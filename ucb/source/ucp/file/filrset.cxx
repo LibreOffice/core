@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,25 +129,17 @@ XResultSet_impl::XResultSet_impl( shell* pMyShell,
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    m_bFaked = m_pMyShell->m_bFaked && m_aBaseDirectory.compareToAscii( "//./" ) == 0;
-    if( m_bFaked )
+    osl::FileBase::RC err = m_aFolder.open();
+    if(  err != osl::FileBase::E_None )
     {
-        m_nIsOpen = true;
+        m_nIsOpen = false;
+        m_aFolder.close();
+
+        m_nErrorCode = TASKHANDLING_OPEN_FOR_DIRECTORYLISTING;
+        m_nMinorErrorCode = err;
     }
     else
-    {
-        osl::FileBase::RC err = m_aFolder.open();
-        if(  err != osl::FileBase::E_None )
-        {
-            m_nIsOpen = false;
-            m_aFolder.close();
-
-            m_nErrorCode = TASKHANDLING_OPEN_FOR_DIRECTORYLISTING;
-            m_nMinorErrorCode = err;
-        }
-        else
-            m_nIsOpen = true;
-    }
+        m_nIsOpen = true;
 
     m_pMyShell->registerNotifier( m_aBaseDirectory,this );
 }
@@ -157,7 +149,7 @@ XResultSet_impl::~XResultSet_impl()
 {
     m_pMyShell->deregisterNotifier( m_aBaseDirectory,this );
 
-    if( m_nIsOpen && ! m_bFaked )
+    if( m_nIsOpen )
         m_aFolder.close();
 
     delete m_pDisposeEventListeners;
@@ -346,41 +338,12 @@ void XResultSet_impl::isFinalChanged()
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::OneMoreFaked( void )
-    throw( sdbc::SQLException,
-           RuntimeException )
-{
-    sal_uInt32 k = m_aItems.size();
-    if( k < m_pMyShell->m_vecMountPoint.size() &&
-        ( m_nOpenMode == OpenMode::ALL || m_nOpenMode == OpenMode::FOLDERS ) )
-    {
-        sal_Bool IsRegular;
-        rtl::OUString aUnqPath = m_pMyShell->m_vecMountPoint[k].m_aDirectory;
-        osl::DirectoryItem aDirItem;
-        osl::DirectoryItem::get( aUnqPath,aDirItem );
-        Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,aDirItem,aUnqPath,IsRegular );
-        vos::OGuard aGuard( m_aMutex );
-        m_aItems.push_back( aRow );
-        m_aIdents.push_back( Reference< XContentIdentifier >() );
-        m_aUnqPath.push_back( aUnqPath );
-        rowCountChanged();
-        return true;
-    }
-
-    return false;
-}
-
-
-sal_Bool SAL_CALL
 XResultSet_impl::OneMore(
     void )
     throw( sdbc::SQLException,
            RuntimeException )
 {
     if( ! m_nIsOpen ) return false;
-
-    if( m_bFaked )
-        return OneMoreFaked();
 
     osl::FileBase::RC err;
     sal_Bool IsRegular;
@@ -449,84 +412,6 @@ XResultSet_impl::OneMore(
 
 
 
-
-/*
-  sal_Bool SAL_CALL
-  XResultSet_impl::OneMore(
-  void )
-  throw( sdbc::SQLException,
-  RuntimeException )
-  {
-  if( m_bFaked )
-  return OneMoreFaked();
-
-  osl::DirectoryItem                  m_aDirIte;
-
-  if( ! m_nIsOpen ) return false;
-
-  osl::FileBase::RC err = m_aFolder.getNextItem( m_aDirIte );
-
-  if( err == osl::FileBase::E_NOENT || err == osl::FileBase::E_INVAL )
-  {
-  m_aFolder.close();
-  isFinalChanged();
-  return ( m_nIsOpen = false );
-  }
-  else if( err == osl::FileBase::E_None )
-  {
-  sal_Bool IsRegular;
-  rtl::OUString aUnqPath;
-  Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
-
-  if( m_nOpenMode == OpenMode::DOCUMENTS )
-  {
-  if( IsRegular )
-  {
-  vos::OGuard aGuard( m_aMutex );
-  m_aItems.push_back( aRow );
-  m_aIdents.push_back( Reference< XContentIdentifier >() );
-  m_aUnqPath.push_back( aUnqPath );
-  rowCountChanged();
-  return true;
-  }
-  else
-  {
-  return OneMore();
-  }
-  }
-  else if( m_nOpenMode == OpenMode::FOLDERS )
-  {
-  if( ! IsRegular )
-  {
-  vos::OGuard aGuard( m_aMutex );
-  m_aItems.push_back( aRow );
-  m_aIdents.push_back( Reference< XContentIdentifier >() );
-  m_aUnqPath.push_back( aUnqPath );
-  rowCountChanged();
-  return true;
-  }
-  else
-  {
-  return OneMore();
-  }
-  }
-  else
-  {
-  vos::OGuard aGuard( m_aMutex );
-  m_aItems.push_back( aRow );
-  m_aIdents.push_back( Reference< XContentIdentifier >() );
-  m_aUnqPath.push_back( aUnqPath );
-  rowCountChanged();
-  return true;
-  }
-  }
-  else
-  {
-  throw sdbc::SQLException();
-  return false;
-  }
-  }
-*/
 
 
 sal_Bool SAL_CALL
@@ -645,30 +530,6 @@ XResultSet_impl::getRow(
 }
 
 
-//  sal_Bool SAL_CALL
-//  XResultSet_impl::absolute(
-//      sal_Int32 row )
-//      throw( sdbc::SQLException,
-//             RuntimeException)
-//  {
-//      if( !row )
-//        throw sdbc::SQLException();
-
-//      if( row >= 0 )
-//      {
-//          m_nRow = -1;
-//          while( row-- ) next();
-//      }
-//      else
-//      {
-//          row = - row - 1;
-//          last();
-//          while( row-- ) --m_nRow;
-//      }
-
-//      return 0<= m_nRow && m_nRow < m_aItems.size();
-//  }
-
 
 sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
     throw( sdbc::SQLException, RuntimeException)
@@ -786,9 +647,7 @@ XResultSet_impl::close(
 {
     if( m_nIsOpen )
     {
-        if( ! m_bFaked )
-            m_aFolder.close();
-
+        m_aFolder.close();
         isFinalChanged();
         vos::OGuard aGuard( m_aMutex );
         m_nIsOpen = false;
