@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-05 11:29:13 $
+#   last change: $Author: jbu $ $Date: 2002-09-18 12:17:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,5 +115,13 @@ APP2STDLIBS = 	$(SALLIB) \
 
 
 # --- Targets ------------------------------------------------------
+
+ALL : 	$(BIN)$/applicat.rdb	\
+    ALLTAR
+
+$(BIN)$/applicat.rdb: $(SOLARBINDIR)$/udkapi.rdb
+    +rm -f $@
+    +regmerge $@ / $?
+
 
 .INCLUDE :  target.mk
