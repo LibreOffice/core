@@ -2,17 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
-<<<<<<< salgdi.cxx
- *  $Revision: 1.13 $
-=======
- *  $Revision: 1.13 $
->>>>>>> 1.12
- *
-<<<<<<< salgdi.cxx
- *  last change: $Author: bmahbod $ $Date: 2000-11-30 01:48:03 $
-=======
- *  last change: $Author: bmahbod $ $Date: 2000-11-30 01:48:03 $
->>>>>>> 1.12
+ *  $Revision: 1.14 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-01 03:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +80,31 @@
 
 SalGraphics::SalGraphics()
 {
+    maGraphicsData.mnPenMode        = patCopy;
+    maGraphicsData.mbTransparentPen = FALSE;
+
+    maGraphicsData.mhDefBrush         = NULL;
+    maGraphicsData.mbTransparentBrush = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 SalGraphics::~SalGraphics()
 {
+    if ( maGraphicsData.mhClipRgn != NULL )
+    {
+        DisposeRgn( maGraphicsData.mhClipRgn );
+    } // if
+
+    if ( maGraphicsData.mhGrowRgn != NULL )
+    {
+        DisposeRgn( maGraphicsData.mhGrowRgn );
+    } // if
+
+    if ( maGraphicsData.mhDefBrush != NULL )
+    {
+        DisposePixPat( maGraphicsData.mhDefBrush );
+    } // if
 }
 
 // -----------------------------------------------------------------------
@@ -201,7 +211,7 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
     maGraphicsData.maBrushColor       = aRGBColor;
     maGraphicsData.mbTransparentBrush = FALSE;
 
-    if ( ( maGraphicsData.mhDefBrush != NULL ) && (  *(maGraphicsData.mhDefBrush) != NULL ) )
+    if ( maGraphicsData.mhDefBrush != NULL )
     {
         DisposePixPat( maGraphicsData.mhDefBrush );
 
@@ -210,7 +220,9 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
 
     maGraphicsData.mhDefBrush = NewPixPat();
 
-    if ( ( maGraphicsData.mhDefBrush != NULL ) && (  *(maGraphicsData.mhDefBrush) != NULL ) )
+    if (    (    maGraphicsData.mhDefBrush  != NULL )
+         && (  *(maGraphicsData.mhDefBrush) != NULL )
+       )
     {
         MakeRGBPat( maGraphicsData.mhDefBrush, &aRGBColor );
     } // if
@@ -220,6 +232,14 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
 
 void SalGraphics::SetXORMode( BOOL bSet )
 {
+    if ( bSet == TRUE )
+    {
+        maGraphicsData.mnPenMode = patXor;
+    } // if
+    else
+    {
+        maGraphicsData.mnPenMode = patCopy;
+    } // else
 }
 
 // -----------------------------------------------------------------------
@@ -315,7 +335,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
         } // if
         else
         {
-            RGBColor  aRectFillColor;
+            RGBColor  aRectFillColor = maGraphicsData.maBrushColor;
 
             VCLGraphics_DrawColorRect (  hView,
                                          nX,
@@ -399,7 +419,76 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
 void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
                             SalGraphics* pSrcGraphics )
 {
-}
+    if ( ( maGraphicsData.mpCGrafPort != NULL ) && ( pPosAry != NULL ) )
+    {
+        VCLVIEW hView = maGraphicsData.mhDC;
+
+        if ( hView != NULL )
+        {
+            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+
+            if ( pDstBitMap != NULL )
+            {
+                Rect   aSrcRect;
+                Rect   aDstRect;
+                short  nMode;
+
+                SetRect( &aSrcRect,
+                          pPosAry->mnSrcX,
+                          pPosAry->mnSrcY,
+                          pPosAry->mnSrcX + pPosAry->mnSrcWidth,
+                          pPosAry->mnSrcY + pPosAry->mnSrcHeight
+                       );
+
+                SetRect( &aDstRect,
+                          pPosAry->mnDestX,
+                          pPosAry->mnDestY,
+                          pPosAry->mnDestX + pPosAry->mnDestWidth,
+                          pPosAry->mnDestY + pPosAry->mnDestHeight
+                       );
+
+                // NOTE: it is a good practice to check rectangle bounds before proceeding
+
+                if ( maGraphicsData.mnPenMode == patCopy )
+                {
+                    nMode = srcCopy;
+                } // if
+                else
+                {
+                    nMode = srcXor;
+                } // else
+
+                if ( (  pSrcGraphics != NULL ) && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL ) )
+                {
+                    const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                    if ( pSrcBitMap != NULL )
+                    {
+                        VCLGraphics_CopyBits (  hView,
+                                                               pSrcBitMap,
+                                                                pDstBitMap,
+                                                               &aSrcRect,
+                                                               &aDstRect,
+                                                                nMode,
+                                                               NULL
+                                                           );
+                    } // if
+                } // if
+                else
+                {
+                    VCLGraphics_CopyBits (  hView,
+                                                            pDstBitMap,
+                                                            pDstBitMap,
+                                                      &aSrcRect,
+                                                           &aDstRect,
+                                                       nMode,
+                                            NULL
+                                                   );
+                } // else
+            } // if
+        } // if
+    } // if
+} // SalGraphics::CopyBits
 
 // -----------------------------------------------------------------------
 
@@ -484,7 +573,7 @@ void SalGraphics::SetTextColor( SalColor nSalColor )
     aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
     aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
 
-    maGraphicsData. maTextColor = aRGBColor;
+    maGraphicsData.maTextColor = aRGBColor;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-29 23:11:26 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-01 03:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,41 +80,58 @@
 
 struct SalGraphicsData
 {
-public:
-    VCLVIEW                 mhDC;           // VCLVIEW
-    VCLWINDOW               mhWnd;          // Window-Handle, when Window-Graphics
-    CGrafPtr                mpCGrafPort;        // QD color graphics port
-    GDHandle                mhDevice;       // GWorld graphics
-    PixPatHandle                mhDefBrush;     // Fill Brush
-        RgnHandle               mhClipRgn;      // Clip Region Handle
-        RgnHandle               mhGrowRgn;      // Grow Region Handle
-        RGBColor                        maPenColor;     // Pen Color
-        RGBColor                        maBrushColor;       // Brush Color
-        RGBColor                        maTextColor;        // Text Color
-    BOOL                    mbFirstClipRect;    // Flag for first cliprect to insert
-    BYTE*                   mpFontCharSets;     // All Charsets for the current font
-    BYTE                    mnFontCharSetCount;     // Number of Charsets of the current font; 0 - if not queried
-    ULONG                   mnFontKernPairCount;    // Number of Kerning Pairs of the current Font
-    BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
-    int                     mnFontOverhang;     // Font-Overhang
-    int                 mnFontNum;      // Mac FontFamilyId
-    int                 mnFontSize;     // Mac Font Size
-    int                 mnFontMode;     // Mac Font transfer mode
-    Style                   mnFontFace;     // Mac Font Style
-    BOOL                    mbStockPen;         // is Pen a stockpen
-    BOOL                    mbStockBrush;       // is Brush a stcokbrush
-    BOOL                    mbPen;          // is Pen (FALSE == NULL_PEN)
-    int                     mnPenWidth;         // Pen Width
-    int                 mnPenMode;      // Pen Mode
-    BOOL                    mbTransparentPen;   // Is pen transparent?
-    BOOL                    mbTransparentBrush; // Is brush ransparent?
-    BOOL                    mbBrush;        // is Brush (FALSE == NULL_BRUSH)
-    BOOL                    mbPrinter;      // is Printer
-    BOOL                    mbVirDev;       // is VirDev
-    BOOL                    mbWindow;       // is Window
-    BOOL                    mbScreen;       // is Screen compatible
-    BOOL                    mbXORMode;      // _every_ output with RasterOp XOR
-    BOOL                    mbCalcOverhang;     // calc overhang
+    // NSView and NSWindow
+
+    VCLVIEW         mhDC;           // VCLVIEW
+    VCLWINDOW       mhWnd;          // Window-Handle, when Window-Graphics
+
+    // QuickDraw graph port and GWorld
+
+    CGrafPtr        mpCGrafPort;        // QD color graphics port
+    GDHandle        mhDevice;       // GWorld graphics
+
+    // Regions within a current port
+
+    RgnHandle       mhClipRgn;      // Clip Region Handle
+        RgnHandle       mhGrowRgn;      // Grow Region Handle
+
+    // Pen, brush, and text colors
+
+        RGBColor                maPenColor;     // Pen Color
+        RGBColor                maBrushColor;       // Brush Color
+        RGBColor                maTextColor;        // Text Color
+
+    // Font attributes
+
+    BYTE*           mpFontCharSets;     // All Charsets for the current font
+    BYTE            mnFontCharSetCount;     // Number of Charsets of the current font; 0 - if not queried
+    unsigned long       mnFontKernPairCount;    // Number of Kerning Pairs of the current Font
+    BOOL            mbFontKernInit;     // FALSE: FontKerns must be queried
+    int             mnFontOverhang;     // Font-Overhang
+    int         mnFontNum;      // Mac FontFamilyId
+    int         mnFontSize;     // Mac Font Size
+    int         mnFontMode;     // Mac Font transfer mode
+    Style           mnFontFace;     // Mac Font Style
+
+    // Pen attributes and status
+
+    int         mnPenMode;      // Pen Mode
+    BOOL            mbTransparentPen;   // Is pen transparent?
+
+    // Brush attributes and status
+
+    PixPatHandle        mhDefBrush;     // Fill brush pixel pattern
+    BOOL            mbTransparentBrush; // Is brush transparent?
+
+    // Miscellaneous status flags
+
+    BOOL            mbPrinter;      // Is a printer available?
+    BOOL            mbVirDev;       // Is a virtual device available?
+    BOOL            mbWindow;       // Is a window availble?
+    BOOL            mbScreen;       // Is this screen compatiable?
 };
+
+typedef struct SalGraphicsData   SalGraphicsData;
+typedef SalGraphicsData         *SalGraphicsDataPtr;
 
 #endif // _SV_SALGDI_H
