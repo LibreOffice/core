@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:47:19 $
+#   last change: $Author: obo $ $Date: 2004-05-28 14:41:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,7 @@ JAVAVERMK:=$(INCCOM)$/java_ver.mk
 .IF "$(JAVAVER)"=="" || "$(JAVALOCATION)"!="$(JAVA_HOME)"
 .IF "$(L10N_framework)"==""
 
-JAVAVER:=
-JAVANUMVER:=
-
+.IF "$(SOLAR_JAVA)"!=""
 JFLAGSVERSION=-version
 JFLAGSVERSION_CMD=-version |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
 JFLAGSNUMVERSION_CMD=-version |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
@@ -82,5 +80,9 @@ JAVAVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
 # each point seperated token blown up to 4 digits
 JAVANUMVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSNUMVERSION_CMD))
 
+.ELSE          # "$(SOLAR_JAVA)"!=""
+JAVAVER=0.0.0
+JAVANUMVER=000000000000
+.ENDIF          # "$(SOLAR_JAVA)"!=""
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF			# "$(JAVAVER)"=="" || "$(JAVALOCATION)"!="$(JAVA_HOME)"
