@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQuery.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-27 15:32:55 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 08:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ namespace connectivity
             sal_Bool                        getQuerySubDirs(void) const;
             void                            setSqlOppr( ::std::vector< eSqlOppr >&);
             const ::std::vector< eSqlOppr >       &getSqlOppr(void) const;
-            sal_Int32                       executeQuery(void);
+            sal_Int32                       executeQuery(sal_Bool _bIsOutlookExpress);
 
             sal_Int32                       getRowCount( void );
 

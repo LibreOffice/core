@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-27 14:56:47 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 08:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ namespace connectivity
             sal_Int32       m_nMaxResultRecords;
             sal_Bool        m_UsesFactory ;
             sal_Bool        m_IsLDAP ;
+            sal_Bool        m_bOutlookExpress;
 
         public:
             OMozabConnection(OMozabDriver* _pDriver);
@@ -113,8 +114,9 @@ namespace connectivity
             sal_Bool usesFactory(void) const { return m_UsesFactory ; }
             sal_Bool isLDAP(void) const { return m_IsLDAP ; }
 
+            sal_Bool    isOutlookExpress() const { return m_bOutlookExpress;}
             sal_Int32   getNextAnonymousAB()    { return (++m_nAnonABCount); }
-            sal_Int32   getMaxResultRecords()   { return m_nMaxResultRecords; }
+            sal_Int32   getMaxResultRecords() const { return m_nMaxResultRecords; }
         };
     }
 }
