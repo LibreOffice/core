@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,12 +974,14 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         bViewHasChanged(sal_False),
         bIsImageListInitialized(sal_False)
 {
+    sal_uInt16 i;
+
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
-    for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
+    for( i = 0; i < CONTENT_TYPE_MAX; i++)
     {
         aActiveContentArr[i]    = 0;
         aHiddenContentArr[i]    = 0;
@@ -1082,8 +1084,9 @@ void  SwContentTree::Command( const CommandEvent& rCEvt )
             PopupMenu aSubPop2;
             PopupMenu aSubPop3;
             PopupMenu aSubPop4; // Bearbeiten
+            sal_uInt16 i;
 
-            for(sal_uInt16 i = 1; i <= MAXLEVEL; i++ )
+            for( i = 1; i <= MAXLEVEL; i++ )
             {
                 aSubPop1.InsertItem( i + 100, String::CreateFromInt32(i));
             }
