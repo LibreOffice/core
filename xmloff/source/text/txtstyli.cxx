@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-20 11:33:56 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 09:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #endif
@@ -121,6 +125,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 //using namespace ::com::sun::star::text;
 
@@ -272,6 +277,21 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     }
 }
 
+void XMLTextStyleContext::SetDefaults( )
+{
+    if (GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
+    {
+        Reference < XMultiServiceFactory > xFactory ( GetImport().GetModel(), UNO_QUERY);
+        if (xFactory.is())
+        {
+            Reference < XInterface > xInt = xFactory->createInstance (
+                OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) ) );
+            Reference < XPropertySet > xProperties ( xInt, UNO_QUERY );
+            if ( xProperties.is() )
+                FillPropertySet ( xProperties );
+        }
+    }
+}
 void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
