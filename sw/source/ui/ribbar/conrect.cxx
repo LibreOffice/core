@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 12:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,9 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                 aItemSet.Put( SdrTextAniCountItem( 0 ) );
                 aItemSet.Put( SdrTextAniAmountItem((INT16)pWin->PixelToLogic(Size(2,1)).Width()) );
-                pObj->SetAttributes(aItemSet, FALSE);
+
+//-/                pObj->SetAttributes(aItemSet, FALSE);
+                pObj->SetItemSetAndBroadcast(aItemSet);
             }
         }
 
@@ -248,6 +250,9 @@ void ConstRectangle::Activate(const USHORT nSlotId)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:46  hr
+      initial import
+
       Revision 1.45  2000/09/18 16:06:01  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:07:42 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 12:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,8 @@ void SwFEShell::Paste( SvStorageStream& rStrm, USHORT nAction,
         case SW_PASTESDR_SETATTR:
             {
                 SfxItemSet aSet( GetAttrPool() );
-                pClpObj->TakeAttributes( aSet, TRUE, FALSE );
+//-/                pClpObj->TakeAttributes( aSet, TRUE, FALSE );
+                aSet.Put(pClpObj->GetItemSet());
                 pView->SetAttributes( aSet, FALSE );
             }
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 12:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         aTwipSz.Height() = MINFLY;
     aItemSet.Put( SdrTextMinFrameHeightItem( aTwipSz.Height() ) );
 
-    pMarquee->SetAttributes( aItemSet, sal_False );
+//-/    pMarquee->SetAttributes( aItemSet, sal_False );
+    pMarquee->SetItemSetAndBroadcast(aItemSet);
 
     if( aTwipSz.Width() < MINFLY )
         aTwipSz.Width() = MINFLY;
@@ -687,18 +688,19 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                          sal_Bool bSetDefaults )
 {
     // die Edit ::com::sun::star::script::Engine-Attribute aus dem Objekt holen
-    SfxItemSet aObjItemSet( *pObj->GetItemPool(), EE_CHAR_START,
-                                                  EE_CHAR_END );
-    pObj->TakeAttributes( aObjItemSet, sal_False, sal_False );
+//-/    SfxItemSet aObjItemSet( *pObj->GetItemPool(), EE_CHAR_START,
+//-/                                                  EE_CHAR_END );
+//-/    pObj->TakeAttributes( aObjItemSet, sal_False, sal_False );
+    SfxItemSet rObjItemSet = pObj->GetItemSet();
 
     // ueber die Edit ::com::sun::star::script::Engine-Attribute iterieren und die Attribute
     // in SW-Attrs wandeln bzw. default setzen
-    SfxWhichIter aIter( aObjItemSet );
+    SfxWhichIter aIter( rObjItemSet );
     sal_uInt16 nEEWhich = aIter.FirstWhich();
     while( nEEWhich )
     {
         const SfxPoolItem *pEEItem;
-        sal_Bool bSet = SFX_ITEM_SET == aObjItemSet.GetItemState( nEEWhich, sal_False,
+        sal_Bool bSet = SFX_ITEM_SET == rObjItemSet.GetItemState( nEEWhich, sal_False,
                                                               &pEEItem );
 
         if( bSet || bSetDefaults )
@@ -722,7 +724,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                 // wenn das Item nicht gesetzt ist nehmen wir ggf. das
                 // Default-Item
                 if( !bSet )
-                    pEEItem = &aObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
+                    pEEItem = &rObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
 
                 // jetzt Clonen wir das Item mit der Which-Id des Writers
                 SfxPoolItem *pSwItem = pEEItem->Clone();
@@ -757,11 +759,12 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     sOut += sHTML_marquee;
 
     // Die Attribute des Objektd holen
-    sal_uInt16 aWhichMap[5] =   { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
-                              SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                              0 };
-    SfxItemSet aItemSet( *pTextObj->GetItemPool(), aWhichMap );
-    pTextObj->TakeAttributes( aItemSet, sal_False, sal_False );
+//-/    sal_uInt16 aWhichMap[5] =   { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
+//-/                              SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+//-/                              0 };
+//-/    SfxItemSet aItemSet( *pTextObj->GetItemPool(), aWhichMap );
+//-/    pTextObj->TakeAttributes( aItemSet, sal_False, sal_False );
+    const SfxItemSet& rItemSet = pTextObj->GetItemSet();
 
     // BEHAVIOUR
     SdrTextAniKind eAniKind = pTextObj->GetTextAniKind();
@@ -795,7 +798,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // LOOP
     sal_Int32 nCount =
-        ((const SdrTextAniCountItem&)aItemSet.Get( SDRATTR_TEXT_ANICOUNT ))
+        ((const SdrTextAniCountItem&)rItemSet.Get( SDRATTR_TEXT_ANICOUNT ))
                                              .GetValue();
     if( 0==nCount )
         nCount = SDRTEXTANI_SLIDE==eAniKind ? 1 : -1;
@@ -804,14 +807,14 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // SCROLLDELAY
     sal_uInt16 nDelay =
-        ((const SdrTextAniDelayItem&)aItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
+        ((const SdrTextAniDelayItem&)rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
                                             .GetValue();
     (((sOut += ' ') += sHTML_O_scrolldelay) += '=')
         += ByteString::CreateFromInt32( nDelay );
 
     // SCROLLAMOUNT
     sal_Int16 nAmount =
-        ((const SdrTextAniAmountItem&)aItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ))
+        ((const SdrTextAniAmountItem&)rItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ))
                                              .GetValue();
     if( nAmount < 0 )
     {
@@ -864,11 +867,11 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // BGCOLOR
     XFillStyle eFillStyle =
-        ((const XFillStyleItem&)aItemSet.Get(XATTR_FILLSTYLE)).GetValue();
+        ((const XFillStyleItem&)rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
     if( XFILL_SOLID==eFillStyle )
     {
         const Color& rFillColor =
-            ((const XFillColorItem&)aItemSet.Get(XATTR_FILLCOLOR)).GetValue();
+            ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetValue();
 
         ((sOut += ' ') += sHTML_O_bgcolor) += '=';
         rWrt.Strm() << sOut.GetBuffer();
@@ -922,11 +925,14 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmldraw.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmldraw.cxx,v 1.2 2000-10-30 12:05:31 aw Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.45  2000/09/18 16:04:44  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-16 10:35:05 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 12:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,8 @@ void SwWW8ImplReader::ReadLine( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetStdAttr( aSet, aLine.aLnt, aLine.aShd );
     SetLineEndAttr( aSet, aLine.aEpp, aLine.aLnt );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 void SwWW8ImplReader::ReadRect( WW8_DPHEAD* pHd, WW8_DO* pDo )
@@ -605,7 +606,8 @@ void SwWW8ImplReader::ReadRect( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetStdAttr( aSet, aRect.aLnt, aRect.aShd );
     SetFill( aSet, aRect.aFill );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 void SwWW8ImplReader::ReadElipse( WW8_DPHEAD* pHd, WW8_DO* pDo )
@@ -629,7 +631,8 @@ void SwWW8ImplReader::ReadElipse( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetStdAttr( aSet, aElipse.aLnt, aElipse.aShd );
     SetFill( aSet, aElipse.aFill );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 void SwWW8ImplReader::ReadArc( WW8_DPHEAD* pHd, WW8_DO* pDo )
@@ -666,7 +669,8 @@ void SwWW8ImplReader::ReadArc( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetStdAttr( aSet, aArc.aLnt, aArc.aShd );
     SetFill( aSet, aArc.aFill );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 void SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, WW8_DO* pDo )
@@ -703,7 +707,8 @@ void SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetStdAttr( aSet, aPoly.aLnt, aPoly.aShd );
     SetFill( aSet, aPoly.aFill );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
@@ -1540,7 +1545,8 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     aSet.Put( SdrTextUpperDistItem( MIN_BORDER_DIST ) );
     aSet.Put( SdrTextLowerDistItem( MIN_BORDER_DIST ) );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 
@@ -1594,7 +1600,8 @@ void SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetFill( aSet, aCallB.dptxbx.aFill );
     aSet.Put( SdrCaptionTypeItem( aCaptA[nTyp] ) );
 
-    pObj->SetAttributes( aSet, FALSE );
+//-/    pObj->SetAttributes( aSet, FALSE );
+    pObj->SetItemSetAndBroadcast(aSet);
 }
 
 
@@ -1807,14 +1814,15 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
 
     // im Sdr-Objekt eingestellten Attribute greifen
-    SfxItemSet aOldSet(pDrawModel->GetItemPool());
-    pSdrObj->TakeAttributes( aOldSet, FALSE, FALSE );
+//-/    SfxItemSet aOldSet(pDrawModel->GetItemPool());
+//-/    pSdrObj->TakeAttributes( aOldSet, FALSE, FALSE );
+    const SfxItemSet& rOldSet = pSdrObj->GetItemSet();
 
     BOOL bIsAAttrObj = pSdrObj->ISA(SdrAttrObj);
-    const XLineAttrSetItem* pLineAttrSetItem
-        = bIsAAttrObj ? ((SdrAttrObj*)pSdrObj)->GetLineAttrSetItem() : 0;
-    const XFillAttrSetItem* pFillAttrSetItem
-        = bIsAAttrObj ? ((SdrAttrObj*)pSdrObj)->GetFillAttrSetItem() : 0;
+//-/    const XLineAttrSetItem* pLineAttrSetItem
+//-/        = bIsAAttrObj ? ((SdrAttrObj*)pSdrObj)->GetLineAttrSetItem() : 0;
+//-/    const XFillAttrSetItem* pFillAttrSetItem
+//-/        = bIsAAttrObj ? ((SdrAttrObj*)pSdrObj)->GetFillAttrSetItem() : 0;
 
 
 
@@ -1827,7 +1835,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     };
     const SfxPoolItem* pPoolItem;
     for(USHORT nItem = 0; nItem < nDirectMatch; ++nItem)
-        if( SFX_ITEM_SET == aOldSet.GetItemState( aDirectMatch[ nItem ],
+        if( SFX_ITEM_SET == rOldSet.GetItemState( aDirectMatch[ nItem ],
                                                   FALSE,
                                                   &pPoolItem) )
         {
@@ -1844,11 +1852,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // check if LineStyle is *really* set!
     const SfxPoolItem* pItem;
 
-    if( pLineAttrSetItem )
+//-/    if( pLineAttrSetItem )
     {
-        SfxItemState eState = pLineAttrSetItem->GetItemSet().GetItemState(
-                                                              XATTR_LINESTYLE,
-                                                              TRUE, &pItem );
+//-/        SfxItemState eState = pLineAttrSetItem->GetItemSet().GetItemState(
+//-/                                                              XATTR_LINESTYLE,
+//-/                                                              TRUE, &pItem );
+        SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,TRUE, &pItem );
         if( eState == SFX_ITEM_SET )
         {
             // Now, that we know there is a line style we will make use the
@@ -1860,14 +1869,17 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
             {
             */
-                const Color aLineColor
-                                = WW8ITEMVALUE( pLineAttrSetItem->GetItemSet(),
-                                                XATTR_LINECOLOR,
-                                                XLineColorItem );
+//-/                const Color aLineColor
+//-/                                = WW8ITEMVALUE( pLineAttrSetItem->GetItemSet(),
+//-/                                                XATTR_LINECOLOR,
+//-/                                                XLineColorItem );
 
-                nLineWidth
-                    = (USHORT)(WW8ITEMVALUE( pLineAttrSetItem->GetItemSet(),
-                                             XATTR_LINEWIDTH, XLineWidthItem ));
+//-/                nLineWidth
+//-/                    = (USHORT)(WW8ITEMVALUE( pLineAttrSetItem->GetItemSet(),
+//-/                                             XATTR_LINEWIDTH, XLineWidthItem ));
+
+                const Color aLineColor = WW8ITEMVALUE(rOldSet, XATTR_LINECOLOR, XLineColorItem);
+                nLineWidth = (USHORT)(WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH, XLineWidthItem));
 
                 if( !nLineWidth )
                     nLineWidth = 15; // WW-default: 0.75 pt
@@ -1927,19 +1939,19 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     rFlySet.Put( aBox );
 
     // Schattenwurf der Box: SvxShadowItem
-    if( WW8ITEMVALUE(aOldSet, SDRATTR_SHADOW, SdrShadowItem) )
+    if( WW8ITEMVALUE(rOldSet, SDRATTR_SHADOW, SdrShadowItem) )
     {
         SvxShadowItem aShadow;
 
-        const Color aShdColor = WW8ITEMVALUE(aOldSet, SDRATTR_SHADOWCOLOR,
+        const Color aShdColor = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWCOLOR,
                                                         SdrShadowColorItem);
 
-        const INT32 nShdDistX = WW8ITEMVALUE(aOldSet, SDRATTR_SHADOWXDIST,
+        const INT32 nShdDistX = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWXDIST,
                                                         SdrShadowXDistItem);
-        const INT32 nShdDistY = WW8ITEMVALUE(aOldSet, SDRATTR_SHADOWYDIST,
+        const INT32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
                                                         SdrShadowYDistItem);
 
-        const USHORT nShdTrans= WW8ITEMVALUE(aOldSet, SDRATTR_SHADOWTRANSPARENCE,
+        const USHORT nShdTrans= WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWTRANSPARENCE,
                                                         SdrShadowTransparenceItem);
         // diese gibt es im Writer nicht  :-(
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1972,11 +1984,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     }
 
     // Hintergrund: SvxBrushItem
-    if( pFillAttrSetItem )
+//-/    if( pFillAttrSetItem )
     {
-        SfxItemState eState = pFillAttrSetItem->GetItemSet().GetItemState(
-                                                              XATTR_FILLSTYLE,
-                                                              TRUE, &pItem );
+//-/        SfxItemState eState = pFillAttrSetItem->GetItemSet().GetItemState(
+//-/                                                              XATTR_FILLSTYLE,
+//-/                                                              TRUE, &pItem );
+        SfxItemState eState = rOldSet.GetItemState(XATTR_FILLSTYLE, TRUE, &pItem);
         if( eState == SFX_ITEM_SET )
         {
 
@@ -1997,10 +2010,11 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                     }break;
                 case XFILL_SOLID    :
                     {
-                        const Color aColor =
-                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
-                                              XATTR_FILLCOLOR,
-                                              XFillColorItem );
+//-/                        const Color aColor =
+//-/                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
+//-/                                              XATTR_FILLCOLOR,
+//-/                                              XFillColorItem );
+                        const Color aColor = WW8ITEMVALUE(rOldSet, XATTR_FILLCOLOR, XFillColorItem);
                         aBrushItem.SetColor( aColor );
                         bBrushItemOk = TRUE;
                     }break;
@@ -2010,15 +2024,18 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                                     break;
                 case XFILL_BITMAP   :
                     {
-                        const Graphic aGraphic(
-                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
-                                              XATTR_FILLBITMAP,
-                                              XFillBitmapItem ).GetBitmap() );
+//-/                        const Graphic aGraphic(
+//-/                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
+//-/                                              XATTR_FILLBITMAP,
+//-/                                              XFillBitmapItem ).GetBitmap() );
 
-                        BOOL bTile =
-                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
-                                              XATTR_FILLBMP_TILE,
-                                              SfxBoolItem );
+//-/                        BOOL bTile =
+//-/                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
+//-/                                              XATTR_FILLBMP_TILE,
+//-/                                              SfxBoolItem );
+
+                        const Graphic aGraphic(WW8ITEMVALUE(rOldSet, XATTR_FILLBITMAP, XFillBitmapItem).GetBitmap());
+                        BOOL bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, SfxBoolItem);
                         aBrushItem.SetGraphic( aGraphic );
                         aBrushItem.SetGraphicPos(  bTile
                                                  ? GPOS_TILED
@@ -2854,7 +2871,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                 aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
                                 aSet.Put(SdrTextAutoGrowHeightItem( FALSE ));
                                 aSet.Put(SdrTextAutoGrowWidthItem(  FALSE ));
-                                pSdrTextObj->NbcSetAttributes(aSet, FALSE);
+//-/                                pSdrTextObj->NbcSetAttributes(aSet, FALSE);
+                                pSdrTextObj->SetItemSet(aSet);
 
                                 long nAngle = pRecord->nTextRotationAngle;
                                 if(  nAngle )
@@ -2956,7 +2974,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                     aItemSet.Put( SdrTextRightDistItem( pRecord->nDxTextRight  ) );
                                     aItemSet.Put( SdrTextUpperDistItem( pRecord->nDyTextTop    ) );
                                     aItemSet.Put( SdrTextLowerDistItem( pRecord->nDyTextBottom ) );
-                                    pSdrTextObj->SetAttributes( aItemSet, FALSE );
+//-/                                    pSdrTextObj->SetAttributes( aItemSet, FALSE );
+                                    pSdrTextObj->SetItemSetAndBroadcast(aItemSet);
                                 }
                             }
                         }
@@ -2995,11 +3014,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.2 2000-10-16 10:35:05 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.3 2000-10-30 12:07:14 aw Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/16 10:35:05  khz
+      read extended WW9-Frame-Alignment (stored in Escher record 0xF122)
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 
