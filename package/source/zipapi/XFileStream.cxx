@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-31 11:32:54 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
+#ifndef _ENCRYPTED_DATA_HEADER_HXX_
+#include <EncryptedDataHeader.hxx>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
@@ -87,7 +93,8 @@ XFileStream::XFileStream( ZipEntry & rEntry,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
                            const vos::ORef < EncryptionData > &rData,
-                           sal_Bool bNewRawStream )
+                           sal_Bool bNewRawStream,
+                           sal_Bool bIsEncrypted )
 : maEntry ( rEntry )
 , mxData ( rData )
 , mbRawStream ( bNewRawStream )
@@ -111,39 +118,38 @@ XFileStream::XFileStream( ZipEntry & rEntry,
         mnZipSize = maEntry.nSize;
         mnZipEnd = maEntry.nMethod == DEFLATED ? maEntry.nOffset + maEntry.nCompressedSize : maEntry.nOffset + maEntry.nSize;
     }
-    if ( !rData.isEmpty() && rData->aSalt.getLength() )
-        ZipFile::StaticGetCipher ( rData, maCipher );
+
+    if ( bIsEncrypted )
+    {
+        sal_Bool bHaveEncryptData = ( !rData.isEmpty() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
+
+        // if we have all the encrypted data, and want a raw stream, then prepend it to the stream, otherwise
+        // make a cipher so we can decrypt it
+        if ( bHaveEncryptData )
+        {
+            if ( !bNewRawStream )
+                ZipFile::StaticGetCipher ( rData, maCipher );
+            else
+            {
+                // Put in the EncryptedDataHeader
+                Sequence < sal_Int8 > aEncryptedDataHeader ( n_ConstHeaderSize +
+                                                             rData->aInitVector.getLength() +
+                                                             rData->aSalt.getLength() +
+                                                             rData->aDigest.getLength() );
+                sal_Int8 * pHeader = aEncryptedDataHeader.getArray();
+                ZipFile::StaticFillHeader ( rData, rEntry.nSize, pHeader );
+                mxTempOut->writeBytes ( aEncryptedDataHeader );
+                mnZipSize += mxTempSeek->getPosition();
+                mxTempSeek->seek ( 0 );
+            }
+        }
+    }
 }
 
 XFileStream::~XFileStream()
 {
     if ( maCipher )
         rtl_cipher_destroy ( maCipher );
-}
-
-Any SAL_CALL  XFileStream::queryInterface( const Type& rType )
-        throw(RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // my interfaces
-                                        static_cast< XInputStream*      > ( this )  ,
-                                        static_cast< XSeekable*     > ( this ) );
-
-}
-
-void SAL_CALL  XFileStream::acquire(void)
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL  XFileStream::release(void)
-    throw()
-{
-    OWeakObject::release();
 }
 
 void XFileStream::fill( sal_Int64 nUntil)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:55:03 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _XFILE_STREAM_HXX
 #define _XFILE_STREAM_HXX
 
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
@@ -73,11 +70,8 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
@@ -89,11 +83,16 @@
 #include <ZipEntry.hxx>
 #endif
 
+namespace com { namespace sun { namespace star {
+    namespace io { class XOutputStream; }
+} } }
 class EncryptionData;
 typedef void* rtlCipher;
-class XFileStream : public com::sun::star::io::XInputStream,
-                    public com::sun::star::io::XSeekable,
-                    public cppu::OWeakObject
+class XFileStream : public cppu::WeakImplHelper2
+<
+    com::sun::star::io::XInputStream,
+    com::sun::star::io::XSeekable
+>
 {
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxZipStream;
@@ -115,16 +114,10 @@ public:
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
                  const vos::ORef < EncryptionData > &rData,
-                 sal_Bool bRawStream );
+                 sal_Bool bRawStream,
+                 sal_Bool bIsEncrypted );
     virtual ~XFileStream();
 
-    // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
