@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_impctx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:56:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ namespace xmlscript
 
 const sal_Int32 UID_UNKNOWN = -1;
 
-static Sequence< OUString > service_getSupportedServiceNames()
+Sequence< OUString > getSupportedServiceNames_DocumentHandlerImpl()
 {
     OUString name( RTL_CONSTASCII_USTRINGPARAM(
                        "com.sun.star.xml.input.SaxDocumentHandler") );
     return Sequence< OUString >( &name, 1 );
 }
 
-static OUString service_getImplementationName()
+OUString getImplementationName_DocumentHandlerImpl()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
                          "com.sun.star.comp.xml.input.SaxDocumentHandler") );
@@ -478,7 +478,7 @@ ExtendedAttributes::~ExtendedAttributes() throw ()
 OUString DocumentHandlerImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return service_getImplementationName();
+    return getImplementationName_DocumentHandlerImpl();
 }
 
 //______________________________________________________________________________
@@ -486,7 +486,7 @@ sal_Bool DocumentHandlerImpl::supportsService(
     OUString const & servicename )
     throw (RuntimeException)
 {
-    Sequence< OUString > names( service_getSupportedServiceNames() );
+    Sequence< OUString > names( getSupportedServiceNames_DocumentHandlerImpl() );
     for ( sal_Int32 nPos = names.getLength(); nPos--; )
     {
         if (names[ nPos ].equals( servicename ))
@@ -499,7 +499,7 @@ sal_Bool DocumentHandlerImpl::supportsService(
 Sequence< OUString > DocumentHandlerImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return service_getSupportedServiceNames();
+    return getSupportedServiceNames_DocumentHandlerImpl();
 }
 
 // XInitialization
@@ -921,51 +921,13 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
 }
 
 //------------------------------------------------------------------------------
-static Reference< XInterface > SAL_CALL service_create(
+Reference< XInterface > SAL_CALL create_DocumentHandlerImpl(
     Reference< XComponentContext > const & )
     SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
         new DocumentHandlerImpl(
             Reference< xml::input::XRoot >(), false /* mt use */ ) );
-}
-
-static struct ::cppu::ImplementationEntry s_entries [] =
-{
-    {
-        service_create, service_getImplementationName,
-        service_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-}
-
-extern "C"
-{
-
-//==============================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//==============================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, ::xmlscript::s_entries );
-}
-
-//==============================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, ::xmlscript::s_entries );
 }
 
 }
