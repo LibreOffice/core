@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-01 20:09:42 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ turkish ] = "Title";
     Text[ arabic ] = "�������";
     Text[ finnish ] = "Otsikko";
-    Text[ catalan ] = "Title";
+    Text[ catalan ] = "T�tol";
     Text[ thai ] = "ชื่อเรื่อง";
 };
 
@@ -117,7 +117,7 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ turkish ] = "Size";
     Text[ arabic ] = "�����";
     Text[ finnish ] = "Koko";
-    Text[ catalan ] = "Size";
+    Text[ catalan ] = "Mida";
     Text[ thai ] = "ขนาด";
 };
 
@@ -144,7 +144,7 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ turkish ] = "Modified Date";
     Text[ arabic ] = "����� �������";
     Text[ finnish ] = "Muokkausp�iv�m��r�";
-    Text[ catalan ] = "Modified Date";
+    Text[ catalan ] = "Data modificada";
     Text[ thai ] = "ดัดแปลงแก้ไขข้อมูล";
 };
 
@@ -171,7 +171,7 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ chinese_traditional ] = "類型";
     Text[ turkish ] = "Type";
     Text[ arabic ] = "Type";
-    Text[ catalan ] = "Type";
+    Text[ catalan ] = "Tipus";
     Text[ thai ] = "ชนิด";
 };
 
@@ -197,7 +197,7 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ chinese_traditional ] = "無法新增資料夾 %1 。";
     Text[ turkish ] = "Could not create the folder %1.";
     Text[ arabic ] = "Could not create the folder %1.";
-    Text[ catalan ] = "Could not create the folder %1.";
+    Text[ catalan ] = "No s'ha pogut crear la carpeta %1.";
     Text[ thai ] = "ไม่สามารถสร้างโฟลเดอร์ %1 ได้";
 };
 
@@ -251,7 +251,7 @@ String STR_SVT_KB
     Text[ korean ] = "KB";
     Text[ turkish ] = "KB";
     Text[ finnish ] = "Kt";
-    Text[ catalan ] = "KB";
+    Text[ catalan ] = "kB";
     Text[ thai ] = "KB";
 };
 
@@ -349,7 +349,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ chinese_traditional ] = "刪除(~D)";
             Text[ turkish ] = "Delete";
             Text[ arabic ] = "Delete";
-            Text[ catalan ] = "Delete";
+            Text[ catalan ] = "Suprimeix";
             Text[ thai ] = "~ลบ";
         };
         MenuItem
@@ -377,7 +377,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ chinese_traditional ] = "重新命名(~R)";
             Text[ turkish ] = "Rename";
             Text[ arabic ] = "Rename";
-            Text[ catalan ] = "Rename";
+            Text[ catalan ] = "Reanomena";
             Text[ thai ] = "เ~ปลี่ยนชื่อ";
         };
     };
@@ -412,7 +412,7 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text[ korean ] = "삭제 확인";
     Text[ turkish ] = "Silmeyi onayla";
     Text[ finnish ] = "Vahvista poisto";
-    Text[ catalan ] = "Confirmar eliminaci�n";
+    Text[ catalan ] = "Confirma la supressi�";
     Text[ thai ] = "ยืนยันการลบ";
 
     FixedText TXT_ENTRY
@@ -481,7 +481,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ korean ] = "선택한 데이터를 정말로 삭제하겠습니까?";
         Text[ turkish ] = "Se�ilen verileri ger�ekten silmek istiyor musunuz?";
         Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
-        Text[ catalan ] = "�Desea realmente eliminar los datos seleccionados?";
+        Text[ catalan ] = "Voleu realment suprimir les dades seleccionades?";
         Text[ thai ] = "คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลที่เลือก?";
     };
 
@@ -512,7 +512,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ arabic ] = "���";
         Text[ turkish ] = "~Sil";
         Text[ finnish ] = "~Poista";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~ลบ";
     };
 
@@ -543,7 +543,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ arabic ] = "��� ����";
         Text[ turkish ] = "~T�m�n� sil";
         Text[ finnish ] = "~Poista kaikki";
-        Text[ catalan ] = "~Eliminar todos";
+        Text[ catalan ] = "~Suprimeix-ho tot";
         Text[ thai ] = "ลบ~ทั้งหมด";
     };
 
@@ -573,7 +573,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ arabic ] = "��� �����";
         Text[ turkish ] = "S~ilme";
         Text[ finnish ] = "~�l� poista";
-        Text[ catalan ] = "~No eliminar";
+        Text[ catalan ] = "~No ho suprimeixis";
         Text[ thai ] = "~ห้ามลบ";
     };
 
