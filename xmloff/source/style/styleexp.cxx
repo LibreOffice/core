@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 12:35:25 $
+ *  last change: $Author: cl $ $Date: 2000-12-11 08:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,18 @@ void XMLStyleExport::exportStyleFamily(
     for( sal_Int32 i=0; i < nStyles; i++ )
     {
         Reference< XStyle > xStyle;
-        xStyles->getByIndex( i ) >>= xStyle;
+        try
+        {
+            xStyles->getByIndex( i ) >>= xStyle;
+        }
+        catch( lang::IndexOutOfBoundsException )
+        {
+            // due to bugs in prior versions it is possible that
+            // a binary file is missing some critical styles.
+            // The only possible way to deal with this is to
+            // not export them here and remain silent.
+            continue;
+        }
 
         DBG_ASSERT( xStyle.is(), "Style not found for export!" );
         if( xStyle.is() )
