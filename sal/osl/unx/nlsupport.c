@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-09 10:43:12 $
+ *  last change: $Author: obr $ $Date: 2002-04-10 16:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,9 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
             rtl_string_release( pCountry );
         }
 
-        /* convert variant to ascii - check if there is enough space for the variant string and a '.' */
+        /* convert variant to ascii - check if there is enough space for the variant string */
         if( pLocale->Variant && pLocale->Variant->length &&
-            ( pLocale->Variant->length < n - 7 ) )
+            ( pLocale->Variant->length < n - 6 ) )
         {
             rtl_String *pVariant = NULL;
 
@@ -184,7 +184,6 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 
             if( offset + pVariant->length + 1 < n )
             {
-                strcpy( buffer + offset++, "." );
                 strcpy( buffer + offset, pVariant->buffer );
                 offset += pVariant->length;
             }
@@ -229,8 +228,8 @@ static rtl_Locale * _parse_locale( const char * locale )
                 offset = 5;
             }
 
-            /* convert variant code to unicode */
-            if( len > offset && '.' == locale[offset++] )
+            /* convert variant code to unicode - do not rely on "." as delimiter */
+            if( len > offset )
                 rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
 
             return rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
