@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:22:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,8 @@ FloatingWindow RID_ALIGNMENT
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Ausrichtung" ;
-    Text [ ENGLISH ] = "Alignment" ;
-    Text [ norwegian ] = "Alignment" ;
-    Text [ italian ] = "Allineamento" ;
-    Text [ portuguese_brazilian ] = "Alinhamento" ;
-    Text [ portuguese ] = "Alinhar" ;
-    Text [ finnish ] = "Tasaus" ;
-    Text [ danish ] = "Justering" ;
-    Text [ french ] = "Alignement" ;
-    Text [ swedish ] = "Justering" ;
-    Text [ dutch ] = "Uitlijning" ;
-    Text [ spanish ] = "Alineación" ;
-    Text [ english_us ] = "Alignment" ;
+    Text [ de ] = "Ausrichtung" ;
+    Text [ en-US ] = "Alignment" ;
     ToolBox RID_ALIGNMENT_TBX
     {
         SVLook = TRUE ;
@@ -117,24 +106,7 @@ FloatingWindow RID_ALIGNMENT
             };
         };
     };
-    Text[ chinese_simplified ] = "å¯¹é½";
-    Text[ russian ] = "Âûğàâíèâàíèå";
-    Text[ polish ] = "Wyrównanie";
-    Text[ japanese ] = "é…ç½®";
-    Text[ chinese_traditional ] = "å°é½Š";
-    Text[ greek ] = "Óôïß÷éóç";
-    Text[ korean ] = "ë§ì¶¤";
-    Text[ arabic ] = "ãÍÇĞÇÉ";
-    Text[ turkish ] = "Hizalama";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineament";
-    Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-    Text[ czech ] = "ZarovnÃ¡nÃ­";
-    Text[ hebrew ] = "â€®×™×©×•×¨â€¬";
-    Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-    Text[ slovak ] = "Zarovnanie";
-    Text[ hungarian ] = "IgazÃ­tÃ¡s";
-    Text[ slovenian ] = "Poravnava";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_ZOOM
 {
@@ -143,19 +115,8 @@ FloatingWindow RID_ZOOM
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Zoomen" ;
-    Text [ ENGLISH ] = "Zoom" ;
-    Text [ norwegian ] = "Zoom" ;
-    Text [ italian ] = "Zoom" ;
-    Text [ portuguese_brazilian ] = "Zoom" ;
-    Text [ portuguese ] = "Zoom" ;
-    Text [ french ] = "Zoom" ;
-    Text [ dutch ] = "Zoomen" ;
-    Text [ spanish ] = "Escala" ;
-    Text [ danish ] = "Zoom" ;
-    Text [ swedish ] = "Zooma" ;
-    Text [ finnish ] = "Zoomaus" ;
-    Text [ english_us ] = "Zoom" ;
+    Text [ de ] = "Zoomen" ;
+    Text [ en-US ] = "Zoom" ;
     ToolBox RID_ZOOM_TBX
     {
         SVLook = TRUE ;
@@ -219,24 +180,7 @@ FloatingWindow RID_ZOOM
             };
         };
     };
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
-    Text[ russian ] = "Ìàñøòàá";
-    Text[ polish ] = "Powiêkszenie";
-    Text[ japanese ] = "ã‚ºãƒ¼ãƒ ";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
-    Text[ greek ] = "Åóôßáóç";
-    Text[ korean ] = "ì¶•ì†Œ/í™•ëŒ€";
-    Text[ arabic ] = "ÊßÈíÑ æÊÕÛíÑ";
-    Text[ turkish ] = "Yakınlaştır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Zoom";
-    Text[ thai ] = "à¸¢à¹ˆà¸­/à¸‚à¸¢à¸²à¸¢";
-    Text[ czech ] = "Lupa";
-    Text[ hebrew ] = "â€®×–×•×â€¬";
-    Text[ hindi ] = "à¤à¥‚à¤®";
-    Text[ slovak ] = "Lupa";
-    Text[ hungarian ] = "NagyÃ­tÃ¡s";
-    Text[ slovenian ] = "Zoom";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_CHOOSE_MODE
 {
@@ -245,19 +189,8 @@ FloatingWindow RID_CHOOSE_MODE
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Effekte" ;
-    Text [ ENGLISH ] = "Effects" ;
-    Text [ norwegian ] = "Effects" ;
-    Text [ italian ] = "Effetti" ;
-    Text [ portuguese_brazilian ] = "Efeitos" ;
-    Text [ portuguese ] = "Efeitos" ;
-    Text [ french ] = "Effets" ;
-    Text [ dutch ] = "Effecten" ;
-    Text [ spanish ] = "Efectos" ;
-    Text [ danish ] = "Effekter" ;
-    Text [ swedish ] = "Effekter" ;
-    Text [ finnish ] = "Tehosteet" ;
-    Text [ english_us ] = "Effects" ;
+    Text [ de ] = "Effekte" ;
+    Text [ en-US ] = "Effects" ;
     ToolBox RID_CHOOSE_MODE_TBX
     {
         SVLook = TRUE ;
@@ -326,24 +259,7 @@ FloatingWindow RID_CHOOSE_MODE
             };
         };
     };
-    Text[ chinese_simplified ] = "æ•ˆæœ";
-    Text[ russian ] = "İôôåêòû";
-    Text[ polish ] = "Efekty";
-    Text[ japanese ] = "åŠ¹æœ";
-    Text[ chinese_traditional ] = "æ•ˆæœ";
-    Text[ greek ] = "Åöİ";
-    Text[ korean ] = "íš¨ê³¼";
-    Text[ arabic ] = "ÊÃËíÑÇÊ";
-    Text[ turkish ] = "Efektler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Efectes";
-    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸´à¹€à¸¨à¸©";
-    Text[ czech ] = "Efekty";
-    Text[ hebrew ] = "â€®××¤×§×˜×™×â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤­à¤¾à¤µ";
-    Text[ slovak ] = "Efekty";
-    Text[ hungarian ] = "HatÃ¡sok";
-    Text[ slovenian ] = "UÄinki";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_TEXT
 {
@@ -352,8 +268,7 @@ FloatingWindow RID_TEXT
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Text" ;
-    Text [ ENGLISH ] = "Text" ;
+    Text [ de ] = "Text" ;
     ToolBox RID_TEXT_TBX
     {
         SVLook = TRUE ;
@@ -411,34 +326,8 @@ FloatingWindow RID_TEXT
             };
         };
     };
-    Text [ dutch ] = "Tekst" ;
-    Text [ english_us ] = "Text" ;
-    Text [ italian ] = "Testo" ;
-    Text [ spanish ] = "Texto" ;
-    Text [ french ] = "Texte" ;
-    Text [ swedish ] = "Text" ;
-    Text [ danish ] = "Tekst" ;
-    Text [ portuguese_brazilian ] = "Texto" ;
-    Text [ portuguese ] = "Texto" ;
-    Text[ chinese_simplified ] = "æ–‡å­—";
-    Text[ russian ] = "Òåêñò";
-    Text[ polish ] = "Tekst";
-    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
-    Text[ chinese_traditional ] = "æ–‡å­—";
-    Text[ greek ] = "Êåßìåíï";
-    Text[ korean ] = "í…ìŠ¤íŠ¸";
-    Text[ arabic ] = "äÕ";
-    Text[ turkish ] = "Metin";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Text";
-    Text[ finnish ] = "Teksti";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "Text";
-    Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-    Text[ slovak ] = "Text";
-    Text[ hungarian ] = "SzÃ¶veg";
-    Text[ slovenian ] = "Besedilo";
+    Text [ en-US ] = "Text" ;
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_RECTANGLES
 {
@@ -447,17 +336,8 @@ FloatingWindow RID_RECTANGLES
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Rechtecke" ;
-    Text [ ENGLISH ] = "Rectangles" ;
-    Text [ dutch ] = "Rechthoeken" ;
-    Text [ english_us ] = "Rectangles" ;
-    Text [ italian ] = "Rettangoli" ;
-    Text [ spanish ] = "Rectángulos" ;
-    Text [ french ] = "Rectangles" ;
-    Text [ swedish ] = "Rektanglar" ;
-    Text [ danish ] = "Rektangler" ;
-    Text [ portuguese_brazilian ] = "Retângulos" ;
-    Text [ portuguese ] = "Ângulos rectos" ;
+    Text [ de ] = "Rechtecke" ;
+    Text [ en-US ] = "Rectangles" ;
     ToolBox RID_RECTANGLES_TBX
     {
         SVLook = TRUE ;
@@ -527,25 +407,7 @@ FloatingWindow RID_RECTANGLES
             };
         };
     };
-    Text[ chinese_simplified ] = "çŸ©å½¢";
-    Text[ russian ] = "Ïğÿìîóãîëüíèêè";
-    Text[ polish ] = "Prostok¹ty";
-    Text[ japanese ] = "å››è§’å½¢";
-    Text[ chinese_traditional ] = "çŸ©å½¢";
-    Text[ greek ] = "Ïñèïãşíéá";
-    Text[ korean ] = "ì§ì‚¬ê°í˜•";
-    Text[ arabic ] = "ãÓÊØíáÇÊ";
-    Text[ turkish ] = "Dikdörtgenler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rectangles";
-    Text[ finnish ] = "Suorakulmiot";
-    Text[ thai ] = "à¸ªà¸µà¹ˆà¹€à¸«à¸¥à¸µà¹ˆà¸¢à¸¡";
-    Text[ czech ] = "ObdÃ©lnÃ­ky";
-    Text[ hebrew ] = "Rechtecke";
-    Text[ hindi ] = "à¤†à¤¯à¤¤à¥‡à¤‚";
-    Text[ slovak ] = "ObdÄºÅ¾niky";
-    Text[ hungarian ] = "TÃ©glalapok";
-    Text[ slovenian ] = "Pravokotniki";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_ELLIPSES
 {
@@ -554,17 +416,8 @@ FloatingWindow RID_ELLIPSES
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Ellipsen" ;
-    Text [ ENGLISH ] = "Ellipses" ;
-    Text [ dutch ] = "Ellipsen" ;
-    Text [ english_us ] = "Ellipses" ;
-    Text [ italian ] = "Ellissi" ;
-    Text [ spanish ] = "Elipses" ;
-    Text [ french ] = "Ellipses" ;
-    Text [ swedish ] = "Ellipser" ;
-    Text [ danish ] = "Ellipser" ;
-    Text [ portuguese_brazilian ] = "Elipses" ;
-    Text [ portuguese ] = "Elipses" ;
+    Text [ de ] = "Ellipsen" ;
+    Text [ en-US ] = "Ellipses" ;
     ToolBox RID_ELLIPSES_TBX
     {
         SVLook = TRUE ;
@@ -662,25 +515,7 @@ FloatingWindow RID_ELLIPSES
             };
         };
     };
-    Text[ chinese_simplified ] = "æ¤­åœ†";
-    Text[ russian ] = "İëëèïñ";
-    Text[ polish ] = "Elipsy";
-    Text[ japanese ] = "æ¥•å††å½¢";
-    Text[ chinese_traditional ] = "æ©¢åœ“";
-    Text[ greek ] = "¸ëëåéøç";
-    Text[ korean ] = "íƒ€ì›";
-    Text[ arabic ] = "ÃÔßÇá ÈíÖæíÉ";
-    Text[ turkish ] = "Elipsler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Elipses";
-    Text[ finnish ] = "Soikiot";
-    Text[ thai ] = "à¸§à¸‡à¸£à¸µ";
-    Text[ czech ] = "Elipsy";
-    Text[ hebrew ] = "Ellipsen";
-    Text[ hindi ] = "à¤¦à¥€à¤°à¥à¤˜à¤µà¥ƒà¤¤à¥à¤¤";
-    Text[ slovak ] = "Elipsy";
-    Text[ hungarian ] = "Ellipszisek";
-    Text[ slovenian ] = "Elipse";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_LINES
 {
@@ -689,17 +524,8 @@ FloatingWindow RID_LINES
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Kurven" ;
-    Text [ ENGLISH ] = "Curves" ;
-    Text [ dutch ] = "Bogen" ;
-    Text [ english_us ] = "Curves" ;
-    Text [ italian ] = "Curve" ;
-    Text [ spanish ] = "Curvas" ;
-    Text [ french ] = "Courbes" ;
-    Text [ swedish ] = "Kurvor" ;
-    Text [ danish ] = "Kurver" ;
-    Text [ portuguese_brazilian ] = "Curvas" ;
-    Text [ portuguese ] = "Curvas & Linhas" ;
+    Text [ de ] = "Kurven" ;
+    Text [ en-US ] = "Curves" ;
     ToolBox RID_LINES_TBX
     {
         SVLook = TRUE ;
@@ -762,25 +588,7 @@ FloatingWindow RID_LINES
             };
         };
     };
-    Text[ chinese_simplified ] = "æ›²çº¿";
-    Text[ russian ] = "Êğèâûå ëèíèè";
-    Text[ polish ] = "Krzywe";
-    Text[ japanese ] = "æ›²ç·š";
-    Text[ chinese_traditional ] = "æ›²ç·š";
-    Text[ greek ] = "Êáìğıëåò";
-    Text[ korean ] = "ê³¡ì„ ";
-    Text[ arabic ] = "ãäÍäíÇÊ";
-    Text[ turkish ] = "Eğriler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Corbes";
-    Text[ finnish ] = "Käyrät";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹‚à¸„à¹‰à¸‡";
-    Text[ czech ] = "KÅ™ivky";
-    Text[ hebrew ] = "Kurven";
-    Text[ hindi ] = "à¤µà¤•à¥à¤°";
-    Text[ slovak ] = "Krivky";
-    Text[ hungarian ] = "GÃ¶rbÃ©k";
-    Text[ slovenian ] = "Krivulje";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_ARROWS
 {
@@ -789,17 +597,8 @@ FloatingWindow RID_ARROWS
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Linien" ;
-    Text [ ENGLISH ] = "Lines" ;
-    Text [ english_us ] = "Lines" ;
-    Text [ portuguese ] = "Linhas" ;
-    Text [ swedish ] = "Linjer" ;
-    Text [ danish ] = "Streger" ;
-    Text [ italian ] = "Linee" ;
-    Text [ spanish ] = "Líneas" ;
-    Text [ french ] = "Lignes" ;
-    Text [ dutch ] = "Lijnen" ;
-    Text [ portuguese_brazilian ] = "Linhas" ;
+    Text [ de ] = "Linien" ;
+    Text [ en-US ] = "Lines" ;
     ToolBox RID_ARROWS_TBX
     {
         SVLook = TRUE ;
@@ -887,25 +686,7 @@ FloatingWindow RID_ARROWS
             };
         };
     };
-    Text[ chinese_simplified ] = "çº¿æ¡";
-    Text[ russian ] = "Ëèíèè è ñòğåëêè";
-    Text[ polish ] = "Linie";
-    Text[ japanese ] = "ç·š";
-    Text[ chinese_traditional ] = "ç·šæ¢";
-    Text[ greek ] = "Ãñáììİò";
-    Text[ korean ] = "ì„ ";
-    Text[ arabic ] = "ÎØæØ";
-    Text[ turkish ] = "Çizgiler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Línies";
-    Text[ finnish ] = "Viivat ja nuolet";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™";
-    Text[ czech ] = "ÄŒÃ¡ry";
-    Text[ hebrew ] = "Linien";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤à¤";
-    Text[ slovak ] = "ÄŒiary";
-    Text[ hungarian ] = "Vonalak";
-    Text[ slovenian ] = "ÄŒrte";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_3D_OBJECTS
 {
@@ -914,17 +695,8 @@ FloatingWindow RID_3D_OBJECTS
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "3D-Objekte" ;
-    Text [ ENGLISH ] = "3D objects" ;
-    Text [ english_us ] = "3D Objects" ;
-    Text [ italian ] = "Oggetti 3D" ;
-    Text [ spanish ] = "Objetos 3D" ;
-    Text [ french ] = "Objets 3D" ;
-    Text [ dutch ] = "3D-objecten" ;
-    Text [ swedish ] = "3D-objekt" ;
-    Text [ danish ] = "3D-objekter" ;
-    Text [ portuguese ] = "Objectos 3D" ;
-    Text [ portuguese_brazilian ] = "Objetos 3D" ;
+    Text [ de ] = "3D-Objekte" ;
+    Text [ en-US ] = "3D Objects" ;
     ToolBox RID_3D_OBJECTS_TBX
     {
         SVLook = TRUE ;
@@ -987,25 +759,7 @@ FloatingWindow RID_3D_OBJECTS
             };
         };
     };
-    Text[ chinese_simplified ] = "3 ç»´å¯¹è±¡";
-    Text[ russian ] = "Òğåõìåğíûå îáúåêòû";
-    Text[ polish ] = "Obiekty 3D";
-    Text[ japanese ] = "ç«‹ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-    Text[ chinese_traditional ] = "3D ç‰©ä»¶";
-    Text[ greek ] = "Áíôéêåßìåíá 3Ä";
-    Text[ korean ] = "3ï¼¤ ê°œì²´";
-    Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
-    Text[ turkish ] = "3B nesneler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objectes 3D";
-    Text[ finnish ] = "3D-kappale";
-    Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸3à¸¡à¸´à¸•à¸´";
-    Text[ czech ] = "3D objekty";
-    Text[ hebrew ] = "3D-Objekte";
-    Text[ hindi ] = "3D à¤µà¤¸à¥à¤¤à¥";
-    Text[ slovak ] = "3D objekty";
-    Text[ hungarian ] = "TÃ©rbeli objektumok";
-    Text[ slovenian ] = "3D predmeti";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_CONNECTORS
 {
@@ -1014,17 +768,8 @@ FloatingWindow RID_CONNECTORS
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Verbinder" ;
-    Text [ ENGLISH ] = "Connectors" ;
-    Text [ dutch ] = "Verbindingen" ;
-    Text [ english_us ] = "Connectors" ;
-    Text [ swedish ] = "Förbindelse" ;
-    Text [ danish ] = "Forbindelse" ;
-    Text [ italian ] = "Connettori" ;
-    Text [ spanish ] = "Conector" ;
-    Text [ french ] = "Connecteurs" ;
-    Text [ portuguese_brazilian ] = "Conectores" ;
-    Text [ portuguese ] = "Conector" ;
+    Text [ de ] = "Verbinder" ;
+    Text [ en-US ] = "Connectors" ;
     ToolBox RID_CONNECTORS_TBX
     {
         SVLook = TRUE ;
@@ -1242,25 +987,7 @@ FloatingWindow RID_CONNECTORS
             };
         };
     };
-    Text[ chinese_simplified ] = "è¿æ¥ç¬¦";
-    Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëèíèÿ";
-    Text[ polish ] = "£¹czniki";
-    Text[ japanese ] = "ã‚³ãƒã‚¯ã‚¿";
-    Text[ chinese_traditional ] = "é€£æ¥ç¬¦";
-    Text[ greek ] = "Óõíäİóåéò";
-    Text[ korean ] = "ì—°ê²°ì";
-    Text[ arabic ] = "ÑæÇÈØ";
-    Text[ turkish ] = "Bağlayıcılar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Connectors";
-    Text[ finnish ] = "Yhdysviivat";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
-    Text[ czech ] = "Spojnice";
-    Text[ hebrew ] = "Verbinder";
-    Text[ hindi ] = "à¤•à¤¨à¥‡à¤•à¥à¤Ÿà¤°à¥‡à¤‚";
-    Text[ slovak ] = "Spojnice";
-    Text[ hungarian ] = "Ã–sszekÃ¶tÅ‘k";
-    Text[ slovenian ] = "Konektorji";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_INSERT
 {
@@ -1270,17 +997,8 @@ FloatingWindow RID_INSERT
     Hide = TRUE ;
     SVLook = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text = "Einfügen" ;
-    Text [ ENGLISH ] = "Insert" ;
-    Text [ dutch ] = "Invoegen" ;
-    Text [ english_us ] = "Insert" ;
-    Text [ italian ] = "Inserisci" ;
-    Text [ spanish ] = "Insertar" ;
-    Text [ french ] = "Insérer" ;
-    Text [ swedish ] = "Infoga" ;
-    Text [ danish ] = "Indsæt" ;
-    Text [ portuguese_brazilian ] = "Inserir" ;
-    Text [ portuguese ] = "Inserir" ;
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
     ToolBox RID_INSERT_TBX
     {
         SVLook = TRUE ;
@@ -1364,25 +1082,7 @@ FloatingWindow RID_INSERT
             };
         };
     };
-    Text[ chinese_simplified ] = "æ’å…¥";
-    Text[ russian ] = "Âñòàâèòü";
-    Text[ polish ] = "Wstaw";
-    Text[ japanese ] = "æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥";
-    Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "ì‚½ì…";
-    Text[ arabic ] = "ÅÏÑÇÌ";
-    Text[ turkish ] = "Ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix";
-    Text[ finnish ] = "Lisää";
-    Text[ thai ] = "à¹à¸—à¸£à¸";
-    Text[ czech ] = "VloÅ¾it";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥";
-    Text[ hungarian ] = "BeszÃºrÃ¡s";
-    Text[ slovenian ] = "Vstavi";
+    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_POSITION
 {
@@ -1391,17 +1091,8 @@ FloatingWindow RID_POSITION
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Anordnung" ;
-    Text [ ENGLISH ] = "Position" ;
-    Text [ dutch ] = "Positie" ;
-    Text [ english_us ] = "Arrange" ;
-    Text [ swedish ] = "Placering" ;
-    Text [ danish ] = "Placering" ;
-    Text [ italian ] = "Disponi" ;
-    Text [ spanish ] = "Disposición" ;
-    Text [ french ] = "Disposition" ;
-    Text [ portuguese_brazilian ] = "Organizar" ;
-    Text [ portuguese ] = "Disposição" ;
+    Text [ de ] = "Anordnung" ;
+    Text [ en-US ] = "Arrange" ;
     ToolBox RID_POSITION_TBX
     {
         SVLook = TRUE ;
@@ -1452,25 +1143,7 @@ FloatingWindow RID_POSITION
             };
         };
     };
-    Text[ chinese_simplified ] = "æ’åº";
-    Text[ russian ] = "Ğàñïîëîæåíèå";
-    Text[ polish ] = "Rozmieszczenie";
-    Text[ japanese ] = "æ•´åˆ—";
-    Text[ chinese_traditional ] = "æ’åº";
-    Text[ greek ] = "Ôáêôïğïßçóç";
-    Text[ korean ] = "ë°°ì¹˜";
-    Text[ arabic ] = "ÊÑÊíÈ";
-    Text[ turkish ] = "Düzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Organitza";
-    Text[ finnish ] = "Järjestä";
-    Text[ thai ] = "à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡";
-    Text[ czech ] = "UspoÅ™Ã¡dat";
-    Text[ hebrew ] = "â€®×¡×™×“×•×¨â€¬";
-    Text[ hindi ] = "à¤•à¥à¤°à¤® à¤®à¥‡à¤‚ à¤°à¤–à¥‹";
-    Text[ slovak ] = "UsporiadaÅ¥";
-    Text[ hungarian ] = "ElrendezÃ©s";
-    Text[ slovenian ] = "Razporedi";
+    Text [ x-comment ] = " ";
 };
 
 
