@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,20 +1154,20 @@ ModalDialog RID_SVXDLG_IMAPURL
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~Alternativtext" ;
         Text [ ENGLISH ] = "~Alternative text" ;
-        Text [ english_us ] = "~Alternative Text" ;
-        Text [ italian ] = "Testo alternativo:" ;
-        Text [ spanish ] = "Texto alternativo:" ;
+        Text [ english_us ] = "Alternative ~text" ;
+        Text [ italian ] = "Testo alternativo" ;
+        Text [ spanish ] = "Texto alternativo" ;
         Text [ french ] = "Texte (facultatif) :" ;
         Text [ dutch ] = "Alternatieve tekst:" ;
-        Text [ swedish ] = "Alternativtext:" ;
+        Text [ swedish ] = "~Alternativtext" ;
         Text [ danish ] = "Alternativtekst:" ;
         Text [ portuguese_brazilian ] = "Alternativtext:" ;
-        Text [ portuguese ] = "Texto alternativo:" ;
-        Text[ chinese_simplified ] = "‘§±∏Œƒ:";
+        Text [ portuguese ] = "Te~xto facultativo" ;
+        Text[ chinese_simplified ] = "‘§±∏Œƒ";
         Text[ russian ] = "¿Î¸ÚÂÌ‡ÚË‚Ì˚È ÚÂÍÒÚ:";
-        Text[ polish ] = "Tekst alternatywny:";
-        Text[ japanese ] = "ë„óp√∑Ωƒ:";
-        Text[ chinese_traditional ] = "¥¿•N§Â¶r:";
+        Text[ polish ] = "Tekst opcjonalny:";
+        Text[ japanese ] = "ë„óp√∑Ωƒ";
+        Text[ chinese_traditional ] = "¥¿•N§Â¶r";
         Text[ arabic ] = ":‰’ »œÌ·";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "≈Ì·ÎÎ·ÍÙÈÍ¸ ÍÂﬂÏÂÌÔ:";
@@ -1191,19 +1191,19 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text = "~URL" ;
         Text [ English ] = "~URL Text" ;
         Text [ dutch ] = "URL:" ;
-        Text [ english_us ] = "~URL Text" ;
-        Text [ italian ] = "URL:" ;
-        Text [ spanish ] = "URL:" ;
+        Text [ english_us ] = "~URL" ;
+        Text [ italian ] = "URL" ;
+        Text [ spanish ] = "URL" ;
         Text [ french ] = "URL :" ;
-        Text [ swedish ] = "URL:" ;
+        Text [ swedish ] = "~URL" ;
         Text [ danish ] = "URL:" ;
         Text [ portuguese_brazilian ] = "URL:" ;
-        Text [ portuguese ] = "EndereÁo (URL):" ;
-        Text[ chinese_simplified ] = "URL£∫";
+        Text [ portuguese ] = "~URL" ;
+        Text[ chinese_simplified ] = "URL";
         Text[ russian ] = "URL:";
-        Text[ polish ] = "Adres URL:";
-        Text[ japanese ] = "URL:";
-        Text[ chinese_traditional ] = "URL:";
+        Text[ polish ] = "URL";
+        Text[ japanese ] = "URL";
+        Text[ chinese_traditional ] = "URL";
         Text[ arabic ] = ":URL ‰’";
         Text[ greek ] = "URL:";
         Text[ korean ] = "URL ≈ÿΩ∫∆Æ:";
@@ -1267,20 +1267,20 @@ ModalDialog RID_SVXDLG_IMAPURL
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~Frame" ;
         Text [ ENGLISH ] = "~Frame" ;
-        Text [ english_us ] = "~Frame" ;
+        Text [ english_us ] = "F~rame" ;
         Text [ portuguese_brazilian ] = "Frame:" ;
-        Text [ swedish ] = "Ram:" ;
+        Text [ swedish ] = "~Ram" ;
         Text [ danish ] = "Frame:" ;
-        Text [ italian ] = "Frame:" ;
-        Text [ spanish ] = "Frame:" ;
+        Text [ italian ] = "Frame" ;
+        Text [ spanish ] = "Frame" ;
         Text [ french ] = "Frame :" ;
         Text [ dutch ] = "Frame:" ;
-        Text [ portuguese ] = "Frame:" ;
-        Text[ chinese_simplified ] = "øÚ£∫";
+        Text [ portuguese ] = "~Frame" ;
+        Text[ chinese_simplified ] = "øÚ";
         Text[ russian ] = " ‡‰:";
-        Text[ polish ] = "Ramka:";
-        Text[ japanese ] = "Ã⁄∞—:";
-        Text[ chinese_traditional ] = "∞TÆÿ:";
+        Text[ polish ] = "Ramka";
+        Text[ japanese ] = "Ã⁄∞—";
+        Text[ chinese_traditional ] = "∞TÆÿ";
         Text[ arabic ] = "≈ÿ«—:";
         Text[ greek ] = "–Î·ﬂÛÈÔ:";
         Text[ korean ] = "«¡∑π¿”:";
@@ -1306,19 +1306,19 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text = "~Name" ;
         Text [ English ] = "~Name" ;
         Text [ english_us ] = "~Name" ;
-        Text [ portuguese ] = "Nome:" ;
+        Text [ portuguese ] = "~Nome" ;
         Text [ portuguese_brazilian ] = "Name:" ;
-        Text [ swedish ] = "Namn:" ;
+        Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn:" ;
-        Text [ italian ] = "Nome:" ;
-        Text [ spanish ] = "Nombre:" ;
+        Text [ italian ] = "Nome" ;
+        Text [ spanish ] = "Nombre" ;
         Text [ french ] = "Nom :" ;
         Text [ dutch ] = "Naam:" ;
-        Text[ chinese_simplified ] = "√˚≥∆:";
+        Text[ chinese_simplified ] = "√˚≥∆";
         Text[ russian ] = "»Ïˇ:";
-        Text[ polish ] = "Nazwa:";
-        Text[ japanese ] = "ñºëO:";
-        Text[ chinese_traditional ] = "¶W∫Ÿ:";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "ñºëO";
+        Text[ chinese_traditional ] = "¶W∫Ÿ";
         Text[ arabic ] = ":«·«”„";
         Text[ greek ] = "ºÌÔÏ·:";
         Text[ korean ] = "¿Ã∏ß:";
@@ -1409,5 +1409,6 @@ String STR_IMAPDLG_MODIFY
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 /******************************************************************************/
+
 
 
