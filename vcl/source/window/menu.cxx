@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:45:22 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1769,23 +1769,35 @@ void Menu::SetHelpText( USHORT nItemId, const XubString& rStr )
         pData->aHelpText = rStr;
 }
 
-const XubString& Menu::GetHelpText( USHORT nItemId ) const
+const XubString& Menu::ImplGetHelpText( USHORT nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
     {
-        if ( !pData->aHelpText.Len() && pData->nHelpId )
+        if ( !pData->aHelpText.Len() &&
+             (( pData->nHelpId  ) || ( pData->aCommandStr.Len() )))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pData->aHelpText = pHelp->GetHelpText( pData->nHelpId, NULL );
+            {
+                if ( pData->aCommandStr.Len() )
+                    pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
+
+                if( !pData->aHelpText.Len() && pData->nHelpId )
+                    pData->aHelpText = pHelp->GetHelpText( pData->nHelpId, NULL );
+            }
         }
 
         return pData->aHelpText;
     }
     else
         return ImplGetSVEmptyStr();
+}
+
+const XubString& Menu::GetHelpText( USHORT nItemId ) const
+{
+    return ImplGetHelpText( nItemId );
 }
 
 void Menu::SetTipHelpText( USHORT nItemId, const XubString& rStr )
