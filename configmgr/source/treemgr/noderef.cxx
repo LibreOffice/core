@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-01 13:40:40 $
+ *  last change: $Author: jb $ $Date: 2000-12-03 11:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,11 +705,33 @@ NodeID::NodeID(TreeImpl* pImpl, NodeOffset nNode)
 }
 //-----------------------------------------------------------------------------
 
+static // for now
+// should move this to a more public place sometime
+// need  this, as STLPORT does not hash sal_(u)Int64 (at least on MSVC)
+inline
+size_t hash64(sal_uInt64 n)
+{
+    // simple solution (but the same that STLPORT uses for unsigned long long (if enabled))
+    return static_cast<size_t>(n);
+}
+//-----------------------------------------------------------------------------
+
+static // for now
+// should move this to a more public place sometime
+inline
+size_t hashAnyPointer(void* p)
+{
+    // most portable quick solution IMHO (we need this cast for UNO tunnels anyway)
+    sal_uInt64 n = reinterpret_cast<sal_uInt64>(p);
+
+    return hash64(n);
+}
+//-----------------------------------------------------------------------------
+
 // hashing
 size_t NodeID::hashCode() const
 {
-    size_t nBaseHash = m_pTree ? m_pTree->getContextPath().hashCode() : 0;
-    return nBaseHash + 5*m_nNode;
+    return hashAnyPointer(m_pTree) + 5*m_nNode;
 }
 //-----------------------------------------------------------------------------
 
