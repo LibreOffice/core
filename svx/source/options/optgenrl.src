@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:07:29 $
+ *  last change: $Author: vg $ $Date: 2001-08-30 20:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ italian ] = "~Nome/Cognome/Iniziali" ;
         Text [ portuguese_brazilian ] = "~Primeiro/?ltimo" ;
         Text [ portuguese ] = "~Nome/Apelido/Iniciais" ;
-        Text [ finnish ] = "~Etu-/Sukunimi/Nimikirjaimet" ;
+        Text [ finnish ] = "Etu-/suku~nimi/nimikirjaimet" ;
         Text [ danish ] = "For-/Efternavn/Initialer" ;
         Text [ french ] = "Prénom/~Nom/Initiales" ;
         Text [ swedish ] = "För-/Efter~namn/Initialer" ;
@@ -220,7 +220,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ italian ] = "Via" ;
         Text [ portuguese_brazilian ] = "~Rua" ;
         Text [ portuguese ] = "~Rua" ;
-        Text [ finnish ] = "~Katu" ;
+        Text [ finnish ] = "~Katuosoite" ;
         Text [ danish ] = "Gade" ;
         Text [ french ] = "~Rue" ;
         Text [ swedish ] = "~Gatuadress" ;
@@ -365,7 +365,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ turkish ] = "Ülke";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~País";
-        Text[ finnish ] = "Valtio";
+        Text[ finnish ] = "Maa";
     };
     Edit ED_COUNTRY
     {
@@ -400,7 +400,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ turkish ] = "~Unvan/Pozisyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título/p~osición";
-        Text[ finnish ] = "~Titteli/Asema";
+        Text[ finnish ] = "~Asema/arvo";
     };
     Edit ED_TITLE
     {
@@ -424,7 +424,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ italian ] = "Te~l. (Priv./Uff.)" ;
         Text [ portuguese_brazilian ] = "Fo~ne (Priv./Co.)" ;
         Text [ portuguese ] = "Tel. (~part./emprego)" ;
-        Text [ finnish ] = "Puh. (koti/työ)" ;
+        Text [ finnish ] = "Puh. (koti/ty?" ;
         Text [ danish ] = "Tlf. (priv./arb.)" ;
         Text [ french ] = "Tél. (domicile/bureau)" ;
         Text [ swedish ] = "Tfn (~priv./arb.)" ;
@@ -554,7 +554,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ turkish ] = "Verileri belge özellikleri için kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usar ~datos para las propiedades del documento";
-        Text[ finnish ] = "Käytä asiakirjan ominaisuustietoja";
+        Text[ finnish ] = "K?yt? asiakirjan ominaisuustietoja";
     };
 
      // extra Resourcen f"ur die amerikanische Postadresse
@@ -582,7 +582,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ turkish ] = "Þehir/Ülke/Posta kodu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ciudad/País/CP";
-        Text[ finnish ] = "Paikkakunta/Osavaltio/Postinumero";
+        Text[ finnish ] = "Postitoimipaikka/osavaltio/postinumero";
     };
     String STR_QUERY_REG
     {
@@ -617,7 +617,7 @@ TabPage RID_SFXPAGE_GENERAL
     Text[ turkish ] = "Kullanýcý verileri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Datos del usuario";
-    Text[ finnish ] = "Käyttäjän tiedot";
+    Text[ finnish ] = "K?ytt?j?n tiedot";
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------
@@ -795,7 +795,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Kilometri" ; FUNIT_KM ; > ;
         < "Tuuma" ; FUNIT_INCH ; > ;
         < "Jalka" ; FUNIT_FOOT ; > ;
-        < "Mailia" ; FUNIT_MILE ; > ;
+        < "Mailit" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Piste" ; FUNIT_POINT ; > ;
     };
@@ -946,6 +946,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
 
 
