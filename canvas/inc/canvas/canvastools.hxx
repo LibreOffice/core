@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:08:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HDL_
-#include <com/sun/star/uno/RuntimeException.hdl>
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -91,6 +91,7 @@ namespace basegfx
 namespace drafts { namespace com { namespace sun { namespace star { namespace geometry
 {
     struct AffineMatrix2D;
+    struct Matrix2D;
 } } } } }
 
 namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
@@ -105,6 +106,25 @@ namespace canvas
 {
     namespace tools
     {
+        /** Compute the next highest power of 2 of a 32-bit value
+
+            Code devised by Sean Anderson, in good ole HAKMEM
+            tradition.
+
+            @return 1 << (lg(x - 1) + 1)
+        */
+        inline sal_uInt32 nextPow2( sal_uInt32 x )
+        {
+            --x;
+            x |= x >> 1;
+            x |= x >> 2;
+            x |= x >> 4;
+            x |= x >> 8;
+            x |= x >> 16;
+
+            return ++x;
+        }
+
         // View- and RenderState utilities
         // ===================================================================
 
@@ -169,7 +189,10 @@ namespace canvas
         // ===================================================================
 
         ::drafts::com::sun::star::geometry::AffineMatrix2D&
-            setIdentityAffineMatrix2D( ::drafts::com::sun::star::geometry::AffineMatrix2D&          matrix );
+            setIdentityAffineMatrix2D( ::drafts::com::sun::star::geometry::AffineMatrix2D&  matrix );
+
+        ::drafts::com::sun::star::geometry::Matrix2D&
+            setIdentityMatrix2D( ::drafts::com::sun::star::geometry::Matrix2D&              matrix );
 
 
         // Special utilities
@@ -292,7 +315,7 @@ namespace canvas
             }
         }
 
-        // BEWARE: don't currently use with float or double, Solaris
+        // BEWARE(E2): don't currently use with float or double, Solaris
         // STLport's numeric_limits bark on that (unresolved
         // externals)
 
@@ -308,7 +331,7 @@ namespace canvas
                 ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
                 ( arg>TargetLimits::max() ) )                               // overflow will happen
             {
-#ifdef VERBOSE
+#if defined(VERBOSE) && defined(DBG_UTIL)
                 OSL_TRACE("numeric_cast detected data loss");
 #endif
                 throw ::com::sun::star::uno::RuntimeException(
@@ -319,7 +342,29 @@ namespace canvas
             return static_cast<Target>(arg);
         }
 
+        /** Retrieve various internal properties of the actual canvas implementation.
+
+            This method retrieves a bunch of internal, implementation-
+            and platform-dependent values from the canvas
+            implementation. Among them are for example operating
+            system window handles. The actual layout and content of
+            the returned sequence is dependent on the component
+            implementation, undocumented and subject to change.
+
+            @param i_rxCanvas
+            Input parameter, the canvas representation for which the device information
+            is to be retrieveds
+
+            @param o_rxParams
+            Output parameter, the sequence of Anys that hold the device parameters. Layout is as described above
+
+            @return A reference to the resulting sequence of parameters
+        */
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo(
+            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvas >& i_rxCanvas,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& o_rxParams );
     }
 }
 
 #endif /* _CANVAS_CANVASTOOLS_HXX */
+// eof
