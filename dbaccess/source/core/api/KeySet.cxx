@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-11 09:09:42 $
+ *  last change: $Author: oj $ $Date: 2001-12-17 12:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,21 +183,27 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     m_aKeyIter = m_aKeyMap.begin();
 
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+    ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString();
 
-    ::rtl::OUString aFilter,aCatalog,aSchema,aTable;
+    ::rtl::OUString aFilter;
+    ::rtl::OUString sCatalog,sSchema,sTable;
 
     Reference<XPropertySet> xTableProp(m_xTable,UNO_QUERY);
-    xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-    xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-    xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
+    xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+    xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+    xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-    m_aComposedTableName = getComposedTableName(aCatalog,aSchema,aTable);
+    m_aComposedTableName = getComposedTableName(sCatalog,sSchema,sTable);
+
+    ::rtl::OUString sComposedName;
+    ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable);
+    ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
     // create the where clause
     OColumnNamePos::const_iterator aIter;
     for(aIter = (*m_pKeyColumnNames).begin();aIter != (*m_pKeyColumnNames).end();)
     {
-        aFilter += ::dbtools::quoteName( aQuote,m_sUpdateTableName);
+        aFilter += sComposedName;
         aFilter += ::rtl::OUString::createFromAscii(".");
         aFilter += ::dbtools::quoteName( aQuote,aIter->first);
         aFilter += ::rtl::OUString::createFromAscii(" = ?");
@@ -1345,6 +1351,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.30  2001/12/11 09:09:42  oj
+    #95779# use of alias tablename
+
     Revision 1.29  2001/12/05 14:56:24  oj
     #95610# fetch autoincrement values after insert with max
 
