@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 07:19:29 $
+ *  last change: $Author: os $ $Date: 2001-06-29 10:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2994,7 +2994,13 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ catalan ] = "La transformación en el formato HTML \npuede causar la pérdida de información. \n¿Desea guardar el documento?";
     Message[ finnish ] = "Muunnettaessa HTML-muotoon\ntietoja saattaa hävitä. \nHaluatko tallentaa asiakirjan?";
 };
-
+QueryBox MSG_SAVEAS_HTML_QUERY
+{
+    BUTTONS = WB_YES_NO;
+    DEFBUTTON = WB_DEF_NO ;
+    MESSAGE = "Die Quelltextansicht kann nur angezeigt werden, wenn das Dokument im HTML-Format gespeichert wurde.\nMöchten Sie das Dokument jetzt im HTML-Format speichern?" ;
+    MESSAGE [ English ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?" ;
+};
 String STR_ABSTRACT_TITLE
 {
     Text = "Abstrakt : " ;

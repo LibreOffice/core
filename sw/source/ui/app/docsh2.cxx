@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 08:56:16 $
+ *  last change: $Author: os $ $Date: 2001-06-29 10:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::sfx2;
 
 extern FASTBOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
@@ -919,19 +920,48 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SwSrcView* pSrcView = PTR_CAST(SwSrcView, pViewShell);
                 if(!pSrcView)
                 {
-                    if(!HasName())
+                    // 3 possible state:
+                    // 1 - file unsaved -> save as HTML
+                    // 2 - file modified and HTML filter active -> save
+                    // 3 - file saved in non-HTML -> QueryBox to save as HTML
+                    const SfxFilter* pHtmlFlt =
+                                    SwIoSystem::GetFilterOfFormat(
+                                        String::CreateFromAscii("HTML"),
+                                        SwWebDocShell::Factory().GetFilterContainer() );
+                    BOOL bHasName = HasName();
+                    if(bHasName)
                     {
+                        //check for filter type
+                        const SfxFilter* pFlt = GetMedium()->GetFilter();
+                        if(!pFlt || pFlt->GetFilterName() != pHtmlFlt->GetFilterName())
+                        {
+                            QueryBox aQuery(&pViewFrm->GetWindow(), SW_RES(MSG_SAVEAS_HTML_QUERY));
+                            if(RET_YES == aQuery.Execute())
+                                bHasName = FALSE;
+                            else
+                                break;
+                        }
+                    }
+                    if(!bHasName)
+                    {
+                        FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
+                        aDlgHelper.AddFilter( pHtmlFlt->GetFilterName(), pHtmlFlt->GetDefaultExtension() );
+                        aDlgHelper.SetCurrentFilter( pHtmlFlt->GetFilterName() );
+                        if(ERRCODE_NONE != aDlgHelper.Execute())
+                        {
+                            break;
+                        }
+                        String sPath = aDlgHelper.GetPath();
+                        SfxStringItem aName(SID_FILE_NAME, sPath);
+                        SfxStringItem aFilter(SID_FILTER_NAME, pHtmlFlt->GetName());
                         const SfxBoolItem* pBool = (const SfxBoolItem*)
                                 pViewFrm->GetDispatcher()->Execute(
-                                        SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON );
+                                        SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aName, &aFilter, 0L );
                         if(!pBool || !pBool->GetValue())
                             break;
                     }
                     else
-                    {
-                        pViewFrm->GetDispatcher()->Execute(
-                                        SID_SAVEDOC, SFX_CALLMODE_SYNCHRON );
-                    }
+                        DoSave();
                 }
 #ifdef DBG_UTIL
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:34:57 $
+ *  last change: $Author: os $ $Date: 2001-06-29 10:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 //Fuer das Interface, weil der RID_APP_BEGIN jetzt Desktop ist.
 #define RID_SW_NAME                 ( RC_APP_BEGIN + 8)
-
+#define MSG_SAVEAS_HTML_QUERY       ( RC_APP_BEGIN + 9)
 #define MSG_INDEX_OVERFLOW          ( RC_APP_BEGIN + 10)
 
 #define STR_UNBENANNT               (RC_APP_BEGIN + 13)
