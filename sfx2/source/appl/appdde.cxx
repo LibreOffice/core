@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: jp $ $Date: 2001-02-09 16:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,25 @@ SvPseudoObject* SfxApplication::DdeCreateHotLink
     return 0;
 }
 
+//--------------------------------------------------------------------
+
+so3::SvLinkSource* SfxApplication::DdeCreateLinkSource
+(
+    const String&   rItem      // das zu erzeugende Item
+)
+
+/*  [Beschreibung]
+
+    Diese Methode kann vom Applikationsentwickler "uberladen werden,
+    um an seiner SfxApplication-Subklasse einen DDE-Hotlink einzurichten
+
+    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
+*/
+
+{
+    return 0;
+}
+
 //========================================================================
 
 long SfxObjectShell::DdeExecute
@@ -412,6 +431,25 @@ SvPseudoObject* SfxObjectShell::DdeCreateHotLink
     return 0;
 }
 
+//--------------------------------------------------------------------
+
+so3::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
+(
+    const String&   rItem      // das zu erzeugende Item
+)
+
+/*  [Beschreibung]
+
+    Diese Methode kann vom Applikationsentwickler "uberladen werden,
+    um an seiner SfxObjectShell-Subklasse einen DDE-Hotlink einzurichten
+
+    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
+*/
+
+{
+    return 0;
+}
+
 //========================================================================
 
 long SfxViewFrame::DdeExecute
@@ -483,6 +521,25 @@ long SfxViewFrame::DdeSetData
 //--------------------------------------------------------------------
 
 SvPseudoObject* SfxViewFrame::DdeCreateHotLink
+(
+    const String&   rItem      // das zu erzeugende Item
+)
+
+/*  [Beschreibung]
+
+    Diese Methode kann vom Applikationsentwickler "uberladen werden,
+    um an seiner SfxViewFrame-Subklasse einen DDE-Hotlink einzurichten
+
+    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
+*/
+
+{
+    return 0;
+}
+
+//--------------------------------------------------------------------
+
+so3::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
 (
     const String&   rItem      // das zu erzeugende Item
 )
@@ -733,6 +790,7 @@ BOOL SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
 
 BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
 {
+#ifndef TF_SVDATA
     SvPseudoObject* pNewObj = pSh->DdeCreateHotLink( GetCurItem() );
     if( !pNewObj )
         return FALSE;
@@ -742,6 +800,19 @@ BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
     ::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
     new SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
     return TRUE;
+
+#else                                   // #ifndef TF_SVDATA
+
+    so3::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
+    if( !pNewObj )
+        return FALSE;
+
+    // dann richten wir auch einen entsprechenden SvBaseLink ein
+    String sNm, sTmp( Application::GetAppName() );
+    so3::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
+    new so3::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
+    return TRUE;
+#endif
 }
 
 
