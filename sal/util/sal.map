@@ -451,6 +451,16 @@ UDK_3_0_0 {
         rtl_bootstrap_setIniFileName;
         rtl_getAppCommandArgCount;
         rtl_getAppCommandArg;
+
+        rtl_moduleCount_acquire;
+        rtl_moduleCount_release;
+        rtl_moduleCount_canUnload;
+        rtl_registerModuleForUnloading;
+        rtl_unregisterModuleForUnloading;
+        rtl_unloadUnusedModules;
+        rtl_addUnloadingListener;
+        rtl_removeUnloadingListener;
+
     local:
         *;
 };
