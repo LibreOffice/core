@@ -1,0 +1,12 @@
+    <node oor:name="chart8" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.chart.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/schart*</value></prop>
+        <prop oor:name="Extensions"><value>oxc</value></prop>
+        <prop oor:name="MediaType"><value>application/x-vnd.oasis.openoffice.chart</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>chart8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Chart 8</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Chart 8</value></prop>
+    </node>
