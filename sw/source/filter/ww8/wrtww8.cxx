@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 15:36:26 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ static void WriteDop( SwWW8Writer& rWrt )
     const SwDocStat& rDStat = rWrt.pDoc->GetDocStat();
     rDop.cWords = rDStat.nWord;
     rDop.cCh    = rDStat.nChar;
-    rDop.cPg    = rDStat.nPage;
+    rDop.cPg    = (INT16)rDStat.nPage;
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
 
@@ -341,7 +341,7 @@ static void WriteDop( SwWW8Writer& rWrt )
     // und noch fuer die Header und Footers
     rDop.cWordsFtnEnd   = rDStat.nWord;
     rDop.cChFtnEdn      = rDStat.nChar;
-    rDop.cPgFtnEdn      = rDStat.nPage;
+    rDop.cPgFtnEdn      = (INT16)rDStat.nPage;
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
 
@@ -434,6 +434,16 @@ sal_Unicode WW8DopTypography::aJapanEndLevel1[51] =
 0xffe1, 0xffe5
 };
 
+int lcl_CmpBeginEndChars( const rtl::OUString& rSWStr,
+                          const sal_Unicode* pMSStr, int nMSStrByteLen )
+{
+    nMSStrByteLen /= sizeof( sal_Unicode );
+    if( nMSStrByteLen > rSWStr.getLength() )
+        nMSStrByteLen = rSWStr.getLength()+1;
+    nMSStrByteLen *= sizeof( sal_Unicode );
+
+    return memcmp( rSWStr.getStr(), pMSStr, nMSStrByteLen );
+}
 
 /*
 Converts the OOo Asian Typography into a best fit match for Microsoft
@@ -471,25 +481,23 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
     {
         if (pForbidden = pDoc->GetForbiddenCharacters(rTypo.GetConvertedLang(),
             FALSE))
-
         {
-            if ((memcmp(pForbidden->endLine.getStr(),
-                aLangNotEnd[(rTypo.reserved1-2)/2],
-                sizeof(aLangNotEnd[(rTypo.reserved1-2)/2])))
-            || (memcmp(pForbidden->beginLine.getStr(),
-                aLangNotBegin[(rTypo.reserved1-2)/2],
-                sizeof(aLangNotBegin[(rTypo.reserved1-2)/2]))))
+            int nIdx = (rTypo.reserved1-2)/2;
+            if( lcl_CmpBeginEndChars( pForbidden->endLine,
+                    aLangNotEnd[ nIdx ], sizeof(aLangNotEnd[ nIdx ]) ) ||
+                lcl_CmpBeginEndChars( pForbidden->beginLine,
+                    aLangNotBegin[ nIdx ], sizeof(aLangNotBegin[ nIdx ]) ) )
             {
                 //One exception for Japanese, if it matches a level 1 we
                 //can use one extra flag for that, rather than use a custom
                 if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
                 {
-                    if ((!memcmp(pForbidden->endLine.getStr(),
-                            WW8DopTypography::aJapanEndLevel1,
-                            sizeof(WW8DopTypography::aJapanEndLevel1)))
-                        && (!memcmp(pForbidden->beginLine.getStr(),
+                    if( !lcl_CmpBeginEndChars( pForbidden->endLine,
                             WW8DopTypography::aJapanBeginLevel1,
-                            sizeof(WW8DopTypography::aJapanEndLevel1))))
+                            sizeof(WW8DopTypography::aJapanBeginLevel1 )) &&
+                        !lcl_CmpBeginEndChars( pForbidden->beginLine,
+                            WW8DopTypography::aJapanEndLevel1,
+                            sizeof(WW8DopTypography::aJapanEndLevel1 )) )
                     {
                         rTypo.reserved2 = 0;
                         continue;
@@ -2254,11 +2262,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.9 2001-02-13 15:36:26 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.10 2001-02-15 20:03:11 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/13 15:36:26  jp
+      Bug #83797#: default is write UniCode
+
       Revision 1.8  2001/02/07 12:41:56  jp
       Bug #80745#: InsAsString16 - use Len instead of zero character
 
