@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:35:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,6 @@ void XclExpDummyRecord::SetData( const void* pRecData, sal_uInt32 nRecSize )
 void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
 {
     rStrm.Write( mpData, GetRecSize() );
-}
-
-// ----------------------------------------------------------------------------
-
-void XclExpRefRecord::Save( XclExpStream& rStrm )
-{
-    mrRec.Save( rStrm );
 }
 
 // ============================================================================
