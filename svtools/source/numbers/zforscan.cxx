@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: er $ $Date: 2002-03-11 15:21:47 $
+ *  last change: $Author: er $ $Date: 2002-07-26 18:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,6 +1345,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 if ( nTypeArray[i] == SYMBOLTYPE_DEL
                         && sStrArray[i].GetChar(0) == ']' )
                     bMatchBracket = FALSE;
+                else
+                    nTypeArray[i] = SYMBOLTYPE_STRING;
                 nPos += sStrArray[i].Len();
                 i++;
             }
