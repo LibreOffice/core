@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-29 13:10:31 $
+ *  last change: $Author: sb $ $Date: 2001-07-03 15:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,8 +222,8 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
 
    ; private
-   vnd-sun-star-hier-url = "VND.SUN.STAR.HIER:" *("/" *pchar)
-
+   vnd-sun-star-hier-url = "VND.SUN.STAR.HIER:" ["//"reg_name] *("/" *pchar)
+   reg_name = 1*(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
    ; private
    vim-url = "VIM://" +vimc [":" *vimc] ["/" [("INBOX" message) / ("NEWSGROUPS" ["/" [+vimc message]])]]
@@ -386,7 +386,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false },
         { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
           false, true, false, true, false },
-        { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, false, false, false,
+        { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
           false, false, false, true, false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
           false },
@@ -808,11 +808,10 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
     bool bSkippedInitialSlash = false;
 
     // Parse //<user>;AUTH=<auth>@<host>:<port> or
-    // //<user>:<password>@<host>:<port>
+    // //<user>:<password>@<host>:<port> or
+    // //<reg_name>
     if (getSchemeInfo().m_bAuthority)
     {
-        aSynAbsURIRef.AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
-
         sal_Unicode const * pUserInfoBegin = 0;
         sal_Unicode const * pUserInfoEnd = 0;
         sal_Unicode const * pHostPortBegin = 0;
@@ -827,6 +826,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
+                aSynAbsURIRef.AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                 UniString aSynAuthority;
                 while (pPos < pEnd
                        && *pPos != '/' && *pPos != '?'
@@ -847,6 +847,48 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                 break;
             }
 
+            case INET_PROT_VND_SUN_STAR_HIER:
+            {
+                if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
+                {
+                    pPos += 2;
+                    aSynAbsURIRef.
+                        AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                    UniString aSynAuthority;
+                    while (pPos < pEnd
+                           && *pPos != '/' && *pPos != '?'
+                           && *pPos != nFragmentDelimiter)
+                    {
+                        EscapeType eEscapeType;
+                        sal_uInt32 nUTF32 = getUTF32(pPos,
+                                                     pEnd,
+                                                     bOctets,
+                                                     cEscapePrefix,
+                                                     eMechanism,
+                                                     eCharset,
+                                                     eEscapeType);
+                        appendUCS4(aSynAuthority,
+                                   nUTF32,
+                                   eEscapeType,
+                                   bOctets,
+                                   PART_AUTHORITY,
+                                   cEscapePrefix,
+                                   eCharset,
+                                   false);
+                    }
+                    if (aSynAuthority.Len() == 0)
+                    {
+                        setInvalid();
+                        return false;
+                    }
+                    m_aHost.set(aSynAbsURIRef,
+                                aSynAuthority,
+                                aSynAbsURIRef.Len());
+                        // misusing m_aHost to store the authority
+                }
+                break;
+            }
+
             case INET_PROT_VND_SUN_STAR_PKG:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
@@ -854,6 +896,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
+                aSynAbsURIRef.AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                 UniString aSynAuthority;
                 while (pPos < pEnd
                        && *pPos != '/' && *pPos != '?'
@@ -914,6 +957,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                                && (p == pEnd || *p == nFragmentDelimiter
                                    || *p == '/'))
                         {
+                            aSynAbsURIRef.
+                                AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                             pHostPortBegin = pPos + 2;
                             pHostPortEnd = p;
                             pPos = p;
@@ -927,6 +972,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     //    "file:///" *path ["#" *UCS4]
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
+                        aSynAbsURIRef.
+                            AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                         pPos += 2;
                         bSkippedInitialSlash = true;
                         break;
@@ -937,7 +984,11 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     //  becomes
                     //    "file:///" *path ["#" *UCS4]
                     if (pPos < pEnd && *pPos == '/')
+                    {
+                        aSynAbsURIRef.
+                            AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                         break;
+                    }
 
                     // 4th Production (UNC; FSYS_DOS only):
                     //    "\\" domain ["\" *path] ["#" *UCS4]
@@ -954,6 +1005,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                             && (p == pEnd || *p == nFragmentDelimiter
                                 || *p == '\\'))
                         {
+                            aSynAbsURIRef.
+                                AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                             pHostPortBegin = pPos + 2;
                             pHostPortEnd = p;
                             pPos = p;
@@ -981,6 +1034,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                             || pPos[2] == '/'
                             || pPos[2] == '\\'))
                     {
+                        aSynAbsURIRef.
+                            AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                         nAltSegmentDelimiter = '\\';
                         bSkippedInitialSlash = true;
                         break;
@@ -1003,6 +1058,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     //  character is not copied.
                     if (eStyle & (FSYS_UNX | FSYS_DOS | FSYS_MAC))
                     {
+                        aSynAbsURIRef.
+                            AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                         switch (guessFSysStyleByCounting(pPos, pEnd, eStyle))
                         {
                             case FSYS_UNX:
@@ -1037,6 +1094,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
+                aSynAbsURIRef.AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
 
                 sal_Unicode const * pAuthority = pPos;
                 sal_uInt32 c = getSchemeInfo().m_bQuery ? '?' : 0x80000000;
@@ -3251,8 +3309,8 @@ void INetURLObject::makeAuthCanonic()
 UniString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {
-    // Check because PROT_VND_SUN_STAR_HELP and PROT_VND_SUN_STAR_PKG misuse
-    // m_aHost:
+    // Check because PROT_VND_SUN_STAR_HELP, PROT_VND_SUN_STAR_HIER, and
+    // PROT_VND_SUN_STAR_PKG misuse m_aHost:
     if (!getSchemeInfo().m_bHost)
         return UniString();
     UniString aHostPort(decode(m_aHost, getEscapePrefix(), eMechanism,

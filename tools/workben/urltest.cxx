@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-11 07:42:06 $
+ *  last change: $Author: sb $ $Date: 2001-07-03 15:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ main()
             bSuccess = false;
     }
 
+/*
     if (false)
     {
         bool bAbs = false;
@@ -363,8 +364,9 @@ main()
 
         INetURLObject aUrl3b(L"file:///export/home/mba/Office/user/Basic/soffice.sbl", INetURLObject::FSYS_DETECT);
     }
+*/
 
-    if (false)
+    if (true)
     {
         INetURLObject aUrl1("http://host:1234/xy/~zw?xxx=yyy");
         if (aUrl1.HasError())
@@ -384,7 +386,7 @@ main()
             printf("GOOD vnd.sun.star.webdav\n");
     }
 
-    if (false)
+    if (true)
     {
         static sal_Char const * const aTest[]
             = { "vnd.sun.star.help://",
@@ -416,7 +418,7 @@ main()
         }
     }
 
-    if (false)
+    if (true)
     {
         static sal_Char const * const aTest[]
             = { "vnd.sun.star.wfs://",
@@ -443,7 +445,7 @@ main()
         }
     }
 
-    if (false)
+    if (true)
     {
         static sal_Char const * const aTest[]
             = { "vnd.sun.star.pkg:",
@@ -468,7 +470,7 @@ main()
         }
     }
 
-    if (false)
+    if (true)
     {
         static sal_Char const * const aTest[]
             = { "vnd.sun.star.cmd:",
@@ -491,7 +493,7 @@ main()
         }
     }
 
-    if (false)
+    if (true)
     {
         rtl::OUString
             aParameters(rtl::OUString::createFromAscii("; CharSet=UTF-8  ; Blubber=Blob"));
@@ -522,7 +524,7 @@ main()
         }
     }
 
-    if (false)
+    if (true)
     {
         {
             INetURLObject aObj;
@@ -670,6 +672,40 @@ main()
                 printf("BAD https query 2\n");
                 bSuccess = false;
             }
+        }
+    }
+
+    if (true)
+    {
+        if (INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.hier:"))).HasError())
+        {
+            printf("BAD vnd.sun.star.hier test 1\n");
+            bSuccess = false;
+        }
+        if (!INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.hier://"))).HasError())
+        {
+            printf("BAD vnd.sun.star.hier test 2\n");
+            bSuccess = false;
+        }
+        if (!INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.hier:///"))).HasError())
+        {
+            printf("BAD vnd.sun.star.hier test 3\n");
+            bSuccess = false;
+        }
+        if (!INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.hier:///abc"))).HasError())
+        {
+            printf("BAD vnd.sun.star.hier test 4\n");
+            bSuccess = false;
+        }
+        if (INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.hier://abc"))).HasError())
+        {
+            printf("BAD vnd.sun.star.hier test 5\n");
+            bSuccess = false;
+        }
+        if (INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.hier://abc/def"))).HasError())
+        {
+            printf("BAD vnd.sun.star.hier test 6\n");
+            bSuccess = false;
         }
     }
 
