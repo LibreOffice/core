@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:11:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String RID_KEEP_PASSWORD
     Text[ chinese_simplified ] = "结束程序之前一直记住密码(~R)";
     Text[ chinese_simplified ] = "结束程序之前一直记住密码(~R)";
     Text[ chinese_traditional ] = "結束程序之前一直記住密碼(~R)";
-    Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
+    Text[ danish ] = "~Husk adgangskode til programmet lukkes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot be�indiging van toepassing";
     Text[ dutch ] = "Wachtwoord o~nthouden tot be�indiging van toepassing";
     Text[ english_us ] = "~Remember password till end of session";
@@ -96,6 +96,8 @@ String RID_KEEP_PASSWORD
     Text[ hebrew ] = "‮לזכור סיסמה רק עד ליציאה מהתוכנית‬";
     Text[ hindi ] = "कूटशब्द को कार्य-काल के अंत तक ~स्मरण में रखो";
     Text[ slovak ] = "~Zapamätať heslo do konca sedenia";
+    Text[ hungarian ] = "~Jelszó megjegyzése a munkafolyamat végéig";
+    Text[ slovenian ] = "~Zapomni si geslo do konca seje";
 };
 
 String RID_SAVE_PASSWORD
@@ -106,7 +108,7 @@ String RID_SAVE_PASSWORD
     Text[ chinese_simplified ] = "保存密码(~R)";
     Text[ chinese_simplified ] = "保存密码(~R)";
     Text[ chinese_traditional ] = "儲存密碼(~R)";
-    Text[ danish ] = "Gem adgangskoden permanent";
+    Text[ danish ] = "~Husk adgangskode";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ english_us ] = "~Remember password";
@@ -129,6 +131,8 @@ String RID_SAVE_PASSWORD
     Text[ hebrew ] = "‮לזכור סיסמה‬";
     Text[ hindi ] = "कूटशब्द ~स्मरण करो";
     Text[ slovak ] = "~Zapamätať heslo";
+    Text[ hungarian ] = "~Jelszó megjegyzése";
+    Text[ slovenian ] = "~Zapomni si geslo";
 };
 
 Resource RID_UUI_ERRHDL
@@ -146,7 +150,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Se ha interrumpido la accion ejecutada en $(ARG1).";
         Text[ finnish ] = "Kohteelle $(ARG1) suoritettu toiminto keskeytettiin.";
         Text[ italian ] = "L'operazione eseguita su $(ARG1) � stata interrotta";
-        Text[ danish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ danish ] = "Handlingen udf�rt p� $(ARG1) blev afbrudt";
         Text[ swedish ] = "�tg�rden som utf�rdes p� $(ARG1) avbr�ts";
         Text[ polish ] = "Operacja wykonywana na $(ARG1) zosta�a przerwana";
         Text[ portuguese_brazilian ] = "A opera��o executada em $(ARG1) foi cancelada.";
@@ -162,6 +166,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הפעולה שבוצע על $(ARG1) בוטלה.‬";
         Text[ hindi ] = "$(ARG1) में चलाया हुआ कार्य अधूरा रह गया";
         Text[ slovak ] = "Operácia spustená na $(ARG1) bola prerušená";
+        Text[ hungarian ] = "A következőn végrehajtott művelet megszakadt: $(ARG1)";
+        Text[ slovenian ] = "Operacija na $(ARG1) je bila prekinjena";
     };
 
     String (ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK)
@@ -177,7 +183,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Denegado el acceso a $(ARG1)";
         Text[ finnish ] = "Kohteen $(ARG1) k�ytt� kiellettiin.";
         Text[ italian ] = "Accesso a $(ARG1) negato";
-        Text[ danish ] = "The access to $(ARG1) was denied";
+        Text[ danish ] = "Adgang til $(ARG1) blev n�gtet";
         Text[ swedish ] = "�tkomst till $(ARG1) nekad";
         Text[ polish ] = "Brak dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "O acesso a $(ARG1) foi negado.";
@@ -193,6 +199,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮אין הרשאות גישה ל $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) केलिए प्रवेश निषेधित है";
         Text[ slovak ] = "Prístup k $(ARG1) bol odoprený";
+        Text[ hungarian ] = "Hozzáférés megtagadva következőhöz: $(ARG1)";
+        Text[ slovenian ] = "Dostop do $(ARG1) je bil zavrnjen";
     };
 
     String (ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK)
@@ -208,7 +216,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Ya existe $(ARG1)";
         Text[ finnish ] = "$(ARG1) on jo olemassa.";
         Text[ italian ] = "$(ARG1) esiste gi�";
-        Text[ danish ] = "$(ARG1) does already exist";
+        Text[ danish ] = "$(ARG1) findes allerede";
         Text[ swedish ] = "$(ARG1) finns redan";
         Text[ polish ] = "$(ARG1) ju� istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) j� existe.";
@@ -224,6 +232,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) כבר קיים‬";
         Text[ hindi ] = "$(ARG1) पहिले से ही अस्तित्व में है";
         Text[ slovak ] = "$(ARG1) už existuje";
+        Text[ hungarian ] = "$(ARG1) már létezik";
+        Text[ slovenian ] = "$(ARG1) že obstaja";
     };
 
     String (ERRCODE_UUI_IO_TARGETALREADYEXISTS & ERRCODE_RES_MASK)
@@ -239,7 +249,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "El destino ya existe";
         Text[ finnish ] = "Target does already exist";
         Text[ italian ] = "La destinazione esiste gi�";
-        Text[ danish ] = "Target does already exist";
+        Text[ danish ] = "M�let findes allerede";
         Text[ swedish ] = "M�l finns redan";
         Text[ polish ] = "Target does already exist";
         Text[ portuguese_brazilian ] = "O destino ainda n�o existe";
@@ -255,6 +265,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "Ziel existiert bereits";
         Text[ hindi ] = "Target already exists";
         Text[ slovak ] = "Cieľ už existuje";
+        Text[ hungarian ] = "A cél már létezik";
+        Text[ slovenian ] = "Cilj že obstaja";
     };
 
     String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
@@ -270,7 +282,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Los datos de $(ARG1) contienen una suma de control incorrecta.";
         Text[ finnish ] = "Kohteen $(ARG1) tiedoilla on virheellinen tarkistussumma.";
         Text[ italian ] = "La somma di controllo di $(ARG1) non � corretta.";
-        Text[ danish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ danish ] = "Data i $(ARG1) har en forkert checksum";
         Text[ swedish ] = "Data fr�n $(ARG1) har en felaktig kontrollsumma";
         Text[ polish ] = "Dane z $(ARG1) maj� nieprawid�ow� sum� kontroln�";
         Text[ portuguese_brazilian ] = "Os dados de $(ARG1) tem um checksum incorreto";
@@ -286,6 +298,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮סכום הביקורת של הנתונים מ-$(ARG1) שגוי‬";
         Text[ hindi ] = "$(ARG1) में से डॉटा का चेकसम गलत है";
         Text[ slovak ] = "Dáta z $(ARG1) majú nesprávny kontrolný súčet";
+        Text[ hungarian ] = "A következőből származó adatok ellenőrzőösszege hibás: $(ARG1)";
+        Text[ slovenian ] = "Podatki v $(ARG1) imajo napačno nadzorno vsoto";
     };
 
     String (ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK)
@@ -296,12 +310,12 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese ] = "Imposs�vel criar o objecto $(ARG1) no direct�rio $(ARG2).";
         Text[ russian ] = "���������� ������� ������ $(ARG1) � ����� $(ARG2)";
         Text[ greek ] = "��� ����� ������ � ���������� ��� ������������ $(ARG1) ���� �������� $(ARG2)";
-        Text[ dutch ] = "Object $(ARG1) kan niet in directory $(ARG2) worden gemaakt";
+        Text[ dutch ] = "Object $(ARG1) kan niet in directory $(ARG2) worden aangemaakt";
         Text[ french ] = "Impossible de cr�er l'objet $(ARG1) dans le r�pertoire $(ARG2) !";
         Text[ spanish ] = "No se puede crear el objeto $(ARG1) en el directorio $(ARG2).";
         Text[ finnish ] = "Kohdetta $(ARG1) ei voi luoda hakemistoon $(ARG2).";
         Text[ italian ] = "Impossibile creare l'oggetto $(ARG1) nella cartella $(ARG2)";
-        Text[ danish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ danish ] = "Objektet $(ARG1) kunne ikke oprettes i kataloget $(ARG2)";
         Text[ swedish ] = "Det g�r inte att skapa objektet $(ARG1) i katalogen $(ARG2)";
         Text[ polish ] = "Utworzenie obiektu $(ARG1) w katalogu $(ARG2) nie jest mo�liwe";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel criar o objeto $(ARG1) no diret�rio $(ARG2).";
@@ -317,6 +331,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן ליצור את העצם $(ARG1) בספריה $(ARG2)‬";
         Text[ hindi ] = "$(ARG2) डैरक्टरी में $(ARG1) वस्तु को उत्पन्न नहीं कर सकते है";
         Text[ slovak ] = "Objekt $(ARG1) nemôže byť vytvorený v adresári $(ARG2)";
+        Text[ hungarian ] = "A(z) $(ARG1) objektumot nem lehet létrehozni a(z) $(ARG2) könyvtárban";
+        Text[ slovenian ] = "Predmeta $(ARG1) ni mogoče ustvariti v mapi $(ARG2)";
     };
 
     String (ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK)
@@ -332,7 +348,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se pudieron leer los datos de $(ARG1).";
         Text[ finnish ] = "Kohteen $(ARG1) tietoja ei voi lukea.";
         Text[ italian ] = "Impossibile leggere i dati di $(ARG1)";
-        Text[ danish ] = "Data of $(ARG1) could not be read";
+        Text[ danish ] = "Data fra $(ARG1) kunne ikke l�ses";
         Text[ swedish ] = "Det gick inte att l�sa data fr�n $(ARG1)";
         Text[ polish ] = "Nie mo�na odczyta� danych o $(ARG1)";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel ler os dados de $(ARG1).";
@@ -348,6 +364,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לקרוא את הנתונים של $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) का ड़ॉटा को नहीं पढ़ सकते है";
         Text[ slovak ] = "Dáta z $(ARG1) nemožno prečítať";
+        Text[ hungarian ] = "A következő adatai nem olvashatóak: $(ARG1)";
+        Text[ slovenian ] = "Podatkov iz $(ARG1) ni mogoče brati";
     };
 
     String (ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK)
@@ -363,7 +381,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se pudo ejecutar la operaci�n seek en $(ARG1).";
         Text[ finnish ] = "Hakutoimintoa kohteelle $(ARG1) ei voi suorittaa.";
         Text[ italian ] = "Impossibile portare a termine l'operazione 'seek' su $(ARG1)";
-        Text[ danish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ danish ] = "S�geoperationen p� $(ARG1) kunne ikke udf�res";
         Text[ swedish ] = "Det gick inte att utf�ra seek-operationen $(ARG1)";
         Text[ polish ] = "Nie mo�na przeprowadzi� na $(ARG1) operacji ustawienia wska�nika";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel executar a opera��o meta em $(ARG1).";
@@ -379,6 +397,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע פעולת חיפוש seek בקובץ $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) में सीक कार्य-संपादन नहीं कर सकते है";
         Text[ slovak ] = "Operácia seek na $(ARG1) nemohla byť uskutočnená";
+        Text[ hungarian ] = "A keresési (seek) műveletet nem lehet végrehajtani a következőn: $(ARG1)";
+        Text[ slovenian ] = "Iskanja na $(ARG1) ni mogoče izvesti";
     };
 
     String (ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK)
@@ -394,7 +414,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se pudo ejecutar la operaci�n tell en $(ARG1).";
         Text[ finnish ] = "Vastaustoimintoa kohteelle $(ARG1) ei voi suorittaa.";
         Text[ italian ] = "Impossibile portare a termine l'operazione 'tell' su  $(ARG1)";
-        Text[ danish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ danish ] = "Operationskaldet til $(ARG1) kunne ikke udf�res";
         Text[ swedish ] = "Det gick inte att utf�ra tell-operationen p� $(ARG1)";
         Text[ polish ] = "Nie mo�na przeprowadzi� na $(ARG1) operacji pobrania wska�nika";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel executar a opera��o comunica��o em $(ARG1).";
@@ -410,6 +430,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע פעולת המיקום tell בקובץ $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) में टेल कार्य-संपादन नहीं कर सकते है";
         Text[ slovak ] = "Operácia tell na $(ARG1) nemohla byť uskutočnená";
+        Text[ hungarian ] = "A \"tell\" műveletet nem lehet végrehajtani a következőn: $(ARG1)";
+        Text[ slovenian ] = "Določanja položaja na $(ARG1) ni mogoče izvesti";
     };
 
     String (ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK)
@@ -425,7 +447,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se pudieron guardar los datos para $(ARG1).";
         Text[ finnish ] = "Kohteen $(ARG1) tietoja ei voi kirjoittaa.";
         Text[ italian ] = "Impossibile scrivere i dati per $(ARG1)";
-        Text[ danish ] = "Data for $(ARG1) could not be written";
+        Text[ danish ] = "Data for $(ARG1) kunne ikke skrives";
         Text[ swedish ] = "Det gick inte att skriva data f�r $(ARG1)";
         Text[ polish ] = "Nie mo�na zapisa� danych dla $(ARG1)";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel gravar os dados para $(ARG1).";
@@ -441,6 +463,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לכתוב את הנתונים עבור $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) केलिए ड़ॉटा को नहीं लिख सकते है";
         Text[ slovak ] = "Dáta z $(ARG1) nemohli byť zapísané";
+        Text[ hungarian ] = "Adat nem írható: $(ARG1)";
+        Text[ slovenian ] = "Podatkov za $(ARG1) ni mogoče zapisati";
     };
 
     String (ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK)
@@ -451,12 +475,12 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese ] = "Ac��o imposs�vel: $(ARG1) � o direct�rio activo.";
         Text[ russian ] = "������ �������� �����������: $(ARG1) �������� ������� ������";
         Text[ greek ] = "� �������� ��� ����� ������: �� $(ARG1) ����� � ������ ���������";
-        Text[ dutch ] = "Deze activiteit kan niet worden uitgevoerd: $(ARG1) is de huidige directory";
+        Text[ dutch ] = "Deze handeling kan niet worden uitgevoerd: $(ARG1) is de huidige directory";
         Text[ french ] = "Op�ration impossible : $(ARG1) est le r�pertoire actif.";
         Text[ spanish ] = "Acci�n imposible: $(ARG1) es el directorio actual";
         Text[ finnish ] = "Toiminto mahdoton: $(ARG1) on nykyinen hakemisto.";
         Text[ italian ] = "L'operazione non � ammessa: $(ARG1) � la cartella attiva";
-        Text[ danish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ danish ] = "Handling ikke mulig: $(ARG1) er det nuv�rende katalog";
         Text[ swedish ] = "�tg�rd om�jlig: $(ARG1) �r den aktuella katalogen";
         Text[ polish ] = "Nie mo�na wykona� akcji: $(ARG1) jest katalogiem bie��cym";
         Text[ portuguese_brazilian ] = "N�o � poss�vel executar esta a��o: $(ARG1) � o diret�rio ativo.";
@@ -472,6 +496,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה: $(ARG1) היא הספריה הנוכחית‬";
         Text[ hindi ] = "कार्य असंभव: $(ARG1) वर्तमान डैरक्टरी है";
         Text[ slovak ] = "Neuskutočniteľná akcia: $(ARG1) je súčasným adresárom";
+        Text[ hungarian ] = "A művelet lehetetlen: a(z) $(ARG1) az aktuális könyvtár";
+        Text[ slovenian ] = "Dejanje ni možno: $(ARG1) je trenutna mapa";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK)
@@ -487,7 +513,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no est� preparado";
         Text[ finnish ] = "$(ARG1) ei ole valmis.";
         Text[ italian ] = "Il drive $(ARG1) non � pronto";
-        Text[ danish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ danish ] = "$(ARG1) er ikke parat";
         Text[ swedish ] = "$(ARG1) �r inte redo";
         Text[ polish ] = "$(ARG1) nie jest gotowy";
         Text[ portuguese_brazilian ] = "$(ARG1) n�o est� pronto.";
@@ -503,6 +529,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) אינו מוכן‬";
         Text[ hindi ] = "$(ARG1) तैयार नहीं है";
         Text[ slovak ] = "$(ARG1) nie je pripravený";
+        Text[ hungarian ] = "$(ARG1) nem üzemkész";
+        Text[ slovenian ] = "$(ARG1) ni pripravljen";
     };
 
     String (ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK)
@@ -513,12 +541,12 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese ] = "Ac��o imposs�vel: $(ARG1) e $(ARG2) s�o dispositivos diferentes (unidades).";
         Text[ russian ] = "������ �������� �����������: $(ARG1) � $(ARG2) �������� ���������� ������������";
         Text[ greek ] = "� �������� ��� ����� ������: �� $(ARG1) ��� �� $(ARG2) ����� ������������ �������� (�������)";
-        Text[ dutch ] = "Deze activiteit kan niet worden uitgevoerd: $(ARG1) en $(ARG2) zijn verschillende apparaten (stations)";
+        Text[ dutch ] = "Deze handeling kan niet worden uitgevoerd: $(ARG1) en $(ARG2) zijn verschillende apparaten (stations)";
         Text[ french ] = "Op�ration impossible : $(ARG1) et $(ARG2) sont des appareils (unit�s) diff�rent(e)s.";
         Text[ spanish ] = "Acci�n imposible: $(ARG1) y $(ARG2) son dispositivos (unidades) diferentes.";
         Text[ finnish ] = "Toiminto mahdoton: $(ARG1) ja $(ARG2) ovat eri laitteita (asemia).";
         Text[ italian ] = "L'operazione non � ammessa: $(ARG1) e $(ARG2) sono due drive diversi";
-        Text[ danish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ danish ] = "Umulig handling: $(ARG1) og $(ARG2) er forskellige enheder (drev)";
         Text[ swedish ] = "�tg�rd om�jlig: $(ARG1) och $(ARG2) �r olika enheter";
         Text[ polish ] = "Nie mo�na wykona� akcji: $(ARG1) i $(ARG2) s� r�nymi urz�dzeniami (nap�dami)";
         Text[ portuguese_brazilian ] = "N�o � poss�vel executar esta a��o: $(ARG1) e $(ARG2) s�o dispositivos (unidades) diferentes";
@@ -534,6 +562,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה כי $(ARG1) ו $(ARG2) נמצאים על כוננים שונים‬";
         Text[ hindi ] = "कार्य असंभव: $(ARG1) और $(ARG2) अलग अलग साधन है (ड्रइव्स)";
         Text[ slovak ] = "Neuskutočniteľná akcia: $(ARG1) a $(ARG2) sú rôzne zariadenia";
+        Text[ hungarian ] = "A művelet lehetetlen: $(ARG1) és $(ARG2) különböző eszközök (meghajtók)";
+        Text[ slovenian ] = "Dejanje ni možno: $(ARG1) in $(ARG2) sta različni napravi (različna pogona)";
     };
 
     String (ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK)
@@ -549,7 +579,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Error general de entrada/salida al acceder a $(ARG1).";
         Text[ finnish ] = "Yleinen I/O-virhe k�ytett�ess� kohdetta $(ARG1).";
         Text[ italian ] = "Errore generale di I/O nell'accesso a $(ARG1).";
-        Text[ danish ] = "General input/output error while accessing $(ARG1)";
+        Text[ danish ] = "Generel input/output fejl for $(ARG1)";
         Text[ swedish ] = "Allm�nt input/outputfel vid �tkomst till $(ARG1)";
         Text[ polish ] = "B��d og�lny wej�cia/wyj�cia przy dost�pie do $(ARG1).";
         Text[ portuguese_brazilian ] = "Erro geral de entrada/sa�da ao acessar $(ARG1).";
@@ -565,6 +595,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮שגיאת קלט-פלט לא מפורטת בעת גישה ל $(ARG1)‬";
         Text[ hindi ] = "$(ARG1)";
         Text[ slovak ] = "Všeobecná chyba vstupu/výstupu pri prístupe k $(ARG1)";
+        Text[ hungarian ] = "Általános be/kimeneti hiba a(z) $(ARG1) elérése közben";
+        Text[ slovenian ] = "Pri dostopu do $(ARG1) je prišlo do splošne vhodno/izhodne napake";
     };
 
     String (ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK)
@@ -580,7 +612,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Se intent� acceder a $(ARG1) en una forma err�nea.";
         Text[ finnish ] = "Kohdetta $(ARG1) yritettiin k�ytt�� v��rin.";
         Text[ italian ] = "� stato rilevato un tentativo di accedere a $(ARG1) in modo non autorizzato.";
-        Text[ danish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ danish ] = "$(ARG1) blev fors�gt tilg�et p� ugyldig vis";
         Text[ swedish ] = "Ogiltigt f�rs�k att f� �tkomst till $(ARG1)";
         Text[ polish ] = "Nieprawid�owa pr�ba dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "Uma tentativa foi feita de acessar $(ARG1) de forma inv�lida.";
@@ -596,6 +628,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮ארע נסיון גישה בצורה שגויה ל $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) को प्रवेश करने केलिए अमान्य रीति का प्रयास किया गया है";
         Text[ slovak ] = "Bol uskutočnený neplatný pokus o prístup k $(ARG1)";
+        Text[ hungarian ] = "Érvénytelen hozzáférési kísérlet történt a következőhöz: $(ARG1)";
+        Text[ slovenian ] = "Poskus dostopa do $(ARG1) je bil izveden na neveljaven način";
     };
 
     String (ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK)
@@ -611,7 +645,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) contiene caracteres no permitidos";
         Text[ finnish ] = "$(ARG1) sis�lt�� virheellisi� merkkej�.";
         Text[ italian ] = "$(ARG1) contiene caratteri non validi";
-        Text[ danish ] = "$(ARG1) contains invalid characters";
+        Text[ danish ] = "$(ARG1) indeholder ugyldige tegn";
         Text[ swedish ] = "$(ARG1) inneh�ller otill�tna tecken";
         Text[ polish ] = "$(ARG1) zawiera niedozwolone znaki";
         Text[ portuguese_brazilian ] = "$(ARG1) cont�m caracteres inv�lidos.";
@@ -627,6 +661,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) מכיל תווים לא חוקיים‬";
         Text[ hindi ] = "$(ARG1) में अमान्य अक्षरें है";
         Text[ slovak ] = "$(ARG1) obsahuje neplatné znaky";
+        Text[ hungarian ] = "A(z) $(ARG1) nem megengedett karaktert tartalmaz";
+        Text[ slovenian ] = "$(ARG1) vsebuje neveljavne znake";
     };
 
     String (ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK)
@@ -642,7 +678,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "El dispositivo (Unidad) $(ARG1) no es v�lido";
         Text[ finnish ] = "Laite (levyasema) $(ARG1) on virheellinen.";
         Text[ italian ] = "Il drive $(ARG1) non � valido";
-        Text[ danish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ danish ] = "Enheden (drev) $(ARG1) er ugyldig";
         Text[ swedish ] = "Enheten $(ARG1) �r ogiltig";
         Text[ polish ] = "Nieprawid�owe urz�dzenie (dysk) $(ARG1)";
         Text[ portuguese_brazilian ] = "O dispositivo (unidade) $(ARG1) n�o � v�lido.";
@@ -658,6 +694,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הכונן $(ARG1) אינו חוקי‬";
         Text[ hindi ] = "साधन (ड्रइव) $(ARG1) अमान्य है";
         Text[ slovak ] = "Zariadenie (mechanika) $(ARG1) je neplatné(-á)";
+        Text[ hungarian ] = "A(z) $(ARG1) eszköz (meghajtó) érvénytelen";
+        Text[ slovenian ] = "Naprava (pogon) $(ARG1) je neveljavena";
     };
 
     String (ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK)
@@ -673,7 +711,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Los datos de $(ARG1) poseen una longitud no permitida";
         Text[ finnish ] = "Kohteen $(ARG1) tiedot ovat v��r�n mittaiset.";
         Text[ italian ] = "La lunghezza dei dati di $(ARG1) non � ammessa";
-        Text[ danish ] = "The data of $(ARG1) have an invalid length";
+        Text[ danish ] = "Data fra $(ARG1) har en ugyldig l�ngde";
         Text[ swedish ] = "Data fr�n $(ARG1) har en ogiltig l�ngd";
         Text[ polish ] = "Dane z $(ARG1) s� nieprawid�owej d�ugo�ci";
         Text[ portuguese_brazilian ] = "Os dados de $(ARG1) t�m um tamanho inv�lido.";
@@ -689,6 +727,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮אורך הנתונים מ $(ARG1) אינו חוקי‬";
         Text[ hindi ] = "$(ARG1) का ड़ॉटा का विस्तार अमान्य है";
         Text[ slovak ] = "Dáta z $(ARG1) majú neplatnú dĺžku";
+        Text[ hungarian ] = "Az következőből származó adat hossza érvénytelen: $(ARG1)";
+        Text[ slovenian ] = "Podatki v $(ARG1) imajo neveljavno dolžino";
     };
 
     String (ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK)
@@ -704,7 +744,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "La operaci�n en $(ARG1) se inici� con un par�metro no permitido";
         Text[ finnish ] = "Toiminto kohteelle $(ARG1) k�ynnistettiin virheellisell� parametrilla.";
         Text[ italian ] = "Il parametro per avviare l'operazione $(ARG1) non � ammesso";
-        Text[ danish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ danish ] = "Handlingen p� $(ARG1) blev startet med en ugyldig parameter";
         Text[ swedish ] = "Operationen p� $(ARG1) startades med en ogiltig parameter";
         Text[ polish ] = "Operacj� na $(ARG1) uruchomiono podaj�c nieprawid�owy parametr";
         Text[ portuguese_brazilian ] = "A opera��o em $(ARG1) foi iniciada com um par�metro inv�lido.";
@@ -720,6 +760,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הפעולה על $(ARG1) הותחלה עם פרמטר לא חוקי‬";
         Text[ hindi ] = "$(ARG1) में अमान्य पैरामीटर सहित कार्य को प्रारंभ किया गया है";
         Text[ slovak ] = "Operácia na $(ARG1) bola spustená s neplatným parametrom";
+        Text[ hungarian ] = "A művelet érvénytelen paraméterrel indult a következőn: $(ARG1)";
+        Text[ slovenian ] = "Operacija na $(ARG1) se je začela z neveljavnim parametrom";
     };
 
     String (ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK)
@@ -735,7 +777,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se puede ejecutar la operaci�n porque $(ARG1) contiene comodines.";
         Text[ finnish ] = "Toimintoa ei voi suorittaa, koska $(ARG1) sis�lt�� yleismerkkej�.";
         Text[ italian ] = "Impossibile eseguire l'operazione perch� $(ARG1) contiene wildcard.";
-        Text[ danish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ danish ] = "Handlingen kan ikke udf�res, da $(ARG1) indeholder jokertegn";
         Text[ swedish ] = "Det g�r inte att utf�ra operationen eftersom $(ARG1) inneh�ller jokertecken";
         Text[ polish ] = "Wykonanie operacji nie jest mo�liwe, poniewa� $(ARG1) zawiera symbole wieloznaczne";
         Text[ portuguese_brazilian ] = "N�o � poss�vel executar a opera��o, porque $(ARG1) cont�m meta-caracteres.";
@@ -751,6 +793,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮ כולל תווי כוכביות‬$(ARG1)‮לא ניתן לבצע את הפעולה כי ‬";
         Text[ hindi ] = "$(ARG1) में वैल्डकार्ड रहने के कारण कार्य-संपादन नहीं कर सकते है";
         Text[ slovak ] = "Operáciu nie je možné uskutočniť, pretože $(ARG1) obsahuje zástupné znaky";
+        Text[ hungarian ] = "A művelet nem végrehajtható, mert $(ARG1) helyettesítő karaktereket tartalmaz";
+        Text[ slovenian ] = "Operacije ni mogoče izvesti, ker $(ARG1) vsebuje nadomestne znake";
     };
 
     String (ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK)
@@ -766,7 +810,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Error durante el acceso compartido al archivo $(ARG1).";
         Text[ finnish ] = "Virhe jaetussa yhteydess� kohteelle $(ARG1).";
         Text[ italian ] = "Errore nell'accesso comune a $(ARG1)";
-        Text[ danish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ danish ] = "Fejl under delt adgang til $(ARG1).";
         Text[ swedish ] = "Fel vid gemensam �tkomst till $(ARG1)";
         Text[ polish ] = "B��d wsp�lnego dost�pu do $(ARG1).";
         Text[ portuguese_brazilian ] = "Ocorreu um erro ao tentar acesso compartilhado a $(ARG1).";
@@ -782,6 +826,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮שגיאה בעת גישה משותפת ל $(ARG1).‬";
         Text[ hindi ] = "$(ARG1) को भागी प्रवेश के समय गलती ।";
         Text[ slovak ] = "Chyba pri zdieľanom prístupe k $(ARG1).";
+        Text[ hungarian ] = "Hiba történt a következőhöz való osztott hozzáféréskor: $(ARG1)";
+        Text[ slovenian ] = "Napaka pri skupnem dostopu do $(ARG1).";
     };
 
     String (ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK)
@@ -797,7 +843,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) contiene caracteres en posiciones donde no est�n permitidos.";
         Text[ finnish ] = "$(ARG1) sis�lt�� v��rin sijoitettuja merkkej�.";
         Text[ italian ] = "$(ARG1) contiene caratteri in posizione errata";
-        Text[ danish ] = "$(ARG1) contains misplaced characters";
+        Text[ danish ] = "$(ARG1) indeholder malplacerede tegn";
         Text[ swedish ] = "$(ARG1) inneh�ller tecken som har en otill�ten placering";
         Text[ polish ] = "$(ARG1) zawiera znaki w niew�a�ciwym miejscu";
         Text[ portuguese_brazilian ] = "$(ARG1) cont�m caracteres mal posicionados.";
@@ -813,6 +859,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) מכיל תווים שלא במקום הנכון‬";
         Text[ hindi ] = "$(ARG1) में अस्थान में रखा हुआ अक्षरें है";
         Text[ slovak ] = "$(ARG1) obsahuje zle umiestnené znaky";
+        Text[ hungarian ] = "A(z) $(ARG1) rossz helyre tett karaktereket tartalmaz";
+        Text[ slovenian ] = "$(ARG1) vsebuje napačno postavljene znake";
     };
 
     String (ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK)
@@ -828,7 +876,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "El nombre $(ARG1) contiene demasiados caracteres";
         Text[ finnish ] = "Nimess� $(ARG1) on liian monta merkki�.";
         Text[ italian ] = "Il nome $(ARG1) � troppo lungo";
-        Text[ danish ] = "The name $(ARG1) contains to many characters";
+        Text[ danish ] = "Navnet $(ARG1) indeholder for mange tegn";
         Text[ swedish ] = "Namnet $(ARG1) inneh�ller f�r m�nga tecken";
         Text[ polish ] = "Nazwa $(ARG1) zawiera za du�o znak�w";
         Text[ portuguese_brazilian ] = "O nome $(ARG1) cont�m muitos caracteres";
@@ -844,6 +892,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮השם $(ARG1) מכיל תווים רבות מדי‬";
         Text[ hindi ] = "$(ARG1) नाम में बहुत अधिक अक्षरें है";
         Text[ slovak ] = "Názov $(ARG1) obsahuje príliš mnoho znakov";
+        Text[ hungarian ] = "A(z) $(ARG1) név túl sok karaktert tartalmaz";
+        Text[ slovenian ] = "Ime $(ARG1) vsebuje preveč znakov";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK)
@@ -859,7 +909,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no existe";
         Text[ finnish ] = "Kohdetta $(ARG1) ei ole olemassa.";
         Text[ italian ] = "$(ARG1) non esiste";
-        Text[ danish ] = "$(ARG1) eksisterer ikke";
+        Text[ danish ] = "$(ARG1) findes ikke";
         Text[ swedish ] = "$(ARG1) existerar inte";
         Text[ polish ] = "$(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) n�o existe";
@@ -875,6 +925,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) אינו קיים‬";
         Text[ hindi ] = "$(ARG1) अस्तित्व में नहीं है ";
         Text[ slovak ] = "$(ARG1) neexistuje";
+        Text[ hungarian ] = "A(z) $(ARG1) nem létezik";
+        Text[ slovenian ] = "$(ARG1) ne obstaja";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK)
@@ -890,7 +942,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No existe la ruta $(ARG1)";
         Text[ finnish ] = "Polkua $(ARG1) ei ole olemassa.";
         Text[ italian ] = "Il percorso $(ARG1) non esiste";
-        Text[ danish ] = "The path $(ARG1) does not exist";
+        Text[ danish ] = "Stien $(ARG1) findes ikke";
         Text[ swedish ] = "S�kv�gen $(ARG1) existerar inte";
         Text[ polish ] = "�cie�ka $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "O caminho $(ARG1) n�o existe";
@@ -906,6 +958,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮מסלול הספריות $(ARG1) אינו קיים‬";
         Text[ hindi ] = "$(ARG1) मार्ग अस्तित्व में नहीं है";
         Text[ slovak ] = "Cesta $(ARG1) neexistuje";
+        Text[ hungarian ] = "A(z) $(ARG1) útvonal nem létezik";
+        Text[ slovenian ] = "Pot $(ARG1) ne obstaja";
     };
 
     String (ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK)
@@ -921,7 +975,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "En el sistema operativo actual no se admite la operaci�n en $(ARG1).";
         Text[ finnish ] = "T�m� k�ytt�j�rjestelm� ei tue toimintoa kohteelle $(ARG1).";
         Text[ italian ] = "Il sistema operativo non supporta l'operazione su $(ARG1)";
-        Text[ danish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ danish ] = "Handlingen p� $(ARG1) underst�ttes ikke af dette operativsystem";
         Text[ swedish ] = "Operationen p� $(ARG1) underst�ds inte p� operativsystemet";
         Text[ polish ] = "Operacja $(ARG1) nie jest obs�ugiwana przez ten system operacyjny";
         Text[ portuguese_brazilian ] = "A opera��o em $(ARG1) n�o � suportado neste sistema operacional.";
@@ -937,6 +991,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הפעולה על $(ARG1) אינה נתמכת במערכת הפעלה זו.‬";
         Text[ hindi ] = "इस ओपरेटिंग सिस्टम में $(ARG1) केलिए कार्य समर्थित नहीं है";
         Text[ slovak ] = "Operácia na $(ARG1) nieje v tomto operačnom systéme podporovaná";
+        Text[ hungarian ] = "A(z) $(ARG1) művelet nem támogatott ezen az operációs rendszeren";
+        Text[ slovenian ] = "Ta operacijski sistem ne podpira operacije na $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK)
@@ -952,7 +1008,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no es un directorio";
         Text[ finnish ] = "$(ARG1) ei ole hakemisto.";
         Text[ italian ] = "$(ARG1) non � una cartella";
-        Text[ danish ] = "$(ARG1) er intet bibliotek";
+        Text[ danish ] = "$(ARG1) er ikke et katalog";
         Text[ swedish ] = "$(ARG1) �r ingen katalog";
         Text[ polish ] = "$(ARG1) nie jest katalogiem";
         Text[ portuguese_brazilian ] = "$(ARG1) n�o � um diret�rio.";
@@ -968,6 +1024,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) אינו ספריה‬";
         Text[ hindi ] = "$(ARG1) डैरक्टरी नहीं है";
         Text[ slovak ] = "$(ARG1) nie je adresár";
+        Text[ hungarian ] = "A(z) $(ARG1) nem könyvtár";
+        Text[ slovenian ] = "$(ARG1) ni mapa";
     };
 
     String (ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK)
@@ -983,7 +1041,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no es un archivo";
         Text[ finnish ] = "$(ARG1) ei ole tiedosto.";
         Text[ italian ] = "$(ARG1) non � un file";
-        Text[ danish ] = "$(ARG1) er ingen fil";
+        Text[ danish ] = "$(ARG1) er ikke en fil";
         Text[ swedish ] = "$(ARG1) �r ingen fil";
         Text[ polish ] = "$(ARG1) nie jest plikiem";
         Text[ portuguese_brazilian ] = "$(ARG1) n�o � um arquivo.";
@@ -999,6 +1057,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) אינו קובץ‬";
         Text[ hindi ] = "$(ARG1) is not a file";
         Text[ slovak ] = "$(ARG1) nie je súbor";
+        Text[ hungarian ] = "A(z) $(ARG1) nem fájl";
+        Text[ slovenian ] = "$(ARG1) ni datoteka";
     };
 
     String (ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK)
@@ -1014,7 +1074,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No existe m�s espacio en el dispositivo $(ARG1)";
         Text[ finnish ] = "Laitteella $(ARG1) ei ole en�� tallennustilaa.";
         Text[ italian ] = "Il drive $(ARG1) non ha pi� spazio disponibile";
-        Text[ danish ] = "There was no space left on device $(ARG1)";
+        Text[ danish ] = "Der er ikke mere ledig plads p� enheden $(ARG1)";
         Text[ swedish ] = "Det finns ingen plats kvar p� enheten $(ARG1)";
         Text[ polish ] = "Brak miejsca na urz�dzeniu $(ARG1)";
         Text[ portuguese_brazilian ] = "N�o h� espa�o dispon�vel no dispositivo $(ARG1).";
@@ -1030,6 +1090,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא נשאר מקום על כונן $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) साधन में अभी ओर जगह नहीं बचा है";
         Text[ slovak ] = "Na zariadení $(ARG1) už nie je voľné miesto";
+        Text[ hungarian ] = "Nincs több hely a(z) $(ARG1) eszközön";
+        Text[ slovenian ] = "Na napravi $(ARG1) ni več prostora";
     };
 
     String (ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK)
@@ -1045,7 +1107,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se puede ejecutar la operaci�n en $(ARG1) porque ya existen demasiados archivos abiertos.";
         Text[ finnish ] = "Toimintoa kohteelle $(ARG1) ei voi suorittaa, koska liian monta tiedostoa on jo auki.";
         Text[ italian ] = "Impossibile eseguire l'operazione su $(ARG1) perch� sono aperti troppi file.";
-        Text[ danish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ danish ] = "Handlingen p� $(ARG1) kan ikke udf�res, fordi der allerede er for mange filer �bne";
         Text[ swedish ] = "Det g�r inte att utf�ra operationen p� $(ARG1) eftersom f�r m�nga filer redan �r �ppna";
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo�liwe, poniewa� otwarto zbyt wiele plik�w";
         Text[ portuguese_brazilian ] = "A opera��o em $(ARG1) n�o pode ser executada por que h� muitos arquivos abertos.";
@@ -1061,6 +1123,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה על $(ARG1) כי יותר מידי קבצים כבר פתוחים‬";
         Text[ hindi ] = "पहिले से ही बहुत अधिक संख्या में फाइलें खुला रखने के कारण $(ARG1) में कोई कार्य-संपादन नहीं कर सकते है ";
         Text[ slovak ] = "Operáciu na $(ARG1) nie je možné uskutočniť, pretože je otvorené príliš mnoho súborov";
+        Text[ hungarian ] = "A művelet a következőn nem hajtható végre, mert túl sok fájl van megnyitva: $(ARG1)";
+        Text[ slovenian ] = "Operacije na $(ARG1) ni mogoče izvesti, ker je odprtih preveč datotek";
     };
 
     String (ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK)
@@ -1076,7 +1140,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se puede ejecutar la operaci�n en $(ARG1) por falta de espacio.";
         Text[ finnish ] = "Toimintoa $(ARG1) ei voi suorittaa, koska muistia ei ole en�� k�ytett�viss�.";
         Text[ italian ] = "Impossibile eseguire l'operazione su $(ARG1) perch� la memoria disponibile non � sufficiente";
-        Text[ danish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ danish ] = "Handlingen p� $(ARG1) kan ikke udf�res, da der ikke er mere ledig hukommelse";
         Text[ swedish ] = "Det g�r inte att utf�ra operationen p� $(ARG1) eftersom inget mer minne �r tillg�ngligt";
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo�liwe z powodu braku pami�ci";
         Text[ portuguese_brazilian ] = "A opera��o em $(ARG1) n�o pode ser executada por que n�o h� mais mem�ria dispon�vel.";
@@ -1092,6 +1156,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה על $(ARG1) כי אין מספיק זכרון‬";
         Text[ hindi ] = "अप्राप्य मेमरी के कारण $(ARG1) में कोई कार्य-संपादन नहीं कर सकते है ";
         Text[ slovak ] = "Operáciu na $(ARG1) nemožno uskutočniť, pretože už nie je dostupná žiadna pamäť";
+        Text[ hungarian ] = "A művelet a következőn nem hajtható végre, mert nincs elég szabad memória: $(ARG1)";
+        Text[ slovenian ] = "Operacije na $(ARG1) ni mogoče izvesti, ker ni več pomnilnika";
     };
 
     String (ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK)
@@ -1107,7 +1173,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se pudo completar la operaci�n en $(ARG1) porque se esperan m�s datos.";
         Text[ finnish ] = "Toiminto kohteelle $(ARG1) ei voi jatkua, koska lis�� tietoja odottaa.";
         Text[ italian ] = "Impossibile proseguire l'operazione su $(ARG1) perch� mancano alcuni dati";
-        Text[ danish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ danish ] = "Handling p� $(ARG1) kan ikke forts�tte, da der afventes mere data";
         Text[ swedish ] = "Operation p� $(ARG1) kan inte forts�tta eftersom fler data v�ntas";
         Text[ polish ] = "Kontynuowanie operacji na $(ARG1) nie jest mo�liwe, poniewa� w kolejce czekaj� dalsze dane";
         Text[ portuguese_brazilian ] = "A opera��o em $(ARG1) n�o pode continuar por que h� mais dados pendentes.";
@@ -1123,6 +1189,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה על $(ARG1) כי נתונים נוספים עומדים בתור‬";
         Text[ hindi ] = "बहुत अधिक विचाराधीन ड़ॉटा के कारण $(ARG1) में कार्य को जारी नहीं रख सकते है";
         Text[ slovak ] = "Operácia na $(ARG1) nemôže pokračovať, pretože dáta ešte čakajú na spracovanie.";
+        Text[ hungarian ] = "A művelet a következőn  nem folytatható, mert több adat függőben van: $(ARG1)";
+        Text[ slovenian ] = "Operacije na $(ARG1) ni mogoče nadaljevati, ker več podatkov čaka";
     };
 
     String (ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK)
@@ -1138,7 +1206,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no se puede copiar en s� mismo.";
         Text[ finnish ] = "Kohdetta $(ARG1) ei voi kopioida itseens�.";
         Text[ italian ] = "$(ARG1) non pu� copiare se stesso";
-        Text[ danish ] = "$(ARG1) cannot be copied into itself";
+        Text[ danish ] = "$(ARG1) kan ikke kopieres til sig selv";
         Text[ swedish ] = "Det g�r inte att kopiera $(ARG1) till sig sj�lv";
         Text[ polish ] = "Nie mo�na skopiowa� $(ARG1) na niego samego";
         Text[ portuguese_brazilian ] = "$(ARG1) n�o pode ser copiado em si mesmo.";
@@ -1154,6 +1222,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן להעתיק את $(ARG1) לתוך עצמו‬";
         Text[ hindi ] = "$(ARG1) का प्रतिलिपि उसमें ही नहीं बना सकते है";
         Text[ slovak ] = "$(ARG1) nemožno skopírovať do seba samého";
+        Text[ hungarian ] = "A(z) $(ARG1) nem másolható önmagára";
+        Text[ slovenian ] = "$(ARG1) ni mogoče kopirati samega vase";
     };
 
     String (ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK)
@@ -1169,7 +1239,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Error de entrada/salida desconocido al acceder a $(ARG1)";
         Text[ finnish ] = "Tuntematon I/O-virhe k�ytett�ess� kohdetta $(ARG1).";
         Text[ italian ] = "Errore sconosciuto di I/O nell'accesso a $(ARG1).";
-        Text[ danish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ danish ] = "Ukendt input/output fejl under tilgangen til $(ARG1)";
         Text[ swedish ] = "Ok�nt input/outputfel vid �tkomst till $(ARG1)";
         Text[ polish ] = "Nieznany b��d wej�cia/wyj�cia podczas pr�by uzyskania dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "Erro desconhecido de entrada/sa�da ao acessar $(ARG1).";
@@ -1185,6 +1255,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮שגיאת קלט-פלט בלתי ידועה בעת גישה ל-$(ARG1)‬";
         Text[ hindi ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ slovak ] = "Neznáma chyba vstupu/výstupu pri prístupe k $(ARG1)";
+        Text[ hungarian ] = "Ismeretlen be/kimeneti hiba $(ARG1) elérése közben";
+        Text[ slovenian ] = "Pri dostopu do $(ARG1) je prišlo do neznane vhodno/izhodne napake";
     };
 
     String (ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK)
@@ -1200,7 +1272,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) es de s�lo lectura";
         Text[ finnish ] = "$(ARG1) on kirjoitussuojattu.";
         Text[ italian ] = "$(ARG1) � protetto";
-        Text[ danish ] = "$(ARG1) is write protected";
+        Text[ danish ] = "$(ARG1) er skrivebeskyttet";
         Text[ swedish ] = "$(ARG1) �r skrivskyddad";
         Text[ polish ] = "$(ARG1) jest chroniony przed zapisem";
         Text[ portuguese_brazilian ] = "$(ARG1) � somente leitura.";
@@ -1216,6 +1288,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) מוגן מפני כתיבה‬";
         Text[ hindi ] = "$(ARG1) लिखने से सुरक्षित है";
         Text[ slovak ] = "$(ARG1) je chránený proti zápisu";
+        Text[ hungarian ] = "A(z) $(ARG1) írásvédett";
+        Text[ slovenian ] = "$(ARG1) je zaščiten pred pisanjem";
     };
 
     String (ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK)
@@ -1231,7 +1305,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) tiene un formato falso";
         Text[ finnish ] = "$(ARG1) ei ole oikeaa muotoa.";
         Text[ italian ] = "$(ARG1) ha un formato errato";
-        Text[ danish ] = "$(ARG1) has an incorrect format";
+        Text[ danish ] = "$(ARG1) er i et forkert format";
         Text[ swedish ] = "$(ARG1) har ett felaktigt format";
         Text[ polish ] = "$(ARG1) ma nieprawid�owy format";
         Text[ portuguese_brazilian ] = "O formato de $(ARG1) est� incorreto.";
@@ -1247,6 +1321,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮ הצורה של $(ARG1) אינה הנכונה‬";
         Text[ hindi ] = "$(ARG1) का रचना गलत है";
         Text[ slovak ] = "$(ARG1) nie je v správnom formáte";
+        Text[ hungarian ] = "A(z) $(ARG1) nem megfelelő formátumú";
+        Text[ slovenian ] = "$(ARG1) nima pravilne oblike zapisa";
     };
 
     String (ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK)
@@ -1262,7 +1338,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no es la versi�n correcta.";
         Text[ finnish ] = "Kohteen $(ARG1) versio on v��r�.";
         Text[ italian ] = "$(ARG1) � presente in una versione errata";
-        Text[ danish ] = "$(ARG1) has an incorrect version";
+        Text[ danish ] = "Forkert version af $(ARG1)";
         Text[ swedish ] = "$(ARG1) har en felaktig version";
         Text[ polish ] = "Wersja $(ARG1) jest nieprawid�owa";
         Text[ portuguese_brazilian ] = "A vers�o de $(ARG1) est� incorreta.";
@@ -1278,6 +1354,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הגרסה של $(ARG1) אינה נכונה‬";
         Text[ hindi ] = "$(ARG1) का आवर्तन गलत है";
         Text[ slovak ] = "Verzia $(ARG1) nie je správna";
+        Text[ hungarian ] = "A(z) $(ARG1) nem megfelelő verziójú";
+        Text[ slovenian ] = "Ni pravilna različica $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK)
@@ -1293,7 +1371,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "La unidad $(ARG1) no existe.";
         Text[ finnish ] = "Asemaa $(ARG1) ei ole olemassa.";
         Text[ italian ] = "Il drive $(ARG1) non esiste";
-        Text[ danish ] = "Volume $(ARG1) does not exist";
+        Text[ danish ] = "Drevet $(ARG1) findes ikke";
         Text[ swedish ] = "Enheten $(ARG1) existerar inte";
         Text[ polish ] = "Nap�d $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "A unidade $(ARG1) n�o existe.";
@@ -1309,6 +1387,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮כונן $(ARG1) לא קיים‬";
         Text[ hindi ] = "ड्रइव $(ARG1) अस्तित्व में नहीं है";
         Text[ slovak ] = "Zariadenie $(ARG1) neexistuje";
+        Text[ hungarian ] = "A(z) $(ARG1) meghajtó nem létezik";
+        Text[ slovenian ] = "Pogon $(ARG1) ne obstaja";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK)
@@ -1324,7 +1404,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No existe la carpeta $(ARG1)";
         Text[ finnish ] = "Kansiota $(ARG1) ei ole olemassa.";
         Text[ italian ] = "La cartella $(ARG1) non esiste";
-        Text[ danish ] = "Folder $(ARG1) does not exist";
+        Text[ danish ] = "Mappen $(ARG1) findes ikke";
         Text[ swedish ] = "Mappen $(ARG1) existerar inte";
         Text[ polish ] = "Folder $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "A pasta $(ARG1) n�o existe.";
@@ -1340,6 +1420,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮תקיית $(ARG1) לא קיימת‬";
         Text[ hindi ] = "$(ARG1) कोष्ठ अस्तित्व में नहीं है";
         Text[ slovak ] = "Priečinok $(ARG1) neexistuje";
+        Text[ hungarian ] = "A(z) $(ARG1) mappa nem létezik";
+        Text[ slovenian ] = "Mapa $(ARG1) ne obstaja";
     };
 
     String (ERRCODE_UUI_WRONGJAVA & ERRCODE_RES_MASK)
@@ -1355,7 +1437,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se admite la versi�n existente de Java.";
         Text[ finnish ] = "Asennettua Java-versiota ei tueta.";
         Text[ italian ] = "La versione di Java installata non � supportata";
-        Text[ danish ] = "Den aktuelle Java-version underst�ttes ikke";
+        Text[ danish ] = "Den installerede Java-version underst�ttes ikke";
         Text[ swedish ] = "Den installerade Java-versionen underst�ds inte";
         Text[ polish ] = "Zainstalowana wersja Java nie jest obs�ugiwana";
         Text[ portuguese_brazilian ] = "A vers�o Java instalada n�o � suportada";
@@ -1371,6 +1453,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת אינה נתמכת‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन समर्थित नहीं है";
         Text[ slovak ] = "Nainštalovaná verzia Javy nie je podporovaná";
+        Text[ hungarian ] = "A telepített Java verziója nem támogatott";
+        Text[ slovenian ] = "Ne podpira nameščene različice Jave";
     };
 
     String (ERRCODE_UUI_WRONGJAVA_VERSION & ERRCODE_RES_MASK)
@@ -1386,7 +1470,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se admite la versi�n existente de Java $(ARG1)";
         Text[ finnish ] = "Asennettua Java-versiota $(ARG1) ei tueta.";
         Text[ italian ] = "La versione di Java $(ARG1) installata non � supportata";
-        Text[ danish ] = "Den aktuelle Java-version $(ARG1) underst�ttes ikke";
+        Text[ danish ] = "Den installerede Java-version $(ARG1) underst�ttes ikke";
         Text[ swedish ] = "Den installerade Java-versionen $(ARG1) underst�ds inte";
         Text[ polish ] = "Zainstalowana wersja Java $(ARG1) nie jest obs�ugiwana";
         Text[ portuguese_brazilian ] = "A vers�o Java instalada $(ARG1) n�o � suportada";
@@ -1402,6 +1486,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת $(ARG1) אינה נתמכת‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन $(ARG1) समर्थित नहीं है";
         Text[ slovak ] = "Nainštalovaná verzia Javy $(ARG1) nie je podporovaná";
+        Text[ hungarian ] = "A telepített Java verziója ($(ARG1)) nem támogatott";
+        Text[ slovenian ] = "Ne podpira nameščene različice Jave $(ARG1)";
     };
     String (ERRCODE_UUI_WRONGJAVA_MIN & ERRCODE_RES_MASK)
     {
@@ -1416,7 +1502,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se admite la versi�n existente de Java. Se requiere al menos la versi�n $(ARG1).";
         Text[ finnish ] = "Asennettua Java-versiota ei tueta. V�hint��n versio $(ARG1) vaaditaan.";
         Text[ italian ] = "La versione di Java installata non � supportata. � necessario installare almeno una versione $(ARG1)";
-        Text[ danish ] = "Den aktuelle Java-version underst�ttes ikke, der kr�ves mindst version $(ARG1)";
+        Text[ danish ] = "Den installerede Java-version underst�ttes ikke. Version $(ARG1) eller nyere er n�dvendig";
         Text[ swedish ] = "Den installerade Java-versionen underst�ds inte, minst version $(ARG1) kr�vs";
         Text[ polish ] = "Zainstalowana wersja Java nie jest obs�ugiwana, jest wymagana wersja co najmniej $(ARG1)";
         Text[ portuguese_brazilian ] = "A vers�o Java instalada n�o � suportada, a �ltima vers�o $(ARG1) � requerida";
@@ -1432,6 +1518,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת אינה נתמכת. נדרשת לפחות גרסה $(ARG1)‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन समर्थित नहीं है, कम से कम $(ARG1) आवर्तन की ज़रूरत है";
         Text[ slovak ] = "Nainštalovaná verzia Javy nie je podporovaná, je vyžadovaná najmenej verzia $(ARG1)";
+        Text[ hungarian ] = "A telepített Java verziója nem támogatott, legalább az $(ARG1) verzió szükséges";
+        Text[ slovenian ] = "Ne podpira nameščene različice Jave, potrebna je vsaj različica $(ARG1)";
     };
 
     String (ERRCODE_UUI_WRONGJAVA_VERSION_MIN & ERRCODE_RES_MASK)
@@ -1447,7 +1535,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "No se admite la versi�n existente de Java $(ARG1). Se requiere al menos la versi�n $(ARG2).";
         Text[ finnish ] = "Asennettua Java-versiota $(ARG1) ei tueta. V�hint��n versio $(ARG2) vaaditaan.";
         Text[ italian ] = "La versione di Java $(ARG1) installata non � supportata. � necessario installare almeno una versione $(ARG2)";
-        Text[ danish ] = "Den aktuelle Java-version $(ARG1) underst�ttes ikke, der kr�ves mindst version $(ARG2)";
+        Text[ danish ] = "Den installerede Java-version $(ARG1) underst�ttes ikke. Version $(ARG2) eller nyere er n�dvendig";
         Text[ swedish ] = "Den installerade Java-versionen $(ARG1) underst�ds inte, minst version $(ARG2) kr�vs";
         Text[ polish ] = "Zainstalowana wersja Java $(ARG1) nie jest obs�ugiwana, jest wymagana wersja co najmniej $(ARG2)";
         Text[ portuguese_brazilian ] = "A vers�o Java $(ARG1) instalada n�o � suportada, a �ltima vers�o $(ARG2) � requerida";
@@ -1463,6 +1551,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת $(ARG1) אינה נתמכת. נדרשת לפחות גרסה $(ARG2)‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन $(ARG1) समर्थित नहीं है, कम से कम $(ARG2) आवर्तन की ज़रूरत है";
         Text[ slovak ] = "Nainštalovaná verzia Javy $(ARG1) nie je podporovaná, je vyžadovaná najmenej verzia $(ARG2)";
+        Text[ hungarian ] = "A telepített Java verziója ($(ARG1)) nem támogatott, legalább az $(ARG2) verzió szükséges";
+        Text[ slovenian ] = "Ne podpira nameščene različice Jave $(ARG1), potrebna je vsaj različica $(ARG2)";
     };
 
     String (ERRCODE_UUI_BADPARTNERSHIP & ERRCODE_RES_MASK)
@@ -1478,7 +1568,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Los datos guardados correspondientes a la asociaci�n est�n en estado defectuoso.";
         Text[ finnish ] = "Kumppanuuteen liittyv�t tiedot ovat vahingoittuneet.";
         Text[ italian ] = "I dati relativi alla partnership sono danneggiati";
-        Text[ danish ] = "De til partnerskabet gemte data er beskadigede";
+        Text[ danish ] = "Dataene forbundet til dette partnerskab er beskadigede.";
         Text[ swedish ] = "De data som har sparats till partnerskapet �r defekta";
         Text[ polish ] = "Zapisane dane dotycz�ce relacji s� uszkodzone";
         Text[ portuguese_brazilian ] = "Os dados associados � associa��o est�o corrompidos.";
@@ -1494,6 +1584,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הנתונים המקושרים לשותפות משובשים.‬";
         Text[ hindi ] = "सम्बन्धित सहकारिता ड़ॉटा दूषित हो गया है";
         Text[ slovak ] = "Dáta priradené k tomuto zväzku sú poškodené.";
+        Text[ hungarian ] = "A társítás adatai megsérültek.";
+        Text[ slovenian ] = "Podatki, povezani z združbo, so pokvarjeni.";
     };
 
     String (ERRCODE_UUI_BADPARTNERSHIP_NAME & ERRCODE_RES_MASK)
@@ -1509,7 +1601,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "Los datos guardados correspondientes a la asociaci�n $(ARG1) est�n en estado defectuoso.";
         Text[ finnish ] = "Kumppanuuteen $(ARG1) liittyv�t tiedot ovat vahingoittuneet.";
         Text[ italian ] = "I dati relativi alla partnership $(ARG1) sono danneggiati";
-        Text[ danish ] = "De til partnerskabet $(ARG1) gemte data er beskadigede";
+        Text[ danish ] = "Dataene forbundet til dette partnerskab $(ARG1) er beskadigede.";
         Text[ swedish ] = "De data som har sparats till partnerskapet $(ARG1) �r defekta";
         Text[ polish ] = "Zapisane dane dotycz�ce relacji $(ARG1) s� uszkodzone";
         Text[ portuguese_brazilian ] = "Os dados associados � associa��o $(ARG1) est�o corrompidos.";
@@ -1525,6 +1617,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הנתונים המקושרים לשותפות $(ARG1) משובשים.‬";
         Text[ hindi ] = "सम्बन्धित सहकारिता ड़ॉटा $(ARG1) दूषित हो गया है";
         Text[ slovak ] = "Dáta priradené k zväzku $(ARG1) sú poškodené.";
+        Text[ hungarian ] = "Társítás adatai megsérültek: $(ARG1)";
+        Text[ slovenian ] = "Podatki, povezani z združbo $(ARG1), so pokvarjeni.";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME & ERRCODE_RES_MASK)
@@ -1556,6 +1650,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הכונן $(ARG1) אינו מוכן‬";
         Text[ hindi ] = "राशि $(ARG1) तैयार नहीं है";
         Text[ slovak ] = "Oddiel $(ARG1) nie je pripravený";
+        Text[ hungarian ] = "A(z) $(ARG1) meghajtó nem elérhető";
+        Text[ slovenian ] = "Vsebina $(ARG1) ni pripravljena";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK)
@@ -1571,7 +1667,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "$(ARG1) no est� preparado; inserte un medio de almacenamiento";
         Text[ finnish ] = "$(ARG1) ei ole valmis. Aseta tallennusv�line.";
         Text[ italian ] = "$(ARG1) non � pronto; inserite un supporto";
-        Text[ danish ] = "$(ARG1) er ikke klar. L�g et lagermedie i";
+        Text[ danish ] = "$(ARG1) er ikke klar. Inds�t et datamedie";
         Text[ swedish ] = "$(ARG1) �r inte redo; l�gg in ett lagringsmedium";
         Text[ polish ] = "$(ARG1) nie jest gotowy; w�� no�nik danych";
         Text[ portuguese_brazilian ] = "$(ARG1) n�o est� pronta; por favor, insira outra m�dia de armazenamento.";
@@ -1587,6 +1683,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮$(ARG1) אינו מוכן. נא להכניס מדית איחסון‬";
         Text[ hindi ] = "$(ARG1) तैयार नहीं है; कृपया संग्रह मीडियम को भरिए";
         Text[ slovak ] = "$(ARG1) nie je pripravený; prosím vložte úložné médium";
+        Text[ hungarian ] = "A(z) $(ARG1) nem üzemkész; helyezzen be egy adathordozót";
+        Text[ slovenian ] = "$(ARG1) ni pripravljen; vstavite pomnilniški medij";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK)
@@ -1602,7 +1700,7 @@ Resource RID_UUI_ERRHDL
         Text[ spanish ] = "La unidad $(ARG1) no est� preparada; inserte un medio de almacenamiento";
         Text[ finnish ] = "Asema $(ARG1) ei ole valmis. Aseta tallennusv�line.";
         Text[ italian ] = "Il drive $(ARG1) non � pronto; inserite un supporto dati";
-        Text[ danish ] = "Drev $(ARG1) er ikke klar. L�g et lagermedie i";
+        Text[ danish ] = "Drev $(ARG1) er ikke klar. Inds�t et datamedie";
         Text[ swedish ] = "Enhet $(ARG1) �r inte redo; l�gg in ett lagringsmedium";
         Text[ polish ] = "Wolumin $(ARG1) nie jest gotowy; w�� no�nik danych";
         Text[ portuguese_brazilian ] = "O volume $(ARG1) n�o est� pronto; por favor, insira uma m�dia de armazenamento.";
@@ -1618,6 +1716,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮הכונן $(ARG1) אינו מוכן. נא להכניס מדית איחסון‬";
         Text[ hindi ] = "राशि $(ARG1) तैयार नहीं है; कृपया संग्रह मीडियम को भरिए";
         Text[ slovak ] = "Oddiel $(ARG1) nie je pripravený; prosím vložte úložné médium";
+        Text[ hungarian ] = "A(z) $(ARG1) kötet nem üzemkész; helyezzen be egy adathordozót";
+        Text[ slovenian ] = "Vsebina $(ARG1) ni pripravljena; vstavite pomnilniški medij";
     };
 
     String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
@@ -1649,6 +1749,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮נא להכניס דיסק $(ARG1)‬";
         Text[ hindi ] = "कृपया $(ARG1) डिस्क् को भरिए ";
         Text[ slovak ] = "Prosím vložte disk $(ARG1)";
+        Text[ hungarian ] = "Helyezze be a(z) $(ARG1). lemezt";
+        Text[ slovenian ] = "Vstavite disk $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_CANTCREATE_NONAME & ERRCODE_RES_MASK)
@@ -1659,12 +1761,12 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese ] = "Imposs�vel criar o objecto no direct�rio $(ARG2).";
         Text[ russian ] = "���������� ������� ������ � �������� $(ARG2)";
         Text[ greek ] = "��� ����� ������ � ���������� ��� ������������ ���� ���� �������� $(ARG2)";
-        Text[ dutch ] = "Het object kan niet in directory $(ARG2) worden gemaakt";
+        Text[ dutch ] = "Het object kan niet in directory $(ARG2) worden aangemaakt";
         Text[ french ] = "Impossible de cr�er l'objet dans le r�pertoire $(ARG1) !";
         Text[ spanish ] = "El objeto no se puede crear en el directorio $(ARG1).";
         Text[ finnish ] = "Kohdetta ei voi luoda hakemistoon $(ARG2).";
         Text[ italian ] = "Impossibile creare l'oggetto nella cartella $(ARG1)";
-        Text[ danish ] = "Objektet kan ikke oprettes i biblioteket $(ARG2)";
+        Text[ danish ] = "Objektet kan ikke oprettes i katalog $(ARG1)";
         Text[ swedish ] = "Det g�r inte att skapa objektet i katalogen $(ARG1).";
         Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG2) nie jest mo�liwe";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel criar o objeto no diret�rio $(ARG2).";
@@ -1680,6 +1782,8 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "‮לא ניתן ליצור את העצם בספרית $(ARG2)‬";
         Text[ slovak ] = "Nie je možné vytvoriť objekt v adresári $(ARG2)";
         Text[ hindi ] = "$(ARG2) डैरक्टरी में वस्तु को उत्पन्न नहीं कर सकते है";
+        Text[ hungarian ] = "Az objektumot nem lehet létrehozni a(z) $(ARG1) könyvtárban";
+        Text[ slovenian ] = "Predmeta ni mogoče ustvariti v mapi $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK)
@@ -1690,12 +1794,12 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
         Text[ russian ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
         Text[ greek ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
-        Text[ dutch ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
+        Text[ dutch ] = "%PRODUCTNAME kan er niet voor zorgen dat bestanden niet worden overschreven, wanneer dit transmissieprotocol wordt gebruikt. Wilt u toch doorgaan?";
         Text[ french ] = "%PRODUCTNAME ne peut pas emp�cher l'�crasement des fichiers avec le protocole de transmission utilis�. Continuer ?";
         Text[ spanish ] = "%PRODUCTNAME no puede evitar que los archivos se sobrescriban durante la utilizaci�n de este protocolo de transmisi�n. �Desea continuar de todos modos? ";
         Text[ finnish ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
         Text[ italian ] = "L'uso di questo protocollo di trasmissione pu� causare un'involontaria soprascrittura di file. Volete procedere comunque?";
-        Text[ danish ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
+        Text[ danish ] = "%PRODUCTNAME kan ikke forhindre, at filer bliver overskrevet, n�r denne protokol benyttes. �nsker du at forts�tte?";
         Text[ swedish ] = "%PRODUCTNAME kan inte f�rhindra att filer skrivs �ver n�r det h�r �verf�ringsprotokollet anv�nds. Vill du forts�tta i alla fall?";
         Text[ polish ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
         Text[ japanese ] = "この転送プロトコルを使用すると、%PRODUCTNAME ではファイルが上書きされることがあります。処理を続行しますか。";
@@ -1711,6 +1815,8 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese_brazilian ] = "O %PRODUCTNAME n�o pode evitar que os arquivos sejam sobrescritos quando for usado este protocolo de transmiss�o. Deseja continuar? ";
         Text[ hindi ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway?";
         Text[ slovak ] = "%PRODUCTNAME nemôže zabrániť prepisovaniu súborov pri tomto prenosovom protokole. Chcete pokračovať?";
+        Text[ hungarian ] = "Az %PRODUCTNAME a kiválasztott átviteli protokollnál nem tudja biztosítani, hogy nem kerülnek felülírásra fájlok. Biztos, hogy folytatja?";
+        Text[ slovenian ] = "%PRODUCTNAME ne more preprečiti prepisovanja datotek, če uporabite ta protokol za prenos. Ali vseeno želite nadaljevati?";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE & ERRCODE_RES_MASK)
@@ -1731,7 +1837,7 @@ Resource RID_UUI_ERRHDL
         Text[ dutch ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ finnish ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ czech ] = "Soubor '$(ARG1)' je poškozen, a proto nemůže být otevřen. Má %PRODUCTNAME opravit tento soubor?";
-        Text[ danish ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
+        Text[ danish ] = "Filen '$(ARG1)' er beskadiget og kan derfor ikke �bnes. Skal %PRODUCTNAME fors�ge at reparere filen?";
         Text[ arabic ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ hebrew ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ catalan ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
@@ -1742,6 +1848,8 @@ Resource RID_UUI_ERRHDL
         Text[ thai ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ hindi ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ slovak ] = "Súbor '$(ARG1)' je porušený a preto nemohol byť otvorený. Má %PRODUCTNAME súbor opraviť?";
+        Text[ hungarian ] = "A(z) '$(ARG1)' fájl megsérült. Megnyitása nem sikerült. Javítsa az %PRODUCTNAME a fájlt?";
+        Text[ slovenian ] = "Datoteka '$(ARG1)' je okvarjena in je ni mogoče odpreti. Ali naj poskuša %PRODUCTNAME popraviti datoteko?";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR & ERRCODE_RES_MASK)
@@ -1762,7 +1870,7 @@ Resource RID_UUI_ERRHDL
         Text[ dutch ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ finnish ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ czech ] = "Soubor '$(ARG1)' není možné opravit, a proto nemůže být ani otevřen.";
-        Text[ danish ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
+        Text[ danish ] = "Filen '$(ARG1)' kunne ikke repareres og kan derfor heller ikke �bnes.";
         Text[ arabic ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ hebrew ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ catalan ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
@@ -1773,9 +1881,12 @@ Resource RID_UUI_ERRHDL
         Text[ thai ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ hindi ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ slovak ] = "Súbor '$(ARG1)' nemohol byť opravený a preto ani nemohol byť otvorený.";
+        Text[ hungarian ] = "A(z) '$(ARG1)' fájl javítása nem sikerült. A fájlt nem lehet megnyitni.";
+        Text[ slovenian ] = "Datoteke '$(ARG1)' ni mogoče popraviti, zato je ne bo mogoče odpreti.";
     };
 
 };
+
 
 
 
