@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlctxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:54:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,8 +679,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 {
                     SwTxtNode  *pNumTxtNode = pPam->GetNode()->GetTxtNode();
 
-                    if( pNumTxtNode->GetNum() &&
-                        !(NO_NUMLEVEL & pNumTxtNode->GetNum()->GetLevel()) )
+                    if( pNumTxtNode->GetNum() && pNumTxtNode->GetNum()->IsNum())
                         nIndent += HTML_NUMBUL_INDENT;
 
                     // den Absatz muessen wir jetzt selbst attributieren
