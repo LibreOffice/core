@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:56 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.filter.BinaryOnlyFilter;
 import org.openoffice.idesupport.filter.ExceptParcelFilter;
 
-import com.sun.star.script.framework.browse.ParcelDescriptor;
+import com.sun.star.script.framework.container.ParcelDescriptor;
 import org.openoffice.idesupport.xml.Manifest;
 
 public class ParcelZipper
