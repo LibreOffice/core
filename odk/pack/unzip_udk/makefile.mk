@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:40:11 $
+#   last change: $Author: rt $ $Date: 2003-04-17 09:58:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,6 @@ all: ..$/misc$/deltree.txt
     +-rm -f $(PRODUCT_NAME).zip >& $(NULLDEV)
     +-rm -f $(PRODUCT_NAME).tar.gz >& $(NULLDEV)
     +-rm -f $(PRODUCT_NAME).tar >& $(NULLDEV)
-    +-rm -f $(DIR_CREATE_FLAG) >& $(NULLDEV)
     +-rm -f $(DEVGUIDE_DOCU_FLAG) >& $(NULLDEV)
     +-rm -f $(DEVGUIDE_SAMPLES_FLAG) >& $(NULLDEV)
     +@echo "" > ..$/misc$/deltree.txt
