@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:49:37 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,10 +352,13 @@ void FuText::StopEditMode()
     }
 
     ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     SfxObjectShell* pObjSh = pViewShell->GetViewData()->GetSfxDocShell();
-    SfxUndoManager* pUndoMan = pObjSh->GetUndoManager();
-    if ( bComment )
+    SfxUndoManager* pUndoMan = NULL;
+    if (bUndo)
+        pUndoMan = pObjSh->GetUndoManager();
+    if ( bComment && bUndo)
     {
         //  einblenden, editieren, ausblenden, Notiz aendern zusammen in eine ListAction
 
@@ -416,8 +419,8 @@ void FuText::StopEditMode()
                 // trotzden kein "delete pObject" mehr, das Objekt gehoert jetzt dem Undo
             }
         }
-
-        pUndoMan->LeaveListAction();
+        if (pUndoMan)
+            pUndoMan->LeaveListAction();
     }
 }
 

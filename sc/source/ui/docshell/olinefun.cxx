@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinefun.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab, TRUE );
     ScOutlineTable* pUndoTab = NULL;
 
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+
     if (bRecord)
         pUndoTab = new ScOutlineTable( *pTable );
 
@@ -200,6 +203,9 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
     USHORT nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     if (pTable)
     {
@@ -255,6 +261,9 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( USHORT nTab, BOOL bRecord, BOOL bApi )
 {
     BOOL bSuccess = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     if (pTable)
     {
@@ -310,6 +319,9 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
     USHORT nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
 
     ScDocument* pUndoDoc = NULL;
@@ -364,6 +376,9 @@ BOOL ScOutlineDocFunc::SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );             // ist schon da
     if (!pTable)
         return FALSE;
@@ -454,6 +469,9 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
     USHORT nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
 
     if (pTable)
@@ -550,6 +568,9 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
     USHORT nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
 
     if (pTable)
@@ -635,6 +656,8 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
                                     BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
@@ -714,6 +737,8 @@ BOOL ScOutlineDocFunc::HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
                                     BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();

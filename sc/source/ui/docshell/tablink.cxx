@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 18:04:16 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,10 @@ void __EXPORT ScTableLink::DataChanged(SvData& rData)
 void __EXPORT ScTableLink::Closed()
 {
     // Verknuepfung loeschen: Undo
+    ScDocument* pDoc = pDocShell->GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
-    if (bAddUndo)
+    if (bAddUndo && bUndo)
     {
         pDocShell->GetUndoManager()->AddUndoAction(
                 new ScUndoRemoveLink( pDocShell, aFileName ) );
@@ -214,6 +216,8 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->SetInLinkUpdate( TRUE );
 
+    BOOL bUndo(pDoc->IsUndoEnabled());
+
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if ( rNewFilter != aFilterName )
         aOptions.Erase();
@@ -240,7 +244,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     ScDocument* pUndoDoc = NULL;
     BOOL bFirst = TRUE;
-    if (bAddUndo)
+    if (bAddUndo && bUndo)
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
 
     //  Tabellen kopieren
@@ -265,7 +269,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
             //  Undo
 
-            if (bAddUndo)
+            if (bAddUndo && bUndo)
             {
                 if (bFirst)
                     pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
@@ -338,7 +342,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     //  Undo
 
-    if (bAddUndo)
+    if (bAddUndo && bUndo)
         pDocShell->GetUndoManager()->AddUndoAction(
                     new ScUndoRefreshLink( pDocShell, pUndoDoc ) );
 

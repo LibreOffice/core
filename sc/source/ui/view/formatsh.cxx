@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:14:43 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     ScMarkData&         rMark       = GetViewData()->GetMarkData();
     ScModule*           pScMod      = SC_MOD();
     String              aRefName;
+    BOOL                bUndo       = pDoc->IsUndoEnabled();
 
     if (   (nSlotId == SID_STYLE_NEW)
         || (nSlotId == SID_STYLE_EDIT)
@@ -562,9 +563,12 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
 
-                                pDocSh->GetUndoManager()->AddUndoAction(
-                                        new ScUndoApplyPageStyle( pDocSh,
-                                            nCurTab, aOldName, aStyleName ) );
+                                if (bUndo)
+                                {
+                                    pDocSh->GetUndoManager()->AddUndoAction(
+                                            new ScUndoApplyPageStyle( pDocSh,
+                                                nCurTab, aOldName, aStyleName ) );
+                                }
                             }
                             rReq.Done();
                         }
@@ -788,7 +792,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         if ( bGrabFocus )
             pTabViewShell->GetActiveWin()->GrabFocus();
 
-        if ( bAddUndo )
+        if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(
                         new ScUndoModifyStyle( pDocSh, eFamily, aOldData, aNewData ) );
     }

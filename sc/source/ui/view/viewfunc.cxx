@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:11:29 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ void ScViewFunc::DoAutoAttributes( USHORT nCol, USHORT nRow, USHORT nTab,
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
+    if (bAddUndo && !pDoc->IsUndoEnabled())
+        bAddUndo = FALSE;
 
     const ScPatternAttr* pSource = pDoc->GetPattern(
                             aFormatSource.Col(), aFormatSource.Row(), nTab );
@@ -391,6 +393,8 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String&
     USHORT nTabCount = pDoc->GetTableCount();
     USHORT nSelCount = rMark.GetSelectCount();
     USHORT i;
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
@@ -650,6 +654,7 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const double&
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     if ( pDoc && pDocSh )
     {
@@ -664,14 +669,21 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const double&
                                     nCol,nRow,nTab, nCol,nRow,nTab, HASATTR_NEEDHEIGHT );
 
             //  Undo
-            ScBaseCell* pUndoCell = pOldCell ? pOldCell->Clone(pDoc) : NULL;
+            ScBaseCell* pUndoCell = NULL;
+            if (bUndo)
+            {
+                pUndoCell = pOldCell ? pOldCell->Clone(pDoc) : NULL;
+            }
 
             pDoc->SetValue( nCol, nRow, nTab, rValue );
 
             // wg. ChangeTrack nach Aenderung im Dokument
-            pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoEnterValue( pDocSh, ScAddress(nCol,nRow,nTab),
-                                        pUndoCell, rValue, bNeedHeight ) );
+            if (bUndo)
+            {
+                pDocSh->GetUndoManager()->AddUndoAction(
+                    new ScUndoEnterValue( pDocSh, ScAddress(nCol,nRow,nTab),
+                                            pUndoCell, rValue, bNeedHeight ) );
+            }
 
 /*!             Zeilenhoehe anpassen? Dann auch bei Undo...
             if (bNeedHeight)
@@ -693,6 +705,8 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const EditTex
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocument* pDoc = pDocSh->GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -1107,6 +1121,8 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     USHORT nStartCol;
     USHORT nStartRow;
@@ -1186,6 +1202,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     ScDocShell* pDocSh      = pViewData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
     ScMarkData& rMark       = pViewData->GetMarkData();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -1353,6 +1371,8 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, BOOL bRecord
     ScDocument* pDoc        = pDocSh->GetDocument();
     ScMarkData& rMark       = pViewData->GetMarkData();
     USHORT nTabCount        = pDoc->GetTableCount();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -1549,6 +1569,8 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
     USHORT nTab = GetViewData()->GetTabNo();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocument* pDoc = pDocSh->GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     USHORT* pRanges = new USHORT[MAXROW+1];
     USHORT nRangeCnt = bRows ? rMark.GetMarkRowRanges( pRanges ) :
                                 rMark.GetMarkColumnRanges( pRanges );
@@ -1666,6 +1688,8 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -1817,6 +1841,8 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRange
     USHORT nFirstTab = pMarkData->GetFirstSelected();
     USHORT nCurTab = GetViewData()->GetTabNo();
     USHORT nTab;
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -2202,7 +2228,9 @@ void ScViewFunc::Protect( USHORT nTab, const String& rPassword )
 {
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
     ScDocFunc aFunc(*pDocSh);
+    BOOL bUndo(pDoc->IsUndoEnabled());
 
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
         aFunc.Protect( nTab, rPassword, FALSE );
@@ -2210,15 +2238,19 @@ void ScViewFunc::Protect( USHORT nTab, const String& rPassword )
     {
         //  modifying several tables is handled here
 
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+        if (bUndo)
+        {
+            String aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+        }
 
         USHORT nCount = pDocSh->GetDocument()->GetTableCount();
         for ( USHORT i=0; i<nCount; i++ )
             if ( rMark.GetTableSelect(i) )
                 aFunc.Protect( i, rPassword, FALSE );
 
-        pDocSh->GetUndoManager()->LeaveListAction();
+        if (bUndo)
+            pDocSh->GetUndoManager()->LeaveListAction();
     }
 
     UpdateLayerLocks();         //! broadcast to all views
@@ -2228,8 +2260,10 @@ BOOL ScViewFunc::Unprotect( USHORT nTab, const String& rPassword )
 {
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
     ScDocFunc aFunc(*pDocSh);
     BOOL bChanged = FALSE;
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
         bChanged = aFunc.Unprotect( nTab, rPassword, FALSE );
@@ -2237,8 +2271,11 @@ BOOL ScViewFunc::Unprotect( USHORT nTab, const String& rPassword )
     {
         //  modifying several tables is handled here
 
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_UNPROTECT_TAB );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+        if (bUndo)
+        {
+            String aUndo = ScGlobal::GetRscString( STR_UNDO_UNPROTECT_TAB );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+        }
 
         USHORT nCount = pDocSh->GetDocument()->GetTableCount();
         for ( USHORT i=0; i<nCount; i++ )
@@ -2246,7 +2283,8 @@ BOOL ScViewFunc::Unprotect( USHORT nTab, const String& rPassword )
                 if ( aFunc.Unprotect( i, rPassword, FALSE ) )
                     bChanged = TRUE;
 
-        pDocSh->GetUndoManager()->LeaveListAction();
+        if (bUndo)
+            pDocSh->GetUndoManager()->LeaveListAction();
     }
 
     if (bChanged)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-25 19:38:12 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,16 @@
 
 BOOL ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, BOOL bApi )
 {
+
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
-    ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
+    ScDBCollection* pUndoColl = NULL;
+    if (bUndo)
+        pUndoColl = new ScDBCollection( *pDocColl );
 
     ScDBData* pNew = new ScDBData( rName, rRange.aStart.Tab(),
                                     rRange.aStart.Col(), rRange.aStart.Row(),
@@ -111,9 +115,12 @@ BOOL ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, BOOL b
         return FALSE;
     }
 
-    ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
-    rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+    if (bUndo)
+    {
+        ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
+        rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+    }
 
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -125,21 +132,27 @@ BOOL ScDBDocFunc::DeleteDBRange( const String& rName, BOOL bApi )
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     USHORT nPos = 0;
     if (pDocColl->SearchName( rName, nPos ))
     {
         ScDocShellModificator aModificator( rDocShell );
 
-        ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
+        ScDBCollection* pUndoColl = NULL;
+        if (bUndo)
+            pUndoColl = new ScDBCollection( *pDocColl );
 
         pDoc->CompileDBFormula( TRUE );     // CreateFormulaString
         pDocColl->AtFree( nPos );
         pDoc->CompileDBFormula( FALSE );    // CompileFormulaString
 
-        ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+        if (bUndo)
+        {
+            ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
+            rDocShell.GetUndoManager()->AddUndoAction(
+                            new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+        }
 
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -154,6 +167,7 @@ BOOL ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, BOOL bA
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     USHORT nPos = 0;
     USHORT nDummy = 0;
@@ -180,9 +194,14 @@ BOOL ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, BOOL bA
 
         if (bInserted)                              // Einfuegen hat geklappt
         {
-            ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
-            rDocShell.GetUndoManager()->AddUndoAction(
-                            new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+            if (bUndo)
+            {
+                ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
+                rDocShell.GetUndoManager()->AddUndoAction(
+                                new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+            }
+            else
+                delete pUndoColl;
 
             aModificator.SetDocumentModified();
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -198,6 +217,7 @@ BOOL ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, BOOL bApi )
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     USHORT nPos = 0;
     if (pDocColl->SearchName( rNewData.GetName(), nPos ))
@@ -211,15 +231,20 @@ BOOL ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, BOOL bApi )
         rNewData.GetArea(aNewRange);
         BOOL bAreaChanged = ( aOldRange != aNewRange );     // dann muss neu compiliert werden
 
-        ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
+        ScDBCollection* pUndoColl = NULL;
+        if (bUndo)
+            pUndoColl = new ScDBCollection( *pDocColl );
 
         *pData = rNewData;
         if (bAreaChanged)
             pDoc->CompileDBFormula();
 
-        ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+        if (bUndo)
+        {
+            ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
+            rDocShell.GetUndoManager()->AddUndoAction(
+                            new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+        }
 
         aModificator.SetDocumentModified();
         bDone = TRUE;
@@ -236,6 +261,8 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
 
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScDBCollection* pColl = pDoc->GetDBCollection();
     USHORT nIndex;
     if ( pColl && pColl->SearchName( rDBName, nIndex ) )
@@ -405,6 +432,8 @@ BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     USHORT nSrcTab = nTab;
 
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
@@ -609,6 +638,8 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rQueryParam.nCol1, rQueryParam.nRow1,
                                                     rQueryParam.nCol2, rQueryParam.nRow2 );
     if (!pDBData)
@@ -923,6 +954,8 @@ BOOL ScDBDocFunc::DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
     BOOL bRet = FALSE;
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
@@ -1117,6 +1150,8 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         pUndoDPObj = new ScDPObject( *pOldObj );    // copy old settings for undo
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     if ( !rDocShell.IsEditable() || pDoc->GetChangeTrack() )
     {
         //  not recorded -> disallow

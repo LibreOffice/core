@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ void ScViewFunc::ShowNote()
     USHORT nCol = GetViewData()->GetCurX();
     USHORT nRow = GetViewData()->GetCurY();
     USHORT nTab = GetViewData()->GetTabNo();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     ScPostIt aNote;
     if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
@@ -240,7 +241,9 @@ void ScViewFunc::ShowNote()
 
         pModel->BeginCalcUndo();
         SdrObject* pObject = ScDetectiveFunc( pDoc,nTab ).ShowComment( nCol, nRow, FALSE );
-        SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+        SdrUndoGroup* pUndo = NULL;
+        if (bUndo)
+            pUndo = pModel->GetCalcUndo();
         if (pObject)
         {
             aNote.SetShown( TRUE );
@@ -266,6 +269,7 @@ void ScViewFunc::HideNote()
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return;         // da is nix
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     USHORT nCol = GetViewData()->GetCurX();
     USHORT nRow = GetViewData()->GetCurY();
@@ -277,7 +281,9 @@ void ScViewFunc::HideNote()
     {
         pModel->BeginCalcUndo();
         BOOL bDone = ScDetectiveFunc( pDoc,nTab ).HideComment( nCol, nRow );
-        SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+        SdrUndoGroup* pUndo = NULL;
+        if (bUndo)
+            pUndo = pModel->GetCalcUndo();
         if (bDone)
         {
             aNote.SetShown( FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-11 11:30:49 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,9 @@ void __EXPORT ScAreaLink::Closed()
 {
     // Verknuepfung loeschen: Undo
 
-    if (bAddUndo)
+    ScDocument* pDoc = pDocShell->GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
+    if (bAddUndo && bUndo)
     {
         pDocShell->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pDocShell,
                                                         aFileName, aFilterName, aOptions,
@@ -225,6 +227,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         return FALSE;
 
     ScDocument* pDoc = pDocShell->GetDocument();
+
+    BOOL bUndo (pDoc->IsUndoEnabled());
     pDoc->SetInLinkUpdate( TRUE );
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
@@ -309,7 +313,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
         ScDocument* pUndoDoc = NULL;
         ScDocument* pRedoDoc = NULL;
-        if ( bAddUndo )
+        if ( bAddUndo && bUndo )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             if ( bDoInsert )
@@ -379,7 +383,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
         //  Undo eintragen
 
-        if ( bAddUndo )
+        if ( bAddUndo && bUndo)
         {
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );

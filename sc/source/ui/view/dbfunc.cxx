@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-10 19:07:03 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode )
 
 void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList )
 {
-    const BOOL bRecord = TRUE;
 
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocShell );
@@ -170,6 +169,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List&
     ScDBCollection* pOldColl = pDoc->GetDBCollection();
     ScDBCollection* pUndoColl = NULL;
     ScDBCollection* pRedoColl = NULL;
+    const BOOL bRecord (pDoc->IsUndoEnabled());
 
     long nDelCount = rDelAreaList.Count();
     for (long nDelPos=0; nDelPos<nDelCount; nDelPos++)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-30 14:40:37 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,12 +591,16 @@ void ScViewFunc::RemoveManualBreaks()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     USHORT nTab = GetViewData()->GetTabNo();
+    BOOL bUndo(pDoc->IsUndoEnabled());
 
-    ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-    pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-    pDoc->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, IDF_NONE, FALSE, pUndoDoc );
-    pDocSh->GetUndoManager()->AddUndoAction(
+    if (bUndo)
+    {
+        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
+        pDoc->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, IDF_NONE, FALSE, pUndoDoc );
+        pDocSh->GetUndoManager()->AddUndoAction(
                                 new ScUndoRemoveBreaks( pDocSh, nTab, pUndoDoc ) );
+    }
 
     pDoc->RemoveManualBreaks(nTab);
     pDoc->UpdatePageBreaks(nTab);
@@ -636,6 +640,7 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
     USHORT nTabCount    = pDoc->GetTableCount();
     ScMarkData& rMark   = GetViewData()->GetMarkData();
     USHORT nTab;
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
 
@@ -716,11 +721,13 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
         }
 
     //  undo (for all tables)
-
-    USHORT nCurTab = GetViewData()->GetTabNo();
-    ScPrintRangeSaver* pNewRanges = pDoc->CreatePrintRangeSaver();
-    pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoPrintRange( pDocSh, nCurTab, pOldRanges, pNewRanges ) );
+    if (bUndo)
+    {
+        USHORT nCurTab = GetViewData()->GetTabNo();
+        ScPrintRangeSaver* pNewRanges = pDoc->CreatePrintRangeSaver();
+        pDocSh->GetUndoManager()->AddUndoAction(
+                    new ScUndoPrintRange( pDocSh, nCurTab, pOldRanges, pNewRanges ) );
+    }
 
     //  update page breaks
 
@@ -941,6 +948,7 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     USHORT nTab = GetViewData()->GetTabNo();
+    BOOL bUndo(pDoc->IsUndoEnabled());
 
     ScRange aMarkRange;
     rMark.MarkToSimple();
@@ -954,6 +962,7 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
 
     ScDocument* pUndoDoc = NULL;
 //  if ( bRecord )
+    if (bUndo)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nTab, nTab );
@@ -981,6 +990,7 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
     }
 
 //  if ( bRecord )
+    if (bUndo)
     {   //! fuer ChangeTrack erst zum Schluss
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoFillTable( pDocSh, rMark,
@@ -1061,6 +1071,8 @@ void ScViewFunc::AutoFormat( USHORT nFormatNo, BOOL bRecord )
         ScDocument* pDoc = pDocSh->GetDocument();
         ScMarkData& rMark = GetViewData()->GetMarkData();
         BOOL bSize = (*ScGlobal::GetAutoFormat())[nFormatNo]->GetIncludeWidthHeight();
+        if (bRecord && !pDoc->IsUndoEnabled())
+            bRecord = FALSE;
 
         ScDocument* pUndoDoc = NULL;
         if ( bRecord )
@@ -1128,6 +1140,8 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
+    if (bAddUndo && !pDoc->IsUndoEnabled())
+        bAddUndo = FALSE;
 
     USHORT nCol = GetViewData()->GetCurX();
     USHORT nRow = GetViewData()->GetCurY();
@@ -1519,6 +1533,8 @@ BOOL ScViewFunc::InsertTables(SvStrings *pNames, USHORT nTab,
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
+    if (bRecord && pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     SvStrings *pNameList= NULL;
 
@@ -1590,6 +1606,8 @@ BOOL ScViewFunc::AppendTable( const String& rName, BOOL bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc   = pDocSh->GetDocument();
+    if (bRecord && pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     WaitObject aWait( GetFrameWin() );
 
@@ -1641,6 +1659,8 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
     USHORT      nNewTab = TheTabs[0];
     int         i;
     WaitObject aWait( GetFrameWin() );
+    if (bRecord && pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
         --nNewTab;
@@ -1771,6 +1791,7 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
     USHORT nPosY = GetViewData()->GetCurY();
     USHORT nTab = GetViewData()->GetTabNo();
     ScAddress aPos( nPosX, nPosY, nTab );
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     String aFilterName = rFilter;
     String aNewOptions = rOptions;
@@ -1784,9 +1805,12 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
 
     //  Undo fuer den leeren Link
 
-    pDocSh->GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( pDocSh,
-                                                rFile, aFilterName, aNewOptions,
-                                                rSource, ScRange(aPos) ) );
+    if (bUndo)
+    {
+        pDocSh->GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( pDocSh,
+                                                    rFile, aFilterName, aNewOptions,
+                                                    rSource, ScRange(aPos) ) );
+    }
 
     //  Update hat sein eigenes Undo
 
@@ -1846,6 +1870,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     //USHORT nTab = GetViewData()->GetTabNo();
 
     BOOL bError = FALSE;
@@ -1855,7 +1880,8 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     if (pSrcDoc->GetDrawLayer())
         pDocSh->MakeDrawLayer();
 
-    pDoc->BeginDrawUndo();          // drawing layer must do its own undo actions
+    if (bUndo)
+        pDoc->BeginDrawUndo();          // drawing layer must do its own undo actions
 
     USHORT nInsCount = 0;
     USHORT i;
@@ -1950,8 +1976,11 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     }
 
 
-    pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoImportTab( pDocSh, nTab, nCount, bLink ) );
+    if (bUndo)
+    {
+        pDocSh->GetUndoManager()->AddUndoAction(
+                new ScUndoImportTab( pDocSh, nTab, nCount, bLink ) );
+    }
 
     for (i=0; i<nInsCount; i++)
         GetViewData()->InsertTab(nTab);
@@ -1984,6 +2013,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
     ScDocument* pDestDoc   = NULL;
     ScDocShell* pDestShell = NULL;
     ScTabViewShell* pDestViewSh = NULL;
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     BOOL bNewDoc = ( nDestDocNo == SC_DOC_NEW );
     if ( bNewDoc )
@@ -2069,7 +2099,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
         if (pDoc->GetDrawLayer())
             pDestShell->MakeDrawLayer();
 
-        if (!bNewDoc)
+        if (!bNewDoc && bUndo)
             pDestDoc->BeginDrawUndo();      // drawing layer must do its own undo actions
 
         ULONG nErrVal =1;
@@ -2118,7 +2148,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
             }
         }
         String sName;
-        if (!bNewDoc)
+        if (!bNewDoc && bUndo)
         {
             pDestDoc->GetName(nDestTab, sName);
             pDestShell->GetUndoManager()->AddUndoAction(
@@ -2232,7 +2262,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
             }
         }
 
-        if (bCopy)
+        if (bCopy && bUndo)
             pDoc->BeginDrawUndo();          // drawing layer must do its own undo actions
 
         pDoc->GetName( nDestTab, aDestName);
@@ -2283,15 +2313,18 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
 
         nTab = GetViewData()->GetTabNo();
 
-        if (bCopy)
+        if (bUndo)
         {
-            pDocShell->GetUndoManager()->AddUndoAction(
-                    new ScUndoCopyTab( pDocShell, TheTabs, TheDestTabs));
-        }
-        else
-        {
-            pDocShell->GetUndoManager()->AddUndoAction(
-                    new ScUndoMoveTab( pDocShell, TheTabs, TheDestTabs));
+            if (bCopy)
+            {
+                pDocShell->GetUndoManager()->AddUndoAction(
+                        new ScUndoCopyTab( pDocShell, TheTabs, TheDestTabs));
+            }
+            else
+            {
+                pDocShell->GetUndoManager()->AddUndoAction(
+                        new ScUndoMoveTab( pDocShell, TheTabs, TheDestTabs));
+            }
         }
 
         USHORT nNewTab = nDestTab;
@@ -2311,6 +2344,7 @@ void ScViewFunc::ShowTable( const String& rName )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     BOOL bFound = FALSE;
     USHORT nPos = 0;
     String aTabName;
@@ -2328,7 +2362,10 @@ void ScViewFunc::ShowTable( const String& rName )
     if (bFound)
     {
         pDoc->SetVisible( nPos, TRUE );
-        pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, nPos, TRUE ) );
+        if (bUndo)
+        {
+            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, nPos, TRUE ) );
+        }
         SetTabNo( nPos, TRUE );
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
@@ -2345,6 +2382,7 @@ void ScViewFunc::HideTable( USHORT nTab )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     USHORT nVisible = 0;
     USHORT nCount = pDoc->GetTableCount();
     for (USHORT i=0; i<nCount; i++)
@@ -2356,7 +2394,10 @@ void ScViewFunc::HideTable( USHORT nTab )
     if (nVisible > 1)
     {
         pDoc->SetVisible( nTab, FALSE );
-        pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, nTab, FALSE ) );
+        if (bUndo)
+        {
+            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, nTab, FALSE ) );
+        }
 
         //  Views updaten:
         pDocSh->Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );

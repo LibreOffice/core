@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:34:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,8 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     USHORT nTab = GetViewData()->GetTabNo();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
                                                 rParam.nCol2, rParam.nRow2 );
@@ -586,6 +588,7 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
 
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = GetViewData()->GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
 
     ScRange aDestRange = rDest;
     if ( bNewTable )
@@ -607,8 +610,11 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
             i++;
 
         BOOL bAppend = ( nNewTab+1 == pDoc->GetTableCount() );
-        pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoInsertTab( pDocSh, nNewTab, bAppend, lcl_MakePivotTabName( aName, i ) ));
+        if (bUndo)
+        {
+            pDocSh->GetUndoManager()->AddUndoAction(
+                        new ScUndoInsertTab( pDocSh, nNewTab, bAppend, lcl_MakePivotTabName( aName, i ) ));
+        }
 
         GetViewData()->InsertTab( nNewTab );
         SetTabNo( nNewTab, TRUE );
@@ -684,6 +690,8 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
     USHORT nTab = GetViewData()->GetTabNo();
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDBData* pDBData = GetDBData();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScQueryParam aQueryParam;
     pDBData->GetQueryParam( aQueryParam );

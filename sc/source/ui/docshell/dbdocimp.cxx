@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:25:23 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,10 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
                                     BOOL bRecord, BOOL bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+
     ScDBData* pDBData = 0;
     if ( !bAddrInsert )
     {

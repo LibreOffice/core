@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:06:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,7 +966,10 @@ void lcl_ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+    BOOL bUndo(pDoc->IsUndoEnabled());
+    ScDocument* pUndoDoc = NULL;
+    if (bUndo)
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
     ULONG nCount = rRanges.Count();
     ULONG i;
     for (i=0; i<nCount; i++)
@@ -974,11 +977,14 @@ void lcl_ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
         ScRange aRange = *rRanges.GetObject(i);
         USHORT nTab = aRange.aStart.Tab();
 
-        if ( i==0 )
-            pUndoDoc->InitUndo( pDoc, nTab, nTab );
-        else
-            pUndoDoc->AddUndoTab( nTab, nTab );
-        pDoc->CopyToDocument( aRange, IDF_ATTRIB, FALSE, pUndoDoc );
+        if (bUndo)
+        {
+            if ( i==0 )
+                pUndoDoc->InitUndo( pDoc, nTab, nTab );
+            else
+                pUndoDoc->AddUndoTab( nTab, nTab );
+            pDoc->CopyToDocument( aRange, IDF_ATTRIB, FALSE, pUndoDoc );
+        }
 
         ScMarkData aMark;
         aMark.SetMarkArea( aRange );
@@ -988,8 +994,11 @@ void lcl_ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
         // RowHeight bei Umrandung alleine nicht noetig
     }
 
-    pDocShell->GetUndoManager()->AddUndoAction(
-            new ScUndoBorder( pDocShell, rRanges, pUndoDoc, rOuter, rInner ) );
+    if (bUndo)
+    {
+        pDocShell->GetUndoManager()->AddUndoAction(
+                new ScUndoBorder( pDocShell, rRanges, pUndoDoc, rOuter, rInner ) );
+    }
 
     for (i=0; i<nCount; i++)
         pDocShell->PostPaint( *rRanges.GetObject(i), PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
@@ -1003,7 +1012,6 @@ void lcl_ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
 BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<uno::Any> >& aData )
 {
-    BOOL bUndo = TRUE;
 //  BOOL bApi = TRUE;
 
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -1012,6 +1020,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     USHORT nStartRow = rRange.aStart.Row();
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nEndRow = rRange.aEnd.Row();
+    BOOL bUndo(pDoc->IsUndoEnabled());
 
     if ( !pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow ) )
     {
@@ -3007,6 +3016,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
             if (pSearchItem)
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
+                BOOL bUndo(pDoc->IsUndoEnabled());
                 pSearchItem->SetCommand( SVX_SEARCHCMD_REPLACE_ALL );
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
@@ -3030,14 +3040,22 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     USHORT nCol = 0, nRow = 0;
 
                     String aUndoStr;
-                    ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                    pUndoDoc->InitUndo( pDoc, nTab, nTab );
+                    ScDocument* pUndoDoc = NULL;
+                    if (bUndo)
+                    {
+                        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                        pUndoDoc->InitUndo( pDoc, nTab, nTab );
+                    }
                     for (i=0; i<nTabCount; i++)
-                        if ( aMark.GetTableSelect(i) && i != nTab )
+                        if ( aMark.GetTableSelect(i) && i != nTab && bUndo)
                             pUndoDoc->AddUndoTab( i, i );
-                    ScMarkData* pUndoMark = new ScMarkData(aMark);
+                    ScMarkData* pUndoMark = NULL;
+                    if (bUndo)
+                        pUndoMark = new ScMarkData(aMark);
 
-                    BOOL bFound = pDoc->SearchAndReplace( *pSearchItem, nCol, nRow, nTab,
+                    BOOL bFound(FALSE);
+                    if (bUndo)
+                        bFound = pDoc->SearchAndReplace( *pSearchItem, nCol, nRow, nTab,
                                                             aMark, aUndoStr, pUndoDoc );
                     if (bFound)
                     {
@@ -5732,13 +5750,17 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
         //! docfunc Funktion, auch fuer ScViewFunc::RemoveManualBreaks
 
         ScDocument* pDoc = pDocSh->GetDocument();
+        BOOL bUndo (pDoc->IsUndoEnabled());
         USHORT nTab = GetTab_Impl();
 
-        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-        pDoc->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, IDF_NONE, FALSE, pUndoDoc );
-        pDocSh->GetUndoManager()->AddUndoAction(
+        if (bUndo)
+        {
+            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
+            pDoc->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, IDF_NONE, FALSE, pUndoDoc );
+            pDocSh->GetUndoManager()->AddUndoAction(
                                     new ScUndoRemoveBreaks( pDocSh, nTab, pUndoDoc ) );
+        }
 
         pDoc->RemoveManualBreaks(nTab);
         pDoc->UpdatePageBreaks(nTab);
@@ -5908,11 +5930,15 @@ void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
+        BOOL bUndo(pDoc->IsUndoEnabled());
         USHORT nTab = GetTab_Impl();
 
         ScPrintRangeSaver* pNewRanges = pDoc->CreatePrintRangeSaver();
-        pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoPrintRange( pDocSh, nTab, pOldRanges, pNewRanges ) );
+        if (bUndo)
+        {
+            pDocSh->GetUndoManager()->AddUndoAction(
+                        new ScUndoPrintRange( pDocSh, nTab, pOldRanges, pNewRanges ) );
+        }
 
         ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
 

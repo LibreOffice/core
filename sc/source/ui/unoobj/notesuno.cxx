@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notesuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::Ru
 
         BOOL bSet = bIsVisible ? TRUE : FALSE;
         ScDocument* pDoc = pDocShell->GetDocument();
+        BOOL bUndo(pDoc->IsUndoEnabled());
         USHORT nCol = aCellPos.Col();
         USHORT nRow = aCellPos.Row();
         USHORT nTab = aCellPos.Tab();
@@ -327,13 +328,16 @@ void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::Ru
                 pDocShell->MakeDrawLayer();
                 ScDrawLayer* pModel = pDoc->GetDrawLayer();
 
-                pModel->BeginCalcUndo();
+                if (bUndo)
+                    pModel->BeginCalcUndo();
                 ScDetectiveFunc aFunc( pDoc,nTab );
                 if ( bSet )
                     bDone = ( aFunc.ShowComment( nCol, nRow, FALSE ) != NULL );
                 else
                     bDone = aFunc.HideComment( nCol, nRow );
-                SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+                SdrUndoGroup* pUndo = NULL;
+                if (bUndo)
+                    pUndo = pModel->GetCalcUndo();
                 if (bDone)
                 {
                     aNote.SetShown( bSet );

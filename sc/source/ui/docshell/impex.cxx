@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-22 01:29:17 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ BOOL ScImportExport::StartPaste()
         aInfoBox.Execute();
         return FALSE;
     }
-    if( bUndo && pDocSh )
+    if( bUndo && pDocSh && pDoc->IsUndoEnabled())
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
@@ -288,7 +288,7 @@ void ScImportExport::EndPaste()
     BOOL bHeight = pDocSh && pDocSh->AdjustRowHeight(
                     aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab() );
 
-    if( pUndoDoc )
+    if( pUndoDoc && pDoc->IsUndoEnabled() )
     {
         ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );

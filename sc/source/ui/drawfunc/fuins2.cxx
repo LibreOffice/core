@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:26:30 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
             ScViewData* pData = pViewSh->GetViewData();
             ScDocShell* pScDocSh = pData->GetDocShell();
             ScDocument* pScDoc   = pScDocSh->GetDocument();
+            BOOL bUndo (pScDoc->IsUndoEnabled());
 
             if( pReqArgs )
             {
@@ -536,9 +537,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                     {
                         BOOL bAppend = TRUE;
 
-                        pScDocSh->GetUndoManager()->AddUndoAction(
-                                    new ScUndoInsertTab( pScDocSh, nNewTab,
-                                                         bAppend, aTabName ) );
+                        if (bUndo)
+                        {
+                            pScDocSh->GetUndoManager()->AddUndoAction(
+                                        new ScUndoInsertTab( pScDocSh, nNewTab,
+                                                             bAppend, aTabName ) );
+                        }
 
                         pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
                         pViewSh->SetTabNo( nNewTab, TRUE );

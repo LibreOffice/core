@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-02 19:39:10 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,6 @@ using namespace com::sun::star;
 
 void ScViewFunc::CutToClip( ScDocument* pClipDoc )
 {
-    const BOOL bRecord=TRUE;                    // Undo/Redo
-
     UpdateInputLine();
 
     if (!SelectionEditable())                   // Bereich editierbar?
@@ -263,6 +261,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc )
         ScDocument* pDoc = GetViewData()->GetDocument();
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScMarkData& rMark = GetViewData()->GetMarkData();
+        const BOOL bRecord(pDoc->IsUndoEnabled());                  // Undo/Redo
 
         ScDocShellModificator aModificator( *pDocSh );
 
@@ -717,8 +716,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         pClipDoc = pTransClip;
     }
 
-    const BOOL bRecord = TRUE;
-
     USHORT nStartCol;
     USHORT nStartRow;
     USHORT nStartTab;
@@ -733,6 +730,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    const BOOL bRecord(pDoc->IsUndoEnabled());
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -809,8 +807,11 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     BOOL bInsertCells = ( eMoveMode != INS_NONE && nEndCol <= MAXCOL && nEndRow <= MAXROW );
     if ( bInsertCells )
     {
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_PASTE );
-        pUndoMgr->EnterListAction( aUndo, aUndo );
+        if (bRecord)
+        {
+            String aUndo = ScGlobal::GetRscString( STR_UNDO_PASTE );
+            pUndoMgr->EnterListAction( aUndo, aUndo );
+        }
 
         MarkRange( aUserRange );            // wird vor CopyFromClip sowieso gesetzt
 
@@ -848,7 +849,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     {
         ErrorMessage(STR_PASTE_FULL);
         delete pTransClip;
-        if ( bInsertCells )
+        if ( bInsertCells && bRecord)
             pUndoMgr->LeaveListAction();
         return FALSE;
     }
@@ -861,7 +862,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     {
         ErrorMessage(STR_PROTECTIONERR);
         delete pTransClip;
-        if ( bInsertCells )
+        if ( bInsertCells && bRecord)
             pUndoMgr->LeaveListAction();
         return FALSE;
     }
@@ -878,7 +879,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         {       // "Zusammenfassen nicht verschachteln !"
             ErrorMessage(STR_MSSG_PASTEFROMCLIP_1);
             delete pTransClip;
-            if ( bInsertCells )
+            if ( bInsertCells && bRecord)
                 pUndoMgr->LeaveListAction();
             return FALSE;
         }

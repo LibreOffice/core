@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:00:38 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     SfxBindings* pBindings = GetViewBindings();
+    BOOL bUndo (aDocument.IsUndoEnabled());
 
     USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -301,8 +302,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if ( aPos.Parse( sTarget, &aDocument ) & SCA_VALID )
                         {
                             bMakeArea = TRUE;
-                            String aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
-                            GetUndoManager()->EnterListAction( aStrImport, aStrImport );
+                            if (bUndo)
+                            {
+                                String aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
+                                GetUndoManager()->EnterListAction( aStrImport, aStrImport );
+                            }
 
                             ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, FALSE );
                             DBG_ASSERT(pDBData, "kann DB-Daten nicht anlegen");
@@ -336,7 +340,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 else
                     rReq.Ignore();
 
-                if ( bMakeArea )
+                if ( bMakeArea && bUndo)
                     GetUndoManager()->LeaveListAction();
             }
             else
@@ -349,6 +353,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 ScDocument* pDoc = GetDocument();
+                BOOL bUndo (pDoc->IsUndoEnabled());
                 const   SfxPoolItem* pItem;
                 String  aChartName, aRangeName;
 
@@ -442,9 +447,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         if (bMultiRange)
                         {
-                            GetUndoManager()->AddUndoAction(
-                                new ScUndoChartData( this, aChartName, aRangeListRef,
-                                                        bColHeaders, bRowHeaders, bAddRange ) );
+                            if (bUndo)
+                            {
+                                GetUndoManager()->AddUndoAction(
+                                    new ScUndoChartData( this, aChartName, aRangeListRef,
+                                                            bColHeaders, bRowHeaders, bAddRange ) );
+                            }
                             aDocument.UpdateChartArea( aChartName, aRangeListRef,
                                                         bColHeaders, bRowHeaders, bAddRange,
                                                         pDataWin );
@@ -452,9 +460,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         else
                         {
                             ScRange aNewRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                            GetUndoManager()->AddUndoAction(
-                                new ScUndoChartData( this, aChartName, aNewRange,
-                                                        bColHeaders, bRowHeaders, bAddRange ) );
+                            if (bUndo)
+                            {
+                                GetUndoManager()->AddUndoAction(
+                                    new ScUndoChartData( this, aChartName, aNewRange,
+                                                            bColHeaders, bRowHeaders, bAddRange ) );
+                            }
                             aDocument.UpdateChartArea( aChartName, aNewRange,
                                                         bColHeaders, bRowHeaders, bAddRange,
                                                         pDataWin );
@@ -1019,6 +1030,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
 void ScDocShell::SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages )
 {
+    BOOL bUndo(aDocument.IsUndoEnabled());
     String aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
@@ -1028,10 +1040,13 @@ void ScDocShell::SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages )
         ScDocShellModificator aModificator( *this );
 
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        USHORT nOldScale = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALE)).GetValue();
-        USHORT nOldPages = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
-        GetUndoManager()->AddUndoAction( new ScUndoPrintZoom(
-                        this, nTab, nOldScale, nOldPages, nScale, nPages ) );
+        if (bUndo)
+        {
+            USHORT nOldScale = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALE)).GetValue();
+            USHORT nOldPages = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
+            GetUndoManager()->AddUndoAction( new ScUndoPrintZoom(
+                            this, nTab, nOldScale, nOldPages, nScale, nPages ) );
+        }
 
         rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
         rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nPages ) );
@@ -1171,6 +1186,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                 }
                 else if ( pReqArgs == NULL )
                 {
+                    BOOL bUndo(aDocument.IsUndoEnabled());
                     String aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet
@@ -1181,7 +1197,8 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                     if ( pStyleSheet )
                     {
                         ScStyleSaveData aOldData;
-                        aOldData.InitFromStyle( pStyleSheet );
+                        if (bUndo)
+                            aOldData.InitFromStyle( pStyleSheet );
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
 
@@ -1216,9 +1233,12 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                             ScStyleSaveData aNewData;
                             aNewData.InitFromStyle( pStyleSheet );
-                            GetUndoManager()->AddUndoAction(
-                                    new ScUndoModifyStyle( this, SFX_STYLE_FAMILY_PAGE,
-                                                aOldData, aNewData ) );
+                            if (bUndo)
+                            {
+                                GetUndoManager()->AddUndoAction(
+                                        new ScUndoModifyStyle( this, SFX_STYLE_FAMILY_PAGE,
+                                                    aOldData, aNewData ) );
+                            }
 
                             PageStyleModified( aNewName, FALSE );
                             rReq.Done();

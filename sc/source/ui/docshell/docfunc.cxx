@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-06 14:54:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,20 +195,27 @@ BOOL ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
 
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     USHORT nCol = rPos.Col();
     USHORT nRow = rPos.Row();
     USHORT nTab = rPos.Tab();
 
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).ShowPred( nCol, nRow );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (bDone)
     {
         ScDetOpData aOperation( ScAddress(nCol,nRow,nTab), SCDETOP_ADDPRED );
         pDoc->AddDetectiveOperation( aOperation );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
@@ -223,6 +230,8 @@ BOOL ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
 BOOL ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo(pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return FALSE;
@@ -233,15 +242,21 @@ BOOL ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
     USHORT nRow = rPos.Row();
     USHORT nTab = rPos.Tab();
 
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).DeletePred( nCol, nRow );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (bDone)
     {
         ScDetOpData aOperation( ScAddress(nCol,nRow,nTab), SCDETOP_DELPRED );
         pDoc->AddDetectiveOperation( aOperation );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
@@ -259,20 +274,28 @@ BOOL ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
 
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo(pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     USHORT nCol = rPos.Col();
     USHORT nRow = rPos.Row();
     USHORT nTab = rPos.Tab();
 
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).ShowSucc( nCol, nRow );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (bDone)
     {
         ScDetOpData aOperation( ScAddress(nCol,nRow,nTab), SCDETOP_ADDSUCC );
         pDoc->AddDetectiveOperation( aOperation );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
@@ -287,6 +310,8 @@ BOOL ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
 BOOL ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return FALSE;
@@ -297,15 +322,21 @@ BOOL ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
     USHORT nRow = rPos.Row();
     USHORT nTab = rPos.Tab();
 
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).DeleteSucc( nCol, nRow );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (bDone)
     {
         ScDetOpData aOperation( ScAddress(nCol,nRow,nTab), SCDETOP_DELSUCC );
         pDoc->AddDetectiveOperation( aOperation );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
@@ -323,20 +354,28 @@ BOOL ScDocFunc::DetectiveAddError(const ScAddress& rPos)
 
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     USHORT nCol = rPos.Col();
     USHORT nRow = rPos.Row();
     USHORT nTab = rPos.Tab();
 
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).ShowError( nCol, nRow );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (bDone)
     {
         ScDetOpData aOperation( ScAddress(nCol,nRow,nTab), SCDETOP_ADDERROR );
         pDoc->AddDetectiveOperation( aOperation );
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+        }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
@@ -354,20 +393,25 @@ BOOL ScDocFunc::DetectiveMarkInvalid(USHORT nTab)
 
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
 
     Window* pWaitWin = rDocShell.GetDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bOverflow;
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).MarkInvalid( bOverflow );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (pWaitWin)
         pWaitWin->LeaveWait();
     if (bDone)
     {
-        if (pUndo)
+        if (pUndo && bUndo)
         {
             pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETINVALID ) );
             rDocShell.GetUndoManager()->AddUndoAction( pUndo );
@@ -388,24 +432,34 @@ BOOL ScDocFunc::DetectiveMarkInvalid(USHORT nTab)
 BOOL ScDocFunc::DetectiveDelAll(USHORT nTab)
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return FALSE;
 
     ScDocShellModificator aModificator( rDocShell );
 
-    pModel->BeginCalcUndo();
+    if (bUndo)
+        pModel->BeginCalcUndo();
     BOOL bDone = ScDetectiveFunc( pDoc,nTab ).DeleteAll( SC_DET_DETECTIVE );
-    SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+    SdrUndoGroup* pUndo = NULL;
+    if (bUndo)
+        pUndo = pModel->GetCalcUndo();
     if (bDone)
     {
         ScDetOpList* pOldList = pDoc->GetDetOpList();
-        ScDetOpList* pUndoList = pOldList ? new ScDetOpList(*pOldList) : NULL;
+        ScDetOpList* pUndoList = NULL;
+        if (bUndo)
+            pUndoList = pOldList ? new ScDetOpList(*pOldList) : NULL;
 
         pDoc->ClearDetectiveOperations();
 
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDetective( &rDocShell, pUndo, NULL, pUndoList ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoDetective( &rDocShell, pUndo, NULL, pUndoList ) );
+        }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
@@ -421,12 +475,15 @@ BOOL ScDocFunc::DetectiveRefresh( BOOL bAutomatic )
 {
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo (pDoc->IsUndoEnabled());
     ScDetOpList* pList = pDoc->GetDetOpList();
     if ( pList && pList->Count() )
     {
         rDocShell.MakeDrawLayer();
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
-        pModel->BeginCalcUndo();
+        if (bUndo)
+            pModel->BeginCalcUndo();
 
         //  Loeschen auf allen Tabellen
 
@@ -469,14 +526,17 @@ BOOL ScDocFunc::DetectiveRefresh( BOOL bAutomatic )
             }
         }
 
-        SdrUndoGroup* pUndo = pModel->GetCalcUndo();
-        if (pUndo)
+        if (bUndo)
         {
-            pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETREFRESH ) );
-            //  wenn automatisch, an letzte Aktion anhaengen
-            rDocShell.GetUndoManager()->AddUndoAction(
-                                            new ScUndoDraw( pUndo, &rDocShell ),
-                                            bAutomatic );
+            SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+            if (pUndo)
+            {
+                pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETREFRESH ) );
+                //  wenn automatisch, an letzte Aktion anhaengen
+                rDocShell.GetUndoManager()->AddUndoAction(
+                                                new ScUndoDraw( pUndo, &rDocShell ),
+                                                bAutomatic );
+            }
         }
         rDocShell.SetDrawModified();
         bDone = TRUE;
@@ -498,6 +558,9 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
     }
 
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     if (!pDoc->IsSelectionEditable(rMark))
     {
         if (!bApi)
@@ -621,6 +684,8 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    BOOL bUndo(pDoc->IsUndoEnabled());
     if (!pDoc->IsBlockEditable( rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() ))
     {
         if (!bApi)
@@ -628,32 +693,41 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
         return FALSE;
     }
 
-    USHORT* pTabs = new USHORT[1];
-    pTabs[0] = rPos.Tab();
-    ScBaseCell** ppOldCells = new ScBaseCell*[1];
+    USHORT* pTabs = NULL;
+    ScBaseCell** ppOldCells = NULL;
+    BOOL* pHasFormat = NULL;
+    ULONG* pOldFormats = NULL;
     ScBaseCell* pDocCell = pDoc->GetCell( rPos );
     BOOL bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
-    ppOldCells[0] = pDocCell ? pDocCell->Clone(pDoc) : NULL;
-
-    BOOL* pHasFormat = new BOOL[1];
-    ULONG* pOldFormats = new ULONG[1];
-    const SfxPoolItem* pItem;
-    const ScPatternAttr* pPattern = pDoc->GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );
-    if ( SFX_ITEM_SET == pPattern->GetItemSet().GetItemState(
-                            ATTR_VALUE_FORMAT,FALSE,&pItem) )
+    if (bUndo)
     {
-        pHasFormat[0] = TRUE;
-        pOldFormats[0] = ((const SfxUInt32Item*)pItem)->GetValue();
+        pTabs = new USHORT[1];
+        pTabs[0] = rPos.Tab();
+        ppOldCells  = new ScBaseCell*[1];
+        ppOldCells[0] = pDocCell ? pDocCell->Clone(pDoc) : NULL;
+
+        pHasFormat = new BOOL[1];
+        pOldFormats = new ULONG[1];
+        const SfxPoolItem* pItem;
+        const ScPatternAttr* pPattern = pDoc->GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );
+        if ( SFX_ITEM_SET == pPattern->GetItemSet().GetItemState(
+                                ATTR_VALUE_FORMAT,FALSE,&pItem) )
+        {
+            pHasFormat[0] = TRUE;
+            pOldFormats[0] = ((const SfxUInt32Item*)pItem)->GetValue();
+        }
+        else
+            pHasFormat[0] = FALSE;
     }
-    else
-        pHasFormat[0] = FALSE;
 
     pDoc->SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
 
-    //  wegen ChangeTracking darf UndoAction erst nach SetString angelegt werden
-    rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoEnterData( &rDocShell, rPos.Col(),rPos.Row(),rPos.Tab(), 1,pTabs,
-                                 ppOldCells, pHasFormat, pOldFormats, rText, NULL ) );
+    if (bUndo)
+    {
+        //  wegen ChangeTracking darf UndoAction erst nach SetString angelegt werden
+        rDocShell.GetUndoManager()->AddUndoAction(new ScUndoEnterData( &rDocShell, rPos.Col(),rPos.Row(),rPos.Tab(), 1,pTabs,
+                                     ppOldCells, pHasFormat, pOldFormats, rText, NULL ) );
+    }
 
     if ( bEditDeleted || pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) )
         AdjustRowHeight( ScRange(rPos) );
@@ -668,6 +742,7 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
     if (!pDoc->IsBlockEditable( rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() ))
     {
         if (!bApi)
@@ -676,19 +751,30 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
         return FALSE;
     }
 
-    BOOL bEditCell = ( pNewCell->GetCellType() == CELLTYPE_EDIT );
-    ScBaseCell* pDocCell = pDoc->GetCell( rPos );
-    BOOL bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
-    BOOL bHeight = ( bEditDeleted || bEditCell ||
+    BOOL bEditCell(FALSE);
+    BOOL bEditDeleted(FALSE);
+    BOOL bHeight;
+    ScBaseCell* pUndoCell = NULL;
+    ScBaseCell* pRedoCell = NULL;
+    if (bUndo)
+    {
+        bEditCell = ( pNewCell->GetCellType() == CELLTYPE_EDIT );
+        ScBaseCell* pDocCell = pDoc->GetCell( rPos );
+        bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
+        bHeight = ( bEditDeleted || bEditCell ||
                     pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) );
-    ScBaseCell* pUndoCell = pDocCell ? pDocCell->Clone(pDoc) : NULL;
-    ScBaseCell* pRedoCell = pNewCell ? pNewCell->Clone(pDoc) : NULL;
+        pUndoCell = pDocCell ? pDocCell->Clone(pDoc) : NULL;
+        pRedoCell = pNewCell ? pNewCell->Clone(pDoc) : NULL;
+    }
 
     pDoc->PutCell( rPos, pNewCell );
 
     //  wegen ChangeTracking darf UndoAction erst nach PutCell angelegt werden
-    rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoPutCell( &rDocShell, rPos, pUndoCell, pRedoCell, bHeight ) );
+    if (bUndo)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoPutCell( &rDocShell, rPos, pUndoCell, pRedoCell, bHeight ) );
+    }
 
     if (bHeight)
         AdjustRowHeight( ScRange(rPos) );
@@ -869,7 +955,7 @@ BOOL ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
                                     BOOL bRecord, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
-    if ( bRecord && pDoc->IsImportingXML() )
+    if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = FALSE;
 
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
@@ -928,7 +1014,7 @@ BOOL ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
                                     BOOL bRecord, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
-    if ( bRecord && pDoc->IsImportingXML() )
+    if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = FALSE;
 
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
@@ -1024,6 +1110,9 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
     USHORT nPaintEndY = nEndRow;
     USHORT nPaintFlags = PAINT_GRID;
     BOOL bSuccess;
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     //  zugehoerige Szenarien auch anpassen
     if ( !pDoc->IsScenario(nEndTab) )
@@ -1240,6 +1329,9 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     USHORT nPaintEndX = nEndCol;
     USHORT nPaintEndY = nEndRow;
     USHORT nPaintFlags = PAINT_GRID;
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     //  zugehoerige Szenarien auch anpassen
     if ( !pDoc->IsScenario(nEndTab) )
@@ -1480,6 +1572,9 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     //  zugehoerige Szenarien auch anpassen - nur wenn innerhalb einer Tabelle verschoben wird!
     BOOL bScenariosAdded = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+
     USHORT nTabCount = pDoc->GetTableCount();
     if ( nDestTab == nStartTab && !pDoc->IsScenario(nEndTab) )
         while ( nEndTab+1 < nTabCount && pDoc->IsScenario(nEndTab+1) )
@@ -1769,6 +1864,8 @@ BOOL ScDocFunc::InsertTable( USHORT nTab, const String& rName, BOOL bRecord, BOO
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     if (bRecord)
         pDoc->BeginDrawUndo();                          //  InsertTab erzeugt ein SdrUndoNewPage
 
@@ -1804,6 +1901,8 @@ BOOL ScDocFunc::DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi )
 
     BOOL bSuccess = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     BOOL bWasLinked = pDoc->IsLinked(nTab);
     ScDocument* pUndoDoc = NULL;
     ScRefUndoData* pUndoData = NULL;
@@ -1879,6 +1978,7 @@ BOOL ScDocFunc::DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi )
 BOOL ScDocFunc::SetTableVisible( USHORT nTab, BOOL bVisible, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     if ( pDoc->IsVisible( nTab ) == bVisible )
         return TRUE;                                // nichts zu tun - ok
 
@@ -1910,7 +2010,8 @@ BOOL ScDocFunc::SetTableVisible( USHORT nTab, BOOL bVisible, BOOL bApi )
     }
 
     pDoc->SetVisible( nTab, bVisible );
-    rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( &rDocShell, nTab, bVisible ) );
+    if (bUndo)
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( &rDocShell, nTab, bVisible ) );
 
     //  Views updaten:
     if (!bVisible)
@@ -1926,6 +2027,8 @@ BOOL ScDocFunc::SetTableVisible( USHORT nTab, BOOL bVisible, BOOL bApi )
 BOOL ScDocFunc::RenameTable( USHORT nTab, const String& rName, BOOL bRecord, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     if ( !pDoc->IsDocEditable() )
     {
         if (!bApi)
@@ -1940,8 +2043,11 @@ BOOL ScDocFunc::RenameTable( USHORT nTab, const String& rName, BOOL bRecord, BOO
     pDoc->GetName(nTab, sOldName);
     if (pDoc->RenameTab( nTab, rName ))
     {
-        rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoRenameTab( &rDocShell, nTab, sOldName, rName));
+        if (bRecord)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                            new ScUndoRenameTab( &rDocShell, nTab, sOldName, rName));
+        }
         rDocShell.PostPaintExtras();
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
@@ -1990,7 +2096,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
         return TRUE;
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    if ( bRecord && pDoc->IsImportingXML() )
+    if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = FALSE;
 
     if ( !rDocShell.IsEditable() )
@@ -2159,6 +2265,8 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     USHORT nTab = rPos.Tab();
     SfxBindings* pBindings = rDocShell.GetViewBindings();
 
@@ -2214,6 +2322,8 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     USHORT nTab = rPos.Tab();
     SfxBindings* pBindings = rDocShell.GetViewBindings();
 
@@ -2288,12 +2398,16 @@ BOOL ScDocFunc::Protect( USHORT nTab, const String& rPassword, BOOL bApi )
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword );
 
     if ( bOk )
     {
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoProtect( &rDocShell, nTab, TRUE, rPassword ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoProtect( &rDocShell, nTab, TRUE, rPassword ) );
+        }
 
         if ( nTab == TABLEID_DOC )
             pDoc->SetDocProtection( TRUE, rPassword );
@@ -2321,6 +2435,7 @@ BOOL ScDocFunc::Unprotect( USHORT nTab, const String& rPassword, BOOL bApi )
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     String aOldPassword;
     BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword, &aOldPassword );
 
@@ -2331,8 +2446,11 @@ BOOL ScDocFunc::Unprotect( USHORT nTab, const String& rPassword, BOOL bApi )
         else
             pDoc->SetTabProtection( nTab, FALSE, String() );
 
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoProtect( &rDocShell, nTab, FALSE, aOldPassword ) );
+        if (bUndo)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                        new ScUndoProtect( &rDocShell, nTab, FALSE, aOldPassword ) );
+        }
 
         rDocShell.PostPaintGridAll();
         aModificator.SetDocumentModified();
@@ -2355,6 +2473,7 @@ BOOL ScDocFunc::ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL 
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
     if (!pDoc->IsSelectionEditable(rMark))
     {
         if (!bApi)
@@ -2366,6 +2485,7 @@ BOOL ScDocFunc::ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL 
     rMark.GetMultiMarkArea( aMarkRange );
 
 //  if (bRecord)
+    if (bUndo)
     {
         USHORT nStartTab = aMarkRange.aStart.Tab();
         USHORT nEndTab = aMarkRange.aEnd.Tab();
@@ -2393,6 +2513,7 @@ BOOL ScDocFunc::ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bAp
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
     if (!pDoc->IsSelectionEditable(rMark))
     {
         if (!bApi)
@@ -2404,6 +2525,7 @@ BOOL ScDocFunc::ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bAp
     rMark.GetMultiMarkArea( aMarkRange );
 
 //  if (bRecord)
+    if (bUndo)
     {
         USHORT nStartTab = aMarkRange.aStart.Tab();
         USHORT nTabCount = pDoc->GetTableCount();
@@ -2454,6 +2576,8 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nEndTab = rRange.aEnd.Tab();
 
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     ScMarkData aMark;
     if (pTabMark)
         aMark = *pTabMark;
@@ -2564,6 +2688,8 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nEndTab = rRange.aEnd.Tab();
 
+    BOOL bUndo(pDoc->IsUndoEnabled());
+
     ScMarkData aMark;
     if (pTabMark)
         aMark = *pTabMark;
@@ -2579,6 +2705,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
 
         ScDocument* pUndoDoc;
 //      if (bRecord)    // immer
+        if (bUndo)
         {
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -2596,6 +2723,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,rString);
 
 //      if (bRecord)    // immer
+        if (bUndo)
         {
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             rDocShell.GetUndoManager()->AddUndoAction(
@@ -2629,6 +2757,9 @@ BOOL ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nEndTab = rRange.aEnd.Tab();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScMarkData aMark;
     if (pTabMark)
@@ -2698,6 +2829,9 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nEndTab = rRange.aEnd.Tab();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScMarkData aMark;
     if (pTabMark)
@@ -2795,6 +2929,9 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nEndTab = rRange.aEnd.Tab();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScMarkData aMark;
     if (pTabMark)
@@ -2907,6 +3044,9 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nEndTab = rRange.aEnd.Tab();
+
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
     ScMarkData aMark;
     if (pTabMark)
@@ -3025,6 +3165,9 @@ BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord,
     USHORT nEndRow = rRange.aEnd.Row();
     USHORT nTab = rRange.aStart.Tab();
 
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+
     if (!pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
     {
         if (!bApi)
@@ -3095,6 +3238,9 @@ BOOL ScDocFunc::UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi )
     ScDocument* pDoc = rDocShell.GetDocument();
     USHORT nTab = rRange.aStart.Tab();
 
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+
     if ( pDoc->HasAttrib( rRange, HASATTR_MERGED ) )
     {
         ScRange aExtended = rRange;
@@ -3146,14 +3292,18 @@ BOOL ScDocFunc::SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi
     USHORT nTab = rPos.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
     if (pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
     {
-        ScPostIt aOld;
-        pDoc->GetNote( nCol, nRow, nTab, aOld );
         pDoc->SetNote( nCol, nRow, nTab, rNote );
 
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoEditNote( &rDocShell, rPos, aOld, rNote ) );
+        if (bUndo)
+        {
+            ScPostIt aOld;
+            pDoc->GetNote( nCol, nRow, nTab, aOld );
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoEditNote( &rDocShell, rPos, aOld, rNote ) );
+        }
 
         rDocShell.PostPaintCell( nCol, nRow, nTab );
         aModificator.SetDocumentModified();
@@ -3172,12 +3322,16 @@ BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
 
-    ScRangeName* pOld = pDoc->GetRangeName();
-    ScRangeName* pUndoRanges = new ScRangeName(*pOld);
-    ScRangeName* pRedoRanges = new ScRangeName(rNewRanges);
-    rDocShell.GetUndoManager()->AddUndoAction(
-        new ScUndoRangeNames( &rDocShell, pUndoRanges, pRedoRanges ) );
+    if (bUndo)
+    {
+        ScRangeName* pOld = pDoc->GetRangeName();
+        ScRangeName* pUndoRanges = new ScRangeName(*pOld);
+        ScRangeName* pRedoRanges = new ScRangeName(rNewRanges);
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoRangeNames( &rDocShell, pUndoRanges, pRedoRanges ) );
+    }
 
     pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
     pDoc->SetRangeName( new ScRangeName( rNewRanges ) );
@@ -3351,10 +3505,10 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
-    const BOOL bRecord=TRUE;
 
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+    const BOOL bRecord = pDoc->IsUndoEnabled();
     USHORT nTab = rStartPos.Tab();
     ScDocument* pUndoDoc = NULL;
 
@@ -3458,6 +3612,8 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     USHORT nNewEndRow = rNewEnd.Row();
     USHORT nTab = rOldRange.aStart.Tab();
 
+    BOOL bUndo(pDoc->IsUndoEnabled());
+
     BOOL bRet = FALSE;
 
     String aFormula;
@@ -3465,7 +3621,8 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     if ( aFormula.GetChar(0) == '{' && aFormula.GetChar(aFormula.Len()-1) == '}' )
     {
         String aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
-        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+        if (bUndo)
+            rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 
         aFormula.Erase(0,1);
         aFormula.Erase(aFormula.Len()-1,1);
@@ -3485,7 +3642,8 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
             }
         }
 
-        rDocShell.GetUndoManager()->LeaveListAction();
+        if (bUndo)
+            rDocShell.GetUndoManager()->LeaveListAction();
     }
 
     return bRet;
@@ -3500,6 +3658,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     //! auch fuer ScViewFunc::InsertAreaLink benutzen!
 
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo (pDoc->IsUndoEnabled());
 
     String aFilterName = rFilter;
     String aNewOptions = rOptions;
@@ -3514,9 +3673,10 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
 
     //  Undo fuer den leeren Link
 
-    rDocShell.GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( &rDocShell,
-                                                rFile, aFilterName, aNewOptions,
-                                                rSource, rDestRange ) );
+    if (bUndo)
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( &rDocShell,
+                                                    rFile, aFilterName, aNewOptions,
+                                                    rSource, rDestRange ) );
 
     //  Update hat sein eigenes Undo
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:48:51 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow, SvDataObject* pOb
     {   // EditEngine eigen wg. Drag&Drop und PasteSpecial
         HideAllCursors();
 
-        const BOOL bRecord = TRUE;
         ScDocument* pUndoDoc = NULL;
 
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
         USHORT nTab = GetViewData()->GetTabNo();
+        const BOOL bRecord (pDoc->IsUndoEnabled());
 
         const ScPatternAttr* pPattern = pDoc->GetPattern( nStartCol, nStartRow, nTab );
         ScTabEditEngine* pEngine = new ScTabEditEngine( *pPattern, pDoc->GetEnginePool() );
@@ -237,6 +237,8 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     ESelection* pEditSel = NULL;
     ScEditEngineDefaulter* pThesaurusEngine;
     BOOL bIsEditMode = GetViewData()->HasEditView(eWhich);
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
@@ -376,6 +378,8 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
     ESelection* pEditSel = NULL;
     ScSpellingEngine* pSpellingEngine = NULL;
     BOOL bIsEditMode = GetViewData()->HasEditView(eWhich);
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);

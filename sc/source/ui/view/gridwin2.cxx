@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
         ScDocShell* pDocSh = pViewData->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
         USHORT nTab = pViewData->GetTabNo();
+        BOOL bUndo (pDoc->IsUndoEnabled());
 
         if ( bBreak )
         {
@@ -1030,8 +1031,11 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
             USHORT nNew = bColumn ? nPosX : nPosY;
             if ( nNew != nPagebreakBreak )
             {
-                String aUndo = ScGlobal::GetRscString( STR_UNDO_DRAG_BREAK );
-                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                if (bUndo)
+                {
+                    String aUndo = ScGlobal::GetRscString( STR_UNDO_DRAG_BREAK );
+                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                }
 
                 BOOL bGrow = !bHide && nNew > nPagebreakBreak;
                 if ( bColumn )
@@ -1089,7 +1093,10 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                     }
                 }
 
-                pDocSh->GetUndoManager()->LeaveListAction();
+                if (bUndo)
+                {
+                    pDocSh->GetUndoManager()->LeaveListAction();
+                }
 
                 if (!bGrow)     // sonst in AdjustPrintZoom schon passiert
                 {
