@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-10 08:53:36 $
+ *  last change: $Author: pb $ $Date: 2001-08-14 06:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
@@ -464,6 +467,7 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     }
     Sequence < PropertyValue > aProps;
     sal_Int32 nFlag = FrameSearchFlag::GLOBAL;
+    sal_Bool bHelpTaskExists = sal_False;
     if ( aTicket.Len() )
     {
         xFrame = Reference < XDispatchProvider > ( xActiveTask, UNO_QUERY );
@@ -492,6 +496,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
                 xTask->getContainerWindow()->setVisible( sal_True );
             }
         }
+        else
+            bHelpTaskExists = sal_True;
     }
 
     if ( xFrame.is() )
@@ -505,6 +511,19 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
                                 DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, aProps );
+
+        if ( bHelpTaskExists )
+        {
+            // bring the help task to front
+            Reference < XFrame > xFrameFinder( xDesktop, UNO_QUERY );
+            Reference < XFrame > xTask = xFrameFinder->findFrame( DEFINE_CONST_UNICODE("OFFICE_HELP_TASK"), FrameSearchFlag::TASKS );
+            if ( xTask.is() )
+            {
+                Reference < ::com::sun::star::awt::XTopWindow > xTopWin( xTask->getContainerWindow(), UNO_QUERY );
+                if ( xTopWin.is() )
+                    xTopWin->toFront();
+            }
+        }
 
         return TRUE;
     }
