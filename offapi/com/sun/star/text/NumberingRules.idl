@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingRules.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 14:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,35 +99,35 @@ service NumberingRules
     interface com::sun::star::container::XIndexAccess;
 
     // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
+    [optional] interface com::sun::star::beans::XPropertySet;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::NumberingRules::IsAbsoluteMargins
     /** determins if the margins are absolute or relative
         to the preceeding numbering level.
      */
-    [property] boolean  IsAbsoluteMargins;
+    [optional, property] boolean  IsAbsoluteMargins;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::NumberingRules::IsAutomatic
     /** determins if the numbering rules are automatically created
         as opposite to numbering rules that are part of a numbering style.
      */
-    [property] boolean IsAutomatic;
+    [optional, property] boolean IsAutomatic;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::NumberingRules::IsContinuousNumbering
     /** determins if the numbering levels are counted coninuously  or if
         each numbering level is counted separately .
      */
-    [property] boolean IsContinuousNumbering;
+    [optional, property] boolean IsContinuousNumbering;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::NumberingRules::Name
     /** contains the name of the numbering rules. It is used to identify a certain
         numbering rules property
      */
-    [readonly, property] string Name;
+    [optional, readonly, property] string Name;
 
 };
 
@@ -138,6 +138,9 @@ service NumberingRules
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:26  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:02  hjs
     initial import
 
