@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.6 2000-12-03 17:25:05 cl Exp $
+	$Id: chart.mod,v 1.7 2000-12-04 09:10:50 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -63,7 +63,7 @@
 						table:table )>
 <!ATTLIST chart:chart
 		  chart:class %chart-class; #REQUIRED
-		  chart:add-in-name: %string; #IMPLIED
+		  chart:add-in-name %string; #IMPLIED
 		  draw:name %string; #IMPLIED
 		  %draw-position;
 		  %draw-size;
