@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Chart.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:07 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 				<desc xml:lang="th">Specifies the colors for creating new charts.</desc>
 				<desc xml:lang="hi-IN">Specifies the colors for creating new charts.</desc>
 				<desc xml:lang="x-comment">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="hu">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="sk">Specifies the colors for creating new charts.</desc>
+				<desc xml:lang="sl">Specifies the colors for creating new charts.</desc>
 			</info>
 			<prop oor:name="Series" oor:type="oor:long-list">
 				<!-- OldPath: Chart/Default_Colors -->
@@ -125,6 +128,9 @@
 						<desc xml:lang="th">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
 						<desc xml:lang="hi-IN">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
 						<desc xml:lang="x-comment">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="hu">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="sk">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+						<desc xml:lang="sl">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
 					<label xml:lang="en-US">Chart colors</label>
 					<label xml:lang="el">Χρώματα διαγράμματος</label>
 					<label xml:lang="nl">Diagramkleuren</label>
@@ -151,12 +157,15 @@
 					<label xml:lang="hi-IN">चार्ट के रंग</label>
 					<label xml:lang="x-comment">Chart colors</label>
 					<label xml:lang="sk">Farby grafu</label>
+					<label xml:lang="hu">Chart colors</label>
+					<label xml:lang="sl">Chart colors</label>
 				</info>
 				<value>0x9999ff 0x993366 0xffffcc 0xccffff 0x660066 0xff8080 0x0066cc 0xccccff 0x000080 0xff00ff 0x00ffff 0xffff00</value>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Describes a command.</desc>
 				<desc xml:lang="hi-IN">Describes a command.</desc>
 				<desc xml:lang="x-comment">Describes a command.</desc>
+				<desc xml:lang="hu">Describes a command.</desc>
+				<desc xml:lang="sk">Describes a command.</desc>
+				<desc xml:lang="sl">Describes a command.</desc>
 			</info>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
@@ -120,6 +123,9 @@
 					<desc xml:lang="th">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="hi-IN">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="x-comment">Specifies the command name for dispatching without a protocol part.</desc>
+					<desc xml:lang="hu">Specifies the command name for dispatching without a protocol part.</desc>
+					<desc xml:lang="sk">Specifies the command name for dispatching without a protocol part.</desc>
+					<desc xml:lang="sl">Specifies the command name for dispatching without a protocol part.</desc>
 				</info>
 			</prop>
 		</group>
@@ -152,6 +158,9 @@
 				<desc xml:lang="th">Contains information about the execute status.</desc>
 				<desc xml:lang="hi-IN">Contains information about the execute status.</desc>
 				<desc xml:lang="x-comment">Contains information about the execute status.</desc>
+				<desc xml:lang="hu">Contains information about the execute status.</desc>
+				<desc xml:lang="sk">Contains information about the execute status.</desc>
+				<desc xml:lang="sl">Contains information about the execute status.</desc>
 			</info>
 			<set oor:name="Disabled" oor:node-type="CommandType">
 				<info>
@@ -180,11 +189,15 @@
 					<desc xml:lang="th">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="hi-IN">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="x-comment">Contains commands that are disabled in the Office user interface.</desc>
+					<desc xml:lang="hu">Contains commands that are disabled in the Office user interface.</desc>
+					<desc xml:lang="sk">Contains commands that are disabled in the Office user interface.</desc>
+					<desc xml:lang="sl">Contains commands that are disabled in the Office user interface.</desc>
 				</info>
 			</set>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
