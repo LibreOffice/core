@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: gh $ $Date: 2004-01-22 15:20:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ BOOL TTUniqueId::IsStrId( UIdType aUIdType )
         case UID_VCL:
             return FALSE;
         case UID_UNKNOWN:
+        default:
             DBG_ERROR( "UNKNOWN UIdType")
             return FALSE;
     }
@@ -288,7 +289,7 @@ static const char * const components[] =
 {
     SAL_MODULENAME( "ucb1" )    // KSO, ABI
     , SAL_MODULENAME( "ucpfile1" )
-    , SAL_MODULENAME( "cfgmgr2" )
+    , "configmgr2.uno" SAL_DLLEXTENSION
     , "sax.uno" SAL_DLLEXTENSION
     , "typeconverter.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
@@ -299,7 +300,7 @@ static const char * const components[] =
     , "textinstream.uno" SAL_DLLEXTENSION
     , "textoutstream.uno" SAL_DLLEXTENSION
     , "introspection.uno" SAL_DLLEXTENSION
-    , "corereflection.uno" SAL_DLLEXTENSION
+    , "reflection.uno" SAL_DLLEXTENSION
         // RemoteUno
     , "connector.uno" SAL_DLLEXTENSION
     , "bridgefac.uno" SAL_DLLEXTENSION
@@ -542,6 +543,7 @@ void BasicApp::Main( )
     }
     catch( ... )
     {
+        printf( "unknown exception occured\n" );
         InfoBox( NULL, String::CreateFromAscii( "unknown exception occured" ) ).Execute();
         throw;
     }
@@ -560,8 +562,34 @@ void BasicApp::SetFocus()
 
 IMPL_LINK( BasicApp, LateInit, void *, pDummy )
 {
-    BOOL bFileLoaded = FALSE;
-    for ( int i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    int i;
+    for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    {
+        if ( Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("-run") == COMPARE_EQUAL
+#ifndef UNX
+            || Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("/run") == COMPARE_EQUAL
+#endif
+            )
+            pFrame->SetAutoRun( TRUE );
+        else if ( Application::GetCommandLineParam( i ).Copy(0,7).CompareIgnoreCaseToAscii("-result") == COMPARE_EQUAL
+#ifndef UNX
+            || Application::GetCommandLineParam( i ).Copy(0,7).CompareIgnoreCaseToAscii("/result") == COMPARE_EQUAL
+#endif
+            )
+        {
+            if ( (i+1) < Application::GetCommandLineParamCount() )
+            {
+                if ( ByteString( Application::GetCommandLineParam( i+1 ), osl_getThreadTextEncoding() ).IsNumericAscii() )
+                {
+                    MsgEdit::SetMaxLogLen( Application::GetCommandLineParam( i+1 ).ToInt32() );
+                }
+                i++;
+            }
+        }
+    }
+
+    // now load the files after the switches have been set. Espechially -run is of interest sunce it changes the behavior
+    for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,1).CompareToAscii("-") != COMPARE_EQUAL
 #ifndef UNX
@@ -570,26 +598,16 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
           )
         {
             pFrame->LoadFile( Application::GetCommandLineParam( i ) );
-            bFileLoaded = TRUE;
         }
-        else
-        {
-            if ( Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("-run") == COMPARE_EQUAL
+        else if ( Application::GetCommandLineParam( i ).Copy(0,7).CompareIgnoreCaseToAscii("-result") == COMPARE_EQUAL
 #ifndef UNX
-              || Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("/run") == COMPARE_EQUAL
+            || Application::GetCommandLineParam( i ).Copy(0,7).CompareIgnoreCaseToAscii("/result") == COMPARE_EQUAL
 #endif
-              )
-                pFrame->SetAutoRun( TRUE );
+            )
+        {   // Increment count to skip the parameter. This works even if it is not given
+            i++;
         }
     }
-
-/*  removed #104906#
-    if ( !bFileLoaded )
-    {
-        AppWin *pWin = new AppBasEd( pFrame, NULL );
-        pWin->Show();
-    }
-    */
 
     pFrame->pStatus->SetStatusSize( pFrame->pStatus->GetStatusSize()+1 );
     pFrame->pStatus->SetStatusSize( pFrame->pStatus->GetStatusSize()-1 );
@@ -965,6 +983,12 @@ void BasicFrame::Move()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("WinGeom");
     aConf.WriteKey("WinParams",GetWindowState());
+}
+
+void BasicFrame::GetFocus()
+{
+    if ( pWork )
+        pWork->GrabFocus();
 }
 
 IMPL_LINK( BasicFrame, CloseButtonClick, void*, EMPTYARG )
@@ -1388,6 +1412,7 @@ BOOL BasicFrame::LoadFile( String aFilename )
     bIsBasic |= DirEntry( aFilename ).GetExtension().CompareIgnoreCaseToAscii("INC") == COMPARE_EQUAL;
 
     AppWin* p;
+    BOOL bSuccess = TRUE;
     if ( bIsResult )
     {
         p = new AppError( this, aFilename );
@@ -1395,16 +1420,22 @@ BOOL BasicFrame::LoadFile( String aFilename )
     else if ( bIsBasic )
     {
         p = new AppBasEd( this, NULL );
-        p->Load( aFilename );
+        bSuccess = p->Load( aFilename );
     }
     else
     {
         p = new AppEdit( this );
-        p->Load( aFilename );
+        bSuccess = p->Load( aFilename );
     }
-    p->Show();
-    p->GrabFocus();
-    return TRUE;
+    if ( bSuccess )
+    {
+        p->Show();
+        p->GrabFocus();
+    }
+    else
+        delete p;
+
+    return bSuccess;
 }
 
 // Kommando ausfuehren
@@ -1501,7 +1532,18 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                     p->ToTop();
                 }
                 else
-                    SetAutoRun( FALSE );    // Wenn kein Programm geladen wurde, dann auch nicht beenden
+                {
+                    AppWin *w = NULL;
+                    for ( w = pList->Last() ; w ? !w->ISA(AppBasEd) : FALSE ; w = pList->Prev() );
+                    if ( w )
+                    {
+                        p = ((AppBasEd*)w);
+                        p->ToTop();
+                    }
+                    else
+                        if ( IsAutoRun() )
+                            printf( "No file loaded to run.\n" );
+                }
 
                 if( bInBreak )
                     // Nur das Flag zuruecksetzen
@@ -1833,7 +1875,7 @@ void NewFileDialog::FilterSelect()
 
 short NewFileDialog::Execute()
 {
-    BOOL bRet = FileDialog::Execute();
+    BOOL bRet = (BOOL)FileDialog::Execute();
     if ( bRet )
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -1998,7 +2040,7 @@ String BasicFrame::GenRealString( const String &aResString )
         }
         else if ( aType.Search(BaseArgKenn) == 0 )      // Fängt mit BaseArgKenn an
         {
-            USHORT nArgNr = aType.Copy( BaseArgKenn.Len() ).ToInt32();
+            USHORT nArgNr = USHORT( aType.Copy( BaseArgKenn.Len() ).ToInt32() );
             DBG_ASSERT( aString.Search( CUniString("($Arg").Append( String::CreateFromInt32(nArgNr) ).AppendAscii(")") ) != STRING_NOTFOUND, "Extra Argument given in String");
             aString.SearchAndReplace( CUniString("($Arg").Append( String::CreateFromInt32(nArgNr) ).AppendAscii(")"), aValue );
             nStartPos = nStart;
