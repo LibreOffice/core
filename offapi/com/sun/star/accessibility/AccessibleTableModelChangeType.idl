@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleTableModelChangeType.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:33:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleTableModelChange_idl__
+#define __com_sun_star_accessibility_XAccessibleTableModelChange_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com { module sun { module star { module accessibility {
+
+/** Type of a change made to a table model.
+
+    @descr
+        <p>The value of this constants group are used by the
+        <type>XAccessibleTableModelChange</type> interface to specifiy the
+        type of change that has been made to a table model.</p>
+
+        <p>Two of the constants,
+        <const>AccessibleTableModelChangeType::INSERT</const> and
+        <const>AccessibleTableModelChangeType::DELETE</const> describe
+        changes to the table's geometry.  One or more rows and/or columns have
+        been inserted or deleted.  In constrast, the remaining constant
+        <const>AccessibleTabelModelChangeType::UPDATE</const> specifies a
+        change of the table's content.</p>
+*/
+constants AccessibleTableModelChangeType
+{
+    /** One or more rows and/or columns have been inserted.
+
+        <p>Use the methods of the <type>XAccessibleTableModelChange</type>
+        to determine the indices of the rows and/or columns that have been
+        inserted.</p>
+    */
+    const short INSERT = 1;
+
+    /** One or more rows and/or columns have been deleted.
+
+        <p>The affected area of the table can be determined by the methods
+        of the methods of interface
+        <type>XAccessibleTableModelChange</type>.</p>
+     */
+    const short DELETE = 2;
+
+    /** Some of the table data has changed.
+
+        <p>The number of rows and columns remains unchanged.  Only (some of)
+        the content of the cells in the range that is specified by the
+        methods of interface <type>XAccessibleTableModelChange</type> have
+        been changed.</p>
+    */
+    const short UPDATE = 3;
+};
+
+}; }; }; };
+
+#endif
