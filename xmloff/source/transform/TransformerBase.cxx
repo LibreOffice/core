@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:00:27 $
+ *  last change: $Author: dvo $ $Date: 2004-07-22 11:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
                 do
                 {
                     m_aExtPathPrefix += sTmp;
-                    nPos = sRelPath.indexOf( '/' );
+                    nPos = sRelPath.indexOf( '/', nPos + 1 );
                 }
                 while( -1 != nPos );
             }
