@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 06:56:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ private:
     CheckBox    aCbxStartWithActualPage;
 
     FixedLine   aTxtCompatibility;
+    CheckBox    aCbxUsePrinterMetrics;
     CheckBox    aCbxCompatibility;
 
     //Scale
@@ -217,8 +218,17 @@ public:
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
-    //hide impress and show draw controls
-    void    SetDrawMode();
+    /** Hide Impress specific controls, make Draw specific controls visible
+        and arrange the visible controls.  Do not call this method or the
+        <member>SetImpressMode()</member> method more than once.
+    */
+    void SetDrawMode (void);
+
+    /** Hide Draw specific controls, make Impress specific controls visible
+        and arrange the visible controls.  Do not call this method or the
+        <member>SetDrawMode()</member> method more than once.
+    */
+    void SetImpressMode (void);
 };
 
 
