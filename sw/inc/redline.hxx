@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 11:56:25 $
+ *  last change: $Author: cmc $ $Date: 2002-11-19 13:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,10 +223,10 @@ public:
     SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // fuer sw3io: pData geht in eigenen Besitz ueber!
-    SwRedline( SwRedlineData* pData, const SwPosition& rPos, BOOL bVsbl,
-               BOOL bDelLP, BOOL bIsPD ) :
-        SwPaM( rPos ), pCntntSect( 0 ), pRedlineData( pData ),
-        bIsVisible( bVsbl ), bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD )
+    SwRedline(SwRedlineData* pData, const SwPosition& rPos, BOOL bVsbl,
+               BOOL bDelLP, BOOL bIsPD) :
+        SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
+        bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
     {}
     SwRedline( const SwRedline& );
     virtual ~SwRedline();
