@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,22 +80,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::WindowDescriptor
 /** describes a window.
  */
 struct WindowDescriptor
 {
-    // DocMerge from xml: field com::sun::star::awt::WindowDescriptor::Type
+    //-------------------------------------------------------------------------
+
     /** specifies the type of window.
      */
     com::sun::star::awt::WindowClass Type;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowDescriptor::WindowServiceName
-    /** specifies the name of the component service ("ListBox", "PushButton").
-
-
+    /** specifies the name of the component service.
 
         <p>A zero length name means that the vcl creates a blank top,
         a container, or a simple window.</p>
@@ -104,48 +101,38 @@ struct WindowDescriptor
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowDescriptor::Parent
     /** specifies the parent of the component.
 
-
-
-        <p>If the <code>Parent == 0 &amp;amp;&amp;amp; ParentIndex == -1</code>,
+        <p>If <code>Parent == 0 && ParentIndex == -1</code>,
         then the window is on the desktop.</p>
      */
     com::sun::star::awt::XWindowPeer Parent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowDescriptor::ParentIndex
     /** specifies the index of the parent window, if available.
 
-
-
-        <p>If Parent == 0 and this struct is a member of an array, then
-        this is the offset from the beginning of the array to the
-        parent.
-
+        <p>If <code>Parent == 0</code> and this struct is a member of an array,
+        then this is the offset from the beginning of the array to the parent.
         A value of -1 means desktop.</p>
      */
     short ParentIndex;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowDescriptor::Bounds
     /** specifies the position and size of the window.
 
-
-
         <p>This member is ignored if the window attribute is
-        WA_FULLSIZE.
-        </p>
+        <const scope="com::sun::star::awt">WindowAttribute::FULLSIZE</const>.</p>
      */
     com::sun::star::awt::Rectangle Bounds;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowDescriptor::WindowAttributes
-    /** contains some of the WA_* attributes.
+    /** specifies the window attributes.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">WindowAttribute</type>.</p>
      */
     long WindowAttributes;
 

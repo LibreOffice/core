@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowClass.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,24 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::awt::WindowClass
 /** specifies the class of a window.
  */
 enum WindowClass
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::WindowClass::TOP
-    /** specifies a top level window on the desktop.  It is also a container.
+    /** specifies a top level window on the desktop. It is also a container.
      */
     TOP,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::WindowClass::MODALTOP
-    /** is a modal top level window on the desktop.  It is also a container.
+    /** is a modal top level window on the desktop. It is also a container.
      */
     MODALTOP,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::WindowClass::CONTAINER
     /** is a container that may contain other components.
         It is not a top window.
      */
@@ -97,7 +93,6 @@ enum WindowClass
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::WindowClass::SIMPLE
     /** is the simplest window. It can be a container.
      */
     SIMPLE
