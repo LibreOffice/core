@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:14:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,11 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
   -----------------------------------------------------------------------*/
 IMPL_LINK(SpellDialog, CancelHdl, Button *, pButton )
 {
+    //apply changes first - if there are any
+    if(aSentenceED.IsModified())
+    {
+        rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions());
+    }
     Close();
     return 0;
 }
