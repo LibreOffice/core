@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 10:13:28 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef _SV_CLIP_HXX //autogen
 #include <vcl/clip.hxx>
@@ -912,9 +912,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bSetModified = IsModified() || pSrcView->IsModified();
                     if(pSrcView->IsModified()||pSrcView->HasSourceSaved())
                     {
-                        TempFile aTempFile;
+                        utl::TempFile aTempFile;
                         aTempFile.EnableKillingFile();
-                        pSrcView->SaveContent(aTempFile.GetName());
+                        pSrcView->SaveContent(aTempFile.GetFileName());
                         bDone = TRUE;
                         SetActualSize(pSrcView->GetEditWin().GetSizePixel());
                         SfxEventConfiguration* pEvent = SFX_APP()->GetEventConfig();
@@ -923,7 +923,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pEvent->ConfigureEvent(SFX_EVENT_CLOSEDOC,      aMac, this);
                         pEvent->ConfigureEvent(SFX_EVENT_ACTIVATEDOC,   aMac, this);
                         pEvent->ConfigureEvent(SFX_EVENT_DEACTIVATEDOC, aMac, this);
-                        ReloadFromHtml(aTempFile.GetName(), pSrcView);
+                        ReloadFromHtml(aTempFile.GetFileName(), pSrcView);
                         nSlot = 0;
                     }
                     else
@@ -1692,6 +1692,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/11/01 10:13:28  jp
+    new method LoadStyleFromFile for docshell and uno
+
     Revision 1.7  2000/10/31 20:32:32  jp
     change usage of filestream to medium
 

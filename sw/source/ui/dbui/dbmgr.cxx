@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:51:02 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -1120,7 +1120,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                     String sLeading(aEntry.GetBase());
                     aEntry.removeSegment();
                     sPath = aEntry.GetMainURL();
-                    TempFile aTemp(sLeading,&sExt,&sPath );
+                    utl::TempFile aTemp(sLeading,&sExt,&sPath );
 
                     if( !aTemp.IsValid() )
                     {
@@ -1130,7 +1130,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                     }
                     else
                     {
-                        INetURLObject aTempFile(aTemp.GetName());
+                        INetURLObject aTempFile(aTemp.GetFileName());
                         aPrtMonDlg.aPrinter.SetText( aTempFile.GetBase() );
                         String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                         sStat += ' ';

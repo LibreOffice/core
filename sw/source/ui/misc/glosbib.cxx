@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -185,7 +185,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         String sPath(*(*pPathArr)[i]);
         aPathLB.InsertEntry(sPath);
         ULONG nCaseReadonly = 0;
-        TempFile aTempFile(&sPath);
+        utl::TempFile aTempFile(&sPath);
         aTempFile.EnableKillingFile();
         if(!aTempFile.IsValid())
             nCaseReadonly |= PATH_READONLY;
@@ -194,7 +194,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
             Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
             try
             {
-                INetURLObject aTempObj(aTempFile.GetName());
+                INetURLObject aTempObj(aTempFile.GetFileName());
                 aTempObj.SetBase(aTempObj.GetBase().ToLowerAscii());
                 Reference<XContentIdentifier> xRef1 = new
                     ::ucb::ContentIdentifier( xMSF, aTempObj.GetMainURL() );
@@ -679,6 +679,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 14:18:05  os
+      use comphelper methods
+
       Revision 1.1.1.1  2000/09/18 17:14:44  hr
       initial import
 

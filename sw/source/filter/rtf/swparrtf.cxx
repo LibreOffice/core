@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 
 
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
-#endif
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
@@ -3483,6 +3480,7 @@ xub_StrLen SwxPosition::GetCntIdx() const
 #include <svx/wghtitem.hxx>
 #include <svx/wrlmitem.hxx>
 #include <svx/adjitem.hxx>
+#include <unotools/tempfile.hxx>
 
 static SvFileStream* pOut = 0;
 static void OutAttr( const SfxItemSet& rSet )
@@ -3740,9 +3738,9 @@ static void OutText( const SwPaM& rPam, const char* pText )
 
 static void DumpStart()
 {
-    TempFile aTempFile;
+    utl::TempFile aTempFile;
 
-    pOut = new SvFileStream( aTempFile.GetName(),
+    pOut = new SvFileStream( aTempFile.GetFileName(),
                             STREAM_WRITE | STREAM_TRUNC );
     *pOut << "Dump des RTF30-Parsers" << endl;
 }
@@ -3761,11 +3759,14 @@ static void DumpEnde()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/swparrtf.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/swparrtf.cxx,v 1.2 2000-11-06 09:30:33 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.159  2000/09/18 16:04:51  willem.vandorp
       OpenOffice header added.
 
