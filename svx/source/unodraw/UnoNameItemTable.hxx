@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ public:
     virtual ~SvxUnoNameItemTable() throw();
 
     virtual NameOrIndex* createItem() const throw() = 0;
+    virtual bool isValid( const NameOrIndex* pItem ) const;
+
     void dispose();
 
     // SfxListener
