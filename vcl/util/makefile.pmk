@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pl $ $Date: 2001-05-15 15:06:45 $
+#   last change: $Author: hdu $ $Date: 2001-05-16 08:00:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ PSPRINT=true
 .ENDIF
 .ENDIF
 
-.IF "$(BUILD_SOSL)" == ""
 .IF "$(OS)" != "MACOSX"
 .IF "$(remote)" != ""
 USE_BUILTIN_RASTERIZER=true
@@ -83,7 +82,6 @@ USE_BUILTIN_RASTERIZER=true
 USE_BUILTIN_RASTERIZER=true
 USE_XRENDER=true
 ENVCFLAGS += -DUSE_XRENDER
-.ENDIF
 .ENDIF
 .ENDIF
 
