@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-19 16:09:57 $
+ *  last change: $Author: cd $ $Date: 2001-12-06 09:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@ namespace utl
 
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
+
+        /// retrieve the installation mode information item; uses the given default, if not found
+        static rtl::OUString getInstallMode(rtl::OUString const& _sDefault);
 
      public: // retrieve path information about the installatíon location
         enum PathStatus
