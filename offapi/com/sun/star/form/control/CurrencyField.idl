@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CurrencyField.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 08:44:56 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 10:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_form_component_currencyfield_idl__
-#define __com_sun_star_form_component_currencyfield_idl__
+#ifndef __com_sun_star_form_control_CurrencyField_idl__
+#define __com_sun_star_form_control_CurrencyField_idl__
 
 #ifndef __com_sun_star_awt_UnoControlCurrencyField_idl__
 #include <com/sun/star/awt/UnoControlCurrencyField.idl>
@@ -97,6 +97,9 @@ service CurrencyField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/04/19 08:44:56  fs
+    initial checkin - service description for form related controls
+
 
 =============================================================================*/
 
@@ -105,6 +108,9 @@ service CurrencyField
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/19 08:44:56  fs
+ *  initial checkin - service description for form related controls
+ *
  *
  *  Revision 1.0 19.04.01 09:21:55  fs
  ************************************************************************/

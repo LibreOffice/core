@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandButton.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 08:44:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 10:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_form_component_commandbutton_idl__
-#define __com_sun_star_form_component_commandbutton_idl__
+#ifndef __com_sun_star_form_control_CommandButton_idl__
+#define __com_sun_star_form_control_CommandButton_idl__
 
 #ifndef __com_sun_star_awt_UnoControlButton_idl__
 #include <com/sun/star/awt/UnoControlButton.idl>
@@ -100,6 +100,9 @@ service CommandButton
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/04/19 08:44:50  fs
+    initial checkin - service description for form related controls
+
 
 =============================================================================*/
 
@@ -108,6 +111,9 @@ service CommandButton
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/19 08:44:50  fs
+ *  initial checkin - service description for form related controls
+ *
  *
  *  Revision 1.0 19.04.01 09:21:55  fs
  ************************************************************************/
