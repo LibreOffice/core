@@ -2,9 +2,9 @@
  *
  *  $RCSfile: malformeduriexception.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-24 10:16:15 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 09:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,28 @@
 
 namespace rtl {
 
+/** An exception indicating a malformed URI.
+
+    <P>Used when parsing (part of) a URI fails for syntactical reasons.</P>
+ */
 class MalformedUriException
 {
 public:
+    /** Create a MalformedUriException.
+
+        @param rMessage
+        A message containing any details about the exception.
+     */
     inline MalformedUriException(rtl::OUString const & rMessage):
         m_aMessage(rMessage) {}
+
+    /** Get the message.
+
+        @return
+        A reference to the message.  The reference is valid for the lifetime of
+        this MalformedUriException.
+     */
+    inline rtl::OUString const & getMessage() const { return m_aMessage; }
 
 private:
     rtl::OUString m_aMessage;
