@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-28 10:28:52 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ namespace connectivity
 {
 //........................................................................
 
+    class OMetaConnection;
+
     namespace mysql
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
@@ -104,7 +106,8 @@ namespace connectivity
                                         ,::com::sun::star::sdbcx::XCreateCatalog
                                         >   ODriverDelegator_BASE;
 
-        typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper> TWeakPair;
+        typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,OMetaConnection*> TWeakConnectionPair;
+        typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
         DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,TJDBCDrivers);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 14:44:57 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,15 +262,17 @@ namespace connectivity
 
                 xConnection = xDriver->connect( sCuttedUrl, aConvertedProperties );
                 if ( xConnection.is() )
-                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()));
-
-                // now we have to set the URL to get the correct answer for metadata()->getURL()
-                Reference< XUnoTunnel> xTunnel(xConnection,UNO_QUERY);
-                if ( xTunnel.is() )
                 {
-                    OMetaConnection* pConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
-                    if ( pConnection )
-                        pConnection->setURL(url);
+                    OMetaConnection* pMetaConnection = NULL;
+                    // now we have to set the URL to get the correct answer for metadata()->getURL()
+                    Reference< XUnoTunnel> xTunnel(xConnection,UNO_QUERY);
+                    if ( xTunnel.is() )
+                    {
+                        pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
+                        if ( pMetaConnection )
+                            pMetaConnection->setURL(url);
+                    }
+                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xConnection),TWeakConnectionPair(WeakReferenceHelper(),pMetaConnection)));
                 }
             }
         }
@@ -320,15 +322,26 @@ namespace connectivity
         checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
 
         Reference< XTablesSupplier > xTab;
-        TWeakPairVector::iterator aEnd = m_aConnections.end();
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        Reference< XUnoTunnel> xTunnel(connection,UNO_QUERY);
+        if ( xTunnel.is() )
         {
-            if ( Reference< XConnection >::query(i->first.get().get()) == connection )
+            OMetaConnection* pConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
+            if ( pConnection )
             {
-                xTab = Reference< XTablesSupplier >(i->second.get().get(),UNO_QUERY);
-                if ( !xTab.is() )
-                    xTab = new OMySQLCatalog(connection);
-                break;
+                TWeakPairVector::iterator aEnd = m_aConnections.end();
+                for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+                {
+                    if ( i->second.second == pConnection )
+                    {
+                        xTab = Reference< XTablesSupplier >(i->second.first.get().get(),UNO_QUERY);
+                        if ( !xTab.is() )
+                        {
+                            xTab = new OMySQLCatalog(connection);
+                            i->second.first = WeakReferenceHelper(xTab);
+                        }
+                        break;
+                    }
+                }
             }
         }
         return xTab;
