@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 11:37:10 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 14:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
@@ -163,6 +166,7 @@
 #ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #endif
+#include <com/sun/star/sdb/ParametersRequest.hpp>
 #ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #endif
@@ -642,6 +646,7 @@ void ORowSet::freeResources()
         m_bNew          = sal_False;
         m_bModified     = sal_False;
         m_nRowCount     = 0;
+        m_aParameterRow.clear();
     }
 }
 // -------------------------------------------------------------------------
@@ -1525,19 +1530,20 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
 
-    if (nParamCount)
+
+    try
     {
-        try
+        freeResources();
+
+        // calc the connection to be used
+        if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
+            // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
+            m_xActiveConnection = NULL;
+        calcConnection(_rxHandler);
+        m_bRebuildConnOnExecute = sal_False;
+
+        if (nParamCount)
         {
-            freeResources();
-
-            // calc the connection to be used
-            if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
-                // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
-                m_xActiveConnection = NULL;
-            calcConnection();
-            m_bRebuildConnOnExecute = sal_False;
-
             // build an interaction request
             // two continuations (Ok and Cancel)
             OInteractionAbort* pAbort = new OInteractionAbort;
@@ -1586,22 +1592,22 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
                 }
             }
         }
-        // ensure that only the allowed exceptions leave this block
-        catch(SQLException&)
-        {
-            throw;
-        }
-        catch(RuntimeException&)
-        {
-            throw;
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
-        }
-
-        // we're done with the parameters, now for the real execution
     }
+    // ensure that only the allowed exceptions leave this block
+    catch(SQLException&)
+    {
+        throw;
+    }
+    catch(RuntimeException&)
+    {
+        throw;
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
+    }
+
+    // we're done with the parameters, now for the real execution
 
     //  do the real execute
     execute_NoApprove_NoNewConn(aGuard);
@@ -1637,7 +1643,7 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
         // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
         m_xActiveConnection = NULL;
 
-    calcConnection();
+    calcConnection(NULL);
     m_bRebuildConnOnExecute = sal_False;
 
     // do the real execute
@@ -1894,7 +1900,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     return aRet;
 }
 //------------------------------------------------------------------------------
-Reference< XConnection >  ORowSet::calcConnection() throw( SQLException, RuntimeException )
+Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionHandler >& _rxHandler) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     if (!m_xActiveConnection.is())
@@ -1907,9 +1913,18 @@ Reference< XConnection >  ORowSet::calcConnection() throw( SQLException, Runtime
             {
                 try
                 {
-                    Reference< XDataSource >  xDataSource(Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(m_aDataSourceName), UNO_QUERY);
-                    if (xDataSource.is())
-                        m_xActiveConnection = xDataSource->getConnection(m_aUser, m_aPassword);
+                    if(_rxHandler.is())
+                    {
+                        Reference< XCompletedConnection> xComplConn(Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(m_aDataSourceName), UNO_QUERY);
+                        if(xComplConn.is())
+                            m_xActiveConnection = xComplConn->connectWithCompletion(_rxHandler);
+                    }
+                    else
+                    {
+                        Reference< XDataSource >  xDataSource(Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(m_aDataSourceName), UNO_QUERY);
+                        if (xDataSource.is())
+                            m_xActiveConnection = xDataSource->getConnection(m_aUser, m_aPassword);
+                    }
                 }
                 catch (SQLException &e)
                 {
@@ -1946,6 +1961,8 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         }
         else // the connection is no table supplier so I make it myself
         {
+            if(!m_xActiveConnection.is())
+                throw SQLException();
             m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection);
             _rxRetTables = m_pTables;
             Sequence< ::rtl::OUString> aTableFilter(1);
