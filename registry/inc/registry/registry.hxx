@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef _REGISTRY_REGTYPE_H_
 #include <registry/regtype.h>
 #endif
+
 #ifndef _VOS_DYNLOAD_HXX_
 #include <vos/dynload.hxx>
 #endif
@@ -144,9 +145,8 @@ public:
     /// Default constructor, try to load the registry DLL and initialize the needed api.
     RegistryLoader()
         : ::vos::ODynamicLoader<Registry_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("reg") ),
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_INIT_FUNCTION_NAME) ),
-             sal_True, LIBRARY_VERSION, sal_False)
+            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION ) ) ),
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_INIT_FUNCTION_NAME) ))
         {}
 
     /// Destructor, decrease the refcount and unload the DLL if the refcount is 0.

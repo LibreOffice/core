@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-16 11:12:04 $
+ *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,8 @@ class RegistryTypeWriterLoader
 public:
     RegistryTypeWriterLoader()
         : ::vos::ODynamicLoader<RegistryTypeWriter_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("reg") ),
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_WRITER_INIT_FUNCTION_NAME) ),
-             sal_True, LIBRARY_VERSION, sal_False)
+            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION  ) ) ),
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_WRITER_INIT_FUNCTION_NAME) ))
         {}
 
     ~RegistryTypeWriterLoader()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regtype.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 // version number of the library. This number is used for the load on call
 // mechanism and must be modifed when the library will be upgraded to a new version.
-#define LIBRARY_VERSION 2
+#define LIBRARY_VERSION "2"
 
 typedef void*       RegHandle;
 
