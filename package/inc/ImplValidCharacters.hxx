@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplValidCharacters.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,29 +65,30 @@
 #include <sal/types.h>
 #endif
 
-static sal_Bool Impl_IsValidChar ( sal_Unicode aChar, sal_Bool bSlashAllowed )
+static sal_Bool Impl_IsValidChar ( const sal_Unicode *pChar, sal_Int16 nLength, sal_Bool bSlashAllowed )
 {
-    sal_Bool bReturn = sal_True;
-
-    switch ( aChar )
+    for ( sal_Int16 i = 0 ; i < nLength ; i++ )
     {
-        case '\\':
-        case '?':
-        case '<':
-        case '>':
-        case '\"':
-        case '|':
-        case ':':
-            bReturn = sal_False;
-        break;
-        case '/':
-            bReturn = bSlashAllowed;
-        break;
-        default:
-            if ( aChar < 32  || aChar > 127 )
-                bReturn = sal_False;
-        break;
+        switch ( pChar[i] )
+        {
+            case '\\':
+            case '?':
+            case '<':
+            case '>':
+            case '\"':
+            case '|':
+            case ':':
+                return sal_False;
+            break;
+            case '/':
+                if ( !bSlashAllowed )
+                    return sal_False;
+            break;
+            default:
+                if ( pChar[i] < 32  || pChar[i] > 127 )
+                    return sal_False;
+        }
     }
-    return bReturn;
+    return sal_True;
 }
 #endif
