@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
     Any aEmptyViewData;
     m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), LIST_APPEND );
     m_nCurPos = m_pHistory->Count() - 1;
-
+// TODO ?
     if ( m_xListener.is() )
     {
         ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -323,30 +323,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
             {
                 HelpHistoryEntry_Impl* pEntry = m_pHistory->GetObject( nPos );
                 if ( pEntry )
-                {
-                    URL aURL;
-                    aURL.Complete = pEntry->aURL;
-                    Reference < XDispatch > xDisp = m_xSlaveDispatcher->queryDispatch( aURL, String(), 0 );
-                    if ( xDisp.is() )
-                    {
-                        if ( m_pOpenListener && m_pWindow )
-                        {
-                            if ( !m_pWindow->IsWait() )
-                                m_pWindow->EnterWait();
-                        }
-                        m_aCurrentURL = aURL.Complete;
-                        m_aViewData = pEntry->aViewData;
-
-                        Reference < XNotifyingDispatch > xNotifyingDisp( xDisp, UNO_QUERY );
-                        if ( xNotifyingDisp.is() )
-                        {
-                            OpenStatusListener_Impl* pListener = (OpenStatusListener_Impl*)m_pWindow->getOpenListener().get();
-                            DBG_ASSERT( pListener, "invalid XDispatchResultListener" );
-                            pListener->SetURL( aURL.Complete );
-                            xNotifyingDisp->dispatchWithNotification( aURL, Sequence < PropertyValue >(), pListener );
-                        }
-                    }
-                }
+                    m_pWindow->loadHelpContent(pEntry->aURL, sal_False); // false => dont add item to history again!
             }
 
             m_pWindow->UpdateToolbox();
