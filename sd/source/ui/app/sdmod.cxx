@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:37:04 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,7 @@
 #include "res_bmp.hrc"
 #include "cfgids.hxx"
 
-TYPEINIT1( SdModuleDummy, SfxModule );
-TYPEINIT1( SdModule, SdModuleDummy );
+TYPEINIT1( SdModule, SfxModule );
 
 #define SdModule
 #include "sdslots.hxx"
@@ -145,17 +144,15 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
     SFX_STATUSBAR_REGISTRATION(RID_DRAW_STATUSBAR);
 }
 
-SFX_IMPL_MODULE_DLL(Sd)
-
 /*************************************************************************
 |*
 |* Ctor
 |*
 \************************************************************************/
 
-SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
-:   SdModuleDummy(SFX_APP()->CreateResManager("sd"), FALSE,
-                  pDrawObjFact, pGraphicObjFact),
+SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact)
+:   SfxModule( SFX_APP()->CreateResManager("sd"), FALSE,
+                  pDrawObjFact, pGraphicObjFact, NULL ),
     bWaterCan(FALSE),
     pTransferClip(NULL),
     pTransferDrag(NULL),
@@ -247,28 +244,6 @@ void SdModule::FillStatusBar(StatusBar& rStatusBar)
 
 /*************************************************************************
 |*
-|* Modul laden (nur Attrappe fuer das Linken der DLL)
-|*
-\************************************************************************/
-
-SfxModule* SdModuleDummy::Load()
-{
-    return (NULL);
-}
-
-/*************************************************************************
-|*
-|* Modul laden
-|*
-\************************************************************************/
-
-SfxModule* SdModule::Load()
-{
-    return (this);
-}
-
-/*************************************************************************
-|*
 |* get notifications
 |*
 \************************************************************************/
@@ -281,16 +256,6 @@ void SdModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         delete pImpressOptions, pImpressOptions = NULL;
         delete pDrawOptions, pDrawOptions = NULL;
     }
-}
-
-/*************************************************************************
-|*
-|* Modul freigeben
-|*
-\************************************************************************/
-
-void SdModule::Free()
-{
 }
 
 /*************************************************************************
