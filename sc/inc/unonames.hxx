@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 12:10:21 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 08:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,8 @@
 #define SC_UNO_CHARCOMP             "CharacterCompressionType"
 #define SC_UNO_ASIANKERN            "IsKernAsianPunctuation"
 #define SC_UNO_VISAREA              "VisibleArea"
+#define SC_UNO_ZOOMTYPE             "ZoomType"
+#define SC_UNO_ZOOMVALUE            "ZoomValue"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"

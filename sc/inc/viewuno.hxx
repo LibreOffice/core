@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-11 09:42:06 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 08:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,10 @@ private:
     sal_Bool                                bDrawSelModeSet;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
+    INT16                   GetZoom(void) const;
+    void                    SetZoom(INT16 Zoom);
+    INT16                   GetZoomType(void) const;
+    void                    SetZoomType(INT16 ZoomType);
 
 public:
                             ScTabViewObj();

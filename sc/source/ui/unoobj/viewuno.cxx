@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:13 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 08:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,14 @@
 #include "sc.hrc"
 #include "unoguard.hxx"
 #include "unonames.hxx"
+#include "scmod.hxx"
+#include "appoptio.hxx"
 #ifndef SC_GRIDWIN_HXX
 #include "gridwin.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_VIEW_DOCUMENTZOOMTYPE_HPP_
+#include <com/sun/star/view/DocumentZoomType.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -136,6 +142,8 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
         {MAP_CHAR_LEN(OLD_UNO_VALUEHIGH),   0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(OLD_UNO_VERTSCROLL),  0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_VISAREA),      0,  &getCppuType((awt::Rectangle*)0),   0},
+        {MAP_CHAR_LEN(SC_UNO_ZOOMTYPE),     0,  &getCppuType((sal_Int16*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_ZOOMVALUE),    0,  &getCppuType((sal_Int16*)0),    0},
         {0,0,0,0}
     };
     return aViewOptPropertyMap_Impl;
@@ -1081,9 +1089,10 @@ void ScTabViewObj::setPagebreakMode(BOOL PagebreakMode)
         pViewSh->SetPagebreakMode(PagebreakMode);
 }
 
-INT16 ScTabViewObj::getZoom(void) const
+#endif
+
+INT16 ScTabViewObj::GetZoom(void) const
 {
-    ScUnoGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
@@ -1093,13 +1102,23 @@ INT16 ScTabViewObj::getZoom(void) const
     return 0;
 }
 
-void ScTabViewObj::setZoom(INT16 Zoom)
+void ScTabViewObj::SetZoom(INT16 nZoom)
 {
-    ScUnoGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        Fraction aFract( Zoom, 100 );
+        if ( nZoom != GetZoom() && nZoom != 0 )
+        {
+            if (!pViewSh->GetViewData()->IsPagebreakMode())
+            {
+                ScModule* pScMod = SC_MOD();
+                ScAppOptions aNewOpt = pScMod->GetAppOptions();
+                aNewOpt.SetZoom( nZoom );
+                aNewOpt.SetZoomType( pViewSh->GetViewData()->GetView()->GetZoomType() );
+                pScMod->SetAppOptions( aNewOpt );
+            }
+        }
+        Fraction aFract( nZoom, 100 );
         pViewSh->SetZoom( aFract, aFract );
         pViewSh->PaintGrid();
         pViewSh->PaintTop();
@@ -1108,7 +1127,86 @@ void ScTabViewObj::setZoom(INT16 Zoom)
     }
 }
 
-#endif
+INT16 ScTabViewObj::GetZoomType(void) const
+{
+    INT16 aZoomType;
+    ScTabViewShell* pViewSh = GetViewShell();
+    if (pViewSh)
+    {
+        SvxZoomType eZoomType = pViewSh->GetViewData()->GetView()->GetZoomType();
+        switch (eZoomType)
+        {
+        case SVX_ZOOM_PERCENT:
+            aZoomType = view::DocumentZoomType::BY_VALUE;
+            break;
+        case SVX_ZOOM_OPTIMAL:
+            aZoomType = view::DocumentZoomType::OPTIMAL;
+            break;
+        case SVX_ZOOM_WHOLEPAGE:
+            aZoomType = view::DocumentZoomType::ENTIRE_PAGE;
+            break;
+        case SVX_ZOOM_PAGEWIDTH:
+            aZoomType = view::DocumentZoomType::PAGE_WIDTH;
+            break;
+        case SVX_ZOOM_PAGEWIDTH_NOBORDER:
+            aZoomType = view::DocumentZoomType::PAGE_WIDTH_EXACT;
+            break;
+        }
+    }
+    return aZoomType;
+}
+
+void ScTabViewObj::SetZoomType(INT16 aZoomType)
+{
+    ScTabViewShell* pViewSh = GetViewShell();
+    if (pViewSh)
+    {
+        ScDBFunc* pView = pViewSh->GetViewData()->GetView();
+        if (pView)
+        {
+            SvxZoomType eZoomType;
+            switch (aZoomType)
+            {
+            case view::DocumentZoomType::BY_VALUE:
+                eZoomType = SVX_ZOOM_PERCENT;
+                break;
+            case view::DocumentZoomType::OPTIMAL:
+                eZoomType = SVX_ZOOM_OPTIMAL;
+                break;
+            case view::DocumentZoomType::ENTIRE_PAGE:
+                eZoomType = SVX_ZOOM_WHOLEPAGE;
+                break;
+            case view::DocumentZoomType::PAGE_WIDTH:
+                eZoomType = SVX_ZOOM_PAGEWIDTH;
+                break;
+            case view::DocumentZoomType::PAGE_WIDTH_EXACT:
+                eZoomType = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                break;
+            }
+            sal_Int16 nZoom(GetZoom());
+            sal_Int16 nOldZoom(nZoom);
+            if ( eZoomType == SVX_ZOOM_PERCENT )
+            {
+                if ( nZoom < MINZOOM )  nZoom = MINZOOM;
+                if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
+            }
+            else
+                nZoom = pView->CalcZoom( eZoomType, nOldZoom );
+
+            switch ( eZoomType )
+            {
+                case SVX_ZOOM_WHOLEPAGE:
+                case SVX_ZOOM_PAGEWIDTH:
+                    pView->SetZoomType( eZoomType );
+                    break;
+
+                default:
+                    pView->SetZoomType( SVX_ZOOM_PERCENT );
+            }
+            SetZoom( nZoom );
+        }
+    }
+}
 
 sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit() throw(uno::RuntimeException)
 {
@@ -1370,6 +1468,18 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         }
         else if ( aString.EqualsAscii( SC_UNO_HIDESPELL ) )
             aNewOpt.SetHideAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        else if ( aString.EqualsAscii( SC_UNO_ZOOMTYPE ) )
+        {
+            sal_Int16 nIntVal;
+            if ( aValue >>= nIntVal )
+                SetZoomType(nIntVal);
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ZOOMVALUE ) )
+        {
+            sal_Int16 nIntVal;
+            if ( aValue >>= nIntVal )
+                SetZoom(nIntVal);
+        }
 
         //  Optionen werden an der View und am Dokument (fuer neue Views) gesetzt,
         //  damit sie beim Speichern erhalten bleiben.
@@ -1435,6 +1545,8 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
         else if ( aString.EqualsAscii( SC_UNO_GRIDCOLOR ) )  aRet <<= (sal_Int32)( rOpt.GetGridColor().GetColor() );
         else if ( aString.EqualsAscii( SC_UNO_HIDESPELL ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsHideAutoSpell() );
         else if ( aString.EqualsAscii( SC_UNO_VISAREA ) ) aRet <<= GetVisArea();
+        else if ( aString.EqualsAscii( SC_UNO_ZOOMTYPE ) ) aRet <<= GetZoomType();
+        else if ( aString.EqualsAscii( SC_UNO_ZOOMVALUE ) ) aRet <<= GetZoom();
     }
 
     return aRet;
