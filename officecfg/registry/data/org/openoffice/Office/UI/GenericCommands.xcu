@@ -5027,8 +5027,8 @@
             </node>
             <node oor:name=".uno:EnterGroup" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Betreten</value>
-                    <value xml:lang="en-US">~Edit Group</value>
+                    <value xml:lang="de">Gruppierung be~treten</value>
+                    <value xml:lang="en-US">~Enter Group</value>
                     <value xml:lang="ar">دخول~</value>
                     <value xml:lang="no">~Edit Group</value>
                     <value xml:lang="ca">~Edita el grup</value>
