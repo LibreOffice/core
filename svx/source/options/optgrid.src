@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:12:30 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ãîðèçîíòàëüíî";
         Text[ greek ] = "Ïñéæüíôéá";
         Text[ dutch ] = "~X-as";
-        Text[ french ] = "Axe ~X";
+        Text[ french ] = "H~orizontal";
         Text[ spanish ] = "Eje ~X";
         Text[ italian ] = "Asse ~X";
         Text[ danish ] = "X-akse";
@@ -251,7 +251,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Âåðòèêàëüíî";
         Text[ greek ] = "Êáôáêüñ~õöá";
         Text[ dutch ] = "~Y-as";
-        Text[ french ] = "Axe ~Y";
+        Text[ french ] = "~Vertical";
         Text[ spanish ] = "Eje ~Y";
         Text[ italian ] = "Asse ~Y";
         Text[ danish ] = "Y-akse";
@@ -445,7 +445,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "Snap lines" ;
         Text [ SPANISH ] = "En ~líneas de captura" ;
         Text [ FINNISH ] = "An Fanglinien" ;
-        Text [ FRENCH ] = "Aux lignes de capture" ;
+        Text [ FRENCH ] = "Aux lignes de ~capture" ;
         Text [ ITALIAN ] = "Alle linee di cattura" ;
         Text [ DUTCH ] = "Aan ~vanglijnen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "An Hilfslinien" ;
@@ -503,7 +503,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "Object ~frame" ;
         Text [ SPANISH ] = "Al m~arco del objeto" ;
         Text [ FINNISH ] = "Am Objektrahmen" ;
-        Text [ FRENCH ] = "Au ~cadre de l'objet" ;
+        Text [ FRENCH ] = "Au cadre de l'~objet" ;
         Text [ ITALIAN ] = "Alla cornice dell'oggetto" ;
         Text [ DUTCH ] = "Aan object~kader" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Am Objektrahmen" ;
@@ -660,7 +660,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "~When creating or moving objects" ;
         Text [ SPANISH ] = "Al crear ~y mover" ;
         Text [ FINNISH ] = "Beim Erzeugen und Bewegen" ;
-        Text [ FRENCH ] = "En ~créant et en déplaçant" ;
+        Text [ FRENCH ] = "Lors de la ~création et du déplacement" ;
         Text [ ITALIAN ] = "Nella creazione e nel movimento" ;
         Text [ DUTCH ] = "~Tijdens het maken en bewegen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Beim Erzeugen und Bewegen" ;
@@ -690,7 +690,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "~Extend edges" ;
         Text [ SPANISH ] = "Aristas e~xtendidas" ;
         Text [ FINNISH ] = "Längere Kantenlänge" ;
-        Text [ FRENCH ] = "~Longueur d'arête plus longue" ;
+        Text [ FRENCH ] = "Arêtes plus ~longues" ;
         Text [ ITALIAN ] = "Bordo più lungo" ;
         Text [ DUTCH ] = "~Langere zijden" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Längere Kantenlänge" ;
@@ -721,7 +721,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "When ro~tating" ;
         Text [ SPANISH ] = "Al g~irar" ;
         Text [ FINNISH ] = "Beim Drehen" ;
-        Text [ FRENCH ] = "Lors de ~rotation" ;
+        Text [ FRENCH ] = "Lors de la ~rotation" ;
         Text [ ITALIAN ] = "Nella rotazione" ;
         Text [ DUTCH ] = "T~ijdens draaien" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Beim Drehen" ;
@@ -787,7 +787,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ english_us ] = "Point reductio~n" ;
         Text [ italian ] = "Riduzione punti" ;
         Text [ spanish ] = "R~educción de puntos" ;
-        Text [ french ] = "Ré~duction de points" ;
+        Text [ french ] = "Ré~duction de point" ;
         Text [ swedish ] = "~Punktreduktion" ;
         Text [ danish ] = "Punktreduktion" ;
         Text [ portuguese ] = "Redução de pontos" ;
