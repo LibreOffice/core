@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WebWizardDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:17:22 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.WizardDialog;
@@ -231,12 +232,12 @@ public abstract class WebWizardDialog  extends WizardDialog implements WebWizard
 
 
     //Resources Object
-WebWizardDialogResources resources;
+  WebWizardDialogResources resources;
 
   public WebWizardDialog(XMultiServiceFactory xmsf) {
     super(xmsf, HID0_WEBWIZARD);
     //Load Resources
-    resources =  new WebWizardDialogResources(xmsf);
+    resources = new WebWizardDialogResources(xmsf, super.getResource());
 
 
     //set dialog properties...
@@ -324,7 +325,7 @@ WebWizardDialogResources resources;
     );
     btnDocDown = insertButton("btnDocDown", BTNDOCDOWN_ACTION_PERFORMED,
       new String[] {"FontDescriptor", "Height", "HelpURL","Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-      new Object[] { fontDescriptor7,INTEGER_14, "HID:" + HID2_BTN_DOC_DOWN, resources.resbtnDocDown_value,"btnDocDown",new Integer(205),new Integer(105),INTEGERS[2],new Short(tabIndex++),new Integer(18)}
+      new Object[] { fontDescriptor7,INTEGER_14, "HID:" + HID2_BTN_DOC_DOWN, resources.resbtnDocDown_value,"btnDocDown",new Integer(205),new Integer(105),INTEGERS[2], new Short(tabIndex++),new Integer(18)}
     );
 
     lblDocExportFormat = insertLabel("lblDocExportFormat",
@@ -341,31 +342,31 @@ WebWizardDialogResources resources;
 
     lnDocsInfo = insertFixedLine("lnDocsInfo",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslnDocsInfo_value,"lnDocsInfo",new Integer(235),new Integer(66),INTEGERS[2],new Short((short)18),new Integer(90)}
+      new Object[] { INTEGERS[8],resources.reslnDocsInfo_value,"lnDocsInfo",new Integer(235),new Integer(66),INTEGERS[2],new Short(tabIndex++),new Integer(90)}
     );
     lblDocTitle = insertLabel("lblDocTitle",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblDocTitle_value,"lblDocTitle",new Integer(235),new Integer(78),INTEGERS[2],new Short((short)19),new Integer(89)}
+      new Object[] { INTEGERS[8],resources.reslblDocTitle_value,"lblDocTitle",new Integer(235),new Integer(78),INTEGERS[2],new Short(tabIndex++),new Integer(89)}
     );
     txtDocTitle = insertTextField("txtDocTitle", null,
       PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID2_TXT_DOC_TITLE , "txtDocTitle",new Integer(235),new Integer(88),INTEGERS[2],new Short((short)20),new Integer(89)}
+      new Object[] { INTEGER_12, "HID:" + HID2_TXT_DOC_TITLE , "txtDocTitle",new Integer(235),new Integer(88),INTEGERS[2],new Short(tabIndex++),new Integer(89)}
     );
     lblDocInfo = insertLabel("lblDocInfo",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblDocInfo_value,"lblDocInfo",new Integer(235),new Integer(103),INTEGERS[2],new Short((short)21),new Integer(89)}
+      new Object[] { INTEGERS[8],resources.reslblDocInfo_value,"lblDocInfo",new Integer(235),new Integer(103),INTEGERS[2],new Short(tabIndex++),new Integer(89)}
     );
     txtDocInfo = insertTextField("txtDocInfo", null,
       new String[] {"Height", "HelpURL", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGER_40, "HID:" + HID2_TXT_DOC_DESC , Boolean.TRUE,"txtDocInfo",new Integer(235),new Integer(113),INTEGERS[2],new Short((short)22),new Integer(89)}
+      new Object[] { INTEGER_40, "HID:" + HID2_TXT_DOC_DESC , Boolean.TRUE,"txtDocInfo",new Integer(235),new Integer(113),INTEGERS[2],new Short(tabIndex++),new Integer(89)}
     );
     lblDocAuthor = insertLabel("lblDocAuthor",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblDocAuthor_value,"lblDocAuthor",new Integer(235),new Integer(155),INTEGERS[2],new Short((short)23),new Integer(89)}
+      new Object[] { INTEGERS[8],resources.reslblDocAuthor_value,"lblDocAuthor",new Integer(235),new Integer(155),INTEGERS[2],new Short(tabIndex++),new Integer(89)}
     );
     txtDocAuthor = insertTextField("txtDocAuthor", null,
       PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID2_TXT_DOC_AUTHOR, "txtDocAuthor",new Integer(235),new Integer(165),INTEGERS[2],new Short((short)24),new Integer(89)}
+      new Object[] { INTEGER_12, "HID:" + HID2_TXT_DOC_AUTHOR, "txtDocAuthor",new Integer(235),new Integer(165),INTEGERS[2],new Short(tabIndex++),new Integer(89)}
     );
   }
 
@@ -495,66 +496,67 @@ WebWizardDialogResources resources;
   }
 
   public void buildStep6() {
+      short tabIndex = 60;
     lblTitleGeneralPage = insertLabel("lblTitleGeneralPage",
       PROPNAMES_TITLE,
-      new Object[] { fontDescriptor4,INTEGERS[8],resources.reslblTitleGeneralPage_value,Boolean.TRUE,"lblTitleGeneralPage",new Integer(90),INTEGERS[9],INTEGERS[6],new Short((short)60),new Integer(232)}
+      new Object[] { fontDescriptor4,INTEGERS[8],resources.reslblTitleGeneralPage_value,Boolean.TRUE,"lblTitleGeneralPage",new Integer(90),INTEGERS[9],INTEGERS[6], new Short(tabIndex++),new Integer(232)}
     );
     lblSiteTitle = insertLabel("lblSiteTitle",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblSiteTitle_value,"lblSiteTitle",new Integer(97),new Integer(28),INTEGERS[6],new Short((short)61),new Integer(80)}
+      new Object[] { INTEGERS[8],resources.reslblSiteTitle_value,"lblSiteTitle",new Integer(97),new Integer(28),INTEGERS[6], new Short(tabIndex++),new Integer(80)}
     );
     txtSiteTitle = insertTextField("txtSiteTitle", null,
       PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_TITLE, "txtSiteTitle",new Integer(179),new Integer(26),INTEGERS[6],new Short((short)62),new Integer(145)}
+      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_TITLE, "txtSiteTitle",new Integer(179),new Integer(26),INTEGERS[6], new Short(tabIndex++),new Integer(145)}
     );
 
 
     insertFixedLine("FixedLineMetaData",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[9],resources.reslblMetaData ,"FixedLineMetaData",new Integer(97),new Integer(56),INTEGERS[6],new Short((short)63),new Integer(228)}
+      new Object[] { INTEGERS[9],resources.reslblMetaData ,"FixedLineMetaData",new Integer(97),new Integer(56),INTEGERS[6], new Short(tabIndex++),new Integer(228)}
     );
 
 
     lblSiteDesc = insertLabel("lblSiteDesc",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblSiteDesc_value,"lblSiteDesc",new Integer(103),new Integer(72),INTEGERS[6],new Short((short)66),new Integer(80)}
+      new Object[] { INTEGERS[8],resources.reslblSiteDesc_value,"lblSiteDesc",new Integer(103),new Integer(72),INTEGERS[6], new Short(tabIndex++),new Integer(80)}
     );
     txtSiteDesc = insertTextField("txtSiteDesc", null,
       PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_DESC ,  "txtSiteDesc",new Integer(179),new Integer(70),INTEGERS[6],new Short((short)67),new Integer(145)}
+      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_DESC ,  "txtSiteDesc",new Integer(179),new Integer(70),INTEGERS[6], new Short(tabIndex++),new Integer(145)}
     );
 
     lblEmail = insertLabel("lblEmail",  PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblEmail_value,"lblEmail",new Integer(103),new Integer(90),INTEGERS[6],new Short((short)77),new Integer(80)}
+      new Object[] { INTEGERS[8],resources.reslblEmail_value,"lblEmail",new Integer(103),new Integer(90),INTEGERS[6], new Short(tabIndex++),new Integer(80)}
     );
     txtEmail = insertTextField("txtEmail", null, PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_EMAIL , "txtEmail",new Integer(179),new Integer(87),INTEGERS[6],new Short((short)78),new Integer(145)}
+      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_EMAIL , "txtEmail",new Integer(179),new Integer(87),INTEGERS[6], new Short(tabIndex++),new Integer(145)}
     );
 
     lblCopyright = insertLabel("lblCopyright", PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblCopyright_value,"lblCopyright",new Integer(103),new Integer(108),INTEGERS[6],new Short((short)79),new Integer(80)}
+      new Object[] { INTEGERS[8],resources.reslblCopyright_value,"lblCopyright",new Integer(103),new Integer(108),INTEGERS[6], new Short(tabIndex++),new Integer(80)}
     );
     txtCopyright = insertTextField("txtCopyright", null, PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_COPYRIGHT , "txtCopyright",new Integer(179),new Integer(106),INTEGERS[6],new Short((short)80),new Integer(145)}
+      new Object[] { INTEGER_12, "HID:" + HID6_TXT_SITE_COPYRIGHT , "txtCopyright",new Integer(179),new Integer(106),INTEGERS[6], new Short(tabIndex++),new Integer(145)}
     );
 
 
     lblSiteCreated = insertLabel("lblSiteCreated",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblSiteCreated_value,"lblSiteCreated",new Integer(103),new Integer(126),INTEGERS[6],new Short((short)70),new Integer(80)}
+      new Object[] { INTEGERS[8],resources.reslblSiteCreated_value,"lblSiteCreated",new Integer(103),new Integer(126),INTEGERS[6], new Short(tabIndex++),new Integer(80)}
     );
     dateSiteCreated = insertDateField("dateSiteCreated", null,
       new String[] {"Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { Boolean.TRUE,INTEGER_12, "HID:" + HID6_DATE_SITE_CREATED , "dateSiteCreated",new Integer(179),new Integer(124),INTEGERS[6],new Short((short)71),new Integer(49)}
+      new Object[] { Boolean.TRUE,INTEGER_12, "HID:" + HID6_DATE_SITE_CREATED , "dateSiteCreated",new Integer(179),new Integer(124),INTEGERS[6], new Short(tabIndex++),new Integer(49)}
     );
     lblSiteUpdated = insertLabel("lblSiteUpdated",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8],resources.reslblSiteUpdated_value,"lblSiteUpdated",new Integer(103),new Integer(144),INTEGERS[6],new Short((short)72),new Integer(80)}
+      new Object[] { INTEGERS[8],resources.reslblSiteUpdated_value,"lblSiteUpdated",new Integer(103),new Integer(144),INTEGERS[6], new Short(tabIndex++),new Integer(80)}
     );
 
     dateSiteUpdate = insertDateField("dateSiteUpdate", null,
       new String[] {"Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { Boolean.TRUE,INTEGER_12, "HID:" + HID6_DATE_SITE_UPDATED , "dateSiteUpdate",new Integer(179),new Integer(142),INTEGERS[6],new Short((short)73),new Integer(49)}
+      new Object[] { Boolean.TRUE,INTEGER_12, "HID:" + HID6_DATE_SITE_UPDATED , "dateSiteUpdate",new Integer(179),new Integer(142),INTEGERS[6], new Short(tabIndex++),new Integer(49)}
     );
 
 
@@ -590,7 +592,7 @@ WebWizardDialogResources resources;
     );
     txtLocalDir = insertTextField("txtLocalDir", null,
       PROPNAMES_TXT,
-      new Object[] { INTEGER_12, "HID:" + HID7_TXT_LOCAL , "txtLocalDir",new Integer(113),new Integer(78), INTEGERS[7],new Short((short)95),new Integer(190)}
+      new Object[] { INTEGER_12, "HID:" + HID7_TXT_LOCAL , "txtLocalDir",new Integer(113),new Integer(78), INTEGERS[7], new Short(tabIndex++),new Integer(190)}
     );
     btnLocalDir = insertButton("btnLocalDir", BTNLOCALDIR_ACTION_PERFORMED,
       PROPNAMES_BUTTON,
@@ -643,19 +645,19 @@ WebWizardDialogResources resources;
 
     lnSaveSetting = insertFixedLine("lnSaveSetting",
       PROPNAMES_TXT,
-      new Object[] { INTEGERS[2],"", "lnSaveSetting",new Integer(97),new Integer(151),INTEGERS[7],new Short((short)103),new Integer(228)}
+      new Object[] { INTEGERS[2],"", "lnSaveSetting",new Integer(97),new Integer(151),INTEGERS[7], new Short(tabIndex++),new Integer(228)}
     );
     chkSaveSettings = insertCheckBox("chkSaveSettings", CHKSAVESETTINGS_ITEM_CHANGED,
       PROPNAMES_CHKBOX,
-      new Object[] { INTEGERS[9], "HID:" + HID7_CHK_SAVE , resources.reschkSaveSettings_value,"chkSaveSettings",new Integer(97),new Integer(157),new Short((short)1),INTEGERS[7],new Short((short)104),new Integer(215)}
+      new Object[] { INTEGERS[9], "HID:" + HID7_CHK_SAVE , resources.reschkSaveSettings_value,"chkSaveSettings",new Integer(97),new Integer(157),new Short((short)1),INTEGERS[7], new Short(tabIndex++),new Integer(215)}
     );
     lblSaveSettings = insertLabel("lblSaveSettings",
       PROPNAMES_LBL,
-      new Object[] { INTEGERS[8], resources.reslblSaveSettings_value,"lblSaveSettings",new Integer(107),new Integer(169),INTEGERS[7],new Short((short)105),new Integer(45)}
+      new Object[] { INTEGERS[8], resources.reslblSaveSettings_value,"lblSaveSettings",new Integer(107),new Integer(169),INTEGERS[7], new Short(tabIndex++),new Integer(45)}
     );
     cbSaveSettings = insertComboBox("txtSaveSettings", TXTSAVESETTINGS_TEXT_CHANGED,TXTSAVESETTINGS_TEXT_CHANGED, TXTSAVESETTINGS_TEXT_CHANGED,
       new String[] {"Autocomplete", "Dropdown", "Height","HelpURL","LineCount","Name","PositionX","PositionY","Step","TabIndex","Width"},
-      new Object[] { Boolean.TRUE, Boolean.TRUE, INTEGER_12, "HID:" + HID7_TXT_SAVE , new Short((short)7), "txtSaveSettings",new Integer(179),new Integer(167),INTEGERS[7],new Short((short)106),new Integer(145)}
+      new Object[] { Boolean.TRUE, Boolean.TRUE, INTEGER_12, "HID:" + HID7_TXT_SAVE , new Short((short)7), "txtSaveSettings",new Integer(179),new Integer(167),INTEGERS[7], new Short(tabIndex++),new Integer(145)}
     );
 
   }
