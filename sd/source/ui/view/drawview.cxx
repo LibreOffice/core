@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 14:54:57 $
+ *  last change: $Author: cl $ $Date: 2002-10-01 15:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,8 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                 }
             }
 
-            bOk = SdView::SetAttributes(rSet, bReplaceAll);
+            if(!bOk)
+                bOk = SdView::SetAttributes(rSet, bReplaceAll);
         }
     }
     else    // nicht auf der Masterpage
