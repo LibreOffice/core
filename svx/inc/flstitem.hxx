@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flstitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #ifndef   ITEMID_FONTLIST
 #define   ITEMID_FONTLIST 0
 #endif
+#include <rtl/ustring.hxx>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
 
 // class SvxFontListItem -------------------------------------------------
 
@@ -84,7 +88,8 @@ class FontList;
 class SvxFontListItem : public SfxPoolItem
 {
 private:
-    const FontList*         pFontList;
+    const FontList*                                 pFontList;
+    com::sun::star::uno::Sequence< rtl::OUString >  aFontNameSeq;
 
 public:
     TYPEINFO();
@@ -95,6 +100,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
