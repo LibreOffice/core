@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-20 13:03:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,11 +673,11 @@ static USHORT aImplTranslateKeyTab[KEY_TAB_SIZE] =
     0,                    // VK_MENU                          18
     0,                    // VK_PAUSE                         19
     0,                    // VK_CAPITAL                       20
-    0,                    //                                  21
+    0,                    // VK_HANGUL                        21
     0,                    //                                  22
     0,                    //                                  23
     0,                    //                                  24
-    0,                    //                                  25
+    KEY_HANGUL_HANJA,     // VK_HANJA                         25
     0,                    //                                  26
     KEY_ESCAPE,           // VK_ESCAPE                        27
     0,                    //                                  28
@@ -3563,7 +3563,6 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             BOOL            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
             nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
-            bWaitForModKeyRelease = true;
 
             aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
             if ( !bKeyUp )
@@ -3627,6 +3626,11 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnRepeat    = nRepeat;
                 bIgnoreCharMsg = bCharPeek;
                 long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
+                // independent part only reacts on keyup but Windows does not send
+                // keyup for VK_HANJA
+                if( aKeyEvt.mnCode == KEY_HANGUL_HANJA )
+                    nRet = pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+
                 bIgnoreCharMsg = FALSE;
 
                 // char-message, than remove or ignore
