@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ namespace dbaui
             try
             {
                 Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getServiceManager()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
-                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument")));
+                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
 
