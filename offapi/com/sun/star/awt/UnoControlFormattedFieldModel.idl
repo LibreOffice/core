@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedFieldModel.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:46:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef __com_sun_star_awt_UnoControlFormattedFieldModel_idl__
 #define __com_sun_star_awt_UnoControlFormattedFieldModel_idl__
 
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
 #ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
@@ -92,7 +92,7 @@ published service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the alignment of the text in the control.
+    /** specifies the horiztonal alignment of the text in the control.
 
         <pre>
         0: left
@@ -221,6 +221,16 @@ published service UnoControlFormattedFieldModel
      */
     [property] string HelpURL;
 
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the selection in the control should be hidden when
+        the control is not active (focused).
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean HideInactiveSelection;
+
     //-------------------------------------------------------------------------
 
     /** specifies the maximum character count.
@@ -241,6 +251,29 @@ published service UnoControlFormattedFieldModel
         user.
      */
     [property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the mouse should show repeating behaviour, i.e.
+        repeatedly trigger an action when keeping pressed.
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean Repeat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the mouse repeat delay, in milliseconds.
+
+        <p>When the user presses a mouse in a control area where this triggers
+        an action (such as spinning the value), then usual control implementations
+        allow to repeatedly trigger this action, without the need to release the
+        mouse button and to press it again. The delay between two such triggers
+        is specified with this property.</p>
+
+        @since OOo 2.0.0
+     */
+    [optional, property] long RepeatDelay;
 
     //-------------------------------------------------------------------------
 
@@ -288,12 +321,6 @@ published service UnoControlFormattedFieldModel
      */
     [property] boolean TreatAsNumber;
 
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the selection in the control should be hidden when the control is not
-        active (focused).
-    */
-    [optional, property] boolean HideInactiveSelection;
 };
 
 //=============================================================================
