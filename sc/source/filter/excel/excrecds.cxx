@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,9 @@
 
 
 
-//---------------------------------------------------- class ExcETabNumBuffer -
+//-------------------------------------------------- class XclExpTabNumBuffer -
 
-ExcETabNumBuffer::ExcETabNumBuffer( ScDocument& rDoc ) :
+XclExpTabNumBuffer::XclExpTabNumBuffer( ScDocument& rDoc ) :
     bEnableLog( FALSE ),
     nCodeCnt( 0 )
 {
@@ -156,13 +156,13 @@ ExcETabNumBuffer::ExcETabNumBuffer( ScDocument& rDoc ) :
 
 }
 
-ExcETabNumBuffer::~ExcETabNumBuffer()
+XclExpTabNumBuffer::~XclExpTabNumBuffer()
 {
     if( pBuffer )
         delete[] pBuffer;
 }
 
-void ExcETabNumBuffer::ApplyBuffer()
+void XclExpTabNumBuffer::ApplyBuffer()
 {
     UINT16 nIndex = 0;
     UINT16 nTab;
@@ -192,23 +192,23 @@ void ExcETabNumBuffer::ApplyBuffer()
         }
 }
 
-BOOL ExcETabNumBuffer::IsExternal( UINT16 nScTab ) const
+BOOL XclExpTabNumBuffer::IsExternal( UINT16 nScTab ) const
 {
     return (nScTab < nScCnt) ? TRUEBOOL( pBuffer[ nScTab ] & EXC_TABBUF_FLAGEXT ) : FALSE;
 }
 
-BOOL ExcETabNumBuffer::IsExportTable( UINT16 nScTab ) const
+BOOL XclExpTabNumBuffer::IsExportTable( UINT16 nScTab ) const
 {
-    DBG_ASSERT( nScTab < nScCnt, "ExcETabNumBuffer::IsExportTable() - out of range!" );
+    DBG_ASSERT( nScTab < nScCnt, "XclExpTabNumBuffer::IsExportTable() - out of range!" );
     return (pBuffer[ nScTab ] & EXC_TABBUF_MASKFLAGS) == 0;
 }
 
-UINT16 ExcETabNumBuffer::GetExcTable( UINT16 nScTab ) const
+UINT16 XclExpTabNumBuffer::GetExcTable( UINT16 nScTab ) const
 {
     return (nScTab < nScCnt) ? (UINT16)(pBuffer[ nScTab ] & EXC_TABBUF_MASKTAB) : EXC_TABBUF_INVALID;
 }
 
-void ExcETabNumBuffer::AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast )
+void XclExpTabNumBuffer::AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast )
 {
     if( bEnableLog )
     {
@@ -2007,7 +2007,9 @@ ExcName::ExcName( RootData* pRD, ScRangeData* pRange ) : eBiff( pRD->eDateiTyp )
 {
     Init();
 
-    pRange->GetName( aName );
+    String aRangeName;
+    pRange->GetName( aRangeName );
+    SetName( aRangeName );
 
     bDummy = aName.CompareToAscii( ScFilterTools::GetBuiltInName( 0x06 ) ) == COMPARE_EQUAL;    // no PrintRanges
 
@@ -2039,36 +2041,23 @@ ExcName::ExcName( RootData* pRD, ScDBData* pArea ) :
 {
     Init();
 
-    pArea->GetName( aName );
-    // generate unique name, DBData is merged into RangeName
-    ScRangeName*                pRangeName = pRD->pDoc->GetRangeName();
-    USHORT nPos;
-    if ( pRangeName->SearchName( aName, nPos ) )
-    {
-        aName.AppendAscii( "_" );
-        static const sal_Unicode    pExtend[] =
-        {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-            'U', 'V', 'W', 'X', 'Y', 'Z'
-        };
-        const USHORT nExtCnt = sizeof(pExtend) / sizeof(sal_Unicode);
-        USHORT nExtend = nExtCnt;
-        do
-        {
-            if ( nExtend < nExtCnt )
-                aName.Erase( aName.Len() - 1, 1 );  // delete last char
-            else
-                nExtend = 0;
-            aName.Append( pExtend[ nExtend++ ] );
-        }
-        while ( pRangeName->SearchName( aName, nPos ) );
-    }
+    String aRangeName;
+    pArea->GetName( aRangeName );
+    SetUniqueName( aRangeName );
 
     ScRange aRange;
     pArea->GetArea( aRange );
     BuildFormula( aRange );
+}
+
+
+ExcName::ExcName( RootData* pRD, const ScRange& rRange, const String& rName ) :
+        ExcRoot( pRD ),
+        eBiff( pRD->eDateiTyp )
+{
+    Init();
+    SetUniqueName( rName );
+    BuildFormula( rRange );
 }
 
 
@@ -2090,6 +2079,43 @@ ExcName::~ExcName()
 {
     if( pData )
         delete[] pData;
+}
+
+
+void ExcName::SetName( const String& rRangeName )
+{
+    DBG_ASSERT( pExcRoot->pScNameList, "ExcName::SetName - missing name list" );
+    ScRangeName& rNameList = *pExcRoot->pScNameList;
+    aName = rRangeName;
+
+    // insert dummy range name
+    ScRangeData* pRangeData = new ScRangeData( pExcRoot->pDoc, aName, ScTokenArray() );
+    if( !rNameList.Insert( pRangeData ) )
+        delete pRangeData;
+}
+
+
+void ExcName::SetUniqueName( const String& rRangeName )
+{
+    DBG_ASSERT( pExcRoot->pScNameList, "ExcName::SetUniqueName - missing name list" );
+    ScRangeName& rNameList = *pExcRoot->pScNameList;
+
+    USHORT nPos;
+    if( rNameList.SearchName( rRangeName, nPos ) )
+    {
+        String aNewName;
+        sal_Int32 nAppendValue = 1;
+        do
+        {
+            aNewName = rRangeName;
+            aNewName += '_';
+            aNewName += String::CreateFromInt32( nAppendValue++ );
+        }
+        while( rNameList.SearchName( aNewName, nPos ) );
+        SetName( aNewName );
+    }
+    else
+        SetName( rRangeName );
 }
 
 
