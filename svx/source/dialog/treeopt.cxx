@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:30 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,6 +1315,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
             SID_SAVEREL_INET, SID_SAVEREL_FSYS,
             SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING,
+            SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
             0 );
             SFX_APP()->GetOptions(*pRet);
             break;
