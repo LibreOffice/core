@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 17:00:17 $
+ *  last change: $Author: rt $ $Date: 2004-10-25 08:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -125,7 +125,7 @@
 
 
 #include <cppuhelper/implbase1.hxx>
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
