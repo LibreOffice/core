@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:21:04 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 17:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text [ portuguese ] = "Não existem imagens no tema 'Marcas' da Gallery." ;
         Text [ english_us ] = "The Gallery theme 'Bullets' is empty (no graphics)." ;
         Text [ portuguese_brazilian ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden." ;
-        Text [ swedish ] = "Det finns ingen grafik tillgänglig i Gallery-temat 'Bullets'." ;
+        Text [ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'." ;
         Text [ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'." ;
         Text [ italian ] = "Nella gallery con argomento 'Punti' non ci sono immagini." ;
         Text [ spanish ] = "No hay imágenes en el tema 'Bullets' de la Galería." ;
@@ -1758,7 +1758,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ spanish ] = "Todos los niveles" ;
         Text [ french ] = "Tous les niveaux" ;
         Text [ dutch ] = "Alle niveaus" ;
-        Text [ portuguese ] = "Todos os níveis" ;
+        Text [ portuguese ] = "Níveis todos" ;
         Text[ chinese_simplified ] = "ËùÓĞ·Ö²ã";
         Text[ russian ] = "Âñå óğîâíè";
         Text[ polish ] = "Wszyst. poziomy";
@@ -1836,11 +1836,11 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ğèñóíêîâ íå èìååòñÿ.";
         Text[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôï èİìá ôçò Gallery 'Êïõêßäåò'.";
         Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp  'Bullets'.";
-        Text[ french ] = "Il n'existe pas d'image pour le thème 'Bullets' dans la Gallery..";
+        Text[ french ] = "Il n'existe pas d'image pour le thème 'Puces' dans la Gallery..";
         Text[ spanish ] = "No existen imágenes en el tema 'Viñetas' de la Gallery.";
         Text[ italian ] = "La cartella 'Bullets' della Gallery è vuota.";
         Text[ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'.";
-        Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Bullets'.";
+        Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'.";
         Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
         Text[ portuguese_brazilian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ japanese ] = "·Ş¬×ØÃ°Ïu‰Óğ‘‚«¼İÎŞÙv‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
