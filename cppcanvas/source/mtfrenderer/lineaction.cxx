@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,15 @@
  *
  ************************************************************************/
 
-#include "lineaction.hxx"
-#include "outdevstate.hxx"
-#include "cppcanvas/canvas.hxx"
+#include <lineaction.hxx>
+#include <outdevstate.hxx>
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#endif
 
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
@@ -77,7 +83,9 @@
 #include <canvas/canvastools.hxx>
 #endif
 
-#include "mtftools.hxx"
+#include <cppcanvas/canvas.hxx>
+
+#include <mtftools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -104,12 +112,18 @@ namespace cppcanvas
         {
         }
 
-        bool LineAction::render() const
+        bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::LineAction::render()" );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::LineAction: 0x%X", this );
+
+            rendering::RenderState aLocalState( maState );
+            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
             mpCanvas->getUNOCanvas()->drawLine( ::vcl::unotools::point2DFromPoint(maStartPoint),
                                                 ::vcl::unotools::point2DFromPoint(maEndPoint),
                                                 mpCanvas->getViewState(),
-                                                maState );
+                                                aLocalState );
 
             return true;
         }
