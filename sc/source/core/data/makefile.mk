@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 09:10:23 $
+#   last change: $Author: rt $ $Date: 2004-08-24 11:57:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,8 @@ SLOFILES =  \
     $(SLO)$/documen8.obj \
     $(SLO)$/documen9.obj \
     $(SLO)$/document.obj \
+    $(SLO)$/dpdimsave.obj \
+    $(SLO)$/dpgroup.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpsave.obj \
