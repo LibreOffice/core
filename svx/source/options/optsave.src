@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:27:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english_us ] = "Save URLs relative to" ;
         Text [ italian ] = "Salvare URL relativamente" ;
         Text [ spanish ] = "Guardar URLs relativamente" ;
-        Text [ french ] = "Enregistrement relatif des URLs" ;
+        Text [ french ] = "Enregistrement relatif des URL" ;
         Text [ dutch ] = "URLs relatief opslaan" ;
         Text [ swedish ] = "Spara URL:er relativt" ;
         Text [ danish ] = "Gem URLs relativt" ;
@@ -724,6 +724,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
