@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:29:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,6 +1643,13 @@ void CustomAnimationEffect::setStopAudio()
     }
 }
 
+// --------------------------------------------------------------------
+
+bool CustomAnimationEffect::getStopAudio() const
+{
+    return mnCommand == EffectCommands::STOPAUDIO;
+}
+
 // ====================================================================
 
 EffectSequenceHelper::EffectSequenceHelper()
@@ -1742,13 +1749,13 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
 
             // check target, maybe we need to force it to text
             Any aTarget( rTarget );
-            sal_Int16 nSubItem;
+            sal_Int16 nSubItem = ShapeAnimationSubType::AS_WHOLE;
 
             if( aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
             {
                 nSubItem = ShapeAnimationSubType::ONLY_TEXT;
             }
-            if( pPreset->isTextOnly() )
+            else if( pPreset->isTextOnly() )
             {
                 Reference< XShape > xShape;
                 aTarget >>= xShape;
@@ -1758,11 +1765,9 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
                     // so change subitem
                     nSubItem = ShapeAnimationSubType::ONLY_TEXT;
                 }
-                nSubItem = ShapeAnimationSubType::AS_WHOLE;
             }
 
             // now create effect from preset
-
             pEffect.reset( new CustomAnimationEffect( xNode ) );
             pEffect->setEffectSequence( this );
             pEffect->setTarget( aTarget );
