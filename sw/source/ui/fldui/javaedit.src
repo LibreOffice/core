@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:18:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ czech ] = "Typ skriptu";
         Text[ hebrew ] = "Script-T~yp";
         Text[ hindi ] = "स्क्रिप्ट वर्ग";
+        Text[ slovak ] = "Druh skriptu";
     };
     Edit ED_TYPE
     {
@@ -146,6 +147,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ czech ] = "URL";
         Text[ hebrew ] = "~URL";
         Text[ hindi ] = "URL";
+        Text[ slovak ] = "URL";
     };
     Edit ED_URL
     {
@@ -195,6 +197,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
+        Text[ slovak ] = "~Text";
     };
     MultiLineEdit ED_EDIT
     {
@@ -239,6 +242,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषय";
+        Text[ slovak ] = "Obsah";
     };
     OKButton BTN_POST_OK
     {
@@ -298,6 +302,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ czech ] = "Upravit skript";
         Text[ hebrew ] = "Script bearbeiten";
         Text[ hindi ] = "स्क्रिप्ट् संपादन";
+        Text[ slovak ] = "Upraviť skript";
     };
     String STR_JAVA_INSERT
     {
@@ -329,6 +334,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ czech ] = "Vložit skript";
         Text[ hebrew ] = "‮הוספת קוד לביצוע‬";
         Text[ hindi ] = "स्क्रिप्ट् जोड़ो";
+        Text[ slovak ] = "Vložiť skript";
     };
     Text [ english_us ] = "Edit Script" ;
     Text [ portuguese_brazilian ] = "Editar Script" ;
@@ -355,8 +361,11 @@ ModalDialog DLG_JAVAEDIT
     Text[ czech ] = "Upravit skript";
     Text[ hebrew ] = "Script bearbeiten";
     Text[ hindi ] = "स्क्रिप्ट् संपादन";
+    Text[ slovak ] = "Upraviť skript";
 };
  // ********************************************************************** EOF
+
+
 
 
 
