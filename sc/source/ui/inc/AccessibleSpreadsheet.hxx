@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-13 08:59:18 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,9 +227,11 @@ private:
     ScTabViewShell* mpViewShell;
     ScRangeList*    mpMarkedRanges;
     std::vector<ScMyAddress>* mpSortedMarkedCells;
+    Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
     sal_Bool        mbHasSelection;
+    sal_Bool        mbDelIns;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
@@ -243,7 +245,9 @@ private:
     void CreateSortedMarkedCells();
     void AddMarkedRange(const ScRange& rRange);
 
-    ScDocument* GetDocument(ScTabViewShell* mpViewShell);
+    ScDocument* GetDocument(ScTabViewShell* pViewShell);
+    Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
+    Rectangle   GetVisCells(const Rectangle& rVisArea);
 };
 
 
