@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:06:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,7 @@
 #define RID_DRAW_CUSTOMSHAPE_POPUP          RID_APP_START+66
 #define RID_TASKPANE_MASTERPAGESSELECTOR_POPUP  RID_APP_START+67
 #define RID_TASKPANE_LAYOUTMENU_POPUP       RID_APP_START+68
+#define RID_DRAW_MEDIA_POPUP                RID_APP_START+69
 
 // Draw (Graphic)
 #define RID_GRAPHIC_TEXTOBJ_POPUP           RID_APP_START+70
@@ -515,6 +516,7 @@
 #define RID_GRAPHIC_3DSCENE_POPUP           RID_APP_START+83
 #define RID_GRAPHIC_3DSCENE2_POPUP          RID_APP_START+84
 #define RID_GRAPHIC_CUSTOMSHAPE_POPUP       RID_APP_START+85
+#define RID_GRAPHIC_MEDIA_POPUP             RID_APP_START+86
 
 /*
  * Pointer (Mauszeiger)
