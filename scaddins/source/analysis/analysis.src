@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:29:28 $
+ *  last change: $Author: gt $ $Date: 2001-08-13 06:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8975,7 +8975,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Duration
         {
-            Text = "Liefert die jährliche Macauley Laufzeit eines Wertpapieres mit periodischer Zinszahlung.";
+            Text = "Liefert die jährliche Macaulay Laufzeit eines Wertpapieres mit periodischer Zinszahlung.";
             Text[ english ] = "Returns the annual duration of a security with periodic interest payments";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the annual Macauley duration of a security with periodic interest payments.";
@@ -11207,8 +11207,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Mduration
         {
-            Text = "Liefert die modifizierte Macauley-Duration eines Wertpapiers mit 100 DM Nennwert.";
-            Text[ english ] = "Returns the Macauley modified duration for a security with an assumed par ";
+            Text = "Liefert die modifizierte Macaulay-Duration eines Wertpapiers mit 100 DM Nennwert.";
+            Text[ english ] = "Returns the Macaulay modified duration for a security with an assumed par ";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the Macauley modified duration for a security with an assumed par value of $100";
             Text[ portuguese ] = "Returns the Macauley modified duration for a security with an assumed par ";
