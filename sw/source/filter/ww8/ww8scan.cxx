@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:40 $
+ *  last change: $Author: cmc $ $Date: 2002-08-15 09:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2246,10 +2246,13 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN, long ncpN )
 
     // Pointer auf Inhalts-Array
     pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
-    USHORT* p = (USHORT*)pPLCF_Contents;
+    BYTE* p = pPLCF_Contents;
 
     for( i = 0; i < ncpN; i++ )         // Baue PNs
-        p[i] = nPN + i;
+    {
+        ShortToSVBT16(nPN + i, p);
+        p+=2;
+    }
 }
 
 BOOL WW8PLCF::SeekPos( long nPos )
