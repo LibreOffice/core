@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-10 16:09:29 $
+ *  last change: $Author: mav $ $Date: 2003-03-11 13:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,16 +244,26 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD nStreamMode )
 {
-    uno::Sequence< beans::PropertyValue > aArgs( 4 );
+    uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 4 : 3 );
+    rtl::OUString sDocUrl( rtl::OUString::createFromAscii( "file:///d:/test.sxw" ) ); // REMOVE
 
     aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
-    aArgs[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
+
+    if ( xStream.is() ) //REMOVE
+        aArgs[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
+    else //REMOVE
+        aArgs[0].Value <<= sDocUrl; //REMOVE
+
     aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
     aArgs[1].Value <<= getFilterNameFromGUID_Impl( &m_guid );
-    aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
-    aArgs[2].Value <<= xStream;
-    aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
-    aArgs[3].Value <<= ( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
+    aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
+    aArgs[2].Value <<= ( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
+
+    if ( xStream.is() ) //REMOVE
+    {
+        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
+        aArgs[3].Value <<= xStream;
+    }
 
     return aArgs;
 }
@@ -374,41 +384,24 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
         hr = E_FAIL;
         if ( m_xFactory.is() && pStg )
         {
-               uno::Reference < frame::XComponentLoader > xComponentLoader(
-                 m_xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ) ) ),
-                                             uno::UNO_QUERY );
-
-             rtl::OUString sDocUrl( rtl::OUString::createFromAscii( "file:///d:/test.sxw" ) );
-
-             uno::Reference< lang::XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-                 sDocUrl, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
-                 uno::Sequence < ::com::sun::star::beans::PropertyValue >() );
-
-
-            m_xDocument = uno::Reference< frame::XModel >( xComponent, uno::UNO_QUERY );
-            /*
             m_xDocument = uno::Reference< frame::XModel >(
                             m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                             uno::UNO_QUERY );
-            */
             if ( m_xDocument.is() )
             {
-                /*
                 uno::Reference< frame::XLoadable > xLoadable( m_xDocument, uno::UNO_QUERY );
                 if( xLoadable.is() )
                 {
                     try
                     {
-                        xLoadable->initNew();
-                */
+                        // xLoadable->initNew();
+                        xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(), nStreamMode ) );
                         hr = S_OK;
-                /*
                     }
                     catch( uno::Exception& )
                     {
                     }
                 }
-                */
 
                 if ( hr == S_OK )
                 {
@@ -541,9 +534,14 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
         HRESULT hr = m_pMasterStorage->CopyTo( NULL, NULL, NULL, pStgSave );
         if ( FAILED( hr ) ) return E_FAIL;
 
+        STATSTG aStat;
+        hr = pStgSave->Stat( &aStat, STATFLAG_NONAME );
+        if ( FAILED( hr ) ) return E_FAIL;
+
+        DWORD nStreamMode = aStat.grfMode;
         hr = pStgSave->OpenStream( aOfficeEmbedStreamName,
                                  0,
-                                 STGM_WRITE,
+                                 STGM_WRITE | ( nStreamMode & 0x73 ),
                                  0,
                                  &pTargetStream );
         if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
@@ -573,6 +571,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                     m_pOwnStream = CComPtr< IStream >();
                     if ( fSameAsLoad || pStgSave == m_pMasterStorage )
                         m_bIsDirty = sal_False;
+
                 }
             }
             catch( uno::Exception& )
@@ -599,16 +598,22 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
         m_pMasterStorage = pStgNew;
 
     STATSTG aStat;
-    HRESULT hr = pStgNew->Stat( &aStat, STATFLAG_NONAME );
+    HRESULT hr = m_pMasterStorage->Stat( &aStat, STATFLAG_NONAME );
     if ( FAILED( hr ) ) return E_OUTOFMEMORY;
 
     DWORD nStreamMode = aStat.grfMode;
     hr = m_pMasterStorage->OpenStream( aOfficeEmbedStreamName,
                                         0,
-                                        nStreamMode,
+                                        nStreamMode & 0x73,
                                         0,
                                         &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_OUTOFMEMORY;
+
+    for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
+    {
+        if ( iAdvise->second )
+            iAdvise->second->OnSave();
+    }
 
     return S_OK;
 }
