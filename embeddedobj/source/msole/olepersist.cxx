@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:55:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
+
 
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
@@ -119,9 +123,24 @@
 using namespace ::com::sun::star;
 
 //------------------------------------------------------
-// TODO: probably later such a common function can be moved
+// TODO: probably later those common functions should be moved
 //       to a separate helper library.
 
+//-------------------------------------------------------------------------
+sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
+{
+    // TODO/LATER: move this method and other methods like this to a standalone library
+    if ( aClassID1.getLength() != aClassID2.getLength() )
+        return sal_False;
+
+    for ( sal_Int32 nInd = 0; nInd < aClassID1.getLength(); nInd++ )
+        if ( aClassID1[nInd] != aClassID2[nInd] )
+            return sal_False;
+
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
 const sal_Int32 n_ConstBufferSize = 32000;
 void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
                              const uno::Reference< io::XOutputStream >& aOut )
@@ -141,6 +160,119 @@ void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
             aOut->writeBytes ( aSequence );
     }
     while ( nRead == n_ConstBufferSize );
+}
+
+//-----------------------------------------------
+sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+{
+    if ( !xFactory.is() )
+        return sal_False;
+
+    sal_Bool bRet = sal_False;
+
+    try
+    {
+        uno::Reference < ucb::XSimpleFileAccess > xAccess(
+                xFactory->createInstance (
+                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                uno::UNO_QUERY );
+
+        if ( xAccess.is() )
+        {
+            xAccess->kill( aURL );
+            bRet = sal_True;
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return bRet;
+}
+
+//----------------------------------------------
+::rtl::OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+{
+    OSL_ENSURE( xFactory.is(), "No factory is provided!\n" );
+
+    ::rtl::OUString aResult;
+
+    uno::Reference < beans::XPropertySet > xTempFile(
+            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            uno::UNO_QUERY );
+
+    if ( !xTempFile.is() )
+        throw uno::RuntimeException(); // TODO
+
+    try {
+        xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ), uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        aUrl >>= aResult;
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    if ( !aResult.getLength() )
+        throw uno::RuntimeException(); // TODO: can not create tempfile
+
+    return aResult;
+}
+
+//-----------------------------------------------
+::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream,
+                                      const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+        throw( io::IOException )
+{
+    OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!\n" );
+
+    ::rtl::OUString aResult = GetNewTempFileURL_Impl( xFactory );
+
+    if ( aResult )
+    {
+        try {
+            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                            xFactory->createInstance (
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                            uno::UNO_QUERY );
+
+            if ( !xTempAccess.is() )
+                throw uno::RuntimeException(); // TODO:
+
+            uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aResult );
+            if ( xTempOutStream.is() )
+            {
+                // copy stream contents to the file
+                copyInputToOutput_Impl( xInStream, xTempOutStream );
+                xTempOutStream->closeOutput();
+                xTempOutStream = uno::Reference< io::XOutputStream >();
+            }
+            else
+                throw io::IOException(); // TODO:
+        }
+        catch( packages::WrongPasswordException& )
+        {
+               KillFile_Impl( aResult, xFactory );
+            throw io::IOException(); //TODO:
+        }
+        catch( io::IOException& )
+        {
+               KillFile_Impl( aResult, xFactory );
+            throw;
+        }
+        catch( uno::RuntimeException& )
+        {
+               KillFile_Impl( aResult, xFactory );
+            throw;
+        }
+        catch( uno::Exception& )
+        {
+               KillFile_Impl( aResult, xFactory );
+            aResult = ::rtl::OUString();
+        }
+    }
+
+    return aResult;
 }
 
 //------------------------------------------------------
