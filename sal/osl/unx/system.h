@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-06 11:53:56 $
+ *  last change: $Author: pluby $ $Date: 2001-02-13 20:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ extern char *strdup(const char *);
 #   include <netinet/tcp.h>
 #   include <machine/endian.h>
 #   include <sys/time.h>
-#   include <mach/semaphore.h>
+#   include <sys/semaphore.h>
 #   include <premac.h>
 #   include <CoreFoundation/CoreFoundation.h>
 #   include <postmac.h>
@@ -398,7 +398,6 @@ extern char *strdup(const char *);
 #   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  NO_PTHREAD_RTL
-#   define  NO_PTHREAD_SEMAPHORES
 #   define  CMD_ARG_PRG                 __progname
 #   define  CMD_ARG_ENV                 environ
 #endif
