@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:36:07 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,6 @@
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
-#endif
-#ifndef _SBAITEMS_HRC //autogen
-#include <offmgr/sbaitems.hrc>
 #endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
@@ -1572,6 +1569,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.4  2000/10/25 15:36:07  jp
+   use CharClass/BreakIt instead of old WordSelection
+
    Revision 1.3  2000/10/25 12:06:30  jp
    Spellchecker/Hyphenator are not longer member of the shells
 

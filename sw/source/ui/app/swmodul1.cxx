@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:03 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 
 #ifndef _SBASLTID_HRC //autogen
 #include <offmgr/sbasltid.hrc>
-#endif
-#ifndef _SBA_SBAOBJ_HXX //autogen
-#include <offmgr/sbaobj.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>

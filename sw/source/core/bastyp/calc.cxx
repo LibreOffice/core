@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:23:40 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,12 +94,6 @@
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SBA_SBADB_HXX //autogen
-#include <offmgr/sbadb.hxx>
-#endif
-#ifndef _SBA_SBAOBJ_HXX //autogen
-#include <offmgr/sbaobj.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>

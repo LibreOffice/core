@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:06 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,18 +132,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SBAOBJ_HXX //autogen
-#include <offmgr/sbaobj.hxx>
-#endif
-#ifndef _SBA_SBADB_HXX //autogen
-#include <offmgr/sbadb.hxx>
-#endif
-#ifndef _SBAITEMS_HRC
-#include <offmgr/sbaitems.hrc>
-#endif
-#ifndef _SBAITEMS_HXX
-#include <offmgr/sbaitems.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>

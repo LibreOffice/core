@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:15 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #endif
 #ifndef _SFX_INIMGR_HXX
 #include <sfx2/inimgr.hxx>
-#endif
-#ifndef _SBA_SBAOBJ_HXX //autogen
-#include <offmgr/sbaobj.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX

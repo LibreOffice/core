@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:15 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #pragma hdrstop
 
 #include "dbmgr.hxx"
-#ifndef _SBA_SBAOBJ_HXX //autogen
-#include <offmgr/sbaobj.hxx>
-#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
