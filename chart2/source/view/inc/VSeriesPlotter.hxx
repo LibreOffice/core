@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 14:28:02 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 15:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ private:
     sal_Int32   m_nMaxPointCount;
 };
 
+enum LabelAlignment { LABEL_ALIGN_CENTER, LABEL_ALIGN_LEFT, LABEL_ALIGN_TOP, LABEL_ALIGN_RIGHT, LABEL_ALIGN_BOTTOM };
+
 class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier
 {
     //-------------------------------------------------------------------------
@@ -227,7 +229,8 @@ protected: //methods
                 , sal_Int32 nPointIndex
                 , double fValue
                 , double fSumValue
-                , const ::com::sun::star::awt::Point& rScreenPosition2D );
+                , const ::com::sun::star::awt::Point& rScreenPosition2D
+                , LabelAlignment eAlignment=LABEL_ALIGN_CENTER );
 
     /** creates two T-shaped error bars in both directions (up/down or
         left/right depending on the bVertical parameter)

@@ -41,6 +41,13 @@
 
 #include <algorithm>
 
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -300,7 +307,8 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                     , sal_Int32 nPointIndex
                     , double fValue
                     , double fSumValue
-                    , const awt::Point& rScreenPosition2D )
+                    , const awt::Point& rScreenPosition2D
+                    , LabelAlignment eAlignment )
 {
     uno::Reference< drawing::XShapes > xTarget_( this->getLabelsGroupShape(rDataSeries, xTarget) );
 
@@ -356,6 +364,30 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
     {
         rtl::OUString aCID = ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(),nPointIndex );
         *pCIDAny = uno::makeAny(aCID);
+    }
+
+    //HorizontalAdjustment
+    {
+        drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
+        if( LABEL_ALIGN_RIGHT==eAlignment  )
+            eHorizontalAdjust = drawing::TextHorizontalAdjust_LEFT;
+        else if( LABEL_ALIGN_LEFT==eAlignment )
+            eHorizontalAdjust = drawing::TextHorizontalAdjust_RIGHT;
+        uno::Any* pHorizontalAdjustAny = PropertyMapper::getValuePointer(*pPropValues,*pPropNames,C2U("TextHorizontalAdjust"));
+        if(pHorizontalAdjustAny)
+            *pHorizontalAdjustAny = uno::makeAny(eHorizontalAdjust);
+    }
+
+    //VerticalAdjustment
+    {
+        drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
+        if( LABEL_ALIGN_TOP==eAlignment  )
+            eVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
+        else if( LABEL_ALIGN_BOTTOM==eAlignment )
+            eVerticalAdjust = drawing::TextVerticalAdjust_TOP;
+        uno::Any* pVerticalAdjustAny = PropertyMapper::getValuePointer(*pPropValues,*pPropNames,C2U("TextVerticalAdjust"));
+        if(pVerticalAdjustAny)
+            *pVerticalAdjustAny = uno::makeAny(eVerticalAdjust);
     }
     //------------------------------------------------
 
