@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,11 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //==========================================================================
 //= OQuery_LINUX - an object implementing the sdb.Query service
@@ -169,12 +174,11 @@ public:
     virtual void SAL_CALL dispose();
 
 // OQueryDescriptor
-    virtual void    initializeFrom(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigLocation);
+    virtual void    initializeFrom(const OConfigurationNode& _rConfigLocation);
 
 protected:
 // OConfigurationFlushable
-    virtual void flush_NoBroadcast();
+    virtual void flush_NoBroadcast_NoCommit();
 
 };
 class OQuery : public OQuery_LINUX
@@ -188,6 +192,10 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
     using OQuery_ArrayHelperBase::getArrayHelper;
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREAPI_QUERY_HXX_
 

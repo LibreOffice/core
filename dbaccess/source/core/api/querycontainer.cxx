@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
 
-using namespace dbaccess;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -113,6 +112,11 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= OQueryContainer
 //==========================================================================
@@ -120,18 +124,19 @@ DBG_NAME(OQueryContainer)
 //------------------------------------------------------------------------------
 OQueryContainer::OQueryContainer(
                 OWeakObject& _rConnection, Mutex& _rMutex, const Reference< XNameContainer >& _rxCommandDefinitions,
-                const Reference< XRegistryKey >& _rxRootConfigNode, const Reference< XMultiServiceFactory >& _rxORB)
+                const OConfigurationTreeRoot& _rRootConfigNode, const Reference< XMultiServiceFactory >& _rxORB)
     :OConfigurationFlushable(_rMutex)
     ,m_rParent(_rConnection)
     ,m_rMutex(_rMutex)
     ,m_aContainerListeners(_rMutex)
     ,m_xCommandDefinitions(_rxCommandDefinitions)
-    ,m_xConfigRoot(_rxRootConfigNode)
     ,m_xORB(_rxORB)
 {
+    m_aConfigurationNode = _rRootConfigNode;
     DBG_CTOR(OQueryContainer, NULL);
 
-    DBG_ASSERT(m_xConfigRoot.is() && m_xORB.is(), "OQueryContainer::OQueryContainer : invalid arguments !");
+    DBG_ASSERT(m_aConfigurationNode.isValid() && m_xORB.is(), "OQueryContainer::OQueryContainer : invalid arguments !");
+    m_aConfigurationNode.setEscape(m_aConfigurationNode.isSetNode());
 
     increment(m_refCount);
     {
@@ -565,11 +570,14 @@ void SAL_CALL OQueryContainer::removeContainerListener( const Reference< XContai
 }
 
 //--------------------------------------------------------------------------
-void OQueryContainer::flush_NoBroadcast()
+void OQueryContainer::flush_NoBroadcast_NoCommit()
 {
     MutexGuard aGuard(m_rMutex);
 
-    DBG_ASSERT(m_xConfigRoot.is(), "ODefinitionContainer::flush : need a starting point within the configuration !");
+    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODefinitionContainer::flush : need a starting point within the configuration !");
+
+    OConfigurationNode aQueryNode;
+    OConfigurationTreeRoot aQueryRootNode;
 
     for (   ConstQueriesIterator aLoop = m_aQueries.begin();
             aLoop != m_aQueries.begin();
@@ -577,7 +585,12 @@ void OQueryContainer::flush_NoBroadcast()
         )
     {
         if (aLoop->second)
-            aLoop->second->storeTo(implGetObjectKey(aLoop->first, sal_True));
+        {
+            aQueryNode = implGetObjectKey(aLoop->first, sal_True);
+            aQueryRootNode = aQueryNode.cloneAsRoot();
+            aLoop->second->storeTo(aQueryRootNode);
+            aQueryRootNode.commit();
+        }
     }
 }
 
@@ -602,42 +615,23 @@ OQuery* OQueryContainer::implCreateWrapper(const Reference< XPropertySet >& _rxC
 }
 
 //--------------------------------------------------------------------------
-Reference< XRegistryKey > OQueryContainer::implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool _bCreate)
+OConfigurationNode OQueryContainer::implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool _bCreate)
 {
-    ORegistryLevelEnumeration aEnum(m_xConfigRoot);
-    Reference< XRegistryKey > xLoop;
-    ::rtl::OUString sNameCompare;
-    while (aEnum.hasMoreElements())
+    if (m_aConfigurationNode.hasByName(_rName))
+        return m_aConfigurationNode.openNode(_rName);
+
+    if (_bCreate)
     {
-        xLoop = aEnum.nextElement();
-        if (readValue(xLoop, CONFIGKEY_CONTAINERLEMENT_TITLE, sNameCompare) && sNameCompare.equals(_rName))
-            break;
+        // the configuration does not support different types of operations in one transaction, so we must commit
+        // before and after we create the new node, to ensure, that every transaction we ever do contains only
+        // one type of operation (insert, remove, update)
+        OSL_VERIFY(m_aConfigurationNode.commit());
+        OConfigurationNode aNode = m_aConfigurationNode.createNode(_rName);
+        OSL_VERIFY(m_aConfigurationNode.commit());
+        return aNode;
     }
 
-    Reference< XRegistryKey > xReturn;
-    if (aEnum.hasMoreElements())
-    {   // found the title key
-        if (openKey(xLoop, CONFIGKEY_CONTAINERLEMENT_OBJECT, xReturn, _bCreate))
-            return xReturn;
-        DBG_ERROR("OQueryContainer::implGetObjectKey : found the right place, but could not open the object key !");
-        return xReturn;
-    }
-
-    DBG_WARNING("OQueryContainer::implGetObjectKey : container logic chnaged ?");
-    // normally it should not be neccessary to create the key, as the CommandDefinition object our OQuery object
-    // wraps should have created that key
-
-    // found nothing, create it if needed
-    if (!_bCreate)
-        return xReturn;
-
-    ::rtl::OUString sNewName = getUniqueKeyName(m_xConfigRoot, ::rtl::OUString::createFromAscii("obj_"));
-    Reference< XRegistryKey > xDescriptionKey;
-    if (openKey(m_xConfigRoot, sNewName, xDescriptionKey, sal_True))
-        if (writeValue(xDescriptionKey, CONFIGKEY_CONTAINERLEMENT_OBJECT, _rName))
-            openKey(xDescriptionKey, CONFIGKEY_CONTAINERLEMENT_OBJECT, xReturn, sal_True);
-
-    return xReturn;
+    return OConfigurationNode();
 }
 
 //--------------------------------------------------------------------------
@@ -654,4 +648,7 @@ sal_Int32 OQueryContainer::implGetIndex(const ::rtl::OUString& _rName)
     return -1;
 }
 
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

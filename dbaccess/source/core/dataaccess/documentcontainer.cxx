@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,11 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= ODocumentContainer
 //==========================================================================
@@ -104,8 +109,12 @@ ODocumentContainer::~ODocumentContainer()
 }
 
 //--------------------------------------------------------------------------
-Reference< XPropertySet > ODocumentContainer::createObject( const ::rtl::OUString& _rName,  const Reference< XRegistryKey >& _rxObjectNode)
+Reference< XPropertySet > ODocumentContainer::createObject( const ::rtl::OUString& _rName,  const OConfigurationNode& _rObjectNode)
 {
-    return new ODocumentDefinition(static_cast<OWeakObject*>(this), _rName, _rxObjectNode);
+    return new ODocumentDefinition(static_cast<OWeakObject*>(this), _rName, _rObjectNode.cloneAsRoot());
 }
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

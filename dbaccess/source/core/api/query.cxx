@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,11 @@ using namespace ::cppu;
 
 #define AGG_PROPERTY(handle, propname_out)  \
     static_cast< ::comphelper::OPropertyArrayAggregationHelper* >(const_cast< OQuery_LINUX* >(this)->getArrayHelper())->fillAggregatePropertyInfoByHandle(&propname_out, NULL, handle)
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //==========================================================================
 //= OQuery_LINUX
@@ -229,19 +234,20 @@ Reference< XPropertySet > SAL_CALL OQuery_LINUX::createDataDescriptor(  ) throw(
 
 // OQueryDescriptor
 //--------------------------------------------------------------------------
-void OQuery_LINUX::initializeFrom(const Reference< XRegistryKey >& _rxConfigLocation)
+void OQuery_LINUX::initializeFrom(const OConfigurationNode& _rConfigLocation)
 {
-    OQueryDescriptor::initializeFrom(_rxConfigLocation);
-    m_xConfigurationNode = _rxConfigLocation;
+    OQueryDescriptor::initializeFrom(_rConfigLocation);
+
+    m_aConfigurationNode = _rConfigLocation.cloneAsRoot();
 }
 
 // OConfigurationFlushable
 //--------------------------------------------------------------------------
-void OQuery_LINUX::flush_NoBroadcast()
+void OQuery_LINUX::flush_NoBroadcast_NoCommit()
 {
-    if (!m_xConfigurationNode.is())
+    if (!m_aConfigurationNode.isValid())
         throw DisposedException();
-    OQueryDescriptor::storeTo(m_xConfigurationNode);
+    OQueryDescriptor::storeTo(m_aConfigurationNode);
 }
 
 // pseudo-XComponent
@@ -254,7 +260,7 @@ void SAL_CALL OQuery_LINUX::dispose()
         m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
         m_xCommandDefinition = NULL;
     }
-    m_xConfigurationNode = NULL;
+    m_aConfigurationNode.clear();
     OQueryDescriptor::dispose();
 }
 
@@ -292,4 +298,7 @@ Reference< XPropertySetInfo > SAL_CALL OQuery_LINUX::getPropertySetInfo(  ) thro
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

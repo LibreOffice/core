@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-13 16:00:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
 #endif
-#ifndef _DBA_CORE_CONNECTION_HXX_
-#include "connection.hxx"
-#endif
 #ifndef _DBA_CORE_USERINFORMATION_HXX_
 #include "userinformation.hxx"
 #endif
@@ -116,14 +113,8 @@
 #include <typelib/typedescription.hxx>
 #endif
 
-#ifndef _SVTOOLS_CMDPARSE_HXX
-#include <svtools/cmdparse.hxx>
-#endif
-//#ifndef _UTL_STREAM_WRAPPER_HXX_
-//#include <unotools/streamwrap.hxx>
-//#endif
-#ifndef __SGI_STL_SET
-#include <stl/set>
+#ifndef _DBA_CORE_CONNECTION_HXX_
+#include "connection.hxx"
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -138,14 +129,19 @@ using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
-using namespace ::svt;
-using namespace dbaccess;
 
 // persistent tokens
 #define PT_SVFORMATTER      0x0001
 
-DBG_NAME(ODatabaseSource);
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
+//============================================================
+//= ODatabaseContext
+//============================================================
+DBG_NAME(ODatabaseSource);
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 {
@@ -178,7 +174,7 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(
                     OWeakObject& _rParent,
-                    const Reference< XRegistryKey >& _rxConfigurationRoot,
+                    const OConfigurationNode& _rConfigRoot,
                     const ::rtl::OUString& _rRegistrationName,
                     const Reference< XMultiServiceFactory >& _rxFactory)
             :OSubComponent(m_aMutex, _rParent)
@@ -193,20 +189,14 @@ ODatabaseSource::ODatabaseSource(
             ,m_aReports(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
 {
-    m_xConfigurationNode = _rxConfigurationRoot;
+    m_aConfigurationNode = _rConfigRoot.cloneAsRoot();
 
     DBG_CTOR(ODatabaseSource,NULL);
-    DBG_ASSERT(m_xConfigurationNode.is(), "ODatabaseSource::ODatabaseSource : use ctor 1 if you can't supply a configuration location at the moment !");
-    if (m_xConfigurationNode.is())
+    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODatabaseSource::ODatabaseSource : use ctor 1 if you can't supply a configuration location at the moment !");
+    if (m_aConfigurationNode.isValid())
         initializeFromConfiguration();
     // adjust our readonly flag
-    try
-    {
-        m_bReadOnly = !m_xConfigurationNode.is() || m_xConfigurationNode->isReadOnly();
-    }
-    catch (InvalidRegistryException&)
-    {
-    }
+    m_bReadOnly = !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
 }
 
 //--------------------------------------------------------------------------
@@ -345,7 +335,7 @@ void ODatabaseSource::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-//  if (m_xConfigurationNode.is())
+//  if (m_aConfigurationNode.isValid())
 //      flush();
         // TODO : we need a mechanism for determining wheter we're modified and need that call or not
 
@@ -601,7 +591,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getFormDocuments( ) throw(Run
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseSource::flush_NoBroadcast()
+void ODatabaseSource::flush_NoBroadcast_NoCommit()
 {
     flushToConfiguration();
 }
@@ -619,31 +609,30 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseSource::inserted(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rRegistrationName, const Reference< XRegistryKey >& _rxConfigRoot)
+void ODatabaseSource::inserted(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rRegistrationName, const OConfigurationTreeRoot& _rConfigRoot)
 {
     MutexGuard aGuard(m_aMutex);
 
-    DBG_ASSERT(!m_xConfigurationNode.is(), "ODatabaseSource::inserted : you're not allowed to change the location if the current one is valid !");
-    DBG_ASSERT(_rxConfigRoot.is(), "ODatabaseSource::inserted : invalid argument (the configuration root) !");
+    DBG_ASSERT(!m_aConfigurationNode.isValid(), "ODatabaseSource::inserted : you're not allowed to change the location if the current one is valid !");
+    DBG_ASSERT(_rConfigRoot.isValid(), "ODatabaseSource::inserted : invalid argument (the configuration root) !");
     DBG_ASSERT(_rRegistrationName.getLength() != 0, "ODatabaseSource::inserted : invalid argument (the name) !");
     DBG_ASSERT(!m_xParent.is(), "ODatabaseSource::inserted : already connected to a parent !");
 
-    m_xConfigurationNode = _rxConfigRoot;
+    m_aConfigurationNode = _rConfigRoot;
     m_xParent = _rxContainer;
     m_sName = _rRegistrationName;
 
-    if (m_xConfigurationNode.is())
-        initializeFromConfiguration();
+    if (m_aConfigurationNode.isValid())
+    {
+        // propagate the new location to our documents
+        // (Usually, we do this from within the ctor which gets a config node, but if we're here, we have been
+        // instantiated as service, so we didn't have any config location before, so the documents haven't any, too.)
+        initializeDocuments(sal_False);
+        flushToConfiguration();
+    }
 
     // adjust our readonly flag
-    try
-    {
-        m_bReadOnly = !m_xConfigurationNode.is() || m_xConfigurationNode->isReadOnly();
-    }
-    catch (InvalidRegistryException&)
-    {
-        m_bReadOnly = sal_True;
-    }
+    m_bReadOnly = !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
 }
 
 //------------------------------------------------------------------------------
@@ -653,118 +642,59 @@ void ODatabaseSource::removed()
     DBG_ASSERT(m_xParent.is(), "ODatabaseSource::removed : not connected to a parent !");
 
     // dispose the document containers so they release the documents and the configuration resources
-    m_aForms.dispose();
-    m_aReports.dispose();
+//  m_aForms.dispose();
+//  m_aReports.dispose();
     m_aCommandDefinitions.dispose();
 
     m_xParent = NULL;
-    m_xConfigurationNode = NULL;
+    m_aConfigurationNode.clear();
     m_sName = ::rtl::OUString();
 
     m_bReadOnly = sal_False;
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseSource::initializeDocuments()
+void ODatabaseSource::initializeDocuments(sal_Bool _bRead)
 {
     // initialize the document containers
-    Reference< XRegistryKey > xFormDocuments;
-    openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_FORMDOCUMENTS, xFormDocuments, sal_True);
-    m_aForms.initialize(xFormDocuments);
-
-    Reference< XRegistryKey > xReportDocuments;
-    openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_REPORTDOCUMENTS, xReportDocuments, sal_True);
-    m_aReports.initialize(xReportDocuments);
-
-    Reference< XRegistryKey > xCommandDefinitions;
-    openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_QUERYDOCUMENTS, xCommandDefinitions, sal_True);
-    m_aCommandDefinitions.initialize(xCommandDefinitions);
+//  m_aForms.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_FORMDOCUMENTS).cloneAsRoot(), _bRead);
+//  m_aReports.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_REPORTDOCUMENTS).cloneAsRoot(), _bRead);
+    m_aCommandDefinitions.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS).cloneAsRoot(), _bRead);
 }
 
 //------------------------------------------------------------------------------
 void ODatabaseSource::initializeFromConfiguration()
 {
-    if (!m_xConfigurationNode.is())
+    if (!m_aConfigurationNode.isValid())
     {
         DBG_ERROR("ODatabaseSource::initializeFromConfiguration : invalid configuration key !");
         return;
     }
 
-    readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_CONNECTURL, m_sConnectURL);
-    readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_USER, m_sUser);
-    readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLEFILTER, m_aTableFilter);
-    readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLETYEFILTER, m_aTableTypeFilter);
-    readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_LOGINTIMEOUT, m_nLoginTimeout);
-
-    sal_Bool bTemp; // temporary, needed because m_bPasswordRequired is part of a bit field and we need to transport it as a reference
-    readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_PASSWORDREQUIRED, bTemp);
-    m_bPasswordRequired = bTemp;
+    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_CONNECTURL) >>= m_sConnectURL;
+    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_USER) >>= m_sUser;
+    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_TABLEFILTER) >>= m_aTableFilter;
+    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_TABLETYEFILTER) >>= m_aTableTypeFilter;
+    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_LOGINTIMEOUT) >>= m_nLoginTimeout;
+    m_bPasswordRequired = ::cppu::any2bool(m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED));
 
     // the property sequence in m_aInfo
-    Reference< XRegistryKey > xInfoKey;
-    if (openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_INFO, xInfoKey, sal_False))
+    OConfigurationNode aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO);
+    if (aInfoNode.isValid())
     {
-        ORegistryLevelEnumeration aEnumInfos(xInfoKey);
-        m_aInfo.realloc(aEnumInfos.size());
+        Sequence< ::rtl::OUString > aNodeNames = aInfoNode.getNodeNames();
+        m_aInfo.realloc(aNodeNames.getLength());
         PropertyValue* pInfos = m_aInfo.getArray();
 
-        // loop the sub keys
-        Reference< XRegistryKey > xCurrent;
-        sal_Bool bValid;
-        while (aEnumInfos.hasMoreElements())
+        for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
+                pNodeNames >= aNodeNames.getConstArray();
+                --pNodeNames, ++pInfos
+            )
         {
-            xCurrent = aEnumInfos.nextElement();
-            RegistryValueType eType(RegistryValueType_NOT_DEFINED);
-            bValid = sal_True;
-            try
-            {
-                // dependent on the type, read and store the values
-                eType = xCurrent->getValueType();
-                pInfos->Name = getShortKeyName(xCurrent);
-                switch (eType)
-                {
-                    case RegistryValueType_STRING:
-                        pInfos->Value <<= xCurrent->getStringValue();
-                        break;
-                    case RegistryValueType_LONG:
-                    {
-                        // temporary HACK: we may have an additional type information (see flushToConfiguration)
-                        sal_Int32 nValue = xCurrent->getLongValue();
-                        ::rtl::OUString sTypeInformation;
-                        Reference< XRegistryKey > xValueKey;
-                        if (readValue(xCurrent, ::rtl::OUString::createFromAscii("TypeInformation"), sTypeInformation))
-                        {
-                            if (sTypeInformation.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean")))
-                            {
-                                pInfos->Value = ::cppu::bool2any((sal_Bool)nValue);
-                                break;
-                            }
-                            DBG_ERROR("ODatabaseSource::initializeFromConfiguration: unknown type information!");
-                        }
-                        pInfos->Value <<= nValue;
-                    }
-                    break;
-                    case RegistryValueType_STRINGLIST:
-                        pInfos->Value <<= xCurrent->getStringListValue();
-                        break;
-                    case RegistryValueType_LONGLIST:
-                        pInfos->Value <<= xCurrent->getLongListValue();
-                        break;
-                    default:
-                        DBG_ERROR("ODatabaseSource::initializeFromConfiguration: encountered an unsupported data type!");
-                        bValid = sal_False;
-                        break;
-                }
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("ODatabaseSource::initializeFromConfiguration: error reading the infos!");
-                bValid = sal_False;
-            }
-            if (bValid)
-                ++pInfos;
+            OConfigurationNode aItemSubNode = aInfoNode.openNode(*pNodeNames);
+            pInfos->Name = *pNodeNames;
+            pInfos->Value = aItemSubNode.getNodeValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")));
         }
-        m_aInfo.realloc(pInfos - m_aInfo.getArray());
     }
 
     initializeDocuments();
@@ -773,111 +703,78 @@ void ODatabaseSource::initializeFromConfiguration()
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushDocuments()
 {
-    m_aForms.flush();
-    m_aReports.flush();
+//  m_aForms.flush();
+//  m_aReports.flush();
     m_aCommandDefinitions.flush();
 }
 
 
-//..............................................................................
-// (could have been a template, but SUNPRO5 does not like explicit template arguments in
-// function calls (like doSomething< ::rtl::OUString >(aArgument)))
-#define WRITE(typeclass, runtimetype, keytype)  \
-    case TypeClass_##typeclass: \
-    {   \
-        runtimetype value;  \
-        pInfoValues->Value >>= value;   \
-        writeValue(xInfoKey, pInfoValues->Name, static_cast< keytype >(value)); \
-        aUsedKeys.insert(pInfoValues->Name);    \
-    }   \
-    break;  \
-
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushToConfiguration()
 {
-    if (!m_xConfigurationNode.is())
+    if (!m_aConfigurationNode.isValid())
     {
         DBG_ERROR("ODatabaseSource::flushToConfiguration : invalid configuration key !");
         return;
     }
 
-    writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_CONNECTURL, m_sConnectURL);
-    writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_USER, m_sUser);
-    writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLEFILTER, m_aTableFilter);
-    writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLETYEFILTER, m_aTableTypeFilter);
-    writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_LOGINTIMEOUT, m_nLoginTimeout);
-    writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_PASSWORDREQUIRED, m_bPasswordRequired);
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_CONNECTURL, makeAny(m_sConnectURL));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_USER, makeAny(m_sUser));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_TABLEFILTER, makeAny(m_aTableFilter));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_TABLETYEFILTER, makeAny(m_aTableTypeFilter));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_LOGINTIMEOUT, makeAny(m_nLoginTimeout));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED, makeAny(m_bPasswordRequired));
 
     // write the additional info tags
-    Reference< XRegistryKey > xInfoKey;
-    if (openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_INFO, xInfoKey, sal_True))
+    // unfortunately, the same as always applies here: the configuration does not support different
+    // operations in one transaction, so we have to open an separate sub tree for the info node, so we can
+    // do separate transactions
+    OConfigurationTreeRoot aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO).cloneAsRoot();
+    if (aInfoNode.isValid())
     {
-        ::std::set< rtl::OUString > aUsedKeys;
+        // stage 0: collect all names under the info node which currently exist
+        ::std::set< rtl::OUString > aExistentKeys;
+        Sequence< ::rtl::OUString > aNodeNames = aInfoNode.getNodeNames();
+        for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
+                pNodeNames >= aNodeNames.getConstArray();
+                --pNodeNames
+            )
+        {
+            aExistentKeys.insert(*pNodeNames);
+            aInfoNode.commit();
+        }
 
-        // stage one: write all currently set info values
+
+        // stage 1: write all currently set info values
+        static ::rtl::OUString s_sValueConfigKey(RTL_CONSTASCII_USTRINGPARAM("Value"));
+        ::std::set< rtl::OUString > aUsedKeys;
         const PropertyValue* pInfoValues = m_aInfo.getConstArray();
         for (sal_Int32 i=0; i<m_aInfo.getLength(); ++i, ++pInfoValues)
         {
-            switch (pInfoValues->Value.getValueType().getTypeClass())
+            OConfigurationNode aSettingsItem;
+            if (aExistentKeys.end() == aExistentKeys.find(pInfoValues->Name))
             {
-                WRITE(STRING, ::rtl::OUString, ::rtl::OUString);
-                WRITE(UNSIGNED_SHORT, sal_uInt16, sal_Int16);
-                WRITE(UNSIGNED_LONG, sal_uInt32, sal_Int32);
-                WRITE(SHORT, sal_Int16, sal_Int16);
-                WRITE(LONG, sal_Int32, sal_Int32);
-            case TypeClass_BOOLEAN:
+                // we do not have such a key -> create it
+                aSettingsItem = aInfoNode.createNode(pInfoValues->Name);
+            }
+            else
             {
-                // a temporary HACK as long as we're not configuration based: we write the bool value as long,
-                // and a special sub key indicating that it is in fact a bool, not a long
-                Reference< XRegistryKey > xValueKey;
-                Reference< XRegistryKey > xIndicator;
-                if (openKey(xInfoKey, pInfoValues->Name, xValueKey, sal_True) && writeValue(xValueKey, ::rtl::OUString::createFromAscii("TypeInformation"), ::rtl::OUString::createFromAscii("boolean")))
-                {
-                    writeValue(xInfoKey, pInfoValues->Name, ::cppu::any2bool(pInfoValues->Value));
-                    aUsedKeys.insert(pInfoValues->Name);
-                }
-                else
-                    DBG_ERROR("ODatabaseSource::flushToConfiguration: failed to write a boolean!");
+                aSettingsItem = aInfoNode.openNode(pInfoValues->Name);
+                aExistentKeys.erase(pInfoValues->Name);
+                    // no need to delete this previously-existing node afterwards ....
             }
-            break;
-            case TypeClass_SEQUENCE:
-            {
-                // determine the element type
-                TypeDescription aTD(pInfoValues->Value.getValueType());
-                typelib_IndirectTypeDescription* pSequenceTD =
-                    reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
-                DBG_ASSERT(pSequenceTD && pSequenceTD->pType, "ODatabaseSource::flushToConfiguration: invalid sequence type!");
-
-                Type aElementType(pSequenceTD->pType);
-                switch (aElementType.getTypeClass())
-                {
-                    WRITE(STRING, Sequence< ::rtl::OUString >, Sequence< ::rtl::OUString >);
-                    WRITE(LONG, Sequence< sal_Int32 >, Sequence< sal_Int32 >);
-                    default:
-                        DBG_ERROR("ODatabaseSource::flushToConfiguration: unsupported property type!");
-                        // TODO: we could save all other sequences, too, by extracting the single elements and
-                        // write them separately
-                }
-            }
-            break;
-            default:
-                DBG_ERROR("ODatabaseSource::flushToConfiguration: unsupported property type!");
-                // TODO: maybe we could write structs, too. We a usual registry this would be possible,
-                // but the configuration we're going to write into would not support this ...
-                // Except we would define templates for all structs known in UNO ... would be possible, but
-                // maybe to expensive.
-                break;
-            }
+            aSettingsItem.setNodeValue(s_sValueConfigKey, pInfoValues->Value);
+            aInfoNode.commit();
         }
 
-        // stage two: delete all info values which may be present in the registry, but not used by the current values
-        ORegistryLevelEnumeration aEnumInfos(xInfoKey);
-        while (aEnumInfos.hasMoreElements())
+        // stage 2: delete all info values which may be present in the registry, but not used by the current values
+        for (   ::std::set< rtl::OUString >::const_iterator aErase = aExistentKeys.begin();
+                aErase != aExistentKeys.end();
+                ++aErase
+            )
         {
-            ::rtl::OUString sExistentKey = getShortKeyName(aEnumInfos.nextElement());
-            if (aUsedKeys.end() == aUsedKeys.find(sExistentKey))
-                // the key was not inserted by ourself in the previous stage -> delete it
-                deleteKey(xInfoKey, sExistentKey);
+            aInfoNode.removeNode(*aErase);
+            aInfoNode.commit();
         }
     }
 
@@ -992,5 +889,10 @@ void ODatabaseSource::writeUIAspects(const ::vos::ORef< ::store::OStream >& _rSt
         }
     }
 }
+
 #endif
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

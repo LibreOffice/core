@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,12 @@ using namespace ::com::sun::star::registry;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace dbaccess;
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= ODocumentDefinition
 //==========================================================================
@@ -110,26 +115,28 @@ extern "C" void SAL_CALL createRegistryInfo_ODocumentDefinition()
 
 //--------------------------------------------------------------------------
 ODocumentDefinition::ODocumentDefinition()
-    :OPropertySetHelper(m_aBHelper)
+    :OConfigurationFlushable(m_aMutex)
+    ,OPropertySetHelper(m_aBHelper)
     ,m_aFlushListeners(m_aMutex)
 {
     DBG_CTOR(ODocumentDefinition, NULL);
 }
 
 //--------------------------------------------------------------------------
-ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rElementName, const Reference< XRegistryKey >& _rxConfigurationRoot)
-    :OPropertySetHelper(m_aBHelper)
+ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rElementName, const OConfigurationTreeRoot& _rObjectNode)
+    :OConfigurationFlushable(m_aMutex)
+    ,OPropertySetHelper(m_aBHelper)
     ,m_sElementName(_rElementName)
-    ,m_xConfigurationRoot(_rxConfigurationRoot)
     ,m_aFlushListeners(m_aMutex)
 {
     DBG_CTOR(ODocumentDefinition, NULL);
 
     DBG_ASSERT(m_xContainer.is(), "ODocumentDefinition::ODocumentDefinition : invalid container !");
     DBG_ASSERT(m_sElementName.getLength() != 0, "ODocumentDefinition::ODocumentDefinition : invalid name !");
-    DBG_ASSERT(m_xConfigurationRoot.is(), "ODocumentDefinition::ODocumentDefinition : invalid configuration node !");
+    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODocumentDefinition::ODocumentDefinition : invalid configuration node !");
 
-    if (m_xConfigurationRoot.is())
+    m_aConfigurationNode = _rObjectNode;
+    if (m_aConfigurationNode.isValid())
         initializeFromConfiguration();
 }
 
@@ -206,35 +213,10 @@ sal_Int64 SAL_CALL ODocumentDefinition::getSomething( const ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::flush(  ) throw(RuntimeException)
+void ODocumentDefinition::flush_NoBroadcast_NoCommit(  ) throw(RuntimeException)
 {
-    {
-        MutexGuard aGuard(m_aMutex);
-
-        if (!m_xConfigurationRoot.is())
-            throw DisposedException();
-
-        // only one property to write to the configuration
-        writeValue(m_xConfigurationRoot, CONFIGKEY_DBLINK_DOCUMENTLOCAITON, m_sDocumentLocation);
-    }
-
-    EventObject aEvt(*this);
-    OInterfaceIteratorHelper aIter(m_aFlushListeners);
-    while (aIter.hasMoreElements())
-        ((XFlushListener*)aIter.next())->flushed(aEvt);
-
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::addFlushListener( const Reference< XFlushListener >& listener ) throw(RuntimeException)
-{
-    m_aFlushListeners.addInterface(listener);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::removeFlushListener( const Reference< XFlushListener >& listener ) throw(RuntimeException)
-{
-    m_aFlushListeners.removeInterface(listener);
+    // only one property to write to the configuration
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON, makeAny(m_sDocumentLocation));
 }
 
 //--------------------------------------------------------------------------
@@ -302,7 +284,7 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
 //--------------------------------------------------------------------------
 void ODocumentDefinition::inserted(const Reference< XInterface >& _rxContainer,
     const ::rtl::OUString& _rElementName,
-    const Reference< XRegistryKey >& _rxConfigRoot)
+    const OConfigurationTreeRoot& _rConfigRoot)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -310,14 +292,14 @@ void ODocumentDefinition::inserted(const Reference< XInterface >& _rxContainer,
 
     DBG_ASSERT(_rxContainer.is(), "ODocumentDefinition::inserted : invalid container !");
     DBG_ASSERT(_rElementName.getLength() != 0, "ODocumentDefinition::inserted : invalid name !");
-    DBG_ASSERT(_rxConfigRoot.is(), "ODocumentDefinition::inserted : invalid configuration node !");
+    DBG_ASSERT(_rConfigRoot.isValid(), "ODocumentDefinition::inserted : invalid configuration node !");
 
     m_xContainer = _rxContainer;
     m_sElementName = _rElementName;
-    m_xConfigurationRoot = _rxConfigRoot;
+    m_aConfigurationNode = _rConfigRoot;
 
-    if (m_xConfigurationRoot.is())
-        initializeFromConfiguration();
+    if (m_aConfigurationNode.isValid())
+        flush_NoBroadcast_NoCommit();
 }
 
 //--------------------------------------------------------------------------
@@ -325,23 +307,26 @@ void ODocumentDefinition::removed()
 {
     MutexGuard aGuard(m_aMutex);
 
-    DBG_ASSERT(m_xContainer.is(), "ODocumentDefinition::inserted : invalid call : I'm not part of a container !");
+    DBG_ASSERT(m_xContainer.is(), "ODocumentDefinition::removed: invalid call : I'm not part of a container !");
 
     m_xContainer = NULL;
     m_sElementName = ::rtl::OUString();
-    m_xConfigurationRoot = NULL;
+    m_aConfigurationNode.clear();
 }
 
 //--------------------------------------------------------------------------
 void ODocumentDefinition::initializeFromConfiguration()
 {
-    if (!m_xConfigurationRoot.is())
+    if (!m_aConfigurationNode.isValid())
     {
         DBG_ERROR("ODocumentDefinition::initializeFromConfiguration : no configuration location !");
         return;
     }
 
-    readValue(m_xConfigurationRoot, CONFIGKEY_DBLINK_DOCUMENTLOCAITON, m_sDocumentLocation);
+    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON) >>= m_sDocumentLocation;
 }
 
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+#   last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/column.obj				\
         $(SLO)$/RowSetBase.obj			\
         $(SLO)$/CRowSetDataColumn.obj	\
         $(SLO)$/CRowSetColumn.obj		\
@@ -89,7 +90,6 @@ SLOFILES=	\
         $(SLO)$/CacheSet.obj			\
         $(SLO)$/RowSetCache.obj			\
         $(SLO)$/RowSetValue.obj			\
-        $(SLO)$/column.obj				\
         $(SLO)$/definitioncolumn.obj	\
         $(SLO)$/resultcolumn.obj		\
         $(SLO)$/datacolumn.obj			\
@@ -102,7 +102,6 @@ SLOFILES=	\
         $(SLO)$/table.obj				\
         $(SLO)$/tablecontainer.obj		\
         $(SLO)$/querydescriptor.obj		\
-        $(SLO)$/definitionsettings.obj	\
         $(SLO)$/datasettings.obj		\
         $(SLO)$/RowSet.obj
 

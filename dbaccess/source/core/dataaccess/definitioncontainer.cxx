@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,31 +106,40 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace dbaccess;
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= ODefinitionContainer
 //==========================================================================
 DBG_NAME(ODefinitionContainer)
 //--------------------------------------------------------------------------
 ODefinitionContainer::ODefinitionContainer(OWeakObject& _rParent, Mutex& _rMutex)
-    :m_aContainerListeners(_rMutex)
+    :OConfigurationFlushable(_rMutex)
+    ,m_aContainerListeners(_rMutex)
     ,m_rParent(_rParent)
-    ,m_rMutex(_rMutex)
     ,m_bInitialized(sal_False)
 {
     DBG_CTOR(ODefinitionContainer, NULL);
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::initialize(const Reference< XRegistryKey >& _rxConfigurationRoot)
+void ODefinitionContainer::initialize(const OConfigurationTreeRoot& _rConfigurationRoot, sal_Bool _bRead)
 {
     MutexGuard aGuard(m_rMutex);
-    m_xConfigurationNode = _rxConfigurationRoot;
+    m_aConfigurationNode = _rConfigurationRoot;
 
-    DBG_ASSERT(m_xConfigurationNode.is(), "ODefinitionContainer::initialize : need a starting point within the configuration !");
+    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODefinitionContainer::initialize : need a starting point within the configuration !");
     DBG_ASSERT(!m_bInitialized, "ODefinitionContainer::initialize : already initialized !");
 
-    if (m_xConfigurationNode.is())
+    if (m_aConfigurationNode.isValid())
+    {
+        DBG_ASSERT(m_aConfigurationNode.isSetNode(), "ODefinitionContainer::initialize: our config node should be a set node!");
+        m_aConfigurationNode.setEscape(sal_True);
         initializeFromConfiguration();
+    }
 
     m_bInitialized = sal_True;
 }
@@ -163,18 +172,15 @@ void ODefinitionContainer::dispose()
     m_aDocumentMap.clear();
     m_aDocuments.clear();
     m_aDocumentObjectKeys.clear();
-    m_aDocumentDescKeys.clear();
-    m_xConfigurationNode = NULL;
+    m_aConfigurationNode.clear();
 
     m_bInitialized = sal_False;
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::flush()
+void ODefinitionContainer::flush_NoBroadcast_NoCommit()
 {
-    MutexGuard aGuard(m_rMutex);
-
-    DBG_ASSERT(m_xConfigurationNode.is(), "ODefinitionContainer::flush : need a starting point within the configuration !");
+    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODefinitionContainer::flush : need a starting point within the configuration !");
     DBG_ASSERT(m_bInitialized, "ODefinitionContainer::flush : not initialized !");
 
     for (   ConstDocumentsIterator aLoop = m_aDocuments.begin();
@@ -184,6 +190,8 @@ void ODefinitionContainer::flush()
     {
         if (aLoop->xObject.is())
         {
+            // TODO: perhaps we should use the flush_NoBroadcast_NoCommit of the implementations of the objects
+            // the method here is called flush_NoBroadcast_NoCommit, which is contradicted by a direct flush call ...
             Reference< XFlushable > xFlush(aLoop->xObject, UNO_QUERY);
             DBG_ASSERT(xFlush.is(), "ODefinitionContainer::flush : have a living object which is not flushable !");
             if (xFlush.is())
@@ -257,17 +265,22 @@ void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName,
     if (!xNewFlushable.is())
         throw IllegalArgumentException();
 
-    Reference< XRegistryKey > xDescriptionKey, xObjectKey;
-    xObjectKey = createConfigKey(_rName, xDescriptionKey);
-    if (!xObjectKey.is())
+    // the configuration does not support different types of operations in one transaction, so we must commit
+    // before and after we create the new node, to ensure, that every transaction we ever do contains only
+    // one type of operation (insert, remove, update)
+    OSL_VERIFY(m_aConfigurationNode.commit());
+    OConfigurationNode aObjectNode = m_aConfigurationNode.createNode(_rName);
+    OSL_VERIFY(m_aConfigurationNode.commit());
+
+    if (!aObjectNode.isValid())
     {   // something went wrong
         DBG_ERROR("ODefinitionContainer::insertByName : could not create the new configuration nodes !");
         throw RuntimeException(::rtl::OUString(), *this);
     }
 
-    implAppend(_rName, xNewElement, xObjectKey, xDescriptionKey);
+    implAppend(_rName, xNewElement, aObjectNode);
 
-    pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, xObjectKey);
+    pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, aObjectNode.cloneAsRoot());
     xNewFlushable->flush();
 
     // notify the listeners
@@ -283,32 +296,35 @@ void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName,
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_True);
+    Reference< XPropertySet > xOldElement;
+    {
+        MutexGuard aGuard(m_rMutex);
+        checkValid(sal_True);
 
-    // check the arguments
-    if (!_rName.getLength())
-        throw IllegalArgumentException();
+        // check the arguments
+        if (!_rName.getLength())
+            throw IllegalArgumentException();
 
-    if (!checkExistence(_rName))
-        throw NoSuchElementException();
+        if (!checkExistence(_rName))
+            throw NoSuchElementException();
 
-    // the old element (for the notifications)
-    Reference< XPropertySet > xOldElement = implGetByName(_rName, (m_aContainerListeners.getLength() != 0));
-        // as this is potentially expensive (if the object is not already created and initialized from the registry)
-        // we load the element only if we have listeners which may be interested in
+        // the old element (for the notifications)
+        xOldElement = implGetByName(_rName, (m_aContainerListeners.getLength() != 0));
+            // as this is potentially expensive (if the object is not already created and initialized from the registry)
+            // we load the element only if we have listeners which may be interested in
 
-    // do the removal
-    implRemove(_rName);
+        // do the removal
+        implRemove(_rName);
 
-    OContainerElement* pOldElement = NULL;
-    getImplementation(pOldElement, Reference< XInterface >(xOldElement));
-    DBG_ASSERT(pOldElement, "ODefinitionContainer::removeByName : have an invalid object !");
-    // we never should have inserted this when it's no OContainerElement
-    if (pOldElement)
-        pOldElement->removed();
+        OContainerElement* pOldElement = NULL;
+        getImplementation(pOldElement, Reference< XInterface >(xOldElement));
+        DBG_ASSERT(pOldElement, "ODefinitionContainer::removeByName : have an invalid object !");
+        // we never should have inserted this when it's no OContainerElement
+        if (pOldElement)
+            pOldElement->removed();
 
-    disposeComponent(xOldElement);
+        disposeComponent(xOldElement);
+    }
 
     // notify the listeners
     if (m_aContainerListeners.getLength())
@@ -324,7 +340,7 @@ void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName 
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
+    ClearableMutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
 
     // check the arguments
@@ -356,8 +372,8 @@ void SAL_CALL ODefinitionContainer::replaceByName( const ::rtl::OUString& _rName
         // we get the element only if we have listeners which may be interested in
 
     // do the replace
-    Reference< XRegistryKey > xObjectDescription;
-    implReplace(_rName, xNewElement, xObjectDescription);
+    OConfigurationNode aObjectDescription;
+    implReplace(_rName, xNewElement, aObjectDescription);
 
     // tell the old element it has been removed
     OContainerElement* pOldElement = NULL;
@@ -368,9 +384,10 @@ void SAL_CALL ODefinitionContainer::replaceByName( const ::rtl::OUString& _rName
     disposeComponent(xOldElement);
 
     // tell the new element it's new name/location and flush it
-    pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, xObjectDescription);
+    pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, aObjectDescription.cloneAsRoot());
     xNewFlushable->flush();
 
+    aGuard.clear();
     // notify the listeners
     if (m_aContainerListeners.getLength())
     {
@@ -556,75 +573,38 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
 //--------------------------------------------------------------------------
 void ODefinitionContainer::initializeFromConfiguration()
 {
-    if (!m_xConfigurationNode.is())
+    if (!m_aConfigurationNode.isValid())
     {
         DBG_ERROR("ODefinitionContainer::initializeFromConfiguration : invalid configuration key !");
         return;
     }
 
-    ORegistryLevelEnumeration aEnum(m_xConfigurationNode);
-    while (aEnum.hasMoreElements())
+    Sequence< ::rtl::OUString > aDefinitionNames = m_aConfigurationNode.getNodeNames();
+    const ::rtl::OUString* pDefinitionNames = aDefinitionNames.getConstArray();
+    for (sal_Int32 i=0; i<aDefinitionNames.getLength(); ++i, ++pDefinitionNames)
     {
-        Reference< XRegistryKey > xCurrentDescription = aEnum.nextElement();
-        if (xCurrentDescription.is())
+        // get the node under which the object is stored
+        OConfigurationNode aObjectNode = m_aConfigurationNode.openNode(*pDefinitionNames);
+
+        if ((0 == pDefinitionNames->getLength()) || !aObjectNode.isValid())
         {
-            // get the name of the object
-            ::rtl::OUString sObjectName;
-            readValue(xCurrentDescription, CONFIGKEY_CONTAINERLEMENT_TITLE, sObjectName);
-            // get the key under which the object is stored
-            Reference< XRegistryKey > xObjectKey;
-            try { xObjectKey = xCurrentDescription->openKey(CONFIGKEY_CONTAINERLEMENT_OBJECT); }
-            catch(InvalidRegistryException&) { }
-
-            if ((sObjectName.getLength() == 0) || !xObjectKey.is())
-            {
-                DBG_ERROR("ODefinitionContainer::initializeFromConfiguration : invalid structure within the configuration !");
-                continue;
-            }
-
-            Reference< XPropertySet > xNewObject;
-            // we don't read this new object here, this may be much to expensive. We read it only on request.
-
-            m_aDocuments.push_back(Document(sObjectName, xNewObject));
-            m_aDocumentMap[sObjectName] = xNewObject;
-            m_aDocumentDescKeys[sObjectName] = xCurrentDescription;
-            m_aDocumentObjectKeys[sObjectName] = xObjectKey;
+            DBG_ERROR("ODefinitionContainer::initializeFromConfiguration : invalid structure within the configuration !");
+            continue;
         }
+
+        Reference< XPropertySet > xNewObject;
+        // we don't read this new object here, this may be much to expensive. We read it only on request.
+
+        m_aDocuments.push_back(Document(*pDefinitionNames, xNewObject));
+        m_aDocumentMap[*pDefinitionNames] = xNewObject;
+        m_aDocumentObjectKeys[*pDefinitionNames] = aObjectNode;
     }
 }
 
 //--------------------------------------------------------------------------
 sal_Bool ODefinitionContainer::isReadOnly() const
 {
-    try
-    {
-        return m_xConfigurationNode.is() && m_xConfigurationNode->isReadOnly();
-    }
-    catch (InvalidRegistryException&)
-    {
-    }
-    DBG_ERROR("ODefinitionContainer::isReadOnly : never should have reached this point !");
-    // if we have an invalid registry - assume the worst
-    return sal_True;
-}
-
-//--------------------------------------------------------------------------
-Reference< XRegistryKey > ODefinitionContainer::createConfigKey(const ::rtl::OUString& _rName, Reference< XRegistryKey >& _rxDescKey)
-{
-    ::rtl::OUString sDescriptionKey = getUniqueKeyName(m_xConfigurationNode, ::rtl::OUString::createFromAscii("obj_"));
-    Reference< XRegistryKey > xObjectKey;
-    try
-    {
-        _rxDescKey = m_xConfigurationNode->createKey(sDescriptionKey);
-        if (_rxDescKey.is())
-            if (writeValue(_rxDescKey, CONFIGKEY_CONTAINERLEMENT_TITLE, _rName))
-                xObjectKey = _rxDescKey->createKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-    }
-    catch (InvalidRegistryException&)
-    {
-    }
-
-    return xObjectKey;
+    return !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
 }
 
 //--------------------------------------------------------------------------
@@ -644,32 +624,17 @@ void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
         }
     }
 
-    // and from the configuration
-    ::rtl::OUString sDescriptionKeyName;
-    try
-    {
-        sDescriptionKeyName = getShortKeyName(m_aDocumentDescKeys[_rName]);
-    }
-    catch (InvalidRegistryException&)
-    {
-        DBG_ERROR("ODefinitionContainer::removeByName : could not get the description key name !");
-    }
-    // (release our own configuration node references before deleting the node, perhaps it's required for
-    // deleting the node ...)
-    m_aDocumentDescKeys.erase(_rName);
     m_aDocumentObjectKeys.erase(_rName);
-    try
-    {
-        m_xConfigurationNode->deleteKey(sDescriptionKeyName);
-    }
-    catch (InvalidRegistryException&)
-    {
-        DBG_ERROR("ODefinitionContainer::removeByName : could not delete the description key !");
-    }
+    // the configuration does not support different types of operations in one transaction, so we must commit
+    // before and after we create the new node, to ensure, that every transaction we ever do contains only
+    // one type of operation (insert, remove, update)
+    OSL_VERIFY(m_aConfigurationNode.commit());
+    m_aConfigurationNode.removeNode(_rName);
+    OSL_VERIFY(m_aConfigurationNode.commit());
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, const Reference< XRegistryKey >& _rxObjectNode, const Reference< XRegistryKey >& _rxDescNode)
+void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, const OConfigurationNode& _rObjectNode)
 {
     MutexGuard aGuard(m_rMutex);
     try
@@ -677,8 +642,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
         // now update our structures
         m_aDocuments.push_back(Document(_rName, _rxNewObject));
         m_aDocumentMap[_rName] = _rxNewObject;
-        m_aDocumentDescKeys[_rName] = _rxDescNode;
-        m_aDocumentObjectKeys[_rName] = _rxObjectNode;
+        m_aDocumentObjectKeys[_rName] = _rObjectNode;
 
         Reference< XComponent > xComp(_rxNewObject, UNO_QUERY);
         if (xComp.is())
@@ -691,7 +655,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, Reference< XRegistryKey >& _rxNewObjectNode)
+void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, OConfigurationNode& _rNewObjectNode)
 {
     DBG_ASSERT(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
 
@@ -717,38 +681,37 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
         }
     }
 
-    _rxNewObjectNode.clear();
-
+    _rNewObjectNode.clear();
     // update the configuration
-    Reference< XRegistryKey > xObjectDescription = m_aDocumentDescKeys[_rName];
-    // delete the old object key
-    m_aDocumentObjectKeys[_rName] = Reference< XRegistryKey >();
-    try
-    {
-        xObjectDescription->deleteKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-            // this ensures that all sub keys will be deleted, too
-        _rxNewObjectNode = m_aDocumentObjectKeys[_rName] = xObjectDescription->createKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-    }
-    catch(InvalidRegistryException&)
-    {
-    }
-    DBG_ASSERT(_rxNewObjectNode.is(), "ODefinitionContainer::implReplace : could not generate the new key !");
+    // clear all old data
+    // the configuration does not support different types of operations in one transaction, so we must commit
+    // before and after we create the new node, to ensure, that every transaction we ever do contains only
+    // one type of operation (insert, remove, update)
+    OSL_VERIFY(m_aConfigurationNode.commit());
+    m_aConfigurationNode.removeNode(_rName);
+    OSL_VERIFY(m_aConfigurationNode.commit());
+
+    // the configuration does not support different types of operations in one transaction, so we must commit
+    // before and after we create the new node, to ensure, that every transaction we ever do contains only
+    // one type of operation (insert, remove, update)
+    OSL_VERIFY(m_aConfigurationNode.commit());
+    _rNewObjectNode = m_aDocumentObjectKeys[_rName] = m_aConfigurationNode.createNode(_rName);
+    OSL_VERIFY(m_aConfigurationNode.commit());
 }
 
 //--------------------------------------------------------------------------
 void ODefinitionContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw (RuntimeException, DisposedException)
 {
     if (!m_bInitialized)
-        throw RuntimeException();
+        throw DisposedException();
 
     if (_bIntendWriteAccess && isReadOnly())
-        RuntimeException(
+        DisposedException(
             ::rtl::OUString::createFromAscii("You have no write access to the configuration tree the object is based on."),
                 // TODO : put this into a resource
             Reference< XInterface >(const_cast<XServiceInfo*>(static_cast<const XServiceInfo*>(this))));
 
-    DBG_ASSERT( (m_aDocuments.size() == m_aDocumentDescKeys.size()) &&
-                (m_aDocuments.size() == m_aDocumentObjectKeys.size()) &&
+    DBG_ASSERT( (m_aDocuments.size() == m_aDocumentObjectKeys.size()) &&
                 (m_aDocuments.size() == m_aDocumentMap.size()),
         "ODefinitionContainer::checkValid : inconsistent state !");
 }
@@ -759,3 +722,6 @@ sal_Bool ODefinitionContainer::approveNewObject(const Reference< XPropertySet >&
     return _rxObject.is();
 }
 
+//........................................................................
+}   // namespace dbaccess
+//........................................................................

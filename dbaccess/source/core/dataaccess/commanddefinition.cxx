@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@ using namespace ::cppu;
 using namespace dbaccess;
 using namespace comphelper;
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= OCommandDefinition
 //==========================================================================
@@ -143,7 +148,7 @@ OCommandDefinition::~OCommandDefinition()
 
 //--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rElementName,
-            const Reference< XRegistryKey >& _rxConfigurationRoot)
+            const OConfigurationTreeRoot& _rConfigRoot)
     :OPropertyContainer(m_aBHelper)
     ,OConfigurationFlushable(m_aMutex)
     ,m_xContainer(_rxContainer)
@@ -153,13 +158,13 @@ OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContain
     registerProperties();
 
     m_sElementName = _rElementName;
-    m_xConfigurationNode = _rxConfigurationRoot;
+    m_aConfigurationNode = _rConfigRoot;
 
     DBG_ASSERT(m_xContainer.is(), "OCommandDefinition::OCommandDefinition : invalid container !");
     DBG_ASSERT(m_sElementName.getLength() != 0, "OCommandDefinition::OCommandDefinition : invalid name !");
-    DBG_ASSERT(m_xConfigurationNode.is(), "OCommandDefinition::OCommandDefinition : invalid configuration node !");
+    DBG_ASSERT(m_aConfigurationNode.isValid(), "OCommandDefinition::OCommandDefinition : invalid configuration node !");
 
-    if (m_xConfigurationNode.is())
+    if (m_aConfigurationNode.isValid())
         initializeFromConfiguration();
 }
 
@@ -227,12 +232,12 @@ sal_Int64 SAL_CALL OCommandDefinition::getSomething( const ::com::sun::star::uno
 }
 
 //------------------------------------------------------------------------------
-void OCommandDefinition::flush_NoBroadcast(  ) throw(RuntimeException)
+void OCommandDefinition::flush_NoBroadcast_NoCommit(  ) throw(RuntimeException)
 {
-    if (!m_xConfigurationNode.is())
+    if (!m_aConfigurationNode.isValid())
         throw DisposedException();
 
-    OCommandBase::storeTo(m_xConfigurationNode);
+    OCommandBase::storeTo(m_aConfigurationNode);
 }
 
 //--------------------------------------------------------------------------
@@ -259,7 +264,7 @@ IPropertyArrayHelper* OCommandDefinition::createArrayHelper( ) const
 //--------------------------------------------------------------------------
 void OCommandDefinition::inserted(const Reference< XInterface >& _rxContainer,
     const ::rtl::OUString& _rElementName,
-    const Reference< XRegistryKey >& _rxConfigRoot)
+    const OConfigurationTreeRoot& _rConfigRoot)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -267,14 +272,14 @@ void OCommandDefinition::inserted(const Reference< XInterface >& _rxContainer,
 
     DBG_ASSERT(_rxContainer.is(), "OCommandDefinition::inserted : invalid container !");
     DBG_ASSERT(_rElementName.getLength() != 0, "OCommandDefinition::inserted : invalid name !");
-    DBG_ASSERT(_rxConfigRoot.is(), "OCommandDefinition::inserted : invalid configuration node !");
+    DBG_ASSERT(_rConfigRoot.isValid(), "OCommandDefinition::inserted : invalid configuration node !");
 
     m_xContainer = _rxContainer;
     m_sElementName = _rElementName;
-    m_xConfigurationNode = _rxConfigRoot;
+    m_aConfigurationNode = _rConfigRoot;
 
-    if (m_xConfigurationNode.is())
-        initializeFromConfiguration();
+    if (m_aConfigurationNode.isValid())
+        flush_NoBroadcast_NoCommit();
 }
 
 //--------------------------------------------------------------------------
@@ -282,22 +287,25 @@ void OCommandDefinition::removed()
 {
     MutexGuard aGuard(m_aMutex);
 
-    DBG_ASSERT(m_xContainer.is(), "OCommandDefinition::inserted : invalid call : I'm not part of a container !");
+    DBG_ASSERT(m_xContainer.is(), "OCommandDefinition::removed: invalid call : I'm not part of a container !");
     m_xContainer = NULL;
     m_sElementName = ::rtl::OUString();
-    m_xConfigurationNode = NULL;
+    m_aConfigurationNode.clear();
 }
 
 //--------------------------------------------------------------------------
 void OCommandDefinition::initializeFromConfiguration()
 {
-    if (!m_xConfigurationNode.is())
+    if (!m_aConfigurationNode.isValid())
     {
         DBG_ERROR("OCommandDefinition::initializeFromConfiguration : no configuration location !");
         return;
     }
 
-    OCommandBase::initializeFrom(m_xConfigurationNode);
+    OCommandBase::initializeFrom(m_aConfigurationNode);
 }
 
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

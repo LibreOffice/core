@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:44:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,11 @@ using namespace ::com::sun::star::registry;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace dbaccess;
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //==========================================================================
 //= OConnectionRerouter
@@ -384,7 +388,7 @@ DBG_NAME(OConnection)
 OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
             :OConnectionRerouter(_rxMaster)
             ,OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
-            ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation(), _rxORB)
+            ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
             ,m_aTables(*this, m_aMutex,_rxMaster)
@@ -396,8 +400,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& 
     DBG_CTOR(OConnection,NULL);
 
     // initialize the queries
-    Reference< XRegistryKey > xParentConfigRoot(_rDB.m_xConfigurationNode);
-    DBG_ASSERT(xParentConfigRoot.is(), "OConnection::OConnection : invalid configuration location of my parent !");
+    DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
 }
 
 //--------------------------------------------------------------------------
@@ -581,4 +584,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     return prepareStatement(aStatement);
 }
 
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

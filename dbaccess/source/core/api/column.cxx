@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,60 +417,18 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
 
 
 //------------------------------------------------------------------------------
-sal_Bool OColumnSettings::writeUITo(const Reference< XRegistryKey >& _rxConfigNode)
+sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode)
 {
-    sal_Bool bWroteAnything = sal_False;
-    sal_Int32 nTemp;
-
-    if (m_aAlignment.hasValue())
-    {
-        m_aAlignment >>= nTemp;
-        writeValue(_rxConfigNode, CONFIGKEY_COLUMN_ALIGNMENT, nTemp);
-        bWroteAnything = sal_True;
-    }
-    else
-        deleteKey(_rxConfigNode, CONFIGKEY_COLUMN_ALIGNMENT);
-
-    if (m_aWidth.hasValue())
-    {
-        m_aWidth >>= nTemp;
-        writeValue(_rxConfigNode, CONFIGKEY_COLUMN_WIDTH, nTemp);
-        bWroteAnything = sal_True;
-    }
-    else
-        deleteKey(_rxConfigNode, CONFIGKEY_COLUMN_WIDTH);
-
-    if (m_aFormatKey.hasValue())
-    {
-        m_aFormatKey >>= nTemp;
-        writeValue(_rxConfigNode, CONFIGKEY_COLUMN_NUMBERFORMAT, nTemp);
-        bWroteAnything = sal_True;
-    }
-    else
-        deleteKey(_rxConfigNode, CONFIGKEY_COLUMN_NUMBERFORMAT);
-
-    if (m_aRelativePosition.hasValue())
-    {
-        m_aRelativePosition >>= nTemp;
-        writeValue(_rxConfigNode, CONFIGKEY_COLUMN_RELPOSITION, nTemp);
-        bWroteAnything = sal_True;
-    }
-    else
-        deleteKey(_rxConfigNode, CONFIGKEY_COLUMN_RELPOSITION);
-
-    if (m_bHidden)
-    {
-        writeValue(_rxConfigNode, CONFIGKEY_COLUMN_HIDDEN, m_bHidden);
-        bWroteAnything = sal_True;
-    }
-    else
-        deleteKey(_rxConfigNode, CONFIGKEY_COLUMN_HIDDEN);
-
-    return bWroteAnything;
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, makeAny(m_aAlignment));
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_WIDTH, makeAny(m_aWidth));
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT, makeAny(m_aFormatKey));
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_RELPOSITION, makeAny(m_aRelativePosition));
+    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_HIDDEN, makeAny(m_bHidden));
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void OColumnSettings::readUIFrom(const Reference< XRegistryKey >& _rxConfigNode)
+void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode)
 {
     // some defaults
     m_bHidden = sal_False;
@@ -479,18 +437,11 @@ void OColumnSettings::readUIFrom(const Reference< XRegistryKey >& _rxConfigNode)
     m_aWidth.clear();
     m_aAlignment.clear();
 
-    sal_Int32 nTemp(0);
-    if (readValue(_rxConfigNode, CONFIGKEY_COLUMN_ALIGNMENT, nTemp))
-        m_aAlignment <<= nTemp;
-    if (readValue(_rxConfigNode, CONFIGKEY_COLUMN_WIDTH, nTemp))
-        m_aWidth <<= nTemp;
-    if (readValue(_rxConfigNode, CONFIGKEY_COLUMN_NUMBERFORMAT, nTemp))
-        m_aFormatKey <<= nTemp;
-    if (readValue(_rxConfigNode, CONFIGKEY_COLUMN_RELPOSITION, nTemp))
-        m_aRelativePosition <<= nTemp;
-    sal_Bool bTemp(sal_False);
-    if (readValue(_rxConfigNode, CONFIGKEY_COLUMN_HIDDEN, bTemp))
-        m_bHidden = bTemp;
+    m_aAlignment = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
+    m_aWidth = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
+    m_aFormatKey = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT);
+    m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
+    _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN) >>= m_bHidden;
 }
 
 //============================================================
@@ -581,38 +532,27 @@ void OColumns::clearColumns()
 }
 
 //------------------------------------------------------------------------------
-void OColumns::loadSettings(const Reference< XRegistryKey >& _rxLocation, const IColumnFactory* _pColFactory, sal_Bool _bAdjustLocation)
+void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnFactory* _pColFactory)
 {
     MutexGuard aGuard(m_rMutex);
 
     OSL_ENSHURE(_pColFactory != NULL, "OColumns::loadSettings : invalid factory !");
 
-    ORegistryLevelEnumeration aSubKeys(_rxLocation);
-    while (aSubKeys.hasMoreElements())
+    OConfigurationNode aLocation(_rLocation);
+    aLocation.setEscape(aLocation.isSetNode());
+
+    Sequence< ::rtl::OUString > aColumNames = aLocation.getNodeNames();
+    const ::rtl::OUString* pColumNames = aColumNames.getConstArray();
+    for (sal_Int32 i=0; i<aColumNames.getLength(); ++i, ++pColumNames)
     {
-        Reference< XRegistryKey > xCurrent = aSubKeys.nextElement();
-
-        ::rtl::OUString sColName;
-        if (!readValue(xCurrent, CONFIGKEY_CONTAINERLEMENT_TITLE, sColName) || !sColName.getLength())
-            // no title key or invalid title
-            continue;
-
-        Reference< XRegistryKey > xObjectKey;
-        if (!openKey(xCurrent, CONFIGKEY_CONTAINERLEMENT_OBJECT, xObjectKey, sal_False))
-            // there is no valid object key
-            continue;
-
         // do we already have a column with that name ?
-        //  OColumnMap::iterator aExistent = m_pColMap->find(sColName);
-        //  OColumn* pExistent = aExistent != m_pColMap->end() ? aExistent->second : NULL;
-
         OColumn* pExistent = NULL;
         // create the column if neccessary
-        if (!hasByName(sColName))
+        if (!hasByName(*pColumNames))
         {
-            pExistent = _pColFactory->createColumn(sColName);
+            pExistent = _pColFactory->createColumn(*pColumNames);
             if (pExistent)
-                append(sColName, pExistent);
+                append(*pColumNames, pExistent);
             else
             {
                 OSL_ASSERT("OColumns::loadSettings : createColumn returned nonsense !");
@@ -622,66 +562,45 @@ void OColumns::loadSettings(const Reference< XRegistryKey >& _rxLocation, const 
         else
         {
             Reference<XNamed> xColumn;
-            getByName(sColName) >>= xColumn;
+            getByName(*pColumNames) >>= xColumn;
             Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xColumn,UNO_QUERY);
             if(xTunnel.is())
                 pExistent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
             OSL_ENSHURE(pExistent,"OColumns::loadSettings: No column from unotunnelhelper!");
         }
 
+        OConfigurationNode aCurrent = aLocation.openNode(*pColumNames);
         OColumnSettings* pExistentSettings = pExistent->getSettings();
         if (pExistentSettings)
-            pExistentSettings->readUIFrom(xObjectKey);
+            pExistentSettings->readUIFrom(aCurrent);
         else
             OSL_ASSERT("OColumns::loadSettings : no settings for the column !");
     }
-
-    // adjust the configuration node
-    if (_bAdjustLocation)
-        m_xConfigurationNode = _rxLocation;
 }
 
 //------------------------------------------------------------------------------
-void OColumns::storeSettings()
+void OColumns::storeSettings(const OConfigurationNode& _rLocation, const OConfigurationTreeRoot& _rCommitLocation)
 {
     MutexGuard aGuard(m_rMutex);
-    if (!m_xConfigurationNode.is())
+    if (!_rLocation.isValid())
     {
-        OSL_ASSERT("OColumns::storeSettings : have no location !");
+        OSL_ASSERT("OColumns::storeSettings: have no location !");
         return;
     }
-    if (m_xConfigurationNode->isReadOnly())
+    if (_rLocation.isReadonly())
     {
-        OSL_ASSERT("OColumns::storeSettings : the location is read-only !");
+        OSL_ASSERT("OColumns::storeSettings: the location is read-only !");
         return;
     }
 
-    DECLARE_STL_USTRINGACCESS_MAP(Reference< XRegistryKey >, MapName2Node);
-    MapName2Node aDescKeys;
+    DECLARE_STL_USTRINGACCESS_MAP(OConfigurationNode, MapName2Node);
     MapName2Node aObjectKeys;
 
     // collect the sub keys of existent column descriptions
-    ORegistryLevelEnumeration aSubKeys(m_xConfigurationNode);
-    while (aSubKeys.hasMoreElements())
-    {
-        Reference< XRegistryKey > xCurrent = aSubKeys.nextElement();
-        ::rtl::OUString sColName;
-        if (!readValue(xCurrent, CONFIGKEY_CONTAINERLEMENT_TITLE, sColName) || !sColName.getLength())
-        {   // no title key or invalid title -> delete that sub key
-            deleteKey(m_xConfigurationNode, getShortKeyName(xCurrent));
-            continue;
-        }
-
-        Reference< XRegistryKey > xObjectKey;
-        if (!openKey(xCurrent, CONFIGKEY_CONTAINERLEMENT_OBJECT, xObjectKey, sal_False))
-        {   // no object key -> delete and continue
-            deleteKey(m_xConfigurationNode, getShortKeyName(xCurrent));
-            continue;
-        }
-
-        aDescKeys[sColName] = xCurrent;
-        aObjectKeys[sColName] = xObjectKey;
-    }
+    Sequence< ::rtl::OUString > aColumNames = _rLocation.getNodeNames();
+    const ::rtl::OUString* pColumNames = aColumNames.getConstArray();
+    for (sal_Int32 i=0; i<aColumNames.getLength(); ++i, ++pColumNames)
+        aObjectKeys[*pColumNames] = _rLocation.openNode(*pColumNames);
 
     // now write all descriptions of my columns
     OColumn* pCurrent = NULL;
@@ -701,90 +620,56 @@ void OColumns::storeSettings()
         OColumnSettings* pCurrentSettings = pCurrent->getSettings();
         if (!pCurrentSettings)
         {
-            OSL_ASSERT("OColumns::storeSettings : column without settings we can write !");
+            OSL_ASSERT("OColumns::storeSettings: column without settings we can write !");
             continue;
         }
         sCurrent = pCurrent->m_sName;
 
-        Reference< XRegistryKey > xColumnNode;
-        Reference< XRegistryKey > xDescKey;
+        OConfigurationNode aColumnNode;
         // do we we have an existent key for that column ?
         ConstMapName2NodeIterator aExistentObjectKey = aObjectKeys.find(sCurrent);
         if (aExistentObjectKey != aObjectKeys.end())
         {
-            xColumnNode = aExistentObjectKey->second;
-
-            ConstMapName2NodeIterator aExistentDescKey = aDescKeys.find(sCurrent);
-            OSL_ENSHURE(aExistentDescKey != aDescKeys.end(), "OColumns::storeSettings : inconsistent : no description key !");
-            xDescKey = aExistentDescKey->second;
-            // and so these sub key is used (and must not be deleted afterwards)
+            aColumnNode = aExistentObjectKey->second;
+            // these sub key is used (and must not be deleted afterwards)
             // -> remove from the key maps
             aObjectKeys.erase(sCurrent);
-            aDescKeys.erase(sCurrent);
         }
         else
         {   // no -> create one
-            ::rtl::OUString sNewDescKey = getUniqueKeyName(m_xConfigurationNode, ::rtl::OUString::createFromAscii("col_"));
-            if  (   !openKey(m_xConfigurationNode, sNewDescKey, xDescKey, sal_True)
-                ||  !writeValue(xDescKey, CONFIGKEY_CONTAINERLEMENT_TITLE, sCurrent)
-                ||  !openKey(xDescKey, CONFIGKEY_CONTAINERLEMENT_OBJECT, xColumnNode, sal_True)
-                )
 
+            // the configuration does not support different types of operations in one transaction, so we must commit
+            // before and after we create the new node, to ensure, that every transaction we ever do contains only
+            // one type of operation (insert, remove, update)
+            OSL_VERIFY(_rCommitLocation.commit());
+            aColumnNode = _rLocation.createNode(sCurrent);
+            if (!aColumnNode.isValid())
             {
-                deleteKey(m_xConfigurationNode, getShortKeyName(xDescKey));
-                OSL_ASSERT("OColumns::storeSettings : could not create the structures for writing a column !");
+                OSL_ASSERT("OColumns::storeSettings: could not create the structures for writing a column !");
                 continue;
             }
+            OSL_VERIFY(_rCommitLocation.commit());
         }
 
         // let the column write itself
-        if (!pCurrentSettings->writeUITo(xColumnNode))
-        {   // the column did have only default values, so nothing was written
-            aObjectKeys[sCurrent] = xColumnNode;
-            aDescKeys[sCurrent] = xDescKey;
-        }
+        pCurrentSettings->writeUITo(aColumnNode);
     }
 
     // delete all description keys where we have no columns for
-    for (   ConstMapName2NodeIterator   aRemove = aDescKeys.begin();
-            aRemove != aDescKeys.end();
+    for (   ConstMapName2NodeIterator   aRemove = aObjectKeys.begin();
+            aRemove != aObjectKeys.end();
             ++aRemove
         )
     {
-        deleteKey(m_xConfigurationNode, getShortKeyName(aRemove->second));
+        // the configuration does not support different types of operations in one transaction, so we must commit
+        // before and after we create the new node, to ensure, that every transaction we ever do contains only
+        // one type of operation (insert, remove, update)
+        OSL_VERIFY(_rCommitLocation.commit());
+        _rLocation.removeNode(aRemove->first);
+        OSL_VERIFY(_rCommitLocation.commit());
     }
 }
 
-//------------------------------------------------------------------------------
-void OColumns::storeSettingsTo(const Reference< XRegistryKey >& _rxLocation)
-{
-    MutexGuard aGuard(m_rMutex);
-
-    // temporary set our member to the new location
-    Reference< XRegistryKey > xOldLocation(m_xConfigurationNode);
-    m_xConfigurationNode = _rxLocation;
-
-    try
-    {
-        storeSettings();
-    }
-    catch (...)
-    {
-        m_xConfigurationNode = xOldLocation;
-        throw;
-    }
-    m_xConfigurationNode = xOldLocation;
-}
-
-//------------------------------------------------------------------------------
-void OColumns::storeSettingsAs(const Reference< XRegistryKey >& _rxLocation)
-{
-    MutexGuard aGuard(m_rMutex);
-
-    storeSettingsTo(_rxLocation);
-    // success -> we have a new location
-    m_xConfigurationNode = _rxLocation;
-}
 // -------------------------------------------------------------------------
 void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {

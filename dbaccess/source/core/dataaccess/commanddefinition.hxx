@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,11 @@
 #include <comphelper/proparrhlp.hxx>
 #endif
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= OCommandDefinition - a database "document" which describes a query
 //==========================================================================
@@ -125,7 +130,7 @@ public:
     OCommandDefinition(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
             const ::rtl::OUString& _rElementName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigurationRoot
+            const OConfigurationTreeRoot& _rConfigRoot
         );
 
 // ::com::sun::star::uno::XInterface
@@ -155,18 +160,18 @@ public:
     virtual void        inserted(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
         const ::rtl::OUString& _rElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigRoot);
+        const OConfigurationTreeRoot& _rConfigRoot);
 
     virtual void        removed();
 
-    virtual sal_Bool    isContainerElement() const { return m_xConfigurationNode.is(); }
+    virtual sal_Bool    isContainerElement() const { return m_aConfigurationNode.isValid(); }
 
 protected:
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 // OConfigurationFlushable
-    void flush_NoBroadcast(  ) throw(::com::sun::star::uno::RuntimeException);
+    void flush_NoBroadcast_NoCommit(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // initialize the members from the current configuration node
     void initializeFromConfiguration();
@@ -175,6 +180,10 @@ private:
     // helper
     void registerProperties();
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
 

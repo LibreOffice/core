@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #include "definitioncontainer.hxx"
 #endif
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= ODocumentContainer -    collections of database documents (reports/forms)
 //==========================================================================
@@ -86,9 +91,13 @@ protected:
 // ODefinitionContainer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createObject(
         const ::rtl::OUString& _rName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxObjectNode
+        const OConfigurationNode& _rObjectNode
     );
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 

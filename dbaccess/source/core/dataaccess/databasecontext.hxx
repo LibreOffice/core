@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _COM_SUN_STAR_SDB_XDATABASEENVIRONMENT_HPP_
 #include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -95,6 +95,9 @@
 #ifndef _DBA_REGISTRATION_HELPER_HXX_
 #include "registrationhelper.hxx"
 #endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
 
 // needed for registration
 namespace com { namespace sun { namespace star {
@@ -104,6 +107,11 @@ namespace com { namespace sun { namespace star {
         class IllegalArgumentException;
     }
 } } }
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //============================================================
 //= ODatabaseContext
@@ -123,9 +131,8 @@ class ODatabaseContext
 
 protected:
     ::osl::Mutex    m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >     m_xRegistry;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        m_xRoot;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
+    OConfigurationTreeRoot                                                                      m_aRootNode;
 
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::WeakReferenceHelper, ObjectCache );
     ObjectCache     m_aDatabaseObjects;
@@ -170,30 +177,14 @@ public:
     virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-// other
-//  /** want to make any informations about an database ("programmatic") persistent ? use this !
-//      (beware : the returned registry isn't fully implemented yet, for instance you can't reopen or close it !)
-//  */
-//  ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry > getSubRegistry(const rtl::OUString& _rURL);
-//  /** "rename" the sub registry for a special programmatic, so it is accessable under the new name
-//  */
-//  void    renameSubRegistry(const rtl::OUString& _rOldURL, const rtl::OUString& _rNewURL);
-
 private:
-    /// open or create the registry. called only once
-    void    implGetRegistry();
-
-    /// get the registry key where all informations for the given registration name are store
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-        getObjectDescriptionKey(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw();
-
-    /// get the registry key a database link is based on
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-        getDatabaseObjectKey(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw (::com::sun::star::container::NoSuchElementException);
-
-//  ::com::sun::star::uno::Sequence<rtl::OUString> getShortChildKeyNames(const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & _rxKey) const;
-//  void implCopyKeys(const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & _rxSource, const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & _rxDest);
+    /// get the node a data source is based on
+    OConfigurationNode getObjectNode(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw();
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATABASECONTEXT_HXX_
 

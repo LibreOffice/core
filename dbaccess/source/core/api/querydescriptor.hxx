@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@
 #ifndef _DBA_CORE_COMMANDBASE_HXX_
 #include "commandbase.hxx"
 #endif
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //==========================================================================
 //= ODescriptorColumn - a single column of an OQueryDescriptor
@@ -192,14 +197,12 @@ public:
     /** store all configuration relevant informations under the given configuration node
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    storeTo(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigLocation);
+    virtual void    storeTo(const OConfigurationTreeRoot& _rConfigLocation);
 
     /** initialize with the informations stored under the given configuration node
         @param      _rxConfigLocation       the configuration node.
     */
-    virtual void    initializeFrom(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigLocation);
+    virtual void    initializeFrom(const OConfigurationNode& _rConfigLocation);
 
 // pseudo-XComponent
     virtual void SAL_CALL dispose();
@@ -215,6 +218,10 @@ protected:
     // helper
     void registerProperties();
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREAPI_QUERYDESCRIPTOR_HXX_
 

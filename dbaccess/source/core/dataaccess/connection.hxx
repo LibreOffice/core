@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,11 @@
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
 #endif
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 typedef ::cppu::ImplHelper3< ::com::sun::star::lang::XServiceInfo
                             ,::com::sun::star::sdbc::XConnection
@@ -234,6 +239,10 @@ public:
 // ::com::sun::star::sdb::XCommandPreparation
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCommand( const ::rtl::OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_CORE_CONNECTION_HXX_
 

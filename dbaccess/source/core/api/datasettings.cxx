@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"
 #endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -92,8 +95,12 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace dbaccess;
 using namespace comphelper;
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //==========================================================================
 //= ODataSettings
@@ -156,113 +163,80 @@ ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
 }
 
 //--------------------------------------------------------------------------
-void ODataSettings_Base::storeTo(const Reference< XRegistryKey >& _rxConfigLocation) const
+void ODataSettings_Base::storeTo(const OConfigurationNode& _rConfigLocation) const
 {
-    try
+    if (!_rConfigLocation.isValid() || _rConfigLocation.isReadonly())
     {
-        if (!_rxConfigLocation.is() || _rxConfigLocation->isReadOnly())
-        {
-            OSL_ASSERT("ODataSettings::storeTo : invalid config key (NULL or readonly) !");
-            return;
-        }
-
-        writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FILTER, m_sFilter);
-        writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_ORDER, m_sOrder);
-        writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_APPLYFILTER, m_bApplyFilter);
-
-        if (m_aFont.Name.getLength())
-        {
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_NAME, m_aFont.Name);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_HEIGHT, m_aFont.Height);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_WIDTH, m_aFont.Width);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_STYLENAME, m_aFont.StyleName);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_FAMILY, m_aFont.Family);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_CHARSET, m_aFont.CharSet);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_PITCH, m_aFont.Pitch);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_UNDERLINE, m_aFont.Underline);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_STRIKEOUT, m_aFont.Strikeout);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_KERNING, m_aFont.Kerning);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_WORDLINEMODE, m_aFont.WordLineMode);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_TYPE, m_aFont.Type);
-
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH, (sal_Int32)m_aFont.CharacterWidth);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_WEIGHT, (sal_Int32)m_aFont.Weight);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_SLANT, (sal_Int32)m_aFont.Slant);
-            writeOrDelete(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_ORIENTATION, (sal_Int32)m_aFont.Orientation);
-                // TODO : find a method to store the character width/weight/slant/orientation ...
-                // or wait 'til we're really configuration based and thus are able to write doubles
-        }
-        else
-            deleteKey(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_ROOTNODE);
-
-
-        if (m_aRowHeight.hasValue())
-            writeValue(_rxConfigLocation, CONFIGKEY_DEFSET_ROW_HEIGHT, getINT32(m_aRowHeight));
-        else
-            deleteKey(_rxConfigLocation, CONFIGKEY_DEFSET_ROW_HEIGHT);
-        if (m_aTextColor.hasValue())
-            writeValue(_rxConfigLocation, CONFIGKEY_DEFSET_TEXTCOLOR, getINT32(m_aTextColor));
-        else
-            deleteKey(_rxConfigLocation, CONFIGKEY_DEFSET_TEXTCOLOR);
+        OSL_ASSERT("ODataSettings_Base::storeTo : invalid config key (NULL or readonly) !");
+        return;
     }
-    catch(InvalidRegistryException&)
+
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FILTER, makeAny(m_sFilter));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_ORDER, makeAny(m_sOrder));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_APPLYFILTER, makeAny(m_bApplyFilter));
+
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_NAME, makeAny(m_aFont.Name));
+    if (m_aFont.Name.getLength())
     {
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT, makeAny(m_aFont.Height));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH, makeAny(m_aFont.Width));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STYLENAME, makeAny(m_aFont.StyleName));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_FAMILY, makeAny(m_aFont.Family));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARSET, makeAny(m_aFont.CharSet));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_PITCH, makeAny(m_aFont.Pitch));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH, makeAny(m_aFont.CharacterWidth));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WEIGHT, makeAny(m_aFont.Weight));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_SLANT, makeAny((sal_Int16)m_aFont.Slant));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINE, makeAny(m_aFont.Underline));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STRIKEOUT, makeAny(m_aFont.Strikeout));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_ORIENTATION, makeAny(m_aFont.Orientation));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_KERNING, makeAny(m_aFont.Kerning));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WORDLINEMODE, makeAny(m_aFont.WordLineMode));
+        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_TYPE, makeAny(m_aFont.Type));
     }
+
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT, m_aRowHeight);
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR, m_aTextColor);
 }
 
 //--------------------------------------------------------------------------
-void ODataSettings_Base::loadFrom(const Reference< XRegistryKey >& _rxConfigLocation)
+void ODataSettings_Base::loadFrom(const OConfigurationNode& _rConfigLocation)
 {
-    try
+    if (!_rConfigLocation.isValid())
     {
-        if (!_rxConfigLocation.is())
-        {
-            OSL_ASSERT("ODataSettings::loadFrom : invalid config key (NULL or readonly) !");
-            return;
-        }
-
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FILTER, m_sFilter);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_ORDER, m_sOrder);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_APPLYFILTER, m_bApplyFilter);
-
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_NAME, m_aFont.Name);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_HEIGHT, m_aFont.Height);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_WIDTH, m_aFont.Width);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_STYLENAME, m_aFont.StyleName);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_FAMILY, m_aFont.Family);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_CHARSET, m_aFont.CharSet);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_PITCH, m_aFont.Pitch);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_UNDERLINE, m_aFont.Underline);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_STRIKEOUT, m_aFont.Strikeout);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_KERNING, m_aFont.Kerning);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_WORDLINEMODE, m_aFont.WordLineMode);
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_TYPE, m_aFont.Type);
-
-        sal_Int32 nTemp;
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH, nTemp);
-        m_aFont.CharacterWidth = nTemp;
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_WEIGHT, nTemp);
-        m_aFont.Weight = nTemp;
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_SLANT, nTemp);
-        m_aFont.Slant = (FontSlant)nTemp;
-        readValue(_rxConfigLocation, CONFIGKEY_DEFSET_FONT_ORIENTATION, nTemp);
-        m_aFont.Orientation = nTemp;
-            // TODO : find a method to store the character width/weight/slant/orientation ...
-            // or wait 'til we're really configuration based and thus are able to write doubles
-
-
-        if (readValue(_rxConfigLocation, CONFIGKEY_DEFSET_ROW_HEIGHT, nTemp))
-            m_aRowHeight <<= nTemp;
-        else
-            m_aRowHeight.clear();
-
-        if (readValue(_rxConfigLocation, CONFIGKEY_DEFSET_TEXTCOLOR, nTemp))
-            m_aTextColor <<= nTemp;
-        else
-            m_aTextColor.clear();
+        OSL_ASSERT("ODataSettings_Base::loadFrom: invalid config key (NULL) !");
+        return;
     }
-    catch(InvalidRegistryException&)
-    {
-    }
+
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FILTER) >>= m_sFilter;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ORDER) >>= m_sOrder;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_APPLYFILTER) >>= m_bApplyFilter;
+
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_NAME) >>= m_aFont.Name;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT) >>= m_aFont.Height;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH) >>= m_aFont.Width;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_STYLENAME) >>= m_aFont.StyleName;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_FAMILY) >>= m_aFont.Family;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARSET) >>= m_aFont.CharSet;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_PITCH) >>= m_aFont.Pitch;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH) >>= m_aFont.CharacterWidth;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WEIGHT) >>= m_aFont.Weight;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINE) >>= m_aFont.Underline;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_STRIKEOUT) >>= m_aFont.Strikeout;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_ORIENTATION) >>= m_aFont.Orientation;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_KERNING) >>= m_aFont.Kerning;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WORDLINEMODE) >>= m_aFont.WordLineMode;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_TYPE) >>= m_aFont.Type;
+
+    sal_Int32 nTemp;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_SLANT) >>= nTemp;
+    m_aFont.Slant = (FontSlant)nTemp;
+
+    m_aRowHeight = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT);
+    m_aTextColor = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR);
 }
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 

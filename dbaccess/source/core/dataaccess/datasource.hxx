@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-13 16:00:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -88,6 +85,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
+#include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
@@ -128,11 +131,14 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
 
-namespace com { namespace sun { namespace star { namespace util {
-    class XNumberFormatsSupplier;
-    class XNumberFormatter;
-} } } }
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
 typedef std::vector< OWeakConnection > OWeakConnectionArray;
@@ -163,10 +169,6 @@ class ODatabaseSource   :public connectivity::OBaseMutex
     friend class OConnection;
     friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-
-#ifdef _PRIVATE_TEST_
-    friend void _cdecl main( int argc, char * argv[] );
-#endif
 
 protected:
     OWeakConnectionArray        m_aConnections;
@@ -201,7 +203,7 @@ protected:
 public:
     ODatabaseSource(
         ::cppu::OWeakObject& _rParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigurationRoot,
+        const OConfigurationNode& _rConfigRoot,
         const ::rtl::OUString& _rRegistrationName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
     virtual ~ODatabaseSource();
@@ -271,7 +273,7 @@ public:
 
 protected:
     // OConfigurationFlushable
-    virtual void flush_NoBroadcast();
+    virtual void flush_NoBroadcast_NoCommit();
 
 protected:
 // helper
@@ -290,11 +292,11 @@ protected:
     virtual void        inserted(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
         const ::rtl::OUString& _rElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigRoot);
+        const OConfigurationTreeRoot& _rConfigRoot);
 
     virtual void        removed();
 
-    virtual sal_Bool    isContainerElement() const { return m_xConfigurationNode.is(); }
+    virtual sal_Bool    isContainerElement() const { return m_aConfigurationNode.isValid(); }
 
 // other stuff
     void    initializeFromConfiguration();
@@ -305,9 +307,13 @@ protected:
     void    writeUIAspects(const ::vos::ORef< ::store::OStream >& _rStream);
 #endif
 
-    void    initializeDocuments();
+    void    initializeDocuments(sal_Bool _bRead = sal_True);
     void    flushDocuments();
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"
 #endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -91,8 +94,12 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
-using namespace dbaccess;
 using namespace comphelper;
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 //==========================================================================
 //= OQueryDescriptor
@@ -134,6 +141,7 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
     :ODataSettings(m_aBHelper)
     ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>())
 {
+    registerProperties();
     OSL_ENSHURE(_rxForeignDescriptor.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
     try
     {
@@ -170,9 +178,11 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
 
     // immediately read the UI of the columns : we may live much longer than _rSource and it's column's config node,
     // so we can't just remember this node and read when needed, we have to do it here and now
-    Reference< XRegistryKey > xColumnUINode = _rSource.m_aColumns.getUILocation();
-    if (xColumnUINode.is())
-        m_aColumns.loadSettings(xColumnUINode, this, sal_True);
+//  OConfigurationNode aColumnUINode = _rSource.m_aColumns.getUILocation();
+//  if (aColumnUINode.isValid())
+//      m_aColumns.loadSettings(aColumnUINode, this);
+    // TODO: cloning of the column information. Since a column container does not know anything about it's columns
+    // config location anymore, we probably need to clone the columns explicitly (instead of re-reading them)
 }
 
 //--------------------------------------------------------------------------
@@ -286,63 +296,68 @@ void SAL_CALL OQueryDescriptor::dispose()
 }
 
 //--------------------------------------------------------------------------
-void OQueryDescriptor::storeTo(const Reference< XRegistryKey >& _rxConfigLocation)
+void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
 {
     MutexGuard aGuard(m_aMutex);
-    try
+    if (!_rConfigLocation.isValid() || _rConfigLocation.isReadonly())
     {
-        if (!_rxConfigLocation.is() || _rxConfigLocation->isReadOnly())
-        {
-            OSL_ASSERT("OQueryDescriptor::storeTo : invalid config key (NULL or readonly) !");
-            return;
-        }
-
-        // do the base class props
-        ODataSettings::storeTo(_rxConfigLocation);
-
-        // OCommandBase props
-        OCommandBase::storeTo(_rxConfigLocation);
-
-        // the columns UI information
-        Reference< XRegistryKey > xColumnsKey;
-        if (openKey(_rxConfigLocation, CONFIGKEY_QRYDESCR_COLUMNS, xColumnsKey, sal_True))
-            m_aColumns.storeSettingsTo(xColumnsKey);
-        else
-            OSL_ASSERT("OQueryDescriptor::storeTo : could not generate the key for the columns UI information !");
+        OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo : invalid config key (NULL or readonly) !");
+        return;
     }
-    catch(InvalidRegistryException&)
+
+    // -----------------
+    // the data settings
+    OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_DATASETTINGS_MAIN);
+    if (!aSettingsNode.isValid())
     {
+        OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo: could not open the sub key for the data settings!");
+        return;
     }
+    ODataSettings::storeTo(aSettingsNode);
+
+    // ---------------------
+    // the command base stuff
+    OCommandBase::storeTo(_rConfigLocation);
+
+    // --------------------------
+    // the columns UI information
+    OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
+    if (aColumnsNode.isValid())
+        m_aColumns.storeSettings(aColumnsNode, _rConfigLocation);
+    else
+        OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo : could not open the node for the columns UI information !");
 }
 
 //--------------------------------------------------------------------------
-void OQueryDescriptor::initializeFrom(const Reference< XRegistryKey >& _rxConfigLocation)
+void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation)
 {
     MutexGuard aGuard(m_aMutex);
-    try
+    if (!_rConfigLocation.isValid())
     {
-        if (!_rxConfigLocation.is())
-        {
-            OSL_ASSERT("OQueryDescriptor::initializeFrom : invalid config key (NULL or readonly) !");
-            return;
-        }
-
-        // do the base class props
-        ODataSettings::loadFrom(_rxConfigLocation);
-
-        // OCommandBase props
-        OCommandBase::initializeFrom(_rxConfigLocation);
-
-        // the columns UI information
-        Reference< XRegistryKey > xColumnsKey;
-        openKey(_rxConfigLocation, CONFIGKEY_QRYDESCR_COLUMNS, xColumnsKey, sal_False);
-        m_aColumns.clearColumns();
-        if (xColumnsKey.is())
-            m_aColumns.loadSettings(xColumnsKey, this, sal_False);
+        OSL_ENSHURE(sal_False, "OQueryDescriptor::initializeFrom : invalid config key (NULL or readonly) !");
+        return;
     }
-    catch(InvalidRegistryException&)
+
+    // -----------------
+    // the data settings
+    OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_DATASETTINGS_MAIN);
+    if (!aSettingsNode.isValid())
     {
+        OSL_ENSHURE(sal_False, "OQueryDescriptor::initializeFrom: could not open the sub key for the data settings!");
+        return;
     }
+    ODataSettings::loadFrom(aSettingsNode);
+
+    // ---------------------
+    // the command base stuff
+    OCommandBase::initializeFrom(_rConfigLocation);
+
+    // --------------------------
+    // the columns UI information
+    OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
+    m_aColumns.clearColumns();
+    if (aColumnsNode.isValid())
+        m_aColumns.loadSettings(aColumnsNode, this);
 }
 
 //------------------------------------------------------------------------------
@@ -429,5 +444,9 @@ void SAL_CALL ODescriptorColumn::getFastPropertyValue(Any& _rValue, sal_Int32 _n
             break;
     }
 }
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 

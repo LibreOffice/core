@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+#   last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,15 +74,15 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/connection.obj	\
-        $(SLO)$/datasource.obj	\
-        $(SLO)$/databasecontext.obj	\
-        $(SLO)$/documentcontainer.obj	\
-        $(SLO)$/commandcontainer.obj	\
         $(SLO)$/definitioncontainer.obj	\
         $(SLO)$/commanddefinition.obj	\
+        $(SLO)$/documentcontainer.obj	\
+        $(SLO)$/commandcontainer.obj	\
         $(SLO)$/documentdefinition.obj	\
         $(SLO)$/containerelement.obj	\
+        $(SLO)$/databasecontext.obj	\
+        $(SLO)$/connection.obj	\
+        $(SLO)$/datasource.obj	\
 
 # --- Targets ----------------------------------
 

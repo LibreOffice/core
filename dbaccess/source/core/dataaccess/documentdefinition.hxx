@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -87,6 +87,9 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
+#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
+#include "configurationflushable.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -98,19 +101,24 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
 //==========================================================================
 //= ODocumentDefinition - a database "document" which is simply a link to a real
 //=                   document
 //==========================================================================
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper2<
                     ::com::sun::star::lang::XUnoTunnel,
-                    ::com::sun::star::lang::XServiceInfo,
-                    ::com::sun::star::util::XFlushable
+                    ::com::sun::star::lang::XServiceInfo
                     > ODocumentDefinition_Base;
 
 class ODocumentDefinition
         :public ODocumentDefinition_Base
         ,public OContainerElement
+        ,public OConfigurationFlushable
         ,public OMutexAndBroadcastHelper
         ,public ::cppu::OPropertySetHelper
         ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
@@ -119,7 +127,6 @@ protected:
     ::cppu::OInterfaceContainerHelper   m_aFlushListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContainer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        m_xConfigurationRoot;
 
 // <properties>
     ::rtl::OUString     m_sElementName;
@@ -136,7 +143,7 @@ public:
     ODocumentDefinition(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
             const ::rtl::OUString& _rElementName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigurationRoot
+            const OConfigurationTreeRoot& _rObjectNode
         );
 
 // ::com::sun::star::uno::XInterface
@@ -161,11 +168,6 @@ public:
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::util::XFlushable
-    virtual void SAL_CALL flush(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
@@ -185,11 +187,11 @@ public:
     virtual void        inserted(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
         const ::rtl::OUString& _rElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigRoot);
+        const OConfigurationTreeRoot& _rConfigRoot);
 
     virtual void        removed();
 
-    virtual sal_Bool    isContainerElement() const { return m_xConfigurationRoot.is(); }
+    virtual sal_Bool    isContainerElement() const { return m_aConfigurationNode.isValid(); }
 
 protected:
 // OPropertyArrayUsageHelper
@@ -197,7 +199,14 @@ protected:
 
     /// read the objects properties from the configuration
     void initializeFromConfiguration();
+
+    // OConfigurationFlushable overridables
+    virtual void flush_NoBroadcast_NoCommit();
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 

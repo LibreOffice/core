@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-16 11:45:46 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,15 +138,22 @@ using namespace dbaccess;
 
 
 //==========================================================================
-DBG_NAME(ODatabaseContext);
-//--------------------------------------------------------------------------
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseContext()
 {
-    static OOneInstanceAutoRegistration< ODatabaseContext > aODatabaseContext_AutoRegistration;
+    static OOneInstanceAutoRegistration< dbaccess::ODatabaseContext > aODatabaseContext_AutoRegistration;
 }
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
+//============================================================
+//= ODatabaseContext
 //==========================================================================
+DBG_NAME(ODatabaseContext);
+//--------------------------------------------------------------------------
 Reference< XInterface >
     ODatabaseContext_CreateInstance(const Reference< XMultiServiceFactory >  & xServiceManager)
 {
@@ -161,9 +168,13 @@ ODatabaseContext::ODatabaseContext(const Reference< XMultiServiceFactory >  & xS
 {
     DBG_CTOR(ODatabaseContext,NULL);
 
-    // get the registry
-    implGetRegistry();
-    DBG_ASSERT(m_xRegistry.is(), "ODatabaseContext::ODatabaseContext : could not get the registry !");
+    // get our the configuration root node
+    m_aRootNode = OConfigurationTreeRoot::createWithServiceFactory(m_xServiceManager,
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/DataSources")), -1, OConfigurationTreeRoot::CM_PREFER_UPDATABLE);
+
+    DBG_ASSERT(m_aRootNode.isSetNode(), "ODatabaseContext::ODatabaseContext: our node should be a set!");
+    // enable auto name encoding
+    m_aRootNode.setEscape(m_aRootNode.isSetNode());
 }
 
 //--------------------------------------------------------------------------
@@ -273,231 +284,55 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
         m_aDatabaseObjects.erase(aExistent);
     }
 
-    Reference< XRegistryKey > xObjectBase = getDatabaseObjectKey(_rName, sal_False);
-        // will throw a NoSuchElementException if no object with the given name exists
+    OConfigurationNode aObjectBase = getObjectNode(_rName, sal_False);
+    if (!aObjectBase.isValid())
+        throw NoSuchElementException((::rtl::OUString::createFromAscii("There is no object named ") += _rName) += ::rtl::OUString::createFromAscii("."), Reference<XNamingService>(this));
 
-    Reference< XInterface > xNewObject = *(new ODatabaseSource(*this, xObjectBase, _rName, m_xServiceManager));
+    Reference< XInterface > xNewObject = *(new ODatabaseSource(*this, aObjectBase, _rName, m_xServiceManager));
     m_aDatabaseObjects[_rName] = WeakReferenceHelper(xNewObject);
 
     return xNewObject;
 }
 
 //--------------------------------------------------------------------------
-void ODatabaseContext::implGetRegistry()
+OConfigurationNode ODatabaseContext::getObjectNode(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw()
 {
-    if (m_xRegistry.is())
-        return;
+    DBG_ASSERT(m_aRootNode.isValid(), "ODatabaseContext::getObjectNode : don't call without a configuration node!");
+    if (!m_aRootNode.isValid())
+        return OConfigurationNode();
 
-    sal_Bool bSuccess = sal_False;
-    try
-    {
-        m_xRegistry = Reference< XSimpleRegistry > (
-                m_xServiceManager->createInstance(rtl::OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")), UNO_QUERY);
+    // if the node exists, just return it
+    if (m_aRootNode.hasByName(_rTitle))
+        return m_aRootNode.openNode(_rTitle);
 
-        if (m_xRegistry.is())
-        {
-            // calc the registry file name
-            String sRegistryFile;
-            String sUserDirFallback;
-            Reference< ::com::sun::star::frame::XConfigManager > xSofficeIni(
-                m_xServiceManager->createInstance(rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY);
-            Reference< XSimpleRegistry >  xIniRegistry(xSofficeIni, UNO_QUERY);
+    // if we're not allowed to create it -> outta here
+    if (!_bCreate)
+        return OConfigurationNode();
 
-            try
-            {
-                if (xIniRegistry.is())
-                {
-                    Reference< XRegistryKey >  xIniRoot = xIniRegistry->getRootKey();
-                    Reference< XRegistryKey >  xDirectories = xIniRoot.is() ? xIniRoot->openKey(::rtl::OUString::createFromAscii("Directories")) : Reference< XRegistryKey > ();
-                    if (xDirectories.is())
-                    {
-                        Reference< XRegistryKey >  xUserConfigKey = xDirectories->openKey(::rtl::OUString::createFromAscii("UserConfig-Path"));
-                        if (xUserConfigKey.is())
-                        {
-                            rtl::OUString sValue = xUserConfigKey->getStringValue();
-                            sRegistryFile = (const sal_Unicode*)xSofficeIni->substituteVariables(sValue);
-                            sRegistryFile += DirEntry::GetAccessDelimiter();
-                            sRegistryFile.AppendAscii(REGISTRYFILE);
-                            sUserDirFallback = sRegistryFile;
-                        }
-                        if (sRegistryFile.Len() && !DirEntry(sRegistryFile).Exists())
-                        {
-                            sRegistryFile.Erase();  // in case of exceptions ...
-                            // check the global config dir
-                            Reference< XRegistryKey >  xGlobalConfigKey = xDirectories->openKey(::rtl::OUString::createFromAscii("Config-Dir"));
-                            if (xGlobalConfigKey.is())
-                            {
-                                rtl::OUString sValue = xGlobalConfigKey->getStringValue();
-                                sRegistryFile = (const sal_Unicode*)xSofficeIni->substituteVariables(sValue);
-                                sRegistryFile += DirEntry::GetAccessDelimiter();
-                                sRegistryFile.AppendAscii(REGISTRYFILE);
-                            }
-                        }
-                        if (sRegistryFile.Len() && !DirEntry(sRegistryFile).Exists())
-                            sRegistryFile.Erase();
-                    }
-                }
-            }
-            catch (InvalidRegistryException)
-            {
-                sRegistryFile.Erase();
-            }
+    // create the node
+    DBG_ASSERT(m_aRootNode.isSetNode(), "ODatabaseContext::getObjectNode: the top-level context node is no set node!");
 
-
-            // have we to create a new registry within the user dir ?
-            sal_Bool bCreateIt = sal_False;
-            if (!sRegistryFile.Len())
-            {
-                sRegistryFile = sUserDirFallback;
-                bCreateIt = sal_True;
-            }
-
-            if (sRegistryFile.Len())
-            {
-                try
-                {
-                    m_xRegistry->open(UniString(sRegistryFile), sal_False, bCreateIt);
-                    m_xRoot = m_xRegistry->getRootKey();
-                    bSuccess = m_xRoot.is();
-                }
-                catch (InvalidRegistryException)
-                {
-                }
-            }
-        }
-    }
-    catch (Exception&)
-    {
-        // something went heavyly wrong (e.g. the instantiation of the SpecialConfigManager)
-        bSuccess = sal_False;
-    }
-
-    if (!bSuccess)
-    {
-        if (m_xRegistry.is())
-        {
-            try { m_xRegistry->close(); } catch (InvalidRegistryException) {  };
-        }
-        m_xRegistry = NULL;
-    }
-}
-
-//--------------------------------------------------------------------------
-Reference< XRegistryKey > ODatabaseContext::getObjectDescriptionKey(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw()
-{
-    DBG_ASSERT(m_xRoot.is(), "ODatabaseContext::getDatabaseObjectKey : don't call without a registry root !");
-
-    Reference< XRegistryKey > xDescriptionKey;
-    if (m_xRoot.is())
-    {
-        try
-        {
-            ORegistryLevelEnumeration aEnum(m_xRoot);
-            ::rtl::OUString sCurrentTitle;
-            sal_Bool bFoundSomething = sal_False;
-            while (aEnum.hasMoreElements())
-            {
-                xDescriptionKey = aEnum.nextElement();
-                if (xDescriptionKey.is())
-                {
-                    try
-                    {
-                        Reference< XRegistryKey > xTitleKey = xDescriptionKey->openKey(CONFIGKEY_CONTAINERLEMENT_TITLE);
-                        sCurrentTitle = xTitleKey->getStringValue();
-                        if (sCurrentTitle.equals(_rTitle))
-                            return xDescriptionKey;
-                    }
-                    catch(Exception&)
-                    {
-                    }
-                }
-            }
-            xDescriptionKey.clear();
-
-            // nothing found
-            if (_bCreate)
-            {
-                ::rtl::OUString sNewKeyName = getUniqueKeyName(m_xRoot, ::rtl::OUString::createFromAscii("obj_"));
-                Reference< XRegistryKey > xNewKey = m_xRoot->createKey(sNewKeyName);
-                if (xNewKey.is())
-                {
-                    try
-                    {
-                        // one sub key for the title
-                        Reference< XRegistryKey > xTitleKey = xNewKey->createKey(CONFIGKEY_CONTAINERLEMENT_TITLE);
-                        xTitleKey->setStringValue(_rTitle);
-                        // one subkey for the object information
-                        xNewKey->createKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-                        // no exceptions 'til here -> we can return the new key
-                        xDescriptionKey = xNewKey;
-                    }
-                    catch(Exception&)
-                    {
-                        // we were not successfull in creating a new tree -> delete the incomplete parts
-                        try { m_xRoot->deleteKey(sNewKeyName); } catch(Exception&) { }
-                    }
-                }
-            }
-        }
-        catch (InvalidRegistryException)
-        {
-        }
-        catch (InvalidValueException)
-        {
-            DBG_ERROR("ODatabaseContext::getObjectDescriptionKey : InvalidValueException ... how this ?");
-                // this would mean the key hasn't a string value
-        }
-    }
-    return xDescriptionKey;
-}
-
-//--------------------------------------------------------------------------
-Reference< XRegistryKey > ODatabaseContext::getDatabaseObjectKey(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw (NoSuchElementException)
-{
-    Reference< XRegistryKey > xDescriptionKey = getObjectDescriptionKey(_rTitle, _bCreate);
-    if (!xDescriptionKey.is())
-        if (!_bCreate)
-            throw NoSuchElementException();
-        else
-            // the creation of the essential root key failed
-            return xDescriptionKey;
-
-    Reference< XRegistryKey > xObjectKey;
-    try
-    {
-        xObjectKey = xDescriptionKey->openKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-        DBG_ASSERT(xObjectKey.is() || !_bCreate, "ODatabaseContext::getDatabaseObjectKey : inconsitent state : there was a name sub key, but no object sub key !");
-
-        if (!xObjectKey.is() && _bCreate)
-        {
-            xObjectKey = xDescriptionKey->createKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-        }
-    }
-    catch(Exception&)
-    {
-    }
-
-    if (!xObjectKey.is())
-        throw NoSuchElementException();
-
-    return xObjectKey;
+    // the configuration does not support different types of operations in one transaction, so we must commit
+    // before and after we create the new node, to ensure, that every transaction we ever do contains only
+    // one type of operation (insert, remove, update)
+    OSL_VERIFY(m_aRootNode.commit());
+    OConfigurationNode aReturn = m_aRootNode.createNode(_rTitle);
+    OSL_VERIFY(m_aRootNode.commit());
+    return aReturn;
 }
 
 //------------------------------------------------------------------------------
 void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Reference< XInterface > & _rxObject) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_xRoot.is())
-        throw InvalidRegistryException();
-    if (DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    // solaris compiler needs a construct like this and can work with comphelper::getImplementation ...
+    // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
     Reference< XUnoTunnel > xTunnel(_rxObject, UNO_QUERY);
     ODatabaseSource* pObjectImpl = NULL;
     if (xTunnel.is())
         pObjectImpl = reinterpret_cast<ODatabaseSource*> (xTunnel->getSomething(ODatabaseSource::getUnoTunnelImplementationId()));
-
     if (!pObjectImpl)
         throw IllegalArgumentException();
 
@@ -508,51 +343,29 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     if (!_rName.getLength())
         throw IllegalArgumentException();
 
-    Reference< XRegistryKey > xObjectBase;
-    try
-    {
-        xObjectBase = getDatabaseObjectKey(_rName, sal_False);
-        // if we are here there already is an object registered under the given name
+    if (m_aRootNode.hasByName(_rName))
         throw ElementExistException();
-    }
-    catch(NoSuchElementException&)
-    {
-    }
+
 
     sal_Bool bSuccess = sal_False;
-    try
-    {
-        Reference< XRegistryKey > xDescriptionKey = getObjectDescriptionKey(_rName, sal_True);
-        if (xDescriptionKey.is())
-        {
-            xObjectBase = xDescriptionKey->openKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-                // getObjectDescriptionKey is expected to create this sub key when creating the new description key !
-
-            pObjectImpl->inserted(*this, _rName, xObjectBase);
-            pObjectImpl->flush();
-
-            bSuccess = sal_True;
-        }
-    }
-    catch(Exception&)
-    {
-    }
-
-    if (!bSuccess)
+    OConfigurationNode aObjectNode = getObjectNode(_rName, sal_True);
+    if (!aObjectNode.isValid())
+        // TODO: a better error message
         throw InvalidRegistryException();
+
+    pObjectImpl->inserted(*this, _rName, aObjectNode.cloneAsRoot());
+    pObjectImpl->flush();
 }
 
 //------------------------------------------------------------------------------
 void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_xRoot.is())
-        throw InvalidRegistryException();
-    if (DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    Reference< XRegistryKey > xObjectKey = getObjectDescriptionKey(_rName, sal_False);
-    if (!xObjectKey.is())
+    OConfigurationNode aObjectNode = getObjectNode(_rName, sal_False);
+    if (!aObjectNode.isValid())
         throw NoSuchElementException();
 
     ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
@@ -565,7 +378,7 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
             if (xComp.is())
                 xComp->dispose();
 
-            // solaris compiler needs a construct like this and can work with comphelper::getImplementation ...
+            // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
             Reference< XUnoTunnel > xTunnel(xExistent, UNO_QUERY);
             ODatabaseSource* pObjectImpl = NULL;
             if (xTunnel.is())
@@ -577,15 +390,13 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
         m_aDatabaseObjects.erase(aExistent);
     }
 
-    try
-    {
-        m_xRoot->deleteKey(getShortKeyName(xObjectKey));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("ODatabaseContext::revokeObject : could not delete the registry key !");
-        throw InvalidRegistryException();
-    }
+    // the configuration does not support different types of operations in one transaction, so we must commit
+    // before and after we create the new node, to ensure, that every transaction we ever do contains only
+    // one type of operation (insert, remove, update)
+    OSL_VERIFY(m_aRootNode.commit());
+    if (!m_aRootNode.removeNode(_rName))
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
+    OSL_VERIFY(m_aRootNode.commit());
 }
 
 // ::com::sun::star::container::XElementAccess
@@ -598,36 +409,11 @@ Type ODatabaseContext::getElementType(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException )
 {
-    MutexGuard aGuard(const_cast<ODatabaseContext*>(this)->m_aMutex);
-    if (!m_xRoot.is())
-        throw InvalidRegistryException();
-    if (DatabaseAccessContext_Base::rBHelper.bDisposed)
+    MutexGuard aGuard(m_aMutex);
+    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    ORegistryLevelEnumeration aEnum(m_xRoot);
-    Reference< XRegistryKey > xLoop, xTitleKey, xObjectKey;
-    while (aEnum.hasMoreElements())
-    {
-        try
-        {
-            xLoop = aEnum.nextElement();
-            if (xLoop.is())
-            {
-                xTitleKey = xLoop->openKey(CONFIGKEY_CONTAINERLEMENT_TITLE);
-                xObjectKey = xLoop->openKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
-                if (xTitleKey.is() && xObjectKey.is())
-                    return sal_True;
-                else
-                    DBG_ERROR("ODatabaseContext::hasElements : me thinks this is inconsistent !");
-                    //  we never should have created a key which has no title or object sub key !
-            }
-        }
-        catch (InvalidRegistryException)
-        {
-        }
-
-    }
-    return sal_False;
+    return 0 != getElementNames().getLength();
 }
 
 // ::com::sun::star::container::XEnumerationAccess
@@ -672,65 +458,23 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
 Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_xRoot.is())
-        throw InvalidRegistryException();
-    if (DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    Sequence< ::rtl::OUString > aNames;
-    try
-    {
-        Sequence< Reference< XRegistryKey > > aKeys = m_xRoot->openKeys();
-        const Reference< XRegistryKey >* pKeys = aKeys.getConstArray();
-        aNames.realloc(aKeys.getLength());
-        ::rtl::OUString* pNames = aNames.getArray();
-
-        Reference< XRegistryKey > xTitleKey;
-
-        for (sal_Int32 i=0; i<aKeys.getLength(); ++i, ++pKeys)
-        {
-            if (pKeys->is())
-            {
-                try
-                {
-                    xTitleKey = (*pKeys)->openKey(CONFIGKEY_CONTAINERLEMENT_TITLE);
-                    if (xTitleKey.is())
-                    {
-                        ::rtl::OUString sName = xTitleKey->getStringValue();
-                        *pNames = sName;
-                        ++pNames;
-                    }
-                }
-                catch(Exception&)
-                {
-                }
-            }
-        }
-
-        aNames.realloc(pNames - aNames.getArray());
-    }
-    catch(InvalidRegistryException&)
-    {
-    }
-    catch(InvalidValueException&)
-    {
-    }
-
-    return aNames;
+    return m_aRootNode.getNodeNames();
 }
 
 //------------------------------------------------------------------------------
 sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    try
-    {
-        Reference< XRegistryKey > xObjectKey = getDatabaseObjectKey(_rName, sal_False);
-        return xObjectKey.is();
-    }
-    catch(NoSuchElementException&)
-    {
-    }
-    return sal_False;
+    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
+        throw DisposedException();
+
+    return m_aRootNode.hasByName(_rName);
 }
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
