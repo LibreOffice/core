@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-29 14:25:12 $
+ *  last change: $Author: ka $ $Date: 2002-04-04 16:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ void OutlinerInfo::SetTextObj( SdDrawDocument* pDoc, SdrRectObj* pObj, OutputDev
         mbVertical = rOutliner.IsVertical();
         pObj->TakeTextRect( rOutliner, aParaBound, TRUE );
 
-        if(IsVertical())
+        if( IsVertical() )
             aTextOffset = aParaBound.TopRight();
         else
             aTextOffset = aParaBound.TopLeft();
@@ -118,8 +118,28 @@ void OutlinerInfo::SetTextObj( SdDrawDocument* pDoc, SdrRectObj* pObj, OutputDev
         rOutliner.StripPortions();
         rOutliner.SetDrawPortionHdl( Link() );
 
-        // letzter Absatz
-        pParagraphs[ nCurPara ].aRect.Bottom() = aParaBound.Bottom();
+        if( 1 == nParaCount )
+            pParagraphs[ 0 ].aRect = aParaBound;
+        else if( IsVertical() )
+        {
+            pParagraphs[ 0 ].aRect.Right() = aParaBound.Right();
+
+            for( USHORT i = 0; i < ( nParaCount - 1 ); i++ )
+                if( pParagraphs[ i ].aRect.Left() > pParagraphs[ i + 1 ].aRect.Right() )
+                    pParagraphs[ i ].aRect.Left() = pParagraphs[ i + 1 ].aRect.Right();
+
+            pParagraphs[ nParaCount - 1 ].aRect.Left() = aParaBound.Left();
+        }
+        else
+        {
+            pParagraphs[ 0 ].aRect.Top() = aParaBound.Top();
+
+            for( USHORT i = 0; i < ( nParaCount - 1 ); i++ )
+                if( pParagraphs[ i ].aRect.Bottom() < pParagraphs[ i + 1 ].aRect.Top() )
+                    pParagraphs[ i ].aRect.Bottom() = pParagraphs[ i + 1 ].aRect.Top();
+
+            pParagraphs[ nParaCount - 1 ].aRect.Bottom() = aParaBound.Bottom();
+        }
     }
     else
     {
@@ -173,110 +193,56 @@ IMPL_LINK( OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pDInfo )
 
     pOut->SetFont( (const Font&) pDInfo->rFont );
 
-    if(IsVertical())
+    if( IsVertical() )
     {
-        // get upper left position
         aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X() - pOut->GetFontMetric().GetDescent();
         aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y();
 
-        if(bInit || pDInfo->nPara != nCurPara)
-        {
-            // new paragraph started. Init new rectangle.
-            if(bInit)
-                bInit = FALSE;
-            else
-                nCurPara = pDInfo->nPara;
+        const Point     aTopLeft( aStart.X(), aParaBound.Top() );
+        const Point     aBottomRight( aStart.X() + pOut->GetFontMetric().GetLineHeight(), aParaBound.Bottom() );
+        const Rectangle aCurRect( aTopLeft, aBottomRight );
 
-            Rectangle aNewRect(
-                aStart.X(), aParaBound.Top(),
-                aStart.X() + pOut->GetFontMetric().GetLineHeight(), aParaBound.Bottom());
-            pParagraphs[nCurPara].aRect = aNewRect;
-        }
+        if( pDInfo->nPara != nCurPara )
+            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = aCurRect;
         else
-        {
-            // new text portion in current paragraph. Calc min and max
-            // positions and compare to current rectangle.
-            sal_Int32 nMin = aStart.X();
-            sal_Int32 nMax = aStart.X() + pOut->GetFontMetric().GetLineHeight();
-
-            if(nMin < pParagraphs[nCurPara].aRect.Left())
-            {
-                // correct left edge of current para
-                pParagraphs[nCurPara].aRect.Left() = nMin;
-            }
-
-            if(nMax > pParagraphs[nCurPara].aRect.Right())
-            {
-                // correct right edge of current para
-                pParagraphs[nCurPara].aRect.Right() = nMax;
-            }
-        }
-
-        // get character rectangles
-        if(nCharCount && (0xFFFF != pDInfo->nIndex))
-        {
-            // add this portions char count
-            pParagraphs[nCurPara].nCharCount += nCharCount;
-
-            for(sal_uInt16 nCharIndex(0); nCharIndex < nCharCount; nCharIndex++)
-            {
-                Size aCharSize(pDInfo->rFont.GetPhysTxtSize(pOut, pDInfo->rText, nCharIndex, 1));
-                Size aMirroredCharSize(aCharSize.Height(), aCharSize.Width());
-                const Rectangle aRect(aStart, aMirroredCharSize);
-                aCharacterList.Insert(new OutlinerCharacter(
-                    aRect, pDInfo->nPara, pDInfo->rFont.GetColor(),
-                    pDInfo->rText.GetChar( nCharIndex ) ), LIST_APPEND);
-
-                if(nCharIndex < nCharCount-1)
-                    aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() + (pDInfo->pDXArray)[nCharIndex];
-            }
-        }
+            pParagraphs[ nCurPara ].aRect.Union( aCurRect );
     }
     else
     {
         aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X();
         aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() - pOut->GetFontMetric().GetAscent();
 
-        if( bInit )
-        {
-            pParagraphs[ 0 ].aRect = aParaBound;
-            bInit = FALSE;
-        }
-        else if( pDInfo->nPara != nCurPara )
-        {
-            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = Rectangle( aStart.X(), aStart.Y(), aParaBound.Right(), aParaBound.Bottom() );
+        const Point     aTopLeft( aParaBound.Left(), aStart.Y() );
+        const Point     aBottomRight( aParaBound.Right(), aStart.Y() + pOut->GetFontMetric().GetLineHeight() );
+        const Rectangle aCurRect( aTopLeft, aBottomRight );
 
-            Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopLeft() ) );
-            Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopLeft() ) );
-            Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
-            pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
-        }
-        else if( aStart.Y() < pParagraphs[ nCurPara ].aRect.Top() )
-        {
-            pParagraphs[ nCurPara ].aRect.Top() = aStart.Y();
+        if( pDInfo->nPara != nCurPara )
+            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = aCurRect;
+        else
+            pParagraphs[ nCurPara ].aRect.Union( aCurRect );
+    }
 
-            if( nCurPara )
+    if( nCharCount && ( pDInfo->nIndex != 0xFFFF ) )
+    {
+        pParagraphs[ nCurPara ].nCharCount += nCharCount;
+
+        for( USHORT nCharIndex = 0; nCharIndex < nCharCount; nCharIndex++ )
+        {
+            Size aCharSize( pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ) );
+
+            if( IsVertical() )
+                ::std::swap( aCharSize.Width(), aCharSize.Height() );
+
+            const Rectangle aRect( aStart, aCharSize );
+            aCharacterList.Insert( new OutlinerCharacter( aRect, pDInfo->nPara,
+                                                          pDInfo->rFont.GetColor(),
+                                                          pDInfo->rText.GetChar( nCharIndex ) ), LIST_APPEND );
+
+            if( nCharIndex < nCharCount - 1 )
             {
-                Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopLeft() ) );
-                Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopLeft() ) );
-                Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
-                pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
-            }
-        }
-
-        if( nCharCount && ( pDInfo->nIndex != 0xFFFF ) )
-        {
-            pParagraphs[ nCurPara ].nCharCount += nCharCount;
-
-            for( USHORT nCharIndex = 0; nCharIndex < nCharCount; nCharIndex++ )
-            {
-                const Rectangle aRect( aStart, pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ) );
-
-                aCharacterList.Insert( new OutlinerCharacter( aRect, pDInfo->nPara,
-                                                              pDInfo->rFont.GetColor(),
-                                                              pDInfo->rText.GetChar( nCharIndex ) ), LIST_APPEND );
-
-                if( nCharIndex < nCharCount - 1 )
+                if( IsVertical() )
+                    aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() + ( pDInfo->pDXArray )[ nCharIndex ];
+                else
                     aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X() + ( pDInfo->pDXArray )[ nCharIndex ];
             }
         }
