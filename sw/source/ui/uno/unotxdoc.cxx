@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 14:39:53 $
+ *  last change: $Author: os $ $Date: 2001-03-15 13:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3011,7 +3011,9 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                     xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
                 xRet = xDrawDefaults;
             break;
+#ifdef DBG_UTIL
             default: DBG_ERROR("which table?")
+#endif
         }
     }
     return xRet;
