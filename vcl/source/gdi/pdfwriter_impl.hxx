@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-27 10:00:34 $
+ *  last change: $Author: pl $ $Date: 2002-10-08 19:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ private:
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
-    void drawLayout( const SalLayout& rLayout, const String& rText );
+    void drawLayout( const SalLayout& rLayout, const String& rText, bool bTextLines );
 
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
@@ -547,11 +547,12 @@ public:
     { m_aGraphicsStack.front().m_nAntiAlias = nAntiAlias; }
 
     /* actual drawing functions */
-    void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
-    void drawTextArray( const Point& rPos, const String& rText, const long* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
+    void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
+    void drawTextArray( const Point& rPos, const String& rText, const long* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
     void drawStretchText( const Point& rPos, ULONG nWidth, const String& rText,
-                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
-    void drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle );
+                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                          bool bTextLines = true  );
+    void drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle, bool bTextLines = true  );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, bool bUnderlineAbove );
 
     void drawLine( const Point& rStart, const Point& rStop );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-08 11:24:23 $
+ *  last change: $Author: pl $ $Date: 2002-10-08 19:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ using namespace rtl;
 #else
 #define MARK( x )
 #endif
+
+// defined in outdev3.cxx
+BOOL ImplIsUnderlineAbove( const Font& );
 
 static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
@@ -2238,7 +2241,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
     }
 }
 
-void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
+void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText, bool bTextLines )
 {
     OStringBuffer aLine( 512 );
 
@@ -2435,9 +2438,63 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         aLine.append( "Q\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
+
+    // draw eventual textlines
+    FontStrikeout eStrikeout = m_aCurrentPDFState.m_aFont.GetStrikeout();
+    FontUnderline eUnderline = m_aCurrentPDFState.m_aFont.GetUnderline();
+    if( bTextLines &&
+        (
+         ( eUnderline != UNDERLINE_NONE && eUnderline != UNDERLINE_DONTKNOW ) ||
+         ( eStrikeout != STRIKEOUT_NONE && eStrikeout != STRIKEOUT_DONTKNOW )
+         )
+        )
+    {
+        BOOL bUnderlineAbove = ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
+        if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
+        {
+            Point aPos, aStartPt;
+            long nWidth = 0, nAdvance=0;
+            for( int nStart = 0;;)
+            {
+                long nGlyphIndex;
+                if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+                    break;
+
+                if( !rLayout.IsSpacingGlyph( nGlyphIndex ) )
+                {
+                    if( !nWidth )
+                        aStartPt = aPos;
+
+                    nWidth += nAdvance;
+                }
+                else if( nWidth > 0 )
+                {
+                    drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
+                                  m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
+                                  eStrikeout, eUnderline, bUnderlineAbove );
+                    nWidth = 0;
+                }
+            }
+
+            if( nWidth > 0 )
+            {
+                drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
+                              m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
+                              eStrikeout, eUnderline, bUnderlineAbove );
+            }
+        }
+        else
+        {
+            Point aStartPt = rLayout.GetDrawPosition();
+            int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
+            drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
+                          m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
+                          eStrikeout, eUnderline, bUnderlineAbove );
+        }
+    }
 }
 
-void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen nIndex, xub_StrLen nLen )
+void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawText" );
 
@@ -2448,12 +2505,12 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText );
+        drawLayout( *pLayout, rText, bTextLines );
         pLayout->Release();
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const long* pDXArray, xub_StrLen nIndex, xub_StrLen nLen )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const long* pDXArray, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawText with array" );
 
@@ -2464,12 +2521,12 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText );
+        drawLayout( *pLayout, rText, bTextLines );
         pLayout->Release();
     }
 }
 
-void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen )
+void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawStretchText" );
 
@@ -2480,12 +2537,12 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const Stri
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, nWidth );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText );
+        drawLayout( *pLayout, rText, bTextLines );
         pLayout->Release();
     }
 }
 
-void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle )
+void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle, bool bTextLines )
 {
     long        nWidth          = rRect.GetWidth();
     long        nHeight         = rRect.GetHeight();
@@ -2579,7 +2636,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
                 xub_StrLen nIndex   = pLineInfo->GetIndex();
                 xub_StrLen nLineLen = pLineInfo->GetLen();
-                drawText( aPos, aStr, nIndex, nLineLen );
+                drawText( aPos, aStr, nIndex, nLineLen, bTextLines );
                 // mnemonics should not appear in documents,
                 // if the need arises, put them in here
                 aPos.Y() += nTextHeight;
@@ -2589,7 +2646,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
 
             // output last line left adjusted since it was shortened
             if ( aLastLine.Len() )
-                drawText( aPos, aLastLine, 0, STRING_LEN );
+                drawText( aPos, aLastLine, 0, STRING_LEN, bTextLines );
         }
     }
     else
@@ -2628,7 +2685,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
         // mnemonics should be inserted here if the need arises
 
         // draw the actual text
-        drawText( aPos, aStr, 0, STRING_LEN );
+        drawText( aPos, aStr, 0, STRING_LEN, bTextLines );
     }
 
     // reset clip region to original value
@@ -2768,7 +2825,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
         // do not get broader than nWidth
         while( m_pReferenceDevice->GetTextWidth( aStrikeout ) > nWidth )
             aStrikeout.Erase( 0, 1 );
-        drawText( rPos, aStrikeout );
+        drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
 
         switch( eUnderline )
         {
@@ -2783,7 +2840,11 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     }
 
     Point aPos( rPos );
-    aPos += Point( 0, HCONV( pFontEntry->maMetric.mnAscent ) );
+    TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
+    if( eAlign == ALIGN_TOP )
+        aPos.Y() += HCONV( pFontEntry->maMetric.mnAscent );
+    else if( eAlign == ALIGN_BOTTOM )
+        aPos.Y() -= HCONV( pFontEntry->maMetric.mnDescent );
 
     OStringBuffer aLine( 512 );
     // save GS
@@ -2834,12 +2895,14 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
              (nLineHeight > 3) )
             nLineHeight = 3;
 
-        long nLineWidth = 1;
+        long nLineWidth = nLineHeight;
 
         if ( eUnderline == UNDERLINE_BOLDWAVE )
             nLineWidth *= 2;
 
-        long nLineWidthHeight = nLineWidth;
+        m_aPages.back().appendMappedLength( nLineWidth, aLine );
+        aLine.append( " w " );
+
         if ( eUnderline == UNDERLINE_DOUBLEWAVE )
         {
             long nOrgLineHeight = nLineHeight;
@@ -2852,25 +2915,23 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
                     nLineHeight = 1;
             }
             long nLineDY = nOrgLineHeight-(nLineHeight*2);
-            if ( nLineDY < nLineWidthHeight )
-                nLineDY = nLineWidthHeight;
+            if ( nLineDY < nLineWidth )
+                nLineDY = nLineWidth;
             long nLineDY2 = nLineDY/2;
             if ( !nLineDY2 )
                 nLineDY2 = 1;
 
-            nLinePos -= nLineWidthHeight-nLineDY2;
+            nLinePos -= nLineWidth-nLineDY2;
 
-            aLine.append( nLineWidth );
-            aLine.append( " w " );
-            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
+            m_aPages.back().appendWaveLine( nWidth, -nLinePos, 2*nLineHeight, aLine );
 
-            nLinePos += nLineWidthHeight+nLineDY;
-            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
+            nLinePos += nLineWidth+nLineDY;
+            m_aPages.back().appendWaveLine( nWidth, -nLinePos, 2*nLineHeight, aLine );
         }
         else
         {
-            nLinePos -= nLineWidthHeight/2;
-            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight/2, aLine );
+            nLinePos -= nLineWidth/2;
+            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
         }
 
         if ( (eStrikeout == STRIKEOUT_NONE) ||
@@ -3030,11 +3091,11 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
             if ( eUnderline == UNDERLINE_DOUBLE )
             {
                 aLine.append( "0 " );
-                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
                 aLine.append( " m " );
                 m_aPages.back().appendMappedLength( nWidth, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
                 aLine.append( " l S\r\n" );
             }
         }
@@ -3070,6 +3131,8 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
 
         if ( nLineHeight )
         {
+            m_aPages.back().appendMappedLength( nLineHeight, aLine, true );
+            aLine.append( " w " );
             appendStrokingColor( aStrikeoutColor, aLine );
             aLine.append( "\r\n" );
 
@@ -3084,11 +3147,11 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
             if ( eStrikeout == STRIKEOUT_DOUBLE )
             {
                 aLine.append( "0 " );
-                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
                 aLine.append( " m " );
                 m_aPages.back().appendMappedLength( nWidth, aLine, true );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
                 aLine.append( " l S\r\n" );
 
             }

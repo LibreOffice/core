@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-07 11:32:25 $
+ *  last change: $Author: pl $ $Date: 2002-10-08 19:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2617,7 +2617,7 @@ static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplIsUnderlineAbove( const Font& rFont )
+BOOL ImplIsUnderlineAbove( const Font& rFont )
 {
     if ( !rFont.IsVertical() )
         return FALSE;
