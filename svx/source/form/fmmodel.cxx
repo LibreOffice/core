@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:50:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ struct FmFormModelImplData
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
             :SdrModel(pPool, pPers, LOADREFCOUNTS)
             ,pObjShell(0)
-            ,bStreamingOldVersion(sal_False)
+//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
@@ -135,7 +135,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
             :SdrModel(rPath, pPool, pPers)
             ,pObjShell(0)
-            ,bStreamingOldVersion(sal_False)
+//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
@@ -157,7 +157,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
                          )
             :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,pObjShell(0)
-            ,bStreamingOldVersion(sal_False)
+//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
 {
 #ifndef SVX_LIGHT
@@ -176,7 +176,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
                          FASTBOOL bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,pObjShell(0)
-            ,bStreamingOldVersion(sal_False)
+//BFS01         ,bStreamingOldVersion(sal_False)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
@@ -257,32 +257,32 @@ SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
 |*
 \************************************************************************/
 
-void FmFormModel::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-
-    if( rOut.GetVersion() < SOFFICE_FILEFORMAT_50 )
-        ((FmFormModel*)this)->bStreamingOldVersion = sal_True;
-
-    SdrModel::WriteData( rOut );
-
-    //////////////////////////////////////////////////////////////////////
-    // Speichern der Option OpenInDesignMode
-    if (!bStreamingOldVersion)
-    {
-        SdrDownCompat aModelFormatCompat(rOut,STREAM_WRITE);
-
-        sal_uInt8 nTemp = m_bOpenInDesignMode;
-        rOut << nTemp;
-
-        nTemp = m_bAutoControlFocus;
-        rOut << nTemp;
-    }
-
-    ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
-
-#endif
-}
+//BFS01void FmFormModel::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01
+//BFS01 if( rOut.GetVersion() < SOFFICE_FILEFORMAT_50 )
+//BFS01     ((FmFormModel*)this)->bStreamingOldVersion = sal_True;
+//BFS01
+//BFS01 SdrModel::WriteData( rOut );
+//BFS01
+//BFS01 //////////////////////////////////////////////////////////////////////
+//BFS01 // Speichern der Option OpenInDesignMode
+//BFS01 if (!bStreamingOldVersion)
+//BFS01 {
+//BFS01     SdrDownCompat aModelFormatCompat(rOut,STREAM_WRITE);
+//BFS01
+//BFS01     sal_uInt8 nTemp = m_bOpenInDesignMode;
+//BFS01     rOut << nTemp;
+//BFS01
+//BFS01     nTemp = m_bAutoControlFocus;
+//BFS01     rOut << nTemp;
+//BFS01 }
+//BFS01
+//BFS01 ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
+//BFS01
+//BFS01#endif
+//BFS01}
 
 
 /*************************************************************************
@@ -290,32 +290,32 @@ void FmFormModel::WriteData(SvStream& rOut) const
 |* ReadData
 |*
 \************************************************************************/
-void FmFormModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-{
-    if( rIn.GetVersion() < SOFFICE_FILEFORMAT_50 )
-        ((FmFormModel*)this)->bStreamingOldVersion = sal_True;
-
-    SdrModel::ReadData( rHead, rIn );
-
-    //////////////////////////////////////////////////////////////////////
-    // Lesen der Option OpenInDesignMode
-    if (!bStreamingOldVersion)
-    {
-        SdrDownCompat aCompat(rIn,STREAM_READ);
-        sal_uInt8 nTemp = 0;
-        rIn >> nTemp;
-
-        implSetOpenInDesignMode( nTemp ? sal_True : sal_False, sal_True );
-
-        if (aCompat.GetBytesLeft())
-        {   // it is a version which already wrote the AutoControlFocus flag
-            rIn >> nTemp;
-            m_bAutoControlFocus = nTemp ? sal_True : sal_False;
-        }
-    }
-
-    ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
-}
+//BFS01void FmFormModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if( rIn.GetVersion() < SOFFICE_FILEFORMAT_50 )
+//BFS01     ((FmFormModel*)this)->bStreamingOldVersion = sal_True;
+//BFS01
+//BFS01 SdrModel::ReadData( rHead, rIn );
+//BFS01
+//BFS01 //////////////////////////////////////////////////////////////////////
+//BFS01 // Lesen der Option OpenInDesignMode
+//BFS01 if (!bStreamingOldVersion)
+//BFS01 {
+//BFS01     SdrDownCompat aCompat(rIn,STREAM_READ);
+//BFS01     sal_uInt8 nTemp = 0;
+//BFS01     rIn >> nTemp;
+//BFS01
+//BFS01     implSetOpenInDesignMode( nTemp ? sal_True : sal_False, sal_True );
+//BFS01
+//BFS01     if (aCompat.GetBytesLeft())
+//BFS01     {   // it is a version which already wrote the AutoControlFocus flag
+//BFS01         rIn >> nTemp;
+//BFS01         m_bAutoControlFocus = nTemp ? sal_True : sal_False;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
+//BFS01}
 
 
 /*************************************************************************
