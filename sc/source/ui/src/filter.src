@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 21:12:33 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2092,7 +2092,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ dutch ] = "~Persistent" ;
         Text [ portuguese ] = "~Manter critйrios" ;
         Text[ chinese_simplified ] = "дїќз•™з­›йЂ‰жќЎд»¶(~K)";
-        Text[ russian ] = "Хранить условия фильтра";
+        Text[ russian ] = "Сохранить условия фильтра";
         Text[ polish ] = "Zachowaj kryteria";
         Text[ japanese ] = "пЅїпЅ°пЅЅзЇ„е›ІгЃЁпѕпѕќпЅёгЃ™г‚‹(~K)";
         Text[ chinese_traditional ] = "дїќз•™зЇ©йЃёжўќд»¶(~K)";
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
