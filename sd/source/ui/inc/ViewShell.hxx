@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:16:27 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,9 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
     virtual BOOL RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
+    virtual long Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
+
+    BOOL HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
     virtual void Draw(OutputDevice &rDev, const Region &rReg);
 
