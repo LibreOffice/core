@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-05 07:58:46 $
+ *  last change: $Author: os $ $Date: 2001-09-10 14:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,11 +1237,18 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for(USHORT i = 0; i < rFilter.Count(); ++i)
                 aFilterLb.InsertEntry(rFilter.GetObject(i)->aName);
-            if(nActFilter < aFilterLb.GetEntryCount())
-                aFilterLb.SelectEntryPos(nActFilter);
+            //insert hierarchical at the beginning
+            aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
+            if(nActFilter < aFilterLb.GetEntryCount() - 1)
+                aFilterLb.SelectEntryPos(nActFilter + 1);
             else
-                aFilterLb.SelectEntryPos(nActFilter = 0);
-            aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
+            {
+                nActFilter = 0;
+                aFilterLb.SelectEntryPos(1);
+                SfxFilterTupel *pT = rFilter.GetObject(nActFilter);
+                USHORT nFilter = pT ? rFilter.GetObject(nActFilter)->nFlags : 0;
+                pStyleSheetPool->SetSearchMask(eFam, nFilter);
+            }
 
             if(pTreeBox)
                 aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
@@ -1251,10 +1258,13 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
         }
         else
         {
-            if( nActFilter < aFilterLb.GetEntryCount() )
-                aFilterLb.SelectEntryPos(nActFilter);
+            if( nActFilter < aFilterLb.GetEntryCount() - 1)
+                aFilterLb.SelectEntryPos(nActFilter + 1);
             else
-                aFilterLb.SelectEntryPos( nActFilter = 0 );
+            {
+                nActFilter = 0;
+                aFilterLb.SelectEntryPos(1);
+            }
         }
 
         if(nFlags & UPDATE_FAMILY_LIST)
@@ -1722,7 +1732,8 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
         aFmtLb.Show();
         //                              aFilterLb.Enable();
         // Falls bHierarchical, kann sich die Familie geaendert haben
-        FilterSelect(pBox->GetSelectEntryPos(), bHierarchical );
+        // minus one since hierarchical is inserted at the start
+        FilterSelect(pBox->GetSelectEntryPos() - 1, bHierarchical );
         bHierarchical=FALSE;
 //      UpdateStyles_Impl(UPDATE_FAMILY_LIST);  // Anzeige aktualisieren
     }
