@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:28:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@
 
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
+#include "svtools/urihelper.hxx"
 
 #ifndef _SFX_FRMDESCRHXX
 #include <sfx2/frmdescr.hxx>
@@ -334,9 +335,8 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
     String sRelURL;
 
     if( bToRel && (rURL.Len() > 0) )
-        sRelURL = INetURLObject::AbsToRel(rURL,
-                      INetURLObject::WAS_ENCODED,
-                      INetURLObject::DECODE_UNAMBIGUOUS);
+    sRelURL = URIHelper::simpleNormalizedMakeRelative(rExport.GetOrigFileName(),
+              rURL);
     else
         sRelURL = rURL;
 
