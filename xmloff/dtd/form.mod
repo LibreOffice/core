@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.11 2001-07-24 15:01:42 dvo Exp $
+	$Id: form.mod,v 1.12 2002-10-25 08:11:58 fs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -94,6 +94,8 @@
 <!ENTITY % list-source "form:list-source CDATA #IMPLIED">
 <!ENTITY % list-source-types "(table|query|sql|sql-pass-through|value-list|table-fields)">
 <!ENTITY % list-source-type "form:list-source-type %list-source-types; #IMPLIED">
+<!ENTITY % column-style-name "form:column-style-name %styleName; #IMPLIED">
+
 
 <!ELEMENT form:control (%controls;)+>
 <!ATTLIST form:control %name;
@@ -318,11 +320,13 @@
                     %tab-index;
                     %tab-stop;
                     %title;>
+
 <!ENTITY % column-type "form:text| form:textarea| form:formatted-text|form:checkbox| form:listbox| form:combobox">
 <!ELEMENT form:column (%column-type;)+>
 <!ATTLIST form:column %name;
                       %service-name;
-                      %label;>
+                      %label;
+					  %column-style-name;>
 
 <!ELEMENT form:generic-control (form:properties?, office:events?)>
 
