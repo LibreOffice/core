@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:31:04 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 14:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _SVPARSER_HXX
 #include <svtools/svparser.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::dbaui;
@@ -211,7 +214,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ImageList aImageList(ModuleRes(IMG_JOINS));
+    ImageList aImageList(ModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS));
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     m_aTypeControl.Show();

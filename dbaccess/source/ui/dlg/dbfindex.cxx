@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:30:50 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 14:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,12 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     Init();
     SetCtrls();
     FreeResource();
+
+    // set Hi contrast bitmaps
+    aIB_Add.SetModeImage(       ModuleRes(IMG_ONE_LEFT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_AddAll.SetModeImage(    ModuleRes(IMG_ALL_LEFT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_Remove.SetModeImage(    ModuleRes(IMG_ONE_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_RemoveAll.SetModeImage( ModuleRes(IMG_ALL_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
 }
 
 //-------------------------------------------------------------------------
@@ -599,6 +605,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/07/17 07:30:50  oj
+ *  #89533# GetMainURL changed
+ *
  *  Revision 1.10  2001/06/21 15:07:11  fme
  *  Fix #86988#: Redesign of dialogs
  *

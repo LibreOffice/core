@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:40:34 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 14:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,62 @@
 
 #define WIN_X   264
 #define WIN_Y   149
+
+Image IMG_ONE_LEFT_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "one_left_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+
+Image IMG_ALL_LEFT_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "all_left_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+
+Image IMG_ONE_RIGHT_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "one_right_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+
+Image IMG_ALL_RIGHT_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "all_right_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
 
 ModalDialog DLG_DBASE_INDEXES
 {
@@ -331,6 +387,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/11/16 22:40:34  kz
+ *  Merge SRC638: 16.11.01 - 22:38:51
+ *
  *  Revision 1.17  2001/08/29 14:04:31  kz
  *  Merge SRC638: 29.08.01 - 16:03:56
  *
