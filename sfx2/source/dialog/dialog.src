@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:24:42 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ swedish ] = "Felaktigt lφsenord." ;
     MESSAGE [ dutch ] = "Wachtwoord niet juist" ;
     MESSAGE [ spanish ] = "Contraseρa errσnea" ;
-    MESSAGE [ english_us ] = "Invalid password." ;
+    MESSAGE [ english_us ] = "Invalid password" ;
     MESSAGE[ chinese_simplified ] = "ι”™θ――η„ε―†η γ€‚";
     MESSAGE[ russian ] = "Νεοπΰβθλόνϋι οΰπξλό.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
@@ -450,7 +450,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ chinese_traditional ] = "ε―†ηΆΌη„΅ζ•γ€‚";
     MESSAGE[ arabic ] = "ίαγΙ ΗαΣΡ ΫνΡ ΥΗαΝΙ.";
     MESSAGE[ greek ] = "Εσφαλμένος κωδικός πρόσβασης.";
-    MESSAGE[ korean ] = "ν¨μ¤μ›λ“κ°€ ν‹€λ¦½λ‹λ‹¤.";
+    MESSAGE[ korean ] = "μ ν¨ν•μ§€ μ•μ€ μ•”νΈ";
     MESSAGE[ turkish ] = "Yanlύώ ώifre";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "Contrasenya incorrecta.";
