@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase7.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 23:10:04 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,31 +93,21 @@ namespace cppu
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7
     {
         /** @internal */
-        static class_data7 s_cd;
+        struct cd : public rtl::StaticAggregate< class_data, ImplClassData7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, WeakComponentImplHelper7<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7> > > {};
     public:
         inline WeakComponentImplHelper7( ::osl::Mutex & rMutex ) throw ()
             : WeakComponentImplHelperBase( rMutex )
             {}
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return WeakComponentImplHelper_query( rType, (class_data *)&s_cd, this, (WeakComponentImplHelperBase *)this ); }
+            { return WeakComponentImplHelper_query( rType, cd::get(), this, (WeakComponentImplHelperBase *)this ); }
         virtual void SAL_CALL acquire() throw ()
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw ()
             { WeakComponentImplHelperBase::release(); }
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return WeakComponentImplHelper_getTypes( (class_data *)&s_cd ); }
+            { return WeakComponentImplHelper_getTypes( cd::get() ); }
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return ImplHelper_getImplementationId( (class_data *)&s_cd ); }
-    };
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7 >
-    class_data7 WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 >::s_cd =
-    {
-        7 +1, sal_False, sal_False,
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            {
-                { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc1 > const * ))&getCppuType, ((sal_Int32)(Ifc1 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc2 > const * ))&getCppuType, ((sal_Int32)(Ifc2 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc3 > const * ))&getCppuType, ((sal_Int32)(Ifc3 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc4 > const * ))&getCppuType, ((sal_Int32)(Ifc4 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc5 > const * ))&getCppuType, ((sal_Int32)(Ifc5 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc6 > const * ))&getCppuType, ((sal_Int32)(Ifc6 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc7 > const * ))&getCppuType, ((sal_Int32)(Ifc7 *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 },
-                    { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }
-            }
+            { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.  Upon disposing objects of this class, sub-classes
@@ -139,7 +129,7 @@ namespace cppu
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7
     {
         /** @internal */
-        static class_data7 s_cd;
+        struct cd : public rtl::StaticAggregate< class_data, ImplClassData7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, WeakAggComponentImplHelper7<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7> > > {};
     public:
         inline WeakAggComponentImplHelper7( ::osl::Mutex & rMutex ) throw ()
             : WeakAggComponentImplHelperBase( rMutex )
@@ -147,25 +137,15 @@ namespace cppu
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
             { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return WeakAggComponentImplHelper_queryAgg( rType, (class_data *)&s_cd, this, (WeakAggComponentImplHelperBase *)this ); }
+            { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, (WeakAggComponentImplHelperBase *)this ); }
         virtual void SAL_CALL acquire() throw ()
             { WeakAggComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw ()
             { WeakAggComponentImplHelperBase::release(); }
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return WeakAggComponentImplHelper_getTypes( (class_data *)&s_cd ); }
+            { return WeakAggComponentImplHelper_getTypes( cd::get() ); }
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return ImplHelper_getImplementationId( (class_data *)&s_cd ); }
-    };
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7 >
-    class_data7 WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 >::s_cd =
-    {
-        7 +1, sal_False, sal_False,
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            {
-                { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc1 > const * ))&getCppuType, ((sal_Int32)(Ifc1 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc2 > const * ))&getCppuType, ((sal_Int32)(Ifc2 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc3 > const * ))&getCppuType, ((sal_Int32)(Ifc3 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc4 > const * ))&getCppuType, ((sal_Int32)(Ifc4 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc5 > const * ))&getCppuType, ((sal_Int32)(Ifc5 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc6 > const * ))&getCppuType, ((sal_Int32)(Ifc6 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc7 > const * ))&getCppuType, ((sal_Int32)(Ifc7 *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 },
-                    { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakAggComponentImplHelper7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7 > *) 16) - 16 }
-            }
+            { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }
 
