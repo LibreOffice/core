@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-19 14:30:02 $
+ *  last change: $Author: oisin $ $Date: 2001-01-23 17:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.3 $  $Author: oisin $  $Date: 2001-01-19 14:30:02 $    //
+// $Revision: 1.4 $  $Author: oisin $  $Date: 2001-01-23 17:18:57 $    //
 //                                                                            //
 // $Workfile:   prex.h  $                                                     //
 //  $Modtime:   08 Aug 1997 10:13:54  $                                       //
@@ -134,19 +134,10 @@ extern "C" {
 
 #define __Ol_OlXlibExt_h__
 
-#if !defined(_USE_PRINT_EXTENSION_)
-      #include <salpdecl.h>
-      #include <salpmacr.h>
-#else
-      #include <X11/X.h>
-      #include <X11/Xlib.h>
-      #include <X11/Xutil.h>
-      #include <X11/Intrinsic.h>
-
-      Bool XSalIsDisplay( Display *p_display );
-      Bool XSalIsPrinter( Display *p_display );
-      Display* GetXpDisplay();
-#endif
+#if !defined(USE_PSPRINT)
+#include <salpdecl.h>
+#include <salpmacr.h>
+#endif /* !USE_PSPRINT */
 
 #endif
 

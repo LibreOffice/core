@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-19 14:29:36 $
+ *  last change: $Author: oisin $ $Date: 2001-01-23 17:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,8 @@ public:
     Bool        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
     Bool        SetLocale( const char* pLocale = "" );
-    Bool        FilterEvent( XEvent *pEvent );
+    Bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
 
-        #ifdef _USE_PRINT_EXTENSION_
-        void            Invalidate()                    { mbUseable = False; }
-        #endif
 
     SalI18N_InputMethod();
     ~SalI18N_InputMethod();
