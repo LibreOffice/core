@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenu.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Date: 2003-11-18 16:31:18 $
+ *  last change: $Date: 2004-01-05 20:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -82,6 +71,18 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
 
 /**
  * Test for object which is represented accessible component of
@@ -117,7 +118,6 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleMenu extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
 
@@ -125,12 +125,12 @@ public class AccessibleMenu extends TestCase {
      * Finds accessible component with role <code>MENU</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
+
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( msf);
+            SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -139,83 +139,84 @@ public class AccessibleMenu extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-                        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         shortWait();
 
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         AccessibilityTools at = new AccessibilityTools();
 
-
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-//        at.printAccessibleTree(log, xRoot);
-
-        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU_BAR);
+        //        at.printAccessibleTree(log, xRoot);
+        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot,
+                                                                   AccessibleRole.MENU_BAR);
         Object menu2 = null;
 
         try {
             oObj = menubar.getAccessibleChild(2);
             menu2 = menubar.getAccessibleChild(1);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleAction act1 = (XAccessibleAction)
-            UnoRuntime.queryInterface(XAccessibleAction.class,oObj) ;
-        final XAccessibleAction act2 = (XAccessibleAction)
-            UnoRuntime.queryInterface(XAccessibleAction.class,menu2) ;
+        final XAccessibleAction act1 = (XAccessibleAction) UnoRuntime.queryInterface(
+                                               XAccessibleAction.class, oObj);
+        final XAccessibleAction act2 = (XAccessibleAction) UnoRuntime.queryInterface(
+                                               XAccessibleAction.class, menu2);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    try {
-                        act2.doAccessibleAction(0);
-                        try {
-                            Thread.sleep(500) ;
-                        } catch (InterruptedException e) {
-                        }
-                        act1.doAccessibleAction(0);
-                    } catch(com.sun.star.lang.IndexOutOfBoundsException e){}
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    act2.doAccessibleAction(0);
 
-        XAccessibleText text = (XAccessibleText)
-                    UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                    }
+
+                    act1.doAccessibleAction(0);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                }
+            }
+        });
+
+        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+                                       XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
-        tEnv.addObjRelation("EditOnly","Can't change or select Text in Menu");
+        tEnv.addObjRelation("EditOnly", "Can't change or select Text in Menu");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
-                                                            new Boolean(false));
+                            new Boolean(false));
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                                                            new Boolean(false));
+                            new Boolean(false));
 
         return tEnv;
-
     }
 
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
-            xTextDoc.dispose();
+            util.DesktopTools.closeDoc(xTextDoc);
+            ;
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("Object already disposed");
         }
@@ -227,16 +228,15 @@ public class AccessibleMenu extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
     }
 
-
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
     * reset</code> call.
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 }
