@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTables.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,13 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     // sal_Int32 nLen = _rName.indexOf('.');
     // aSchema = _rName.copy(0,nLen);
     // aName    = _rName.copy(nLen+1);
-    aSchema = ::rtl::OUString::createFromAscii("%");
+    aSchema = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
     aName = _rName;
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("%");
-    //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
-    //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
+    aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
+    //  aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    //  aTypes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYSTEMTABLE"));
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
