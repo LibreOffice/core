@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 15:59:39 $
+ *  last change: $Author: fs $ $Date: 2001-12-20 16:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,17 @@
 #include "services.hxx"
 #endif
 
+#ifndef _COMPHELPER_BASIC_IO_HXX_
 #include <comphelper/basicio.hxx>
+#endif
+
+#ifndef _FRM_RESOURCE_HXX_
+#include "frm_resource.hxx"
+#endif
+#ifndef _FRM_RESOURCE_HRC_
+#include "frm_resource.hrc"
+#endif
+
 
 //... namespace frm .......................................................
 namespace frm
@@ -653,13 +663,21 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
     osl::MutexGuard aGuard(m_aMutex);
 
     // 1. Schreiben des UnoControls
-        Reference<stario::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
+    Reference<stario::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
+    if ( !xMark.is() )
+    {
+        throw IOException(
+            FRM_RES_STRING( RID_STR_INVALIDSTREAM ),
+            static_cast< ::cppu::OWeakObject* >( this )
+        );
+    }
+
     sal_Int32 nMark = xMark->createMark();
     sal_Int32 nLen = 0;
 
     _rxOutStream->writeLong(nLen);
 
-        Reference<stario::XPersistObject> xPersist;
+    Reference<stario::XPersistObject> xPersist;
     if (query_aggregation(m_xAggregate, xPersist))
         xPersist->write(_rxOutStream);
 
@@ -691,14 +709,22 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
 {
     osl::MutexGuard aGuard(m_aMutex);
 
+    Reference<stario::XMarkableStream> xMark(InStream, UNO_QUERY);
+    if ( !xMark.is() )
+    {
+        throw IOException(
+            FRM_RES_STRING( RID_STR_INVALIDSTREAM ),
+            static_cast< ::cppu::OWeakObject* >( this )
+        );
+    }
+
     // 1. Lesen des UnoControls
     sal_Int32 nLen = InStream->readLong();
     if (nLen)
     {
-                Reference<stario::XMarkableStream> xMark(InStream, UNO_QUERY);
         sal_Int32 nMark = xMark->createMark();
 
-                Reference<stario::XPersistObject> xPersist;
+        Reference<stario::XPersistObject> xPersist;
         if (query_aggregation(m_xAggregate, xPersist))
             xPersist->read(InStream);
 
