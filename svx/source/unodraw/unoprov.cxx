@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:22:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,6 +707,17 @@ comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
     return aSvxDrawingDefaultsPropertyMap_Impl;
 }
 
+// OD 13.10.2003 #i18732#
+comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
+{
+    static comphelper::PropertyMapEntry aSvxAdditionalDefaultsPropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN("IsFollowingTextFlow"), SID_SW_FOLLOW_TEXT_FLOW, &::getBooleanCppuType(), 0, 0},
+        {0,0,0,0,0}
+    };
+
+    return aSvxAdditionalDefaultsPropertyMap_Impl;
+}
 
 // ---------------------------------------------------------------------
 
@@ -1316,6 +1327,8 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
         case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER:
             mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
             mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->remove( OUString( RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION ) ) );
+            // OD 13.10.2003 #i18732# - add property map for writer item 'IsFollowingTextFlow'
+            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetAdditionalWriterDrawingDefaultsPropertyMap() );
             break;
 
         default:
