@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 15:31:38 $
+ *  last change: $Author: mt $ $Date: 2001-11-12 13:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,6 +751,7 @@ public:
     sal_uInt16      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
     sal_uInt32      GetParaHeight( sal_uInt16 nParagraph );
 
+    SfxItemSet      GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal_uInt8 nFlags = 0xFF ) const;
     SfxItemSet      GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib = FALSE  );
     void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE nSpecial = 0 );
     void            RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich = 0 );
