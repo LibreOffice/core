@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
+ *  last change: $Author: sab $ $Date: 2001-11-16 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,11 @@ void ScMyShapeResizer::ResizeShapes()
                                         awt::Size aOldSize = aItr->xShape->getSize();
                                         awt::Size aSize(aOldSize);
                                         aPoint.X += aRefPoint.X;
+                                        if (aPoint.X > aRec.Right())
+                                            aPoint.X = aRec.Right() - 1;
                                         aPoint.Y += aRefPoint.Y;
+                                        if (aPoint.Y > aRec.Bottom())
+                                            aPoint.Y = aRec.Bottom() - 1;
                                         aSize.Width = aItr->nEndX - aPoint.X;
                                         aSize.Height = aItr->nEndY - aPoint.Y;
                                         aItr->xShape->setPosition(aPoint);
@@ -246,7 +250,11 @@ void ScMyShapeResizer::ResizeShapes()
                                         aRefPoint.Y = aRec.Top();
                                         awt::Point aPoint = aItr->xShape->getPosition();
                                         aPoint.X += aRefPoint.X;
+                                        if (aPoint.X > aRec.Right())
+                                            aPoint.X = aRec.Right() - 1;
                                         aPoint.Y += aRefPoint.Y;
+                                        if (aPoint.Y > aRec.Bottom())
+                                            aPoint.Y = aRec.Bottom() - 1;
                                         aItr->xShape->setPosition(aPoint);
                                     }
                                 }
