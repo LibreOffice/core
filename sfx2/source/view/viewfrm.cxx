@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-14 11:30:08 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 09:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3337,8 +3337,16 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
                     rState.DisableItem(nSID);
             }
         }
+        else if ( nSID == SID_PARTWIN )
+        {
+            Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface()->
+                            findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
+            if ( !xFrame.is() )
+                rState.DisableItem( nSID );
+            else if ( KnowsChildWindow(nSID) )
+                rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
+        }
         else if ( nSID == SID_HELP_PI )
-//! (pb) what about help?
             rState.DisableItem(nSID);
         else if ( KnowsChildWindow(nSID) )
             rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
