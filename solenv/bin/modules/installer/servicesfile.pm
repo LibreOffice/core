@@ -98,39 +98,6 @@ sub add_services_sourcepath_into_filearray
 
 }
 
-############################################################################
-# Adding the newly created legacy_binfilters.rdb into the files collector
-############################################################################
-
-sub add_legacy_binfilters_rdb_file_into_filearray
-{
-    my ( $filesarrayref, $includepatharrayref ) = @_;
-
-    my $legacyfilename = "legacy_binfilters.rdb";
-
-    my $legacyfilesourceref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$legacyfilename, $includepatharrayref, 1);
-    if ( $$legacyfilesourceref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $legacyfilename!", "add_legacy_binfilters_rdb_file_into_filearray"); }
-
-    my $found = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
-    {
-        $onefile = ${$filesarrayref}[$i];
-        my $name = $onefile->{'Name'};
-
-        if ( $legacyfilename eq $name )
-        {
-            $found = 1;
-            $onefile->{'sourcepath'} = $$legacyfilesourceref;   # setting the sourcepath!
-            last;
-        }
-    }
-
-    if ( ! $found ) { installer::exiter::exit_program("ERROR: Did not find $legacyfilename in files collector!", "add_legacy_binfilters_rdb_file_into_filearray"); }
-
-}
-
 ################################################################
 # Generating a file url from a path
 ################################################################
@@ -768,10 +735,6 @@ sub create_services_rdb
     # Setting the global variable $installer::globals::services_rdb_created
 
     $installer::globals::services_rdb_created = 1;
-
-    # Adding the created file "legacy_binfilters.rdb" to the filearray
-
-    add_legacy_binfilters_rdb_file_into_filearray($filesarrayref, $includepatharrayref);
 
 }
 
