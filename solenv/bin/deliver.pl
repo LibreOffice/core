@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 13:00:19 $
+#   last change: $Author: rt $ $Date: 2003-05-08 11:51:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.43 $ ';
+$id_str = ' $Revision: 1.44 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -889,22 +889,19 @@ sub hedabu_if_newer
     my $hedabu_headers_ref = shift;
     my ($from_stat_ref, $header);
 
+    push_on_ziplist($to) if $opt_zip;
+
+    if ( $opt_delete ) {
+        print "REMOVE: $to\n";
+        my $rc = unlink($to);
+        return 1 if $rc;
+        return 0;
+    }
+
     if ( $from_stat_ref = is_newer($from, $to) ) {
-        if ( $opt_delete ) {
-            print "REMOVE: $to\n";
-        }
-        else {
-            print "HEDABU: $from -> $to\n";
-        }
+        print "HEDABU: $from -> $to\n";
 
         return 1 if $opt_check;
-
-        if ( $opt_delete ) {
-            push_on_ziplist($to) if $opt_zip;
-            my $rc = unlink($to);
-            return 1 if $rc;
-            return 0;
-        }
 
         my $save = $/;
         undef $/;
@@ -934,7 +931,6 @@ sub hedabu_if_newer
 
         utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
         fix_file_permissions($$from_stat_ref[2], $to);
-        push_on_ziplist($to) if $opt_zip;
         return 1;
     }
     return 0;
