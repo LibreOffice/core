@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:20:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,7 +643,6 @@ void ScDPFieldWindow::DelField( size_t nDelIndex )
 {
     if( IsExistingIndex( nDelIndex  ) )
     {
-        aFieldArr.erase( aFieldArr.begin() + nDelIndex );
         if (pAccessible) // before decrement fieldcount
         {
             com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
@@ -652,6 +651,7 @@ void ScDPFieldWindow::DelField( size_t nDelIndex )
             else
                 pAccessible = NULL;
         }
+        aFieldArr.erase( aFieldArr.begin() + nDelIndex );
         Redraw();
     }
 }
