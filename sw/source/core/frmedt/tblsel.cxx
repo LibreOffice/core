@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:39:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,15 +772,16 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
 BOOL IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 {
-#ifdef VERTICAL_LAYOUT
-    if( pCell->IsVertical() )
+    ASSERT( pCell->IsCellFrm(), "Frame ohne Gazelle" );
+
+    if( pCell->FindTabFrm()->IsVertical() )
         return ( rUnion.Right() >= pCell->Frm().Right() &&
-            rUnion.Left() <= pCell->Frm().Left() &&
+                 rUnion.Left() <= pCell->Frm().Left() &&
             (( rUnion.Top() <= pCell->Frm().Top()+20 &&
                rUnion.Bottom() > pCell->Frm().Top() ) ||
              ( rUnion.Top() >= pCell->Frm().Top() &&
                rUnion.Bottom() < pCell->Frm().Bottom() )) ? TRUE : FALSE );
-#endif
+
     return (
         rUnion.Top() <= pCell->Frm().Top() &&
         rUnion.Bottom() >= pCell->Frm().Bottom() &&
@@ -1060,7 +1061,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     long nWidth;
     SwTableBox* pLastBox = 0;
 
-    SWRECTFN( pStart )
+    SWRECTFN( pStart->GetUpper() )
 
     for ( USHORT i = 0; i < aUnions.Count(); ++i )
     {
@@ -1955,7 +1956,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 #ifdef VERTICAL_LAYOUT
     else
     {
-        SWRECTFN( pStart )
+        SWRECTFN( pTable )
+//        SWRECTFN( pStart )
         long nSttTop = (pStart->Frm().*fnRect->fnGetTop)();
         long nEndTop = (pEnd->Frm().*fnRect->fnGetTop)();
         if( nSttTop == nEndTop )
@@ -2157,7 +2159,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
                       *pEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm(
                                 &aMkPos )->GetUpper();
 
-    SWRECTFN( pStart )
+    SWRECTFN( pStart->GetUpper() )
 
     //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
     SwSelUnions aUnions;
@@ -2457,13 +2459,8 @@ void _FndBox::DelFrms( SwTable &rTable )
 BOOL lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 {
     const SwTabFrm* pTblFrm = rChk.FindTabFrm();
-#ifdef FRANK_TEST
     if( pTblFrm->IsFollow() )
         pTblFrm->FindMaster( true );
-#else
-    while( pTblFrm->IsFollow() )
-        pTblFrm = pTblFrm->FindMaster();
-#endif
     return &rTable == pTblFrm;
 }
 
