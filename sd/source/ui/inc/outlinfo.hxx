@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-20 16:49:46 $
+ *  last change: $Author: aw $ $Date: 2002-08-01 14:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,17 @@ struct OutlinerCharacter
     Rectangle   aRect;
     ULONG       nPara;
     Color       aColor;
-    USHORT      nCharCode;
 
-                OutlinerCharacter( const Rectangle& _rRect, ULONG _nPara, const Color& _rCol, USHORT _nCharCode ) :
-                    aRect( _rRect ), nPara( _nPara ), aColor( _rCol ), nCharCode( _nCharCode ) {}
+    // #101500# Removed CharCode, it's only used in one place to compare
+    // for single space character. This can be done at creation, too.
+    //USHORT        nCharCode;
+
+    OutlinerCharacter( const Rectangle& _rRect, ULONG _nPara, const Color& _rCol /* #101500#, USHORT _nCharCode*/ )
+    :   aRect( _rRect ),
+        nPara( _nPara ),
+        aColor( _rCol )
+    {
+    }
 };
 
 // -----------------------------------------------------------------------------
