@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-14 09:36:04 $
+ *  last change: $Author: os $ $Date: 2001-02-15 06:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WRITING_DIRECTION
     // RES_CHRATR_EMPHASIS_MARK
-    M_E( "CharEmphasize",           STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    M_E( "CharEmphasis",            STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
     M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
     M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
@@ -435,7 +435,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WRITING_DIRECTION
     // RES_CHRATR_EMPHASIS_MARK
-    M_E( "CharEmphasize",           STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    M_E( "CharEmphasis",            STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
     M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
