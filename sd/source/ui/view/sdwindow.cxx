@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-26 11:18:59 $
+ *  last change: $Author: af $ $Date: 2002-07-19 09:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,16 +162,15 @@ void SdWindow::ShareViewArea(SdWindow* pOtherWin)
     SetMapMode(aMap);
 }
 
-/*************************************************************************
-|*
-|* Resize event
-|*
-\************************************************************************/
+
+
 
 void SdWindow::CalcMinZoom()
 {
+    // Are we entitled to change the minimal zoom factor?
     if ( bMinZoomAutoCalc )
     {
+        // Get current zoom factor.
         long nZoom = GetZoom();
 
         if ( pShareWin )
@@ -181,16 +180,28 @@ void SdWindow::CalcMinZoom()
         }
         else
         {
+            // Get the rectangle of the output area in logical coordinates
+            // and calculate the scaling factors that would lead to the view
+            // area (also called application area) to completely fill the
+            // window.
             Size aWinSize = PixelToLogic(GetOutputSizePixel());
-            ULONG nX = (ULONG) ((double) aWinSize.Width()  * (double) ZOOM_MULTIPLICATOR / (double) aViewSize.Width());
-            ULONG nY = (ULONG) ((double) aWinSize.Height() * (double) ZOOM_MULTIPLICATOR / (double) aViewSize.Height());
-            ULONG nFact;
+            ULONG nX = (ULONG) ((double) aWinSize.Width()
+                * (double) ZOOM_MULTIPLICATOR / (double) aViewSize.Width());
+            ULONG nY = (ULONG) ((double) aWinSize.Height()
+                * (double) ZOOM_MULTIPLICATOR / (double) aViewSize.Height());
 
+            // Decide whether to take the larger or the smaller factor.
+            ULONG nFact;
             if ( bCalcMinZoomByMinSide )    nFact = Min(nX, nY);
             else                            nFact = Max(nX, nY);
+
+            // The factor is tansfomed according to the current zoom factor.
             nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
             nMinZoom = Max((USHORT) MIN_ZOOM, (USHORT) nFact);
         }
+        // If the current zoom factor is smaller than the calculated minimal
+        // zoom factor then set the new minimal factor as the current zoom
+        // factor.
         if ( nZoom < (long) nMinZoom )
             SetZoomFactor(nMinZoom);
     }
@@ -347,41 +358,51 @@ void SdWindow::SetViewSize(const Size& rSize)
     CalcMinZoom();
 }
 
-/*************************************************************************
-|*
-|* den eigentlichen Zoomfaktor in Prozent setzen; protected, wird
-|* nur intern benutzt
-|*
-\************************************************************************/
+
+
 
 long SdWindow::SetZoomFactor(long nZoom)
 {
-    if ( nZoom > MAX_ZOOM ) nZoom = MAX_ZOOM;
-    if ( nZoom < (long) nMinZoom ) nZoom = nMinZoom;
+    // Clip the zoom factor to the valid range marked by nMinZoom as
+    // calculated by CalcMinZoom() and the constant MAX_ZOOM.
+    if ( nZoom > MAX_ZOOM )
+        nZoom = MAX_ZOOM;
+    if ( nZoom < (long) nMinZoom )
+        nZoom = nMinZoom;
 
+    // Set the zoom factor at the window's map mode.
     MapMode aMap(GetMapMode());
     aMap.SetScaleX(Fraction(nZoom, 100));
     aMap.SetScaleY(Fraction(nZoom, 100));
     SetMapMode(aMap);
+
+    // Update the map mode's origin (to what effect?).
     UpdateMapOrigin();
+
+    // Update the view's snapping to the the new zoom factor.
     if ( pViewShell && pViewShell->ISA(SdDrawViewShell) )
         ((SdDrawViewShell*) pViewShell)->GetView()->
                                         RecalcLogicSnapMagnetic(*this);
+
+    // Return the zoom factor just in case it has been changed above to lie
+    // inside the valid range.
     return nZoom;
 }
 
-/*************************************************************************
-|*
-|* Zoomfaktor in Prozent setzen und Darstellungsbereich um den
-|* Zoom-Mittelpunkt zentrieren
-|*
-\************************************************************************/
+
+
 
 void SdWindow::SetZoom(long nZoom)
 {
-    if ( nZoom > MAX_ZOOM ) nZoom = MAX_ZOOM;
-    if ( nZoom < (long) nMinZoom ) nZoom = nMinZoom;
+    // Clip the zoom factor to the valid range marked by nMinZoom as
+    // previously calculated by <member>CalcMinZoom()</member> and the
+    // MAX_ZOOM constant.
+    if ( nZoom > MAX_ZOOM )
+        nZoom = MAX_ZOOM;
+    if ( nZoom < (long) nMinZoom )
+        nZoom = nMinZoom;
 
+    // Calculate the window's new origin.
     Size aSize = PixelToLogic(GetOutputSizePixel());
     long nW = aSize.Width()  * GetZoom() / nZoom;
     long nH = aSize.Height() * GetZoom() / nZoom;
@@ -389,43 +410,66 @@ void SdWindow::SetZoom(long nZoom)
     aWinPos.Y() += (aSize.Height() - nH) / 2;
     if ( aWinPos.X() < 0 ) aWinPos.X() = 0;
     if ( aWinPos.Y() < 0 ) aWinPos.Y() = 0;
+
+    // Finally update this window's map mode to the given zoom factor that
+    // has been clipped to the valid range.
     SetZoomFactor(nZoom);
 }
 
-/*************************************************************************
-|*
-|* Fensterposition und Zoomfaktor nach uebergebenem Rechteck setzen
-|* obere linke Ecke des Rechtecks muss relativ zur linken oberen
-|* Ecke des Fensters angegeben werden; gibt den berechneten Zoom-
-|* faktor zurueck
-|*
-\************************************************************************/
 
+
+
+/** Recalculate the zoom factor and translation so that the given rectangle
+    is displayed centered and as large as possible while still being fully
+    visible in the window.
+*/
 long SdWindow::SetZoomRect(const Rectangle& rZoomRect)
 {
     long nNewZoom = 100;
 
     if (rZoomRect.GetWidth() == 0 || rZoomRect.GetHeight() == 0)
     {
+        // The given rectangle is degenerate.  Use the default zoom factor
+        // (above) of 100%.
         SetZoom(nNewZoom);
     }
     else
     {
         Point aPos = rZoomRect.TopLeft();
+        // Transform the output area from pixel coordinates into logical
+        // coordinates.
         Size aWinSize = PixelToLogic(GetOutputSizePixel());
+        // Paranoia!  The degenerate case of zero width or height has been
+        // taken care of above.
         DBG_ASSERT(rZoomRect.GetWidth(), "ZoomRect-Breite = 0!");
         DBG_ASSERT(rZoomRect.GetHeight(), "ZoomRect-Hoehe = 0!");
-        ULONG nX = (ULONG) ((double) aWinSize.Width()  * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
-        ULONG nY = (ULONG) ((double) aWinSize.Height() * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+
+        // Calculate the scale factors which will lead to the given
+        // rectangle being fully visible (when translated accordingly) as
+        // large as possible in the output area independently in both
+        // coordinate directions .
+        ULONG nX = (ULONG) ((double) aWinSize.Width()
+            * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+        ULONG nY = (ULONG) ((double) aWinSize.Height()
+            * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+        // Use the smaller one of both so that the zoom rectangle will be
+        // fully visible with respect to both coordinate directions.
         ULONG nFact = Min(nX, nY);
+
+        // Transform the current zoom factor so that it leads to the desired
+        // scaling.
         long nZoom = nFact * GetZoom() / ZOOM_MULTIPLICATOR;
 
+        // Calculate the new origin.
         if ( nFact == 0 )
         {
+            // Don't change anything if the scale factor is degenrate.
             nNewZoom = GetZoom();
         }
         else
         {
+            // Calculate the new window position that centers the given
+            // rectangle on the screen.
             if ( nZoom > MAX_ZOOM )
                 nFact = nFact * MAX_ZOOM / nZoom;
 
@@ -438,6 +482,8 @@ long SdWindow::SetZoomRect(const Rectangle& rZoomRect)
 
             if ( aWinPos.X() < 0 )  aWinPos.X() = 0;
             if ( aWinPos.Y() < 0 )  aWinPos.Y() = 0;
+
+            // Adapt the window's map mode to the new zoom factor.
             nNewZoom = SetZoomFactor(nZoom);
         }
     }
@@ -744,6 +790,16 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
         if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         {
+            // When the screen zoom factor has changed then reset the zoom
+            // factor of the frame to allways display the whole page.
+            const AllSettings* pOldSettings = rDCEvt.GetOldSettings ();
+            const AllSettings& rNewSettings = GetSettings ();
+            if (pOldSettings)
+                if (pOldSettings->GetStyleSettings().GetScreenZoom()
+                    != rNewSettings.GetStyleSettings().GetScreenZoom())
+                    pViewShell->GetViewFrame()->GetDispatcher()->
+                        Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
             // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
             // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
             // Resize-Handler aber auch die Groesse der ScrollBars aus
