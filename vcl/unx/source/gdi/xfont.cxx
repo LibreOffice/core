@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: hdu $ $Date: 2001-04-05 07:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,8 @@ GetVerticalClass( sal_Unicode nChar )
     {
         if ( nChar == 0x2010 || nChar == 0x2015 ||
              nChar == 0x2016 || nChar == 0x2026 ||
-             (nChar >= 0x3008 && nChar <= 0x3017) )
+             (nChar >= 0x3008 && nChar <= 0x3017) ||
+             nChar >= 0xFF00 )
         {
             return VCLASS_ROTATE;
         }
