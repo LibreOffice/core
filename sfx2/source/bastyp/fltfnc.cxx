@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: as $ $Date: 2001-10-24 11:34:08 $
+ *  last change: $Author: as $ $Date: 2001-10-29 14:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,9 @@ public:
     sal_Bool bLoadPending;
     SfxFilterContainerFlags eFlags;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xCacheSync; // listener on framework::FilterCache to synchronize our two caches!
+
+    void     syncDefaults( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& lNew );
+    sal_Bool equalFilterNames( const String& s1, const ::rtl::OUString& s2 ) const;
 };
 
 
@@ -1545,20 +1548,16 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 aResult = xFilterCFG->getByName( sQuery );
                 if( aResult >>= lFilterNames )
                 {
+                    if( pImpl->aList.Count() > 0 )
+                    {
+                        pImpl->syncDefaults( lFilterNames );
+                        return;
+                    }
+
                     // get all properties of filters ... put it into the filter container
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lFilterProperties                           ;
                     sal_Int32                                                                 nFilterCount      = lFilterNames.getLength();
                     sal_Int32                                                                 nFilter           = 0                       ;
-
-                    // These function could be called for initialize or by our SynchronizeListener for framework::FilterCache changes!
-                    // So we should clear current container before we insert any new entries ...
-                    SfxFilterList_Impl& rCurrentList = pImpl->aList;
-                    sal_Int32           nCount       = rCurrentList.Count();
-                    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-                    {
-                        delete rCurrentList.GetObject(nStep);
-                    }
-                    rCurrentList.Clear();
 
                     for( nFilter=0; nFilter<nFilterCount; ++nFilter )
                     {
@@ -1715,5 +1714,79 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
     catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ASSERT( sal_False, "SfxFilterContainer::ReadExternalFilter()\nException detected. Possible not all filters could be cached.\n" );
+    }
+}
+
+sal_Bool SfxFilterContainer_Impl::equalFilterNames( const String& s1, const ::rtl::OUString& s2 ) const
+{
+    ::rtl::OUString sC1( s1 );
+    ::rtl::OUString sC2( s2 );
+    sal_Int32       nPos = -1;
+
+    nPos = sC1.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
+    if( nPos > 0 )
+    {
+        sC1 = sC1.copy( nPos+2 );
+    }
+
+    nPos = sC2.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
+    if( nPos > 0 )
+    {
+        sC2 = sC2.copy( nPos+2 );
+    }
+
+    return( sC1 == sC2 );
+}
+
+void SfxFilterContainer_Impl::syncDefaults( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& lNew )
+{
+    // sync lists only, wich diff by old/new default filters only.
+    // They must have same size and should be allready filled.
+    if(
+        ( lNew.getLength()        >  0             )    &&
+        ( aList.Count()           >  0             )    &&
+        ( (ULONG)lNew.getLength() == aList.Count() )
+      )
+    {
+        SfxFilter* pOldDefault = aList.First();
+        SfxFilter* pNewDefault = NULL         ;
+        sal_Int32  nOldPos     = 0            ;
+
+        // search for old/new positions of items in both lists
+        sal_Int32 nCount = aList.Count();
+        for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+        {
+            // get new default filter
+            if( equalFilterNames( aList.GetObject(nStep)->GetName(), lNew[0] ) == sal_True )
+            {
+                pNewDefault = aList.GetObject(nStep);
+            }
+
+            // get position for old default filter
+            if( equalFilterNames( pOldDefault->GetName(), lNew[nStep] ) == sal_True )
+            {
+                nOldPos = nStep;
+            }
+
+            // break search, if all neccessary informations are available
+            if( nOldPos>0 && pNewDefault!= NULL )
+            {
+                break;
+            }
+        }
+
+        // realy changed ?!
+        if(
+            ( pOldDefault != pNewDefault )  &&
+            ( nOldPos     >  0           )
+          )
+        {
+            // move default filter to top of list
+            aList.Remove( pNewDefault                 );
+            aList.Insert( pNewDefault, (ULONG)0       );
+            // move old default one to right place in list
+            aList.Remove( pOldDefault                 );
+            aList.Insert( pOldDefault, (ULONG)nOldPos );
+        }
     }
 }
