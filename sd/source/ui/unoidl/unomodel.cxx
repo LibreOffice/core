@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:18:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1505,12 +1505,12 @@ IMPL_LINK( ImplRenderPaintProc, _ImplRenderPaintProc, SdrPaintProcRec*, pRecord 
     SdrObject* pObj = pRecord->pObj;
     if( !pObj->IsEmptyPresObj() && IsVisible( pObj ) && IsPrintable( pObj ) )
     {
-        pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+        pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
     else
     {
         if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
-            pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+            pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
     return 0;
 }
