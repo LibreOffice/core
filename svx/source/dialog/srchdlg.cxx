@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:24:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _SV_MOREBTN_HXX //autogen wg. MoreButton
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen wg. System
-#include <vcl/system.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen wg. RET_OK
 #include <vcl/msgbox.hxx>
@@ -488,16 +485,6 @@ void SvxSearchDialog::Construct_Impl()
 
     // alten Text des aWordBtn's merken
     ( aCalcStr += sal_Unicode('#') ) += aWordBtn.GetText();
-
-/*! (pb) there is no AppWindow anymore
-    // Position anpassen
-    Point aPos;
-    const Size aScreen( Application::GetAppWindow()->GetDesktopRectPixel().GetSize() );
-    const Size MySize( GetSizePixel() );
-    aPos.X() =  ( aScreen.Width() - MySize.Width() ) / 2;
-    aPos.Y() =  aScreen.Height() - MySize.Height() - 60;
-    SetPosPixel( aPos );
-*/
 
     aLayoutStr = SVX_RESSTR( RID_SVXSTR_SEARCH_STYLES );
     aStylesStr = aLayoutBtn.GetText();
