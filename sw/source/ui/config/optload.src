@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:58:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ english_us ] = "Caption";
         Text[ chinese_simplified ] = "±êÇ©";
         Text[ russian ] = "Ïîäïèñü";
-        Text[ polish ] = "Opis";
+        Text[ polish ] = "Etykieta";
         Text[ japanese ] = "}•\\”Ô†";
         Text[ chinese_traditional ] = "¼ĞÅÒ";
         Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
@@ -431,7 +431,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ dutch ] = "Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
-        Text[ chinese_simplified ] = "¼ÆÁ¿µ¥Î»";
+        Text[ chinese_simplified ] = "³ß´çµ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "g‚¤’PˆÊ";
@@ -439,7 +439,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ finnish ] = "Mittayksiköt" ;
         Text[ chinese_traditional ] = "­p¶q³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
-        Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
+        Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "ÃøÁ¤ ´ÜÀ§";
         Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
@@ -469,14 +469,14 @@ TabPage TP_OPTLOAD_PAGE
         Text [ english_us ] = "Tab stops";
     Text[ chinese_simplified ] = "ÖÆ±í·û¼ä¸ô";
     Text[ russian ] = "Øàã òàáóëÿöèè";
-        Text[ polish ] = "Odstêp tabulatorów";
+        Text[ polish ] = "Odstêp miêdzy tabulatorami";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
         Text [ norwegian ] = "Standard tabulatoravstand" ;
         Text [ finnish ] = "Sarkaimet" ;
         Group = TRUE ;
         Text[ chinese_traditional ] = "»sªí²Å¶¡¹j";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
-        Text[ greek ] = "ÁğïóôÜóåéò óôçëïèåôşí";
+        Text[ greek ] = "Áğï~óôÜóåéò óôçëïèåôşí";
         Text[ korean ] = "ÅÇ °£°İ";
         Text[ turkish ] = "Sekme durağı";
         Text[ language_user1 ] = " ";
@@ -513,7 +513,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "Compatibilità";
         Text[ danish ] = "Kompatibilitet";
         Text[ swedish ] = "Kompatibilitet";
-        Text[ polish ] = "Zgodno?æ";
+        Text[ polish ] = "Zgodnoœæ";
         Text[ portuguese_brazilian ] = "Compatibility";
         Text[ japanese ] = "ŒİŠ·«";
         Text[ chinese_simplified ] = "ºÍ MS Office ÎÄµµ¼æÈİ";
@@ -540,11 +540,11 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "Sumar ~espacios de párrafos y tablas en el documento actual";
         Text[ italian ] = "Aggiungi distanze tra i paragrafi e le tabelle nel documento attuale";
         Text[ danish ] = "Tæl alle afsnits- og tabelafstande i det aktuelle dokument sammen";
-        Text[ swedish ] = "Addera alla stycke- och tabell~avstånd i det aktuella dokumentet";
-        Text[ polish ] = "Dodaj w aktualnym dokumencie wszystkie odstêpy akapitów i tabel";
+        Text[ swedish ] = "Addera alla stycke- och tabellavstånd i det aktuella ~dokumentet";
+        Text[ polish ] = "Dodaj w bie¿¹cym dokumencie wszystkie odstêpy miêdzy akapitami i tabelami";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
         Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì’i—ŠÔŠu‚Æ•\\ŠÔŠu‚ğ‰ÁZ‚·‚é";
-        Text[ chinese_simplified ] = "ÔÚµ±Ç°ÎÄµµÄÚÀ©´óËùÓĞ¶ÎÂäºÍ±í¸ñÖ®¼äµÄ¼ä¸ô";
+        Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂäµÄ¼°±í¸ñµÄ¼ä¸ôÏà¼Ó";
         Text[ chinese_traditional ] = "¦b·í«e¤å¥ó¤ºÂX¤j©Ò¦³¬q¸¨©Mªí®æ¤§¶¡ªº¶¡¹j";
         Text[ arabic ] = "ÅÖÇİÉ ãÓÇİÉ ÇáÊÈÇÚÏ Åáì ßá İŞÑÇÊ æÌÏÇæá ÇáãÓÊäÏ ÇáÍÇáí";
         Text[ greek ] = "¢èñïéóìá üëùí ôùí ~áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôï ôñİ÷ïí İããñáöï";
@@ -591,13 +591,13 @@ TabPage TP_OPTLOAD_PAGE
         Text[ english_us ] = "Align tab stop position";
         Text[ portuguese ] = "Alinhar posição de tabulação";
         Text[ russian ] = "Âûğîâíÿòü ïîçèöèş òàáóëÿöèè";
-        Text[ greek ] = "Align tab stop position";
+        Text[ greek ] = "Ó~ôïß÷éóç èİóçò óôçëïèİôç";
         Text[ dutch ] = "Align tab stop position";
         Text[ french ] = "Aligner la position de tabulation";
         Text[ spanish ] = "Ajustar posición de tabulador";
         Text[ italian ] = "Align tab stop position";
         Text[ danish ] = "Align tab stop position";
-        Text[ swedish ] = "Justera tabulatorposition";
+        Text[ swedish ] = "Justera ~tabulatorposition";
         Text[ polish ] = "Wyrównaj pozycjê tabulatora";
         Text[ portuguese_brazilian ] = "Align tab stop position";
         Text[ japanese ] = "ÀÌŞ‚ÌˆÊ’u‚ğ‘µ‚¦‚é";
@@ -1509,4 +1509,5 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
