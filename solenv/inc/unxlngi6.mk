@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:28:27 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:57:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,6 +164,7 @@ DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
 LINK*=$(CXX)
+LINKC*=$(CC)
 
 # default linker flags
 LINKFLAGSDEFS*=-Wl,-z,defs
