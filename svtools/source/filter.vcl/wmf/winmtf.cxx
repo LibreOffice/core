@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:42:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
 #endif
+
 // ------------------------------------------------------------------------
 
 #define WIN_MTF_MAX_POLYPOLYCOUNT   16
@@ -424,28 +425,67 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
-            if ( ( mnMapMode == MM_TEXT ) && mnRefExtX && mnRefExtY )
+            switch( mnMapMode )
             {
-                fX2 -= mnWinOrgX;
-                fY2 -= mnWinOrgY;
-                fX2 *= mnDevWidth;
-                fY2 *= mnDevHeight;
-                fX2 /= mnRefExtX;
-                fY2 /= mnRefExtY;
-                fX2 += mnDevOrgX;
-                fY2 += mnDevOrgY;
+                case MM_LOENGLISH :
+                {
+                    fY2 *= -1;
+                    fX2 -= mnWinOrgX;
+                    fY2 -= mnWinOrgY;
+                    fX2 *= 25.40;
+                    fY2 *= 25.40;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                }
+                break;
+                case MM_HIENGLISH :
+                {
+                    fY2 *= -1;
+                    fX2 -= mnWinOrgX;
+                    fY2 -= mnWinOrgY;
+                    fX2 *= 2.540;
+                    fY2 *= 2.540;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                }
+                break;
+                case MM_LOMETRIC :
+                {
+                    fY2 *= -1;
+                    fX2 -= mnWinOrgX;
+                    fY2 -= mnWinOrgY;
+                    fX2 *= 10;
+                    fY2 *= 10;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                }
+                break;
+                case MM_HIMETRIC :
+                {
+                    fY2 *= -1;
+                    fX2 -= mnWinOrgX;
+                    fY2 -= mnWinOrgY;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                }
+                break;
+                default :
+                {
+                    fX2 -= mnWinOrgX;
+                    fY2 -= mnWinOrgY;
+                    fX2 /= mnWinExtX;
+                    fY2 /= mnWinExtY;
+                    fX2 *= mnDevWidth;
+                    fY2 *= mnDevHeight;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;   // fX2, fY2 now in device units
+                    fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
+                    fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
+                }
+                break;
             }
-            else
-            {
-                fX2 -= mnWinOrgX;
-                fY2 -= mnWinOrgY;
-                fX2 /= mnWinExtX;
-                fY2 /= mnWinExtY;
-                fX2 *= mnDevWidth;
-                fY2 *= mnDevHeight;
-                fX2 += mnDevOrgX;
-                fY2 += mnDevOrgY;
-            }
+            fX2 -= mrclFrame.Left();
+            fY2 -= mrclFrame.Top();
         }
         return Point( FRound( fX2 ), FRound( fY2 ) );
     }
@@ -473,19 +513,41 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
-            if ( ( mnMapMode == MM_TEXT ) && mnRefExtX && mnRefExtY )
+            switch( mnMapMode )
             {
-                fWidth *= mnDevWidth;
-                fHeight *= mnDevHeight;
-                fWidth /= mnRefExtX;
-                fHeight /= mnRefExtY;
-            }
-            else
-            {
-                fWidth /= mnWinExtX;
-                fHeight /= mnWinExtY;
-                fWidth *= mnDevWidth;
-                fHeight *= mnDevHeight;
+                case MM_LOENGLISH :
+                {
+                    fWidth *= 25.40;
+                    fHeight*=-25.40;
+                }
+                break;
+                case MM_HIENGLISH :
+                {
+                    fWidth *= 2.540;
+                    fHeight*=-2.540;
+                }
+                break;
+                case MM_LOMETRIC :
+                {
+                    fWidth *= 10;
+                    fHeight*=-10;
+                }
+                break;
+                case MM_HIMETRIC :
+                {
+                    fHeight *= -1;
+                }
+                break;
+                default :
+                {
+                    fWidth /= mnWinExtX;
+                    fHeight /= mnWinExtY;
+                    fWidth *= mnDevWidth;
+                    fHeight *= mnDevHeight;
+                    fWidth *= (double)mnMillX * 100 / (double)mnPixX;
+                    fHeight *= (double)mnMillY * 100 / (double)mnPixY;
+                }
+                break;
             }
         }
         return Size( FRound( fWidth ), FRound( fHeight ) );
@@ -837,15 +899,25 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnLatestBkMode      ( 0 ),
     maBkColor           ( COL_WHITE ),
     maLatestBkColor     ( 0x12345678 ),
-    mnMapMode           ( MM_ANISOTROPIC ),
     mbNopMode           ( sal_False ),
     maActPos            ( Point() ),
     meRasterOp          ( ROP_OVERPAINT ),
     meLatestRasterOp    ( ROP_INVERT ),
     mnEntrys            ( 16 ),
     mnGfxMode           ( GM_COMPATIBLE ),
-    mnRefExtX           ( 0 ),
-    mnRefExtY           ( 0 )
+    mnMapMode           ( MM_TEXT ),
+    mnDevOrgX           ( 0 ),
+    mnDevOrgY           ( 0 ),
+    mnDevWidth          ( 1 ),
+    mnDevHeight         ( 1 ),
+    mnWinOrgX           ( 0 ),
+    mnWinOrgY           ( 0 ),
+    mnWinExtX           ( 1 ),
+    mnWinExtY           ( 1 ),
+    mnPixX              ( 100 ),
+    mnPixY              ( 100 ),
+    mnMillX             ( 1 ),
+    mnMillY             ( 1 )
 {
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  // The original clipregion has to be on top
     maFont.SetCharSet( gsl_getSystemTextEncoding() );                   // of the stack so it can always be restored
@@ -870,7 +942,10 @@ WinMtfOutput::~WinMtfOutput()
 
     mpGDIMetaFile->AddAction( new MetaPopAction() );
     mpGDIMetaFile->SetPrefMapMode( MAP_100TH_MM );
-    mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
+    if ( mrclFrame.IsEmpty() )
+        mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
+    else
+        mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
 
     for ( UINT32 i = 0; i < mnEntrys; i++ )
     {
@@ -1485,7 +1560,15 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         if( pDXArry )
             mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDXArry, 0, STRING_LEN ) );
         else
-            mpGDIMetaFile->AddAction( new MetaTextAction( rPosition, rText, 0, STRING_LEN ) );
+        {
+            VirtualDevice   aVDev;
+            aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
+            aVDev.SetFont( maFont );
+            long* pOwnDx = new long[ rText.Len() ];
+            aVDev.GetTextArray( rText, pOwnDx, 0, STRING_LEN );
+            mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pOwnDx, 0, STRING_LEN ) );
+            delete[] pOwnDx;
+        }
     }
     SetGfxMode( nOldGfxMode );
 }
@@ -1575,7 +1658,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
             if ( ( nRasterOperation & 0xaa ) != ( ( nRasterOperation & 0x55 ) << 1 ) )
                 nUsed |= 4;     // destination is used
 
-            if ( nUsed & 1 )
+            if ( (nUsed & 1) && (( nUsed & 2 ) == 0) )
             {   // patterns aren't well supported yet
                 sal_uInt32 nOldRop = SetRasterOp( ROP_OVERPAINT );  // in this case nRasterOperation is either 0 or 0xff
                 UpdateFillStyle();
@@ -1635,6 +1718,11 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         case 0x8 :
                         {
                             Bitmap  aMask( aBitmap );
+                            if ( ( nUsed & 1 ) && ( nRasterOperation & 0xb0 ) == 0xb0 )     // pattern used
+                            {
+                                aBitmap.Convert( BMP_CONVERSION_24BIT );
+                                aBitmap.Erase( maFillStyle.aFillColor );
+                            }
                             BitmapEx aBmpEx( aBitmap, aMask );
                             ImplDrawBitmap( aPos, aSize, aBmpEx );
                             if ( nOperation == 0x7 )
@@ -1754,8 +1842,18 @@ void WinMtfOutput::SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd )
 
 void WinMtfOutput::SetDevExt( const Size& rSize )
 {
-    mnDevWidth = rSize.Width();
-    mnDevHeight = rSize.Height();
+    if ( rSize.Width() && rSize.Height() )
+    {
+        switch( mnMapMode )
+        {
+            case MM_ISOTROPIC :
+            case MM_ANISOTROPIC :
+            {
+                mnDevWidth = rSize.Width();
+                mnDevHeight = rSize.Height();
+            }
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------------
@@ -1786,8 +1884,19 @@ void WinMtfOutput::SetWinOrgOffset( INT32 nXAdd, INT32 nYAdd )
 
 void WinMtfOutput::SetWinExt( const Size& rSize )
 {
-    mnWinExtX = rSize.Width();
-    mnWinExtY = rSize.Height();
+
+    if( rSize.Width() && rSize.Height() )
+    {
+        switch( mnMapMode )
+        {
+            case MM_ISOTROPIC :
+            case MM_ANISOTROPIC :
+            {
+                mnWinExtX = rSize.Width();
+                mnWinExtY = rSize.Height();
+            }
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------------
@@ -1800,10 +1909,32 @@ void WinMtfOutput::ScaleWinExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetRefExt( const Size& rSize )
+void WinMtfOutput::SetrclBounds( const Rectangle& rRect )
 {
-    mnRefExtX = rSize.Width();
-    mnRefExtY = rSize.Height();
+    mrclBounds = rRect;
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::SetrclFrame( const Rectangle& rRect )
+{
+    mrclFrame = rRect;
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::SetRefPix( const Size& rSize )
+{
+    mnPixX = rSize.Width();
+    mnPixY = rSize.Height();
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::SetRefMill( const Size& rSize )
+{
+    mnMillX = rSize.Width();
+    mnMillY = rSize.Height();
 }
 
 //-----------------------------------------------------------------------------------
@@ -1811,6 +1942,16 @@ void WinMtfOutput::SetRefExt( const Size& rSize )
 void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 {
     mnMapMode = nMapMode;
+    if ( nMapMode == MM_TEXT )
+    {
+        mnWinExtX = mnDevWidth;
+        mnWinExtY = mnDevHeight;
+    }
+    else if ( mnMapMode == MM_HIMETRIC )
+    {
+        mnWinExtX = mnMillX * 100;
+        mnWinExtY = mnMillY * 100;
+    }
 }
 
 //-----------------------------------------------------------------------------------
