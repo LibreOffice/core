@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-29 12:40:11 $
+ *  last change: $Author: jp $ $Date: 2001-05-30 16:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                 if( nIndex >= pImpl->Count() )
                 {
                     pImpl = NULL;
-                    Cache()->UnlockImpl();
+                    pDoc->GetLayoutCache()->UnlockImpl();
                 }
 #endif
             }
