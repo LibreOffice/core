@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:59:30 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SC_DLLIMPLEMENTATION
+#undef SC_DLLIMPLEMENTATION
+#endif
 
 #include <vcl/svapp.hxx>
 #include <svtools/aeitem.hxx>
