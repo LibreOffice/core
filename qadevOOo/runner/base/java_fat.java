@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change:$Date: 2004-07-23 10:42:29 $
+ *  last change:$Date: 2004-11-02 11:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ import lib.Status;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import lib.TestResult;
 
 import share.DescEntry;
 import share.DescGetter;
@@ -106,9 +107,10 @@ public class java_fat implements TestBase {
     public static boolean debug = false;
     public static boolean keepdocument = false;
     public static boolean logging = true;
+    private DynamicClassLoader dcl = null;
 
     public boolean executeTest(lib.TestParameters param) {
-        DynamicClassLoader dcl = new DynamicClassLoader();
+        dcl = new DynamicClassLoader();
 
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
@@ -134,7 +136,7 @@ public class java_fat implements TestBase {
         System.out.println();
 
         if (entries == null) {
-            System.out.println("Couldn't get Description for Job");
+            System.out.println("Couldn't get Description for Job: " + job);
 
             return false;
         }
@@ -285,42 +287,45 @@ public class java_fat implements TestBase {
                 MultiMethodTest ifc = null;
                 lib.TestResult res = null;
 
-                try {
-                    ifc = (MultiMethodTest) dcl.getInstance(
-                                  entry.SubEntries[j].entryName);
-                    res = ifc.run(entry.SubEntries[j], tEnv, param);
-                } catch (IllegalArgumentException iae) {
-                    System.out.println("Couldn't load class " +
-                                       entry.SubEntries[j].entryName);
-                    System.out.println("**** " + iae.getMessage() + " ****");
-                    Summarizer.summarizeDown(entry.SubEntries[j],
-                                             iae.getMessage());
-                } catch (java.lang.NoClassDefFoundError iae) {
-                    System.out.println("Couldn't load class " +
-                                       entry.SubEntries[j].entryName);
-                    System.out.println("**** " + iae.getMessage() + " ****");
-                    Summarizer.summarizeDown(entry.SubEntries[j],
-                                             iae.getMessage());
-               } catch (java.lang.RuntimeException e) {
-                    helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                       "AppProvider");
+                // run the interface test twice if it failed.
+                int countInterfaceTestRun = 0;
+                boolean finished = false;
+                while (!finished) {
+                    try {
+                        countInterfaceTestRun++;
+                        finished = true;
+                        res = executeInterfaceTest(entry.SubEntries[j], tEnv, param);
+                    } catch (IllegalArgumentException iae) {
+                        System.out.println("Couldn't load class " +
+                                           entry.SubEntries[j].entryName);
+                        System.out.println("**** " + iae.getMessage() + " ****");
+                        Summarizer.summarizeDown(entry.SubEntries[j],
+                                                 iae.getMessage());
+                    } catch (java.lang.NoClassDefFoundError iae) {
+                        System.out.println("Couldn't load class " +
+                                           entry.SubEntries[j].entryName);
+                        System.out.println("**** " + iae.getMessage() + " ****");
+                        Summarizer.summarizeDown(entry.SubEntries[j],
+                                                 iae.getMessage());
+                    } catch (java.lang.RuntimeException e) {
+                        helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
+                                                           "AppProvider");
 
-                    if (ph != null) {
-                        office.closeExistingOffice(param, true);
-                        shortWait(5000);
+                        if (ph != null) {
+                            office.closeExistingOffice(param, true);
+                            shortWait(5000);
+                        }
+
+                        tEnv = getEnv(entry, param);
+                        if (countInterfaceTestRun < 2) {
+                            finished = false;
+                        }
+                        else {
+                            Summarizer.summarizeDown(entry.SubEntries[j],
+                                                        e.toString()+".FAILED");
+                        }
                     }
-
-
-                    tEnv = getEnv(entry, param);
-                    ifc = (MultiMethodTest) dcl.getInstance(
-                                  entry.SubEntries[j].entryName);
-
-                    if ((tEnv != null) && (ifc != null)) {
-                        res = ifc.run(entry.SubEntries[j], tEnv, param);
-                    } else {
-                        res = null;
-                    }
-               }
+                }
                 if (res != null) {
                     for (int k = 0; k < entry.SubEntries[j].SubEntryCount; k++) {
                         if (res.hasMethod(
@@ -386,7 +391,8 @@ public class java_fat implements TestBase {
     }
 
     protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
-        DynamicClassLoader dcl = new DynamicClassLoader();
+        if (dcl == null)
+            dcl = new DynamicClassLoader();
         String officeProviderName = (String) param.get("OfficeProvider");
         AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
 
@@ -508,5 +514,12 @@ public class java_fat implements TestBase {
         }
 
         return entryList;
+    }
+
+    private TestResult executeInterfaceTest(
+            DescEntry entry, TestEnvironment tEnv, TestParameters param)
+            throws IllegalArgumentException, java.lang.NoClassDefFoundError {
+        MultiMethodTest ifc = (MultiMethodTest) dcl.getInstance(entry.entryName);
+        return ifc.run(entry, tEnv, param);
     }
 }
