@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:22:54 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 
 // -------------------------------------------------------------------------------------
 
+DECLARE_CREATEINSTANCE( SvNumberFormatterServiceObj )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
 DECLARE_CREATEINSTANCE( ImageProducer )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
@@ -264,6 +265,9 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" ) );
 
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatter" ) );
+
         xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/org.openoffice.comp.svt.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
 
@@ -318,6 +322,12 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
             xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatsSupplierServiceObject_CreateInstance, aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatter" );
+            xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatterServiceObj_CreateInstance, aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "org.openoffice.comp.svt.OAddressBookSourceDialogUno") == 0 )
         {
