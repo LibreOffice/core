@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profileitem_python.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:17:04 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,60 +61,6 @@
 
 #include "macros.inc"
 
-Profile gid_Profile_Pyuno_Ini
-    ModuleID = gid_Module_Optional_Pyuno;
-  #ifdef UNX
-    Name = "pyunorc";
-  #else
-    Name = "pyuno.ini";
-  #endif
-    Dir = gid_Dir_Program;
-    Styles = (NETWORK);
-End
-
-ProfileItem gid_Profileitem_Pyuno_Shared_Packages
-    ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Optional_Pyuno;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "PYUNO_SHARED_PACKAGES";
-  #ifdef UNX
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/share/uno_packages/cache";
-  #else
-    Value = "${$ORIGIN/bootstrap.ini:BaseInstallation}/share/uno_packages/cache";
-  #endif
-End
-
-ProfileItem gid_Profileitem_Pyuno_User_Packages
-    ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Optional_Pyuno;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "PYUNO_USER_PACKAGES";
-  #ifdef UNX
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/uno_packages/cache";
-  #else
-    Value = "${$ORIGIN/bootstrap.ini:UserInstallation}/user/uno_packages/cache";
-  #endif
-End
-
-ProfileItem gid_Profileitem_Pyuno_Uno_Types
-    ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Optional_Pyuno;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "UNO_TYPES";
-    Value = "$ORIGIN/types.rdb ?$PYUNO_SHARED_PACKAGES/types.rdb ?$PYUNO_USER_PACKAGES/types.rdb";
-End
-
-ProfileItem gid_Profileitem_Pyuno_Uno_Services
-    ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Optional_Pyuno;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "UNO_SERVICES";
-    Value = "?$PYUNO_USER_PACKAGES/services.rdb ?$PYUNO_SHARED_PACKAGES/services.rdb $ORIGIN/services.rdb";
-End
 
 Profile gid_Profile_Pythonloader_Uno_Ini
     ModuleID = gid_Module_Optional_Pyuno;
