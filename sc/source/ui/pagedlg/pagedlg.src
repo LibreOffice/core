@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:57:28 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ greek ] = "Περιοχή εκτύπωσης";
         Text[ korean ] = "ΐΞΌβ Ήόΐ§";
         Text[ turkish ] = "Yazdύrma aralύπύ";
+        Text[ catalan ] = "Αrea de impresiσn";
     };
     ListBox LB_PRINTAREA
     {
@@ -263,6 +264,12 @@ ModelessDialog RID_SCDLG_AREAS
         < "- benutzerdefiniert -" ; Default ; > ;
         < "- Selektion -" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "- ninguno -" ; Default ; > ;
+        < "- definido por el usuario -" ; Default ; > ;
+        < "- selecciσn -" ; Default ; > ;
+    };
     };
     Edit ED_PRINTAREA
     {
@@ -295,6 +302,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ greek ] = "Σμίκρυνση";
         QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_REPEATROW
     {
@@ -322,6 +330,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ greek ] = "Επαναλαμβανόμενη γραμμή";
         Text[ korean ] = "Ηΰ ΉέΊΉ";
         Text[ turkish ] = "Yinelenen satύr";
+        Text[ catalan ] = "Fila ~a repetir";
     };
     ListBox LB_REPEATROW
     {
@@ -444,6 +453,11 @@ ModelessDialog RID_SCDLG_AREAS
             < "- keine -" ; Default ; > ;
         < "- benutzerdefiniert -" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "- ninguno -" ; Default ; > ;
+        < "- definida por el usuario -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATROW
     {
@@ -476,6 +490,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ greek ] = "Σμίκρυνση";
         QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_REPEATCOL
     {
@@ -503,6 +518,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ greek ] = "Επαναλαμβανόμενη στήλη";
         Text[ korean ] = "Ώ­ ΉέΊΉ";
         Text[ turkish ] = "Yinelenen sόtun";
+        Text[ catalan ] = "~Columna a repetir";
     };
     ListBox LB_REPEATCOL
     {
@@ -625,6 +641,11 @@ ModelessDialog RID_SCDLG_AREAS
             < "- keine -" ; Default ; > ;
         < "- benutzerdefiniert -" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "- ninguno -" ; Default ; > ;
+        < "- definida por el usuario -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATCOL
     {
@@ -657,6 +678,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ greek ] = "Σμίκρυνση";
         QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     Text [ swedish ] = "Redigera utskriftsomrεden" ;
     Text [ danish ] = "Rediger udskriftsomrεde" ;
@@ -671,6 +693,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ greek ] = "Επεξεργασία περιοχών εκτύπωσης";
     Text[ korean ] = "ΐΞΌβΉόΐ§ ΖνΑύ";
     Text[ turkish ] = "Yazdύrma aralύklarύnύ dόzenle";
+    Text[ catalan ] = "Editar αreas de impresiσn";
 };
 TabPage RID_SCPAGE_TABLE
 {
@@ -707,6 +730,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Κεφαλίδες γραμμών/στηλών";
         Text[ korean ] = "Ώ­°ϊ Ηΰ ΈΣΈ®±Ϋ(~C)";
         Text[ turkish ] = "Satύr ve sόtun ~baώlύklarύ";
+        Text[ catalan ] = "Tνt~ulos de filas y columnas";
     };
     CheckBox BTN_GRID
     {
@@ -735,6 +759,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Πλέ~γμα πίνακα";
         Text[ korean ] = "Η₯‘‘΄«±έΌ±(~G)";
         Text[ turkish ] = "~Kύlavuz ηizgiler";
+        Text[ catalan ] = "~Cuadrνcula";
     };
     CheckBox BTN_NOTES
     {
@@ -763,6 +788,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Σημειώσεις";
         Text[ korean ] = "ΈήΈπ(~N)";
         Text[ turkish ] = "~Notlar";
+        Text[ catalan ] = "~Notas";
     };
     CheckBox BTN_OBJECTS
     {
@@ -791,6 +817,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Αντικείμενα/Γραφικά";
         Text[ korean ] = "°³ΓΌ/±Χ·‘ΗΘ(~O)";
         Text[ turkish ] = "~Nesne/grafikler";
+        Text[ catalan ] = "~Objetos/Imαgenes";
     };
     CheckBox BTN_CHARTS
     {
@@ -819,6 +846,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Διαγράμματα";
         Text[ korean ] = "ΒχΖ®(~A)";
         Text[ turkish ] = "~ήemalar";
+        Text[ catalan ] = "~Diagramas";
     };
     CheckBox BTN_DRAWINGS
     {
@@ -847,6 +875,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Αντικείμενα σχεδίασης";
         Text[ korean ] = "°³ΓΌ ±ΧΈ®±β(~D)";
         Text[ turkish ] = "Ηizim nesnele~ri";
+        Text[ catalan ] = "O~bjetos de dibujo";
     };
     CheckBox BTN_FORMULAS
     {
@@ -875,6 +904,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Τύποι";
         Text[ korean ] = "Όφ½Δ(~F)";
         Text[ turkish ] = "~Formόl";
+        Text[ catalan ] = "~Fσrmulas";
     };
     CheckBox BTN_NULLVALS
     {
@@ -903,6 +933,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Μηδενικές τιμές";
         Text[ korean ] = "0 °ͺ(~Z)";
         Text[ turkish ] = "Sύfύr deπer~leri";
+        Text[ catalan ] = "~Valores cero";
     };
     GroupBox GB_PRINT
     {
@@ -930,6 +961,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Εκτύπωση";
         Text[ korean ] = "ΐΞΌβ";
         Text[ turkish ] = "Yazdύr";
+        Text[ catalan ] = "Imprimir";
     };
     RadioButton BTN_TOPDOWN
     {
@@ -958,6 +990,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Από πάνω προς τα κάτω";
         Text[ korean ] = "ΐ§Ώ‘Ό­ ΎΖ·‘·Ξ(~T)";
         Text[ turkish ] = "~Yukardan aώaπύ";
+        Text[ catalan ] = "De arriba ~hacia abajo";
     };
     RadioButton BTN_LEFTRIGHT
     {
@@ -987,6 +1020,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Από αριστερά προς τα δεξιά";
         Text[ korean ] = "ΏήΒΚΏ‘Ό­ ΏΐΈ₯ΒΚΐΈ·Ξ(~L)";
         Text[ turkish ] = "S~oldan saπa";
+        Text[ catalan ] = "De ~izquierda a derecha";
     };
     FixedBitmap BMP_PAGEDIR
     {
@@ -1024,6 +1058,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Πρώτος αριθμός σελίδας";
         Text[ korean ] = "ΓΉ ΒΚ ΉψΘ£(~P)";
         Text[ turkish ] = "έlk sayfa ~numarasύ";
+        Text[ catalan ] = "~Primer nϊm. de pαgina";
     };
     NumericField ED_PAGENO
     {
@@ -1063,6 +1098,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Διάταξη σελιδών";
         Text[ korean ] = "ΒΚ ΌψΌ­";
         Text[ turkish ] = "Sayfa sύrasύ";
+        Text[ catalan ] = "Orden de pαginas";
     };
     RadioButton BTN_SCALEALL
     {
@@ -1091,6 +1127,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "₯ώ³‘±Δ₯Ξ[%](~A)";
         Text[ arabic ] = "Ηαία Εαμ  [%]";
         Text[ turkish ] = "T~όmό [%]";
+        Text[ catalan ] = "~Todo al [%]";
     };
     RadioButton BTN_SCALEPAGENUM
     {
@@ -1119,6 +1156,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Μέ~γ. αριθμός σελίδων";
         Text[ korean ] = "ΓΦ΄λ ΒΚ Όφ(~M)";
         Text[ turkish ] = "A~zami sayfa sayύsύ";
+        Text[ catalan ] = "Nϊm. ~mαx. de pαginas";
     };
     NumericField ED_SCALEALL
     {
@@ -1169,5 +1207,6 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "Κλίμακα";
         Text[ korean ] = "Ήθΐ²";
         Text[ turkish ] = "Φlηek";
+        Text[ catalan ] = "Escala";
     };
 };
