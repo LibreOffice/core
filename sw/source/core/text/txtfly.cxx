@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 16:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,8 +692,9 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             // Wert anwachsen, so sparen wir einige Leerzeilen.
 #ifdef VERTICAL_LAYOUT
             SWRECTFN( pFrm )
-            const long nNextTop =
-                    pFrm->SwitchVerticalToHorizontal( pTxtFly->GetNextTop() );
+            long nNextTop = pTxtFly->GetNextTop();
+            if ( bVert )
+                nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
             if( nNextTop > aInter.Bottom() )
             {
                 SwTwips nH = nNextTop - aInter.Top();
