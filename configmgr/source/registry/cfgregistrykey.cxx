@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:48 $
+ *  last change: $Author: jb $ $Date: 2002-04-11 14:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,9 +1440,14 @@ void SAL_CALL OConfigurationRegistryKey::closeKey(  ) throw(InvalidRegistryExcep
 
     checkValid(KAT_META);
 
-    m_xNode.clear();
-    m_xParentNode.clear();
-//  m_sLocalName = OUString(); - local name is const ...
+    bool bRoot = (m_sLocalName.getLength() == 0);
+
+    if (!bRoot) // don't close, if this is the root key ..
+    {
+        m_xNode.clear();
+        m_xParentNode.clear();
+//      m_sLocalName = OUString(); - local name is const ...
+    }
 }
 
 //--------------------------------------------------------------------------
