@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-09 17:51:22 $
+ *  last change: $Author: khong $ $Date: 2002-09-06 07:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ public:\
 #ifdef BREAKITERATOR_ALL
 BREAKITERATOR_CJK( zh )
 BREAKITERATOR_CJK( ja )
+BREAKITERATOR_CJK( ko )
 #endif
 #undef BREAKITERATOR__CJK
 
