@@ -347,19 +347,29 @@ public class TokenDecoder {
 
         buffer[0] = (byte) bis.read();
         buffer[1] = (byte) bis.read();
-        int formulaRow = EndianConverter.readShort(buffer);
-        int relativeFlags = (formulaRow & 0xC000)>>14;
-        formulaRow &= 0x3FFF;
-        int formulaCol = (byte) bis.read();
-        String cellRef = "." + int2CellStr(formulaRow, formulaCol, relativeFlags);
+        int formulaRow1 = EndianConverter.readShort(buffer);
+        int relativeFlags1 = (formulaRow1 & 0xC000)>>14;
+        formulaRow1 &= 0x3FFF;
+
+        buffer[0] = (byte) bis.read();
+        buffer[1] = (byte) bis.read();
+        int formulaRow2 = EndianConverter.readShort(buffer);
+        int relativeFlags2 = (formulaRow2 & 0xC000)>>14;
+        formulaRow2 &= 0x3FFF;
+
+        int formulaCol1 = (byte) bis.read();
+        int formulaCol2 = (byte) bis.read();
+
+        String cellRef1 = "." + int2CellStr(formulaRow1, formulaCol1, relativeFlags1);
+        String cellRef2 = int2CellStr(formulaRow2, formulaCol2, relativeFlags2);
 
         if(Sheet1 == Sheet2) {
-            outputString = "$" + wb.getSheetName(Sheet1) + cellRef;
+            outputString = "$" + wb.getSheetName(Sheet1) + cellRef1 + ":" + cellRef2;
         } else {
-            outputString = "$" + wb.getSheetName(Sheet1) + cellRef + ":$" + wb.getSheetName(Sheet2) + cellRef;
+            outputString = "$" + wb.getSheetName(Sheet1) + cellRef1 + ":$" + wb.getSheetName(Sheet2) + "." + cellRef2;
         }
 
-        return (tf.getOperandToken(outputString,"3D_CELL_REFERENCE"));
+        return (tf.getOperandToken(outputString,"3D_CELL_AREA_REFERENCE"));
     }
 
     /**
