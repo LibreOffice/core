@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-02-01 17:10:28 $
+ *  last change: $Author: mav $ $Date: 2002-03-05 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,8 @@ SotStorage::SotStorage( const ::ucb::Content& rContent, const String & rName, St
     pOwnStg = new UCBStorage( rContent, aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
+
+    SignAsRoot( pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
@@ -647,6 +649,7 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
 
     ULONG nErr = pOwnStg->GetError();
     SetError( nErr );
+    SignAsRoot( pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( BOOL bUCBStorage, const String & rName, StreamMode nMode, StorageMode nStorageMode )
@@ -687,6 +690,8 @@ SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
         pOwnStg = new Storage( rStm, FALSE );
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
+
+    SignAsRoot( pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( SvStream & rStm )
@@ -701,6 +706,8 @@ SotStorage::SotStorage( SvStream & rStm )
         pOwnStg = new Storage( rStm, FALSE );
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
+
+    SignAsRoot( pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
@@ -722,6 +729,8 @@ SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
     bDelStm = bDelete;
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
+
+    SignAsRoot( pOwnStg->IsRoot() );
 }
 
 /*************************************************************************
