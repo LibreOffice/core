@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-02-15 16:01:34 $
+#   last change: $Author: jsc $ $Date: 2001-03-14 10:02:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ APP1OBJS=   $(OBJ)$/regmerge.obj
 
 APP1STDLIBS=\
             $(SALLIB) \
-            $(VOSLIB) \
+            $(SALHELPERLIB) \
             $(REGLIB)
 
 .IF "$(GUI)"=="WNT"
@@ -101,7 +101,7 @@ APP2OBJS=   $(OBJ)$/regview.obj
 
 APP2STDLIBS=\
             $(SALLIB) \
-            $(VOSLIB) \
+            $(SALHELPERLIB) \
             $(REGLIB)
 
 .IF "$(GUI)"=="WNT"
@@ -114,7 +114,7 @@ APP3OBJS=   $(OBJ)$/regcompare.obj
 
 APP3STDLIBS=\
             $(SALLIB) \
-            $(VOSLIB) \
+            $(SALHELPERLIB) \
             $(REGLIB)
 
 .IF "$(GUI)"=="WNT"
