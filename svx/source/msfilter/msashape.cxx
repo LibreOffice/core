@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-06 17:24:44 $
+ *  last change: $Author: sj $ $Date: 2001-02-08 14:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,6 +979,47 @@ static const mso_AutoShape msoBentArrow =
     (sal_Int32*)mso_sptBentArrowDefault,
     (sal_Int32*)mso_sptBentArrowTextRect,
     (sal_Int32*)NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptUturnArrowVert[] =
+{
+    0, 21600,   // p
+    0, 8550,    // p
+    0, 3540,    // c
+    4370, 0,    // c
+    9270, 0,    // p
+    13890, 0,   // c
+    18570, 3230,// c
+    18600, 8300,// p
+    21600, 8300,// p
+    15680, 14260,// p
+    9700, 8300, // p
+    12500, 8300, // p
+    12320,  6380, // c
+    10870, 5850, // c
+    9320, 5850, // p
+    7770, 5850, // c
+    6040, 6410, // c
+    6110, 8520, // p
+    6110, 21600 // p
+};
+static const sal_uInt16 mso_sptUturnArrowSegm[] =
+{
+    0x4000, 0x0001, 0x2002, 0x0004, 0x2002, 0x0001, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptUturnArrowTextRect[] =
+{
+    1, 0, 8280, 6110, 21600
+};
+static const mso_AutoShape msoUturnArrow =
+{
+    (sal_Int32*)mso_sptUturnArrowVert, sizeof( mso_sptUturnArrowVert ) >> 3,
+    (sal_uInt16*)mso_sptUturnArrowSegm, sizeof( mso_sptUturnArrowSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptUturnArrowTextRect,
+    NULL,
     0x80000000, 0x80000000
 };
 
@@ -5225,6 +5266,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptQuadArrow :             pDefAutoShape = &msoQuadArrow; break;
         case mso_sptLeftRightUpArrow :      pDefAutoShape = &msoLeftRightUpArrow; break;
         case mso_sptBentArrow :             pDefAutoShape = &msoBentArrow; break;
+        case mso_sptUturnArrow :            pDefAutoShape = &msoUturnArrow; break;
         case mso_sptLeftUpArrow :           pDefAutoShape = &msoLeftUpArrow; break;
         case mso_sptBentUpArrow :           pDefAutoShape = &msoBentUpArrow; break;
 //      case mso_sptCurvedRightArrow :      pDefAutoShape = &msoCurvedRightArrow; break;    // !!!!!
