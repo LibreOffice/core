@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: er $ $Date: 2002-09-15 23:16:49 $
+#   last change: $Author: obo $ $Date: 2002-09-25 12:09:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,9 @@ TARFILE_ROOTDIR=icu
 
 PATCH_FILE_NAME=icu-2.2.patch
 
-ADDITIONAL_FILES=source/data/brkitr/edit_word.txt \
-        source/data/brkitr/dict_word.txt \
-        source/data/brkitr/count_word.txt
+ADDITIONAL_FILES=source$/data$/brkitr$/edit_word.txt \
+        source$/data$/brkitr$/dict_word.txt \
+        source$/data$/brkitr$/count_word.txt
 
 # Currently no binary patch, but this is how it worked with ICU 2.0
 #BINARY_PATCH_FILE_NAME=icu-2.0-binary_patch.tar.gz
