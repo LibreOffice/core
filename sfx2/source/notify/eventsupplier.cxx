@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:59:03 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,8 +381,6 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
 //--------------------------------------------------------------------------------------------------------
 SfxEvents_Impl::~SfxEvents_Impl()
 {
-    if ( mxBroadcaster.is() )
-        mxBroadcaster->removeEventListener( this );
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -577,8 +575,8 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference
     pImp = new SfxEvents_Impl( NULL, this );
     m_xEvents = pImp;
     m_xJobsBinding = REFERENCE< XJOBEXECUTOR >(xSmgr->createInstance(OUSTRING::createFromAscii("com.sun.star.task.JobExecutor")), UNO_QUERY);
-    m_refCount--;
     StartListening(*SFX_APP());
+    m_refCount--;
 }
 
 SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
