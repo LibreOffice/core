@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:32:27 $
+ *  last change: $Author: mtg $ $Date: 2001-07-11 11:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,29 +60,35 @@
  ************************************************************************/
 #pragma hdrstop
 
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
-
 #ifndef _SW_XMLSECTIONLIST_HXX
 #include <SwXMLSectionList.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 
 SwXMLSectionList::SwXMLSectionList ( SvStrings & rNewSectionList)
 : rSectionList ( rNewSectionList )
 {
-    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
-                                     sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
+    GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
+                           GetXMLToken ( XML_N_BLOCK_LIST),
+                           XML_NAMESPACE_BLOCKLIST );
 }
 
 SwXMLSectionList::~SwXMLSectionList ( void )
@@ -95,57 +101,21 @@ SvXMLImportContext *SwXMLSectionList::CreateContext(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-/*
-    String sName;
-    if (nPrefix == XML_NAMESPACE_TEXT && (rLocalName.compareToAscii( sXML_section ) == 0))
-    {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
-    for (sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
-        const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_TEXT == nPrefix)
-        {
-            if (aLocalName.compareToAscii( sXML_name ) == 0)
-            {
-                sName = rAttrValue;
-            }
-        }
-    }
-    if ( sName.Len() )
-        rSectionList.Insert ( new String(sName), rSectionList.Count() );
-
-    if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName.compareToAscii( sXML_document ) == 0 )
-        pContext = new SvXMLSectionListContext( *this, nPrefix, rLocalName, xAttrList );
-    else
-    }
-    if (nPrefix == XML_NAMESPACE_OFFICE && rLocalName.compareToAscii ( sXML_document) == 0)
-    {
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
-    }
-    else
-*/
-        if  (nPrefix == XML_NAMESPACE_OFFICE && rLocalName.compareToAscii ( sXML_body ) == 0 ||
+    if  (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY ) ||
          nPrefix == XML_NAMESPACE_TEXT &&
-        (rLocalName.compareToAscii( sXML_p ) == 0 ||
-         rLocalName.compareToAscii( sXML_h ) == 0 ||
-         rLocalName.compareToAscii( sXML_a ) == 0 ||
-         rLocalName.compareToAscii( sXML_span ) == 0 ||
-         rLocalName.compareToAscii( sXML_section ) == 0 ||
-         rLocalName.compareToAscii( sXML_index_body ) == 0 ||
-         rLocalName.compareToAscii( sXML_index_title ) == 0 ||
-         rLocalName.compareToAscii( sXML_insertion ) == 0 ||
-         rLocalName.compareToAscii( sXML_deletion ) == 0 ) )
+        (IsXMLToken ( rLocalName, XML_P ) ||
+         IsXMLToken ( rLocalName, XML_H ) ||
+         IsXMLToken ( rLocalName, XML_A ) ||
+         IsXMLToken ( rLocalName, XML_SPAN ) ||
+         IsXMLToken ( rLocalName, XML_SECTION ) ||
+         IsXMLToken ( rLocalName, XML_INDEX_BODY ) ||
+         IsXMLToken ( rLocalName, XML_INDEX_TITLE )||
+         IsXMLToken ( rLocalName, XML_INSERTION ) ||
+         IsXMLToken ( rLocalName, XML_DELETION ) ) )
         pContext = new SvXMLSectionListContext (*this, nPrefix, rLocalName, xAttrList);
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
-        /*
-        pContext = new SvXMLIgnoreSectionListContext (*this, nPrefix, rLocalName, xAttrList);
-        */
     return pContext;
 }
 
@@ -168,8 +138,8 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
     String sName;
 
-    if (nPrefix == XML_NAMESPACE_TEXT && (rLocalName.compareToAscii( sXML_section ) == 0 ||
-                                          rLocalName.compareToAscii( sXML_bookmark) == 0 ) )
+    if (nPrefix == XML_NAMESPACE_TEXT && ( IsXMLToken ( rLocalName, XML_SECTION ) ||
+                                           IsXMLToken ( rLocalName, XML_BOOKMARK) ) )
     {
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
@@ -179,24 +149,13 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
             OUString aLocalName;
             sal_uInt16 nPrefix = rLocalRef.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-            if (XML_NAMESPACE_TEXT == nPrefix)
-            {
-                if (aLocalName.compareToAscii( sXML_name ) == 0)
-                {
-                    sName = rAttrValue;
-                }
-            }
+            if (XML_NAMESPACE_TEXT == nPrefix && IsXMLToken ( aLocalName, XML_NAME ) )
+                sName = rAttrValue;
         }
         if ( sName.Len() )
             rLocalRef.rSectionList.Insert ( new String(sName), rLocalRef.rSectionList.Count() );
     }
-    /*
-    if (nPrefix == XML_NAMESPACE_TEXT &&
-        rLocalName.compareToAscii( sXML_section ) == 0)
-        pContext = new SvXMLSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);
-    else
-        pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
-    */
+
     pContext = new SvXMLSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     return pContext;
 }

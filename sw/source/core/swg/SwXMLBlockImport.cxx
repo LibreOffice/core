@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:44:35 $
+ *  last change: $Author: mtg $ $Date: 2001-07-11 11:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,25 @@
 #ifndef _SW_XMLBLOCKIMPORT_HXX
 #include <SwXMLBlockImport.hxx>
 #endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
+#include <SwXMLBlockListContext.hxx>
+#endif
+#ifndef _SW_XMLTEXTBLOCKS_HXX
+#include <SwXMLTextBlocks.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 using namespace ::rtl;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
@@ -71,8 +87,9 @@ sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 SwXMLBlockListImport::SwXMLBlockListImport ( SwXMLTextBlocks &rBlocks )
 : rBlockList (rBlocks)
 {
-    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
-                                     sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
+    GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
+                           GetXMLToken ( XML_N_BLOCK_LIST ),
+                           XML_NAMESPACE_BLOCKLIST );
 }
 
 SwXMLBlockListImport::~SwXMLBlockListImport ( void )
@@ -85,8 +102,8 @@ SvXMLImportContext *SwXMLBlockListImport::CreateContext(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    if( XML_NAMESPACE_BLOCKLIST==nPrefix &&
-        rLocalName.compareToAscii( sXML_block_list ) == 0 )
+    if ( XML_NAMESPACE_BLOCKLIST == nPrefix &&
+         IsXMLToken ( rLocalName, XML_BLOCK_LIST ) )
         pContext = new SwXMLBlockListContext( *this, nPrefix, rLocalName,
                                               xAttrList );
     else
@@ -99,8 +116,6 @@ SwXMLTextBlockImport::SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks, String & 
 , bTextOnly ( bNewTextOnly )
 , m_rText ( rNewText )
 {
-//  GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
-//                                sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
 }
 
 SwXMLTextBlockImport::~SwXMLTextBlockImport ( void )
@@ -114,7 +129,7 @@ SvXMLImportContext *SwXMLTextBlockImport::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
     if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName.compareToAscii( bTextOnly ? sXML_document : sXML_document_content ) == 0 )
+        IsXMLToken ( rLocalName, bTextOnly ? XML_DOCUMENT : XML_DOCUMENT_CONTENT ) )
         pContext = new SwXMLTextBlockDocumentContext( *this, nPrefix, rLocalName, xAttrList );
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
