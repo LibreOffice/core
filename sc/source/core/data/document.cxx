@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
+ *  last change: $Author: er $ $Date: 2000-10-29 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ BOOL ScDocument::GetTable( const String& rName, USHORT& rTab ) const
 
 BOOL ScDocument::ValidTabName( const String& rName ) const
 {
-    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::i18n;
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
         KParseTokens::ASC_UNDERSCORE;
     sal_Int32 nContFlags = nStartFlags;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-06 13:46:12 $
+ *  last change: $Author: er $ $Date: 2000-10-29 16:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ xub_StrLen ScCompiler::NextSymbol()
     }
     if ( bi18n )
     {
-        using namespace ::com::sun::star::lang;
+        using namespace ::com::sun::star::i18n;
         nSrcPos += nSpaces;
         sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
