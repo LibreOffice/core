@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-15 15:38:54 $
+ *  last change: $Author: pb $ $Date: 2001-01-23 11:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@ void ReplaceStringHookProc( UniString& rStr )
 {
     static String aBrandName;
     static String aVersion;
+    static String aExtension;
+
+    static int nAll = 0, nPro = 0;
+
     if ( !aBrandName.Len() )
     {
         Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
@@ -99,10 +103,20 @@ void ReplaceStringHookProc( UniString& rStr )
         aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
         aRet >>= aTmp;
         aVersion = aTmp;
+
+        aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
+        aRet >>= aTmp;
+        aExtension = aTmp;
     }
 
-    rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aBrandName );
-    rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", aVersion );
+    nAll++;
+    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    {
+        nPro++;
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aBrandName );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", aVersion );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", aExtension );
+    }
 }
 
 Desktop aDesktop;
