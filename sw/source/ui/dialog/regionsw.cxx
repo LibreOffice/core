@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:38:53 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 17:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,7 +1494,9 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
                     rBox.InsertEntry( *aArr[ n ] );
             }
         }
-        else if ( aStor.Is() && ( SOT_FORMATSTR_ID_STARWRITER_60 == nFormat ) )
+        else if ( aStor.Is() &&
+                ( SOT_FORMATSTR_ID_STARWRITER_60 == nFormat ||
+                  SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nFormat ) )
         {
             SvStringsDtor aArr( 10, 10 );
             Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -1502,12 +1504,10 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
             ASSERT( xServiceFactory.is(),
                     "XMLReader::Read: got no service manager" );
             if( !xServiceFactory.is() )
-            {
-                // Throw an exception ?
-            }
+                return;
 
             xml::sax::InputSource aParserInput;
-            OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
+            OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
             aParserInput.sSystemId = sDocName;
             SvStorageStreamRef xDocStream = aStor->OpenStream( sDocName, ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
             xDocStream->Seek( 0L );
@@ -1520,9 +1520,7 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
             ASSERT( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( !xXMLParser.is() )
-            {
-                // Maybe throw an exception?
-            }
+                return;
 
             // get filter
             Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( (SvStrings&)aArr );
@@ -2317,6 +2315,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/02 14:38:53  jp
+    password change: use sequence instead of string
+
     Revision 1.5  2001/03/02 14:07:11  os
     extended numbering types available
 
