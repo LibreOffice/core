@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiComponentFactory.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 14:24:26 $
+ *  last change: $Author: dbo $ $Date: 2001-07-05 09:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,12 @@
 #ifndef __com_sun_star_lang_XMultiComponentFactory_idl__
 #define __com_sun_star_lang_XMultiComponentFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_uno_Exception_idl__
-#include <com/sun/star/uno/Exception.idl>
+#ifndef __com_sun_star_uno_XComponentContext_idl__
+#include <com/sun/star/uno/XComponentContext.idl>
 #endif
 
 
 //=============================================================================
-
-module com {  module sun {  module star {  module uno {
-interface XComponentContext;
-}; }; }; };
 
 module com {  module sun {  module star {  module lang {
 
