@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:46:29 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 10:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,12 +176,7 @@ void OUserAdmin::FillUserNames()
             const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
             ::rtl::OUString sUserName = m_UserName;
             for(;pBegin != pEnd;++pBegin)
-            {
-                // the user which is connected to the database should be in the list because
-                // he doesn't have the possibility to revoke his own rights
-                if(sUserName != *pBegin)
-                    m_LB_USER.InsertEntry(*pBegin);
-            }
+                m_LB_USER.InsertEntry(*pBegin);
 
             m_LB_USER.SelectEntryPos(0);
             if(m_xUsers->hasByName(m_UserName))
