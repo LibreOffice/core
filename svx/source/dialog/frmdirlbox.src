@@ -2,8 +2,8 @@
  *
  *  $RCSfile: frmdirlbox.src,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:48 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: kz $ $Date: 2002-09-18 19:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,26 @@ String RID_SVXSTR_FRAMEDIR_LTR
     Text = "Links-nach-rechts";
     Text [ english ] = "Left-to-right";
     Text [ english_us ] = "Left-to-right";
+    Text[ portuguese ] = "Left-to-right";
+    Text[ russian ] = "Left-to-right";
+    Text[ greek ] = "Left-to-right";
+    Text[ dutch ] = "Left-to-right";
+    Text[ french ] = "Left-to-right";
+    Text[ spanish ] = "Left-to-right";
+    Text[ finnish ] = "Left-to-right";
+    Text[ italian ] = "Left-to-right";
+    Text[ danish ] = "Left-to-right";
+    Text[ swedish ] = "Left-to-right";
+    Text[ polish ] = "Left-to-right";
+    Text[ portuguese_brazilian ] = "Left-to-right";
+    Text[ japanese ] = "Left-to-right";
+    Text[ korean ] = "Left-to-right";
+    Text[ chinese_simplified ] = "Left-to-right";
+    Text[ chinese_traditional ] = "Left-to-right";
+    Text[ turkish ] = "Left-to-right";
+    Text[ arabic ] = "Left-to-right";
+    Text[ catalan ] = "Left-to-right";
+    Text[ thai ] = "Left-to-right";
 };
 
 String RID_SVXSTR_FRAMEDIR_RTL
@@ -74,6 +94,26 @@ String RID_SVXSTR_FRAMEDIR_RTL
     Text = "Rechts-nach-links";
     Text [ english ] = "Right-to-left";
     Text [ english_us ] = "Right-to-left";
+    Text[ portuguese ] = "Right-to-left";
+    Text[ russian ] = "Right-to-left";
+    Text[ greek ] = "Right-to-left";
+    Text[ dutch ] = "Right-to-left";
+    Text[ french ] = "Right-to-left";
+    Text[ spanish ] = "Right-to-left";
+    Text[ finnish ] = "Right-to-left";
+    Text[ italian ] = "Right-to-left";
+    Text[ danish ] = "Right-to-left";
+    Text[ swedish ] = "Right-to-left";
+    Text[ polish ] = "Right-to-left";
+    Text[ portuguese_brazilian ] = "Right-to-left";
+    Text[ japanese ] = "Right-to-left";
+    Text[ korean ] = "Right-to-left";
+    Text[ chinese_simplified ] = "Right-to-left";
+    Text[ chinese_traditional ] = "Right-to-left";
+    Text[ turkish ] = "Right-to-left";
+    Text[ arabic ] = "Right-to-left";
+    Text[ catalan ] = "Right-to-left";
+    Text[ thai ] = "Right-to-left";
 };
 
 String RID_SVXSTR_FRAMEDIR_SUPER
@@ -81,6 +121,26 @@ String RID_SVXSTR_FRAMEDIR_SUPER
     Text = "Einstellungen des übergeordneten Objektes verwenden";
     Text [ english ] = "Use superordinate object settings";
     Text [ english_us ] = "Use superordinate object settings";
+    Text[ portuguese ] = "Use superordinate object settings";
+    Text[ russian ] = "Use superordinate object settings";
+    Text[ greek ] = "Use superordinate object settings";
+    Text[ dutch ] = "Use superordinate object settings";
+    Text[ french ] = "Use superordinate object settings";
+    Text[ spanish ] = "Use superordinate object settings";
+    Text[ finnish ] = "Use superordinate object settings";
+    Text[ italian ] = "Use superordinate object settings";
+    Text[ danish ] = "Use superordinate object settings";
+    Text[ swedish ] = "Use superordinate object settings";
+    Text[ polish ] = "Use superordinate object settings";
+    Text[ portuguese_brazilian ] = "Use superordinate object settings";
+    Text[ japanese ] = "Use superordinate object settings";
+    Text[ korean ] = "Use superordinate object settings";
+    Text[ chinese_simplified ] = "Use superordinate object settings";
+    Text[ chinese_traditional ] = "Use superordinate object settings";
+    Text[ turkish ] = "Use superordinate object settings";
+    Text[ arabic ] = "Use superordinate object settings";
+    Text[ catalan ] = "Use superordinate object settings";
+    Text[ thai ] = "Use superordinate object settings";
 };
 
 // page direction -------------------------------------------------------------
@@ -90,6 +150,26 @@ String RID_SVXSTR_PAGEDIR_LTR_HORI
     Text = "Links-nach-rechts (horizontal)";
     Text [ english ] = "Left-to-right (horizontal)";
     Text [ english_us ] = "Left-to-right (horizontal)";
+    Text[ portuguese ] = "Left-to-right (horizontal)";
+    Text[ russian ] = "Left-to-right (horizontal)";
+    Text[ greek ] = "Left-to-right (horizontal)";
+    Text[ dutch ] = "Left-to-right (horizontal)";
+    Text[ french ] = "Left-to-right (horizontal)";
+    Text[ spanish ] = "Left-to-right (horizontal)";
+    Text[ finnish ] = "Left-to-right (horizontal)";
+    Text[ italian ] = "Left-to-right (horizontal)";
+    Text[ danish ] = "Left-to-right (horizontal)";
+    Text[ swedish ] = "Left-to-right (horizontal)";
+    Text[ polish ] = "Left-to-right (horizontal)";
+    Text[ portuguese_brazilian ] = "Left-to-right (horizontal)";
+    Text[ japanese ] = "Left-to-right (horizontal)";
+    Text[ korean ] = "Left-to-right (horizontal)";
+    Text[ chinese_simplified ] = "Left-to-right (horizontal)";
+    Text[ chinese_traditional ] = "Left-to-right (horizontal)";
+    Text[ turkish ] = "Left-to-right (horizontal)";
+    Text[ arabic ] = "Left-to-right (horizontal)";
+    Text[ catalan ] = "Left-to-right (horizontal)";
+    Text[ thai ] = "Left-to-right (horizontal)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_HORI
@@ -97,6 +177,26 @@ String RID_SVXSTR_PAGEDIR_RTL_HORI
     Text = "Rechts-nach-links (horizontal)";
     Text [ english ] = "Right-to-left (horizontal)";
     Text [ english_us ] = "Right-to-left (horizontal)";
+    Text[ portuguese ] = "Right-to-left (horizontal)";
+    Text[ russian ] = "Right-to-left (horizontal)";
+    Text[ greek ] = "Right-to-left (horizontal)";
+    Text[ dutch ] = "Right-to-left (horizontal)";
+    Text[ french ] = "Right-to-left (horizontal)";
+    Text[ spanish ] = "Right-to-left (horizontal)";
+    Text[ finnish ] = "Right-to-left (horizontal)";
+    Text[ italian ] = "Right-to-left (horizontal)";
+    Text[ danish ] = "Right-to-left (horizontal)";
+    Text[ swedish ] = "Right-to-left (horizontal)";
+    Text[ polish ] = "Right-to-left (horizontal)";
+    Text[ portuguese_brazilian ] = "Right-to-left (horizontal)";
+    Text[ japanese ] = "Right-to-left (horizontal)";
+    Text[ korean ] = "Right-to-left (horizontal)";
+    Text[ chinese_simplified ] = "Right-to-left (horizontal)";
+    Text[ chinese_traditional ] = "Right-to-left (horizontal)";
+    Text[ turkish ] = "Right-to-left (horizontal)";
+    Text[ arabic ] = "Right-to-left (horizontal)";
+    Text[ catalan ] = "Right-to-left (horizontal)";
+    Text[ thai ] = "Right-to-left (horizontal)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_VERT
@@ -104,6 +204,26 @@ String RID_SVXSTR_PAGEDIR_RTL_VERT
     Text = "Rechts-nach-links (vertikal)";
     Text [ english ] = "Right-to-left (vertical)";
     Text [ english_us ] = "Right-to-left (vertical)";
+    Text[ portuguese ] = "Right-to-left (vertical)";
+    Text[ russian ] = "Right-to-left (vertical)";
+    Text[ greek ] = "Right-to-left (vertical)";
+    Text[ dutch ] = "Right-to-left (vertical)";
+    Text[ french ] = "Right-to-left (vertical)";
+    Text[ spanish ] = "Right-to-left (vertical)";
+    Text[ finnish ] = "Right-to-left (vertical)";
+    Text[ italian ] = "Right-to-left (vertical)";
+    Text[ danish ] = "Right-to-left (vertical)";
+    Text[ swedish ] = "Right-to-left (vertical)";
+    Text[ polish ] = "Right-to-left (vertical)";
+    Text[ portuguese_brazilian ] = "Right-to-left (vertical)";
+    Text[ japanese ] = "Right-to-left (vertical)";
+    Text[ korean ] = "Right-to-left (vertical)";
+    Text[ chinese_simplified ] = "Right-to-left (vertical)";
+    Text[ chinese_traditional ] = "Right-to-left (vertical)";
+    Text[ turkish ] = "Right-to-left (vertical)";
+    Text[ arabic ] = "Right-to-left (vertical)";
+    Text[ catalan ] = "Right-to-left (vertical)";
+    Text[ thai ] = "Right-to-left (vertical)";
 };
 
 String RID_SVXSTR_PAGEDIR_LTR_VERT
@@ -111,6 +231,26 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
     Text = "Links-nach-rechts (vertikal)";
     Text [ english ] = "Left-to-right (vertical)";
     Text [ english_us ] = "Left-to-right (vertical)";
+    Text[ portuguese ] = "Left-to-right (vertical)";
+    Text[ russian ] = "Left-to-right (vertical)";
+    Text[ greek ] = "Left-to-right (vertical)";
+    Text[ dutch ] = "Left-to-right (vertical)";
+    Text[ french ] = "Left-to-right (vertical)";
+    Text[ spanish ] = "Left-to-right (vertical)";
+    Text[ finnish ] = "Left-to-right (vertical)";
+    Text[ italian ] = "Left-to-right (vertical)";
+    Text[ danish ] = "Left-to-right (vertical)";
+    Text[ swedish ] = "Left-to-right (vertical)";
+    Text[ polish ] = "Left-to-right (vertical)";
+    Text[ portuguese_brazilian ] = "Left-to-right (vertical)";
+    Text[ japanese ] = "Left-to-right (vertical)";
+    Text[ korean ] = "Left-to-right (vertical)";
+    Text[ chinese_simplified ] = "Left-to-right (vertical)";
+    Text[ chinese_traditional ] = "Left-to-right (vertical)";
+    Text[ turkish ] = "Left-to-right (vertical)";
+    Text[ arabic ] = "Left-to-right (vertical)";
+    Text[ catalan ] = "Left-to-right (vertical)";
+    Text[ thai ] = "Left-to-right (vertical)";
 };
 
 // ----------------------------------------------------------------------------
