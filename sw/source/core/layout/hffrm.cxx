@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:21:59 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-08-14 13:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,10 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                 const PtPtr pVarPs = pVARPOS;
 #endif
                 const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
+
+                /* minimal height of frame given by user */
                 SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
+
                 ColLock();
                 SwTwips nMaxHeight = LONG_MAX;
                 SwTwips nRemaining, nOldHeight;
@@ -262,6 +265,12 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                             nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
                         pFrm = pFrm->GetNext();
                     }
+
+
+                    /* The content has at least the minimal height delivered by the user. */
+                    if ( nRemaining < nMinHeight )
+                        nRemaining = nMinHeight;
+
                     SwTwips nDiff = nRemaining - nOldHeight;
                     if( !nDiff )
                         break;
@@ -273,7 +282,9 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                     }
                     else
                     {
-                        nMinHeight = nOldHeight;
+                        if ( nMinHeight < nOldHeight )
+                            nMinHeight = nOldHeight;
+
                         if( nRemaining >= nMaxHeight )
                             nRemaining = ( nMaxHeight + nMinHeight + 1 ) / 2;
                     }
