@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:54:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,11 +1386,9 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyContent;
     const ::rtl::OUString sPropertyDate;
 
-    ::rtl::OUString sAuthor;
+    ::rtl::OUStringBuffer aAuthorBuffer;
     ::rtl::OUStringBuffer aTextBuffer;
-    ::com::sun::star::util::Date aDate;
-
-    sal_Bool bDateOK;
+    ::rtl::OUStringBuffer aDateBuffer;
 
 public:
 
