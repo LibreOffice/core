@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 12:56:51 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:24:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,8 @@ SLOFILES =  \
         $(SLO)$/wrap.obj
 
 EXCEPTIONSFILES =  \
-        $(SLO)$/frmpage.obj 
+        $(SLO)$/frmpage.obj \
+        $(SLO)$/cption.obj 
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
