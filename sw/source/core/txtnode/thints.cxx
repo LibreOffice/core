@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 18:16:53 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 18:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,9 @@
 #ifndef _SOT_FACTORY_HXX
 #include <sot/factory.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
 #endif
-
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
@@ -91,6 +89,9 @@
 #endif
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
 #endif
 
 #ifndef _TXTINET_HXX //autogen
@@ -153,7 +154,9 @@
 #ifndef _FMT2LINES_HXX
 #include <fmt2lines.hxx>
 #endif
-
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -207,6 +210,7 @@
 #define CHECK
 #endif
 
+using namespace ::com::sun::star::text;
 
 /*************************************************************************
  *                      SwTxtNode::MakeTxtAttr()
@@ -1302,58 +1306,6 @@ BOOL SwpHints::Resort( const USHORT nPos )
     return FALSE;
 }
 
-/*************************************************************************
- *                      SwpHints::GetLang()
- *************************************************************************/
-
-USHORT SwpHints::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
-{
-    USHORT nRet = LANGUAGE_DONTKNOW;
-    xub_StrLen nEnd = nBegin + nLen;
-    for( USHORT i = 0, nSize = Count(); i < nSize; ++i )
-    {
-        // ist der Attribut-Anfang schon groesser als der Idx ?
-        const SwTxtAttr *pHt = operator[](i);
-        xub_StrLen nAttrStart = *pHt->GetStart();
-        if( nEnd < nAttrStart )
-            break;
-
-        const USHORT nWhich = pHt->Which();
-
-        if( ( pHt->IsCharFmtAttr() &&
-              lcl_Included( RES_CHRATR_LANGUAGE, pHt ) )
-            || RES_CHRATR_LANGUAGE == nWhich )
-        {
-            const xub_StrLen *pEndIdx = pHt->GetEnd();
-            // Ueberlappt das Attribut den Bereich?
-
-
-            if( pEndIdx &&
-                nLen ? ( nAttrStart < nEnd && nBegin < *pEndIdx )
-                     : (( nAttrStart < nBegin &&
-                            ( pHt->DontExpand() ? nBegin < *pEndIdx
-                                                : nBegin <= *pEndIdx )) ||
-                        ( nBegin == nAttrStart &&
-                            ( nAttrStart == *pEndIdx || !nBegin ))) )
-            {
-                USHORT nLng;
-                if( RES_TXTATR_CHARFMT == nWhich )
-                    nLng = pHt->GetCharFmt().GetCharFmt()->GetLanguage().GetLanguage();
-                else if( RES_TXTATR_INETFMT == nWhich )
-                    nLng = ((SwTxtINetFmt*)pHt)->GetCharFmt()->GetLanguage().GetLanguage();
-                else
-                    nLng = (USHORT)pHt->GetLanguage().GetLanguage();
-
-                // Umfasst das Attribut den Bereich komplett?
-                if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
-                    nRet = nLng;
-                else if( LANGUAGE_DONTKNOW == nRet )
-                    nRet = nLng; // partielle Ueberlappung, der 1. gewinnt
-            }
-        }
-    }
-    return nRet;
-}
 
 /*************************************************************************
  *                      SwpHints::NoteInHistory()
@@ -2106,11 +2058,76 @@ FASTBOOL SwTxtNode::IsInSymbolFont( xub_StrLen nPos ) const
 
 USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
 {
-    USHORT nRet = pSwpHints ? pSwpHints->GetLang( nBegin, nLen )
-                            : LANGUAGE_DONTKNOW;
+    USHORT nWhichId = RES_CHRATR_LANGUAGE;
+    USHORT nRet = LANGUAGE_DONTKNOW;
+    if( pSwpHints )
+    {
+        if( pBreakIt->xBreak.is() )
+            switch( pBreakIt->xBreak->getScriptType( aText, nBegin ) )
+            {
+            case ScriptType::ASIAN:     nWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+            case ScriptType::COMPLEX:   nWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+            }
 
+        xub_StrLen nEnd = nBegin + nLen;
+        for( USHORT i = 0, nSize = pSwpHints->Count(); i < nSize; ++i )
+        {
+            // ist der Attribut-Anfang schon groesser als der Idx ?
+            const SwTxtAttr *pHt = pSwpHints->operator[](i);
+            xub_StrLen nAttrStart = *pHt->GetStart();
+            if( nEnd < nAttrStart )
+                break;
+
+            const USHORT nWhich = pHt->Which();
+
+            if( ( pHt->IsCharFmtAttr() && lcl_Included( nWhichId, pHt ) )
+                || nWhichId == nWhich )
+            {
+                const xub_StrLen *pEndIdx = pHt->GetEnd();
+                // Ueberlappt das Attribut den Bereich?
+
+                if( pEndIdx &&
+                    nLen ? ( nAttrStart < nEnd && nBegin < *pEndIdx )
+                         : (( nAttrStart < nBegin &&
+                                ( pHt->DontExpand() ? nBegin < *pEndIdx
+                                                    : nBegin <= *pEndIdx )) ||
+                            ( nBegin == nAttrStart &&
+                                ( nAttrStart == *pEndIdx || !nBegin ))) )
+                {
+                    const SfxPoolItem* pItem;
+                    if( RES_TXTATR_CHARFMT == nWhich )
+                        pItem = &pHt->GetCharFmt().GetCharFmt()->GetAttr( nWhichId );
+                    else if( RES_TXTATR_INETFMT == nWhich )
+                        pItem = &((SwTxtINetFmt*)pHt)->GetCharFmt()->GetAttr( nWhichId );
+                    else
+                        pItem = &pHt->GetAttr();
+
+                    USHORT nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
+
+                    // Umfasst das Attribut den Bereich komplett?
+                    if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
+                        nRet = nLng;
+                    else if( LANGUAGE_DONTKNOW == nRet )
+                        nRet = nLng; // partielle Ueberlappung, der 1. gewinnt
+                }
+            }
+        }
+    }
     if( LANGUAGE_DONTKNOW == nRet )
-        nRet = GetSwAttrSet().GetLanguage().GetLanguage();
+    {
+        if( nBegin )
+        {
+            nWhichId = RES_CHRATR_LANGUAGE;
+            if( pBreakIt->xBreak.is() )
+                switch( pBreakIt->xBreak->getScriptType( aText, 0 ) )
+                {
+                case ScriptType::ASIAN:     nWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+                case ScriptType::COMPLEX:   nWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+                }
+        }
+
+        nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();
+    }
     return nRet;
 }
 
