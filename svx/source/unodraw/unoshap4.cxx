@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:27:18 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,21 +267,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     // create storage and inplace object
     String              aEmptyStr;
     SvStorageRef        aStor;
-    const SotFactory* pFact = SvFactory::Find( aClassName );
-    SvInPlaceObjectRef aIPObj;
-    if ( pFact )
-    {
-        aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-        aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName,aStor );
-    }
-    else
-    {
-        aStor = new SvStorage( FALSE, aEmptyStr, STREAM_STD_READWRITE );
-        String aFileName;
-        BOOL bOk;
-        SvGlobalName aName( aClassName );
-        aIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aName, aFileName );
-    }
+    SvInPlaceObjectRef aIPObj = SvInPlaceObject::CreateObject( aClassName );
 
     SvPersist*          pPersist = pModel->GetPersist();
     sal_Bool            bOk = sal_False;
