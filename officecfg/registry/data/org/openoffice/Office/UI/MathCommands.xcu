@@ -250,6 +250,9 @@
                     <value xml:lang="zh-CN">输入公式(~I)...</value>
                     <value xml:lang="pt">~Importar fórmula...</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:FitInWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -560,6 +563,9 @@
                     <value xml:lang="zh-CN">分类(~C)...</value>
                     <value xml:lang="pt">Catá~logo...</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Preferences" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -653,6 +659,9 @@
                     <value xml:lang="zh-CN">1</value>
                     <value xml:lang="pt">1</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:View200" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -715,6 +724,9 @@
                     <value xml:lang="zh-CN">放大(~O)</value>
                     <value xml:lang="pt">~Aproximar</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ZoomOut" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -745,6 +757,9 @@
                     <value xml:lang="hi">~झूम बाहर</value>
                     <value xml:lang="zh-CN">缩小(~M)</value>
                     <value xml:lang="pt">A~fastar</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Draw" oor:op="replace">
@@ -777,6 +792,9 @@
                     <value xml:lang="zh-CN">更新(~P)</value>
                     <value xml:lang="pt">~Actualizar</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Adjust" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -807,6 +825,9 @@
                     <value xml:lang="hi">~सब दिखाओ</value>
                     <value xml:lang="zh-CN">全部显示(~W)</value>
                     <value xml:lang="pt">~Ver tudo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToolBox" oor:op="replace">
@@ -869,6 +890,9 @@
                     <value xml:lang="hi">सूत्र कर्सर</value>
                     <value xml:lang="zh-CN">公式光标</value>
                     <value xml:lang="pt">Cursor de fórmulas</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
         </node>
