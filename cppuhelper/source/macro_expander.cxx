@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:21:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,7 @@ Bootstrap const & get_unorc() SAL_THROW( () );
 
 namespace
 {
-
-// static stuff initialized when loading lib
-static OUString s_impl_name = OUSTR(IMPL_NAME);
+inline OUString s_impl_name() { return OUSTR(IMPL_NAME); }
 static Sequence< OUString > const & s_get_service_names()
 {
     static Sequence< OUString > const * s_pnames = 0;
@@ -173,7 +171,7 @@ Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW( () )
 OUString Bootstrap_MacroExpander::getImplementationName()
     throw (RuntimeException)
 {
-    return s_impl_name;
+    return s_impl_name();
 }
 //__________________________________________________________________________________________________
 sal_Bool Bootstrap_MacroExpander::supportsService( OUString const & serviceName )
@@ -277,7 +275,7 @@ Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factor
 {
     return ::cppu::createSingleComponentFactory(
         service_create,
-        s_impl_name,
+        s_impl_name(),
         s_get_service_names() );
 }
 
