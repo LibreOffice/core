@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: dvo $ $Date: 2000-11-28 17:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                     if (NUMBERFORMAT_TEXT == nNumberFormat)
                     {
                         // text format
-                        AddAttributeASCII( XML_NAMESPACE_TEXT,
+                        AddAttributeASCII( XML_NAMESPACE_TABLE,
                                            sXML_value_type, sXML_text );
                     }
                     else if (-1 != nNumberFormat)
