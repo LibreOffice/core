@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-15 07:39:01 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_HELPER_COMPONENTLOADER_HXX_
-#include <helper/componentloader.hxx>
-#endif
-
 #ifndef __FRAMEWORK_HELPER_PERSISTENTWINDOWSTATE_HXX_
 #include <helper/persistentwindowstate.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
-#include <classes/argumentanalyzer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
-#include <classes/filtercache.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
@@ -118,6 +106,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -494,7 +486,7 @@ sal_Bool PersistentWindowState::implst_getFrameProps( const css::uno::Reference<
                                                             SvtModuleOptions::EFactory*                             pModule          ,
                                                             css::uno::Reference< css::awt::XWindow >*               pContainerWindow )
 {
-    if ( ! xFrame.is())
+    if (!xFrame.is())
         return sal_False;
 
     css::uno::Reference< css::awt::XWindow >       xContainerWindow = xFrame->getContainerWindow();
@@ -503,18 +495,17 @@ sal_Bool PersistentWindowState::implst_getFrameProps( const css::uno::Reference<
     // may its an empty frame - can occure only in case first load request failed
     // and framework try to close this frame immediatly
     // But then we hav nothing to do here!
-    if ( ! xContainerWindow.is() || ! xController.is() )
+    if (
+        (!xContainerWindow.is()) ||
+        (!xController.is()     )
+       )
         return sal_False;
 
-    ::rtl::OUString sDocumentService = ComponentLoader::specifyDocServiceByDocument(xFactory,xController);
-    if (sDocumentService.getLength() < 1)
+    css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+    if (!xModel.is())
         return sal_False;
 
-    SvtModuleOptions::EFactory eModule;
-    if ( ! SvtModuleOptions::ClassifyFactoryByName(sDocumentService,eModule))
-        return sal_False;
-
-    *pModule          = eModule;
+    *pModule          = SvtModuleOptions::ClassifyFactoryByModel(xModel);
     *pContainerWindow = xContainerWindow;
 
     return sal_True;
