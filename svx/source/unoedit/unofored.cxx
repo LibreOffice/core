@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,13 @@ void SvxEditEngineForwarder::QuickInsertField( const SvxFieldItem& rFld, const E
 void SvxEditEngineForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
     rEditEngine.QuickSetAttribs( rSet, rSel );
+}
+
+BOOL SvxEditEngineForwarder::IsValid() const
+{
+    // cannot reliably query EditEngine state
+    // while in the middle of an update
+    return rEditEngine.GetUpdateMode();
 }
 
 XubString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )

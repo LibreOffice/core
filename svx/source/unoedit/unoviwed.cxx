@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-27 16:43:06 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,12 @@ Rectangle SvxEditEngineViewForwarder::GetVisArea() const
 
         if( pEditEngine )
         {
-            aVisArea = pOutDev->LogicToLogic( aVisArea, pEditEngine->GetRefMapMode(), pOutDev->GetMapMode() );
-            return pOutDev->LogicToPixel( aVisArea );
+            MapMode aMapMode(pOutDev->GetMapMode());
+            aVisArea = OutputDevice::LogicToLogic( aVisArea,
+                                                   pEditEngine->GetRefMapMode(),
+                                                   aMapMode.GetMapUnit() );
+            aMapMode.SetOrigin(Point());
+            return pOutDev->LogicToPixel( aVisArea, aMapMode );
         }
     }
 
@@ -114,8 +118,11 @@ Point SvxEditEngineViewForwarder::LogicToPixel( const Point& rPoint, const MapMo
 
     if( pOutDev )
     {
-        Point aPoint( pOutDev->LogicToLogic( rPoint, rMapMode, pOutDev->GetMapMode() ) );
-        return pOutDev->LogicToPixel( aPoint );
+        MapMode aMapMode(pOutDev->GetMapMode());
+        Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
+                                                  aMapMode.GetMapUnit() ) );
+        aMapMode.SetOrigin(Point());
+        return pOutDev->LogicToPixel( aPoint, aMapMode );
     }
 
     return Point();
@@ -127,8 +134,12 @@ Point SvxEditEngineViewForwarder::PixelToLogic( const Point& rPoint, const MapMo
 
     if( pOutDev )
     {
-        Point aPoint( pOutDev->PixelToLogic( rPoint ) );
-        return pOutDev->LogicToLogic( aPoint, pOutDev->GetMapMode(), rMapMode );
+        MapMode aMapMode(pOutDev->GetMapMode());
+        aMapMode.SetOrigin(Point());
+        Point aPoint( pOutDev->PixelToLogic( rPoint, aMapMode ) );
+        return OutputDevice::LogicToLogic( aPoint,
+                                           aMapMode.GetMapUnit(),
+                                           rMapMode );
     }
 
     return Point();

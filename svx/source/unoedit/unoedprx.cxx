@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-27 16:43:05 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,7 +1095,7 @@ USHORT SvxAccessibleTextAdapter::GetLineLen( USHORT nPara, USHORT nLine ) const
     SvxAccessibleTextIndex aEndIndex;
     USHORT nCurrLine;
     sal_Int32 nCurrIndex, nLastIndex;
-    for( nCurrLine=0, nCurrIndex=0, nLastIndex=0; nCurrLine<nLine; ++nCurrLine )
+    for( nCurrLine=0, nCurrIndex=0, nLastIndex=0; nCurrLine<=nLine; ++nCurrLine )
     {
         nLastIndex = nCurrIndex;
         nCurrIndex += mrTextForwarder->GetLineLen( nPara, nCurrLine );

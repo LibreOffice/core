@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,13 @@ void SvxOutlinerForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelec
 XubString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return rOutliner.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
+}
+
+BOOL SvxOutlinerForwarder::IsValid() const
+{
+    // cannot reliably query outliner state
+    // while in the middle of an update
+    return rOutliner.GetUpdateMode();
 }
 
 extern USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich );
