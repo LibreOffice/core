@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:05:04 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 07:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pHoriOrientRelState = NULL;
     XMLPropertyState* pHoriOrientRelFrameState = NULL;
     XMLPropertyState* pHoriOrientMirrorState = NULL;
+    // --> OD 2004-08-09 #i28749# - horizontal position and relation for shapes
+    XMLPropertyState* pShapeHoriOrientState = NULL;
+    XMLPropertyState* pShapeHoriOrientMirroredState = NULL;
+    XMLPropertyState* pShapeHoriOrientRelState = NULL;
+    XMLPropertyState* pShapeHoriOrientRelFrameState = NULL;
+    XMLPropertyState* pShapeHoriOrientMirrorState = NULL;
+    // <--
 
     // vertical position and relation
     XMLPropertyState* pVertOrientState = NULL;
@@ -465,6 +472,14 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pVertOrientRelPageState = NULL;
     XMLPropertyState* pVertOrientRelFrameState = NULL;
     XMLPropertyState* pVertOrientRelAsCharState = NULL;
+
+    // --> OD 2004-08-09 #i28749# - vertical position and relation for shapes
+    XMLPropertyState* pShapeVertOrientState = NULL;
+    XMLPropertyState* pShapeVertOrientAtCharState = NULL;
+    XMLPropertyState* pShapeVertOrientRelState = NULL;
+    XMLPropertyState* pShapeVertOrientRelPageState = NULL;
+    XMLPropertyState* pShapeVertOrientRelFrameState = NULL;
+    // <--
 
     // filter underline color
     XMLPropertyState* pUnderlineState = NULL;
@@ -546,6 +561,19 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
+
+        // --> OD 2004-08-09 #i28749# - handle new CTFs for shape positioning properties
+        case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_HORIZONTALPOS_MIRRORED:    pShapeHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_HORIZONTALREL:             pShapeHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_HORIZONTALREL_FRAME:       pShapeHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_HORIZONTALMIRROR:          pShapeHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_VERTICALPOS:           pShapeVertOrientState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_VERTICALPOS_ATCHAR:    pShapeVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_VERTICALREL:           pShapeVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_VERTICALREL_PAGE:      pShapeVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_VERTICALREL_FRAME:     pShapeVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
+        // <--
 
         case CTF_FONTNAME:              pFontNameState = propertie; break;
         case CTF_FONTFAMILYNAME:        pFontFamilyNameState = propertie; break;
@@ -898,35 +926,99 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         aAny >>= eAnchor;
     }
 
-    if( pHoriOrientState && pHoriOrientMirroredState )
+    // states for frame positioning attributes
     {
-        if( pHoriOrientMirrorState &&
-            *(sal_Bool *)pHoriOrientMirrorState->maValue.getValue() )
-            pHoriOrientState->mnIndex = -1;
-        else
-            pHoriOrientMirroredState->mnIndex = -1;
+        if( pHoriOrientState && pHoriOrientMirroredState )
+        {
+            if( pHoriOrientMirrorState &&
+                *(sal_Bool *)pHoriOrientMirrorState->maValue.getValue() )
+                pHoriOrientState->mnIndex = -1;
+            else
+                pHoriOrientMirroredState->mnIndex = -1;
+        }
+        if( pHoriOrientMirrorState )
+            pHoriOrientMirrorState->mnIndex = -1;
+
+        if( pHoriOrientRelState && TextContentAnchorType_AT_FRAME == eAnchor )
+            pHoriOrientRelState->mnIndex = -1;
+        if( pHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
+            pHoriOrientRelFrameState->mnIndex = -1;;
+
+        if( pVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
+            pVertOrientState->mnIndex = -1;
+        if( pVertOrientAtCharState && TextContentAnchorType_AT_CHARACTER != eAnchor )
+            pVertOrientAtCharState->mnIndex = -1;
+        if( pVertOrientRelState && TextContentAnchorType_AT_PARAGRAPH != eAnchor &&
+            TextContentAnchorType_AT_CHARACTER != eAnchor )
+            pVertOrientRelState->mnIndex = -1;
+        if( pVertOrientRelPageState && TextContentAnchorType_AT_PAGE != eAnchor )
+            pVertOrientRelPageState->mnIndex = -1;
+        if( pVertOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
+            pVertOrientRelFrameState->mnIndex = -1;
+        if( pVertOrientRelAsCharState && TextContentAnchorType_AS_CHARACTER != eAnchor )
+            pVertOrientRelAsCharState->mnIndex = -1;
     }
-    if( pHoriOrientMirrorState )
-        pHoriOrientMirrorState->mnIndex = -1;
 
-    if( pHoriOrientRelState && TextContentAnchorType_AT_FRAME == eAnchor )
-        pHoriOrientRelState->mnIndex = -1;
-    if( pHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
-        pHoriOrientRelFrameState->mnIndex = -1;;
+    // --> OD 2004-08-09 #i28749# - states for shape positioning properties
+    if ( eAnchor != TextContentAnchorType_AS_CHARACTER &&
+         ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
+    {
+        // no export of shape positioning properties,
+        // if shape isn't anchored as-character and
+        // destination file format is OpenOffice.org file format
+        if ( pShapeHoriOrientState )
+            pShapeHoriOrientState->mnIndex = -1;
+        if ( pShapeHoriOrientMirroredState )
+            pShapeHoriOrientMirroredState->mnIndex = -1;
+        if ( pShapeHoriOrientRelState )
+            pShapeHoriOrientRelState->mnIndex = -1;
+        if ( pShapeHoriOrientRelFrameState )
+            pShapeHoriOrientRelFrameState->mnIndex = -1;
+        if ( pShapeHoriOrientMirrorState )
+            pShapeHoriOrientMirrorState->mnIndex = -1;
+        if ( pShapeVertOrientState )
+            pShapeVertOrientState->mnIndex = -1;
+        if ( pShapeVertOrientAtCharState )
+            pShapeVertOrientAtCharState->mnIndex = -1;
+        if ( pShapeVertOrientRelState )
+            pShapeVertOrientRelState->mnIndex = -1;
+        if ( pShapeVertOrientRelPageState )
+            pShapeVertOrientRelPageState->mnIndex = -1;
+        if ( pShapeVertOrientRelFrameState )
+            pShapeVertOrientRelFrameState->mnIndex = -1;
+    }
+    else
+    {
+        // handling of shape positioning property states as for frames - see above
+        if( pShapeHoriOrientState && pShapeHoriOrientMirroredState )
+        {
+            if( pShapeHoriOrientMirrorState &&
+                *(sal_Bool *)pShapeHoriOrientMirrorState->maValue.getValue() )
+                pShapeHoriOrientState->mnIndex = -1;
+            else
+                pShapeHoriOrientMirroredState->mnIndex = -1;
+        }
+        if( pShapeHoriOrientMirrorState )
+            pShapeHoriOrientMirrorState->mnIndex = -1;
 
-    if( pVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
-        pVertOrientState->mnIndex = -1;
-    if( pVertOrientAtCharState && TextContentAnchorType_AT_CHARACTER != eAnchor )
-        pVertOrientAtCharState->mnIndex = -1;
-    if( pVertOrientRelState && TextContentAnchorType_AT_PARAGRAPH != eAnchor &&
-         TextContentAnchorType_AT_CHARACTER != eAnchor )
-        pVertOrientRelState->mnIndex = -1;
-    if( pVertOrientRelPageState && TextContentAnchorType_AT_PAGE != eAnchor )
-        pVertOrientRelPageState->mnIndex = -1;
-    if( pVertOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
-        pVertOrientRelFrameState->mnIndex = -1;
-    if( pVertOrientRelAsCharState && TextContentAnchorType_AS_CHARACTER != eAnchor )
-        pVertOrientRelAsCharState->mnIndex = -1;
+        if( pShapeHoriOrientRelState && TextContentAnchorType_AT_FRAME == eAnchor )
+            pShapeHoriOrientRelState->mnIndex = -1;
+        if( pShapeHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
+            pShapeHoriOrientRelFrameState->mnIndex = -1;;
+
+        if( pShapeVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
+            pShapeVertOrientState->mnIndex = -1;
+        if( pShapeVertOrientAtCharState && TextContentAnchorType_AT_CHARACTER != eAnchor )
+            pShapeVertOrientAtCharState->mnIndex = -1;
+        if( pShapeVertOrientRelState && TextContentAnchorType_AT_PARAGRAPH != eAnchor &&
+            TextContentAnchorType_AT_CHARACTER != eAnchor )
+            pShapeVertOrientRelState->mnIndex = -1;
+        if( pShapeVertOrientRelPageState && TextContentAnchorType_AT_PAGE != eAnchor )
+            pShapeVertOrientRelPageState->mnIndex = -1;
+        if( pShapeVertOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
+            pShapeVertOrientRelFrameState->mnIndex = -1;
+    }
+    // <--
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties,rPropSet);
 }
