@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:40:34 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 #ifndef _SVX_ALGITEM_HXX //autogen
 #include <svx/algitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
+#include <com/sun/star/sdb/XResultSetAccess.hpp>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -181,6 +187,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace dbaui;
@@ -515,7 +523,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 //          Reference< XPropertyState >  xPropState(xGridSet, UNO_QUERY);
 //          if (xPropState.is())
 //          {
-//              try { aHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT); } catch(...) { } ;
+//              try { aHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT); } catch(Exception&) { } ;
 //          }
 //      }
 //      else
@@ -533,7 +541,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 //  }
 //
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaTableQueryBrowser::InitializeGridModel : something went wrong !");
         return sal_False;
@@ -565,12 +573,6 @@ ToolBox* SbaTableQueryBrowser::CreateToolBox(Window* _pParent)
         pTB = new ToolBox(_pParent, ModuleRes(nResId));
         if (!pTB)
             return NULL;
-
-        if (pTB->GetItemPos(ID_BROWSER_EXPL_PREVLEVEL) != TOOLBOX_ITEM_NOTFOUND)
-        {   // if we display the grid in the beamer we don't want a "prev level" button
-            //  if (getFrame().is() && (getFrame()->getName().equals(::rtl::OUString::createFromAscii("_beamer"))))
-                pTB->HideItem(ID_BROWSER_EXPL_PREVLEVEL);
-        }
     }
     return pTB;
 }
@@ -762,40 +764,127 @@ sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeExceptio
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & _xFrame) throw( RuntimeException )
+void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEvent ) throw(RuntimeException)
 {
-    SbaXDataBrowserController::attachFrame(_xFrame);
-
-    sal_Bool bIsBeamer = (getFrame().is() && (getFrame()->getName().equals(::rtl::OUString::createFromAscii("_beamer"))));
-    Reference< XPropertySet >  xGridSet(getFormComponent(), UNO_QUERY);
-    ToolBox* pTB = getContent() ? getContent()->getToolBox() : NULL;
-
-    if (bIsBeamer)
+    // search the external dispatcher causing this call
+    Reference< XDispatch > xSource(_rEvent.Source, UNO_QUERY);
+    for (   SpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
+            aLoop != m_aDispatchers.end();
+            ++aLoop
+        )
     {
-        // hide the "move a level up"-button
-        sal_uInt16 nPos = pTB ? pTB->GetItemPos(ID_BROWSER_EXPL_PREVLEVEL) : TOOLBOX_ITEM_NOTFOUND;
-        if ((nPos != TOOLBOX_ITEM_NOTFOUND) && pTB->IsItemVisible(ID_BROWSER_EXPL_PREVLEVEL))
+        if (_rEvent.FeatureURL.Complete == getURLForId(aLoop->first).Complete)
         {
-            DBG_ASSERT(nPos == 0, "SbaTableQueryBrowser::attachFrame : can't handle a prev-level-slot which isn't the first one within the TB !");
-                // we check all slots behind the prev-level slot and don't deal with the ones before
-            pTB->HideItem(ID_BROWSER_EXPL_PREVLEVEL);
-            ++nPos;
-            if (pTB->GetItemType(nPos) == TOOLBOXITEM_SEPARATOR)
-                pTB->RemoveItem(nPos);
+            DBG_ASSERT(xSource.get() == aLoop->second.get(), "SbaTableQueryBrowser::statusChanged: inconsistent!");
+            m_aDispatchStates[aLoop->first] = _rEvent.IsEnabled;
+            implCheckExternalSlot(aLoop->first);
+            break;
         }
     }
-    else
+    DBG_ASSERT(aLoop != m_aDispatchers.end(), "SbaTableQueryBrowser::statusChanged: don't know who sent this!");
+}
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::implCheckExternalSlot(sal_Int32 _nId)
+{
+    // check if we have to hide this item from the toolbox
+    ToolBox* pTB = getContent()->getToolBox();
+    if (pTB)
     {
-        // show the "move a level up"-button
-        sal_uInt16 nPos = pTB ? pTB->GetItemPos(ID_BROWSER_EXPL_PREVLEVEL) : TOOLBOX_ITEM_NOTFOUND;
-        if ((nPos != TOOLBOX_ITEM_NOTFOUND) && !pTB->IsItemVisible(ID_BROWSER_EXPL_PREVLEVEL))
+        sal_Bool bHaveDispatcher = m_aDispatchers[_nId].is();
+        if (bHaveDispatcher != pTB->IsItemVisible(_nId))
+            bHaveDispatcher ? pTB->ShowItem(_nId) : pTB->HideItem(_nId);
+    }
+
+    // and invalidate this feature in general
+    InvalidateFeature(_nId);
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) throw(RuntimeException)
+{
+    // search the external dispatcher causing this call in our map
+    Reference< XDispatch > xSource(_rSource.Source, UNO_QUERY);
+    for (   SpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
+            aLoop != m_aDispatchers.end();
+            ++aLoop
+        )
+    {
+        if (aLoop->second.get() == xSource.get())
         {
-            DBG_ASSERT(nPos == 0, "SbaTableQueryBrowser::attachFrame : can't handle a prev-level-slot which isn't the first one within the TB !");
-                // we check all slots behind the prev-level slot and don't deal with the ones before
-            pTB->ShowItem(ID_BROWSER_EXPL_PREVLEVEL);
-            ++nPos;
-            if (pTB->GetItemType(nPos) != TOOLBOXITEM_SEPARATOR)
-                pTB->InsertSeparator(nPos);
+            SpecialSlotDispatchersIterator aPrevious = aLoop;
+            --aPrevious;
+
+            // remove it
+            m_aDispatchers.erase(aLoop);
+            m_aDispatchStates.erase(aLoop->first);
+
+            // maybe update the UI
+            implCheckExternalSlot(aLoop->first);
+
+            // continue, the same XDispatch may be resposible for more than one URL
+            aLoop = aPrevious;
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & _xFrame) throw( RuntimeException )
+{
+    // clear all old dispatches
+    for (   ConstSpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
+            aLoop != m_aDispatchers.end();
+            ++aLoop
+        )
+    {
+        if (aLoop->second.is())
+        {
+            try
+            {
+                aLoop->second->removeStatusListener(this, getURLForId(aLoop->first));
+            }
+            catch (Exception&)
+            {
+                DBG_ERROR("SbaTableQueryBrowser::attachFrame: could not remove a status listener!");
+            }
+        }
+    }
+    m_aDispatchers.clear();
+    m_aDispatchStates.clear();
+
+    SbaXDataBrowserController::attachFrame(_xFrame);
+
+    // get the dispatchers for the external slots
+    Reference< XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
+    DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::attachFrame: no DispatchPprovider !");
+    if (xProvider.is())
+    {
+        sal_Int32 nExternalIds[] = { ID_BROWSER_FORMLETTER, ID_BROWSER_INSERTCOLUMNS, ID_BROWSER_INSERTCONTENT };
+        for (sal_Int32 i=0; i<sizeof(nExternalIds)/sizeof(nExternalIds[0]); ++i)
+        {
+            URL aURL = getURLForId(nExternalIds[i]);
+            m_aDispatchers[nExternalIds[i]] = xProvider->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_parent"), FrameSearchFlag::PARENT);
+            if (m_aDispatchers[nExternalIds[i]].get() == static_cast< XDispatch* >(this))
+                // as the URL is one of our "supported features", we may answer the request ourself if nobody out there
+                // is interested in.
+                m_aDispatchers[nExternalIds[i]].clear();
+
+            // assume te general availability of the feature. This is overruled if there is no dispatcher for the URL
+            m_aDispatchStates[nExternalIds[i]] = sal_True;
+
+            if (m_aDispatchers[nExternalIds[i]].is())
+            {
+                try
+                {
+                    m_aDispatchers[nExternalIds[i]]->addStatusListener(this, aURL);
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("SbaTableQueryBrowser::attachFrame: could not attach a status listener!");
+                }
+            }
+
+            implCheckExternalSlot(nExternalIds[i]);
         }
     }
 }
@@ -835,16 +924,6 @@ String SbaTableQueryBrowser::getURL() const
 void SbaTableQueryBrowser::InvalidateFeature(sal_uInt16 nId, const Reference< ::com::sun::star::frame::XStatusListener > & xListener)
 {
     SbaXDataBrowserController::InvalidateFeature(nId, xListener);
-//  switch (nId)
-//  {
-//      case ID_BROWSER_INSERT:
-//      case ID_BROWSER_UPDATE:
-//      case ID_BROWSER_MERGE:
-//          GetBindings().Invalidate(nId, sal_True, sal_False);
-//          break;
-//      default:
-//          SbaXDataBrowserController::InvalidateFeature(nId, xListener);
-//  }
 }
 
 //------------------------------------------------------------------------------
@@ -872,16 +951,16 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
     SbaXDataBrowserController::AddSupportedFeatures();
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Title")]               = ID_BROWSER_TITLE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:WriterDB/MailInsert")] = ID_BROWSER_INSERT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:WriterDB/MailMerge")]  = ID_BROWSER_MERGE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:WriterDB/MailUpdate")] = ID_BROWSER_UPDATE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter")]    = ID_BROWSER_FORMLETTER;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertColumns")] = ID_BROWSER_INSERTCOLUMNS;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertContent")] = ID_BROWSER_INSERTCONTENT;
 
             // TODO reenable our own code if we really have a handling for the formslots
-//          ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToFirst"),        SID_FM_RECORD_FIRST     ),
-//          ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToLast"),     SID_FM_RECORD_LAST      ),
-//          ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNew"),      SID_FM_RECORD_NEW       ),
-//          ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNext"),     SID_FM_RECORD_NEXT      ),
-//          ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToPrev"),     SID_FM_RECORD_PREV      )
+//      ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToFirst"),        SID_FM_RECORD_FIRST     ),
+//      ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToLast"),     SID_FM_RECORD_LAST      ),
+//      ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNew"),      SID_FM_RECORD_NEW       ),
+//      ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNext"),     SID_FM_RECORD_NEXT      ),
+//      ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToPrev"),     SID_FM_RECORD_PREV      )
 
 }
 
@@ -905,34 +984,35 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
 
         switch (nId)
         {
-            case ID_BROWSER_INSERT:
-            case ID_BROWSER_UPDATE:
-            case ID_BROWSER_MERGE:
+            case ID_BROWSER_INSERTCOLUMNS:
+            case ID_BROWSER_INSERTCONTENT:
+            case ID_BROWSER_FORMLETTER:
             {
-                // TODO
-//              SfxPoolItem* pState = NULL;
-//              SfxItemState eState = GetBindings().QueryState(nId, pState);
-//              if (pState)
-//                  delete pState;  // not interested in
-//              aReturn.bEnabled = (eState >= SFX_ITEM_AVAILABLE);
+                // the slot is enabled if we have an external dispatcher able to handle it,
+                // and the dispatcher must have enabled the slot in general
+                if (m_aDispatchers[nId].is())
+                    aReturn.bEnabled = m_aDispatchStates[nId];
+                else
+                    aReturn.bEnabled = sal_False;
 
-                if (ID_BROWSER_MERGE != nId)
+                // for the Insert* slots, we need at least one selected row
+                if (ID_BROWSER_FORMLETTER != nId)
                     aReturn.bEnabled = aReturn.bEnabled && getContent()->getVclControl()->GetSelectRowCount();
 
+                // disabled for native queries which are not saved within the database
+                // 67706 - 23.08.99 - FS
                 Reference< XPropertySet >  xDataSource(getRowSet(), UNO_QUERY);
                 try
                 {
                     aReturn.bEnabled = aReturn.bEnabled && xDataSource.is();
 
-                    // disable them for native queries which are not saved within the database
-                    // 67706 - 23.08.99 - FS
                     if (xDataSource.is())
                     {
                         sal_Int32 nType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
                         aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)) || (nType == ::com::sun::star::sdb::CommandType::QUERY)));
                     }
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
 
@@ -968,10 +1048,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
             case ID_BROWSER_COLWIDTH:
                 aReturn.bEnabled = getContent() && getContent()->getVclControl() && isValid() && isValidCursor();
                 //  aReturn.bEnabled &= getDefinition() && !getDefinition()->GetDatabase()->IsReadOnly();
-                break;
-
-            case ID_BROWSER_EXPL_PREVLEVEL:
-                aReturn.bEnabled = sal_True;
                 break;
 
             case ID_BROWSER_EDITDOC:
@@ -1011,38 +1087,24 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             SbaXDataBrowserController::Execute(nId);
             break;
 
-        case ID_BROWSER_INSERT:
-        case ID_BROWSER_UPDATE:
-        case ID_BROWSER_MERGE:
-            // TODO use dispatch
+        case ID_BROWSER_INSERTCOLUMNS:
+        case ID_BROWSER_INSERTCONTENT:
+        case ID_BROWSER_FORMLETTER:
             if (getContent() && isValidCursor())
             {
-                ::com::sun::star::util::URL aParentUrl;
-                // is faster as to search in the map
-                switch(nId)
-                {
-                    case ID_BROWSER_INSERT:
-                        aParentUrl.Complete = ::rtl::OUString::createFromAscii(".uno:WriterDB/MailInsert");
-                        break;
-                    case ID_BROWSER_UPDATE:
-                        aParentUrl.Complete = ::rtl::OUString::createFromAscii(".uno:WriterDB/MailUpdate");
-                        break;
-                    case ID_BROWSER_MERGE:
-                        aParentUrl.Complete = ::rtl::OUString::createFromAscii(".uno:WriterDB/MailMerge");
-                        break;
-                }
+                // the URL the slot id is assigned to
+                URL aParentUrl = getURLForId(nId);
 
-                Reference< ::com::sun::star::frame::XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-                DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::Execute(ID_BROWSER_EXPL_PREVLEVEL) : no DispatchPprovider !");
-                Reference< ::com::sun::star::frame::XDispatch >  xDispatcher = xProvider->queryDispatch(aParentUrl, m_xCurrentFrame->getName(), 0);
-                if (xDispatcher.is())
+                // let the dispatcher execute the slot
+                Reference< XDispatch > xDispatch(m_aDispatchers[nId]);
+                if (xDispatch.is())
                 {
                     // set the properties for the dispatch
 
                     // first fill the selection
                     SbaGridControl* pGrid = getContent()->getVclControl();
                     MultiSelection* pSelection = (MultiSelection*)pGrid->GetSelection();
-                    Sequence< sal_Int32> aSelection;
+                    Sequence< sal_Int32 > aSelection;
                     if (pSelection != NULL)
                     {
                         aSelection.realloc(pSelection->GetSelectCount());
@@ -1055,42 +1117,38 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                         }
                     }
 
+                    Reference< XResultSet > xCursorClone;
+                    try
+                    {
+                        Reference< XResultSetAccess > xResultSetAccess(getRowSet(),UNO_QUERY);
+                        if (xResultSetAccess.is())
+                            xCursorClone = xResultSetAccess->createResultSet();
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
+                    }
+
                     Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
 
-                    Sequence< PropertyValue> aProps(4);
-                    aProps[0] = PropertyValue(PROPERTY_DATASOURCENAME,-1,xProp->getPropertyValue(PROPERTY_DATASOURCENAME),PropertyState_DIRECT_VALUE);
-                    aProps[1] = PropertyValue(PROPERTY_COMMAND,-1,xProp->getPropertyValue(PROPERTY_COMMAND),PropertyState_DIRECT_VALUE);
-                    aProps[2] = PropertyValue(PROPERTY_COMMANDTYPE,-1,xProp->getPropertyValue(PROPERTY_COMMANDTYPE),PropertyState_DIRECT_VALUE);
-                    aProps[3] = PropertyValue(PROPERTY_ROWCOUNT,-1,makeAny(aSelection),PropertyState_DIRECT_VALUE);
+                    try
+                    {
+                        Sequence< PropertyValue> aProps(5);
+                        aProps[0] = PropertyValue(PROPERTY_DATASOURCENAME, -1, xProp->getPropertyValue(PROPERTY_DATASOURCENAME), PropertyState_DIRECT_VALUE);
+                        aProps[1] = PropertyValue(PROPERTY_COMMAND, -1, xProp->getPropertyValue(PROPERTY_COMMAND), PropertyState_DIRECT_VALUE);
+                        aProps[2] = PropertyValue(PROPERTY_COMMANDTYPE, -1, xProp->getPropertyValue(PROPERTY_COMMANDTYPE), PropertyState_DIRECT_VALUE);
+                        aProps[3] = PropertyValue(::rtl::OUString::createFromAscii("Selection"), -1, makeAny(aSelection), PropertyState_DIRECT_VALUE);
+                        aProps[4] = PropertyValue(::rtl::OUString::createFromAscii("Cursor"), -1, makeAny(xCursorClone), PropertyState_DIRECT_VALUE);
 
-                    xDispatcher->dispatch(aParentUrl, aProps);
+                        xDispatch->dispatch(aParentUrl, aProps);
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not dispatch the slot (caught an exception)!");
+                    }
                 }
             }
-            //  SendInfo(nId);
             break;
-
-        case ID_BROWSER_EXPL_PREVLEVEL:
-        {
-            INetURLObject aURL(getURL());
-            DBG_ASSERT(aURL.HasMark(), "SbaTableQueryBrowser::Execute : invalid ::com::sun::star::util::URL !");
-            String sMark = aURL.GetMark();
-            xub_StrLen nSep = sMark.SearchBackward(';');
-            DBG_ASSERT(nSep != STRING_NOTFOUND, "SbaTableQueryBrowser::Execute : invalid ::com::sun::star::util::URL !");
-            String sParentContainerUrl; sParentContainerUrl.AssignAscii("file:///");
-            sParentContainerUrl += aURL.GetURLPath();
-            sParentContainerUrl += '#';
-            sParentContainerUrl += sMark.Copy(0, nSep);
-
-            ::com::sun::star::util::URL aParentUrl;
-            aParentUrl.Complete = sParentContainerUrl;
-
-            Reference< ::com::sun::star::frame::XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-            DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::Execute(ID_BROWSER_EXPL_PREVLEVEL) : no DispatchPprovider !");
-            Reference< ::com::sun::star::frame::XDispatch >  xDispatcher = xProvider->queryDispatch(aParentUrl, m_xCurrentFrame->getName(), 0);
-            if (xDispatcher.is())
-                xDispatcher->dispatch(aParentUrl, Sequence< PropertyValue>());
-        }
-        break;
 
         default:
             SbaXDataBrowserController::Execute(nId);
@@ -1125,12 +1183,19 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
     if(bRebuild)
     {
+        // the values allowing the RowSet to re-execute
         xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
         xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(nCommandType));
         xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(aName));
 
+        // the formatter depends on the data source we're working on, so rebuild it here ...
+        initFormatter();
+
+        // switch the grid to design mode while loading
         getContent()->getGridControl()->setDesignMode(sal_True);
+        // reload the row set
         getRowSet()->execute();
+        // initialize the model
         InitializeGridModel(getFormComponent());
         Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
         xLoadable->reload();

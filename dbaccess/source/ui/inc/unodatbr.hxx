@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:38:57 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,19 @@
 #include "brwctrlr.hxx"
 #endif
 
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 // =========================================================================
 class SvLBoxEntry;
 class Splitter;
@@ -75,19 +88,32 @@ namespace dbaui
     class DBTreeView;
     class DBTreeListModel;
     // =========================================================================
+    typedef ::cppu::ImplHelper1< ::com::sun::star::frame::XStatusListener >
+                            SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
+                ,public SbaTableQueryBrowser_Base
     {
     protected:
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
 
+        DECLARE_STL_STDKEY_MAP( sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >, SpecialSlotDispatchers);
+        DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
+        SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
+        SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
+
     // attribute access
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
         ~SbaTableQueryBrowser();
 
+//      static void * SAL_CALL operator new( size_t nSize ) throw()
+//          { return ::rtl_allocateMemory( nSize ); }
+//      static void SAL_CALL operator delete( void * pMem ) throw()
+//          { ::rtl_freeMemory( pMem ); }
+//
         // need by registration
         static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -107,6 +133,12 @@ namespace dbaui
 
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL dispose();
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -133,7 +165,8 @@ namespace dbaui
 
         String getURL() const;
     private:
-        //  void SendInfo(sal_uInt16 nSID);
+        // check the state of the external slot given, update any UI elements if necessary
+        void implCheckExternalSlot(sal_Int32 _nId);
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
