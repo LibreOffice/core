@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-26 14:45:16 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 10:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,12 @@ BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
 
 void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 {
-    if( bTxbxFlySection || bDontCreateSep )
+    //#i1909# #100688# section/page breaks should not occur in tables, word
+    //itself ignores them in this case.
+    if (nTable)
+        return;
+
+    if (bTxbxFlySection || bDontCreateSep)
         return;
 
     BYTE nLastSectionCorrIhdt      = nCorrIhdt;
