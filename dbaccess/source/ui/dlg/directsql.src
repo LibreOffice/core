@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:00:18 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 21:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ polish ] = "Polecenie SQL";
         Text[ portuguese_brazilian ] = "SQL command";
         Text[ japanese ] = "SQL ｺﾏﾝﾄﾞ";
-        Text[ korean ] = "SQL command";
+        Text[ korean ] = "SQL 명령";
         Text[ chinese_simplified ] = "SQL 命令";
         Text[ chinese_traditional ] = "SQL 指令";
         Text[ turkish ] = "SQL command";
@@ -127,7 +127,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ polish ] = "Polecenie do wykonania";
         Text[ portuguese_brazilian ] = "Command to execute";
         Text[ japanese ] = "実行ｺﾏﾝﾄﾞ";
-        Text[ korean ] = "Command to execute";
+        Text[ korean ] = "실행할 명령";
         Text[ chinese_simplified ] = "要执行的命令";
         Text[ chinese_traditional ] = "要執行的指令";
         Text[ turkish ] = "Command to execute";
@@ -164,7 +164,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ polish ] = "Wykonaj";
         Text[ portuguese_brazilian ] = "Execute";
         Text[ japanese ] = "実行";
-        Text[ korean ] = "Execute";
+        Text[ korean ] = "실행";
         Text[ chinese_simplified ] = "执行";
         Text[ chinese_traditional ] = "執行";
         Text[ turkish ] = "Execute";
@@ -191,7 +191,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ polish ] = "Poprzednie polecenie";
         Text[ portuguese_brazilian ] = "Previous commands";
         Text[ japanese ] = "前のｺﾏﾝﾄﾞ";
-        Text[ korean ] = "Previous commands";
+        Text[ korean ] = "이전 명령";
         Text[ chinese_simplified ] = "前一个命令";
         Text[ chinese_traditional ] = "前一個指令";
         Text[ turkish ] = "Previous commands";
@@ -271,7 +271,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
         Text[ japanese ] = "閉じる";
-        Text[ korean ] = "Close";
+        Text[ korean ] = "닫기";
         Text[ chinese_simplified ] = "关闭";
         Text[ chinese_traditional ] = "關閉";
         Text[ turkish ] = "Close";
@@ -296,7 +296,7 @@ ModalDialog DLG_DIRECTSQL
     Text[ polish ] = "Wykonaj polecenie SQL";
     Text[ portuguese_brazilian ] = "Excecute SQL statement";
     Text[ japanese ] = "SQL ｽﾃｰﾄﾒﾝﾄの実行";
-    Text[ korean ] = "Excecute SQL statement";
+    Text[ korean ] = "SQL 문 실행";
     Text[ chinese_simplified ] = "直接执行 SQL 命令";
     Text[ chinese_traditional ] = "直接執行 SQL 指令";
     Text[ turkish ] = "Excecute SQL statement";
@@ -348,7 +348,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text[ polish ] = "Po��czenie z baz� danych przerwano. Okno dialogowe zostanie zamkni�te.";
     Text[ portuguese_brazilian ] = "The connection to the database has been lost. This dialog will be closed.";
     Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽへの接続は削除されています。このﾀﾞｲｱﾛｸﾞを閉じます。";
-    Text[ korean ] = "The connection to the database has been lost. This dialog will be closed.";
+    Text[ korean ] = "데이터베이스와의 연결이 해제되었습니다. 이 대화상자가 닫힐 것입니다.";
     Text[ chinese_simplified ] = "已经结束和数据库的连接。现在关闭这个对话框。";
     Text[ chinese_traditional ] = "已經結束與資料庫的連線。現在關閉這個對話方塊。";
     Text[ turkish ] = "The connection to the database has been lost. This dialog will be closed.";
@@ -359,6 +359,9 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/08/07 15:00:18  kz
+ *  Merge SRC638: 07.08.01 - 16:59:48
+ *
  *  Revision 1.3  2001/07/13 21:08:48  kz
  *  Merge SRC638: 13.07.01 - 23:07:57
  *
@@ -371,6 +374,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
 
 
 
