@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:46 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,28 +60,8 @@
 
 #define _SV_SALGDIUTILS_CXX
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
-#endif
-
-#ifndef _SV_VCLGRAPHICS_H
-#include <VCLGraphics.h>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
-#endif
-
 #ifndef _SV_SALGDIUTILS_HXX
-#include <salgdiutils.hxx>
+    #include <salgdiutils.hxx>
 #endif
 
 // =======================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salpixmaputils.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-10 22:30:00 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,22 +63,53 @@
 #define _SV_SALPIXMAPUTILS_HXX
 
 #include <premac.h>
-#include <ApplicationServices/ApplicationServices.h>
+
+    #ifndef __FIXMATH__
+        #include <CarbonCore/FixMath.h>
+    #endif
+
+    #ifndef __MACERRORS__      #include <CarbonCore/MacErrors.h>
+    #endif
+
+    #ifndef __MACTYPES__
+        #include <CarbonCore/MacTypes.h>
+    #endif
+
+    #ifndef __MACMEMORY__
+        #include <CarbonCore/MacMemory.h>
+    #endif
+
+    #ifndef __QUICKDRAW__
+        #include <QD/Quickdraw.h>
+    #endif
+
+    #ifndef __QDOFFSCREEN__
+        #include <QD/QDOffscreen.h>
+    #endif
+
 #include <postmac.h>
 
 #ifndef _GEN_HXX
-#include <tools/gen.hxx>
+    #include <tools/gen.hxx>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+    #include <salbtype.hxx>
 #endif
 
 #ifndef _SV_SALGTYPE_HXX
-#include <salgtype.hxx>
+    #include <salgtype.hxx>
 #endif
 
-// ------------------------------------------------------------------
+#ifndef _SV_SALCONST_H
+    #include <salconst.h>
+#endif
+
+#ifndef _SV_SALCOLORUTILS_HXX
+    #include <salcolorutils.hxx>
+#endif
+
+#if PRAGMA_ONCE    #pragma once#endif// ------------------------------------------------------------------
 
 
 PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
@@ -94,6 +125,4 @@ PixMapHandle GetCGrafPortPixMap ( const Size           &rPixMapSize,
                                   const CGrafPtr        pCGraf
                                 );
 
-// ------------------------------------------------------------------
-
-#endif  // _SV_SALPIXMAPUTILS_HXX
+// ------------------------------------------------------------------#endif   // _SV_SALPIXMAPUTILS_HXX

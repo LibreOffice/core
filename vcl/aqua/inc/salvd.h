@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:48 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,52 @@
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
 
+#include <premac.h>
+
+    #ifndef __MACERRORS__      #include <CarbonCore/MacErrors.h>
+    #endif
+
+    #ifndef __MACTYPES__
+        #include <CarbonCore/MacTypes.h>
+    #endif
+
+    #ifndef __MACMEMORY__
+        #include <CarbonCore/MacMemory.h>
+    #endif
+
+    #ifndef __FONTS__
+        #include <QD/Fonts.h>
+    #endif
+
+    #ifndef __QUICKDRAW__
+        #include <QD/Quickdraw.h>
+    #endif
+
+    #ifndef __QDOFFSCREEN__
+        #include <QD/QDOffscreen.h>
+    #endif
+
+#include <postmac.h>
+
 #ifndef _SV_SV_H
-#include <sv.h>
+    #include <sv.h>
 #endif
 
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+    #include <salgdi.hxx>
 #endif
+
+#ifndef _SV_SALCONST_H
+    #include <salconst.h>
+#endif
+
+#ifndef _SV_SALCOLORUTILS_HXX
+    #include <salcolorutils.hxx>
+#endif
+
+#if PRAGMA_ONCE    #pragma once#endif// =======================================================================
+
+// =======================================================================
 
 // -----------------
 // - SalVirDevData -
@@ -86,5 +125,9 @@ struct SalVirDevData
 typedef struct SalVirDevData   SalVirDevData;
 typedef SalVirDevData         *SalVirDevDataPtr;
 typedef SalVirDevDataPtr      *SalVirDevDataHandle;
+
+// =======================================================================
+
+// =======================================================================
 
 #endif // _SV_SALVD_H

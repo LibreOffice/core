@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salmathutils.cxx,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,15 @@
 
 #define _SV_SALMATHUTILS_CXX
 
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salmathutils.hxx>
+#ifndef _SV_SALMATHUTILS_HXX
+    #include <salmathutils.hxx>
 #endif
+
+// =======================================================================
+
+// =======================================================================
+
+#define Swap( x, y ) { x ^= y; y ^= x; x ^= y; }
 
 // =======================================================================
 
@@ -72,9 +78,7 @@
 
 void CSwap ( char &rX, char &rY )
 {
-    rX ^= rY;
-    rY ^= rX;
-    rX ^= rY;
+    Swap( rX, rY );
 } // CSwap
 
 // -----------------------------------------------------------------------
@@ -83,9 +87,7 @@ void CSwap ( char &rX, char &rY )
 
 void UCSwap ( unsigned char &rX, unsigned char &rY )
 {
-    rX ^= rY;
-    rY ^= rX;
-    rX ^= rY;
+    Swap( rX, rY );
 } // UCSwap
 
 // -----------------------------------------------------------------------
@@ -94,9 +96,7 @@ void UCSwap ( unsigned char &rX, unsigned char &rY )
 
 void SSwap ( short &rX, short &rY )
 {
-    rX ^= rY;
-    rY ^= rX;
-    rX ^= rY;
+    Swap( rX, rY );
 } // SSwap
 
 // -----------------------------------------------------------------------
@@ -105,9 +105,7 @@ void SSwap ( short &rX, short &rY )
 
 void USSwap ( unsigned short &rX, unsigned short &rY )
 {
-    rX ^= rY;
-    rY ^= rX;
-    rX ^= rY;
+    Swap( rX, rY );
 } // USSwap
 
 // -----------------------------------------------------------------------
@@ -116,9 +114,7 @@ void USSwap ( unsigned short &rX, unsigned short &rY )
 
 void LSwap ( long &rX, long &rY )
 {
-    rX ^= rY;
-    rY ^= rX;
-    rX ^= rY;
+    Swap( rX, rY );
 } // LSwap
 
 // -----------------------------------------------------------------------
@@ -127,9 +123,7 @@ void LSwap ( long &rX, long &rY )
 
 void ULSwap ( unsigned long &rX, unsigned long &rY )
 {
-    rX ^= rY;
-    rY ^= rX;
-    rX ^= rY;
+    Swap( rX, rY );
 } // ULSwap
 
 // =======================================================================
@@ -172,12 +166,12 @@ unsigned long  Euclidian2Norm ( const LRectCoorVector  pVec )
 
         if ( nMax < nMed )
         {
-            ULSwap( nMax, nMed );
+            Swap( nMax, nMed );
         } // if
 
         if ( nMax < nMin )
         {
-            ULSwap( nMax, nMin );
+            Swap( nMax, nMin );
         } // if
 
         // Approximate Euclidian distance:

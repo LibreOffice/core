@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,40 +61,8 @@
 
 #define _SV_SALBMP_CXX
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
-#endif
-
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
-#endif
-
-#ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
-#endif
-
-#ifndef _SV_SALPIXMAPUTILS_HXX
-#include <salpixmaputils.hxx>
-#endif
-
-#ifndef _SV_SALRECTANGLEUTILS_HXX
-#include <salrectangleutils.hxx>
+    #include <salbmp.hxx>
 #endif
 
 // =======================================================================
@@ -164,7 +132,7 @@ BOOL SalBitmap::Create( const Size&           rSize,
                         if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
                         {
                             mnBitCount = GetPixDepth( mhPixMap);
-                            maSize     = rSize;
+                            mnSize     = rSize;
 
                             bSalBitmapCreated = TRUE;
                         } // if
@@ -233,7 +201,7 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 {
     BOOL bSalBitmapCreated = FALSE;
 
-    if ( Create( rSalBmp.maSize, nNewBitCount, BitmapPalette() ) )
+    if ( Create( rSalBmp.mnSize, nNewBitCount, BitmapPalette() ) )
     {
         // Copy pixels from rSalBmp.mpVirDev to mpVirDev
 
@@ -283,7 +251,7 @@ void SalBitmap::Destroy()
         } // if
 
         mhPixMap   = NULL;
-        maSize     = Size();
+        mnSize     = Size();
         mnBitCount = 0;
     } // if
 } // SalBitmap::Destroy

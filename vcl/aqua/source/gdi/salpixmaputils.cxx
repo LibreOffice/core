@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salpixmaputils.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-26 20:02:27 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,8 @@
 
 #define _SV_SALPIXMAPUTILS_CXX
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
-#endif
-
 #ifndef _SV_SALPIXMAPUTILS_HXX
-#include <salpixmaputils.hxx>
+    #include <salpixmaputils.hxx>
 #endif
 
 // =======================================================================

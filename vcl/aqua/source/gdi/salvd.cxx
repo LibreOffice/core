@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:47 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,8 @@
 
 #define _SV_SALVD_CXX
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
-#endif
-
 #ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+    #include <salvd.hxx>
 #endif
 
 // =======================================================================

@@ -1,9 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: salmathutils.hxx,v $
+ *  $RCSfile: salfontutils.hxx,v $
  *
- *  $Revision: 1.2 $
- *
+ *  $Revision: 1.1 $
  *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
@@ -50,7 +49,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2001 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -59,55 +58,36 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALMATHUTILS_HXX
-#define _SV_SALMATHUTILS_HXX
+// =======================================================================
 
-#if PRAGMA_ONCE    #pragma once#endif#ifdef __cplusplus    extern "C" {#endif// ------------------------------------------------------------------
-//
-//                            Structures
-//
-// ------------------------------------------------------------------
+// =======================================================================
 
-// LRectCoor is an abreviation for rectangular coordinates
-// represented as long integers
+#ifndef _SV_SALFONTUTILS_HXX
+#define _SV_SALFONTUTILS_HXX
 
-struct LRectCoor
-{
-    long  x;
-    long  y;
-    long  z;
-};
+#ifndef _SV_SALDATA_HXX
+    #include <saldata.hxx>
+#endif
 
-// ------------------------------------------------------------------
-//
-//                       Type Definitions
-//
-// ------------------------------------------------------------------
+#ifndef _SV_OUTFONT_HXX
+    #include <outfont.hxx>
+#endif
 
-// LRectCoorVec is an abreviation for vectors in rectangular
-// coordinates represented as long integers
+#if PRAGMA_ONCE    #pragma once#endif// =======================================================================
 
-typedef struct LRectCoor   LRectCoor;
-typedef LRectCoor         *LRectCoorVector;
-typedef LRectCoorVector   *LRectCoorTensor;
+// =======================================================================
 
-// ------------------------------------------------------------------
-//
-//                      Function Headers
-//
-// ------------------------------------------------------------------
+DECLARE_LIST( FontList, ImplFontData* );
 
-void CSwap  ( char            &rX, char            &rY );
-void UCSwap ( unsigned char   &rX, unsigned char   &rY );
-void SSwap  ( short           &rX, short           &rY );
-void USSwap ( unsigned short  &rX, unsigned short  &rY );
-void LSwap  ( long            &rX, long            &rY );
-void ULSwap ( unsigned long   &rX, unsigned long   &rY );
+// =======================================================================
 
-// ------------------------------------------------------------------
+// =======================================================================
 
-unsigned long  Euclidian2Norm ( const LRectCoorVector  pVec );
+FontList *GetMacFontList();
 
-// ------------------------------------------------------------------
+// =======================================================================
 
-#ifdef __cplusplus}#endif#endif // _SV_SALMATHUTILS_HXX
+// =======================================================================
+
+#endif  // _SV_SALFONTUTILS_HXX
+

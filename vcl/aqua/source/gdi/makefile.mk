@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+#   last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,8 @@ SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salcolorutils.obj     \
             $(SLO)$/salpixmaputils.obj    \
             $(SLO)$/salgdiutils.obj       \
+            $(SLO)$/salatsuifontutils.obj \
+            $(SLO)$/salfontutils.obj      \
             $(SLO)$/salgdi.obj            \
             $(SLO)$/VCLGraphics.obj       \
             $(SLO)$/salvd.obj             \
@@ -99,6 +101,8 @@ OBJFILES=   $(OBJ)$/salmathutils.obj      \
             $(OBJ)$/salcolorutils.obj     \
             $(OBJ)$/salpixmaputils.obj    \
             $(OBJ)$/salgdiutils.obj       \
+            $(OBJ)$/salatsuifontutils.obj \
+            $(OBJ)$/salfontutils.obj      \
             $(OBJ)$/salgdi.obj            \
             $(OBJ)$/VCLGraphics.obj	  \
             $(OBJ)$/salvd.obj		  \

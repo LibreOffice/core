@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.52 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:46 $
+ *  $Revision: 1.53 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,46 +57,41 @@
  *
  *
  ************************************************************************/
-
 #define _SV_SALGDI_CXX
 
 #ifndef _SV_SALCONST_H
-#include <salconst.h>
+    #include <salconst.h>
+#endif
+
+#ifndef _SV_SALGDI_H
+    #include <salgdi.h>
 #endif
 
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
-#endif
-
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
-#endif
-
-#ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+    #include <salbmp.hxx>
 #endif
 
 #ifndef _SV_VCLGRAPHICS_H
-#include <VCLGraphics.h>
+    #include <VCLGraphics.h>
 #endif
 
 #ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
+    #include <salcolorutils.hxx>
 #endif
 
-#ifndef _SV_SALRECTANGLEUTILS_HXX
-#include <salrectangleutils.hxx>
+#ifndef _SV_SALFONTUTILS_HXX
+    #include <salfontutils.hxx>
 #endif
 
 #ifndef _SV_SALGDIUTILS_HXX
-#include <salgdiutils.hxx>
+    #include <salgdiutils.hxx>
 #endif
 
-// =======================================================================
+#ifndef _SV_SALRECTANGLEUTILS_HXX
+    #include <salrectangleutils.hxx>
+#endif
+
+#if PRAGMA_ONCE    #pragma once#endif// =======================================================================
 
 // =======================================================================
 
@@ -1310,18 +1305,54 @@ ULONG SalGraphics::GetKernPairs( ULONG              nPairs,
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::GetDevFontList( ImplDevFontList* pList )
+void SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
-    ImplFontData *pFontData = new ImplFontData;
+    if ( pList != NULL )
+    {
+        SalData *pSalData = GetSalData();
 
-    pFontData->mnWidth  = 10;
-    pFontData->mnHeight = 10;
+        if ( pSalData != NULL )
+        {
+            FontList      *pMacFontList = NULL;
+            ImplFontData  *pDevFontData = NULL;
+            ImplFontData  *pSysFontData = NULL;
 
-    pList->Add( pFontData );
+            if ( pSalData->mpFontList != NULL )
+            {
+                pSalData->mpFontList = GetMacFontList();
 
-    fprintf( stderr,
-             "<<WARNING>> SalGraphics::GetDevFontList not yet implemented!\n"
-           );
+                pMacFontList = pSalData->mpFontList;
+                pSysFontData = pMacFontList->First();
+
+                while ( pSysFontData != NULL )
+                {
+                    pDevFontData = new ImplFontData;
+
+                    pDevFontData->mpSysData             = pSysFontData;
+                    pDevFontData->maName                = pSysFontData->maName;
+                    pDevFontData->maStyleName           = pSysFontData->maStyleName;
+                    pDevFontData->mnWidth               = pSysFontData->mnWidth;
+                    pDevFontData->mnHeight              = pSysFontData->mnHeight;
+                    pDevFontData->meFamily              = pSysFontData->meFamily;
+                    pDevFontData->meCharSet             = pSysFontData->meCharSet;
+                    pDevFontData->meScript              = pSysFontData->meScript;
+                    pDevFontData->mePitch               = pSysFontData->mePitch;
+                    pDevFontData->meWidthType           = pSysFontData->meWidthType;
+                    pDevFontData->meWeight              = pSysFontData->meWeight;
+                    pDevFontData->meItalic              = pSysFontData->meItalic;
+                    pDevFontData->meType                = pSysFontData->meType;
+                    pDevFontData->mnVerticalOrientation = pSysFontData->mnVerticalOrientation;
+                    pDevFontData->mbOrientation         = pSysFontData->mbOrientation;
+                    pDevFontData->mbDevice              = pSysFontData->mbDevice;
+                    pDevFontData->mnQuality             = pSysFontData->mnQuality;
+
+                    pList->Add( pDevFontData );
+
+                    pSysFontData = pMacFontList->Next();
+                } // while
+            } // if
+        } // if
+    } // if
 } // SalGraphics::GetDevFontList
 
 // -----------------------------------------------------------------------

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salcolorutils.cxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-26 20:02:27 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,8 @@
 
 #define _SV_SALCOLORUTILS_CXX
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
 #ifndef _SV_SALCOLORUTILS_HXX
-#include <salmathutils.hxx>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
+    #include <salcolorutils.hxx>
 #endif
 
 // =======================================================================

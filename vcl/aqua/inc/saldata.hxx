@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:20 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,37 +63,41 @@
 #define _SV_SALDATA_HXX
 
 #ifndef _SV_SV_H
-#include <sv.h>
+    #include <sv.h>
 #endif
 
 #ifdef __cplusplus
 
-#ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
-#endif
+    #ifndef _SV_SVDATA_HXX
+        #include <svdata.hxx>
+    #endif
 
 #endif // __cplusplus
 
 #ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+    #include <salwtype.hxx>
 #endif
+
 #ifndef _SV_VCLWINDOW_H
-#include <VCLWindow.h>
+    #include <VCLWindow.h>
 #endif
 
-#ifdef __cplusplus
+#if PRAGMA_ONCE    #pragma once#endif#ifdef __cplusplus
 
-class SalInstance;
-class SalObject;
-class SalFrame;
-class SalVirtualDevice;
-class SalPrinter;
+    class SalInstance;
+    class SalObject;
+    class SalFrame;
+    class SalVirtualDevice;
+    class SalPrinter;
+
+    class FontList;
 
 #else // __cplusplus
 
-#define SalInstance void
-#define SalVirtualDevice void
-#define SalPrinter void
+    #define SalInstance void
+    #define SalVirtualDevice void
+    #define SalPrinter void
+    #define FontList void
 
 #endif // __cplusplus
 
@@ -103,27 +107,32 @@ class SalPrinter;
 
 struct SalData
 {
-    SALTIMERPROC            mpTimerProc;            // timer callback proc
-    SalInstance*            mpFirstInstance;        // pointer of first instance
-    SalFrame*               mpFirstFrame;           // pointer of first frame
-    SalObject*              mpFirstObject;          // pointer of first object window
-    SalVirtualDevice*       mpFirstVD;              // first VirDev
-    SalPrinter*             mpFirstPrinter;         // first printing printer
+    SALTIMERPROC       mpTimerProc;     // timer callback proc
+    SalInstance       *mpFirstInstance; // pointer of first instance
+    SalFrame          *mpFirstFrame;    // pointer of first frame
+    SalObject         *mpFirstObject;   // pointer of first object window
+    SalVirtualDevice  *mpFirstVD;       // first VirDev
+    SalPrinter        *mpFirstPrinter;  // first printing printer
+    FontList          *mpFontList;          // Mac OS font list
 };
 
 #ifdef __cplusplus
 
-inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
-inline SalData* GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
-inline SalData* GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData; }
+    inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
+
+    inline SalData *GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
+    inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData; }
 
 #else // __cplusplus
 
-// C wrapper functions around SetSalData, GetSalData, and GetAppSalData
-void SalSetSalData( struct SalData* pData );
-struct SalData* SalGetSalData();
-struct SalData* SalGetAppSalData();
-BOOL SalGetAppQuit();
+    // C wrapper functions around SetSalData, GetSalData, and GetAppSalData
+
+    void SalSetSalData( struct SalData* pData );
+
+    struct SalData *SalGetSalData();
+    struct SalData *SalGetAppSalData();
+
+    BOOL SalGetAppQuit();
 
 #endif // __cplusplus
 
