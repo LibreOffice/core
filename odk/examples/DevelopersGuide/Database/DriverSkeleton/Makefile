@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:20:44 $
+#  last change: $Author: kz $ $Date: 2005-03-01 12:08:41 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -143,7 +143,7 @@ endif
 
 DatabaseSDBCDriverSkeletonExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The Databse SDBC skeleton driver component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo The Database SDBC skeleton driver component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description and the howto of implementing a sdbc driver.
 	@echo --------------------------------------------------------------------------------
