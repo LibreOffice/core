@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:28:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,9 +212,9 @@
 #include "fmgridif.hxx"
 #endif
 
-#ifndef _SVX_SHOWCOLS_HXX
-#include "showcols.hxx"
-#endif
+//CHINA001 #ifndef _SVX_SHOWCOLS_HXX
+//CHINA001 #include "showcols.hxx"
+//CHINA001 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -243,6 +243,9 @@
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
+
+#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -1055,9 +1058,19 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         break;
         case SID_FM_SHOWCOLS_MORE:
         {
-            FmShowColsDialog dlg(NULL);
-            dlg.SetColumns(xCols);
-            dlg.Execute();
+            //CHINA001 FmShowColsDialog dlg(NULL);
+            //CHINA001 dlg.SetColumns(xCols);
+            //CHINA001 dlg.Execute();
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if(pFact)
+            {
+                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL, ResId(RID_SVX_DLG_SHOWGRIDCOLUMNS));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                pDlg->SetColumns(xCols);
+                pDlg->Execute();
+                delete pDlg;
+            }
+
         }
         break;
         case SID_FM_SHOWALLCOLS:
