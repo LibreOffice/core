@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:48:47 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1984,14 +1984,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         case KS_KeyToView:
             {
-                if (rSh.IsInFrontOfLabel())
+                eKeyState = KS_Ende;
+                bNormalChar = !rKeyCode.IsControlMod() &&
+                                SW_ISPRINTABLE( aCh );
+
+                if (bNormalChar && rSh.IsInFrontOfLabel())
                 {
                     rSh.NumOrNoNum(FALSE);
                 }
 
-                eKeyState = KS_Ende;
-                bNormalChar = !rKeyCode.IsControlMod() &&
-                                SW_ISPRINTABLE( aCh );
                 if( aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
                     FlushInBuffer();
 
