@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
+ *  last change: $Author: fs $ $Date: 2001-09-10 16:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
@@ -149,10 +152,14 @@
 #endif
 
 using namespace ::svxform;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
@@ -483,13 +490,15 @@ void SAL_CALL FmXGridControl::dispose() throw( ::com::sun::star::uno::RuntimeExc
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rModel)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     if (!UnoControl::setModel(rModel))
         return sal_False;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridPeer >  xGridPeer(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XGridPeer > xGridPeer(mxPeer, UNO_QUERY);
     if (xGridPeer.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xCols(mxModel, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XIndexContainer > xCols(mxModel, UNO_QUERY);
         xGridPeer->setColumns(xCols);
     }
     return sal_True;
@@ -751,26 +760,28 @@ void SAL_CALL FmXGridControl::draw( long x, long y )
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetSupplier >  xGrid(mxPeer, ::com::sun::star::uno::UNO_QUERY);
 
     if (xGrid.is() && (bOn != mbDesignMode || (!bOn && !xGrid->getRowSet().is())))
     {
         if (bOn)
         {
-            xGrid->setRowSet(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > ());
+            xGrid->setRowSet(Reference< XRowSet > ());
         }
         else
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp(getModel(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
             if (xComp.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xForm(xComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< XRowSet >  xForm(xComp->getParent(), UNO_QUERY);
                 xGrid->setRowSet(xForm);
             }
         }
 
         mbDesignMode = bOn;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >  xVclWindowPeer(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XVclWindowPeer >  xVclWindowPeer(mxPeer, UNO_QUERY);
         if (xVclWindowPeer.is())
             xVclWindowPeer->setDesignMode(bOn);
     }
@@ -1592,17 +1603,26 @@ void FmXGridPeer::reloaded(const ::com::sun::star::lang::EventObject& aEvent) th
 //------------------------------------------------------------------------------
 void FmXGridPeer::addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCol)
 {
-    static ::rtl::OUString aPropsListenedTo[] =
+    static const ::rtl::OUString aPropsListenedTo[] =
     {
         FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN, FM_PROP_FORMATKEY
     };
 
     // as not all properties have to be supported by all columns we have to check this
     // before adding a listener
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
-    for (sal_uInt16 i=0; i<sizeof(aPropsListenedTo)/sizeof(aPropsListenedTo[0]); ++i)
-        if (xInfo->hasPropertyByName(aPropsListenedTo[i]))
-            xCol->addPropertyChangeListener(aPropsListenedTo[i], this);
+    Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
+    Property aPropDesc;
+    const ::rtl::OUString* pProps = aPropsListenedTo;
+    const ::rtl::OUString* pPropsEnd = pProps + sizeof( aPropsListenedTo ) / sizeof( aPropsListenedTo[ 0 ] );
+    for (; pProps != pPropsEnd; ++pProps)
+    {
+        if ( xInfo->hasPropertyByName( *pProps ) )
+        {
+            aPropDesc = xInfo->getPropertyByName( *pProps );
+            if ( 0 != ( aPropDesc.Attributes & PropertyAttribute::BOUND ) )
+                xCol->addPropertyChangeListener( *pProps, this );
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1624,53 +1644,53 @@ void FmXGridPeer::removeColumnListeners(const ::com::sun::star::uno::Reference< 
 //------------------------------------------------------------------------------
 void FmXGridPeer::setColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& Columns) throw( ::com::sun::star::uno::RuntimeException )
 {
-    Window* pWin = GetWindow();
+    FmGridControl* pGrid = static_cast< FmGridControl* >( GetWindow() );
 
     if (m_xColumns.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
+        Reference< XPropertySet > xCol;
         for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
         {
             ::cppu::extractInterface(xCol, m_xColumns->getByIndex(i));
             removeColumnListeners(xCol);
         }
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >  xContainer(m_xColumns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XContainer >  xContainer(m_xColumns, UNO_QUERY);
         xContainer->removeContainerListener(this);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(m_xColumns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XSelectionSupplier >  xSelSupplier(m_xColumns, UNO_QUERY);
         xSelSupplier->removeSelectionChangeListener(this);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset >  xColumnReset(m_xColumns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XReset >  xColumnReset(m_xColumns, UNO_QUERY);
         if (xColumnReset.is())
-            xColumnReset->removeResetListener((::com::sun::star::form::XResetListener*)this);
+            xColumnReset->removeResetListener((XResetListener*)this);
     }
     if (Columns.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >  xContainer(Columns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XContainer >  xContainer(Columns, UNO_QUERY);
         xContainer->addContainerListener(this);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(Columns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XSelectionSupplier >  xSelSupplier(Columns, UNO_QUERY);
         xSelSupplier->addSelectionChangeListener(this);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCol;
+        Reference< XPropertySet >  xCol;
         for (sal_Int32 i = 0; i < Columns->getCount(); i++)
         {
             ::cppu::extractInterface(xCol, Columns->getByIndex(i));
             addColumnListeners(xCol);
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset >  xColumnReset(Columns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XReset >  xColumnReset(Columns, UNO_QUERY);
         if (xColumnReset.is())
-            xColumnReset->addResetListener((::com::sun::star::form::XResetListener*)this);
+            xColumnReset->addResetListener((XResetListener*)this);
     }
     m_xColumns = Columns;
-    if (pWin)
+    if (pGrid)
     {
-        ((FmGridControl*) pWin)->InitColumnsByModels(m_xColumns);
+        pGrid->InitColumnsByModels(m_xColumns);
 
         if (m_xColumns.is())
         {
-            ::com::sun::star::lang::EventObject aEvt(m_xColumns);
+            EventObject aEvt(m_xColumns);
             selectionChanged(aEvt);
         }
     }
@@ -1783,6 +1803,8 @@ void FmXGridPeer::elementRemoved(const ::com::sun::star::container::ContainerEve
 //------------------------------------------------------------------------------
 void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     sal_Int32 nId = FmPropertyInfoService::getPropertyId(PropertyName);
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     sal_Bool bVoid = !Value.hasValue();
