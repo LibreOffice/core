@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:02:33 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,15 +88,27 @@
 
 #ifndef MAC
 #include "../../ui/inc/strings.hrc"
-#include "../../ui/inc/docshell.hxx"
-#include "../../ui/inc/sdwindow.hxx"
-#include "../../ui/inc/viewshel.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../../ui/inc/DrawDocShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "../../ui/inc/Window.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "../../ui/inc/ViewShell.hxx"
+#endif
 #include "../../ui/inc/assclass.hxx"
 #else  //MAC
 #include "strings.hrc"
-#include "docshell.hxx"
-#include "sdwindow.hxx"
-#include "viewshel.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "assclass.hxx"
 #endif //!MAC
 
@@ -122,7 +134,10 @@ class HtmlState;
 class SdrTextObj;
 class SdrPage;
 class SdDrawDocument;
-class SdView;
+
+namespace sd {
+class View;
+}
 
 class HtmlErrorContext : public ErrorContext
 {
@@ -150,7 +165,7 @@ class HtmlExport
     String m_aPath;
 
     SdDrawDocument* pDoc;
-    SdDrawDocShell* pDocSh;
+    ::sd::DrawDocShell* pDocSh;
 
     HtmlErrorContext m_eEC;
 
@@ -276,7 +291,7 @@ class HtmlExport
     String GetButtonName( USHORT nButton ) const;
 
  public:
-     HtmlExport( rtl::OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell );
+     HtmlExport( rtl::OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, ::sd::DrawDocShell* pDocShell );
     virtual ~HtmlExport();
 
     static String   ColorToHTMLString( Color aColor );
