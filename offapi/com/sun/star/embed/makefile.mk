@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-26 20:44:30 $
+#   last change: $Author: vg $ $Date: 2005-02-25 09:32:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,7 @@ IDLFILES=\
     XPackageStructureCreator.idl\
     UnreachableStateException.idl\
     UseBackupException.idl\
+    StateChangeInProgressException.idl\
     WrongStateException.idl\
     ObjectSaveVetoException.idl\
     InvalidStorageException.idl\
