@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-08 15:58:45 $
+ *  last change: $Author: sb $ $Date: 2002-11-13 11:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2045,7 +2045,7 @@ static ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
     { 0x06, 0xF5, aImplUniToDBCSTab_JIS0208_9B },               /* 0x9B */
     { 0x04, 0xF6, aImplUniToDBCSTab_JIS0208_9C },               /* 0x9C */
     { 0x03, 0xFD, aImplUniToDBCSTab_JIS0208_9D },               /* 0x9D */
-    { 0x19, 0xFD, aImplUniToDBCSTab_JIS0208_9E },               /* 0x9E */
+    { 0x1A, 0xFD, aImplUniToDBCSTab_JIS0208_9E },               /* 0x9E */
     { 0x07, 0xA0, aImplUniToDBCSTab_JIS0208_9F },               /* 0x9F */
     {    1,    0, NULL },                                       /* 0xA0 */
     {    1,    0, NULL },                                       /* 0xA1 */
