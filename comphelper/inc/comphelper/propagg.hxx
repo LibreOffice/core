@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:07:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-21 11:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ protected:
 namespace internal
 {
     class PropertyForwarder;
-};
+}
 
 /**
  * helper class for implementing the property-set-related interfaces
