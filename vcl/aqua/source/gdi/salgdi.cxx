@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.36 $
- *  last change: $Author: pluby $ $Date: 2000-12-31 19:06:40 $
+ *  $Revision: 1.37 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-03 21:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,100 @@ static inline short SelectCopyMode ( const SalGraphicsDataPtr pSalGraphicsData )
 
     return nCopyMode;
 } // SelectCopyMode
+
+// =======================================================================
+
+// =======================================================================
+
+static RgnHandle GetPolygonRgn ( const unsigned long   nPolyCount,
+                                 const unsigned long  *pPoints,
+                                 PCONSTSALPOINT       *ppPtAry,
+                                 OSStatus             *rQDStatus
+                               )
+{
+    RgnHandle hSrcRgnA = NULL;
+
+    hSrcRgnA = NewRgn();
+
+    if ( hSrcRgnA != NULL )
+    {
+        RgnHandle hSrcRgnB = NULL;
+
+        hSrcRgnB = NewRgn();
+
+        if ( hSrcRgnB != NULL )
+        {
+            unsigned short  nPolyEdgeIndex = 0;
+            unsigned short  nPolyIndex     = 0;
+            unsigned short  nPolyEdges     = 0;
+
+            for ( nPolyIndex = 0;
+                  nPolyIndex < nPolyCount;
+                  nPolyIndex++
+                )
+            {
+                const SalPoint *pPtAry = ppPtAry[nPolyIndex];
+
+                nPolyEdges = pPoints[nPolyIndex];
+
+                // Begin region construction
+
+                OpenRgn();
+
+                    // Begin polygon construction
+
+                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+
+                    for ( nPolyEdgeIndex = 1;
+                          nPolyEdgeIndex < nPolyEdges;
+                          nPolyEdgeIndex++
+                        )
+                    {
+                        MacLineTo( pPtAry[nPolyEdgeIndex].mnX,
+                                   pPtAry[nPolyEdgeIndex].mnY
+                                 );
+                    } // for
+
+                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+
+                    // End polygon construction
+
+                CloseRgn( hSrcRgnB );
+
+                // End region construction
+
+                *rQDStatus = QDErr();
+
+                if ( *rQDStatus == noErr )
+                {
+                    if ( nPolyIndex == 0 )
+                    {
+                        MacCopyRgn( hSrcRgnB, hSrcRgnA );
+                    } // if
+                    else
+                    {
+                        MacXorRgn( hSrcRgnA, hSrcRgnB, hSrcRgnA );
+                    } // else
+                } // if
+            } // for
+
+            DisposeRgn( hSrcRgnB );
+
+            *rQDStatus = QDErr();
+
+            if ( *rQDStatus != noErr )
+            {
+                DisposeRgn( hSrcRgnA );
+
+                hSrcRgnA = NULL;
+            }
+
+            hSrcRgnB = NULL;
+        } // if
+    } // if
+
+    return hSrcRgnA;
+} // GetPolygonRgn
 
 // =======================================================================
 
@@ -616,30 +710,6 @@ static OSStatus BeginClip ( SalGraphicsDataPtr rSalGraphicsData )
          && ( rSalGraphicsData->mhClipRgn != NULL )
        )
     {
-        Rect aClipRect;
-
-        // Get the port bounds from our current region handle
-
-        GetRegionBounds( rSalGraphicsData->mhClipRgn, &aClipRect );
-
-        // Clip to a rectangle that we got from our current region
-
-        ClipRect( &aClipRect );
-
-        // Was there an error after clipping to a rectangle?
-
-        rSalGraphicsData->mnMacOSStatus == QDErr();
-    } // if
-
-    return rSalGraphicsData->mnMacOSStatus;
-} // BeginClip
-
-// -----------------------------------------------------------------------
-
-static OSStatus EndClip ( SalGraphicsDataPtr rSalGraphicsData )
-{
-    if ( rSalGraphicsData->mhClipRgn != NULL )
-    {
         // Set the clip region
 
         SetClip( rSalGraphicsData->mhClipRgn );
@@ -652,6 +722,16 @@ static OSStatus EndClip ( SalGraphicsDataPtr rSalGraphicsData )
 
         rSalGraphicsData->mbClipRegionChanged = FALSE;
     } // if
+    return rSalGraphicsData->mnMacOSStatus;
+} // BeginClip
+
+// -----------------------------------------------------------------------
+
+static OSStatus EndClip ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    // Set the new status flag for our port
+
+    rSalGraphicsData->mbClipRegionChanged = FALSE;
 
     return rSalGraphicsData->mnMacOSStatus;
 } // EndClip
@@ -660,7 +740,7 @@ static OSStatus EndClip ( SalGraphicsDataPtr rSalGraphicsData )
 
 // =======================================================================
 
-static OSStatus OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
+static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 {
     // Previous to entering this function, was there a QD error?
 
@@ -670,20 +750,22 @@ static OSStatus OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
         if ( rSalGraphicsData->mbWindow )
         {
-            rSalGraphicsData->mpCGrafPort = VCLGraphics_LockFocusCGrafPort( rSalGraphicsData->mhDC );
-        }
+            rSalGraphicsData->mpCGrafPort
+                = VCLGraphics_LockFocusCGrafPort( rSalGraphicsData->mhDC );
+        } // if
 
         if ( rSalGraphicsData->mpCGrafPort != NULL )
         {
-            // Set to the current graph port
+            // Set to the current offscreen world for Mac OS X
+            // only as everything is written to GWorld here
 
             SetGWorld( rSalGraphicsData->mpCGrafPort, NULL );
 
-            // Was there a QD error when we set the port?
+            // Was there a QD error when we set the GWorld?
 
             rSalGraphicsData->mnMacOSStatus = QDErr();
 
-            // Set background and foreground colors on this graph port
+            // Set background and foreground colors on this GWorld port
 
             SetWhiteBackColor();
             SetBlackForeColor();
@@ -691,17 +773,16 @@ static OSStatus OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
     } // if
 
     return rSalGraphicsData->mnMacOSStatus;
-} // OpenQDPort
+} // BeginGraphics
 
 // -----------------------------------------------------------------------
 
-static OSStatus CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
+static OSStatus EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 {
     // Previous to entering this function, was there a QD error?
 
     if ( rSalGraphicsData->mnMacOSStatus == noErr )
     {
-
         // Flush the QuickDraw buffer
 
         QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
@@ -711,7 +792,7 @@ static OSStatus CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
         if ( rSalGraphicsData->mbWindow )
         {
             VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
-        }
+        } // if
 
         // When we get here then the QD port must have changed(?)
 
@@ -723,7 +804,7 @@ static OSStatus CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
     } // if
 
     return rSalGraphicsData->mnMacOSStatus;
-} // CloseQDPort
+} // EndGraphics
 
 // =======================================================================
 
@@ -737,7 +818,7 @@ static void InitBrush ( SalGraphicsDataPtr rSalGraphicsData )
     aBlackColor.green = 0x0000;
     aBlackColor.blue  = 0x0000;
 
-    rSalGraphicsData->mbTransparentBrush = FALSE;
+    rSalGraphicsData->mbBrushTransparent = FALSE;
     rSalGraphicsData->maBrushColor       = aBlackColor;
 } // InitBrush
 
@@ -769,25 +850,23 @@ static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
 
     rSalGraphicsData->maPenColor       = aBlackColor;
     rSalGraphicsData->mnPenMode        = patCopy;
-    rSalGraphicsData->mbTransparentPen = FALSE;
+    rSalGraphicsData->mbPenTransparent = FALSE;
 } // InitPen
 
 // -----------------------------------------------------------------------
 
 static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mhDC              = NULL;
-    rSalGraphicsData->mpCGrafPort       = NULL;
-    rSalGraphicsData->mpOffscreenGWorld = NULL;
-    rSalGraphicsData->mhGDevice         = NULL;
+    rSalGraphicsData->mhDC        = NULL;
+    rSalGraphicsData->mpCGrafPort = NULL;
+    rSalGraphicsData->mpGWorld    = NULL;
 } // InitQD
 
 // -----------------------------------------------------------------------
 
 static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mhClipRgn = NULL;
-    rSalGraphicsData->mhGrowRgn = NULL;
+    rSalGraphicsData->mhClipRgn           = NULL;
     rSalGraphicsData->mbClipRegionChanged = FALSE;
 } // InitRegions
 
@@ -795,105 +874,15 @@ static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mbPrinter = FALSE;
-    rSalGraphicsData->mbVirDev = FALSE;
-    rSalGraphicsData->mbWindow = FALSE;
-    rSalGraphicsData->mbScreen = FALSE;
+    rSalGraphicsData->mbPrinter     = FALSE;
+    rSalGraphicsData->mbVirDev      = FALSE;
+    rSalGraphicsData->mbWindow      = FALSE;
+    rSalGraphicsData->mbScreen      = FALSE;
     rSalGraphicsData->mnMacOSStatus = noErr;
 } // InitStatusFlags
 
 // =======================================================================
 
-// =======================================================================
-
-static RgnHandle GetPolygonRgn ( const unsigned long   nPolyCount,
-                                 const unsigned long  *pPoints,
-                                 PCONSTSALPOINT       *ppPtAry,
-                                 OSStatus             *rQDStatus
-                               )
-{
-    RgnHandle hSrcRgnA = NULL;
-
-    hSrcRgnA = NewRgn();
-
-    if ( hSrcRgnA != NULL )
-    {
-        RgnHandle hSrcRgnB = NULL;
-
-        hSrcRgnB = NewRgn();
-
-        if ( hSrcRgnB != NULL )
-        {
-            unsigned short  nPolyEdgeIndex = 0;
-            unsigned short  nPolyIndex     = 0;
-            unsigned short  nPolyEdges     = 0;
-
-            for ( nPolyIndex = 0; nPolyIndex < nPolyCount; nPolyIndex ++ )
-            {
-                const SalPoint *pPtAry = ppPtAry[nPolyIndex];
-
-                nPolyEdges = pPoints[nPolyIndex];
-
-                // Begin region construction
-
-                OpenRgn();
-
-                    // Begin polygon construction
-
-                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
-
-                    for ( nPolyEdgeIndex = 1;
-                          nPolyEdgeIndex < nPolyEdges;
-                          nPolyEdgeIndex++
-                        )
-                    {
-                        MacLineTo( pPtAry[nPolyEdgeIndex].mnX,
-                                   pPtAry[nPolyEdgeIndex].mnY
-                                 );
-                    } // for
-
-                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
-
-                    // End polygon construction
-
-                CloseRgn( hSrcRgnB );
-
-                // End region construction
-
-                *rQDStatus = QDErr();
-
-                if ( *rQDStatus == noErr )
-                {
-                    if ( nPolyIndex == 0 )
-                    {
-                        MacCopyRgn( hSrcRgnB, hSrcRgnA );
-                    } // if
-                    else
-                    {
-                        MacXorRgn( hSrcRgnA, hSrcRgnB, hSrcRgnA );
-                    } // else
-                } // if
-            } // for
-
-            DisposeRgn( hSrcRgnB );
-
-            *rQDStatus = QDErr();
-
-            if ( *rQDStatus != noErr )
-            {
-                DisposeRgn( hSrcRgnA );
-
-                hSrcRgnA = NULL;
-            }
-
-            hSrcRgnB = NULL;
-        } // if
-    } // if
-
-    return hSrcRgnA;
-} // GetPolygonRgn
-
-// =======================================================================
 
 // =======================================================================
 
@@ -939,19 +928,10 @@ SalGraphics::~SalGraphics()
         DisposeRgn( maGraphicsData.mhClipRgn );
     } // if
 
-    if ( maGraphicsData.mhGrowRgn != NULL )
+    if ( maGraphicsData.mpGWorld != NULL )
     {
-        DisposeRgn( maGraphicsData.mhGrowRgn );
+        DisposeGWorld( maGraphicsData.mpGWorld );
     } // if
-    if ( maGraphicsData.mpOffscreenGWorld != NULL )
-    {
-        DisposeGWorld( maGraphicsData.mpOffscreenGWorld );
-    } // if
-    if ( maGraphicsData.mhGDevice != NULL )
-    {
-        DisposeGDevice( maGraphicsData.mhGDevice );
-    } // if
-
 } // SalGraphics Class Destructor
 
 // =======================================================================
@@ -998,7 +978,7 @@ USHORT SalGraphics::GetBitCount()
 {
     unsigned short nBitDepth = 0;
 
-    maGraphicsData.mnMacOSStatus = GetGDeviceBitDepth ( &nBitDepth );
+    maGraphicsData.mnMacOSStatus = GetGDeviceBitDepth( &nBitDepth );
 
     return nBitDepth;
 } // SalGraphics::GetBitCount
@@ -1040,14 +1020,6 @@ void SalGraphics::ResetClipRegion()
                         nRight,
                         nBottom
                       );
-
-        if ( maGraphicsData.mhGrowRgn != NULL )
-        {
-            DiffRgn( maGraphicsData.mhClipRgn,
-                     maGraphicsData.mhGrowRgn,
-                     maGraphicsData.mhClipRgn
-                   );
-        } // if
     } // else
 
     maGraphicsData.mbClipRegionChanged = TRUE;
@@ -1127,35 +1099,26 @@ BOOL SalGraphics::UnionClipRegion( long nX,
 
 void SalGraphics::EndSetClipRegion()
 {
-    if (    ( maGraphicsData.mhClipRgn != NULL )
-         && ( maGraphicsData.mhGrowRgn != NULL )
-       )
-    {
-        DiffRgn( maGraphicsData.mhClipRgn,
-                 maGraphicsData.mhGrowRgn,
-                 maGraphicsData.mhClipRgn
-               );
-    } // if
-    else
+    maGraphicsData.mbClipRegionChanged = TRUE;
+
+    if ( maGraphicsData.mhClipRgn == NULL )
     {
         ResetClipRegion();
-    } // else
-
-    maGraphicsData.mbClipRegionChanged = TRUE;
+    }
 } // SalGraphics::EndSetClipRegion
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetLineColor()
 {
-    maGraphicsData.mbTransparentPen = TRUE;
+    maGraphicsData.mbPenTransparent = TRUE;
 } // SalGraphics::SetLineColor
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetLineColor( SalColor nSalColor )
 {
-    maGraphicsData.mbTransparentPen = FALSE;
+    maGraphicsData.mbPenTransparent = FALSE;
     maGraphicsData.maPenColor       = SALColor2RGBColor( nSalColor );
 } // SalGraphics::SetLineColor
 
@@ -1163,7 +1126,7 @@ void SalGraphics::SetLineColor( SalColor nSalColor )
 
 void SalGraphics::SetFillColor()
 {
-    maGraphicsData.mbTransparentBrush = TRUE;
+    maGraphicsData.mbBrushTransparent = TRUE;
 } // SalGraphics::SetFillColor
 
 // -----------------------------------------------------------------------
@@ -1175,7 +1138,7 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
     aRGBColor = SALColor2RGBColor( nSalColor );
 
     maGraphicsData.maBrushColor       = aRGBColor;
-    maGraphicsData.mbTransparentBrush = FALSE;
+    maGraphicsData.mbBrushTransparent = FALSE;
 } // SalGraphics::SetFillColor
 
 // -----------------------------------------------------------------------
@@ -1218,7 +1181,7 @@ void SalGraphics::DrawPixel( long nX,
 {
     OSStatus aQDStatus = noErr;
 
-    aQDStatus = OpenQDPort( &maGraphicsData );
+    aQDStatus = BeginGraphics( &maGraphicsData );
 
     if ( aQDStatus == noErr )
     {
@@ -1233,7 +1196,7 @@ void SalGraphics::DrawPixel( long nX,
             EndClip( &maGraphicsData );
         } // if
 
-        CloseQDPort( &maGraphicsData );
+        EndGraphics( &maGraphicsData );
     } // if
 } // SalGraphics::DrawPixel
 
@@ -1246,7 +1209,7 @@ void SalGraphics::DrawPixel( long      nX,
 {
     OSStatus aQDStatus = noErr;
 
-    aQDStatus = OpenQDPort( &maGraphicsData );
+    aQDStatus = BeginGraphics( &maGraphicsData );
 
     if ( aQDStatus == noErr )
     {
@@ -1263,7 +1226,7 @@ void SalGraphics::DrawPixel( long      nX,
             EndClip( &maGraphicsData );
         } // if
 
-        CloseQDPort( &maGraphicsData );
+        EndGraphics( &maGraphicsData );
     } // if
 } // SalGraphics::DrawPixel
 
@@ -1277,7 +1240,7 @@ void SalGraphics::DrawLine( long nX1,
 {
     OSStatus aQDStatus = noErr;
 
-    aQDStatus = OpenQDPort( &maGraphicsData );
+    aQDStatus = BeginGraphics( &maGraphicsData );
 
     if ( aQDStatus == noErr )
     {
@@ -1297,7 +1260,7 @@ void SalGraphics::DrawLine( long nX1,
 
             MoveTo( nX1, nY1 );
 
-            if ( maGraphicsData.mbTransparentPen == TRUE )
+            if ( maGraphicsData.mbPenTransparent == TRUE )
             {
                 SetBlackForeColor();
             } // if
@@ -1317,7 +1280,7 @@ void SalGraphics::DrawLine( long nX1,
             EndClip( &maGraphicsData );
         } // if
 
-        CloseQDPort( &maGraphicsData );
+        EndGraphics( &maGraphicsData );
     } // if
 } // SalGraphics::DrawLine
 
@@ -1331,7 +1294,7 @@ void SalGraphics::DrawRect( long  nX,
 {
     OSStatus aQDStatus = noErr;
 
-    aQDStatus = OpenQDPort( &maGraphicsData );
+    aQDStatus = BeginGraphics( &maGraphicsData );
 
     if ( aQDStatus == noErr )
     {
@@ -1355,7 +1318,7 @@ void SalGraphics::DrawRect( long  nX,
 
             MacSetRect( &aRect, nX, nY, nEndX, nEndY );
 
-            if ( maGraphicsData.mbTransparentBrush == TRUE )
+            if ( maGraphicsData.mbBrushTransparent == TRUE )
             {
                 short       nPortPenMode = 0;
                 short       nPenMode     = maGraphicsData.mnPenMode;
@@ -1381,7 +1344,7 @@ void SalGraphics::DrawRect( long  nX,
             EndClip( &maGraphicsData );
         } // if
 
-        CloseQDPort( &maGraphicsData );
+        EndGraphics( &maGraphicsData );
     } // if
 } // SalGraphics::DrawRect
 
@@ -1395,7 +1358,7 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
     {
         OSStatus aQDStatus = noErr;
 
-        aQDStatus = OpenQDPort( &maGraphicsData );
+        aQDStatus = BeginGraphics( &maGraphicsData );
 
         if ( aQDStatus == noErr )
         {
@@ -1425,9 +1388,14 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
                     {
                         MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
 
-                        for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                        for ( nPolyEdges = 1;
+                              nPolyEdges < nPoints;
+                              nPolyEdges++
+                            )
                         {
-                            MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
+                            MacLineTo( pPtAry[nPolyEdges].mnX,
+                                       pPtAry[nPolyEdges].mnY
+                                     );
                         } // for
 
                         MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
@@ -1439,7 +1407,9 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
 
                 maGraphicsData.mnMacOSStatus = QDErr();
 
-                if ( ( maGraphicsData.mnMacOSStatus == noErr ) && ( hPolygon != NULL )  )
+                if (    ( maGraphicsData.mnMacOSStatus == noErr )
+                     && ( hPolygon != NULL )
+                   )
                 {
                     FramePoly( hPolygon );
 
@@ -1453,7 +1423,7 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
                 EndClip( &maGraphicsData );
             } // if
 
-            CloseQDPort( &maGraphicsData );
+            EndGraphics( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::DrawPolyLine
@@ -1468,7 +1438,7 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
     {
         OSStatus aQDStatus = noErr;
 
-        aQDStatus = OpenQDPort( &maGraphicsData );
+        aQDStatus = BeginGraphics( &maGraphicsData );
 
         if ( aQDStatus == noErr )
         {
@@ -1513,7 +1483,9 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
 
                 maGraphicsData.mnMacOSStatus = QDErr();
 
-                if ( ( maGraphicsData.mnMacOSStatus == noErr ) && ( hPolygon != NULL )  )
+                if (    ( maGraphicsData.mnMacOSStatus == noErr )
+                     && ( hPolygon != NULL )
+                   )
                 {
                     PaintPoly( hPolygon );
 
@@ -1527,7 +1499,7 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
                 EndClip( &maGraphicsData );
             } // if
 
-            CloseQDPort( &maGraphicsData );
+            EndGraphics( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::DrawPolygon
@@ -1543,7 +1515,7 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
     {
         OSStatus aQDStatus = noErr;
 
-        aQDStatus = OpenQDPort( &maGraphicsData );
+        aQDStatus = BeginGraphics( &maGraphicsData );
 
         if ( aQDStatus == noErr )
         {
@@ -1594,7 +1566,7 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
                 EndClip( &maGraphicsData );
             } // if
 
-            CloseQDPort( &maGraphicsData );
+            EndGraphics( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::DrawPolyPolygon
@@ -1612,7 +1584,7 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
     {
         OSStatus aQDStatus = noErr;
 
-        aQDStatus = OpenQDPort( &maGraphicsData );
+        aQDStatus = BeginGraphics( &maGraphicsData );
 
         if ( aQDStatus == noErr )
         {
@@ -1651,21 +1623,25 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
                              && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
                            )
                         {
-                            const BitMap  *pSrcBitMap
-                                = GetPortBitMapForCopyBits
-                                    ( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                            const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
 
                             if ( pSrcBitMap != NULL )
                             {
-                                pSrcGraphics->maGraphicsData.mnMacOSStatus = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
-                                ::CopyBits (  pSrcBitMap,
-                                              pDstBitMap,
-                                             &aSrcRect,
-                                             &aDstRect,
-                                              nCopyMode,
-                                              hMaskRgn
-                                           );
-                                pSrcGraphics->maGraphicsData.mnMacOSStatus = UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                                maGraphicsData.mnMacOSStatus
+                                    = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                                if ( maGraphicsData.mnMacOSStatus == noErr )
+                                {
+                                    ::CopyBits (  pSrcBitMap,
+                                                  pDstBitMap,
+                                                 &aSrcRect,
+                                                 &aDstRect,
+                                                  nCopyMode,
+                                                  hMaskRgn
+                                               );
+
+                                    UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                                } // if
                             } // if
                         } // if
                         else
@@ -1686,7 +1662,7 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
                 EndClip( &maGraphicsData );
             } // if
 
-            CloseQDPort( &maGraphicsData );
+            EndGraphics( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::CopyBits
@@ -1708,7 +1684,7 @@ void SalGraphics::CopyArea( long    nDstX,
     {
         OSStatus aQDStatus = noErr;
 
-        aQDStatus = OpenQDPort( &maGraphicsData );
+        aQDStatus = BeginGraphics( &maGraphicsData );
 
         if ( aQDStatus == noErr )
         {
@@ -1761,7 +1737,7 @@ void SalGraphics::CopyArea( long    nDstX,
                 EndClip( &maGraphicsData );
             } // if
 
-            CloseQDPort( &maGraphicsData );
+            EndGraphics( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::CopyArea
@@ -1912,29 +1888,34 @@ void SalGraphics::DrawText( long                nX,
 
     OSStatus aQDStatus = noErr;
 
-    aQDStatus = OpenQDPort( &maGraphicsData );
+    aQDStatus = BeginGraphics( &maGraphicsData );
 
     if ( aQDStatus == noErr )
     {
         if ( ( pStr != NULL ) && ( nLen > 0 ) )
         {
-            short        nFirstByte = 0;
-            short        nByteCount = nLen;
-            ByteString   aByteString( pStr, nLen, gsl_getSystemTextEncoding() );
-
-            RGBForeColor( &(maGraphicsData.maFontColor) );
+            ByteString  aByteString( pStr, nLen, gsl_getSystemTextEncoding() );
 
             aQDStatus = BeginClip( &maGraphicsData );
 
             if ( aQDStatus == noErr )
             {
-                MoveTo( nX, nY );
+                short        nFirstByte  = 0;
+                short        nByteCount  = nLen;
+                const char  *pTextBuffer = aByteString.GetBuffer();
 
-                ::MacDrawText( aByteString.GetBuffer(), nFirstByte, nByteCount );
+                if ( pTextBuffer != NULL )
+                {
+                    MoveTo( nX, nY );
+
+                    ::MacDrawText( pTextBuffer, nFirstByte, nByteCount );
+                } // if
+
                 EndClip( &maGraphicsData );
             } // if
         } // if
-        CloseQDPort( &maGraphicsData );
+
+        EndGraphics( &maGraphicsData );
     } // if
 } // SalGraphics::DrawText
 
