@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-20 08:54:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,21 @@
 #endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
+#endif
+#ifndef _TOOLS_INTN_HXX
+#include <tools/intn.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+#ifndef _SVX_PAPERINF_HXX
+#include <svx/paperinf.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
 #include <toolkit/awt/vclxdevice.hxx>
@@ -866,6 +881,30 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     return 1;
 }
 
+
+static Size lcl_GuessPaperSize()
+{
+    Size aRes;
+    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+    LocaleDataWrapper aLocWrp( xMgr, AllSettings().GetLocale() );
+    if( MEASURE_METRIC == aLocWrp.getMeasurementSystemEnum() )
+    {
+        // in Twip
+        aRes.Width()  = lA4Width;
+        aRes.Height() = lA4Height;
+    }
+    else
+    {
+        // in Twip
+        aRes.Width()  = lLetterWidth;
+        aRes.Height() = lLetterHeight;
+    }
+    aRes = OutputDevice::LogicToLogic( aRes, MapMode(MAP_TWIP),
+                                             MapMode(MAP_100TH_MM) );
+    return aRes;
+}
+
+
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& rSelection,
@@ -885,6 +924,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     Printer *pPrinter = aPrinterAccess.GetPrinter();
     //Point   aPrtPageOffset( pPrinter->GetPageOffset() );
     Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+
+    // if paper size is 0 (usually if no 'real' printer is found),
+    // guess the paper size
+    if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
+        aPrtPaperSize = lcl_GuessPaperSize();
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
@@ -938,11 +982,23 @@ void SAL_CALL SmModel::render(
                 SmPrinterAccess aPrinterAccess( *pDocSh );
                 Printer *pPrinter = aPrinterAccess.GetPrinter();
 
-                Point     aZeroPoint;
-                Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
-
-                Point   aPrtPageOffset( pPrinter->GetPageOffset() );
                 Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+                Size    aOutputSize   ( pPrinter->GetOutputSize() );
+                Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+
+                // no real printer ??
+                if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
+                {
+                    aPrtPaperSize = lcl_GuessPaperSize();
+                    // factors from Windows DIN A4
+                    aOutputSize    = Size( aPrtPaperSize.Width()  * 0.941,
+                                           aPrtPaperSize.Height() * 0.961);
+                    aPrtPageOffset = Point( aPrtPaperSize.Width()  * 0.0250,
+                                            aPrtPaperSize.Height() * 0.0214);
+                }
+                Point   aZeroPoint;
+                Rectangle OutputRect( aZeroPoint, aOutputSize );
+
 
                 // set minimum top and bottom border
                 if (aPrtPageOffset.Y() < 2000)
