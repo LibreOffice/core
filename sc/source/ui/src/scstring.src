@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:14:44 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,7 @@ String STR_ROWHEIGHT
     Text [ english_us ] = "Height" ;
     Text[ chinese_simplified ] = "¸ß";
     Text[ russian ] = "Âûñîòà";
-    Text[ polish ] = "Wysoko?æ";
+    Text[ polish ] = "Wysokoœæ";
     Text[ japanese ] = "‚‚³";
     Text[ chinese_traditional ] = "°ª";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ";
@@ -827,7 +827,7 @@ String STR_ROWHEIGHT_TITLE
     Text [ english_us ] = "Row Height" ;
     Text[ chinese_simplified ] = "ĞĞ¸ß";
     Text[ russian ] = "Âûñîòà ñòğîêè";
-    Text[ polish ] = "Wysoko?æ wierszy";
+    Text[ polish ] = "Wysokoœæ wierszy";
     Text[ japanese ] = "s‚Ì‚‚³";
     Text[ chinese_traditional ] = "¦C°ª";
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
@@ -855,7 +855,7 @@ String STR_OPT_ROWHEIGHT_TITLE
     Text [ english_us ] = "Optimal Row Height" ;
     Text[ chinese_simplified ] = "×î¼ÑĞĞ¸ß";
     Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè";
-    Text[ polish ] = "Optymalna wysoko?æ wierszy";
+    Text[ polish ] = "Optymalna wysokoœæ wierszy";
     Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³";
     Text[ chinese_traditional ] = "³Ì¾A¦C°ª";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
@@ -882,7 +882,7 @@ String STR_COLWIDTH
     Text [ english_us ] = "Width" ;
     Text[ chinese_simplified ] = "¿í";
     Text[ russian ] = "Øèğèíà";
-    Text[ polish ] = "Szeroko?æ";
+    Text[ polish ] = "Szerokoœæ";
     Text[ japanese ] = "•";
     Text[ chinese_traditional ] = "¼e";
     Text[ arabic ] = "ÇáÚÑÖ";
@@ -936,7 +936,7 @@ String STR_COLWIDTH_TITLE
     Text [ english_us ] = "Column Width" ;
     Text[ chinese_simplified ] = "ÁĞ¿í";
     Text[ russian ] = "Øèğèíà ñòîëáöîâ";
-    Text[ polish ] = "Szeroko?æ kolumn";
+    Text[ polish ] = "Szerokoœæ kolumn";
     Text[ japanese ] = "—ñ•";
     Text[ chinese_traditional ] = "Äæ¼e";
     Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
@@ -963,7 +963,7 @@ String STR_OPT_COLWIDTH_TITLE
     Text [ english_us ] = "Optimal Column Width" ;
     Text[ chinese_simplified ] = "×î¼ÑÁĞ¿í";
     Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà êîëîíêè";
-    Text[ polish ] = "Optymalna szeroko?æ kolumn";
+    Text[ polish ] = "Optymalna szerokoœæ kolumn";
     Text[ japanese ] = "Å“K‚È—ñ•";
     Text[ chinese_traditional ] = "³Ì¾AÄæ¼e";
     Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÃÚãÏÉ";
@@ -1150,7 +1150,7 @@ String SCSTR_STDFILTER
     Text [ portuguese_brazilian ] = "- Standard -" ;
     Text[ chinese_simplified ] = "- ±ê×¼ -";
     Text[ russian ] = "- Ñòàíäàğò -";
-    Text[ polish ] = "- Domy?lnie-";
+    Text[ polish ] = "- Domyœlnie-";
     Text[ japanese ] = "- •W€ -";
     Text[ chinese_traditional ] = "- ¼Ğ·Ç -";
     Text[ arabic ] = "- ŞíÇÓí -";
@@ -1500,8 +1500,8 @@ String SCSTR_AREAS
     Text [ portuguese ] = "Áreas" ;
     Text [ finnish ] = "Alueet" ;
     Text [ danish ] = "Områder" ;
-    Text [ french ] = "Plages" ;
-    Text [ swedish ] = "Områden" ;
+    Text [ french ] = "~Plages" ;
+    Text [ swedish ] = "~Områden" ;
     Text [ dutch ] = "Bereiken" ;
     Text [ spanish ] = "Áreas" ;
     Text [ english_us ] = "Ranges" ;
@@ -1622,7 +1622,7 @@ String SCSTR_APDTABLE
     Text[ chinese_traditional ] = "ªş¥[¤u§@ªí";
     Text[ arabic ] = "ÅÑİÇŞ ÌÏæá";
     Text[ greek ] = "Ğñïóêüëëçóç ğßíáêá";
-    Text[ korean ] = "½ÃÆ®¡¡Ã·ºÎ";
+    Text[ korean ] = "Å×ÀÌºí Ã·ºÎ";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Adjuntar hoja";
@@ -1728,7 +1728,7 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text [ english_us ] = "Centered horizontally" ;
     Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
     Text[ russian ] = "Ãîğèçîíòàëüíî ïî öåíòğó";
-    Text[ polish ] = "Wyrównany w poziomie";
+    Text[ polish ] = "Poziomo do œrodka";
     Text[ japanese ] = "‰¡ˆÊ’u‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
     Text[ arabic ] = "ãæÓØ ÃİŞíÇ";
@@ -1836,7 +1836,7 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text [ english_us ] = "Horizontal alignment default" ;
     Text[ chinese_simplified ] = "Ë®Æ½¶ÔÆë±ê×¼";
     Text[ russian ] = "Ãîğèçîíòàëüíîå âûğàâíèâàíèå (ñòàíäàğò)";
-    Text[ polish ] = "Domy?lne wyrównanie w poziomie";
+    Text[ polish ] = "Domyœlne wyrównanie w poziomie";
     Text[ japanese ] = "•W€‰¡ˆÊ’u";
     Text[ chinese_traditional ] = "¤ô¥­¹ï»ô¼Ğ·Ç";
     Text[ arabic ] = "ãÍÇĞÇÉ ÃİŞíÉ ÇİÊÑÇÖíÉ";
@@ -1890,7 +1890,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text [ english_us ] = "Centered vertically" ;
     Text[ chinese_simplified ] = "´¹Ö±¾ÓÖĞ";
     Text[ russian ] = "Âåğòèêàëüíî ïî öåíòğó";
-    Text[ polish ] = "Wy?rodkowany w pionie";
+    Text[ polish ] = "Wyœrodkowany w pionie";
     Text[ japanese ] = "ã‰º‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "««ª½¸m¤¤";
     Text[ arabic ] = "ãæÓØ ÚãæÏíÇ";
@@ -1944,7 +1944,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text [ english_us ] = "Vertical alignment default" ;
     Text[ chinese_simplified ] = "´¹Ö±¶ÔÆë ±ê×¼";
     Text[ russian ] = "Âûğàâíèâàíèå ïî âåğòèêàëè (ñòàíäàğò)";
-    Text[ polish ] = "Domy?lne wyrównanie w pionie";
+    Text[ polish ] = "Domyœlne wyrównanie w pionie";
     Text[ japanese ] = "•W€ã‰º‘µ‚¦";
     Text[ chinese_traditional ] = "««ª½¹ï»ô ¼Ğ·Ç";
     Text[ arabic ] = "ãÍÇĞÇÉ ÑÃÓíÉ ÇİÊÑÇÖíÉ";
@@ -2025,7 +2025,7 @@ String SCSTR_ORIENTATION_STANDARD
     Text [ english_us ] = "Default orientation" ;
     Text[ chinese_simplified ] = "ÎÄ×Ö·½Ïò ±ê×¼";
     Text[ russian ] = "Ñòàíäàğòíîå íàïğàâëåíèå ïèñüìà";
-    Text[ polish ] = "Orientacja domy?lna";
+    Text[ polish ] = "Orientacja domyœlna";
     Text[ japanese ] = "‹L“ü•ûŒü •W€";
     Text[ chinese_traditional ] = "¤å¦r¤è¦V ¼Ğ·Ç";
     Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ ÇáÇİÊÑÇÖí";
@@ -2267,7 +2267,7 @@ String SCSTR_CHG_PROTECT
     Text [ portuguese_brazilian ] = "Protect trace" ;
     Text[ chinese_simplified ] = "±£»¤¼ÇÂ¼";
     Text[ russian ] = "Protect trace";
-    Text[ polish ] = "Chroñ ?lad";
+    Text[ polish ] = "Chroñ historiê";
     Text[ japanese ] = "‹L˜^‚Ì•ÛŒì";
     Text[ chinese_traditional ] = "«OÅ@°O¿ı";
     Text[ arabic ] = "Protect trace";
@@ -2293,7 +2293,7 @@ String SCSTR_CHG_UNPROTECT
     Text [ portuguese_brazilian ] = "Unprotect trace" ;
     Text[ chinese_simplified ] = "È¡Ïû±£»¤¼ÇÂ¼";
     Text[ russian ] = "Unprotect trace";
-    Text[ polish ] = "Anuluj ochronê ?ladu";
+    Text[ polish ] = "Anuluj ochronê historii";
     Text[ japanese ] = "‹L˜^‚Ì•ÛŒì‚ğ‰ğœ";
     Text[ chinese_traditional ] = "¨ú®ø«OÅ@°O¿ı";
     Text[ arabic ] = "Unprotect trace";
@@ -2518,7 +2518,7 @@ String SCSTR_CLPBRD_CLEAR
     Text [ spanish ] = "Ha copiado una gran cantidad de datos en el portapapeles.\n¿Desea que el contenido del portapapeles esté disponible para otras aplicaciones?" ;
     Text[ chinese_simplified ] = "ÔÚ¼ôÌù°åÄÚÁô´æ´óÁ¿Êı¾İ¡£\nÄúÒªÈÃÆäËûµÄÓ¦ÓÃ³ÌĞòÒ²Ê¹ÓÃÕâĞ©Êı¾İÂğ£¿";
     Text[ russian ] = "Âû ïîìåñòèëè â áóôåğ îáìåíà áîëüøåå êîëè÷åñòâî äàííûõ.\nÑäåëàòü äîñòóïíûì ñîäåğæèìîå áóôåğà îáìåíà äëÿ äğóãèõ ïğèëîæåíèé?";
-    Text[ polish ] = "Wprowadzi³e? wiêksze ilo?ci danych do schowka.\nCzy zawarto?æ schowka ma zostaæ udostêpniona innym aplikacjom?";
+    Text[ polish ] = "Wprowadzi³eœ wiêksze iloœci danych do schowka.\nCzy zawartoœæ schowka ma zostaæ udostêpniona innym aplikacjom?";
     Text[ japanese ] = "‚©‚È‚è‚ÌÃŞ°À—Ê‚ª¸Ø¯ÌßÎŞ°ÄŞ‚É•ÛŠÇ‚³‚ê‚Ä‚¢‚Ü‚·B\n¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚ğ‚Ù‚©‚Ì±ÌßØ¹°¼®İ‚Ég‚¢‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "¦b°Å¶KÃ¯¤º¯d¦s¤j¶q¸ê®Æ¡C\n±z­nÅı¨ä¥LªºÀ³¥Îµ{§Ç¤]¨Ï¥Î³o¨Ç¸ê®Æ¡H";
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÍİÙ ßãíÇÊ ßÈíÑÉ ãä ÇáÈíÇäÇÊ İí ÇáÍÇİÙÉ.\nåá ÊÑíÏ æÖÚ ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊÍÊ ÊÕÑİ ÊØÈíŞÇÊ ÃÎÑì¿";
@@ -2785,7 +2785,7 @@ String SCSTR_VALUE
     Text [ portuguese_brazilian ] = "~Wert" ;
     Text[ chinese_simplified ] = "ÊıÖµ(~V)";
     Text[ russian ] = "Çíà÷åíèå";
-    Text[ polish ] = "Warto?æ";
+    Text[ polish ] = "Wartoœæ";
     Text[ japanese ] = "”’l(~V)";
     Text[ chinese_traditional ] = "¼Æ­È(~V)";
     Text[ arabic ] = "ÇáŞíãÉ";
@@ -2819,7 +2819,7 @@ String SCSTR_CHARSET_USER
     Text[ chinese_traditional ] = "¨t²Î";
     Text[ arabic ] = "äÙÇã";
     Text[ greek ] = "Óıóôçìá";
-    Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);½Ã½ºÅÛ";
+    Text[ korean ] = "½Ã½ºÅÛ";
     Text[ turkish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sistema";
