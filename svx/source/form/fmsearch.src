@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:23:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Il contenuto di campo è ~NULL";
         Text[ danish ] = "Feltindhold er lig med NULL";
         Text[ swedish ] = "Fältinnehåll är NULL";
-        Text[ polish ] = "Zawarto?ci¹ pola jest ~NULL";
+        Text[ polish ] = "Zawartoœci¹ pola jest ~NULL";
         Text[ portuguese_brazilian ] = "Field content is ~NULL";
         Text[ japanese ] = "Ì¨°ÙÄÞ“à—e‚Í~NULL";
         Text[ korean ] = "ÇÊµå ³»¿ëÀÌ ~NULLÀÓ";
@@ -174,7 +174,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Il contenuto di campo non è N~ULL";
         Text[ danish ] = "Feltindhold er forskellig fra NULL";
         Text[ swedish ] = "Fältinnehåll är inte NULL";
-        Text[ polish ] = "Zawarto?æ pola jest nierówna NULL";
+        Text[ polish ] = "Zawartoœæ pola jest nierówna NULL";
         Text[ portuguese_brazilian ] = "Field content is n~ot NULL";
         Text[ japanese ] = "Ì¨°ÙÄÞ“à—e‚ÍNU~LL‚Å‚Í‚È‚¢";
         Text[ korean ] = "ÇÊµå ³»¿ëÀÌ NU~LLÀÌ¡¡¾Æ´Ô";
@@ -650,9 +650,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Larghezza intera/ridotta";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Zwyk³a/po³owa szeroko?ci";
+        Text[ polish ] = "Zwyk³a/po³owa szerokoœci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ð‹æ•Ê";
+        Text[ japanese ] = "‘SŠp‚Æ”¼Šp‚ð‹æ•Ê";
         Text[ korean ] = "Match half/full width forms";
         Text[ chinese_simplified ] = "°ë½ÇºÍÈ«½Ç×Ö·û";
         Text[ chinese_traditional ] = "¥b§Î©M¥þ§Î¦r¤¸";
@@ -1061,4 +1061,5 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
