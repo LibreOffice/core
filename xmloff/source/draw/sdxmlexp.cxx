@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:33:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,8 +1517,8 @@ void SdXMLExport::ImpWritePageMasterInfos()
             sString = sNewName;
             AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sString);
 
-            // write page-master
-            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, XML_PAGE_MASTER, sal_True, sal_True);
+            // write page-layout
+            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT, sal_True, sal_True);
 
             // prepare style:properties inside page-master
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderTop());
@@ -1551,7 +1551,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
                 AddAttribute(XML_NAMESPACE_STYLE, XML_PRINT_ORIENTATION, XML_LANDSCAPE);
 
             // write style:properties
-            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, XML_PROPERTIES, sal_True, sal_True);
+            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_PROPERTIES, sal_True, sal_True);
         }
     }
 }
@@ -1768,7 +1768,8 @@ void SdXMLExport::_ExportContent()
 
             // draw:style-name (presentation page attributes AND background attributes)
             if( maDrawPagesStyleNames[nPageInd].getLength() )
-                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawPagesStyleNames[nPageInd]);
+                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME,
+                        maDrawPagesStyleNames[nPageInd]);
 
             if( IsImpress() )
                 AddAttribute(XML_NAMESPACE_DRAW, XML_ID, OUString::valueOf( sal_Int32( nPageInd + 1 ) ) );
@@ -1783,7 +1784,8 @@ void SdXMLExport::_ExportContent()
                     Reference < container::XNamed > xMasterNamed(xUsedMasterPage, UNO_QUERY);
                     if(xMasterNamed.is())
                     {
-                        AddAttribute(XML_NAMESPACE_DRAW, XML_MASTER_PAGE_NAME, xMasterNamed->getName());
+                        AddAttribute(XML_NAMESPACE_DRAW, XML_MASTER_PAGE_NAME,
+                            EncodeStyleName( xMasterNamed->getName()) );
                     }
                 }
             }
@@ -1791,7 +1793,7 @@ void SdXMLExport::_ExportContent()
             // presentation:page-layout-name
             if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd+1].getLength())
             {
-                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[nPageInd+1]);
+                AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[nPageInd+1] );
             }
 
             Reference< beans::XPropertySet > xProps( xDrawPage, UNO_QUERY );
@@ -2325,14 +2327,14 @@ void SdXMLExport::_ExportMasterStyles()
                 // presentation:page-layout-name
                 if( IsImpress() && maDrawPagesAutoLayoutNames[0].getLength())
                 {
-                    AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[0]);
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, EncodeStyleName( maDrawPagesAutoLayoutNames[0] ));
                 }
 
                 ImpXMLEXPPageMasterInfo* pInfo = mpHandoutPageMaster;
                 if(pInfo)
                 {
                     OUString sString = pInfo->GetName();
-                    AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sString);
+                    AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString );
                 }
 
                 // draw:style-name
@@ -2363,20 +2365,27 @@ void SdXMLExport::_ExportMasterStyles()
             Reference < container::XNamed > xNamed(xMasterPage, UNO_QUERY);
             if(xNamed.is())
             {
+                sal_Bool bEncoded = sal_False;
                 sMasterPageName = xNamed->getName();
-                AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sMasterPageName);
+                AddAttribute(XML_NAMESPACE_STYLE, XML_NAME,
+                    EncodeStyleName( sMasterPageName, &bEncoded ));
+                if( bEncoded )
+                    AddAttribute(
+                        XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
+                        sMasterPageName );
             }
 
             ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterUsageList->GetObject(nMPageId);
             if(pInfo)
             {
                 OUString sString = pInfo->GetName();
-                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sString);
+                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString );
             }
 
             // draw:style-name (background attributes)
             if( maMasterPagesStyleNames[nMPageId].getLength() )
-                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maMasterPagesStyleNames[nMPageId]);
+                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME,
+                        maMasterPagesStyleNames[nMPageId]);
 
             // write masterpage
             SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_MASTER_PAGE, sal_True, sal_True);
@@ -2405,7 +2414,7 @@ void SdXMLExport::_ExportMasterStyles()
                             if(pInfo)
                             {
                                 OUString sString = pInfo->GetName();
-                                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sString);
+                                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString);
                             }
 
                             // write presentation notes
@@ -2549,244 +2558,48 @@ OUString SdXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool b
 
 //////////////////////////////////////////////////////////////////////////////
 
-uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+#define SERVICE( classname, servicename, implementationname, draw, flags )\
+uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
+{\
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( servicename ) );\
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
+    return aSeq;\
+}\
+OUString SAL_CALL classname##_getImplementationName() throw()\
+{\
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationname ) );\
+}\
+uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
+{\
+    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, draw, flags );\
 }
 
-OUString SAL_CALL SdImpressXMLExport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress" ) );
-}
+SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", sal_False, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLImpressStylesExportOasis, "com.sun.star.comp.Impress.XMLOasisStylesExporter", "XMLImpressStylesExportOasis", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLImpressContentExportOasis, "com.sun.star.comp.Impress.XMLOasisContentExporter", "XMLImpressContentExportOasis", sal_False, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLImpressMetaExportOasis, "com.sun.star.comp.Impress.XMLOasisMetaExporter", "XMLImpressMetaExportOasis", sal_False, EXPORT_OASIS|EXPORT_META );
+SERVICE( XMLImpressSettingsExportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsExporter", "XMLImpressSettingsExportOasis", sal_False, EXPORT_OASIS|EXPORT_SETTINGS );
 
-Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_False, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED);
-}
+SERVICE( XMLImpressExportOOO, "com.sun.star.comp.Impress.XMLExporter", "XMLImpressExportOOO", sal_False, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLImpressStylesExportOOO, "com.sun.star.comp.Impress.XMLStylesExporter", "XMLImpressStylesExportOOO", sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLImpressContentExportOOO, "com.sun.star.comp.Impress.XMLContentExporter", "XMLImpressContentExportOOO", sal_False, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLImpressMetaExportOOO, "com.sun.star.comp.Impress.XMLMetaExporter", "XMLImpressMetaExportOOO", sal_False, EXPORT_META );
+SERVICE( XMLImpressSettingsExportOOO, "com.sun.star.comp.Impress.XMLSettingsExporter", "XMLImpressSettingsExportOOO", sal_False, EXPORT_SETTINGS );
 
-uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
+SERVICE( XMLDrawExportOasis, "com.sun.star.comp.Draw.XMLOasisExporter", "XMLDrawExportOasis", sal_True, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLDrawStylesExportOasis, "com.sun.star.comp.Draw.XMLOasisStylesExporter", "XMLDrawStylesExportOasis", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLDrawContentExportOasis, "com.sun.star.comp.Draw.XMLOasisContentExporter", "XMLDrawContentExportOasis", sal_True, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLDrawMetaExportOasis, "com.sun.star.comp.Draw.XMLOasisMetaExporter", "XMLDrawMetaExportOasis", sal_True, EXPORT_OASIS|EXPORT_META );
+SERVICE( XMLDrawSettingsExportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsExporter", "XMLDrawSettingsExportOasis", sal_True, EXPORT_OASIS|EXPORT_SETTINGS );
 
-OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw" ) );
-}
+SERVICE( XMLDrawExportOOO, "com.sun.star.comp.Draw.XMLExporter", "XMLDrawExportOOO", sal_True, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLDrawStylesExportOOO, "com.sun.star.comp.Draw.XMLStylesExporter", "XMLDrawStylesExportOOO", sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLDrawContentExportOOO, "com.sun.star.comp.Draw.XMLContentExporter", "XMLDrawContentExportOOO", sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLDrawMetaExportOOO, "com.sun.star.comp.Draw.XMLMetaExporter", "XMLDrawMetaExportOOO", sal_True, EXPORT_META );
+SERVICE( XMLDrawSettingsExportOOO, "com.sun.star.comp.Draw.XMLSettingsExporter", "XMLDrawSettingsExportOOO", sal_True, EXPORT_SETTINGS );
 
-Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_True, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL DrawingLayerXMLExport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.DrawingLayer.XMLExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL DrawingLayerXMLExport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawingLayerXMLExport" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL DrawingLayerXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_True, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL ImpressXMLClipboardExport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLClipboardExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL ImpressXMLClipboardExport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ImpressXMLClipboardExport" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL ImpressXMLClipboardExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_False, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-}
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Style_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLStylesExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLExport_Style_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Styles" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Style_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Style_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLStylesExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLExport_Style_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Styles" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Style_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Meta_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLMetaExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLExport_Meta_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Meta" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_META );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_False, EXPORT_META );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Meta_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLMetaExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLExport_Meta_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Meta" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_META );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_True, EXPORT_META );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLSettingsExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLExport_Settings_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Settings" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Settings_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_SETTINGS );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_False, EXPORT_SETTINGS );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLSettingsExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLExport_Settings_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Settings" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Settings_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_SETTINGS );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_True, EXPORT_SETTINGS );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Content_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLContentExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLExport_Content_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Content" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_False, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Content_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLContentExporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLExport_Content_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Content" ) );
-}
-
-Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-}
+SERVICE( XMLDrawingLayerExport, "com.sun.star.comp.DrawingLayer.XMLExporter", "XMLDrawingLayerExport", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExporter", "XMLImpressClipboardExport", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 
 // XServiceInfo
 OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeException )
@@ -2797,18 +2610,30 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
 
         switch( getExportFlags())
         {
-            case EXPORT_ALL:
-                return SdDrawXMLExport_getImplementationName();
-            case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES):
-                return SdDrawXMLExport_Style_getImplementationName();
-            case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
-                return SdDrawXMLExport_Content_getImplementationName();
+            case EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
+                return XMLDrawExportOOO_getImplementationName();
+            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+                return XMLDrawStylesExportOOO_getImplementationName();
+            case EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
+                return XMLDrawContentExportOOO_getImplementationName();
             case EXPORT_META:
-                return SdDrawXMLExport_Meta_getImplementationName();
+                return XMLDrawMetaExportOOO_getImplementationName();
             case EXPORT_SETTINGS:
-                return SdDrawXMLExport_Settings_getImplementationName();
+                return XMLDrawSettingsExportOOO_getImplementationName();
+
+            case EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
+                return XMLDrawExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+                return XMLDrawStylesExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
+                return XMLDrawContentExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_META:
+                return XMLDrawMetaExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_SETTINGS:
+                return XMLDrawSettingsExportOasis_getImplementationName();
+
             default:
-                return OUString::createFromAscii( "SdXMLExport.Draw" );
+                return XMLDrawExportOOO_getImplementationName();
         }
     }
     else
@@ -2817,18 +2642,29 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
 
         switch( getExportFlags())
         {
-            case EXPORT_ALL:
-                return SdImpressXMLExport_getImplementationName();
-            case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES):
-                return SdImpressXMLExport_Style_getImplementationName();
-            case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
-                return SdImpressXMLExport_Content_getImplementationName();
+            case EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
+                return XMLImpressExportOOO_getImplementationName();
+            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+                return XMLImpressStylesExportOOO_getImplementationName();
+            case EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
+                return XMLImpressContentExportOOO_getImplementationName();
             case EXPORT_META:
-                return SdImpressXMLExport_Meta_getImplementationName();
+                return XMLImpressMetaExportOOO_getImplementationName();
             case EXPORT_SETTINGS:
-                return SdImpressXMLExport_Settings_getImplementationName();
+                return XMLImpressSettingsExportOOO_getImplementationName();
+            case EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
+                return XMLImpressExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+                return XMLImpressStylesExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
+                return XMLImpressContentExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_META:
+                return XMLImpressMetaExportOasis_getImplementationName();
+            case EXPORT_OASIS|EXPORT_SETTINGS:
+                return XMLImpressSettingsExportOasis_getImplementationName();
+
             default:
-                return OUString::createFromAscii( "SdXMLExport.Impress" );
+                return XMLImpressExportOOO_getImplementationName();
         }
     }
 }
