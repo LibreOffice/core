@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: svesik $ $Date: 2001-06-22 14:22:14 $
+ *  last change: $Author: mh $ $Date: 2001-10-16 12:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
 
-#if defined(SOLARIS)
+#if defined(SOLARIS) || defined ( FREEBSD )
 #include <poll.h>
 #define HAVE_POLL_H
 #endif /* SOLARIS */

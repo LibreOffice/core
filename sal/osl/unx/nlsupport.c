@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-08 15:07:29 $
+ *  last change: $Author: mh $ $Date: 2001-10-16 12:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,13 +822,25 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) )
+#if defined ( FREEBSD ) || defined ( NETBSD )
+            setenv( "LC_ALL", locale_buf, 1 );
+#else
             setenv( "LC_ALL", locale_buf );
+#endif
 
         if( getenv( "LC_CTYPE" ) )
+#if defined ( FREEBSD ) || defined ( NETBSD )
+            setenv( "LC_CTYPE", locale_buf, 1 );
+#else
             setenv( "LC_CTYPE", locale_buf );
+#endif
 
         if( getenv( "LANG" ) )
+#if defined ( FREEBSD ) || defined ( NETBSD )
+            setenv( "LANG", locale_buf,1 );
+#else
             setenv( "LANG", locale_buf );
+#endif
     }
 
     return 0;
