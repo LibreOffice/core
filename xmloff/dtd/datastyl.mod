@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.11 2002-06-26 16:52:37 er Exp $
+   $Id: datastyl.mod,v 1.12 2004-11-09 12:11:11 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -132,13 +132,16 @@
 <!ATTLIST number:boolean-style style:name %styleName; #REQUIRED>
 <!ATTLIST number:text-style style:name %styleName; #REQUIRED>
 
-<!ATTLIST number:number-style style:family CDATA #REQUIRED>
-<!ATTLIST number:currency-style style:family CDATA #REQUIRED>
-<!ATTLIST number:percentage-style style:family CDATA #REQUIRED>
-<!ATTLIST number:date-style style:family CDATA #REQUIRED>
-<!ATTLIST number:time-style style:family CDATA #REQUIRED>
-<!ATTLIST number:boolean-style style:family CDATA #REQUIRED>
-<!ATTLIST number:text-style style:family CDATA #REQUIRED>
+<!-- The style:family is redundant and therefor should not exist at all -->
+<!-- Since OOo 1.0/1.1 is exporting this attribute is is an #IMPLIED    -->
+<!-- one to avoid validation errors.                                    -->
+<!ATTLIST number:number-style style:family CDATA #IMPLIED>
+<!ATTLIST number:currency-style style:family CDATA #IMPLIED>
+<!ATTLIST number:percentage-style style:family CDATA #IMPLIED>
+<!ATTLIST number:date-style style:family CDATA #IMPLIED>
+<!ATTLIST number:time-style style:family CDATA #IMPLIED>
+<!ATTLIST number:boolean-style style:family CDATA #IMPLIED>
+<!ATTLIST number:text-style style:family CDATA #IMPLIED>
 
 <!ATTLIST number:number-style number:language CDATA #IMPLIED>
 <!ATTLIST number:currency-style number:language CDATA #IMPLIED>
