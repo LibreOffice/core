@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 07:45:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 07:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,9 +1353,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // or better its not allowed for some requests in general :-)
     if (
         (!TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                                          ) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_ASTEMPLATE, sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_HIDDEN     , sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_OPENNEWVIEW, sal_False) == sal_True)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
