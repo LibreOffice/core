@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:41:14 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
@@ -148,46 +154,61 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
         {
             SdrView *pSdrView = rSh.GetDrawView();
             const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
+            bool bConvertToText = rHLinkItem.GetInsertMode() == HLINK_DEFAULT ||
+                            rHLinkItem.GetInsertMode() == HLINK_FIELD;
             const SdrMarkList& rMarkList = pSdrView->GetMarkList();
             if (rMarkList.GetMark(0))
             {
                 SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
                 if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                 {
-                    uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
-
-                    ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
-                    if( !xControlModel.is() )
-                        return;
-
-                    uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
-
-                    // Darf man eine URL an dem Objekt setzen?
-                    OUString sTargetURL( C2U( "TargetURL" ));
-                    uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
-                    if( xPropInfoSet->hasPropertyByName( sTargetURL ))
+                    if(bConvertToText)
                     {
-                        beans::Property aProp = xPropInfoSet->getPropertyByName( sTargetURL );
-                        if( aProp.Name.getLength() )
+                        SwView& rView = rSh.GetView();
+                        //remove object -> results in destruction of this!
+                        rView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SFX_CALLMODE_SYNCHRON );
+                        rView.StopShellTimer();
+                        //issue a new command to insert the link
+                        rView.GetViewFrame()->GetDispatcher()->Execute(
+                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0);
+                    }
+                    else
+                    {
+                        uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
+
+                        ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                        if( !xControlModel.is() )
+                            return;
+
+                        uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
+
+                        // Darf man eine URL an dem Objekt setzen?
+                        OUString sTargetURL( C2U( "TargetURL" ));
+                        uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
+                        if( xPropInfoSet->hasPropertyByName( sTargetURL ))
                         {
-                            uno::Any aTmp;
-                            // Ja!
-                            aTmp <<= OUString(rHLinkItem.GetName());
-                            xPropSet->setPropertyValue(C2U("Label"), aTmp );
-
-                            aTmp <<=  OUString(INetURLObject::RelToAbs(rHLinkItem.GetURL()));
-                            xPropSet->setPropertyValue( sTargetURL, aTmp );
-
-                            if( rHLinkItem.GetTargetFrame().Len() )
+                            beans::Property aProp = xPropInfoSet->getPropertyByName( sTargetURL );
+                            if( aProp.Name.getLength() )
                             {
-                                aTmp <<=  OUString(rHLinkItem.GetTargetFrame());
-                                xPropSet->setPropertyValue( C2U("TargetFrame"), aTmp );
+                                uno::Any aTmp;
+                                // Ja!
+                                aTmp <<= OUString(rHLinkItem.GetName());
+                                xPropSet->setPropertyValue(C2U("Label"), aTmp );
+
+                                aTmp <<=  OUString(INetURLObject::RelToAbs(rHLinkItem.GetURL()));
+                                xPropSet->setPropertyValue( sTargetURL, aTmp );
+
+                                if( rHLinkItem.GetTargetFrame().Len() )
+                                {
+                                    aTmp <<=  OUString(rHLinkItem.GetTargetFrame());
+                                    xPropSet->setPropertyValue( C2U("TargetFrame"), aTmp );
+                                }
+
+
+                                form::FormButtonType eButtonType = form::FormButtonType_URL;
+                                aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
+                                xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
                             }
-
-
-                             form::FormButtonType eButtonType = form::FormButtonType_URL;
-                            aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
-                            xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
                         }
                     }
                 }
