@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:24:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@
 #ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeSegmentCommand_hpp__
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
+#endif
 
 //      textitem.hxx        editdata.hxx
 #define ITEMID_COLOR        EE_CHAR_COLOR
@@ -330,6 +333,12 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
         // set items as needed
         SfxItemSet aTempSet(rOriginalSet);
+
+        // SJ: #40108# :-(  if a SvxWritingModeItem (Top->Bottom) is set the text object
+        // is creating a paraobject, but paraobjects can not be created without model. So
+        // we are preventing the crash by setting the writing mode always left to right,
+        // this is not bad since our shadow geometry does not contain text.
+        aTempSet.Put( SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB ) );
 
         // no shadow
         aTempSet.Put(SdrShadowItem(sal_False));
