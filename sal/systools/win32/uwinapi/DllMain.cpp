@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DllMain.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-26 13:43:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <malloc.h>
+#define _MBCS
+#include <tchar.h>
 
 
 HMODULE     UWINAPI_BaseAddress = NULL;
@@ -77,17 +79,17 @@ static HMODULE WINAPI _LoadUnicowsLibrary(VOID)
 
     if ( UWINAPI_BaseAddress && GetModuleFileNameA( UWINAPI_BaseAddress, szModulePath, MAX_PATH ) )
     {
-        char    *lpLastBkSlash = strrchr( szModulePath, '\\' );
+        char    *lpLastBkSlash = _tcsrchr( szModulePath, '\\' );
 
         if ( lpLastBkSlash )
         {
-            size_t  nParentDirSize = lpLastBkSlash - szModulePath + 1;
+            size_t  nParentDirSize = _tcsinc( lpLastBkSlash ) - szModulePath;
             LPSTR   lpUnicowsModulePath = (LPTSTR)_alloca( nParentDirSize + sizeof(szUnicowsModuleName) );
 
             if ( lpUnicowsModulePath )
             {
-                strncpy( lpUnicowsModulePath, szModulePath, nParentDirSize );
-                strcat( lpUnicowsModulePath, szUnicowsModuleName );
+                _tcsncpy( lpUnicowsModulePath, szModulePath, nParentDirSize );
+                _tcscpy( lpUnicowsModulePath + nParentDirSize, szUnicowsModuleName );
 
                 hModuleUnicows = LoadLibraryA( lpUnicowsModulePath );
             }
