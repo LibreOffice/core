@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:45:41 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 17:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
         if( !pMedium->GetFilter()->UsesStorage() )
             pMedium->GetInStream();
+        else
+            pMedium->GetStorage();
 
         pImp->nLoadedFlags = 0;
         if ( pMedium->GetFilter() &&  ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
