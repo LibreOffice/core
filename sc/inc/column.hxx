@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:27:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,8 @@ public:
 
                 // nur Attribute:
     SCROW       GetLastAttrPos() const;
-    BOOL        HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const;
+    BOOL        GetFirstVisibleAttr( SCROW& rFirstRow ) const;
+    BOOL        GetLastVisibleAttr( SCROW& rLastRow ) const;
     BOOL        HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     BOOL        IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow = 0,
                                     SCROW nEndRow = MAXROW ) const;
