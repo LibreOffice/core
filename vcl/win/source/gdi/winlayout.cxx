@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:22:13 $
+ *  last change: $Author: hdu $ $Date: 2002-11-13 15:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,7 +780,7 @@ void SimpleWinLayout::Justify( long nNewWidth )
 
 void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
 {
-    // try to avoid disturbance of text flow for LSB rounding case
+    // try to avoid disturbance of text flow for LSB rounding case;
     int i = 0;
     long nOldWidth = 0;
     for(; i < mnGlyphCount; ++i )
@@ -790,7 +790,13 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
         {
             nOldWidth += mpGlyphAdvances[ j ];
             int nDiff = nOldWidth - pDXArray[ i ];
-            if( nDiff>+1 || nDiff<-1)
+#if 0       // disabled because of #104768#
+            // works great for static text, but problems when it gets changed
+            if( nDiff>+1 || nDiff<-1 )
+#else
+            // only bother with changing anything when something moved
+            if( nDiff != 0 )
+#endif
                 break;
         }
     }
