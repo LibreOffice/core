@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:06:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <xmloff/xmltkmap.hxx>
 #ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
 #include <xmloff/XMLBase64ImportContext.hxx>
+#endif
+#ifndef _GRFMGR_HXX //autogen
+#include <goodies/grfmgr.hxx>
 #endif
 
 #ifndef _SVX_UNOMID_HXX
@@ -172,17 +175,22 @@ SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext;
+    SvXMLImportContext *pContext = 0;
     if( xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
-        if( !(pItem->GetGraphicLink() || pItem->GetGraphic() ) && !xBase64Stream.is() )
+        if( !xBase64Stream.is() && !pItem->GetGraphicLink() )
         {
-            xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
-            if( xBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    xBase64Stream );
+            const GraphicObject *pGrObj = pItem->GetGraphicObject();
+            if( !pGrObj || GRAPHIC_NONE == pGrObj->GetType() )
+            {
+                xBase64Stream =
+                    GetImport().GetStreamForGraphicObjectURLFromBase64();
+                if( xBase64Stream.is() )
+                    pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                        rLocalName, xAttrList,
+                                                        xBase64Stream );
+            }
         }
     }
     if( !pContext )
