@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:59:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ SfxTopWindow_Impl::SfxTopWindow_Impl( SfxTopFrame* pF )
         : Window( pF->pImp->pWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
 {
-    SetBackgroundBrush( Brush( Color( COL_WHITE )) );
+    SetBackground(Wallpaper( Color( COL_WHITE ) ) );
 }
 
 SfxTopWindow_Impl::~SfxTopWindow_Impl( )
