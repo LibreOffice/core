@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:15:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_SLIDER_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
@@ -176,7 +174,7 @@ void Slider::ImplLoadRes( const ResId& rResId )
     INT16 nThumbPos     = ReadShortRes();
     INT16 nPage         = ReadShortRes();
     INT16 nStep         = ReadShortRes();
-    INT16 nVisibleSize  = ReadShortRes();
+    /* INT16 nVisibleSize   = */ ReadShortRes();
 
     SetRange( Range( nMin, nMax ) );
     SetLineSize( nStep );
@@ -188,8 +186,6 @@ void Slider::ImplLoadRes( const ResId& rResId )
 
 void Slider::ImplInitSettings()
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
