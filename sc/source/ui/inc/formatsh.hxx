@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 15:10:46 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@ public:
 
     void        ExecuteTextDirection( SfxRequest& rReq );
     void        GetTextDirectionState( SfxItemSet& rSet );
+
+    void        ExecFormatPaintbrush( SfxRequest& rReq );
+    void        StateFormatPaintbrush( SfxItemSet& rSet );
 };
 
 #endif
