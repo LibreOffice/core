@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:32:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,9 +395,9 @@ public:
     long GetUpDownX() const             { return nUpDownX; }
 
     FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
-                                { return LeftRight( TRUE, nCnt, nMode, bAllowVisual ); }
+        { return LeftRight( TRUE, nCnt, nMode, bAllowVisual ); }
     FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
-                                { return LeftRight( FALSE, nCnt, nMode, bAllowVisual ); }
+        { return LeftRight( FALSE, nCnt, nMode, bAllowVisual ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LRMargin( TRUE ); }
@@ -847,10 +847,12 @@ public:
 
     // is cursor or the point in/over a vertical formatted text?
     FASTBOOL IsInVerticalText( const Point* pPt = 0 ) const;
-#ifdef BIDI
     // is cursor or the point in/over a right to left formatted text?
     FASTBOOL IsInRightToLeftText( const Point* pPt = 0 ) const;
-#endif
+
+    // If the current cursor position is inside a hidden range, the hidden range
+    // is selected and true is returned:
+    bool SelectHiddenRange();
 
     // remove all invalid cursors
     void ClearUpCrsrs();
