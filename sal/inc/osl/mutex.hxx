@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-22 10:49:45 $
+ *  last change: $Author: pl $ $Date: 2001-06-29 11:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,12 +189,12 @@ namespace osl
         T* pResetT;
     public:
         ResettableGuard( T* pT ) :
-                ClearableGuard( pT ),
+                ClearableGuard<T>( pT ),
                 pResetT( pT )
         {}
 
         ResettableGuard( T& rT ) :
-                ClearableGuard( rT ),
+                ClearableGuard<T>( rT ),
                 pResetT( &rT )
         {}
 
