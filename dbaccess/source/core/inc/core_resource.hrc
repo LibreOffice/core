@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,16 @@
 #endif
 
 //------------------------------------------------------------------------------
-#define RID_CORE_STRINGS_START                  10000
-    // nearly arbitrary ...
+#define RID_CORE_STRINGS_START                  RID_DBACCESS_START
 
 //------------------------------------------------------------------------------
 //- String-IDs
-#define RID_STR_DBACC_PROGRAMMATIC_USED             ( RID_FRM_STRINGS_START +  0 )
-#define RID_STR_DBACC_NAMEURL_EXISTS                ( RID_FRM_STRINGS_START +  1 )
-#define RID_STR_DBACC_TITLE_CONFLICT                ( RID_FRM_STRINGS_START +  2 )
-#define RID_STR_DBACC_FALLBACKTITLE_CONFLICT        ( RID_FRM_STRINGS_START +  3 )
-#define RID_STR_DBACC_TITLE_USED                    ( RID_FRM_STRINGS_START +  4 )
-#define RID_STR_STANDARD                            ( RID_FRM_STRINGS_START +  5 )
+#define RID_STR_DBACC_PROGRAMMATIC_USED             ( RID_CORE_STRINGS_START +  0 )
+#define RID_STR_DBACC_NAMEURL_EXISTS                ( RID_CORE_STRINGS_START +  1 )
+#define RID_STR_DBACC_TITLE_CONFLICT                ( RID_CORE_STRINGS_START +  2 )
+#define RID_STR_DBACC_FALLBACKTITLE_CONFLICT        ( RID_CORE_STRINGS_START +  3 )
+#define RID_STR_DBACC_TITLE_USED                    ( RID_CORE_STRINGS_START +  4 )
+#define RID_STR_STANDARD                            ( RID_CORE_STRINGS_START +  5 )
 
 
 

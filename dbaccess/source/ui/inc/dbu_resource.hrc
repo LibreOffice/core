@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:10:43 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,75 +62,90 @@
 #ifndef _DBU_RESOURCE_HRC_
 #define _DBU_RESOURCE_HRC_
 
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>
+#endif
+
+#define RID_DIALOG_START                RID_DBACCESS_START
+#define RID_PAGE_START                  RID_DBACCESS_START
+#define RID_ERRORBOX_START              RID_DBACCESS_START
+#define RID_QUERYBOX_START              RID_DBACCESS_START
+#define RID_TOOLBOX_START               RID_DBACCESS_START
+#define RID_BITMAP_START                RID_DBACCESS_START
+#define RID_IMAGE_START                 RID_DBACCESS_START
+#define RID_MENU_START                  RID_DBACCESS_START
+#define RID_STRING_START                RID_DBACCESS_START
+#define RID_UNTYPED_START               RID_DBACCESS_START
+
 //========================================================================
 // dialog ids
 
-#define DLG_DATABASE_ADMINISTRATION     1000
-#define DLG_DBASE_INDEXES               1001
-#define DLG_SQLMESSAGE                  1002
-#define DLG_SQLEXCEPTIONCHAIN           1003
-#define DLG_DATASOURCE_SELECTION        1004
-#define DLG_PARAMETERS                  1005
-#define DLG_FILTERCRIT                  1006
-#define DLG_ORDERCRIT                   1007
+#define DLG_DATABASE_ADMINISTRATION     RID_DIALOG_START +  0
+#define DLG_DBASE_INDEXES               RID_DIALOG_START +  1
+#define DLG_SQLMESSAGE                  RID_DIALOG_START +  2
+#define DLG_SQLEXCEPTIONCHAIN           RID_DIALOG_START +  3
+#define DLG_DATASOURCE_SELECTION        RID_DIALOG_START +  4
+#define DLG_PARAMETERS                  RID_DIALOG_START +  5
+#define DLG_FILTERCRIT                  RID_DIALOG_START +  6
+#define DLG_ORDERCRIT                   RID_DIALOG_START +  7
 
 //========================================================================
 // tab pages
 
-#define PAGE_GENERAL                    1000
-#define PAGE_DBASE                      1001
-#define PAGE_JDBC                       1002
-#define PAGE_ODBC                       1003
-#define PAGE_TEXT                       1004
-#define PAGE_ADABAS                     1005
-#define PAGE_TABLESUBSCRIPTION          1006
+#define PAGE_GENERAL                    RID_PAGE_START +  0
+#define PAGE_DBASE                      RID_PAGE_START +  1
+#define PAGE_JDBC                       RID_PAGE_START +  2
+#define PAGE_ODBC                       RID_PAGE_START +  3
+#define PAGE_TEXT                       RID_PAGE_START +  4
+#define PAGE_ADABAS                     RID_PAGE_START +  5
+#define PAGE_TABLESUBSCRIPTION          RID_PAGE_START +  6
 
 //========================================================================
 // error boxes
 
-#define ERR_NOREGISTEREDDATASOURCES     1000
-#define ERR_COULDNOTRESTOREDS           1001
+#define ERR_NOREGISTEREDDATASOURCES     RID_ERRORBOX_START +  0
+#define ERR_COULDNOTRESTOREDS           RID_ERRORBOX_START +  1
 
 //========================================================================
 // query boxes
 
-#define QUERY_BRW_DELETE_ROWS           1000
-#define QUERY_BRW_SAVEMODIFIED          1001
+#define QUERY_BRW_DELETE_ROWS           RID_QUERYBOX_START +  0
+#define QUERY_BRW_SAVEMODIFIED          RID_QUERYBOX_START +  1
 
 //========================================================================
 // toolboxes
 
-#define RID_BRW_TAB_TOOLBOX             1000
-#define RID_BRW_QRY_TOOLBOX             1001
-#define RID_QRY_TOOLBOX_SQL             1002 // SQLAbfage
+#define RID_BRW_TAB_TOOLBOX             RID_TOOLBOX_START +  0
+#define RID_BRW_QRY_TOOLBOX             RID_TOOLBOX_START +  1
+#define RID_QRY_TOOLBOX_SQL             RID_TOOLBOX_START +  2
 
 //========================================================================
 // bitmaps
 
-#define BMP_PLUSBUTTON                  1000
-#define BMP_MINUSBUTTON                 1001
-#define BMP_CHECKBUTTON_UNCHECKED       1002
-#define BMP_CHECKBUTTON_CHECKED         1003
-#define BMP_CHECKBUTTON_HICHECKED       1004
-#define BMP_CHECKBUTTON_HIUNCHECKED     1005
-#define BMP_CHECKBUTTON_TRISTATE        1006
-#define BMP_CHECKBUTTON_HITRISTATE      1007
+#define BMP_PLUSBUTTON                  RID_BITMAP_START +  0
+#define BMP_MINUSBUTTON                 RID_BITMAP_START +  1
+#define BMP_CHECKBUTTON_UNCHECKED       RID_BITMAP_START +  2
+#define BMP_CHECKBUTTON_CHECKED         RID_BITMAP_START +  3
+#define BMP_CHECKBUTTON_HICHECKED       RID_BITMAP_START +  4
+#define BMP_CHECKBUTTON_HIUNCHECKED     RID_BITMAP_START +  5
+#define BMP_CHECKBUTTON_TRISTATE        RID_BITMAP_START +  6
+#define BMP_CHECKBUTTON_HITRISTATE      RID_BITMAP_START +  7
 
 //========================================================================
 // images
 
-#define TABLE_TREE_ICON                 1000
-#define VIEW_TREE_ICON                  1001
-#define TABLEFOLDER_TREE_ICON           1002
-#define BMP_EXCEPTION_ERROR             1003
-#define BMP_EXCEPTION_WARNING           1004
-#define BMP_EXCEPTION_INFO              1005
-#define QUERYFOLDER_TREE_ICON           1006
-#define QUERY_TREE_ICON                 1007
-#define IMG_DATABASE                    1008
-#define IMG_DATABASE_MODIFIED           1009
-#define IMG_DATABASE_NEW                1010
-#define IMG_DATABASE_DELETED            1011
+#define TABLE_TREE_ICON                 RID_IMAGE_START +  0
+#define VIEW_TREE_ICON                  RID_IMAGE_START +  1
+#define TABLEFOLDER_TREE_ICON           RID_IMAGE_START +  2
+#define BMP_EXCEPTION_ERROR             RID_IMAGE_START +  3
+#define BMP_EXCEPTION_WARNING           RID_IMAGE_START +  4
+#define BMP_EXCEPTION_INFO              RID_IMAGE_START +  5
+#define QUERYFOLDER_TREE_ICON           RID_IMAGE_START +  6
+#define QUERY_TREE_ICON                 RID_IMAGE_START +  7
+#define IMG_DATABASE                    RID_IMAGE_START +  8
+#define IMG_DATABASE_MODIFIED           RID_IMAGE_START +  9
+#define IMG_DATABASE_NEW                RID_IMAGE_START + 10
+#define IMG_DATABASE_DELETED            RID_IMAGE_START + 11
 
 //========================================================================
 // image lists
@@ -138,62 +153,65 @@
 //========================================================================
 // menues
 
-#define MENU_TABLETREE_POPUP            256
-#define MENU_DATASOURCELIST_POPUP       257
-#define RID_SBA_GRID_COLCTXMENU         258
-#define RID_SBA_GRID_ROWCTXMENU         259
+#define MENU_TABLETREE_POPUP            RID_MENU_START +  0
+#define MENU_DATASOURCELIST_POPUP       RID_MENU_START +  1
+#define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
+#define RID_SBA_GRID_ROWCTXMENU         RID_MENU_START +  3
 
 //========================================================================
 // strings
 
-#define STR_COULDNOTCREATE_DRIVERMANAGER    256
-#define STR_NOREGISTEREDDRIVER              257
-#define STR_COULDNOTCONNECT                 259
-#define STR_COULDNOTCONNECT_PLEASECHECK     260
-#define STR_NOTABLEINFO                     261
-#define STR_GENERAL_SDB_ERROR               262
-#define STR_ENTER_CONNECTION_PASSWORD       263
-#define STR_DATASOURCE_DEFAULTNAME          264
-#define STR_TBL_TITLE                       265
-#define STR_QRY_TITLE                       266
-#define RID_STR_CONNECTION_LOST             267
-#define RID_STR_LOADING_DATASOURCE          268
-#define RID_STR_SAVE_CURRENT_RECORD         269
-#define RID_STR_UNDO_MODIFY_RECORD          270
-#define SBA_BROWSER_SETTING_ORDER           271
-#define SBA_BROWSER_SETTING_FILTER          272
-#define RID_STR_DATABROWSER_FILTERED        273
-#define STR_REMEMBERPASSWORD_SESSION        274
-#define STR_REMEMBERPASSWORD_PERSISTENT     275
-#define STR_ERR_EMPTY_DSN_NAME              276
-#define STR_QRY_FUNCTIONS                   277
-#define STR_QRY_SORTTEXT                    278
-#define STR_QUERY_UNDO_MOVETABWIN           279
-#define STR_QUERY_UNDO_SIZETABWIN           280
-#define STR_QUERY_UNDO_INSERTCONNECTION     281
-#define STR_QUERY_UNDO_REMOVECONNECTION     282
-#define STR_QUERY_UNDO_TABWINSHOW           283
-#define STR_QUERY_UNDO_TABWINDELETE         284
-#define STR_QUERY_UNDO_MODIFY_CELL          285
-#define STR_QUERY_UNDO_SIZE_COLUMN          286
-#define STR_QUERY_UNDO_TABFIELDDELETE       287
-#define STR_QUERY_UNDO_TABFIELDCREATE       288
-#define STR_QUERY_UNDO_MODIFYSQLEDIT        289
-#define RID_STR_TABLE_DOESNT_EXIST          290
-#define RID_STR_FIELD_DOESNT_EXIST          291
-#define RID_STR_TOMUCHTABLES                292
+#define STR_COULDNOTCREATE_DRIVERMANAGER    RID_STRING_START +  0
+#define STR_NOREGISTEREDDRIVER              RID_STRING_START +  1
+#define STR_COULDNOTCONNECT                 RID_STRING_START +  2
+#define STR_COULDNOTCONNECT_PLEASECHECK     RID_STRING_START +  3
+#define STR_NOTABLEINFO                     RID_STRING_START +  4
+#define STR_GENERAL_SDB_ERROR               RID_STRING_START +  5
+#define STR_ENTER_CONNECTION_PASSWORD       RID_STRING_START +  6
+#define STR_DATASOURCE_DEFAULTNAME          RID_STRING_START +  7
+#define STR_TBL_TITLE                       RID_STRING_START +  8
+#define STR_QRY_TITLE                       RID_STRING_START +  9
+#define RID_STR_CONNECTION_LOST             RID_STRING_START + 10
+#define RID_STR_LOADING_DATASOURCE          RID_STRING_START + 11
+#define RID_STR_SAVE_CURRENT_RECORD         RID_STRING_START + 12
+#define RID_STR_UNDO_MODIFY_RECORD          RID_STRING_START + 13
+#define SBA_BROWSER_SETTING_ORDER           RID_STRING_START + 14
+#define SBA_BROWSER_SETTING_FILTER          RID_STRING_START + 15
+#define RID_STR_DATABROWSER_FILTERED        RID_STRING_START + 16
+#define STR_REMEMBERPASSWORD_SESSION        RID_STRING_START + 17
+#define STR_REMEMBERPASSWORD_PERSISTENT     RID_STRING_START + 18
+#define STR_ERR_EMPTY_DSN_NAME              RID_STRING_START + 19
+#define STR_QRY_FUNCTIONS                   RID_STRING_START + 20
+#define STR_QRY_SORTTEXT                    RID_STRING_START + 21
+#define STR_QUERY_UNDO_MOVETABWIN           RID_STRING_START + 22
+#define STR_QUERY_UNDO_SIZETABWIN           RID_STRING_START + 23
+#define STR_QUERY_UNDO_INSERTCONNECTION     RID_STRING_START + 24
+#define STR_QUERY_UNDO_REMOVECONNECTION     RID_STRING_START + 25
+#define STR_QUERY_UNDO_TABWINSHOW           RID_STRING_START + 26
+#define STR_QUERY_UNDO_TABWINDELETE         RID_STRING_START + 27
+#define STR_QUERY_UNDO_MODIFY_CELL          RID_STRING_START + 28
+#define STR_QUERY_UNDO_SIZE_COLUMN          RID_STRING_START + 29
+#define STR_QUERY_UNDO_TABFIELDDELETE       RID_STRING_START + 30
+#define STR_QUERY_UNDO_TABFIELDCREATE       RID_STRING_START + 31
+#define STR_QUERY_UNDO_MODIFYSQLEDIT        RID_STRING_START + 32
+#define RID_STR_TABLE_DOESNT_EXIST          RID_STRING_START + 33
+#define RID_STR_FIELD_DOESNT_EXIST          RID_STRING_START + 34
+#define RID_STR_TOMUCHTABLES                RID_STRING_START + 35
 
 //========================================================================
 // untyped resources
 
-#define RSC_DATASOURCE_TYPES            256
-#define RSC_CHARSETS                    257
+#define RSC_DATASOURCE_TYPES            RID_UNTYPED_START +  1
+#define RSC_CHARSETS                    RID_UNTYPED_START +  2
 
 #endif // _DBU_RESOURCE_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2000/11/10 16:10:43  oj
+ *  new defines
+ *
  *  Revision 1.10  2000/11/02 15:18:43  fs
  *  #79380# +STR_ERR_EMPTY_DSN_NAME
  *
