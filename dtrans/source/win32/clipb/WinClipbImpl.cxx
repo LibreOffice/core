@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-19 12:40:31 $
+ *  last change: $Author: tra $ $Date: 2001-07-26 11:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,22 +155,27 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
 {
     Reference< XTransferable > rClipContent;
 
+    // use the shotcut or create a transferable from
+    // system clipboard
     if ( NULL != m_pCurrentClipContent )
         rClipContent = m_pCurrentClipContent->m_XTransferable;
     else
     {
         // get the current dataobject from clipboard
         IDataObjectPtr pIDataObject;
-        m_MtaOleClipboard.getClipboard( &pIDataObject );
+        HRESULT hr = m_MtaOleClipboard.getClipboard( &pIDataObject );
 
-        // create an apartment neutral dataobject and initialize it with a
-        // com smart pointer to the IDataObject from clipboard
-        IDataObjectPtr pIDo = ( new CAPNDataObject( pIDataObject ) );
+        if ( SUCCEEDED( hr ) )
+        {
+            // create an apartment neutral dataobject and initialize it with a
+            // com smart pointer to the IDataObject from clipboard
+            IDataObjectPtr pIDo( new CAPNDataObject( pIDataObject ) );
 
-        CDTransObjFactory objFactory;
+            CDTransObjFactory objFactory;
 
-        // remeber pIDo destroys itself due to the smart pointer
-        rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
+            // remeber pIDo destroys itself due to the smart pointer
+            rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
+        }
     }
 
     return rClipContent;
