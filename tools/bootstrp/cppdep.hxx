@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-16 14:04:14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,8 @@
  *
  ************************************************************************/
 
-#if SUPD < 356
-#include <tools.hxx>
-#else
 #include <list.hxx>
 #include <string.hxx>
-#endif
-
 #define PATH_SEP ":"
 #define DIR_SEP "/"
 
