@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 11:13:32 $
+ *  last change: $Author: jbu $ $Date: 2001-10-09 07:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,8 +287,8 @@ public:
         @param nIndex index
         @return non-const C++ reference to element at index nIndex
     */
-    inline sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) SAL_THROW( () )
-        { return getArray()[ nIndex ]; }
+    inline sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) SAL_THROW( () );
+
     /** Const index operator: Obtains a reference to byte indexed at given position.
                               The implementation does NOT check for array bounds!
 
@@ -309,8 +309,7 @@ public:
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const ByteSequence & rSeq ) const
-        { return (! operator == ( rSeq )); }
+    inline sal_Bool SAL_CALL operator != ( const ByteSequence & rSeq ) const SAL_THROW( () );
 
     /** Reallocates sequence to new length. If the sequence has a handle acquired by other sequences
         (reference count > 1), then the remaining elements are copied to a new sequence handle to

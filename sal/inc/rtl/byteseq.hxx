@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 11:13:32 $
+ *  last change: $Author: jbu $ $Date: 2001-10-09 07:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,16 @@ inline sal_Int8 * ByteSequence::getArray() SAL_THROW( () )
 inline void ByteSequence::realloc( sal_Int32 nSize ) SAL_THROW( () )
 {
     ::rtl_byte_sequence_realloc( &_pSequence, nSize );
+}
+//__________________________________________________________________________________________________
+inline sal_Int8 & ByteSequence::operator [] ( sal_Int32 nIndex ) SAL_THROW( () )
+{
+    return getArray()[ nIndex ];
+}
+//__________________________________________________________________________________________________
+inline sal_Bool ByteSequence::operator != ( const ByteSequence & rSeq ) const SAL_THROW( () )
+{
+    return (! operator == ( rSeq ));
 }
 
 }
