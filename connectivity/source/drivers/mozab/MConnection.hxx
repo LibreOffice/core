@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:07:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,15 @@ namespace connectivity
         class ODatabaseMetaData;
         class MNameMapper;
 
+        namespace SDBCAddress {
+            typedef enum {
+                Unknown     = 0,
+                LDAP        = 1,
+                Outlook     = 2,
+                Mozilla     = 3,
+                OutlookExp  = 4
+            } sdbc_address_type;
+        }
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
@@ -133,10 +142,10 @@ namespace connectivity
             rtl::OUString   m_sMozillaURI;
             sal_Int32       m_nAnonABCount;
             sal_Int32       m_nMaxResultRecords;
-            sal_Bool        m_UsesFactory ;
-            sal_Bool        m_IsLDAP ;
-            sal_Bool        m_bOutlookExpress;
             MNameMapper*    m_aNameMapper;
+
+            SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
+
             // End of Additions from the land of mozilla
 
         public:
@@ -191,12 +200,14 @@ namespace connectivity
             rtl::OUString getMozURI() const
                 { return m_sMozillaURI; }
 
-            sal_Bool usesFactory(void) const { return m_UsesFactory ; }
-            sal_Bool isLDAP(void) const { return m_IsLDAP ; }
+            sal_Bool usesFactory(void) const { return (m_eSDBCAddressType == SDBCAddress::Outlook) || (m_eSDBCAddressType == SDBCAddress::OutlookExp); }
+            sal_Bool isLDAP(void) const { return m_eSDBCAddressType == SDBCAddress::LDAP; }
 
-            sal_Bool    isOutlookExpress() const { return m_bOutlookExpress;}
+            sal_Bool    isOutlookExpress() const { return m_eSDBCAddressType == SDBCAddress::OutlookExp;}
             sal_Int32   getNextAnonymousAB()    { return (++m_nAnonABCount); }
             sal_Int32   getMaxResultRecords() const { return m_nMaxResultRecords; }
+
+            SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
 
             const OColumnAlias & getColumnAlias() const
                               { return (m_aColumnAlias); }
