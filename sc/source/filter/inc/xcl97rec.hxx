@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:26:35 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,24 +558,26 @@ public:
 };
 
 
-// --- class ExcWindow18 ---------------------------------------------
+// ============================================================================
 
-class ExcWindow18 : public ExcRecord
+/** Represents the WINDOW1 record containing workbook global view settings. */
+class XclExpWindow1 : public XclExpRecord
 {
-private:
-    UINT16                  nCurrTable;
-    UINT16                  nSelTabs;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
 public:
-                            ExcWindow18( RootData& rRootData );
+    explicit                XclExpWindow1( const XclExpRoot& rRoot );
 
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+private:
+    /** Writes the contents of the WINDOW1 record. */
+    virtual void            WriteBody( XclExpStream& rStrm );
+
+private:
+    sal_uInt16              mnActiveTab;        /// Index to active (visible) sheet.
+    sal_uInt16              mnFirstVisTab;      /// Index to first visible sheet.
+    sal_uInt16              mnSelectedTabs;     /// Number of selected sheets.
 };
 
 
+// ============================================================================
 // --- class ExcPane8 ------------------------------------------------
 
 class ExcPane8 : public ExcRecord
@@ -615,7 +617,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcWindow28( const XclExpRoot& rRoot, sal_uInt16 nScTab );
+                                ExcWindow28( const XclExpRoot& rRoot, USHORT nScTab );
     virtual                     ~ExcWindow28();
 
     virtual void                Save( XclExpStream& rStrm );
