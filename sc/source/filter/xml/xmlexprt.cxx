@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-27 08:08:14 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1515,11 +1515,11 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
         uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.Defaults")));
         uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
         if (xProperties.is())
-            aStylesExp.exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
+            aStylesExp.exportDefaultStyle(xProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), xCellStylesExportPropertySetMapper);
         xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
         uno::Reference <beans::XPropertySet> xDrawProperties(xInterface, uno::UNO_QUERY);
         if (xDrawProperties.is())
-            aStylesExp.exportDefaultStyle(xDrawProperties, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, GetShapeExport()->CreateShapePropMapper(*this));
+            aStylesExp.exportDefaultStyle(xDrawProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetShapeExport()->CreateShapePropMapper(*this));
     }
     uno::Reference <style::XStyleFamiliesSupplier> xStyleFamiliesSupplier (xModel, uno::UNO_QUERY);
     if (xStyleFamiliesSupplier.is())
@@ -1551,7 +1551,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     exportDataStyles();
 
     aStylesExp.exportStyleFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles")),
-        XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), xCellStylesExportPropertySetMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
 }
 
 void ScXMLExport::_ExportAutoStyles()
