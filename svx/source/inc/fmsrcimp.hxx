@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:17:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
 #endif
 
 // ===================================================================================================
@@ -233,7 +237,7 @@ namespace svxform {
     };
 }
 
-class FmSearchEngine
+class SVX_DLLPUBLIC FmSearchEngine
 {
     friend class FmSearchThread;
 
@@ -310,7 +314,7 @@ class FmSearchEngine
 // -------------
 // Memberzugriff
 private:
-    sal_Bool    CancelRequested();      // liefert eine durch m_aCancelAsynchAccess gesicherte Auswertung von m_bCancelAsynchRequest
+    SVX_DLLPRIVATE sal_Bool CancelRequested();      // liefert eine durch m_aCancelAsynchAccess gesicherte Auswertung von m_bCancelAsynchRequest
 
 public:
     void        SetCaseSensitive(sal_Bool bSet);
@@ -423,34 +427,34 @@ protected:
     void ImplStartNextSearch();
 
 private:
-    void clearControlTexts();
-    void fillControlTexts(const InterfaceArray& arrFields);
+    SVX_DLLPRIVATE void clearControlTexts();
+    SVX_DLLPRIVATE void fillControlTexts(const InterfaceArray& arrFields);
 
     // three methods implementing a complete search loop (null/not null, wildcard, SearchText)
     // (they all have some code in common, but with this solution we have do do a distinction only once per search (before
     // starting the loop), not in every loop step
-    SEARCH_RESULT SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
+    SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-    SEARCH_RESULT SearchWildcard(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
+    SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-    SEARCH_RESULT SearchRegularApprox(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
+    SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
 
-    void PropagateProgress(sal_Bool _bDontPropagateOverflow);
+    SVX_DLLPRIVATE void PropagateProgress(sal_Bool _bDontPropagateOverflow);
         // ruft den ProgressHandler mit STATE_PROGRESS und der aktuellen Position des SearchIterators auf
 
     // helpers, die ich mehrmals brauche
-    sal_Bool MoveCursor();
+    SVX_DLLPRIVATE sal_Bool MoveCursor();
         // bewegt m_xSearchIterator unter Beachtung von Richtung/Ueberlauf Cursor
-    sal_Bool MoveField(sal_Int32& nPos, FieldCollectionIterator& iter, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
+    SVX_DLLPRIVATE sal_Bool MoveField(sal_Int32& nPos, FieldCollectionIterator& iter, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
         // bewegt den Iterator unter Beachtung von Richtung/Ueberlauf Iterator/Ueberlauf Cursor
-    void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
+    SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
         // baut eine FieldInfo zum Feld Nummer nField (in xAllFields) auf und fuegt sie zu m_arrUsedFields hinzu
         // xAllFields muss den DatabaseRecord-Service unterstuetzen
-    ::rtl::OUString FormatField(const FieldInfo& rField);
+    SVX_DLLPRIVATE ::rtl::OUString FormatField(const FieldInfo& rField);
         // formatiert das Feld mit dem NumberFormatter
 
-    sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
+    SVX_DLLPRIVATE sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
     DECL_LINK(OnSearchTerminated, FmSearchThread*);
         // wird vom SuchThread benutzt, nach Rueckkehr aus diesem Handler loescht sich der Thread selber
