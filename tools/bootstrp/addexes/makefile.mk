@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:13:27 $
+#   last change: $Author: mh $ $Date: 2001-10-04 17:06:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
 LIB1FILES=  $(LB)$/bootstrp.lib
 
-#APP1TARGET=	dirsync
+APP1TARGET=	dirsync
 APP1STACK=	16000
 APP1OBJS=   $(OBJ)$/dirsync.obj
 APP1STDLIBS=$(STATIC_LIBS)
