@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-02 11:53:44 $
+ *  last change: $Author: dbo $ $Date: 2001-07-03 16:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,24 +349,26 @@ static typelib_TypeClass __cdecl cpp_mediate(
         {
             typelib_TypeDescription * pTD = 0;
             TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pCallStack[3] )->getTypeLibType() );
-            OSL_ASSERT( pTD );
-
-            XInterface * pInterface = 0;
-            (*pThis->pBridge->pCppEnv->getRegisteredInterface)(
-                pThis->pBridge->pCppEnv,
-                (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
-
-            if (pInterface)
+            if (pTD)
             {
-                uno_any_construct( reinterpret_cast< uno_Any * >( pCallStack[2] ),
-                                   &pInterface, pTD, cpp_acquire );
-                pInterface->release();
+                XInterface * pInterface = 0;
+                (*pThis->pBridge->pCppEnv->getRegisteredInterface)(
+                    pThis->pBridge->pCppEnv,
+                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+
+                if (pInterface)
+                {
+                    ::uno_any_construct(
+                        reinterpret_cast< uno_Any * >( pCallStack[2] ),
+                        &pInterface, pTD, cpp_acquire );
+                    pInterface->release();
+                    TYPELIB_DANGER_RELEASE( pTD );
+                    *(void **)pRegisterReturn = pCallStack[2];
+                    eRet = typelib_TypeClass_ANY;
+                    break;
+                }
                 TYPELIB_DANGER_RELEASE( pTD );
-                *(void **)pRegisterReturn = pCallStack[2];
-                eRet = typelib_TypeClass_ANY;
-                break;
             }
-            TYPELIB_DANGER_RELEASE( pTD );
         } // else perform queryInterface()
         default:
             eRet = cpp2uno_call(

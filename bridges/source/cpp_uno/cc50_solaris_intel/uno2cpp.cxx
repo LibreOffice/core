@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-12 13:41:00 $
+ *  last change: $Author: dbo $ $Date: 2001-07-03 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,22 +394,25 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
         {
             typelib_TypeDescription * pTD = 0;
             TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
-            OSL_ASSERT( pTD );
-
-            uno_Interface * pInterface = 0;
-            (*pThis->pBridge->pUnoEnv->getRegisteredInterface)(
-                pThis->pBridge->pUnoEnv,
-                (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
-
-            if (pInterface)
+            if (pTD)
             {
-                uno_any_construct( reinterpret_cast< uno_Any * >( pReturn ), &pInterface, pTD, 0 );
-                (*pInterface->release)( pInterface );
+                uno_Interface * pInterface = 0;
+                (*pThis->pBridge->pUnoEnv->getRegisteredInterface)(
+                    pThis->pBridge->pUnoEnv,
+                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+
+                if (pInterface)
+                {
+                    ::uno_any_construct(
+                        reinterpret_cast< uno_Any * >( pReturn ),
+                        &pInterface, pTD, 0 );
+                    (*pInterface->release)( pInterface );
+                    TYPELIB_DANGER_RELEASE( pTD );
+                    *ppException = 0;
+                    break;
+                }
                 TYPELIB_DANGER_RELEASE( pTD );
-                *ppException = 0;
-                break;
             }
-            TYPELIB_DANGER_RELEASE( pTD );
         } // else perform queryInterface()
         default:
             // dependent dispatch
