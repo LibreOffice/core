@@ -1,0 +1,286 @@
+/*************************************************************************
+ *
+ *  $RCSfile: extinput.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifdef PRECOMPILED
+#include "core_pch.hxx"
+#endif
+
+#pragma hdrstop
+
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
+#ifndef _SV_KEYCODES_HXX
+#include <vcl/keycodes.hxx>
+#endif
+#ifndef _VCL_CMDEVT_HXX
+#include <vcl/cmdevt.hxx>
+#endif
+#ifndef _EXTINPUT_HXX
+#include <extinput.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _INDEX_HXX
+#include <index.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
+
+
+SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
+    : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ), bInsText( TRUE )
+{
+}
+
+SwExtTextInput::~SwExtTextInput()
+{
+    SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    if( pTNd )
+    {
+        xub_StrLen nEndCnt = GetPoint()->nContent.GetIndex(),
+                    nSttCnt = GetMark()->nContent.GetIndex();
+        if( nEndCnt != nSttCnt )
+        {
+            if( nEndCnt < nSttCnt )
+            {
+                xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
+            }
+
+            // damit Undo / Redlining usw. richtig funktioniert,
+            // muss ueber die Doc-Schnittstellen gegangen werden !!!
+            SwIndex aIdx( pTNd, nSttCnt );
+            String sTxt( pTNd->GetTxt().Copy( nSttCnt, nEndCnt - nSttCnt ));
+            pTNd->Erase( aIdx, nEndCnt - nSttCnt );
+
+            if( bInsText )
+                GetDoc()->Insert( *this, sTxt );
+        }
+    }
+}
+
+void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
+{
+    SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    if( pTNd )
+    {
+        xub_StrLen nEndCnt = GetPoint()->nContent.GetIndex(),
+                    nSttCnt = GetMark()->nContent.GetIndex();
+        if( nEndCnt < nSttCnt )
+        {
+            xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
+        }
+        SwIndex aIdx( pTNd, nSttCnt );
+
+        if( nSttCnt < nEndCnt )
+            pTNd->Erase( aIdx, nEndCnt - nSttCnt );
+
+        pTNd->Insert( rData.GetText(), aIdx );
+
+        SetMark();
+        GetPoint()->nContent = nSttCnt;
+
+        if( aAttrs.Count() )
+            aAttrs.Remove( 0, aAttrs.Count() );
+        if( rData.GetTextAttr() )
+            aAttrs.Insert( rData.GetTextAttr(), rData.GetText().Len(), 0 );
+    }
+}
+
+Rectangle* SwExtTextInput::GetPosInputData(
+                                const CommandExtTextInputPosData& rFill,
+                                const Point* pLayPos ) const
+{
+    Rectangle* pRet = 0;
+    SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    if( pTNd )
+    {
+        Point aPt;
+        if( pLayPos )
+            aPt = *pLayPos;
+
+        const SwCntntFrm* pFrm = pTNd->GetFrm( &aPt, 0, FALSE );
+        if( pFrm )
+        {
+            xub_StrLen nEndCnt = GetPoint()->nContent.GetIndex(),
+                        nSttCnt = GetMark()->nContent.GetIndex();
+            if( nEndCnt < nSttCnt )
+            {
+                xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
+            }
+
+            xub_StrLen nLen = rFill.GetChars();
+            pRet = new Rectangle[ nLen ];
+
+            SwPosition aPos( *GetPoint() );
+            SwRect aRect;
+            for( xub_StrLen n = rFill.GetFirstPos(); n < nLen; ++n )
+            {
+                aPos.nContent = nSttCnt + n;
+                pFrm->GetCharRect( aRect, aPos );
+                pRet[ n ] = aRect.SVRect();
+            }
+        }
+    }
+    return pRet;
+}
+
+void SwExtTextInput::SetFontForPos( USHORT nPos, Font& rFont )
+{
+}
+
+void SwExtTextInput::InvalidateRange()      // das Layout anstossen
+{
+    ULONG nSttNd = GetMark()->nNode.GetIndex(),
+            nEndNd = GetPoint()->nNode.GetIndex();
+    xub_StrLen nSttCnt = GetMark()->nContent.GetIndex(),
+                nEndCnt = GetPoint()->nContent.GetIndex();
+
+    if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
+    {
+        ULONG nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
+        nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
+    }
+
+    SwUpdateAttr aHt( 0, 0, RES_FMT_CHG );
+    SwNodes& rNds = GetDoc()->GetNodes();
+    SwNode* pNd;
+    for( ULONG n = nSttNd; n <= nEndNd; ++n )
+        if( ND_TEXTNODE == ( pNd = rNds[ n ] )->GetNodeType() )
+        {
+            aHt.nStart = n == nSttNd ? nSttCnt : 0;
+            aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
+            ((SwTxtNode*)pNd)->Modify( &aHt, &aHt );
+        }
+}
+
+
+// die Doc Schnittstellen:
+
+SwExtTextInput* SwDoc::CreateExtTextInput( const SwPaM& rPam )
+{
+    SwExtTextInput* pNew = new SwExtTextInput( rPam, pExtInputRing );
+    if( !pExtInputRing )
+        pExtInputRing = pNew;
+    pNew->SetMark();
+    return pNew;
+}
+
+void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
+{
+    if( pDel == pExtInputRing )
+    {
+        if( pDel->GetNext() != pExtInputRing )
+            pExtInputRing = (SwPaM*)pDel->GetNext();
+        else
+            pExtInputRing = 0;
+    }
+    // das Layout benachrichtigen
+    if( pDel->HasMark() )
+    {
+    }
+    delete pDel;
+}
+
+SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
+                                        xub_StrLen nCntntPos ) const
+{
+    SwExtTextInput* pRet = 0;
+    if( pExtInputRing )
+    {
+        ULONG nNdIdx = rNd.GetIndex();
+        SwExtTextInput* pTmp = (SwExtTextInput*)pExtInputRing;
+        do {
+            ULONG nPt = pTmp->GetPoint()->nNode.GetIndex(),
+                  nMk = pTmp->GetMark()->nNode.GetIndex();
+            xub_StrLen nPtCnt = pTmp->GetPoint()->nContent.GetIndex(),
+                         nMkCnt = pTmp->GetMark()->nContent.GetIndex();
+
+            if( nPt < nMk || ( nPt == nMk && nPtCnt < nMkCnt ))
+            {
+                ULONG nTmp = nMk; nMk = nPt; nPt = nTmp;
+                nTmp = nMkCnt; nMkCnt = nPtCnt; nPtCnt = (xub_StrLen)nTmp;
+            }
+
+            if( nMk <= nNdIdx && nNdIdx <= nPt &&
+                ( STRING_NOTFOUND == nCntntPos ||
+                    ( nMkCnt <= nCntntPos && nCntntPos <= nPtCnt )))
+            {
+                pRet = pTmp;
+                break;
+            }
+        } while( pExtInputRing != (pTmp = (SwExtTextInput*)pExtInputRing ) );
+    }
+    return pRet;
+}
+
+
+
+
