@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:34:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,14 +508,10 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         UniReference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
         xImp->addShape( xShape, mxAttrList, mxShapes );
 
-        /* We have to temporarily disable this call since it causes the
-           CompanyTakeover presentation from being displayed correctly.
-           This change has been introduced by bugfix #i32217#.
         uno::Reference<beans::XMultiPropertyStates> xMultiPropertyStates(
             xShape, uno::UNO_QUERY );
         if (xMultiPropertyStates.is())
             xMultiPropertyStates->setAllPropertiesToDefault();
-        */
 
         // #107848#
         if(!mbTemporaryShape && (!GetImport().HasTextImport()
