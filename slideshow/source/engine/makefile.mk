@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-15 11:21:04 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:38:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ CDEFS+= -DBOOST_SP_ENABLE_DEBUG_HOOKS
 # Disable optimization for SunCC (funny loops
 # when parsing e.g. "x+width/2")
 .IF "$(OS)"=="SOLARISS" && "$(COM)"!="GCC"
+NOOPTFILES= $(SLO)$/smilfunctionparser.obj
+.ENDIF
+# same issue for MACOSX
+.IF "$(OS)"=="MACOSX"
 NOOPTFILES= $(SLO)$/smilfunctionparser.obj
 .ENDIF
 
