@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-20 17:17:18 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 09:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ IMPL_LINK( VCLXCheckBox, ClickHdl, CheckBox*, EMPTYARG )
 //  ----------------------------------------------------
 //  class VCLXRadioButton
 //  ----------------------------------------------------
-VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this )
+VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners( *this )
 {
 }
 
@@ -690,13 +690,15 @@ void VCLXRadioButton::SetWindow( Window* pWindow )
 ::com::sun::star::uno::Any VCLXRadioButton::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XRadioButton*, this ) );
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XRadioButton*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRadioButton>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -790,6 +792,18 @@ void VCLXRadioButton::removeItemListener( const ::com::sun::star::uno::Reference
     maItemListeners.removeInterface( l );
 }
 
+void VCLXRadioButton::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maActionListeners.addInterface( l );
+}
+
+void VCLXRadioButton::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maActionListeners.removeInterface( l );
+}
+
 void VCLXRadioButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -797,6 +811,12 @@ void VCLXRadioButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun
     Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
+}
+
+void VCLXRadioButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maActionCommand = rCommand;
 }
 
 void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException)
@@ -851,6 +871,13 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 
 IMPL_LINK( VCLXRadioButton, ClickHdl, RadioButton*, EMPTYARG )
 {
+    if ( GetWindow() && maActionListeners.getLength() )
+    {
+        ::com::sun::star::awt::ActionEvent aEvent;
+        aEvent.Source = (::cppu::OWeakObject*)this;
+        aEvent.ActionCommand = maActionCommand;
+        maActionListeners.actionPerformed( aEvent );
+    }
     ImplClickedOrToggled( FALSE );
     return 1;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-12 15:53:11 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 09:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,13 +636,15 @@ public:
 //  class UnoRadioButtonControl
 //  ----------------------------------------------------
 class UnoRadioButtonControl :   public UnoControlBase,
+                                public ::com::sun::star::awt::XButton,
                                 public ::com::sun::star::awt::XRadioButton,
                                 public ::com::sun::star::awt::XItemListener,
                                 public ::com::sun::star::awt::XLayoutConstrains
 {
 private:
-    ItemListenerMultiplexer maItemListeners;
-    ::rtl::OUString         maLabel;
+    ItemListenerMultiplexer     maItemListeners;
+    ActionListenerMultiplexer   maActionListeners;
+    ::rtl::OUString             maActionCommand;
 
 public:
 
@@ -663,6 +665,11 @@ public:
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XButton
+    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XRadioButton
     void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);

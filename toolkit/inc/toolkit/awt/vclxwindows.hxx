@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-14 11:56:50 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 09:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,10 +444,14 @@ public:
 //  class VCLXRadioButton
 //  ----------------------------------------------------
 class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
+                        public ::com::sun::star::awt::XButton,
                         public VCLXWindow
 {
 private:
     ItemListenerMultiplexer maItemListeners;
+
+    ActionListenerMultiplexer   maActionListeners;
+    ::rtl::OUString             maActionCommand;
 
 protected:
     DECL_LINK(      ClickHdl, RadioButton* );
@@ -479,6 +483,11 @@ public:
     sal_Bool SAL_CALL getState(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XButton:
+    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
