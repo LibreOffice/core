@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 10:33:18 $
+ *  last change: $Author: jp $ $Date: 2001-11-15 13:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,11 +1014,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             }
             //no break!
             case SID_HYPERLINK_DIALOG:
-                if(!GetView().GetViewFrame()->HasChildWindow(nWhich)  && rSh.HasReadonlySel())
+                if( GetView().GetDocShell()->IsReadOnly() ||
+                    (!GetView().GetViewFrame()->HasChildWindow(nWhich) &&
+                     rSh.HasReadonlySel()) )
                     rSet.DisableItem(nWhich);
                 else
-                    rSet.Put(SfxBoolItem(nWhich, 0 != GetView().GetViewFrame()->GetChildWindow(nWhich)));
-            break;
+                    rSet.Put(SfxBoolItem( nWhich, 0 != GetView().
+                                GetViewFrame()->GetChildWindow( nWhich ) ));
+                break;
             case FN_EDIT_HYPERLINK:
             {
                 SfxItemSet aSet(GetPool(),
