@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_SocketAddr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:54:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 09:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,6 +886,29 @@ namespace osl_SocketAddr
 
     }; // class gettheServicePort
 
+    /** testing the method:
+
+    */
+
+    class getFamilyOfSocketAddr : public CppUnit::TestFixture
+    {
+    public:
+        void getFamilyOfSocketAddr_001()
+        {
+                   ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+                   oslSocketAddr psaOSLSocketAddr = saSocketAddr.getHandle( );
+                   osl_getFamilyOfSocketAddr( psaOSLSocketAddr ) == osl_Socket_FamilyInet ;
+
+            CPPUNIT_ASSERT_MESSAGE( "test for osl_getFamilyOfSocketAddr.",
+                                      osl_getFamilyOfSocketAddr( psaOSLSocketAddr ) == osl_Socket_FamilyInet );
+        }
+
+        CPPUNIT_TEST_SUITE( getFamilyOfSocketAddr );
+        CPPUNIT_TEST( getFamilyOfSocketAddr_001 );
+        CPPUNIT_TEST_SUITE_END( );
+
+    }; // class getFamilyOfSocketAddr
+
 // -----------------------------------------------------------------------------
 
 
@@ -901,7 +924,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getSocketAddrHandle, "osl_
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getLocalHostname, "osl_SocketAddr");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::resolveHostname, "osl_SocketAddr");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::gettheServicePort, "osl_SocketAddr");
-
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr, "osl_SocketAddr");
 
 } // namespace osl_SocketAddr
 
