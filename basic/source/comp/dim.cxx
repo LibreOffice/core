@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,7 +715,7 @@ void SbiParser::Call()
 {
     String aName( aSym );
     SbiExpression aVar( this, SbSYMBOL );
-    aVar.Gen();
+    aVar.Gen( FORCE_CALL );
     aGen.Gen( _GET );
 }
 
