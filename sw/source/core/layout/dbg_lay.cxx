@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:11:05 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, ULONG nFlags )
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                     SnapShot( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm(), nFlags );
             }
             if( aLayer.Len() > 1 )
