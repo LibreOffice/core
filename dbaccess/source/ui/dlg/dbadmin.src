@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:57:19 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 22:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Text [ turkish ] = "New data source";
             Text [ arabic ] = "ãÕÏÑ ÈíÇäÇÊ ÌÏíÏ";
             Text[ finnish ] = "Uusi tietolähde";
-            Text[ catalan ] = "Nueva fuente de datos";
+            Text[ catalan ] = "Font de dades nova";
         };
         ListBox LB_DATASOURCES
         {
@@ -355,7 +355,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ arabic ] = "ÅÍÕÇÆíÇÊ Adabas D";
         Text [ turkish ] = "Adabas D";
         Text[ finnish ] = "Adabas D Statistic";
-        Text[ catalan ] = "Adabas D";
+        Text[ catalan ] = "Estadístiques de l'Adabas D";
     };
     String STR_PAGETITLE_USERADMIN
     {
@@ -380,7 +380,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı ayarları";
         Text[ finnish ] = "User Settings";
-        Text[ catalan ] = "User Settings";
+        Text[ catalan ] = "Paràmetres de l'usuari";
     };
     String STR_PAGETITLE_TEXT
     {
@@ -407,7 +407,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ korean ] = "í…ìŠ¤íŠ¸";
         Text [ turkish ] = "Metin";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "Texto";
+        Text[ catalan ] = "Text";
     };
     String STR_PAGETITLE_TABLESUBSCRIPTION
     {
@@ -432,7 +432,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ turkish ] = "Tablolar";
         Text [ arabic ] = "ÌÏÇæá";
         Text[ finnish ] = "Taulukot";
-        Text[ catalan ] = "Tablas";
+        Text[ catalan ] = "Taules";
     };
     String STR_PAGETITLE_QUERIES
     {
@@ -457,7 +457,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ turkish ] = "Queries";
         Text [ arabic ] = "ÇÓÊİÓÇÑÇÊ";
         Text[ finnish ] = "Abfragen";
-        Text[ catalan ] = "Consultas";
+        Text[ catalan ] = "Consultes";
     };
     String STR_PAGETITLE_DOCUMENTS
     {
@@ -482,7 +482,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ chinese_traditional ] = "æ·å¾‘";
         Text[ turkish ] = "Bookmarks";
         Text[ arabic ] = "Bookmarks";
-        Text[ catalan ] = "Bookmarks";
+        Text[ catalan ] = "Enllaços";
     };
     Text [ portuguese ] = "Gerir fontes de dados";
     Text [ russian ] = "Óïğàâëåíèå èñòî÷íèêîì äàííûõ";
@@ -502,7 +502,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Text [ turkish ] = "Datasource administration";
     Text [ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ";
     Text[ finnish ] = "Tietolähteen hallinta";
-    Text[ catalan ] = "Administración de fuentes de datos";
+    Text[ catalan ] = "Administració de la font de dades";
 };
 
 //-------------------------------------------------------------------------
@@ -560,7 +560,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "Ad:";
         Text [ arabic ] = "ÇáÇÓã:";
         Text[ finnish ] = "~Nimi:";
-        Text[ catalan ] = "~Nombre:";
+        Text[ catalan ] = "~Nom";
     };
 
     Edit ET_DATASOURCENAME
@@ -597,7 +597,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "Connection";
         Text [ arabic ] = "ÇÊÕÇá";
         Text[ finnish ] = "Yhteys";
-        Text[ catalan ] = "Conexión";
+        Text[ catalan ] = "Connexió";
     };
 
     FixedText FT_DATATYPE
@@ -626,7 +626,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "Veritabanı tipi";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Tietokannan ~tyyppi:";
-        Text[ catalan ] = "Tipo de base de datos:";
+        Text[ catalan ] = "~Tipus de base de dades";
     };
     ListBox LB_DATATYPE
     {
@@ -663,7 +663,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "~Data source URL:";
         Text [ arabic ] = " URL ãÕÏÑ ÇáÈíÇäÇÊ:";
         Text[ finnish ] = "~Tietolähteen URL-osoite:";
-        Text[ catalan ] = "~Fuente de datos URL:";
+        Text[ catalan ] = "URL de la font de ~dades";
     };
     Edit ET_CONNECTURL
     {
@@ -693,8 +693,8 @@ TabPage PAGE_GENERAL
         Text[ swedish ] = "~...";
         Text[ polish ] = "~...";
         Text[ portuguese_brazilian ] = "Durchsuchen...";
-        Text[ japanese ] = "...";
-        Text[ korean ] = "...";
+        Text[ japanese ] = "(~.)...";
+        Text[ korean ] = "(~.)...";
         Text[ chinese_simplified ] = "~...";
         Text[ chinese_traditional ] = "~...";
         Text[ turkish ] = "Tara...";
@@ -726,7 +726,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "Timeout:";
         Text [ arabic ] = "Òãä ÇáÊæŞİ:";
         Text[ finnish ] = "Aikakatkaisu:";
-        Text[ catalan ] = "Desconexión temporal:";
+        Text[ catalan ] = "Temps excedit:";
     };
     Edit ET_TIMEOUT_NUMBER
     {
@@ -779,7 +779,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "~new database";
         Text [ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ ÌÏíÏÉ...";
         Text[ finnish ] = "~Neue Datenbank...";
-        Text[ catalan ] = "~new database";
+        Text[ catalan ] = "Base de dades ~nova...";
     };
     String STR_NAMEINVALID
     {
@@ -806,7 +806,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ arabic ] = "íæÌÏ ÈÇáİÚá ãÕÏÑ ÈíÇäÇÊ ÂÎÑ áå åĞÇ ÇáÇÓã. äÙÑÇğ áÃä ÃÓãÇÁ ãÕÇÏÑ ÇáÈíÇäÇÊ íÌÈ ÚãæãÇğ Ãä Êßæä İÑíÏÉ¡ ÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
         Text[ finnish ] = "Toisella tietolähteellä on jo sama nimi. Tietolähteillä on oltava yksilölliset nimet, valitse toinen nimi.";
-        Text[ catalan ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente único.";
+        Text[ catalan ] = "Ja hi ha una altra font de dades amb aquest nom. Atès que les fonts de dades han de tenir noms globalment únics, trieu-ne una altra.";
     };
     String STR_DATASOURCEDELETED
     {
@@ -831,7 +831,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "This data source is scheduled to be deleted.";
         Text [ arabic ] = "áŞÏ ŞãÊ ÈÍĞİ ãÕÏÑ ÇáÈíÇäÇÊ åĞÇ.";
         Text[ finnish ] = "Olet poistanut tämän tietolähteen.";
-        Text[ catalan ] = "Ha eliminado esta fuente de datos.";
+        Text[ catalan ] = "Heu suprimit aquesta font de dades.";
     };
     String STR_COULDNOTLOAD_ODBCLIB
     {
@@ -856,7 +856,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text [ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. ÇÎÊíÇÑ ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
         Text[ finnish ] = "Ohjelmakirjaston lib lataaminen ei onnistunut tai kirjasto on vioittunut. ODBC-tietolähteet eivät ole käytettävissä.";
-        Text[ catalan ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La selección de fuente de datos ODBC no está disponible.";
+        Text[ catalan ] = "No s'ha pogut carregar la biblioteca de programes #lib# o està corrompuda. La selecció de la font de dades ODBC no està disponible.";
     };
     String STR_NO_ADABASE_DATASOURCES
     {
@@ -881,7 +881,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "No Adabas data sources have been found on your system.";
         Text [ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ãÕÇÏÑ ÈíÇäÇÊ Adabas Úáì äÙÇãß.";
         Text[ finnish ] = "Järjestelmässä ei ole Adabas-tietolähteitä.";
-        Text[ catalan ] = "No se han encontrado fuentes de datos Adabas en su sistema.";
+        Text[ catalan ] = "No hi ha cap font de dades Adabas en el sistema.";
     };
     String STR_UNSUPPORTED_DATASOURCE_TYPE
     {
@@ -906,7 +906,7 @@ TabPage PAGE_GENERAL
         Text[ chinese_traditional ] = "é€™å€‹æ“ä½œç³»çµ±ä¸æ”¯æ´é€™å€‹é¡å‹çš„è³‡æ–™åº«é¡å‹ã€‚\næ‚¨å¯ä»¥è®Šæ›´é€™äº›è¨­å®šï¼Œä½†ä¸å¤ªå¯èƒ½é€£ç·šåˆ°ä¸€å€‹è³‡æ–™åº«ã€‚";
         Text[ turkish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ arabic ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
-        Text[ catalan ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text[ catalan ] = "Aquest tipus de font de dades no se soporta en aquesta plataforma.\nTot i que podeu canviar els paràmetres és molt probable que no pugueu connectar-vos a la base de dades.";
     };
 };
 
@@ -951,7 +951,7 @@ TabPage PAGE_DBASE
         Text [ korean ] = "ë¬¸ìì§‘í•©(~C)";
         Text [ turkish ] = "Karakter kümesi";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "J~uego de caracteres";
+        Text[ catalan ] = "Joc de ~car?cters";
     };
     ListBox LB_CHARSET
     {
@@ -997,7 +997,7 @@ TabPage PAGE_DBASE
         Text [ korean ] = "ë¹„í™œì„± ë ˆì½”ë“œ ë””ìŠ¤í”Œë ˆì´(~N)";
         Text [ turkish ] = "Etkin olmayan kayıtları görüntüle";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "Mostrar registros inacti~vos";
+        Text[ catalan ] = "Visualitza els registres i~nactius";
     };
     PushButton PB_INDICIES
     {
@@ -1027,7 +1027,7 @@ TabPage PAGE_DBASE
         Text [ polish ] = "Indeksy...";
         Text [ japanese ] = "ï½²ï¾ï¾ƒï¾ï½¯ï½¸ï½½...";
         Text[ finnish ] = "Hakemistot";
-        Text[ catalan ] = "Í~ndices...";
+        Text[ catalan ] = "?ndexs...";
     };
 };
 
@@ -1110,7 +1110,7 @@ TabPage PAGE_ADO
         Text [ korean ] = "ì‚¬ìš©ì ì´ë¦„(~U)";
         Text [ turkish ] = "Kullanıcı adı";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "N~ombre del usuario";
+        Text[ catalan ] = "Nom d'~usuari";
     };
     Edit ET_USERNAME
     {
@@ -1146,7 +1146,7 @@ TabPage PAGE_ADO
         Text [ turkish ] = "Açarken sor";
         Text [ arabic ] = "ãØáæÈ ßáãÉ ÓÑ";
         Text[ finnish ] = "Salasana pakollinen";
-        Text[ catalan ] = "Se requiere una contraseña";
+        Text[ catalan ] = "Es necessita una contrasenya";
     };
 };
 
@@ -1185,7 +1185,7 @@ TabPage PAGE_JDBC
         Text [ turkish ] = "~JDBC sürücü sınıfı";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "~JDBC-ajuriluokka";
-        Text[ catalan ] = "~Clase de controlador JDBC";
+        Text[ catalan ] = "Classe del programa de control ~JDBC";
     };
     Edit ET_JDBCDRIVERCLASS
     {
@@ -1260,7 +1260,7 @@ TabPage PAGE_JDBC
         Text [ korean ] = "ì‚¬ìš©ì ì´ë¦„(~U)";
         Text [ turkish ] = "Kullanıcı adı";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "N~ombre del usuario";
+        Text[ catalan ] = "Nom d'~usuari";
     };
     Edit ET_USERNAME
     {
@@ -1296,7 +1296,7 @@ TabPage PAGE_JDBC
         Text [ turkish ] = "Açarken sor";
         Text [ arabic ] = "ãØáæÈ ßáãÉ ÇáÓÑ";
         Text[ finnish ] = "Salasana pakollinen";
-        Text[ catalan ] = "Se requiere una contraseña";
+        Text[ catalan ] = "Es necessita una contrasenya";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1330,7 +1330,7 @@ TabPage PAGE_JDBC
         Text [ korean ] = "ë¬¸ìì§‘í•©(~C)" ;
         Text [ turkish ] = "Karakter kümesi" ;
         Text [ language_user1 ] = " :" ;
-        Text[ catalan ] = "J~uego de caracteres:";
+        Text[ catalan ] = "Joc de ~car?cters:";
     };
     ListBox LB_CHARSET
     {
@@ -1380,7 +1380,7 @@ TabPage PAGE_ODBC
         Text [ korean ] = "ì‚¬ìš©ì ì´ë¦„(~U)";
         Text [ turkish ] = "Kullanıcı adı";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "N~ombre del usuario";
+        Text[ catalan ] = "Nom d'~usuari";
     };
     Edit ET_USERNAME
     {
@@ -1416,7 +1416,7 @@ TabPage PAGE_ODBC
         Text [ turkish ] = "Password required";
         Text [ arabic ] = "ãØáæÈ ßáãÉ ÓÑ";
         Text[ finnish ] = "Salasana pakollinen";
-        Text[ catalan ] = "Se necesita una contraseña";
+        Text[ catalan ] = "Es necessita una contrasenya";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1450,7 +1450,7 @@ TabPage PAGE_ODBC
         Text [ korean ] = "ë“œë¼ì´ë²„ ì„¤ì •";
         Text [ turkish ] = "Sürücü ayarları";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones del ~controlador";
+        Text[ catalan ] = "Par?metres del programa de control";
     };
     Edit ET_OPTIONS
     {
@@ -1487,7 +1487,7 @@ TabPage PAGE_ODBC
         Text [ korean ] = "ë¬¸ìì§‘í•©(~C)";
         Text [ turkish ] = "Karakter kümesi";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "J~uego de caracteres";
+        Text[ catalan ] = "Joc de ~car?cters";
     };
     ListBox LB_CHARSET
     {
@@ -1526,7 +1526,7 @@ TabPage PAGE_ODBC
         Text[ turkish ] = "Use catalog on filebased databases";
         Text[ arabic ] = "Use catalog on filebased databases";
         Text[ finnish ] = "Catalog verwenden bei dateibasierten Datenbanken";
-        Text[ catalan ] = "Use catalog on filebased databases";
+        Text[ catalan ] = "Utilitza el cat?leg per a les bases de dades basades en fitxers";
     };
 };
 //.........................................................................
@@ -1793,7 +1793,7 @@ TabPage PAGE_TEXT
         Text [ turkish ] = "Line format";
         Text [ arabic ] = "ÊäÓíŞ ÇáÎØ";
         Text[ finnish ] = "Zeilenformat";
-        Text[ catalan ] = "Formato de línea";
+        Text[ catalan ] = "Format de la fila";
     };
     CheckBox CB_HEADER
     {
@@ -1824,7 +1824,7 @@ TabPage PAGE_TEXT
         Text [ korean ] = "ë¨¸ë¦¬ê¸€ì´ í¬í•¨ë˜ì–´ ìˆëŠ” í…ìŠ¤íŠ¸(~T)";
         Text [ turkish ] = "Metin üstbilgi içeriyor";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "Te~xto contiene encabezamiento";
+        Text[ catalan ] = "El ~text cont? cap?aleres";
     };
     FixedText FT_FIELDSEPARATOR
     {
@@ -1853,7 +1853,7 @@ TabPage PAGE_TEXT
         Text [ korean ] = "í•„ë“œ êµ¬ë¶„ì";
         Text [ turkish ] = "Alan ayırıcısı";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "~Separador de campo";
+        Text[ catalan ] = "Separador de camps";
     };
     ComboBox CM_FIELDSEPARATOR
     {
@@ -1891,7 +1891,7 @@ TabPage PAGE_TEXT
         Text [ korean ] = "í…ìŠ¤íŠ¸ êµ¬ë¶„ì";
         Text [ turkish ] = "Metin ayırıcısı";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "Separador de te~xto";
+        Text[ catalan ] = "Separador de text";
     };
     ComboBox CM_TEXTSEPARATOR
     {
@@ -1929,7 +1929,7 @@ TabPage PAGE_TEXT
         Text [ greek ] = "~Äéá÷ùñéóôéêü äåêáäéêşí";
         Text [ korean ] = "ì†Œìˆ˜ì  êµ¬ë¶„ì";
         Text [ turkish ] = "Ondalık ayırıcısı";
-        Text[ catalan ] = "Separa~dor decimal";
+        Text[ catalan ] = "Separador decimal";
     };
     ComboBox CM_DECIMALSEPARATOR
     {
@@ -1975,7 +1975,7 @@ TabPage PAGE_TEXT
         Text [ greek ] = "Äé~á÷ùñéóôéêü ÷éëßùí";
         Text [ korean ] = "ì²œë‹¨ìœ„ êµ¬ë¶„ì";
         Text [ turkish ] = "Binlik ayırıcısı";
-        Text[ catalan ] = "Separad~or de miles";
+        Text[ catalan ] = "Separador de milers";
     };
     ComboBox CM_THOUSANDSSEPARATOR
     {
@@ -2017,7 +2017,7 @@ TabPage PAGE_TEXT
         Text [ turkish ] = "File format";
         Text [ arabic ] = "ÊäÓíŞ Çáãáİ";
         Text[ finnish ] = "Dateiformat";
-        Text[ catalan ] = "Formato de archivo";
+        Text[ catalan ] = "Format del fitxer";
     };
     FixedText FT_EXTENSION
     {
@@ -2045,7 +2045,7 @@ TabPage PAGE_TEXT
         Text [ turkish ] = "Uzantı";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Loppuliite";
-        Text[ catalan ] = "E~xtensión";
+        Text[ catalan ] = "Extensi?";
     };
     ComboBox CM_EXTENSION
     {
@@ -2090,7 +2090,7 @@ TabPage PAGE_TEXT
         Text [ korean ] = "ë¬¸ìì§‘í•©(~C)";
         Text [ turkish ] = "Karakter kümesi";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = "J~uego de caracteres";
+        Text[ catalan ] = "Joc de ~car?cters";
     };
     ListBox LB_CHARSET
     {
@@ -2128,7 +2128,7 @@ TabPage PAGE_TEXT
         Text [ korean ] = ";\t59\t,\t44\t:\t58\t{íƒ­}\t9\t{ê³µë°±}\t32";
         Text [ turkish ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Boş}\t32";
         Text [ language_user1 ] = " ";
-        Text[ catalan ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{vacío}\t32";
+        Text[ catalan ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{empty}\t32";
     };
     String STR_TEXTSEPARATORLIST
     {
@@ -2158,7 +2158,7 @@ TabPage PAGE_TEXT
         Text [ turkish ] = "#1 belirlenmiş olmalı.";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "1 on määritettävä.";
-        Text[ catalan ] = "#1 debe indicarse.";
+        Text[ catalan ] = "Cal definir #1.";
     };
     String STR_DELIMITER_MUST_DIFFER
     {
@@ -2184,7 +2184,7 @@ TabPage PAGE_TEXT
         Text [ turkish ] = "#1 ve #2 farklı olmalı.";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Arvot 1 ja 2 eivät saa olla identtiset.";
-        Text[ catalan ] = "#1 y #2 tienen que ser diferentes.";
+        Text[ catalan ] = "#1 i #2 han de ser diferents.";
     };
     String STR_NO_WILDCARDS
     {
@@ -2210,7 +2210,7 @@ TabPage PAGE_TEXT
         Text [ turkish ] = "*,? gibi değişkenler #1 için kullanılamaz.";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Yleismerkkejä (esimerkiksi ? ja *) ei sallita kohteessa 1.";
-        Text[ catalan ] = "Comodines como *,? no están permitidos en #1.";
+        Text[ catalan ] = "Els comodins com ara ? o * no s'admeten a #1.";
     };
 };
 //.........................................................................
@@ -2247,7 +2247,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ chinese_traditional ] = "è¡¨æ ¼åŠè¡¨æ ¼ç¯©é¸";
         Text[ turkish ] = "Tables and Table filter";
         Text[ arabic ] = "Tables and Table filter";
-        Text[ catalan ] = "Tables and Table filter";
+        Text[ catalan ] = "Taules i filtre de taules";
     };
     ToolBox TLB_ACTIONS
     {
@@ -2312,7 +2312,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ chinese_traditional ] = "è«‹åœ¨ä»¥ä¸Šçš„æ¸…å–®ä¹‹ä¸­æŒ‘é¸è¦é¡¯ç¤ºçµ¦æ‡‰ç”¨ç¨‹å¼çš„è¡¨æ ¼ã€‚";
         Text[ turkish ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ arabic ] = "In the list above, please check the tables which should be visible for the applications.";
-        Text[ catalan ] = "In the list above, please check the tables which should be visible for the applications.";
+        Text[ catalan ] = "A la llista anterior, activeu les taules que s'han de poder veure a les aplicacions.";
     };
     FixedLine FL_SEPARATOR2
     {
@@ -2339,7 +2339,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ chinese_traditional ] = "æ¬„";
         Text[ turkish ] = "Columns";
         Text[ arabic ] = "Columns";
-        Text[ catalan ] = "Columns";
+        Text[ catalan ] = "Columnes";
     };
     CheckBox CB_SUPPRESVERSIONCL
     {
@@ -2369,7 +2369,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ turkish ] = "Suppress version columns";
         Text [ arabic ] = "ÅÙåÇÑ ÃÚãÏÉ ÇáÅÕÏÇÑ (İí ÍÇáÉ ÊæİÑåÇ)";
         Text[ finnish ] = "Suppress version columns";
-        Text[ catalan ] = "Suprimir columnas de versión (si están disponibles)";
+        Text[ catalan ] = "Visualitza les columnes de la versi?(quan estiguin disponibles)";
     };
 };
 
@@ -2407,7 +2407,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text [ turkish ] = "Queries";
         Text [ arabic ] = "ÇÓÊİÓÇÑÇÊ";
         Text[ finnish ] = "Queries";
-        Text[ catalan ] = "Queries";
+        Text[ catalan ] = "Consultes";
     };
     ToolBox TLB_ACTIONS
     {
@@ -2496,7 +2496,7 @@ TabPage PAGE_DOCUMENTLINKS
         Text[ chinese_traditional ] = "æ·å¾‘";
         Text[ turkish ] = "Bookmarks";
         Text[ arabic ] = "Bookmarks";
-        Text[ catalan ] = "Bookmarks";
+        Text[ catalan ] = "Adreces d'inter?s";
     };
     ToolBox TLB_ACTIONS
     {
@@ -2583,7 +2583,7 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message[ turkish ] = "Currently, there are no registered data sources.";
     Message[ arabic ] = "áÇ ÊæÌÏ ÍÇáíÇğ ÃíÉ ãÕÇÏÑ ÈíÇäÇÊ ãÓÌáÉ.";
     Message[ finnish ] = "Käytettävissä ei ole rekisteröityjä tietolähteitä.";
-    Message[ catalan ] = "En este momento no existen fuentes de datos registradas.";
+    Message[ catalan ] = "En aquest moment no hi ha fonts de dades registrades.";
 };
 ErrorBox ERR_COULDNOTRESTOREDS
 {
@@ -2608,7 +2608,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ turkish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ arabic ] = "áŞÏ ŞãÊ ÈÇáİÚá ÈÅÚØÇÁ ÇÓã ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÍĞæİ áãÕÏÑ ÈíÇäÇÊ ÂÎÑ. íÌÈ Ãä ÊŞæã ÈÅÚÇÏÉ ÊÓãíÉ ãÕÏÑ ÇáÈíÇäÇÊ ÇáÂÎÑ¡ ÍÊì ÊÊãßä ãä ÇÓÊÚÇÏÉ ÇáãÕÏÑ";
     Message[ finnish ] = "Poistetun tietolähteen nimi on jo toisella tietolähteellä. Et voi palauttaa poistettua tietolähdettä ennen kuin nimeät uuden tietolähteen uudelleen.";
-    Message[ catalan ] = "¡Ya ha aplicado a otra fuente de datos el nombre de la eliminada! Debe cambiar el nombre a la primera para poder restaurar la actual.";
+    Message[ catalan ] = "El nom de la font de dades suprimida ja s'ha assignat a una altra font de dades. Per tal de restaurar la primera, cal reanomenar aquesta ?tima.";
 };
 
 String STR_ENTER_CONNECTION_PASSWORD
@@ -2634,7 +2634,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ turkish ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ arabic ] = "ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ \"$name$\" íÊØáÈ ÅÏÎÇá ßáãÉ ÓÑ.";
     Text[ finnish ] = "Yhteyden muodostamiseen tietolähteeseen $name$ tarvitaan salasana.";
-    Text[ catalan ] = "Debe introducir una contraseña para la conexión a la fuente de datos \"$name$\".";
+    Text[ catalan ] = "Es necessita una contrasenya per connectar-se a la font de dades \"$name$\".";
 };
 String STR_DATASOURCE_DEFAULTNAME
 {
@@ -2659,7 +2659,7 @@ String STR_DATASOURCE_DEFAULTNAME
     Text [ turkish ] = "datas source";
     Text [ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ finnish ] = "Tietolähde";
-    Text[ catalan ] = "Fuente de datos";
+    Text[ catalan ] = "Font de dades";
 };
 String STR_ERR_EMPTY_DSN_NAME
 {
@@ -2684,7 +2684,7 @@ String STR_ERR_EMPTY_DSN_NAME
     Text [ turkish ] = "The data source name must not be empty!";
     Text [ arabic ] = "íÌÈ ÃáÇ íßæä ÇÓã ãÕÏÑ ÇáÈíÇäÇÊ İÇÑÛÇğ!";
     Text[ finnish ] = "Tietolähdettä ei saa jättää määrittämättä.";
-    Text[ catalan ] = "¡El nombre de la fuente de datos no puede quedar vacío!";
+    Text[ catalan ] = "El nom de la font de dades no pot estar buit.";
 };
 Menu MENU_DATASOURCELIST_POPUP
 {
@@ -2716,7 +2716,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ turkish ] = "new data source";
             Text [ arabic ] = "ãÕÏÑ ÈíÇäÇÊ ÌÏíÏ";
             Text[ finnish ] = "Uusi tietolähde";
-            Text[ catalan ] = "nueva fuente de datos";
+            Text[ catalan ] = "Font de dades nova";
         };
         MenuItem
         {
@@ -2743,7 +2743,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ turkish ] = "delete data source";
             Text [ arabic ] = "ÍĞİ ãÕÏÑ ÇáÈíÇäÇÊ";
             Text[ finnish ] = "Poista tietolähde";
-            Text[ catalan ] = "eliminar fuente de datos";
+            Text[ catalan ] = "Suprimeix la font de dades";
         };
         MenuItem
         {
@@ -2770,7 +2770,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ turkish ] = "restore data source";
             Text [ arabic ] = "ÇÓÊÚÇÏÉ ãÕÏÑ ÇáÈíÇäÇÊ";
             Text[ finnish ] = "Palauta tietolähde";
-            Text[ catalan ] = "Restaurar fuente de datos";
+            Text[ catalan ] = "Restaura la font de dades";
         };
     };
 };
@@ -2803,7 +2803,7 @@ Menu RID_NEW_FORM
             Text[ chinese_traditional ] = "æ–‡å­—æ–‡ä»¶(~T)";
             Text[ turkish ] = "~Text document";
             Text[ arabic ] = "~Text document";
-            Text[ catalan ] = "~Text document";
+            Text[ catalan ] = "Document de ~text";
         };
         MenuItem
         {
@@ -2829,7 +2829,7 @@ Menu RID_NEW_FORM
             Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ–‡ä»¶(~S)";
             Text[ turkish ] = "~Spreadsheet";
             Text[ arabic ] = "~Spreadsheet";
-            Text[ catalan ] = "~Spreadsheet";
+            Text[ catalan ] = "~Full de c?lcul";
         };
         MenuItem
         {
@@ -2855,7 +2855,7 @@ Menu RID_NEW_FORM
             Text[ chinese_traditional ] = "ç°¡å ±(~P)";
             Text[ turkish ] = "~Presentation";
             Text[ arabic ] = "~Presentation";
-            Text[ catalan ] = "~Presentation";
+            Text[ catalan ] = "~Presentaci?";
         };
         MenuItem
         {
@@ -3076,6 +3076,26 @@ String STR_QUERY_DROP_ALL
 {
     Text = "Wollen Sie die alle Selektierten löschen?";
     Text [ english ] = "Do you want to delete all selected?";
+    Text[ english_us ] = "Do you want to delete all selected?";
+    Text[ portuguese ] = "Do you want to delete all selected?";
+    Text[ russian ] = "Do you want to delete all selected?";
+    Text[ greek ] = "Do you want to delete all selected?";
+    Text[ dutch ] = "Do you want to delete all selected?";
+    Text[ french ] = "Do you want to delete all selected?";
+    Text[ spanish ] = "Do you want to delete all selected?";
+    Text[ finnish ] = "Do you want to delete all selected?";
+    Text[ italian ] = "Do you want to delete all selected?";
+    Text[ danish ] = "Do you want to delete all selected?";
+    Text[ swedish ] = "Vill du radera alla markerade?";
+    Text[ polish ] = "Do you want to delete all selected?";
+    Text[ portuguese_brazilian ] = "Do you want to delete all selected?";
+    Text[ japanese ] = "Do you want to delete all selected?";
+    Text[ korean ] = "Do you want to delete all selected?";
+    Text[ chinese_simplified ] = "è¦åˆ é™¤å…¨éƒ¨é€‰ä¸­ï¼Ÿ";
+    Text[ chinese_traditional ] = "è¦åˆªé™¤å…¨éƒ¨çš„é¸å–ï¼Ÿ";
+    Text[ turkish ] = "Do you want to delete all selected?";
+    Text[ arabic ] = "Do you want to delete all selected?";
+    Text[ catalan ] = "Do you want to delete all selected?";
 };
 
 String STR_QUERY_DROP_DOCUMENT_LINK
@@ -3326,7 +3346,7 @@ String STR_HINT_READONLY_CONNECTION
     Text[ finnish ] = "(connection is read-only)";
     Text[ italian ] = "(il collegamento è di sola lettura)";
     Text[ danish ] = "(connection is read-only)";
-    Text[ swedish ] = "(koppling är bara för läsning)";
+    Text[ swedish ] = "(förbindelse är bara för läsning)";
     Text[ polish ] = "(po³¹czenie jest tylko do odczytu)";
     Text[ portuguese_brazilian ] = "(connection is read-only)";
     Text[ japanese ] = "(æ¥ç¶šã¯èª­ã¿å–ã‚Šå°‚ç”¨)";
@@ -3367,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.75  2001/10/05 06:57:19  oj
+ *  #84000# impl multiselction for queries and link docs
+ *
  *  Revision 1.74  2001/10/02 21:00:57  kz
  *  Merge SRC641: 02.10.01 - 23:00:14
  *
@@ -3387,6 +3410,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
