@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:26:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,18 @@ public:
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    static void SwXTextCursor::SetPropertyValue(SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const rtl::OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue, const SfxItemPropertyMap* pMap = 0)  throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    static void SwXTextCursor::SetPropertyValue(
+                        SwPaM& rPaM,
+                        const SfxItemPropertySet& rPropSet,
+                        const rtl::OUString& rPropertyName,
+                        const ::com::sun::star::uno::Any& aValue,
+                        const SfxItemPropertyMap* pMap = 0,
+                        USHORT nAttrMode = 0)
+                            throw(::com::sun::star::beans::UnknownPropertyException,
+                                ::com::sun::star::beans::PropertyVetoException,
+                                ::com::sun::star::lang::IllegalArgumentException,
+                                ::com::sun::star::lang::WrappedTargetException,
+                                ::com::sun::star::uno::RuntimeException);
      static ::com::sun::star::uno::Any  SwXTextCursor::GetPropertyValue(    SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const ::rtl::OUString& rPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
      static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SwXTextCursor::GetPropertyStates( SwPaM& rPaM, SfxItemPropertySet& rPropSet,      const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, SwGetPropertyStatesCaller eCaller = SW_PROPERTY_STATE_CALLER_DEFAULT)          throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
      static ::com::sun::star::beans::PropertyState SwXTextCursor::GetPropertyState( SwPaM& rPaM, SfxItemPropertySet& rPropSet, const ::rtl::OUString& rPropertyName)        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
