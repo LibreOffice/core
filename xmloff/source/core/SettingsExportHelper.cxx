@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-15 10:08:50 $
+ *  last change: $Author: sab $ $Date: 2001-03-15 11:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,9 +255,10 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
 }
 
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
-                                        const rtl::OUString& rName) const
+                                        const rtl::OUString& rName,
+                                        const sal_Bool bNameAccess) const
 {
-    //DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT((bNameAccess && rName.getLength()) || !bNameAccess, "no name");
     uno::Sequence<beans::PropertyValue> aProps;
     rAny >>= aProps;
     sal_Int32 nLength = aProps.getLength();
@@ -283,7 +284,7 @@ void XMLSettingsExportHelper::exportNameAccess(
         SvXMLElementExport aNamedElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_named, sal_True, sal_True);
         uno::Sequence< rtl::OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
-            exportMapEntry(aNamed->getByName(aNames[i]), aNames[i]);
+            exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], sal_True);
     }
 }
 
@@ -301,7 +302,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
         sal_Int32 nCount = aIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            exportMapEntry(aIndexed->getByIndex(i), sEmpty);
+            exportMapEntry(aIndexed->getByIndex(i), sEmpty, sal_False);
         }
     }
 }
