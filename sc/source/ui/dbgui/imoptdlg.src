@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:13:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ ENGLISH ] = "Field Options" ;
         Text [ norwegian ] = "Field Options" ;
         Text [ italian ] = "Opzioni campo" ;
-        Text [ portuguese_brazilian ] = "Opções de Campo" ;
+        Text [ portuguese_brazilian ] = "Op??s de Campo" ;
         Text [ portuguese ] = "Opções de campo" ;
         Text [ french ] = "Options de champ" ;
         Text [ dutch ] = "Veldopties" ;
