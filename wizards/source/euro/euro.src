@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-24 21:21:46 $
+ *  last change: $Author: obo $ $Date: 2001-09-27 21:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,22 +200,22 @@ String STEP_ZERO + 5
 {
 Text = "Heben Sie vorab Den Schutz aller Tabellen auf!";
 Text[English] = "Unprotect all sheets beforehand!";
-Text[ english_us ] = "Unprotect all sheets beforehand!";
+Text[ english_us ] = "First, unprotect all sheets.";
     Text[ portuguese ] = "Desproteger primeiro todas as tabelas!";
     Text[ russian ] = "Ñíà÷àëà ñíèìèòå çàùèòó ñî âñåõ òàáëèö!";
     Text[ greek ] = "ÊáôáñãŞóåôå ğñéí ôçí ğñïóôáóßá üëùí ôùí ğéíÜêùí!";
-    Text[ dutch ] = "Hef eerst de bescherming van alle werkbladen op!";
+    Text[ dutch ] = "Hef eerst de beveiliging van alle werkbladen op!";
     Text[ french ] = "Désactivez la protection des feuilles au préalable !";
     Text[ spanish ] = "¡Desprotega primero todas las tablas!";
     Text[ italian ] = "Eliminate la protezione dalle tabelle!";
     Text[ danish ] = "Ophæv forinden beskyttelsen for alle ark!";
-    Text[ swedish ] = "Upphäv först skyddet för alla tabeller!";
+    Text[ swedish ] = "Upphäv först skyddet för alla tabeller";
     Text[ polish ] = "Odbezpiecz najpierw wszystkie tabele!";
     Text[ portuguese_brazilian ] = "Unprotect all sheets beforehand!";
     Text[ japanese ] = "å‰ã‚‚ã£ã¦ã™ã¹ã¦ã®è¡¨ã®ä¿è­·ã‚’è§£é™¤ã—ã¦ãŠãã¾ã™ã€‚";
     Text[ korean ] = "ëª¨ë“  ì‹œíŠ¸ë¥¼ ì‚¬ì „ì— ë³´í˜¸í•´ì œí•˜ì‹­ì‹œì˜¤!";
     Text[ chinese_simplified ] = "äº‹å…ˆå–æ¶ˆæ‰€æœ‰å·¥ä½œè¡¨ä¿æŠ¤";
-    Text[ chinese_traditional ] = "å–æ¶ˆæ‰€æœ‰å·¥ä½œè¡¨çš„ä¿è­·";
+    Text[ chinese_traditional ] = "å…ˆå–æ¶ˆæ‰€æœ‰å·¥ä½œè¡¨çš„ä¿è­·";
     Text[ arabic ] = "Şã ÃæáÇğ ÈÅáÛÇÁ ÍãÇíÉ ÌãíÚ ÇáÌÏÇæá!";
     Text[ turkish ] = "Önce bütün tabloların korumasını kaldırın!";
     Text[ finnish ] = "Poista kaikkien lomakkeiden suojaus etukäteen.";
@@ -1566,19 +1566,19 @@ String MESSAGES + 22
     Text[ portuguese ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ russian ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ greek ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ dutch ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ french ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ spanish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ dutch ] = "Bestand '<1>' bestaat reeds.<CR>Overschrijven?";
+    Text[ french ] = "Le fichier '<1>' existe déjà.<CR>Voulez-vous l'écraser ?";
+    Text[ spanish ] = "Ya existe el archivo '<1>'.<CR>¿Desea sobrescribirlo?";
     Text[ finnish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ italian ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ danish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ swedish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ polish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ swedish ] = "Filen '<1>' finns redan.<CR>Vill du skriva över den?";
+    Text[ polish ] = "Plik '<1>' ju¿ istnieje.<CR>Skasowaæ go przez zapisanie?";
     Text[ portuguese_brazilian ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ japanese ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ '<1>' ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚<CR>ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
     Text[ korean ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ chinese_simplified ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ chinese_traditional ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ chinese_simplified ] = "æ–‡ä»¶ '<1>'å·²ç»å­˜åœ¨ã€‚<CR>æ‚¨è¦æ”¹å†™è¿™ä¸ªæ–‡ä»¶ï¼Ÿ";
+    Text[ chinese_traditional ] = "'<1>' æª”æ¡ˆå·²ç¶“å­˜åœ¨ã€‚<CR>è¦è¦†å¯«ï¼Ÿ";
     Text[ turkish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ arabic ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ catalan ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
@@ -1593,19 +1593,19 @@ String MESSAGES + 23
     Text[ portuguese ] = "Do you really want to terminate conversion at this point?";
     Text[ russian ] = "Do you really want to terminate conversion at this point?";
     Text[ greek ] = "Do you really want to terminate conversion at this point?";
-    Text[ dutch ] = "Do you really want to terminate conversion at this point?";
-    Text[ french ] = "Do you really want to terminate conversion at this point?";
-    Text[ spanish ] = "Do you really want to terminate conversion at this point?";
+    Text[ dutch ] = "Wilt u het converteren werkelijk stoppen?";
+    Text[ french ] = "Interrompre la conversion à ce stade ?";
+    Text[ spanish ] = "¿Desea realmente interrumpir ahora el proceso de conversión?";
     Text[ finnish ] = "Do you really want to terminate conversion at this point?";
     Text[ italian ] = "Do you really want to terminate conversion at this point?";
     Text[ danish ] = "Do you really want to terminate conversion at this point?";
-    Text[ swedish ] = "Do you really want to terminate conversion at this point?";
-    Text[ polish ] = "Do you really want to terminate conversion at this point?";
+    Text[ swedish ] = "Vill du verkligen avbryta konverteringen nu?";
+    Text[ polish ] = "Na pewno przerwaæ konwersjê w tym miejscu?";
     Text[ portuguese_brazilian ] = "Do you really want to terminate conversion at this point?";
-    Text[ japanese ] = "Do you really want to terminate conversion at this point?";
+    Text[ japanese ] = "æœ¬å½“ã«ã“ã“ã§å¤‰æ›ã‚’ä¸­æ­¢ã—ã¾ã™ã‹ã€‚";
     Text[ korean ] = "Do you really want to terminate conversion at this point?";
-    Text[ chinese_simplified ] = "Do you really want to terminate conversion at this point?";
-    Text[ chinese_traditional ] = "Do you really want to terminate conversion at this point?";
+    Text[ chinese_simplified ] = "æ‚¨çœŸçš„è¦ç°åœ¨å–æ¶ˆè½¬æ¢ï¼Ÿ";
+    Text[ chinese_traditional ] = "ç¾åœ¨çœŸçš„è¦å–æ¶ˆè½‰æ›ï¼Ÿ";
     Text[ turkish ] = "Do you really want to terminate conversion at this point?";
     Text[ arabic ] = "Do you really want to terminate conversion at this point?";
     Text[ catalan ] = "Do you really want to terminate conversion at this point?";
@@ -1619,19 +1619,19 @@ String MESSAGES + 24
     Text[ portuguese ] = "Cancel AutoPilot";
     Text[ russian ] = "Cancel AutoPilot";
     Text[ greek ] = "Cancel AutoPilot";
-    Text[ dutch ] = "Cancel AutoPilot";
-    Text[ french ] = "Cancel AutoPilot";
-    Text[ spanish ] = "Cancel AutoPilot";
+    Text[ dutch ] = "AutoPiloot stoppen";
+    Text[ french ] = "Annuler l'AutoPilote";
+    Text[ spanish ] = "Cancelar AutoPiloto";
     Text[ finnish ] = "Cancel AutoPilot";
     Text[ italian ] = "Cancel AutoPilot";
     Text[ danish ] = "Cancel AutoPilot";
-    Text[ swedish ] = "Cancel AutoPilot";
-    Text[ polish ] = "Cancel AutoPilot";
+    Text[ swedish ] = "Avbryt AutoPiloten";
+    Text[ polish ] = "Anuluj AutoPilota";
     Text[ portuguese_brazilian ] = "Cancel AutoPilot";
-    Text[ japanese ] = "Cancel AutoPilot";
+    Text[ japanese ] = "ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ã‚’ä¸­æ­¢";
     Text[ korean ] = "Cancel AutoPilot";
-    Text[ chinese_simplified ] = "Cancel AutoPilot";
-    Text[ chinese_traditional ] = "Cancel AutoPilot";
+    Text[ chinese_simplified ] = "å–æ¶ˆè‡ªåŠ¨æ–‡æ¡£åŠ©ç†";
+    Text[ chinese_traditional ] = "å–æ¶ˆè‡ªå‹•æª”æ¡ˆåŠ©ç†";
     Text[ turkish ] = "Cancel AutoPilot";
     Text[ arabic ] = "Cancel AutoPilot";
     Text[ catalan ] = "Cancel AutoPilot";
@@ -2132,6 +2132,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protección de hoja";
 };
+
 
 
 
