@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-10 16:47:40 $
+ *  last change: $Author: mtg $ $Date: 2001-10-17 16:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             {
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
+                aSz.SetWidth ( MM100_TO_TWIP ( nWidth ) );
             }
             else if(FN_TABLE_RELATIVE_WIDTH == pMap->nWID)
             {
