@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-28 09:06:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleText.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #endif
 
 class SvxEditSource;
@@ -134,7 +134,7 @@ namespace accessibility
         edit source. Every interface method will then properly throw
         an exception.
     */
-    class AccessibleStaticTextBase : public ::drafts::com::sun::star::accessibility::XAccessibleText
+    class AccessibleStaticTextBase : public ::com::sun::star::accessibility::XAccessibleText
     {
 
     public:
@@ -208,14 +208,14 @@ namespace accessibility
             The interface that should be set as the source for
             accessibility events sent by this object.
          */
-        virtual void SetEventSource( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rInterface );
+        virtual void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
 
         /** Get the event source
 
             @return the interface that is set as the source for
             accessibility events sent by this object.
          */
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GetEventSource() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
 
         /** Set offset of EditEngine from parent
 
@@ -270,7 +270,7 @@ namespace accessibility
         virtual sal_Int32 SAL_CALL getCaretPosition() throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getCharacterCount() throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getIndexAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
@@ -292,10 +292,10 @@ namespace accessibility
 
         // child-related methods from XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
         // child-related methods from XAccessibleComponent
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
 
