@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-03-05 08:54:23 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 17:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2130,6 +2130,16 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aHangingPunctCB.SetClickHdl( aLink );
     aScriptSpaceCB.SetClickHdl( aLink );
     aForbiddenRulesCB.SetClickHdl( aLink );
+
+//JP 28.3.2001 - these options currently not available!
+    aAllowWordBreakCB.Hide();
+    aCharDistGB.Hide();
+    aPuntuationCB.Hide();
+    aAdjustNumbersCB.Hide();
+    aTextAlignFT.Hide();
+    aTextAlignLB.Hide();
+    aScriptSpaceCB.SetPosPixel( aAllowWordBreakCB.GetPosPixel() );
+//JP 28.3.2001 - these options currently not available!
 }
 /*-- 29.11.00 11:36:24---------------------------------------------------
 
