@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:22:58 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,15 @@
 #ifndef SC_DETFUNC_HXX
 #include "detfunc.hxx"
 #endif
+#ifndef __GLOBSTR_HRC_
+#include "globstr.hrc"
+#endif
 
 #ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
+#endif
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
@@ -473,7 +479,7 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 {
     delete pFormConv;
 
-    pFormConv = new ExcelToSc8( pExcRoot, aIn );
+    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( pExcRoot, aIn );
 
     pExcRoot->pPivotCacheStorage = pPivotCache;
     pCurrPivTab = NULL;
@@ -589,21 +595,20 @@ void ImportExcel8::Note( void )
     {
         if( nId )
         {
-            const XclImpEscherNote* pObj = GetObjectManager().GetObjNote( nId, GetScTab() );
-            const String* pText = pObj ? pObj->GetText() : NULL;
-            if( pText )
+            if( const XclImpEscherNote* pNoteObj = GetObjectManager().GetEscherNote( GetScTab(), nId ) )
             {
-                bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
-                ScPostIt aNote( *pText );
-                aNote.SetShown( bVisible );
-                GetDoc().SetNote( nCol, nRow, GetScTab(), aNote );
-                if( bVisible )
+                if( const XclImpString* pString = pNoteObj->GetString() )
+                {
+                    bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
+                    ScPostIt aNote( pString->GetText() );
+                    aNote.SetShown( bVisible );
+                    GetDoc().SetNote( nCol, nRow, GetScTab(), aNote );
+                    if( bVisible )
                     {
-                        ScDocument *pDoc = GetDocPtr();
+                        ScDocument* pDoc = GetDocPtr();
                         ScDetectiveFunc( pDoc, GetScTab() ).ShowComment( nCol, nRow, TRUE );
-
-                   // ScDetectiveFunc( GetDocPtr(), GetScTab() ).ShowComment( nCol, nRow, TRUE );
                     }
+                }
             }
         }
     }
@@ -1005,102 +1010,7 @@ void ImportExcel8::PostDocLoad( void )
         pAutoFilterBuffer->Apply();
     GetWebQueryBuffer().Apply();    //! test if extant
 
-    UINT32 nChartCnt = 0;
-
-    SfxObjectShell* pShell = GetDocShell();
-    XclImpObjectManager& rObjManager = GetObjectManager();
-    Biff8MSDffManager*      pDffMan = NULL;
-
-    if( pShell && rObjManager.HasEscherStream() )
-    {
-        pDffMan = new Biff8MSDffManager( *pExcRoot, rObjManager,
-                                            0, 0, pD->GetDrawLayer(), 1440 );
-
-        const XclImpAnchorData*         pAnch;
-        const SvxMSDffShapeInfos*       pShpInf = pDffMan->GetShapeInfos();
-
-        if( pShpInf )
-        {
-            const UINT32                nMax = pShpInf->Count();
-            const SvxMSDffShapeInfo*    p;
-            ULONG                       nShapeId;
-            SvxMSDffImportData*         pMSDffImportData;
-            UINT32                      n;
-            bool                        bIgnoreObj;
-
-            UINT32                      nOLEImpFlags = 0;
-            OfaFilterOptions*           pFltOpts = OFF_APP()->GetFilterOptions();
-            if( pFltOpts )
-            {
-                if( pFltOpts->IsMathType2Math() )
-                    nOLEImpFlags |= OLE_MATHTYPE_2_STARMATH;
-
-                if( pFltOpts->IsWinWord2Writer() )
-                    nOLEImpFlags |= OLE_WINWORD_2_STARWRITER;
-
-                if( pFltOpts->IsPowerPoint2Impress() )
-                    nOLEImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
-            }
-
-            XclImpOcxConverter aOcxConverter( *this );
-
-            for( n = 0 ; n < nMax ; n++ )
-            {
-                p = pShpInf->GetObject( ( UINT16 ) n );
-                DBG_ASSERT( p, "-ImportExcel8::PostDocLoad(): Immer diese falschen Versprechungen!" );
-
-                nShapeId = p->nShapeId;
-
-                XclImpEscherObj* pObj = rObjManager.GetObjFromStream( p->nFilePos );
-                if( pObj && !pObj->GetSdrObj() )
-                {
-                    pMSDffImportData = new SvxMSDffImportData;
-                    pDffMan->SetSdrObject( pObj, nShapeId, *pMSDffImportData );
-
-                    if( pObj->GetSdrObj() )
-                    {
-                        pAnch = rObjManager.GetAnchorData( p->nFilePos );
-
-                        // *** find all objects to ignore ***
-                        bIgnoreObj = false;
-                        if( pAnch )
-                        {
-                            // pivot table dropdowns
-                            bIgnoreObj |= aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                            // auto filter drop downs
-                            if( pAutoFilterBuffer )
-                                bIgnoreObj |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                        }
-                        // other objects
-                        if( !bIgnoreObj )
-                            bIgnoreObj = rObjManager.IsIgnoreObject( pObj->GetId() );
-
-                        if( bIgnoreObj )
-                            pObj->SetSdrObj( NULL );      // delete SdrObject
-                        else
-                        {
-                            switch ( pObj->GetObjType() )
-                            {
-                                case otOle:
-                                    ((XclImpEscherOle*)pObj)->CreateSdrOle( *pDffMan, nOLEImpFlags );
-                                break;
-                                case otCtrl:
-                                    aOcxConverter.ReadControl( static_cast< XclImpEscherOle& >( *pObj ) );
-                                break;
-                            }
-                        }
-                    }
-                    delete pMSDffImportData;
-                }
-            }
-        }
-
-    }
-
-    rObjManager.Apply(pDffMan);
-
-    if( pDffMan )
-        delete pDffMan;
+    ApplyEscherObjects();
 
     ImportExcel::PostDocLoad();
 
@@ -1111,6 +1021,8 @@ void ImportExcel8::PostDocLoad( void )
 
         aScenList.Apply( *pD );
     }
+
+    SfxObjectShell* pShell = GetDocShell();
 
     // BASIC
     if( bHasBasic && pShell )
@@ -1148,6 +1060,51 @@ void ImportExcel8::PostDocLoad( void )
 
     // building pivot tables
     aPivotTabList.Apply();
+}
+
+
+void ImportExcel8::ApplyEscherObjects()
+{
+    SfxObjectShell* pShell = GetDocShell();
+    XclImpObjectManager& rObjManager = GetObjectManager();
+
+    if( pShell && rObjManager.HasEscherStream() )
+    {
+        XclImpDffManager& rDffManager = rObjManager.GetDffManager();
+        if( const SvxMSDffShapeInfos* pShapeInfos = rDffManager.GetShapeInfos() )
+        {
+            for( sal_uInt16 nInfo = 0, nInfoCount = pShapeInfos->Count(); nInfo < nInfoCount; ++nInfo )
+            {
+                if( const SvxMSDffShapeInfo* pShapeInfo = pShapeInfos->GetObject( nInfo ) )
+                {
+                    sal_uInt32 nShapeId = pShapeInfo->nShapeId;
+                    XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( pShapeInfo->nFilePos );
+                    if( pEscherObj && !pEscherObj->GetSdrObj() )
+                    {
+                        SvxMSDffImportData aDffImportData;
+                        rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
+
+                        // *** find some comboboxes to skip ***
+                        if( const XclImpEscherCtrl* pCtrlObj = PTR_CAST( XclImpEscherCtrl, pEscherObj ) )
+                        {
+                            if( pCtrlObj->GetType() == EXC_OBJ_CMO_COMBOBOX )
+                            {
+                                if( const XclImpEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
+                                {
+                                    bool bSkipObj = aPivotTabList.IsInPivotRange( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
+                                    if( !bSkipObj && pAutoFilterBuffer )
+                                        bSkipObj = pAutoFilterBuffer->HasDropDown( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
+                                    if( bSkipObj )
+                                        pEscherObj->SetSkip();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        rObjManager.Apply();
+    }
 }
 
 
