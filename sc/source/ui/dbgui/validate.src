@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:54:32 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_traditional ] = "®e³\\(~A)";
         Text[ arabic ] = "ΣγΗΝ";
         Text[ greek ] = "Να επιτραπεί";
-        Text[ korean ] = "ΗγΏλ";
+        Text[ korean ] = "ΗγΏλ(~A)";
         Text[ turkish ] = "~Geηerli";
     };
     ListBox LB_ALLOW
@@ -428,7 +428,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_traditional ] = "Έκ®Ζ(~D)";
         Text[ arabic ] = "ΘνΗδΗΚ";
         Text[ greek ] = "Δεδομένα";
-        Text[ korean ] = "µ¥ΐΜΕΝ";
+        Text[ korean ] = "µ¥ΐΜΕΝ(~D)";
         Text[ turkish ] = "~Veriler";
     };
     ListBox LB_VALUE
@@ -695,7 +695,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_traditional ] = "³Μ¤p(~M)";
         Text[ arabic ] = "ΗαΝΟ ΗαΓΟδμ";
         Text[ greek ] = "Ελάχιστο";
-        Text[ korean ] = "ΓΦΌÒ";
+        Text[ korean ] = "ΓΦΌÒ(~M)";
         Text[ turkish ] = "A~sgari";
     };
     Edit EDT_MIN
@@ -727,7 +727,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_traditional ] = "³Μ¤j(~X)";
         Text[ arabic ] = "ΗαΓήΥμ";
         Text[ greek ] = "Μέγιστο";
-        Text[ korean ] = "ΓΦ΄λ";
+        Text[ korean ] = "ΓΦ΄λ(~X)";
         Text[ turkish ] = "A~zami";
     };
     Edit EDT_MAX
@@ -760,7 +760,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_traditional ] = "®e³\\ªΕ®ζ(~B)";
         Text[ arabic ] = "ΗαΣγΗΝ ΘΗαΞαΗνΗ ΗαέΗΡΫΙ";
         Text[ greek ] = "Να επιτραπούν κενά κελιά";
-        Text[ korean ] = "Ίσ΅΅ΌΏ΅΅ΗγΏλ";
+        Text[ korean ] = "Ίσ΅΅ΌΏ΅΅ΗγΏλ(~B)";
         Text[ turkish ] = "~Boώ hόcre geηerli";
     };
     GroupBox GRP_VALUES
@@ -838,7 +838,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ chinese_traditional ] = "¦bΏο¨ϊΐx¦s®ζ®ΙΕγ¥άΏι¤J»΅©ϊ(~S)";
         Text[ arabic ] = "ΕΩεΗΡ γΣΗΪΟΙ ΗαΕΟΞΗα ΪδΟ ΚΝΟνΟ ΗαΞανΙ";
         Text[ greek ] = "Εμφάν~ιση βοήθειας εισαγωγής κατά την επιλογή ενός κελιού";
-        Text[ korean ] = "ΌΏ Ό±ΕΓ½ΓΏ΅ ΐΤ·ΒµµΏςΈ» Α¦°ψ";
+        Text[ korean ] = "ΌΏ Ό±ΕΓ½ΓΏ΅ ΐΤ·ΒµµΏςΈ» Α¦°ψ(~S)";
         Text[ turkish ] = "Hόcre se~ηildiπinde giriώ yardύmύ φner";
     };
     GroupBox GRP_CONTENT
@@ -888,7 +888,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ chinese_traditional ] = "ΌΠΓD(~T)";
         Text[ arabic ] = "ΗαΪδζΗδ";
         Text[ greek ] = "~Τίτλος";
-        Text[ korean ] = "Α¦Έρ";
+        Text[ korean ] = "Α¦Έρ(~T)";
         Text[ turkish ] = "~Baώlύk";
     };
     FixedText FT_INPUTHELP
@@ -913,7 +913,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ chinese_traditional ] = "Ώι¤J»΅©ϊ(~I)";
         Text[ arabic ] = "γΣΗΪΟΙ ΗαΕΟΞΗα";
         Text[ greek ] = "Βοήθεια ~εισαγωγής";
-        Text[ korean ] = "ΐΤ·Β΅΅µµΏςΈ»";
+        Text[ korean ] = "ΐΤ·Β΅΅µµΏςΈ»(~I)";
         Text[ turkish ] = "~Giriώ yardύmύ";
     };
     Edit EDT_TITLE
@@ -990,7 +990,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "¦bΏι¤JµL®ΔΌΖ­Θ®ΙΕγ¥άΏω»~³ψ§i(~M)";
         Text[ arabic ] = "ΕΩεΗΡ ΡΣΗαΙ ΞΨΓ ΪδΟ ΕΟΞΗα ήνγ ΫνΡ ΥΗαΝΙ";
         Text[ greek ] = "Εμφάνιση μηνύματος σ~φάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °ª ΐΤ·Β½Γ Ώΐ·ω Έή½ΓΑφ ³ªΕΈ³»±β";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °ª ΐΤ·Β½Γ Ώΐ·ω Έή½ΓΑφ ³ªΕΈ³»±β(~M)";
         Text[ turkish ] = "~Geηersiz deπer girildiπinde hata iletisi gφrόntόle";
     };
     MultiLineEdit EDT_ERROR
@@ -1031,7 +1031,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "Ώω»~³ψ§i(~E)";
         Text[ arabic ] = "ΡΣΗαΙ ΞΨΓ";
         Text[ greek ] = "Μήνυμα σφάλματος";
-        Text[ korean ] = "Ώΐ·ω Έή½ΓΑφ";
+        Text[ korean ] = "Ώΐ·ω Έή½ΓΑφ(~E)";
         Text[ turkish ] = "~Hata iletisi";
     };
     FixedText FT_TITLE
@@ -1056,7 +1056,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "ΌΠΓD(~T)";
         Text[ arabic ] = "ΗαΪδζΗδ";
         Text[ greek ] = "~Τίτλος";
-        Text[ korean ] = "Α¦Έρ";
+        Text[ korean ] = "Α¦Έρ(~T)";
         Text[ turkish ] = "~Baώlύk";
     };
     FixedText FT_ACTION
@@ -1081,7 +1081,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "°Κ§@(~A)";
         Text[ arabic ] = "ΕΜΡΗΑ";
         Text[ greek ] = "~Ενέργεια";
-        Text[ korean ] = "µΏΐΫ";
+        Text[ korean ] = "µΏΐΫ(~A)";
         Text[ turkish ] = "~έώlem";
     };
     ListBox LB_ACTION
@@ -1263,7 +1263,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "ΒsΔύ(~B)...";
         Text[ arabic ] = "ΗΣΚΪΡΗΦ...";
         Text[ greek ] = "Αναζήτηση...";
-        Text[ korean ] = "Γ£ΎΖΊΈ±β...";
+        Text[ korean ] = "Γ£ΎΖΊΈ±β(~B)...";
         Text[ turkish ] = "~Tara...";
     };
     Text [ dutch ] = "Foutmelding" ;
