@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:57:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,15 @@
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
 
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
 #ifndef _SV_SALIMESTATUS_HXX
 #include <salimestatus.hxx>
 #endif
+
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 
@@ -163,34 +169,54 @@ public:
     USHORT  mnResId;
 };
 
-ImplReservedKey ImplReservedKeys[] = {
-    ImplReservedKey(KeyCode(KEY_F1,0),                  SV_SHORTCUT_HELP),
-    ImplReservedKey(KeyCode(KEY_F1,KEY_SHIFT),          SV_SHORTCUT_ACTIVEHELP),
-    ImplReservedKey(KeyCode(KEY_F1,KEY_MOD1),           SV_SHORTCUT_CONTEXTHELP),
-    ImplReservedKey(KeyCode(KEY_F2,KEY_SHIFT),          SV_SHORTCUT_CONTEXTHELP),
-    ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1),           SV_SHORTCUT_DOCKUNDOCK),
-    ImplReservedKey(KeyCode(KEY_F4,KEY_MOD2),           SV_SHORTCUT_DOCKUNDOCK),
-    ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2),  SV_SHORTCUT_DOCKUNDOCK),
-    ImplReservedKey(KeyCode(KEY_F6,0),                  SV_SHORTCUT_NEXTSUBWINDOW),
-    ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1),           SV_SHORTCUT_TODOCUMENT),
-    ImplReservedKey(KeyCode(KEY_F6,KEY_SHIFT),          SV_SHORTCUT_PREVSUBWINDOW),
-    ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT), 0),         // activate splitter (string is missing!)
-    ImplReservedKey(KeyCode(KEY_F10,0),                 SV_SHORTCUT_MENUBAR)
+typedef std::pair<ImplReservedKey*, size_t> ReservedKeys;
+namespace
+{
+    struct ImplReservedKeysImpl
+    {
+        ReservedKeys* operator()()
+        {
+            static ImplReservedKey ImplReservedKeys[] =
+            {
+                ImplReservedKey(KeyCode(KEY_F1,0), SV_SHORTCUT_HELP),
+                ImplReservedKey(KeyCode(KEY_F1,KEY_SHIFT), SV_SHORTCUT_ACTIVEHELP),
+                ImplReservedKey(KeyCode(KEY_F1,KEY_MOD1), SV_SHORTCUT_CONTEXTHELP),
+                ImplReservedKey(KeyCode(KEY_F2,KEY_SHIFT), SV_SHORTCUT_CONTEXTHELP),
+                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1), SV_SHORTCUT_DOCKUNDOCK),
+                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD2), SV_SHORTCUT_DOCKUNDOCK),
+                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2), SV_SHORTCUT_DOCKUNDOCK),
+                ImplReservedKey(KeyCode(KEY_F6,0), SV_SHORTCUT_NEXTSUBWINDOW),
+                ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1), SV_SHORTCUT_TODOCUMENT),
+                ImplReservedKey(KeyCode(KEY_F6,KEY_SHIFT), SV_SHORTCUT_PREVSUBWINDOW),
+                ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT), 0),         // activate splitter (string is missing!)
+                ImplReservedKey(KeyCode(KEY_F10,0), SV_SHORTCUT_MENUBAR)
 #ifdef UNX
-    ,
-    ImplReservedKey(KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1), 0),
-    ImplReservedKey(KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1), 0)
+                ,
+                ImplReservedKey(KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1), 0),
+                ImplReservedKey(KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1), 0)
 #endif
-};
+            };
+            static ReservedKeys aKeys
+            (
+                &ImplReservedKeys[0],
+                sizeof(ImplReservedKeys) / sizeof(ImplReservedKey)
+            );
+            return &aKeys;
+        }
+    };
+
+    struct ImplReservedKeys
+        : public rtl::StaticAggregate<ReservedKeys, ImplReservedKeysImpl> {};
+}
 
 
 // #include <usr/refl.hxx>
@@ -437,7 +463,7 @@ void Application::Abort( const XubString& rErrorText )
 
 ULONG   Application::GetReservedKeyCodeCount()
 {
-    return sizeof( ImplReservedKeys ) / sizeof( ImplReservedKey );
+    return ImplReservedKeys::get()->second;
 }
 
 const KeyCode*  Application::GetReservedKeyCode( ULONG i )
@@ -445,15 +471,16 @@ const KeyCode*  Application::GetReservedKeyCode( ULONG i )
     if( i >= GetReservedKeyCodeCount() )
         return NULL;
     else
-        return &ImplReservedKeys[i].mKeyCode;
+        return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
 String Application::GetReservedKeyCodeDescription( ULONG i )
 {
-    if( i >= GetReservedKeyCodeCount() || ! ImplReservedKeys[i].mnResId )
+    ImplReservedKey *pImplReservedKeys = ImplReservedKeys::get()->first;
+    if( i >= GetReservedKeyCodeCount() || ! pImplReservedKeys[i].mnResId )
         return String();
     else
-        return String( ResId( ImplReservedKeys[i].mnResId, ImplGetResMgr() ) );
+        return String( ResId( pImplReservedKeys[i].mnResId, ImplGetResMgr() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -705,8 +732,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             // Update all windows
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
             // Daten, die neu berechnet werden muessen, zuruecksetzen
-            long nOldDPIX;
-            long nOldDPIY;
+            long nOldDPIX(0);
+            long nOldDPIY(0);
             if ( pFirstFrame )
             {
                 nOldDPIX = pFirstFrame->mnDPIX;
