@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:25:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ static const XclImpBuiltInFormat pBuiltInFormats[] =
 
 XclImpNumFmtBuffer::XclImpNumFmtBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    mnStdFmt( GetFormatter().GetStandardFormat( GetDefLanguage() ) )
+    mnStdFmt( GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
 {
 }
 
@@ -686,7 +686,7 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
     sal_uInt32 nKey;
 
     GetFormatter().PutandConvertEntry( aFormat, nCheckPos, nType, nKey,
-        LANGUAGE_ENGLISH_US, GetDefLanguage() );
+        LANGUAGE_ENGLISH_US, ScGlobal::eLnge );
 
     if( bAppend )
         maKeyVec.push_back( nKey );
