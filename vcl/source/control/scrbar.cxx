@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-19 11:12:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <rc.h>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
