@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:17:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ ModalDialog DLG_NEW_FILE
         Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒ(~X)";
         Text[ chinese_traditional ] = "ζ–‡ε­—(~X)";
         Text[ arabic ] = "δΥ";
-        Text[ greek ] = "Κείμενο";
+        Text[ greek ] = "Κεί~μενο";
         Text[ korean ] = "ν…μ¤νΈ(~X)";
         Text[ turkish ] = "~Metin";
         Text[ finnish ] = "Teks~ti";
@@ -353,7 +353,7 @@ ModalDialog DLG_NEW_FILE
         Text[ japanese ] = "ζ (~F)";
         Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅(~F)";
         Text[ arabic ] = "ίΗΟΡ";
-        Text[ greek ] = "Περίγραμμα";
+        Text[ greek ] = "~Πλαίσιο";
         Text[ korean ] = "ν”„λ μ„(~F)";
         Text[ turkish ] = "Η~erηeve";
         Text[ finnish ] = "~Kehys";
@@ -386,7 +386,7 @@ ModalDialog DLG_NEW_FILE
         Text[ japanese ] = "γƒγƒΌγ‚Έ(~P)";
         Text[ chinese_traditional ] = "ι (~P)";
         Text[ arabic ] = "ΥέΝΗΚ";
-        Text[ greek ] = "Σελίδες";
+        Text[ greek ] = "~Σελίδες";
         Text[ korean ] = "νμ΄μ§€(~P)";
         Text[ turkish ] = "~Sayfalar";
         Text[ finnish ] = "~Sivut";
@@ -419,7 +419,7 @@ ModalDialog DLG_NEW_FILE
         Text[ japanese ] = "η•ªε·δ»γ‘(~U)";
         Text[ chinese_traditional ] = "η·¨θ™(~U)";
         Text[ arabic ] = "ΚΡήνγ";
-        Text[ greek ] = "Αρίθμηση";
+        Text[ greek ] = "Α~ρίθμηση";
         Text[ korean ] = "λ²νΈ λ§¤κΈ°κΈ°(~U)";
         Text[ turkish ] = "~Numaralandύrma";
         Text[ finnish ] = "Numerointi";
@@ -452,7 +452,7 @@ ModalDialog DLG_NEW_FILE
         Text[ japanese ] = "δΈζ›Έγ(~O)";
         Text[ chinese_traditional ] = "θ¦†ε―«(~O)";
         Text[ arabic ] = "ΗαίΚΗΘΙ έζή";
-        Text[ greek ] = "Αντικατάσταση";
+        Text[ greek ] = "~Αντικατάσταση";
         Text[ korean ] = "λ®μ–΄μ“°κΈ°(~O)";
         Text[ turkish ] = "ά~zerine yaz";
         Text[ finnish ] = "Korvaa";
@@ -515,7 +515,7 @@ ModalDialog DLG_NEW_FILE
         Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«γ®θª­γΏθΎΌγΏ";
         Text[ chinese_traditional ] = "θΌ‰ε…¥ζ¨£εΌ";
         Text[ arabic ] = "ΚΝγνα ΓδγΗΨ";
-        Text[ greek ] = "Εισαγωγή προτύπων";
+        Text[ greek ] = "Φόρτωση στυλ";
         Text[ korean ] = "μ¤νƒ€μΌ λ΅λ“";
         Text[ turkish ] = "Biηemleri Yόkle";
         Text[ finnish ] = "Lataa tyylit";
@@ -721,6 +721,7 @@ ModalDialog DLG_NEW_FILE
     Text[ hindi ] = "ΰ¤¨ΰ¤―ΰ¤Ύ";
     Text[ slovak ] = "NovΓ½";
 };
+
 
 
 
