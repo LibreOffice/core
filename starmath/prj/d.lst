@@ -11,7 +11,7 @@ touch: ..\%__SRC%\misc\sm.hid %_DEST%\bin%_EXT%\sm.hid
 ..\%__SRC%\bin\sm?????.dll %_DEST%\bin%_EXT%\sm?????.dll
 ..\%__SRC%\bin\sm?????.res %_DEST%\bin%_EXT%\sm?????.res
 ..\%__SRC%\bin\sm?????.sym %_DEST%\bin%_EXT%\sm?????.sym
-mkdir: %_DEST%\inc\starmath
+mkdir: %_DEST%\inc%_EXT%\starmath
 
 hedabu: ..\inc\smdll.hxx %_DEST%\inc%_EXT%\starmath\smdll.hxx
 hedabu: ..\inc\smdll0.hxx %_DEST%\inc%_EXT%\starmath\smdll0.hxx

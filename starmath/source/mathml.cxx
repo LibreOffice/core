@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-25 10:36:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@ one go*/
 #ifndef _TOOLS_DEBUG_H
 #include <tools/debug.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_H
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -144,6 +144,9 @@ one go*/
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
@@ -250,6 +253,10 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     {
         if( bEncrypted )
             nError = ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch( packages::zip::ZipIOException& )
+    {
+        nError = ERRCODE_IO_BROKENPACKAGE;
     }
     catch( io::IOException& )
     {
@@ -364,23 +371,33 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
-        ReadThroughComponent(
+        ULONG nWarn = ReadThroughComponent(
             rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
             xServiceFactory, "com.sun.star.comp.Math.XMLMetaImporter" );
 
-        if (xStatusIndicator.is())
-            xStatusIndicator->setValue(nSteps++);
+        if ( nWarn != ERRCODE_IO_BROKENPACKAGE )
+        {
+            if (xStatusIndicator.is())
+                xStatusIndicator->setValue(nSteps++);
 
-        ReadThroughComponent(
-            rMedium.GetStorage(), xModelComp, "settings.xml", 0,
-            xServiceFactory, "com.sun.star.comp.Math.XMLSettingsImporter" );
+            nWarn = ReadThroughComponent(
+                rMedium.GetStorage(), xModelComp, "settings.xml", 0,
+                xServiceFactory, "com.sun.star.comp.Math.XMLSettingsImporter" );
 
-        if (xStatusIndicator.is())
-            xStatusIndicator->setValue(nSteps++);
+            if ( nWarn != ERRCODE_IO_BROKENPACKAGE )
+            {
+                if (xStatusIndicator.is())
+                    xStatusIndicator->setValue(nSteps++);
 
-        nError = ReadThroughComponent(
-           rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml",
-           xServiceFactory, "com.sun.star.comp.Math.XMLImporter" );
+                nError = ReadThroughComponent(
+                    rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml",
+                    xServiceFactory, "com.sun.star.comp.Math.XMLImporter" );
+            }
+            else
+                nError = ERRCODE_IO_BROKENPACKAGE;
+        }
+        else
+            nError = ERRCODE_IO_BROKENPACKAGE;
     }
     else
     {
@@ -979,7 +996,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         /*Add xmlns line*/
         SvXMLAttributeList &rList = GetAttrList();
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(
-            XML_NAMESPACE_MATH_IDX),sCDATA,GetNamespaceMap().GetNameByKey(
+            XML_NAMESPACE_MATH_IDX),GetNamespaceMap().GetNameByKey(
             XML_NAMESPACE_MATH_IDX));
 
         //I think we need something like ImplExportEntities();
@@ -3997,7 +4014,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 
                         double mytest = static_cast<double>(aTemp);
 
-                        mytest = SolarMath::Round(mytest,1);
+                        mytest = ::rtl::math::round(mytest,1);
                         SvXMLUnitConverter::convertDouble(sStrBuf,mytest);
                         sStrBuf.append(OUString(
                             RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt)));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-10 11:23:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ModalDialog RID_FONTDIALOG
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "~Fonte:";
         Text[ japanese ] = "γƒ•γ‚©γƒ³γƒ(~F)";
-        Text[ korean ] = "κΈ€κΌ΄(~F):";
+        Text[ korean ] = "κΈ€κΌ΄(~F)";
         Text[ chinese_simplified ] = "ε­—δ½“(~F)";
         Text[ chinese_traditional ] = "ε­—ε‹(~F)";
         Text[ turkish ] = "Yazύtipi:";
@@ -301,7 +301,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ polish ] = "Domylnie";
         Text[ portuguese_brazilian ] = "~Tamanho de base:";
         Text[ japanese ] = "εΊζ¬γ‚µγ‚¤γ‚Ί(~S)";
-        Text[ korean ] = "κΈ°λ³Έ ν¬κΈ°(~S)";
+        Text[ korean ] = "κΈ°μ¤€ ν¬κΈ°(~S)";
         Text[ chinese_simplified ] = "εΊζ¬ε¤§ε°(~S)";
         Text[ chinese_traditional ] = "εΊζ¬ε¤§ε°(~S)";
         Text[ turkish ] = "Temel boyut:";
@@ -386,7 +386,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ polish ] = "Indeksy";
         Text[ portuguese_brazilian ] = "~?ndices";
         Text[ japanese ] = "ζ‡ζ•°γ¨ζ·»γε­—(~I)";
-        Text[ korean ] = "μƒ‰μΈ(~I):";
+        Text[ korean ] = "μƒ‰μΈ(~I)";
         Text[ chinese_simplified ] = "ζ ‡εΏ—(~I)";
         Text[ chinese_traditional ] = "ζ¨™θª(~I)";
         Text[ turkish ] = "έndisler:";
@@ -472,7 +472,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ polish ] = "Operatory";
         Text[ portuguese_brazilian ] = "~Operadores:";
         Text[ japanese ] = "ζΌ”η®—ε­(~O)";
-        Text[ korean ] = "μ—°μ‚°μ(~O):";
+        Text[ korean ] = "μ—°μ‚°μ(~O)";
         Text[ chinese_simplified ] = "θΏη®—η¬¦(~O)";
         Text[ chinese_traditional ] = "ι‹η®—η¬¦(~O)";
         Text[ turkish ] = "έώleηler:";
@@ -562,7 +562,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "η›Έε°ε¤§ε°";
         Text[ arabic ] = "ΓΝΜΗγ δΣΘνΙ";
         Text[ greek ] = "Σχετικά μεγέθη";
-        Text[ korean ] = "μƒλ€μ  ν¬κΈ°";
+        Text[ korean ] = "λΉ„λ΅€ν•λ” ν¬κΈ°";
         Text[ turkish ] = "Gφreceli boyutlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mides relatives";
@@ -598,13 +598,13 @@ ModalDialog RID_FONTSIZEDIALOG
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padrγo" ;
         Text[ chinese_simplified ] = "ζ ‡ε‡†(~D)";
-        Text[ russian ] = "Ρςΰνδΰπς";
+        Text[ russian ] = "Ρξυπΰνθςό";
         Text[ polish ] = "Domylnie";
         Text[ japanese ] = "ζ¨™ζΊ–(~D)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per ~defecte";
@@ -612,7 +612,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ thai ] = "~ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™";
     };
     Text[ chinese_simplified ] = "ε­—δ½“";
-    Text[ russian ] = "Πΰημεπϋ ψπθτςΰ";
+    Text[ russian ] = "Πΰημεπ ψπθτςΰ";
     Text[ polish ] = "Rozmiar czcionek";
     Text[ japanese ] = "γƒ•γ‚©γƒ³γƒγ‚µγ‚¤γ‚Ί";
     Text[ chinese_traditional ] = "ε­—ε‹ε¤§ε°";
@@ -705,7 +705,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ spanish ] = "Fuentes del usuario" ;
         Text [ english_us ] = "Custom fonts" ;
         Text[ greek ] = "Γραμματοσειρές χρήστη";
-        Text[ korean ] = "μ‚¬μ©μ κΈ€κΌ΄";
+        Text[ korean ] = "μ‚¬μ©μ μ •μ κΈ€κΌ΄";
         Text[ turkish ] = "Kullanύcύ yazύtipleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus de lletra d'usuari";
@@ -724,7 +724,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ greek ] = "Μεταβλητές:";
         Text[ dutch ] = "~Variabelen";
         Text[ french ] = "Variables";
-        Text[ spanish ] = "~Predeterminaciones";
+        Text[ spanish ] = "~Variables";
         Text[ finnish ] = "M~uuttujat";
         Text[ italian ] = "~Variabili";
         Text[ danish ] = "~Variabler";
@@ -1024,7 +1024,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ ENGLISH ] = "~Standard" ;
         Text[ chinese_simplified ] = "ζ ‡ε‡†(~D)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
-        Text[ russian ] = "Ρςΰνδΰπς";
+        Text[ russian ] = "Ρξυπΰνθςό";
         Text[ polish ] = "Domylnie";
         Text[ japanese ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
@@ -1038,7 +1038,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padrγo" ;
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per ~defecte";
@@ -1046,7 +1046,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ thai ] = "~ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™";
     };
     Text[ greek ] = "Τύπος γραμματοσειράς";
-    Text[ korean ] = "κΈ€κΌ΄ μ ν•";
+    Text[ korean ] = "κΈ€κΌ΄";
     Text[ turkish ] = "Yazύtipleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipus de lletra";
@@ -1165,7 +1165,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text [ ENGLISH ] = "Scale all Brackets" ;
         Text[ english_us ] = "Scale all brackets";
         Text[ portuguese ] = "Redimensionar parκnteses todos";
-        Text[ russian ] = "Μΰρψςΰαθπξβΰςό βρε ρκξακθ";
+        Text[ russian ] = "~Μΰρψςΰαθπξβΰςό βρε ρκξακθ";
         Text[ dutch ] = "Alle haken op schaal brengen";
         Text[ french ] = "Ajuster toutes les parenthθses";
         Text[ spanish ] = "Dimensionar todos los parιntesis";
@@ -1278,13 +1278,13 @@ ModalDialog RID_DISTANCEDIALOG
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padrγo" ;
         Text[ chinese_simplified ] = "ζ ‡ε‡†(~D)";
-        Text[ russian ] = "Ρςΰνδΰπς";
+        Text[ russian ] = "Οξ σμξλχΰνθώ";
         Text[ polish ] = "Domylnie";
         Text[ japanese ] = "ζ¨™ζΊ–(~D)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per ~defecte";
@@ -1476,7 +1476,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ polish ] = "od pierwiastka";
             Text[ portuguese_brazilian ] = "~Espa?amento de raiz:";
             Text[ japanese ] = "γƒ«γƒΌγƒι–“ι”(~R)";
-            Text[ korean ] = "μκ°„(~R):";
+            Text[ korean ] = "λ£¨νΈ κ°„κ²©(~R)";
             Text[ chinese_simplified ] = "ζ ΉεΌι—΄ι”(~R)";
             Text[ chinese_traditional ] = "ζ ΉεΌι–“ι”(~R)";
             Text[ turkish ] = "Kφk aralύπύ:";
@@ -1539,7 +1539,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ polish ] = "Indeks gσrny";
             Text[ portuguese_brazilian ] = "~Sobrescrito:";
             Text[ japanese ] = "ζ‡ζ•°(~S)";
-            Text[ korean ] = "μ„μ²¨μ(~S):";
+            Text[ korean ] = "μ„μ²¨μ(~S)";
             Text[ chinese_simplified ] = "δΈζ ‡(~S)";
             Text[ chinese_traditional ] = "δΈζ¨™(~S)";
             Text[ turkish ] = "άst simge:";
@@ -1632,7 +1632,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ greek ] = "Αριθμητής:";
             Text[ dutch ] = "~Noemerhoogte";
             Text[ french ] = "Numιrateur";
-            Text[ spanish ] = "Altura del ~numerador";
+            Text[ spanish ] = "~Numerador";
             Text[ finnish ] = "~Osoittaja";
             Text[ italian ] = "Dist. ~numeratore";
             Text[ danish ] = "~Tζllerhψjde";
@@ -1674,7 +1674,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ polish ] = "Mianownik";
             Text[ portuguese_brazilian ] = "~Denominador baixo:";
             Text[ japanese ] = "ε†ζ―(~D)";
-            Text[ korean ] = "λ¶„λª¨(~D):";
+            Text[ korean ] = "λ¶„λª¨(~D)";
             Text[ chinese_simplified ] = "ε†ζ―(~D)";
             Text[ chinese_traditional ] = "ε†ζ―(~D)";
             Text[ turkish ] = "Bφlen aralύπύ:";
@@ -1715,7 +1715,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "ε†ζ•Έη·";
             Text[ arabic ] = "ΤΡΨΙ ΗαίΣΡ";
             Text[ greek ] = "Γραμμές κλάσματος";
-            Text[ korean ] = "λ¶„μ μ¤„";
+            Text[ korean ] = "λ¶„μ ν‘μ‹μ¤„";
             Text[ turkish ] = "Kesir ηizgisi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de fraccions";
@@ -1775,7 +1775,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ polish ] = "Gruboζ linii";
             Text[ portuguese_brazilian ] = "~Largura da linha:";
             Text[ japanese ] = "η·γ®ε¤ªγ•(~W)";
-            Text[ korean ] = "μ¤„μ λ‘κ»(~W):";
+            Text[ korean ] = "μ„  κµµκΈ°(~W)";
             Text[ chinese_simplified ] = "ε’ηΊΏη²—(~W)";
             Text[ chinese_traditional ] = "η·η²—(~W)";
             Text[ turkish ] = "Ηizgi kalύnlύπύ:";
@@ -1932,7 +1932,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ greek ] = "Υπ~ερβάλλον μέγεθος (αριστερά/δεξιά):";
             Text[ dutch ] = "~links/rechts extra groot:";
             Text[ french ] = "Dιpassement latιral";
-            Text[ spanish ] = "~Sobredimensiσn izq./der.";
+            Text[ spanish ] = "~Tamaρo lateral excesivo ";
             Text[ finnish ] = "~Lisδkoko (vaakasuunnassa)";
             Text[ italian ] = "Sovradim. (sin./des.)";
             Text[ danish ] = "~venstre/hψjre overstψrrelse";
@@ -1962,7 +1962,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text [ ENGLISH ] = "~Distance:" ;
             Text[ english_us ] = "~Spacing";
             Text[ portuguese ] = "~Espaηamento";
-            Text[ russian ] = "Θνςεπβΰλ";
+            Text[ russian ] = "~Θνςεπβΰλ";
             Text[ greek ] = "~Απόσταση:";
             Text[ dutch ] = "~Afstand";
             Text[ french ] = "Ιcart";
@@ -1996,11 +1996,11 @@ ModalDialog RID_DISTANCEDIALOG
             Text [ ENGLISH ] = "~Excess size" ;
             Text[ english_us ] = "~Excess size";
             Text[ portuguese ] = "~Tamanho excessivo";
-            Text[ russian ] = "~Βϋρςσο";
+            Text[ russian ] = "Β~ϋρςσο";
             Text[ greek ] = "Υπ~ερβάλλον μέγεθος:";
             Text[ dutch ] = "~Extra groot";
             Text[ french ] = "Dιpassement";
-            Text[ spanish ] = "~Sobredimensiσn";
+            Text[ spanish ] = "~Tamaρo excesivo";
             Text[ finnish ] = "~Viivan lisδpituus";
             Text[ italian ] = "Sovradimensionato";
             Text[ danish ] = "~Overstψrrelse";
@@ -2265,7 +2265,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ greek ] = "Υπ~ερβάλλον μέγεθος:";
             Text[ dutch ] = "~Extra groot";
             Text[ french ] = "Dιpassement";
-            Text[ spanish ] = "~Sobredimensiσn";
+            Text[ spanish ] = "~Tamaρo excesivo";
             Text[ finnish ] = "~Lisδkoko";
             Text[ italian ] = "~Sovradimensionato";
             Text[ danish ] = "~Overstψrrelse";
@@ -2337,7 +2337,7 @@ ModalDialog RID_DISTANCEDIALOG
             TEXT[ french ] = "Marges";
             TEXT[ swedish ] = "Marginaler";
             TEXT[ dutch ] = "Marges";
-            TEXT[ spanish ] = "Mαrgenes";
+            TEXT[ spanish ] = "Bordes";
             TEXT[ english_us ] = "Borders";
             TEXT[ chinese_simplified ] = "θΎΉθ·";
             TEXT[ russian ] = "Οξλÿ";
@@ -2346,7 +2346,7 @@ ModalDialog RID_DISTANCEDIALOG
             TEXT[ chinese_traditional ] = "ι‚θ·";
             TEXT[ arabic ] = "ΗαεζΗγΤ";
             TEXT[ greek ] = "Περιγράμματα";
-            TEXT[ korean ] = "ν…λ‘λ¦¬";
+            TEXT[ korean ] = "μ—¬λ°±";
             TEXT[ turkish ] = "Kenarlar";
             TEXT[ language_user1 ] = " ";
             TEXT[ catalan ] = "Vores";
@@ -2677,13 +2677,13 @@ ModalDialog RID_ALIGNDIALOG
         Text [ portuguese ] = "~Padrγo" ;
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text[ chinese_simplified ] = "ζ ‡ε‡†(~D)";
-        Text[ russian ] = "Ρςΰνδΰπς";
+        Text[ russian ] = "Οξ σμξλχΰνθώ";
         Text[ polish ] = "Domylnie";
         Text[ japanese ] = "ζ¨™ζΊ–(~D)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per ~defecte";
@@ -2902,7 +2902,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "εδ»¶ε¤§ε°(~R)";
         Text[ arabic ] = "ΗαΝΜγ ΗαΓΥαν";
         Text[ greek ] = "Αρχικό μέγεθ~ος";
-        Text[ korean ] = "μ›λλ€λ΅(~R)";
+        Text[ korean ] = "μ›λ ν¬κΈ°(~R)";
         Text[ turkish ] = "Gerηek boyut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mida o~riginal";
@@ -2924,7 +2924,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ french ] = "~Adapter ΰ la page" ;
         Text [ swedish ] = "Anpassa ~sida" ;
         Text [ dutch ] = "~Pagina aanpassen" ;
-        Text [ spanish ] = "Ajustar ~pαgina" ;
+        Text [ spanish ] = "~Ajustar a la pαgina" ;
         Text [ english_us ] = "Fit to ~page" ;
         Text[ chinese_simplified ] = "ε―ΉεΊ”ι΅µιΆ(~P)";
         Text[ russian ] = "Οξ πΰημεπσ ρςπΰνθφϋ";
@@ -2964,7 +2964,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "ι΅―η¤Ίζ―”δΎ‹(~S)";
         Text[ arabic ] = "ΚΟΡνΜ";
         Text[ greek ] = "~Κλίμακα";
-        Text[ korean ] = "ν™•λ€(~S)";
+        Text[ korean ] = "λ°°μ¨(~S)";
         Text[ turkish ] = "Φlηeklendirme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Redimen~sionament";
@@ -3145,7 +3145,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ chinese_traditional ] = "δΈζ";
         Text[ arabic ] = "ΫνΡ γΪΡζέ";
         Text[ greek ] = "Άγνωστο";
-        Text[ korean ] = "μ•λ ¤μ Έ μμ§€ μ•μ";
+        Text[ korean ] = "μ• μ μ—†μ";
         Text[ turkish ] = "Bilinmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desconegut";
@@ -3180,7 +3180,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ chinese_traditional ] = "ζ΅η”¨(~I)";
         Text[ arabic ] = "ΕΟΡΗΜ";
         Text[ greek ] = "Εφαρμογή";
-        Text[ korean ] = "μ μ©(~I)";
+        Text[ korean ] = "μ‚½μ…(~I)";
         Text[ turkish ] = "Kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Insereix";
@@ -3396,7 +3396,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ polish ] = "Symbol";
         Text[ portuguese_brazilian ] = "~Symbol:";
         Text[ japanese ] = "θ¨ε·(~S)";
-        Text[ korean ] = "κΈ°νΈ(~S):";
+        Text[ korean ] = "κΈ°νΈ(~S)";
         Text[ chinese_simplified ] = "ε›Ύζ ‡(~S)";
         Text[ chinese_traditional ] = "ε–η¤Ί(~S)";
         Text[ turkish ] = "Simge:";
@@ -3470,7 +3470,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "~Fonte:";
         Text[ japanese ] = "γƒ•γ‚©γƒ³γƒ(~F)";
-        Text[ korean ] = "κΈ€κΌ΄(~F):";
+        Text[ korean ] = "κΈ€κΌ΄(~F)";
         Text[ chinese_simplified ] = "ε­—δ½“(~F)";
         Text[ chinese_traditional ] = "ε­—ε‹(~F)";
         Text[ turkish ] = "Yazύtipi:";
@@ -3507,7 +3507,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ polish ] = "~Obszar";
         Text[ portuguese_brazilian ] = "~Subset";
         Text[ japanese ] = "η¨®ι΅(~S)";
-        Text[ korean ] = "μμ—­(~S)";
+        Text[ korean ] = "μΆ…λ¥(~S)";
         Text[ chinese_simplified ] = "ε­ι›†(~S)";
         Text[ chinese_traditional ] = "ε­ι›†(~S)";
         Text[ turkish ] = "~Subset";
@@ -3546,7 +3546,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ polish ] = "Styl";
         Text[ portuguese_brazilian ] = "Schriftschni~tt:";
         Text[ japanese ] = "γƒ•γ‚©γƒ³γƒγ®γ‚Ήγ‚Ώγ‚¤γƒ«(~T)";
-        Text[ korean ] = "μ ν•(~T):";
+        Text[ korean ] = "μ ν•(~T)";
         Text[ chinese_simplified ] = "ε­—δ½“ε½Άη¶(~T)";
         Text[ chinese_traditional ] = "ε­—ε‹ε½Άη‹€(~T)";
         Text[ turkish ] = "Yazύtipi varyantύ:";
@@ -3666,7 +3666,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ spanish ] = "Modificar" ;
         Text [ english_us ] = "~Modify" ;
         Text[ greek ] = "Τροποποίηση";
-        Text[ korean ] = "μμ •(~M)";
+        Text[ korean ] = "λ³€κ²½(~M)";
         Text[ turkish ] = "Deπiώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica";
@@ -3694,7 +3694,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         Text[ greek ] = "Διαγραφή";
         Text[ korean ] = "μ‚­μ (~D)";
@@ -3767,13 +3767,13 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message [ spanish ] = "ΏDesea guardar los cambios como predeterminados?\n\nEstos cambios tendrαn efecto en todas las nuevas fσrmulas." ;
     Message [ english_us ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
     Message[ chinese_simplified ] = "θ¦ε°†ζ›΄ζ”Ήε†…ε®Ήδ½δΈΊζ ‡ε‡†ζ ΌεΌε­η›οΌ\n\nθΏ™δΈªζ›΄ζ”ΉδΌε½±ε“ζ‰€ζ‰ζ–°ε…¬εΌγ€‚";
-    Message[ russian ] = "Ρξυπΰνθςό θημενενθÿ κΰκ ρςΰνδΰπςνϋε ?\n\nΘημενενθÿ ασδσς οπθμενενϋ κξ βρεμ νξβϋμ τξπμσλΰμ.";
+    Message[ russian ] = "Ρξυπΰνθςό νΰρςπξικθ κΰκ ηνΰχενθÿ οξ σμξλχΰνθώ?\n\nΝΰρςπξικθ ασδσς οπθμενενϋ κξ βρεμ νξβϋμ τξπμσλΰμ.";
     Message[ polish ] = "Czy zapisaζ zmiany jako domylne?\n\nZmiany te majΉ wp³yw na wszystkie nowe formu³y.";
     Message[ japanese ] = "γ“γ®ε¤‰ζ›΄γ‚’ζ¨™ζΊ–γ¨γ—γ¦δΏε­γ—γΎγ™γ‹γ€‚\n\nγ“γ®ε¤‰ζ›΄γ―γ™γΉγ¦γ®ζ–°γ—γ„ζ•°εΌγ«ε½±ιΏγ—γΎγ™γ€‚";
     Message[ chinese_traditional ] = "θ¦ε°‡θ®ζ›΄η•¶δ½ζ¨™ζΊ–ζ ΌεΌε„²ε­οΌ\n\nι€™ε€‹θ®ζ›΄ζƒε½±ιΏζ‰€ζ‰η„ζ–°ε…¬εΌγ€‚";
     Message[ arabic ] = "εα ΚΡνΟ ΝέΩ ΗαΚΫννΡΗΚ ίΗέΚΡΗΦνΏ\n\nΣζέ νίζδ αεΠε ΗαΚΫννΡΗΚ ΓΛΡΗπ Ϊαμ ία ΗαΥνΫ ΗαΜΟνΟΙ.";
     Message[ greek ] = "Να αποθηκευτούν οι αλλαγές ως προεπιλογή;\n\nΟι αλλαγές αυτές θα έχουν επίδραση σε όλους τους νέους τύπους.";
-    Message[ korean ] = "λ³€κ²½ μ‚¬ν•­μ„ κΈ°λ³ΈμΌλ΅ μ €μ¥ν•κ² μµλ‹κΉ?\n\nμ΄ λ³€κ²½ μ‚¬ν•­λ“¤μ€ λª¨λ“  μƒ μμ‹μ— μν–¥μ„ λ―ΈμΉ©λ‹λ‹¤.";
+    Message[ korean ] = "λ³€κ²½ λ‚΄μ©μ„ κΈ°λ³Έκ°’μΌλ΅ μ €μ¥ν•μ‹κ² μµλ‹κΉ?\n\nμ΄ λ³€κ²½ λ‚΄μ©μ€ λª¨λ“  μƒ μμ‹μ— μν–¥μ„ λ―ΈμΉ©λ‹λ‹¤.";
     Message[ turkish ] = "Deπiώiklikler standart deπerler olarak kaydedilsin mi?\n\nBu deπiώiklikler tόm yeni formόlleri etkileyecektir.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Voleu desar aquests canvis com a predeterminats?\n\nAquests canvis tindran efecte en totes les noves fσrmules.";
@@ -3802,7 +3802,7 @@ String RID_FONTREGULAR
     Text[ chinese_traditional ] = "ζ¨™ζΊ–";
     Text[ arabic ] = "ΪΗΟν ,";
     Text[ greek ] = ", Κανονικά";
-    Text[ korean ] = ", λ³΄ν†µ";
+    Text[ korean ] = "ν‘μ¤€";
     Text[ turkish ] = ", standart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ", Estΰndard";
@@ -3858,7 +3858,7 @@ String RID_FONTBOLD
     Text[ chinese_traditional ] = "η²—ι«”";
     Text[ arabic ] = "ΪΡνΦ";
     Text[ greek ] = ";Έντονο";
-    Text[ korean ] = ", κµµκ²";
+    Text[ korean ] = "κµµκ²";
     Text[ turkish ] = ", kalύn";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ", negreta";
@@ -3907,7 +3907,7 @@ Menu RID_VIEWMENU
             Text [ french ] = "Zoom ~50 %" ;
             Text [ swedish ] = "Visa ~50%" ;
             Text [ dutch ] = "Zoomwaarde ~50%" ;
-            Text [ spanish ] = "Zoom ~50%" ;
+            Text [ spanish ] = "Escala ~50%" ;
             Text [ english_us ] = "~View 50%" ;
             Text[ chinese_simplified ] = "θ§†ε›Ύ 50%(~V)";
             Text[ russian ] = "Βθδ ~50%";
@@ -3916,7 +3916,7 @@ Menu RID_VIEWMENU
             Text[ chinese_traditional ] = "ζªΆθ¦– 50%(~V)";
             Text[ arabic ] = "%ΪΡΦ 50";
             Text[ greek ] = "Μεγέθυνση ~50%";
-            Text[ korean ] = "λ³΄κΈ° 50%(~V)";
+            Text[ korean ] = "50% λ°°μ¨λ΅ λ³΄κΈ°(~V)";
             Text[ turkish ] = "Gφrόnόm %~50";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Zoom ~50%";
@@ -3937,7 +3937,7 @@ Menu RID_VIEWMENU
             Text [ french ] = "Zoom ~100 %" ;
             Text [ swedish ] = "Visa ~100%" ;
             Text [ dutch ] = "Zoomwaarde ~100%" ;
-            Text [ spanish ] = "Zoom ~100%" ;
+            Text [ spanish ] = "Escala ~100%" ;
             Text [ english_us ] = "View ~100%" ;
             Text[ chinese_simplified ] = "θ§†ε›Ύ 100%";
             Text[ russian ] = "Βθδ ~100%";
@@ -3946,7 +3946,7 @@ Menu RID_VIEWMENU
             Text[ chinese_traditional ] = "ζªΆθ¦– 100%";
             Text[ arabic ] = "%ΪΡΦ 100";
             Text[ greek ] = "Μεγέθυνση ~100%";
-            Text[ korean ] = "100%λ΅ λ³΄κΈ°";
+            Text[ korean ] = "100% λ°°μ¨λ΅ λ³΄κΈ°";
             Text[ turkish ] = "Gφrόnόm %~100";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Zoom ~100%";
@@ -3967,7 +3967,7 @@ Menu RID_VIEWMENU
             Text [ french ] = "Zoom ~200 %" ;
             Text [ swedish ] = "Visa ~200%" ;
             Text [ dutch ] = "Zoomwaarde ~200%" ;
-            Text [ spanish ] = "Zoom ~200%" ;
+            Text [ spanish ] = "Escala ~200%" ;
             Text [ english_us ] = "View ~200%" ;
             Text[ chinese_simplified ] = "θ§†ε›Ύ 200%";
             Text[ russian ] = "Βθδ ~200%";
@@ -3976,7 +3976,7 @@ Menu RID_VIEWMENU
             Text[ chinese_traditional ] = "ζªΆθ¦– 200%";
             Text[ arabic ] = "%ΪΡΦ 200";
             Text[ greek ] = "Μεγέθυνση ~200%";
-            Text[ korean ] = "200%λ΅ λ³΄κΈ°";
+            Text[ korean ] = "200% λ°°μ¨λ΅ λ³΄κΈ°";
             Text[ turkish ] = "Gφrόnόm %~200";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Zoom ~200%";
@@ -4136,7 +4136,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_traditional ] = "ι–“ι”";
             Text[ arabic ] = "ΚΘΗΪΟ";
             Text[ greek ] = "Aποστάσεις";
-            Text[ korean ] = "μΉΈ λ„μ°κΈ°";
+            Text[ korean ] = "κ°„κ²©";
             Text[ turkish ] = "Aralύklar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Espacios";
@@ -4221,7 +4221,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_traditional ] = "ε†ζ•Έη·";
             Text[ arabic ] = "ΤΡΨΙ ΗαίΣΡ";
             Text[ greek ] = "Γραμμές κλάσματος";
-            Text[ korean ] = "λ¶„μ ν‘μ‹μ¤„";
+            Text[ korean ] = "λ¶„μμ„ ";
             Text[ turkish ] = "Kesir ηizgisi";
             Text[ catalan ] = "Barres de fraccions";
             Text[ thai ] = "ΰΈ‚ΰΈµΰΈ”ΰΉ€ΰΈ¨ΰΈ©ΰΈªΰΉΰΈ§ΰΈ™";
@@ -4334,7 +4334,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_traditional ] = "θ£ι£Ύιƒ¨ε†";
             Text[ arabic ] = "ΡγζÒ";
             Text[ greek ] = "Διακόσμηση";
-            Text[ korean ] = "κΈ°νΈ";
+            Text[ korean ] = "μ¥μ‹ κΈ°νΈ";
             Text[ turkish ] = "Simgeler";
             Text[ catalan ] = "Ornaments";
             Text[ thai ] = "ΰΈªΰΈ±ΰΈΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΉ";
@@ -4379,16 +4379,16 @@ Menu RID_DISTANCEMENU
             TEXT[ french ] = "Marges";
             TEXT[ swedish ] = "Marginaler";
             TEXT[ dutch ] = "Marges";
-            TEXT[ spanish ] = "Mαrgenes";
+            TEXT[ spanish ] = "Bordes";
             TEXT[ english_us ] = "Borders";
     TEXT[ chinese_simplified ] = "θΎΉθ·";
             TEXT[ russian ] = "Οξλÿ";
             TEXT[ polish ] = "Marginesy";
-            TEXT[ japanese ] = "δ½™η™½";
-            TEXT[ chinese_traditional ] = "ι‚θ·";
+            TEXT[ japanese ] = "ζ η·";
+            TEXT[ chinese_traditional ] = "ι‚ζ΅†";
             TEXT[ arabic ] = "ΓΨΡΗέ";
             TEXT[ greek ] = "Περιγράμματα";
-            TEXT[ korean ] = "μ™Έκ³½μ„ ";
+            TEXT[ korean ] = "μ—¬λ°±";
             TEXT[ turkish ] = "Kenarlar";
             TEXT[ catalan ] = "Mαrgenes";
             TEXT[ finnish ] = "Reunat";
@@ -4415,7 +4415,7 @@ Menu RID_FONTMENU
             Text [ french ] = "Variables" ;
             Text [ swedish ] = "Variabler" ;
             Text [ dutch ] = "Variabelen" ;
-            Text [ spanish ] = "Predeterminaciones" ;
+            Text [ spanish ] = "Variables" ;
             Text [ english_us ] = "Variables" ;
             Text[ chinese_simplified ] = "ει‡";
             Text[ russian ] = "Οεπεμεννϋε";
@@ -4538,7 +4538,7 @@ Menu RID_FONTMENU
             Text[ chinese_traditional ] = "Serif";
             Text[ arabic ] = "Serif";
             Text[ greek ] = "Serif";
-            Text[ korean ] = "μ„Έλ¦¬ν”„";
+            Text[ korean ] = "Serif";
             Text[ turkish ] = "Serif";
             Text[ catalan ] = "Serif";
             Text[ thai ] = "Serif";
@@ -4566,7 +4566,7 @@ Menu RID_FONTMENU
             Text[ chinese_traditional ] = "Sans";
             Text[ arabic ] = "Sans";
             Text[ greek ] = "Sans";
-            Text[ korean ] = "μ‚°";
+            Text[ korean ] = "Sans";
             Text[ turkish ] = "Sans";
             Text[ catalan ] = "Sans";
             Text[ thai ] = "Sans";
@@ -4594,7 +4594,7 @@ Menu RID_FONTMENU
             Text[ chinese_traditional ] = "ε›Ίε®η„";
             Text[ arabic ] = "ΛΗΘΚ";
             Text[ greek ] = "Σταθερά";
-            Text[ korean ] = "κ³ μ •λ¨";
+            Text[ korean ] = "κ³ μ •";
             Text[ turkish ] = "Sabit";
             Text[ catalan ] = "Fix";
             Text[ thai ] = "ΰΈ„ΰΈ‡ΰΈ—ΰΈµΰΉ";
@@ -4787,7 +4787,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "additions +" ;
                 Text [ italian ] = "Addizione +" ;
                 Text [ spanish ] = "+ de suma" ;
-                Text [ french ] = "+ d'addition" ;
+                Text [ french ] = "Addition (+)" ;
                 Text [ dutch ] = "Optellen +" ;
                 Text [ portuguese ] = "Adiηγo +" ;
                 Text[ chinese_simplified ] = "ε ζ³• +";
@@ -4815,7 +4815,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Multiplikation (punkt)" ;
                 Text [ danish ] = "multiplikation (punkt)" ;
                 Text [ italian ] = "Moltiplicazione (punto)" ;
-                Text [ spanish ] = "Multiplicaciσn (Punto)" ;
+                Text [ spanish ] = "Multiplicaciσn (punto)" ;
                 Text [ french ] = "Multiplication (point)" ;
                 Text [ dutch ] = "Vermenigvuldigen (punt)" ;
                 Text [ portuguese ] = "Multiplicaηγo (ponto)" ;
@@ -4936,7 +4936,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "subtraktions -" ;
                 Text [ italian ] = "Sottrazione -" ;
                 Text [ spanish ] = "Restas -" ;
-                Text [ french ] = "- de soustraction" ;
+                Text [ french ] = "Soustraction (-)" ;
                 Text [ dutch ] = "Aftrekken (-)" ;
                 Text [ portuguese ] = "Subtracηγo -" ;
                 Text[ chinese_simplified ] = "ε‡ζ³• -";
@@ -5004,7 +5004,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ι™¤ζ³•(δΈ€θ΅ι›™ι»)";
                 Text[ arabic ] = "(χ) ήΣγΙ";
                 Text[ greek ] = "Division (Έ)";
-                Text[ korean ] = "λ‚λ—μ… ";
+                Text[ korean ] = "λ‚λ—μ… (λ‚λ—μ… κΈ°νΈ)";
                 Text[ turkish ] = "Bφlme (χ)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Divisiσ (dos punts-ratlla)";
@@ -5033,7 +5033,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ι™¤ζ³•(ζ–η·)";
                 Text[ arabic ] = "(/) ήΣγΙ";
                 Text[ greek ] = "Διαίρεση (Κάθετος)";
-                Text[ korean ] = "λ‚λ—μ… (/)";
+                Text[ korean ] = "λ‚λ—μ… (/ κΈ°νΈ)";
                 Text[ turkish ] = "Bφlme (/)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Divisiσ (barra obliqua)";
@@ -5137,7 +5137,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "η›Έη­‰";
                 Text[ arabic ] = "νΣΗζν";
                 Text[ greek ] = "είναι ίσο";
-                Text[ korean ] = "λ“±κ°€μ…λ‹λ‹¤";
+                Text[ korean ] = "κ°™μ";
                 Text[ turkish ] = "Eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs igual";
@@ -5166,7 +5166,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δΈη­‰ζ–Ό";
                 Text[ arabic ] = "αΗ νΣΗζν";
                 Text[ greek ] = "είναι διάφορο";
-                Text[ korean ] = "κ°™μ§€ μ•λ‹¤.";
+                Text[ korean ] = "κ°™μ§€ μ•μ";
                 Text[ turkish ] = "Eώit deπil";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "no ιs igual";
@@ -5195,7 +5195,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "θΏ‘δΌΌη­‰ζ–Ό";
                 Text[ arabic ] = "νΣΗζν ΚήΡνΘΗπ";
                 Text[ greek ] = "είναι κατά προσέγγιση ίσο";
-                Text[ korean ] = "κ±°μ κ°™λ‹¤";
+                Text[ korean ] = "κ±°μ κ°™μ";
                 Text[ turkish ] = "Yaklaώύk olarak eώit";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs aprox. igual";
@@ -5345,7 +5345,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "η›ΈδΌΌζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "γΤΗΘε Γζ γΣΗζν";
                 Text[ greek ] = "είναι όμοιο ή ίσο με";
-                Text[ korean ] = "μ μ‚¬ν•κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "μ μ‚¬ν•κ±°λ‚ κ°™μ";
                 Text[ turkish ] = "Benzer ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs semblant o igual";
@@ -5374,7 +5374,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "εΉ³θ΅ζ–Ό";
                 Text[ arabic ] = "γΚζΗÒν γΪ";
                 Text[ greek ] = "είναι παράλληλο προς";
-                Text[ korean ] = "μ— ν‰ν–‰μΌλ΅";
+                Text[ korean ] = "ν‰ν–‰";
                 Text[ turkish ] = "Paraleldir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs paral.lel a";
@@ -5403,7 +5403,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "η›΄θ§’ζ–Ό";
                 Text[ arabic ] = "γΚΪΗγΟ Ϊαμ";
                 Text[ greek ] = "σχηματίζει ορθή γωνία με";
-                Text[ korean ] = "μ— μ§κ°μΌλ΅";
+                Text[ korean ] = "μ§κ°";
                 Text[ turkish ] = "dikgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs ortogonal a";
@@ -5466,7 +5466,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε¤§ζ–Όζ–ε¤§ζ–Ό";
                 Text[ arabic ] = "ΓίΘΡ γδ Γζ νΣΗζν (γΗΖα)";
                 Text[ greek ] = "είναι μεγαλύτερο ή ίσο με (λοξά)";
-                Text[ korean ] = "ν¬κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "ν¬κ±°λ‚ κ°™μ";
                 Text[ turkish ] = "Bόyόktόr ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs major que o igual a (obliquo)";
@@ -5495,7 +5495,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "η›ΈδΌΌζ–Ό";
                 Text[ arabic ] = "γΤΗΘε α";
                 Text[ greek ] = "είναι όμοιο με";
-                Text[ korean ] = "μ— μ μ‚¬";
+                Text[ korean ] = "μ μ‚¬";
                 Text[ turkish ] = "Benzerdir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs semblant a";
@@ -5524,7 +5524,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε…¨η­‰ζ–Ό";
                 Text[ arabic ] = "γΡΗΟέ α";
                 Text[ greek ] = "είναι ισοδύναμο με";
-                Text[ korean ] = "μ— ν•©λ™";
+                Text[ korean ] = "ν•©λ™";
                 Text[ turkish ] = "Φrtόώόr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs congruent amb";
@@ -5590,7 +5590,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε¤§ζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "ΓίΘΡ γδ Γζ νΣΗζν";
                 Text[ greek ] = "είναι μεγαλύτερο ή ίσο με";
-                Text[ korean ] = "ν¬κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "ν¬κ±°λ‚ κ°™μ";
                 Text[ turkish ] = "Bόyόk ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs mayor que o igual a";
@@ -5619,7 +5619,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ζζ―”δΎ‹ζ–Ό";
                 Text[ arabic ] = "γΚδΗΣΘ γΪ";
                 Text[ greek ] = "είναι ανάλογο προς";
-                Text[ korean ] = "μ— λΉ„λ΅€";
+                Text[ korean ] = "λΉ„λ΅€";
                 Text[ turkish ] = "Orantύlύdύr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ιs proporcional a";
@@ -5648,7 +5648,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ζ¥θΏ‘";
                 Text[ arabic ] = "ΘΗΚΜΗε";
                 Text[ greek ] = "τείνει προς";
-                Text[ korean ] = "μ§„ν–‰ λ°©ν–¥";
+                Text[ korean ] = "μ ‘κ·Ό";
                 Text[ turkish ] = "Yφnό";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cap a";
@@ -5685,7 +5685,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "ε·¦ε‘ι›™η®­ι ­";
                 TEXT[ arabic ] = "Σεγ γÒΟζΜ Εαμ ΗανΣΗΡ";
                 TEXT[ greek ] = "Διπλό βέλος προς τα αριστερά";
-                TEXT[ korean ] = "2μ¤‘ ν™”μ‚΄ν‘, μ™Όμª½μΌλ΅";
+                TEXT[ korean ] = "μ΄μ¤‘ ν™”μ‚΄ν‘ μ™Όμª½μΌλ΅";
                 TEXT[ turkish ] = "Sola ηift ok";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Fletxa doble esquerra";
@@ -5714,7 +5714,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "ε·¦ε³ε‘ι›™η®­ι ­";
                 TEXT[ arabic ] = "Σεγ γÒΟζΜ Εαμ ΗανΣΗΡ ζΗανγνδ";
                 TEXT[ greek ] = "Διπλό βέλος προς τα αριστερά και δεξιά";
-                TEXT[ korean ] = "2μ¤‘ ν™”μ‚΄ν‘ μ™Όμª½κ³Ό μ¤λ¥Έμª½μΌλ΅";
+                TEXT[ korean ] = "2μ¤‘ ν™”μ‚΄ν‘λ¥Ό μ™Όμª½κ³Ό μ¤λ¥Έμª½μΌλ΅";
                 TEXT[ turkish ] = "Sola ve saπa ηift ok";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Fletxa doble esquerra i dreta";
@@ -5743,7 +5743,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "ε³ε‘ι›™η®­ι ­";
                 TEXT[ arabic ] = "Σεγ γÒΟζΜ Εαμ Ηανγνδ";
                 TEXT[ greek ] = "Διπλό βέλος προς τα δεξιά";
-                TEXT[ korean ] = "2μ¤‘ ν™”μ‚΄ν‘ μ¤λ¥Έμª½μΌλ΅";
+                TEXT[ korean ] = "μ΄μ¤‘ ν™”μ‚΄ν‘ μ¤λ¥Έμª½μΌλ΅";
                 TEXT[ turkish ] = "Saπa ηift ok";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Fletxa doble dreta";
@@ -5803,7 +5803,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "finns inte i" ;
                 Text [ danish ] = "tihψrer ikke" ;
                 Text [ italian ] = "Non compreso in" ;
-                Text [ spanish ] = "no contenido en" ;
+                Text [ spanish ] = "no estα contenido en" ;
                 Text [ french ] = "N'est pas inclus dans" ;
                 Text [ dutch ] = "is niet in" ;
                 Text [ portuguese ] = "nγo contido em" ;
@@ -5898,7 +5898,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Genomsnitt" ;
                 Text [ danish ] = "fζllesmζngde" ;
                 Text [ italian ] = "Intersezione" ;
-                Text [ spanish ] = "Promedio" ;
+                Text [ spanish ] = "Intersecciσn" ;
                 Text [ french ] = "Intersection" ;
                 Text [ dutch ] = "Gemiddelde" ;
                 Text [ portuguese ] = "Mιdia" ;
@@ -6182,7 +6182,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ιε­ι›†";
                 Text[ arabic ] = "ανΣ γΜγζΪΙ ΜÒΖνΙ";
                 Text[ greek ] = "όχι υποσύνολο";
-                Text[ korean ] = "λ¶€λ¶„μ§‘ν•©μ΄ μ•„λ‹λ‹¤.";
+                Text[ korean ] = "λ¶€λ¶„μ§‘ν•© μ•„λ‹";
                 Text[ turkish ] = "Alt kόmesi deπil";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunt no parcial";
@@ -6240,7 +6240,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δΈζ―ε…¨ι›†";
                 Text[ arabic ] = "ανΣΚ γΜγζΪΙ ΪΗανΙ";
                 Text[ greek ] = "Όχι υπερσύνολο";
-                Text[ korean ] = "μ΄μ§‘ν•©μ΄ μ•„λ‹λ‹¤";
+                Text[ korean ] = "μ΄μ§‘ν•© μ•„λ‹";
                 Text[ turkish ] = "άst kόmesi deπil";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunt no superior";
@@ -6581,7 +6581,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "δΉε†ª";
                 TEXT[ arabic ] = "ΗαήζΙ";
                 TEXT[ greek ] = "Δύναμη";
-                TEXT[ korean ] = "κ±°λ“­μ κ³±";
+                TEXT[ korean ] = "μ§€μ";
                 TEXT[ turkish ] = "άs";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Potθncia";
@@ -6752,7 +6752,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Arcussinus" ;
                 Text [ danish ] = "arcus sinus" ;
                 Text [ italian ] = "Arcoseno" ;
-                Text [ spanish ] = "Seno de arco" ;
+                Text [ spanish ] = "Arcoseno" ;
                 Text [ french ] = "Arc sinus" ;
                 Text [ dutch ] = "Boogsinus" ;
                 Text [ portuguese ] = "Arcoseno" ;
@@ -6763,7 +6763,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "εζ­£εΌ¦";
                 Text[ arabic ] = "γήΗΘα ΗαΜνΘ";
                 Text[ greek ] = "Τόξο ημιτόνου";
-                Text[ korean ] = "μ•„ν¬ μ‚¬μΈ";
+                Text[ korean ] = "μ•„ν¬μ‚¬μΈ";
                 Text[ turkish ] = "Arksinόs";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Arcsinus";
@@ -6781,7 +6781,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Arcuscosinus" ;
                 Text [ danish ] = "arcus cosinus" ;
                 Text [ italian ] = "Arcocoseno" ;
-                Text [ spanish ] = "Coseno de arco" ;
+                Text [ spanish ] = "Arcocoseno" ;
                 Text [ french ] = "Arc cosinus" ;
                 Text [ dutch ] = "Boogcosinus" ;
                 Text [ portuguese ] = "Arco-coseno" ;
@@ -6879,7 +6879,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "n ζ¬΅ζ Ή";
                 Text[ arabic ] = "ΜΠΡ γΗ    (n-th Root)";
                 Text[ greek ] = "n-οστή ρίζα";
-                Text[ korean ] = "nμ°¨ κ·Ό";
+                Text[ korean ] = "nκ°μ κ·Ό";
                 Text[ turkish ] = "Kφk n";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Arrel n";
@@ -7061,7 +7061,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ει›™ζ›²ζ­£εΌ¦";
                 Text[ arabic ] = "ΜνΘ ΗαÒΗζνΙ αήΨΪ ÒΗΖΟ αγδΨήΙ";
                 Text[ greek ] = "Αντίστροφο υπερβολικό ημίτονο";
-                Text[ korean ] = "λ©΄μ  μκ³΅μ„  μ‚¬μΈ";
+                Text[ korean ] = "μκ³΅μ„  μ‚¬μΈ";
                 Text[ turkish ] = "Alan hiperbolik sinόs";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sinus hiperbςlic d'ΰrea";
@@ -7090,7 +7090,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ι¤εΌ¦ι›™ζ›²ιΆ";
                 Text[ arabic ] = "ΜνΘ ΗαΚγΗγ αήΨΪ ÒΗΖΟ αγδΨήΙ";
                 Text[ greek ] = "Αντίστροφο υπερβολικό συνημίτονο";
-                Text[ korean ] = "λ©΄μ  μκ³΅μ„  μ½”μ‚¬μΈ";
+                Text[ korean ] = "μκ³΅μ„  μ½”μ‚¬μΈ";
                 Text[ turkish ] = "Alan hiperbolik kosinόs";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cosinus hiperbςlic d'ΰrea";
@@ -7119,7 +7119,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ζ­£ε‡ι›™ζ›²ιΆ";
                 Text[ arabic ] = "Ωα ΗαÒΗζνΙ αήΨΪ ÒΗΖΟ αγδΨήΙ";
                 Text[ greek ] = "Αντίστροφη υπερβολική εφαπτομένη";
-                Text[ korean ] = "λ©΄μ μκ³΅μ„  νƒ„μ  νΈ";
+                Text[ korean ] = "μκ³΅μ„  νƒ„μ  νΈ";
                 Text[ turkish ] = "Alan hiperbolik tanjant";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tangent hiperbςlica d'ΰrea";
@@ -7148,7 +7148,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δ½™ε‡ι›™ζ›²ιΆ";
                 Text[ arabic ] = "Ωα ΗαΚγΗγ αήΨΪ ÒΗΖΟ αγδΨήΙ";
                 Text[ greek ] = "Αντίστροφη υπερβολική συνεφαπτομένη";
-                Text[ korean ] = "λ©΄μ μκ³΅μ„  μ½”νƒ„μ  νΈ";
+                Text[ korean ] = "μκ³΅μ„  μ½”νƒ„μ  νΈ";
                 Text[ turkish ] = "Alan hiperbolik kotanjant";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cotangent hiperbςlica d'ΰrea";
@@ -7426,7 +7426,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δΈ‰ι‡η©ε†";
                 Text[ arabic ] = "ΚίΗγα ΛαΗΛν";
                 Text[ greek ] = "Τριπλό ολοκλήρωμα";
-                Text[ korean ] = "3μ¤‘ μ λ¶„";
+                Text[ korean ] = "μ‚Όμ¤‘ μ λ¶„";
                 Text[ turkish ] = "άηlό integral";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral triple";
@@ -7510,7 +7510,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Dubbel kurvintegral" ;
                 Text [ danish ] = "dobbelt kurveintegral" ;
                 Text [ italian ] = "Integrale curvilineo doppio" ;
-                Text [ spanish ] = "Doble integral curvilνnea" ;
+                Text [ spanish ] = "Integral curvilνnea doble" ;
                 Text [ french ] = "Double intιgrale de courbe" ;
                 Text [ dutch ] = "dubbele boogintegraal" ;
                 Text [ portuguese ] = "Dupla integral curvilνnea" ;
@@ -7539,7 +7539,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Tredubbel kurvintegral" ;
                 Text [ danish ] = "tredobbelt kurveintegral" ;
                 Text [ italian ] = "Integrale curvilineo triplo" ;
-                Text [ spanish ] = "Triple integral curvilνnea" ;
+                Text [ spanish ] = "Integral curvilνnea triple" ;
                 Text [ french ] = "Triple intιgrale de courbe" ;
                 Text [ dutch ] = "drievoudige boogintegraal" ;
                 Text [ portuguese ] = "Tripla integral curvilνnea" ;
@@ -7550,7 +7550,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δΈ‰ι‡ζ›²η·η©ε†";
                 Text[ arabic ] = "ΚίΗγα γδΝδμ ΛαΗΛν";
                 Text[ greek ] = "Τριπλό επικαμπύλιο ολοκλήρωμα";
-                Text[ korean ] = "3μ¤‘ μ„ μ λ¶„";
+                Text[ korean ] = "μ‚Όμ¤‘ μ„ μ λ¶„";
                 Text[ turkish ] = "άηlό eπri integrali";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral de corba triple";
@@ -7651,7 +7651,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ polish ] = "Akcent w prawo na dσ³";
                 Text[ portuguese_brazilian ] = "Accent nach links";
                 Text[ japanese ] = "γ‚°γƒ¬γƒΌγƒ–";
-                Text[ korean ] = "μ•΅μ„ΌνΈ, μ¤λ¥Έμª½ μ•„λλ΅";
+                Text[ korean ] = "μ¤λ¥Έμª½ μ•„λλ΅ μ•΅μ„ΌνΈ λ¶€νΈ";
                 Text[ chinese_simplified ] = "ε³δΈ‹ζ–Ήε‘ι‡ι³";
                 Text[ chinese_traditional ] = "ε·¦ε‘ι‡ι³η¬¦θ™";
                 Text[ turkish ] = "Sola vurgu";
@@ -7681,7 +7681,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "εε‘ζ‘ζη¬¦θ™";
                 Text[ arabic ] = "ΪαΗγΙ (^) ΪίΣνΙ";
                 Text[ greek ] = "Αντίστροφη γαλλική περισπωμένη";
-                Text[ korean ] = "κ°•μ΅°κΈ°νΈλ¥Ό μ—­μΌλ΅";
+                Text[ korean ] = "κ°•μ΅° κΈ°νΈλ¥Ό λ°λ€λ΅";
                 Text[ turkish ] = "Ters ώapka";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Circumflex invers";
@@ -7801,7 +7801,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε ε¨θ¥Ώη­η‰™θªn_ε­—δΈη„η™Όι³η¬¦θ™";
                 Text[ arabic ] = "ΗαΚαΟΙ";
                 Text[ greek ] = "Περισπωμένη";
-                Text[ korean ] = "λ°λ³µ κΈ°νΈ";
+                Text[ korean ] = "ν‹Έλ°";
                 Text[ turkish ] = "Tilde";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Titlla";
@@ -7859,7 +7859,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δΈεƒη·";
                 Text[ arabic ] = "ΞΨ έζή";
                 Text[ greek ] = "Γραμμή άνω";
-                Text[ korean ] = "μƒμ„ μ„ ";
+                Text[ korean ] = "λ°”";
                 Text[ turkish ] = "άst ηizgi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Lνnia superior";
@@ -7950,7 +7950,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "ε―¬η„ε ε¨θ¥Ώη­η‰™θªn_ε­—δΈη„η™Όι³η¬¦θ™";
                 TEXT[ arabic ] = "ΚαΟΙ ΪΡνΦΙ";
                 TEXT[ greek ] = "Μεγάλη περισπωμένη";
-                TEXT[ korean ] = "ν° λ°λ³µ κΈ°νΈ";
+                TEXT[ korean ] = "ν° λ¬Όκ²° κΈ°νΈ";
                 TEXT[ turkish ] = "Geniώ tilde";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Titlla gran";
@@ -8012,7 +8012,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ι›™ι»";
                 Text[ arabic ] = "δήΨΙ γÒΟζΜΙ";
                 Text[ greek ] = "Διπλή κουκκίδα";
-                Text[ korean ] = "μ΄μ¤‘ μ ";
+                Text[ korean ] = "μ΄μ¤‘μ ";
                 Text[ turkish ] = "Ηift nokta";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Punt doble";
@@ -8136,7 +8136,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "δΈ‰ι»";
                 Text[ arabic ] = "δήΨΙ ΛαΗΛνΙ";
                 Text[ greek ] = "Τριπλή κουκκίδα";
-                Text[ korean ] = "3μ¤‘ μ ";
+                Text[ korean ] = "μ‚Όμ¤‘μ ";
                 Text[ turkish ] = "άη nokta";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Punt triple";
@@ -8256,7 +8256,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "θ®ζ›΄ε¤§ε°";
                 Text[ arabic ] = "ΚΫννΡ ΗαΝΜγ";
                 Text[ greek ] = "Αλλαγή μεγέθους";
-                Text[ korean ] = "ν¬κΈ° μ΅°μ •";
+                Text[ korean ] = "ν¬κΈ° λ³€κ²½";
                 Text[ turkish ] = "Boyutu deπiώtir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Canvia la mida";
@@ -8285,7 +8285,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "θ®ζ›΄ε­—ε‹";
                 Text[ arabic ] = "ΚΫννΡ ΗαΞΨ";
                 Text[ greek ] = "Αλλαγή γραμματοσειράς";
-                Text[ korean ] = "κΈ€κΌ΄ μμ •";
+                Text[ korean ] = "κΈ€κΌ΄ λ³€κ²½";
                 Text[ turkish ] = "Yazύtipini deπiώtir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Canvia el tipus de lletra";
@@ -8356,7 +8356,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ζ–Ήζ‹¬θ™";
                 Text[ arabic ] = "ΓήζΗΣ ήΗΖγΙ ΗαÒΗζνΙ";
                 Text[ greek ] = "αγκύλες";
-                Text[ korean ] = "λ€κ΄„νΈ";
+                Text[ korean ] = "κ°κ΄„νΈ";
                 Text[ turkish ] = "Kφώeli ayraη";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Corchetes";
@@ -8443,7 +8443,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ι›™η·";
                 Text[ arabic ] = "ΞΨζΨ γÒΟζΜΙ";
                 Text[ greek ] = "Διπλές γραμμές";
-                Text[ korean ] = "μ΄μ¤‘ μ„ ";
+                Text[ korean ] = "μ΄μ¤‘μ„ ";
                 Text[ turkish ] = "Ηift ηizgiler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Lνnies dobles";
@@ -8567,7 +8567,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ηµ„ζ‹¬θ™";
                 Text[ arabic ] = "ΓήζΗΣ ΚΜγνΪ";
                 Text[ greek ] = "Παρενθέσεις ομαδοποίησης";
-                Text[ korean ] = "ν¬κ΄„ κ΄„νΈ";
+                Text[ korean ] = "κ΄„νΈλ΅ λ¬¶κΈ°";
                 Text[ turkish ] = "Gruplama ayraηlarύ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Parθntesi d'agrupament";
@@ -8998,7 +8998,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε‚η›΄η·¨ζ’(2ε€‹ε…ƒη΄ )";
                 Text[ arabic ] = "ΚΡΚνΘ Γέήν (ΪδΥΡΗδ)";
                 Text[ greek ] = "Κατακόρυφη διάταξη (2 Στοιχεία)";
-                Text[ korean ] = "μμ§ λ°°μ—΄ (2 μ”μ†)";
+                Text[ korean ] = "μμ§ λ°°μ—΄(2 μ”μ†)";
                 Text[ turkish ] = "Dikey sύralama (2 φπe)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pila vertical (2 elements)";
@@ -9016,18 +9016,18 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ swedish ] = "Bφrja ny rad" ;
                 Text [ danish ] = "begynd pε ny linje" ;
                 Text [ italian ] = "Inizia riga nuova" ;
-                Text [ spanish ] = "Empezar lνnea nueva" ;
+                Text [ spanish ] = "Lνnea nueva" ;
                 Text [ french ] = "Aller ΰ la ligne" ;
                 Text [ dutch ] = "met een nieuwe regel beginnen" ;
                 Text [ portuguese ] = "Comeηar nova linha" ;
                 Text[ chinese_simplified ] = "ζ–°θ΅εΌ€ε§‹";
-                Text[ russian ] = "Ρξηδΰςό λθνθώ";
+                Text[ russian ] = "Ρξηδΰςό νξβσώ ρςπξκσ";
                 Text[ polish ] = "Rozpocznij nowΉ liniκ";
                 Text[ japanese ] = "ζ”Ήθ΅";
                 Text[ chinese_traditional ] = "ζ–°θ΅ι–‹ε§‹";
                 Text[ arabic ] = "ΣΨΡ ΜΟνΟ";
                 Text[ greek ] = "αρχή νέας γραμμής";
-                Text[ korean ] = "μƒλ΅μ΄ ν–‰ μ‹μ‘";
+                Text[ korean ] = "μƒ μ¤„ μ‹μ‘";
                 Text[ turkish ] = "Yeni satύr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Inici nova lνnia";
@@ -9170,7 +9170,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ dutch ] = "kleine spatie" ;
                 Text [ portuguese ] = "Intervalo pequeno" ;
                 Text[ chinese_simplified ] = "Small Gap";
-                Text[ russian ] = "Κξπξςκθι οπξμεζσςξκ";
+                Text[ russian ] = "Κξπξςκθι οπξαελ";
                 Text[ polish ] = "Ma³y odstκp";
                 Text[ japanese ] = "γ‚ΉγƒγƒΌγ‚Ήε°";
                 Text[ chinese_traditional ] = "ε°ι–“ι”";
@@ -9209,7 +9209,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε·¦ε°ι½";
                 Text[ arabic ] = "γΝΗΠΗΙ Εαμ ΗανΣΗΡ";
                 Text[ greek ] = "Στοίχιση αριστερά";
-                Text[ korean ] = "μ™Όμª½μ— λ§μ¶¤";
+                Text[ korean ] = "μ™Όμª½ λ§μ¶¤";
                 Text[ turkish ] = "Sola hizala";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alinea a l'esquerra";
@@ -9268,7 +9268,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε³ε°ι½";
                 Text[ arabic ] = "γΝΗΠΗΙ Εαμ Ηανγνδ";
                 Text[ greek ] = "Στοίχιση δεξιά";
-                Text[ korean ] = "μ¤λ¥Έμª½μ— λ§μ¶¤";
+                Text[ korean ] = "μ¤λ¥Έμª½ λ§μ¶¤";
                 Text[ turkish ] = "Saπa hizala";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alinea a la dreta";
@@ -9320,7 +9320,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ dutch ] = "Spatie" ;
                 Text [ portuguese ] = "Intervalo" ;
                 Text[ chinese_simplified ] = "Gap";
-                Text[ russian ] = "Οπξμεζσςξκ";
+                Text[ russian ] = "Οπξαελ";
                 Text[ polish ] = "Odstκp ramek";
                 Text[ japanese ] = "γ‚ΉγƒγƒΌγ‚Ή";
                 Text[ chinese_traditional ] = "ι–“ι”";
@@ -9484,7 +9484,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "ι©η”¨ε…¨ιƒ¨";
                 TEXT[ arabic ] = "ααία";
                 TEXT[ greek ] = "Για όλα";
-                TEXT[ korean ] = "λª¨λ“  ..μ— λ€ν•΄";
+                TEXT[ korean ] = "λª¨λ‘ μ μ©";
                 TEXT[ turkish ] = "Tόmό iηin";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Per a tots";
@@ -9813,13 +9813,13 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ spanish ] = "Puntos en el medio";
                 TEXT[ english_us ] = "Dots In Middle";
                 TEXT[ chinese_simplified ] = "δΈ­ε‘η‚Ή";
-                TEXT[ russian ] = "Òξχκθ οξ ρεπεδθνε";
+                TEXT[ russian ] = "Òξχκθ οξρεπεδθνε";
                 TEXT[ polish ] = "Kropki w rodku";
                 TEXT[ japanese ] = "γƒ‰γƒƒγƒδΈ­ε¤®";
                 TEXT[ chinese_traditional ] = "δΈ­ε‘ι»";
                 TEXT[ arabic ] = "δήΗΨ έν ΗαζΣΨ";
                 TEXT[ greek ] = "Κουκκίδες κεντραρισμένα";
-                TEXT[ korean ] = "κ°€μ΄λ° μ ";
+                TEXT[ korean ] = "μ μ„ κ°€μ΄λ°λ΅";
                 TEXT[ turkish ] = "Noktalar (orta)";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Punts a la meitat";
@@ -9970,7 +9970,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ dutch ] = "Relaties" ;
                 Text [ portuguese ] = "Relaηυes" ;
                 Text[ chinese_simplified ] = "ε…³η³»";
-                Text[ russian ] = "Ρβÿηθ";
+                Text[ russian ] = "Ξςνξψενθÿ";
                 Text[ polish ] = "Relacje";
                 Text[ japanese ] = "ζ―”θΌƒζΌ”η®—";
                 Text[ chinese_traditional ] = "ι—δΏ‚";
@@ -10187,7 +10187,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ζ ΌεΌε–";
                 Text[ arabic ] = "ΚδΣνή";
                 Text[ greek ] = "Μορφοποιήσεις";
-                Text[ korean ] = "μ„μ‹ μ§€μ •";
+                Text[ korean ] = "μ„μ‹";
                 Text[ turkish ] = "Format";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Formats";
@@ -10604,7 +10604,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text [ french ] = "Commandes" ;                 \
     Text [ swedish ] = "Kommandon" ;                \
     Text [ dutch ] = "Commando΄s" ;                 \
-    Text [ spanish ] = "Comandos" ;                 \
+    Text [ spanish ] = "Σrdenes" ;                 \
     Text [ english_us ] = "Commands" ;              \
     Text[ chinese_simplified ] = "ε‘½δ»¤";          \
     Text[ russian ] = "Κξμΰνδϋ";                    \
@@ -10785,7 +10785,7 @@ String STR_STATSTR_READING
     Text[ dutch ] = "Document wordt geladen...";
     Text[ chinese_simplified ] = "ζ­£ε¨θ£…ε…¥ζ–‡ζ΅£...";
     Text[ greek ] = "Το έγγραφο φορτώνεται...";
-    Text[ korean ] = "λ¬Έμ„ λ΅λ“ μ¤‘...";
+    Text[ korean ] = "λ¬Έμ„λ¥Ό λ΅λ“ν•λ” μ¤‘...";
     Text[ turkish ] = "Belge yόkleniyor...";
     Text[ catalan ] = "S'estΰ carregant el document...";
     Text[ thai ] = "ΰΈΰΈ³ΰΈ¥ΰΈ±ΰΈ‡ΰΉ‚ΰΈ«ΰΈ¥ΰΈ”ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£...";
@@ -10816,7 +10816,7 @@ String STR_STATSTR_WRITING
     Text[ dutch ] = "Document wordt opgeslagen...";
     Text[ chinese_simplified ] = "ζ­£ε¨ε­η›ζ–‡ζ΅£...";
     Text[ greek ] = "Αποθήκευση εγγράφου...";
-    Text[ korean ] = "λ¬Έμ„ μ €μ¥ μ¤‘...";
+    Text[ korean ] = "λ¬Έμ„ μ €μ¥ν•λ” μ¤‘...";
     Text[ turkish ] = "Belge kaydediliyor...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'estΰ desant el document...";
@@ -10834,7 +10834,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ greek ] = "%PRODUCTNAME 6.0 Τύπος";
     Text[ dutch ] = "%PRODUCTNAME 6.0 Formule";
     Text[ french ] = "%PRODUCTNAME 6.0 Formule";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Fσrmula";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 - Fσrmula";
     Text[ italian ] = "%PRODUCTNAME 6.0 Formula";
     Text[ danish ] = "%PRODUCTNAME 6.0-formel";
     Text[ swedish ] = "%PRODUCTNAME 6.0 formel";
@@ -10858,7 +10858,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_50
     Text [ swedish ] = "%PRODUCTNAME 5.0 formel" ;
     Text [ danish ] = "%PRODUCTNAME 5.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 5.0" ;
-    Text [ spanish ] = "%PRODUCTNAME 5.0 Fσrmula" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 - Fσrmula" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Formule" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 Formule" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Formel" ;
@@ -10886,7 +10886,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text [ swedish ] = "%PRODUCTNAME 4.0 formel" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 4.0" ;
-    Text [ spanish ] = "%PRODUCTNAME 4.0 Fσrmula" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 - Fσrmula" ;
     Text [ french ] = "%PRODUCTNAME 4.0 Formule" ;
     Text [ dutch ] = "%PRODUCTNAME 4.0 Formule" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Formel" ;
@@ -10914,7 +10914,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text [ swedish ] = "%PRODUCTNAME 3.0 formel" ;
     Text [ danish ] = "%PRODUCTNAME 3.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 3.0" ;
-    Text [ spanish ] = "%PRODUCTNAME 3.0 Fσrmula" ;
+    Text [ spanish ] = "%PRODUCTNAME 3.0 - Fσrmula" ;
     Text [ french ] = "%PRODUCTNAME 3.0 Formule" ;
     Text [ dutch ] = "%PRODUCTNAME 3.0 Formule" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Formel" ;
@@ -10954,7 +10954,7 @@ String RID_SYMBOLFILESSTR
     Text[ chinese_traditional ] = "ε–η¤Ίζª”ζ΅(*.sms)";
     Text[ arabic ] = "(*.sms) γαέΗΚ ΗαΡγζÒ";
     Text[ greek ] = "Αρχεία συμβόλων (*.sms)";
-    Text[ korean ] = "κΈ°νΈ νμΌ (*.sms)";
+    Text[ korean ] = "κΈ°νΈ νμΌ(*.sms)";
     Text[ turkish ] = "Simge dosyalarύ (*.sms)";
     Text[ catalan ] = "Fitxer de sνmbols (*.sms)";
     Text[ finnish ] = "Symbolitiedostot (*.sms)";
@@ -11037,7 +11037,7 @@ String RID_ERR_UNKOWN
     Text[ chinese_traditional ] = "η™Όη”δΈ€ε€‹δΈζη„ι―θª¤γ€‚";
     Text[ arabic ] = "ΝΟΛ ΞΨΓ ΫνΡ γΪΡζέ";
     Text[ greek ] = "Παρουσιάστηκε άγνωστο σφάλμα";
-    Text[ korean ] = "μ•λ ¤μ Έ μμ§€ μ•μ€ μ¤λ¥ λ°μƒ";
+    Text[ korean ] = "μ• μ μ—†λ” μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤";
     Text[ turkish ] = "Bilinmeyen bir hata oluώtu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'ha produοt un error desconegut";
@@ -11336,7 +11336,7 @@ String RID_ERR_IDENTEXPECTED
     Text [ italian ] = "Atteso identifier" ;
     Text [ spanish ] = "Se requiere un identificador" ;
     Text [ french ] = "Identificateur requis" ;
-    Text [ swedish ] = "Identifier fφrvδntad" ;
+    Text [ swedish ] = "Identifierare fφrvδntad" ;
     Text [ danish ] = "Identifikator forventes" ;
     Text [ portuguese_brazilian ] = "Identifier erwartet" ;
     Text [ portuguese ] = "Necessαrio identificador" ;
@@ -11403,7 +11403,7 @@ String RID_ERR_COLOREXPECTED
     Text[ chinese_traditional ] = "ζεΎ…ι΅θ‰²";
     Text[ arabic ] = "γΨαζΘ αζδ";
     Text[ greek ] = "Απαιτείται χρώμα";
-    Text[ korean ] = "μƒ‰μƒ,  ν•„μ”ν•";
+    Text[ korean ] = "μƒ‰μƒμ΄ ν•„μ”ν•©λ‹λ‹¤.";
     Text[ turkish ] = "Renk gerekli";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Es necessita un color";
@@ -11650,13 +11650,13 @@ ToolBox RID_MATH_TOOLBOX
             Text [ portuguese ] = "Fσrmula inteira" ;
             Text [ portuguese_brazilian ] = "Ganze Formel" ;
             Text[ chinese_simplified ] = "ζ•΄δΈªε…¬εΌ";
-            Text[ russian ] = "Βρÿ τξπμσλΰ";
+            Text[ russian ] = "Οξκΰηΰςό βρε";
             Text[ polish ] = "Ca³a formu³a";
             Text[ japanese ] = "ζ•°εΌε…¨δ½“";
             Text[ chinese_traditional ] = "ζ•΄ε€‹ε…¬εΌ";
             Text[ arabic ] = "ΥνΫΙ ίΗγαΙ";
             Text[ greek ] = "Ολόκληρος τύπος";
-            Text[ korean ] = "μ΄ μμ‹";
+            Text[ korean ] = "μ „μ²΄ μμ‹";
             Text[ turkish ] = "Tόm formόl";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Fσrmula completa";
@@ -11787,6 +11787,11 @@ String RID_MATH_TOOLBOX
     Text[ finnish ] = "Pδδtyφkalurivi";
     Text[ thai ] = "ΰΉΰΈ–ΰΈΰΉ€ΰΈ„ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡ΰΈ΅ΰΈ·ΰΈ­ΰΈ«ΰΈ¥ΰΈ±ΰΈ";
 };
+
+
+
+
+
 
 
 

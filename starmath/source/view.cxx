@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-12 15:40:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,14 +214,14 @@ void SmGraphicWindow::StateChanged( StateChangedType eType )
 }
 
 
-void SmGraphicWindow::ApplyColorConfigValues( const svx::ColorConfig &rColorCfg )
+void SmGraphicWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     // Note: SetTextColor not necessary since the nodes that
     // get painted have the color information.
 #ifdef DEBUG
-    ColorData nVal = rColorCfg.GetColorValue(svx::DOCCOLOR).nColor;
+    ColorData nVal = rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor;
 #endif
-    SetBackground( Color( (ColorData) rColorCfg.GetColorValue(svx::DOCCOLOR).nColor ) );
+    SetBackground( Color( (ColorData) rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor ) );
     Invalidate();
 }
 

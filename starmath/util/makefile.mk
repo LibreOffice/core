@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tl $ $Date: 2002-07-22 13:21:05 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:58:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=SM
 TARGET=smath3
 LIBTARGET=NO
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------------
@@ -125,13 +126,6 @@ DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets -------------------------------------------------------------
 
-.IF "$(depend)" == ""
-
-ALL: \
-    $(SRS)$/hidother.hid\
-    ALLTAR
-.ENDIF
-
 .INCLUDE :  target.mk
 
 .IF "$(depend)" == ""
@@ -145,13 +139,3 @@ $(MISC)$/$(SHL1TARGET).flt:
 
 .ENDIF
 
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"=="WNTI"
-.IF "$(BUILD_SOSL)"==""
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-.ENDIF
-.ELSE
-    @echo nix
-.ENDIF

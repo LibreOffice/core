@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-09 13:14:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -110,6 +113,9 @@
 #endif
 #ifndef _VCL_UNOHELP2_HXX
 #include <vcl/unohelp2.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -156,10 +162,53 @@ using namespace drafts::com::sun::star::accessibility;
 
 //////////////////////////////////////////////////////////////////////
 
+static awt::Rectangle lcl_GetBounds( Window *pWin )
+{
+    // !! see VCLXAccessibleComponent::implGetBounds()
+
+    //! the coordinates returned are relativ to the parent window !
+    //! Thus the top-left point may be different from (0, 0) !
+
+    awt::Rectangle aBounds;
+    if (pWin)
+    {
+        Rectangle aRect = pWin->GetWindowExtentsRelative( NULL );
+        aBounds.X       = aRect.Left();
+        aBounds.Y       = aRect.Top();
+        aBounds.Width   = aRect.GetWidth();
+        aBounds.Height  = aRect.GetHeight();
+        Window* pParent = pWin->GetAccessibleParentWindow();
+        if (pParent)
+        {
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
+            awt::Point aParentScreenLoc( aParentRect.Left(), aParentRect.Top() );
+            aBounds.X -= aParentScreenLoc.X;
+            aBounds.Y -= aParentScreenLoc.Y;
+        }
+    }
+    return aBounds;
+}
+
+static awt::Point lcl_GetLocationOnScreen( Window *pWin )
+{
+    // !! see VCLXAccessibleComponent::getLocationOnScreen()
+
+    awt::Point aPos;
+    if (pWin)
+    {
+        Rectangle aRect = pWin->GetWindowExtentsRelative( NULL );
+        aPos.X = aRect.Left();
+        aPos.Y = aRect.Top();
+    }
+    return aPos;
+}
+
+//////////////////////////////////////////////////////////////////////
+
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
     pWin                (pGraphicWin),
-    aAccEventListeners  (aListenerMutex)
+    nClientId           (0)
 {
     DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
     //++aRefCount;
@@ -168,7 +217,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
 
 SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
     aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
-    aAccEventListeners  (aListenerMutex)
+    nClientId           (0)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
     pWin = rSmAcc.pWin;
@@ -207,9 +256,11 @@ void SmGraphicAccessible::ClearWin()
 {
     pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
 
-    EventObject aEvtObj;
-    aEvtObj.Source = (XAccessible *) this;
-    aAccEventListeners.disposeAndClear( aEvtObj );
+    if ( nClientId )
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
+        nClientId =  0;
+    }
 }
 
 void SmGraphicAccessible::LaunchEvent(
@@ -224,13 +275,8 @@ void SmGraphicAccessible::LaunchEvent(
     aEvt.NewValue   = rNewVal ;
 
     // pass event on to event-listener's
-    cppu::OInterfaceIteratorHelper aIt( aAccEventListeners );
-    while (aIt.hasMoreElements())
-    {
-        Reference< XAccessibleEventListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->notifyEvent( aEvt );
-    }
+    if (nClientId)
+        comphelper::AccessibleEventNotifier::addEvent( nClientId, aEvt );
 }
 
 uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessibleContext()
@@ -243,6 +289,9 @@ uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessible
 sal_Bool SAL_CALL SmGraphicAccessible::contains( const awt::Point& aPoint )
     throw (RuntimeException)
 {
+    //! the arguments coordinates are relativ to the current window !
+    //! Thus the top-left point is (0, 0)
+
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
@@ -269,10 +318,9 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-
-    Point aPt( pWin->GetPosPixel() );
-    Size  aSz( pWin->GetSizePixel() );
-    return awt::Rectangle( aPt.X(), aPt.Y(), aSz.Width(), aSz.Height() );
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
+    return lcl_GetBounds( pWin );
 }
 
 awt::Point SAL_CALL SmGraphicAccessible::getLocation()
@@ -281,9 +329,10 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocation()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-
-    Point aPt( pWin->GetPosPixel() );
-    return awt::Point( aPt.X(), aPt.Y() );
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
+    awt::Rectangle aRect( lcl_GetBounds( pWin ) );
+    return awt::Point( aRect.X, aRect.Y );
 }
 
 awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
@@ -292,9 +341,9 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-
-    Point aPt( pWin->OutputToAbsoluteScreenPixel( Point() ) );
-    return awt::Point( aPt.X(), aPt.Y() );
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
+    return lcl_GetLocationOnScreen( pWin );
 }
 
 awt::Size SAL_CALL SmGraphicAccessible::getSize()
@@ -303,8 +352,15 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
+#ifdef DEBUG
+    awt::Rectangle aRect( lcl_GetBounds( pWin ) );
+    Size aSz2( aRect.Width, aRect.Height );
+    DBG_ASSERT( aSz == aSz2, "mismatch in width" );
+#endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
 
@@ -465,17 +521,36 @@ void SAL_CALL SmGraphicAccessible::addEventListener(
         const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
-    if (pWin)   // not disposing (about to destroy view shell)
-        aAccEventListeners.addInterface( xListener );
+    if (xListener.is())
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        if (pWin)
+        {
+            if (!nClientId)
+                nClientId = comphelper::AccessibleEventNotifier::registerClient( );
+            comphelper::AccessibleEventNotifier::addEventListener( nClientId, xListener );
+        }
+    }
 }
 
 void SAL_CALL SmGraphicAccessible::removeEventListener(
         const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
-    aAccEventListeners.removeInterface( xListener );
+    if (xListener.is())
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( nClientId );
+            nClientId = 0;
+        }
+    }
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
@@ -1472,7 +1547,6 @@ sal_Bool SmEditViewForwarder::Paste()
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) ),
     pWin                (pEditWin),
-    aAccEventListeners  (aListenerMutex),
     pTextHelper         (0)
 {
     DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
@@ -1481,8 +1555,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
 
 
 SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
-    aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) ),
-    aAccEventListeners  (aListenerMutex)
+    aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) )
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
     pWin = rSmAcc.pWin;
@@ -1534,10 +1607,6 @@ void SmEditAccessible::ClearWin()
     //! (e.g. the one set by the 'SetEventSource' call)
     pTextHelper->Dispose();
     delete pTextHelper;     pTextHelper = 0;
-
-    EventObject aEvtObj;
-    aEvtObj.Source = (XAccessible *) this;
-    aAccEventListeners.disposeAndClear( aEvtObj );
 }
 
 // XAccessible
@@ -1552,6 +1621,9 @@ uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleCon
 sal_Bool SAL_CALL SmEditAccessible::contains( const awt::Point& aPoint )
     throw (RuntimeException)
 {
+    //! the arguments coordinates are relativ to the current window !
+    //! Thus the top left-point is (0, 0)
+
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
@@ -1576,10 +1648,9 @@ awt::Rectangle SAL_CALL SmEditAccessible::getBounds(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-
-    Point aPt( pWin->GetPosPixel() );
-    Size  aSz( pWin->GetSizePixel() );
-    return awt::Rectangle( aPt.X(), aPt.Y(), aSz.Width(), aSz.Height() );
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
+    return lcl_GetBounds( pWin );
 }
 
 awt::Point SAL_CALL SmEditAccessible::getLocation(  )
@@ -1588,9 +1659,10 @@ awt::Point SAL_CALL SmEditAccessible::getLocation(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-
-    Point aPt( pWin->GetPosPixel() );
-    return awt::Point( aPt.X(), aPt.Y() );
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
+    awt::Rectangle aRect( lcl_GetBounds( pWin ) );
+    return awt::Point( aRect.X, aRect.Y );
 }
 
 awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
@@ -1599,9 +1671,9 @@ awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-
-    Point aPt( pWin->OutputToAbsoluteScreenPixel( Point() ) );
-    return awt::Point( aPt.X(), aPt.Y() );
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
+    return lcl_GetLocationOnScreen( pWin );
 }
 
 awt::Size SAL_CALL SmEditAccessible::getSize(  )
@@ -1610,8 +1682,15 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
+    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+            "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
+#ifdef DEBUG
+    awt::Rectangle aRect( lcl_GetBounds( pWin ) );
+    Size aSz2( aRect.Width, aRect.Height );
+    DBG_ASSERT( aSz == aSz2, "mismatch in width" );
+#endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
 

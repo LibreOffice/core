@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-12 15:40:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ void SmModule::_CreateVirtualDev() const
     pThis->pVirtualDev = new VirtualDevice;
 }
 
-void SmModule::ApplyColorConfigValues( const svx::ColorConfig &rColorCfg )
+void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     //invalidate all graphic and edit windows
     const TypeId aSmViewTypeId = TYPE(SmViewShell);
@@ -351,11 +351,11 @@ void SmModule::ApplyColorConfigValues( const svx::ColorConfig &rColorCfg )
     }
 }
 
-svx::ColorConfig & SmModule::GetColorConfig()
+svtools::ColorConfig & SmModule::GetColorConfig()
 {
     if(!pColorConfig)
     {
-        pColorConfig = new svx::ColorConfig;
+        pColorConfig = new svtools::ColorConfig;
         ApplyColorConfigValues( *pColorConfig );
         StartListening( *pColorConfig );
     }

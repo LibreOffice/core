@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: tl $ $Date: 2002-11-06 12:37:08 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,12 +141,12 @@ $(SLO)$/smlib.obj : $(INCCOM)$/dllname.hxx
 $(INCCOM)$/dllname.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    echo #define DLL_NAME \"libsm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    +echo \#define DLL_NAME \"libsm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
 .IF "$(USE_SHELL)"!="4nt"
-    echo \#define DLL_NAME \"sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    +echo \#define DLL_NAME \"sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE          # "$(USE_SHELL)"!="4nt"
-    echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+    +echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
 .ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 

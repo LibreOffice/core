@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:36:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ Menu RID_COMMANDMENU
             Text [ italian ] = "Operatori unari/binari" ;
             Text [ spanish ] = "Operadores ~unarios/binarios" ;
             Text [ french ] = "Opérateurs u~naires/binaires" ;
-            Text [ dutch ] = "~Unaire/binaire operatoren" ;
+            Text [ dutch ] = "~Monadische/binaire operatoren" ;
             Text [ portuguese ] = "Operadores ~unários/binários" ;
             SubMenu = Menu
             {
@@ -408,20 +408,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û(~U)";
-            Text[ russian ] = "Óíàğíûå/Áèíàğíûå îïåğàòîğû";
+            Text[ chinese_simplified ] = "ä¸€å…ƒ/äºŒå…ƒè¿ç®—ç¬¦(~U)";
+            Text[ russian ] = "Óíàğíûå/áèíàğíûå îïåğàòîğû";
             Text[ polish ] = "Unarne/binarne operatory";
-            Text[ japanese ] = "’P€¥“ñ€‰‰Zq(~U)";
-            Text[ chinese_traditional ] = "¤@¤¸/¤G¤¸¹Bºâ²Å(~U)";
-            Text[ dutch ] = "~Unaire/binaire operatoren";
-            Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û(~U)";
+            Text[ japanese ] = "å˜é …ãƒ»äºŒé …æ¼”ç®—å­(~U)";
+            Text[ chinese_traditional ] = "ä¸€å…ƒ/äºŒå…ƒé‹ç®—ç¬¦(~U)";
+            Text[ dutch ] = "~Monadische/binaire operatoren";
+            Text[ chinese_simplified ] = "ä¸€å…ƒ/äºŒå…ƒè¿ç®—ç¬¦(~U)";
             Text[ greek ] = "Åíá~äéêïß/Äõáäéêïß ôåëåóôİò";
-            Text[ korean ] = "´ÜÇ×/ÀÌÇ× ¿¬»êÀÚ(~U)";
+            Text[ korean ] = "ë‹¨í•­/ì´í•­ ì—°ì‚°ì(~U)";
             Text[ arabic ] = "ÚæÇãá ÊÔÛíá ÃÍÇÏíÉ/ËäÇÆíÉ";
             Text[ turkish ] = "Birli/ikili işleçler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Operadores ~unarios/binarios";
-            Text[ finnish ] = "~Unaari-/binäärioperaattorit";
+            Text[ catalan ] = "~Operadors Monaris/Binaris";
+            Text[ finnish ] = "~Yksi- ja kaksipaikkaiset operaattorit";
+            Text[ thai ] = "à¸•à¸±à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£~Unary/Binary ";
         };
         MenuItem
         {
@@ -578,20 +579,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "¹ØÏµ(~R)";
+            Text[ chinese_simplified ] = "å…³ç³»(~R)";
             Text[ russian ] = "Îòíîøåíèÿ";
             Text[ polish ] = "Relacje";
-            Text[ japanese ] = "”äŠr‰‰Z(~R)";
-            Text[ chinese_traditional ] = "Ãö«Y(~R)";
+            Text[ japanese ] = "æ¯”è¼ƒæ¼”ç®—(~R)";
+            Text[ chinese_traditional ] = "é—œä¿‚(~R)";
             Text[ dutch ] = "~Relaties";
-            Text[ chinese_simplified ] = "¹ØÏµ(~R)";
+            Text[ chinese_simplified ] = "å…³ç³»(~R)";
             Text[ greek ] = "~Ó÷İóåéò";
-            Text[ korean ] = "°ü°è(~R)";
+            Text[ korean ] = "ê´€ê³„(~R)";
             Text[ arabic ] = "ÚáÇŞÇÊ";
             Text[ turkish ] = "İlişkiler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Relaciones";
-            Text[ finnish ] = "~Suhteet";
+            Text[ catalan ] = "~Relacions";
+            Text[ finnish ] = "~Relaatiot";
+            Text[ thai ] = "~à¸„à¸§à¸²à¸¡à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œ";
         };
         MenuItem
         {
@@ -754,20 +756,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã(~S)";
-            Text[ russian ] = "Îïåğàöèè ìíîæåñòâà";
+            Text[ chinese_simplified ] = "é›†åˆè¿ç®—(~S)";
+            Text[ russian ] = "Îïåğàöèè íàä ìíîæåñòâîì";
             Text[ polish ] = "Operacje na zbiorach";
-            Text[ japanese ] = "W‡‰‰Z(~S)";
-            Text[ chinese_traditional ] = "¼Æ¶q­pºâ(~S)";
+            Text[ japanese ] = "é›†åˆæ¼”ç®—(~S)";
+            Text[ chinese_traditional ] = "é›†åˆé‹ç®—(~S)";
             Text[ dutch ] = "~Definities";
-            Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã(~S)";
+            Text[ chinese_simplified ] = "é›†åˆè¿ç®—(~S)";
             Text[ greek ] = "~ĞñÜîåéò óõíüëùí";
-            Text[ korean ] = "ÁıÇÕ ¿¬»ê(~S)";
+            Text[ korean ] = "ì§‘í•© ì—°ì‚°(~S)";
             Text[ arabic ] = "ãÌãæÚÉ ÚãáíÇÊ";
             Text[ turkish ] = "Küme işlemleri";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Operaciones de conjuntos";
-            Text[ finnish ] = "~Määritä toiminnot";
+            Text[ catalan ] = "~Operacions de conjunts";
+            Text[ finnish ] = "~Joukko-operaattorit";
+            Text[ thai ] = "~à¸•à¸±à¹‰à¸‡à¸à¸²à¸£à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
         };
         MenuItem
         {
@@ -967,37 +970,39 @@ Menu RID_COMMANDMENU
                                 };
                             };
                         };
-                        TEXT[ chinese_simplified ] = "ÆäËû";
-                        TEXT[ russian ] = "äğóãèå";
+                        TEXT[ chinese_simplified ] = "å…¶ä»–";
+                        TEXT[ russian ] = "Äğóãèå";
                         TEXT[ polish ] = "inne";
-                        TEXT[ japanese ] = "‚»‚Ì‘¼";
-                        TEXT[ chinese_traditional ] = "¨ä¥L";
+                        TEXT[ japanese ] = "ãã®ä»–";
+                        TEXT[ chinese_traditional ] = "å…¶ä»–";
                         TEXT[ language_user1 ] = " ";
                         TEXT[ dutch ] = "andere";
-                        TEXT[ chinese_simplified ] = "ÆäËû";
+                        TEXT[ chinese_simplified ] = "å…¶ä»–";
                         TEXT[ greek ] = "Üëëá";
-                        TEXT[ korean ] = "±âÅ¸";
+                        TEXT[ korean ] = "ê¸°íƒ€";
                         TEXT[ arabic ] = "ÛíÑ Ğáß";
                         TEXT[ turkish ] = "Diğer";
-                        TEXT[ catalan ] = "otros";
+                        TEXT[ catalan ] = "altres";
                         TEXT[ finnish ] = "Lisää";
+                        TEXT[ thai ] = "à¸¡à¸²à¸à¸à¸§à¹ˆà¸²";
                     };
                 };
             };
-            Text[ chinese_simplified ] = "º¯Êı(~F)";
+            Text[ chinese_simplified ] = "å‡½æ•°(~F)";
             Text[ russian ] = "Ôóíêöèè";
             Text[ polish ] = "Funkcje";
-            Text[ japanese ] = "ŠÖ”(~F)";
-            Text[ chinese_traditional ] = "¨ç¼Æ(~F)";
+            Text[ japanese ] = "é–¢æ•°(~F)";
+            Text[ chinese_traditional ] = "å‡½æ•¸(~F)";
             Text[ dutch ] = "~Functies";
-            Text[ chinese_simplified ] = "º¯Êı(~F)";
+            Text[ chinese_simplified ] = "å‡½æ•°(~F)";
             Text[ greek ] = "~ÓõíáñôŞóåéò";
-            Text[ korean ] = "ÇÔ¼ö(~F)";
+            Text[ korean ] = "í•¨ìˆ˜(~F)";
             Text[ arabic ] = "ÏÇáÇÊ";
             Text[ turkish ] = "Fonksiyon";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Funciones";
-            Text[ finnish ] = "~Toiminnot";
+            Text[ catalan ] = "~Funcions";
+            Text[ finnish ] = "~Funktiot";
+            Text[ thai ] = "~à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
         };
         MenuItem
         {
@@ -1102,20 +1107,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÔËËã·û(~P)";
+            Text[ chinese_simplified ] = "è¿ç®—ç¬¦(~P)";
             Text[ russian ] = "Îïåğàòîğû";
             Text[ polish ] = "Operatory";
-            Text[ japanese ] = "‰‰Zq(~P)";
-            Text[ chinese_traditional ] = "¹Bºâ²Å(~P)";
+            Text[ japanese ] = "æ¼”ç®—å­(~P)";
+            Text[ chinese_traditional ] = "é‹ç®—ç¬¦(~P)";
             Text[ dutch ] = "O~peratoren";
-            Text[ chinese_simplified ] = "ÔËËã·û(~P)";
+            Text[ chinese_simplified ] = "è¿ç®—ç¬¦(~P)";
             Text[ greek ] = "~Ôåëåóôİò";
-            Text[ korean ] = "¿¬»ê(~P)";
+            Text[ korean ] = "ì—°ì‚°ì(~P)";
             Text[ arabic ] = "ÚæÇãá ÇáÊÔÛíá";
             Text[ turkish ] = "İşleçler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Operadores";
+            Text[ catalan ] = "O~peradors";
             Text[ finnish ] = "~Operaattorit";
+            Text[ thai ] = "à¸•à¸±~à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
         };
         MenuItem
         {
@@ -1129,7 +1135,7 @@ Menu RID_COMMANDMENU
             Text [ swedish ] = "~Attribut" ;
             Text [ danish ] = "Attributter" ;
             Text [ italian ] = "Attributi" ;
-            Text [ spanish ] = "~Atributos" ;
+            Text [ spanish ] = "Atributos" ;
             Text [ french ] = "~Attributs" ;
             Text [ dutch ] = "~Attributen" ;
             SubMenu = Menu
@@ -1284,20 +1290,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÊôĞÔ(~A)";
+            Text[ chinese_simplified ] = "å±æ€§(~A)";
             Text[ russian ] = "Àòğèáóòû";
             Text[ polish ] = "Atrybuty";
-            Text[ japanese ] = "‘®«(~A)";
-            Text[ chinese_traditional ] = "Äİ©Ê(~A)";
+            Text[ japanese ] = "å±æ€§(~A)";
+            Text[ chinese_traditional ] = "å±¬æ€§(~A)";
             Text[ dutch ] = "~Attributen";
-            Text[ chinese_simplified ] = "ÊôĞÔ(~A)";
+            Text[ chinese_simplified ] = "å±æ€§(~A)";
             Text[ greek ] = "~Éäéüôçôåò";
-            Text[ korean ] = "¼Ó¼º(~A)";
+            Text[ korean ] = "ì†ì„±(~A)";
             Text[ arabic ] = "ÓãÇÊ";
             Text[ turkish ] = "Öznitelikler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Atributos";
+            Text[ catalan ] = "~Atributs";
             Text[ finnish ] = "~Määritteet";
+            Text[ thai ] = "~à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
         };
         MenuItem
         {
@@ -1470,20 +1477,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "À¨ºÅ(~B)";
+            Text[ chinese_simplified ] = "æ‹¬å·(~B)";
             Text[ russian ] = "Ñêîáêè";
             Text[ polish ] = "Nawiasy";
-            Text[ japanese ] = "‚©‚Á‚±(~B)";
-            Text[ chinese_traditional ] = "¬A¸¹(~B)";
+            Text[ japanese ] = "ã‹ã£ã“(~B)";
+            Text[ chinese_traditional ] = "æ‹¬è™Ÿ(~B)";
             Text[ dutch ] = "~Haakjes";
-            Text[ chinese_simplified ] = "À¨ºÅ(~B)";
+            Text[ chinese_simplified ] = "æ‹¬å·(~B)";
             Text[ greek ] = "~Ğáñåíèİóåéò";
-            Text[ korean ] = "°ıÈ£(~B)";
+            Text[ korean ] = "ê´„í˜¸(~B)";
             Text[ arabic ] = "ÃŞæÇÓ";
             Text[ turkish ] = "Ayraçlar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Paréntesis";
+            Text[ catalan ] = "~Parèntesi";
             Text[ finnish ] = "~Sulkeet";
+            Text[ thai ] = "~à¸§à¸‡à¹€à¸¥à¹‡à¸šà¸à¹‰à¸²à¸¡à¸›à¸¹";
         };
         MenuItem
         {
@@ -1557,22 +1565,23 @@ Menu RID_COMMANDMENU
                         Text[ french ] = "nouvelle ligne";
                         Text[ swedish ] = "ny rad";
                         Text[ dutch ] = "nieuwe regel";
-                        Text[ spanish ] = "nueva línea";
+                        Text[ spanish ] = "línea nueva";
                         Text[ english_us ] = "New Line";
-                        Text[ chinese_simplified ] = "»»ĞĞ";
-                        Text[ russian ] = "íîâàÿ ñòğîêà";
+                        Text[ chinese_simplified ] = "æ¢è¡Œ";
+                        Text[ russian ] = "Ñîçäàòü íîâóş ñòğîêó";
                         Text[ polish ] = "nowy wiersz";
-                        Text[ japanese ] = "V‚µ‚¢s";
-                        Text[ chinese_traditional ] = "´«¦æ";
+                        Text[ japanese ] = "newline";
+                        Text[ chinese_traditional ] = "æ›è¡Œ";
                         Text[ dutch ] = "nieuwe regel";
-                        Text[ chinese_simplified ] = "»»ĞĞ";
+                        Text[ chinese_simplified ] = "æ¢è¡Œ";
                         Text[ greek ] = "Íİá ãñáììŞ";
-                        Text[ korean ] = "»õ Çà";
+                        Text[ korean ] = "ìƒˆ í–‰";
                         Text[ arabic ] = "ÎØ ÌÏíÏ";
                         Text[ turkish ] = "Yeni satır";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "nueva línea";
-                        Text[ finnish ] = "Uusi viiva";
+                        Text[ catalan ] = "línia nova";
+                        Text[ finnish ] = "Rivinvaihto";
+                        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¹ƒà¸«à¸¡à¹ˆ";
                     };
                     MenuItem
                     {
@@ -1589,20 +1598,21 @@ Menu RID_COMMANDMENU
                         Text[ dutch ] = "kleine spatie";
                         Text[ spanish ] = "espacio pequeño";
                         Text[ english_us ] = "Small Gap";
-                        Text[ chinese_simplified ] = "Ğ¡¼ä¸ô";
-                        Text[ russian ] = "êîğîòêèé ïğîáåë";
+                        Text[ chinese_simplified ] = "å°é—´éš”";
+                        Text[ russian ] = "Êîğîòêèé ïğîáåë";
                         Text[ polish ] = "Ma³y odstêp";
-                        Text[ japanese ] = "¬½Íß°½";
-                        Text[ chinese_traditional ] = "¤p¶¡¹j";
+                        Text[ japanese ] = "ã‚¹ãƒšãƒ¼ã‚¹å°";
+                        Text[ chinese_traditional ] = "å°é–“éš”";
                         Text[ dutch ] = "kleine spatie";
-                        Text[ chinese_simplified ] = "Ğ¡¼ä¸ô";
+                        Text[ chinese_simplified ] = "å°é—´éš”";
                         Text[ greek ] = "ìéêñü äéÜêåíï";
-                        Text[ korean ] = "ÀÛÀº °£°İ";
+                        Text[ korean ] = "ì‘ì€ ê°„ê²©";
                         Text[ arabic ] = "ÊÈÇÚÏ ÕÛíÑ";
                         Text[ turkish ] = "Küçük aralık";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "espacio pequeño";
-                        Text[ finnish ] = "Pieni väli";
+                        Text[ catalan ] = "espai petit";
+                        Text[ finnish ] = "Kapea väli";
+                        Text[ thai ] = "à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡à¹€à¸¥à¹‡à¸";
                     };
                     MenuItem
                     {
@@ -1619,20 +1629,21 @@ Menu RID_COMMANDMENU
                         Text[ dutch ] = "spatie";
                         Text[ spanish ] = "espacio";
                         Text[ english_us ] = "Gap";
-                        Text[ chinese_simplified ] = "¼ä¸ô";
+                        Text[ chinese_simplified ] = "é—´éš”";
                         Text[ russian ] = "Ïğîáåë";
                         Text[ polish ] = "Odstêp ramek";
-                        Text[ japanese ] = "½Íß°½";
-                        Text[ chinese_traditional ] = "¶¡¹j";
+                        Text[ japanese ] = "ã‚¹ãƒšãƒ¼ã‚¹";
+                        Text[ chinese_traditional ] = "é–“éš”";
                         Text[ dutch ] = "spatie";
-                        Text[ chinese_simplified ] = "¼ä¸ô";
+                        Text[ chinese_simplified ] = "é—´éš”";
                         Text[ greek ] = "ÄéÜêåíï";
-                        Text[ korean ] = "°£°İ";
+                        Text[ korean ] = "ê°„ê²©";
                         Text[ arabic ] = "ÊÈÇÚÏ";
                         Text[ turkish ] = "Aralık";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "espacio";
+                        Text[ catalan ] = "Espai";
                         Text[ finnish ] = "Väli";
+                        Text[ thai ] = "à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡";
                     };
                     MenuItem
                     {
@@ -1676,20 +1687,21 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "¸ñÊ½»¯(~M)";
+            Text[ chinese_simplified ] = "æ ¼å¼åŒ–(~M)";
             Text[ russian ] = "Ôîğìàòû";
             Text[ polish ] = "Formatowania";
-            Text[ japanese ] = "‘®İ’è(~M)";
-            Text[ chinese_traditional ] = "®æ¦¡¤Æ(~M)";
+            Text[ japanese ] = "æ›¸å¼è¨­å®š(~M)";
+            Text[ chinese_traditional ] = "æ ¼å¼åŒ–(~M)";
             Text[ dutch ] = "~Opmaak";
-            Text[ chinese_simplified ] = "¸ñÊ½»¯(~M)";
+            Text[ chinese_simplified ] = "æ ¼å¼åŒ–(~M)";
             Text[ greek ] = "Ìïñ~öïğïéŞóåéò";
-            Text[ korean ] = "Æ÷¸ËÆÃ(~M)";
+            Text[ korean ] = "ì„œì‹(~M)";
             Text[ arabic ] = "ÊäÓíŞ";
             Text[ turkish ] = "Format";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Formatos";
-            Text[ finnish ] = "~Muodot";
+            Text[ catalan ] = "For~mats";
+            Text[ finnish ] = "~Muotoilu";
+            Text[ thai ] = "à¸£à¸¹à¸›à¹~à¸šà¸š";
         };
         MenuItem
         {
@@ -1704,7 +1716,7 @@ Menu RID_COMMANDMENU
             Text [ italian ] = "Altro" ;
             Text [ spanish ] = "~Otros" ;
             Text [ french ] = "~Autres" ;
-            Text [ dutch ] = "D~iversen" ;
+            Text [ dutch ] = "Over~ige" ;
             Text [ portuguese ] = "~Outros" ;
             SubMenu = Menu
             {
@@ -1834,23 +1846,36 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÆäËû(~O)";
+            Text[ chinese_simplified ] = "å…¶ä»–(~O)";
             Text[ russian ] = "Ïğî÷åå";
             Text[ polish ] = "Inne";
-            Text[ japanese ] = "‚»‚Ì‘¼(~O)";
-            Text[ chinese_traditional ] = "¨ä¥L(~O)";
-            Text[ dutch ] = "D~iversen";
-            Text[ chinese_simplified ] = "ÆäËû(~O)";
+            Text[ japanese ] = "ãã®ä»–(~O)";
+            Text[ chinese_traditional ] = "å…¶ä»–(~O)";
+            Text[ dutch ] = "Over~ige";
+            Text[ chinese_simplified ] = "å…¶ä»–(~O)";
             Text[ greek ] = "~ÄéÜöïñá";
-            Text[ korean ] = "±âÅ¸(~O)";
+            Text[ korean ] = "ê¸°íƒ€(~O)";
             Text[ arabic ] = "ãÇ ÚÏì Ğáß";
             Text[ turkish ] = "Diğer";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Otros";
+            Text[ catalan ] = "~Altres";
             Text[ finnish ] = "~Muut";
+            Text[ thai ] = "~à¸­à¸·à¹ˆà¸™ à¹†";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
