@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 09:02:57 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,9 +782,16 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 if(xProp.is())
                 {
-                    sal_Int32 nNewAlign = 0;
-                    evt.NewValue >>= nNewAlign; // may fail in case it's void
-                    xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(nNewAlign));
+                    if(evt.NewValue.hasValue())
+                    {
+                        sal_Int16 nAlign = 0;
+                        if(evt.NewValue >>= nAlign)
+                            xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(sal_Int32(nAlign)));
+                        else
+                            xProp->setPropertyValue(PROPERTY_ALIGN,evt.NewValue);
+                    }
+                    else
+                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)0));
                 }
             }
             catch(Exception&)
@@ -1263,6 +1270,33 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
             case ID_BROWSER_CLOSE:
                 aReturn.bEnabled = sal_True;
                 break;
+            case ID_BROWSER_COPY:
+                if(m_pTreeView->HasChildPathFocus())
+                {
+                    SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+                    EntryType eType = getEntryType(pEntry);
+                    aReturn.bEnabled = (eType == ET_TABLE || eType == ET_QUERY);
+                    break;
+                }// else run through
+            case ID_BROWSER_CUT:
+                if(m_pTreeView->HasChildPathFocus())
+                {
+                    aReturn.bEnabled = sal_False;
+//                  SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+//                  EntryType eType = getEntryType(pEntry);
+//                  aReturn.bEnabled = (eType == ET_TABLE || eType == ET_QUERY);
+                    break;
+                }// else run through
+                break;
+            case ID_BROWSER_PASTE:
+                // first look which side is active
+                if(m_pTreeView->HasChildPathFocus())
+                {
+                    SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+                    EntryType eType = getEntryType(pEntry);
+                    aReturn.bEnabled = ((eType == ET_TABLE || eType == ET_TABLE_CONTAINER) && isTableFormat());
+                    break;
+                }// else run through
             default:
                 return SbaXDataBrowserController::GetState(nId);
         }
@@ -1370,6 +1404,60 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                 ::comphelper::disposeComponent(xComp);
             }
             break;
+
+        case ID_BROWSER_PASTE:
+            if(m_pTreeView->HasChildPathFocus())
+            {
+                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+                SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+                implPasteTable( pEntry, aTransferData );
+                break;
+            }// else run through
+        case ID_BROWSER_COPY:
+            if(m_pTreeView->HasChildPathFocus())
+            {
+                SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+                EntryType eType = getEntryType(pEntry);
+                switch(eType)
+                {
+                    case ET_QUERY:
+                        implCopyObject( pEntry, CommandType::QUERY );
+                        break;
+                    case ET_TABLE:
+                        {
+                            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::TABLE );
+                            Reference< XTransferable> aEnsureDelete = pTransfer;
+
+                            if (pTransfer)
+                                pTransfer->CopyToClipboard();
+                        }
+                        break;
+                }
+                break;
+            }// else run through
+        case ID_BROWSER_CUT:
+            // first look which side is active
+            if(m_pTreeView->HasChildPathFocus())
+            {
+                SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+                EntryType eType = getEntryType(pEntry);
+                switch(eType)
+                {
+                    case ET_QUERY:
+                        implCopyObject( pEntry, CommandType::QUERY );
+                        break;
+                    case ET_TABLE:
+                        {
+                            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::TABLE );
+                            Reference< XTransferable> aEnsureDelete = pTransfer;
+
+                            if (pTransfer)
+                                pTransfer->CopyToClipboard();
+                        }
+                        break;
+                }
+                break;
+            } // else run through
         default:
             SbaXDataBrowserController::Execute(nId);
             break;
@@ -1750,19 +1838,19 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                     }
                     break;
             }
-
-
             if(xNameAccess.is() && xNameAccess->hasByName(aName))
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 if(!pData)
                 {
-                    DBTreeListModel::DBTreeListUserData* pTableData = new DBTreeListModel::DBTreeListUserData;
-                    pTableData->bTable = pTablesData->bTable;
-                    if(xNameAccess->getByName(aName) >>= pTableData->xObject) // remember the table or query object
+                    Reference<XInterface> xObject;
+                    if(xNameAccess->getByName(aName) >>= xObject) // remember the table or query object
+                    {
+                        DBTreeListModel::DBTreeListUserData* pTableData = new DBTreeListModel::DBTreeListUserData;
+                        pTableData->xObject = xObject;
+                        pTableData->bTable = pTablesData->bTable;
                         m_pCurrentlyDisplayed->SetUserData(pTableData);
-                    else
-                        delete pTableData; // do you see the data can be null or not set
+                    }
                 }
             }
             // the values allowing the RowSet to re-execute
@@ -1797,6 +1885,12 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 if (xLoadable->isLoaded() && bLoadSuccess)
                     xLoadable->reload();
                 FormLoaded(sal_True);
+            }
+            // set the title of the beamer
+            Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+            if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+            {
+                xProp->setPropertyValue(PROPERTY_TITLE,makeAny(aName));
             }
         }
         catch(SQLException& e)
@@ -2373,6 +2467,9 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
     SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
     SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
     DBG_ASSERT(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
+    // we want the table entry and the end so we have to do a check
+    if(getEntryType(pRHS) == ET_QUERY_CONTAINER)
+        return 1;
 
     SvLBoxString* pLeftTextItem = static_cast<SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     SvLBoxString* pRightTextItem = static_cast<SvLBoxString*>(pRHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
@@ -2519,6 +2616,7 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
             pDispatcher->edit(aDSName, sCurrentObject, xConnection);
         else
             pDispatcher->create(aDSName, xConnection, ID_TREE_QUERY_CREATE_DESIGN == _nAction);
+        delete pDispatcher;
     }
     catch(SQLException& e)
     {
@@ -2689,15 +2787,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     bTablesOrTable);
 
         // 1.2 pasting tables
-        sal_Bool bPasteAble = bTablesOrTable;
-        if(bPasteAble)
-        {
-            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-            bPasteAble  =   aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
-                        ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
-                        ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
-                        ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML);
-        }
+        sal_Bool bPasteAble = bTablesOrTable && isTableFormat();
         aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bPasteAble);
 
         // 1.3 actions on existing tables
