@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-08-12 13:59:38 $
+ *  last change: $Author: os $ $Date: 2002-08-22 10:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,13 @@ struct RelationMap
     ULONG  nLBRelation;
     USHORT nRelation;
 };
+
+struct ResIdPair_Impl
+{
+    USHORT nHori;
+    USHORT nVert;
+};
+
 #define MAX_PERCENT_WIDTH 254L
 
 #define LB_FRAME                0x00000001L // Textbereich des Absatzes
@@ -578,7 +585,41 @@ void lcl_SetTwipValue(MetricField& rMetric, long nValue)
 {
     rMetric.SetValue(rMetric.Normalize(nValue),FUNIT_TWIP);
 }
+/* -----------------------------20.08.2002 16:12------------------------------
 
+ ---------------------------------------------------------------------------*/
+USHORT lcl_ChangeResIdToVertical(USHORT nResId)
+{
+    //exchange horizontal strings with vertical strings and vice versa
+    ResIdPair_Impl aHoriVertIds[] =
+    {
+        {STR_LEFT,           STR_TOP},
+        {STR_RIGHT,          STR_BOTTOM},
+        {STR_CENTER_HORI,    STR_CENTER_VERT},
+        {STR_FROMLEFT,       STR_FROMTOP},
+        {STR_REL_PG_LEFT,    STR_REL_PG_TOP},
+        {STR_REL_PG_RIGHT,   STR_REL_PG_BOTTOM} ,
+        {STR_REL_FRM_LEFT,   STR_REL_FRM_TOP},
+        {STR_REL_FRM_RIGHT,  STR_REL_FRM_BOTTOM},
+        {0, 0}
+    };
+    USHORT nIndex = 0;
+    while(aHoriVertIds[nIndex].nHori)
+    {
+        if(aHoriVertIds[nIndex].nHori == nResId)
+        {
+            nResId = aHoriVertIds[nIndex].nVert;
+            break;
+        }
+        else if(aHoriVertIds[nIndex].nVert == nResId)
+        {
+            nResId = aHoriVertIds[nIndex].nHori;
+            break;
+        }
+        nIndex++;
+    }
+    return nResId;
+}
 /*--------------------------------------------------------------------
     Beschreibung:   StandardRahmenTabPage
  --------------------------------------------------------------------*/
@@ -1164,37 +1205,7 @@ USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
         {
             USHORT nResId = aMirrorPagesCB.IsChecked() ? pMap[i].nMirrorStrId : pMap[i].nStrId;
             if(bIsVerticalFrame)
-            {
-                //exchange horizontal strings with vertical strings and vice versa
-                struct ResIdPair
-                {
-                    USHORT nHori;
-                    USHORT nVert;
-                };
-                ResIdPair aHoriVertIds[] =
-                {
-                    {STR_LEFT,           STR_TOP},
-                    {STR_RIGHT,          STR_BOTTOM},
-                    {STR_CENTER_HORI,    STR_CENTER_VERT},
-                    {STR_FROMLEFT,       STR_FROMTOP},
-                    {0, 0}
-                };
-                USHORT nIndex = 0;
-                while(aHoriVertIds[nIndex].nHori)
-                {
-                    if(aHoriVertIds[nIndex].nHori == nResId)
-                    {
-                        nResId = aHoriVertIds[nIndex].nVert;
-                        break;
-                    }
-                    else if(aHoriVertIds[nIndex].nVert == nResId)
-                    {
-                        nResId = aHoriVertIds[nIndex].nHori;
-                        break;
-                    }
-                    nIndex++;
-                }
-            }
+                nResId = lcl_ChangeResIdToVertical(nResId);
             String sEntry(SW_RES(nResId));
             sEntry.EraseAllChars( '~' );
             if (rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
@@ -1220,7 +1231,6 @@ USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT nRel, ListBox &rLB, FixedText &rFT)
 {
     String sSelEntry;
@@ -1248,6 +1258,8 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
                         {
                             USHORT nResId = aAsCharRelationMap[nRelPos].nStrId;
 
+                            if(bIsVerticalFrame)
+                                nResId = lcl_ChangeResIdToVertical(nResId);
                             String sEntry(SW_RES(nResId));
                             USHORT nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
@@ -1293,6 +1305,8 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
                         if (aRelationMap[nRelPos].nLBRelation == nBit)
                         {
                             USHORT nResId = aMirrorPagesCB.IsChecked() ? aRelationMap[nRelPos].nMirrorStrId : aRelationMap[nRelPos].nStrId;
+                            if(bIsVerticalFrame)
+                                nResId = lcl_ChangeResIdToVertical(nResId);
                             String sEntry(SW_RES(nResId));
                             USHORT nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
@@ -3147,5 +3161,4 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
 
     return 0;
 }
-
 
