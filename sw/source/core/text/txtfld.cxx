@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
+ *  last change: $Author: fme $ $Date: 2001-11-20 16:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,11 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     pNumFnt->SetPitch( pFmtFnt->GetPitch(), nAct );
                 }
                 // we do not allow a vertical font
+#ifdef VERTICAL_LAYOUT
+                pNumFnt->SetVertical( 0, pFrm->IsVertical() );
+#else
                 pNumFnt->SetVertical( 0 );
+#endif
 
                 pRet = new SwBulletPortion( rNumFmt.GetBulletChar(), pNumFnt, bLeft,
                             bCenter, nMinDist );
@@ -457,7 +461,11 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     // pNumFnt->ChangeSize( rInf.GetFont()->GetSize() );
 
                     // we do not allow a vertical font
+#ifdef VERTICAL_LAYOUT
+                    pNumFnt->SetVertical( 0, pFrm->IsVertical() );
+#else
                     pNumFnt->SetVertical( 0 );
+#endif
 
                     pRet = new SwNumberPortion( aTxt, pNumFnt, bLeft, bCenter,
                                                 nMinDist );
