@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,42 @@ public:
     ULONG Fc2Cp( ULONG nFc ) const;
 };
 
+class wwFont
+{
+//In some future land the stream could be converted to a nice stream interface
+//and we could have harmony
+private:
+    BYTE maWW8_FFN[6];
+    String msFamilyNm;
+    String msAltNm;
+    bool mbAlt;
+    bool mbWrtWW8;
+    String MapFont(const String &rFamilyNm);
+public:
+    wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+        rtl_TextEncoding eChrSet, bool bWrtWW8);
+    bool Write(SvStream *pTableStram) const;
+    friend bool operator < (const wwFont &r1, const wwFont &r2);
+    static bool IsStarSymbol(const String &rFamilyNm);
+};
 
+class wwFontHelper
+{
+private:
+    /*
+     * Keep track of fonts that need to be exported.
+    */
+    ::std::map<wwFont, USHORT> maFonts;
+    bool mbWrtWW8;
+public:
+    wwFontHelper() : mbWrtWW8(false) {}
+    //rDoc used only to get the initial standard font(s) in use.
+    void InitFontTable(bool bWrtWW8, const SwDoc& rDoc);
+    USHORT GetId(const Font& rFont);
+    USHORT GetId(const SvxFontItem& rFont);
+    USHORT GetId(const wwFont& rFont);
+    void WriteFontTable(SvStream *pTableStream, WW8Fib& pFib );
+};
 
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
@@ -301,6 +336,7 @@ friend BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt ); // pO
 friend void WW8_WrPlcSepx::WriteOlst( SwWW8Writer& rWrt, USHORT i );
 friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
+    wwFontHelper maFontHelper;
     String aMainStg;
     SvPtrarr aTOXArr;
     SwPosFlyFrms* pFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
@@ -319,7 +355,6 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     ULONG nIniFlags;            // Flags aus der writer.ini
     USHORT nCharFmtStart;
     USHORT nFmtCollStart;
-    USHORT nAktFlyPos;          // Index auf das naechste "FlyFrmFmt"
     USHORT nStyleBeforeFly;     // Style-Nummer des Nodes,
                                 //       in/an dem ein Fly verankert ist
     USHORT nLastFmtId;          // Style of last TxtNode in normal range
@@ -329,7 +364,6 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
     void PrepareStorage();
     void WriteFkpPlcUsw();
-    void OutFontTab( WW8Fib& pFib );
     void WriteMainText();
     void StoreDoc1();
     ULONG StoreDoc();
@@ -349,6 +383,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void OutListTab();
     void OutOverrideListTab();
     void OutListNamesTab();
+    void InitFontTable();
 public:
     const SwPageDesc* pAktPageDesc;
     WW8Fib* pFib;
@@ -427,10 +462,12 @@ public:
 
     USHORT GetId( const SwTxtFmtColl& rColl ) const;
     USHORT GetId( const SwCharFmt& rFmt ) const;
-    USHORT GetId( const SvxFontItem& rFont ) const;
-    USHORT GetId( const Font& rFont ) const;
     USHORT GetId( const SwNumRule& rNumRule ) const;
     USHORT GetId( const SwTOXType& rTOXType );
+    USHORT GetId( const SvxFontItem& rFont)
+    {
+        return maFontHelper.GetId(rFont);
+    }
 
     void OutRedline( const SwRedlineData& rRedline );
     USHORT AddRedlineAuthor( USHORT nId );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-07 13:10:39 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,9 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm,BYTE nVersion,
     pGlossary = new WW8GlossaryFib( *refStrm, nVersion,*xTableStream, aWwFib );
 }
 
-BOOL WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
+bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 {
-    BOOL bRet=FALSE;
+    bool bRet=false;
     for( USHORT nCnt = pDoc->GetSpzFrmFmts()->Count(); nCnt; )
     {
         SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ --nCnt ];
@@ -143,21 +143,21 @@ BOOL WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
             0 != ( pAPos = rAnchor.GetCntntAnchor()) &&
             rIdx == pAPos->nNode.GetIndex() )
             {
-                bRet=TRUE;
+                bRet=true;
                 break;
             }
     }
     return bRet;
 }
 
-BOOL WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
-                                BOOL bSaveRelFile, SvStrings& rStrings,
+bool WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
+                                bool bSaveRelFile, SvStrings& rStrings,
                                 SvStrings& rExtra )
 {
     // this code will be called after reading all text into the
     // empty sections
     const String aOldURL( INetURLObject::GetBaseURL() );
-    BOOL bRet=FALSE;
+    bool bRet=false;
     if( bSaveRelFile )
     {
         INetURLObject::SetBaseURL(
@@ -222,7 +222,7 @@ BOOL WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
             {
                 rBlocks.ClearDoc();
                 String sLNm( *rStrings[nGlosEntry] );
-                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(sLNm,TRUE),
+                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(sLNm,true),
                     sLNm ))
                 {
                     SwDoc* pGlDoc = rBlocks.GetDoc();
@@ -239,7 +239,7 @@ BOOL WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
         } while( aStart.GetNode().IsStartNode() &&
                 SwNormalStartNode == aStart.GetNode().
                     GetStartNode()->GetStartNodeType());
-        bRet=TRUE;
+        bRet=true;
     }
 
 // this code will be called after reading all text into the empty sections
@@ -249,9 +249,9 @@ BOOL WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
 }
 
 
-BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
+bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 {
-    BOOL bRet = FALSE;
+    bool bRet=false;
     if( pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries() )
     {
         //read the names of the autotext entries
@@ -260,7 +260,7 @@ BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
         rtl_TextEncoding eStructCharSet =
             WW8Fib::GetFIBCharset(pGlossary->chseTables);
 
-        WW8ReadSTTBF( TRUE, *xTableStream, pGlossary->fcSttbfglsy,
+        WW8ReadSTTBF(true, *xTableStream, pGlossary->fcSttbfglsy,
             pGlossary->lcbSttbfglsy, 0, eStructCharSet, aStrings, &aExtra );
 
         rStrm->Seek(0);
@@ -272,7 +272,7 @@ BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
             {
                 SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
                 SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
-                    xStg, &rStrm, *pD, TRUE);
+                    xStg, &rStrm, *pD, true);
 
                 SwNodeIndex aIdx(
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
@@ -301,7 +301,7 @@ BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
 }
 
 
-BOOL WW8GlossaryFib::IsGlossaryFib()
+bool WW8GlossaryFib::IsGlossaryFib()
 {
     if (!nFibError)
     {

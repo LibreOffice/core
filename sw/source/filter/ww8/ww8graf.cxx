@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:55 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,7 +2065,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
     if (pFlyFmt)
     {
         //JP 11.1.2002: task 96329
-        SdrObject* pNewObject = bNew ? 0 : pFlyFmt->FindRealSdrObject();
+        SdrObject* pNewObject = mbNewDoc ? 0 : pFlyFmt->FindRealSdrObject();
         if (!pNewObject)
             pNewObject = pFlyFmt->FindSdrObject();
         if (!pNewObject && pFlyFmt->ISA(SwFlyFrmFmt))

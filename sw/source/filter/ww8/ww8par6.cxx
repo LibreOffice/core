@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-28 13:26:19 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,7 +1176,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 
 
     // check if Line Numbering must be activated or resetted
-    const BYTE* pSprmSNLnnMod = bNew ?
+    const BYTE* pSprmSNLnnMod = mbNewDoc ?
         pSep->HasSprm( bVer67 ? 154 : 0x5015 ) : 0;
     if( pSprmSNLnnMod && *pSprmSNLnnMod )
     {
@@ -1482,7 +1482,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                     }
                     break;
                 case 1:
-                    if( bNew )
+                    if (mbNewDoc)
                     {
                         rDoc.Insert(*pPaM, SvxFmtBreakItem(
                             SVX_BREAK_COLUMN_BEFORE ));
@@ -1499,7 +1499,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                         So geht es, auch wenn der Break auf Seite 7 kommt,
                         wieder mit einer ERSTEN Seite weiter.
                     */
-                    if( bNew )
+                    if (mbNewDoc)
                     {
                         if( pPageDesc )
                             rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
@@ -1515,9 +1515,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
             // ========  Das war's Freunde, jetzt nichts wie weg hier!
             }
         }
-        if(    bNew
-            && (    bSectionWasJustClosed
-                 || (pPageDesc != &rDoc._GetPageDesc( 0 )) ) )
+        if (mbNewDoc &&
+            ( bSectionWasJustClosed || (pPageDesc != &rDoc._GetPageDesc(0)) ))
         {
             if ((nBreakCode > 1) && bMustHaveBreak)
             {
@@ -1545,11 +1544,10 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
             }
         }
     }
-    else
-        if( bNew )
-            pPageDesc = &rDoc._GetPageDesc( 0 );    // Standard
+    else if (mbNewDoc)
+        pPageDesc = &rDoc._GetPageDesc( 0 );    // Standard
 
-    if( !bNew )
+    if (!mbNewDoc)
         return;
 
 
@@ -2681,8 +2679,8 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     const WW8SwFlyPara* pFS, BOOL bGraf )
     : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
-    if( !rReader.bNew )
-        Reader::ResetFrmFmtAttrs( *this );  // Abstand/Umrandung raus
+    if (!rReader.mbNewDoc)
+        Reader::ResetFrmFmtAttrs(*this);    // Abstand/Umrandung raus
                                             // Position
 
     Put( SwFmtHoriOrient( pFS->nXPos, pFS->eHAlign, pFS->eHRel,
@@ -2734,7 +2732,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     const WW8_PIC& rPic, long nWidth, long nHeight )
     : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
-    if( !rReader.bNew )
+    if (!rReader.mbNewDoc)
         Reader::ResetFrmFmtAttrs( *this );  // Abstand/Umrandung raus
 
     Put( SvxLRSpaceItem() ); //inline writer ole2 objects start with 0.2cm l/r

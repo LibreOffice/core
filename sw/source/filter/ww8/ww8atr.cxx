@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 16:47:10 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,17 +755,10 @@ static Writer& OutWW8_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SvxFontItem& rAttr = (const SvxFontItem&)rHt;
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    USHORT nFontID= rWrtWW8.GetId( rAttr );
+    USHORT nFontID= rWrtWW8.GetId(rAttr);
 
     if( rWrtWW8.bWrtWW8 )
     {
-#if 0
-        if (nIdPreferred = RES_CHRATR_FONT)
-        {
-            rWrtWW8.InsUInt16( 0x286f );
-            rWrtWW8.pO->Insert( 0, rWrtWW8.pO->Count() );
-        }
-#endif
         rWrtWW8.InsUInt16( 0x4a4f );
         rWrtWW8.InsUInt16( nFontID );
         rWrtWW8.InsUInt16( 0x4a51 );
@@ -789,7 +782,7 @@ static Writer& OutWW8_SwCJKFont( Writer& rWrt, const SfxPoolItem& rHt )
         }
 #endif
         rWrtWW8.InsUInt16( 0x4a50 );
-        rWrtWW8.InsUInt16( rWrtWW8.GetId( (const SvxFontItem&)rHt ) );
+        rWrtWW8.InsUInt16(rWrtWW8.GetId((const SvxFontItem&)rHt));
     }
     return rWrt;
 }

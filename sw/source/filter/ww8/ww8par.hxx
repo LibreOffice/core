@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-28 18:03:58 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,7 +748,7 @@ friend class WW8FormulaControl;
     BYTE nCorrIhdt;             // used in CreateSep()
     BOOL bSectionHasATitlePage; // used in CreateSep()
 
-    BOOL bNew;              // Neues Dokument ?
+    bool mbNewDoc;          // Neues Dokument ?
     BOOL bReadNoTbl;        // Keine Tabellen
     BOOL bPgSecBreak;       // Page- oder Sectionbreak ist noch einzufuegen
     BOOL bSpec;             // Special-Char im Text folgt
@@ -957,7 +957,7 @@ friend class WW8FormulaControl;
     BOOL ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
         SwWw8ControlType nWhich);
 
-    void ImportDop( BOOL bNewDoc );
+    void ImportDop();
 
     //This converts MS Asian Typography information into OOo's
     void ImportDopTypography(const WW8DopTypography &rTypo);
@@ -1262,7 +1262,7 @@ public:     // eigentlich private, geht aber leider nur public
         long &rX, long &rY);
 
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, BOOL bNewDoc );
+        SwDoc& rD, bool bNewDoc );
 
     const ULONG GetFieldFlags() const{ return nFieldFlags; }
     const ULONG GetIniFlags()   const{ return nIniFlags; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ public:
     WW8GlossaryFib( SvStream& rStrm, BYTE nWantedVersion ,
         SvStream& rTableStrm, const WW8Fib &rFib) : WW8Fib(rStrm,
         nWantedVersion,FindGlossaryFibOffset(rTableStrm,rStrm,rFib)) {}
-    BOOL IsGlossaryFib();
+    bool IsGlossaryFib();
 private:
     UINT32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
         const WW8Fib &rFib);
@@ -105,7 +105,7 @@ class WW8Glossary
 {
 public:
     WW8Glossary( SvStorageStreamRef &refStrm, BYTE nVersion, SvStorage *pStg=0);
-    BOOL Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile );
+    bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
     ~WW8Glossary()                  { delete pGlossary; }
     WW8GlossaryFib *GetFib()        { return pGlossary; }
     USHORT GetNoStrings() const     { return nStrings; }
@@ -117,9 +117,9 @@ private:
     SvStorageRef xStg;
     USHORT nStrings;
 
-    BOOL MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks, BOOL bSaveRelFile,
+    bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
         SvStrings& rStrings, SvStrings& rExtra);
-    BOOL HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
+    bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 
     //No copying
     WW8Glossary(const WW8Glossary&);

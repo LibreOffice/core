@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,11 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+
+//#define DUMPSYMBOLS
+#ifdef DUMPSYMBOLS
+#include <fstream>
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -206,6 +211,7 @@ void SwWW8Writer::OutListTab()
         0x11, 0x84, 0, 0                // sprmPDxaLeft1
     };
 
+    StarSymbolToMSMultiFont *pConvert = 0;
     for( n = 0; n < nCount; ++n )
     {
         const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
@@ -230,19 +236,73 @@ void SwWW8Writer::OutListTab()
 
             // Build the NumString for this Level
             String sNumStr;
+            String sFontName;
             BOOL bWriteBullet = FALSE;
-            rtl_TextEncoding eChrSet = RTL_TEXTENCODING_SYMBOL;
+            const Font* pBulletFont=0;
+            rtl_TextEncoding eChrSet=0;
+            FontFamily eFamily=FAMILY_DECORATIVE;
             if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
                 SVX_NUM_BITMAP == rFmt.GetNumberingType() )
             {
                 sNumStr = rFmt.GetBulletChar();
                 bWriteBullet = TRUE;
 
-                const Font* pFont = rFmt.GetBulletFont();
-                if( !pFont )
-                    pFont = &SwNumRule::GetDefBulletFont();
+                pBulletFont = rFmt.GetBulletFont();
+                if( !pBulletFont )
+                    pBulletFont = &SwNumRule::GetDefBulletFont();
 
-                eChrSet = pFont->GetCharSet();
+                eChrSet = pBulletFont->GetCharSet();
+                sFontName = pBulletFont->GetName();
+                eFamily = pBulletFont->GetFamily();
+
+                if (wwFont::IsStarSymbol(sFontName))
+                {
+                    if (!pConvert)
+                    {
+                        pConvert = CreateStarSymbolToMSMultiFont();
+#ifdef DUMPSYMBOLS
+                        ::std::ofstream output("fontdebug");
+                        for (sal_Unicode i=0xE000;i<0xF8FF;i++)
+                        {
+                            String sFont = pConvert->ConvertChar(i);
+                            if (sFont.Len())
+                                output << ::std::hex << i << std::endl;
+                        }
+#endif
+                    }
+                    const char *pName=0;
+                    sal_Unicode cChar = sNumStr.GetChar(0);
+                    String sFont = pConvert->ConvertChar(cChar);
+                    if (sFont.Len())
+                    {
+                        sNumStr = cChar;
+                        sFontName = sFont;
+                        eChrSet = RTL_TEXTENCODING_SYMBOL;
+                    }
+                    else if (sNumStr.GetChar(0) < 0xE000 ||
+                        sNumStr.GetChar(0) > 0xF8FF)
+                    {
+                        /*
+                        Ok we can't fit into a known windows unicode font, but
+                        we are not in the private area, so we are a
+                        standardized symbol, so turn off the symbol bit and
+                        let words own font substitution kick in
+                        */
+                        eChrSet = RTL_TEXTENCODING_UNICODE;
+                        eFamily = FAMILY_SWISS;
+                        sFontName = ::GetFontToken(sFontName, 0);
+                    }
+                    else
+                    {
+                        /*
+                        Well we don't have an available substition, and we're
+                        in our private area, so give up and show a standard
+                        bullet symbol
+                        */
+                        sFontName.ASSIGN_CONST_ASC("Wingdings");
+                        sNumStr = 0x6C;
+                    }
+                }
             }
             else if( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
             {
@@ -286,23 +346,43 @@ void SwWW8Writer::OutListTab()
                 SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
                                                       RES_CHRATR_END );
                 const SfxItemSet* pOutSet;
-                if( bWriteBullet )
+                if (bWriteBullet)
                 {
-                    const Font* pFont = rFmt.GetBulletFont();
-                    if( !pFont )
-                        pFont = &SwNumRule::GetDefBulletFont();
                     pOutSet = &aSet;
 
-                    if( rFmt.GetCharFmt() )
+                    if (rFmt.GetCharFmt())
                         aSet.Put( rFmt.GetCharFmt()->GetAttrSet() );
-                    aSet.Put( SvxFontItem( pFont->GetFamily(),
-                                pFont->GetName(), pFont->GetStyleName(),
-                                pFont->GetPitch(), pFont->GetCharSet() ));
+                    aSet.ClearItem(RES_CHRATR_CJK_FONT);
+                    aSet.ClearItem(RES_CHRATR_FONT);
+
+                    if (!sFontName.Len())
+                        sFontName = pBulletFont->GetName();
+
+                    wwFont aPseudoFont(sFontName, pBulletFont->GetPitch(),
+                        eFamily, eChrSet, bWrtWW8);
+                    USHORT nFontID = maFontHelper.GetId(aPseudoFont);
+
+                    if (bWrtWW8)
+                    {
+                        InsUInt16(0x4a4f);
+                        InsUInt16(nFontID);
+                        InsUInt16(0x4a51);
+                    }
+                    else
+                        pO->Insert(93, pO->Count());
+                    InsUInt16(nFontID);
+
+                    if (bWrtWW8)
+                    {
+                        InsUInt16(0x286F);
+                        pO->Insert(01, pO->Count());
+                    }
                 }
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
 
                 Out_SfxItemSet( *pOutSet, FALSE, TRUE, ScriptType::LATIN );
+
                 pO = pOldpO;
             }
             nFlags = (BYTE)aCharAtrs.Count();
@@ -331,6 +411,7 @@ void SwWW8Writer::OutListTab()
             SwWW8Writer::WriteString16( *pTableStrm, sNumStr, FALSE );
         }
     }
+    delete pConvert;
 }
 
 void SwWW8Writer::OutOverrideListTab()
@@ -453,7 +534,7 @@ void SwWW8Writer::BuildAnlvBulletBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
         const Font& rFont = rFmt.GetBulletFont() ? *rFmt.GetBulletFont()
             : SwNumRule::GetDefBulletFont();
 
-        USHORT nFontId = GetId( rFont );
+        USHORT nFontId = maFontHelper.GetId(rFont);
         ShortToSVBT16( nFontId, rAnlv.ftc );
         *rpCh = ByteString::ConvertFromUnicode( rFmt.GetBulletChar(),
             rFont.GetCharSet() );

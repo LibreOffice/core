@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 11:55:17 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             pFlySet = pTempSet;
 
             // Abstand/Umrandung raus
-            if( !bNew )
+            if (!mbNewDoc)
                 Reader::ResetFrmFmtAttrs( *pTempSet );
 
             SwFmtAnchor aAnchor( FLY_IN_CNTNT );

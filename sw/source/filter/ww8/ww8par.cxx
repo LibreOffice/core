@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:58 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,50 +734,51 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
 //              DOP
 //-----------------------------------------
 
-void SwWW8ImplReader::ImportDop( BOOL bNewDoc )
+void SwWW8ImplReader::ImportDop()
 {
-    if( bNewDoc )
+    // correct the LastPrinted date in DocumentInfo
+    if (rDoc.GetpInfo())
     {
-        // correct the LastPrinted date in DocumentInfo
-        if( rDoc.GetpInfo() )
+        DateTime aLastPrinted(
+            WW8ScannerBase::WW8DTTM2DateTime(pWDop->dttmLastPrint));
+        SfxDocumentInfo* pNeuDocInf = new SfxDocumentInfo(*rDoc.GetpInfo());
+        SfxStamp aPrinted(pNeuDocInf->GetPrinted());
+        if (aPrinted.GetTime() != aLastPrinted)
         {
-            DateTime aLastPrinted( WW8ScannerBase::WW8DTTM2DateTime( pWDop->dttmLastPrint ));
-            SfxDocumentInfo* pNeuDocInf = new SfxDocumentInfo( *rDoc.GetpInfo() );
-            SfxStamp aPrinted( pNeuDocInf->GetPrinted() );
-            if( aPrinted.GetTime() != aLastPrinted)
+            // check if WW8 date was set
+            if (aLastPrinted == DateTime(Date(0), Time(0)))
             {
-                // check if WW8 date was set
-                if( aLastPrinted == DateTime(Date( 0 ), Time( 0 )))
-                    // create "invalid" value for SfxStamp
-                    // (as seen in sfx2/DOSINF.HXX)
-                    aPrinted.SetTime(DateTime(Date( 1, 1, 1601 ), Time( 0, 0, 0 )));
-                else
-                    aPrinted.SetTime( aLastPrinted );
-                pNeuDocInf->SetPrinted( aPrinted );
-                rDoc.SetInfo( *pNeuDocInf );
-                delete pNeuDocInf;
+                // create "invalid" value for SfxStamp
+                // (as seen in sfx2/DOSINF.HXX)
+                aPrinted.SetTime(DateTime(Date( 1, 1, 1601 ), Time( 0, 0, 0 )));
             }
+            else
+                aPrinted.SetTime( aLastPrinted );
+
+            pNeuDocInf->SetPrinted( aPrinted );
+            rDoc.SetInfo( *pNeuDocInf );
+            delete pNeuDocInf;
         }
-
-        // Import Default-Tabs
-        long nDefTabSiz = pWDop->dxaTab;
-        if( nDefTabSiz < 56 )
-            nDefTabSiz = 709;
-
-        // wir wollen genau einen DefaultTab
-        SvxTabStopItem aNewTab( 1, USHORT(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT );
-        ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
-
-        rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
-
-        // set default language (from FIB)
-        rDoc.GetAttrPool().SetPoolDefaultItem(
-            SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
-
-        //import magic doptypography information, if its there
-        if (pWwFib->nFib > 105)
-            ImportDopTypography(pWDop->doptypography);
     }
+
+    // Import Default-Tabs
+    long nDefTabSiz = pWDop->dxaTab;
+    if( nDefTabSiz < 56 )
+        nDefTabSiz = 709;
+
+    // wir wollen genau einen DefaultTab
+    SvxTabStopItem aNewTab( 1, USHORT(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT );
+    ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
+
+    rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
+
+    // set default language (from FIB)
+    rDoc.GetAttrPool().SetPoolDefaultItem(
+        SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
+
+    //import magic doptypography information, if its there
+    if (pWwFib->nFib > 105)
+        ImportDopTypography(pWDop->doptypography);
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
@@ -785,7 +786,8 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     using namespace ::com::sun::star;
     switch (rTypo.iLevelOfKinsoku)
     {
-#if 0   /*
+#if 0
+        /*
         Do the defaults differ between Microsoft versions ?, do we do
         something about it if so ?
         */
@@ -804,13 +806,14 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 #endif
         case 2: //custom
             {
-            i18n::ForbiddenCharacters aForbidden(rTypo.rgxchFPunct,
-                rTypo.rgxchLPunct);
-            rDoc.SetForbiddenCharacters(rTypo.GetConvertedLang(),aForbidden);
-            //Obviously cannot set the standard level 1 for japanese, so bail
-            //out now while we can.
-            if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
-                return;
+                i18n::ForbiddenCharacters aForbidden(rTypo.rgxchFPunct,
+                    rTypo.rgxchLPunct);
+                rDoc.SetForbiddenCharacters(rTypo.GetConvertedLang(),
+                        aForbidden);
+                //Obviously cannot set the standard level 1 for japanese, so
+                //bail out now while we can.
+                if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
+                    return;
             }
             break;
         default:
@@ -2179,8 +2182,8 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 #**************************************************************************/
 
 SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, BOOL bNewDoc )
-    : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), bNew( 0 != bNewDoc ),
+    SvStream* pSt, SwDoc& rD, bool bNewDoc )
+    : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), mbNewDoc(bNewDoc),
     pMSDffManager( 0 ), pAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
     pTabNode(0), pLastPgDeskIdx( 0 ), pDataStream( 0 ), pTableStream( 0 ),
     aGrfNameGenerator(bNewDoc,String('G'))
@@ -2271,7 +2274,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 {
     ULONG nErrRet = 0;
 
-    if( bNew && pStg && !pGloss)
+    if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
 
     pPaM = new SwPaM( *rPaM.GetPoint() );
@@ -2289,7 +2292,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     nPageDescOffset = rDoc.GetPageDescCnt();
 
     SwNodeIndex aSttNdIdx( rDoc.GetNodes() );
-    SwRelNumRuleSpaces aRelNumRule( rDoc, bNew );
+    SwRelNumRuleSpaces aRelNumRule(rDoc, mbNewDoc);
 
     USHORT eMode = REDLINE_SHOW_INSERT;
 
@@ -2396,12 +2399,12 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
             bWWBugNormal = pWwFib->nProduct == 0xc03d;
 
-            if( !bNew )
+            if (!mbNewDoc)
                 aSttNdIdx = pPaM->GetPoint()->nNode;
 
             ::StartProgress( STR_STATSTR_W4WREAD, 0, 100, rDoc.GetDocShell() );
 
-            if ( bNew )
+            if (mbNewDoc)
             {
                 // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
                 // Abst. des ersten und oberem Abst. des zweiten
@@ -2416,15 +2419,19 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             // Document Properties
             pWDop = new WW8Dop( *pTableStream, pWwFib->nFib, pWwFib->fcDop,
                 pWwFib->lcbDop );
-            ImportDop( bNew != 0 );
+
+            if (mbNewDoc)
+                ImportDop();
 
             /*
                 Import revisioning data: author names
             */
             if( pWwFib->lcbSttbfRMark )
+            {
                 ReadRevMarkAuthorStrTabl( *pTableStream,
                                             pWwFib->fcSttbfRMark,
                                             pWwFib->lcbSttbfRMark, rDoc );
+            }
 
             /*
                 zuerst(!) alle Styles importieren   (siehe WW8PAR2.CXX)
@@ -2499,7 +2506,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             if( pWwFib->lcbPlcfhdd )
                 pHdFt = new WW8PLCF_HdFt( pTableStream, *pWwFib, *pWDop );
 
-            if( !bNew )
+            if (!mbNewDoc)
             {
                 // in ein Dokument einfuegen ?
                 // Da immer ganze Zeile eingelesen werden, muessen
@@ -2570,7 +2577,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 // Bitfeld, welche Outline-Level bereits an einem
                 // Style gesetzt wurden (vermeiden von Doppeltvergabe)
                 USHORT nFlagsStyleOutlLevel = 0;
-                if( !bNew )
+                if (!mbNewDoc)
                 {
                     const SwTxtFmtColls& rColls = *rDoc.GetTxtFmtColls();
                     for( nI = 0; nI < rColls.Count(); nI++ )
@@ -2709,7 +2716,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
             }
 
-            if( bNew )
+            if (mbNewDoc)
             {
                 if( pWDop->fRevMarking )
                     eMode |= REDLINE_ON;
@@ -2760,7 +2767,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     DeleteRefStk();
 
     aRelNumRule.SetNumRelSpaces( rDoc );
-    if( !bNew && !nErrRet && aSttNdIdx.GetIndex() )
+    if( !mbNewDoc && !nErrRet && aSttNdIdx.GetIndex() )
     {
         aSttNdIdx++;
         aRelNumRule.SetOultineRelSpaces( aSttNdIdx,
@@ -2770,7 +2777,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     UpdateFields();
 
     // delete the pam before the call for hide all redlines (Bug 73683)
-    if( bNew )
+    if (mbNewDoc)
         rDoc.SetRedlineMode( eMode );
 
     // set NoBallanced flag on last inserted section and remove the trailing
@@ -2782,7 +2789,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     }
     if (pAfterSection)
     {
-        if (bNew)
+        if (mbNewDoc)
         {
             //Needed to unlock last node so that we can delete it without
             //giving writer a fit. Necessary for deleting the para after a
@@ -2940,7 +2947,7 @@ ULONG WW8Reader::Read( SwDoc &rDoc, SwPaM &rPam,
                     const String & /* FileName, falls benoetigt wird */ )
 {
     USHORT nOldBuffSize = 32768;
-    BOOL bNew = !bInsertMode;               // Neues Doc ( kein Einfuegen )
+    bool bNew = !bInsertMode;               // Neues Doc ( kein Einfuegen )
 
 
     SvStorageStreamRef refStrm;         // damit uns keiner den Stream klaut
@@ -2984,14 +2991,14 @@ ULONG WW8Reader::Read( SwDoc &rDoc, SwPaM &rPam,
         //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
         //              Kapitelnummer. Darum hier explizit abschalten
         //              weil das Default jetzt wieder auf AN ist.
-        if( bNew )
+        if (bNew)
         {
             Reader::SetNoOutlineNum( rDoc );
             // MIB 27.09.96: Umrandung uns Abstaende aus Frm-Vorlagen entf.
             Reader::ResetFrmFmts( rDoc );
         }
-        SwWW8ImplReader* pRdr = new SwWW8ImplReader( nVersion, pStg,
-                                                        pIn, rDoc, bNew );
+        SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
+            bNew);
         nRet = pRdr->LoadDoc( rPam );
         delete pRdr;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
 
 #define _SVSTDARR_STRINGSSORTDTOR
 
@@ -645,76 +649,54 @@ void WW8WrtStyle::OutStyleTab()
 //---------------------------------------------------------------------------
 //          Fonts
 //---------------------------------------------------------------------------
-
-USHORT SwWW8Writer::GetId( const SvxFontItem& rFont ) const
+bool wwFont::IsStarSymbol(const String &rFamilyNm)
 {
-    const SfxItemPool& rPool = pDoc->GetAttrPool();
-    const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT );
-    USHORT n = 3;
-    if( rFont == *pFont )
-        return n;
-
-    ++n;
-    if( 0 != ( pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(
-                                                        RES_CHRATR_FONT )))
-    {
-        if( rFont == *pFont )
-            return n;
-        ++n;
-    }
-
-    USHORT nMaxItem = rPool.GetItemCount( RES_CHRATR_FONT );
-    for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem(
-            RES_CHRATR_FONT, nGet )) )
-        {
-            if( rFont == *pFont )
-                return n;
-            ++n;
-        }
-
-    ASSERT( !this, "Font nicht in der Tabelle" );
-    return 0;
+    String sFamilyNm  = ::GetFontToken(rFamilyNm, 0);
+    return (sFamilyNm.EqualsIgnoreCaseAscii("starsymbol") ||
+        sFamilyNm.EqualsIgnoreCaseAscii("opensymbol"));
 }
 
-USHORT SwWW8Writer::GetId( const Font& rFont ) const
+String wwFont::MapFont(const String &rFamilyNm)
 {
-    return GetId( SvxFontItem( rFont.GetFamily(), rFont.GetName(),
-                                rFont.GetStyleName(), rFont.GetPitch(),
-                                rFont.GetCharSet() ) );
+    String sRet;
+    if (IsStarSymbol(rFamilyNm))
+        sRet.ASSIGN_CONST_ASC("Arial Unicode MS");
+    else
+        sRet = GetSubsFontName(rFamilyNm, SUBSFONT_ONLYONE | SUBSFONT_MS);
+    return sRet;
 }
 
-static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
+wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+    rtl_TextEncoding eChrSet, bool bWrtWW8) : mbAlt(false), mbWrtWW8(bWrtWW8)
 {
-    BOOL bAlt=FALSE;
-    String sFamilyNm( ::GetFontToken( rFont.GetFamilyName(), 0 ));
-    String sAltNm( GetSubsFontName(sFamilyNm, SUBSFONT_ONLYONE | SUBSFONT_MS));
-    if( !sAltNm.Len() )
-        sAltNm = GetFontToken( rFont.GetFamilyName(), 1 );
-    if (sAltNm.Len() && sAltNm != sFamilyNm &&
-        (sFamilyNm.Len() + sAltNm.Len() + 2 <= 65) )
+    msFamilyNm  = ::GetFontToken(rFamilyName, 0);
+    msAltNm = MapFont(msFamilyNm);
+    if (!msAltNm.Len())
+        msAltNm = GetFontToken(rFamilyName, 1);
+    if (msAltNm.Len() && msAltNm != msFamilyNm &&
+        (msFamilyNm.Len() + msAltNm.Len() + 2 <= 65) )
     {
         //max size of szFfn in 65 chars
-        bAlt=TRUE;
+        mbAlt=TRUE;
     }
 
-    BYTE aWW8_FFN[ 6 ];
-    memset( aWW8_FFN, 0, 6 );                       // 6 == len of fixed Part
-    if( rWrt.bWrtWW8 )
+    memset(maWW8_FFN, 0, sizeof(maWW8_FFN));
+
+    if (bWrtWW8)
     {
-        aWW8_FFN[0] = (BYTE)( 6 - 1 + 0x22 + ( 2 * ( 1 + sFamilyNm.Len() ) ));
-        if (bAlt)
-            aWW8_FFN[0] += 2 * ( 1 + sAltNm.Len());
+        maWW8_FFN[0] = (BYTE)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.Len() ) ));
+        if (mbAlt)
+            maWW8_FFN[0] += 2 * ( 1 + msAltNm.Len());
     }
     else
     {
-        aWW8_FFN[0] = (BYTE)( 6 - 1 + 1 + sFamilyNm.Len() );
-        if (bAlt)
-            aWW8_FFN[0] += 1 + sAltNm.Len();
+        maWW8_FFN[0] = (BYTE)( 6 - 1 + 1 + msFamilyNm.Len() );
+        if (mbAlt)
+            maWW8_FFN[0] += 1 + msAltNm.Len();
     }
 
     BYTE aB = 0;
-    switch( rFont.GetPitch() )
+    switch(ePitch)
     {
         case PITCH_VARIABLE:
             aB |= 2;    // aF.prg = 2
@@ -727,148 +709,175 @@ static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
     }
     aB |= 1 << 2;   // aF.fTrueType = 1; weiss ich nicht besser;
 
-    switch( rFont.GetFamily() )
+    switch(eFamily)
     {
-    case FAMILY_ROMAN:
-        aB |= 1 << 4;   // aF.ff = 1;
-        break;
-    case FAMILY_SWISS:
-        aB |= 2 << 4;   // aF.ff = 2;
-        break;
-    case FAMILY_MODERN:
-        aB |= 3 << 4;   // aF.ff = 3;
-        break;
-    case FAMILY_SCRIPT:
-        aB |= 4 << 4;   // aF.ff = 4;
-        break;
-    case FAMILY_DECORATIVE:
-        aB |= 5 << 4;   // aF.ff = 5;
-        break;
-    default:            // aF.ff = 0; FF_DONTCARE (windows.h)
-        break;
+        case FAMILY_ROMAN:
+            aB |= 1 << 4;   // aF.ff = 1;
+            break;
+        case FAMILY_SWISS:
+            aB |= 2 << 4;   // aF.ff = 2;
+            break;
+        case FAMILY_MODERN:
+            aB |= 3 << 4;   // aF.ff = 3;
+            break;
+        case FAMILY_SCRIPT:
+            aB |= 4 << 4;   // aF.ff = 4;
+            break;
+        case FAMILY_DECORATIVE:
+            aB |= 5 << 4;   // aF.ff = 5;
+            break;
+        default:            // aF.ff = 0; FF_DONTCARE (windows.h)
+            break;
     }
-    aWW8_FFN[1] = aB;
+    maWW8_FFN[1] = aB;
 
-    ShortToSVBT16( 400, &aWW8_FFN[2] );         // weiss ich nicht besser
+    ShortToSVBT16( 400, &maWW8_FFN[2] );        // weiss ich nicht besser
                                                 // 400 == FW_NORMAL (windows.h)
-    if( RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet() )
-        aWW8_FFN[4] = 2;
+    if (RTL_TEXTENCODING_SYMBOL == eChrSet)
+        maWW8_FFN[4] = 2;
     else
-        aWW8_FFN[4] = 0;
+        maWW8_FFN[4] = 0;
 
-    if (bAlt)
-        aWW8_FFN[5] = sFamilyNm.Len()+1;
-
-    rWrt.pTableStrm->Write( aWW8_FFN, 6 );                  // fixed part
-    if( rWrt.bWrtWW8 )
-    {
-        // ab Ver8 sind folgende beiden Felder eingeschoben,
-        // werden von uns ignoriert.
-        //char  panose[ 10 ];       //  0x6   PANOSE
-        //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
-        SwWW8Writer::FillCount( *rWrt.pTableStrm, 0x22 );
-        SwWW8Writer::WriteString16( *rWrt.pTableStrm, sFamilyNm, TRUE );
-        if (bAlt)
-            SwWW8Writer::WriteString16( *rWrt.pTableStrm, sAltNm, TRUE );
-    }
-    else
-    {
-        SwWW8Writer::WriteString8( *rWrt.pTableStrm, sFamilyNm, TRUE,
-            RTL_TEXTENCODING_MS_1252 );
-        if (bAlt)
-        {
-            SwWW8Writer::WriteString8( *rWrt.pTableStrm, sAltNm, TRUE,
-                RTL_TEXTENCODING_MS_1252 );
-        }
-
-    }
+    if (mbAlt)
+        maWW8_FFN[5] = msFamilyNm.Len()+1;
 }
 
-void SwWW8Writer::OutFontTab( WW8Fib& rFib )
+bool wwFont::Write(SvStream *pTableStrm) const
 {
-    rFib.fcSttbfffn = pTableStrm->Tell();
-    if( bWrtWW8 )
+    pTableStrm->Write(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
+    if (mbWrtWW8)
     {
-        SwWW8Writer::WriteLong( *pTableStrm, 0 );       // hier wird Laenge nachgetragen ( cbFFN )
-
         // ab Ver8 sind folgende beiden Felder eingeschoben,
         // werden von uns ignoriert.
         //char  panose[ 10 ];       //  0x6   PANOSE
         //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
-
-        static BYTE __READONLY_DATA aBase_10[] = {
-                    0x47,0x16,0x90,0x01,0x00,0x00 };
-        static BYTE __READONLY_DATA aBase_11[] = {
-            'T',0,'i',0,'m',0,'e',0,'s',0,' ',0,
-            'N',0,'e',0,'w',0,' ',0,'R',0,'o',0,'m',0,'a',0,'n',0,0,0 };
-
-        static BYTE __READONLY_DATA aBase_20[] = {
-                    0x35,0x16,0x90,0x01,0x02,0x00 };
-        static BYTE __READONLY_DATA aBase_21[] = {
-            'S',0,'y',0,'m',0,'b',0,'o',0,'l',0,0,0 };
-
-        static BYTE __READONLY_DATA aBase_30[] = {
-                    0x33,0x26,0x90,0x01,0x00,0x00 };
-        static BYTE __READONLY_DATA aBase_31[] = {
-            'A',0,'r',0,'i',0,'a',0,'l',0,0,0 };
-
-        // Base part
-        pTableStrm->Write( aBase_10, sizeof( aBase_10 ) );
-        SwWW8Writer::FillCount( *pTableStrm, 0x22 );
-        pTableStrm->Write( aBase_11, sizeof( aBase_11 ) );
-
-        pTableStrm->Write( aBase_20, sizeof( aBase_20 ) );
-        SwWW8Writer::FillCount( *pTableStrm, 0x22 );
-        pTableStrm->Write( aBase_21, sizeof( aBase_21 ) );
-
-        pTableStrm->Write( aBase_30, sizeof( aBase_30 ) );
-        SwWW8Writer::FillCount( *pTableStrm, 0x22 );
-        pTableStrm->Write( aBase_31, sizeof( aBase_31 ) );
+        SwWW8Writer::FillCount(*pTableStrm, 0x22);
+        SwWW8Writer::WriteString16(*pTableStrm, msFamilyNm, TRUE);
+        if (mbAlt)
+            SwWW8Writer::WriteString16(*pTableStrm, msAltNm, TRUE);
     }
     else
     {
-        SwWW8Writer::WriteShort( *pTableStrm, 0 );      // hier wird Laenge nachgetragen ( cbFFN )
-
-        static BYTE __READONLY_DATA aBase[] = {
-            0x15,0x16,0x90,0x01,0x00,0x00,'T','i','m','e','s',' ',
-                                    'N','e','w',' ','R','o','m','a','n',0,
-            0x0c,0x16,0x90,0x01,0x02,0x00,'S','y','m','b','o','l',0,
-            0x0b,0x26,0x90,0x01,0x00,0x00,'A','r','i','a','l',0 };
-        pTableStrm->Write( aBase, sizeof( aBase ) );        // Base part
-    }
-
-    const SfxItemPool& rPool = pDoc->GetAttrPool();
-    const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT );
-    const SvxFontItem* pDfltFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(
-                                    RES_CHRATR_FONT );
-
-    _OutFont( *this, *pFont );
-    USHORT nFontCount = 4;
-
-    if( pDfltFont )
-    {
-        _OutFont( *this, *pDfltFont );
-        ++nFontCount;
-    }
-
-    USHORT nMaxItem = rPool.GetItemCount( RES_CHRATR_FONT );
-    for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-    {
-        pFont = (const SvxFontItem*)rPool.GetItem( RES_CHRATR_FONT, nGet );
-        if( pFont )
+        SwWW8Writer::WriteString8(*pTableStrm, msFamilyNm, TRUE,
+            RTL_TEXTENCODING_MS_1252);
+        if (mbAlt)
         {
-            _OutFont( *this, *pFont );
-            ++nFontCount;
+            SwWW8Writer::WriteString8( *pTableStrm, msAltNm, TRUE,
+                RTL_TEXTENCODING_MS_1252);
         }
     }
-    rFib.lcbSttbfffn = pTableStrm->Tell() - rFib.fcSttbfffn;
-    if( bWrtWW8 )
-        SwWW8Writer::WriteLong( *pTableStrm, rFib.fcSttbfffn, nFontCount );
-    else
-        SwWW8Writer::WriteShort( *pTableStrm, rFib.fcSttbfffn,
-                                (INT16)pFib->lcbSttbfffn );
+    return true;
 }
 
+bool operator<(const wwFont &r1, const wwFont &r2)
+{
+    int nRet = memcmp(r1.maWW8_FFN, r2.maWW8_FFN, sizeof(r1.maWW8_FFN));
+    if (nRet == 0)
+    {
+        StringCompare eRet = r1.msFamilyNm.CompareTo(r2.msFamilyNm);
+        if (eRet == COMPARE_EQUAL)
+            eRet = r1.msAltNm.CompareTo(r2.msAltNm);
+        nRet = eRet;
+    }
+    return nRet < 0;
+}
+
+
+USHORT wwFontHelper::GetId(const wwFont &rFont)
+{
+    USHORT nRet;
+    ::std::map<wwFont, USHORT>::const_iterator aIter = maFonts.find(rFont);
+    if (aIter != maFonts.end())
+        nRet = aIter->second;
+    else
+    {
+        nRet = maFonts.size();
+        maFonts[rFont] = nRet;
+    }
+    return nRet;
+}
+
+void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
+{
+    mbWrtWW8 = bWrtWW8;
+
+    GetId(wwFont(CREATE_CONST_ASC("Times New Roman"), PITCH_VARIABLE,
+        FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252,bWrtWW8));
+
+    GetId(wwFont(CREATE_CONST_ASC("Symbol"), PITCH_VARIABLE, FAMILY_ROMAN,
+        RTL_TEXTENCODING_SYMBOL,bWrtWW8));
+
+    GetId(wwFont(CREATE_CONST_ASC("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
+        RTL_TEXTENCODING_MS_1252,bWrtWW8));
+
+    const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr(RES_CHRATR_FONT);
+
+    GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
+        pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+
+    const SfxItemPool& rPool = rDoc.GetAttrPool();
+    if (pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT))
+    {
+        GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
+            pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+    }
+}
+
+USHORT wwFontHelper::GetId(const Font& rFont)
+{
+    wwFont aFont(rFont.GetName(), rFont.GetPitch(), rFont.GetFamily(),
+        rFont.GetCharSet(), mbWrtWW8);
+    return GetId(aFont);
+}
+
+USHORT wwFontHelper::GetId(const SvxFontItem& rFont)
+{
+    wwFont aFont(rFont.GetFamilyName(), rFont.GetPitch(), rFont.GetFamily(),
+        rFont.GetCharSet(), mbWrtWW8);
+    return GetId(aFont);
+}
+
+void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
+{
+    rFib.fcSttbfffn = pTableStream->Tell();
+    /*
+     * Reserve some space to fill in the len after we know how big it is
+     */
+    if (mbWrtWW8)
+        SwWW8Writer::WriteLong(*pTableStream, 0);
+    else
+        SwWW8Writer::WriteShort(*pTableStream, 0);
+
+    /*
+     * Convert from fast insertion map to linear vector in the order that we
+     * want to write.
+     */
+    ::std::vector<const wwFont *> aFontList(maFonts.size());
+
+    for(::std::map<wwFont, USHORT>::iterator aIter = maFonts.begin();
+        aIter != maFonts.end(); ++aIter)
+    {
+        aFontList[aIter->second] = &aIter->first;
+    }
+
+    /*
+     * Write them all to pTableStream
+     */
+    ::std::for_each(aFontList.begin(), aFontList.end(),
+        ::std::bind2nd(::std::mem_fun(&wwFont::Write),pTableStream));
+
+    /*
+     * Write the position and len in the FIB
+     */
+    rFib.lcbSttbfffn = pTableStream->Tell() - rFib.fcSttbfffn;
+    if (mbWrtWW8)
+        SwWW8Writer::WriteLong( *pTableStream, rFib.fcSttbfffn, maFonts.size());
+    else
+    {
+        SwWW8Writer::WriteShort( *pTableStream, rFib.fcSttbfffn,
+            (INT16)rFib.lcbSttbfffn );
+    }
+}
 
 /*  */
 

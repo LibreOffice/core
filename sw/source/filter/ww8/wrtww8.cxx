@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1937,7 +1937,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
         pSepx->WritePlcHdd( *this );            // Slcx.PlcHdd
         pChpPlc->WritePlc();                    // Plcx.Chpx
         pPapPlc->WritePlc();                    // Plcx.Papx
-        OutFontTab( *pFib );                    // FFNs
+        maFontHelper.WriteFontTable(pTableStrm, *pFib); // FFNs
         if( pRedlAuthors )
             pRedlAuthors->Write( *this );       // sttbfRMark (RedlineAuthors)
         pFldMain->Write( *this );               // Fields ( Main Text )
@@ -2003,7 +2003,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
         pMagicTable->Write( *this );
 
         pPiece->WritePc( *this );               // Piece-Table
-        OutFontTab( *pFib );                    // FFNs
+        maFontHelper.WriteFontTable(pTableStrm, *pFib); // FFNs
 
         //Convert OOo asian typography into MS typography structure
         ExportDopTypography(pDop->doptypography);
@@ -2108,9 +2108,13 @@ ULONG SwWW8Writer::StoreDoc()
 
     PrepareStorage();
 
+    maFontHelper.InitFontTable(bWrtWW8, *pDoc);
+#if 0
+    //I reckon we don't need this with the new ww font code
     PutNumFmtFontsInAttrPool();
     PutEditEngFontsInAttrPool();
     PutCJKandCTLFontsInAttrPool();
+#endif
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
 
@@ -2379,11 +2383,9 @@ ULONG SwWW8Writer::WriteStorage()
 
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
     // das gesamte Dokument geschrieben wird
-    nAktFlyPos = 0;
     SwPosFlyFrms aFlyPos;
     pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pOrigPam, bWrtWW8 );
-        // Die Sonderbehandlung fuer Teilausgabe fehlt noch ( siehe RTF )
-    pFlyPos = &aFlyPos;
+    // Die Sonderbehandlung fuer Teilausgabe fehlt noch ( siehe RTF )
 
     ULONG nRet = StoreDoc();
 

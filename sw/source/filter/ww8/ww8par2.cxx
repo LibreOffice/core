@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-29 11:34:33 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,7 @@ void SwWW8ImplReader::NextAnlLine( const BYTE* pSprm13, const BYTE* pS12 )
     {
         nSwNumLevel = 0xff;                 // keine Nummer
     }
-    BYTE nLevel = ( nSwNumLevel < MAXLEVEL ) ? nSwNumLevel : NO_NUMLEVEL;
+    BYTE nLevel = ( nSwNumLevel < MAXLEVEL ) ? nSwNumLevel : NO_NUM;
     SwNodeNum aNum( nLevel );
     SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
     pNd->UpdateNum( aNum );
@@ -3268,8 +3268,8 @@ SwCharFmt* WW8RStyle::MakeOrGetCharFmt( BOOL* pbStyExist, WW8_STD* pStd, const S
         RES_POOLCHR_INET_NORMAL, RES_POOLCHR_INET_VISIT,
         RES_POOLCHR_HTML_STRONG, RES_POOLCHR_HTML_EMPHASIS };
 
-    if(     pIo->bNew               // Einfuegen: immer neue Styles generieren
-        && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) )   // nicht abgeschaltet
+    // Einfuegen: immer neue Styles generieren || nicht abgeschaltet
+    if ( pIo->mbNewDoc && !(pIo->nIniFlags & WW8FL_NO_DEFSTYLES) )
     {
         SwCharFmt* pFmt = 0;
 
@@ -3402,7 +3402,7 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd, cons
         if( pCol )
         {
             *pbStyExist = TRUE;
-            if (pIo->bNew)      //#i3674#
+            if (pIo->mbNewDoc)      //#i3674#
                 pCol->SetOutlineLevel(NO_NUMBERING);
             return pCol;
         }
@@ -3461,7 +3461,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
     else                                // Char-Style
         pColl = MakeOrGetCharFmt( &bStyExist, pStd, sName );
 
-    BOOL bImport = !bStyExist || pIo->bNew; // Inhalte Importieren ?
+    BOOL bImport = !bStyExist || pIo->mbNewDoc; // Inhalte Importieren ?
     BOOL bOldNoImp = pIo->bNoAttrImport;
     pSI->bImportSkipped = !bImport;
 
@@ -3491,7 +3491,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->n81Flags = pj->n81Flags;
         }
     }
-    else if( pIo->bNew && bStyExist )
+    else if( pIo->mbNewDoc && bStyExist )
     {
         if( pStd->sgc == 1 )
             pSI->pFmt->SetDerivedFrom( pIo->pStandardFmtColl );
@@ -3683,7 +3683,7 @@ void WW8RStyle::Import()
 
 
     // set Hyphenation flag on BASIC para-style
-    if(    pIo->bNew
+    if(    pIo->mbNewDoc
         && pIo->pWDop->fAutoHyphen
         && pIo->pStandardFmtColl
         && SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(
