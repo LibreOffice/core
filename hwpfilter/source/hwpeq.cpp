@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpeq.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:16:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace std;
 //#define DEBUG
 
 
-//@Man: hwp수식을 LaTeX으로 바꾸기
+/* @Man: hwp수식을 LaTeX으로 바꾸기 */
 #ifdef WIN32
 # define ENDL  "\r\n"
 #else /* !WIN32 */
@@ -173,7 +173,7 @@ static hwpeq eq_tbl[] = {
   { "bullet",       NULL,       0,  0   },
   { "cap",      NULL,       0,  0   },
   { "cases",        NULL,       0,  EQ_ENV  },
-  { "ccol",     NULL,       0,  0   }, // 세로로 가운데
+  { "ccol",     NULL,       0,  0   }, /* 세로로 가운데 */
   { "cdot",     NULL,       0,  0   },
   { "cdots",        NULL,       0,  0   },
   { "check",        NULL,       1,  0   },
@@ -449,7 +449,7 @@ static hwpeq *lookup_eqn(char *str)
   return result;
 }
 
-// 첫자만 대문자이거나 전부 대문자면 소문자로 바꾼다.
+/* 첫자만 대문자이거나 전부 대문자면 소문자로 바꾼다. */
 
 static char *make_keyword( char *keyword, const char *token)
 {
@@ -509,7 +509,7 @@ void push_token(MzString &white, MzString &token, istream *strm)
   stk->strm = strm;
 }
 
-/// 읽은 토큰의 길이를 반환한다.
+/* 읽은 토큰의 길이를 반환한다. */
 /* control char, control sequence, binary sequence,
    alphabet string, sigle character */
 static int next_token(MzString &white, MzString &token, istream *strm)
@@ -545,8 +545,9 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       ch = strm->get();
     } while( ch != EOF && (ch & 0x80 || isalpha(ch)) ) ;
     strm->putback(ch);
-    // sub, sub, over, atop 특수 처리
-    // 그 이유는 next_state()에 영향을 미치기 때문이다.
+    /*  sub, sub, over, atop 특수 처리
+        그 이유는 next_state()에 영향을 미치기 때문이다.
+     */
     if( !STRICMP("sub", token) || !STRICMP("from", token) ||
     !STRICMP("sup", token) || !STRICMP("to", token) ||
     !STRICMP("over", token) || !STRICMP("atop", token) ||
@@ -596,18 +597,19 @@ static int read_white_space(MzString& outs, istream *strm)
   return result;
 }
 
-// 인수가 필요하지 않은 경우 각 항목간의 구분은 space와 brace
-//   sqrt {ab}c = sqrt{ab} c
-// (, }는 grouping
-// ^, _ 는 앞뒤로 결합한다.
-//
-// sqrt 등과 같이 인수가 있는 형식 정리
-//   sqrt a -> sqrt{a}
-//   sqrt {a}   -> sqrt{a}
-// 1 이상의 인수가 있는 경우 인수들간의 역백은 없앤다.
-//   \frac a b  -> frac{a}{b}
-// over의 형식 정리
-//   a over b   -> {a}over{b}
+/* 인수가 필요하지 않은 경우 각 항목간의 구분은 space와 brace
+     sqrt {ab}c = sqrt{ab} c
+   (, }는 grouping
+   ^, _ 는 앞뒤로 결합한다.
+
+   sqrt 등과 같이 인수가 있는 형식 정리
+     sqrt a  -> sqrt{a}
+     sqrt {a}    -> sqrt{a}
+   1 이상의 인수가 있는 경우 인수들간의 역백은 없앤다.
+     \frac a b   -> frac{a}{b}
+   over의 형식 정리
+     a over b    -> {a}over{b}
+ */
 
 static int eq_word(MzString& outs, istream *strm, int status)
 {
@@ -640,7 +642,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
     state << white << token;
   }
   else {
-    // 정상적인 token
+    /* 정상적인 token */
     int script_status = SCRIPT_NONE;
     while( 1 ) {
       state << white << token;
