@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 14:27:15 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@
         <value>方正宋体;MSung Light SC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Fangsong;Hei;Song;AR PL SungtiL GB;Kai;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+        <value>Andale Sans UI;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Arial Unicode MS;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-tw" oor:op="replace">
@@ -531,7 +531,7 @@
         <value>方正明體;MSung Light TC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;AR PL Mingti2L Big5;Kai;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+        <value>Andale Sans UI;AR PL Mingti2L Big5;AR PL KaitiM Big5;PMingLiU;MingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-hk" oor:op="replace">
@@ -561,7 +561,37 @@
         <value>方正明體;MSung Light TC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Kai;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+        <value>Andale Sans UI;AR PL Mingti2L Big5;AR PL KaitiM Big5;PMingLiU;MingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+    <node oor:name="zh-sg" oor:op="replace">
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>FZHeiTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>方正明體;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>方正明體;MSung Light TC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;AR PL Mingti2L Big5;AR PL KaitiM Big5;PMingLiU;MingLiU;Kai;Arial Unicode MS;Ming;gnu-unifont;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="ko-kr" oor:op="replace">
@@ -611,7 +641,7 @@
         <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Andale Sans UI;gnu-unifont</value>
+        <value>썬굴림;SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Andale Sans UI;gnu-unifont;Tahoma</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
         <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
