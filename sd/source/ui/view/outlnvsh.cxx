@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:51:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include "app.hrc"
 #define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
-#include <offmgr/hyprlink.hxx>
+#include <svx/hyprlink.hxx>
 #endif
 #ifndef _SVX_TAB_HYPERLINK_HXX
 #include <svx/hyperdlg.hxx>
