@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:37:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,17 @@
         <prop oor:name="Timeout">
           <value>60</value>
         </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver" oor:op="replace">
+         <prop oor:name="DriverName">
+           <value>com.sun.star.comp.sdbc.evoab.OEvoabDriver</value>
+         </prop>
+         <prop oor:name="Enable">
+           <value>true</value>
+         </prop>
+         <prop oor:name="Timeout">
+           <value>60</value>
+         </prop>
       </node>
       <node oor:name="com.sun.star.comp.sdbc.ado.ODriver" oor:op="replace">
         <prop oor:name="DriverName">
@@ -1522,6 +1533,114 @@
             <value xml:lang="cs">Comments</value>
             <value xml:lang="he">‮הערות‬</value>
             <value xml:lang="hi-IN">Comments</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
+      <node oor:name="EvolutionPreferences">
+        <prop oor:name="FullPathExportingCommand">
+          <value>file:///usr/share/evolution/*/evolution-addressbook-export</value>
+        </prop>
+      </node>
+      <node oor:name="ColumnAliases">
+        <prop oor:name="FirstName">
+          <value>given_name</value>
+        </prop>
+        <prop oor:name="LastName">
+          <value>family_name</value>
+        </prop>
+        <prop oor:name="DisplayName">
+          <value>full_name</value>
+        </prop>
+        <prop oor:name="NickName">
+          <value>nickname</value>
+        </prop>
+        <prop oor:name="PrimaryEmail">
+          <value>email</value>
+        </prop>
+        <prop oor:name="SecondEmail">
+          <value>email_2</value>
+        </prop>
+        <prop oor:name="PreferMailFormat">
+          <value>wants_html</value>
+        </prop>
+        <prop oor:name="WorkPhone">
+          <value>business_phone</value>
+        </prop>
+        <prop oor:name="HomePhone">
+          <value>home_phone</value>
+        </prop>
+        <prop oor:name="FaxNumber">
+          <value>business_fax</value>
+        </prop>
+        <prop oor:name="PagerNumber">
+          <value>pager</value>
+        </prop>
+        <prop oor:name="CellularNumber">
+          <value>mobile_phone</value>
+        </prop>
+        <prop oor:name="HomeAddress">
+          <value>Home Address</value>
+        </prop>
+        <prop oor:name="HomeAddress2">
+          <value>Home Address2</value>
+        </prop>
+        <prop oor:name="HomeCity">
+          <value>Home Address City</value>
+        </prop>
+        <prop oor:name="HomeState">
+          <value>Home Address State</value>
+        </prop>
+        <prop oor:name="HomeZipCode">
+          <value>Home Address PostCode</value>
+        </prop>
+        <prop oor:name="HomeCountry">
+          <value>Home Address Country</value>
+        </prop>
+        <prop oor:name="WorkAddress">
+          <value>Business Address</value>
+        </prop>
+        <prop oor:name="WorkAddress2">
+          <value>Business Address2</value>
+        </prop>
+        <prop oor:name="WorkCity">
+          <value>Business Address City</value>
+        </prop>
+        <prop oor:name="WorkState">
+          <value>Business Address State</value>
+        </prop>
+        <prop oor:name="WorkZipCode">
+          <value>Business Address PostCode</value>
+        </prop>
+        <prop oor:name="WorkCountry">
+          <value>Business Address Country</value>
+        </prop>
+        <prop oor:name="JobTitle">
+          <value>title</value>
+        </prop>
+        <prop oor:name="Department">
+          <value>office</value>
+        </prop>
+        <prop oor:name="Company">
+          <value>org</value>
+        </prop>
+        <prop oor:name="WebPage1">
+          <value>url</value>
+        </prop>
+        <prop oor:name="WebPage2">
+          <value>caluri</value>
+        </prop>
+        <prop oor:name="BirthYear">
+          <value>Birth Year</value>
+        </prop>
+        <prop oor:name="BirthMonth">
+          <value>Birth Month</value>
+        </prop>
+        <prop oor:name="BirthDay">
+          <value>Birth Day</value>
+        </prop>
+        <prop oor:name="Notes">
+          <value>note</value>
         </prop>
       </node>
     </node>
