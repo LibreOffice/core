@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:51:41 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@ void SwView::GetState(SfxItemSet &rSet)
                 if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && nSelectionType != SwWrtShell::SEL_DRW_TXT)||
                         nSelectionType & SwWrtShell::SEL_TBL ||
                         nSelectionType & SwWrtShell::SEL_DRW) )
+                    rSet.DisableItem(nWhich);
+                else if((pWrtShell->IsObjSelected()||pWrtShell->IsFrmSelected()) &&
+                        (pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
+                            pWrtShell->IsSelObjProtected( FLYPROTECT_CONTENT )))
                     rSet.DisableItem(nWhich);
                 else if( pWrtShell->IsTableMode() )
                     rSet.DisableItem(nWhich);
