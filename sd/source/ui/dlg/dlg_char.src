@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:29:52 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,14 @@ TabDialog TAB_CHAR
                 Text [ spanish ] = "Fuente" ;
                 Text [ english_us ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "Ì«İÄ";
-                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+                Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
-                Text[ korean ] = "±Û²Ã";
+                Text[ korean ] = "ê¸€ê¼´";
                 Text[ turkish ] = "Yazıtipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fuente";
@@ -134,14 +134,14 @@ TabDialog TAB_CHAR
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effects" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
                 Text[ russian ] = "İôôåêòû øğèôòà";
                 Text[ polish ] = "Efekt czcionki";
-                Text[ japanese ] = "Ì«İÄŒø‰Ê";
-                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
+                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„åŠ¹æœ";
+                Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
-                Text[ korean ] = "±Û²Ã È¿°ú";
+                Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
                 Text[ turkish ] = "Yazıtipi efekti";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Efectos de fuente";
@@ -164,10 +164,10 @@ TabDialog TAB_CHAR
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
-                Text[ japanese ] = "ˆÊ’u";
-                Text[ korean ] = "À§Ä¡";
-                Text[ chinese_simplified ] = "Î»ÖÃ";
-                Text[ chinese_traditional ] = "¦ì¸m";
+                Text[ japanese ] = "ä½ç½®";
+                Text[ korean ] = "ìœ„ì¹˜";
+                Text[ chinese_simplified ] = "ä½ç½®";
+                Text[ chinese_traditional ] = "ä½ç½®";
                 Text[ turkish ] = "Konum";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
@@ -212,29 +212,30 @@ TabDialog TAB_CHAR
         Text [ spanish ] = "Regresar" ;
         Text [ english_us ] = "Return" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "·µ»Ø";
+        Text[ chinese_simplified ] = "è¿”å›";
         Text[ russian ] = "Íàçàä";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "–ß‚é";
-        Text[ chinese_traditional ] = "ªğ¦^";
+        Text[ japanese ] = "æˆ»ã‚‹";
+        Text[ chinese_traditional ] = "è¿”å›";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "ÅğéóôñïöŞ";
-        Text[ korean ] = "µÇµ¹¾Æ °¡±â";
+        Text[ korean ] = "ë˜ëŒì•„ ê°€ê¸°";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Regresar";
     };
-    Text[ chinese_simplified ] = "×Ö·û";
+    Text[ chinese_simplified ] = "å­—ç¬¦";
     Text[ russian ] = "Çíàêè";
     Text[ polish ] = "Znak";
-    Text[ japanese ] = "•¶š";
-    Text[ chinese_traditional ] = "¦r¤¸";
+    Text[ japanese ] = "æ–‡å­—";
+    Text[ chinese_traditional ] = "å­—å…ƒ";
     Text[ arabic ] = "ÍÑİ";
     Text[ greek ] = "×áñáêôŞñåò";
-    Text[ korean ] = "¹®ÀÚ";
+    Text[ korean ] = "ë¬¸ì";
     Text[ turkish ] = "Yazıtipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caracteres";
 };
+
 
 
