@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-22 13:15:34 $
+ *  last change: $Author: hdu $ $Date: 2002-04-25 10:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ SimpleWinLayout::~SimpleWinLayout()
 
 bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
+    // layout text
     mnGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
     mpOutGlyphs     = new WCHAR[ mnGlyphCount ];
     mpGlyphAdvances = new int[ mnGlyphCount ];
@@ -177,11 +178,21 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         ; //TODO
     DWORD nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
         mnGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
-    mnWidth = nRC;  //### wrong value, because the API is unclear
 
-    // adjust positions if requested
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
+    // cache essential layout properties
+    if( rArgs.mnLayoutWidth )
+    {
+        mnWidth = rArgs.mnLayoutWidth;
+        mnGlyphCount = aGCP.nMaxFit;
+    }
+    else
+    {
+        mnWidth = nRC & 0xFFFF; // TODO: check API docs for updates
+
+        // adjust positions if requested
+        if( rArgs.mpDXArray )
+            ApplyDXArray( rArgs.mpDXArray );
+    }
 
     return (nRC != 0);
 }
@@ -190,6 +201,9 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
 void SimpleWinLayout::Draw() const
 {
+    if( mnGlyphCount <= 0 )
+        return;
+
     Point aPos = GetDrawPosition();
     ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, NULL,
         mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
@@ -221,6 +235,9 @@ bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
 
 long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 {
+    if( mnWidth && !pDXArray )
+        return mnWidth;
+
     long nWidth = 0;
 
     for( int i = 0; i < mnGlyphCount; ++i )
@@ -254,6 +271,9 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth ) const
 Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
     long nXPos = 0;
+
+    if( mnGlyphCount <= 0 )
+        return Point( nXPos, 0 );
 
     if( !bRTL ) // relative to left edge
     {
@@ -324,11 +344,11 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
     if( i >= mnGlyphCount )
         return;
 
-    nOldWidth = 0;
+    mnWidth = 0;
     for( i = 0; i < mnGlyphCount; ++i )
     {
-        mpGlyphAdvances[i] = pDXArray[i] - nOldWidth;
-        nOldWidth = pDXArray[i];
+        mpGlyphAdvances[i] = pDXArray[i] - mnWidth;
+        mnWidth = pDXArray[i];
     }
 }
 
