@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:25:29 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     // set additional controls for FTP: Username / Password
     if ( aStrScheme.SearchAscii( sFTPScheme ) == 0 )
     {
-        if ( aURL.GetUser().ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
+        if ( String(aURL.GetUser()).ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
             setAnonymousFTPUser();
         else
             setFTPUser(aURL.GetUser(), aURL.GetPass());
