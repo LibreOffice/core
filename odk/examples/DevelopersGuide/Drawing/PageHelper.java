@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:24:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,19 +40,22 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XServiceInfo;
 
-
-// application specific classes
-import com.sun.star.drawing.*;
-
-// presentation specific classes
-import com.sun.star.presentation.*;
+import com.sun.star.awt.Size;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.awt.Size;
+
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XMasterPageTarget;
+import com.sun.star.drawing.XMasterPagesSupplier;
+
+import com.sun.star.presentation.XPresentationPage;
+import com.sun.star.presentation.XHandoutMasterSupplier;
 
 
 public class PageHelper

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:25:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,22 +40,26 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 
-
-// application specific classes
-import com.sun.star.drawing.*;
-
-import com.sun.star.text.*;
-import com.sun.star.container.*;
-
-// presentation specific classes
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.awt.Size;
-import com.sun.star.awt.Point;
+
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
+
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+
+import com.sun.star.text.ControlCharacter;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextRange;
 
 
 public class ShapeHelper
