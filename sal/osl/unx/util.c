@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:35:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
 #ifdef SOLARIS
     /** algorithm doesn't work on solaris */
     return sal_False;
-#endif
+#else
 
     if ( pAddr == 0 )
     {
@@ -151,6 +151,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
     }
 
     return sal_False;
+#endif
 }
 
 
