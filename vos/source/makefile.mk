@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 09:16:55 $
+#   last change: $Author: obo $ $Date: 2003-10-30 12:47:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ SLOFILES=       $(SLO)$/bytarray.obj    \
                 $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
-                $(SLO)$/runthrd.obj     \
                 $(SLO)$/socket.obj      \
                 $(SLO)$/thread.obj      \
                 $(SLO)$/stream.obj      \
@@ -97,7 +96,6 @@ OBJFILES=       $(OBJ)$/bytarray.obj    \
                 $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
-                $(OBJ)$/runthrd.obj     \
                 $(OBJ)$/socket.obj      \
                 $(OBJ)$/thread.obj      \
                 $(OBJ)$/stream.obj      \
