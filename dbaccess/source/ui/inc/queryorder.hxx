@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 10:50:52 $
+ *  last change: $Author: oj $ $Date: 2002-03-04 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ namespace com
             namespace beans
             {
                 struct PropertyValue;
+                class XPropertySet;
             }
         }
     }
@@ -137,6 +138,7 @@ namespace dbaui
         HelpButton      aBT_HELP;
         FixedLine       aFL_ORDER;
         String          aSTR_NOENTRY;
+        ::rtl::OUString m_sOrgOrder;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> m_xQueryComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
@@ -153,13 +155,15 @@ namespace dbaui
         DlgOrderCrit(   Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>& _rxQueryComposer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn);
 
                         ~DlgOrderCrit();
         void            BuildOrderPart();
 
         ::rtl::OUString GetOrderList( ) const;
         void            SetOrderList( const String& _rOrderList );
+        ::rtl::OUString GetOrignalOrder() const { return m_sOrgOrder; }
     };
 }
 #endif // DBAUI_QUERYORDER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:31:33 $
+ *  last change: $Author: oj $ $Date: 2002-03-04 13:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -114,7 +111,8 @@ DBG_NAME(DlgOrderCrit);
 DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
                             const Reference< XSQLQueryComposer>& _rxQueryComposer,
-                            const Reference< XNameAccess>& _rxCols)
+                            const Reference< XNameAccess>& _rxCols,
+                            const Reference< XPropertySet >& _xColumn)
              :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
             ,aLB_ORDERFIELD1(   this, ResId( LB_ORDERFIELD1 ) )
             ,aLB_ORDERVALUE1(   this, ResId( LB_ORDERVALUE1 ) )
@@ -178,7 +176,12 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
         }
     }
 
-    SetOrderList(m_xQueryComposer->getOrder());
+    m_sOrgOrder = m_xQueryComposer->getOrder();
+
+    if ( _xColumn.is() )
+        m_xQueryComposer->appendOrderByColumn(_xColumn,sal_True);
+
+    SetOrderList( m_xQueryComposer->getOrder() );
     EnableLines();
 
     aLB_ORDERFIELD1.SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
@@ -267,13 +270,18 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
         String aOrder = _rOrderList.GetToken(i,',');
         aOrder.EraseTrailingChars();
         String sColumnName = aOrder.GetToken(0,' ');
+
+        xub_StrLen nCount = sColumnName.GetTokenCount('.');
+        if ( nCount > 1)
+            sColumnName = sColumnName.GetToken(nCount-1,'.');
+
         if(sQuote.getLength() && sColumnName.Len() && sColumnName.GetChar(0) == sQuote.getStr()[0] && sColumnName.GetChar(sColumnName.Len()-1) == sQuote.getStr()[0])
         {
             sColumnName.Erase(0,1);
             sColumnName.Erase(sColumnName.Len()-1,1);
         }
         arrLbFields[i]->SelectEntry( sColumnName );
-        xub_StrLen nAsc = (aOrder.GetTokenCount(' ') == 2) ? (aOrder.GetToken(1,' ').EqualsAscii("ASC") ? 0 : 1) : 1;
+        xub_StrLen nAsc = (aOrder.GetTokenCount(' ') == 2) ? (aOrder.GetToken(1,' ').EqualsAscii("ASC") ? 0 : 1) : 0;
         arrLbValues[i]->SelectEntryPos( nAsc );
     }
 
