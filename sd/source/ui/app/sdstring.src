@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:20:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ String STR_LINESTYLE
     Text[ russian ] = "Ρςθλό λθνθθ";
     Text[ polish ] = "Styl linii";
     Text[ japanese ] = "ό½ΐ²Ω";
-    Text[ chinese_traditional ] = "½u±ψΌΛ¦΅";
+    Text[ chinese_traditional ] = "½u±ψ¦΅ΌΛ";
     Text[ arabic ] = "δγΨ ΗαΞΨ";
     Text[ greek ] = "Στυλ γραμμής";
     Text[ korean ] = "Ό± ΐ―Ηό";
@@ -441,7 +441,7 @@ String STR_DESC_LINESTYLE
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ δλÿ νξβξγξ ρςθλÿ λθνθθ:";
     Text[ polish ] = "Wstaw nazwκ nowego stylu linii:";
     Text[ japanese ] = "‚±‚±‚ΙV‚µ‚Άό½ΐ²Ω‚Μ–Ό‘O‚π“ό—Ν‚µ‚ά‚·:";
-    Text[ chinese_traditional ] = "½Π±zΏι¤J¤@­Σ·s½u±ψΌΛ¦΅ªΊ¦WΊΩ΅G";
+    Text[ chinese_traditional ] = "½ΠΏι¤J¤@­Σ·s½u±ψ¦΅ΌΛªΊ¦WΊΩ΅G";
     Text[ arabic ] = "γδ έΦαί ΗίΚΘ ΗΣγ ΗαδγΨ ΗαΜΟνΟ ααΞΨ εδΗ:";
     Text[ language_user1 ] = ":";
     Text[ greek ] = "Παρακαλώ εισάγετε το όνομα για το νέο στυλ γραμμής:";
@@ -469,7 +469,7 @@ String STR_DEL_LINESTYLE
     Text[ russian ] = "Σδΰλθςό ρςθλό λθνθθ";
     Text[ polish ] = "Usuρ styl linii";
     Text[ japanese ] = "ό½ΐ²Ω‚Μν";
-    Text[ chinese_traditional ] = "§R°£½u±ψΌΛ¦΅";
+    Text[ chinese_traditional ] = "§R°£½u±ψ¦΅ΌΛ";
     Text[ arabic ] = "ΝΠέ δγΨ ΗαΞΨ";
     Text[ greek ] = "Διαγραφή στυλ γραμμής";
     Text[ korean ] = "Ό± ΐ―Ηό »θΑ¦";
@@ -497,7 +497,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ρςθλό λθνθθ?";
     Text[ polish ] = "Chcesz na pewno usunΉζ styl linii?";
     Text[ japanese ] = "ό½ΐ²Ω‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
-    Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½u±ψΌΛ¦΅΅H";
+    Text[ chinese_traditional ] = "―u­n§R°£³o­Σ½u±ψ¦΅ΌΛ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δγΨ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
     Text[ korean ] = "Ό± ΐ―Ηόΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -525,7 +525,7 @@ String STR_ASK_CHANGE_LINESTYLE
     Text[ russian ] = "Ρςθλό λθνθθ αϋλ θημενεν, νξ νε ρξυπΰνεν. \nΒϋ μξζεςε θημενθςό βϋαπΰννϋι ρςθλό λθνθθ \nθλθ δξαΰβθςό νξβϋι ρςθλό λθνθθ.";
     Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMoΏesz zmieniζ zaznaczony styl linii \nlub dodaζ nowy styl linii.";
     Text[ japanese ] = "ό½ΐ²Ω‚ª•ΟX‚³‚κ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ό½ΐ²Ω‚π•ΟX‚·‚ι‚©A\nV‚µ‚Άό½ΐ²Ω‚π’Η‰Α‚·‚ι‚±‚Ζ‚ª‚Ε‚«‚ά‚·B";
-    Text[ chinese_traditional ] = "½u±ψΌΛ¦΅¤wΈgΕά§σ΅A¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ½u±ψΌΛ¦΅\n©ΞªΜ·sΌW¤@­Σ½u±ψΌΛ¦΅΅C";
+    Text[ chinese_traditional ] = "½u±ψ¦΅ΌΛ¤wΈgΕά§σ΅A¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ½u±ψ¦΅ΌΛ\n©ΞªΜ·sΌW¤@­Σ½u±ψ¦΅ΌΛ΅C";
     Text[ arabic ] = "αγ νΚγ ΝέΩ δγΨ ΗαΞΨ ΘΪΟ ΚΫννΡε. \nνγίδί ΚΫννΡ δγΨ ΗαΞΨ ΗαγΝΟΟ΅ \nΓζ ΕΦΗέΙ δγΨ ΞΨ ΜΟνΟ.";
     Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να αποθηκευτεί. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \\ή να προσθέσετε ένα νέο.";
     Text[ korean ] = "Ό± ΐ―ΗόΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. \nΌ±ΕΓµΘ Ό± ΐ―Ηόΐ» Ί―°ζΗΟ°Ε³ª \n»υ Ό± ΐ―Ηόΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
@@ -662,7 +662,7 @@ String STR_ADD
     Text[ russian ] = "Δξαΰβθςό";
     Text[ polish ] = "Dodaj";
     Text[ japanese ] = "’Η‰Α";
-    Text[ chinese_traditional ] = "ΌW¥[";
+    Text[ chinese_traditional ] = "·sΌW";
     Text[ arabic ] = "ΕΦΗέΙ";
     Text[ greek ] = "Προσθήκη";
     Text[ korean ] = "Γί°΅";
@@ -670,5 +670,6 @@ String STR_ADD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aρadir";
 };
+
 
 
