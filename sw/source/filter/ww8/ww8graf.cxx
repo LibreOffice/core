@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:50 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,8 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     aP1.Y() += (INT16)SVBT16ToShort( pHd->dya );
 
     SdrObject* pObj = new SdrRectObj( OBJ_TEXT, Rectangle( aP0, aP1 ) );
-    pObj->SetModel( pDrawModel );
+    pObj->SetModel(pDrawModel);
+    pObj->NbcSetSnapRect(Rectangle(aP0, aP1));
     Size aSize( (INT16)SVBT16ToShort( pHd->dxa ) ,
         (INT16)SVBT16ToShort( pHd->dya ) );
 
@@ -1338,64 +1339,6 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     rSet.Put( SdrTextLowerDistItem( MIN_BORDER_DIST ) );
 
     return pObj;
-
-#if 0
-    //Cannot properly have draw objects in header, here with txtbox we can
-    //convert it successfully to a flyframe, nor can we support graphics
-    //in text drawboxes
-    if (bHdFtFtnEdn || bContainsGraphics)
-    {
-        SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
-            RES_FRMATR_END-1);
-
-        aFlySet.Put(SwFmtFrmSize(ATT_MIN_SIZE, aSize.Width(), aSize.Height()));
-        aFlySet.Put(SwFmtSurround(SURROUND_THROUGHT));
-        if (SVBT16ToShort( pDo->dhgt ) & 0x2000)
-            aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
-
-        //InnerDist is all 0 as word 6 doesn't store distance from borders and
-        //neither does it store the border style so its always simple
-        Rectangle aInnerDist(Point(0,0),Point(0,0));
-        MatchSdrItemsIntoFlySet( pObj, aFlySet, mso_lineSimple, mso_sptMin,
-            aInnerDist );
-
-        //undo the anchor setting for draw graphics, remove the setting in the
-        //control stack, get the id from the drawpg and reuse it in the new
-        //flyframe and then remove it as well
-        pCtrlStck->DeleteAndDestroy(pCtrlStck->Count()-1);
-        const SwFmtAnchor &rAnchor = (const SwFmtAnchor&)pDrawFmt->GetAttr(
-            RES_ANCHOR);
-        SwFlyFrmFmt *pRetFrmFmt = rDoc.MakeFlySection( rAnchor.GetAnchorId(),
-            pPaM->GetPoint(), &aFlySet );
-        pDrawFmt->ResetAttr( RES_ANCHOR );
-
-        if (nEndCpFly-nStartCpFly)
-        {
-            WW8ReaderSave aSave( this );
-
-            // set Pam into the FlyFrame
-            const SwFmtCntnt& rCntnt = pRetFrmFmt->GetCntnt();
-            ASSERT( rCntnt.GetCntntIdx(), "Oops" );
-            pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
-            pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
-
-            ReadText( nStartCpFly, (nEndCpFly-nStartCpFly),
-                  MAN_MAINTEXT == pPlcxMan->GetManType()
-                ? MAN_TXBX
-                : MAN_TXBX_HDFT );
-
-            aSave.Restore( this );
-        }
-
-        if( pObj->GetPage() )
-            pDrawPg->RemoveObject( pObj->GetOrdNum() );
-        delete pObj;
-
-        SdrObject* pOurNewObject = CreateContactObject( pRetFrmFmt );
-        if( pOurNewObject && !pOurNewObject->IsInserted() )
-            pDrawPg->InsertObject( pOurNewObject );
-    }
-#endif
 }
 
 SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
@@ -1959,7 +1902,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     {
         SwFmtHoriOrient aHori = (const SwFmtHoriOrient &)(rFlySet.Get(
             RES_HORI_ORIENT));
-        aHori.SetPos(aHori.GetPos()-nOutside);
+        aHori.SetPos(GetSafePos(aHori.GetPos()-nOutside));
         rFlySet.Put(aHori);
 
         SwFmtVertOrient aVert = (const SwFmtVertOrient &)(rFlySet.Get(
@@ -2428,6 +2371,15 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         if ((eHoriRel == FRAME) && (eAnchor == FLY_PAGE))
             eHoriRel = PRTAREA;
 
+        //#111875#
+        if ((eHoriRel == REL_PG_FRAME) && (eHoriOri == HORI_RIGHT))
+        {
+            eHoriRel = REL_FRM_RIGHT;
+            eHoriOri = HORI_NONE;
+            pFSPA->nXaRight -= pFSPA->nXaLeft;
+            pFSPA->nXaLeft = 0;
+        }
+
         //#109311# Miserable miserable hack.
         if (bOrgObjectWasReplace || pRecord->bReplaceByFly)
         {
@@ -2483,7 +2435,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             }
         }
 
-        SwFmtHoriOrient aHoriOri( pFSPA->nXaLeft, eHoriOri, eHoriRel );
+        SwFmtHoriOrient aHoriOri( GetSafePos(pFSPA->nXaLeft), eHoriOri, eHoriRel );
         if( 4 <= nXAlign )
             aHoriOri.SetPosToggle(true);
         rFlySet.Put( aHoriOri );
@@ -2498,8 +2450,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         SwVertOrient eVertOri;
         eVertOri = aVertOriTab[ nYAlign ];
         SwRelationOrient eVertRel;
-        eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR :
-            aRelOriTab[  nYRelTo ];
+        eVertRel = aRelOriTab[  nYRelTo ];
         // Make an adjustment for the special case where we want to align
         // vertically to page when horizontally aligned centre to character
         if (((pRecord->nXAlign == 1) ||
@@ -2511,10 +2462,21 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         if ((eAnchor == FLY_AT_CNTNT) && (eVertRel == REL_CHAR))
             eVertRel = PRTAREA;
 
-        rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
+        rFlySet.Put(SwFmtVertOrient( GetSafePos(pFSPA->nYaTop),  eVertOri, eVertRel ));
     }
 
     return eAnchor;
+}
+
+// #i9245 clips the text box to the min or max position if it is outside our min or max boundry
+long SwWW8ImplReader::GetSafePos(long nPos)
+{
+    if(nPos > SHRT_MAX)
+        nPos = SHRT_MAX;
+    else if(nPos < SHRT_MIN)
+        nPos = SHRT_MIN;
+
+    return nPos;
 }
 
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
@@ -2728,12 +2690,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
         if (!bDone)
         {
-            if (FmFormInventor == pObject->GetObjInventor())
-                pObject->SetLayer(rDoc.GetInvisibleControlsId());
-            else if (pF->bBelowText || pRecord->bDrawHell)
-                pObject->SetLayer(nDrawHell);
+            sw::hack::SetLayer aSetLayer(rDoc);
+            if (pF->bBelowText || pRecord->bDrawHell)
+                aSetLayer.SendObjectToHell(*pObject);
             else
-                pObject->SetLayer(nDrawHeaven);
+                aSetLayer.SendObjectToHeaven(*pObject);
 
             //#106167# Annoying problems with drawing objects
             if (nInTable)
@@ -3036,25 +2997,25 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet);
     else
     {
-        const Graphic& rGraph = ((SdrGrafObj*)rpObject)->GetGraphic();
+        SdrGrafObj *pGrf= (SdrGrafObj*)rpObject;
+        const Graphic& rGraph = pGrf->GetGraphic();
         bool bDone = false;
 
-        if( ((SdrGrafObj*)rpObject)->IsLinkedGraphic() )
+        if (pGrf->IsLinkedGraphic() && pGrf->GetFileName().Len())
         {
-            String aGrfName( URIHelper::SmartRelToAbs(
-                    ((SdrGrafObj*)rpObject)->GetFileName()) );
+            String aGrfName(URIHelper::SmartRelToAbs(pGrf->GetFileName()));
 
             if (GRAPHIC_NONE == rGraph.GetType() && CanUseRemoteLink(aGrfName))
             {
-                pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName, aEmptyStr, 0,
-                    &rFlySet, 0 /*SwFrmFmt*/);
+                pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
+                    &rFlySet, 0);
                 bDone = true;
             }
         }
-        if( !bDone )
+        if (!bDone)
         {
-            pRetFrmFmt = rDoc.Insert( *pPaM, aEmptyStr, aEmptyStr, &rGraph,
-                &rFlySet, 0 /* SwFrmFmt*/ );
+            pRetFrmFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraph,
+                &rFlySet, 0);
         }
     }
 
@@ -3104,12 +3065,9 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
     pDrawModel  = rDoc.GetDrawModel();
     ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
     pDrawPg     = pDrawModel->GetPage(0);
-    nDrawHeaven = rDoc.GetInvisibleHeavenId();
-    nDrawHell   = rDoc.GetInvisibleHellId();
 
-    pWWZOrder = new wwZOrderer(pDrawPg,
-        pMSDffManager ? pMSDffManager->GetShapeOrders() : 0, nDrawHeaven,
-        nDrawHell);
+    pWWZOrder = new wwZOrderer(sw::hack::SetLayer(rDoc), pDrawPg,
+        pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
 }
 
 void SwWW8ImplReader::GrafikDtor()
