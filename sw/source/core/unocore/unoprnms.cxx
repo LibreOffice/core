@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 13:47:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,21 @@ const SwPropNameTab aPropNameTab = {
 /* 0675 UNO_NAME_NUMBERING_IS_OUTLINE*/ {MAP_CHAR_LEN("NumberingIsOutline")},
 /* 0676 UNO_NAME_DEFAULT_OUTLINE_LEVEL*/ {MAP_CHAR_LEN("DefaultOutlineLevel")},
 /* 0677 UNO_NAME_STARTPOSITION_IN_HORI_L2R*/ {MAP_CHAR_LEN("StartPositionInHoriL2R")},
-/* 0678 UNO_NAME_ENDPOSITION_IN_HORI_L2R*/ {MAP_CHAR_LEN("EndPositionInHoriL2R")}
+/* 0678 UNO_NAME_ENDPOSITION_IN_HORI_L2R*/ {MAP_CHAR_LEN("EndPositionInHoriL2R")},
+/* 0679 UNO_NAME_SUBJECT             */  {MAP_CHAR_LEN("Subject")},
+/* 0680 UNO_NAME_ADDRESS_FROM_COLUMN */  {MAP_CHAR_LEN("AddressFromColumn")},
+/* 0681 UNO_NAME_SEND_AS_HTML        */  {MAP_CHAR_LEN("SendAsHTML")},
+/* 0682 UNO_NAME_SEND_AS_ATTACHMENT  */  {MAP_CHAR_LEN("SendAsAttachment")},
+/* 0683 UNO_NAME_MAIL_BODY           */  {MAP_CHAR_LEN("MailBody")},
+/* 0684 UNO_NAME_ATTACHMENT_NAME     */  {MAP_CHAR_LEN("AttachmentName")},
+/* 0685 UNO_NAME_ATTACHMENT_FILTER   */  {MAP_CHAR_LEN("AttachmentFilter")},
+/* 0686 UNO_NAME_PRINT_OPTIONS      */  {MAP_CHAR_LEN("PrintOptions")},
+/* 0687 UNO_NAME_SAVE_AS_SINGLE_FILE */  {MAP_CHAR_LEN("SaveAsSingleFile")},
+/* 0688 UNO_NAME_SAVE_FILTER         */  {MAP_CHAR_LEN("SaveFilter")},
+/* 0689 UNO_NAME_COPIES_TO           */  {MAP_CHAR_LEN("CopiesTo")},
+/* 0890 UNO_NAME_BLIND_COPIES_TO     */  {MAP_CHAR_LEN("BlindCopiesTo")},
+/* 0891 UNO_NAME_IN_SERVER_PASSWORD  */  {MAP_CHAR_LEN("InServerPassword")},
+/* 0892 UNO_NAME_OUT_SERVER_PASSWORD */  {MAP_CHAR_LEN("OutServerPassword")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
