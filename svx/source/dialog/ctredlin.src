@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:00:05 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-05-04 20:00:05 $
- // $Revision: 1.13 $
+ //     $Date: 2001-05-10 06:04:03 $
+ // $Revision: 1.14 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -101,6 +101,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Filtro";
+        Text[ finnish ] = "Suodatin";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
     OutputSize = TRUE ;
@@ -135,6 +136,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "~Tarih";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fecha";
+        Text[ finnish ] = "~Päivämäärä";
     };
     ListBox LB_DATE
     {
@@ -343,6 +345,15 @@ TabPage SID_REDLIN_FILTER_PAGE
         < "entre" ; Default ; > ;
         < "desde el 'Guardado'" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "ennen kuin" ; Default ; > ;
+        < "alkaen" ; Default ; > ;
+        < "yhtä suuri kuin " ; Default ; > ;
+        < "ei yhtä suuri kuin" ; Default ; > ;
+        < "Välissä" ; Default ; > ;
+        < "tallennuksesta" ; Default ; > ;
+    };
     };
     DateField DF_DATE
     {
@@ -418,6 +429,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ catalan ] = "Definir fecha/hora";
+        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika!";
     };
     FixedText FT_DATE2
     {
@@ -446,6 +458,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "~ile";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "y";
+        Text[ finnish ] = "ja";
     };
     DateField DF_DATE2
     {
@@ -521,6 +534,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ catalan ] = "Definir fecha/hora";
+        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika!";
     };
     CheckBox CB_AUTOR
     {
@@ -550,6 +564,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "~Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autor";
+        Text[ finnish ] = "~Laatija";
     };
     ListBox LB_AUTOR
     {
@@ -589,6 +604,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "~Aralýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
+        Text[ finnish ] = "~Alue";
     };
     Edit ED_RANGE
     {
@@ -623,6 +639,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "Ý~þlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Acción";
+        Text[ finnish ] = "~Toiminto";
     };
     ListBox LB_ACTION
     {
@@ -684,6 +701,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
         Text[ catalan ] = "...";
         QuickHelpText[ catalan ] = "Definir referencia a tabla";
+        Text[ finnish ] = "...";
+        QuickHelpText[ finnish ] = "Määritä viite!";
     };
     CheckBox CB_COMMENT
     {
@@ -713,6 +732,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "Açýk~lama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Descripción";
+        Text[ finnish ] = "Kommentti";
     };
     Edit ED_COMMENT
     {
@@ -761,6 +781,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Liste";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Lista";
+        Text[ finnish ] = "Luettelo";
     };
     Control DG_VIEW
     {
@@ -796,6 +817,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "~Kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aceptar";
+        Text[ finnish ] = "~Hyväksy";
     };
     PushButton PB_REJECT
     {
@@ -824,6 +846,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "R~eddet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rechazar";
+        Text[ finnish ] = "~Hylkää";
     };
     PushButton PB_ACCEPTALL
     {
@@ -852,6 +875,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "~Tümünü kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aceptar todo";
+        Text[ finnish ] = "~Hyväksy kaikki";
     };
     PushButton PB_REJECTALL
     {
@@ -880,6 +904,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Tümünü ~reddet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rechazar todo";
+        Text[ finnish ] = "~Hylkää kaikki";
     };
 
     PushButton PB_UNDO
@@ -910,6 +935,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "~Geri al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Deshacer";
+        Text[ finnish ] = "Peruuta ";
     };
     String STR_TITLE1
     {
@@ -935,6 +961,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Ýþlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Acción";
+        Text[ finnish ] = "Toiminto";
     };
     String STR_TITLE2
     {
@@ -960,6 +987,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
+        Text[ finnish ] = "Sijainti";
     };
     String STR_TITLE3
     {
@@ -985,6 +1013,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Autor";
+        Text[ finnish ] = "Laatija";
     };
     String STR_TITLE4
     {
@@ -1010,6 +1039,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Tarih";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fecha";
+        Text[ finnish ] = "Päivämäärä";
     };
     String STR_TITLE5
     {
@@ -1035,5 +1065,6 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Descripción";
+        Text[ finnish ] = "Kommentti";
     };
 };
