@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:13:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,9 @@ CFLAGSNOOPT+=-Ob0
 
 OBJFILES=   $(OBJ)$/cppumaker.obj	\
             $(OBJ)$/cppuoptions.obj \
-            $(OBJ)$/cpputype.obj
+            $(OBJ)$/cpputype.obj \
+            $(OBJ)$/dumputils.obj \
+            $(OBJ)$/includes.obj
 
 NOOPTFILES= \
             $(OBJ)$/cpputype.obj
