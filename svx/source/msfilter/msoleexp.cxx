@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:26:49 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,12 +237,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
 
                     if( GetFlags() & pArr->nFlag )
                     {
-                        const SfxObjectFactory& rFact = xSfxIPObj->
-                                                GetObjectShell()->GetFactory();
-                        if( rFact.GetFilterContainer() )
-                            pExpFilter = rFact.GetFilterContainer()->
-                                GetFilter4FilterName( String::CreateFromAscii(
-                                                pArr->pFilterNm ));
+                        const SfxObjectFactory& rFact = xSfxIPObj->GetObjectShell()->GetFactory();
+                        pExpFilter = SfxFilterMatcher(String::CreateFromAscii(rFact.GetShortName())).GetFilter4FilterName(String::CreateFromAscii(pArr->pFilterNm));
                         break;
                     }
                 }
