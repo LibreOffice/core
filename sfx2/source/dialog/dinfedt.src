@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:54:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ ModalDialog DLG_DOCINFO_EDT
         Text[ czech ] = "Názvy";
         Text[ hebrew ] = "‮שמות‬";
         Text[ hindi ] = "नाम";
+        Text[ slovak ] = "Názvy";
     };
     Edit ED_INFO1
     {
@@ -174,7 +175,10 @@ ModalDialog DLG_DOCINFO_EDT
     Text[ czech ] = "Upravit názvy polí";
     Text[ hebrew ] = "‮עריכת שמות שדות‬";
     Text[ hindi ] = "क्षेत्र नामों का संपादन";
+    Text[ slovak ] = "Upraviť názvy polí­";
 };
+
+
 
 
 
