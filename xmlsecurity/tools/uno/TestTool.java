@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestTool.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,10 @@ public class TestTool extends JFrame implements ActionListener
     /*
      * C-based component names
      */
-    public static String SEINITIALIZER_COMPONENT_C = "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl";
-    public static String XMLSIGNATURE_COMPONENT_C = "com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl";
-    public static String XMLENCRYPTION_COMPONENT_C = "com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_NssImpl";
-    public static String XMLDOCUMENTWRAPPER_COMPONENT_C = "com.sun.star.xml.security.bridge.xmlsec.XMLDocumentWrapper_XmlSecImpl";
+    public static String SEINITIALIZER_COMPONENT_C = "com.sun.star.xml.crypto.SEInitializer";
+    public static String XMLSIGNATURE_COMPONENT_C = "com.sun.star.xml.crypto.XMLSignature";
+    public static String XMLENCRYPTION_COMPONENT_C = "com.sun.star.xml.crypto.XMLEncryption";
+    public static String XMLDOCUMENTWRAPPER_COMPONENT_C = "com.sun.star.xml.wrapper.XMLDocumentWrapper";
 
     /* url resolver name */
     public static String UNOURLRESOLVER = "com.sun.star.bridge.UnoUrlResolver";
@@ -435,7 +435,7 @@ public class TestTool extends JFrame implements ActionListener
         m_startButton.setEnabled(false);
 
         m_isExportingButton = new JCheckBox("export, not import", true);
-        m_isJavaComponentButton = new JCheckBox("java, not C++", false);
+        m_isJavaComponentButton = new JCheckBox("use java component", false);
 
         m_saveButton = new JButton("Save...");
         m_saveButton.addActionListener(this);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SignatureEntity.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ class SignatureEntity extends SecurityEntity
         if (isExporting)
         {
             m_nSignatureElementCollectorId = m_xSAXEventKeeper.addSecurityElementCollector(
-                ElementMarkPriority.PRI_AFTERMODIFY,
+                ElementMarkPriority.AFTERMODIFY,
                 true);
 
             m_xSAXEventKeeper.setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
@@ -126,7 +126,7 @@ class SignatureEntity extends SecurityEntity
                 args[0] = new Integer(m_nSecurityId).toString();
                 args[1] = m_xSAXEventKeeper;
                 args[2] = new Integer(m_nSignatureElementCollectorId).toString();
-                args[3] = m_xXMLSecurityContext;
+                args[3] = m_xXMLSecurityContext.getSecurityEnvironment();
                 args[4] = m_xXMLSignature;
                 xInitialization.initialize(args);
 
@@ -159,7 +159,7 @@ class SignatureEntity extends SecurityEntity
         else
         {
             m_nSignatureElementCollectorId = m_xSAXEventKeeper.addSecurityElementCollector(
-                ElementMarkPriority.PRI_BEFOREMODIFY, false);
+                ElementMarkPriority.BEFOREMODIFY, false);
 
             m_xSAXEventKeeper.setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
 
@@ -290,7 +290,7 @@ class SignatureEntity extends SecurityEntity
         {
             int referenceId = m_xSAXEventKeeper.addSecurityElementCollector(
                 isExporting?
-                (ElementMarkPriority.PRI_AFTERMODIFY):(ElementMarkPriority.PRI_BEFOREMODIFY),
+                (ElementMarkPriority.AFTERMODIFY):(ElementMarkPriority.BEFOREMODIFY),
                 false );
 
             m_xSAXEventKeeper.setSecurityId(referenceId, m_nSecurityId);
