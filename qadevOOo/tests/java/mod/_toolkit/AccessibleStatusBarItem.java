@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBarItem.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-28 16:11:26 $
+ *  last change:$Date: 2003-03-24 15:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ public class AccessibleStatusBarItem extends TestCase {
         XController xController = aModel.getCurrentController();
 
         XInterface oObj = null;
+        XInterface secondItem = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -195,6 +196,7 @@ public class AccessibleStatusBarItem extends TestCase {
 
         try {
             oObj = statusbar.getAccessibleChild(6);
+            secondItem = statusbar.getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
 
         }
@@ -202,6 +204,9 @@ public class AccessibleStatusBarItem extends TestCase {
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("EditOnly","Can't change or select Text in StatusBarItem");
+        tEnv.addObjRelation("XAccessibleText", secondItem);
 
         final XTextDocument doc = xTextDoc;
 
