@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-16 11:52:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,14 +352,11 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     for( n = 1; n < nLines; n++ )
         mpLayoutData->m_aLineIndices.push_back( rSubControl.mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
     int nRectangles = rSubControl.mpLayoutData->m_aUnicodeBoundRects.size();
+        Rectangle aRel = const_cast<Control&>(rSubControl).GetWindowExtentsRelative( const_cast<Control*>(this) );
     for( n = 0; n < nRectangles; n++ )
     {
-        Rectangle aRect = rSubControl.LogicToPixel( rSubControl.mpLayoutData->m_aUnicodeBoundRects[n] );
-        Point aTL = aRect.TopLeft();
-        aTL = rSubControl.OutputToAbsoluteScreenPixel( aTL );
-        aTL = AbsoluteScreenToOutputPixel( aTL );
-        aRect.SetPos( aTL );
-        aRect = PixelToLogic( aRect );
+        Rectangle aRect = rSubControl.mpLayoutData->m_aUnicodeBoundRects[n];
+        aRect.Move( aRel.Left(), aRel.Top() );
         mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
 }
