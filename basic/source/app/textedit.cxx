@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-10 11:54:02 $
+ *  last change: $Author: gh $ $Date: 2001-10-09 10:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,6 +726,8 @@ DBG_CTOR(TextEdit,0);
 
     Font aFont( aEdit.GetDefaultFont( DEFAULTFONT_FIXED, aEdit.GetSettings().GetLanguage(), 0, &aEdit ));
     aFont.SetTransparent( FALSE );
+    aFont.SetAlign( ALIGN_BOTTOM );
+    aFont.SetHeight( aFont.GetHeight()+2 );
     SetFont( aFont );
 }
 
