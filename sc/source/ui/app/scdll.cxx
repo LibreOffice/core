@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:51:34 $
+ *  last change: $Author: nn $ $Date: 2001-07-27 19:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
 
 #include "editutil.hxx"
 #include <svx/svdfield.hxx>     //  SdrRegisterFieldClasses
+#include <rtl/logfile.hxx>
 
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
@@ -145,6 +146,8 @@ ScResId::ScResId( USHORT nId ) :
 
 void ScDLL::Init()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDLL::Init" );
+
     // called directly after loading the DLL
     // do whatever you want, you may use Sxx-DLL too
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-09 16:33:00 $
+ *  last change: $Author: nn $ $Date: 2001-07-27 19:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@
 #include <sfx2/ipfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/help.hxx>
+#include <rtl/logfile.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
@@ -403,6 +404,8 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
             eZoomType( SVX_ZOOM_PERCENT ),
             TABVIEW_INIT
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScTabView::ScTabView" );
+
     Init();
 }
 
@@ -412,6 +415,8 @@ ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShe
             eZoomType( rScTabView.eZoomType ),
             TABVIEW_INIT
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScTabView::ScTabView" );
+
     aViewData.SetViewShell( pViewShell );
     Init();
 

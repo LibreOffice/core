@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-20 09:37:38 $
+ *  last change: $Author: nn $ $Date: 2001-07-27 19:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <rtl/logfile.hxx>
 
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -1665,6 +1666,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     __INIT_ScTabViewShell,
     ScDBFunc( &pViewFrame->GetWindow(), rWin, this )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScTabViewShell::ScTabViewShell" );
+
     Construct();
 
     UpdatePageBreakData();
@@ -1683,6 +1686,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     __INIT_ScTabViewShell,
     ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScTabViewShell::ScTabViewShell" );
+
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
     Construct();

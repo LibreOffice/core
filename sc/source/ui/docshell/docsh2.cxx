@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
+ *  last change: $Author: nn $ $Date: 2001-07-27 19:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <svx/asiancfg.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/unolingu.hxx>
+#include <rtl/logfile.hxx>
 
 
 
@@ -109,6 +110,8 @@ using namespace com::sun::star;
 
 BOOL __EXPORT ScDocShell::InitNew( SvStorage * pStor )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::InitNew" );
+
     BOOL bRet = SfxInPlaceObject::InitNew( pStor );
 
     aDocument.MakeTable(0);
@@ -247,6 +250,8 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (!pDrawLayer)
     {
+        RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::MakeDrawLayer" );
+
         aDocument.InitDrawLayer(this);
         pDrawLayer = aDocument.GetDrawLayer();
         InitItems();                                            // incl. Undo und Basic
