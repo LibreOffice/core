@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,14 @@
 #include "xoutx.hxx"
 
 #include "drawitem.hxx"
-#include "tabarea.hxx"
+#include "cuitabarea.hxx"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
 #include "xlineit0.hxx"
 #endif
+#include <sfx2/request.hxx> //add CHINA001
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -257,8 +258,12 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     int nPos;
     int nCount;
-
-    if( *pDlgType == 0 ) // Flaechen-Dialog
+    //add CHINA001 Begin
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
+    if (pPageTypeItem)
+        SetPageType(pPageTypeItem->GetValue());
+    //add CHINA001 end
+    if( nDlgType == 0 ) //CHINA001 // Flaechen-Dialogif( *pDlgType == 0 ) // Flaechen-Dialog
     {
         if( pColorTab )
         {
@@ -283,7 +288,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
                 ModifyShadowHdl_Impl( this );
             }
-            *pPageType = PT_SHADOW;
+            nPageType = PT_SHADOW;//CHINA001 *pPageType = PT_SHADOW;
         }
     }
 }
@@ -402,6 +407,9 @@ BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
     }
+    //add CHINA001  begin
+    rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
+    //add CHINA001  end
     return( bModified );
 }
 
@@ -611,4 +619,18 @@ void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
     ModifyShadowHdl_Impl( pWindow );
 }
 
+void SvxShadowTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
 
+
+    if (pColorTabItem)
+        SetColorTable(pColorTabItem->GetColorTable());
+    if (pPageTypeItem)
+        SetPageType(pPageTypeItem->GetValue());
+    if (pDlgTypeItem)
+        SetDlgType(pDlgTypeItem->GetValue());
+    Construct();
+}
