@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,10 +625,10 @@ ToolBox RID_DRAW_GRAF_TOOLBOX
 
 String RID_DRAW_VIEWER_TOOLBOX
 {
-    TEXT = "Funktionsleiste" ;
-    TEXT [ english ] = "Function bar" ;
+    TEXT = "Funktionsleiste (Lesemodus)" ;
+    TEXT [ english ] = "Function Bar (viewing mode)" ;
     Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar" ;
+    Text [ english_us ] = "Function Bar (viewing mode)" ;
     Text [ italian ] = "Barra delle funzioni" ;
     Text [ spanish ] = "Barra de funciones" ;
     Text [ french ] = "Barre de fonctions" ;
@@ -739,10 +739,10 @@ ToolBox RID_DRAW_VIEWER_TOOLBOX
 
 String RID_GRAPHIC_VIEWER_TOOLBOX
 {
-    TEXT = "Funktionsleiste" ;
-    TEXT [ english ] = "Function bar" ;
+    TEXT = "Funktionsleiste (Lesemodus)" ;
+    TEXT [ english ] = "Function Bar (viewing mode)" ;
     Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar" ;
+    Text [ english_us ] = "Function Bar (viewing mode)" ;
     Text [ italian ] = "Barra delle funzioni" ;
     Text [ spanish ] = "Barra de funciones" ;
     Text [ french ] = "Barre de fonctions" ;
