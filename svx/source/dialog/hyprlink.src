@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:35:07 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ russian ] = "Èìÿ URL";
         QuickHelpText[ danish ] = "URL navn";
         QuickHelpText[ polish ] = "Nazwa URL";
-        QuickHelpText[ japanese ] = "URL‚Ì–¼‘O";
+        QuickHelpText[ japanese ] = "URL‚Ì–¼‘O!";
         QuickHelpText[ chinese_simplified ] = "URL Ãû³Æ";
         QuickHelpText[ chinese_traditional ] = "URL ¦WºÙ";
         QuickHelpText[ arabic ] = "URL ÇÓã ÇáÜ";
@@ -162,7 +162,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ russian ] = "Íàêîïèòåëü URL Èíòåğíåòà";
         QuickHelpText[ danish ] = "Samleboks til Internet URL";
         QuickHelpText[ polish ] = "Skrzynka zbiorcza dla URL Internetu";
-        QuickHelpText[ japanese ] = "²İÀ°È¯ÄURL‚ÌûWÎŞ¯¸½";
+        QuickHelpText[ japanese ] = "²İÀ°È¯ÄURL‚ÌûWÎŞ¯¸½!";
         QuickHelpText[ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍø URL µØÖ·À¸";
         QuickHelpText[ chinese_traditional ] = "Internet URL ¦ì§}¦C";
         QuickHelpText[ arabic ] = "ÇáÅäÊÑäÊ URLs ÕäÏæŞ ÌãÚ";
@@ -275,7 +275,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text [ dutch ] = "Hyperlink invoegen" ;
     Text [ swedish ] = "Infoga hyperlänk" ;
     Text [ danish ] = "Indsæt hyperlink" ;
-    Text [ portuguese_brazilian ] = "Hyperlink einfügen" ;
+    Text [ portuguese_brazilian ] = "Hyperlink einf?en" ;
     Text [ portuguese ] = "Inserir hiperligação" ;
     Text[ chinese_simplified ] = "ĞÂÔö³¬Á´½Ó";
     Text[ russian ] = "Âñòàâèòü ãèïåğññûëêó";
@@ -367,7 +367,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message [ dutch ] = "Deze URL kan pas na het tot stand brengen van een verbinding getest worden.\nWilt u de verbinding tot stand brengen?" ;
     Message [ swedish ] = "Denna URL kan först prövas när en förbindelse har upprättats.\nSka en förbindelse upprättas?" ;
     Message [ danish ] = "URL kan først testes når en forbindelse er blevet oprettet.\nSkal der oprettes en forbindelse?" ;
-    Message [ portuguese_brazilian ] = "Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden?" ;
+    Message [ portuguese_brazilian ] = "Die URL kann erst nach Aufbau einer Verbindung gepr?t werden.\nSoll die Verbindung aufgebaut werden?" ;
     Message [ portuguese ] = "O URL pode apenas ser verificado depois de  efectuar uma ligação.\nDeseja iniciá-la?" ;
     Message[ chinese_simplified ] = "Ö»ÓĞÔÚ½¨Á¢Á¬½Óºó²ÅÄÜÈ·¶¨Õâ¸ö URL ÊÇ·ñÕıÈ·¡£\nÄúÒªÏÖÔÚ½¨Á¢Á¬½ÓÂğ£¿";
     Message[ russian ] = "Ïğîâåğèòü URL âîçìîæíî òîëüêî ïîñëå ïîäêëş÷åíèÿ.nÓñòàíîâèòü ïîäêëş÷åíèå?";
@@ -397,7 +397,7 @@ QueryBox RID_SVXQB_DONTEXIST
     Message [ french ] = "L'URL n'existe pas.\nVoulez-vous l'insérer tout de même ?" ;
     Message [ swedish ] = "Denna URL existerar inte.\nSka den infogas ändå?" ;
     Message [ danish ] = "URL eksisterer ikke.\nSkal den tilføjes alligevel?" ;
-    Message [ portuguese_brazilian ] = "Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden?" ;
+    Message [ portuguese_brazilian ] = "Die URL existiert nicht.\nSoll sie trotzdem eingef?t werden?" ;
     Message [ portuguese ] = "O URL não existe.\nDeseja inseri-lo?" ;
     Message[ chinese_simplified ] = "Õâ¸ö URL ²»´æÔÚ¡£\nÄú»¹ÊÇÒª¼ÓÈëËü£¿";
     Message[ russian ] = "İòîò URL íå ñóùåñòâóåò.\nÂñå ğàâíî âñòàâèòü?";
