@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: os $ $Date: 2001-12-12 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,7 @@ public:
     ~BmpWindow();
     void MirrorVert(BOOL bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(BOOL bMirror) { bHorz = bMirror; Invalidate(); }
-    void SetGraphic(const Graphic& rGrf)
-            {aGraphic = rGrf; bGraphic = TRUE; Invalidate();}
+    void SetGraphic(const Graphic& rGrf);
 
 };
 

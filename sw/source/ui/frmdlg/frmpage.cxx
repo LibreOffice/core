@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-12-06 14:48:25 $
+ *  last change: $Author: os $ $Date: 2001-12-12 16:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2404,43 +2404,48 @@ void BmpWindow::Paint( const Rectangle& )
     Size  aGrfSize;
     if(bGraphic)
         aGrfSize = ::GetGraphicSizeTwip(aGraphic, this);
-    else
+    //it should show the default bitmap also if no graphic can be found
+    if(!aGrfSize.Width() && !aGrfSize.Height())
         aGrfSize =  PixelToLogic(aBmp.GetSizePixel());
 
-    // u.U. ist nichts gesetzt
-    if(aGrfSize.Width() && aGrfSize.Height())
+    long nRelGrf = aGrfSize.Width() * 100L / aGrfSize.Height();
+    long nRelWin = aPntSz.Width() * 100L / aPntSz.Height();
+    if(nRelGrf < nRelWin)
     {
-        long nRelGrf = aGrfSize.Width() * 100L / aGrfSize.Height();
-        long nRelWin = aPntSz.Width() * 100L / aPntSz.Height();
-        if(nRelGrf < nRelWin)
-        {
-            const long nWidth = aPntSz.Width();
-            aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
-            if(!bLeftAlign)
-                aPntPos.X() += nWidth - aPntSz.Width() ;
-        }
-
-        if ( bHorz )
-        {
-            aPntPos.Y()     += aPntSz.Height();
-            aPntPos.Y() --;
-            aPntSz.Height() *= -1;
-        }
-        if ( bVert )
-        {
-            aPntPos.X()     += aPntSz.Width();
-            aPntPos.X()--;
-            aPntSz.Width()  *= -1;
-        }
-        if(bGraphic)
-            aGraphic.Draw(this, aPntPos, aPntSz);
-        else
-            DrawBitmap( aPntPos, aPntSz, aBmp );
+        const long nWidth = aPntSz.Width();
+        aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
+        if(!bLeftAlign)
+            aPntPos.X() += nWidth - aPntSz.Width() ;
     }
+
+    if ( bHorz )
+    {
+        aPntPos.Y()     += aPntSz.Height();
+        aPntPos.Y() --;
+        aPntSz.Height() *= -1;
+    }
+    if ( bVert )
+    {
+        aPntPos.X()     += aPntSz.Width();
+        aPntPos.X()--;
+        aPntSz.Width()  *= -1;
+    }
+    if(bGraphic)
+        aGraphic.Draw(this, aPntPos, aPntSz);
+    else
+        DrawBitmap( aPntPos, aPntSz, aBmp );
 }
 
 BmpWindow::~BmpWindow()
 {
+}
+
+void BmpWindow::SetGraphic(const Graphic& rGrf)
+{
+    aGraphic = rGrf;
+    Size aGrfSize = ::GetGraphicSizeTwip(aGraphic, this);
+    bGraphic = aGrfSize.Width() && aGrfSize.Height();
+    Invalidate();
 }
 
 /***************************************************************************
