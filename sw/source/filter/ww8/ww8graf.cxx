@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-20 12:44:03 $
+ *  last change: $Author: cmc $ $Date: 2001-03-20 15:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,12 +1065,13 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
     USHORT nIstd     = pPlcxMan->GetPapPLCF()->GetIstd();
     USHORT nNextIstd = USHRT_MAX;
 
+    SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
+    WW8PLCFManResult aRes;
+    InsertTxbxStyAttrs( *pS, nIstd );
+
     while( nStart <= nEndCp )
     {
-        SfxItemSet aS( pDrawEditEngine->GetEmptyItemSet() );
-        WW8PLCFManResult aRes;
-        InsertTxbxStyAttrs( aS, nIstd );
-            // get position of next SPRM
+        // get position of next SPRM
         if(    pPlcxMan->Get( &aRes )
             && aRes.pMemPos && aRes.nSprmId )
         {
@@ -1092,7 +1093,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
             else if( aRes.nSprmId && (    (    256 >  aRes.nSprmId )
                                        || ( 0x0800 <= aRes.nSprmId ) ) )
             {
-                GetTxbxPapAndCharAttrs( aS, aRes );
+                GetTxbxPapAndCharAttrs( *pS, aRes );
             }
         }
 
@@ -1106,20 +1107,23 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
             {
                 nIstd = nNextIstd;
                 // store the *next* Style's SPRMs
-                InsertTxbxStyAttrs( aS, nIstd );
+                InsertTxbxStyAttrs( *pS, nIstd );
             }
 
             nEnd = ( nNext < nEndCp ) ? nNext : nEndCp;
             // put the attrs into the doc
-            if( aS.Count() )
+            if( pS->Count() )
             {
-                pDrawEditEngine->QuickSetAttribs( aS,
+                pDrawEditEngine->QuickSetAttribs( *pS,
                     GetESelection( nStart - nStartCp, nEnd - nStartCp ) );
+                delete pS;
+                pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
+                InsertTxbxStyAttrs( *pS, nIstd );
             }
         }
         nStart = nNext;
     }
-
+    delete pS;
     aSave.Restore(this);
 }
 
@@ -2984,11 +2988,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.14 2001-03-20 12:44:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.15 2001-03-20 15:26:15 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/03/20 12:44:03  cmc
+      ##572## stop Escher Text attribute cascade and silence some warnings
+
       Revision 1.13  2001/03/08 10:09:29  cmc
       Reformat unreadable code
 
