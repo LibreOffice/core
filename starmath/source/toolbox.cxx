@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 09:41:20 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,24 +194,30 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 
 void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
 {
-    Size        CatSize (31 * 5, 31 * 2);
-    Size        CmdSize (31 * 5, 31 * 5);
-    Size        WndSize (31 * 5, CatSize.Height() + 10 + CmdSize.Height());
+    Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
+    Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 5 ) );
+    DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
 
-    // basic window settings
-    SetOutputSizePixel(WndSize);
     // catalog settings
     aToolBoxCat.SetPosPixel( Point(0, 3) );
-    aToolBoxCat.SetSizePixel( CatSize );
+    aToolBoxCat.SetSizePixel( aCatSize );
     // settings for catalog / category delimiter
     Point aP( aToolBoxCat_Delim.GetPosPixel() );
     aP.X() += 5;
     aToolBoxCat_Delim.SetPosPixel( aP );
-    Size  aS( CatSize.Width() - 10, 10 );
+    Size  aS( aCatSize.Width() - 10, 10 );
     aToolBoxCat_Delim.SetSizePixel( aS );
     // category settings
+    aP.X() = 0;
+    aP.Y() += aToolBoxCat_Delim.GetSizePixel().Height();
     for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
-        vToolBoxCategories[i]->SetSizePixel(CmdSize);
+    {
+        vToolBoxCategories[i]->SetPosPixel( aP );
+        vToolBoxCategories[i]->SetSizePixel( aCmdSize );
+    }
+    // main window settings
+    Size    aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + pToolBoxCmd->GetSizePixel().Height() + 3);
+    SetOutputSizePixel( aWndSize );
 
     if (bSetPos)
     {
@@ -222,7 +228,7 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
         {
             SmGraphicWindow &rWin = pView->GetGraphicWindow();
             aPos = Point( rWin.OutputToScreenPixel(
-                            Point( rWin.GetSizePixel().Width() - WndSize.Width(), 0) ) );
+                            Point( rWin.GetSizePixel().Width() - aWndSize.Width(), 0) ) );
         }
         if (aPos.X() < 0)
             aPos.X() = 0;
@@ -279,10 +285,12 @@ void SmToolBoxWindow::SetCategory(USHORT nCategory)
         pToolBoxCmd = vToolBoxCategories[nWhatBox];
 
         // calculate actual size of window to use
-        Size  CatSize (31 * 5, 31 * 2);
-        Size  CmdSize (31 * 5, 31 * nLines);
-        Size  WndSize (31 * 5, CatSize.Height() + 2*10 + CmdSize.Height());
-        SetOutputSizePixel(WndSize);
+        Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
+        Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( nLines ) );
+        DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
+        // main window settings
+        Size  aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + aCmdSize.Height() + 3);
+        SetOutputSizePixel( aWndSize );
 
         if (nActiveCategory)
             aToolBoxCat.CheckItem(nActiveCategory, FALSE);
