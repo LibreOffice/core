@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:10:39 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1434,6 +1434,9 @@ private: // CLOOK-Impl-Methoden
     void    SaveDdeLinks(SvStream& rStream) const;
     void    LoadAreaLinks(SvStream& rStream);
     void    SaveAreaLinks(SvStream& rStream) const;
+
+    void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
+                             const ScRange& r, short nDx, short nDy, short nDz );
 
     BOOL    HasPartOfMerged( const ScRange& rRange );
 };
