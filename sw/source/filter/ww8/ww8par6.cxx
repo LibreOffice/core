@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-24 10:26:11 $
+ *  last change: $Author: cmc $ $Date: 2001-04-24 16:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1978,6 +1978,11 @@ static SvxBorderLine& Set1Border( BOOL bVer67, SvxBorderLine& rLine,
     rLine.SetOutWidth( rBorders.Out  );
     rLine.SetInWidth ( rBorders.In   );
     rLine.SetDistance( rBorders.Dist );
+
+    //NO auto for borders as yet, so if AUTO, use BLACK
+    if (nCol == 0)
+        nCol = 1;
+
     rLine.SetColor( eSwWW8ColA[ nCol ] );
 
     /*
@@ -4131,13 +4136,19 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
     b = rSHD.GetFore();
     if ( b >= 17 )
         b = 0;
+
+    //NO auto for shading so Foreground: Auto = Black
+    if (b == 0)
+        b = 1;
     nFore = eSwWW8ColA[b];
-                                        // Vordergrund: Auto = Schwarz
+
     b = rSHD.GetBack();
     if( b >=  17 )
         b = 0;
+
+    //NO auto for shading so background: Auto = Weiss
     if( b == 0 )
-        b = 8;                          // Hintergrund: Auto = Weiss
+        b = 8;
     nBack = eSwWW8ColA[b];
 
     b = rSHD.GetStyle( bVer67 );
@@ -5079,12 +5090,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.22 2001-04-24 10:26:11 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.23 2001-04-24 16:17:10 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/04/24 10:26:11  cmc
+      CJK Vertical Text Alignment {im|ex}port
+
       Revision 1.21  2001/04/23 11:16:23  cmc
       Enable automatic text foreground color {im|ex}port
 
