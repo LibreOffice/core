@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:35:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
-#include <vcl/system.hxx>
 
 #define ACTION_INSERTTEXT         1
 #define ACTION_INSERTPARABRK      2
