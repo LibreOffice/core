@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_class.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:26:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,7 +788,8 @@ Node::Write2( csi::xml::Element &           o_rOut,
         case ary::cpp::PROTECT_private:
                     *pOut << new html::StyleAttr("color:#ff6666;");
                     break;
-        // default: do nothing.
+        default:    // do nothing.
+                    ;
     }   // end switch
 
     if ( bVirtual )
@@ -812,7 +813,8 @@ Node::Write2( csi::xml::Element &           o_rOut,
          case ary::cpp::PROTECT_private:
                     rOut << "private)";
                     break;
-        // default: do nothing.
+        default:    // do nothing.
+                    ;
     }   // end switch
 }
 
