@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:52:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ chinese_simplified ] = "øÃ∂»";
         Text[ russian ] = "”‚ÂÎË˜ÂÌËÂ";
         Text[ polish ] = "Skalowanie";
-        Text[ japanese ] = "Ωﬁ∞—";
+        Text[ japanese ] = "î{ó¶";
         Text[ chinese_traditional ] = "≈„•‹§Ò®“";
         Text[ arabic ] = " ﬂ»Ì—";
         Text[ language_user1 ] = " ";
