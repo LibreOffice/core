@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-31 16:35:42 $
+ *  last change: $Author: ssa $ $Date: 2001-08-07 09:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1933,8 +1933,10 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         // get input focus on SAL_FRAME_STYLE_CHILD windows
         // because the focus handling in this case (running as plugin)
         // is "a little tricky"
-          if( nStyle_ & SAL_FRAME_STYLE_CHILD )
-              XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
+        // on some wm however, this leads to closing our menues before the menu event
+        // was fired (#89867), so we cancel this now
+          //if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        //XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
         if( pEvent->xbutton.button == Button1 ||
             pEvent->xbutton.button == Button2 ||
             pEvent->xbutton.button == Button3 )
