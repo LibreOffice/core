@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ οξλόηξβΰςελÿ θ οΰπξλό δλÿ %1.";
         Text[ polish ] = "Wpisz nazwκ uΏytkownika i has³o dla %1.";
         Text[ japanese ] = "‚±‚±‚Ι %1 ‚ΜΥ°»ή°–Ό‚ΖΚί½ά°Δή‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
-        Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥Ξ¦W©M±K½X΅C";
+        Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥ΞªΜ¦WΊΩ©M±K½X΅C";
         Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
         Text[ korean ] = "Ώ©±βΏ΅ %1ΐΗ »ηΏλΐΪ ΐΜΈ§°ϊ ΖΠ½ΊΏφµεΈ¦ ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
         Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ αά %1 εδΗ.";
@@ -203,7 +203,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ russian ] = "Θμÿ οξλόηξβΰςελÿ";
         Text[ polish ] = "Nazwa uΏytkownika";
         Text[ japanese ] = "Υ°»ή°–Ό(~U)";
-        Text[ chinese_traditional ] = "¨Ο¥Ξ¦W(~U)";
+        Text[ chinese_traditional ] = "¨Ο¥ΞªΜ¦WΊΩ(~U)";
         Text[ greek ] = "Όνομα χρήστη";
         Text[ korean ] = "»ηΏλΐΪ ΐΜΈ§(~U)";
         Text[ arabic ] = "ΗΣγ ΗαγΣΚΞΟγ";
@@ -335,7 +335,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ portuguese ] = "Login" ;
         Text[ chinese_simplified ] = "µΗΒΌ";
         Text[ russian ] = "Βυξδ β ρθρςεμσ";
-        Text[ polish ] = "Logowanie";
+        Text[ polish ] = "Wejcie do systemu";
         Text[ japanese ] = "ΫΈή²έ";
         Text[ chinese_traditional ] = "µn¤J";
         Text[ greek ] = "Δήλωση";
@@ -399,7 +399,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ russian ] = "Νεξαυξδθμϋ θμÿ οξλόηξβΰςελÿ θ οΰπξλό";
     Text[ polish ] = "NaleΏy podaζ nazwκ uΏytkownika i has³o.";
     Text[ japanese ] = "Υ°»ή°–Ό‚ΖΚί½ά°Δή‚ª•K—v";
-    Text[ chinese_traditional ] = "½ΠΏι¤J¨Ο¥Ξ¦W©M±K½X";
+    Text[ chinese_traditional ] = "½ΠΏι¤J¨Ο¥Ξ¦WΊΩ©M±K½X";
     Text[ greek ] = "Απαιτείται το όνομα του χρήστη και ο κωδικός πρόσβασης";
     Text[ korean ] = "»ηΏλΐΪ ΐΜΈ§°ϊ ΖΠ½ΊΏφµε°΅ ΗΚΏδΗΥ΄Ο΄Ω.";
     Text[ arabic ] = "γΨαζΘ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ";
@@ -407,5 +407,6 @@ ModalDialog DLG_UUI_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseρa";
     Text[ finnish ] = "Kδyttδjδtunnus ja salasana pakolliset";
 };
+
 
 
