@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:12:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,14 @@ void SetNoNum( BYTE * nLvl, BOOL nVal )
         *nLvl |= NO_NUMLEVEL;
     else
         *nLvl &= ~NO_NUMLEVEL;
+}
+
+void SetLevel(BYTE * nLvl, BYTE nNewLevel)
+{
+    if (IsNum)
+        *nLvl = nNewLevel;
+    else
+        *nLvl = nNewLevel | NO_NUMLEVEL;
 }
 
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
@@ -781,7 +789,7 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
             BYTE i = rNum.GetLevel();
 
             if( !IsContinusNum() &&
-                rMyNFmt.GetIncludeUpperLevels() )       // nur der eigene Level ?
+                rMyNFmt.GetIncludeUpperLevels() )  // nur der eigene Level ?
             {
                 BYTE n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
