@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:20:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // System - Includes -----------------------------------------------------
 
 #ifdef PCH
@@ -1764,36 +1763,36 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     {
         WaitObject aWait( GetDialogParent() );
 
-        BOOL bDo = TRUE;
-        ScTabViewShell* pViewShell = GetBestViewShell();
-        if( pViewShell )
+        bool bDoSave = true;
+        if( ScTabViewShell* pViewShell = GetBestViewShell() )
         {
             ScExtDocOptions* pExtDocOpt = aDocument.GetExtDocOptions();
             if( !pExtDocOpt )
-                        aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
+                aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
             // if the imported document contained an encrypted
-            // password - determineif we should save without it.
-            if(pExtDocOpt && pExtDocOpt->IsWinEncrypted() )
-                        bDo = ScWarnPassword::WarningOnPassword( rMed );
+            // password - determine if we should save without it.
+            if( pExtDocOpt && pExtDocOpt->GetDocSettings().mbEncrypted )
+                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
         }
 
-        if(bDo)
+        if( bDoSave )
         {
-            BOOL bFake97 = ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) );
-            FltError eError = ScExportExcel5( rMed, &aDocument, bFake97, RTL_TEXTENCODING_MS_1252 );
+            bool bBiff8 = aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp );
+            FltError eError = ScExportExcel5( rMed, &aDocument, bBiff8, RTL_TEXTENCODING_MS_1252 );
 
-        if (eError && !GetError())
-            SetError(eError);
+            if( eError && !GetError() )
+                SetError( eError );
 
-        if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
-            bRet = TRUE;
-        else
-            bRet = eError == eERR_OK;
+            // don't return false for warnings
+            bRet = ((eError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK) || (eError == eERR_OK);
         }
-    else
-        SetError(ERRCODE_ABORT);
+        else
+        {
+            // export aborted, i.e. "Save without password" warning
+            SetError( ERRCODE_ABORT );
+        }
     }
     else if (aFltName.EqualsAscii(pFilterAscii))
     {
