@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 12:57:00 $
+#   last change: $Author: hr $ $Date: 2004-10-12 13:24:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES =  \
         $(SLO)$/conform.obj \
         $(SLO)$/conpoly.obj \
         $(SLO)$/conarc.obj \
+        $(SLO)$/concustomshape.obj \
         $(SLO)$/dselect.obj \
         $(SLO)$/drawbase.obj \
         $(SLO)$/tblctrl.obj \
