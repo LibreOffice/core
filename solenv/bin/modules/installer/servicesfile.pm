@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:17:24 $
+#   last change: $Author: rt $ $Date: 2004-06-15 10:33:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -454,6 +454,7 @@ sub include_regcomp_into_ld_library_path
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$ld_library_path);
     $ld_library_path =~ s/\/\s*$//;     # removing ending slashes
     $ld_library_path =~ s/\/bin\./\/lib\./;
+    $ld_library_path =~ s/\/bin\s*$/\/lib/; # when packing from flat
     $ENV{'LD_LIBRARY_PATH'} = $ld_library_path;
 
     my $infoline = "Setting LD_LIBRARY_PATH to $ENV{'LD_LIBRARY_PATH'}\n";
