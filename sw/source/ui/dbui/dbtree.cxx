@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:17:49 $
+ *  last change: $Author: os $ $Date: 2002-06-06 13:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,14 +352,14 @@ void SwDBTreeList::InitTreeList()
     const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
-    BOOL bDark = GetDisplayBackground().GetColor().IsDark();
-    ImageList& rImgLst = bDark ?
-                    aImageListHC : aImageList;
-    Image& rImg = rImgLst.GetImage(IMG_DB);
+    Image& rImg = aImageList.GetImage(IMG_DB);
+    Image& rHCImg = aImageListHC.GetImage(IMG_DB);
     for(long i = 0; i < nCount; i++)
     {
         String sDBName(pDBNames[i]);
-        InsertEntry(sDBName, rImg, rImg, NULL, TRUE);
+        SvLBoxEntry* pEntry = InsertEntry(sDBName, rImg, rImg, NULL, TRUE);
+        SetExpandedEntryBmp(pEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+        SetCollapsedEntryBmp(pEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
     }
     String sDBName(sDefDBName.GetToken(0, DB_DELIM));
     String sTableName(sDefDBName.GetToken(1, DB_DELIM));
@@ -484,9 +484,6 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
             String sSourceName = GetEntryText(pParent);
             if(!pImpl->GetContext()->hasByName(sSourceName))
                 return;
-            BOOL bDark = GetDisplayBackground().GetColor().IsDark();
-            ImageList& rImgLst = bDark ?
-                            aImageListHC : aImageList;
             Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
             if (xConnection.is())
             {
@@ -498,13 +495,16 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     String sTableName;
                     long nCount = aTblNames.getLength();
                     const OUString* pTblNames = aTblNames.getConstArray();
-                    Image& rImg = rImgLst.GetImage(IMG_DBTABLE);
+                    Image& rImg = aImageList.GetImage(IMG_DBTABLE);
+                    Image& rHCImg = aImageListHC.GetImage(IMG_DBTABLE);
                     for (long i = 0; i < nCount; i++)
                     {
                         sTableName = pTblNames[i];
                         SvLBoxEntry* pTableEntry = InsertEntry(sTableName, rImg, rImg, pParent, bShowColumns);
                         //to discriminate between queries and tables the user data of table entries is set
                         pTableEntry->SetUserData((void*)0);
+                        SetExpandedEntryBmp(pTableEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                        SetCollapsedEntryBmp(pTableEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
                     }
                 }
 
@@ -516,12 +516,15 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     String sQueryName;
                     long nCount = aQueryNames.getLength();
                     const OUString* pQueryNames = aQueryNames.getConstArray();
-                    Image& rImg = rImgLst.GetImage(IMG_DBQUERY);
+                    Image& rImg = aImageList.GetImage(IMG_DBQUERY);
+                    Image& rHCImg = aImageListHC.GetImage(IMG_DBQUERY);
                     for (long i = 0; i < nCount; i++)
                     {
                         sQueryName = pQueryNames[i];
                         SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, rImg, rImg, pParent, bShowColumns);
                         pQueryEntry->SetUserData((void*)1);
+                        SetExpandedEntryBmp(pQueryEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                        SetCollapsedEntryBmp( pQueryEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
                     }
                 }
             }

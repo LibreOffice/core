@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:18:43 $
+ *  last change: $Author: os $ $Date: 2002-06-06 13:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,6 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
     aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    aUsedDBTLB.SetFont(GetSettings().GetStyleSettings().GetAppFont());
     aUsedDBTLB.SetSpaceBetweenEntries(0);
 
     aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
@@ -262,11 +261,14 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
     USHORT nParent = 0;
     USHORT nChild = 0;
 
-    BOOL bDark = aUsedDBTLB.GetDisplayBackground().GetColor().IsDark();
-    ImageList& rImgLst = bDark ?
-                    aImageListHC : aImageList;
-    Image& rTableImg = rImgLst.GetImage(IMG_DBTABLE);
-    Image& rDBImg = rImgLst.GetImage(IMG_DB);
+    Image& rTableImg = aImageList.GetImage(IMG_DBTABLE);
+    Image& rDBImg = aImageList.GetImage(IMG_DB);
+    Image& rQueryImg = aImageList.GetImage(IMG_DBQUERY);
+    Image& rHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
+    Image& rHCDBImg = aImageListHC.GetImage(IMG_DB);
+    Image& rHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
+    Image& rToInsert = nCommandType ? rQueryImg : rTableImg;
+    Image& rHCToInsert = nCommandType ? rHCQueryImg : rHCTableImg;
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -276,13 +278,20 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                 if (sTableName == aUsedDBTLB.GetEntryText(pChild))
                     return pChild;
             }
-            SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rTableImg, rTableImg, pParent);
+            SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+            aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
+            aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, rDBImg, rDBImg);
-    SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rTableImg, rTableImg, pParent);
+    aUsedDBTLB.SetExpandedEntryBmp(pParent, rHCDBImg, BMP_COLOR_HIGHCONTRAST);
+    aUsedDBTLB.SetCollapsedEntryBmp(pParent, rHCDBImg, BMP_COLOR_HIGHCONTRAST);
+
+    SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+    aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
+    aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }
