@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 14:57:10 $
+#   last change: $Author: hjs $ $Date: 2002-03-01 13:21:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,26 +71,29 @@ COMNAME:=
 
 .IF "$(COM)"=="GCC"
 CFLAGSVERSION=-dumpversion
-CFLAGSNUMVERSION=-dumpversion |& awk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION_CMD=-dumpversion
+CFLAGSNUMVERSION_CMD=-dumpversion |& awk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="MSC"
-CFLAGSVERSION= |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION= |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION=
+CFLAGSVERSION_CMD= |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD= |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
-CFLAGSVERSION= -V |& nawk -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION= -V |& nawk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION= -V
+CFLAGSVERSION_CMD= -V |& nawk -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD= -V |& nawk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 # that's the version known by the specific
-#compiler
-CCVER:=$(shell $(CC) $(CFLAGSVERSION))
+# compiler
+CCVER:=$(shell -$(CC) $(CFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
-CCNUMVER:=$(shell $(CC) $(CFLAGSNUMVERSION))
+CCNUMVER:=$(shell -$(CC) $(CFLAGSNUMVERSION_CMD))
 
 .IF "$(COM)"=="MSC"
 .IF "$(CCNUMVER)">="001200000000"
@@ -128,6 +131,9 @@ compiler_version_error:
     @+echo  Could not detect compiler version!
     @+echo  Please extend tg_compv.mk in 
     @+echo  "solenv/inc".
+    @+echo ++++++++++++++++++++++++++++++++++++
+    @+echo "$(CC) $(CFLAGSVERSION)" returns
+    @+$(CC) $(CFLAGSVERSION)
     @+echo ++++++++++++++++++++++++++++++++++++
     @+exit 255
 
