@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implsprite.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:02:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITE_HPP_
-#include <drafts/com/sun/star/rendering/XSprites.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XSPRITE_HPP_
+#include <com.sun.star.rendering.XSprites.hpp>
 #endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
@@ -91,14 +91,14 @@ namespace cppcanvas
         {
         public:
             ImplSprite( const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
+                                  ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
                         const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XSprite >&       rSprite,
+                                  ::com::sun::star::rendering::XSprite >&       rSprite,
                         const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             ImplSprite( const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
+                                  ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
                         const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XAnimatedSprite >& rSprite,
+                                  ::com::sun::star::rendering::XAnimatedSprite >& rSprite,
                         const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             virtual ~ImplSprite();
 
@@ -113,10 +113,10 @@ namespace cppcanvas
             virtual void hide();
 
             virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XSprite >  getUNOSprite() const;
+                ::com::sun::star::rendering::XSprite >  getUNOSprite() const;
 
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XGraphicDevice >
+                ::com::sun::star::rendering::XGraphicDevice >
                                                                 getGraphicDevice() const;
 
         private:
@@ -124,9 +124,9 @@ namespace cppcanvas
             ImplSprite(const ImplSprite&);
             ImplSprite& operator=( const ImplSprite& );
 
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite >          mxSprite;
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite >  mxAnimatedSprite;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >          mxSprite;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite >  mxAnimatedSprite;
             ImplSpriteCanvas::TransformationArbiterSharedPtr                                                mpTransformArbiter;
         };
     }
