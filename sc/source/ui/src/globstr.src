@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 20:56:54 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 08:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2115,6 +2115,11 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±¸¿ªÀÌ¸§  ÆíÁý";
         Text[ turkish ] = "Aralýk adlarýný düzenle";
         Text[ language_user1 ] = " ";
+    };
+    String STR_UNDO_TRANSLITERATE
+    {
+        Text = "Groß-/Kleinschreibung" ;
+        Text [ ENGLISH ] = "Change case" ;
     };
     String STR_DB_NONAME
     {

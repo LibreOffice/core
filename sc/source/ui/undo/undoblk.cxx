@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:22:31 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 08:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TYPEINIT1(ScUndoUseScenario,        SfxUndoAction);
 TYPEINIT1(ScUndoSelectionStyle,     SfxUndoAction);
 TYPEINIT1(ScUndoEnterMatrix,        ScBlockUndo);
 TYPEINIT1(ScUndoIndent,             ScBlockUndo);
+TYPEINIT1(ScUndoTransliterate,      ScBlockUndo);
 TYPEINIT1(ScUndoClearItems,         ScBlockUndo);
 TYPEINIT1(ScUndoRemoveBreaks,       SfxUndoAction);
 TYPEINIT1(ScUndoRemoveMerge,        ScBlockUndo);
@@ -1506,6 +1507,8 @@ BOOL __EXPORT ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 {
+    DBG_ASSERT( rMark.IsMultiMarked(), "wrong mark type" );
+
     ScRange aRange;
     rMark.GetMultiMarkArea( aRange );
     return aRange;
@@ -1564,6 +1567,67 @@ void __EXPORT ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
 }
 
 BOOL __EXPORT ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    return (rTarget.ISA(ScTabViewTarget));
+}
+
+// -----------------------------------------------------------------------
+//
+//      Transliteration for cells
+//
+
+ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
+                            ScDocument* pNewUndoDoc, sal_Int32 nType ) :
+    ScBlockUndo( pNewDocShell, lcl_GetMultiMarkRange(rMark), SC_UNDO_AUTOHEIGHT ),
+    aMarkData( rMark ),
+    pUndoDoc( pNewUndoDoc ),
+    nTransliterationType( nType )
+{
+}
+
+__EXPORT ScUndoTransliterate::~ScUndoTransliterate()
+{
+    delete pUndoDoc;
+}
+
+String __EXPORT ScUndoTransliterate::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_TRANSLITERATE );
+}
+
+void __EXPORT ScUndoTransliterate::Undo()
+{
+    BeginUndo();
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    USHORT nTabCount = pDoc->GetTableCount();
+    ScRange aCopyRange = aBlockRange;
+    aCopyRange.aStart.SetTab(0);
+    aCopyRange.aEnd.SetTab(nTabCount-1);
+    pUndoDoc->CopyToDocument( aCopyRange, IDF_CONTENTS, TRUE, pDoc, &aMarkData );
+    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+
+    EndUndo();
+}
+
+void __EXPORT ScUndoTransliterate::Redo()
+{
+    BeginRedo();
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    pDoc->TransliterateText( aMarkData, nTransliterationType );
+    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+
+    EndRedo();
+}
+
+void __EXPORT ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
+{
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->TransliterateText( nTransliterationType );
+}
+
+BOOL __EXPORT ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 08:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,6 +834,28 @@ private:
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
     BOOL            bIsIncrement;
+};
+
+
+class ScUndoTransliterate: public ScBlockUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
+                                        ScDocument* pNewUndoDoc, sal_Int32 nType );
+    virtual         ~ScUndoTransliterate();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    ScMarkData      aMarkData;
+    ScDocument*     pUndoDoc;
+    sal_Int32       nTransliterationType;
 };
 
 

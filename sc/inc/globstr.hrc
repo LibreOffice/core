@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 19:32:00 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 08:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,9 @@
 
 #define STR_DATAPILOT_SUBTOTAL      380
 
-#define STR_COUNT                   380
+#define STR_UNDO_TRANSLITERATE      381
+
+#define STR_COUNT                   381
 
 
 

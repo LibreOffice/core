@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:25:50 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 08:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,25 @@ BOOL ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
     aMultiMark.MarkToMulti();
     aMultiMark.GetMultiMarkArea( aMarkRange );
 
-    //! undo
+    if (bRecord)
+    {
+        USHORT nStartTab = aMarkRange.aStart.Tab();
+        USHORT nTabCount = pDoc->GetTableCount();
+
+        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
+        for (USHORT i=0; i<nTabCount; i++)
+            if (i != nStartTab && rMark.GetTableSelect(i))
+                pUndoDoc->AddUndoTab( i, i );
+
+        ScRange aCopyRange = aMarkRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, IDF_CONTENTS, TRUE, pUndoDoc, &aMultiMark );
+
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoTransliterate( &rDocShell, aMultiMark, pUndoDoc, nType ) );
+    }
 
     pDoc->TransliterateText( aMultiMark, nType );
 
