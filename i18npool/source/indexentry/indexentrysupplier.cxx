@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-01-10 21:53:13 $
+ *  last change: $Author: jp $ $Date: 2002-01-14 09:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #define I18N_CHARACTERCLASSIFICATION_USES_CLASS_INTERNATIONAL
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -76,6 +79,9 @@
 
 using namespace ::com::sun::star::i18n;
 
+#define STR_I18N_PATH       "com.sun.star.i18n."
+#define STR_I18N_UNICODE    "Unicode"
+#define STR_I18N_INSTANCE   "_IndexEntrySupplier"
 
 ::rtl::OUString SAL_CALL IndexEntrySupplier::getIndexCharacter(
                             const ::rtl::OUString& rIndexEntry,
@@ -84,21 +90,31 @@ using namespace ::com::sun::star::i18n;
                                 throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString aRet;
-    ::rtl::OUString rServiceName(::rtl::OUString::createFromAscii( "com.sun.star.i18n."));
+    // take the max count of all length
+    ::rtl::OUStringBuffer aBuf( sizeof( STR_I18N_PATH ) +
+                                ( rLocale.Country.getLength() +
+                                  rLocale.Variant.getLength() +
+                                  rSortAlgorithm.getLength() + 3 ) +
+                                sizeof( STR_I18N_UNICODE ) +
+                                sizeof( STR_I18N_INSTANCE ) );
 
-    if ( rLocale.Language.getLength() ) {
-        ::rtl::OUString underScore( ::rtl::OUString::createFromAscii("_") );
-        rServiceName += rLocale.Language;
+    aBuf.appendAscii( STR_I18N_PATH, sizeof( STR_I18N_PATH ) - 1  );
+
+    if( rLocale.Language.getLength() )
+    {
+        aBuf.append( rLocale.Language );
         if ( rLocale.Country.getLength() )
-        rServiceName += underScore + rLocale.Country;
+            aBuf.append( (sal_Unicode)'_' ).append( rLocale.Country );
         if ( rLocale.Variant.getLength() )
-        rServiceName += underScore + rLocale.Variant;
+            aBuf.append( (sal_Unicode)'_' ).append( rLocale.Variant );
         if ( rSortAlgorithm.getLength() )
-        rServiceName += underScore + rSortAlgorithm;
-    } else // if not locale specified, use default Unicode service.
-        rServiceName += ::rtl::OUString::createFromAscii("Unicode");
+            aBuf.append( (sal_Unicode)'_' ).append( rSortAlgorithm );
+    }
+    else // if not locale specified, use default Unicode service.
+        aBuf.appendAscii( STR_I18N_UNICODE, sizeof( STR_I18N_UNICODE ) - 1  );
+    aBuf.appendAscii( STR_I18N_INSTANCE, sizeof( STR_I18N_INSTANCE ) - 1  );
 
-    rServiceName += ::rtl::OUString::createFromAscii("_IndexEntrySupplier");
+    ::rtl::OUString rServiceName( aBuf );
 
     if ( (!rServiceName.equals(aServiceName) || (!xIES.is())) && xMSF.is() ) {
 
