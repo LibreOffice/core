@@ -218,6 +218,10 @@ JAVA_OFFICEBEAN_OFFICEWRITERBEAN= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBeanInfo.java \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Makefile
 
+JAVA_OFFICEBEAN_HELPERBEANS= \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeCommand.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BasicOfficeBean.java
+
 BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
     $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd 	\
@@ -274,6 +278,7 @@ EXAMPLESLIST= \
     $(JAVA_WRITERSELECTOR)         \
     $(JAVA_OFFICEBEAN_SIMPLEBEAN)  \
     $(JAVA_OFFICEBEAN_OFFICEWRITERBEAN)  \
+    $(JAVA_OFFICEBEAN_HELPERBEANS)  \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
     $(OLE_EXAMPLES_DELPHI)                \
