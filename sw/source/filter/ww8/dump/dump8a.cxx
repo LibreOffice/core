@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,8 @@ static void DumpBookHigh()
     *pOut << indent1 << begin1 << "Bookmarks High" << endl1;
 
     USHORT i = 0;
-    while( 1 ){
+    while( 1 )
+    {
         long nPos = aBook.Where();
         if( nPos >= LONG_MAX )
             break;
@@ -433,9 +434,9 @@ static void DumpBookHigh()
         *pOut << ( ( aBook.GetIsEnd() ) ? " Ende  " : " Anfang" );
         *pOut << " Handle: " << aBook.GetHandle();
 //      *pOut << " Len: " << hex4 << aBook.GetLen() << dec;
-        const char* pN = aBook.GetName();
-        if( pN )
-            *pOut << " Name: " << pN << endl1;
+        ByteString sName( *aBook.GetName(), RTL_TEXTENCODING_MS_1252 );
+        if( sName.Len() )
+            *pOut << " Name: " << sName.GetBuffer() << endl1;
         else
             *pOut << endl1;
         aBook++;
@@ -568,15 +569,20 @@ static void DumpFonts()
     *pOut << endl1;
     *pOut << 'T' << hex6 << pWwFib->fcSttbfffn << dec2 << ' ' << indent1 << begin1 << "FFNs" << endl1;
 
+    ByteString sOut;
+
     for( i=0; i<aFonts.GetMax(); i++){
         // const
         WW8_FFN* p = (WW8_FFN*)aFonts.GetFont( i );
 
-        *pOut << "Id:" << i << " Name:\"" << String( p->sFontname ).GetStr() << '"';    // Name
+        sOut = ByteString( p->sFontname, RTL_TEXTENCODING_MS_1252 );
+        *pOut << "Id:" << i << " Name:\"" << sOut.GetBuffer() << '"';    // Name
         if( p->ibszAlt )                    // gibt es einen alternativen Font ?
-
-        *pOut << ", Alternativ:" << '"' << String( p->sFontname.Copy( p->ibszAlt ) ).GetStr() << '"';
-
+        {
+            sOut = ByteString( p->sFontname.Copy( p->ibszAlt ),
+                                RTL_TEXTENCODING_MS_1252 );
+            *pOut << ", Alternativ:" << '"' << sOut.GetBuffer() << '"';
+        }
         *pOut << ", PitchRequest:" << (short)p->prg << ", TrueType:" << (short)p->fTrueType;
         *pOut << ", FontFamily:" << (short)p->ff;
         *pOut << ", BaseWeight:" << p->wWeight;
@@ -2779,13 +2785,14 @@ static void PrintStyleId( USHORT nId )
 void DStyle::Dump1Style( USHORT nNr )
 {
     short nSkip, cbStd;
-    BYTE* pStr;
+    String aStr;
     char c;
     indent( *pOut, *xTableStream );
 
-    WW8_STD* pStd = Read1Style( nSkip, &pStr, &cbStd ); // lese Style
+    WW8_STD* pStd = Read1Style( nSkip, &aStr, &cbStd ); // lese Style
 
-    if ( pStr ){                                    // echter Style
+    if ( aStr.Len() )                                       // echter Style
+    {
         *pOut << begin1;
         switch ( pStd->sgc ){
         case 1:  c = 'P'; break;
@@ -2795,7 +2802,8 @@ void DStyle::Dump1Style( USHORT nNr )
         *pOut << c << "-Style Nr:" << nNr << ' ';
         *pOut << "ID:"; PrintStyleId( pStd->sti );
         *pOut << "BasedOn:"; PrintStyleId( pStd->istdBase );
-        *pOut << "Next:" << pStd->istdNext << " Name:\"" << &pStr[1] << "\"";
+        ByteString sName( aStr, RTL_TEXTENCODING_MS_1252 );
+        *pOut << "Next:" << pStd->istdNext << " Name:\"" << sName.GetBuffer() << "\"";
         *pOut << endl1 << "                       ";
         *pOut << "cbStd:" << cbStd << ' ';
         *pOut << "No of Upx & Upe:" << pStd->cupx << ' ';
@@ -2811,12 +2819,11 @@ void DStyle::Dump1Style( USHORT nNr )
     if( pStd && ( pStd->sgc == 1 || pStd->sgc == 2 ) )
         DumpStyleGrupx( nVersion, nSkip, pStd->sgc == 1 );
 
-    if ( pStr )                                 // echter Style
+    if ( aStr.Len() )                               // echter Style
         end( *pOut, *xTableStream ) << c << "-Style" << endl1;
 
     xTableStream->Seek( nPos+nSkip );
 
-    DELETEZ( pStr );
     DELETEZ( pStd );
 }
 
@@ -2867,63 +2874,43 @@ int PrepareConvert( String& rName, String& rOutName, String& rMess )
         strcat( cOutName, ".DMP" );
     }
 #endif
-    if( access( rName.GetStr(), 0 ) ){
-        rMess += "Kann ";
-        rMess += rName;
-        rMess += " nicht oeffnen";
-        return 1;
-    }
 
     pxStor = new SvStorageRef( new SvStorage( rName, STREAM_STD_READ ) );
-    xStrm = (*pxStor)->OpenStream( String( "WordDocument" ), STREAM_STD_READ );
+    xStrm = (*pxStor)->OpenStream( String::CreateFromAscii( "WordDocument" ),
+                                        STREAM_STD_READ );
 
     if ( !xStrm.Is() /* || xStrm->GetError() */ ){
-        rMess += "Kann StorageStream \"WordDocument\" in ";
+        rMess.AppendAscii( "Kann StorageStream \"WordDocument\" in " );
         rMess += rName;
-        rMess += " nicht zum Lesen oeffnen";
+        rMess.AppendAscii( " nicht zum Lesen oeffnen" );
         DELETEZ( pxStor );
         return 1;
     }
 
     ULONG nL;
     if ( xStrm->Read( &nL, sizeof( nL ) ) == 0 ){
-        rMess += "Kann aus StorageStream \"WordDocument\" in ";
+        rMess.AppendAscii( "Kann aus StorageStream \"WordDocument\" in ");
         rMess += rName;
-        rMess += " nicht Lesen";
+        rMess.AppendAscii( " nicht Lesen" );
         return 1;
     }
     xStrm->Seek( 0 );
 
-    pOut = new fstream( rOutName, ios::out );
-    if ( !pOut ){
-        rMess += "Kann Ausgabedatei ";
+    ByteString sOutName( rOutName, RTL_TEXTENCODING_MS_1252 );
+    pOut = new fstream( sOutName.GetBuffer(), ios::out );
+    if ( !pOut )
+    {
+        rMess.AppendAscii( "Kann Ausgabedatei " );
         rMess += rOutName;
-        rMess += " nicht zum Schreiben oeffnen";
+        rMess.AppendAscii( " nicht zum Schreiben oeffnen" );
         return 1;
     }
 
-#if 0       // erstmal raus wg. Umstellung
-    if( argc > 3 ) {
-        char StorName[266];
-        strncpy( StorName, *++argv, sizeof( StorName )-5 );
-
-        if( !strchr( StorName, '.' ) )
-            strcat( StorName, ".STO" );
-
-        SvFileStream aStrm( StorName, STREAM_WRITE|STREAM_TRUNC );
-        aStrm << *xStrm;
-
-//      fstream aOut2( StorName, ios::out );
-//      aOut2 << *xStrm;
-
-        xStrm->Seek( 0 );
-    }
-#endif
-    rMess += "Ausgabe von ";
+    rMess.AppendAscii( "Ausgabe von " );
     rMess += rName;
-    rMess += " in Datei ";
+    rMess.AppendAscii( " in Datei " );
     rMess += rOutName;
-    rMess += "......";
+    rMess.AppendAscii(  "......" );
 
     if ( xStrm->Read( &nL, sizeof( nL ) ) == 0 ){
         return 1;
@@ -2968,10 +2955,11 @@ int DoConvert( const String& rName, BYTE nVersion )
             xDataStream = &xStrm;
                     break;
     case 8:
-            xTableStream = (*pxStor)->OpenStream(
-                        ( 1 == pWwFib->fWhichTblStm ) ? "1Table" : "0Table" ,
+            xTableStream = (*pxStor)->OpenStream( String::CreateFromAscii(
+                        ( 1 == pWwFib->fWhichTblStm ) ? "1Table" : "0Table" ),
                         STREAM_STD_READ );
-            xDataStream = (*pxStor)->OpenStream( "Data", STREAM_STD_READ | STREAM_NOCREATE );
+            xDataStream = (*pxStor)->OpenStream( String::CreateFromAscii(
+                            "Data" ), STREAM_STD_READ | STREAM_NOCREATE );
             if( !xDataStream.Is() || SVSTREAM_OK != xDataStream->GetError() )
                 xDataStream = &xStrm;
                     break;
@@ -2986,8 +2974,10 @@ int DoConvert( const String& rName, BYTE nVersion )
 
 
     // dann erstmal den Dateinamen schreiben:
-    *pOut << "Datei: " << rName.GetStr() << endl;
-
+    {
+        ByteString sName( rName, RTL_TEXTENCODING_MS_1252 );
+        *pOut << "Datei: " << sName.GetBuffer() << endl;
+    }
     pSBase = new WW8ScannerBase( &xStrm, &xTableStream, &xDataStream, pWwFib );
 
     // erstmal die Lowlevel-Funktionen
@@ -3072,11 +3062,14 @@ void DeInit()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8a.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8a.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.15  2000/09/18 16:05:02  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,8 @@ void VBA_Impl::Output( int nLen, const BYTE *pData)
 int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     {
     SvStorageStreamRef xVBAProject;
-    xVBAProject = rxVBAStorage->OpenStream( "_VBA_PROJECT",
+    xVBAProject = rxVBAStorage->OpenStream(
+                    String::CreateFromAscii( "_VBA_PROJECT" ),
                     STREAM_STD_READ | STREAM_NOCREATE );
 
     if( !xVBAProject.Is() || SVSTREAM_OK != xVBAProject->GetError() )
@@ -427,7 +428,7 @@ const String &VBA_Impl::Decompress( UINT16 nIndex, int *pOverflow)
         xVBAStream->GetError() )
     {
         DBG_WARNING("Not able to open vb module ");
-        DBG_WARNING((pOffsets[nIndex].sName).GetStr());
+//      DBG_WARNING((pOffsets[nIndex].sName).GetStr());
     }
     else
     {
@@ -440,10 +441,10 @@ const String &VBA_Impl::Decompress( UINT16 nIndex, int *pOverflow)
          */
         if (bCommented)
         {
-            String sTempStringa("\x0D\x0A");
-            String sTempStringb("\x0D\x0ARem ");
+            String sTempStringa(String::CreateFromAscii( "\x0D\x0A"));
+            String sTempStringb(String::CreateFromAscii( "\x0D\x0ARem "));
             sVBAString.SearchAndReplaceAll(sTempStringa,sTempStringb);
-            sVBAString.Insert("Rem ",0);
+            sVBAString.InsertAscii("Rem ",0);
         }
     }
     return sVBAString;
@@ -571,11 +572,14 @@ int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/msvbasic.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/msvbasic.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:59  hr
+    initial import
+
     Revision 1.5  2000/09/18 16:05:03  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,16 +133,16 @@ void MyApp::Main()
     {
         aName = GetCommandLineParam( 0 );
         if (aName.Search('.') == STRING_NOTFOUND)
-            aName += ".doc";
+            aName.AppendAscii( ".doc" );
         if (nArgs >= 2)
         {
             aOutName = GetCommandLineParam( 1 );
             if (nArgs > 2)
             {
-                nVersion = (BYTE)(USHORT)GetCommandLineParam( 2 );
+                nVersion = GetCommandLineParam( 2 ).ToInt32();
                 if( 6 > nVersion || 8 < nVersion )
                 {
-                    aMess = "Aufruf: Dump1 InFile [OutFile] [6|7|8]";
+                    aMess.AssignAscii( "Aufruf: Dump1 InFile [OutFile] [6|7|8]" );
                 }
             }
         }
@@ -150,11 +150,11 @@ void MyApp::Main()
         {
             aOutName = aName;
             aOutName.Erase(aOutName.Search('.'));
-            aOutName += ".dmp";
+            aOutName.AppendAscii( ".dmp" );
         }
     }
 
-    BOOL bOk =     !aMess
+    BOOL bOk =     !aMess.Len()
                 && !PrepareConvert( aName, aOutName, aMess )
                 && !DoConvert( aName, nVersion  );
 
@@ -162,7 +162,7 @@ void MyApp::Main()
     {
         MyWin aMainWin( NULL, WB_APP | WB_STDWORK, aMess );
 
-        aMainWin.SetText( "WW8-Dumper" );
+        aMainWin.SetText( String::CreateFromAscii( "WW8-Dumper" ));
         aMainWin.Show();
         aMainWin.Invalidate();
 
@@ -176,11 +176,11 @@ void MyApp::Main()
 
 void MyWin::Paint( const Rectangle& )
 {
-    String aText( "Dumper fuer WinWord-Dateien !\n"
-                                "Die Wandlung ging schief. Ist es wirklich ein WW-File ?" );
+    String aText( String::CreateFromAscii( "Dumper fuer WinWord-Dateien !\n"
+            "Die Wandlung ging schief. Ist es wirklich ein WW-File ?" ));
 
     Size  aWinSize  = GetOutputSizePixel();
-    Size  aTextSize = GetTextSize( aText );
+    Size  aTextSize( GetTextWidth( aText ), GetTextHeight());
     Point aPos( aWinSize.Width() / 2  - aTextSize.Width() / 2,
                 aWinSize.Height() / 2 - aTextSize.Height() / 2 );
 
@@ -212,21 +212,19 @@ void MyWin::KeyInput( const KeyEvent& rKEvt )
 
 
 
-//class XVclComponentPeer;
-XWindowPeer* Window::GetComponentInterface( BOOL )
-{
-return 0;
-}
 
 /*************************************************************************
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.8  2000/09/18 16:05:02  willem.vandorp
       OpenOffice header added.
 

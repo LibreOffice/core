@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,17 @@
 #define _WW8SCAN_HXX
 
 
+#ifndef LONG_MAX
+#include <limits.h>
+#endif
+#ifndef _SAL_TYPES_H
+#include <sal/types.h>
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>        // UINTXX
+#endif
+#ifndef _TABLE_HXX //autogen
+#include <tools/table.hxx>
 #endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
@@ -75,20 +84,13 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#ifndef WW8STRUC_HXX
-#include "ww8struc.hxx"     // FIB, STSHI, STD
-#endif
-#ifndef LONG_MAX
-#include <limits.h>
-#endif
-#ifndef _SAL_TYPES_H
-#include <sal/types.h>
-#endif
 
-                        // ASS_FALSE, um ASSERT( ASS_FALSE, ... ) schreiben
-                        // zu koennen, ohne vom Compiler angemeckert zu werden
-#ifndef ASS_FALSE
-#define ASS_FALSE ( !this )
+
+#define _SVSTDARR_STRINGS
+#include <svtools/svstdarr.hxx>
+
+#ifndef WW8STRUC_HXX
+#include <ww8struc.hxx>     // FIB, STSHI, STD
 #endif
 
 #ifndef DELETEZ
@@ -106,38 +108,36 @@ class  WW8PLCFx_PCD;
 class  SvUShortsSort;
 
 
-
-UINT8* WW8ReadPString( SvStream& rStrm, BOOL bAtEndSeekRel1 = TRUE );
+String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
+                       BOOL bAtEndSeekRel1 = TRUE );
 
 // Folgende Methode liest einen 2-byter-UNICODE-String ein:
 // - falls bAtEndSeekRel1 gesetzt ist, wird am Ende genau EIN Byte uebersprungen,
 // - falls nChars (die Zeichen-Anzahl, NICHT die Byte-Anzahl) nicht gesetzt ist,
 //   wird das erste USHORT als Lannengenangabe interpretiert,
 //   ansonsten als erstes String-Zeichen genommen.
-UINT8* WW8Read_xstz(SvStream& rStrm, BOOL bAtEndSeekRel1 = TRUE,
-                    USHORT nChars = 0, BOOL bInsLeadingLen = TRUE,
-                    long* pWasRead = 0 );
+String WW8Read_xstz(SvStream& rStrm,
+                    USHORT nChars,
+                    BOOL   bAtEndSeekRel1);
 
 
 // read array of strings (see MS documentation: STring TaBle stored in File)
 // returns NOT the original pascal strings but an array of converted char*
 //
 // attention: the *extra data* of each string are SKIPPED and ignored
-char** WW8ReadSTTBF(BOOL bVer8, SvStream& rStrm, UINT32 nStart,
-                    INT32 nLen,
-                    long& rCount,
-                    USHORT nSkip = 0, BYTE ***pData=0);
+
+/*  to be optimized like this:    */
+void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
+                    UINT32 nStart, INT32 nLen, USHORT nSkip,
+                    rtl_TextEncoding eCS,
+                    SvStrings &rArray, SvStrings* pExtraArray = 0 );
+
+
 
 USHORT WW8GetSprmId(        BYTE nVersion, BYTE* pSp,   BYTE*   pDelta = 0 );
 short WW8GetSprmSizeNetto(  BYTE nVersion, BYTE* pSprm, USHORT* pId );
 short WW8GetSprmSizeBrutto( BYTE nVersion, BYTE* pSprm, USHORT* pId );
 BYTE WW8SprmDataOfs( USHORT nId );
-
-struct WW8_PSTR         // Pascal-String
-{
-    UINT8 nLen;
-    char cStr[2];       // offene Laenge
-};
 
 struct WW8FieldDesc
 {
@@ -155,6 +155,17 @@ struct WW8FieldDesc
 BOOL WW8GetFieldPara( BYTE nVersion, WW8PLCFspecial& rPLCF, WW8FieldDesc& rF );
 
 
+struct WW8PLCFxSave1
+{
+    ULONG nPLCFxPos;
+    ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
+    long nPLCFxMemOfs;
+    WW8_CP nAttrStart;
+    WW8_CP nAttrEnd;
+    BOOL   bLineEnd;
+};
+
+
 /*
     u.a. fuer Felder, also genausoviele Attr wie Positionen,
     falls Ctor-Param bNoEnd = false
@@ -162,7 +173,7 @@ BOOL WW8GetFieldPara( BYTE nVersion, WW8PLCFspecial& rPLCF, WW8FieldDesc& rF );
 class WW8PLCFspecial        // Iterator fuer PLCFs
 {
     INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    char*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
+    BYTE*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;         // Anzahl der Elemente
     long nIdx;          // Merker, wo wir gerade sind
     long nStru;
@@ -229,7 +240,7 @@ public:
 class WW8PLCF                       // Iterator fuer PLCFs
 {
     INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    char* pPLCF_Contents;       // Pointer auf Inhalts-Array-Teil des Pos-Array
+    BYTE* pPLCF_Contents;       // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;                         // Anzahl der Elemente
     long nIdx;
     long nStru;
@@ -265,20 +276,26 @@ public:
         return ( nIdx >= nIMax ) ? 0 : (const void*)&pPLCF_Contents[nIdx * nStru]; }
 };
 
+
+DECLARE_TABLE( WW8Pcd_FC_sortArr, INT32 )
+
+
 /*
     fuer Piece Table (bei Schnellspeicherung)
 */
 class WW8PLCFpcd
 {
 friend class WW8PLCFpcd_Iter;
+    WW8Pcd_FC_sortArr aFC_sort; // sorted PCD entries by FC
     INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    char*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
+    BYTE*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;
     long nStru;
 
 public:
     WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct );
     ~WW8PLCFpcd(){ delete( pPLCF_PosArray ); }
+    ULONG FindIdx( WW8_FC nFC ) const;
 };
 
 /*
@@ -299,6 +316,7 @@ public:
 //  BOOL SeekMaxMainFC( WW8Fib& rWwF, long& rMaxPosData );
     long Where();
     BOOL Get( long& rStart, long& rEnd, void*& rpValue );
+    ULONG FindIdx( WW8_FC nFC ) const { return rPLCF.FindIdx( nFC ); }
     WW8PLCFpcd_Iter& operator ++( int ) { if( nIdx < rPLCF.nIMax ) nIdx++; return *this; }
 };
 
@@ -319,9 +337,9 @@ public:
 
 //  virtual ~WW8PLCFx() {}
     BOOL IsSprm() { return bIsSprm; }
-    virtual ULONG GetIdx() = 0;
+    virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;
-    virtual ULONG GetIdx2();
+    virtual ULONG GetIdx2() const;
     virtual void SetIdx2( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos ) = 0;
     virtual long Where() = 0;
@@ -330,6 +348,8 @@ public:
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
     virtual WW8PLCFx& operator ++( int ) = 0;
     virtual USHORT GetIstd() const { return 0xffff; }
+    virtual void Save(          WW8PLCFxSave1& rSave ) const;
+    virtual void Restore( const WW8PLCFxSave1& rSave );
     BYTE GetVersion() const { return nVersion; }
 };
 
@@ -339,7 +359,7 @@ class WW8PLCFx_PCDAttrs : public WW8PLCFx
 {
     WW8PLCFpcd_Iter* pPcdI;
     WW8PLCFx_PCD* pPcd;
-    char** pGrpprls;            // Attribute an Piece-Table
+    BYTE** pGrpprls;            // Attribute an Piece-Table
     SVBT32 aShortSprm;          // mini storage: can contain ONE sprm with
                                 // 1 byte param
     UINT16 nGrpprls;            // Attribut Anzahl davon
@@ -347,7 +367,7 @@ class WW8PLCFx_PCDAttrs : public WW8PLCFx
 public:
     WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
     virtual ~WW8PLCFx_PCDAttrs();
-    virtual ULONG GetIdx();
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
@@ -365,7 +385,8 @@ class WW8PLCFx_PCD : public WW8PLCFx            // Iterator fuer Piece Table
 public:
     WW8PLCFx_PCD( BYTE nVersion, WW8PLCFpcd* pPLCFpcd, WW8_CP nStartCp, BOOL bVer67P );
     virtual ~WW8PLCFx_PCD();
-    virtual ULONG GetIdx();
+    virtual ULONG GetIMax() const;
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
@@ -409,16 +430,18 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
             BYTE* pFkp;         // gesamter Fkp
 
             long nItemSize;     // entweder 1 Byte oder ein komplettes BX
+            long nFilePos;      // Offset in Stream where last read of 52 bytes took place
             short nIdx;         // Pos-Merker
             ePLCFT ePLCF;
-            char nIMax;         // Anzahl der Eintraege
+            BYTE nIMax;         // Anzahl der Eintraege
             BYTE nVersion;
 
         public:
             WW8Fkp( BYTE nFibVer, SvStream* pFKPStrm, SvStream* pDataStrm,
-                    long nFilePos, long nItemSiz,
+                    long _nFilePos, long nItemSiz,
                     ePLCFT ePl, WW8_FC nStartFc = -1 );
             ~WW8Fkp();
+            long GetFilePos() const { return nFilePos; }
             ULONG GetIdx() const { return (ULONG)nIdx; }
             void SetIdx( ULONG nI );
             BOOL SeekPos( long nPos );
@@ -464,7 +487,7 @@ public:
                      WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL,
                      WW8PLCFx_PCDAttrs* pPLCFx_PCD );
     virtual ~WW8PLCFx_Fc_FKP();
-    virtual ULONG GetIdx();
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
     virtual BOOL SeekPos( WW8_FC nFcPos );
     virtual WW8_FC Where();
@@ -474,6 +497,7 @@ public:
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     BYTE* HasSprm( USHORT nId );
     ULONG GetParaHeight() const;
+    BOOL HasFkp() { return (0 != pFkp); }
 };
 
 // Iterator fuer Piece Table Exceptions of Fkps arbeitet auf CPs (High-Level)
@@ -492,12 +516,17 @@ public:
                         rBase,  ePLCFT ePl );
     virtual ~WW8PLCFx_Cp_FKP();
     void ResetAttrStartEnd();
-    ULONG GetIdx2();
-    void SetIdx2( ULONG nIdx );
+    ULONG GetPCDIMax() const;
+    ULONG GetPCDIdx() const;
+    void SetPCDIdx( ULONG nIdx );
+    virtual ULONG GetIdx2() const;
+    virtual void  SetIdx2( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual WW8_CP Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
+    virtual void Save(          WW8PLCFxSave1& rSave ) const;
+    virtual void Restore( const WW8PLCFxSave1& rSave );
 };
 
 
@@ -513,7 +542,7 @@ class WW8PLCFx_SEPX : public WW8PLCFx           // Iterator fuer Piece Table Exc
 public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, WW8Fib& rFib, WW8_CP nStartCp );
     virtual ~WW8PLCFx_SEPX();
-    virtual ULONG GetIdx();
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
     long GetIMax() const { return ( pPLCF ) ? pPLCF->GetIMax() : 0; }
     virtual BOOL SeekPos( WW8_CP nCpPos );
@@ -541,7 +570,7 @@ public:
                     long nFcRef, long nLenRef,
                     long nFcTxt, long nLenTxt, long nStruc = 0 );
     virtual ~WW8PLCFx_SubDoc();
-    virtual ULONG GetIdx();
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
@@ -570,7 +599,7 @@ class WW8PLCFx_FLD : public WW8PLCFx            // Iterator fuer Fuss- und Endno
 public:
     WW8PLCFx_FLD( SvStream* pSt, WW8Fib& rMyFib, short nType, WW8_CP nStartCp );
     virtual ~WW8PLCFx_FLD();
-    virtual ULONG GetIdx();
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
@@ -584,7 +613,7 @@ enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_ONLY_REF = 0x2 };
 class WW8PLCFx_Book : public WW8PLCFx           // Iterator fuer Booknotes
 {
     WW8PLCFspecial* pBook[2];           // Start- und EndPosition
-    char** pBookNames;                  // Name
+    SvStrings aBookNames;               // Name
     eBookStatus* pStatus;
     long nIMax;                         // Anzahl der Booknotes
     USHORT nIsEnd;
@@ -592,23 +621,25 @@ public:
     WW8PLCFx_Book( SvStream* pSt, SvStream* pTblSt, WW8Fib& rFib, WW8_CP nStartCp );
     virtual ~WW8PLCFx_Book();
     long GetIMax(){ return nIMax; }
-    virtual ULONG GetIdx();
+    virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
-    virtual ULONG GetIdx2();
+    virtual ULONG GetIdx2() const;
     virtual void SetIdx2( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
     virtual long GetNoSprms( long& rStart, long& rEnd, long& rLen );
     virtual WW8PLCFx& operator ++( int );
-    const char* GetName() const
+    const String* GetName() const
         { return ( !nIsEnd && ( (long)(pBook[0]->GetIdx()) < nIMax ) )
-                    ? pBookNames[pBook[0]->GetIdx()] : 0; }
+                        ? aBookNames[ pBook[0]->GetIdx() ]
+                        : 0;
+        }
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? LONG_MAX : pBook[0]->Where(); }
     long GetLen() const;
     BOOL GetIsEnd() const { return ( nIsEnd ) ? TRUE : FALSE; }
     long GetHandle() const;
-    BOOL SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion, char* pName,
+    BOOL SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion, const String& rName,
                     eBookStatus eStat );
     eBookStatus GetStatus() const;
 };
@@ -629,6 +660,25 @@ struct WW8PLCFManResult
     BYTE nFlags;        // Absatz- oder Section-Anfang
 };
 
+#define MAN_ANZ_PLCF 12
+
+#define MAN_MASK_NEW_PAP 1      // neue Zeile
+#define MAN_MASK_NEW_SEP 2      // neue Section
+
+
+#define MAN_MAINTEXT 0          // Defines fuer PLCFMan-ctor
+#define MAN_FTN 1
+#define MAN_EDN 2
+#define MAN_HDFT 3
+#define MAN_AND 4
+#define MAN_TXBX 5
+#define MAN_TXBX_HDFT 6
+
+struct WW8PLCFxSaveAll
+{
+    WW8PLCFxSave1 aS[MAN_ANZ_PLCF];
+};
+
 /*
     hiermit arbeitet der Manager drinnen:
 */
@@ -644,39 +694,22 @@ struct WW8PLCFxDesc
     long nCpOfs;        // fuer Offset Header .. Footnote
     BOOL bFirstSprm;    // fuer Erkennung erster Sprm einer Gruppe
     BOOL bRealLineEnd;  // FALSE bei Pap-Piece-Ende
+    void Save(          WW8PLCFxSave1& rSave ) const;
+    void Restore( const WW8PLCFxSave1& rSave );
 };
 
-
-#define MAN_ANZ_PLCF 12
-
-struct WW8PLCFxSave1
-{
-    ULONG nPLCFxPos;
-    ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
-    long nPLCFxMemOfs;
-};
-
-struct WW8PLCFxSaveAll
-{
-    WW8PLCFxSave1 aS[MAN_ANZ_PLCF];
-};
-
-#define MAN_MASK_NEW_PAP 1      // neue Zeile
-#define MAN_MASK_NEW_SEP 2      // neue Section
-
-
-#define MAN_MAINTEXT 0          // Defines fuer PLCFMan-ctor
-#define MAN_FTN 1
-#define MAN_EDN 2
-#define MAN_HDFT 3
-#define MAN_AND 4
-#define MAN_TXBX 5
-#define MAN_TXBX_HDFT 6
 
 #ifndef DUMP
 
 class WW8PLCFMan
 {
+    long nCpO;      // Origin Cp -- the basis for nNewCp
+
+    long nLineEnd;                  // zeigt *hinter* das <CR>
+    long nLastWhereIdxCp;           // last result of WhereIdx()
+    USHORT nPLCF;                   // so viele PLCFe werden verwaltet
+    short nManType;
+
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFldTxbx, *pFldTxbxHdft,
                  *pFtn, *pEdn,
@@ -684,10 +717,8 @@ class WW8PLCFMan
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd;
 
     WW8Fib* pWwFib;
-    long nLineEnd;                  // zeigt *hinter* das <CR>
-
-    USHORT nPLCF;                   // so viele PLCFe werden verwaltet
-    short nManType;
+    USHORT* pNoAttrScan; // Attribute komplett(!) ignorieren, die ueber n CPs
+                        // aufgespannt sind; z.B. bei Char #7 (Zellen-/Zeilenende)
 
     short WhereIdx( BOOL* pbStart, long* pPos );
     void AdjustEnds(    WW8PLCFxDesc& rDesc );
@@ -734,10 +765,9 @@ public:
     WW8PLCFx_Cp_FKP* GetPapPLCF(){ return (WW8PLCFx_Cp_FKP*)pPap->pPLCFx; }
     WW8PLCFx_SEPX* GetSepPLCF(){   return (WW8PLCFx_SEPX*)pSep->pPLCFx; }
     WW8PLCFxDesc* GetPap(){ return pPap; }
-    void Save1PLCFx(    WW8PLCFxDesc* p, WW8PLCFxSave1*   pSave ) const;
-    void Restore1PLCFx( WW8PLCFxDesc* p, WW8PLCFxSave1*   pSave );
-    void SaveAllPLCFx(                   WW8PLCFxSaveAll* pSave );
-    void RestoreAllPLCFx(                WW8PLCFxSaveAll* pSave );
+    void SeekPos( long nNewCp );
+    void SaveAllPLCFx(                   WW8PLCFxSaveAll& rSave ) const;
+    void RestoreAllPLCFx(          const WW8PLCFxSaveAll& rSave );
     WW8PLCFspecial* GetFdoa()   { return pFdoa;     }
     WW8PLCFspecial* GetTxbx()   { return pTxbx;     }
     WW8PLCFspecial* GetTxbxBkd(){ return pTxbxBkd;  }
@@ -753,7 +783,7 @@ friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
                                         const WW8ScannerBase&, ePLCFT );
 
 #ifdef DUMP
-friend static void DumpPLCFText( WW8_FC nPos, long nLen, long nOfs, char* pName,
+friend static void DumpPLCFText( WW8_FC nPos, long nLen, long nOfs, sal_Char* pName,
                                 WW8ScannerBase* pBase );
 friend static void DumpFtnShort( short nId, long nPos, long nFieldLen );
 #else
@@ -787,8 +817,10 @@ friend class SwWw8ImplReader;
     WW8PLCFpcd_Iter*    pPieceIter; // fuer FastSave ( Iterator dazu )
     WW8PLCFx_PCD*       pPLCFx_PCD;     // dito
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
-    char**              pPieceGrpprls;      // Attribute an Piece-Table
-    UINT16              nPieceGrpprls;      // Anzahl davon
+    BYTE**              pPieceGrpprls;  // Attribute an Piece-Table
+    UINT16              nPieceGrpprls;  // Anzahl davon
+    USHORT              nNoAttrScan;    // Attribute komplett(!) ignorieren, die ueber n CPs
+                                        // aufgespannt sind; z.B. bei Char #7 (Zellen-/Zeilenende)
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, WW8Fib* pWwF );
     void DeletePieceTable();
@@ -804,10 +836,11 @@ public:
     WW8_CP WW8Fc2Cp( WW8_FC nFcPos ) const ;
     WW8_FC WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode = 0,
                      WW8_CP* pNextPieceCp = 0, BOOL* pTestFlag = 0 ) const;
+    void SetNoAttrScan( USHORT nValue ) { nNoAttrScan = nValue; };
 
-    USHORT WW8ReadString( SvStream& rStrm, String* pString,
+    USHORT WW8ReadString( SvStream& rStrm, String& rStr,
                             WW8_CP nAktStartCp, long nTotalLen,
-                            unsigned char** ppStr = 0 ) const;
+                            rtl_TextEncoding eEnc ) const;
 };
 
 
@@ -1248,8 +1281,8 @@ protected:
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
 //  ~WW8Style(){ delete( pStishi ); pStishi = 0; }
-  WW8_STD* Read1STDFixed( short& rSkip, short* pcbStd );
-    WW8_STD* Read1Style( short& rSkip, UINT8** ppStr = 0, short* pcbStd = 0 );
+    WW8_STD* Read1STDFixed( short& rSkip, short* pcbStd );
+    WW8_STD* Read1Style( short& rSkip, String* pString, short* pcbStd );
     const UINT16 GetCount() const { return cstd; }
 };
 
@@ -1493,6 +1526,207 @@ public:
 };
 
 
+/*************************************************************************
+      Source Code Control System - Header
+
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8scan.hxx,v 1.2 2000-10-24 14:01:34 jp Exp $
+
+
+      Source Code Control System - Update
+
+      $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
+      Revision 1.58  2000/09/18 16:05:02  willem.vandorp
+      OpenOffice header added.
+
+      Revision 1.57  2000/08/24 06:43:01  khz
+      #75708# advance StartPos of attributes starting on a Table-Row-End by 1
+
+      Revision 1.56  2000/07/12 12:24:54  khz
+      #76503# use WW8PLCFx_Cp_FKP::?etIdx2() to save/restore nIdx of pPcd
+
+      Revision 1.55  2000/05/31 12:23:05  khz
+      Changes for Unicode
+
+      Revision 1.54  2000/05/25 08:06:37  khz
+      Piece Table optimization, Unicode changes, Bugfixes
+
+      Revision 1.53  2000/05/18 10:58:50  jp
+      Changes for Unicode
+
+      Revision 1.52  2000/05/16 12:13:13  jp
+      ASS_FALSE define removed
+
+      Revision 1.51  2000/05/16 11:07:47  khz
+      Unicode code-conversion
+
+      Revision 1.50  2000/05/12 08:29:03  khz
+      Changes for Unicode
+
+      Revision 1.49  2000/05/04 07:32:05  khz
+      Task #75379# added Save() and Restore() to WW8PLCFx, WW8PLCFx_Cp_FKP, WW8PLCFxDesc
+
+      Revision 1.48  2000/02/22 16:23:14  khz
+      Task #72987# Ignore Sprms covering ONLY a Tab-Row-End Char #7
+
+      Revision 1.47  2000/02/09 08:57:36  khz
+      Task #72647# Read SPRMs that are stored in piece table grpprls (2)
+
+      Revision 1.46  2000/02/03 10:08:31  cmc
+      #72268# Allow create fib from offset, added data to STTBF
+
+      Revision 1.45  2000/02/02 18:07:51  khz
+      Task #69885# Read SPRMs that are stored in piece table grpprls
+
+      Revision 1.44  1999/12/07 14:29:04  khz
+      Task #69508# import sprmPHugePapx by reading DATA stream
+
+      Revision 1.43  1999/11/19 15:09:24  khz
+      Task #69910# Use extra PLCF structure for field!
+
+      Revision 1.42  1999/11/03 17:18:02  khz
+      import new TOX_CONTENT and TOX_INDEX features (2)
+
+      Revision 1.41  1999/10/21 15:36:21  khz
+      Import Redlining (4)
+
+      Revision 1.40  1999/10/13 21:06:47  khz
+      Import Redlining (3)
+
+      Revision 1.39  1999/10/08 09:25:29  khz
+      Import Redlining
+
+      Revision 1.38  1999/09/10 15:36:39  khz
+      CharSet matching made by TENCINFO.H::rtl_getTextEncodingFromWindowsCharset()
+
+      Revision 1.37  1999/09/09 18:16:13  khz
+      CharSet matching now done in central methode WW8SCAN.HXX::WW8GetCharSet()
+
+      Revision 1.36  1999/09/08 13:26:17  khz
+      Better performance by reducing use of SWAP..() and SVBT..To..() methods
+
+      Revision 1.35  1999/08/30 19:53:04  JP
+      Bug #68219#: no static members - be reentrant
+
+
+      Rev 1.34   30 Aug 1999 21:53:04   JP
+   Bug #68219#: no static members - be reentrant
+
+      Rev 1.33   09 Aug 1999 18:35:10   KHZ
+   Task #67543# Import of Property Modifier(variant 1) (PRM) in WW8 docs
+
+      Rev 1.32   15 Jun 1999 14:34:58   JP
+   for Export: FIB - read/write SttbListNames
+
+      Rev 1.31   02 Jun 1999 09:32:44   KHZ
+   Task #66227# a) kein Unicode bei Ver67 ;-)  b) Grafik in grupp. Textbox
+
+      Rev 1.30   19 May 1999 11:12:56   JP
+   WinWord97-ExportFilter
+
+      Rev 1.29   28 Apr 1999 23:03:28   KHZ
+   Task #65245# Breite eines Rahmens bei WW 'automatisch' muss PRTAREA sein
+
+      Rev 1.28   26 Feb 1999 14:43:36   KHZ
+   Task #59715# Behandlung von Section breaks
+
+      Rev 1.27   25 Jan 1999 10:22:38   KHZ
+   Task #60715# in Textobjekt verankerte Grafik als Grafik importieren
+
+      Rev 1.26   18 Jan 1999 08:53:08   KHZ
+   Task #60878# WW8Read_xstz nur dann Assertion, wenn kein pTestFlag
+
+      Rev 1.25   10 Dec 1998 21:29:02   JP
+   Bug #59643#: benutzerdefinierte Zeichen von Fuss-/EndNoten verarbeiten
+
+      Rev 1.24   05 Dec 1998 17:10:26   KHZ
+   Task #59580# Unicode (3)
+
+      Rev 1.23   04 Dec 1998 20:19:48   KHZ
+   Task #58766# Textboxen mit Unicode-Inhalt
+
+      Rev 1.22   03 Dec 1998 19:10:00   KHZ
+   Task #58766# Unicode-Import (2)
+
+      Rev 1.20   30 Nov 1998 17:46:52   JP
+   Task #59822#: OLE-Objecte importieren
+
+      Rev 1.21   02 Dec 1998 15:34:32   JP
+   Task #60063#: Kommentare als PostIts einlesen
+
+      Rev 1.20   30 Nov 1998 17:46:52   JP
+   Task #59822#: OLE-Objecte importieren
+
+      Rev 1.19   30 Nov 1998 17:30:36   KHZ
+   Task #54828# Unicode-Import
+
+      Rev 1.18   03 Nov 1998 18:29:52   KHZ
+   Task #57243# Performance-Gewinn durch Vermeiden ueberfluessiger WW8GetSprmId()
+
+      Rev 1.17   02 Nov 1998 17:58:32   KHZ
+   Task #57017# Textmarken-Namen als UNICODE-Strings
+
+      Rev 1.16   16 Oct 1998 16:12:34   KHZ
+   Task #53520# ueberpruefe Feld DRUCKDATUM in DocInfo anhand von WW-internem Feld
+
+      Rev 1.15   22 Sep 1998 17:40:22   KHZ
+   Bug #56310# Kopf-/Fusszeilen in Unicode-Dokumenten jetzt korrekt
+
+      Rev 1.14   03 Sep 1998 22:15:40   KHZ
+   Task #55189# Textboxen
+
+      Rev 1.13   11 Aug 1998 12:25:16   KHZ
+   Task #52607# Optimierung in AdjustEnds(), GetNewSprms(), GetNoNewSprms()
+
+      Rev 1.12   30 Jul 1998 00:02:54   KHZ
+   Task #53614# Grafiken, die NICHT ueber dem Text liegen (MSDFF-Quick-Hack)
+
+      Rev 1.11   28 Jul 1998 11:05:46   KHZ
+   Task #52607# nummerierte Listen (Teil 1)
+
+      Rev 1.10   22 Jul 1998 15:39:32   KHZ
+   Task #52607#
+
+      Rev 1.9   22 Jul 1998 15:33:28   KHZ
+   Task #52607#
+
+      Rev 1.8   21 Jul 1998 14:52:30   KHZ
+   Task #52607# (WW 97 Import)
+
+      Rev 1.7   21 Jul 1998 12:32:54   KHZ
+   als MSDrawingObject eingebettete Grafik (Teil 1)
+
+      Rev 1.6   09 Jul 1998 20:14:56   KHZ
+   Tabellen: verbundene Zellen und Zellen-Hintergrundfarbe jetzt Ok.
+
+      Rev 1.5   30 Jun 1998 21:33:22   KHZ
+   Header/Footer/Footnotes weitgehend ok
+
+      Rev 1.4   26 Jun 1998 20:50:20   KHZ
+   Absatz-Attribute jetzt weitestgehend ok
+
+      Rev 1.3   23 Jun 1998 20:49:24   KHZ
+   verarbeitet jetzt auch mehrere FKPs
+
+      Rev 1.2   23 Jun 1998 11:24:20   KHZ
+   Zwischenstand: die meisten Zeichenattribute Ok!
+
+      Rev 1.1   16 Jun 1998 18:37:14   KHZ
+   DaSi-Stand
+
+      Rev 1.0   16 Jun 1998 11:12:10   KHZ
+   Initial revision.
+
+      Rev 1.1   10 Jun 1998 17:22:34   KHZ
+   Zwischenstand-Sicherung Dumper
+
+      Rev 1.0   27 May 1998 15:29:16   KHZ
+   Initial revision.
+
+
+*************************************************************************/
 
 #endif
 
