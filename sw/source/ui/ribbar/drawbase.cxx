@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 17:32:34 $
+ *  last change: $Author: os $ $Date: 2002-04-03 12:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,155 +729,22 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
         pView->NoRotate();
     }
 }
+/* -----------------------------03.04.2002 10:52------------------------------
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/08/16 09:34:40  fme
-      Fix #90760#: Removed VCL defines
-
-      Revision 1.1.1.1  2000/09/18 17:14:46  hr
-      initial import
-
-      Revision 1.80  2000/09/18 16:06:01  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.79  2000/09/07 15:59:27  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.78  2000/05/10 11:54:15  os
-      Basic API removed
-
-      Revision 1.77  1999/05/27 11:04:40  OS
-      Einf?gen/Bearbeiten von Spalten ueberarbeitet
-
-
-      Rev 1.76   27 May 1999 13:04:40   OS
-   Einf?gen/Bearbeiten von Spalten ueberarbeitet
-
-      Rev 1.75   11 Mar 1999 11:31:22   MA
-   #63192# mit Suizid fertig werden
-
-      Rev 1.74   16 Nov 1998 17:18:52   OM
-   #58158# Beschriftung fuer weiter OLE-Objekte
-
-      Rev 1.73   06 Nov 1998 17:05:04   OM
-   #58158# Automatische Beschriftung
-
-      Rev 1.72   09 Sep 1998 12:14:46   OM
-   #56223# Kein GPF bei Klick in Seitenrand
-
-      Rev 1.71   22 Jul 1998 16:06:00   TJ
-   add: header wg. int comp. error
-
-      Rev 1.70   09 Jun 1998 15:34:00   OM
-   VC-Controls entfernt
-
-      Rev 1.69   11 Mar 1998 17:12:08   OM
-   DB-FormShell
-
-      Rev 1.68   28 Nov 1997 20:16:46   MA
-   includes
-
-      Rev 1.67   24 Nov 1997 14:54:00   MA
-   includes
-
-      Rev 1.66   18 Sep 1997 13:59:46   OS
-   Pointer::GetPosPixel fuer VCL ersetzt
-
-      Rev 1.65   12 Sep 1997 10:36:42   OS
-   ITEMID_* definiert
-
-      Rev 1.64   04 Sep 1997 17:14:02   MA
-   includes
-
-      Rev 1.63   01 Sep 1997 13:14:38   OS
-   DLL-Umstellung
-
-      Rev 1.62   13 Aug 1997 12:19:54   OM
-   #42383# Selektion von Punkten im Konstruktionsmode
-
-      Rev 1.61   13 Aug 1997 12:18:56   OM
-   #42383# Selektion von Punkten im Konstruktionsmode
-
-      Rev 1.60   09 Aug 1997 13:33:42   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.59   30 Jul 1997 18:40:48   HJS
-   includes
-
-      Rev 1.58   07 Apr 1997 13:40:24   MH
-   chg: header
-
-      Rev 1.57   20 Mar 1997 11:33:46   OM
-   Insert und CreateMode merken
-
-      Rev 1.56   24 Feb 1997 16:51:46   OS
-   ::Deactivate: Template-Pointer gfs. abschalten
-
-      Rev 1.55   04 Feb 1997 15:20:32   OM
-   Bugs in Selektionsmodi behoben
-
-      Rev 1.54   31 Jan 1997 10:58:26   OM
-   Statusupdate
-
-      Rev 1.53   30 Jan 1997 11:48:10   OM
-   Freihandzeichnen
-
-      Rev 1.52   29 Jan 1997 11:22:08   OM
-   Freihandzeichnen
-
-      Rev 1.51   23 Jan 1997 16:07:06   OM
-   Neuer Polygon Zeichenmode
-
-      Rev 1.50   22 Jan 1997 11:19:48   OM
-   Neue Shells: DrawBaseShell und DrawControlShell
-
-      Rev 1.49   16 Jan 1997 12:35:58   OM
-   Neuer Objekttyp: Bezier
-
-      Rev 1.48   13 Jan 1997 15:50:18   OM
-   Bezier-Punkte loeschen
-
-      Rev 1.47   08 Jan 1997 12:44:26   OM
-   Aenderungen fuer Bezier-Shell
-
-      Rev 1.46   27 Nov 1996 17:26:22   OM
-   Neu: SetAngleSnap
-
-      Rev 1.45   28 Aug 1996 13:39:30   OS
-   includes
-
-      Rev 1.44   14 Aug 1996 15:05:28   OM
-   Zentrisch konstruieren
-
-      Rev 1.43   14 Aug 1996 11:31:00   JP
-   svdraw.hxx entfernt
-
-      Rev 1.42   09 Aug 1996 14:33:20   OM
-   #29784# GPF im Dtor behoben
-
-      Rev 1.41   07 Mar 1996 14:27:30   HJS
-   2 defines zu viel
-
-      Rev 1.40   24 Jan 1996 15:19:58   OM
-   #24663# Haenger bei Polygon im Rastermode behoben
-
-      Rev 1.39   14 Jan 1996 17:59:08   OS
-   recording Rahmen einfuegen: Position von GetAnchorObjDiff() holen
-
-      Rev 1.38   17 Dec 1995 17:28:18   OS
-   Rahmen einfuegen wird jetzt an der Textshell recorded
-
-      Rev 1.37   30 Nov 1995 13:59:52   MA
-   opt: SV304, keine Pruefung vor SetPointer
-
-      Rev 1.36   24 Nov 1995 16:58:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.35   23 Nov 1995 14:29:00   MA
-   chg: GetObjAnchorDiff(), GetObjAbsPos()
-
-*************************************************************************/
+ ---------------------------------------------------------------------------*/
+void SwDrawBase::CreateDefaultObject()
+{
+    Size aWinSize = pWin->GetSizePixel();
+    Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
+    aStartPos = pWin->PixelToLogic(aStartPos);
+    Point aEndPos(aStartPos);
+    aStartPos.X() -= MM50;
+    aStartPos.Y() -= MM50;
+    aEndPos.X() += MM50;
+    aEndPos.Y() += MM50;
+    pSh->BeginCreate(pWin->GetDrawMode(), aStartPos);
+    pSh->MoveCreate(aEndPos);
+    pSh->EndCreate(SDRCREATE_FORCEEND);
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2002-04-03 12:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ public:
 
     virtual void Activate(const USHORT nSlotId);    // Function aktivieren
     virtual void Deactivate();                      // Function deaktivieren
+
+    virtual void CreateDefaultObject();
 };
 
 
