@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:59:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,15 +285,15 @@ Text[ english_us ] = "C~lose";
     Text[ russian ] = "~Çàêğûòü";
     Text[ greek ] = "C~lose";
     Text[ dutch ] = "~Sluiten";
-    Text[ french ] = "C~lose";
+    Text[ french ] = "~Fermer";
     Text[ spanish ] = "~Cerrar";
     Text[ finnish ] = "C~lose";
     Text[ italian ] = "C~lose";
     Text[ danish ] = "C~lose";
     Text[ swedish ] = "~Stäng";
-    Text[ polish ] = "C~lose";
+    Text[ polish ] = "Zamknij";
     Text[ portuguese_brazilian ] = "C~lose";
-    Text[ japanese ] = "C~lose";
+    Text[ japanese ] = "•Â‚¶‚é";
     Text[ korean ] = "C~lose";
     Text[ chinese_simplified ] = "C~lose";
     Text[ chinese_traditional ] = "C~lose";
@@ -346,7 +346,7 @@ Text[ english_us ] = "Selection";
     Text[ portuguese_brazilian ] = "Selection";
     Text[ japanese ] = "‘I‘ğ”ÍˆÍ";
     Text[ korean ] = "¼±ÅÃ";
-    Text[ chinese_simplified ] = "Ñ¡Ôñ";
+    Text[ chinese_simplified ] = "Ñ¡ÖĞ";
     Text[ chinese_traditional ] = "¿ï¨ú";
     Text[ arabic ] = "ÇáÊÍÏíÏ";
     Text[ turkish ] = "Seçim";
@@ -974,12 +974,12 @@ Text[ english_us ] = "finished!";
     Text[ russian ] = "Ãîòîâî";
     Text[ greek ] = "Ïëïêëçñşèçêå!";
     Text[ dutch ] = "~Klaar";
-    Text[ french ] = "....Terminé !";
+    Text[ french ] = "Terminé";
     Text[ spanish ] = "Terminado";
     Text[ italian ] = "...fine!";
     Text[ danish ] = "Færdig!";
     Text[ swedish ] = "~Färdig";
-    Text[ polish ] = "...Gotowe!";
+    Text[ polish ] = "Gotowe!";
     Text[ portuguese_brazilian ] = "Ready";
     Text[ japanese ] = "Š®—¹";
     Text[ korean ] = "¿Ï·á!";
@@ -1549,7 +1549,7 @@ Text[ english_us ] = "Document is read-only!";
     Text[ portuguese_brazilian ] = "Document is Read Only!";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Í“Ç‚İæ‚èê—p‚Å‚·B";
     Text[ korean ] = "ÀĞ±â Àü¿ë ¹®¼­ÀÔ´Ï´Ù!";
-    Text[ chinese_simplified ] = "ÎÄµµÊÇ·À¸²Ğ´µÄ£¡";
+    Text[ chinese_simplified ] = "ÎÄµµÊÇ·À¸ÄĞ´µÄ£¡";
     Text[ chinese_traditional ] = "¤å¥ó¬O°ßÅªªº¡I";
     Text[ turkish ] = "Document is Read Only!";
     Text[ arabic ] = "Document is Read Only!";
@@ -2053,6 +2053,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protección de hoja";
 };
+
 
 
 
