@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-15 18:26:30 $
+ *  last change: $Author: sj $ $Date: 2001-09-10 17:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,8 @@ BOOL WMFReader::ReadHeader()
 
     pOut->SetWinOrg( aPlaceableBound.TopLeft() );
 
-    ImplSetWMFSize( aPlaceableBound.GetSize() );
+    Size aWMFSize( abs( aPlaceableBound.GetWidth() ), abs( aPlaceableBound.GetHeight() ) );
+    ImplSetWMFSize( aWMFSize );
 
     return TRUE;
 }
