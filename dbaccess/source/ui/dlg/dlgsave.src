@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:47:17 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ ModalDialog DLG_SAVE_AS
         Text[ portuguese_brazilian ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
         Text[ japanese ] = "'$Name: not supported by cvs2svn $' ‚Ì–¼‘O‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nã‘‚«‚µ‚Ü‚·‚©B";
         Text[ korean ] = "ÀÌ¸§ '$Name: not supported by cvs2svn $'Àº(´Â) ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.\nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
-        Text[ chinese_simplified ] = "Õâ¸öÃû³Æ '$Name: not supported by cvs2svn $' ÒÑ¾­´æÔÚ¡£\nÒª¸²Ğ´Ëü£¿";
+        Text[ chinese_simplified ] = "Õâ¸öÃû³Æ '$Name: not supported by cvs2svn $' ÒÑ¾­´æÔÚ¡£\nÒª¸ÄĞ´£¿";
         Text[ chinese_traditional ] = "³o­Ó¦WºÙ '$Name: not supported by cvs2svn $' ¤w¸g¦s¦b¡C\n­nÂĞ¼g¡H";
         Text[ turkish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
         Text[ arabic ] = "ÇáÇÓã '$Name: not supported by cvs2svn $' ãæÌæÏ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
@@ -439,6 +439,7 @@ ModalDialog DLG_SAVE_AS
     Text[ catalan ] = "Guardar como";
     Text[ finnish ] = "Tallenna nimellä";
 };
+
 
 
 
