@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:42:18 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ ModalDialog DLG_ORDERCRIT
     Border = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_ORDERCRIT ;
-    Size = MAP_APPFONT ( 252 , 83 ) ;
+    Size = MAP_APPFONT ( 252 , 76 ) ;
     Text = "Sortierung" ;
     Text [ ENGLISH ] = "Sort Order" ;
     Text [ norwegian ] = "Sort Order" ;
@@ -89,7 +89,7 @@ ModalDialog DLG_ORDERCRIT
     ListBox LB_ORDERFIELD1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 29 ) ;
+        Pos = MAP_APPFONT ( 59 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -98,7 +98,7 @@ ModalDialog DLG_ORDERCRIT
     ListBox LB_ORDERVALUE1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 29 ) ;
+        Pos = MAP_APPFONT ( 123 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 36 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -227,7 +227,7 @@ ModalDialog DLG_ORDERCRIT
     ListBox LB_ORDERFIELD2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 45 ) ;
+        Pos = MAP_APPFONT ( 59 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -236,7 +236,7 @@ ModalDialog DLG_ORDERCRIT
     ListBox LB_ORDERVALUE2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 45 ) ;
+        Pos = MAP_APPFONT ( 123 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 36 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -365,7 +365,7 @@ ModalDialog DLG_ORDERCRIT
     ListBox LB_ORDERFIELD3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 60 ) ;
+        Pos = MAP_APPFONT ( 59 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -374,7 +374,7 @@ ModalDialog DLG_ORDERCRIT
     ListBox LB_ORDERVALUE3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 36 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -502,8 +502,8 @@ ModalDialog DLG_ORDERCRIT
     };
     FixedText FT_ORDERFIELD
     {
-        Pos = MAP_APPFONT ( 58 , 15 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 58 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Feldname" ;
         Text [ ENGLISH ] = "Fieldname" ;
         Text [ norwegian ] = "Fieldname" ;
@@ -531,41 +531,10 @@ ModalDialog DLG_ORDERCRIT
         Text[ catalan ] = "Nombre de campo";
     };
 
-    FixedText FT_ORDERVALUE
-    {
-        Pos = MAP_APPFONT ( 118 , 110 ) ;
-        Size = MAP_APPFONT ( 59 , 1 ) ;
-        Text = "Reihenfolge" ;
-        Text [ ENGLISH ] = "Order" ;
-        Text [ norwegian ] = "Rekkef¯lge" ;
-        Text [ italian ] = "Sequenza" ;
-        Text [ portuguese_brazilian ] = "Ordem" ;
-        Text [ portuguese ] = "Ordem" ;
-        Text [ finnish ] = "J‰rjestys" ;
-        Text [ danish ] = "RÊkkef¯lge" ;
-        Text [ french ] = "Ordre" ;
-        Text [ swedish ] = "Ordning" ;
-        Text [ dutch ] = "Volgorde" ;
-        Text [ spanish ] = "Orden" ;
-        Text [ ENGLISH_US ] = "Order" ;
-        Center = TRUE ;
-        Text[ chinese_simplified ] = "À≥–Ú";
-        Text[ russian ] = "œÓˇ‰ÓÍ";
-        Text[ polish ] = "KolejnoúÊ";
-        Text[ japanese ] = "ï¿Ç◊ë÷Ç¶èáèò";
-        Text[ chinese_traditional ] = "∂∂ß«";
-        Text[ arabic ] = "«· — Ì»";
-        Text[ greek ] = "”ÂÈÒ‹";
-        Text[ korean ] = "º¯º≠";
-        Text[ turkish ] = "S˝ra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Orden";
-    };
-
     FixedText FT_ORDERAFTER1
     {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "danach" ;
         Text [ ENGLISH ] = "and then" ;
         Text [ norwegian ] = "and then" ;
@@ -593,8 +562,8 @@ ModalDialog DLG_ORDERCRIT
     };
     FixedText FT_ORDERAFTER2
     {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "danach" ;
         Text [ ENGLISH ] = "and then" ;
         Text [ norwegian ] = "and then" ;
@@ -622,8 +591,8 @@ ModalDialog DLG_ORDERCRIT
     };
     FixedText FT_ORDEROPER
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 46 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung : Verkn≥pfung */
         Text = "Verkn¸pfung" ;
         Text [ ENGLISH ] = "Operator" ;
@@ -652,8 +621,8 @@ ModalDialog DLG_ORDERCRIT
     };
     FixedText FT_ORDERDIR
     {
-        Pos = MAP_APPFONT ( 122 , 15 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 122 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Reihenfolge" ;
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
@@ -699,10 +668,10 @@ ModalDialog DLG_ORDERCRIT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_ORDER
+    FixedLine FL_ORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 184 , 77 ) ;
+        Size = MAP_APPFONT ( 184 , 8 ) ;
         Text = "Sortierung" ;
         Text [ ENGLISH ] = "Sort order" ;
         Text [ norwegian ] = "Sort order" ;

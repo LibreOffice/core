@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:26:30 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "dbu_resource.hrc"
 #endif
 
-#define WIN_X   202
-#define WIN_Y   168
+#define WIN_X   264
+#define WIN_Y   149
 
 ModalDialog DLG_DBASE_INDEXES
 {
@@ -86,48 +86,28 @@ ModalDialog DLG_DBASE_INDEXES
     Closeable = TRUE ;
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 6 , WIN_Y - 20 ) ;
+        Pos = MAP_APPFONT ( 208 , 5 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 59 , WIN_Y - 20 ) ;
+        Pos = MAP_APPFONT ( 208 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( WIN_X - 56 , WIN_Y - 20 ) ;
+        Pos = MAP_APPFONT ( 208 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_TABLES
     {
-        Pos = MAP_APPFONT ( 8 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Tabelle:" ;
-        Text [ english ] = "Table:" ;
-        Text [ english_us ] = "~Table:" ;
-        Text [ spanish ] = "~Tabla:" ;
-        Text [ french ] = "~Table :" ;
-        Text [ italian ] = "Tabella:" ;
-        Text [ dutch ] = "~Tabel: " ;
-        Text [ portuguese ] = "~Tabela:" ;
-        Text [ portuguese_brazilian ] = "Tabelle:" ;
-        Text [ danish ] = "Tabel:" ;
-        Text [ swedish ] = "~Tabell:" ;
-        Text[ chinese_simplified ] = "±Ì∏Ò(~T)£∫";
-        Text[ russian ] = "“‡·ÎËˆ‡:";
-        Text[ polish ] = "Tabela:";
-        Text[ japanese ] = "√∞ÃﬁŸ(~T):";
-        Text[ chinese_traditional ] = "™ÌÆÊ(~T)°G";
-        Text[ arabic ] = "ÃœÊ·:";
-        Text[ greek ] = "–ﬂÌ·Í·Ú:";
-        Text[ korean ] = "«•(~T):";
-        Text[ turkish ] = "Tablo:";
-        Text[ catalan ] = "~Tabla:";
-        Text[ finnish ] = "~Taulukko:";
+        Pos = MAP_APPFONT ( 8 , 7 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Tabelle" ;
+        Text [ english ] = "Table" ;
     };
     ComboBox CB_TABLES
     {
@@ -138,10 +118,10 @@ ModalDialog DLG_DBASE_INDEXES
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    GroupBox GB_INDEXES
+    FixedLine FL_INDEXES
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( WIN_X - 12 , 120 ) ;
+        Size = MAP_APPFONT ( 196 , 8 ) ;
         Text = "Zuweisung" ;
         Text [ english ] = "Assignment" ;
         Text [ english_us ] = "Assignment" ;
@@ -168,100 +148,108 @@ ModalDialog DLG_DBASE_INDEXES
     FixedText FT_TABLEINDEXES
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text = "T~abellenindizes:" ;
-        Text [ english ] = "Table indexes:" ;
-        Text [ english_us ] = "T~able indexes:" ;
-        Text [ spanish ] = "Õndices de ta~bla:" ;
-        Text [ french ] = "~Index de table :" ;
-        Text [ italian ] = "Indici t~abella:" ;
-        Text [ dutch ] = "Tabel~indices: " ;
-        Text [ portuguese ] = "~Õndices de tabelas:" ;
-        Text [ portuguese_brazilian ] = "Tabellenindizes:" ;
-        Text [ swedish ] = "T~abellindex:" ;
-        Text [ danish ] = "Tabelindeks:" ;
-        Text[ chinese_simplified ] = "±Ì∏Ò±Í÷æ(~A)£∫";
-        Text[ russian ] = "»Ì‰ÂÍÒ˚ Ú‡·ÎËˆ˚:";
-        Text[ polish ] = "Indeksy tabeli:";
-        Text[ japanese ] = "√∞ÃﬁŸÇÃ≤›√ﬁØ∏Ω(~A):";
-        Text[ chinese_traditional ] = "™ÌÆÊº–ªx(~A)°G";
-        Text[ arabic ] = "›Â«—” ÃœÊ·:";
-        Text[ greek ] = "≈ıÒÂÙﬁÒÈ~· ÈÌ‹Í˘Ì:";
-        Text[ korean ] = "«• ªˆ¿Œ(~A):";
-        Text[ turkish ] = "Tablo dizinleri:";
-        Text[ catalan ] = "Õndices de ta~bla:";
-        Text[ finnish ] = "T~aulukkohakemistot:";
+        Size = MAP_APPFONT ( 83 , 8 ) ;
+        Text = "T~abellenindizes" ;
+        Text [ english ] = "Table indexes" ;
     };
     ListBox LB_TABLEINDEXES
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 73 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 76 , 98 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_ALLINDEXES
     {
-        Pos = MAP_APPFONT ( 117 , 33 ) ;
-        Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text = "~Freie Indizes:" ;
-        Text [ english ] = "Free Indexes:" ;
-        Text [ english_us ] = "~Free indexes:" ;
-        Text [ spanish ] = "Õndices lib~res:" ;
-        Text [ french ] = "Index ~libres :" ;
-        Text [ italian ] = "Indici liberi:" ;
-        Text [ dutch ] = "~Vrije indices: " ;
-        Text [ portuguese ] = "Õndices ~livres:" ;
-        Text [ portuguese_brazilian ] = "Freie Indizes" ;
-        Text [ swedish ] = "~Fria index:" ;
-        Text [ danish ] = "Frie indeks:" ;
-        Text[ chinese_simplified ] = "◊‘”…±Í÷æ(~F)£∫";
-        Text[ russian ] = "—‚Ó·Ó‰Ì˚Â ËÌ‰ÂÍÒ˚:";
-        Text[ polish ] = "Wolne indeksy:";
-        Text[ japanese ] = "Ãÿ∞≤›√ﬁØ∏Ω(~F)";
-        Text[ chinese_traditional ] = "¶€•—º–ªx(~F)°G";
-        Text[ arabic ] = "›Â«—” Õ—…:";
-        Text[ greek ] = "≈ÎÂ˝~ËÂÒ· ÂıÒÂÙﬁÒÈ·";
-        Text[ korean ] = "¿”¿«¿« ªˆ¿Œ(~F)";
-        Text[ turkish ] = "Bo˛ dizinler:";
-        Text[ catalan ] = "Õndices lib~res:";
-        Text[ finnish ] = "~Vapaat hakemistot:";
+        Pos = MAP_APPFONT ( 120 , 33 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
+        Text = "~Freie Indizes" ;
+        Text [ english ] = "Free Indexes" ;
     };
     ListBox LB_FREEINDEXES
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 117 , 46 ) ;
-        Size = MAP_APPFONT ( 73 , 90 ) ;
+        Pos = MAP_APPFONT ( 120 , 44 ) ;
+        Size = MAP_APPFONT ( 76 , 98 ) ;
         TabStop = TRUE ;
     };
-    PushButton PB_ADD
+    ImageButton IB_ADD
     {
-        Pos = MAP_APPFONT ( 91 , 60 ) ;
+        Pos = MAP_APPFONT ( 94 , 60 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
-        Text = "<-" ;
-        TabStop = TRUE ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_ADDALL
+    ImageButton IB_ADDALL
     {
-        Pos = MAP_APPFONT ( 91 , 77 ) ;
+        Pos = MAP_APPFONT ( 94 , 77 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
-        Text = "~<<=" ;
-        TabStop = TRUE ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_REMOVE
+    ImageButton IB_REMOVE
     {
-        Pos = MAP_APPFONT ( 91 , 98 ) ;
+        Pos = MAP_APPFONT ( 94 , 98 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
-        Text = "->" ;
-        TabStop = TRUE ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_REMOVEALL
+    ImageButton IB_REMOVEALL
     {
-        Pos = MAP_APPFONT ( 91, 114 ) ;
+        Pos = MAP_APPFONT ( 94, 114 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
-        Text = "=~>>" ;
-        TabStop = TRUE ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
 
     Text [ portuguese_brazilian ] = "Indizes" ;
@@ -283,6 +271,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/06/13 22:26:30  kz
+ *  Merge SRC633: 14.06.01 - 00:26:49
+ *
  *  Revision 1.7  2001/05/10 05:48:47  kz
  *  Merge SRC631: 10.05.01 - 07:49:17 (NoBranch)
  *

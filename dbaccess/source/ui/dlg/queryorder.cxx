@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:00 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             ,aLB_ORDERFIELD3(   this, ResId( LB_ORDERFIELD3 ) )
             ,aLB_ORDERVALUE3(   this, ResId( LB_ORDERVALUE3 ) )
             ,aFT_ORDERFIELD(    this, ResId( FT_ORDERFIELD ) )
-            ,aFT_ORDERVALUE(    this, ResId( FT_ORDERVALUE ) )
             ,aFT_ORDERAFTER1(   this, ResId( FT_ORDERAFTER1 ) )
             ,aFT_ORDERAFTER2(   this, ResId( FT_ORDERAFTER2 ) )
             ,aFT_ORDEROPER(     this, ResId( FT_ORDEROPER ) )
@@ -129,7 +128,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             ,aBT_OK(            this, ResId( BT_OK ) )
             ,aBT_CANCEL(        this, ResId( BT_CANCEL ) )
             ,aBT_HELP(          this, ResId( BT_HELP ) )
-            ,aGB_ORDER(         this, ResId( GB_ORDER ) )
+            ,aFL_ORDER(         this, ResId( FL_ORDER ) )
             ,aSTR_NOENTRY(      ResId( STR_NOENTRY ) )
             ,m_xQueryComposer(_rxQueryComposer)
             ,m_xColumns(_rxCols)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:12:18 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 
 #define FT_ORDERFIELD   1
-#define FT_ORDERVALUE   2
 #define FT_ORDERDIR     3
 #define FT_ORDERAFTER1  4
 #define FT_ORDERAFTER2  5
@@ -80,7 +79,7 @@
 #define LB_ORDERVALUE2  5
 #define LB_ORDERVALUE3  6
 
-#define GB_ORDER        1
+#define FL_ORDER                1
 
 #define BT_OK           1
 #define BT_CANCEL       2

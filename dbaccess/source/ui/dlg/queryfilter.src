@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:40:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ ModalDialog DLG_FILTERCRIT
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 303 , 84 ) ;
+    Size = MAP_APPFONT ( 303 , 76 ) ;
     Text = "Filter" ;
     Text [ english ] = "Filter";
     Text [ english_us ] = "Filter";
@@ -201,7 +201,7 @@ ModalDialog DLG_FILTERCRIT
     ListBox LB_WHEREFIELD1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 28 ) ;
+        Pos = MAP_APPFONT ( 60 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -209,8 +209,8 @@ ModalDialog DLG_FILTERCRIT
     ListBox LB_WHERECOMP1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 28 ) ;
-        Size = MAP_APPFONT ( 50 , 72 ) ;
+        Pos = MAP_APPFONT ( 124 , 25 ) ;
+        Size = MAP_APPFONT ( 49 , 72 ) ;
         TabStop = TRUE ;
         DDExtraWidth = TRUE ;
         DropDown = TRUE ;
@@ -219,15 +219,15 @@ ModalDialog DLG_FILTERCRIT
     Edit ET_WHEREVALUE1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 28 ) ;
+        Pos = MAP_APPFONT ( 177 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_WHERECOND2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 15 , 43 ) ;
-        Size = MAP_APPFONT ( 40 , 36 ) ;
+        Pos = MAP_APPFONT ( 15 , 41 ) ;
+        Size = MAP_APPFONT ( 41 , 36 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -236,7 +236,7 @@ ModalDialog DLG_FILTERCRIT
     ListBox LB_WHEREFIELD2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 43 ) ;
+        Pos = MAP_APPFONT ( 60 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -244,8 +244,8 @@ ModalDialog DLG_FILTERCRIT
     ListBox LB_WHERECOMP2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 72 ) ;
+        Pos = MAP_APPFONT ( 124 , 41 ) ;
+        Size = MAP_APPFONT ( 49 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -254,15 +254,15 @@ ModalDialog DLG_FILTERCRIT
     Edit ET_WHEREVALUE2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 43 ) ;
+        Pos = MAP_APPFONT ( 177 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_WHERECOND3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 15 , 58 ) ;
-        Size = MAP_APPFONT ( 40 , 36 ) ;
+        Pos = MAP_APPFONT ( 15 , 57 ) ;
+        Size = MAP_APPFONT ( 41 , 36 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -271,7 +271,7 @@ ModalDialog DLG_FILTERCRIT
     ListBox LB_WHEREFIELD3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 58 ) ;
+        Pos = MAP_APPFONT ( 60 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -279,8 +279,8 @@ ModalDialog DLG_FILTERCRIT
     ListBox LB_WHERECOMP3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 58 ) ;
-        Size = MAP_APPFONT ( 50 , 72 ) ;
+        Pos = MAP_APPFONT ( 124 , 57 ) ;
+        Size = MAP_APPFONT ( 49 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -289,14 +289,14 @@ ModalDialog DLG_FILTERCRIT
     Edit ET_WHEREVALUE3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 58 ) ;
+        Pos = MAP_APPFONT ( 177 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_WHEREFIELD
     {
         Pos = MAP_APPFONT ( 60 , 14 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Feldname" ;
         Center = TRUE ;
         Text [ ENGLISH ] = "Fieldname" ;
@@ -326,7 +326,7 @@ ModalDialog DLG_FILTERCRIT
     FixedText FT_WHERECOMP
     {
         Pos = MAP_APPFONT ( 124 , 14 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Bedingung" ;
         Center = TRUE ;
         Text [ ENGLISH ] = "Condition" ;
@@ -356,7 +356,7 @@ ModalDialog DLG_FILTERCRIT
     FixedText FT_WHEREVALUE
     {
         Pos = MAP_APPFONT ( 177 , 14 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Wert" ;
         Center = TRUE ;
         Text [ ENGLISH ] = "Value" ;
@@ -386,7 +386,7 @@ ModalDialog DLG_FILTERCRIT
     FixedText FT_WHEREOPER
     {
         Pos = MAP_APPFONT ( 15 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung : Verkn³pfung */
         Text = "Verknüpfung" ;
         Center = TRUE ;
@@ -414,10 +414,10 @@ ModalDialog DLG_FILTERCRIT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Vínculo";
     };
-    GroupBox GB_FIELDS
+    FixedLine FL_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 236 , 74 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
         Text = "Kriterien" ;
         Text [ ENGLISH ] = "Search criteria" ;
         Text [ norwegian ] = "Search criteria" ;

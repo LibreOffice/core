@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:02:51 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,10 @@
 #define FT_TABLE1   1
 #define FT_TABLE2   2
 
-#define GB_INVOLVED_TABLES  1
-#define GB_INVOLVED_FIELDS  2
-#define GB_CASC_DEL         3
-#define GB_CASC_UPD         4
+#define FL_INVOLVED_TABLES      1
+#define FL_INVOLVED_FIELDS      2
+#define FL_CASC_DEL                     3
+#define FL_CASC_UPD                     4
 
 #define RB_NO_CASC_DEL      1
 #define RB_NO_CASC_UPD      2

@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.10 2001-06-13 22:19:14 kz Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.11 2001-06-21 15:07:11 fme Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: kz $ $Date: 2001-06-13 22:19:14 $ $Revision: 1.10 $
+ //  $Author: fme $ $Date: 2001-06-21 15:07:11 $ $Revision: 1.11 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -23,17 +23,17 @@ ModalDialog DLG_REL_PROPERTIES
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 186 , 235 ) ;
+    Size = MAP_APPFONT ( 186 , 205 ) ;
     Text = "Relationen" ;
     Text [ english ] = "Relations" ;
     Text [ english_us ] = "Relations" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    GroupBox GB_INVOLVED_TABLES
+    FixedLine FL_INVOLVED_TABLES
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 174 , 31 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
         Text = "beteiligte Tabellen" ;
         Text [ English ] = "involved tables" ;
         Text[ english_us ] = "Tables involved";
@@ -61,7 +61,7 @@ ModalDialog DLG_REL_PROPERTIES
     ListBox LB_LEFT_TABLE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 12, 18 );
+        Pos = MAP_APPFONT( 12, 14 );
         Size = MAP_APPFONT( 78, 60 );
         DropDown = TRUE;
         TabStop = TRUE;
@@ -70,16 +70,16 @@ ModalDialog DLG_REL_PROPERTIES
     ListBox LB_RIGHT_TABLE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 96, 18 );
+        Pos = MAP_APPFONT( 96, 14 );
         Size = MAP_APPFONT( 78, 60 );
         DropDown = TRUE;
         TabStop = TRUE;
     };
 
-    GroupBox GB_INVOLVED_FIELDS
+    FixedLine FL_INVOLVED_FIELDS
     {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 174 , 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 29 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
         Text = "beteiligte Felder" ;
         Text [ English ] = "involved fields" ;
         Text[ english_us ] = "Fields involved";
@@ -104,10 +104,10 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ finnish ] = "beteiligte Felder";
     };
 
-    GroupBox GB_CASC_UPD
+    FixedLine FL_CASC_UPD
     {
-        Pos = MAP_APPFONT ( 6 , 135 ) ;
-        Size = MAP_APPFONT ( 84 , 71 ) ;
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "Update Optionen" ;
         Text [ English ] = "Update options" ;
         Text [ english_us ] = "Update options" ;
@@ -134,8 +134,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_NO_CASC_UPD
     {
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 125 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Keine Aktion" ;
         Text [ English ] = "No action" ;
@@ -163,8 +163,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_CASC_UPD
     {
-        Pos = MAP_APPFONT ( 12 , 162 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 139 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text = "K~ask. Update" ;
         Text [ English ] = "Cascading update" ;
         Text [ portuguese ] = "Actualizar ~cascata" ;
@@ -191,8 +191,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_CASC_UPD_NULL
     {
-        Pos = MAP_APPFONT ( 12 , 177 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text = "~Null setzen" ;
         Text [ English ] = "Set null" ;
         Text [ portuguese ] = "Definir ~Null" ;
@@ -219,8 +219,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_CASC_UPD_DEFAULT
     {
-        Pos = MAP_APPFONT ( 12 , 192 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 167 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text = "~Default setzen" ;
         Text [ English ] = "Set default" ;
         Text [ portuguese ] = "Definir ~padrão" ;
@@ -245,11 +245,11 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ catalan ] = "~Predeterminar";
         Text[ finnish ] = "~Default setzen";
     };
-// zweite Groupbox
-    GroupBox GB_CASC_DEL
+// zweite FixedLine
+    FixedLine FL_CASC_DEL
     {
-        Pos = MAP_APPFONT ( 96 , 135 ) ;
-        Size = MAP_APPFONT ( 84 , 71 ) ;
+        Pos = MAP_APPFONT ( 96 , 114 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "Löschoptionen" ;
         Text [ English ] = "Delete options" ;
         Text [ english_us ] = "Delete options" ;
@@ -276,8 +276,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_NO_CASC_DEL
     {
-        Pos = MAP_APPFONT ( 102 , 147 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 102 , 125 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
         Text = "K~eine Aktion" ;
         Text [ English ] = "No action" ;
@@ -305,8 +305,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_CASC_DEL
     {
-        Pos = MAP_APPFONT ( 102 , 162 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 102 , 139 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text = "Ka~sk. Löschen" ;
         Text [ English ] = "Cascading delete" ;
         Text [ portuguese ] = "Eli~minar cascata" ;
@@ -333,8 +333,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_CASC_DEL_NULL
     {
-        Pos = MAP_APPFONT ( 102 , 177 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 102 , 153 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text = "Nu~ll setzen" ;
         Text [ English ] = "Set null" ;
         Text [ portuguese ] = "Definir ~Null" ;
@@ -361,8 +361,8 @@ ModalDialog DLG_REL_PROPERTIES
     };
     RadioButton RB_CASC_DEL_DEFAULT
     {
-        Pos = MAP_APPFONT ( 102 , 192 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 102 , 167 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text = "De~fault setzen" ;
         Text [ English ] = "Set default" ;
         Text [ portuguese ] = "Definir ~padrão" ;
@@ -390,20 +390,20 @@ ModalDialog DLG_REL_PROPERTIES
 
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 6 , 216 ) ;
+        Pos = MAP_APPFONT ( 6 , 184 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 59 , 216 ) ;
+        Pos = MAP_APPFONT ( 59 , 184 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 115 , 216 ) ;
+        Pos = MAP_APPFONT ( 115 , 184 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };

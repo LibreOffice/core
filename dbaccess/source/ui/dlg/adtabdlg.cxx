@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:42:25 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent)
              ,aAddButton( this, ResId( PB_ADDTABLE ) )
              ,aCloseButton( this, ResId( PB_CLOSE ) )
              ,aHelpButton( this, ResId( PB_HELP ) )
-             ,aGroupBoxTable( this, ResId( GB_TABLE ) )
+             ,aFixedLineTable( this, ResId( FL_TABLE ) )
              ,aDefaultString( ResId( STR_DEFAULT ) )
 {
     DBG_CTOR(OAddTableDlg,NULL);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:44:21 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,89 +86,6 @@ Image BMP_EXCEPTION_INFO
 {
     ImageBitmap = Bitmap { File = "exinfo.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-
-ModalDialog DLG_SQLMESSAGE
-{
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 238 , 101 ) ;
-    HelpId = HID_GENERIC_SQL_ERROR;
-    Text = "Text" ;
-    Text [ ENGLISH ] = "Text" ;
-    Text [ norwegian ] = "Text" ;
-    Text [ italian ] = "Testo" ;
-    Text [ portuguese_brazilian ] = "Texto" ;
-    Text [ portuguese ] = "Texto" ;
-    Text [ finnish ] = "Teksti" ;
-    Text [ danish ] = "Tekst" ;
-    Text [ french ] = "Texte" ;
-    Text [ swedish ] = "Text" ;
-    Text [ dutch ] = "Tekst" ;
-    Text [ spanish ] = "Texto" ;
-    Text [ english_us ] = "Text" ;
-    MultiLineEdit ED_TEXT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 153 , 76 ) ;
-        TabStop = TRUE ;
-    };
-    GroupBox GB_DATA
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 165 , 92 ) ;
-        Text = "Text" ;
-        Text [ ENGLISH ] = "Text" ;
-        Text [ norwegian ] = "Text" ;
-        Text [ italian ] = "Testo" ;
-        Text [ portuguese_brazilian ] = "Texto" ;
-        Text [ portuguese ] = "Texto" ;
-        Text [ finnish ] = "Teksti" ;
-        Text [ danish ] = "Tekst" ;
-        Text [ french ] = "Texte" ;
-        Text [ swedish ] = "Text" ;
-        Text [ dutch ] = "Tekst" ;
-        Text [ spanish ] = "Texto" ;
-        Text [ english_us ] = "Text" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö";
-        Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "Tekst";
-        Text[ japanese ] = "Ã·½Ä";
-        Text[ chinese_traditional ] = "¤å¦r";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ turkish ] = "Metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Texto";
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 181 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 181 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text[ chinese_simplified ] = "ÎÄ×Ö";
-    Text[ russian ] = "Òåêñò";
-    Text[ polish ] = "Tekst";
-    Text[ japanese ] = "Ã·½Ä";
-    Text[ chinese_traditional ] = "¤å¦r";
-    Text[ arabic ] = "ÇáäÕ";
-    Text[ greek ] = "Êåßìåíï";
-    Text[ korean ] = "ÅØ½ºÆ®";
-    Text[ turkish ] = "Metin";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
 };
 
 ModalDialog DLG_SQLEXCEPTIONCHAIN
@@ -444,6 +361,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/06/13 22:44:21  kz
+ *  Merge SRC633: 14.06.01 - 00:44:36
+ *
  *  Revision 1.14  2001/06/08 22:18:54  rt
  *  Merge SRC633: 09.06.01 - 00:19:13
  *

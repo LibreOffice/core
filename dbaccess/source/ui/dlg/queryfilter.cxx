@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:22:20 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
             ,aFT_WHERECOMP      ( this, ResId( FT_WHERECOMP ) )
             ,aFT_WHEREVALUE     ( this, ResId( FT_WHEREVALUE ) )
             ,aFT_WHEREOPER      ( this, ResId( FT_WHEREOPER ) )
-            ,aGB_FIELDS         ( this, ResId( GB_FIELDS ) )
+            ,aFL_FIELDS         ( this, ResId( FL_FIELDS ) )
             ,aBT_OK             ( this, ResId( BT_OK ) )
             ,aBT_CANCEL         ( this, ResId( BT_CANCEL ) )
             ,aBT_HELP           ( this, ResId( BT_HELP ) )

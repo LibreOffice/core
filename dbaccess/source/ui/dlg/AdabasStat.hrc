@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 07:17:01 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 
 #define PB_OK               1
 
-#define GB_FILES            1
-#define GB_SIZES            2
+#define FL_FILES                        1
+#define FL_SIZES                        2
 
 
 #endif // DBAUI_ADABASSTAT_HRC

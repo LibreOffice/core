@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:21:09 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModelessDialog DLG_JOIN_TABADD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpID = DLG_JOIN_TABADD ;
-    Size = MAP_APPFONT ( 178 , 155 ) ;
+    Size = MAP_APPFONT ( 178 , 147 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Tabellen hinzufügen : Tabellen hinzuf³gen */
     Text = "Tabellen hinzufügen" ;
     Text [ ENGLISH ] = "Add tables" ;
@@ -95,7 +95,7 @@ ModelessDialog DLG_JOIN_TABADD
     FixedText FT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "~Tabellenname" ;
         Text [ ENGLISH ] = "~Table name" ;
         Text [ NORWEGIAN ] = "~Table name" ;
@@ -204,10 +204,10 @@ ModelessDialog DLG_JOIN_TABADD
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_TABLE
+    FixedLine FL_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 111 , 146 ) ;
+        Size = MAP_APPFONT ( 111 , 8 ) ;
         Text = "Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
         Text [ NORWEGIAN ] = "Table" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 15:42:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,23 +119,23 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     aPB_HELP(           this, ResId( PB_HELP ) ),
     m_FT_Tables(        this, ResId( FT_TABLES ) ),
     aCB_Tables(         this, ResId( CB_TABLES ) ),
-    m_GB_Indexes(       this, ResId( GB_INDEXES ) ),
+    m_FL_Indexes(       this, ResId( FL_INDEXES ) ),
     m_FT_TableIndexes(  this, ResId( FT_TABLEINDEXES ) ),
     aLB_TableIndexes(   this, ResId( LB_TABLEINDEXES ) ),
     m_FT_AllIndexes(    this, ResId( FT_ALLINDEXES ) ),
     aLB_FreeIndexes(    this, ResId( LB_FREEINDEXES ) ),
-    aPB_Add(            this, ResId( PB_ADD ) ),
-    aPB_Remove(         this, ResId( PB_REMOVE ) ),
-    aPB_AddAll(         this, ResId( PB_ADDALL ) ),
-    aPB_RemoveAll(      this, ResId( PB_REMOVEALL ) ),
+    aIB_Add(            this, ResId( IB_ADD ) ),
+    aIB_Remove(         this, ResId( IB_REMOVE ) ),
+    aIB_AddAll(         this, ResId( IB_ADDALL ) ),
+    aIB_RemoveAll(      this, ResId( IB_REMOVEALL ) ),
     m_aDSN(aDataSrcName),
     m_bCaseSensitiv(sal_True)
 {
     aCB_Tables.SetSelectHdl( LINK(this, ODbaseIndexDialog, TableSelectHdl) );
-    aPB_Add.SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
-    aPB_Remove.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveClickHdl) );
-    aPB_AddAll.SetClickHdl( LINK(this, ODbaseIndexDialog, AddAllClickHdl) );
-    aPB_RemoveAll.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
+    aIB_Add.SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
+    aIB_Remove.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveClickHdl) );
+    aIB_AddAll.SetClickHdl( LINK(this, ODbaseIndexDialog, AddAllClickHdl) );
+    aIB_RemoveAll.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
     aPB_OK.SetClickHdl( LINK(this, ODbaseIndexDialog, OKClickHdl) );
 
     aLB_FreeIndexes.SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
@@ -177,11 +177,11 @@ sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator
 //-------------------------------------------------------------------------
 void ODbaseIndexDialog::checkButtons()
 {
-    aPB_Add.Enable(0 != aLB_FreeIndexes.GetSelectEntryCount());
-    aPB_AddAll.Enable(0 != aLB_FreeIndexes.GetEntryCount());
+    aIB_Add.Enable(0 != aLB_FreeIndexes.GetSelectEntryCount());
+    aIB_AddAll.Enable(0 != aLB_FreeIndexes.GetEntryCount());
 
-    aPB_Remove.Enable(0 != aLB_TableIndexes.GetSelectEntryCount());
-    aPB_RemoveAll.Enable(0 != aLB_TableIndexes.GetEntryCount());
+    aIB_Remove.Enable(0 != aLB_TableIndexes.GetSelectEntryCount());
+    aIB_RemoveAll.Enable(0 != aLB_TableIndexes.GetEntryCount());
 }
 
 //-------------------------------------------------------------------------
@@ -348,15 +348,15 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 void ODbaseIndexDialog::Init()
 {
     aPB_OK.Disable();
-    m_GB_Indexes.Disable();
+    m_FL_Indexes.Disable();
     m_FT_TableIndexes.Disable();
     aLB_TableIndexes.Disable();
     m_FT_AllIndexes.Disable();
     aLB_FreeIndexes.Disable();
-    aPB_Add.Disable();
-    aPB_Remove.Disable();
-    aPB_AddAll.Disable();
-    aPB_RemoveAll.Disable();
+    aIB_Add.Disable();
+    aIB_Remove.Disable();
+    aIB_AddAll.Disable();
+    aIB_RemoveAll.Disable();
 
     ///////////////////////////////////////////////////////////////////////////
     // Alle Indizes werden erst einmal zur Liste der freien Indizes hinzugefuegt.
@@ -463,7 +463,7 @@ void ODbaseIndexDialog::Init()
     if (m_aTableInfoList.size())
     {
         aPB_OK.Enable();
-        m_GB_Indexes.Enable();
+        m_FL_Indexes.Enable();
         m_FT_TableIndexes.Enable();
         aLB_TableIndexes.Enable();
         m_FT_AllIndexes.Enable();
@@ -599,6 +599,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/12 15:42:44  fs
+ *  #88079# catch the property exceptions
+ *
  *  Revision 1.8  2001/05/29 06:44:52  fs
  *  #87037# Init: don't cut the extension from the index URLs
  *

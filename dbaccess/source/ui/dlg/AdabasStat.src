@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:17:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ ModalDialog DLG_ADABASSTAT
     SVLook      = TRUE ;
     Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-    GroupBox GB_FILES
+    FixedLine FL_FILES
     {
         Pos                 = MAP_APPFONT ( 6 , 3 ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12, 93 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12, 8 ) ;
         Text                = "Datenbankdateien" ;
         Text[ENGLISH]       = "Database files" ;
         Text[ english_us ] = "Database files";
@@ -217,10 +217,10 @@ ModalDialog DLG_ADABASSTAT
         VScroll     = TRUE;
         HScroll     = TRUE;
     };
-    GroupBox GB_SIZES
+    FixedLine FL_SIZES
     {
         Pos                 = MAP_APPFONT ( 6 , 99 ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 65 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
         Text                = "Datenbankgrößen" ;
         Text [ ENGLISH ]    = "database sizes" ;
         Text[ english_us ] = "Database sizes";

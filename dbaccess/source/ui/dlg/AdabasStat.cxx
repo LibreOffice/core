@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 06:50:20 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,14 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                                      const Reference< ::com::sun::star::sdbc::XConnection >& _xCurrentConnection,
                                      const Reference< XMultiServiceFactory >& _xFactory)
     : ModalDialog( pParent, ModuleRes(DLG_ADABASSTAT) )
-    ,m_GB_FILES(            this , ResId(GB_FILES))
+    ,m_FL_FILES(            this , ResId(FL_FILES))
     ,m_FT_SYSDEVSPACE(      this , ResId(FT_SYSDEVSPACE))
     ,m_ET_SYSDEVSPACE(      this , STR_ADABAS_HELP_SYSDEVSPACE,ResId(ET_SYSDEVSPACE))
     ,m_FT_TRANSACTIONLOG(   this , ResId(FT_TRANSACTIONLOG))
     ,m_ET_TRANSACTIONLOG(   this , STR_ADABAS_HELP_TRANSACT,ResId(ET_TRANSACTIONLOG))
     ,m_FT_DATADEVSPACE(     this , ResId(FT_DATADEVSPACE))
     ,m_LB_DATADEVS(         this , STR_ADABAS_HELP_DATADEVSPACES,ResId(LB_DATADEVS))
-    ,m_GB_SIZES(            this , ResId(GB_SIZES))
+    ,m_FL_SIZES(            this , ResId(FL_SIZES))
     ,m_FT_SIZE(             this , ResId(FT_SIZE))
     ,m_ET_SIZE(             this , STR_ADABAS_HELP_SIZE,ResId(ET_SIZE))
     ,m_FT_FREESIZE(         this , ResId(FT_FREESIZE))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 07:17:09 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
-#endif
 #ifndef DBAUI_FIELDCONTROLS_HXX
 #include "FieldControls.hxx"
 #endif
@@ -96,14 +93,14 @@ namespace dbaui
     {
     protected:
 
-        GroupBox                m_GB_FILES;
+        FixedLine               m_FL_FILES;
         FixedText               m_FT_SYSDEVSPACE;
         OPropEditCtrl           m_ET_SYSDEVSPACE;
         FixedText               m_FT_TRANSACTIONLOG;
         OPropEditCtrl           m_ET_TRANSACTIONLOG;
         FixedText               m_FT_DATADEVSPACE;
         OPropListBoxCtrl        m_LB_DATADEVS;
-        GroupBox                m_GB_SIZES;
+        FixedLine               m_FL_SIZES;
         FixedText               m_FT_SIZE;
         OPropEditCtrl           m_ET_SIZE;
         FixedText               m_FT_FREESIZE;

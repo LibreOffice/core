@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 13:25:15 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
@@ -150,7 +147,7 @@ protected:
     FixedText       m_FT_Tables;
     ComboBox        aCB_Tables;
 
-    GroupBox        m_GB_Indexes;
+    FixedLine       m_FL_Indexes;
 
     FixedText       m_FT_TableIndexes;
     ListBox         aLB_TableIndexes;
@@ -158,10 +155,10 @@ protected:
     FixedText       m_FT_AllIndexes;
     ListBox         aLB_FreeIndexes;
 
-    PushButton      aPB_Add;
-    PushButton      aPB_Remove;
-    PushButton      aPB_AddAll;
-    PushButton      aPB_RemoveAll;
+    ImageButton      aIB_Add;
+    ImageButton      aIB_Remove;
+    ImageButton      aIB_AddAll;
+    ImageButton      aIB_RemoveAll;
 
     DECL_LINK( TableSelectHdl, ComboBox* );
     DECL_LINK( AddClickHdl, PushButton* );
@@ -204,6 +201,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/14 13:25:15  fs
+ *  #86942# +checkButtons / OnListEntrySelected
+ *
  *  Revision 1.4  2001/03/07 16:44:40  fs
  *  added a parameter to implRemoveIndex controlling the assertion / correct collecting the indexes in Init
  *
