@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 08:29:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,25 +533,37 @@ IMPL_LINK( SwViewImp, RefreshScrolledHdl, Timer *, EMPTYARG )
         {
             SwScrollArea* pScroll = pScrolledArea->GetObject(0);
             ASSERT( pScroll->Count(), "Empty scrollarea" );
-            SwStripes* pStripes = pScroll->GetObject(0);
-            ASSERT( pStripes->Count() > 1, "Empty scrollstripes" );
-            const SwStripe &rStripe = pStripes->GetObject(1);
-            SwRect aTmpRect = pScroll->IsVertical() ?
-                SwRect( rStripe.GetY() - rStripe.GetHeight(), pScroll->GetX(),
-                          rStripe.GetHeight(), pScroll->GetWidth() ) :
-                SwRect( pScroll->GetX(), rStripe.GetY(),
-                        pScroll->GetWidth(), rStripe.GetHeight() );
-            if( aTmpRect.IsOver( aRect ) )
+            // OD 21.10.2003 #112616# - for savety reason:
+            // react, if precondition named in assertion isn't hold
+            if ( pScroll->Count() )
             {
-                SwSaveHdl aSaveHdl( this );
-                 if( !bNoRefresh )
-                    _RefreshScrolledArea( aTmpRect );
-            }
-            pStripes->Remove( 1 );
-            if( pStripes->Count() < 2 )
-            {
-                pScroll->Remove( USHORT(0) );
-                delete pStripes;
+                SwStripes* pStripes = pScroll->GetObject(0);
+                // OD 20.10.2003 #112616# - consider also first stripe
+                ASSERT( pStripes->Count(), "Empty scrollstripes" );
+                // OD 21.10.2003 #112616# - for savety reason:
+                // react, if precondition named in assertion isn't hold
+                if ( pStripes->Count() )
+                {
+                    const SwStripe &rStripe = pStripes->GetObject(0);
+                    SwRect aTmpRect = pScroll->IsVertical() ?
+                        SwRect( rStripe.GetY() - rStripe.GetHeight(), pScroll->GetX(),
+                                  rStripe.GetHeight(), pScroll->GetWidth() ) :
+                        SwRect( pScroll->GetX(), rStripe.GetY(),
+                                pScroll->GetWidth(), rStripe.GetHeight() );
+                    if( aTmpRect.IsOver( aRect ) )
+                    {
+                        SwSaveHdl aSaveHdl( this );
+                        if( !bNoRefresh )
+                            _RefreshScrolledArea( aTmpRect );
+                    }
+                    // OD 20.10.2003 #112616# - consider also first stripe
+                    pStripes->Remove( 0 );
+                }
+                if( pStripes->Count() < 1 )
+                {
+                    pScroll->Remove( USHORT(0) );
+                    delete pStripes;
+                }
             }
             if( !pScroll->Count() )
             {
