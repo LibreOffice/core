@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: nf $ $Date: 2001-12-19 11:54:56 $
+#   last change: $Author: nf $ $Date: 2002-05-07 08:11:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,23 +123,17 @@ APP5STACK=  16000
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS=$(STATIC_LIBS)
 
-# extractor and merger for *.xxl and *.xrb
-APP6TARGET= xmlex
+# extractor and merger for *.cfg
+APP6TARGET= cfgex
 APP6STACK=  16000
-APP6OBJS=   $(OBJ)$/xmlmerge.obj $(OBJ)$/xml_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP6STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
-# extractor and merger for *.cfg
-APP7TARGET= cfgex
-APP7STACK=  16000
-APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
-
 # extractor and merger for *.xrm
-APP8TARGET= xrmex
-APP8STACK=  16000
-APP8OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
+APP7TARGET= xrmex
+APP7STACK=  16000
+APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 #APP8TARGET= xgfconv
 #APP8STACK=  16000
