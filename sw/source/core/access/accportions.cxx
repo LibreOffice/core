@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-03 15:02:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ void SwAccessiblePortionData::Skip(USHORT nLength)
 {
     DBG_ASSERT( !bFinished, "We are already done!" );
     DBG_ASSERT( aModelPositions.size() == 0, "Never Skip() after portions" );
+    DBG_ASSERT( nLength <= pTxtNode->GetTxt().Len(), "skip exceeds model string!" );
 
     nModelPosition += nLength;
 }
