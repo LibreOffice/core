@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-07 13:57:01 $
+ *  last change: $Author: ab $ $Date: 2002-08-08 12:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3076,7 +3076,8 @@ RTLFUNC(Shell)
         return;
     }
 
-    if ( rPar.Count() < 2 || rPar.Count() > 5 )
+    ULONG nArgCount = rPar.Count();
+    if ( nArgCount < 2 || nArgCount > 5 )
     {
         rPar.Get(0)->PutLong(0);
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3087,7 +3088,7 @@ RTLFUNC(Shell)
                           NAMESPACE_VOS(OProcess)::TOption_Detached;
         String aCmdLine = rPar.Get(1)->GetString();
         // Zusaetzliche Parameter anhaengen, es muss eh alles geparsed werden
-        if( rPar.Count() >= 4 )
+        if( nArgCount >= 4 )
         {
             aCmdLine.AppendAscii( " " );
             aCmdLine += rPar.Get(3)->GetString();
@@ -3152,7 +3153,7 @@ RTLFUNC(Shell)
         // #55735 / #72471 Ende
 
         INT16 nWinStyle = 0;
-        if( rPar.Count() >= 3 )
+        if( nArgCount >= 3 )
         {
             nWinStyle = rPar.Get(2)->GetInteger();
             switch( nWinStyle )
@@ -3167,6 +3168,12 @@ RTLFUNC(Shell)
                     nOptions |= NAMESPACE_VOS(OProcess)::TOption_FullScreen;
                     break;
             }
+
+            BOOL bSync = FALSE;
+            if( nArgCount >= 5 )
+                bSync = rPar.Get(4)->GetBool();
+            if( bSync )
+                nOptions |= NAMESPACE_VOS(OProcess)::TOption_Wait;
         }
         NAMESPACE_VOS(OProcess)::TProcessOption eOptions =
             (NAMESPACE_VOS(OProcess)::TProcessOption)nOptions;
