@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:10:59 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,11 +233,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
             }
         }
-        else if (rRef.GetId() == SFX_HINT_DYING)
-        {
-            // it seems the Broadcaster is dying, since the view is dying
-            dispose();
-        }
     }
     else if (rHint.ISA( ScUpdateRefHint ))
     {
@@ -264,6 +259,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             }
         }
     }
+
+    ScAccessibleTableBase::Notify(rBC, rHint);
 }
 
     //=====  XAccessibleTable  ================================================

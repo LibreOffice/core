@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:50:07 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,12 +196,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ))
-    {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        if (rRef.GetId() == SFX_HINT_DYING)
-            dispose();
-    }
+    ScAccessibleDocumentBase::Notify(rBC, rHint);
 }
 
 //=====  XAccessibleComponent  ============================================

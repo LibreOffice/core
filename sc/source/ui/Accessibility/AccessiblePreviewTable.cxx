@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:08:06 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,12 @@ ScAccessiblePreviewTable::ScAccessiblePreviewTable( const ::com::sun::star::uno:
 
 ScAccessiblePreviewTable::~ScAccessiblePreviewTable()
 {
-    if (mpViewShell)
-        mpViewShell->RemoveAccessibilityObject(*this);
-
-    delete mpTableInfo;
+    if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
+    {
+        // increment refcount to prevent double call off dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
+    }
 }
 
 void SAL_CALL ScAccessiblePreviewTable::disposing()
@@ -112,6 +114,9 @@ void SAL_CALL ScAccessiblePreviewTable::disposing()
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = NULL;
     }
+
+    if (mpTableInfo)
+        DELETEZ (mpTableInfo);
 
     ScAccessibleContextBase::disposing();
 }
@@ -124,15 +129,15 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         ULONG nId = rRef.GetId();
-        if ( nId == SFX_HINT_DYING )
-            dispose();
-        else if ( nId == SFX_HINT_DATACHANGED )
+        if ( nId == SFX_HINT_DATACHANGED )
         {
             //  column / row layout may change with any document change,
             //  so it must be invalidated
             DELETEZ( mpTableInfo );
         }
     }
+
+    ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
 //=====  XInterface  =====================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:51:50 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,7 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
 
 void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ))
-    {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        ULONG nId = rRef.GetId();
-        if ( nId == SFX_HINT_DYING )
-            dispose();
-    }
+    ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
 //=====  XAccessibleComponent  ============================================
