@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:37:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ namespace objectpositioning
     {
         private:
             // calculated data for object position type TO_LAYOUT
-            Point maRelPos;
+            Point       maRelPos;
+
             // --> OD 2004-06-17 #i26791#
             // determine offset to frame anchor position according to the
             // positioning alignments
