@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cl $ $Date: 2001-02-23 21:35:17 $
+#   last change: $Author: cl $ $Date: 2001-03-19 10:15:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,8 @@ TARGET=xml
 
 .INCLUDE : settings.mk
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
@@ -76,11 +78,11 @@ SLOFILES = \
         $(SLO)$/xmlgrhlp.obj		\
         $(SLO)$/xmleohlp.obj		
 
-EXCEPTIONSFILES = \
-        $(SLO)$/xmlxtimp.obj		\
-        $(SLO)$/xmlxtexp.obj		\
-        $(SLO)$/xmlgrhlp.obj		\
-        $(SLO)$/xmleohlp.obj		
+SVXLIGHTOBJFILES=\
+        $(OBJ)$/xmlxtimp.obj		\
+        $(OBJ)$/xmlxtexp.obj		\
+        $(OBJ)$/xmlgrhlp.obj		\
+        $(OBJ)$/xmleohlp.obj		
 
 # --- Targets --------------------------------------------------------------
 

@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
  *  last change: $Author: cl $
  *
@@ -139,7 +139,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 
 // -----------------------------------------------------------------------------
 
-SvStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& rStorageName )
+SotStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& rStorageName )
 {
     if( !mxGraphicStorage.Is() || ( rStorageName != maCurStorageName ) )
     {
@@ -153,16 +153,16 @@ SvStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& r
 
 // -----------------------------------------------------------------------------
 
-SvStorageStreamRef SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
+SotStorageStreamRef SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                              const ::rtl::OUString& rPictureStreamName,
                                                              BOOL bTruncate )
 {
-    SvStorageStreamRef  xStm;
-    SvStorageRef        xStorage( ImplGetGraphicStorage( rPictureStorageName ) );
+    SotStorageStreamRef xStm;
+    SotStorageRef       xStorage( ImplGetGraphicStorage( rPictureStorageName ) );
 
     if( xStorage.Is() )
     {
-        xStm = xStorage->OpenStream( rPictureStreamName,
+        xStm = xStorage->OpenSotStream( rPictureStreamName,
                                      STREAM_READ |
                                      ( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) ?
                                        ( STREAM_WRITE | ( bTruncate ? STREAM_TRUNC : 0 ) ) : 0 ) );
@@ -177,7 +177,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
                                              const ::rtl::OUString& rPictureStreamName )
 {
     Graphic             aGraphic;
-    SvStorageStreamRef  xStm( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
+    SotStorageStreamRef xStm( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
 
     if( xStm.Is() )
         GetGrfFilter()->ImportGraphic( aGraphic, String(), *xStm );
@@ -197,7 +197,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
-        SvStorageStreamRef xStm( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, TRUE ) );
+        SotStorageStreamRef xStm( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, TRUE ) );
 
         if( xStm.Is() )
         {
@@ -210,7 +210,8 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GetGrfFilter();
+                    GraphicFilter* pFilter = GetGrfFilter();
+
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
@@ -331,7 +332,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
 // -----------------------------------------------------------------------------
 
-void SvXMLGraphicHelper::Init( SvStorage& rXMLStorage,
+void SvXMLGraphicHelper::Init( SotStorage& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
                                BOOL bDirect )
 {
@@ -342,7 +343,7 @@ void SvXMLGraphicHelper::Init( SvStorage& rXMLStorage,
 
 // -----------------------------------------------------------------------------
 
-SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvStorage& rXMLStorage,
+SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SotStorage& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
                                                 BOOL bDirect )
 {
@@ -399,7 +400,7 @@ void SvXMLGraphicHelper::Flush()
     }
     if( GRAPHICHELPER_MODE_WRITE == meCreateMode )
     {
-        SvStorageRef xStorage = ImplGetGraphicStorage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_GRAPHICSTORAGE_NAME) ) );
+        SotStorageRef xStorage = ImplGetGraphicStorage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_GRAPHICSTORAGE_NAME) ) );
 
         if( xStorage.Is() )
             xStorage->Commit();
