@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.1.1.1 $
+  *  $Revision: 1.2 $
   *
-  *  last change: $Author: pl $ $Date: 2001-05-08 11:46:09 $
+  *  last change: $Author: pl $ $Date: 2001-05-09 12:26:55 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -457,8 +457,16 @@ PrinterGfx::getFontSubstitute ()
 sal_Int32
 PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
 {
-    fontID pFont3[3] = { getFontSubstitute(), mnFontID, mnFallbackID };
+    // XXX compatibility code, symbol area is 0xf020 and up but application is
+    // perhaps not aware of this and ask metrics in the range of 0 ... 256
+    rtl_TextEncoding nEnc = mrFontMgr.getFontEncoding( mnFontID );
+    if ( nEnc == RTL_TEXTENCODING_SYMBOL && nTo < 256 )
+    {
+        nTo   += 0xf000;
+        nFrom += 0xf000;
+    }
 
+    fontID pFont3[3] = { getFontSubstitute(), mnFontID, mnFallbackID };
     int nScale = mnTextWidth ? mnTextWidth : mnTextHeight;
     for( int n = 0; n < (nTo - nFrom + 1); n++ )
     {
