@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:24:08 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,9 +493,9 @@ Menu RID_POPUP_TAB
             Text [ finnish ] = "~Lisää" ;
             Text [ danish ] = "~Indsæt..." ;
             Text [ french ] = "~Insérer une feuille..." ;
-            Text [ swedish ] = "~Infoga..." ;
+            Text [ swedish ] = "~Infoga tabell..." ;
             Text [ dutch ] = "~Invoegen..." ;
-            Text [ spanish ] = "~Insertar..." ;
+            Text [ spanish ] = "~Insertar hoja..." ;
             Text [ english_us ] = "~Insert Sheet..." ;
             Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨(~I)...";
             Text[ russian ] = "Âñòàâêà...";
@@ -523,9 +523,9 @@ Menu RID_POPUP_TAB
             Text [ finnish ] = "~Poista" ;
             Text [ danish ] = "Slet..." ;
             Text [ french ] = "~Supprimer la feuille..." ;
-            Text [ swedish ] = "~Radera..." ;
+            Text [ swedish ] = "~Radera tabell..." ;
             Text [ dutch ] = "~Wissen..." ;
-            Text [ spanish ] = "~Eliminar..." ;
+            Text [ spanish ] = "Eli~minar hoja..." ;
             Text [ english_us ] = "~Delete Sheet..." ;
             Text[ chinese_simplified ] = "åˆ é™¤å·¥ä½œè¡¨(~D)...";
             Text[ russian ] = "Óäàëèòü...";
@@ -553,9 +553,9 @@ Menu RID_POPUP_TAB
             Text [ finnish ] = "~Nimeä uudelleen..." ;
             Text [ danish ] = "Omdøb..." ;
             Text [ french ] = "Ren~ommer la feuille..." ;
-            Text [ swedish ] = "~Byt namn..." ;
+            Text [ swedish ] = "~Byt namn på tabell..." ;
             Text [ dutch ] = "~Naam wijzigen..." ;
-            Text [ spanish ] = "~Cambiar nombre..." ;
+            Text [ spanish ] = "~Cambiar nombre a hoja..." ;
             Text [ english_us ] = "~Rename Sheet..." ;
             Text[ chinese_simplified ] = "é‡å‘½åå·¥ä½œè¡¨(~R)...";
             Text[ russian ] = "Ïåğåèìåíîâàòü...";
@@ -583,9 +583,9 @@ Menu RID_POPUP_TAB
             Text [ finnish ] = "~Siirrä/kopioi..." ;
             Text [ danish ] = "Flyt/kopier..." ;
             Text [ french ] = "~Déplacer/Copier la feuille..." ;
-            Text [ swedish ] = "~Flytta/kopiera..." ;
+            Text [ swedish ] = "~Flytta/kopiera tabell..." ;
             Text [ dutch ] = "~Verplaatsen/kopiëren..." ;
-            Text [ spanish ] = "~Desplazar/Copiar..." ;
+            Text [ spanish ] = "~Desplazar/copiar hoja..." ;
             Text [ english_us ] = "~Move/Copy Sheet..." ;
             Text[ chinese_simplified ] = "ç§»åŠ¨/å¤åˆ¶å·¥ä½œè¡¨(~M)...";
             Text[ russian ] = "Ïåğåìåñòèòü/ñêîïèğîâàòü...";
