@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: lkovacs $ $Date: 2002-11-04 15:42:00 $
+*  last change: $Author: lkovacs $ $Date: 2002-11-05 10:32:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -201,7 +201,7 @@ SAL_THROW ( ( RuntimeException ) )
 
         validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
 
-        // and place it in the hash_map. Increment the counter
+        // and place it in the hash_maps. Increment the counter
         m_ScriptStorageHash[ m_count++ ] = xInterface;
     m_StorageIdHash [storageStr] = m_count - 1;
 
@@ -284,6 +284,12 @@ void SAL_CALL
 ScriptStorageManager::refreshScriptStorage(const OUString & stringURI)
 throw( RuntimeException )
 {
+
+    OSL_TRACE( "** => ScriptStorageManager in refreshScriptStorage\n");
+    OSL_TRACE( "** => refreshing URI: %s\n",
+            ::rtl::OUStringToOString(
+                stringURI, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+
     StorageId_hash::const_iterator it = m_StorageIdHash.find(stringURI);
 
     if ( it == m_StorageIdHash.end() )
@@ -392,6 +398,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
     // erase the entry from the hash
     m_ScriptStorageHash.erase( scriptStorageID );
 
+
+    // erase from name/storageId hash
     StorageId_hash::iterator it = m_StorageIdHash.begin();
     StorageId_hash::iterator it_end = m_StorageIdHash.end();
     for( ; it != it_end; ++it)

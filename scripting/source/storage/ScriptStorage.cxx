@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.13 $
-*  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:32 $
+*  $Revision: 1.14 $
+*  last change: $Author: lkovacs $ $Date: 2002-11-05 10:32:49 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -539,6 +539,8 @@ void
 ScriptStorage::refresh()
 throw (RuntimeException)
 {
+    OSL_TRACE("** => ScriptStorage: in refresh()\n");
+
     // guard against concurrent refreshes
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
 
