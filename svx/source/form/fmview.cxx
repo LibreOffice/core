@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-14 08:50:01 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,12 +191,7 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
+#include "fmglob.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -209,7 +204,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 using namespace ::svxform;
 using namespace ::svx;
-using namespace ::dbtools;
 
 //========================================================================
 //------------------------------------------------------------------------
@@ -641,5 +635,54 @@ void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::
         pImpl->removeWindow( xCC );
     }
 }
+// -----------------------------------------------------------------------------
+BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+{
+    BOOL bDone = FALSE;
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    if (    IsDesignMode()
+        &&  pWin
+        &&  !rKeyCode.IsShift()
+        &&  !rKeyCode.IsMod1()
+        &&  !rKeyCode.IsMod2()
+        &&  rKeyCode.GetCode() == KEY_RETURN )
+    {
+        const SdrMarkList& rMarkList = GetMarkList();
+        if ( 1 == rMarkList.GetMarkCount() )
+        {
+            SdrMark* pMark = rMarkList.GetMark(0);
+            if ( pMark )
+            {
+                FmFormObj* pObj = PTR_CAST(FmFormObj,pMark->GetObj());
+                if ( pObj && pObj->getType() == OBJ_FM_GRID )
+                {
+                    // get the context of the control - it will be our "inner" context
+                    Reference< ::com::sun::star::awt::XWindow> xWindow(pObj->GetUnoControl( pWin ),UNO_QUERY);
+                    if ( xWindow.is() )
+                    {
+                        pImpl->m_xWindow = xWindow;
+                        xWindow->addFocusListener(pImpl);
+                        SetMoveOutside(TRUE);
+                        RefreshAllIAOManagers();
+                        xWindow->setFocus();
+                        bDone = TRUE;
+                    }
+                }
+            }
+        }
 
-
+    }
+    if ( !bDone )
+        bDone = E3dView::KeyInput(rKEvt,pWin);
+    return bDone;
+}
+// -----------------------------------------------------------------------------
+sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
+{
+    sal_Bool bRet = sal_False;
+    Reference< ::com::sun::star::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
+    if ( bRet = ( !xControl.is() || !_xSource.is() || _xSource != xControl->getModel() ) )
+        UnmarkAll();
+    return bRet;
+}
+// -----------------------------------------------------------------------------
