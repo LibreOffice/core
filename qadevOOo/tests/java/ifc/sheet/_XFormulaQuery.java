@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFormulaQuery.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:01:07 $
+ *  last change:$Date: 2003-11-18 16:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ import lib.StatusException;
 import com.sun.star.sheet.XFormulaQuery;
 import com.sun.star.sheet.XSheetCellRanges;
 import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.table.XCell;
 import com.sun.star.uno.UnoRuntime;
 
 /**
@@ -78,10 +80,15 @@ public class _XFormulaQuery extends MultiMethodTest {
 
     public XFormulaQuery oObj;
 
-     protected XSpreadsheet oSheet = null;
+    protected XSpreadsheet oSheet = null;
+    private XCell mxCell;
+    private int miQueryThisDependentRange = 1;
+    private int miQueryThisPrecedentRange = 1;
+    private int[] miExpectedDependentValues;
+    private int[] miExpectedPrecedentValues;
 
     protected void before() {
-        oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
+        oSheet = (XSpreadsheet)tEnv.getObjRelation("SHEET");
 
         if (oSheet == null) {
             log.println("Object relation oSheet is missing");
@@ -94,14 +101,56 @@ public class _XFormulaQuery extends MultiMethodTest {
                                                   "Object relation oSheet is missing"));
             }
         }
+        Object o = tEnv.getObjRelation("MAKEENTRYINCELL");
+        if (o != null) {
+            mxCell = (XCell)o;
+        }
+        else {
+            try {
+                mxCell = oSheet.getCellByPosition(15, 15);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                throw new StatusException(
+                            Status.failed("Couldn't get initial cell"));
+            }
+        }
 
+        o = tEnv.getObjRelation("RANGEINDICES");
+        if (o != null) {
+            int[]index = (int[])o;
+            miQueryThisDependentRange = index[0];
+            miQueryThisPrecedentRange = index[1];
+        }
+
+        o = tEnv.getObjRelation("EXPECTEDDEPENDENTVALUES");
+        if (o != null) {
+            miExpectedDependentValues = (int[])o;
+        }
+        else {
+            miExpectedDependentValues = new int[4];
+            miExpectedDependentValues[0] = 15;
+            miExpectedDependentValues[1] = 15;
+            miExpectedDependentValues[2] = 15;
+            miExpectedDependentValues[3] = 15;
+        }
+
+        o = tEnv.getObjRelation("EXPECTEDPRECEDENTVALUES");
+        if (o != null) {
+            miExpectedPrecedentValues = (int[])o;
+        }
+        else {
+            miExpectedPrecedentValues = new int[4];
+            miExpectedPrecedentValues[0] = 0;
+            miExpectedPrecedentValues[1] = 0;
+            miExpectedPrecedentValues[2] = 15;
+            miExpectedPrecedentValues[3] = 15;
+        }
     }
 
     public void _queryDependents() {
         boolean res = true;
 
         try {
-            oSheet.getCellByPosition(15, 15).setFormula("=sum(A1:D1)");
+            mxCell.setFormula("=sum(A1:D1)");
             oSheet.getCellByPosition(0, 0).setValue(1);
             oSheet.getCellByPosition(1, 0).setValue(1);
             oSheet.getCellByPosition(2, 0).setValue(1);
@@ -110,15 +159,23 @@ public class _XFormulaQuery extends MultiMethodTest {
             log.println(
                     "calling oObj.queryDependents(false)");
             XSheetCellRanges getting = oObj.queryDependents(false);
+            CellRangeAddress[] range = getting.getRangeAddresses();
 
-            res = ((getting.getRangeAddresses()[1].StartColumn==15) && (getting.getRangeAddresses()[1].EndColumn==15) && (getting.getRangeAddresses()[1].StartRow==15) && (getting.getRangeAddresses()[1].EndRow==15));
+            res = ((range[miQueryThisDependentRange].StartColumn==miExpectedDependentValues[0]) &&
+                    (range[miQueryThisDependentRange].EndColumn==miExpectedDependentValues[1]) &&
+                   (range[miQueryThisDependentRange].StartRow==miExpectedDependentValues[2]) &&
+                   (range[miQueryThisDependentRange].EndRow==miExpectedDependentValues[3]));
 
             if (!res) {
-            log.println("Getting ("+(getting.getRangeAddresses()[1]).StartColumn
-            +","+(getting.getRangeAddresses()[1]).EndColumn
-            +","+(getting.getRangeAddresses()[1]).StartRow
-            +","+(getting.getRangeAddresses()[1]).EndRow+")"                       );
-            log.println("Expected (15,15,15,15)");
+                log.println("Getting ("
+                        +(range[miQueryThisDependentRange]).StartColumn+","
+                        +(range[miQueryThisDependentRange]).EndColumn+","
+                        +(range[miQueryThisDependentRange]).StartRow+","
+                        +(range[miQueryThisDependentRange]).EndRow+")");
+                log.println("Expected (" + miExpectedDependentValues[0] + "," +
+                                           miExpectedDependentValues[1] + "," +
+                                           miExpectedDependentValues[2] + "," +
+                                           miExpectedDependentValues[3] + ")");
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't set initial version to cell");
@@ -132,7 +189,7 @@ public class _XFormulaQuery extends MultiMethodTest {
         boolean res = true;
 
         try {
-            oSheet.getCellByPosition(0, 15).setFormula("=sum(A1:D1)");
+            mxCell.setFormula("=sum(A1:D1)");
             oSheet.getCellByPosition(0, 0).setValue(1);
             oSheet.getCellByPosition(1, 0).setValue(1);
             oSheet.getCellByPosition(2, 0).setValue(1);
@@ -142,15 +199,23 @@ public class _XFormulaQuery extends MultiMethodTest {
             log.println(
                     "calling oObj.queryPrecedents(false)");
             XSheetCellRanges getting = oObj.queryPrecedents(false);
+            CellRangeAddress[] range = getting.getRangeAddresses();
 
-            res = ((getting.getRangeAddresses()[1].StartColumn==0) && (getting.getRangeAddresses()[1].EndColumn==0) && (getting.getRangeAddresses()[1].StartRow==15) && (getting.getRangeAddresses()[1].EndRow==15));
+            res = ((range[miQueryThisPrecedentRange].StartColumn==miExpectedPrecedentValues[0]) &&
+                    (range[miQueryThisPrecedentRange].EndColumn==miExpectedPrecedentValues[1]) &&
+                   (range[miQueryThisPrecedentRange].StartRow==miExpectedPrecedentValues[2]) &&
+                   (range[miQueryThisPrecedentRange].EndRow==miExpectedPrecedentValues[3]));
 
             if (!res) {
-            log.println("Getting ("+(getting.getRangeAddresses()[1]).StartColumn
-            +","+(getting.getRangeAddresses()[1]).EndColumn
-            +","+(getting.getRangeAddresses()[1]).StartRow
-            +","+(getting.getRangeAddresses()[1]).EndRow+")"                       );
-            log.println("Expected (0,0,15,15)");
+                log.println("Getting ("
+                        +(range[miQueryThisPrecedentRange]).StartColumn+","
+                        +(range[miQueryThisPrecedentRange]).EndColumn+","
+                        +(range[miQueryThisPrecedentRange]).StartRow+","
+                        +(range[miQueryThisPrecedentRange]).EndRow+")");
+                log.println("Expected (" + miExpectedPrecedentValues[0] + "," +
+                                           miExpectedPrecedentValues[1] + "," +
+                                           miExpectedPrecedentValues[2] + "," +
+                                           miExpectedPrecedentValues[3] + ")");
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't set initial version to cell");
