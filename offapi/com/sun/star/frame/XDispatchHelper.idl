@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatchHelper.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
     are useful at the UI.
 
     @see XDispatch
+
+    @since #107627#
  */
 interface XDispatchHelper : com::sun::star::uno::XInterface
 {
