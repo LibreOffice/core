@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:58:12 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 13
 #define PAGE_DOCUMENTLINKS              RID_PAGE_START + 14
 #define PAGE_LDAP                       RID_PAGE_START + 15
+#define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
 
 //========================================================================
 // error boxes
@@ -426,6 +427,15 @@
 #define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STRING_START + 169
 #define STR_DIRECTSQL_CONNECTIONLOST        RID_STRING_START + 170
 
+#define STR_TABLE_PRIV_SELECT               RID_STRING_START + 169
+#define STR_TABLE_PRIV_INSERT               RID_STRING_START + 170
+#define STR_TABLE_PRIV_DELETE               RID_STRING_START + 171
+#define STR_TABLE_PRIV_UPDATE               RID_STRING_START + 172
+#define STR_TABLE_PRIV_ALTER                RID_STRING_START + 173
+#define STR_TABLE_PRIV_REFERENCE            RID_STRING_START + 174
+#define STR_TABLE_PRIV_DROP                 RID_STRING_START + 175
+#define STR_TABLE_PRIV_NAME                 RID_STRING_START + 176
+
 
 //========================================================================
 // untyped resources
@@ -440,6 +450,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.48  2001/06/19 10:58:12  fs
+ *  #88393# new direct sql dialog
+ *
  *  Revision 1.47  2001/05/29 13:11:51  oj
  *  #87149# addressbook ui impl
  *
