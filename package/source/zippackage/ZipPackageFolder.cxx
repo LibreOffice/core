@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
-#endif
-#ifndef _RTL_RANDOM_H_
-#include <rtl/random.h>
 #endif
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
@@ -283,7 +280,7 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any&
         throw NoSuchElementException();
     insertByName(aName, aElement);
 }
-void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, Sequence < sal_Int8 > &rEncryptionKey)
+void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool &rRandomPool)
     throw(RuntimeException)
 {
     Reference < XUnoTunnel > xTunnel;
@@ -297,12 +294,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     const OUString sSizeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
-
-    // Get a random number generator and seed it with current timestamp
-    TimeValue aTime;
-    osl_getSystemTime( &aTime );
-    rtlRandomPool aRandomPool = rtl_random_createPool ();
-    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
 
     for ( TunnelHash::const_iterator aCI = aContents.begin(), aEnd = aContents.end();
           aCI != aEnd;
@@ -363,7 +354,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             // know it's point at the beginning of the LOC
             ZipPackageFolder::copyZipEntry ( pFolder->aEntry, *pTempEntry );
             pFolder->aEntry.nOffset *= -1;
-            pFolder->saveContents(pTempEntry->sName, rManList, rZipOut, rEncryptionKey);
+            pFolder->saveContents(pTempEntry->sName, rManList, rZipOut, rEncryptionKey, rRandomPool);
             pFolder->aEntry.sName = rShortName;
         }
         else
@@ -386,8 +377,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             {
                 Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
                 Sequence < sal_Int8 > aKey ( 16 );
-                rtl_random_getBytes ( aRandomPool, aSalt.getArray(), 16 );
-                rtl_random_getBytes ( aRandomPool, aVector.getArray(), 8 );
+                rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
+                rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
                 sal_Int32 nIterationCount = 1024;
 
                 rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
