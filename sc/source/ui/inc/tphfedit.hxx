@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-24 16:10:13 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,17 @@ class EditTextObject;
 class SvxFieldItem;
 class ScAccessibleEditObject;
 
+enum ScEditWindowLocation
+{
+    Left,
+    Center,
+    Right
+};
+
 class ScEditWindow : public Control
 {
 public:
-            ScEditWindow( Window* pParent, const ResId& rResId );
+            ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc );
             ~ScEditWindow();
 
     void            SetFont( const ScPatternAttr& rPattern );
@@ -140,6 +147,7 @@ protected:
 private:
     ScHeaderEditEngine* pEdEngine;
     EditView*           pEdView;
+    ScEditWindowLocation eLocation;
 
     com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
