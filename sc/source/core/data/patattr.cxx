@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-22 11:39:28 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <svx/langitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/shdditem.hxx>
 #include <svx/udlnitem.hxx>
@@ -101,6 +102,12 @@
 // STATIC DATA -----------------------------------------------------------
 
 ScDocument* ScPatternAttr::pDoc = NULL;
+
+// -----------------------------------------------------------------------
+
+//! move to some header file
+inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 // -----------------------------------------------------------------------
 
@@ -211,7 +218,7 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) 
 }
 
 void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction* pScale,
-                                const SfxItemSet* pCondSet ) const
+                                const SfxItemSet* pCondSet, BYTE nScript ) const
 {
     //  Items auslesen
 
@@ -226,24 +233,47 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
     BOOL bShadow;
     Color aColor;
 
+    USHORT nFontId, nHeightId, nWeightId, nPostureId;
+    if ( nScript == SCRIPTTYPE_ASIAN )
+    {
+        nFontId    = ATTR_CJK_FONT;
+        nHeightId  = ATTR_CJK_FONT_HEIGHT;
+        nWeightId  = ATTR_CJK_FONT_WEIGHT;
+        nPostureId = ATTR_CJK_FONT_POSTURE;
+    }
+    else if ( nScript == SCRIPTTYPE_COMPLEX )
+    {
+        nFontId    = ATTR_CTL_FONT;
+        nHeightId  = ATTR_CTL_FONT_HEIGHT;
+        nWeightId  = ATTR_CTL_FONT_WEIGHT;
+        nPostureId = ATTR_CTL_FONT_POSTURE;
+    }
+    else
+    {
+        nFontId    = ATTR_FONT;
+        nHeightId  = ATTR_FONT_HEIGHT;
+        nWeightId  = ATTR_FONT_WEIGHT;
+        nPostureId = ATTR_FONT_POSTURE;
+    }
+
     if ( pCondSet )
     {
         const SfxPoolItem* pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT );
+        if ( pCondSet->GetItemState( nFontId, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( nFontId );
         pFontAttr = (const SvxFontItem*) pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT_HEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_HEIGHT );
+        if ( pCondSet->GetItemState( nHeightId, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( nHeightId );
         nFontHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_WEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_WEIGHT );
+        if ( pCondSet->GetItemState( nWeightId, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( nWeightId );
         eWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_POSTURE, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_POSTURE );
+        if ( pCondSet->GetItemState( nPostureId, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( nPostureId );
         eItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
@@ -268,13 +298,13 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
     }
     else    // alles aus rMySet
     {
-        pFontAttr = &(const SvxFontItem&)rMySet.Get( ATTR_FONT );
+        pFontAttr = &(const SvxFontItem&)rMySet.Get( nFontId );
         nFontHeight = ((const SvxFontHeightItem&)
-                        rMySet.Get( ATTR_FONT_HEIGHT )).GetHeight();
+                        rMySet.Get( nHeightId )).GetHeight();
         eWeight = (FontWeight)((const SvxWeightItem&)
-                        rMySet.Get( ATTR_FONT_WEIGHT )).GetValue();
+                        rMySet.Get( nWeightId )).GetValue();
         eItalic = (FontItalic)((const SvxPostureItem&)
-                        rMySet.Get( ATTR_FONT_POSTURE )).GetValue();
+                        rMySet.Get( nPostureId )).GetValue();
         eUnder = (FontUnderline)((const SvxUnderlineItem&)
                         rMySet.Get( ATTR_FONT_UNDERLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
@@ -356,13 +386,15 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
 
     const SfxItemSet& rMySet = GetItemSet();
 
-    SvxColorItem    aColorItem(EE_CHAR_COLOR);      // Item komplett uebernehmen
-    SvxFontItem     aFontItem(EE_CHAR_FONTINFO);    // Item komplett uebernehmen
-    long            nTHeight;                       // Twips
-    FontWeight      eWeight;
+    SvxColorItem    aColorItem(EE_CHAR_COLOR);              // use item as-is
+    SvxFontItem     aFontItem(EE_CHAR_FONTINFO);            // use item as-is
+    SvxFontItem     aCjkFontItem(EE_CHAR_FONTINFO_CJK);
+    SvxFontItem     aCtlFontItem(EE_CHAR_FONTINFO_CTL);
+    long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
+    FontWeight      eWeight, eCjkWeight, eCtlWeight;
     FontUnderline   eUnder;
     FontStrikeout   eStrike;
-    FontItalic      eItalic;
+    FontItalic      eItalic, eCjkItalic, eCtlItalic;
     BOOL            bOutline;
     BOOL            bShadow;
 
@@ -377,18 +409,42 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
         if ( pCondSet->GetItemState( ATTR_FONT, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT );
         aFontItem = *(const SvxFontItem*)pItem;
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CJK_FONT );
+        aCjkFontItem = *(const SvxFontItem*)pItem;
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CTL_FONT );
+        aCtlFontItem = *(const SvxFontItem*)pItem;
 
         if ( pCondSet->GetItemState( ATTR_FONT_HEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_HEIGHT );
         nTHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_HEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CJK_FONT_HEIGHT );
+        nCjkTHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_HEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CTL_FONT_HEIGHT );
+        nCtlTHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
 
         if ( pCondSet->GetItemState( ATTR_FONT_WEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_WEIGHT );
         eWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_WEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CJK_FONT_WEIGHT );
+        eCjkWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_WEIGHT, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CTL_FONT_WEIGHT );
+        eCtlWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_POSTURE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_POSTURE );
         eItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_POSTURE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CJK_FONT_POSTURE );
+        eCjkItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_POSTURE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CTL_FONT_POSTURE );
+        eCtlItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_UNDERLINE );
@@ -410,12 +466,26 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     {
         aColorItem = (const SvxColorItem&) rMySet.Get( ATTR_FONT_COLOR );
         aFontItem = (const SvxFontItem&) rMySet.Get( ATTR_FONT );
+        aCjkFontItem = (const SvxFontItem&) rMySet.Get( ATTR_CJK_FONT );
+        aCtlFontItem = (const SvxFontItem&) rMySet.Get( ATTR_CTL_FONT );
         nTHeight = ((const SvxFontHeightItem&)
                         rMySet.Get( ATTR_FONT_HEIGHT )).GetHeight();
+        nCjkTHeight = ((const SvxFontHeightItem&)
+                        rMySet.Get( ATTR_CJK_FONT_HEIGHT )).GetHeight();
+        nCtlTHeight = ((const SvxFontHeightItem&)
+                        rMySet.Get( ATTR_CTL_FONT_HEIGHT )).GetHeight();
         eWeight = (FontWeight)((const SvxWeightItem&)
                         rMySet.Get( ATTR_FONT_WEIGHT )).GetValue();
+        eCjkWeight = (FontWeight)((const SvxWeightItem&)
+                        rMySet.Get( ATTR_CJK_FONT_WEIGHT )).GetValue();
+        eCtlWeight = (FontWeight)((const SvxWeightItem&)
+                        rMySet.Get( ATTR_CTL_FONT_WEIGHT )).GetValue();
         eItalic = (FontItalic)((const SvxPostureItem&)
                         rMySet.Get( ATTR_FONT_POSTURE )).GetValue();
+        eCjkItalic = (FontItalic)((const SvxPostureItem&)
+                        rMySet.Get( ATTR_CJK_FONT_POSTURE )).GetValue();
+        eCtlItalic = (FontItalic)((const SvxPostureItem&)
+                        rMySet.Get( ATTR_CTL_FONT_POSTURE )).GetValue();
         eUnder = (FontUnderline)((const SvxUnderlineItem&)
                         rMySet.Get( ATTR_FONT_UNDERLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
@@ -428,32 +498,31 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
 
     // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72, und runden
 
-    long nHeight = (nTHeight * 127 + 36) / 72;          // 36==72/2
+    long nHeight = TwipsToHMM(nTHeight);
+    long nCjkHeight = TwipsToHMM(nCjkTHeight);
+    long nCtlHeight = TwipsToHMM(nCtlTHeight);
 
     //  Items in Edit-Set stecken
-
-    SvxFontItem aCjkFontItem(EE_CHAR_FONTINFO_CJK);
-    SvxFontItem aCtlFontItem(EE_CHAR_FONTINFO_CTL);
-    aCjkFontItem = aFontItem;
-    aCtlFontItem = aFontItem;
 
     pEditSet->Put( aColorItem );
     pEditSet->Put( aFontItem );
     pEditSet->Put( aCjkFontItem );
     pEditSet->Put( aCtlFontItem );
     pEditSet->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
-    pEditSet->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-    pEditSet->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+    pEditSet->Put( SvxFontHeightItem( nCjkHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+    pEditSet->Put( SvxFontHeightItem( nCtlHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
     pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT ) );
-    pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT_CJK ) );
-    pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT_CTL ) );
+    pEditSet->Put( SvxWeightItem    ( eCjkWeight,   EE_CHAR_WEIGHT_CJK ) );
+    pEditSet->Put( SvxWeightItem    ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
     pEditSet->Put( SvxUnderlineItem ( eUnder,       EE_CHAR_UNDERLINE ) );
     pEditSet->Put( SvxCrossedOutItem( eStrike,      EE_CHAR_STRIKEOUT ) );
     pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC ) );
-    pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC_CJK ) );
-    pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC_CTL ) );
+    pEditSet->Put( SvxPostureItem   ( eCjkItalic,   EE_CHAR_ITALIC_CJK ) );
+    pEditSet->Put( SvxPostureItem   ( eCtlItalic,   EE_CHAR_ITALIC_CTL ) );
     pEditSet->Put( SvxContourItem   ( bOutline,     EE_CHAR_OUTLINE ) );
     pEditSet->Put( SvxShadowedItem  ( bShadow,      EE_CHAR_SHADOW ) );
+
+    //! language...
 }
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
@@ -463,35 +532,58 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 
     if (pEditSet->GetItemState(EE_CHAR_COLOR,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxColorItem(ATTR_FONT_COLOR) = *(const SvxColorItem*)pItem );
+
     if (pEditSet->GetItemState(EE_CHAR_FONTINFO,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxFontItem(ATTR_FONT) = *(const SvxFontItem*)pItem );
-    if (pEditSet->GetItemState(EE_CHAR_FONTHEIGHT,TRUE,&pItem) == SFX_ITEM_SET)
-    {
-        // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72
+    if (pEditSet->GetItemState(EE_CHAR_FONTINFO_CJK,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxFontItem(ATTR_CJK_FONT) = *(const SvxFontItem*)pItem );
+    if (pEditSet->GetItemState(EE_CHAR_FONTINFO_CTL,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxFontItem(ATTR_CTL_FONT) = *(const SvxFontItem*)pItem );
 
-        long nMHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
-//      long nHeight = ( nMHeight * 72 ) / 127;     // Rundungsfehler!
-        long nHeight = (nMHeight * 72 + 63) / 127;  // 63==127/2
-        rMySet.Put( SvxFontHeightItem( nHeight, 100, ATTR_FONT_HEIGHT ) );
-    }
+    if (pEditSet->GetItemState(EE_CHAR_FONTHEIGHT,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxFontHeightItem( HMMToTwips( ((const SvxFontHeightItem*)pItem)->GetHeight() ),
+                        100, ATTR_FONT_HEIGHT ) );
+    if (pEditSet->GetItemState(EE_CHAR_FONTHEIGHT_CJK,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxFontHeightItem( HMMToTwips( ((const SvxFontHeightItem*)pItem)->GetHeight() ),
+                        100, ATTR_CJK_FONT_HEIGHT ) );
+    if (pEditSet->GetItemState(EE_CHAR_FONTHEIGHT_CTL,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxFontHeightItem( HMMToTwips( ((const SvxFontHeightItem*)pItem)->GetHeight() ),
+                        100, ATTR_CTL_FONT_HEIGHT ) );
+
     if (pEditSet->GetItemState(EE_CHAR_WEIGHT,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_FONT_WEIGHT) );
+    if (pEditSet->GetItemState(EE_CHAR_WEIGHT_CJK,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
+                        ATTR_CJK_FONT_WEIGHT) );
+    if (pEditSet->GetItemState(EE_CHAR_WEIGHT_CTL,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
+                        ATTR_CTL_FONT_WEIGHT) );
+
     if (pEditSet->GetItemState(EE_CHAR_UNDERLINE,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxUnderlineItem( (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue(),
                         ATTR_FONT_UNDERLINE) );
     if (pEditSet->GetItemState(EE_CHAR_STRIKEOUT,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxCrossedOutItem( (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue(),
                         ATTR_FONT_CROSSEDOUT) );
+
     if (pEditSet->GetItemState(EE_CHAR_ITALIC,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxPostureItem( (FontItalic)((const SvxPostureItem*)pItem)->GetValue(),
                         ATTR_FONT_POSTURE) );
+    if (pEditSet->GetItemState(EE_CHAR_ITALIC_CJK,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxPostureItem( (FontItalic)((const SvxPostureItem*)pItem)->GetValue(),
+                        ATTR_CJK_FONT_POSTURE) );
+    if (pEditSet->GetItemState(EE_CHAR_ITALIC_CTL,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxPostureItem( (FontItalic)((const SvxPostureItem*)pItem)->GetValue(),
+                        ATTR_CTL_FONT_POSTURE) );
+
     if (pEditSet->GetItemState(EE_CHAR_OUTLINE,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxContourItem( ((const SvxContourItem*)pItem)->GetValue(),
                         ATTR_FONT_CONTOUR) );
     if (pEditSet->GetItemState(EE_CHAR_SHADOW,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxShadowedItem( ((const SvxShadowedItem*)pItem)->GetValue(),
                         ATTR_FONT_SHADOWED) );
+
     if (pEditSet->GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
     {
         SvxCellHorJustify eVal;
