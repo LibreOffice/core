@@ -2,11 +2,11 @@
  *
  *  $RCSfile: osl_process.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:50:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 09:00:52 $
  *
- *  The Contents of this file are made available subject to the terms of
+ *  The Contents of this file are made available subject to the terms ofexecProc_merged_child_environment
  *  either of the following licenses
  *
  *         - GNU Lesser General Public License Version 2.1
@@ -126,17 +126,19 @@ inline ::rtl::OUString getExecutablePath( void )
     osl::Module::getUrlFromAddress( ( void* ) &getExecutablePath, dirPath );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
-    dirPath += rtl::OUString::createFromAscii("bin/");
+    dirPath += rtl::OUString::createFromAscii("bin");
     return dirPath;
 }
 
-rtl::OUString CWD = getExecutablePath();
+//rtl::OUString CWD = getExecutablePath();
 
 //########################################
 class Test_osl_joinProcess : public CppUnit::TestFixture
 {
     const OUString join_param_;
     const OUString wait_time_;
+    OUString suCWD;
+    OUString suExecutableFileURL;
 
     rtl_uString* parameters_[2];
     int          parameters_count_;
@@ -150,6 +152,10 @@ public:
     {
         parameters_[0] = join_param_.pData;
         parameters_[1] = wait_time_.pData;
+        suCWD = getExecutablePath();
+        suExecutableFileURL = suCWD;
+        suExecutableFileURL += rtl::OUString::createFromAscii("/");
+        suExecutableFileURL += EXECUTABLE_NAME;
     }
 
     /*-------------------------------------
@@ -163,12 +169,12 @@ public:
     {
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
-            EXECUTABLE_NAME.pData,
+            suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
             osl_getCurrentSecurity(),
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
@@ -213,12 +219,12 @@ public:
     {
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
-            EXECUTABLE_NAME.pData,
+            suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
             osl_getCurrentSecurity(),
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
@@ -253,12 +259,12 @@ public:
     {
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
-            EXECUTABLE_NAME.pData,
+            suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
             osl_getCurrentSecurity(),
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
@@ -289,12 +295,12 @@ public:
     {
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
-            EXECUTABLE_NAME.pData,
+            suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
             osl_getCurrentSecurity(),
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
@@ -402,6 +408,8 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
     OUString     temp_file_path_;
     rtl_uString* parameters_[2];
     int          parameters_count_;
+    OUString    suCWD;
+    OUString    suExecutableFileURL;
 
 public:
 
@@ -412,6 +420,10 @@ public:
         parameters_count_(2)
     {
         parameters_[0] = env_param_.pData;
+        suCWD = getExecutablePath();
+        suExecutableFileURL = suCWD;
+        suExecutableFileURL += rtl::OUString::createFromAscii("/");
+        suExecutableFileURL += EXECUTABLE_NAME;
     }
 
     //------------------------------------------------
@@ -527,12 +539,12 @@ public:
     {
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
-            EXECUTABLE_NAME.pData,
+            suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
             NULL,
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
@@ -553,16 +565,16 @@ public:
 
         osl_freeProcessHandle(process);
 
-     /*   CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_MESSAGE
         (
             "Parent an child environment not equal",
             compare_environments()
-        );*/
+        );
     }
 
     //------------------------------------------------
     #define ENV1 "PAT=a:\\"
-    #define ENV2 "PATH=b:\\"
+    #define ENV2 "PATHb=b:\\"
     #define ENV3 "Patha=c:\\"
     #define ENV4 "Patha=d:\\"
 
@@ -581,12 +593,12 @@ public:
 
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
-            EXECUTABLE_NAME.pData,
+            suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
             NULL,
-            CWD.pData,
+            suCWD.pData,
             child_env,
             sizeof(child_env)/sizeof(child_env[0]),
             &process);
@@ -612,24 +624,24 @@ public:
         different_child_env_vars.push_back(ENV2);
         different_child_env_vars.push_back(ENV4);
 
-       /* CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_MESSAGE
         (
             "osl_execProc_merged_child_environment",
             compare_merged_environments(different_child_env_vars)
-        ); */
+        );
     }
 
     void osl_execProc_test_batch()
     {
         oslProcess process;
-        rtl::OUString batch = rtl::OUString::createFromAscii("batch.bat");
+        rtl::OUString suBatch = suCWD + rtl::OUString::createFromAscii("/") + rtl::OUString::createFromAscii("batch.bat");
         oslProcessError osl_error = osl_executeProcess(
-            batch.pData,
+            suBatch.pData,
             NULL,
             0,
             osl_Process_NORMAL,
             NULL,
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
@@ -655,10 +667,9 @@ public:
     {
         rtl_uString* params[3];
 
-        params[0] = EXECUTABLE_NAME.pData;
+        params[0] = suExecutableFileURL.pData;
         params[1] = env_param_.pData;
         params[2] = temp_file_path_.pData;
-
         oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
             NULL,
@@ -666,7 +677,7 @@ public:
             3,
             osl_Process_NORMAL,
             NULL,
-            CWD.pData,
+            suCWD.pData,
             NULL,
             0,
             &process);
