@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 14:44:36 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:00:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,10 @@ dummy:
 
 SLOFILES=	\
         $(SLO)/FWS.obj $(SLO)/salframe.obj $(SLO)/salobj.obj $(SLO)/salmenu.obj
+
+.IF "$(WITH_WIDGETSET)"!=""
+CFLAGS+= $(WIDGETSET_CFLAGS)
+.ENDIF
 
 .ENDIF		# "$(GUIBASE)"!="unx"
 
