@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: jp $ $Date: 2001-04-11 16:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,12 +523,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
                                             IsInsTblFormatNum( bWebView )));
             break;
             case FN_QRY_MERGE:
-            {
-                SwView *pView = ::GetActiveView();
-                if(!pView || !GetView()->GetWrtShell().GetDBData().sDataSource.getLength())
+                if(!pActView || !pActView->GetWrtShell().GetDBData().sDataSource.getLength())
                     rSet.DisableItem(nWhich);
-            }
-            break;
+                break;
             default:
                 DBG_ERROR("::StateOther: default");
         }
