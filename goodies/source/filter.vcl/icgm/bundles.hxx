@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bundles.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ public:
 
 // ---------------------------------------------------------------
 
-class FontList
+class CGMFList
 {
     sal_uInt32              nFontNameCount;
     sal_uInt32              nCharSetCount;
@@ -198,9 +198,9 @@ public:
     FontEntry*          GetFontEntry( sal_uInt32 );
     void                InsertName( sal_uInt8* pSource, sal_uInt32 nSize );
     void                InsertCharSet( CharSetType, sal_uInt8* pSource, sal_uInt32 nSize );
-                        FontList();
-    FontList&           operator=( FontList& rFontList );
-                        ~FontList();
+                        CGMFList();
+    CGMFList&           operator=( CGMFList& rFontList );
+                        ~CGMFList();
 };
 
 

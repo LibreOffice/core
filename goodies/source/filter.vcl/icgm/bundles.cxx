@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bundles.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ FontEntry::~FontEntry()
 
 // ---------------------------------------------------------------
 
-FontList::FontList() :
+CGMFList::CGMFList() :
     nFontsAvailable     ( 0 ),
     nFontNameCount      ( 0 ),
     nCharSetCount       ( 0 )
@@ -155,14 +155,14 @@ FontList::FontList() :
     aFontEntryList.Clear();
 }
 
-FontList::~FontList()
+CGMFList::~CGMFList()
 {
     ImplDeleteList();
 }
 
 // ---------------------------------------------------------------
 
-FontList& FontList::operator=( FontList& rSource )
+CGMFList& CGMFList::operator=( CGMFList& rSource )
 {
     ImplDeleteList();
     nFontsAvailable = rSource.nFontsAvailable;
@@ -194,7 +194,7 @@ FontList& FontList::operator=( FontList& rSource )
 
 // ---------------------------------------------------------------
 
-FontEntry* FontList::GetFontEntry( sal_uInt32 nIndex )
+FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
 {
     sal_uInt32 nInd = nIndex;
     if ( nInd )
@@ -221,7 +221,7 @@ static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8* pDest, sal_uInt32
     return NULL;
 }
 
-void FontList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
+void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
     if ( nFontsAvailable == nFontNameCount )
@@ -284,7 +284,7 @@ void FontList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
 
 //--------------------------------------------------------------------------
 
-void FontList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_uInt32 nSize )
+void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
     if ( nFontsAvailable == nCharSetCount )
@@ -306,7 +306,7 @@ void FontList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
 
 // ---------------------------------------------------------------
 
-void FontList::ImplDeleteList()
+void CGMFList::ImplDeleteList()
 {
     FontEntry* pFontEntry = (FontEntry*)aFontEntryList.First();
     while( pFontEntry )

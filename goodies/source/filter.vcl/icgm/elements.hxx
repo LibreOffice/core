@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class CGMElements
         long                nCharacterSetIndex;
         long                nAlternateCharacterSetIndex;
         CharacterCodingA    eCharacterCodingA;
-        FontList            aFontList;
+        CGMFList            aFontList;
 
         FillBundle*         pFillBundle;        // Pointer to the current EdgeBundleIndex
         FillBundle          aFillBundle;
