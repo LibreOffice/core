@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:27:03 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,9 @@
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
-#ifndef DBUI_TABLECONTROLLER_HXX
-#include "TableController.hxx"
-#endif
 
 class Edit;
+class SfxUndoManager;
 namespace dbaui
 {
     class OTableDescWin;
@@ -170,7 +168,7 @@ namespace dbaui
         virtual         ~OTableEditorCtrl();
         virtual BOOL    CursorMoving(long nNewRow, USHORT nNewCol);
         virtual void    UpdateAll();
-        SfxUndoManager* GetUndoManager() const { return GetView()->getController()->getUndoMgr(); }
+        SfxUndoManager* GetUndoManager() const;
 
         void            SetDescrWin( OTableFieldDescWin* pWin ){ pDescrWin = pWin; if (pDescrWin && pActRow) pDescrWin->DisplayData(pActRow->GetActFieldDescr()); }
         BOOL            SaveCurRow();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 07:39:15 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef DBAUI_TABLEUNDO_HXX
 #include "TableUndo.hxx"
+#endif
+#ifndef DBUI_TABLECONTROLLER_HXX
+#include "TableController.hxx"
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -263,6 +266,12 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
     m_nClipboardFormat = Clipboard::RegisterFormatName( String::CreateFromAscii("Tabed") );
     m_pRowList = GetView()->getController()->getRows();
     m_nDataPos = 0;
+}
+
+//------------------------------------------------------------------------------
+SfxUndoManager* OTableEditorCtrl::GetUndoManager() const
+{
+    return GetView()->getController()->getUndoMgr();
 }
 
 //------------------------------------------------------------------------------

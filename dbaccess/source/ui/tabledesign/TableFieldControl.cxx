@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef DBAUI_TABLEFIELDCONTROL_HXX
 #include "TableFieldControl.hxx"
+#endif
+#ifndef DBUI_TABLECONTROLLER_HXX
+#include "TableController.hxx"
 #endif
 #ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #include "TableDesignView.hxx"
