@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-15 09:25:19 $
+ *  last change: $Author: pb $ $Date: 2002-04-05 08:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ BOOL SfxOrganizeListBox_Impl::bDropMoveOk = TRUE;
 
 //=========================================================================
 
-
 class SuspendAccel
 {
 public:
@@ -158,8 +157,9 @@ class SfxOrganizeDlg_Impl
 friend class SfxTemplateOrganizeDlg;
 friend class SfxOrganizeListBox_Impl;
 
-    SuspendAccel            *pSuspend;
+    SuspendAccel*           pSuspend;
     SfxTemplateOrganizeDlg* pDialog;
+    SvLBox*                 pSourceView;
 
     SfxOrganizeListBox_Impl aLeftLb;
     ListBox                 aLeftTypLb;
@@ -172,9 +172,6 @@ friend class SfxOrganizeListBox_Impl;
     HelpButton              aHelpBtn;
     PushButton              aAddressTemplateBtn;
     PushButton              aFilesBtn;
-
-//    FixedText               aDefaultTemplateLabel;
-//    FixedInfo               aDefaultTemplate;
 
     Accelerator             aEditAcc;
 
@@ -221,7 +218,9 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aEditBtn( pParent, ResId( BTN_EDIT ) ),
     aMgr(&aLeftLb, &aRightLb, pTempl),
     pFocusBox(0),
-    pPrt(0)
+    pPrt(0),
+    pSourceView( NULL )
+
 {
     // update the SfxDocumentTemplates the manager works with
     if ( aMgr.GetTemplates() )  // should never fail, but who knows ....
@@ -830,7 +829,10 @@ BOOL SfxOrganizeListBox_Impl::NotifyMoving(SvLBoxEntry *pTarget,
 
 {
     BOOL bOk =  FALSE;
-    SvLBox *pSourceBox = GetSourceView();
+    SvLBox* pSourceBox = GetSourceView();
+    if ( !pSourceBox )
+        pSourceBox = pDlg->pSourceView;
+    DBG_ASSERT( pSourceBox, "no source view" );
     if(pSourceBox->GetModel()->GetDepth(pSource) <= GetDocLevel() &&
         GetModel()->GetDepth(pTarget) <= GetDocLevel())
         bOk = MoveOrCopyTemplates(pSourceBox, pSource, pTarget,
@@ -884,7 +886,10 @@ BOOL SfxOrganizeListBox_Impl::NotifyCopying(SvLBoxEntry *pTarget,
 */
 {
     BOOL bOk =  FALSE;
-    SvLBox *pSourceBox = GetSourceView();
+    SvLBox* pSourceBox = GetSourceView();
+    if ( !pSourceBox )
+        pSourceBox = pDlg->pSourceView;
+    DBG_ASSERT( pSourceBox, "no source view" );
     if(pSourceBox->GetModel()->GetDepth(pSource) <= GetDocLevel() &&
         GetModel()->GetDepth(pTarget) <= GetDocLevel())
         bOk = MoveOrCopyTemplates(pSourceBox, pSource, pTarget,
@@ -1066,9 +1071,12 @@ sal_Int8 SfxOrganizeListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     bDropMoveOk = TRUE;
     sal_Int8 nRet = rEvt.mnAction;
     if ( !bSuccess )
+    {
         // asynchronous, because of MessBoxes
+        pDlg->pSourceView = GetSourceView();
         PostUserEvent( LINK( this, SfxOrganizeListBox_Impl, OnAsyncExecuteDrop ),
                        new ExecuteDropEvent( rEvt ) );
+    }
 
     return nRet;
 }
@@ -1305,8 +1313,12 @@ IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEven
     DBG_ASSERT( pEvent, "invalid DropEvent" );
     if ( pEvent )
     {
-        SvTreeListBox::ExecuteDrop( *pEvent );
+        SvLBox* pSourceView = GetSourceView();
+        if ( !pSourceView )
+            pSourceView = pDlg->pSourceView;
+        SvTreeListBox::ExecuteDrop( *pEvent, pSourceView );
         delete pEvent;
+        pDlg->pSourceView = NULL;
     }
     return 0;
 }
