@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:47:01 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,9 @@ void SwTableHeightDlg::Apply()
 
     SwFrmSize eFrmSize = (SwFrmSize) aAutoHeightCB.IsChecked() ?
         ATT_MIN_SIZE : ATT_FIX_SIZE;
-    if(eFrmSize != aSz.GetSizeType())
+    if(eFrmSize != aSz.GetHeightSizeType())
     {
-        aSz.SetSizeType(eFrmSize);
+        aSz.SetHeightSizeType(eFrmSize);
     }
     rSh.SetRowHeight( aSz );
 }
@@ -160,7 +160,7 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
     if ( pSz )
     {
         long nHeight = pSz->GetHeight();
-        aAutoHeightCB.Check(pSz->GetSizeType() != ATT_FIX_SIZE);
+        aAutoHeightCB.Check(pSz->GetHeightSizeType() != ATT_FIX_SIZE);
         aHeightEdit.SetValue(aHeightEdit.Normalize(nHeight), FUNIT_TWIP);
 
         delete pSz;
