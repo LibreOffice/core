@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:55:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,8 +976,15 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
                 SfxViewFrame* pView = pCurFrame->GetCurrentViewFrame();
                 if ( pView && pView != pViewFrame )
                 {
-                    pFrame = pView;
-                    break;
+                    if ( !pView->GetViewShell() )
+                    {
+                        DBG_ERROR("Attention: this bug is very hard to reproduce. Please try to remember how you triggered it!");
+                    }
+                    else
+                    {
+                        pFrame = pView;
+                        break;
+                    }
                 }
             }
         }
@@ -1039,8 +1046,6 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
 
         pViewFrame = pFrame;
 
-        SfxWorkWindow* pWork = pViewFrame ? pViewFrame->GetFrame()->GetWorkWindow_Impl() : NULL;
-        Window* pWin = pWork ? pWork->GetTopWindow() : NULL;
         const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
         if ( !pSh )
         {
@@ -1053,7 +1058,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         if( pNewContainerFrame )
         {
             pNewContainerFrame->DoActivate( bTaskActivate );
-            if ( bTaskActivate )
+            if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl();
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();
@@ -1065,7 +1070,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
                     pProgress->SetState( pProgress->GetState() );
             }
 
-            if ( !pNew )
+            if ( !pNew && pViewFrame->GetViewShell() )
             {
                 SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
                 pDisp->Flush();
