@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 class SwLayoutFrm;
 class SwPageFrm;
 class SwCntntNode;
-class Sw3FrameIo;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
 class SwAttrSetChg;
@@ -102,13 +101,10 @@ protected:
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     SwCntntFrm( SwCntntNode * const );
-    SwCntntFrm( Sw3FrameIo&, SwLayoutFrm* );
 
 public:
     virtual ~SwCntntFrm();
     TYPEINFO(); //bereits in Basisklassen drin
-
-    virtual void Store( Sw3FrameIo& ) const;
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

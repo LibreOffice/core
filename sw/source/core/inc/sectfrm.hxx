@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,8 @@ protected:
 public:
     SwSectionFrm( SwSection & );                 //Inhalt wird nicht erzeugt!
     SwSectionFrm( SwSectionFrm &, BOOL bMaster );//_Nur_ zum Erzeugen von Master/Follows
-    SwSectionFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwSectionFrm();
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );

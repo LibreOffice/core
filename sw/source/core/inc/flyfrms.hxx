@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 13:56:32 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,9 @@ protected:
 
 
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
-    SwFlyFreeFrm( Sw3FrameIo&, SwLayoutFrm* );
 public:
 
     virtual ~SwFlyFreeFrm();
-    virtual void Store( Sw3FrameIo& ) const;
 
     virtual void MakeAll();
 
@@ -97,9 +95,7 @@ class SwFlyLayFrm : public SwFlyFreeFrm
 public:
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
-    SwFlyLayFrm( Sw3FrameIo&, SwLayoutFrm* );
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
 };
@@ -116,9 +112,7 @@ protected:
     virtual void MakeFlyPos();
 public:
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
-    SwFlyAtCntFrm( Sw3FrameIo&, SwLayoutFrm* );
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     void SetAbsPos( const Point &rNew );
@@ -155,10 +149,8 @@ protected:
 
 public:
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
-    SwFlyInCntFrm( Sw3FrameIo&, SwLayoutFrm* );
 
     virtual ~SwFlyInCntFrm();
-    virtual void  Store( Sw3FrameIo& ) const;
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 );
     virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include "layfrm.hxx"
 
 class SwTableBox;
-class Sw3FrameIo;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
 
@@ -81,10 +80,8 @@ protected:
 
 public:
     SwCellFrm( const SwTableBox & );
-    SwCellFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwCellFrm();
 
-    virtual void   Store( Sw3FrameIo& ) const;
     virtual BOOL   GetCrsrOfst( SwPosition *, Point&,
                                 const SwCrsrMoveState* = 0 ) const;
     virtual void   Modify( SfxPoolItem*, SfxPoolItem* );

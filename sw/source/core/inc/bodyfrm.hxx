@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bodyfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #include "layfrm.hxx"
 
-class Sw3FrameIo;
 class SwBorderAttrs;
 
 class SwBodyFrm: public SwLayoutFrm
@@ -80,9 +79,7 @@ protected:
 #endif
 public:
     SwBodyFrm( SwFrmFmt* );
-    SwBodyFrm( Sw3FrameIo&, SwLayoutFrm* );
 
-    virtual void   Store( Sw3FrameIo& ) const;
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };
 

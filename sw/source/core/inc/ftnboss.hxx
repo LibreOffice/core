@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnboss.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ class SwFtnBossFrm: public SwLayoutFrm
     SwFtnFrm     *FindFirstFtn();
     BYTE _NeighbourhoodAdjustment( const SwFrm* pFrm ) const;
 protected:
-    inline SwFtnBossFrm( Sw3FrameIo& rFr, SwLayoutFrm* pLay) : SwLayoutFrm( rFr, pLay ) {}
 
     void          InsertFtn( SwFtnFrm * );
     static void   ResetFtn( const SwFtnFrm *pAssumed );

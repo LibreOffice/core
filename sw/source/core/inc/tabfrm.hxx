@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include "flowfrm.hxx"
 
 class SwTable;
-class Sw3FrameIo;
 class SwBorderAttrs;
 class SwAttrSetChg;
 
@@ -121,7 +120,6 @@ public:
     SwTabFrm( SwTable & );  //Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
     SwTabFrm( SwTabFrm & ); //_Nur_ zum erzeugen von Follows
-    SwTabFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwTabFrm();
 
     void JoinAndDelFollows();   //Fuer DelFrms des TableNodes!
@@ -134,7 +132,6 @@ public:
     inline const SwTabFrm *FindMaster() const;
     inline       SwTabFrm *FindMaster();
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( const SwRect& ) const;

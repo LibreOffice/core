@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,12 @@
 
 #include "layfrm.hxx"
 
-class Sw3FrameIo;
 
 class SwHeaderFrm: public SwLayoutFrm
 {
 public:
     SwHeaderFrm( SwFrmFmt* );
-    SwHeaderFrm( Sw3FrameIo&, SwLayoutFrm* );
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, const SzPtr,
@@ -88,9 +85,7 @@ class SwFooterFrm: public SwLayoutFrm
 {
 public:
     SwFooterFrm( SwFrmFmt* );
-    SwFooterFrm( Sw3FrameIo&, SwLayoutFrm* );
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );

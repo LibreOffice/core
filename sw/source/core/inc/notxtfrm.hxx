@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #endif
 
 class SwNoTxtNode;
-class Sw3FrameIo;
 class OutputDevice;
 class SwBorderAttrs;
 class Bitmap;
@@ -90,10 +89,8 @@ protected:
     virtual void MakeAll();
 public:
     SwNoTxtFrm( SwNoTxtNode * const );
-    SwNoTxtFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwNoTxtFrm();
 
-    virtual void Store( Sw3FrameIo& ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void Paint(const SwRect& ) const;
     virtual BOOL GetCharRect( SwRect &, const SwPosition&,

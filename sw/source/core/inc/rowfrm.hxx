@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include "layfrm.hxx"
 
 class SwTableLine;
-class Sw3FrameIo;
 class SwBorderAttrs;
 
 class SwRowFrm: public SwLayoutFrm
@@ -87,10 +86,7 @@ protected:
 
 public:
     SwRowFrm( const SwTableLine & );
-    SwRowFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwRowFrm();
-
-    virtual void   Store( Sw3FrameIo& ) const;
 
     virtual void Cut();
     virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
