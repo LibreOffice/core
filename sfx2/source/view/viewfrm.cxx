@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:50:50 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #include <stdio.h>
 
 #include "viewfrm.hxx"
+
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
@@ -670,7 +674,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxMedium *pMedium = xOldObj->GetMedium();
 
                 // Frameset abziehen, bevor FramesetView evtl. verschwindet
-                SFX_REQUEST_ARG(rReq, pNoCacheItem, SfxBoolItem, SID_NOCACHE, sal_False);
                 String aURL = pURLItem ? pURLItem->GetValue() :
                                 pMedium->GetName();
 
@@ -724,20 +727,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 const SfxObjectFactory* pFactory = 0;
 
-                // Wenn OrigURL mitkam nicht Filter verwenden, denn dann
-                // kann es sich um die sba Geschichten handeln.
-                SFX_ITEMSET_ARG( pNewSet, pOrigURL, SfxStringItem, SID_ORIGURL, sal_False);
-                sal_Bool bUseFilter = !pOrigURL && !pURLItem;
+                sal_Bool bUseFilter = !pURLItem;
 
                 // Falls eine salvagede Datei vorliegt, nicht nochmals die
                 // OrigURL mitschicken, denn die Tempdate ist nach Reload
                 // ungueltig
                 SFX_ITEMSET_ARG( pNewSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
-
-                if( pSalvageItem && pOrigURL )
+                if( pSalvageItem )
                 {
-                    if( !pURLItem ) aURL = pOrigURL->GetValue();
-                    pNewSet->ClearItem( SID_ORIGURL );
+                    aURL = pSalvageItem->GetValue();
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
@@ -752,14 +750,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 else
                     pNewSet->Put( SfxStringItem( SID_REFERER, String() ) );
 
-                SFX_REQUEST_ARG( rReq, pBindingItem, SfxRefItem, SID_BINDING, sal_False);
-                if( pBindingItem )
-                    DBG_ERROR( "Not implemented!" );
-
                 xOldObj->CancelTransfers();
-                pNewMedium->SetUsesCache(
-                    xOldObj->Get_Impl()->bReloadAvailable ||
-                    pNoCacheItem && !pNoCacheItem->GetValue() );
 
                 // eigentliches Reload
                 pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
@@ -799,9 +790,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( bHandsOff )
                     xOldObj->DoHandsOff();
 
-                xLoader->Start();
-                while( xLoader->GetState() != LoadEnvironment_Impl::DONE )
-                    Application::Yield();
+                sal_uInt32 nLoadError = xLoader->Start();
 
                 // hat reload nicht geklappt?
                 xNewObj = xLoader->GetObjectShell();
@@ -844,12 +833,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         // an error handling should be done here
                         if ( !pSilentItem || !pSilentItem->GetValue() )
-                            ErrorHandler::HandleError( xLoader->GetError() );
+                            ErrorHandler::HandleError( nLoadError );
                     }
                 }
                 else
                 {
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
+                    UpdateDocument_Impl();
                 }
 
                 DELETEZ( pSaveItemSet );
@@ -859,9 +849,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 if( !bDeleted )
                 {
-/*                    if( GetFrame()->GetLoadEnvironment_Impl() == &xLoader )
-                        GetFrame()->SetLoadEnvironment_Impl( 0 );*/
-
                     GetBindings().Invalidate( SID_RELOAD );
                     pImp->bReloading = sal_False;
                 }
@@ -1603,7 +1590,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if ( rHint.IsA(TYPE(SfxEventHint)) )
     {
         // Wenn das Document asynchron geladen wurde, wurde der Dispatcher
-        // auf ReadOnly gesetzt, was zur"ckgenommen werden mu\s, wenn
+        // auf ReadOnly gesetzt, was zur"?ckgenommen werden mu\s, wenn
         // das Document selbst nicht ReadOnly ist und das Laden fertig ist.
         switch ( ((SfxEventHint&)rHint).GetEventId() )
         {
@@ -1744,7 +1731,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     SfxViewFrame *pThis = this; // wegen der kranken Array-Syntax
     SfxViewFrameArr_Impl &rViewArr = SFX_APP()->GetViewFrames_Impl();
     rViewArr.C40_INSERT(SfxViewFrame, pThis, rViewArr.Count() );
-
     pImp->bInCtor = sal_False;
 }
 
@@ -2173,8 +2159,6 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
         else
         {
             Window *pWindow = &GetFrame()->GetTopFrame()->GetWindow();
-            while ( !pWindow->IsSystemWindow() )
-                pWindow = pWindow->GetParent();
             pWindow->EnableInput( bEnable, TRUE );
         }
 
@@ -4052,6 +4036,27 @@ SfxImageManager* SfxViewFrame::GetImageManager()
 SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
 {
     return pImp->pMacro;
+}
+
+void SfxViewFrame::UpdateDocument_Impl()
+{
+    BOOL bHasMacros = FALSE;
+    SvStorage* pStor = GetObjectShell()->GetStorage();
+    if ( pStor->IsOLEStorage() )
+        bHasMacros = BasicManager::HasBasicWithModules( *pStor );
+    else
+        bHasMacros = pStor->IsStorage( String::CreateFromAscii("Basic") );
+
+    if ( bHasMacros )
+        GetObjectShell()->AdjustMacroMode( String() );
+    else
+    {
+        // if macros will be added by the user later, the security check is obsolete
+        GetObjectShell()->Get_Impl()->nMacroMode = ::com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    }
+
+    // check if document depends from a template
+    GetObjectShell()->UpdateFromTemplate_Impl();
 }
 
 BOOL SfxViewFrame::ClearEventFlag_Impl()
