@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-19 10:53:21 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,15 @@ UnoBackend createOnlineBackend(ConnectionSettings const & _aSettings, CreationCo
 }
 // -------------------------------------------------------------------------
 
-static
-UnoBackend createUnoBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx)
+UnoBackend BackendFactory::createDefaultUnoBackend(CreationContext const & _xCtx)
+{
+    BootstrapSettings aBootstrapData( getBootstrapContext(_xCtx) );
+
+    return createUnoBackend(aBootstrapData.settings,_xCtx);
+}
+// -------------------------------------------------------------------------
+
+UnoBackend BackendFactory::createUnoBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx)
 {
     UnoInitArgs aArguments = createInitArgs(_aSettings);
 
