@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.54 $
- *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:47 $
+ *  $Revision: 1.55 $
+ *  last change: $Author: hdu $ $Date: 2001-07-09 16:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,6 +1294,14 @@ ULONG SalGraphics::GetKernPairs( ULONG              nPairs,
 
     return 0;
 } // SalGraphics::GetKernPairs
+
+// -----------------------------------------------------------------------
+
+ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    // TODO: try to get the necessary info from Aqua
+    return 0;
+} // SalGraphics::GetFontCodeRanges
 
 // -----------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:34 $
+ *  last change: $Author: hdu $ $Date: 2001-07-09 16:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,14 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
     // kann
     nPairs = GpiQueryKerningPairs( maGraphicsData.mhPS, nPairs, (KERNINGPAIRS*)pKernPairs );
     return nPairs;
+}
+
+// -----------------------------------------------------------------------
+
+ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    // TODO: try to get the necessary info
+    return 0;
 }
 
 // -----------------------------------------------------------------------
