@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-06 13:23:44 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 16:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #endif
 #ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
 #include <tools/solmath.hxx>
+#endif
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+#ifndef _INTN_HXX //autogen
+#include <tools/intn.hxx>
 #endif
 
 #include <vector>
@@ -198,6 +204,8 @@ class SbiInstance
     SbiDllMgr*      pDllMgr;        // DLL-Calls (DECLARE)
     StarBASIC*      pBasic;
     SvNumberFormatter* pNumberFormatter;
+    LanguageType    meFormatterLangType;
+    DateFormat      meFormatterDateFormat;
     ULONG           nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
     SbError         nErr;           // aktueller Fehlercode
@@ -251,7 +259,8 @@ public:
 
     // #39629# NumberFormatter auch statisch anbieten
     static void PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
-        ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx );
+        ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx,
+        LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
 };
 
 SbiIoSystem* SbGetIoSystem();       // das aktuelle I/O-System

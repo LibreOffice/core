@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:17:50 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 16:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <svtools/zforlist.hxx>
 #endif
 #include <svtools/sbx.hxx>
+#include <svtools/syslocale.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
 #include "sbintern.hxx"
@@ -81,10 +82,6 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
 #endif
 
 // Makro MEMBER()
@@ -336,23 +333,51 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 // #39629 NumberFormatter jetzt ueber statische Methode anlegen
 SvNumberFormatter* SbiInstance::GetNumberFormatter()
 {
+    LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+    SvtSysLocale aSysLocale;
+    DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
+    if( pNumberFormatter )
+    {
+        if( eLangType != meFormatterLangType ||
+            eDate != meFormatterDateFormat )
+        {
+            delete pNumberFormatter;
+            pNumberFormatter = NULL;
+        }
+    }
+    meFormatterLangType = eLangType;
+    meFormatterDateFormat = eDate;
     if( !pNumberFormatter )
-        PrepareNumberFormatter( pNumberFormatter, nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx );
+        PrepareNumberFormatter( pNumberFormatter, nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
+        &meFormatterLangType, &meFormatterDateFormat );
     return pNumberFormatter;
 }
 
 // #39629 NumberFormatter auch statisch anbieten
 void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
-    ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx )
+    ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx,
+    LanguageType* peFormatterLangType, DateFormat* peFormatterDateFormat )
 {
-    LanguageType eLangType = Application::GetSettings().GetLanguage();
-
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xFactory = comphelper::getProcessServiceFactory();
-    if ( xFactory.is() )
-        rpNumberFormatter = new SvNumberFormatter( xFactory, eLangType );
+
+    LanguageType eLangType;
+    if( peFormatterLangType )
+        eLangType = *peFormatterLangType;
     else
-        rpNumberFormatter = new SvNumberFormatter( eLangType );
+        eLangType = GetpApp()->GetSettings().GetLanguage();
+
+    DateFormat eDate;
+    if( peFormatterDateFormat )
+        eDate = *peFormatterDateFormat;
+    else
+    {
+        SvtSysLocale aSysLocale;
+        eDate = aSysLocale.GetLocaleData().getDateFormat();
+    }
+
+    rpNumberFormatter = new SvNumberFormatter( xFactory, eLangType );
+
     xub_StrLen nCheckPos = 0; short nType;
     rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );
 
@@ -364,7 +389,6 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     // austauscht. Problem: Print Year(Date) unter engl. BS
     // siehe auch svtools\source\sbx\sbxdate.cxx
 
-    DateFormat eDate = SvtSysLocale().GetLocaleData().getDateFormat();
     String aDateStr;
     switch( eDate )
     {
