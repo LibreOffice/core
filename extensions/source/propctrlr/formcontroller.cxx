@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:42:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 12:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,8 +968,15 @@ namespace pcr
             Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
             if (!xRowSet.is())
             {
-                DBG_ERROR("OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!");
-                return;
+                // are we inspecting a combo-/listbox?
+                if ((FormComponentType::COMBOBOX == m_nClassId) || (FormComponentType::LISTBOX == m_nClassId))
+                    xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
+
+                if (!xRowSet.is())
+                {
+                    DBG_ERROR("OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!");
+                    return;
+                }
             }
 
             Reference< XQueriesSupplier >  xSupplyQueries;
@@ -2717,6 +2724,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/03/21 15:42:13  fs
+ *  #82696# use the new font dialog for changing the control font
+ *
  *  Revision 1.12  2001/03/15 09:02:28  fs
  *  cppuhelper/extract -> comphelper/extract
  *
