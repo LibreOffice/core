@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-19 10:07:32 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ TabPage TP_LAB_PRT
         Text [ portuguese ] = "~Sincronizar conteúdos" ;
         Text[ chinese_simplified ] = "ÄÚÈÝÍ¬²½»¯(~Z)";
         Text[ russian ] = "Ñèíõðîíèçàöèÿ ñîäåðæèìîãî";
-        Text[ polish ] = "Synchronizacja treœci";
+        Text[ polish ] = "Synchronizacja zawartoœci";
         Text[ japanese ] = "“à—e‚ð“¯Šú‚³‚¹‚é(~Z)";
         Text[ chinese_traditional ] = "¤º®e¦P¨B¤Æ(~Z)";
         Text[ arabic ] = "ÊÒÇãä ÇáãÍÊæíÇÊ";
@@ -243,6 +243,26 @@ TabPage TP_LAB_PRT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Verteilen" ;
         Text[ ENGLISH ] = "Divide" ;
+        Text[ english_us ] = "Divide";
+        Text[ portuguese ] = "Divide";
+        Text[ russian ] = "Ðàñïðåäåëèòü";
+        Text[ greek ] = "Divide";
+        Text[ dutch ] = "Divide";
+        Text[ french ] = "Divide";
+        Text[ spanish ] = "Distribuir";
+        Text[ finnish ] = "Divide";
+        Text[ italian ] = "Divide";
+        Text[ danish ] = "Divide";
+        Text[ swedish ] = "Fördela";
+        Text[ polish ] = "Divide";
+        Text[ portuguese_brazilian ] = "Divide";
+        Text[ japanese ] = "Š„‚è“–‚Ä";
+        Text[ korean ] = "Divide";
+        Text[ chinese_simplified ] = "Divide";
+        Text[ chinese_traditional ] = "Divide";
+        Text[ turkish ] = "Divide";
+        Text[ arabic ] = "Divide";
+        Text[ catalan ] = "Divide";
     };
     FixedText INF_PRINTER
     {
@@ -329,6 +349,7 @@ TabPage TP_LAB_PRT
     };
 };
  // **************************************************************************
+
 
 
 
