@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 16:50:34 $
+#   last change: $Author: rt $ $Date: 2005-01-05 16:01:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,25 +74,9 @@ TARGET=sw3io
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/sw3io.obj	\
-    $(SLO)$/sw3attr.obj	\
-    $(SLO)$/sw3block.obj \
-    $(SLO)$/sw3doc.obj	\
-    $(SLO)$/sw3field.obj \
-    $(SLO)$/sw3fmts.obj	\
-    $(SLO)$/sw3imp.obj	\
-    $(SLO)$/sw3misc.obj	\
-    $(SLO)$/sw3nodes.obj \
-    $(SLO)$/sw3npool.obj \
-    $(SLO)$/sw3num.obj	\
-    $(SLO)$/sw3page.obj	\
-    $(SLO)$/sw3redln.obj	\
-    $(SLO)$/sw3sectn.obj \
-    $(SLO)$/sw3style.obj \
-    $(SLO)$/sw3table.obj \
-    $(SLO)$/sw3gsect.obj \
-    $(SLO)$/swacorr.obj	\
-    $(SLO)$/crypter.obj
+  $(SLO)$/swacorr.obj \
+  $(SLO)$/sw3convert.obj
+
 
 # --- Targets -------------------------------------------------------
 
