@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 15:39:52 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,11 @@
 
 #include <vector>
 
-class SdrModel;
-
-namespace chart
-{
-namespace wrapper
+namespace comphelper
 {
 
+/** Note: virtual const USHORT * GetWhichPairs() const; is still pure virtual
+ */
 class MultipleItemConverter : public ItemConverter
 {
 public:
@@ -93,49 +91,6 @@ protected:
     ::std::vector< ItemConverter * >            m_aConverters;
 };
 
-class AllAxisItemConverter : public MultipleItemConverter
-{
-public:
-    AllAxisItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        SfxItemPool& rItemPool,
-        SdrModel& rDrawModel );
-    virtual ~AllAxisItemConverter();
-
-protected:
-    virtual const USHORT * GetWhichPairs() const;
-};
-
-class AllGridItemConverter : public MultipleItemConverter
-{
-public:
-    AllGridItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        SfxItemPool& rItemPool,
-        SdrModel& rDrawModel  );
-    virtual ~AllGridItemConverter();
-
-protected:
-    virtual const USHORT * GetWhichPairs() const;
-};
-
-class AllDataLabelItemConverter : public MultipleItemConverter
-{
-public:
-    AllDataLabelItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        SfxItemPool& rItemPool,
-        SdrModel& rDrawModel  );
-    virtual ~AllDataLabelItemConverter();
-
-protected:
-    virtual const USHORT * GetWhichPairs() const;
-};
-
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace comphelper
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:54:08 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include "ViewElementListProvider.hxx"
 #include "DataPointItemConverter.hxx"
 #include "AxisItemConverter.hxx"
-#include "MultipleItemConverter.hxx"
+#include "MultipleChartConverters.hxx"
 #include "TitleItemConverter.hxx"
 #include "ChartModelHelper.hxx"
 #include "MeterHelper.hxx"
@@ -219,12 +219,12 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
     }
     catch( uno::Exception& ex)
     {
-        ex;
+        ASSERT_EXCEPTION( ex );
     }
     return xObjectProperties;
 }
 
-wrapper::ItemConverter* createItemConverter(
+::comphelper::ItemConverter* createItemConverter(
     const ::rtl::OUString & aObjectCID
     , const uno::Reference< frame::XModel > & xModel
     , SdrModel & rDrawModel
@@ -232,7 +232,7 @@ wrapper::ItemConverter* createItemConverter(
     , ExplicitValueProvider * pExplicitValueProvider = NULL
     )
 {
-    wrapper::ItemConverter* pItemConverter=NULL;
+    ::comphelper::ItemConverter* pItemConverter=NULL;
 
     //-------------------------------------------------------------
     //get type of selected object
@@ -557,7 +557,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
         bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
         //-------------------------------------------------------------
         //convert properties to ItemSet
-        ::std::auto_ptr< wrapper::ItemConverter > apItemConverter(
+        ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
             createItemConverter( rObjectCID, m_aModel->getModel(),
                                  m_pDrawModelWrapper->getSdrModel(),
                                  m_pNumberFormatterWrapper,
@@ -625,7 +625,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -665,9 +665,9 @@ void SAL_CALL ChartController::executeDispatch_ObjectToDefault()
 
         impl_rebuildView();
     }
-    catch( uno::Exception& )
+    catch( uno::Exception& e )
     {
-        DBG_ERROR( "Exception caught" );
+        ASSERT_EXCEPTION( e );
     }
 }
 

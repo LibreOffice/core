@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
         }
         catch( uno::Exception& e )
         {
-             e;
+            ASSERT_EXCEPTION( e );
         }
     }
 }
@@ -350,7 +350,7 @@ uno::Any createPolyPolygon_Cylinder(
     if( fRoundedEdge == 0.0 )
         fRoundedEdge = 0.4 / 200.0;
 
-    const double fWidth = fRadius;
+//     const double fWidth = fRadius;
 
     const double fOffset = (fRadius * 2.0 * fRoundedEdge) * 1.05;   // increase by 5% for safety
     const bool bRoundEdges = fRoundedEdge && fOffset < fRadius && 2.0 * fOffset < fHeight;
@@ -647,7 +647,7 @@ uno::Reference<drawing::XShape>
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -764,7 +764,7 @@ uno::Reference<drawing::XShape>
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -801,7 +801,7 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     const double fSmallAngleRadian = F_PI/10.0;
 
     drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
-    sal_Int32 nSegmentCount = fAngleRadian/fSmallAngleRadian;
+    sal_Int32 nSegmentCount = static_cast< sal_Int32 >( fAngleRadian/fSmallAngleRadian );
     if( fAngleRadian > fSmallAngleRadian*nSegmentCount )
         nSegmentCount++;
 
@@ -846,22 +846,22 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         P2 = rTransformationFromUnitCircle*(aStart*P2);
         P3 = rTransformationFromUnitCircle*(aStart*P3);
 
-        aPoints[nPoint].X = P0.X();
-        aPoints[nPoint].Y = P0.Y();
+        aPoints[nPoint].X = static_cast< sal_Int32 >( P0.X());
+        aPoints[nPoint].Y = static_cast< sal_Int32 >( P0.Y());
         aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
 
-        aPoints[nPoint].X = P1.X();
-        aPoints[nPoint].Y = P1.Y();
+        aPoints[nPoint].X = static_cast< sal_Int32 >( P1.X());
+        aPoints[nPoint].Y = static_cast< sal_Int32 >( P1.Y());
         aFlags[nPoint++] = drawing::PolygonFlags_CONTROL;
 
-        aPoints[nPoint].X = P2.X();
-        aPoints[nPoint].Y = P2.Y();
+        aPoints[nPoint].X = static_cast< sal_Int32 >( P2.X());
+        aPoints[nPoint].Y = static_cast< sal_Int32 >( P2.Y());
         aFlags [nPoint++] = drawing::PolygonFlags_CONTROL;
 
         if(nSegment==(nSegmentCount-1))
         {
-            aPoints[nPoint].X = P3.X();
-            aPoints[nPoint].Y = P3.Y();
+            aPoints[nPoint].X = static_cast< sal_Int32 >( P3.X());
+            aPoints[nPoint].Y = static_cast< sal_Int32 >( P3.Y());
             aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
         }
     }
@@ -1097,7 +1097,7 @@ UNO_NAME_POLYPOLYGONBEZIER "PolyPolygonBezier" drawing::PolyPolygonBezierCoords*
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
 
@@ -1236,7 +1236,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1285,7 +1285,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1324,7 +1324,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1361,7 +1361,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1588,7 +1588,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1631,7 +1631,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1650,7 +1650,7 @@ void setShapeName( uno::Reference< drawing::XShape >& xShape , const ::rtl::OUSt
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
 }
@@ -1708,7 +1708,7 @@ uno::Reference< drawing::XShapes >
             }
             catch( uno::Exception& e )
             {
-                e;
+                ASSERT_EXCEPTION( e );
             }
         }
     }
@@ -1775,7 +1775,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1837,7 +1837,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;
@@ -1887,7 +1887,7 @@ uno::Reference< drawing::XShape >
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     return xShape;

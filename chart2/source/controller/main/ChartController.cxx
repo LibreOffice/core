@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 15:39:56 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,17 +130,17 @@ using namespace ::drafts::com::sun::star::chart2;
 
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext)
     : m_aLifeTimeManager( NULL )
+    , m_bSuspended( sal_False )
+    , m_bCanClose( sal_True )
+    , m_xCC(xContext) //@todo is it allowed to hold this context??
     , m_xFrame( NULL )
     , m_aModelMutex()
     , m_aModel( NULL, m_aModelMutex )
-    , m_bSuspended( sal_False )
-    , m_bCanClose( sal_True )
     , m_pChartWindow( NULL )
     , m_xViewWindow( NULL )
     , m_pChartView( NULL )
     , m_pDrawModelWrapper( NULL )
     , m_pDrawViewWrapper(NULL)
-    , m_xCC(xContext) //@todo is it allowed to hold this context??
     , m_bViewDirty( false )
     , m_pNumberFormatterWrapper(NULL)
 {
@@ -1116,7 +1116,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 

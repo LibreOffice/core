@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 15:39:54 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,32 +60,14 @@
  ************************************************************************/
 #include "MultipleItemConverter.hxx"
 #include "ItemPropertyMap.hxx"
-#include "SchSfxItemIds.hxx"
-#include "SchWhichPairs.hxx"
-#include "AxisItemConverter.hxx"
-#include "GraphicPropertyItemConverter.hxx"
-#include "DataPointItemConverter.hxx"
-#include "ChartModelHelper.hxx"
-
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XGridContainer.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
-#endif
 
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
-namespace chart
+namespace comphelper
 {
-namespace wrapper
-{
+
 MultipleItemConverter::MultipleItemConverter( SfxItemPool& rItemPool )
         : ItemConverter( NULL, rItemPool )
 {
@@ -130,106 +112,4 @@ bool MultipleItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUStrin
     return false;
 }
 
-//-----------------------------------------------------------------------------
-
-AllAxisItemConverter::AllAxisItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
-    SfxItemPool& rItemPool,
-    SdrModel& rDrawModel )
-        : MultipleItemConverter( rItemPool )
-{
-    uno::Reference< chart2::XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-    if(!xChartDocument.is())
-        return;
-    uno::Reference< chart2::XDiagram > xDiagram = xChartDocument->getDiagram();
-    uno::Reference< chart2::XAxisContainer > xContainer( xDiagram, uno::UNO_QUERY );
-    if(!xContainer.is())
-        return;
-    uno::Sequence< uno::Reference< chart2::XAxis > > aElementList = xContainer->getAxes();
-    for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
-    {
-        uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
-        m_aConverters.push_back( new wrapper::AxisItemConverter(
-                    xObjectProperties, rItemPool, rDrawModel, 0, 0, 0, 0 ) );
-    }
-}
-
-AllAxisItemConverter::~AllAxisItemConverter()
-{
-}
-
-const USHORT * AllAxisItemConverter::GetWhichPairs() const
-{
-    // must span all used items!
-    return nAllAxisWhichPairs;
-}
-
-//-----------------------------------------------------------------------------
-
-AllGridItemConverter::AllGridItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
-    SfxItemPool& rItemPool,
-    SdrModel& rDrawModel  )
-        : MultipleItemConverter( rItemPool )
-{
-    uno::Reference< chart2::XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-    if(!xChartDocument.is())
-        return;
-    uno::Reference< chart2::XDiagram > xDiagram = xChartDocument->getDiagram();
-    uno::Reference< chart2::XGridContainer > xContainer( xDiagram, uno::UNO_QUERY );
-    if(!xContainer.is())
-        return;
-    uno::Sequence< uno::Reference< chart2::XGrid > > aElementList = xContainer->getGrids();
-    for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
-    {
-        uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
-        m_aConverters.push_back( new wrapper::GraphicPropertyItemConverter(
-                                        xObjectProperties, rItemPool, rDrawModel,
-                                        wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES ) );
-    }
-}
-
-AllGridItemConverter::~AllGridItemConverter()
-{
-}
-
-const USHORT * AllGridItemConverter::GetWhichPairs() const
-{
-    // must span all used items!
-    return nGridWhichPairs;
-}
-
-//-----------------------------------------------------------------------------
-
-AllDataLabelItemConverter::AllDataLabelItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
-    SfxItemPool& rItemPool,
-    SdrModel& rDrawModel  )
-        : MultipleItemConverter( rItemPool )
-{
-    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
-        ChartModelHelper::getDataSeries( xChartModel ));
-
-    ::std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
-    for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
-    {
-        uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
-        m_aConverters.push_back( new wrapper::DataPointItemConverter(
-                                        xObjectProperties, rItemPool, rDrawModel, NULL ) );
-    }
-}
-
-AllDataLabelItemConverter::~AllDataLabelItemConverter()
-{
-}
-
-const USHORT * AllDataLabelItemConverter::GetWhichPairs() const
-{
-    // must span all used items!
-    return nDataLabelWhichPairs;
-}
-
-//-----------------------------------------------------------------------------
-
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace comphelper

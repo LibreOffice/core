@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,10 @@ using namespace ::com::sun::star;
 
 namespace
 {
-::chart::wrapper::ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aCharacterPropertyMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aCharacterPropertyMap(
+        ::comphelper::MakeItemPropertyMap
         ( EE_CHAR_COLOR,                  C2U( "CharColor" ))
         ( EE_CHAR_FONTHEIGHT,             C2U( "CharHeight" ))
 //         ( EE_CHAR_ITALIC,                 C2U( "CharPosture" ))
@@ -139,8 +139,8 @@ const USHORT * CharacterPropertyItemConverter::GetWhichPairs() const
 
 bool CharacterPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
-    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ::comphelper::ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
+    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

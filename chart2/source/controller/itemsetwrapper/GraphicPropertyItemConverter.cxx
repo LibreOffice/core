@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,10 @@ using namespace ::drafts::com::sun::star;
 
 namespace
 {
-::chart::wrapper::ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aDataPointPropertyFilledMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aDataPointPropertyFilledMap(
+        ::comphelper::MakeItemPropertyMap
         ( XATTR_FILLSTYLE,                C2U( "FillStyle" ))
         ( XATTR_FILLCOLOR,                C2U( "Color" ))
         ( XATTR_FILLTRANSPARENCE,         C2U( "Transparency" ))
@@ -149,10 +149,10 @@ namespace
 
     return aDataPointPropertyFilledMap;
 }
-::chart::wrapper::ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aDataPointPropertyLineMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aDataPointPropertyLineMap(
+        ::comphelper::MakeItemPropertyMap
         ( XATTR_LINECOLOR,                C2U( "Color" ))
         ( XATTR_LINETRANSPARENCE,         C2U( "Transparency" ))
         ( XATTR_LINESTYLE,                C2U( "LineStyle" ))
@@ -162,10 +162,10 @@ namespace
 
     return aDataPointPropertyLineMap;
 }
-::chart::wrapper::ItemPropertyMapType & lcl_GetLinePropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetLinePropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aLinePropertyMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aLinePropertyMap(
+        ::comphelper::MakeItemPropertyMap
         ( XATTR_LINESTYLE,                C2U( "LineStyle" ))
         ( XATTR_LINEWIDTH,                C2U( "LineWidth" ))
 //         ( XATTR_LINEDASH,                 C2U( "LineDash" ))
@@ -176,10 +176,10 @@ namespace
 
     return aLinePropertyMap;
 }
-::chart::wrapper::ItemPropertyMapType & lcl_GetFillPropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetFillPropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aFillPropertyMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aFillPropertyMap(
+        ::comphelper::MakeItemPropertyMap
         ( XATTR_FILLSTYLE,                C2U( "FillStyle" ))
         ( XATTR_FILLCOLOR,                C2U( "FillColor" ))
         ( XATTR_FILLTRANSPARENCE,         C2U( "FillTransparence" ))
@@ -234,8 +234,8 @@ const USHORT * GraphicPropertyItemConverter::GetWhichPairs() const
 
 bool GraphicPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
 {
-    ::chart::wrapper::ItemPropertyMapType::const_iterator aEndIt;
-    ::chart::wrapper::ItemPropertyMapType::const_iterator aIt;
+    ::comphelper::ItemPropertyMapType::const_iterator aEndIt;
+    ::comphelper::ItemPropertyMapType::const_iterator aIt;
 
     switch( m_eGraphicObjectType )
     {

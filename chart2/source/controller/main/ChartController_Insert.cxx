@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:54:07 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include "ContextHelper.hxx"
 #include "macros.hxx"
 #include "DrawModelWrapper.hxx"
-#include "MultipleItemConverter.hxx"
+#include "MultipleChartConverters.hxx"
 
 //maybe superfluous in future:
 #include "ChartTypeItemConverter.hxx"
@@ -377,7 +377,7 @@ void SAL_CALL ChartController::executeDispatch_InsertAxis()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -404,7 +404,7 @@ void SAL_CALL ChartController::executeDispatch_InsertGrid()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -432,7 +432,7 @@ void SAL_CALL ChartController::executeDispatch_InsertTitle()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -461,7 +461,7 @@ void SAL_CALL ChartController::executeDispatch_InsertLegend()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -492,7 +492,7 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
     //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
     if(bChanged) try
@@ -501,7 +501,7 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -530,7 +530,7 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
     }
     catch( uno::RuntimeException& e)
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 

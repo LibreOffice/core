@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: GraphicPropertyItemConverter.hxx,v $
+ *  $RCSfile: MultipleChartConverters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:17 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,10 @@
  *
  *
  ************************************************************************/
-#ifndef CHART_GRAPHICPROPERTYITEMCONVERTER_HXX
-#define CHART_GRAPHICPROPERTYITEMCONVERTER_HXX
+#ifndef CHART2_MULTIPLECHARTCONVERTERS_HXX
+#define CHART2_MULTIPLECHARTCONVERTERS_HXX
 
-#include "ItemConverter.hxx"
-
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
-#endif
+#include "MultipleItemConverter.hxx"
 
 class SdrModel;
 
@@ -77,46 +70,50 @@ namespace chart
 namespace wrapper
 {
 
-class GraphicPropertyItemConverter :
-        public ::comphelper::ItemConverter
+class AllAxisItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
-    enum eGraphicObjectType
-    {
-        FILLED_DATA_POINT,
-        LINE_DATA_POINT,
-        LINE_PROPERTIES,
-        FILL_PROPERTIES,
-        LINE_AND_FILL_PROPERTIES
-    };
-
-    GraphicPropertyItemConverter(
+    AllAxisItemConverter(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
+            ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
-        SdrModel& rDrawModel,
-        eGraphicObjectType eObjectType = FILLED_DATA_POINT );
-    virtual ~GraphicPropertyItemConverter();
+        SdrModel& rDrawModel );
+    virtual ~AllAxisItemConverter();
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+};
 
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const;
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const;
+class AllGridItemConverter : public ::comphelper::MultipleItemConverter
+{
+public:
+    AllGridItemConverter(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xChartModel,
+        SfxItemPool& rItemPool,
+        SdrModel& rDrawModel  );
+    virtual ~AllGridItemConverter();
 
-    void FillBitmapItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::beans::UnknownPropertyException );
-    void ApplyBitmapItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
-        throw( ::com::sun::star::beans::UnknownPropertyException );
+protected:
+    virtual const USHORT * GetWhichPairs() const;
+};
 
-private:
-    eGraphicObjectType              m_eGraphicObjectType;
-    SdrModel &                      m_rDrawModel;
+class AllDataLabelItemConverter : public ::comphelper::MultipleItemConverter
+{
+public:
+    AllDataLabelItemConverter(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xChartModel,
+        SfxItemPool& rItemPool,
+        SdrModel& rDrawModel  );
+    virtual ~AllDataLabelItemConverter();
+
+protected:
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 } //  namespace wrapper
 } //  namespace chart
 
-// CHART_GRAPHICPROPERTYITEMCONVERTER_HXX
+// CHART2_MULTIPLECHARTCONVERTERS_HXX
 #endif

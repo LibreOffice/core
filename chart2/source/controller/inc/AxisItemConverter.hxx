@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace chart
 namespace wrapper
 {
 
-class AxisItemConverter : public ItemConverter
+class AxisItemConverter : public ::comphelper::ItemConverter
 {
 public:
     AxisItemConverter(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleItemConverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@ using namespace ::drafts::com::sun::star;
 
 namespace
 {
-::chart::wrapper::ItemPropertyMapType & lcl_GetTitlePropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetTitlePropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aTitlePropertyMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aTitlePropertyMap(
+        ::comphelper::MakeItemPropertyMap
         ( SCHATTR_TEXT_STACKED,   C2U( "StackCharacters" ))
         );
 
@@ -101,7 +101,7 @@ namespace wrapper
 
 // ========================================
 
-class FormattedStringsConverter : public MultipleItemConverter
+class FormattedStringsConverter : public ::comphelper::MultipleItemConverter
 {
 public:
     FormattedStringsConverter(
@@ -166,13 +166,13 @@ TitleItemConverter::TitleItemConverter(
 TitleItemConverter::~TitleItemConverter()
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     DeleteItemConverterPtr() );
+                     ::comphelper::DeleteItemConverterPtr() );
 }
 
 void TitleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     FillItemSetFunc( rOutItemSet ));
+                     ::comphelper::FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -183,7 +183,7 @@ bool TitleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ApplyItemSetFunc( rItemSet, bResult ));
+                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -197,8 +197,8 @@ const USHORT * TitleItemConverter::GetWhichPairs() const
 
 bool TitleItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
-    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ::comphelper::ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
+    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

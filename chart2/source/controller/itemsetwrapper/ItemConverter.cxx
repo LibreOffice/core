@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 15:39:53 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,7 @@
 
 using namespace ::com::sun::star;
 
-namespace chart
-{
-namespace wrapper
+namespace comphelper
 {
 
 ItemConverter::ItemConverter(
@@ -293,5 +291,4 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
     }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace comphelper

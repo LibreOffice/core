@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace wrapper
 {
 
 class DataPointItemConverter :
-        public ItemConverter
+        public ::comphelper::ItemConverter
 {
 public:
     DataPointItemConverter(

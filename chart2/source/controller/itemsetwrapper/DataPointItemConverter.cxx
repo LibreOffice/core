@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,10 @@ using namespace ::drafts::com::sun::star;
 
 namespace
 {
-::chart::wrapper::ItemPropertyMapType & lcl_GetDataPointPropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetDataPointPropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aDataPointPropertyMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aDataPointPropertyMap(
+        ::comphelper::MakeItemPropertyMap
         ( CHATTR_PIE_SEGMENT_OFFSET,      C2U( "Offset" ))
         );
 
@@ -119,13 +119,13 @@ DataPointItemConverter::DataPointItemConverter(
 DataPointItemConverter::~DataPointItemConverter()
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     DeleteItemConverterPtr() );
+                     ::comphelper::DeleteItemConverterPtr() );
 }
 
 void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     FillItemSetFunc( rOutItemSet ));
+                     ::comphelper::FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -136,7 +136,7 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ApplyItemSetFunc( rItemSet, bResult ));
+                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -150,8 +150,8 @@ const USHORT * DataPointItemConverter::GetWhichPairs() const
 
 bool DataPointItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
-    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ::comphelper::ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
+    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

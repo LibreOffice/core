@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,10 @@ using namespace ::drafts::com::sun::star;
 
 namespace
 {
-::chart::wrapper::ItemPropertyMapType & lcl_GetAxisPropertyMap()
+::comphelper::ItemPropertyMapType & lcl_GetAxisPropertyMap()
 {
-    static ::chart::wrapper::ItemPropertyMapType aAxisPropertyMap(
-        ::chart::wrapper::MakeItemPropertyMap
+    static ::comphelper::ItemPropertyMapType aAxisPropertyMap(
+        ::comphelper::MakeItemPropertyMap
         ( SCHATTR_AXIS_SHOWDESCR, C2U( "DisplayLabels" ))
         ( SCHATTR_AXIS_TICKS,     C2U( "MajorTickmarks" ))
         ( SCHATTR_AXIS_HELPTICKS, C2U( "MinorTickmarks" ))
@@ -177,13 +177,13 @@ AxisItemConverter::~AxisItemConverter()
     delete m_pExplicitOrigin;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     DeleteItemConverterPtr() );
+                     ::comphelper::DeleteItemConverterPtr() );
 }
 
 void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     FillItemSetFunc( rOutItemSet ));
+                     ::comphelper::FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -194,7 +194,7 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ApplyItemSetFunc( rItemSet, bResult ));
+                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -208,8 +208,8 @@ const USHORT * AxisItemConverter::GetWhichPairs() const
 
 bool AxisItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
-    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ::comphelper::ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
+    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
 //     OSL_TRACE( "Which-Id: %d", nWhichId );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemPropertyMap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,7 @@
 
 #include "InlineContainer.hxx"
 
-namespace chart
-{
-namespace wrapper
+namespace comphelper
 {
 
 typedef ::std::map< USHORT, ::rtl::OUString > ItemPropertyMapType;
@@ -112,8 +110,7 @@ struct DeleteItemConverterPtr : public ::std::unary_function< void, ItemConverte
     { delete pConv; }
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace comphelper
 
 // CHART_ITEMPROPERTYMAP_HXX
 #endif

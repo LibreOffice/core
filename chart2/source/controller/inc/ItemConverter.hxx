@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 15:39:51 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,7 @@
 
 class SfxItemPropertyMap;
 
-namespace chart
-{
-namespace wrapper
+namespace comphelper
 {
 
 /** This class serves for conversion between properties of an XPropertySet and
@@ -97,6 +95,26 @@ namespace wrapper
 
     FillSpecialItem and ApplySpecialItem may be used for special handling of
     individual item, e.g. if you need member-ids in QueryValue/PutValue
+
+    A typical use could be the following:
+
+    ::comphelper::ChartTypeItemConverter aItemConverter( xPropertySet, GetItemPool() );
+    SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+    aItemConverter.FillItemSet( aItemSet );
+    bool bChanged = false;
+
+    MyDialog aDlg( aItemSet );
+    if( aDlg.Execute() == RET_OK )
+    {
+        const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+        if( pOutItemSet )
+            bChanged = aItemConverter.ApplyItemSet( *pOutItemSet );
+    }
+
+    if( bChanged )
+    {
+        [ apply model changes to view ]
+    }
  */
 class ItemConverter :
         public ::utl::OEventListenerAdapter
@@ -222,8 +240,7 @@ private:
     bool                                            m_bIsValid;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace comphelper
 
 // CHART_ITEMCONVERTER_HXX
 #endif
