@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-12-04 11:31:58 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 18:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ TabPage TP_LAB_PRT
         Text [ PORTUGUESE_BRAZILIAN ] = "P?gina inteira" ;
         Text [ SWEDISH ] = "H~ela sidan" ;
         Text [ PORTUGUESE ] = "Página ~inteira" ;
-        Text[ chinese_simplified ] = "ÕûÒ³(~E)";
+        Text[ chinese_simplified ] = "æ•´é¡µ(~E)";
         Text[ russian ] = "Âñÿ ñòğàíèöà";
         Text[ polish ] = "Ca³a strona";
-        Text[ japanese ] = "Íß°¼Ş‘S‘Ì(~E)";
-        Text[ chinese_traditional ] = "¾ã­¶(~E)";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸å…¨ä½“(~E)";
+        Text[ chinese_traditional ] = "æ•´é (~E)";
         Text[ arabic ] = "ÕİÍÉ ßÇãáÉ";
         Text[ greek ] = "Ïëüêëçñç óåëßäá";
-        Text[ korean ] = "ÀüÃ¼ ÆäÀÌÁö(~E)";
+        Text[ korean ] = "ì „ì²´ í˜ì´ì§€(~E)";
         Text[ turkish ] = "~Tam sayfa";
         Text[ catalan ] = "~Toda la página";
     };
@@ -116,14 +116,14 @@ TabPage TP_LAB_PRT
         Text [ PORTUGUESE_BRAZILIAN ] = "Etiqueta simples" ;
         Text [ SWEDISH ] = "Enstaka eti~kett" ;
         Text [ PORTUGUESE ] = "E~tiqueta única" ;
-        Text[ chinese_simplified ] = "µ¥¸ö±êÇ©(~S)";
+        Text[ chinese_simplified ] = "å•ä¸ªæ ‡ç­¾(~S)";
         Text[ russian ] = "Îòäåëüíàÿ íàêëåéêà";
         Text[ polish ] = "Poj~edyncza etykieta";
-        Text[ japanese ] = "‚P–‡‚Ì×ÍŞÙ(~S)";
-        Text[ chinese_traditional ] = "³æ­Ó¶K¼Ğ(~S)";
+        Text[ japanese ] = "ï¼‘æšã®ãƒ©ãƒ™ãƒ«(~S)";
+        Text[ chinese_traditional ] = "å–®å€‹è²¼æ¨™(~S)";
         Text[ arabic ] = "ÈØÇŞÉ ÚäæäÉ ãİÑÏÉ";
         Text[ greek ] = "Ìåìïíùìİíç åôéêİôá";
-        Text[ korean ] = "°¢ ¶óº§(~S)";
+        Text[ korean ] = "ê° ë¼ë²¨(~S)";
         Text[ turkish ] = "Tek Eti~ket";
         Text[ catalan ] = "~Una etiqueta";
     };
@@ -145,14 +145,14 @@ TabPage TP_LAB_PRT
         Text [ SWEDISH ] = "Kolu~mn" ;
         Text [ PORTUGUESE ] = "~Coluna" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÁĞ(~M)";
+        Text[ chinese_simplified ] = "åˆ—(~M)";
         Text[ russian ] = "Êîëîíêà";
         Text[ polish ] = "Kolumna";
-        Text[ japanese ] = "—ñ(~M)";
-        Text[ chinese_traditional ] = "Äæ(~M)";
+        Text[ japanese ] = "åˆ—(~M)";
+        Text[ chinese_traditional ] = "æ¬„(~M)";
         Text[ arabic ] = "ÚãæÏ";
         Text[ greek ] = "ÓôŞëç";
-        Text[ korean ] = "¿­(~M)";
+        Text[ korean ] = "ì—´(~M)";
         Text[ turkish ] = "~Sütun";
         Text[ catalan ] = "C~olumna";
     };
@@ -186,14 +186,14 @@ TabPage TP_LAB_PRT
         Text [ SWEDISH ] = "R~ad" ;
         Text [ PORTUGUESE ] = "~Linha" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ĞĞ(~W)";
+        Text[ chinese_simplified ] = "è¡Œ(~W)";
         Text[ russian ] = "Ñòğîêà";
         Text[ polish ] = "Wiersz";
-        Text[ japanese ] = "s(~W)";
-        Text[ chinese_traditional ] = "¦æ(~W)";
+        Text[ japanese ] = "è¡Œ(~W)";
+        Text[ chinese_traditional ] = "è¡Œ(~W)";
         Text[ arabic ] = "Õİ";
         Text[ greek ] = "ÃñáììŞ";
-        Text[ korean ] = "Çà(~)";
+        Text[ korean ] = "í–‰()(~W)";
         Text[ turkish ] = "S~atır";
         Text[ catalan ] = "~Fila";
     };
@@ -225,14 +225,14 @@ TabPage TP_LAB_PRT
         Text [ french ] = "~Synchroniser le contenu" ;
         Text [ dutch ] = "Inhoud ~synchroniseren" ;
         Text [ portuguese ] = "~Sincronizar conteúdos" ;
-        Text[ chinese_simplified ] = "ÄÚÈİÍ¬²½»¯(~Z)";
+        Text[ chinese_simplified ] = "å†…å®¹åŒæ­¥åŒ–(~Z)";
         Text[ russian ] = "Ñèíõğîíèçàöèÿ ñîäåğæèìîãî";
         Text[ polish ] = "Synchronizacja zawartoœci";
-        Text[ japanese ] = "“à—e‚ğ“¯Šú‚³‚¹‚é(~Z)";
-        Text[ chinese_traditional ] = "¤º®e¦P¨B¤Æ(~Z)";
+        Text[ japanese ] = "å†…å®¹ã‚’åŒæœŸã•ã›ã‚‹(~Z)";
+        Text[ chinese_traditional ] = "å…§å®¹åŒæ­¥åŒ–(~Z)";
         Text[ arabic ] = "ÊÒÇãä ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Óõã÷ñïíéóìüò ğåñéå÷ïìİíùí";
-        Text[ korean ] = "³»¿ë µ¿±âÈ­(~Z)";
+        Text[ korean ] = "ë‚´ìš© ë™ê¸°í™”(~Z)";
         Text[ turkish ] = "İçeriği çoğalt";
         Text[ finnish ] = "~Synkronoi sisältö";
         Text[ catalan ] = "~Sincronizar contenidos";
@@ -243,23 +243,23 @@ TabPage TP_LAB_PRT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Verteilen" ;
         Text[ ENGLISH ] = "Divide" ;
-        Text[ english_us ] = "Divide";
+        Text[ english_us ] = "Distribute";
         Text[ portuguese ] = "Distribuir";
         Text[ russian ] = "Ğàñïğåäåëèòü";
         Text[ greek ] = "Divide";
-        Text[ dutch ] = "Divide";
-        Text[ french ] = "Divide";
+        Text[ dutch ] = "Verdelen";
+        Text[ french ] = "Répartir";
         Text[ spanish ] = "Distribuir";
         Text[ finnish ] = "Divide";
-        Text[ italian ] = "Divide";
+        Text[ italian ] = "Distribuisci";
         Text[ danish ] = "Divide";
         Text[ swedish ] = "Fördela";
         Text[ polish ] = "Dystrybuj";
         Text[ portuguese_brazilian ] = "Divide";
-        Text[ japanese ] = "Š„‚è“–‚Ä";
-        Text[ korean ] = "Divide";
-        Text[ chinese_simplified ] = "Divide";
-        Text[ chinese_traditional ] = "Divide";
+        Text[ japanese ] = "å‰²ã‚Šå½“ã¦";
+        Text[ korean ] = "ë¶„í• ";
+        Text[ chinese_simplified ] = "åˆ†å¸ƒ";
+        Text[ chinese_traditional ] = "åˆ†å¸ƒ";
         Text[ turkish ] = "Divide";
         Text[ arabic ] = "Divide";
         Text[ catalan ] = "Divide";
@@ -280,14 +280,14 @@ TabPage TP_LAB_PRT
         Text [ danish ] = "Printernavn" ;
         Text [ portuguese_brazilian ] = "Druckername" ;
         Text [ portuguese ] = "Nome da impressora" ;
-        Text[ chinese_simplified ] = "´òÓ¡»úÃû³Æ";
+        Text[ chinese_simplified ] = "æ‰“å°æœºåç§°";
         Text[ russian ] = "Íàçâàíèå ïğèíòåğà";
         Text[ polish ] = "Nazwa drukarki";
-        Text[ japanese ] = "ÌßØİÀ–¼";
-        Text[ chinese_traditional ] = "¦Lªí¾÷¦WºÙ";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿å";
+        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿåç¨±";
         Text[ arabic ] = "ÇÓã ÇáØÇÈÚÉ";
         Text[ greek ] = "¼íïìá åêôõğùôŞ";
-        Text[ korean ] = "ÇÁ¸°ÅÍ ÀÌ¸§";
+        Text[ korean ] = "í”„ë¦°í„° ì´ë¦„";
         Text[ turkish ] = "Yazıcı adı";
         Text[ finnish ] = "Tulostimen nimi";
         Text[ catalan ] = "Nombre de la impresora";
@@ -308,14 +308,14 @@ TabPage TP_LAB_PRT
         Text [ danish ] = "Indstil..." ;
         Text [ portuguese_brazilian ] = "Einrichten..." ;
         Text [ portuguese ] = "~Configurar..." ;
-        Text[ chinese_simplified ] = "ÉèÖÃ...";
+        Text[ chinese_simplified ] = "è®¾ç½®...";
         Text[ russian ] = "Íàñòğîèòü...";
         Text[ polish ] = "Konfiguruj...";
-        Text[ japanese ] = "İ’è...";
-        Text[ chinese_traditional ] = "³]¸m...";
+        Text[ japanese ] = "è¨­å®š...";
+        Text[ chinese_traditional ] = "è¨­ç½®...";
         Text[ arabic ] = "...ÅÚÏÇÏ";
         Text[ greek ] = "~ÅãêáôÜóôáóç...";
-        Text[ korean ] = "¼Â¾÷...";
+        Text[ korean ] = "ì„¤ì¹˜...";
         Text[ turkish ] = "Ayarlar...";
         Text[ finnish ] = "Asennus";
         Text[ catalan ] = "Configurar...";
@@ -326,7 +326,7 @@ TabPage TP_LAB_PRT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = " Drucker " ;
         Text [ ENGLISH ] = " Printer " ;
-        Text [ dutch ] = "Printer " ;
+        Text [ dutch ] = " Printer " ;
         Text [ english_us ] = " Printer " ;
         Text [ italian ] = "Stampante " ;
         Text [ spanish ] = "Impresora " ;
@@ -335,20 +335,21 @@ TabPage TP_LAB_PRT
         Text [ danish ] = "Printer " ;
         Text [ portuguese_brazilian ] = "Drucker " ;
         Text [ portuguese ] = "Impressora " ;
-        Text[ chinese_simplified ] = " ´òÓ¡»ú ";
+        Text[ chinese_simplified ] = " æ‰“å°æœº ";
         Text[ russian ] = "Ïğèíòåğ";
         Text[ polish ] = "Drukarka ";
-        Text[ japanese ] = "ÌßØİÀ ";
-        Text[ chinese_traditional ] = " ¦Lªí¾÷ ";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ ";
+        Text[ chinese_traditional ] = " å°è¡¨æ©Ÿ ";
         Text[ arabic ] = "ÇáØÇÈÚÉ ";
         Text[ greek ] = "ÅêôõğùôŞò ";
-        Text[ korean ] = "ÇÁ¸°ÅÍ ";
+        Text[ korean ] = "í”„ë¦°í„° ";
         Text[ turkish ] = "Yazıcı ";
-        Text[ finnish ] = "Tulostin ";
+        Text[ finnish ] = " Tulostin";
         Text[ catalan ] = "Impresora  ";
     };
 };
  // **************************************************************************
+
 
 
 
