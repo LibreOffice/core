@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:05:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,74 +327,61 @@ TabPage RID_SVXPAGE_AREA
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248, 8 ) ;
+        Size = MAP_APPFONT ( 120, 8 ) ;
         Text [ de ] = "Füllung" ;
         Text [ en-US ] = "Fill";
     };
-    RadioButton RBT_FILL_OFF
+    ListBox LB_AREA_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~Keine" ;
-        Text [ en-US ] = "None";
+        Size = MAP_APPFONT ( 108 , 60 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList [ de ] =
+        {
+            < "Keine" ; Default ; > ;
+            < "Farbe" ; Default ; > ;
+            < "Farbverlauf" ; Default ; > ;
+            < "Schraffur" ; Default ; > ;
+            < "Bitmap" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "None" ; Default ; > ;
+            < "Color" ; Default ; > ;
+            < "Gradient" ; Default ; > ;
+            < "Hatching" ; Default ; > ;
+            < "Bitmap" ; Default ; > ;
+        };
     };
-    RadioButton RBT_COLOR
-    {
-        Pos = MAP_APPFONT ( 12 , 28  ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~Farbe" ;
-        Text [ en-US ] = "Color";
-        Text [ x-comment ] = " ";
-    };
-    RadioButton RBT_GRADIENT
-    {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "Farb~verlauf" ;
-        Text [ en-US ] = "Gradient";
-        Text [ x-comment ] = " ";
-    };
-    RadioButton RBT_HATCH
-    {
-        Pos = MAP_APPFONT ( 72 , 14  ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "Schraff~ur" ;
-        Text [ en-US ] = "Hatching";
-    };
-    RadioButton RBT_BITMAP
-    {
-        Pos = MAP_APPFONT ( 72 , 28  ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~Bitmap" ;
-        Text [ en-US ] = "Bitmap";
-        Text [ x-comment ] = " ";
-    };
+
+
     ListBox LB_COLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 108 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_GRADIENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 108 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_HATCHING
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 108 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_BITMAP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 108 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
         TabStop = TRUE ;
     };
 
@@ -403,13 +390,13 @@ TabPage RID_SVXPAGE_AREA
     Control CTL_COLOR_PREVIEW
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Pos = MAP_APPFONT ( 12 , 137  ) ;
         Size = MAP_APPFONT ( 110 , 42 ) ;
     };
     Control CTL_BITMAP_PREVIEW
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Pos = MAP_APPFONT ( 12 , 137  ) ;
         Size = MAP_APPFONT ( 110 , 42 ) ;
         Hide = TRUE ;
     };
@@ -418,7 +405,7 @@ TabPage RID_SVXPAGE_AREA
 
     FixedLine FL_STEPCOUNT
     {
-        Pos = MAP_APPFONT ( 132 , 61 ) ;
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ de ] = "Schrittweite" ;
         Text [ en-US ] = "Increments" ;
@@ -426,7 +413,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STEPCOUNT
     {
-        Pos = MAP_APPFONT ( 138 , 75 ) ;
+        Pos = MAP_APPFONT ( 138 , 15 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text [ de ] = "~Automatisch" ;
         TabStop = TRUE ;
@@ -436,7 +423,7 @@ TabPage RID_SVXPAGE_AREA
     NumericField NUM_FLD_STEPCOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 73 ) ;
+        Pos = MAP_APPFONT ( 208 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -452,7 +439,7 @@ TabPage RID_SVXPAGE_AREA
 
     CheckBox CB_HATCHBCKGRD
     {
-        Pos = MAP_APPFONT ( 132 , 61 ) ;
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 122 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "H~intergrundfarbe" ;
@@ -462,7 +449,7 @@ TabPage RID_SVXPAGE_AREA
     ListBox LB_HATCHBCKGRDCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 141 , 74 ) ;
+        Pos = MAP_APPFONT ( 141 , 16 ) ;
         Size = MAP_APPFONT ( 70 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -473,7 +460,7 @@ TabPage RID_SVXPAGE_AREA
 
     FixedLine FL_SIZE
     {
-        Pos = MAP_APPFONT ( 132 , 61  ) ;
+        Pos = MAP_APPFONT ( 132 , 3  ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
@@ -481,7 +468,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_ORIGINAL
     {
-        Pos = MAP_APPFONT ( 138 , 73 ) ;
+        Pos = MAP_APPFONT ( 138 , 15 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "~Original" ;
         TabStop = TRUE ;
@@ -490,7 +477,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_SCALE
     {
-        Pos = MAP_APPFONT ( 138 , 88 ) ;
+        Pos = MAP_APPFONT ( 138 , 30 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "Re~lativ" ;
         TabStop = TRUE ;
@@ -499,7 +486,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_X_SIZE
     {
-        Pos = MAP_APPFONT ( 187 , 73 ) ;
+        Pos = MAP_APPFONT ( 187 , 15 ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
         Text [ de ] = "B~reite" ;
         Text [ en-US ] = "Wi~dth" ;
@@ -508,7 +495,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_X_SIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 212 , 71 ) ;
+        Pos = MAP_APPFONT ( 212 , 14 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -525,7 +512,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_Y_SIZE
     {
-        Pos = MAP_APPFONT ( 187 , 88  ) ;
+        Pos = MAP_APPFONT ( 187 , 31  ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
         Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "H~eight" ;
@@ -534,7 +521,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_Y_SIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 212 , 86  ) ;
+        Pos = MAP_APPFONT ( 212 , 29  ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -552,7 +539,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 132 , 104 ) ;
+        Pos = MAP_APPFONT ( 132 , 47 ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
@@ -562,13 +549,13 @@ TabPage RID_SVXPAGE_AREA
     Control CTL_POSITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 138 , 114 ) ;
-        Size = MAP_APPFONT ( 37 , 27 ) ;
+        Pos = MAP_APPFONT ( 138 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 27 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_X_OFFSET
     {
-        Pos = MAP_APPFONT ( 179 , 116  ) ;
+        Pos = MAP_APPFONT ( 138 , 89  ) ;
         Size = MAP_APPFONT ( 39 , 8 ) ;
         Text [ de ] = "~X-Offset" ;
         Text [ en-US ] = "~X Offset" ;
@@ -576,8 +563,8 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_Y_OFFSET
     {
-        Pos = MAP_APPFONT ( 179 , 131 ) ;
-        Size = MAP_APPFONT ( 39 , 8 ) ;
+        Pos = MAP_APPFONT ( 139 , 104 ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
         Text [ de ] = "~Y-Offset" ;
         Text [ en-US ] = "~Y Offset" ;
         Text [ x-comment ] = " ";
@@ -585,7 +572,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_X_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 219 , 114 ) ;
+        Pos = MAP_APPFONT ( 219 , 87 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -600,7 +587,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_Y_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 219 , 129 ) ;
+        Pos = MAP_APPFONT ( 219 , 102 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -614,7 +601,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_TILE
     {
-        Pos = MAP_APPFONT ( 138 , 144  ) ;
+        Pos = MAP_APPFONT ( 138 , 117  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text [ de ] = "Ka~cheln" ;
         TabStop = TRUE ;
@@ -623,7 +610,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STRETCH
     {
-        Pos = MAP_APPFONT ( 194 , 144  ) ;
+        Pos = MAP_APPFONT ( 194 , 117  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text [ de ] = "A~npassen" ;
         TabStop = TRUE ;
@@ -632,7 +619,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedLine FL_OFFSET
     {
-        Pos = MAP_APPFONT ( 132 , 158  ) ;
+        Pos = MAP_APPFONT ( 132 , 133  ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ de ] = "Verschiebung" ;
         Text [ en-US ] = "Offset" ;
@@ -640,16 +627,16 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_ROW
     {
-        Pos = MAP_APPFONT ( 138 , 170  ) ;
-        Size = MAP_APPFONT ( 39 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 144  ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ de ] = "~Zeile" ;
         Text [ en-US ] = "Ro~w" ;
         Text [ x-comment ] = " ";
     };
     RadioButton RBT_COLUMN
     {
-        Pos = MAP_APPFONT ( 178 , 170 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 158 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ de ] = "S~palte" ;
         Text [ en-US ] = "Colu~mn" ;
         Text [ x-comment ] = " ";
@@ -657,7 +644,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 219 , 168 ) ;
+        Pos = MAP_APPFONT ( 219 , 157 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
