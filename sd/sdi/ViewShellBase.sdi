@@ -1,6 +1,68 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ViewShellBase.sdi,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:42:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
+/** This item holds the requested type of view shell when calling the
+    SID_SWITCH_SHELL slot.
+*/
 SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
-
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -25,11 +87,221 @@ SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
     GroupId = GID_VIEW;
 ]
 
+
+/** This item holds the requested pane of the multi pane GUI in which a
+    change of the view shell is requested by a call to the SID_SWITCH_SHELL
+    slot.
+*/
+SfxInt32Item SwitchViewShellPane SID_SWITCH_SHELL_PANE
+[
+    // flags:
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    // config:
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+SfxBoolItem LeftPaneChildWindow SID_LEFT_PANE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
+SfxBoolItem RightPaneChildWindow SID_RIGHT_PANE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
+SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+SfxBoolItem NormalMultiPaneGUI SID_NORMAL_MULTI_PANE_GUI
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
+SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
 interface ViewShellBaseView : View
 {
     SID_SWITCH_SHELL
     [
-        ExecMethod = ExecuteModeChange;
+        ExecMethod = Execute;
+    ]
+    SID_LEFT_PANE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_RIGHT_PANE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_NOTES_WINDOW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_NORMAL_MULTI_PANE_GUI
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_SLIDE_SORTER_MULTI_PANE_GUI
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_DRAWINGMODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_DIAMODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_OUTLINEMODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_NOTESMODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_HANDOUTMODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
     ]
 }
 
