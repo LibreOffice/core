@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:34:39 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,6 @@
 
 using namespace ::com::sun::star;
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
-extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
-                       const SwScriptInfo* pSI );
 
 /*-----------------10.10.00 15:23-------------------
  *  class SwMultiPortion
@@ -430,14 +428,14 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
     if( pBracket->cPre > 255 )
     {
         String aTxt( pBracket->cPre );
-        nTmp = WhichFont( 0, &aTxt, 0 );
+        nTmp = SwScriptInfo::WhichFont( 0, &aTxt, 0 );
     }
     pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
     if( pBracket->cPost > 255 )
     {
         String aTxt( pBracket->cPost );
-        nTmp = WhichFont( 0, &aTxt, 0 );
+        nTmp = SwScriptInfo::WhichFont( 0, &aTxt, 0 );
     }
     pBracket->nPostScript = nTmp;
 
