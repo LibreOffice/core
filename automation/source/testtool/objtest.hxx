@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:55:05 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@
 #define ID_GetApplicationPath 35
 #define ID_GetCommonApplicationPath 36
 #define ID_MakeIniFileName 37
-#define ID_StringControl 38
-#define ID_Wait         39
+#define ID_StringControl   38
+#define ID_Wait            39
 #define ID_GetErrorCount   40
 #define ID_GetWarningCount 41
 #define ID_GetUseFileWarningCount 42
@@ -128,11 +128,11 @@
 #define ID_GetTestCaseFileName 47
 #define ID_GetTestCaseLineNr 48
 #define ID_StopOnSyntaxError 49
-
+#define ID_SetChildEnv     50
+#define ID_GetChildEnv     51
+#define ID_GetLinkDestination 52
+#define ID_GetRegistryValue 53
 #define ID_DoNothing    99
-
-#define DEF_HID_DIR "q:\\testtool\\"    // Keine Panik, die werden als FAT Behandelt und
-#define DEF_BASE_DIR "q:\\testtool\\"   // dann ins system-Format gewandelt. (DirEntry)
 
 void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames );
 
@@ -276,6 +276,7 @@ private:
 };
 SV_DECL_IMPL_REF(Controls);
 
+typedef Environment;
 
 class ImplTestToolObj
 {
@@ -335,6 +336,8 @@ public:
     BOOL bDebugFindNoErrors;    // suppress generating errors when find of variables is called for variable viewing purposes
 
     BOOL bStopOnSyntaxError;    // catch syntax errors in testcases or not
+
+    Environment *pChildEnv;      // Environment Variables for child Process
 };
 
 
