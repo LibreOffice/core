@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_tag.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,9 @@ class HF_IdlTag : public HtmlFactory_Idl,
                                                 i_rToken );
     virtual void        Display_ParameterAtTag(
                             const csi::dsapi::DT_ParameterAtTag &
+                                                i_rToken );
+    virtual void        Display_SinceAtTag(
+                            const csi::dsapi::DT_SinceAtTag &
                                                 i_rToken );
 
     void                Enter_TextOut(
