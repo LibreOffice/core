@@ -78,6 +78,10 @@ arFunctions["testinout_methodXInterface"]="void testinout_methodXInterface( [ino
 arFunctions["testinout_methodXInterface2"]="void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut)";
 
 arFunctions["methodAnyTest1"]="any methodAnyTest1( [in] any rIn)";
+arFunctions["AttrAny2"]= "[attribute]  any AttrAny2";
+arFunctions["retMethodStruct"]= "com::sun::star::beans::Property retMethodStruct()";
+arFunctions["AttrStruct"]= "[attribute] com::sun::star::beans::Property AttrStruct";
+arFunctions["methodStruct2"]= "com::sun::star::beans::Property methodStruct2( [in] com::sun::star::beans::Property aProp)";
 
 
 var Log= new Logger();
@@ -532,11 +536,93 @@ var sInVal= "this is a string"
 ob.value= sInVal;
 outVal[0]= ob;
 oletest.testinout_methodXInterface( outVal);
-Log.print( outVal[0].value == " this string was written in the UNO component to the inout pararmeter", "testinout_methodXInterface");
+Log.print( outVal[0].value == "out", "testinout_methodXInterface");
+document.writeln("<p>");
+
+i= 100;
+ret= oletest.methodAnyTest1( i);
+Log.print( i == ret, "methodAnyTest1");
+
+i= 3.14;
+ret= oletest.methodAnyTest1( i);
+Log.print( i == ret, "methodAnyTest1");
+
+i= "Hallo"
+ret= oletest.methodAnyTest1( i);
+Log.print( i == ret, "methodAnyTest1");
+
+i= arrInt;
+ret= oletest.methodAnyTest1( i);
+var arr= new VBArray( ret).toArray();
+Log.print( isEqualAr(arr, arrInt), "methodAnyTest1");
+
+var obj= new Object();
+ret= oletest.methodAnyTest1( obj);
+Log.print( obj == ret, "methodAnyTest1");
+
 
 document.writeln("<p>");
 
 
+i= 100;
+oletest.AttrAny2= i;
+ret= oletest.AttrAny2;
+Log.print( i == ret, "AttrAny2");
+
+i= 3.14;
+oletest.AttrAny2= i;
+ret= oletest.AttrAny2;
+Log.print( i == ret, "AttrAny2");
+
+i= "Hallo"
+oletest.AttrAny2= i;
+ret= oletest.AttrAny2;
+Log.print( i == ret, "AttrAny2");
+
+i= arrInt;
+oletest.AttrAny2= i;
+ret= oletest.AttrAny2;
+var arr= new VBArray( ret).toArray();
+Log.print( isEqualAr(arr, arrInt), "AttrAny2");
+
+var obj= new Object();
+oletest.AttrAny2= obj;
+ret= oletest.AttrAny2;
+Log.print( obj == ret, "AttrAny2");
+
+
+document.writeln("<p>");
+// Structs ----------------------------------------------
+
+/* var struct= oletest._GetStruct("com.sun.star.beans.Property"); */
+/* struct.Attributes= 1; */
+/* struct.Handle= 2; */
+/* struct.Name= "some Property" */
+/* oletest.methodStruct( struct); */
+
+var ret= oletest.retMethodStruct();
+Log.print( ret.Attributes == 127 && ret.Handle == 255 && ret.Name == "OleTest_Property", "retMethodStruct");
+
+var astruct= oletest._GetStruct("com.sun.star.beans.Property");
+astruct.Attributes= 1;
+astruct.Handle= 2;
+astruct.Name= "some Property"
+oletest.AttrStruct=  astruct;
+
+var ret= oletest.AttrStruct;
+Log.print( ret.Attributes == 127 && ret.Handle == 255 && ret.Name == "OleTest_Property", "AttrStruct");
+
+ret= oletest.methodStruct2( astruct);
+Log.print( ret === astruct, "methodStruct2");
+
+
+/* 		alert("2100"); */
+/* 		var ret= oletest.retMethodByte(); */
+/* 		var sfarray= VBArray( ret); */
+/* 		document.writeln( sfarray.toArray() ); */
+
+
+document.writeln("<p>");
 Log.summarize();
 
 
@@ -674,71 +760,7 @@ function callOleTest(	 id)
 	// Array in-param
 
 
-	
-	// Test ANY
-	// Methods
-	case 1000:
-		i= 100;
-		ret= oletest.methodAnyTest1( i);
-		document.writeln( "in: " + i + " ret: " + ret);
-		break;
-	case 1001: 
-		i= 3.14;
-		ret= oletest.methodAnyTest1( i);
-		document.writeln( "in: " + i + " ret: " + ret);
-		break;
-	case 1002:
-		i= "Hallo"
-		ret= oletest.methodAnyTest1( i);
-		document.writeln( "in: " + i + " ret: " + ret);
-		break;
-	case 1003:
-		i= arr;
-		ret= oletest.methodAnyTest1( i);
-		sfarray= new VBArray( ret);
-		document.writeln( "in: " + i + " ret: " + sfarray.toArray());
-		break;
-	case 1004:
-		var obj= new Object();
-		obj[1]= "This is index 0";
-		ret= oletest.methodAnyTest1( obj);
-		document.writeln( "in: " + obj + " ret: " + ret);
-		break;
 
-
-	// Test ANY property
-	case 1010:
-		i= 100;
-		oletest.AttrAny2= i;
-		ret= oletest.AttrAny2;
-		document.writeln( "set: " + i + " get: " + ret);
-		break;
-	case 1011: 
-		i= 3.14;
-		oletest.AttrAny2= i;
-		ret= oletest.AttrAny2;
-		document.writeln( "set: " + i + " get: " + ret);
-		break;
-	case 1012:
-		i= "Hallo"
-		oletest.AttrAny2= i;
-		ret= oletest.AttrAny2;
-		document.writeln( "set: " + i + " get: " + ret);
-		break;
-	case 1013:
-		i= arr;
-		oletest.AttrAny2= i;
-		ret= oletest.AttrAny2;
-		sfarray= new VBArray( ret);
-		document.writeln( "set: " + i + " get: " + sfarray.toArray());
-		break;
-	case 1014:
-		var obj= new Object();
-		obj[1]= "This is index 0";
-		oletest.AttrAny2= obj;
-		ret= oletest.AttrAny2;
-		document.writeln( "set: " + obj + " get: " + ret);
-		break;
 	
 	// Structs ----------------------------------------------
 	case 1020:
@@ -1113,37 +1135,6 @@ end sub
 
 <p>
 
-Tests Array/Sequence conversion with Attributes. All params are of type Sequence and 
- the element type of the Sequence is written on the buttons. <br>
-<button onclick='callOleTest( 200)'>byte </Button>
-<button onclick='callOleTest( 212)'>float</Button>
-<button onclick='callOleTest( 201)'>double</Button>
-<button onclick='callOleTest( 202)'>boolean</Button>
-<button onclick='callOleTest( 203)'>short</Button>
-<button onclick='callOleTest( 204)'>unsigned short</Button>
-<button onclick='callOleTest( 205)'>long</Button>
-<button onclick='callOleTest( 206)'>unsigned long</Button>
-<button onclick='callOleTest( 207)'>char</Button>
-<button onclick='callOleTest( 208)'>string</Button>
-<button onclick='callOleTest( 209)'>any</Button>
-<button onclick='callOleTest( 210)'>sequence&ltlong&gt </Button>
-<button onclick='callOleTest( 211)'>sequence&ltsequence&ltlong&gt &gt </Button>
-<p>
-
-Test of Any parameter in a method. Any contains:<br>
-<button onclick='callOleTest( 1000)'>integer </Button>
-<button onclick='callOleTest( 1001)'>double </Button>
-<button onclick='callOleTest( 1002)'>string</Button>
-<button onclick='callOleTest( 1003)'>array</Button>
-<button onclick='callOleTest( 1004)'>object</Button>
-<p>
-Test of Any parameter in a property. Any contains:<br>
-<button onclick='callOleTest( 1010)'>integer </Button>
-<button onclick='callOleTest( 1011)'>double </Button>
-<button onclick='callOleTest( 1012)'>string</Button>
-<button onclick='callOleTest( 1013)'>array</Button>
-<button onclick='callOleTest( 1014)'>object</Button>
-<P>
 Test of Struct conversions<br>
 <button onclick='callOleTest( 1020)'>methodStruct </Button>
 <button onclick='callOleTest( 1021)'>return struct</Button>

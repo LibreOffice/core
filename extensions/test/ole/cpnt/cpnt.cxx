@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:13:48 $
+ *  last change: $Author: jl $ $Date: 2002-06-20 09:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ public: // XTestSequence
 
     virtual Property SAL_CALL  getAttrStruct(void) throw( RuntimeException );
     virtual void SAL_CALL setAttrStruct(const Property& AttrStruct_) throw( RuntimeException );
+    virtual Property SAL_CALL methodStruct2( const Property& aProp ) throw (RuntimeException);
 
     // XTestOther
     virtual void SAL_CALL other_methodAnyIn(const Any& rAny) throw( RuntimeException );
@@ -896,7 +897,7 @@ void SAL_CALL OComponent::testinout_methodXInterface( Reference< XInvocation >& 
         any= rOut->getValue( OUString( L"value"));
         OUString _s;
         any >>= _s;
-        OUString string(L" this string was written in the UNO component to the inout pararmeter");
+        OUString string(L"out");
         any <<= string;
         rOut->setValue( OUString(L"value"), any);
 
@@ -970,7 +971,12 @@ void SAL_CALL OComponent::setAttrStruct(const Property& AttrStruct_) throw( Runt
     buff[0]= 0;
     sprintf( buff,"Property::Attribute : %d \n Property::Handle : %d \n Property::Name : %S",
         AttrStruct_.Attributes, AttrStruct_.Handle, (const sal_Unicode*)AttrStruct_.Name);
-    MessageBox( NULL, A2T(buff), _T("OleTest: setAttrStruct"), MB_OK);
+//  MessageBox( NULL, A2T(buff), _T("OleTest: setAttrStruct"), MB_OK);
+}
+
+Property SAL_CALL OComponent::methodStruct2( const Property& aProp ) throw (RuntimeException)
+{
+    return aProp;
 }
 
 // XTestOther ==================================================================================

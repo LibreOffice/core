@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:14:26 $
+ *  last change: $Author: jl $ $Date: 2002-06-20 09:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ interface XTestStruct: com::sun::star::uno::XInterface
     com::sun::star::beans::Property retMethodStruct();
 // Attributes as structs
     [attribute] com::sun::star::beans::Property AttrStruct;
+
+    com::sun::star::beans::Property methodStruct2( [in] com::sun::star::beans::Property aProp);
 };
 
 interface XTestOutParameters: com::sun::star::uno::XInterface
