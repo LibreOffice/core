@@ -2,9 +2,9 @@
  *
  *  $RCSfile: group.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <rc.h>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
