@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:15:41 $
+ *  last change: $Author: os $ $Date: 2001-01-24 15:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         }
         Reference< uno::XInterface >  xFrm(xInterface, uno::UNO_QUERY);;
 
-        if(xFrm.is())
+        if(xFrm.is() && xIfcTunnel.is())
         {
             //
             SwXFrame* pFrame = (SwXFrame*)
@@ -419,7 +419,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 
         Reference< text::XTextTable >  xTbl(xInterface, uno::UNO_QUERY);;
 
-        if(xTbl.is())
+        if(xTbl.is() && xIfcTunnel.is())
         {
             SwXTextTable* pTable = (SwXTextTable*)
                 xIfcTunnel->getSomething(SwXTextTable::getUnoTunnelId());
@@ -435,7 +435,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 
         Reference< text::XTextContent >  xBkm(xInterface, uno::UNO_QUERY);;
 
-        if(xBkm.is())
+        if(xBkm.is() && xIfcTunnel.is())
         {
             SwXBookmark* pBkm = (SwXBookmark*)
                     xIfcTunnel->getSomething(SwXBookmark::getUnoTunnelId());
@@ -457,8 +457,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 
         Reference< drawing::XShapes >  xShapeColl( xInterface, uno::UNO_QUERY );
         Reference< beans::XPropertySet >  xTmpProp(xInterface, uno::UNO_QUERY);
-        SwXShape* pSwXShape = (SwXShape*)
-            xIfcTunnel->getSomething(SwXShape::getUnoTunnelId());
+        SwXShape* pSwXShape = 0;
+        if(xIfcTunnel.is())
+            pSwXShape = (SwXShape*)xIfcTunnel->getSomething(SwXShape::getUnoTunnelId());
         SvxShape* pSvxShape = 0;
         if(pSwXShape)
         {
