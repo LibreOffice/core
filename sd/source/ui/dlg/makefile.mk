@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:44:00 $
+#   last change: $Author: hr $ $Date: 2004-05-14 07:29:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,8 +116,6 @@ SRC1FILES =\
 
 
 SLOFILES =  \
-        $(SLO)$/masterlayoutdlg.obj\
-        $(SLO)$/headerfooterdlg.obj\
         $(SLO)$/inspage.obj \
         $(SLO)$/inspagob.obj \
         $(SLO)$/ins_paste.obj \
@@ -171,7 +169,6 @@ SLOFILES =  \
                 $(SLO)$/sduiexp.obj \
         $(SLO)$/sddlgfact.obj \
         $(SLO)$/sdabstdlg.obj 
-        
 
 EXCEPTIONSFILES= \
         $(SLO)$/filedlg.obj   	    \
@@ -215,6 +212,8 @@ LIB1OBJFILES= \
 LIB2TARGET= $(SLB)$/sdui.lib
 
 LIB2OBJFILES= \
+        $(SLO)$/masterlayoutdlg.obj\
+        $(SLO)$/headerfooterdlg.obj\
         $(SLO)$/sduiexp.obj \
         $(SLO)$/sddlgfact.obj \
         $(SLO)$/brkdlg.obj \
@@ -241,7 +240,7 @@ LIB2OBJFILES= \
         $(SLO)$/tpoption.obj \
         $(SLO)$/vectdlg.obj \
         $(SLO)$/prntopts.obj 
-        
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
