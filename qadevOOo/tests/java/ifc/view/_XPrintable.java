@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPrintable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:31:39 $
+ *  last change:$Date: 2003-09-08 11:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,17 @@
 
 package ifc.view;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+import util.utils;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.PaperOrientation;
 import com.sun.star.view.XPrintable;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
-import util.utils;
 
 /**
  * Testing <code>com.sun.star.view.XPrintable</code>
