@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-11 09:07:24 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 15:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ namespace svt
         m_aPreferredSize.Height() += aSize.Height() - aOutputSize.Height();
 
         SetPointer(Pointer(POINTER_REFHAND));
+        AlwaysEnableInput( TRUE, TRUE );
     }
 
     //--------------------------------------------------------------------
@@ -206,6 +207,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/05/11 09:07:24  rt
+ *  #65293# fix for gcc (needs temporary variable for Point() )
+ *
  *  Revision 1.1  2001/05/07 15:18:58  fs
  *  initial checkin - window for the new help agent
  *
