@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-26 07:29:35 $
+#   last change: $Author: mt $ $Date: 2004-08-17 10:27:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,16 +128,12 @@ SHL2STDLIBS +=			\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
-    $(XMLOFFLIB)
+    $(XMLOFFLIB)        
 
-.IF "$(GUI)"=="WNT"
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
-SHL2STDLIBS+= "ixml2.lib" "xmlsec.lib" "xmlsec-mscrypto.lib" "crypt32.lib" "advapi32.lib"
+SHL2STDLIBS+= $(MSCRYPTOLIBS)
 .ELSE
-SHL2STDLIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "plc4.lib" "xmlsec.lib" "xmlsec-nss.lib"
-.ENDIF
-.ELSE
-SHL2STDLIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lplc4" "-lxmlsec" "-lxmlsec-nss"  
+SHL2STDLIBS+= $(NSSCRYPTOLIBS)
 .ENDIF
     
 SHL2IMPLIB = $(SHL2TARGET)
@@ -183,14 +179,9 @@ SHL4STDLIBS=\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
 
-#MT: Remove ixml2 and xs_comm (above) by cerating service for base encodings
-.IF "$(GUI)"=="WNT"
-SHL4STDLIBS+= "ixml2.lib" "xmlsec.lib" 
-.ELSE
-SHL4STDLIBS+= "-lxml2" "-lxmlsec" "-lxsec_xmlsec"
-.ENDIF
-        
-        
+#MT: Remove libxml2 and xs_comm (above) by cerating service for base encodings
+SHL4STDLIBS+= $(LIBXML2LIB) $(XMLSECLIB)
+                
 SHL4VERSIONMAP = xmlsecurity.map
 SHL4DEPN=
 SHL4IMPLIB=i$(TARGET)
