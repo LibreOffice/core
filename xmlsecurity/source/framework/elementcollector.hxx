@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementcollector.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@ class ElementCollector : public ElementMark
 private:
     /*
      * the notify priority, is one of following values:
-     * PRI_AFTERMODIFY  - this ElementCollector will notify after all
+     * AFTERMODIFY  - this ElementCollector will notify after all
      *                    internal modifications have finished.
-     * PRI_BEFOREMODIFY - this ElementCollector must notify before any
+     * BEFOREMODIFY - this ElementCollector must notify before any
      *                    internal modification happens.
      */
     com::sun::star::xml::crypto::sax::ElementMarkPriority m_nPriority;
