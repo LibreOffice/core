@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-19 09:26:29 $
+ *  last change: $Author: sj $ $Date: 2000-12-19 13:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #pragma hdrstop
 
 #include <ucbhelper/content.hxx>
+#include <osl/file.hxx>
 
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -211,14 +212,17 @@ USHORT FillFilter( GraphicFilter& rFilter )
 
     for ( xub_StrLen i = 0, nCount = aModulesPath.GetTokenCount(); i < nCount; i++ )
     {
-        String          aToken( aModulesPath.GetToken( i ) );
-        INetURLObject   aTokenUrl( aToken );
-        if ( aTokenUrl.HasError() )
-            aTokenUrl = INetURLObject( aToken, INET_PROT_FILE );
-        aTokenUrl.insertName( DEFINE_CONST_UNICODE( IMPGRF_GRAPHIC_FILTER_FILE ) );
+        String aToken( aModulesPath.GetToken( i ) );
+        ::rtl::OUString aDest;
+        ::osl::FileBase::normalizePath( aToken, aDest );
+        aDest += ::rtl::OUString( sal_Unicode( '/' ) );
+        aDest += ::rtl::OUString( DEFINE_CONST_UNICODE(IMPGRF_GRAPHIC_FILTER_FILE) );
+
         if ( aFullConfigPath.Len() )
             aFullConfigPath += sal_Unicode(';');
-        aFullConfigPath += aTokenUrl.GetMainURL();
+        ::rtl::OUString aNormalizedPath;
+        ::osl::FileBase::getSystemPathFromNormalizedPath( aDest, aNormalizedPath );
+        aFullConfigPath.Append( String( aNormalizedPath ) );
     }
     rFilter.SetConfigPath( aFullConfigPath );
     rFilter.SetFilterPath( aPathOpt.GetFilterPath() );
