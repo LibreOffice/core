@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-23 10:49:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-23 11:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ void SfxTabDialog::EnableApplyButton(BOOL bEnable)
         // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
         pImpl->pApplyButton->SetZOrder(&aOKBtn, WINDOW_ZORDER_BEHIND);
 
-        pImpl->pApplyButton->SetText( String::CreateFromAscii("Apply") );
+        pImpl->pApplyButton->SetText( String( SfxResId( STR_APPLY ) ) );
         pImpl->pApplyButton->Show();
     }
     else
