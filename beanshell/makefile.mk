@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 13:13:35 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:08:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,6 @@ PRJNAME=ooo_beanshell
 TARGET=ooo_beanshell
 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)" == "gcj"
-all:
-        @echo This dir cannot be build with gcj because of javax.swing.text.DefaultStyledDocument
-.ELSE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -88,7 +84,6 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-.ENDIF
 .ELSE
 all:
         @echo java disabled
