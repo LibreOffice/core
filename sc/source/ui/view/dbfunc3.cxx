@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:32:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,19 +138,20 @@ void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
     BOOL bColFound = FALSE;
     BOOL bRowFound = FALSE;
 
-    USHORT nStartCol, nStartRow, nStartTab;
-    USHORT nEndCol, nEndRow, nEndTab;
+    SCCOL nStartCol, nEndCol;
+    SCROW nStartRow, nEndRow;
+    SCTAB nStartTab, nEndTab;
     if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
     {
-        USHORT nTab = nStartTab;
+        SCTAB nTab = nStartTab;
         ScDocument* pDoc = GetViewData()->GetDocument();
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
         if (pTable)
         {
             ScOutlineArray* pArray;
             ScOutlineEntry* pEntry;
-            USHORT nStart;
-            USHORT nEnd;
+            SCCOLROW nStart;
+            SCCOLROW nEnd;
             BOOL bColMarked = ( nStartRow == 0 && nEndRow == MAXROW );
             BOOL bRowMarked = ( nStartCol == 0 && nEndCol == MAXCOL );
 
@@ -164,7 +165,7 @@ void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
                 {
                     nStart = pEntry->GetStart();
                     nEnd   = pEntry->GetEnd();
-                    if ( nStartCol<=nEnd && nEndCol>=nStart )
+                    if ( nStartCol<=static_cast<SCCOL>(nEnd) && nEndCol>=static_cast<SCCOL>(nStart) )
                         bColFound = TRUE;
                 }
             }
@@ -192,7 +193,7 @@ void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
 
 void ScDBFunc::RemoveAllOutlines( BOOL bRecord )
 {
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -208,7 +209,7 @@ void ScDBFunc::RemoveAllOutlines( BOOL bRecord )
 
 void ScDBFunc::AutoOutline( BOOL bRecord )
 {
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // ganze Tabelle, wenn nichts markiert
     ScMarkData& rMark = GetViewData()->GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
@@ -226,7 +227,7 @@ void ScDBFunc::AutoOutline( BOOL bRecord )
 
 void ScDBFunc::SelectLevel( BOOL bColumns, USHORT nLevel, BOOL bRecord, BOOL bPaint )
 {
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -242,7 +243,7 @@ void ScDBFunc::SelectLevel( BOOL bColumns, USHORT nLevel, BOOL bRecord, BOOL bPa
 
 void ScDBFunc::ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bRecord, BOOL bPaint )
 {
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -258,7 +259,7 @@ void ScDBFunc::ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bR
 
 void ScDBFunc::HideOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry, BOOL bRecord, BOOL bPaint )
 {
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -276,24 +277,24 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
 {
     BOOL bEnable = FALSE;
 
-    USHORT nStartCol;
-    USHORT nStartRow;
-    USHORT nStartTab;
-    USHORT nEndCol;
-    USHORT nEndRow;
-    USHORT nEndTab;
+    SCCOL nStartCol;
+    SCROW nStartRow;
+    SCTAB nStartTab;
+    SCCOL nEndCol;
+    SCROW nEndRow;
+    SCTAB nEndTab;
 
     if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
     {
         ScDocument* pDoc = GetViewData()->GetDocument();
-        USHORT nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData()->GetTabNo();
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
         if (pTable)
         {
             ScOutlineArray* pArray;
             ScOutlineEntry* pEntry;
-            USHORT nStart;
-            USHORT nEnd;
+            SCCOLROW nStart;
+            SCCOLROW nEnd;
 
             //  Spalten
 
@@ -305,7 +306,7 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
                 nEnd   = pEntry->GetEnd();
                 if ( bHide )
                 {
-                    if ( nStartCol<=nEnd && nEndCol>=nStart )
+                    if ( nStartCol<=static_cast<SCCOL>(nEnd) && nEndCol>=static_cast<SCCOL>(nStart) )
                         if (!pEntry->IsHidden())
                             bEnable = TRUE;
                 }
@@ -396,7 +397,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
@@ -445,7 +446,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
         ScOutlineTable* pUndoTab = NULL;
         ScRangeName*    pUndoRange = NULL;
         ScDBCollection* pUndoDB = NULL;
-        USHORT          nTabCount = 0;              // fuer Referenz-Undo
+        SCTAB           nTabCount = 0;              // fuer Referenz-Undo
 
         if (bRecord)                                        // alte Daten sichern
         {
@@ -458,15 +459,15 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                USHORT nOutStartCol;                            // Zeilen/Spaltenstatus
-                USHORT nOutStartRow;
-                USHORT nOutEndCol;
-                USHORT nOutEndRow;
+                SCCOLROW nOutStartCol;                          // Zeilen/Spaltenstatus
+                SCCOLROW nOutStartRow;
+                SCCOLROW nOutEndCol;
+                SCCOLROW nOutEndRow;
                 pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-                pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
                 pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
             }
             else
@@ -569,7 +570,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, BOOL bRecord )
 //          Pivot
 //
 
-String lcl_MakePivotTabName( const String& rPrefix, USHORT nNumber )
+String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
 {
     String aName = rPrefix;
     aName += String::CreateFromInt32( nNumber );
@@ -595,7 +596,7 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     ScRange aDestRange = rDest;
     if ( bNewTable )
     {
-        USHORT nSrcTab = GetViewData()->GetTabNo();
+        SCTAB nSrcTab = GetViewData()->GetTabNo();
 
         String aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
         String aStr;
@@ -605,9 +606,9 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         aName += aStr;
         aName += '_';
 
-        USHORT nNewTab = nSrcTab+1;
+        SCTAB nNewTab = nSrcTab+1;
 
-        USHORT i=1;
+        SCTAB i=1;
         while ( !pDoc->InsertTab( nNewTab, lcl_MakePivotTabName( aName, i ) ) && i <= MAXTAB )
             i++;
 
@@ -689,9 +690,9 @@ void ScDBFunc::RecalcPivotTable()
 
 void ScDBFunc::RepeatDB( BOOL bRecord )
 {
-    USHORT nCurX = GetViewData()->GetCurX();
-    USHORT nCurY = GetViewData()->GetCurY();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCCOL nCurX = GetViewData()->GetCurX();
+    SCROW nCurY = GetViewData()->GetCurY();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDBData* pDBData = GetDBData();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -725,11 +726,11 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
             }
         }
 
-        USHORT nDummy;
-        USHORT nStartCol;
-        USHORT nStartRow;
-        USHORT nEndCol;
-        USHORT nEndRow;
+        SCTAB nDummy;
+        SCCOL nStartCol;
+        SCROW nStartRow;
+        SCCOL nEndCol;
+        SCROW nEndRow;
         pDBData->GetArea( nDummy, nStartCol, nStartRow, nEndCol, nEndRow );
 
         //!     Undo nur benoetigte Daten ?
@@ -741,22 +742,22 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
 
         if (bRecord)
         {
-            USHORT nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = pDoc->GetTableCount();
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
             if (pTable)
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                USHORT nOutStartCol;                            // Zeilen/Spaltenstatus
-                USHORT nOutStartRow;
-                USHORT nOutEndCol;
-                USHORT nOutEndRow;
+                SCCOLROW nOutStartCol;                          // Zeilen/Spaltenstatus
+                SCCOLROW nOutStartRow;
+                SCCOLROW nOutEndCol;
+                SCCOLROW nOutEndRow;
                 pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-                pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
                 pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
             }
             else
@@ -812,9 +813,10 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
 
         if (bRecord)
         {
-            USHORT nDummy;
-            USHORT nNewEndRow;
-            pDBData->GetArea( nDummy, nDummy,nDummy, nDummy,nNewEndRow );
+            SCTAB nDummyTab;
+            SCCOL nDummyCol;
+            SCROW nDummyRow, nNewEndRow;
+            pDBData->GetArea( nDummyTab, nDummyCol,nDummyRow, nDummyCol,nNewEndRow );
 
             const ScRange* pOld = NULL;
             const ScRange* pNew = NULL;
