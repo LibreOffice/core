@@ -4204,3 +4204,7 @@ __CTA2?AVIndexOutOfBoundsException@lang@star@sun@com@@
 ?IsAddonMenuId@AddonMenuManager@framework@@SAEG@Z
 ?IsPickListItemId@MenuConfiguration@framework@@SAEG@Z
 ?IsWindowListItemId@MenuConfiguration@framework@@SAEG@Z
+?implcp_searchContentHandlerForType@FilterCache@framework@@CAEABVOUString@rtl@@ABV?$CheckedIterator@VOUStringList@framework@@@2@0@Z
+?implcp_searchDetectorForType@FilterCache@framework@@CAEABVOUString@rtl@@ABV?$CheckedIterator@VOUStringList@framework@@@2@0@Z
+?implcp_searchFilterForType@FilterCache@framework@@CAEABVOUString@rtl@@ABV?$CheckedIterator@VOUStringList@framework@@@2@0@Z
+?implcp_searchLoaderForType@FilterCache@framework@@CAEABVOUString@rtl@@ABV?$CheckedIterator@VOUStringList@framework@@@2@0@Z
