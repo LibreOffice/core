@@ -273,6 +273,12 @@
      <value>true</value>
     </prop>
    </node>
+   <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Standard (viewing mode)</value>
+     <value xml:lang="de">Standard (Lesemodus)</value>
+    </prop>
+   </node>
   </node>
  </node>
 </oor:component-data>
