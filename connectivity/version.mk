@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mmaher $ $Date: 2001-10-11 10:05:47 $
+#   last change: $Author: oj $ $Date: 2002-11-11 08:57:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -222,5 +222,21 @@ MOZAB_CPP=1
 
 MOZAB=$(MOZAB_TARGET_TARGET)_$(CMPEXT)
 
+
+# ----------------------------MySQL settings-----------------------------------#
+# target
+MYSQL_TARGET=mysql
+
+# the major 
+MYSQL_MAJOR=2
+# the minor 
+MYSQL_MINOR=0
+# the micro 
+MYSQL_MICRO=0
+
+# this is a c++ compatible library 
+MYSQL_CPP=1
+
+MYSQL=$(MYSQL_TARGET_TARGET)_$(CMPEXT)
 
 
