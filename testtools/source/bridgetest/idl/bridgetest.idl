@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgetest.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:16:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,22 +134,53 @@ interface XRecursiveCall : com::sun::star::uno::XInterface
     void callRecursivly( [in] XRecursiveCall xCall , [in] long nToCall );
 };
 
-interface XA {
-    long f1();
+interface XMultiBase1 {
+    [attribute] double att1; // initially 0.0
+    long fn11([in] long arg); // return 11 * arg
+    string fn12([in] string arg); // return "12" + arg
 };
 
-interface XB {
-    long f2();
-    [attribute] long a;
+interface XMultiBase2: XMultiBase1 {
+    long fn21([in] long arg); // return 21 * arg
+    string fn22([in] string arg); // return "22" + arg
 };
 
-interface XC {
-    interface XA;
-    interface XB;
+interface XMultiBase3 {
+    [attribute] double att3; // initially 0.0
+    long fn31([in] long arg); // return 31 * arg
+    string fn32([in] string arg); // return "32" + arg
+    long fn33(); // return 33
 };
 
-interface XMulti: XC {
-    long f3();
+interface XMultiBase3a: XMultiBase3 {};
+
+interface XMultiBase4 {
+    long fn41([in] long arg); // return 41 * arg
+};
+
+interface XMultiBase5 {
+    interface XMultiBase3;
+    interface XMultiBase4;
+    interface XMultiBase1;
+};
+
+interface XMultiBase6 {
+    interface XMultiBase2;
+    interface XMultiBase3a;
+    interface XMultiBase5;
+    long fn61([in] long arg); // return 61 * arg
+    string fn62([in] string arg); // return "62" + arg
+};
+
+interface XMultiBase7 {
+    long fn71([in] long arg); // return 71 * arg
+    string fn72([in] string arg); // return "72" + arg
+    long fn73(); // return 73
+};
+
+interface XMulti {
+    interface XMultiBase6;
+    interface XMultiBase7;
 };
 
 /**
@@ -267,10 +298,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     void startRecursiveCall( [in] XRecursiveCall xCall , [in] long nToCall );
 
     XMulti getMulti();
-    long testMultiF1([in] XMulti multi);
-    long testMultiF2([in] XMulti multi);
-    long testMultiF3([in] XMulti multi);
-    long testMultiA([in] XMulti multi, [in] long value);
+    string testMulti([in] XMulti multi);
 };
 
 
