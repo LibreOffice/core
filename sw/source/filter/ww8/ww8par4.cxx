@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 11:38:09 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,7 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
     // pointing to the very same char position as our SprmCFRMark[Del]
-    if (!pPlcxMan || bIgnoreText)
+    if (!pPlcxMan)
         return;
     const BYTE* pSprmCIbstRMark;
     const BYTE* pSprmCDttmRMark;
