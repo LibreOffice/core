@@ -352,7 +352,9 @@ DOCUFILES+= \
     $(DESTDIRDOCUIMAGES)$/elements.jpg
 
 INSTALLSCRIPT= \
-    $(DESTDIR)$/setsdkenv_unix \
+    $(DESTDIR)$/configureUnix \
+    $(DESTDIR)$/setsdkenv_unix.in \
+    $(DESTDIR)$/configureWindowsNT.bat \
     $(DESTDIR)$/setsdkenv_windows.bat
 
 
@@ -398,7 +400,15 @@ $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs/images$/%
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $? $@
 
-$(DESTDIR)$/setsdkenv_unix : $(PRJ)$/setsdkenv_unix
+$(DESTDIR)$/configureUnix : $(PRJ)$/configureUnix
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/configureWindowsNT.bat : $(PRJ)$/configureWindowsNT.bat
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
