@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:37:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,23 @@
 #define CB_COPY_ATTR  20
 #define FT_OBJECT_NAME 21
 #define ED_OBJECT_NAME 22
+#define BTN_AUTOCAPTION 23
+#define TXT_SEP         24
+#define EDT_SEP         25
+#define WIN_SAMPLE      26
 
-#define STR_BEGINNING  1
-#define STR_END        2
-#define STR_ABOVE      3
-#define STR_CP_BELOW   4
+#define FL_CATANDFRAME  27
+#define FT_CHARSTYLE    28
+#define LB_CHARSTYLE    29
+#define CB_APPLYBAS     30
+
+#define STR_BEGINNING       1
+#define STR_END             2
+#define STR_ABOVE           3
+#define STR_CP_BELOW        4
+#define STR_CATEGORY_NONE   5
 
 #endif
 
 // ********************************************************************** EOF
+
