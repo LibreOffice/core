@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2000-11-30 11:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class ScDocument;
 class NameBuffer;
 
 class ScProgress;
+class XclExpChangeTrack;
 
 //class ScDPCollection;
 //class ScDPObject;
@@ -108,6 +109,7 @@ public:
     inline void                 Append( ExcRecord* );
     inline ExcRecord*           First( void );
     inline ExcRecord*           Next( void );
+                                List::Count;
 };
 
 
@@ -193,6 +195,8 @@ private:
     ScProgress*         pPrgrsBar;
 
     static NameBuffer*  pTabNames;
+
+    XclExpChangeTrack*  pExpChangeTrack;
 
     void                Clear( void );
     void                Add( UINT16 nScTab );
