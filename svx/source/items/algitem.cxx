@@ -2,9 +2,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:02:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,12 @@ SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
 {
 }
 
+SvxOrientationItem::SvxOrientationItem( INT32 nRotation, BOOL bStacked, const USHORT nId ) :
+    SfxEnumItem( nId )
+{
+    SetFromRotation( nRotation, bStacked );
+}
+
 //------------------------------------------------------------------------
 
 SfxItemPresentation SvxOrientationItem::GetPresentation
@@ -494,6 +500,38 @@ SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, USHORT ) const
 USHORT SvxOrientationItem::GetValueCount() const
 {
     return SVX_ORIENTATION_STACKED + 1; // letzter Enum-Wert + 1
+}
+
+//------------------------------------------------------------------------
+
+BOOL SvxOrientationItem::IsStacked() const
+{
+    return static_cast< SvxCellOrientation >( GetValue() ) == SVX_ORIENTATION_STACKED;
+}
+
+INT32 SvxOrientationItem::GetRotation( INT32 nStdAngle ) const
+{
+    INT32 nAngle = nStdAngle;
+    switch( static_cast< SvxCellOrientation >( GetValue() ) )
+    {
+        case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;
+        case SVX_ORIENTATION_TOPBOTTOM: nAngle = 27000;
+    }
+    return nAngle;
+}
+
+void SvxOrientationItem::SetFromRotation( INT32 nRotation, BOOL bStacked )
+{
+    if( bStacked )
+    {
+        SetValue( SVX_ORIENTATION_STACKED );
+    }
+    else switch( nRotation )
+    {
+        case 9000:  SetValue( SVX_ORIENTATION_BOTTOMTOP );  break;
+        case 27000: SetValue( SVX_ORIENTATION_TOPBOTTOM );  break;
+        default:    SetValue( SVX_ORIENTATION_STANDARD );
+    }
 }
 
 // class SvxMarginItem ---------------------------------------------------
