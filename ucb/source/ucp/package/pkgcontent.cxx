@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-04 10:59:10 $
+ *  last change: $Author: kso $ $Date: 2000-12-15 09:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1705,6 +1705,9 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
     if ( !rxPackage.is() )
         return sal_False;
 
+    if ( !rxPackage->hasByHierarchicalName( rURI.getPath() ) )
+        return sal_False;
+
     try
     {
         Any aEntry = rxPackage->getByHierarchicalName( rURI.getPath() );
@@ -1818,6 +1821,9 @@ sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
     if ( !xNA.is() )
         return sal_False;
 
+    if ( !xNA->hasByHierarchicalName( aURI.getPath() ) )
+        return sal_False;
+
     try
     {
         Any aEntry = xNA->getByHierarchicalName( aURI.getPath() );
@@ -1922,6 +1928,12 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             VOS_ENSURE( sal_False, "Content::storeData - insertByName failed!" );
             return sal_False;
         }
+        catch ( NoSuchElementException & )
+        {
+            // getByHierarchicalName
+            VOS_ENSURE( sal_False, "Content::storeData - getByHierarchicalName failed!" );
+            return sal_False;
+        }
         catch ( Exception & )
         {
             // createInstanceWithArguments
@@ -1929,6 +1941,9 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             return sal_False;
         }
     }
+
+    if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
+        return sal_False;
 
     try
     {
@@ -2005,9 +2020,12 @@ sal_Bool Content::removeData()
     if ( !xNA.is() )
         return sal_False;
 
+    PackageUri aParentUri( getParentURL() );
+    if ( !xNA->hasByHierarchicalName( aParentUri.getPath() ) )
+        return sal_False;
+
     try
     {
-        PackageUri aParentUri( getParentURL() );
         Any aEntry = xNA->getByHierarchicalName( aParentUri.getPath() );
         Reference< XNameContainer > xContainer;
         aEntry >>= xContainer;
@@ -2079,6 +2097,9 @@ Reference< XInputStream > Content::getInputStream()
     if ( !xNA.is() )
         return xStream;
 
+    if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
+        return xStream;
+
     try
     {
         Any aEntry = xNA->getByHierarchicalName( m_aUri.getPath() );
@@ -2114,6 +2135,9 @@ Reference< XEnumeration > Content::getIterator()
     Reference< XEnumeration > xIter;
     Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
+        return xIter;
+
+    if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
         return xIter;
 
     try
