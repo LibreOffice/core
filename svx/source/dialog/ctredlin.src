@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:15:25 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-01-12 21:15:25 $
- // $Revision: 1.7 $
+ //     $Date: 2001-01-26 20:46:35 $
+ // $Revision: 1.8 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -600,7 +600,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ russian ] = "ƒÂÈÒÚ‚ËÂ";
         Text[ polish ] = "Akcja";
         Text[ japanese ] = "±∏ºÆ›(~C)";
-        Text[ chinese_traditional ] = "æﬁß@(~C)";
+        Text[ chinese_traditional ] = "∞ ß@(~C)";
         Text[ arabic ] = "«·≈Ã—«¡";
         Text[ greek ] = "≈Ì›Ò„ÂÈ·";
         Text[ korean ] = "ºˆ«‡(~C)";
@@ -902,7 +902,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ russian ] = "ƒÂÈÒÚ‚ËÂ";
         Text[ polish ] = "Akcja";
         Text[ japanese ] = "±∏ºÆ›";
-        Text[ chinese_traditional ] = "æﬁß@";
+        Text[ chinese_traditional ] = "∞ ß@";
         Text[ arabic ] = "«·≈Ã—«¡";
         Text[ greek ] = "≈Ì›Ò„ÂÈ·";
         Text[ korean ] = "ºˆ«‡";
