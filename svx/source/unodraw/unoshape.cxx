@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-24 13:01:13 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 11:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,7 +1021,10 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 
     uno::Reference< uno::XInterface > xSelf( pObj->getWeakUnoShape() );
     if( !xSelf.is() )
+    {
+        pObj = NULL;
         return;
+    }
 
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
