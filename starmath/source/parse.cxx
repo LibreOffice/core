@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-12-12 16:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,11 @@ static const xub_Unicode aDelimiterTable[] =
     '\0'    // end of list symbol
 };
 
+
+static inline BOOL IsDigit( sal_Unicode cChar )
+{
+    return '0' <= cChar && cChar <= '9';
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -619,7 +624,7 @@ void SmParser::NextToken()
     }
 
     USHORT i;
-    for (i = 0; (i < n) && (isdigit(*pBuffer) ||
+    for (i = 0; (i < n) && (IsDigit(*pBuffer) ||
                             (*pBuffer == '.') ||
                             (*pBuffer == ',')); i++)
         pBuffer ++;
