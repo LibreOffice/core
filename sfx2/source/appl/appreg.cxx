@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:03:48 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,16 +131,16 @@ void SfxApplication::Registrations_Impl()
     SfxAppMenuControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppMenuControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
 */
-    SfxToolBoxControl::RegisterControl(SID_UNDO);
-    SfxToolBoxControl::RegisterControl(SID_REDO);
+//  SfxToolBoxControl::RegisterControl(SID_UNDO);
+//  SfxToolBoxControl::RegisterControl(SID_REDO);
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
     SfxCancelToolBoxControl_Impl::RegisterControl(SID_BROWSE_STOP);
     SfxAppToolBoxControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppToolBoxControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
-    SfxDragToolBoxControl_Impl::RegisterControl( SID_TOPDOC );
-    SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_FORWARD );
-    SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_BACKWARD );
+//  SfxDragToolBoxControl_Impl::RegisterControl( SID_TOPDOC );
+//  SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_FORWARD );
+//  SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_BACKWARD );
     SfxReloadToolBoxControl_Impl::RegisterControl( SID_RELOAD );
     SfxAddonsToolBoxControl_Impl::RegisterControl( SID_ADDONS );
 };
