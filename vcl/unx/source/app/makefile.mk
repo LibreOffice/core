@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pl $ $Date: 2001-11-05 09:21:13 $
+#   last change: $Author: hr $ $Date: 2002-08-27 13:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,12 @@ TARGET=salapp
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(GUIBASE)"!="unx"
 
 dummy:
-    @echo "Nothing to build for Mac OS X"
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
-.ELSE		# "$(OS)"=="MACOSX"
+.ELSE		# "$(GUIBASE)"!="unx"
 
 .IF "$(BUILD_SOSL)"!=""
 CDEFS+=-DBUILD_SOSL
@@ -133,7 +133,7 @@ EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
         $(OBJ)$/salmain.obj
 .ENDIF
 
-.ENDIF		# "$(OS)"=="MACOSX"
+.ENDIF		# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
 
