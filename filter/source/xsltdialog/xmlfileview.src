@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfileview.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:32:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,24 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         HelpId              = HID_XML_SOURCE_FILE_VALIDATE;
         Text                = "~Validieren";
         Text[ english_us ]  = "~Validate";
+        Text[ french ] = "Valider";
+        Text[ spanish ] = "~Confirmar";
+        Text[ italian ] = "~Conferma";
+        Text[ swedish ] = "~Validera";
+        Text[ japanese ] = "検証";
+        Text[ korean ] = "검증";
+        Text[ chinese_simplified ] = "验证(~V)";
+        Text[ chinese_traditional ] = "驗證(~V)";
     };
+    Text[ french ] = "Sortie filtre XML";
+    Text[ spanish ] = "Salida filtro XML";
+    Text[ italian ] = "XML - uscita filtro";
+    Text[ swedish ] = "XML-filterutdata";
+    Text[ japanese ] = "XML フィルタのアウトプット";
+    Text[ korean ] = "XML 필터 출력";
+    Text[ chinese_simplified ] = "XML 筛选器输出";
+    Text[ chinese_traditional ] = "XML 篩選器匯出";
 };
+
+
 
