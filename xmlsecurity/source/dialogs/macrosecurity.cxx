@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 10:43:31 $
+ *  last change: $Author: gt $ $Date: 2004-07-19 15:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,33 +215,33 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
 {
-        try
+    try
+    {
+        rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+        uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        uno::Reference < ui::dialogs::XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), uno::UNO_QUERY );
+
+        short nRet = xFolderPicker->execute();
+
+        if( ui::dialogs::ExecutableDialogResults::OK != nRet )
+            return 0;
+
+        String aPathStr = xFolderPicker->getDirectory();
+        INetURLObject aNewObj( aPathStr );
+        aNewObj.removeFinalSlash();
+
+        // then the new path also an URL else system path
+        String aNewPathStr = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID )? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+
+        if( maTrustFileLocLB.GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
         {
-            rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-            uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            uno::Reference < ui::dialogs::XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), uno::UNO_QUERY );
-
-            short nRet = xFolderPicker->execute();
-
-            if( ui::dialogs::ExecutableDialogResults::OK != nRet )
-                return 0;
-
-            String aPathStr = xFolderPicker->getDirectory();
-            INetURLObject aNewObj( aPathStr );
-            aNewObj.removeFinalSlash();
-
-            // then the new path also an URL else system path
-            String aNewPathStr = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID )? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
-
-            if( maTrustFileLocLB.GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
-            {
-                maTrustFileLocLB.InsertEntry( aNewPathStr );
-            }
+            maTrustFileLocLB.InsertEntry( aNewPathStr );
         }
-        catch( uno::Exception& )
-        {
-            DBG_ERRORFILE( "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" )
-        }
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE( "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" )
+    }
 
     return 0;
 }
