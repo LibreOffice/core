@@ -1,4 +1,4 @@
-..\%__SRC%\bin\ldump.exe %_DEST%\bin%_EXT%\ldump.exe
+..\%__SRC%\bin\ldump4.exe %_DEST%\bin%_EXT%\ldump4.exe
 ..\%__SRC%\bin\makedepend.exe %_DEST%\bin%_EXT%\makedepend.exe
 ..\%__SRC%\bin\makedepend %_DEST%\bin%_EXT%\makedepend
 ..\%__SRC%\bin\javadep.exe %_DEST%\bin%_EXT%\javadep.exe
