@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 09:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,6 @@ public:
     void CancelTransfers();
 
     static void SetTransferPriority( SvBaseLink& rLink, USHORT nPrio );
-
-    // PrepareReload - alle FileObjects des LinksManagers oder den spz.
-    // aus dem Cache entfernen.
-    virtual void PrepareReload( SvBaseLink* pLnk = 0 );
 
     // um Status Informationen aus dem FileObject an den BaseLink zu
     // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
