@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:42:55 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,9 @@
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -350,7 +353,8 @@ static void WriteDop( SwWW8Writer& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
 
-    rDop.fUsePrinterMetrics = !rWrt.pDoc->IsUseVirtualDevice();
+    rDop.fNoLeading = !rWrt.pDoc->IsAddExtLeading();
+    rDop.fUsePrinterMetrics = com::sun::star::document::PrinterIndependentLayout::DISABLED == rWrt.pDoc->IsUseVirtualDevice();
 
     // default TabStop schreiben
     const SvxTabStopItem& rTabStop =
