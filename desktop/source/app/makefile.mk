@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: jb $ $Date: 2002-10-21 09:02:16 $
+#   last change: $Author: jb $ $Date: 2002-10-21 09:04:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ OBJFILES = \
         $(OBJ)$/appsys.obj				\
         $(OBJ)$/desktopresid.obj		\
         $(OBJ)$/dispatchwatcher.obj		\
+        $(SLO)$/ssodlg.obj				\
          $(OBJ)$/ssoinit.obj				\
         $(OBJ)$/configinit.obj		    \
         $(OBJ)$/officeipcmanager.obj	\
