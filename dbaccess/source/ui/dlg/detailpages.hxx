@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 08:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,8 @@ namespace dbaui
         FixedLine           m_aSeparator2;
         FixedText           m_aPortNumber;
         NumericField        m_aNFPortNumber;
+        FixedText           m_aFTRowCount;
+        NumericField        m_aNFRowCount;
 
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
 
@@ -314,6 +316,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/29 13:11:52  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.5  2001/05/23 14:16:42  oj
  *  #87149# new helpids
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-20 13:43:42 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 08:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,6 +703,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_HOSTNAME, ::rtl::OUString::createFromAscii("HostName")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, ::rtl::OUString::createFromAscii("BaseDN")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_PORTNUMBER, ::rtl::OUString::createFromAscii("PortNumber")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, ::rtl::OUString::createFromAscii("MaxRowCount")));
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -1096,12 +1097,14 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_HOSTNAME, String());
     *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, String());
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
+    *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100);
 
 
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -2654,6 +2657,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.60  2001/06/20 13:43:42  fs
+ *  #88447# corrected order of detail pages
+ *
  *  Revision 1.59  2001/06/20 07:08:33  oj
  *  #88434# new page for user admin
  *

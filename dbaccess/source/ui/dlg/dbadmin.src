@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-21 21:43:36 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 08:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1719,6 +1719,22 @@ TabPage PAGE_LDAP
         Pos = MAP_APPFONT ( 91 , 80 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
+    FixedText FT_LDAPROWCOUNT
+    {
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Datensätze (max.)" ;
+        Text [ english ] = "~Rows (max.)" ;
+    };
+    NumericField NF_LDAPROWCOUNT
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+        HelpId = HID_DSADMIN_LDAP_ROWCOUNT;
+
+        Pos = MAP_APPFONT ( 91 , 98 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+    };
 };
 //.........................................................................
 TabPage PAGE_TEXT
@@ -3240,6 +3256,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.59  2001/06/21 21:43:36  kz
+ *  Merge SRC633: 21.06.01 - 23:42:48
+ *
  *  Revision 1.58  2001/06/20 07:08:33  oj
  *  #88434# new page for user admin
  *

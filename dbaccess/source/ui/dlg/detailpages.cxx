@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 11:37:57 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 08:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,10 +760,13 @@ namespace dbaui
         ,m_aSeparator2      (this, ResId(FL_SEPARATOR2))
         ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
         ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
+        ,m_aFTRowCount      (this, ResId(FT_LDAPROWCOUNT))
+        ,m_aNFRowCount      (this, ResId(NF_LDAPROWCOUNT))
     {
         m_aETHostname.SetModifyHdl(getControlModifiedLink());
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
+        m_aNFRowCount.SetModifyHdl(getControlModifiedLink());
 
         FreeResource();
     }
@@ -785,6 +788,7 @@ namespace dbaui
                 DSID_CONN_LDAP_HOSTNAME,
                 DSID_CONN_LDAP_BASEDN,
                 DSID_CONN_LDAP_PORTNUMBER,
+                DSID_CONN_LDAP_ROWCOUNT,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -803,6 +807,11 @@ namespace dbaui
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, m_aNFPortNumber.GetValue()));
             bChangedSomething = sal_True;
         }
+        if (m_aNFRowCount.GetValue() != m_aNFRowCount.GetSavedValue())
+        {
+            _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, m_aNFRowCount.GetValue()));
+            bChangedSomething = sal_True;
+        }
 
         return bChangedSomething;
     }
@@ -819,16 +828,19 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_LDAP_HOSTNAME, sal_True);
         SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, sal_True);
         SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
+        SFX_ITEMSET_GET(_rSet, pRowCount, SfxInt32Item, DSID_CONN_LDAP_ROWCOUNT, sal_True);
 
         m_aETHostname.SetText(pHostName->GetValue());
         m_aETBaseDN.SetText(pBaseDN->GetValue());
         m_aNFPortNumber.SetValue(pPortNumber->GetValue());
+        m_aNFRowCount.SetValue(pRowCount->GetValue());
 
         if (_bSaveValue)
         {
             m_aETHostname.SaveValue();
             m_aETBaseDN.SaveValue();
             m_aNFPortNumber.SaveValue();
+            m_aNFRowCount.SaveValue();
         }
 
         if (bReadonly)
@@ -836,6 +848,7 @@ namespace dbaui
             m_aETHostname.Disable();
             m_aETBaseDN.Disable();
             m_aNFPortNumber.Disable();
+            m_aNFRowCount.Disable();
         }
     }
 
@@ -1147,6 +1160,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/31 11:37:57  oj
+ *  #87149# correct ldap protocol
+ *
  *  Revision 1.6  2001/05/29 13:11:52  oj
  *  #87149# addressbook ui impl
  *

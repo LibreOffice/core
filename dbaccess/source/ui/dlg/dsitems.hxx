@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 08:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,18 +99,22 @@
 #define DSID_CONN_LDAP_HOSTNAME     32
 #define DSID_CONN_LDAP_BASEDN       33
 #define DSID_CONN_LDAP_PORTNUMBER   34
+#define DSID_CONN_LDAP_ROWCOUNT     35
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_CONN_LDAP_PORTNUMBER
+#define DSID_LAST_ITEM_ID   DSID_CONN_LDAP_ROWCOUNT
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/29 13:11:52  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.8  2001/04/20 13:38:06  oj
  *  #85736# new checkbox for odbc
  *
