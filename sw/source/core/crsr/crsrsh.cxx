@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:52:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,6 +949,11 @@ FASTBOOL SwCrsrShell::IsSttPara() const
 FASTBOOL SwCrsrShell::IsEndPara() const
 {   return( pCurCrsr->GetPoint()->nContent == pCurCrsr->GetCntntNode()->Len() ? TRUE : FALSE ); }
 
+
+FASTBOOL SwCrsrShell::IsInFrontOfLabel() const
+{
+    return pCurCrsr->IsInFrontOfLabel();
+}
 
 FASTBOOL SwCrsrShell::GotoPage( USHORT nPage )
 {
