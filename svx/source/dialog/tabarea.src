@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-05 21:58:49 $
+ *  last change: $Author: kz $ $Date: 2001-06-09 00:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,10 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text [ ENGLISH ] = "Transparency mode" ;
         Text[ english_us ] = "Transparency mode";
         Text[ portuguese ] = "Transparency mode";
-        Text[ russian ] = "Transparency mode";
+        Text[ russian ] = "Ğåæèì ïğîçğà÷íîñòè";
         Text[ greek ] = "Transparency mode";
         Text[ dutch ] = "Transparency mode";
-        Text[ french ] = "Transparency mode";
+        Text[ french ] = "Mode Transparence";
         Text[ spanish ] = "Modo transparencia";
         Text[ finnish ] = "Transparency mode";
         Text[ italian ] = "Transparency mode";
@@ -95,7 +95,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ swedish ] = "Transparensläge";
         Text[ polish ] = "Tryb przezroczystoœci";
         Text[ portuguese_brazilian ] = "Transparency mode";
-        Text[ japanese ] = "Transparency mode";
+        Text[ japanese ] = "“§‰ß«Ó°ÄŞ";
         Text[ korean ] = "Transparency mode";
         Text[ chinese_simplified ] = "Í¸Ã÷Ä£Ê½";
         Text[ chinese_traditional ] = "³z©ú¼Ò¦¡";
@@ -118,7 +118,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ spanish ] = "~Sin transparencia";
         Text[ italian ] = "Nessuna trasparenza";
         Text[ danish ] = "Ingen transparens";
-        Text[ swedish ] = "Ingen transparens";
+        Text[ swedish ] = "~Ingen transparens";
         Text[ polish ] = "~Bez przezroczystoœci";
         Text[ portuguese_brazilian ] = "~No transparence";
         Text[ japanese ] = "“§‰ß«‚È‚µ(~N)";
@@ -139,10 +139,10 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text [ ENGLISH ] = "~Transparency" ;
         Text[ english_us ] = "~Linear transparency";
         Text[ portuguese ] = "~Transparência linear";
-        Text[ russian ] = "Ëèíåéíàÿ ïğîçğà÷íîñòü";
+        Text[ russian ] = "Ïğîçğà÷íîñòü";
         Text[ greek ] = "ÃñáììéêŞ äéáöÜíåéá";
         Text[ dutch ] = "~Lineaire transparantie";
-        Text[ french ] = "~Transparence linéaire";
+        Text[ french ] = "~Transparence";
         Text[ spanish ] = "~Transparencia";
         Text[ finnish ] = "~Lineaarinen läpikuultavuus";
         Text[ italian ] = "Trasparenza ~lineare";
@@ -150,7 +150,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ swedish ] = "~Transparens";
         Text[ polish ] = "Przezroczystoœæ";
         Text[ portuguese_brazilian ] = "~Linear transparence";
-        Text[ japanese ] = "üó‚Å“§‰ß«‚ ‚è(~L)";
+        Text[ japanese ] = "“§‰ß«‚ ‚è(~L)";
         Text[ korean ] = "¼±Çü Åõ¸íÈ¿°ú(~L)";
         Text[ chinese_simplified ] = "Í¸Ã÷(~L)";
         Text[ chinese_traditional ] = "³z©ú(~L)";
@@ -181,10 +181,10 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text [ ENGLISH ] = "Gradient" ;
         Text[ english_us ] = "~Transparency gradient";
         Text[ portuguese ] = "~Gradação da transparência";
-        Text[ russian ] = "~Ïğîçğà÷íàÿ ãğàäèåíòíàÿ";
+        Text[ russian ] = "Ãğàäèåíòíàÿ";
         Text[ greek ] = "ÄéáâÜèìéóç äéáöÜíåéáò";
         Text[ dutch ] = "~Transparantieverloop";
-        Text[ french ] = "~Dégradé de transparence";
+        Text[ french ] = "Dégradé";
         Text[ spanish ] = "Gradiente";
         Text[ finnish ] = "~Transparency gradient";
         Text[ italian ] = "Grado di ~trasparenza";
@@ -215,10 +215,10 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ spanish ] = "Ti~po";
         Text[ italian ] = "Ti~po";
         Text[ danish ] = "Type";
-        Text[ swedish ] = "Typ";
+        Text[ swedish ] = "Ty~p";
         Text[ polish ] = "Ty~p";
         Text[ portuguese_brazilian ] = "Ty~pe";
-        Text[ japanese ] = "À²Ìß(~P)";
+        Text[ japanese ] = "í—Ş(~P)";
         Text[ korean ] = "ÇüÅÂ(~P)";
         Text[ chinese_simplified ] = "ÀàĞÍ(~P)";
         Text[ chinese_traditional ] = "Ãş«¬(~P)";
@@ -782,10 +782,10 @@ TabPage RID_SVXPAGE_AREA
         Text [ ENGLISH ] = "Fill" ;
         Text[ english_us ] = "Fill";
         Text[ portuguese ] = "Fill";
-        Text[ russian ] = "Fill";
+        Text[ russian ] = "Çàïîëíåíèå";
         Text[ greek ] = "Fill";
         Text[ dutch ] = "Fill";
-        Text[ french ] = "Fill";
+        Text[ french ] = "Remplissage";
         Text[ spanish ] = "Relleno";
         Text[ finnish ] = "Fill";
         Text[ italian ] = "Fill";
@@ -793,7 +793,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ swedish ] = "Fyllning";
         Text[ polish ] = "Wype³nienie";
         Text[ portuguese_brazilian ] = "Fill";
-        Text[ japanese ] = "Fill";
+        Text[ japanese ] = "“h‚è‚Â‚Ô‚µ";
         Text[ korean ] = "Fill";
         Text[ chinese_simplified ] = "³äÌî";
         Text[ chinese_traditional ] = "¥R¶ñ";
@@ -809,10 +809,10 @@ TabPage RID_SVXPAGE_AREA
         Text [ ENGLISH ] = "No Fill" ;
         Text[ english_us ] = "No Fill";
         Text[ portuguese ] = "No Fill";
-        Text[ russian ] = "No Fill";
+        Text[ russian ] = "Áåç";
         Text[ greek ] = "No Fill";
         Text[ dutch ] = "No Fill";
-        Text[ french ] = "No Fill";
+        Text[ french ] = "Aucun";
         Text[ spanish ] = "Ninguno";
         Text[ finnish ] = "No Fill";
         Text[ italian ] = "No Fill";
@@ -820,7 +820,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ swedish ] = "Ingen";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "No Fill";
-        Text[ japanese ] = "No Fill";
+        Text[ japanese ] = "“h‚è‚Â‚Ô‚µ‚È‚µ";
         Text[ korean ] = "No Fill";
         Text[ chinese_simplified ] = "ÎŞ³äÌîÉ«";
         Text[ chinese_traditional ] = "µL¥R¶ñ";
@@ -839,7 +839,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ russian ] = "Öâåò";
         Text[ greek ] = "×ñşìá";
         Text[ dutch ] = "~Kleur";
-        Text[ french ] = "C~ouleur";
+        Text[ french ] = "Couleur";
         Text[ spanish ] = "Color";
         Text[ finnish ] = "~Väri";
         Text[ italian ] = "C~olore";
@@ -847,7 +847,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ swedish ] = "Färg";
         Text[ polish ] = "~Kolor";
         Text[ portuguese_brazilian ] = "C~or";
-        Text[ japanese ] = "ĞF(~C)";
+        Text[ japanese ] = "F";
         Text[ korean ] = "»ö»ó(~C)";
         Text[ chinese_simplified ] = "ÑÕÉ«(~C)";
         Text[ chinese_traditional ] = "±m¦â(~C)";
@@ -866,7 +866,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ russian ] = "Ãğàäèåíòíàÿ";
         Text[ greek ] = "Äéá~âÜèì. ÷ñşìá";
         Text[ dutch ] = "K~leurverloop";
-        Text[ french ] = "Dé~gradé";
+        Text[ french ] = "Dégradé";
         Text[ spanish ] = "Gradiente";
         Text[ finnish ] = "~Sävytys";
         Text[ italian ] = "~Sfumatura";
@@ -874,7 +874,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ swedish ] = "Färggradient";
         Text[ polish ] = "Gradient";
         Text[ portuguese_brazilian ] = "~D?grad?";
-        Text[ japanese ] = "????????(~G)";
+        Text[ japanese ] = "¸Ş×ÃŞ°¼®İ";
         Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç(~G)";
         Text[ chinese_simplified ] = "²ÊÉ«Í¼°¸(~G)";
         Text[ chinese_traditional ] = "±m¦â¹Ï®×(~G)";
@@ -890,10 +890,10 @@ TabPage RID_SVXPAGE_AREA
         Text [ ENGLISH ] = "Hatching" ;
         Text[ english_us ] = "Hatching";
         Text[ portuguese ] = "Hatching";
-        Text[ russian ] = "Hatching";
+        Text[ russian ] = "Øòğèõîâêà";
         Text[ greek ] = "Hatching";
         Text[ dutch ] = "Hatching";
-        Text[ french ] = "Hatching";
+        Text[ french ] = "Hachure";
         Text[ spanish ] = "Trama";
         Text[ finnish ] = "Hatching";
         Text[ italian ] = "Hatching";
@@ -901,7 +901,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ swedish ] = "Skraffering";
         Text[ polish ] = "Kreskowanie";
         Text[ portuguese_brazilian ] = "Hatching";
-        Text[ japanese ] = "Hatching";
+        Text[ japanese ] = "Ê¯Áİ¸Ş";
         Text[ korean ] = "Hatching";
         Text[ chinese_simplified ] = "ÒõÓ°Ïß";
         Text[ chinese_traditional ] = "³±¼v½u";
@@ -920,7 +920,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ russian ] = "Bitmap";
         Text[ greek ] = "~Bitmap";
         Text[ dutch ] = "~Bitmap";
-        Text[ french ] = "~Bitmap";
+        Text[ french ] = "Bitmap";
         Text[ spanish ] = "Bitmap";
         Text[ finnish ] = "~Bittikartta";
         Text[ italian ] = "~Bitmap";
@@ -928,7 +928,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ swedish ] = "Bitmap";
         Text[ polish ] = "Mapa bitowa";
         Text[ portuguese_brazilian ] = "~Bitmap";
-        Text[ japanese ] = "??????(~B)";
+        Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß";
         Text[ korean ] = "ºñÆ®¸Ê(~B)";
         Text[ chinese_simplified ] = "Î»Í¼(~B)";
         Text[ chinese_traditional ] = "ÂI°}¹Ï(~B)";
@@ -1290,7 +1290,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "Position" ;
         Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "Posición" ;
-        Text [ french ] = "Fonction" ;
+        Text [ french ] = "Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ swedish ] = "Position" ;
         Text [ danish ] = "Placering" ;
@@ -1609,10 +1609,10 @@ TabPage RID_SVXPAGE_SHADOW
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
+        Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Properties";
         Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
+        Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Properties";
         Text[ italian ] = "Properties";
@@ -1620,7 +1620,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "Properties";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Properties";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
@@ -1637,10 +1637,10 @@ TabPage RID_SVXPAGE_SHADOW
         TabStop = TRUE ;
         Text[ english_us ] = "~On";
         Text[ portuguese ] = "~Mostrar";
-        Text[ russian ] = "ïîêàçàòü";
+        Text[ russian ] = "Ïğèìåíèòü òåíü";
         Text[ greek ] = "åìöÜíéóç";
         Text[ dutch ] = "~weergeven";
-        Text[ french ] = "~Afficher";
+        Text[ french ] = "Appliquer";
         Text[ spanish ] = "Usar sombra";
         Text[ finnish ] = "~On";
         Text[ italian ] = "~Mostra";
@@ -1648,7 +1648,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ swedish ] = "Använd skugga";
         Text[ polish ] = "Zastosuj cieñ";
         Text[ portuguese_brazilian ] = "~mostrar";
-        Text[ japanese ] = "•\\¦(~O)";
+        Text[ japanese ] = "‰e‚ğ•t‚¯‚é(~O)";
         Text[ korean ] = "Ç¥½Ã(~O)";
         Text[ chinese_simplified ] = "Ê¹ÓÃÒõÓ°";
         Text[ chinese_traditional ] = "¨Ï¥Î³±¼v(~O)";
@@ -1667,7 +1667,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ greek ] = "Èİóç";
         Text[ dutch ] = "Positie";
-        Text[ french ] = "~Position";
+        Text[ french ] = "Position";
         Text[ spanish ] = "Posición";
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "~Posizione";
@@ -1702,7 +1702,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ russian ] = "Ğàññòîÿíèå";
         Text[ greek ] = "Áğüóôáóç";
         Text[ dutch ] = "~Afstand";
-        Text[ french ] = "~Distance";
+        Text[ french ] = "Distance";
         Text[ spanish ] = "Distancia";
         Text[ finnish ] = "~Etäisyys";
         Text[ italian ] = "~Distanza";
@@ -1781,10 +1781,10 @@ TabPage RID_SVXPAGE_SHADOW
         Text [ ENGLISH ] = "~Intensity" ;
         Text[ english_us ] = "In~tensity";
         Text[ portuguese ] = "~Transparência";
-        Text[ russian ] = "Ïğîçğà÷íîñòü";
+        Text[ russian ] = "Èíòåíñèâíîñòü";
         Text[ greek ] = "ÄéáöÜíåéá";
         Text[ dutch ] = "~Transparantie";
-        Text[ french ] = "~Transparence";
+        Text[ french ] = "~Intensité";
         Text[ spanish ] = "In~tensidad";
         Text[ finnish ] = "~Läpinäkyvyys";
         Text[ italian ] = "~Trasparenza";
@@ -1792,7 +1792,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ swedish ] = "~Intensitet";
         Text[ polish ] = "Intensywnoœæ";
         Text[ portuguese_brazilian ] = "~Transparenz";
-        Text[ japanese ] = "“§–¾(~T)";
+        Text[ japanese ] = "‹­‚³(~T)";
         Text[ korean ] = "Åõ¸í(~T)";
         Text[ chinese_simplified ] = "Í¸Ã÷¶È(~T)";
         Text[ chinese_traditional ] = "³z©ú«×(~T)";
@@ -1850,10 +1850,10 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
+        Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Properties";
         Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
+        Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Properties";
         Text[ italian ] = "Properties";
@@ -1861,7 +1861,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "Properties";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Properties";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
@@ -2448,10 +2448,10 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
+        Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Properties";
         Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
+        Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Properties";
         Text[ italian ] = "Properties";
@@ -2459,7 +2459,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "Properties";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Properties";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
@@ -2473,12 +2473,12 @@ TabPage RID_SVXPAGE_BITMAP
         Size = MAP_APPFONT ( 85 , 8 ) ;
         Text = "Muster Editor" ;
         Text [ ENGLISH ] = "Pattern Edit" ;
-        Text[ english_us ] = "Pattern Edit";
+        Text[ english_us ] = "Pattern Editor";
         Text[ portuguese ] = "Pattern Edit";
-        Text[ russian ] = "Pattern Edit";
+        Text[ russian ] = "Ğåäàêòîğ óçîğà";
         Text[ greek ] = "Pattern Edit";
         Text[ dutch ] = "Pattern Edit";
-        Text[ french ] = "Pattern Edit";
+        Text[ french ] = "Éditeur de motif";
         Text[ spanish ] = "Editor de modelo";
         Text[ finnish ] = "Pattern Edit";
         Text[ italian ] = "Pattern Edit";
@@ -2486,7 +2486,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ swedish ] = "Mönster-editor";
         Text[ polish ] = "Edytor przyk³adowy";
         Text[ portuguese_brazilian ] = "Pattern Edit";
-        Text[ japanese ] = "Pattern Edit";
+        Text[ japanese ] = "ÊßÀ°İ´ÃŞ¨À";
         Text[ korean ] = "Pattern Edit";
         Text[ chinese_simplified ] = "±à¼­Í¼°¸";
         Text[ chinese_traditional ] = "½s¿è¹Ï®×";
@@ -2509,7 +2509,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ ENGLISH ] = "~Foreground color" ;
         Text[ english_us ] = "~Foreground color";
         Text[ portuguese ] = "P~rimeiro plano";
-        Text[ russian ] = "Ïåğåäíèé ïëàí";
+        Text[ russian ] = "Öâåò ïåğåäíåãî ïëàíà";
         Text[ greek ] = "~Óå ğñşôï ğëÜíï";
         Text[ dutch ] = "V~oorgrond";
         Text[ french ] = "~Premier plan";
@@ -2520,7 +2520,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ swedish ] = "För~grundsfärg";
         Text[ polish ] = "Kolor pierwszego planu";
         Text[ portuguese_brazilian ] = "~Primeiro plano";
-        Text[ japanese ] = "‘OŒi(~F)";
+        Text[ japanese ] = "‘OŒiF(~F)";
         Text[ korean ] = "Àü¸é(~F)";
         Text[ chinese_simplified ] = "Ç°¾°ÑÕÉ«(~F)";
         Text[ chinese_traditional ] = "«e´º?¦â(~F)";
@@ -2545,7 +2545,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ ENGLISH ] = "~Background color" ;
         Text[ english_us ] = "~Background color";
         Text[ portuguese ] = "~Plano de fundo";
-        Text[ russian ] = "Ôîí";
+        Text[ russian ] = "Öâåò ôîíà";
         Text[ greek ] = "Öüíôï";
         Text[ dutch ] = "~Achtergrond";
         Text[ french ] = "~Arrière-plan";
@@ -2556,7 +2556,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ swedish ] = "Bakgru~ndsfärg";
         Text[ polish ] = "Kolor t³a";
         Text[ portuguese_brazilian ] = "~Fundo";
-        Text[ japanese ] = "”wŒi(~B)";
+        Text[ japanese ] = "”wŒiF(~B)";
         Text[ korean ] = "¹è°æ(~B)";
         Text[ chinese_simplified ] = "±³¾°ÑÕÉ«(~B)";
         Text[ chinese_traditional ] = "­I´º?¦â(~B)";
@@ -2846,10 +2846,10 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
+        Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Properties";
         Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
+        Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Properties";
         Text[ italian ] = "Properties";
@@ -2857,7 +2857,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "Properties";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Properties";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
@@ -3664,10 +3664,10 @@ TabPage RID_SVXPAGE_COLOR
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
+        Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Properties";
         Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
+        Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Properties";
         Text[ italian ] = "Properties";
@@ -3675,7 +3675,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "Properties";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Properties";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
@@ -4468,6 +4468,7 @@ TabDialog RID_SVXDLG_AREA
     Text[ catalan ] = "Relleno";
 };
  // ********************************************************************** EOF
+
 
 
 
