@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:27:16 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 20:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ turkish ] = "Close";
             Text[ arabic ] = "ÅÛáÇŞ";
             Text[ finnish ] = "Sulje";
-            Text[ catalan ] = "Cerrar";
+            Text[ catalan ] = "Tanca";
         };
     };
 };
@@ -332,7 +332,7 @@ String RID_STR_LOADING_DATASOURCE
     Text[ arabic ] = "ÊÍãíá ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Verileri yükle";
     Text[ finnish ] = "Lataa tiedot";
-    Text[ catalan ] = "Cargar datos";
+    Text[ catalan ] = "Carrega les dades";
 };
 
 QueryBox QUERY_BRW_SAVEMODIFIED
@@ -364,7 +364,7 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ turkish ] = "Güncel veri kümesi değiştirildi.\nDeğişiklikler saklansın mı?";
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Nykyistä tietuetta on muutettu.\nHaluatko tallentaa muutokset?";
-    Message[ catalan ] = "El registro actual ha sido modificado.\n¿Desea guardar las modificaciones?";
+    Message[ catalan ] = "El registre actual ha canviat.\nVoleu desar els canvis?";
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
@@ -393,7 +393,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message[ turkish ] = "Seçilen veriler silinsin mi?";
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Haluatko palauttaa poistaa valitut tiedot?";
-    Message[ catalan ] = "¿Desea eliminar los datos seleccionados?";
+    Message[ catalan ] = "Voleu suprimir les dades seleccionades?";
 };
 
 String RID_STR_DATABROWSER_FILTERED
@@ -422,7 +422,7 @@ String RID_STR_DATABROWSER_FILTERED
     Text[ turkish ] = "(filtrelenmiş)";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "(suodatettu)";
-    Text[ catalan ] = "(filtrado)";
+    Text[ catalan ] = "(filtrat)";
 };
 
 String SBA_BROWSER_SETTING_ORDER
@@ -448,7 +448,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáİÑÒ";
     Text[ turkish ] = "Sıralama ölçütlerinin ayarlanmasında hata";
     Text[ finnish ] = "Virhe lajittelujärjestyksen määrityksessä";
-    Text[ catalan ] = "Error al definir los criterios de ordenación";
+    Text[ catalan ] = "S'ha produït un error en definir els criteris d'ordenació";
 };
 String SBA_BROWSER_SETTING_FILTER
 {
@@ -473,7 +473,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕİíÉ";
     Text[ turkish ] = "Filtre ölçütlerinin ayarlanmasında hata";
     Text[ finnish ] = "Virhe suodatinehtojen määrityksessä";
-    Text[ catalan ] = "Error al definir los criterios de filtro";
+    Text[ catalan ] = "S'ha produït un error en definir els criteris de filtratge";
 };
 
 String RID_STR_CONNECTION_LOST
@@ -499,7 +499,7 @@ String RID_STR_CONNECTION_LOST
     Text[ arabic ] = "Êã İŞÏÇä ÇáÇÊÕÇá";
     Text[ turkish ] = "Bağlantı koptu";
     Text[ finnish ] = "Yhteys menetetty";
-    Text[ catalan ] = "Se perdió la conexión";
+    Text[ catalan ] = "S'ha perdut la connexió";
 };
 
 Image QUERYFOLDER_TREE_ICON
@@ -549,7 +549,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ turkish ] = "Queries";
     Text[ arabic ] = "ÇÓÊİÓÇÑÇÊ";
     Text[ finnish ] = "Abfragen";
-    Text[ catalan ] = "Consultas";
+    Text[ catalan ] = "Consultes";
 };
 
 String RID_STR_TABLES_CONTAINER
@@ -575,7 +575,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ turkish ] = "Tables";
     Text[ arabic ] = "Tables";
     Text[ finnish ] = "Laskentataulukot";
-    Text[ catalan ] = "Tablas";
+    Text[ catalan ] = "Taules";
 };
 
 String RID_STR_BOOKMARKS_CONTAINER
@@ -601,7 +601,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "æ·å¾‘";
     Text[ turkish ] = "Bookmarks";
     Text[ arabic ] = "Bookmarks";
-    Text[ catalan ] = "Bookmarks";
+    Text[ catalan ] = "Enllaços";
 };
 
 #define MID_ADMINISTRATE    \
@@ -628,8 +628,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "administrate ~data sources ..."; \
     Text[ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ..."; \
     Text[ finnish ] = "~Datenquellen verwalten ...";    \
-    Text[ catalan ] = "Administrate ~Data Sources..."; \
-    Text[ catalan ] = "Administrate ~Data Sources...";
+    Text[ catalan ] = "Administra les fonts de ~dades..."; \
+    Text[ catalan ] = "Administra les fonts de ~dades...";
 
 #define MID_DIRECT_SQL  \
     Identifier = ID_DIRECT_SQL ;    \
@@ -681,8 +681,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "~close connection";  \
     Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá"; \
     Text[ finnish ] = "Verbindung s~chließen";  \
-    Text[ catalan ] = "Disco~nnect";            \
-    Text[ catalan ] = "Disco~nnect";
+    Text[ catalan ] = "Desco~nnecta";           \
+    Text[ catalan ] = "Desco~nnecta";
 
 #define MID_REFRESHCONN \
     Identifier = ID_TREE_REBUILD_CONN ; \
@@ -708,8 +708,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "~refresh connection";    \
     Text[ arabic ] = "ÊÍÏíË ÇáÇÊÕÇá";   \
     Text[ finnish ] = "Verbindung e~rneuern";   \
-    Text[ catalan ] = "~Refresh Connection";    \
-    Text[ catalan ] = "~Refresh Connection";
+    Text[ catalan ] = "~Refresca la connexió";  \
+    Text[ catalan ] = "~Refresca la connexió";
 
 #define MITEMS_DEFAULT  \
     MenuItem    \
@@ -838,7 +838,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ turkish ] = "c~opy query";
             Text[ arabic ] = "äÓÎ ÇáÇÓÊİÓÇÑ";
             Text[ finnish ] = "Abfrage ~kopieren";
-            Text[ catalan ] = "C~opy Query";
+            Text[ catalan ] = "C~opia la consulta";
         };
         MenuItem
         {
@@ -859,13 +859,13 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ swedish ] = "~Infoga sökning...";
             Text[ polish ] = "~Wstaw kwerendê...";
             Text[ portuguese_brazilian ] = "~Insert Query...";
-            Text[ japanese ] = "ï½¸ï½´ï¾˜ï½°ã®æŒ¿å…¥...";
-            Text[ korean ] = "ì§ˆì˜ ì‚½ì…...";
-            Text[ chinese_simplified ] = "æ’å…¥æŸ¥è¯¢(~I)...";
-            Text[ chinese_traditional ] = "æ’å…¥æŸ¥è©¢...";
+            Text[ japanese ] = "ï½¸ï½´ï¾˜ï½°ã®æŒ¿å…¥(~P)...";
+            Text[ korean ] = "ì§ˆì˜ ì‚½ì…(~P)...";
+            Text[ chinese_simplified ] = "æ’å…¥æŸ¥è¯¢(~P)...";
+            Text[ chinese_traditional ] = "æ’å…¥æŸ¥è©¢(~P)...";
             Text[ turkish ] = "~Insert Query...";
             Text[ arabic ] = "~Insert Query...";
-            Text[ catalan ] = "~Insert Query...";
+            Text[ catalan ] = "~Inserta una consulta...";
         };
     };
 };
@@ -910,7 +910,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ turkish ] = "c~opy table";
             Text[ arabic ] = "äÓÎ ÇáÌÏæá";
             Text[ finnish ] = "Tabelle ~kopieren";
-            Text[ catalan ] = "C~opy Table";
+            Text[ catalan ] = "C~opia la taula";
         };
         MenuItem
         {
@@ -931,13 +931,13 @@ Menu MENU_BROWSER_TABLECONTEXT
                 Text[ swedish ] = "Kl~istra in tabell...";
                 Text[ polish ] = "~Wstaw tabelê...";
                 Text[ portuguese_brazilian ] = "~insert table";
-                Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®æŒ¿å…¥(~I)";
-                Text[ korean ] = "í…Œì´ë¸” ì‚½ì…(~I)";
-                Text[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼(~I)...";
-                Text[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼(~I)...";
+                Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®æŒ¿å…¥(~P)";
+                Text[ korean ] = "í…Œì´ë¸” ì‚½ì…(~P)";
+                Text[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼(~P)...";
+                Text[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼(~P)...";
                 Text[ turkish ] = "~insert table";
                 Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá...";
-                Text[ catalan ] = "~Insert Table";
+                Text[ catalan ] = "~Insereix la taula";
             };
         MenuItem
         {
@@ -968,7 +968,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
             Text[ finnish ] = "Relatio~nenentwurf";
-            Text[ catalan ] = "Rel~ation Design";
+            Text[ catalan ] = "Disseny de la rel~ació";
         };
     };
 };
@@ -1011,7 +1011,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ chinese_traditional ] = "è¤‡è£½æª¢è¦–(~O)";
                 Text[ turkish ] = "C~opy View";
                 Text[ arabic ] = "C~opy View";
-                Text[ catalan ] = "C~opy View";
+                Text[ catalan ] = "C~opia la vista";
             };
         MenuItem
         {
@@ -1032,13 +1032,13 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ swedish ] = "Kl~istra in vy";
                 Text[ polish ] = "~Wstaw widok";
                 Text[ portuguese_brazilian ] = "~Insert View";
-                Text[ japanese ] = "ï¾‹ï¾ï½­ï½°ã®æŒ¿å…¥(~I)";
-                Text[ korean ] = "ë³´ê¸° ì‚½ì…(~I)";
-                Text[ chinese_simplified ] = "æ’å…¥è§†å›¾(~I)";
-                Text[ chinese_traditional ] = "è²¼ä¸Šæª¢è¦–(~I)";
+                Text[ japanese ] = "ï¾‹ï¾ï½­ï½°ã®æŒ¿å…¥(~P)";
+                Text[ korean ] = "ë³´ê¸° ì‚½ì…(~P)";
+                Text[ chinese_simplified ] = "æ’å…¥è§†å›¾(~P)";
+                Text[ chinese_traditional ] = "è²¼ä¸Šæª¢è¦–(~P)";
                 Text[ turkish ] = "~Insert View";
                 Text[ arabic ] = "~Insert View";
-                Text[ catalan ] = "~Insert View";
+                Text[ catalan ] = "~Insereix la vista";
             };
         MenuItem
         {
@@ -1069,7 +1069,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
             Text[ finnish ] = "Rel~ation Design";
-                Text[ catalan ] = "Rel~ation Design";
+                Text[ catalan ] = "Disseny de la rel~ació";
             };
     };
 };
@@ -1098,7 +1098,7 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ turkish ] = "confirm deletion";
     Text[ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
     Text[ finnish ] = "Vahvista poistaminen";
-    Text[ catalan ] = "Confirmar eliminación";
+    Text[ catalan ] = "Confirmeu la supressió";
 };
 
 String STR_QUERY_DELETE_QUERY
@@ -1124,7 +1124,7 @@ String STR_QUERY_DELETE_QUERY
     Text[ turkish ] = "Do you want to delete the query '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '$name$'?";
     Text[ finnish ] = "Soll die Abfrage '$name$' gelöscht werden?";
-    Text[ catalan ] = "¿Desea eliminar la consulta '%1'?";
+    Text[ catalan ] = "Voleu suprimir la consulta '$name$'?";
 };
 
 String STR_QUERY_DELETE_TABLE
@@ -1150,7 +1150,7 @@ String STR_QUERY_DELETE_TABLE
     Text[ turkish ] = "Do you want to delete the table '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÌÏæá '%1'¿";
     Text[ finnish ] = "Soll die Tabelle '%1' gelöscht werden?";
-    Text[ catalan ] = "¿Desea eliminar la tabla '%1'?";
+    Text[ catalan ] = "Voleu eliminar la taula '%1'?";
 };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
@@ -1177,7 +1177,7 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ turkish ] = "The query already exists. Do you want to delete the query?";
     Message[ arabic ] = "åĞÇ ÇáÇÓÊİÓÇÑ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÍĞİå¿";
     Message[ finnish ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?";
-    Message[ catalan ] = "Ya existe la consulta. ¿Desea eliminarla?";
+    Message[ catalan ] = "La consulta ja existeix. Voleu suprimir-la?";
 };
 
 QueryBox QUERY_CONNECTION_LOST
@@ -1204,7 +1204,7 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ turkish ] = "The connection to the database was lost! Reconnect";
     Message[ arabic ] = "İõŞÏ ÇáÇÊÕÇá ÈŞÇÚÏÉ ÇáÈíÇäÇÊ. åá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá ãÑÉ ÃÎÑì¿";
     Message[ finnish ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?";
-    Message[ catalan ] = "¡Se eliminó la conexión a la base de datos! ¿Desea restablecerla?";
+    Message[ catalan ] = "S'ha perdut la connexió amb la base de dades. Voleu tornar a connectar?";
 };
 
 String STR_OPENTABLES_WARNINGS
@@ -1230,7 +1230,7 @@ String STR_OPENTABLES_WARNINGS
     Text[ turkish ] = "Warnings encountered.";
     Text[ arabic ] = "ÍÏËÊ ÊÍĞíÑÇÊ.";
     Text[ finnish ] = "Warnungen aufgetreten.";
-    Text[ catalan ] = "Han aparecido advertencias.";
+    Text[ catalan ] = "S'han trobat advertiments";
 };
 
 String STR_OPENTABLES_WARNINGS_DETAILS
@@ -1256,7 +1256,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ turkish ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ arabic ] = "Êã ÊÈáíÛ ÊÍĞíÑÇÊ ãä ÇÊÕÇá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÃËäÇÁ ãÍÇæáÉ ÇÓÊÑÏÇÏ ÇáÌÏÇæá.";
     Text[ finnish ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
-    Text[ catalan ] = "La conexión a la base de datos ha enviado advertencias durante la determinación de las tablas.";
+    Text[ catalan ] = "La connexió amb la base de dades ha generat advertiments en recuperar les taules";
 };
 
 String STR_CONNECTING_DATASOURCE
@@ -1282,7 +1282,7 @@ String STR_CONNECTING_DATASOURCE
     Text[ turkish ] = "connecting to \"$name$\" ...";
     Text[ arabic ] = "connecting to \"$name$\" ...";
     Text[ finnish ] = "Verbindungsaufbau zu \"$name$\" ...";
-    Text[ catalan ] = "connecting to \"$name$\" ...";
+    Text[ catalan ] = "S'està establint la connexió amb \"$name$\" ...";
 };
 
 String STR_LOADING_QUERY
@@ -1308,7 +1308,7 @@ String STR_LOADING_QUERY
     Text[ turkish ] = "loading query $name$ ...";
     Text[ arabic ] = "loading query $name$ ...";
     Text[ finnish ] = "lade Abfrage $name$ ...";
-    Text[ catalan ] = "loading query $name$ ...";
+    Text[ catalan ] = "S'està carregant la consulta $name$ ...";
 };
 
 String STR_LOADING_TABLE
@@ -1334,7 +1334,7 @@ String STR_LOADING_TABLE
     Text[ turkish ] = "loading table $name$ ...";
     Text[ arabic ] = "loading table $name$ ...";
     Text[ finnish ] = "lade Tabelle $name$ ...";
-    Text[ catalan ] = "loading table $name$ ...";
+    Text[ catalan ] = "S'està carregant la taula $name$ ...";
 };
 
 String STR_DSBROWSER_TITLE
@@ -1360,7 +1360,7 @@ String STR_DSBROWSER_TITLE
         Text[ chinese_traditional ] = "è³‡æ–™æºæª¢è¦–";
         Text[ turkish ] = "Data source browser";
         Text[ arabic ] = "Data source browser";
-        Text[ catalan ] = "Data source browser";
+        Text[ catalan ] = "Vista de font de dades";
 };
 
 String STR_NO_TABLE_FORMAT_INSIDE
@@ -1386,7 +1386,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ°è¡¨æ ¼æ ¼å¼ã€‚";
         Text[ turkish ] = "No table format found.";
         Text[ arabic ] = "No table format found.";
-        Text[ catalan ] = "No table format found.";
+        Text[ catalan ] = "No s'ha trobat cap format de taula.";
 };
 
 String STR_COULDNOTCONNECT_DATASOURCE
@@ -1453,5 +1453,6 @@ Menu RID_MENU_REFRESH_DATA
             };
     };
 };
+
 
 
