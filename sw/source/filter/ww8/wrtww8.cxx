@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:28:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,6 +1028,8 @@ BYTE *WW8_WrFkp::CopyLastSprms(BYTE &rLen, bool bVer8)
     if (*p)
     {
         rLen = *p++;
+        if (PAP == ePlc)
+            rLen *= 2;
         pRet = new BYTE[rLen];
         memcpy(pRet,p,rLen);
     }
@@ -2160,12 +2162,6 @@ void SwWW8Writer::StoreDoc1()
 
 ULONG SwWW8Writer::StoreDoc()
 {
-    {
-        static const sal_Char* aNames[ 1 ] = { "WinWord/WWWR" };
-        sal_uInt32 aVal[ 1 ];
-        SwFilterOptions aOpt( 1, aNames, aVal );
-        nIniFlags = aVal[ 0 ];
-    }
     nCharFmtStart = ANZ_DEFAULT_STYLES;
     nFmtCollStart = nCharFmtStart + pDoc->GetCharFmts()->Count() - 1;
 
