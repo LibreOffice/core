@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ japanese ] = "Ã·½ÄÏ°¸";
         Text[ chinese_traditional ] = "¤º¤å¼ÐÅÒ";
         Text[ arabic ] = "ÅÔÇÑÉ ãÑÌÚíÉ";
-        Text[ greek ] = "Óåëéäïäåßêôçò";
+        Text[ greek ] = "ÓçìÜäé êåéìÝíïõ";
         Text[ korean ] = "Ã¥ °¥ÇÇ";
         Text[ turkish ] = "Metin iþareti";
         Text[ language_user1 ] = " ";
@@ -692,7 +692,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Graphics" ;
         Text [ portuguese_brazilian ] = "Grafik" ;
         Text [ swedish ] = "Grafik" ;
-        Text [ danish ] = "Billede" ;
+        Text [ danish ] = "Grafik" ;
         Text [ italian ] = "Immagine" ;
         Text [ spanish ] = "Imagen" ;
         Text [ french ] = "Image" ;
@@ -768,7 +768,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ danish ] = "Markering" ;
         Text [ italian ] = "Selezione" ;
         Text [ spanish ] = "Selección" ;
-        Text [ french ] = "Sélection" ;
+        Text [ french ] = "Marque" ;
         Text [ dutch ] = "Markering" ;
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "Ñ¡ÖÐ";
@@ -814,7 +814,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Reminder" ;
         Text [ portuguese_brazilian ] = "Merker" ;
         Text [ swedish ] = "Temporärt bokmärke" ;
-        Text [ danish ] = "Påmindelse" ;
+        Text [ danish ] = "Bogmærke" ;
         Text [ italian ] = "Contrassegno" ;
         Text [ spanish ] = "Marca" ;
         Text [ french ] = "Pense-bête" ;
@@ -1192,7 +1192,7 @@ String STR_IMGBTN_GRF_DOWN
     Text [ english_us ] = "Next picture" ;
     Text [ portuguese_brazilian ] = "Nächste Grafik" ;
     Text [ swedish ] = "Nästa grafik" ;
-    Text [ danish ] = "Næste billede" ;
+    Text [ danish ] = "Næste grafik" ;
     Text [ italian ] = "Immagine successiva" ;
     Text [ spanish ] = "Imagen siguiente" ;
     Text [ french ] = "Image suivante" ;
@@ -1318,7 +1318,7 @@ String STR_IMGBTN_MARK_DOWN
     Text [ english_us ] = "Next Reminder" ;
     Text [ portuguese_brazilian ] = "Nächster Merker" ;
     Text [ swedish ] = "Nästa temporära bokmärke" ;
-    Text [ danish ] = "Næste påmindelse" ;
+    Text [ danish ] = "Næste bogmærke" ;
     Text [ italian ] = "Contrassegno successivo" ;
     Text [ spanish ] = "Marca siguiente" ;
     Text [ french ] = "Pense-bête suivant" ;
@@ -1591,7 +1591,7 @@ String STR_IMGBTN_GRF_UP
     Text [ english_us ] = "Previous picture" ;
     Text [ portuguese_brazilian ] = "Vorige Grafik" ;
     Text [ swedish ] = "Föregående grafik" ;
-    Text [ danish ] = "Forrige billede" ;
+    Text [ danish ] = "Forrige grafik" ;
     Text [ italian ] = "Immagine precedente" ;
     Text [ spanish ] = "Imagen anterior" ;
     Text [ french ] = "Image précédente" ;
@@ -1714,7 +1714,7 @@ String STR_IMGBTN_MARK_UP
     Text [ english_us ] = "Previous Reminder" ;
     Text [ portuguese_brazilian ] = "Voriger Merker" ;
     Text [ swedish ] = "Föregående temporära bokmärke" ;
-    Text [ danish ] = "Forrige påmindelse" ;
+    Text [ danish ] = "Forrige bogmærke" ;
     Text [ italian ] = "Contrassegno precedente" ;
     Text [ spanish ] = "Marca anterior" ;
     Text [ french ] = "Pense-bête précédent" ;
