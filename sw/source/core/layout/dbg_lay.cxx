@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-01 08:03:15 $
+ *  last change: $Author: ama $ $Date: 2001-10-02 07:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
 #include "dflyobj.hxx"
+#ifndef _FNTCACHE_HXX
+#include <fntcache.hxx>
+#endif
 
 ULONG SwProtocol::nRecord = 0;
 SwImplProtocol* SwProtocol::pImpl = NULL;
@@ -303,6 +306,7 @@ void SwProtocol::Init()
         pImpl = new SwImplProtocol();
         pImpl->FileInit();
     }
+    aStream.Close();
 }
 
 // Ende der Aufzeichnung
@@ -313,6 +317,8 @@ void SwProtocol::Stop()
      {
         delete pImpl;
         pImpl = NULL;
+        if( pFntCache )
+            pFntCache->Flush();
      }
      nRecord = 0;
 }
@@ -353,7 +359,11 @@ BOOL SwImplProtocol::NewStream()
 
 SwImplProtocol::~SwImplProtocol()
 {
-    delete pStream;
+    if( pStream )
+    {
+        pStream->Close();
+        delete pStream;
+    }
     delete pFrmIds;
     delete pVar;
 }
@@ -490,6 +500,7 @@ void SwImplProtocol::FileInit()
         if( aLine.Len() )
             CheckLine( aLine );     // letzte Zeile auswerten
     }
+    aStream.Close();
 }
 
 /* -----------------11.01.99 11:20-------------------
