@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:58:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,8 @@ TabDialog DLG_ENV
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Briefumschlag" ;
-    Text [ ENGLISH ] = "Envelope" ;
-    Text [ norwegian ] = "Envelope" ;
-    Text [ italian ] = "Busta" ;
-    Text [ portuguese_brazilian ] = "Envelope" ;
-    Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori" ;
-    Text [ danish ] = "Konvolut" ;
-    Text [ french ] = "Enveloppe" ;
-    Text [ swedish ] = "Kuvert" ;
-    Text [ dutch ] = "Envelop" ;
-    Text [ spanish ] = "Sobre" ;
-    Text [ english_us ] = "Envelope" ;
+    Text [ de ] = "Briefumschlag" ;
+    Text [ en-US ] = "Envelope" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -90,201 +79,41 @@ TabDialog DLG_ENV
             PageItem
             {
                 Identifier = TP_ENV_ENV ;
-                Text = "Umschlag" ;
-                Text [ ENGLISH ] = "Envelop" ;
-                Text [ norwegian ] = "Konvolutt" ;
-                Text [ italian ] = "Busta" ;
-                Text [ portuguese_brazilian ] = "Envelope" ;
-                Text [ portuguese ] = "Envelope" ;
-                Text [ finnish ] = "Kirjekuori" ;
-                Text [ danish ] = "Konvolut" ;
-                Text [ french ] = "Enveloppe" ;
-                Text [ swedish ] = "Kuvert" ;
-                Text [ dutch ] = "Envelop" ;
-                Text [ spanish ] = "Sobre" ;
-                Text [ english_us ] = "Envelope" ;
+                Text [ de ] = "Umschlag" ;
+                Text [ en-US ] = "Envelope" ;
                 PageResID = TP_ENV_ENV ;
-                Text[ chinese_simplified ] = "ä¿¡å°";
-                Text[ russian ] = "Êîíâåğò";
-                Text[ polish ] = "Koperta";
-                Text[ japanese ] = "å°ç­’";
-                Text[ chinese_traditional ] = "ä¿¡å°";
-                Text[ arabic ] = "ÙÑİ";
-                Text[ greek ] = "ÖÜêåëïò";
-                Text[ korean ] = "ë´‰íˆ¬";
-                Text[ turkish ] = "Zarf";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sobre";
-                Text[ thai ] = "à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-                Text[ czech ] = "ObÃ¡lka";
-                Text[ hebrew ] = "â€®××¢×˜×¤×”â€¬";
-                Text[ hindi ] = "à¤²à¤¿à¤«à¤¾à¤«à¤¾";
-                Text[ slovak ] = "ObÃ¡lka";
-                Text[ hungarian ] = "BorÃ­tÃ©k";
-                Text[ slovenian ] = "Ovojnica";
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_ENV_FMT ;
-                Text = "Format" ;
-                Text[English] = "Format" ;
+                Text [ de ] = "Format" ;
                 PageResID = TP_ENV_FMT ;
-                Text[ english_us ] = "Format";
-                Text[ portuguese ] = "Formato";
-                Text[ russian ] = "Ôîğìàò";
-                Text[ greek ] = "ÌïñöŞ";
-                Text[ dutch ] = "Formaat";
-                Text[ french ] = "Format";
-                Text[ spanish ] = "Formato";
-                Text[ italian ] = "Formato";
-                Text[ danish ] = "Format";
-                Text[ swedish ] = "Format";
-                Text[ polish ] = "Format";
-                Text[ portuguese_brazilian ] = "Formato";
-                Text[ japanese ] = "æ›¸å¼";
-                Text[ korean ] = "ì„œì‹";
-                Text[ chinese_simplified ] = "æ ¼å¼";
-                Text[ chinese_traditional ] = "æ ¼å¼";
-                Text[ turkish ] = "Biçem";
-                Text[ arabic ] = "ÇáÊäÓíŞ";
-                Text[ catalan ] = "Formata";
-                Text[ finnish ] = "Muotoilu";
-                Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
-                Text[ czech ] = "FormÃ¡t";
-                Text[ hebrew ] = "â€®×¢×™×¦×•×‘â€¬";
-                Text[ hindi ] = "à¤°à¤šà¤¨à¤¾";
-                Text[ slovak ] = "FormÃ¡t";
-                Text[ hungarian ] = "FormÃ¡tum";
-                Text[ slovenian ] = "Oblika";
+                Text [ en-US ] = "Format";
             };
             PageItem
             {
                 Identifier = TP_ENV_PRT ;
-                Text = "Drucker" ;
-                Text [ English ] = "Printer" ;
-                Text [ norwegian ] = "Printer" ;
-                Text [ italian ] = "Stampante" ;
-                Text [ portuguese_brazilian ] = "Impressora" ;
-                Text [ portuguese ] = "Impressora" ;
-                Text [ finnish ] = "Tulostin" ;
-                Text [ danish ] = "Printer" ;
-                Text [ french ] = "Imprimante" ;
-                Text [ swedish ] = "Skrivare" ;
-                Text [ dutch ] = "Printer" ;
-                Text [ spanish ] = "Impresora" ;
-                Text [ english_us ] = "Printer" ;
+                Text [ de ] = "Drucker" ;
+                Text [ en-US ] = "Printer" ;
                 PageResID = TP_ENV_PRT ;
-                Text[ chinese_simplified ] = "æ‰“å°æœº";
-                Text[ russian ] = "Ïğèíòåğ";
-                Text[ polish ] = "Drukarka";
-                Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿";
-                Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
-                Text[ arabic ] = "ÇáØÇÈÚÉ";
-                Text[ greek ] = "ÅêôõğùôŞò";
-                Text[ korean ] = "í”„ë¦°í„°";
-                Text[ turkish ] = "Yazıcı";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Impressora";
-                Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
-                Text[ czech ] = "TiskÃ¡rna";
-                Text[ hebrew ] = "â€®××“×¤×¡×ªâ€¬";
-                Text[ hindi ] = "à¤®à¥à¤¦à¥à¤°à¤•";
-                Text[ slovak ] = "TlaÄiareÅˆ";
-                Text[ hungarian ] = "NyomtatÃ³";
-                Text[ slovenian ] = "Tiskalnik";
+                Text [ x-comment ] = " ";
             };
         };
     };
     String ST_INSERT
     {
-        Text = "~Einfügen" ;
-        Text [ English ] = "~Insert" ;
-        Text [ norwegian ] = "~Insert" ;
-        Text [ italian ] = "Inserisci" ;
-        Text [ portuguese_brazilian ] = "~Inserir" ;
-        Text [ portuguese ] = "~Inserir" ;
-        Text [ finnish ] = "~Lisää" ;
-        Text [ danish ] = "~Indsæt" ;
-        Text [ french ] = "Insérer" ;
-        Text [ swedish ] = "~Infoga" ;
-        Text [ dutch ] = "~Invoegen" ;
-        Text [ spanish ] = "Insertar" ;
-        Text [ english_us ] = "~Insert" ;
-        Text[ chinese_simplified ] = "æ’å…¥(~I)";
-        Text[ russian ] = "Âñòàâèòü";
-        Text[ polish ] = "W~staw";
-        Text[ japanese ] = "æŒ¿å…¥(~I)";
-        Text[ chinese_traditional ] = "æ’å…¥(~I)";
-        Text[ arabic ] = "ÅÏÑÇÌ";
-        Text[ dutch ] = "~Invoegen";
-        Text[ chinese_simplified ] = "æ’å…¥(~I)";
-        Text[ greek ] = "~ÅéóáãùãŞ";
-        Text[ korean ] = "ì‚½ì…(~I)";
-        Text[ turkish ] = "~Ekle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Insereix";
-        Text[ thai ] = "à¹~à¸—à¸£à¸";
-        Text[ czech ] = "VloÅ¾it";
-        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
-        Text[ slovak ] = "~VloÅ¾iÅ¥";
-        Text[ hungarian ] = "~BeszÃºrÃ¡s";
-        Text[ slovenian ] = "~Vstavi";
+        Text [ de ] = "~Einfügen" ;
+        Text [ en-US ] = "~Insert" ;
+        Text [ x-comment ] = " ";
     };
     String ST_CHANGE
     {
-        Text = "~Ändern" ;
-        Text [ English ] = "Change" ;
-        Text [ norwegian ] = "Endre" ;
-        Text [ italian ] = "C~ambia" ;
-        Text [ portuguese_brazilian ] = "~Modificar" ;
-        Text [ portuguese ] = "~Modificar" ;
-        Text [ finnish ] = "~Muuta" ;
-        Text [ danish ] = "~Modificer" ;
-        Text [ french ] = "Modifier" ;
-        Text [ swedish ] = "~Ändra" ;
-        Text [ dutch ] = "~Wijzigen" ;
-        Text [ spanish ] = "~Modificar" ;
-        Text [ english_us ] = "~Modify" ;
-        Text[ chinese_simplified ] = "æ›´æ”¹(~M)";
-        Text[ russian ] = "Ïğèìåíèòü";
-        Text[ polish ] = "~Modyfikuj";
-        Text[ japanese ] = "å¤‰æ›´(~M)";
-        Text[ chinese_traditional ] = "ä¿®æ”¹(~M)";
-        Text[ arabic ] = "ÊÚÏíá";
-        Text[ dutch ] = "~Wijzigen";
-        Text[ chinese_simplified ] = "æ›´æ”¹(~M)";
-        Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "ìˆ˜ì •(~M)";
-        Text[ turkish ] = "D~eğiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modifica";
-        Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚";
-        Text[ czech ] = "Upravit";
-        Text[ hebrew ] = "â€®×©×™× ×•×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤§à¤¾à¤°à¥‹";
-        Text[ slovak ] = "U~praviÅ¥";
-        Text[ hungarian ] = "~MÃ³dosÃ­tÃ¡s";
-        Text[ slovenian ] = "~Spremeni";
+        Text [ de ] = "~Ändern" ;
+        Text [ en-US ] = "~Modify" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "ä¿¡å°";
-    Text[ russian ] = "Êîíâåğò";
-    Text[ polish ] = "Koperta";
-    Text[ japanese ] = "å°ç­’";
-    Text[ chinese_traditional ] = "ä¿¡å°";
-    Text[ arabic ] = "ÙÑİ";
-    Text[ greek ] = "ÖÜêåëïò";
-    Text[ korean ] = "í¸ì§€ë´‰íˆ¬";
-    Text[ turkish ] = "Zarf";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sobre";
-    Text[ thai ] = "à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-    Text[ czech ] = "ObÃ¡lka";
-    Text[ hebrew ] = "â€®××¢×˜×¤×”â€¬";
-    Text[ hindi ] = "à¤²à¤¿à¤«à¤¾à¤«à¤¾";
-    Text[ slovak ] = "ObÃ¡lka";
-    Text[ hungarian ] = "BorÃ­tÃ©k";
-    Text[ slovenian ] = "Ovojnica";
+    Text [ x-comment ] = " ";
 };
  // TP_ENV_ENV ---------------------------------------------------------------
 TabPage TP_ENV_ENV
@@ -296,39 +125,11 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text = "~Empfänger" ;
-        Text [ English ] = "Addressee" ;
-        Text [ norwegian ] = "Addressee" ;
-        Text [ italian ] = "Destinatario" ;
-        Text [ portuguese_brazilian ] = "~Destinatário" ;
-        Text [ portuguese ] = "~Destinatário" ;
-        Text [ finnish ] = "~Saaja" ;
-        Text [ danish ] = "~Modtager" ;
-        Text [ french ] = "Destinataire" ;
-        Text [ swedish ] = "Mottagar~e" ;
-        Text [ dutch ] = "~Geadresseerde" ;
-        Text [ spanish ] = "~Destinatario" ;
-        Text [ english_us ] = "Addr~essee" ;
+        Text [ de ] = "~Empfänger" ;
+        Text [ en-US ] = "Addr~essee" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ”¶ä»¶äºº(~E)";
-        Text[ russian ] = "Ïîëó÷àòåëü";
-        Text[ polish ] = "~Odbiorca";
-        Text[ japanese ] = "å®›å…ˆ(~E)";
-        Text[ chinese_traditional ] = "æ”¶ä»¶è€…(~E)";
-        Text[ arabic ] = "ÇáãÓÊáã";
-        Text[ greek ] = "ĞáñáëŞğôçò";
-        Text[ korean ] = "ë°›ëŠ” ì‚¬ëŒ(~E)";
-        Text[ turkish ] = "Alıcı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Destinat~ari";
-        Text[ thai ] = "à¸œà¸¹à¹‰à¸£à¸±~à¸šà¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-        Text[ czech ] = "AdresÃ¡t";
-        Text[ hebrew ] = "~EmpfÃ¤nger";
-        Text[ hindi ] = "à¤²à¥‡à¤¨à¥‡~à¤µà¤¾à¤²à¤¾";
-        Text[ slovak ] = "Adr~esÃ¡t";
-        Text[ hungarian ] = "~CÃ­mzett";
-        Text[ slovenian ] = "Na~slovnik";
+        Text [ x-comment ] = " ";
     };
     MultiLineEdit EDT_ADDR
     {
@@ -345,37 +146,9 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 162 , 6 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text = "~Datenbank" ;
-        Text [ English ] = "Database" ;
-        Text [ norwegian ] = "Database" ;
-        Text [ italian ] = "Database" ;
-        Text [ portuguese_brazilian ] = "Banco de dados" ;
-        Text [ portuguese ] = "~Base de dados" ;
-        Text [ finnish ] = "Tietokanta" ;
-        Text [ danish ] = "Database" ;
-        Text [ french ] = "~Base de données" ;
-        Text [ swedish ] = "~Databas" ;
-        Text [ dutch ] = "~Database" ;
-        Text [ spanish ] = "Base de datos" ;
-        Text [ english_us ] = "Database" ;
-        Text[ chinese_simplified ] = "æ•°æ®åº“";
-        Text[ russian ] = "Áàçà äàííûõ";
-        Text[ polish ] = "Baza danych";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
-        Text[ chinese_traditional ] = "è³‡æ–™åº«";
-        Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-        Text[ greek ] = "ÂÜóç ~äåäïìİíùí";
-        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤";
-        Text[ turkish ] = "Veritabanı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Base de dades";
-        Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "DatabÃ¡ze";
-        Text[ hebrew ] = "~Datenbank";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯";
-        Text[ slovak ] = "DatabÃ¡za";
-        Text[ hungarian ] = "AdatbÃ¡zis";
-        Text[ slovenian ] = "Zbirka podatkov";
+        Text [ de ] = "~Datenbank" ;
+        Text [ en-US ] = "Database" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DATABASE
     {
@@ -389,36 +162,9 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 162 , 33 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text = "~Tabelle" ;
-        Text [ ENGLISH ] = "Table" ;
-        Text [ english_us ] = "Table" ;
-        Text [ italian ] = "Tabella" ;
-        Text [ spanish ] = "Tabla" ;
-        Text [ french ] = "~Table" ;
-        Text [ dutch ] = "~Tabel" ;
-        Text [ swedish ] = "~Tabell" ;
-        Text [ danish ] = "Tabel" ;
-        Text [ portuguese_brazilian ] = "Tabela" ;
-        Text [ portuguese ] = "~Tabela" ;
-        Text[ chinese_simplified ] = "è¡¨æ ¼";
-        Text[ russian ] = "Òàáëèöà";
-        Text[ polish ] = "Tabela";
-        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
-        Text[ chinese_traditional ] = "è¡¨æ ¼";
-        Text[ arabic ] = "ÇáÌÏæá";
-        Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "í…Œì´ë¸”";
-        Text[ turkish ] = "Tablo";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Taula";
-        Text[ finnish ] = "Taulukko";
-        Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡";
-        Text[ czech ] = "Tabulka";
-        Text[ hebrew ] = "â€®×˜×‘×œ×”â€¬";
-        Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€";
-        Text[ slovak ] = "TabuÄ¾ka";
-        Text[ hungarian ] = "TÃ¡blÃ¡zat";
-        Text[ slovenian ] = "Tabela";
+        Text [ de ] = "~Tabelle" ;
+        Text [ en-US ] = "Table" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_TABLE
     {
@@ -439,37 +185,9 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 162 , 60 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text = "Datenbank~feld" ;
-        Text [ English ] = "Database field" ;
-        Text [ norwegian ] = "Database field" ;
-        Text [ italian ] = "Campo database" ;
-        Text [ portuguese_brazilian ] = "~Campo do banco de dados" ;
-        Text [ portuguese ] = "Campo base de dados" ;
-        Text [ finnish ] = "~Tietokantakenttä" ;
-        Text [ danish ] = "~Databasefelt" ;
-        Text [ french ] = "Champ de BD" ;
-        Text [ swedish ] = "Databas~fält" ;
-        Text [ dutch ] = "Database~veld" ;
-        Text [ spanish ] = "~Campo base de datos" ;
-        Text [ english_us ] = "~Database field" ;
-        Text[ chinese_simplified ] = "æ•°æ®åº“å­—æ®µ(~D)";
-        Text[ russian ] = "Ïîëå áàçû äàííûõ";
-        Text[ polish ] = "Pole bazy ~danych";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~D)";
-        Text[ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½(~D)";
-        Text[ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-        Text[ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
-        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œ(~D)";
-        Text[ turkish ] = "Veritabanı alanı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Camp de la ~base de dades";
-        Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡~à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Pole databÃ¡ze";
-        Text[ hebrew ] = "Datenbank~feld";
-        Text[ hindi ] = "~à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤•à¥à¤·à¥‡à¤¤à¥à¤°";
-        Text[ slovak ] = "Pole ~databÃ¡zy";
-        Text[ hungarian ] = "A~datbÃ¡zismezÅ‘";
-        Text[ slovenian ] = "Polje zbirke pod~atkov";
+        Text [ de ] = "Datenbank~feld" ;
+        Text [ en-US ] = "~Database field" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DBFIELD
     {
@@ -483,38 +201,10 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 6 , 105 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text = "~Absender" ;
-        Text [ English ] = "Sender" ;
-        Text [ norwegian ] = "Sender" ;
-        Text [ italian ] = "Mittente" ;
-        Text [ portuguese_brazilian ] = "~Remetente" ;
-        Text [ portuguese ] = "~Remetente" ;
-        Text [ finnish ] = "~Lähettäjä" ;
-        Text [ danish ] = "~Afsender" ;
-        Text [ french ] = "~Expéditeur" ;
-        Text [ swedish ] = "~Avsändare" ;
-        Text [ dutch ] = "Af~zender" ;
-        Text [ spanish ] = "R~emitente" ;
-        Text [ english_us ] = "~Sender" ;
+        Text [ de ] = "~Absender" ;
+        Text [ en-US ] = "~Sender" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä»¶äºº(~S)";
-        Text[ russian ] = "Îòïğàâèòåëü";
-        Text[ polish ] = "N~adawca";
-        Text[ japanese ] = "å·®å‡ºäºº(~S)";
-        Text[ chinese_traditional ] = "å¯„ä»¶è€…(~S)";
-        Text[ arabic ] = "ÇáãÑÓá";
-        Text[ greek ] = "Áğïóôïëİáò";
-        Text[ korean ] = "ë³´ë‚¸ ì‚¬ëŒ(~S)";
-        Text[ turkish ] = "Gönderen";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Remitent";
-        Text[ thai ] = "~à¸œà¸¹à¹‰à¸ªà¹ˆà¸‡";
-        Text[ czech ] = "Odesilatel";
-        Text[ hebrew ] = "~Absender";
-        Text[ hindi ] = "~à¤­à¥‡à¤œà¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-        Text[ slovak ] = "Odo~sielateÄ¾";
-        Text[ hungarian ] = "~FeladÃ³";
-        Text[ slovenian ] = "~PoÅ¡iljatelj";
+        Text [ x-comment ] = " ";
     };
     MultiLineEdit EDT_SEND
     {
@@ -537,37 +227,9 @@ TabPage TP_ENV_ENV
  // Strings ******************************************************************
 String STR_DOC_TITLE
 {
-    Text = "Briefumschlag" ;
-    Text [ English ] = "Envelope" ;
-    Text [ norwegian ] = "Envelope" ;
-    Text [ italian ] = "Busta" ;
-    Text [ portuguese_brazilian ] = "Envelope" ;
-    Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori" ;
-    Text [ danish ] = "Konvolut" ;
-    Text [ french ] = "Enveloppe" ;
-    Text [ swedish ] = "Kuvert" ;
-    Text [ dutch ] = "Envelop" ;
-    Text [ spanish ] = "Sobre" ;
-    Text [ english_us ] = "Envelope" ;
-    Text[ chinese_simplified ] = "ä¿¡å°";
-    Text[ russian ] = "Êîíâåğò";
-    Text[ polish ] = "Koperta";
-    Text[ japanese ] = "å°ç­’";
-    Text[ chinese_traditional ] = "ä¿¡å°";
-    Text[ arabic ] = "ÙÑİ";
-    Text[ greek ] = "ÖÜêåëïò";
-    Text[ korean ] = "í¸ì§€ë´‰íˆ¬";
-    Text[ turkish ] = "Zarf";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sobre";
-    Text[ thai ] = "à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-    Text[ czech ] = "ObÃ¡lka";
-    Text[ hebrew ] = "â€®××¢×˜×¤×”â€¬";
-    Text[ hindi ] = "à¤²à¤¿à¤«à¤¾à¤«à¤¾";
-    Text[ slovak ] = "ObÃ¡lka";
-    Text[ hungarian ] = "BorÃ­tÃ©k";
-    Text[ slovenian ] = "Ovojnica";
+    Text [ de ] = "Briefumschlag" ;
+    Text [ en-US ] = "Envelope" ;
+    Text [ x-comment ] = " ";
 };
 
 
