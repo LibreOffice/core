@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ulfconv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 08:21:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 11:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,8 @@ int main( int argc, char * const argv[] )
     FILE *istream = stdin;
     FILE *ostream = stdout;
 
+    char *outfile = NULL;
+
     int errflg = 0;
     int argi;
 
@@ -306,11 +308,7 @@ int main( int argc, char * const argv[] )
                 }
 
                 ++argi;
-                ostream = fopen(argv[argi], "w");
-                if ( ostream == NULL ) {
-                    fprintf(stderr, "ulfconv: %s : %s\n", argv[argi], strerror(errno));
-                    exit(2);
-                }
+                outfile = argv[argi];
                 break;
             case 't':
                 if (argi+1 >= argc || argv[argi+1][0] == '-')
@@ -339,10 +337,20 @@ int main( int argc, char * const argv[] )
     }
 
     /* assign input file to stdin */
-    if ( argi < argc ) {
-
+    if ( argi < argc )
+    {
         istream = fopen(argv[argi], "r");
         if ( istream  == NULL ) {
+            fprintf(stderr, "ulfconv: %s : %s\n", argv[argi], strerror(errno));
+            exit(2);
+        }
+    }
+
+    /* open output file if any */
+    if ( outfile )
+    {
+        ostream = fopen(outfile, "w");
+        if ( ostream == NULL ) {
             fprintf(stderr, "ulfconv: %s : %s\n", argv[argi], strerror(errno));
             exit(2);
         }
