@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-04 17:42:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "TabControl.hxx"
+
 #ifndef _SVDLAYER_HXX
 #include <svx/svdlayer.hxx>
 #endif
@@ -73,21 +75,30 @@
 
 #include "sdattr.hxx"
 #include "app.hxx"
-#include "tabcontr.hxx"
 #include "app.hrc"
 #include "glob.hrc"
 #include "res_bmp.hrc"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
 #include "helpids.h"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "unmodpg.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "sdresid.hxx"
 
+
+namespace sd {
 
 #define SWITCH_TIMEOUT  20
 
@@ -95,27 +106,27 @@
 // - SdTabControl::SdPageObjsTransferable -
 // -----------------------------------------
 
-SdTabControl::SdTabControlTransferable::~SdTabControlTransferable()
+TabControl::TabControlTransferable::~TabControlTransferable()
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void SdTabControl::SdTabControlTransferable::AddSupportedFormats()
+void TabControl::TabControlTransferable::AddSupportedFormats()
 {
     AddFormat( SOT_FORMATSTR_ID_STARDRAW_TABBAR );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdTabControl::SdTabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------------
 
-void SdTabControl::SdTabControlTransferable::DragFinished( sal_Int8 nDropAction )
+void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mrParent.DragFinished( nDropAction );
 }
@@ -126,7 +137,7 @@ void SdTabControl::SdTabControlTransferable::DragFinished( sal_Int8 nDropAction 
 |*
 \************************************************************************/
 
-SdTabControl::SdTabControl(SdDrawViewShell* pViewSh, Window* pParent) :
+TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE | WB_DRAG) ),
     DragSourceHelper( this ),
     DropTargetHelper( this ),
@@ -145,7 +156,7 @@ SdTabControl::SdTabControl(SdDrawViewShell* pViewSh, Window* pParent) :
 |*
 \************************************************************************/
 
-SdTabControl::~SdTabControl()
+TabControl::~TabControl()
 {
 }
 
@@ -153,7 +164,7 @@ SdTabControl::~SdTabControl()
 |*
 \************************************************************************/
 
-void SdTabControl::Select()
+void TabControl::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
     pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON |
@@ -164,7 +175,7 @@ void SdTabControl::Select()
 |*
 \************************************************************************/
 
-void  SdTabControl::MouseButtonDown(const MouseEvent& rMEvt)
+void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // eine saubere linke Maustaste ohne verwaessernde Modifier (damit koennte
     //ja das Kontextmenue gemeint sein)
@@ -198,7 +209,7 @@ void  SdTabControl::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdTabControl::DoubleClick()
+void TabControl::DoubleClick()
 {
     if (GetCurPageId() != 0)
     {
@@ -214,12 +225,12 @@ void SdTabControl::DoubleClick()
 |*
 \************************************************************************/
 
-void SdTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void TabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     bInternalMove = TRUE;
 
     // object is delete by reference mechanismn
-    ( new SdTabControl::SdTabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
+    ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 
 /*************************************************************************
@@ -228,7 +239,7 @@ void SdTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 |*
 \************************************************************************/
 
-void SdTabControl::DragFinished( sal_Int8 nDropAction )
+void TabControl::DragFinished( sal_Int8 nDropAction )
 {
     bInternalMove = FALSE;
 }
@@ -239,7 +250,7 @@ void SdTabControl::DragFinished( sal_Int8 nDropAction )
 |*
 \************************************************************************/
 
-sal_Int8 SdTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -269,7 +280,7 @@ sal_Int8 SdTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
             if( ( nPageId >= 0 ) && pDoc->GetPage( nPageId ) )
             {
-                SdWindow* pWindow = NULL;
+                ::sd::Window* pWindow = NULL;
 
                 nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
@@ -286,7 +297,7 @@ sal_Int8 SdTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 |*
 \************************************************************************/
 
-sal_Int8 SdTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     SdDrawDocument* pDoc = pDrViewSh->GetDoc();
     Point           aPos( rEvt.maPosPixel );
@@ -366,13 +377,13 @@ sal_Int8 SdTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 |*
 \************************************************************************/
 
-void SdTabControl::Command(const CommandEvent& rCEvt)
+void TabControl::Command(const CommandEvent& rCEvt)
 {
     USHORT nCmd = rCEvt.GetCommand();
 
     if ( nCmd == COMMAND_CONTEXTMENU )
     {
-        BOOL bGraphicShell = pDrViewSh->ISA( SdGraphicViewShell );
+        BOOL bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
         USHORT nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :
                                         RID_DRAW_PAGETAB_POPUP;
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -384,7 +395,7 @@ void SdTabControl::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-long SdTabControl::StartRenaming()
+long TabControl::StartRenaming()
 {
     BOOL bOK = FALSE;
 
@@ -392,7 +403,7 @@ long SdTabControl::StartRenaming()
     {
         bOK = TRUE;
 
-        SdView* pView = pDrViewSh->GetView();
+        ::sd::View* pView = pDrViewSh->GetView();
 
         if ( pView->IsTextEdit() )
             pView->EndTextEdit();
@@ -405,7 +416,7 @@ long SdTabControl::StartRenaming()
 |*
 \************************************************************************/
 
-long SdTabControl::AllowRenaming()
+long TabControl::AllowRenaming()
 {
     BOOL bOK = TRUE;
 
@@ -432,7 +443,7 @@ long SdTabControl::AllowRenaming()
 |*
 \************************************************************************/
 
-void SdTabControl::EndRenaming()
+void TabControl::EndRenaming()
 {
     if( !IsEditModeCanceled() )
         pDrViewSh->RenameSlide( GetEditPageId(), GetEditText() );
@@ -443,7 +454,7 @@ void SdTabControl::EndRenaming()
 |*
 \************************************************************************/
 
-void SdTabControl::ActivatePage()
+void TabControl::ActivatePage()
 {
     if ( /*IsInSwitching && */ pDrViewSh->IsSwitchPageAllowed() )
     {
@@ -458,7 +469,7 @@ void SdTabControl::ActivatePage()
 |*
 \************************************************************************/
 
-long SdTabControl::DeactivatePage()
+long TabControl::DeactivatePage()
 {
     return pDrViewSh->IsSwitchPageAllowed();
 }
@@ -466,7 +477,7 @@ long SdTabControl::DeactivatePage()
 
 
 
-void SdTabControl::SendActivatePageEvent (void)
+void TabControl::SendActivatePageEvent (void)
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));
@@ -475,8 +486,10 @@ void SdTabControl::SendActivatePageEvent (void)
 
 
 
-void SdTabControl::SendDeactivatePageEvent (void)
+void TabControl::SendDeactivatePageEvent (void)
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));
 }
+
+} // end of namespace sd
