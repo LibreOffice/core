@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-03 08:53:05 $
+ *  last change: $Author: mib $ $Date: 2002-10-15 17:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,134 +365,144 @@ sal_Unicode SvParser::GetNextChar()
     }
     else
     {
-        sal_Char c1;    // signed, that's the text converter expects
-        rInput >> c1;
-        if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
+        sal_Size nChars = 0;
+        do
         {
-            if( RTL_TEXTENCODING_DONTKNOW == eSrcEnc )
+            sal_Char c1;    // signed, that's the text converter expects
+            rInput >> c1;
+            if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
             {
-                // no convserion shall take place
-                c = (sal_Unicode)c1;
-            }
-            else
-            {
-                DBG_ASSERT( pImplData && pImplData->hConv,
-                             "no text converter!" )
-
-                sal_Unicode cUC;
-                sal_uInt32 nInfo = 0;
-                sal_Size nCvtBytes;
-                sal_Size nChars = rtl_convertTextToUnicode(
-                            pImplData->hConv, pImplData->hContext,
-                            &c1, 1, &cUC, 1,
-                            RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
-                            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
-                            RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
-                            &nInfo, &nCvtBytes);
-                if( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
+                if( RTL_TEXTENCODING_DONTKNOW == eSrcEnc )
                 {
-                    // The conversion wasn't successfull because we haven't
-                    // read enough characters.
-                    if( pImplData->hContext != (rtl_TextToUnicodeContext)1 )
-                    {
-                        while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
-                        {
-                            rInput >> c1;
-                            if( (bErr = (rInput.IsEof() || rInput.GetError())) )
-                                break;
-
-                            nChars = rtl_convertTextToUnicode(
-                                        pImplData->hConv, pImplData->hContext,
-                                        &c1, 1, &cUC, 1,
-                                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
-                                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
-                                        RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
-                                        &nInfo, &nCvtBytes);
-                        }
-                        if( !bErr )
-                        {
-                            if( 1 == nChars && 0 == nInfo )
-                            {
-                                c = cUC;
-                            }
-                            else
-                            {
-                                DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
-                                    "source buffer is to small" );
-                                DBG_ASSERT( 0 == nChars,
-                                   "there is a converted character, but an error" );
-                                DBG_ASSERT( 0 != nInfo,
-                                   "there is no converted character and no error" );
-                                // There are still errors, but nothing we can
-                                // do
-                                c = (sal_Unicode)'?';
-                            }
-                        }
-                    }
-                    else
-                    {
-                        sal_Char sBuffer[10];
-                        sBuffer[0] = c1;
-                        sal_uInt16 nLen = 1;
-                        while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 &&
-                                nLen < 10 )
-                        {
-                            rInput >> c1;
-                            if( (bErr = (rInput.IsEof() || rInput.GetError())) )
-                                break;
-
-                            sBuffer[nLen++] = c1;
-                            nChars = rtl_convertTextToUnicode(
-                                        pImplData->hConv, 0, sBuffer, nLen, &cUC, 1,
-                                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
-                                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
-                                        RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
-                                        &nInfo, &nCvtBytes);
-                        }
-                        if( !bErr )
-                        {
-                            if( 1 == nChars && 0 == nInfo )
-                            {
-                                DBG_ASSERT( nCvtBytes == nLen,
-                                            "no all bytes have been converted!" );
-                                c = cUC;
-                            }
-                            else
-                            {
-                                DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
-                                    "source buffer is to small" );
-                                DBG_ASSERT( 0 == nChars,
-                                   "there is a converted character, but an error" );
-                                DBG_ASSERT( 0 != nInfo,
-                                   "there is no converted character and no error" );
-                                // There are still errors, so we use the first
-                                // character and restart after that.
-                                c = (sal_Unicode)sBuffer[0];
-                                rInput.SeekRel( -(nLen-1) );
-                            }
-                        }
-                    }
-                }
-                else if( 1 == nChars && 0 == nInfo )
-                {
-                    // The conversion was successfull
-                    DBG_ASSERT( nCvtBytes == 1,
-                                "no all bytes have been converted!" );
-                    c = cUC;
+                    // no convserion shall take place
+                    c = (sal_Unicode)c1;
+                    nChars = 1;
                 }
                 else
                 {
-                    DBG_ASSERT( 0 == nChars,
-                            "there is a converted character, but an error" );
-                    DBG_ASSERT( 0 != nInfo,
-                            "there is no converted character and no error" );
-                    // #73398#: If the character could not be converted,
-                    // because a conversion is not available, do no conversion at all.
-                    c = (sal_Unicode)c1;
+                    DBG_ASSERT( pImplData && pImplData->hConv,
+                                "no text converter!" )
 
+                    sal_Unicode cUC;
+                    sal_uInt32 nInfo = 0;
+                    sal_Size nCvtBytes;
+                    nChars = rtl_convertTextToUnicode(
+                                pImplData->hConv, pImplData->hContext,
+                                &c1, 1, &cUC, 1,
+                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
+                                RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
+                                RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+                                &nInfo, &nCvtBytes);
+                    if( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
+                    {
+                        // The conversion wasn't successfull because we haven't
+                        // read enough characters.
+                        if( pImplData->hContext != (rtl_TextToUnicodeContext)1 )
+                        {
+                            while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
+                            {
+                                rInput >> c1;
+                                if( (bErr = (rInput.IsEof() || rInput.GetError())) )
+                                    break;
+
+                                nChars = rtl_convertTextToUnicode(
+                                            pImplData->hConv, pImplData->hContext,
+                                            &c1, 1, &cUC, 1,
+                                            RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
+                                            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
+                                            RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+                                            &nInfo, &nCvtBytes);
+                            }
+                            if( !bErr )
+                            {
+                                if( 1 == nChars && 0 == nInfo )
+                                {
+                                    c = cUC;
+                                }
+                                else if( 0 != nChars || 0 != nInfo )
+                                {
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                        "source buffer is to small" );
+                                    DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
+                                         "there is a conversion error" );
+                                    DBG_ASSERT( 0 == nChars,
+                                       "there is a converted character, but an error" );
+                                    // There are still errors, but nothing we can
+                                    // do
+                                    c = (sal_Unicode)'?';
+                                    nChars = 1;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            sal_Char sBuffer[10];
+                            sBuffer[0] = c1;
+                            sal_uInt16 nLen = 1;
+                            while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 &&
+                                    nLen < 10 )
+                            {
+                                rInput >> c1;
+                                if( (bErr = (rInput.IsEof() || rInput.GetError())) )
+                                    break;
+
+                                sBuffer[nLen++] = c1;
+                                nChars = rtl_convertTextToUnicode(
+                                            pImplData->hConv, 0, sBuffer, nLen, &cUC, 1,
+                                            RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
+                                            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
+                                            RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+                                            &nInfo, &nCvtBytes);
+                            }
+                            if( !bErr )
+                            {
+                                if( 1 == nChars && 0 == nInfo )
+                                {
+                                    DBG_ASSERT( nCvtBytes == nLen,
+                                                "no all bytes have been converted!" );
+                                    c = cUC;
+                                }
+                                else
+                                {
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                        "source buffer is to small" );
+                                    DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
+                                         "there is a conversion error" );
+                                    DBG_ASSERT( 0 == nChars,
+                                       "there is a converted character, but an error" );
+
+                                    // There are still errors, so we use the first
+                                    // character and restart after that.
+                                    c = (sal_Unicode)sBuffer[0];
+                                    rInput.SeekRel( -(nLen-1) );
+                                    nChars = 1;
+                                }
+                            }
+                        }
+                    }
+                    else if( 1 == nChars && 0 == nInfo )
+                    {
+                        // The conversion was successfull
+                        DBG_ASSERT( nCvtBytes == 1,
+                                    "no all bytes have been converted!" );
+                        c = cUC;
+                    }
+                    else if( 0 != nChars || 0 != nInfo )
+                    {
+                        DBG_ASSERT( 0 == nChars,
+                                "there is a converted character, but an error" );
+                        DBG_ASSERT( 0 != nInfo,
+                                "there is no converted character and no error" );
+                        // #73398#: If the character could not be converted,
+                        // because a conversion is not available, do no conversion at all.
+                        c = (sal_Unicode)c1;
+                        nChars = 1;
+
+                    }
                 }
             }
         }
+        while( 0 == nChars  && !bErr );
     }
     if( bErr )
     {
