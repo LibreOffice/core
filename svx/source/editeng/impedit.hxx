@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:47:28 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _IMPEDIT_HXX
 #define _IMPEDIT_HXX
 
@@ -223,6 +222,18 @@ struct SpellInfo
 
     SpellInfo()
         { bSpellToEnd = sal_True; eState = EE_SPELL_OK; bMultipleDoc = sal_False; }
+};
+
+// used for text conversion
+struct ConvInfo
+{
+    EPaM            aConvStart;
+    EPaM            aConvTo;
+    EPaM            aConvContinue;    // position to start search for next text portion (word) with
+    sal_Bool        bConvToEnd;
+    sal_Bool        bMultipleDoc;
+
+    ConvInfo() { bConvToEnd = sal_True; bMultipleDoc = sal_False; }
 };
 
 struct FormatterFontMetric
@@ -503,6 +514,8 @@ private:
     SpellInfo*          pSpellInfo;
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
 
+    ConvInfo *          pConvInfo;
+
     XubString           aAutoCompleteText;
 
     InternalEditStatus  aStatus;
@@ -520,6 +533,7 @@ private:
     sal_Bool            bUseAutoColor;
     sal_Bool            bForceAutoColor;
     sal_Bool            bCallParaInsertedOrDeleted;
+    sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
 
     // Fuer Formatierung / Update....
     DeletedNodesList    aDeletedNodes;
@@ -943,6 +957,12 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
+
+    // text conversion functions
+    void                Convert( EditView* pEditView, LanguageType nLang, sal_Bool bMultipleDoc );
+    String              ImpConvert( EditView* pEditView, LanguageType nLang, const ESelection &rConvRange );
+    ConvInfo *          GetConvInfo() const { return pConvInfo; }
+    sal_Bool            HasConvertibleTextPortion( LanguageType nLang );
 
     sal_Bool            Search( const SvxSearchItem& rSearchItem, EditView* pView );
     sal_Bool            ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
