@@ -8064,3 +8064,5 @@ _TI2?AVbad_alloc@std@@
 ?getArray@?$Sequence@J@uno@star@sun@com@@QAAPAJXZ
 ?SetBorderStyle@ComboBox@@QAEXG@Z
 ?getArray@?$Sequence@UCalendarItem@i18n@star@sun@com@@@uno@star@sun@com@@QAAPAUCalendarItem@i18n@345@XZ
+?SetReferenceDevice@VirtualDevice@@QAEXW4RefDevMode@1@@Z
+_real@3fd3333333333333
