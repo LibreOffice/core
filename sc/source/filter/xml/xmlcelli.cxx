@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:40:57 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,6 +747,8 @@ void ScXMLTableRowCellContext::EndElement()
                     aCurrentPos.Column = aCellPos.Column + i;
                     if (i > 0)
                         rXMLImport.GetTables().AddColumn(sal_False);
+                    if (!bIsEmpty || sContentValidationName.getLength())
+                            xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
                     if (!bIsEmpty)
                     {
                         for (sal_Int32 j = 0; j < nRepeatedRows; j++)
@@ -754,7 +756,6 @@ void ScXMLTableRowCellContext::EndElement()
                             aCurrentPos.Row = aCellPos.Row + j;
                             if ((aCurrentPos.Column == 0) && (j > 0))
                                 rXMLImport.GetTables().AddRow();
-                            xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
                             if ((!(bIsCovered) || (xCell->getType() == table::CellContentType_EMPTY)))
                             {
                                 switch (nCellType)
