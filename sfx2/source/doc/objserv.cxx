@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:31:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // Filter kann nicht exportieren und Default-Filter ist verf"ugbar?
         if ( !pCurFilter->CanExport() && !pDefFilter->IsInternal() )
         {
+#if 0
             // fragen, ob im default-Format gespeichert werden soll
             String aWarn(SfxResId(STR_QUERY_MUSTOWNFORMAT));
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
@@ -935,9 +936,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             QueryBox aWarnBox(0,WB_OK_CANCEL|WB_DEF_OK,aWarn);
             if ( aWarnBox.Execute() == RET_OK )
             {
+#endif
                 // ja: Save-As in eigenem Foramt
                 rReq.SetSlot(nId = SID_SAVEASDOC);
                 pImp->bSetStandardName=TRUE;
+#if 0
             }
             else
             {
@@ -945,6 +948,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 rReq.Ignore();
                 return;
             }
+#endif
         }
         else
         {
@@ -960,8 +964,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     String aWarn(SfxResId(STR_QUERY_SAVEOWNFORMAT));
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
                                 GetMedium()->GetFilter()->GetUIName());
-                    aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                                pDefFilter->GetUIName() );
+                    aWarn = SearchAndReplace( aWarn,
+                                DEFINE_CONST_UNICODE( "$(FILENAME)" ),
+                                INetURLObject( GetMedium()->GetName() ).getName( INetURLObject::LAST_SEGMENT,
+                                                                                true,
+                                                                                INetURLObject::DECODE_WITH_CHARSET ) );
 
                     SfxViewFrame *pFrame = SfxObjectShell::Current() == this ?
                         SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
@@ -974,10 +981,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         SFX_APP()->SetViewFrame( pTop->GetCurrentViewFrame() );
                         pFrame->GetFrame()->Appear();
 
-                        QueryBox aWarnBox(&pFrame->GetWindow(),WB_YES_NO_CANCEL|WB_DEF_YES,aWarn);
+                        QueryBox aWarnBox(&pFrame->GetWindow(),WB_YES_NO|WB_DEF_YES,aWarn);
                         switch(aWarnBox.Execute())
                         {
-                              case RET_YES:
+                              case RET_NO:
                             {
                                 // ja: in Save-As umsetzen
                                 rReq.SetSlot(nId = SID_SAVEASDOC);
@@ -987,11 +994,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                 pImp->bSetStandardName = TRUE;
                                 break;
                             }
-
-                              case RET_CANCEL:
-                                // nein: Abbruch
-                                rReq.Ignore();
-                                return;
                         }
 
                         pImp->bDidWarnFormat=TRUE;
