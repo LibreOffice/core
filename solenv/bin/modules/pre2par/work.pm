@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:50:57 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:10:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -260,34 +260,30 @@ sub formatter
 
 
 ############################################
-# Creating lng file name from corresponding
+# Creating ulf file name from corresponding
 # pre filename
 ############################################
 
-sub getlngfilename
+sub getulffilename
 {
-    my ($prefilename) = @_;
+#   my ($prefilename) = @_;
 
-    my $lngfilename = $prefilename;
+    my $ulffilename = $pre2par::globals::ulffilename;
 
-    pre2par::pathanalyzer::make_absolute_filename_to_relative_filename(\$lngfilename);
-
-    $lngfilename =~ s/\.pre\s*$/\.lng/;
-
-    return $lngfilename;
+    return $ulffilename;
 }
 
 ############################################
-# Checking if the lng file exists
+# Checking if the ulf file exists
 ############################################
 
 sub fileexists
 {
-    my ($lngfilename) = @_;
+    my ($ulffilename) = @_;
 
     my $fileexists = 0;
 
-    if( -f $lngfilename ) { $fileexists = 1; }
+    if( -f $ulffilename ) { $fileexists = 1; }
 
     return $fileexists;
 }
