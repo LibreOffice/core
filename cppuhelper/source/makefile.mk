@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 13:28:20 $
+#   last change: $Author: hr $ $Date: 2004-04-13 12:27:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ UNOTYPES= \
         com.sun.star.security.XAccessController		\
         com.sun.star.security.RuntimePermission		\
         com.sun.star.io.FilePermission			\
+        com.sun.star.io.IOException			\
         com.sun.star.connection.SocketPermission	\
         com.sun.star.util.XMacroExpander
 
