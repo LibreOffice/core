@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-08 08:55:12 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 15:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,6 +669,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
 
+#ifndef REMOTE_APPSERVER
 #if defined WNT
         // FIXME: determine if accessibility should be enabled
         if( NULL != getenv("SAL_ACCESSIBILITY_ENABLED" ) )
@@ -702,6 +703,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                     pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), new FrameAccessibleImpl(this));
             }
         }
+#endif
 #endif
     }
 
@@ -3992,6 +3994,7 @@ Window::~Window()
     {
         try
         {
+#ifndef REMOTE_APPSERVER
 #if defined WNT
             const SystemEnvData * pEnvData = GetSystemData();
             ImplSVData* pSVData = ImplGetSVData();
@@ -4004,6 +4007,7 @@ Window::~Window()
                     pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->hWnd));
                 }
             }
+#endif
 #endif
 
             // deregister drop target listener
