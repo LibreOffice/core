@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 15:26:27 $
+ *  last change: $Author: oj $ $Date: 2001-12-04 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
             try
             {
                 nFormat = _xTypes->getStandardFormat((sal_Int16)nNumberType, _rLocale);
-                if(_nScale)
+                if(_nScale > 0)
                 {
                     // generate a new format if necessary
                     Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
@@ -1708,6 +1708,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2001/10/30 15:26:27  oj
+ *  #93939# composeTableName remember values from metadata now
+ *
  *  Revision 1.41  2001/09/20 12:51:56  oj
  *  #92232# fixes for BIGINT type
  *
