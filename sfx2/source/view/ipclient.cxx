@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:54:51 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,8 @@ void SAL_CALL SfxInPlaceClient_Impl::stateChanged( const ::com::sun::star::lang:
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    DBG_ASSERT( m_pClient, "No Client, but notified");
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") )
     {
         m_pClient->ViewChanged();
@@ -965,5 +966,25 @@ void SfxInPlaceClient::VisAreaChanged()
     uno::Reference < embed::XInplaceClient > xClient( m_pImp->m_xClient, uno::UNO_QUERY );
     if ( xObj.is() && xClient.is() )
         xObj->setObjectRectangles( xClient->getPlacement(), xClient->getClipRectangle() );
+}
+
+void SfxInPlaceClient::ObjectAreaChanged()
+{
+    // dummy implementation
+}
+
+void SfxInPlaceClient::RequestNewObjectArea( Rectangle& )
+{
+    // dummy implementation
+}
+
+void SfxInPlaceClient::ViewChanged()
+{
+    // dummy implementation
+}
+
+void SfxInPlaceClient::MakeVisible()
+{
+    // dummy implementation
 }
 
