@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:24:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,11 +658,11 @@ void SwDocShell::ReactivateModel()
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocShell::Load(const uno::Reference < embed::XStorage >& xStor )
+sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Load" );
     sal_Bool bRet = sal_False;
-    if( SfxObjectShell::Load( xStor ))
+    if( SfxObjectShell::Load( rMedium ))
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "after SfxInPlaceObject::Load" );
         if( pDoc )              // fuer Letzte Version !!
@@ -677,8 +677,7 @@ sal_Bool  SwDocShell::Load(const uno::Reference < embed::XStorage >& xStor )
                             SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
             {
-                SfxMedium* pMedium = GetMedium();
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
                 nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
             }
 
@@ -695,7 +694,7 @@ sal_Bool  SwDocShell::Load(const uno::Reference < embed::XStorage >& xStor )
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( TRUE );
-                    SwReader aRdr( xStor, aEmptyStr, pDoc );
+                    SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
                     ReadXML->SetOrganizerMode( FALSE );
                 }
@@ -720,7 +719,7 @@ sal_Bool  SwDocShell::Load(const uno::Reference < embed::XStorage >& xStor )
                 {
                     // die DocInfo vom Doc am DocShell-Medium setzen
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
-                    SwReader aRdr( xStor, aEmptyStr, pDoc );
+                    SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
                     nErr = aRdr.Read( *pReader );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after Read" );
@@ -776,7 +775,7 @@ sal_Bool  SwDocShell::Load(const uno::Reference < embed::XStorage >& xStor )
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor )
+sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::LoadFrom" );
     sal_Bool bRet = sal_False;
@@ -790,8 +789,8 @@ sal_Bool  SwDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor 
         //const String& rNm = pStor->GetName();
         String aStreamName;
         aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("styles.xml"));
-        uno::Reference < container::XNameAccess > xAccess( xStor, uno::UNO_QUERY );
-        if ( xAccess->hasByName( aStreamName ) && xStor->isStreamElement( aStreamName ) )
+        uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
+        if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {
             // Das Laden
             SwWait aWait( *this, sal_True );
@@ -802,7 +801,7 @@ sal_Bool  SwDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor 
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( TRUE );
-                    SwReader aRdr( xStor, aEmptyStr, pDoc );
+                    SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
                     ReadXML->SetOrganizerMode( FALSE );
                 }
@@ -836,7 +835,7 @@ sal_Bool  SwDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor 
 
     } while( sal_False );
 
-    SfxObjectShell::LoadFrom( xStor );
+    SfxObjectShell::LoadFrom( rMedium );
     pDoc->ResetModified();
     return bRet;
 }
