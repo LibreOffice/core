@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:13:28 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 13:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -142,6 +145,10 @@ class LocaleDataWrapper;
 namespace linguistic
 {
 
+// ascii to OUString conversion
+#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 ::osl::Mutex &  GetLinguMutex();
@@ -161,6 +168,8 @@ inline ByteString OU2BS(const ::rtl::OUString &rText, rtl_TextEncoding nEnc)
 {
     return ByteString( rText.getStr(), nEnc );
 }
+
+rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -189,6 +198,15 @@ LanguageType
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
 BOOL    IsReadOnly( const String &rURL, BOOL *pbExist = 0 );
+
+// checks if a file with the given URL exists
+BOOL    FileExists( const String &rURL );
+
+// returns complete file URL for given filename that is to be searched in
+// the specified path
+String  GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName );
+
+String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim = TRUE );
 
 ///////////////////////////////////////////////////////////////////////////
 
