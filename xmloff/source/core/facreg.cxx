@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:13:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,11 +106,6 @@ SERVICE( XMLImpressMetaExportOasis );
 SERVICE( XMLImpressSettingsExportOasis );
 
 // impress OOo import
-SERVICE( XMLImpressImportOOO );
-SERVICE( XMLImpressStylesImportOOO );
-SERVICE( XMLImpressContentImportOOO );
-SERVICE( XMLImpressMetaImportOOO );
-SERVICE( XMLImpressSettingsImportOOO );
 
 // impress OOo export
 SERVICE( XMLImpressExportOOO );
@@ -134,11 +129,6 @@ SERVICE( XMLDrawMetaExportOasis );
 SERVICE( XMLDrawSettingsExportOasis );
 
 // draw OOo import
-SERVICE( XMLDrawImportOOO );
-SERVICE( XMLDrawStylesImportOOO );
-SERVICE( XMLDrawContentImportOOO );
-SERVICE( XMLDrawMetaImportOOO );
-SERVICE( XMLDrawSettingsImportOOO );
 
 // draw OOo export
 SERVICE( XMLDrawExportOOO );
@@ -164,32 +154,11 @@ SERVICE( SchXMLExport_Oasis_Styles );
 SERVICE( SchXMLExport_Oasis_Content );
 
 // chart OOo import
-SERVICE( XMLChartImportOOO );
-SERVICE( XMLChartStylesImportOOO );
-SERVICE( XMLChartContentImportOOO );
 
 // chart OOo export
 SERVICE( SchXMLExport );
 SERVICE( SchXMLExport_Styles );
 SERVICE( SchXMLExport_Content );
-
-// Writer OOo import
-SERVICE( XMLWriterImportOOO );
-SERVICE( XMLWriterStylesImportOOO );
-SERVICE( XMLWriterContentImportOOO );
-SERVICE( XMLWriterMetaImportOOO );
-SERVICE( XMLWriterSettingsImportOOO );
-
-// Calc OOo import
-SERVICE( XMLCalcImportOOO );
-SERVICE( XMLCalcStylesImportOOO );
-SERVICE( XMLCalcContentImportOOO );
-SERVICE( XMLCalcMetaImportOOO );
-SERVICE( XMLCalcSettingsImportOOO );
-
-// Math OOo import
-SERVICE( XMLMathMetaImportOOO );
-SERVICE( XMLMathSettingsImportOOO );
 
 // meta export
 SERVICE( XMLMetaExportComponent );
@@ -200,9 +169,6 @@ SERVICE( XMLMetaImportComponent );
 // meta export OOo
 SERVICE( XMLMetaExportOOO );
 
-// meta import OOo
-SERVICE( XMLMetaImportOOO );
-
 // writer autotext event export
 SERVICE( XMLAutoTextEventExport );
 
@@ -211,15 +177,6 @@ SERVICE( XMLAutoTextEventImport );
 
 // writer autotext event export OOo
 SERVICE( XMLAutoTextEventExportOOO );
-
-// writer autotext event import OOo
-SERVICE( XMLAutoTextEventImportOOO );
-
-// Oasis2OOo transformer
-SERVICE( Oasis2OOoTransformer );
-
-// OOo2Oasis transformer
-SERVICE( OOo2OasisTransformer );
 
 
 //
@@ -268,13 +225,6 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             WRITEINFO( XMLImpressMetaExportOasis );
             WRITEINFO( XMLImpressSettingsExportOasis );
 
-            // impress OOo importers
-            WRITEINFO( XMLImpressImportOOO );
-            WRITEINFO( XMLImpressStylesImportOOO );
-            WRITEINFO( XMLImpressContentImportOOO );
-            WRITEINFO( XMLImpressMetaImportOOO );
-            WRITEINFO( XMLImpressSettingsImportOOO );
-
             // impress OOo export
             WRITEINFO( XMLImpressExportOOO );
             WRITEINFO( XMLImpressStylesExportOOO );
@@ -295,13 +245,6 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             WRITEINFO( XMLDrawContentExportOasis );
             WRITEINFO( XMLDrawMetaExportOasis );
             WRITEINFO( XMLDrawSettingsExportOasis );
-
-            // draw OOo importers
-            WRITEINFO( XMLDrawImportOOO );
-            WRITEINFO( XMLDrawStylesImportOOO );
-            WRITEINFO( XMLDrawContentImportOOO );
-            WRITEINFO( XMLDrawMetaImportOOO );
-            WRITEINFO( XMLDrawSettingsImportOOO );
 
             // draw OOo export
             WRITEINFO( XMLDrawExportOOO );
@@ -326,53 +269,22 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             WRITEINFO( SchXMLExport_Oasis_Styles );
             WRITEINFO( SchXMLExport_Oasis_Content );
 
-            // chart OOo import
-            WRITEINFO( XMLChartImportOOO );
-            WRITEINFO( XMLChartStylesImportOOO );
-            WRITEINFO( XMLChartContentImportOOO );
-
             // chart OOo export
             WRITEINFO( SchXMLExport );
             WRITEINFO( SchXMLExport_Styles );
             WRITEINFO( SchXMLExport_Content );
-
-            // writer OOo importers
-            WRITEINFO( XMLWriterImportOOO );
-            WRITEINFO( XMLWriterStylesImportOOO );
-            WRITEINFO( XMLWriterContentImportOOO );
-            WRITEINFO( XMLWriterMetaImportOOO );
-            WRITEINFO( XMLWriterSettingsImportOOO );
-
-            // calc OOo importers
-            WRITEINFO( XMLCalcImportOOO );
-            WRITEINFO( XMLCalcStylesImportOOO );
-            WRITEINFO( XMLCalcContentImportOOO );
-            WRITEINFO( XMLCalcMetaImportOOO );
-            WRITEINFO( XMLCalcSettingsImportOOO );
-
-            // Math OOo import
-            WRITEINFO( XMLMathMetaImportOOO );
-            WRITEINFO( XMLMathSettingsImportOOO );
 
             // meta
             WRITEINFO( XMLMetaImportComponent );
             WRITEINFO( XMLMetaExportComponent );
 
             // meta OOo
-            WRITEINFO( XMLMetaImportOOO );
             WRITEINFO( XMLMetaExportOOO );
 
             // writer auto text events
             WRITEINFO( XMLAutoTextEventExport );
             WRITEINFO( XMLAutoTextEventImport );
             WRITEINFO( XMLAutoTextEventExportOOO );
-            WRITEINFO( XMLAutoTextEventImportOOO );
-
-            // Oasis2OOo transformer
-            WRITEINFO( Oasis2OOoTransformer );
-
-            // OOo2Oasis transformer
-            WRITEINFO( OOo2OasisTransformer );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -417,13 +329,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         else SINGLEFACTORY( XMLImpressMetaExportOasis )
         else SINGLEFACTORY( XMLImpressSettingsExportOasis )
 
-        // impress OOo importers
-        else SINGLEFACTORY( XMLImpressImportOOO )
-        else SINGLEFACTORY( XMLImpressStylesImportOOO )
-        else SINGLEFACTORY( XMLImpressContentImportOOO )
-        else SINGLEFACTORY( XMLImpressMetaImportOOO )
-        else SINGLEFACTORY( XMLImpressSettingsImportOOO )
-
         // impress OOo export
         else SINGLEFACTORY( XMLImpressExportOOO )
         else SINGLEFACTORY( XMLImpressStylesExportOOO )
@@ -444,13 +349,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         else SINGLEFACTORY( XMLDrawContentExportOasis )
         else SINGLEFACTORY( XMLDrawMetaExportOasis )
         else SINGLEFACTORY( XMLDrawSettingsExportOasis )
-
-        // draw OOo importers
-        else SINGLEFACTORY( XMLDrawImportOOO )
-        else SINGLEFACTORY( XMLDrawStylesImportOOO )
-        else SINGLEFACTORY( XMLDrawContentImportOOO )
-        else SINGLEFACTORY( XMLDrawMetaImportOOO )
-        else SINGLEFACTORY( XMLDrawSettingsImportOOO )
 
         // draw OOo export
         else SINGLEFACTORY( XMLDrawExportOOO )
@@ -475,33 +373,10 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         else SINGLEFACTORY( SchXMLExport_Oasis_Styles )
         else SINGLEFACTORY( SchXMLExport_Oasis_Content )
 
-        // chart OOo import
-        else SINGLEFACTORY( XMLChartImportOOO )
-        else SINGLEFACTORY( XMLChartStylesImportOOO )
-        else SINGLEFACTORY( XMLChartContentImportOOO )
-
         // chart OOo export
         else SINGLEFACTORY( SchXMLExport )
         else SINGLEFACTORY( SchXMLExport_Styles )
         else SINGLEFACTORY( SchXMLExport_Content )
-
-        // writer OOo import
-        else SINGLEFACTORY( XMLWriterImportOOO )
-        else SINGLEFACTORY( XMLWriterStylesImportOOO )
-        else SINGLEFACTORY( XMLWriterContentImportOOO )
-        else SINGLEFACTORY( XMLWriterMetaImportOOO )
-        else SINGLEFACTORY( XMLWriterSettingsImportOOO )
-
-        // calc OOo import
-        else SINGLEFACTORY( XMLCalcImportOOO )
-        else SINGLEFACTORY( XMLCalcStylesImportOOO )
-        else SINGLEFACTORY( XMLCalcContentImportOOO )
-        else SINGLEFACTORY( XMLCalcMetaImportOOO )
-        else SINGLEFACTORY( XMLCalcSettingsImportOOO )
-
-        // math OOo import
-        else SINGLEFACTORY( XMLMathMetaImportOOO )
-        else SINGLEFACTORY( XMLMathSettingsImportOOO )
 
         // meta import/export
         else SINGLEFACTORY( XMLMetaExportComponent )
@@ -509,17 +384,11 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
 
         // meta import/export OOo
         else SINGLEFACTORY( XMLMetaExportOOO )
-        else SINGLEFACTORY( XMLMetaImportOOO )
 
         // auto text import/export
         else SINGLEFACTORY( XMLAutoTextEventExport )
         else SINGLEFACTORY( XMLAutoTextEventImport )
         else SINGLEFACTORY( XMLAutoTextEventExportOOO )
-        else SINGLEFACTORY( XMLAutoTextEventImportOOO )
-
-        // transformers
-        else SINGLEFACTORY( Oasis2OOoTransformer )
-        else SINGLEFACTORY( OOo2OasisTransformer )
 
         if( xFactory.is())
         {
