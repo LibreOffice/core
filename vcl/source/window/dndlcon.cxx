@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,11 @@ using namespace ::com::sun::star::datatransfer::dnd;
 //
 //==================================================================================================
 
-DNDListenerContainer::DNDListenerContainer() : m_aMutex(),
+DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions ) : m_aMutex(),
     WeakComponentImplHelper2< XDragGestureRecognizer, XDropTarget >(m_aMutex)
 {
     m_bActive = sal_False;
-
-// FIXME: set drop target default actions.
-//  m_nDefaultActions = ;
+    m_nDefaultActions = nDefaultActions;
 }
 
 //==================================================================================================
@@ -317,7 +315,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
 //==================================================================================================
 
 sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTargetDragContext >& context,
-    const sal_Int8 dropAction, const Point& location, const sal_Int8 sourceActions )
+    const sal_Int8 dropAction, const Point& location, const sal_Int8 sourceActions, const Sequence< DataFlavor >& dataFlavors )
 {
     sal_uInt32 nRet = 0;
 
@@ -327,7 +325,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
     if( pContainer )
     {
         // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions );
+        DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions, dataFlavors );
         OInterfaceIteratorHelper aIterator( *pContainer );
 
         while (aIterator.hasMoreElements())

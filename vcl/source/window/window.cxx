@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,19 @@
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
+#include <com/sun/star/awt/XDisplayConnection.hpp>
+#endif
+
 #ifdef REMOTE_APPSERVER
 #include "rmwindow.hxx"
 #include "xevthdl.hxx"
@@ -157,8 +170,14 @@
 
 #include <unowrap.hxx>
 #include <dndlcon.hxx>
+#include <dndevdis.hxx>
 
 #pragma hdrstop
+
+using namespace rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::dnd;
 
 // =======================================================================
 
@@ -520,6 +539,68 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mpDragTimer        = NULL;
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+
+        try {
+#ifdef REMOTE_APPSERVER
+
+            // FIXME: drag and drop for remote case
+    //  Reference< XMultiServiceFactory > xFactory;
+
+#else
+            Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            if ( xFactory.is() )
+            {
+                /*
+                 * IMHO this belongs in the platform dependend part of vcl, but the vcl guys say it
+                 * is better to implement it here to reduce dependencies on the other ports like Mac etc.
+                 */
+
+                const SystemEnvData * pEnvData = GetSystemData();
+
+                if( pEnvData )
+                {
+                    Sequence< Any > aDragSourceAL( 1 ), aDropTargetAL( 1 );
+//                  Sequence< sal_Int8 > windowId( 4 );
+                    OUString aDragSourceSN, aDropTargetSN;
+
+#if defined WNT
+//                  xInstance = xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragAndDrop" ) );
+                    * ( reinterpret_cast < HWND * > ( windowId.getArray() ) ) = pEnvData->hWnd;
+#elif defined UNX
+                    aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragAndDrop" );
+                    aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
+
+                    // need second parameter for drop target
+                    aDropTargetAL.realloc( 2 );
+
+                    aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aDropTargetAL[ 1 ] = makeAny( pEnvData->aShellWindow );
+#endif
+                    // FIXME: add service names for macos etc. here
+
+                    if( aDragSourceSN.getLength() )
+                        mpFrameData->mxDragSource = Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
+
+                    if( aDropTargetSN.getLength() )
+                        mpFrameData->mxDropTarget = Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
+
+                }
+            }
+#endif
+
+            if( mpFrameData->mxDropTarget.is() )
+                mpFrameData->mxDropTarget->addDropTargetListener( new DNDEventDispatcher( this ) );
+        }
+
+        // createInstance can throw any exception
+        catch( Exception exc )
+        {
+            // release all instances
+            mpFrameData->mxDropTarget.clear();
+            mpFrameData->mxDragSource.clear();
+        }
+
 
 #ifndef REMOTE_APPSERVER
         // Muessen Application-Settings noch upgedatet werden
@@ -6585,28 +6666,49 @@ void Window::ImplCallActivateListeners( Window *pOld )
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
+Reference< XDropTarget > Window::GetDropTarget()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( ! mxDNDListenerContainer.is() )
-        mxDNDListenerContainer = static_cast < ::com::sun::star::datatransfer::dnd::XDropTarget * > ( new DNDListenerContainer() );
+    {
+        sal_Int32 nDefaultActions = 0;
+
+        if( mpFrameData && mpFrameData->mxDropTarget.is() )
+            nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
+
+        mxDNDListenerContainer = static_cast < XDropTarget * > ( new DNDListenerContainer( nDefaultActions ) );
+    }
 
     // this object is located in the same process, so there will be no runtime exception
-    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >
-        ( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+    return Reference< XDropTarget > ( mxDNDListenerContainer, UNO_QUERY );
 }
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > Window::GetDragGestureRecognizer()
+Reference< XDragSource > Window::GetDragSource()
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    return mpFrameData ? mpFrameData->mxDragSource : Reference< XDragSource > ();
+}
+
+// -----------------------------------------------------------------------
+
+Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( ! mxDNDListenerContainer.is() )
-        mxDNDListenerContainer = static_cast < ::com::sun::star::datatransfer::dnd::XDropTarget * > ( new DNDListenerContainer() );
+    {
+        sal_Int32 nDefaultActions = 0;
+
+        if( mpFrameData && mpFrameData->mxDropTarget.is() )
+            nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
+
+        mxDNDListenerContainer = static_cast < XDropTarget * > ( new DNDListenerContainer( nDefaultActions ) );
+    }
 
     // this object is located in the same process, so there will be no runtime exception
-    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer >
-        ( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+    return Reference< XDragGestureRecognizer > ( mxDNDListenerContainer, UNO_QUERY );
 }

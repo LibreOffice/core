@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.3 $
+#	$Revision: 1.4 $
 #
-#	last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
+#	last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -135,6 +135,7 @@ EXCEPTIONSFILES=					\
 .ELSE
 EXCEPTIONSFILES=					\
             $(SLO)$/window.obj		\
+            $(SLO)$/winproc.obj		\
             $(SLO)$/syswin.obj		\
             $(SLO)$/dndevdis.obj	\
             $(SLO)$/dndlcon.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class DNDListenerContainer : public ::cppu::WeakComponentImplHelper2<
 
 public:
 
-    DNDListenerContainer();
+    DNDListenerContainer( sal_Int8 nDefaultActions );
     virtual ~DNDListenerContainer();
 
     sal_uInt32 fireDropEvent(
@@ -105,7 +105,8 @@ public:
 
     sal_uInt32 fireDragEnterEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& context,
-        const sal_Int8 dropAction, const ::com::sun::star::awt::Point& location, const sal_Int8 sourceActions );
+        const sal_Int8 dropAction, const ::com::sun::star::awt::Point& location, const sal_Int8 sourceActions,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& dataFlavor );
 
     sal_uInt32 fireDropActionChangedEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& context,

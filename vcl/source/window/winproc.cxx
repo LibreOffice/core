@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
+#include <com/sun/star/awt/MouseEvent.hpp>
+#endif
 
 #pragma hdrstop
 
@@ -640,8 +643,13 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                          !(((nMouseY-nDragH) <= pMouseDownWin->mpFrameData->mnFirstMouseY) &&
                            ((nMouseY+nDragH) >= pMouseDownWin->mpFrameData->mnFirstMouseY)) )
                     {
-#if 1
                         pMouseDownWin->mpFrameData->mbStartDragCalled  = TRUE;
+
+#if 0
+                        /*
+                         * old drag and drop api
+                         */
+
                         Point aCmdMousePos( pMouseDownWin->mpFrameData->mnFirstMouseX,
                                             pMouseDownWin->mpFrameData->mnFirstMouseY );
                         aCmdMousePos = pMouseDownWin->ImplFrameToOutput( aCmdMousePos );
@@ -654,8 +662,11 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                         if ( aDelData.IsDelete() )
                             return 1;
                         pMouseDownWin->ImplRemoveDel( &aDelData );
-#else
-                        pMouseDownWin->mpFrameData->mbStartDragCalled  = TRUE;
+#endif
+
+                        /*
+                         * new drag and drop api
+                         */
 
                         // query DropTarget from child window
                         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
@@ -668,16 +679,29 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                                 pMouseDownWin->mpFrameData->mnFirstMouseX,
                                 pMouseDownWin->mpFrameData->mnFirstMouseX ) );
 
-                            // FIXME: where do I get Action from ?
-                            // FIXME: Fill any with data.
+                            // create a uno mouse event out of the available data
+                            ::com::sun::star::awt::MouseEvent aMouseEvent(
+                                static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
+                                nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
+                                nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE),
+                                nMouseX,
+                                nMouseY,
+                                nClicks,
+                                sal_False );
 
-                            // fire...Event returns the number of listeners found
+                            // the X dnd implementation uses a second display connection
+                            pMouseDownWin->mpFrame->CaptureMouse( sal_False );
+
+                            ULONG nCount = Application::ReleaseSolarMutex();
+
+                            // FIXME: where do I get Action from ?
                             static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
                                 ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                                pMouseDownWin->GetSystemWindow()->mxDragSource,
-                                ::com::sun::star::uno::Any() );
+                                pMouseDownWin->GetDragSource(),
+                                ::com::sun::star::uno::makeAny( aMouseEvent ) );
+
+                            Application::AcquireSolarMutex( nCount );
                         }
-#endif
                     }
                 }
             }

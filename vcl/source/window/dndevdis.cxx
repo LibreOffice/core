@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,12 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
             // send DragEnterEvent if other window than at last dragOver
             if( bSendDragEnter )
             {
+#if 0
                 static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
                     fireDragEnterEvent( static_cast < XDropTargetDragContext * > (dtde.Context.get()),
                         dtde.DropAction, ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
                         dtde.SourceActions );
+#endif
             }
 
             // fire...Event returns the number of listeners found
@@ -149,33 +151,37 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     }
 
     // reject drop if no listeners found
-    if( nListeners == 0 )
-        dtde.Context->reject();
+    if( nListeners == 0 ) {
+        OSL_TRACE( "rejecting drop due to missing listeners." );
+        dtde.Context->rejectDrop();
+    }
 }
 
 //==================================================================================================
 // DNDEventDispatcher::dragEnter
 //==================================================================================================
 
-void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEvent& dtde )
+void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
     throw(RuntimeException)
 {
     sal_Int32 nListeners;
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aGuard( Application::GetSolarMutex() );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( Point( dtde.Location.X, dtde.Location.Y ) );
+    Window * pChildWindow = m_pTopWindow->ImplFindWindow( Point( dtdee.Location.X, dtdee.Location.Y ) );
     aGuard.clear();
 
     // assume pointer write operation to be atomic
     m_pCurrentWindow = pChildWindow;
 
-    // fire dropActionChanged on listeners of current window
-    nListeners = dragAction( 3, pChildWindow, dtde );
+    // fire dragEnter on listeners of current window
+    nListeners = dragAction( 1, pChildWindow, dtdee );
 
     // reject drag if no listener found
-    if( nListeners == 0 )
-        dtde.Context->reject();
+    if( nListeners == 0 ) {
+        OSL_TRACE( "rejecting drag enter due to missing listeners." );
+        dtdee.Context->rejectDrag();
+    }
 }
 
 //==================================================================================================
@@ -231,13 +237,16 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     }
     else
     {
-        // fire dropActionChanged on listeners of current window
+        // fire dragOver on listeners of current window
         nListeners = dragAction( 2, pChildWindow, dtde );
     }
 
     // reject drag if no listener found
     if( nListeners == 0 )
-        dtde.Context->reject();
+    {
+        OSL_TRACE( "rejecting drag over due to missing listeners." );
+        dtde.Context->rejectDrag();
+    }
 }
 
 //==================================================================================================
@@ -273,7 +282,10 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
     // reject drag if no listener found
     if( nListeners == 0 )
-        dtde.Context->reject();
+    {
+        OSL_TRACE( "rejecting dropActionChanged due to missing listeners." );
+        dtde.Context->rejectDrag();
+    }
 }
 
 
@@ -311,10 +323,12 @@ sal_Int32 DNDEventDispatcher::dragAction( sal_Int8 action, Window * pWindow, con
             switch( action )
             {
             case 1:
+#if 0
                 n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
                     fireDragEnterEvent( dtde.Context, dtde.DropAction,
                         ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
                         dtde.SourceActions );
+#endif
                 break;
 
             case 2:
