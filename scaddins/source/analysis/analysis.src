@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-13 06:21:06 $
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Weeknum_add
+    Resource ANALYSIS_Weeknum
     {
         String 1    // description Weeknum_add
         {
@@ -720,7 +720,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_EoMonth
+    Resource ANALYSIS_Eomonth
     {
         String 1    // description EoMonth
         {
@@ -1050,7 +1050,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Iseven_add
+    Resource ANALYSIS_Iseven
     {
         String 1    // description Iseven_add
         {
@@ -1131,7 +1131,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Isodd_add
+    Resource ANALYSIS_Isodd
     {
         String 1    // description Isodd_add
         {
@@ -1818,7 +1818,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_SqrtPI
+    Resource ANALYSIS_Sqrtpi
     {
         String 1    // description SqrtPI
         {
@@ -2040,7 +2040,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Gcd_add
+    Resource ANALYSIS_Gcd
     {
         String 1    // description Gcd_add
         {
@@ -2121,7 +2121,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Lcm_add
+    Resource ANALYSIS_Lcm
     {
         String 1    // description Lcm_add
         {
@@ -2202,7 +2202,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_BesselI
+    Resource ANALYSIS_Besseli
     {
         String 1    // description BesselI
         {
@@ -2340,7 +2340,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_BesselJ
+    Resource ANALYSIS_Besselj
     {
         String 1    // description BesselJ
         {
@@ -2478,7 +2478,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_BesselK
+    Resource ANALYSIS_Besselk
     {
         String 1    // description BesselK
         {
@@ -2616,7 +2616,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_BesselY
+    Resource ANALYSIS_Bessely
     {
         String 1    // description BesselY
         {
@@ -4603,7 +4603,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_GeStep
+    Resource ANALYSIS_Gestep
     {
         String 1    // description GeStep
         {
@@ -6662,7 +6662,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Convert_add
+    Resource ANALYSIS_Convert
     {
         String 1    // description Convert_add
         {
@@ -9325,7 +9325,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Effect_add
+    Resource ANALYSIS_Effect
     {
         String 1    // description Effect_add
         {
@@ -9458,7 +9458,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Cumprinc_add
+    Resource ANALYSIS_Cumprinc
     {
         String 1    // description Cumprinc_add
         {
@@ -9800,7 +9800,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Cumipmt_add
+    Resource ANALYSIS_Cumipmt
     {
         String 1    // description Cumipmt_add
         {
@@ -11557,9 +11557,9 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 
-    Resource ANALYSIS_Nomial_add
+    Resource ANALYSIS_Nominal
     {
-        String 1    // description Nomial_add
+        String 1    // description Nominal_add
         {
             Text = "Liefert die jährliche Nominalverzinsung.";
             Text[ english ] = "Returns the annual nominal interest rate";
@@ -11585,7 +11585,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ catalan ] = "Returns the annual nominal interest rate";
         };
 
-        String 2 // name of parameter 1         Nomial_add
+        String 2 // name of parameter 1         Nominal_add
         {
             Text = "Effektiver Zins";
             Text[ english ] = "Effektiver Zins";
@@ -11611,7 +11611,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ catalan ] = "Effektiver Zins";
         };
 
-        String 3 // description of parameter 1  Nomial_add
+        String 3 // description of parameter 1  Nominal_add
         {
             Text = "Effektiver Zins";
             Text[ english ] = "Effektiver Zins";
@@ -11637,7 +11637,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ catalan ] = "Effektiver Zins";
         };
 
-        String 4 // name of parameter 2         Nomial_add
+        String 4 // name of parameter 2         Nominal_add
         {
             Text = "Perioden";
             Text[ english ] = "Perioden";
@@ -11663,7 +11663,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ catalan ] = "Perioden";
         };
 
-        String 5 // description of parameter 2  Nomial_add
+        String 5 // description of parameter 2  Nominal_add
         {
             Text = "Perioden";
             Text[ english ] = "Perioden";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,23 +75,23 @@
 #define ANALYSIS_Workday                    (ANALYSIS_FUNCDESC_START)
 #define ANALYSIS_Yearfrac                   (ANALYSIS_FUNCDESC_START+1)
 #define ANALYSIS_Edate                      (ANALYSIS_FUNCDESC_START+2)
-#define ANALYSIS_Weeknum_add                (ANALYSIS_FUNCDESC_START+3)
-#define ANALYSIS_EoMonth                    (ANALYSIS_FUNCDESC_START+4)
+#define ANALYSIS_Weeknum                    (ANALYSIS_FUNCDESC_START+3)
+#define ANALYSIS_Eomonth                    (ANALYSIS_FUNCDESC_START+4)
 #define ANALYSIS_Networkdays                (ANALYSIS_FUNCDESC_START+5)
-#define ANALYSIS_Iseven_add                 (ANALYSIS_FUNCDESC_START+6)
-#define ANALYSIS_Isodd_add                  (ANALYSIS_FUNCDESC_START+7)
+#define ANALYSIS_Iseven                     (ANALYSIS_FUNCDESC_START+6)
+#define ANALYSIS_Isodd                      (ANALYSIS_FUNCDESC_START+7)
 #define ANALYSIS_Multinomial                (ANALYSIS_FUNCDESC_START+8)
 #define ANALYSIS_Seriessum                  (ANALYSIS_FUNCDESC_START+9)
 #define ANALYSIS_Quotient                   (ANALYSIS_FUNCDESC_START+10)
 #define ANALYSIS_Mround                     (ANALYSIS_FUNCDESC_START+11)
-#define ANALYSIS_SqrtPI                     (ANALYSIS_FUNCDESC_START+12)
+#define ANALYSIS_Sqrtpi                     (ANALYSIS_FUNCDESC_START+12)
 #define ANALYSIS_Randbetween                (ANALYSIS_FUNCDESC_START+13)
-#define ANALYSIS_Gcd_add                    (ANALYSIS_FUNCDESC_START+14)
-#define ANALYSIS_Lcm_add                    (ANALYSIS_FUNCDESC_START+15)
-#define ANALYSIS_BesselI                    (ANALYSIS_FUNCDESC_START+16)
-#define ANALYSIS_BesselJ                    (ANALYSIS_FUNCDESC_START+17)
-#define ANALYSIS_BesselK                    (ANALYSIS_FUNCDESC_START+18)
-#define ANALYSIS_BesselY                    (ANALYSIS_FUNCDESC_START+19)
+#define ANALYSIS_Gcd                        (ANALYSIS_FUNCDESC_START+14)
+#define ANALYSIS_Lcm                        (ANALYSIS_FUNCDESC_START+15)
+#define ANALYSIS_Besseli                    (ANALYSIS_FUNCDESC_START+16)
+#define ANALYSIS_Besselj                    (ANALYSIS_FUNCDESC_START+17)
+#define ANALYSIS_Besselk                    (ANALYSIS_FUNCDESC_START+18)
+#define ANALYSIS_Bessely                    (ANALYSIS_FUNCDESC_START+19)
 #define ANALYSIS_Bin2Oct                    (ANALYSIS_FUNCDESC_START+20)
 #define ANALYSIS_Bin2Dec                    (ANALYSIS_FUNCDESC_START+21)
 #define ANALYSIS_Bin2Hex                    (ANALYSIS_FUNCDESC_START+22)
@@ -107,7 +107,7 @@
 #define ANALYSIS_Delta                      (ANALYSIS_FUNCDESC_START+32)
 #define ANALYSIS_Erf                        (ANALYSIS_FUNCDESC_START+33)
 #define ANALYSIS_Erfc                       (ANALYSIS_FUNCDESC_START+34)
-#define ANALYSIS_GeStep                     (ANALYSIS_FUNCDESC_START+35)
+#define ANALYSIS_Gestep                     (ANALYSIS_FUNCDESC_START+35)
 #define ANALYSIS_Factdouble                 (ANALYSIS_FUNCDESC_START+36)
 #define ANALYSIS_Imabs                      (ANALYSIS_FUNCDESC_START+37)
 #define ANALYSIS_Imaginary                  (ANALYSIS_FUNCDESC_START+38)
@@ -127,7 +127,7 @@
 #define ANALYSIS_Imsqrt                     (ANALYSIS_FUNCDESC_START+52)
 #define ANALYSIS_Imsum                      (ANALYSIS_FUNCDESC_START+53)
 #define ANALYSIS_Complex                    (ANALYSIS_FUNCDESC_START+54)
-#define ANALYSIS_Convert_add                (ANALYSIS_FUNCDESC_START+55)
+#define ANALYSIS_Convert                    (ANALYSIS_FUNCDESC_START+55)
 #define ANALYSIS_Amordegrc                  (ANALYSIS_FUNCDESC_START+56)
 #define ANALYSIS_Amorlinc                   (ANALYSIS_FUNCDESC_START+57)
 #define ANALYSIS_Accrint                    (ANALYSIS_FUNCDESC_START+58)
@@ -135,14 +135,14 @@
 #define ANALYSIS_Received                   (ANALYSIS_FUNCDESC_START+60)
 #define ANALYSIS_Disc                       (ANALYSIS_FUNCDESC_START+61)
 #define ANALYSIS_Duration                   (ANALYSIS_FUNCDESC_START+62)
-#define ANALYSIS_Effect_add                 (ANALYSIS_FUNCDESC_START+63)
-#define ANALYSIS_Cumprinc_add               (ANALYSIS_FUNCDESC_START+64)
-#define ANALYSIS_Cumipmt_add                (ANALYSIS_FUNCDESC_START+65)
+#define ANALYSIS_Effect                     (ANALYSIS_FUNCDESC_START+63)
+#define ANALYSIS_Cumprinc                   (ANALYSIS_FUNCDESC_START+64)
+#define ANALYSIS_Cumipmt                    (ANALYSIS_FUNCDESC_START+65)
 #define ANALYSIS_Price                      (ANALYSIS_FUNCDESC_START+66)
 #define ANALYSIS_Pricedisc                  (ANALYSIS_FUNCDESC_START+67)
 #define ANALYSIS_Pricemat                   (ANALYSIS_FUNCDESC_START+68)
 #define ANALYSIS_Mduration                  (ANALYSIS_FUNCDESC_START+69)
-#define ANALYSIS_Nomial_add                 (ANALYSIS_FUNCDESC_START+70)
+#define ANALYSIS_Nominal                    (ANALYSIS_FUNCDESC_START+70)
 #define ANALYSIS_Dollarfr                   (ANALYSIS_FUNCDESC_START+71)
 #define ANALYSIS_Dollarde                   (ANALYSIS_FUNCDESC_START+72)
 #define ANALYSIS_Yield                      (ANALYSIS_FUNCDESC_START+73)
