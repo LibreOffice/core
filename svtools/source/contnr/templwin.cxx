@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-28 12:31:38 $
+ *  last change: $Author: pb $ $Date: 2001-09-05 12:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,6 +1221,11 @@ void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
         pFileWin->SetFocus();
 }
 
+void SvtTemplateWindow::OpenTemplateRoot()
+{
+    pFileWin->OpenFolder( pIconWin->GetTemplateRootURL() );
+}
+
 // ------------------------------------------------------------------------
 void SvtTemplateWindow::ReadViewSettings( )
 {
@@ -1531,6 +1536,8 @@ void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
     {
         WaitObject aWaitCursor( this );
         xTemplates->update();
+        if ( pImpl->pWin->IsTemplateFolderOpen() )
+            pImpl->pWin->OpenTemplateRoot();
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-10 09:22:30 $
+ *  last change: $Author: pb $ $Date: 2001-09-05 12:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ public:
     String              GetFolderTitle() const;
     void                SetFocus( sal_Bool bIconWin );
     sal_Bool            HasIconWinFocus() const { return pIconWin->HasChildPathFocus(); }
+    void                OpenTemplateRoot();
 };
 
 #endif // _SVTOOLS_TEMPLWIN_HXX
