@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:45:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,8 +564,8 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
     ScXMLDataPilotFieldContext* pDataPilotField;
 
     rtl::OUString sName;
-    sal_Bool    bDisplay : 1;
-    sal_Bool    bDisplayDetails : 1;
+    sal_Bool    bDisplay;
+    sal_Bool    bDisplayDetails;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
