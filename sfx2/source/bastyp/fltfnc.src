@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:42:07 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 15:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@ String STR_FILTER_COMPONENT
 
 String STR_FILTER_NOT_INSTALLED
 {
-    Text [ de ] = "Der ausgewählte Filter $(FILTER) ist nicht installiert.\nMöchten Sie das nachholen ?";
-    Text [ en-US ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
+    Text [ de ] = "Der ausgewählte Filter $(FILTER) ist nicht installiert.\nMöchten Sie das nachholen?";
+    Text [ en-US ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now?";
     Text [ x-comment ] = " ";
 };
 
