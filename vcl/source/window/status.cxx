@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:50:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ struct ImplStatusItem
     void*               mpUserData;
     BOOL                mbVisible;
     XubString           maAccessibleName;
+    XubString           maCommand;
 };
 
 DECLARE_LIST( ImplStatusItemList, ImplStatusItem* );
@@ -186,7 +187,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( TRUE, TRUE, TRUE );
     SetLineColor();
 
-    SetSizePixel( CalcWindowSizePixel() );
+    SetOutputSizePixel( CalcWindowSizePixel() );
 }
 
 // -----------------------------------------------------------------------
@@ -687,6 +688,13 @@ void StatusBar::Paint( const Rectangle& )
         }
     }
 
+    // draw a top border
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetLineColor( rStyleSettings.GetShadowColor() );
+    DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
+    SetLineColor( rStyleSettings.GetLightColor() );
+    DrawLine( Point( 0, 1 ), Point( mnDX-1, 1 ) );
+
     if ( mbBottomBorder )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -713,6 +721,8 @@ void StatusBar::Resize()
     mnDX = aSize.Width();
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;
+    // subtract top border
+    mnCalcHeight -= 2;
     if ( mbBottomBorder )
         mnCalcHeight -= 2;
 
@@ -1240,6 +1250,33 @@ const XubString& StatusBar::GetItemText( USHORT nItemId ) const
 
 // -----------------------------------------------------------------------
 
+void StatusBar::SetItemCommand( USHORT nItemId, const XubString& rCommand )
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+    {
+        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+
+        if ( pItem->maCommand != rCommand )
+            pItem->maCommand = rCommand;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+const XubString& StatusBar::GetItemCommand( USHORT nItemId )
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+        return mpItemList->GetObject( nPos )->maCommand;
+    else
+        return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------
+
 void StatusBar::SetItemData( USHORT nItemId, void* pNewData )
 {
     USHORT nPos = GetItemPos( nItemId );
@@ -1475,6 +1512,8 @@ Size StatusBar::CalcWindowSizePixel() const
     }
 
     nCalcHeight = GetTextHeight()+(STATUSBAR_OFFSET_TEXTY*2);
+    // add top border
+    nCalcHeight += 2;
     if ( mbBottomBorder )
         nCalcHeight += 2;
 
