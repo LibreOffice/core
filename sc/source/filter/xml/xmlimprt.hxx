@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:30:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ enum ScXMLDataPilotTableSourceServiceAttrTokens
     XML_TOK_SOURCE_SERVICE_ATTR_NAME,
     XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME,
     XML_TOK_SOURCE_SERVICE_ATTR_OBJECT_NAME,
-    XML_TOK_SOURCE_SERVICE_ATTR_USERNAME,
+    XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME,
     XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD
 };
 
@@ -603,7 +603,7 @@ enum ScXMLDataPilotFieldElemTokens
 
 enum ScXMLDataPilotLevelAttrTokens
 {
-    XML_TOK_DATA_PILOT_LEVEL_ATTR_DISPLAY_EMPTY
+    XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY
 };
 
 enum ScXMLDataPilotLevelElemTokens
@@ -634,7 +634,7 @@ enum ScXMLDataPilotMemberAttrTokens
 {
     XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME,
     XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY,
-    XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS
+    XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS
 };
 
 enum ScXMLConsolidationAttrTokens
