@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:18:35 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Text[ chinese_traditional ] = "畫廊";
     Text[ turkish ] = "Galeri";
     Text[ arabic ] = "��������";
-    Text[ catalan ] = "Gallery";
+    Text[ catalan ] = "Galeria";
     Text[ finnish ] = "Galleria";
     Sizeable = TRUE;
     Moveable = TRUE ;
@@ -155,7 +155,7 @@ TabDialog RID_SVXTABDLG_GALLERY
     Text[ korean ] = "등록정보 ";
     Text[ turkish ] = "�zellikler: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Propiedades de ";
+    Text[ catalan ] = "Propietats de ";
     Text[ finnish ] = "Ominaisuudet:";
     Moveable = TRUE ;
     TabControl 1
@@ -227,7 +227,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     Text[ korean ] = "등록정보 ";
     Text[ turkish ] = "�zellikler: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Propiedades de ";
+    Text[ catalan ] = "Propietats de";
     Text[ finnish ] = "Ominaisuudet:";
     Moveable = TRUE ;
     TabControl 1
@@ -291,7 +291,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ korean ] = "파일";
                 Text[ turkish ] = "Dosyalar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Archivos";
+                Text[ catalan ] = "Fitxers";
                 Text[ finnish ] = "Tiedostot";
                 Text[ thai ] = "แฟ้ม";
             };
@@ -351,7 +351,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "유형:";
         Text[ turkish ] = "Tip:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo:";
+        Text[ catalan ] = "Tipus:";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "ชนิด:";
     };
@@ -388,7 +388,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "장소:";
         Text[ turkish ] = "Yer:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ubicaci�n:";
+        Text[ catalan ] = "Ubicaci�:";
         Text[ finnish ] = "Sijainti:";
         Text[ thai ] = "ที่ตั้ง:";
     };
@@ -425,7 +425,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "내용:";
         Text[ turkish ] = "��erik:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contenido:";
+        Text[ catalan ] = "Continguts:";
         Text[ finnish ] = "Sis�lt�:";
         Text[ thai ] = "เนื้อหา:";
     };
@@ -467,7 +467,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "작성일자:";
         Text[ turkish ] = "Olu�turma tarihi:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Creado el:";
+        Text[ catalan ] = "Creat:";
         Text[ finnish ] = "Luotu:";
         Text[ thai ] = "สร้าง:";
     };
@@ -504,7 +504,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "변경일자:";
         Text[ turkish ] = "De�i�iklik tarihi:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modificado el:";
+        Text[ catalan ] = "Modificat:";
         Text[ finnish ] = "Muokattu:";
         Text[ thai ] = "ดัดแปลงแก้ไข:";
     };
@@ -550,7 +550,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "파일 형식";
         Text[ turkish ] = "Dosya tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de archivo";
+        Text[ catalan ] = "Tipus de fitxer";
         Text[ finnish ] = "Tiedostotyyppi";
         Text[ thai ] = "ชนิดแฟ้ม";
     };
@@ -598,7 +598,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "파일 찾기(~F)...";
         Text[ turkish ] = "Dosyay� bul";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Bus~car archivos...";
+        Text[ catalan ] = "~Cerca fitxers...";
         Text[ finnish ] = "~Etsi tiedostot";
         Text[ thai ] = "~หาแฟ้ม...";
     };
@@ -630,7 +630,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "추가(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir";
+        Text[ catalan ] = "~Afegeix";
         Text[ finnish ] = "~Lis��";
         Text[ thai ] = "เ~พิ่ม";
     };
@@ -662,7 +662,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "모두 추가(~D)";
         Text[ turkish ] = "T�m�n� ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A�adir ~todos";
+        Text[ catalan ] = "A~fegeix-ho tot";
         Text[ finnish ] = "Li~s�� kaikki";
         Text[ thai ] = "เพิ่~มทั้งหมด";
     };
@@ -695,7 +695,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "미리보기(~E)";
         Text[ turkish ] = "�n izleme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Pr~evisualizaci�n";
+        Text[ catalan ] = "Pr~evisualitzaci�";
         Text[ thai ] = "แส~ดงตัวอย่าง";
     };
     Window WND_BRSPRV
@@ -800,7 +800,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Text[ chinese_traditional ] = "鍵入標題";
     Text[ arabic ] = "����� �������";
     Text[ turkish ] = "Ba�l�k gir";
-    Text[ catalan ] = "Introducir t�tulo";
+    Text[ catalan ] = "Introdueix el t�tol";
     Text[ finnish ] = "Sy�t� otsikko";
     Moveable = TRUE ;
 
@@ -848,7 +848,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         Text[ chinese_traditional ] = "標題";
         Text[ arabic ] = "�������";
         Text[ turkish ] = "Ba�l�k";
-        Text[ catalan ] = "T�tulo";
+        Text[ catalan ] = "T�tol";
         Text[ finnish ] = "Otsikko";
         Text[ thai ] = "ชื่อเรื่อง";
     };
@@ -893,7 +893,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text[ korean ] = "찾기";
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Buscar";
+    Text[ catalan ] = "Cerca";
     Text[ finnish ] = "Etsi";
     Moveable = TRUE ;
     FixedLine FL_SEARCH_DIR
@@ -923,7 +923,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ korean ] = "디렉토리";
         Text[ turkish ] = "Dizin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Directorio";
+        Text[ catalan ] = "Directori";
         Text[ finnish ] = "Hakemisto";
         Text[ thai ] = "ไดเร็กทอรี่";
     };
@@ -965,7 +965,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ korean ] = "파일 형식";
         Text[ turkish ] = "Dosya tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de archivo";
+        Text[ catalan ] = "Tipus de fitxer";
         Text[ finnish ] = "Tiedostotyyppi";
         Text[ thai ] = "ชนิดแฟ้ม";
     };
@@ -1009,7 +1009,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text[ korean ] = "적용";
     Text[ turkish ] = "Kullan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicar";
+    Text[ catalan ] = "Aplica";
     Text[ finnish ] = "K�yt�";
     Moveable = TRUE ;
     FixedLine FL_TAKE_PROGRESS
@@ -1039,7 +1039,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
         Text[ korean ] = "파일";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Archivo";
+        Text[ catalan ] = "Fitxer";
         Text[ finnish ] = "Tiedosto";
         Text[ thai ] = "แฟ้ม";
     };
@@ -1089,7 +1089,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
     Text[ korean ] = "업데이트";
     Text[ turkish ] = "G�ncelle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Actualizar";
+    Text[ catalan ] = "Actualitza";
     Text[ finnish ] = "P�ivit�";
     Moveable = TRUE ;
     FixedLine FL_ACTUALIZE_PROGRESS
@@ -1119,7 +1119,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
         Text[ korean ] = "파일";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Archivo";
+        Text[ catalan ] = "Fitxer";
         Text[ finnish ] = "Tiedosto";
         Text[ thai ] = "แฟ้ม";
     };
@@ -1166,7 +1166,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ korean ] = "주제- ID";
     Text[ turkish ] = "Konu tan�t�c�s�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Temas ID";
+    Text[ catalan ] = "Identificador del tema";
     Text[ finnish ] = "Teematunnus";
     Moveable = TRUE ;
     OkButton BTN_OK
@@ -1256,7 +1256,7 @@ CheckBox RID_SVXDLG_GALLERY_CBX
     Text[ korean ] = "서브 디렉토리(~U)";
     Text[ turkish ] = "Alt dizinler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Subdirectorios";
+    Text[ catalan ] = "S~ubdirectoris";
     Text[ finnish ] = "~Alihakemistot";
     Text[ thai ] = "ไดเร็กทอรี่~ย่อย";
 };
@@ -1285,7 +1285,7 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
     Text[ korean ] = "업데이트";
     Text[ turkish ] = "G�ncelle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Actualizar";
+    Text[ catalan ] = "Actualitza";
     Text[ finnish ] = "P�ivit�";
     Text[ thai ] = "ปรับปรุง";
 };
@@ -1314,7 +1314,7 @@ String RID_SVXSTR_GALLERY_FOPENERROR
     Text[ korean ] = "이 파일을 열 수 없습니다";
     Text[ turkish ] = "Bu dosya a��lam�yor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se puede abrir este archivo";
+    Text[ catalan ] = "No es pot obrir aquest fitxer";
     Text[ finnish ] = "Tiedoston avaaminen ei onnistu.";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้มนี้";
 };
@@ -1343,7 +1343,7 @@ String RID_SVXSTR_GALLERY_NOFILES
     Text[ korean ] = "<파일 없음>";
     Text[ turkish ] = "<Dosya yok>";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "<Ning�n archivo>";
+    Text[ catalan ] = "<Cap fitxer>";
     Text[ finnish ] = "<Ei tiedostoja >";
     Text[ thai ] = "<ไม่มีแฟ้ม>";
 };
@@ -1372,7 +1372,7 @@ String RID_SVXSTR_GALLERY_NOTHEME
     Text[ korean ] = "주제 이름이 유효하지 않습니다!";
     Text[ turkish ] = "Bu konu ad� ge�erli de�il!";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�El nombre del tema no es v�lido!";
+    Text[ catalan ] = "El nom del tema no �s v�lid!";
     Text[ finnish ] = "Virheellinen teeman nimi.";
     Text[ thai ] = "ชุดรูปแบบชื่อไม่ถูกต้อง!";
 };
@@ -1401,7 +1401,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ korean ] = "이 개체를\n정말 삭제하겠습니까?";
     Text[ turkish ] = "Bu nesneyi ger�ekten\nsilmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea realmente\neliminar este objeto?";
+    Text[ catalan ] = "Esteu segur de voler\nsuprimir aquest objecte?";
     Text[ finnish ] = "Halutko varmasti\npoistaa t�m�n objektin?";
     Text[ thai ] = "คุณต้องการ\nลบวัตถุนี้หรือไม่?";
 };
@@ -1427,7 +1427,7 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text[ chinese_traditional ] = "您真的要刪除這個主題？";
     Text[ turkish ] = "Do you really want to\ndelete this theme?";
     Text[ arabic ] = "�� ���� ������\n ��� ��� ������ڿ";
-    Text[ catalan ] = "�Desea realmente eliminar\neste tema?";
+    Text[ catalan ] = "Esteu segur de voler\nsuprimir aquest tema?";
     Text[ finnish ] = "Halutko varmasti\npoistaa t�m�n teeman?";
     Text[ thai ] = "คุณต้องการ\nลบชุดรุปแบบนี้หรือไม่?";
 };
@@ -1460,7 +1460,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text[ korean ] = "웨이브-사운드 파일";
     Text[ turkish ] = "Wave - Ses dosyas�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Wave - archivo de sonido";
+    Text[ catalan ] = "Fitxer de so - Wave";
     Text[ finnish ] = "Wave-��nitiedosto";
     Text[ thai ] = "Wave - แฟ้มเสียง";
 };
@@ -1493,7 +1493,7 @@ String RID_SVXSTR_EXTFORMAT2_UI
     Text[ korean ] = "오디오 교환 파일 서식";
     Text[ turkish ] = "Audio Interchange dosya format�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formato de archivo Audio Interchange";
+    Text[ catalan ] = "Format de fitxer d'intercanvi de so";
     Text[ finnish ] = "AIF-tiedostomuoto";
     Text[ thai ] = "เสียงเปลี่ยนรูปแบบแฟ้ม";
 };
@@ -1523,7 +1523,7 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text[ chinese_traditional ] = "AU - 聲音檔案";
     Text[ arabic ] = "��� ���� -AU ";
     Text[ turkish ] = "AU - Ses dosyas�";
-    Text[ catalan ] = "Archivo audio AU";
+    Text[ catalan ] = "Fitxer de so - AU";
     Text[ finnish ] = "AU-��nitiedosto";
     Text[ thai ] = "AU - แฟ้มเสียง";
 };
@@ -1552,7 +1552,7 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ korean ] = "그래픽 필터";
     Text[ turkish ] = "Grafik filtresi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filtro de imagen";
+    Text[ catalan ] = "Filtre d'imatge";
     Text[ finnish ] = "Grafiikkasuodatin";
     Text[ thai ] = "ตัวกรองกราฟิค";
 };
@@ -1610,7 +1610,7 @@ String RID_SVXSTR_GALLERY_SIZE
     Text[ korean ] = "크기:";
     Text[ turkish ] = "B�y�kl�k:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tama�o:";
+    Text[ catalan ] = "Mida:";
     Text[ finnish ] = "Koko:";
     Text[ thai ] = "ขนาด:";
 };
@@ -1639,7 +1639,7 @@ String RID_SVXSTR_GALLERY_DELETEDD
     Text[ korean ] = "링크된 파일을 삭제하겠습니까?";
     Text[ turkish ] = "Ba�lant� olu�turdu�unuz dosyay� silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea eliminar el archivo enlazado?";
+    Text[ catalan ] = "Voleu suprimir el fitxer enlla�at?";
     Text[ finnish ] = "Halutko poistaa linkitetyn tiedoston?";
     Text[ thai ] = "คุณต้องการลบแฟ้มที่เชื่อมโยงหรือไม่?";
 };
@@ -1668,7 +1668,7 @@ String RID_SVXSTR_GALLERY_SEARCH
     Text[ korean ] = "파일목록을 업데이트하겠습니까?";
     Text[ turkish ] = "Dosya listesini g�ncellemek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea actualizar la lista de archivos?";
+    Text[ catalan ] = "Voleu actualitzar la llista de fitxers?";
     Text[ finnish ] = "Halutko p�ivitt�� tiedostoluettelon?";
     Text[ thai ] = "คุณต้องการปรับปรุงรายการของแฟ้มหรือไม่?";
 };
@@ -1697,7 +1697,7 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text[ korean ] = "이 파일을 열 수 없습니다. \n다른 검색경로를 입력하겠습니까? ";
     Text[ turkish ] = "Bu dosya a��lam�yor.\nBa�ka bir veri yolu girmek istiyor musunuz? ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se puede abrir este archivo.\n�Desea indicar otra ruta de b�squeda? ";
+    Text[ catalan ] = "No es pot obrir aquest fitxer.\nVoleu indicar un cam� de cerca?";
     Text[ finnish ] = "Tiedoston avaaminen ei onnistu.\nHaluatko m��ritt�� toisen hakupolun? ";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้มนี้ได้ \nคุณต้องการใส่เส้นทางค้นหาที่ต่างกันหรือไม่? ";
 };
@@ -1726,7 +1726,7 @@ String RID_SVXSTR_GALLERY_NEWTHEME
     Text[ korean ] = "새 주제";
     Text[ turkish ] = "Yeni konu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nuevo Tema";
+    Text[ catalan ] = "Tema nou";
     Text[ finnish ] = "Uusi teema";
     Text[ thai ] = "ชุดรูปแบบใหม่";
 };
@@ -1755,7 +1755,7 @@ String RID_SVXSTR_GALLERY_BROWSER
     Text[ korean ] = "관리(~O)...";
     Text[ turkish ] = "Y�net...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Administraci�n...";
+    Text[ catalan ] = "~Organitzador...";
     Text[ finnish ] = "~J�rjestelyty�kalu";
     Text[ thai ] = "~ตัวจัดการ...";
 };
@@ -1784,7 +1784,7 @@ String RID_SVXSTR_GALLERY_THEMEERR
     Text[ korean ] = "이 주제 이름은 이미 존재합니다.\n다른 이름을 선택하십시오.";
     Text[ turkish ] = "Bu konu ad� mevcut durumda.\nBa�ka bir ad se�in.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Este nombre de tema ya existe.\nPor favor elija otro nombre.";
+    Text[ catalan ] = "Ja existeix aquest nom del tema.\nSiusplau, escolliu-ne un de diferent.";
     Text[ finnish ] = "T�m�nniminen teema on jo olemassa.\nValitse toinen nimi.";
     Text[ thai ] = "ชื่อชุดรูปแบบนี้มีอยู่แล้ว\nกรุณาใส่ชื่อที่ต่างออกไป";
 };
@@ -1813,7 +1813,7 @@ String RID_SVXSTR_GALLERYPROPS_THEME
     Text[ korean ] = "주제;주제들";
     Text[ turkish ] = "Konu;Konular";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tema;Temas";
+    Text[ catalan ] = "Tema;Temes";
     Text[ finnish ] = "teema;teemat";
     Text[ thai ] = "ชุดรูปแบบ;ชุดรูปแบบ";
 };
@@ -1842,7 +1842,7 @@ String RID_SVXSTR_GALLERYPROPS_OBJECT
     Text[ korean ] = "개체 ; 개체들";
     Text[ turkish ] = "Nesne;Nesneler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto;Objetos";
+    Text[ catalan ] = "Objecte;Objectes";
     Text[ finnish ] = "objekti;objektit";
     Text[ thai ] = "วัตถุ;วัตถุ";
 };
@@ -1871,7 +1871,7 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text[ korean ] = "갤러리 주제";
     Text[ turkish ] = "Galleri konusu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tema Gallery";
+    Text[ catalan ] = "Tema de la galeria";
     Text[ finnish ] = "Galleriateema";
     Text[ thai ] = "ชุดรุปแบบคลังภาพ";
 };
@@ -1900,7 +1900,7 @@ String RID_SVXSTR_GALLERY_IMPORTTHEME
     Text[ korean ] = "가져오기(~M)...";
     Text[ turkish ] = "��~e aktar...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Im~portar...";
+    Text[ catalan ] = "I~mporta...";
     Text[ finnish ] = "T~uo";
     Text[ thai ] = "นำเ~ข้า...";
 };
@@ -1929,7 +1929,7 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text[ korean ] = "새 주제...";
     Text[ turkish ] = "Yeni konu...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nuevo tema...";
+    Text[ catalan ] = "Tema nou...";
     Text[ finnish ] = "Uusi teema";
     Text[ thai ] = "ชุดรูปแบบใหม่...";
 };
@@ -1960,7 +1960,7 @@ String RID_SVXSTR_GALLERY_READONLY
     Text[ korean ] = " (읽기 전용)";
     Text[ turkish ] = "(Salt okunur)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = " (solo lectura)";
+    Text[ catalan ] = " (nom�s lectura)";
     Text[ thai ] = " (อ่านอย่างเดียว)";
 };
 String RID_SVXSTR_GALLERY_ALLFILES
@@ -1988,7 +1988,7 @@ String RID_SVXSTR_GALLERY_ALLFILES
     Text[ korean ] = "<모든 파일>";
     Text[ turkish ] = "<T�m dosyalar>";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "<Todos los archivos>";
+    Text[ catalan ] = "<Tots els fitxers>";
     Text[ finnish ] = "<Kaikki tiedostot>";
     Text[ thai ] = "<แฟ้มทั้งหมด>";
 };
@@ -2017,7 +2017,7 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ korean ] = "ID 할당";
     Text[ turkish ] = "Tan�t�c� ata";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Asignar ID";
+    Text[ catalan ] = "Assigna l'identificador";
     Text[ finnish ] = "Liit� tunnus";
     Text[ thai ] = "กำหนด ID";
 };
@@ -2046,7 +2046,7 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text[ korean ] = "이 ID는 이미 존재합니다...";
     Text[ turkish ] = "Bu tan�t�c� mevcut durumda...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Esta ID ya existe...";
+    Text[ catalan ] = "Aquest identificador ja existeix...";
     Text[ finnish ] = "Tunnus on jo olemassa";
     Text[ thai ] = " ID นี้มีอยู่แล้ว...";
 };
@@ -2072,7 +2072,7 @@ String RID_SVXSTR_GALLERY_TITLE
     Text[ chinese_traditional ] = "標題(T)";
     Text[ arabic ] = "�����";
     Text[ turkish ] = "Ba�l�k";
-    Text[ catalan ] = "T�tulo";
+    Text[ catalan ] = "T�tol";
     Text[ finnish ] = "Otsikko";
     Text[ thai ] = "ชื่อเรื่อง";
 };
@@ -2101,7 +2101,7 @@ String RID_SVXSTR_GALLERY_PATH
     Text[ korean ] = "경로";
     Text[ turkish ] = "Veri yolu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ruta";
+    Text[ catalan ] = "Cam�";
     Text[ thai ] = "เส้นทาง";
 };
 String RID_SVXSTR_GALLERY_ICONVIEW
@@ -2127,7 +2127,7 @@ String RID_SVXSTR_GALLERY_ICONVIEW
     Text[ chinese_traditional ] = "圖示檢視";
     Text[ turkish ] = "Symbol view";
     Text[ arabic ] = "Symbol view";
-    Text[ catalan ] = "Symbol view";
+    Text[ catalan ] = "Mostra els s�mbols";
     Text[ thai ] = "มุมมองไอคอน";
 };
 String RID_SVXSTR_GALLERY_LISTVIEW
@@ -2153,7 +2153,7 @@ String RID_SVXSTR_GALLERY_LISTVIEW
     Text[ chinese_traditional ] = "細節檢視";
     Text[ turkish ] = "Detail view";
     Text[ arabic ] = "Detail view";
-    Text[ catalan ] = "Detail view";
+    Text[ catalan ] = "Mostra els detalls";
     Text[ thai ] = "มุมมองรายละเอียด";
 };
 
@@ -2295,7 +2295,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "업데이트";
             Text[ turkish ] = "G�ncelle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Actuali~zar";
+            Text[ catalan ] = "Actualitza";
             Text[ finnish ] = "P�ivit�";
             Text[ thai ] = "ปรับปรุง";
         };
@@ -2328,7 +2328,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ arabic ] = "���";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "~Suprimeix";
             Text[ finnish ] = "~Poista";
             Text[ thai ] = "~ลบ";
         };
@@ -2359,7 +2359,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "이름 변경(~R)";
             Text[ turkish ] = "Ye~niden adland�r";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Cambiar nombre";
+            Text[ catalan ] = "~Reanomena";
             Text[ finnish ] = "~Nime� uudelleen";
             Text[ thai ] = "เ~ปลี่ยนชื่อ";
         };
@@ -2393,7 +2393,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "~ID 할당";
             Text[ turkish ] = "Tan�t�c� ata";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Asignar ~ID";
+            Text[ catalan ] = "Assigna ~identificador";
             Text[ finnish ] = "Liit� ~tunnus";
             Text[ thai ] = "กำหนด ~ID";
         };
@@ -2428,7 +2428,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "등록정보(~I)...";
             Text[ turkish ] = "~�zellikler ...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Prop~iedades...";
+            Text[ catalan ] = "Prop~ietats...";
             Text[ finnish ] = "Ominai~suudet";
             Text[ thai ] = "คุณสม~บัติ ...";
         };
@@ -2468,7 +2468,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ korean ] = "삽입(~I)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~A�adir";
+            Text[ catalan ] = "~Insereix";
             Text[ finnish ] = "~Lis��";
             SubMenu = Menu
             {
@@ -2532,7 +2532,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ korean ] = "링크";
                         Text[ turkish ] = "Ba�lant�";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~V�nculo";
+                        Text[ catalan ] = "~Enlla�";
                         Text[ finnish ] = "Linkki";
                         Text[ thai ] = "เชื่อมโยง";
                     };
@@ -2567,7 +2567,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ korean ] = "배경(~K)";
                         Text[ turkish ] = "Artalan";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Fondo";
+                        Text[ catalan ] = "~Fons";
                         Text[ finnish ] = "Taus~ta";
                         Text[ thai ] = "พื้น~หลัง";
                     };
@@ -2604,7 +2604,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ arabic ] = "������";
             Text[ turkish ] = "�nizleme";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Previsualizaci�n";
+            Text[ catalan ] = "~Previsualitzaci�";
             Text[ finnish ] = "~Esikatselu";
             Text[ thai ] = "แ~สดงตัวอย่าง";
         };
@@ -2636,7 +2636,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ chinese_traditional ] = "標題(~T)";
             Text[ arabic ] = "�����";
             Text[ turkish ] = "Ba�l�k";
-            Text[ catalan ] = "~T�tulo";
+            Text[ catalan ] = "~T�tol";
             Text[ finnish ] = "~Otsikko";
             Text[ thai ] = "~ชื่อเรื่อง";
         };
@@ -2669,7 +2669,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ arabic ] = "���";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "~Suprimeix";
             Text[ finnish ] = "~Poista";
             Text[ thai ] = "~ลบ";
         };
@@ -2705,7 +2705,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ greek ] = "����~�����";
             Text[ korean ] = "복사(~C)";
             Text[ turkish ] = "K~opyala";
-            Text[ catalan ] = "~Copiar";
+            Text[ catalan ] = "~Copia";
             Text[ thai ] = "~คัดลอก";
         };
         MenuItem
@@ -2734,7 +2734,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ korean ] = "삽입(~I)"   ;
             Text[ arabic ] = "�����"    ;
             Text[ turkish ] = "~Ekle"   ;
-            Text[ catalan ] = "~Insertar";
+            Text[ catalan ] = "~Insereix";
             Text[ thai ] = "แ~ทรก";
         };
     };
