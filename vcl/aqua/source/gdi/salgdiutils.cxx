@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.4 $
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
+ *  $Revision: 1.5 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 11:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,8 +239,11 @@ BOOL LockGraphics ( SalGraphics *rSalGraphics )
 {
     BOOL  bCGrafPortLocked = FALSE;
 
+    // [ed] 12/16/01 Don't lock QDView grafports.
+
     if (    ( rSalGraphics                             != NULL )
          && ( rSalGraphics->maGraphicsData.mpCGrafPort != NULL )
+         && ( rSalGraphics->maGraphicsData.mbWindow != TRUE)
        )
     {
         rSalGraphics->maGraphicsData.mnOSStatus
@@ -299,7 +302,14 @@ BOOL BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
                 = VCLGraphics_LockFocusCGrafPort( rSalGraphicsData->mhDC );
         } // if
 
-        if ( rSalGraphicsData->mpCGrafPort != NULL )
+        // [ed] 12/3/01 Check to make sure we've got a valid graph port
+
+        if(rSalGraphicsData->mpCGrafPort && !IsValidPort(rSalGraphicsData->mpCGrafPort))
+        {
+            fprintf(stderr, "Invalid port in BeginGraphics()\n");
+        }
+
+        if ( ( rSalGraphicsData->mpCGrafPort != NULL ) && IsValidPort(rSalGraphicsData->mpCGrafPort))
         {
             // Get the port's pen attributes
 
@@ -358,7 +368,10 @@ BOOL BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
                         // if the PixMap is a relocatable block,
                         // then mark it as locked.
 
-                        if ( LockPixels( rSalGraphicsData->mhGWorldPixMap ) )
+                            // [ed] 12/16/01 Don't lock pixels of QDViews
+
+                        if ( !rSalGraphicsData->mbWindow &&
+                             LockPixels( rSalGraphicsData->mhGWorldPixMap ) )
                         {
                             rSalGraphicsData->mbGWorldPixelsLocked = TRUE;
                         } // if
@@ -382,7 +395,7 @@ BOOL BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
                         // Now begin to set the clip region
 
-                        if (    ( rSalGraphicsData->mbClipRgnChanged == TRUE )
+                        if ( ( rSalGraphicsData->mbClipRgnChanged == TRUE )
                              && ( rSalGraphicsData->mhClipRgn        != NULL )
                            )
                         {
@@ -399,8 +412,26 @@ BOOL BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
                             rSalGraphicsData->mbClipRgnChanged = FALSE;
                         } // if
                     } // if
+                    else
+                    {
+                        // [ed] 12/13/01 GWord graphics error flags set
+
+                        fprintf(stderr, "GWorld graphics flags indicate error in BeginGraphics()\n");
+                    }
                 } // if
+                else
+                {
+                    // [ed] 12/13/01 GWorld graphics has no PixMap handle
+
+                    fprintf(stderr, "Valid GWorld, but no pixmap in BeginGraphics()\n");
+                }
             } // if
+            else
+            {
+                // [ed] 12/13/01 Error checking
+
+                fprintf(stderr, "QuickDraw error in BeginGraphics()\n");
+            }
         } // if
     } // if
 
@@ -437,9 +468,19 @@ BOOL EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
         // Reset the port's pen to its original attributes
 
+        /*
+
+            [ed] 12/19/01 Apparently the pen pattern handle we retrieved
+            in BeginGraphics() is invalid by this point on OS 10.1.
+            By not attempting to revert the pen pattern, we can avoid
+            seg faulting the next time we draw into the port.
+
+            +++ Is it necessary to reset the pen pattern?
+
         SetPortPenPixPat( rSalGraphicsData->mpCGrafPort,
                                   rSalGraphicsData->mhPortPenPattern
                                 );
+        */
 
         SetPortPenSize( rSalGraphicsData->mpCGrafPort,
                                 rSalGraphicsData->maPortPenSize
@@ -449,20 +490,27 @@ BOOL EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
                         rSalGraphicsData->mnPortPenMode
                       );
 
+        // When we get here then the QD port must have changed(?)
+        // [ed] 12/19/01 This will commit the changes to reset the pen size
+        // and pen mode.
+
+        PortChanged( rSalGraphicsData->mpCGrafPort );
+
+                // [ed] 6/1/02 Always flush the buffer, regardless of whether we're in
+                // a debug or non-debug build.
+
+        // [ed] 12/19/01 Flush the QuickDraw buffer immediately.  This helps
+        // with VCL debugging.
+
+        if(QDIsPortBuffered(rSalGraphicsData->mpCGrafPort))
+            QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
+
         // Unlock focus on the current NSView
 
         if ( rSalGraphicsData->mbWindow == TRUE )
         {
             VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
         } // if
-
-        // When we get here then the QD port must have changed(?)
-
-        PortChanged( rSalGraphicsData->mpCGrafPort );
-
-        // Flush the QuickDraw buffer
-
-        QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
 
         // Was there an error after flushing the QuickDraw buffer
 
