@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:24:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
         case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_SHAPE_TYPE:
-        case SID_FONTWORK_SHAPE_TYPES:
         case SID_FONTWORK_ALIGNMENT:
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         case SID_FONTWORK_CHARACTER_SPACING:
