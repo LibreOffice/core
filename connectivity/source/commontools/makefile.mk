@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: oj $ $Date: 2002-08-12 09:11:05 $
+#   last change: $Author: oj $ $Date: 2002-10-25 09:03:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,17 @@ EXCEPTIONSFILES=\
         $(SLO)$/conncleanup.obj							\
         $(SLO)$/emptymetadata.obj						\
         $(SLO)$/dbtools.obj								\
+        $(SLO)$/dbtools2.obj							\
         $(SLO)$/dbexception.obj							\
         $(SLO)$/CommonTools.obj							\
+        $(SLO)$/TColumnsHelper.obj						\
+        $(SLO)$/TTableHelper.obj						\
+        $(SLO)$/TKeys.obj								\
+        $(SLO)$/TKey.obj								\
+        $(SLO)$/TKeyColumns.obj							\
+        $(SLO)$/TIndexes.obj							\
+        $(SLO)$/TIndex.obj								\
+        $(SLO)$/TIndexColumns.obj						\
         $(SLO)$/DateConversion.obj						\
         $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
