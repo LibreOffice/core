@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-06-21 21:01:12 $
+ *  last change: $Author: th $ $Date: 2001-08-23 13:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <svsys.h>
 #endif
 #ifndef REMOTE_APPSERVER
+#ifndef _SV_SALBMP_HXX
+#include <salbmp.hxx>
+#endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
@@ -82,6 +85,9 @@
 
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
+#endif
+#ifndef _SV_IMPBMP_HXX
+#include <impbmp.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
@@ -381,18 +387,48 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
 
 // =======================================================================
 
-Bitmap Window::SnapShot() const
+Bitmap Window::SnapShot( BOOL bBorder ) const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Bitmap aBmp;
 
-    if ( mpBorderWindow )
-        aBmp = mpBorderWindow->SnapShot();
-    else if ( IsReallyVisible() )
-        mpFrameWindow->ImplGetFrameBitmap( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ), aBmp );
+    if ( IsReallyVisible() )
+    {
+        if ( bBorder && mpBorderWindow )
+            aBmp = mpBorderWindow->SnapShot();
+        else
+        {
+            ((Window*)this)->Update();
+
+#ifndef REMOTE_APPSERVER
+            if ( bBorder && mbFrame )
+            {
+                SalBitmap* pSalBmp = mpFrame->SnapShot();
+
+                if ( pSalBmp )
+                {
+                    ImpBitmap* pImpBmp = new ImpBitmap;
+                    pImpBmp->ImplSetSalBitmap( pSalBmp );
+                    aBmp.ImplSetImpBitmap( pImpBmp );
+                    return aBmp;
+                }
+            }
+#endif
+
+            mpFrameWindow->ImplGetFrameBitmap( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ), aBmp );
+        }
+    }
 
     return aBmp;
+}
+
+// -----------------------------------------------------------------------
+
+Bitmap Window::SnapShot() const
+{
+    // Should be merged in the next top level build !!!
+    return SnapShot( TRUE );
 }
 
 // -----------------------------------------------------------------------
