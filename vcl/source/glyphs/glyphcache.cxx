@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-27 08:16:51 $
+ *  last change: $Author: hdu $ $Date: 2001-08-10 16:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ void ServerFont::GarbageCollect( long nLruIndex )
 
 Point ServerFont::TransformPoint( const Point& rPoint ) const
 {
-    if( !nSin)
+    if( nCos == 0x10000 )
         return rPoint;
     // TODO: use 32x32=>64bit intermediate
     const double dCos = nCos * (1.0 / 0x10000);
