@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceAttributeTypeDescription.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:21 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,11 @@
 //=============================================================================
 
 /** Reflects an interface attribute type.
+
+    <p>This type is superseded by
+    <type>XInterfaceAttributeTypeDescription2</type>, which supports extended
+    attributes.</p>
+
     The type class of this type is TypeClass_INTERFACE_ATTRIBUTE.
 */
 interface XInterfaceAttributeTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
