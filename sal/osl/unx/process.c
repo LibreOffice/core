@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 11:01:05 $
+ *  last change: $Author: svesik $ $Date: 2001-05-14 15:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@ static sal_Char *getCmdLine()
     /* Memory layout of CMD_ARG_PRG:
        progname\0arg1\0...argn[\0]\0environ\0env2\0...envn\0[\0] */
 
+#if !defined(NETBSD)
     extern sal_Char*  CMD_ARG_PRG;
+#endif
     extern sal_Char** CMD_ARG_ENV;
 
     int   n = *(CMD_ARG_ENV) - (CMD_ARG_PRG);
