@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XWindow.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-12 15:01:41 $
+ *  last change:$Date: 2003-09-08 10:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 package ifc.awt;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+
 import com.sun.star.awt.FocusEvent;
 import com.sun.star.awt.KeyEvent;
 import com.sun.star.awt.MouseEvent;
@@ -79,8 +82,6 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowListener;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.lang.EventObject;
-import lib.MultiMethodTest;
-import util.ValueComparer;
 
 /**
 * Testing <code>com.sun.star.awt.XWindow</code>
