@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 17:16:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,12 +253,16 @@ sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale ) throw(RuntimeException)
 {
+        if (nStartPos < 0 || nStartPos >= Text.getLength())
+            return -1;
         return LBI->beginOfSentence(Text, nStartPos, rLocale);
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale ) throw(RuntimeException)
 {
+        if (nStartPos < 0 || nStartPos >= Text.getLength())
+            return -1;
         return LBI->endOfSentence(Text, nStartPos, rLocale);
 }
 
@@ -278,6 +282,9 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_I
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType ) throw(RuntimeException)
 {
+        if (nStartPos < 0 || nStartPos >= Text.getLength())
+            return -1;
+
         if(ScriptType != getScriptClass(Text[nStartPos]))
             return -1;
 
@@ -289,6 +296,9 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType ) throw(RuntimeException)
 {
+        if (nStartPos < 0 || nStartPos >= Text.getLength())
+            return -1;
+
         if(ScriptType != getScriptClass(Text[nStartPos]))
             return -1;
 
@@ -304,6 +314,8 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
 sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType ) throw(RuntimeException)
 {
+        if (nStartPos < 0)
+            nStartPos = 0;
         if (nStartPos > Text.getLength())
             nStartPos = Text.getLength();
 
@@ -327,6 +339,8 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
 {
         if (nStartPos < 0)
             nStartPos = 0;
+        if (nStartPos > Text.getLength())
+            nStartPos = Text.getLength();
 
         sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text[nStartPos])) ? 2 : 1;
         sal_Int32 strLen = Text.getLength();
@@ -345,6 +359,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sa
         const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
 {
         if (CharType == CharType::ANY_CHAR) return 0;
+        if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
         if (CharType != unicode::getUnicodeType(Text[nStartPos])) return -1;
 
         while(nStartPos-- > 0 && CharType == unicode::getUnicodeType(Text[nStartPos])) {}
@@ -356,8 +371,9 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_
 {
         sal_Int32 strLen = Text.getLength();
 
-        if(CharType == CharType::ANY_CHAR) return strLen; // end of char block is exclusive
-        if(CharType != unicode::getUnicodeType(Text[nStartPos])) return -1;
+        if (CharType == CharType::ANY_CHAR) return strLen; // end of char block is exclusive
+        if (nStartPos < 0 || nStartPos >= strLen) return -1;
+        if (CharType != unicode::getUnicodeType(Text[nStartPos])) return -1;
 
         while(++nStartPos < strLen && CharType == unicode::getUnicodeType(Text[nStartPos])) {}
         return nStartPos; // end of char block is exclusive
@@ -367,6 +383,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_I
         const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
 {
         if (CharType == CharType::ANY_CHAR) return -1;
+        if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
 
         sal_Int16 numberOfChange = (CharType == unicode::getUnicodeType(Text[nStartPos])) ? 2 : 1;
         sal_Int32 strLen = Text.getLength();
@@ -382,15 +399,15 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
         const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
 {
         if(CharType == CharType::ANY_CHAR) return -1;
+        if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
 
         sal_Int16 numberOfChange = (CharType == unicode::getUnicodeType(Text[nStartPos])) ? 3 : 2;
 
         while (numberOfChange > 0 && --nStartPos >= 0) {
             if (((numberOfChange % 2) == 0) ^ (CharType != unicode::getUnicodeType(Text[nStartPos])))
                 numberOfChange--;
-            if (nStartPos == 0) {
-                if (numberOfChange > 0)
-                    numberOfChange--;
+            if (nStartPos == 0 && numberOfChange > 0) {
+                numberOfChange--;
                 nStartPos--;
             }
         }
