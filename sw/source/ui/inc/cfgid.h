@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgid.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 08:24:19 $
+ *  last change: $Author: os $ $Date: 2002-04-19 09:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,5 +73,7 @@
 #define CFG_INSERT_DBCOLUMN_ITEM    (SFX_ITEMTYPE_SW_BEGIN +25)
 #define CFG_SW_MENU_PORTAL          (SFX_ITEMTYPE_SW_BEGIN +27)
 #define CFG_SWWEB_MENU_PORTAL       (SFX_ITEMTYPE_SW_BEGIN +28)
+#define CFG_SWGLOBAL_MENU           (SFX_ITEMTYPE_SW_BEGIN +29)
+#define CFG_SWGLOBAL_MENU_PORTAL    (SFX_ITEMTYPE_SW_BEGIN +30)
 
 #endif
