@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-12 13:24:10 $
+ *  last change: $Author: mba $ $Date: 2001-04-24 15:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,9 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         // if no shallow detection has been done or it gave no result ( aTypeName is empty ),
         // we must try a deep detection for all possible SFX filters ( see below )
         pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, SFX_FILTER_NOTINSTALLED );
+        if ( !pFilter )
+            // no SFX handled type at all
+            return aTypeName;
     }
     else
     {
