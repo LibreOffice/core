@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-11 10:06:29 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,12 +307,26 @@ void ScSelectionTransferObj::CreateCellData()
         //  similar to ScViewFunctionSet::BeginDrag
         if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
         {
+            ScDocShell* pDocSh = pViewData->GetDocShell();
+
+            ScRange aSelRange;
+            rMark.GetMarkArea( aSelRange );
+            ScDocShellRef aDragShellRef;
+            if ( pDocSh->GetDocument()->HasOLEObjectsInArea( aSelRange, &rMark ) )
+            {
+                aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+                aDragShellRef->DoInitNew(NULL);
+            }
+            ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
+
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
             // bApi = TRUE -> no error mesages
-            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE );
+            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE, TRUE );
+
+            ScDrawLayer::SetGlobalDrawPersist(NULL);
+
             if ( bCopied )
             {
-                ScDocShell* pDocSh = pViewData->GetDocShell();
                 TransferableObjectDescriptor aObjDesc;
                 pDocSh->FillTransferableObjectDescriptor( aObjDesc );
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
@@ -323,6 +337,9 @@ void ScSelectionTransferObj::CreateCellData()
 
                 // SetDragHandlePos is not used - there is no mouse position
                 //? pTransferObj->SetVisibleTab( nTab );
+
+                SvEmbeddedObjectRef aPersistRef( aDragShellRef );
+                pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
 
                 pTransferObj->SetDragSource( pDocSh, rMark );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-19 17:14:17 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ private:
 };
 
 
-class ScUndoPaste: public ScSimpleUndo
+class ScUndoPaste: public ScBlockUndo
 {
 public:
                     TYPEINFO();
@@ -216,7 +216,6 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;

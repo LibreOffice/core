@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:36:44 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,8 @@ ScTransferObj::~ScTransferObj()
     delete pDoc;        // ScTransferObj is owner of clipboard document
 
     aDocShellRef.Clear();   // before releasing the mutex
+
+    aDrawPersistRef.Clear();                    // after the model
 
     Application::GetSolarMutex().release();
 }
@@ -476,7 +478,8 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
         if (pSourceSh)
         {
             ScMarkData aMarkData = GetSourceMarkData();
-            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL, TRUE, FALSE );
+            //  external drag&drop doesn't copy objects, so they also aren't deleted:
+            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, TRUE, FALSE );
         }
     }
 
@@ -498,6 +501,11 @@ void ScTransferObj::SetDragHandlePos( USHORT nX, USHORT nY )
 void ScTransferObj::SetVisibleTab( USHORT nNew )
 {
     nVisibleTab = nNew;
+}
+
+void ScTransferObj::SetDrawPersist( const SvEmbeddedObjectRef& rRef )
+{
+    aDrawPersistRef = rRef;
 }
 
 void ScTransferObj::SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark )
@@ -567,31 +575,15 @@ void ScTransferObj::InitDocShell()
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
         pDestDoc->RenameTab( 0, aTabName, FALSE );          // no UpdateRef (empty)
 
-        //  cell range is copied to the original position, but on the first sheet
-        //  -> bCutMode must be set
-        //  pDoc is always a Clipboard-document
-
         pDestDoc->CopyStdStylesFrom( pDoc );
 
         USHORT nStartX = aBlock.aStart.Col();
         USHORT nStartY = aBlock.aStart.Row();
         USHORT nEndX = aBlock.aEnd.Col();
         USHORT nEndY = aBlock.aEnd.Row();
-        ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
-        BOOL bWasCut = pDoc->IsCutMode();
-        if (!bWasCut)
-            pDoc->SetClipArea( aDestRange, TRUE );          // Cut
-        pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, FALSE );
-        pDoc->SetClipArea( aDestRange, bWasCut );
-
-        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
-
-        ScRange aMergeRange = aDestRange;
-        pDestDoc->ExtendMerge( aMergeRange, TRUE );
-
-        pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
 
         //  widths / heights
+        //  (must be copied before CopyFromClip, for drawing objects)
 
         USHORT nCol;
         USHORT nRow;
@@ -615,6 +607,27 @@ void ScTransferObj::InitDocShell()
                     pDestDoc->SetRowFlags( nRow, 0, pDestDoc->GetRowFlags( nRow, 0 ) | CR_MANUALSIZE );
             }
         }
+
+        if ( pDoc->GetDrawLayer() )
+            pDocSh->MakeDrawLayer();
+
+        //  cell range is copied to the original position, but on the first sheet
+        //  -> bCutMode must be set
+        //  pDoc is always a Clipboard-document
+
+        ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
+        BOOL bWasCut = pDoc->IsCutMode();
+        if (!bWasCut)
+            pDoc->SetClipArea( aDestRange, TRUE );          // Cut
+        pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, FALSE );
+        pDoc->SetClipArea( aDestRange, bWasCut );
+
+        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
+
+        ScRange aMergeRange = aDestRange;
+        pDestDoc->ExtendMerge( aMergeRange, TRUE );
+
+        pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
 
         //  page format (grid etc) and page size (maximum size for ole object)
 
@@ -682,6 +695,30 @@ void ScTransferObj::InitDocShell()
         pDocSh->SetVisArea( aNewArea );
 
         pDocSh->UpdateOle(&aViewData, TRUE);
+
+        //! SetDocumentModified?
+        if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
+            pDestDoc->UpdateChartListenerCollection();
+    }
+}
+
+//  static
+SvPersist* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
+{
+    // update ScGlobal::pDrawClipDocShellRef
+
+    delete ScGlobal::pDrawClipDocShellRef;
+    if (bAnyOle)
+    {
+        ScGlobal::pDrawClipDocShellRef =
+                        new ScDocShellRef(new ScDocShell);      // there must be a ref
+        (*ScGlobal::pDrawClipDocShellRef)->DoInitNew(NULL);
+        return *ScGlobal::pDrawClipDocShellRef;
+    }
+    else
+    {
+        ScGlobal::pDrawClipDocShellRef = NULL;
+        return NULL;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-19 17:15:04 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "chgtrack.hxx"
 #include "transobj.hxx"
 #include "refundo.hxx"
+#include "undoolk.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -695,6 +696,9 @@ void ScUndoCut::DoChange( const BOOL bUndo )
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
 
+    if ( pDrawUndo && !bUndo )                  //  draw redo after updating row heights
+        RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
+
     pDocShell->PostDataChanged();
     if (pViewShell)
         pViewShell->CellContentChanged();
@@ -710,14 +714,17 @@ void __EXPORT ScUndoCut::Undo()
 void __EXPORT ScUndoCut::Redo()
 {
     BeginRedo();
+    ScDocument* pDoc = pDocShell->GetDocument();
+    EnableDrawAdjust( pDoc, FALSE );                //! include in ScBlockUndo?
     DoChange( FALSE );
+    EnableDrawAdjust( pDoc, TRUE );                 //! include in ScBlockUndo?
     EndRedo();
 }
 
 void __EXPORT ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip();
+        ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip( NULL, TRUE );
 }
 
 BOOL __EXPORT ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -740,8 +747,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
                 ScRefUndoData* pRefData,
                 void* pFill1, void* pFill2, void* pFill3,
                 BOOL bRedoIsFilled ) :
-    ScSimpleUndo( pNewDocShell ),
-    aRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
+    ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),
     pRedoDoc( pNewRedoDoc ),
@@ -754,8 +760,8 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
     //  don't have to be changed and branched for 641.
     //  They can be removed later.
 
-    if ( !aMarkData.IsMarked() )            // keine Zelle markiert:
-        aMarkData.SetMarkArea( aRange );    //  Paste-Block markieren
+    if ( !aMarkData.IsMarked() )                // no cell marked:
+        aMarkData.SetMarkArea( aBlockRange );   //  mark paste block
 
     if ( pRefUndoData )
         pRefUndoData->DeleteUnchanged( pDocShell->GetDocument() );
@@ -780,7 +786,7 @@ void ScUndoPaste::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack && (nFlags & IDF_CONTENTS) )
-        pChangeTrack->AppendContentRange( aRange, pUndoDoc,
+        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc,
             nStartChangeAction, nEndChangeAction, SC_CACM_PASTE );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -809,36 +815,37 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    ScUndoUtil::MarkSimpleBlock( pDocShell, aRange );
+    // marking is in ScBlockUndo...
+    ScUndoUtil::MarkSimpleBlock( pDocShell, aBlockRange );
 
     if ( bUndo && !bRedoFilled )
     {
         if (!pRedoDoc)
         {
-            BOOL bColInfo = ( aRange.aStart.Row()==0 && aRange.aEnd.Row()==MAXROW );
-            BOOL bRowInfo = ( aRange.aStart.Col()==0 && aRange.aEnd.Col()==MAXCOL );
+            BOOL bColInfo = ( aBlockRange.aStart.Row()==0 && aBlockRange.aEnd.Row()==MAXROW );
+            BOOL bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==MAXCOL );
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aStart.Tab(),
+            pRedoDoc->InitUndo( pDoc, aBlockRange.aStart.Tab(), aBlockRange.aStart.Tab(),
                                 bColInfo, bRowInfo );
         }
         //  Redo-Daten beim ersten Undo aus dem Dokument lesen
-        pDoc->CopyToDocument( aRange, nUndoFlags, FALSE, pRedoDoc );
+        pDoc->CopyToDocument( aBlockRange, nUndoFlags, FALSE, pRedoDoc );
         bRedoFilled = TRUE;
     }
 
-    BOOL bHasLines = pDoc->HasAttrib( aRange, HASATTR_PAINTEXT );
+    BOOL bHasLines = pDoc->HasAttrib( aBlockRange, HASATTR_PAINTEXT );
 
     aMarkData.MarkToMulti();
     pDoc->DeleteSelection( nUndoFlags, aMarkData );
     aMarkData.MarkToSimple();
 
     if ( !bUndo && pRedoDoc )       // Redo: UndoToDocument vorher
-        pRedoDoc->UndoToDocument( aRange, nUndoFlags, FALSE, pDoc );
+        pRedoDoc->UndoToDocument( aBlockRange, nUndoFlags, FALSE, pDoc );
 
     if (pWorkRefData)
     {
         pWorkRefData->DoUndo( pDoc, TRUE );     // TRUE = bSetChartRangeLists for SetChartListenerCollection
-        if ( pDoc->RefreshAutoFilter( 0,0, MAXCOL,MAXROW, aRange.aStart.Tab() ) )
+        if ( pDoc->RefreshAutoFilter( 0,0, MAXCOL,MAXROW, aBlockRange.aStart.Tab() ) )
             bPaintAll = TRUE;
     }
 
@@ -846,7 +853,7 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         pRefRedoData->DeleteUnchanged( pDoc );
 
     if (bUndo)      // Undo: UndoToDocument hinterher
-        pUndoDoc->UndoToDocument( aRange, nUndoFlags, FALSE, pDoc );
+        pUndoDoc->UndoToDocument( aBlockRange, nUndoFlags, FALSE, pDoc );
 
     if ( bUndo )
     {
@@ -857,7 +864,7 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
     else
         SetChangeTrack();
 
-    ScRange aDrawRange( aRange );
+    ScRange aDrawRange( aBlockRange );
     USHORT nPaint = PAINT_GRID;
     USHORT nPaintExt = 0;
     if (bPaintAll)
@@ -872,12 +879,12 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
     }
     else
     {
-        if ( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MAXROW )  // ganze Spalte
+        if ( aBlockRange.aStart.Row() == 0 && aBlockRange.aEnd.Row() == MAXROW )    // ganze Spalte
         {
             nPaint |= PAINT_TOP;
             aDrawRange.aEnd.SetCol(MAXCOL);
         }
-        if ( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL )  // ganze Zeile
+        if ( aBlockRange.aStart.Col() == 0 && aBlockRange.aEnd.Col() == MAXCOL )    // ganze Zeile
         {
             nPaint |= PAINT_LEFT;
             aDrawRange.aEnd.SetRow(MAXROW);
@@ -893,6 +900,10 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         bHasLines |= pDoc->HasAttrib( aDrawRange, HASATTR_PAINTEXT );
         if (bHasLines) nPaintExt = SC_PF_LINES;
     }
+
+    if ( pDrawUndo && !bUndo )                  //  draw redo after updating row heights
+        RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
+
     pDocShell->PostPaint( aDrawRange, nPaint, nPaintExt );
 
     pDocShell->PostDataChanged();
@@ -904,14 +915,17 @@ void __EXPORT ScUndoPaste::Undo()
 {
     BeginUndo();
     DoChange( TRUE );
-    ShowTable( aRange );
+    ShowTable( aBlockRange );
     EndUndo();
 }
 
 void __EXPORT ScUndoPaste::Redo()
 {
     BeginRedo();
+    ScDocument* pDoc = pDocShell->GetDocument();
+    EnableDrawAdjust( pDoc, FALSE );                //! include in ScBlockUndo?
     DoChange( FALSE );
+    EnableDrawAdjust( pDoc, TRUE );                 //! include in ScBlockUndo?
     EndRedo();
 }
 
@@ -1092,6 +1106,8 @@ void __EXPORT ScUndoDragDrop::Redo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
 
+    EnableDrawAdjust( pDoc, FALSE );                //! include in ScBlockUndo?
+
     USHORT nTab;
     ScMarkData aSourceMark;
     for (nTab=aSrcRange.aStart.Tab(); nTab<=aSrcRange.aEnd.Tab(); nTab++)
@@ -1113,7 +1129,7 @@ void __EXPORT ScUndoDragDrop::Redo()
         aDestMark.SelectTable( nTab, TRUE );
 
     BOOL bIncludeFiltered = bCut;
-    pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pClipDoc, TRUE, FALSE, bIncludeFiltered );
+    pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL & ~IDF_OBJECTS, NULL, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
@@ -1133,6 +1149,11 @@ void __EXPORT ScUndoDragDrop::Redo()
 
     delete pClipDoc;
     ShowTable( aDestRange.aStart.Tab() );
+
+    if ( pDrawUndo )
+        RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
+    EnableDrawAdjust( pDoc, TRUE );             //! include in ScBlockUndo?
+
     EndRedo();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-27 16:30:16 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include "chartlis.hxx"
 #include "rangelst.hxx"
 #include "markdata.hxx"
+#include "drwlayer.hxx"
 #include "conditio.hxx"
 #include "validat.hxx"
 #include "prnsave.hxx"
@@ -1206,7 +1207,8 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 void ScDocument::CopyToClip(USHORT nCol1, USHORT nRow1,
                             USHORT nCol2, USHORT nRow2,
                             BOOL bCut, ScDocument* pClipDoc,
-                            BOOL bAllTabs, const ScMarkData* pMarks, BOOL bKeepScenarioFlags)
+                            BOOL bAllTabs, const ScMarkData* pMarks,
+                            BOOL bKeepScenarioFlags, BOOL bIncludeObjects)
 {
     DBG_ASSERT( bAllTabs || pMarks, "CopyToClip: ScMarkData fehlt" );
 
@@ -1247,7 +1249,17 @@ void ScDocument::CopyToClip(USHORT nCol1, USHORT nRow1,
         for (i = 0; i <= MAXTAB; i++)
             if (pTab[i] && pClipDoc->pTab[i])
                 if ( bAllTabs || !pMarks || pMarks->GetTableSelect(i) )
+                {
                     pTab[i]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[i], bKeepScenarioFlags);
+
+                    if ( pDrawLayer && bIncludeObjects )
+                    {
+                        //  also copy drawing objects
+
+                        Rectangle aObjRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
+                        pDrawLayer->CopyToClip( pClipDoc, i, aObjRect );
+                    }
+                }
 
         pClipDoc->bCutMode = bCut;
     }
@@ -1315,6 +1327,23 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
                 pTab[i]->TransposeClip( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
                                             aClipRange.aEnd.Col(), aClipRange.aEnd.Row(),
                                             pTransClip->pTab[i], nFlags, bAsLink );
+
+                if ( pDrawLayer && ( nFlags & IDF_OBJECTS ) )
+                {
+                    //  Drawing objects are copied to the new area without transposing.
+                    //  CopyFromClip is used to adjust the objects to the transposed block's
+                    //  cell range area.
+                    //  (pDrawLayer in the original clipboard document is set only if there
+                    //  are drawing objects to copy)
+
+                    pTransClip->InitDrawLayer();
+                    Rectangle aSourceRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
+                                                        aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i );
+                    Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
+                                                    aClipRange.aEnd.Row() - aClipRange.aStart.Row(),
+                                                    aClipRange.aEnd.Col() - aClipRange.aStart.Col(), i );
+                    pTransClip->pDrawLayer->CopyFromClip( pDrawLayer, i, aSourceRect, ScAddress(0,0,i), aDestRect );
+                }
             }
 
         pTransClip->aClipRange = ScRange( 0, 0, aClipRange.aStart.Tab(),
@@ -1383,8 +1412,31 @@ void ScDocument::CopyBlockFromClip( USHORT nCol1, USHORT nRow1,
         if (pTab[i] && rMark.GetTableSelect(i) )
         {
             while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
+
             pTab[i]->CopyFromClip( nCol1, nRow1, nCol2, nRow2, nDx, nDy,
                 pCBFCP->nInsFlag, pCBFCP->bAsLink, ppClipTab[nClipTab] );
+
+            if ( pCBFCP->pClipDoc->pDrawLayer && ( pCBFCP->nInsFlag & IDF_OBJECTS ) )
+            {
+                //  also copy drawing objects
+
+                // drawing layer must be created before calling CopyFromClip
+                // (ScDocShell::MakeDrawLayer also does InitItems etc.)
+                DBG_ASSERT( pDrawLayer, "CopyBlockFromClip: No drawing layer" );
+                if ( pDrawLayer )
+                {
+                    //  For GetMMRect, the row heights in the target document must already be valid
+                    //  (copied in an extra step before pasting, or updated after pasting cells, but
+                    //  before pasting objects).
+
+                    Rectangle aSourceRect = pCBFCP->pClipDoc->GetMMRect(
+                                    nCol1-nDx, nRow1-nDy, nCol2-nDx, nRow2-nDy, nClipTab );
+                    Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
+                    pDrawLayer->CopyFromClip( pCBFCP->pClipDoc->pDrawLayer, nClipTab, aSourceRect,
+                                                ScAddress( nCol1, nRow1, i ), aDestRect );
+                }
+            }
+
             nClipTab = (nClipTab+1) % (MAXTAB+1);
         }
     }

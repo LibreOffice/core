@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #include <svtools/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <offmgr/app.hxx>
+#include <sch/schdll.hxx>
+#include <sch/schdll0.hxx>
+#include <sch/memchrt.hxx>
 
 #include "drwlayer.hxx"
 #include "drawpage.hxx"
@@ -105,6 +108,7 @@
 #include "markdata.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"
+#include "chartarr.hxx"
 
 #define DET_ARROW_OFFSET    1000
 
@@ -1103,7 +1107,10 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
             aTopLeft.Y() += aMove.Y();
     }
 
-    MoveAreaTwips( nTab, aRect, aMove, aTopLeft );
+    //  drawing objects are now directly included in cut&paste
+    //  -> only update references when inserting/deleting (or changing widths or heights)
+    if ( bInsDel )
+        MoveAreaTwips( nTab, aRect, aMove, aTopLeft );
 
         //
         //      Detektiv-Pfeile: Zellpositionen anpassen
@@ -1340,6 +1347,248 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             else
                 DBG_ERROR("pPage?");
         }
+}
+
+void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, USHORT nTab, const Rectangle& rRange )
+{
+    //  copy everything in the specified range into the same page (sheet) in the clipboard doc
+
+    SdrPage* pSrcPage = GetPage(nTab);
+    if (pSrcPage)
+    {
+        ScDrawLayer* pDestModel = NULL;
+        SdrPage* pDestPage = NULL;
+
+        SdrObjListIter aIter( *pSrcPage, IM_FLAT );
+        SdrObject* pOldObject = aIter.Next();
+        while (pOldObject)
+        {
+            Rectangle aObjRect = pOldObject->GetBoundRect();
+            if ( rRange.IsInside( aObjRect ) && pOldObject->GetLayer() != SC_LAYER_INTERN )
+            {
+                if ( !pDestModel )
+                {
+                    pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?
+                    if ( !pDestModel )
+                    {
+                        //  allocate drawing layer in clipboard document only if there are objects to copy
+
+                        pClipDoc->InitDrawLayer();                  //! create contiguous pages
+                        pDestModel = pClipDoc->GetDrawLayer();
+                    }
+                    if (pDestModel)
+                        pDestPage = pDestModel->GetPage( nTab );
+                }
+
+                DBG_ASSERT( pDestPage, "no page" );
+                if (pDestPage)
+                {
+                    SdrObject* pNewObject = pOldObject->Clone( pDestPage, pDestModel );
+                    pNewObject->NbcMove(Size(0,0));
+                    pDestPage->InsertObject( pNewObject );
+
+                    //  no undo needed in clipboard document
+                    //  charts are not updated
+                }
+            }
+
+            pOldObject = aIter.Next();
+        }
+    }
+}
+
+BOOL lcl_IsAllInRange( const ScRangeList& rRanges, const ScRange& rClipRange )
+{
+    //  check if every range of rRanges is completely in rClipRange
+
+    ULONG nCount = rRanges.Count();
+    for (ULONG i=0; i<nCount; i++)
+    {
+        ScRange aRange = *rRanges.GetObject(i);
+        if ( !rClipRange.In( aRange ) )
+        {
+            return FALSE;   // at least one range is not valid
+        }
+    }
+
+    return TRUE;            // everything is fine
+}
+
+BOOL lcl_MoveRanges( ScRangeList& rRanges, const ScRange& rSourceRange, const ScAddress& rDestPos )
+{
+    BOOL bChanged = FALSE;
+
+    ULONG nCount = rRanges.Count();
+    for (ULONG i=0; i<nCount; i++)
+    {
+        ScRange* pRange = rRanges.GetObject(i);
+        if ( rSourceRange.In( *pRange ) )
+        {
+            short nDiffX = rDestPos.Col() - (short)rSourceRange.aStart.Col();
+            short nDiffY = rDestPos.Row() - (short)rSourceRange.aStart.Row();
+            short nDiffZ = rDestPos.Tab() - (short)rSourceRange.aStart.Tab();
+            pRange->Move( nDiffX, nDiffY, nDiffZ );
+            bChanged = TRUE;
+        }
+    }
+
+    return bChanged;
+}
+
+void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, const Rectangle& rSourceRange,
+                                    const ScAddress& rDestPos, const Rectangle& rDestRange )
+{
+    if (!pClipModel)
+        return;
+
+    if (bDrawIsInUndo)      //! can this happen?
+    {
+        DBG_ERROR("CopyFromClip, bDrawIsInUndo");
+        return;
+    }
+
+    USHORT nDestTab = rDestPos.Tab();
+
+    SdrPage* pSrcPage = pClipModel->GetPage(nSourceTab);
+    SdrPage* pDestPage = GetPage(nDestTab);
+    DBG_ASSERT( pSrcPage && pDestPage, "draw page missing" );
+    if ( !pSrcPage || !pDestPage )
+        return;
+
+    Size aMove( rDestRange.Left() - rSourceRange.Left(), rDestRange.Top() - rSourceRange.Top() );
+
+    long nDestWidth = rDestRange.GetWidth();
+    long nDestHeight = rDestRange.GetHeight();
+    long nSourceWidth = rSourceRange.GetWidth();
+    long nSourceHeight = rSourceRange.GetHeight();
+
+    long nWidthDiff = nDestWidth - nSourceWidth;
+    long nHeightDiff = nDestHeight - nSourceHeight;
+
+    Fraction aHorFract(1,1);
+    Fraction aVerFract(1,1);
+    BOOL bResize = FALSE;
+    // sizes can differ by 1 from twips->1/100mm conversion for equal cell sizes,
+    // don't resize to empty size when pasting into hidden columns or rows
+    if ( Abs(nWidthDiff) > 1 && nDestWidth > 1 && nSourceWidth > 1 )
+    {
+        aHorFract = Fraction( nDestWidth, nSourceWidth );
+        bResize = TRUE;
+    }
+    if ( Abs(nHeightDiff) > 1 && nDestHeight > 1 && nSourceHeight > 1 )
+    {
+        aVerFract = Fraction( nDestHeight, nSourceHeight );
+        bResize = TRUE;
+    }
+    Point aRefPos = rDestRange.TopLeft();       // for resizing (after moving)
+
+    SdrObjListIter aIter( *pSrcPage, IM_FLAT );
+    SdrObject* pOldObject = aIter.Next();
+    while (pOldObject)
+    {
+        Rectangle aObjRect = pOldObject->GetBoundRect();
+        if ( rSourceRange.IsInside( aObjRect ) )
+        {
+            SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
+
+            pNewObject->NbcMove( aMove );
+            if ( bResize )
+                pNewObject->NbcResize( aRefPos, aHorFract, aVerFract );
+
+            pDestPage->InsertObject( pNewObject );
+            if (bRecording)
+                AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+
+            //  handle chart data references (after InsertObject)
+
+            if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
+            {
+                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
+                if ( aIPObj.Is() && SchModuleDummy::HasID( *aIPObj->GetSvFactory() ) )
+                {
+                    SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                    if ( pChartData )
+                    {
+                        ScChartArray aArray( pDoc, *pChartData );   // parses range description
+                        ScRangeListRef xRanges = aArray.GetRangeList();
+                        if ( aArray.IsValid() && xRanges.Is() )
+                        {
+                            ScDocument* pClipDoc = pClipModel->GetDocument();
+
+                            //  a clipboard document and its source share the same document item pool,
+                            //  so the pointers can be compared to see if this is copy&paste within
+                            //  the same document
+                            BOOL bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
+
+                            BOOL bDestClip = pDoc && pDoc->IsClipboard();
+
+                            BOOL bInSourceRange = FALSE;
+                            ScRange aClipRange;
+                            if ( pClipDoc )
+                            {
+                                USHORT nClipStartX, nClipStartY, nClipEndX, nClipEndY;
+                                pClipDoc->GetClipStart( nClipStartX, nClipStartY );
+                                pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
+                                nClipEndX += nClipStartX;
+                                nClipEndY += nClipStartY;   // GetClipArea returns the difference
+
+                                aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
+                                                        nClipEndX, nClipEndY, nSourceTab );
+
+                                bInSourceRange = lcl_IsAllInRange( *xRanges, aClipRange );
+                            }
+
+                            // always lose references when pasting into a clipboard document (transpose)
+                            if ( ( bInSourceRange || bSameDoc ) && !bDestClip )
+                            {
+                                if ( bInSourceRange )
+                                {
+                                    if ( rDestPos != aClipRange.aStart )
+                                    {
+                                        //  update the data ranges to the new (copied) position
+                                        ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
+                                        if ( lcl_MoveRanges( *xNewRanges, aClipRange, rDestPos ) )
+                                        {
+                                            aArray.SetRangeList( xNewRanges );
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //  leave the ranges unchanged
+                                    //  Update has to be called anyway because parts of the data may have changed
+                                }
+
+                                SchMemChart* pMemChart = aArray.CreateMemChart();
+                                ScChartArray::CopySettings( *pMemChart, *pChartData );
+                                SchDLL::Update( aIPObj, pMemChart );
+                                delete pMemChart;
+                            }
+                            else
+                            {
+                                //  pasting into a new document without the complete source data
+                                //  -> break connection to source data
+
+                                //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
+
+                                pChartData->SomeData1().Erase();
+                                pChartData->SomeData2().Erase();
+                                pChartData->SomeData3().Erase();
+                                pChartData->SomeData4().Erase();
+                                SchChartRange aChartRange;
+                                pChartData->SetChartRange( aChartRange );
+                                pChartData->SetReadOnly( FALSE );
+                                SchDLL::Update( aIPObj, pChartData );
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        pOldObject = aIter.Next();
+    }
 }
 
 // static

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 12:13:31 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,8 +1679,18 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         aSourceMark.SelectTable( nTab, TRUE );      // Source selektieren
     aSourceMark.SetMarkArea( rSource );
 
+    ScDocShellRef aDragShellRef;
+    if ( pDoc->HasOLEObjectsInArea( rSource ) )
+    {
+        aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+        aDragShellRef->DoInitNew(NULL);
+    }
+    ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
+
     pDoc->CopyToClip( nStartCol, nStartRow, nEndCol, nEndRow, bCut, pClipDoc,
-                        FALSE, &aSourceMark, bScenariosAdded );
+                        FALSE, &aSourceMark, bScenariosAdded, TRUE );
+
+    ScDrawLayer::SetGlobalDrawPersist(NULL);
 
     USHORT nOldEndCol = nEndCol;
     USHORT nOldEndRow = nEndRow;
@@ -1794,9 +1804,13 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     BOOL bSourceHeight = FALSE;     // Hoehen angepasst?
     if (bCut)
     {
+        ScMarkData aDelMark;    // only for tables
         for (nTab=nStartTab; nTab<=nEndTab; nTab++)
+        {
             pDoc->DeleteAreaTab( nStartCol,nStartRow, nOldEndCol,nOldEndRow, nTab, IDF_ALL );
-//!!!   pDoc->DeleteAreaTab( nStartCol,nStartRow, nEndCol,nEndRow, nStartTab, IDF_ALL );
+            aDelMark.SelectTable( nTab, TRUE );
+        }
+        pDoc->DeleteObjectsInArea( nStartCol,nStartRow, nOldEndCol,nOldEndRow, aDelMark );
 
         //  Test auf zusammengefasste
 
@@ -1834,8 +1848,8 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         aDestMark.SelectTable( nTab, TRUE );        // Destination selektieren
     aDestMark.SetMarkArea( aPasteDest );
 
-        //! markierte Tabellen bei CopyFromClip uebergeben !!!!!
-    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL, pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
+    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~IDF_OBJECTS,
+                        pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
@@ -1845,6 +1859,11 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     BOOL bDestHeight = AdjustRowHeight(
                             ScRange( 0,nDestRow,nDestTab, MAXCOL,nDestEndRow,nDestEndTab ),
                             FALSE );
+
+    //  paste drawing objects after adjusting row heights
+    if ( pClipDoc->GetDrawLayer() )
+        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_OBJECTS,
+                            pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     if (bRecord)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 12:09:33 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ private:
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SvEmbeddedObjectRef             aDocShellRef;
+    SvEmbeddedObjectRef             aDrawPersistRef;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
     USHORT                          nDragHandleX;
     USHORT                          nDragHandleY;
@@ -132,6 +133,7 @@ public:
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
 
+    void                SetDrawPersist( const SvEmbeddedObjectRef& rRef );
     void                SetDragHandlePos( USHORT nX, USHORT nY );
     void                SetVisibleTab( USHORT nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
@@ -139,6 +141,8 @@ public:
     void                SetDragWasInternal();
 
     static ScTransferObj* GetOwnClipboard( Window* pUIWin );
+
+    static SvPersist*   SetDrawClipDoc( BOOL bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-19 17:15:43 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@
 #include "waitoff.hxx"
 #include "scmod.hxx"
 #include "sc.hrc"
+#include "drwlayer.hxx"
 
 using namespace com::sun::star;
 
@@ -249,7 +250,7 @@ using namespace com::sun::star;
 //----------------------------------------------------------------------------
 //      C U T
 
-void ScViewFunc::CutToClip( ScDocument* pClipDoc )
+void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
 {
     UpdateInputLine();
 
@@ -276,7 +277,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc )
             rMark.SetMarkArea( aRange );
         }
 
-        CopyToClip( pClipDoc, TRUE );           // Ab ins Clipboard
+        CopyToClip( pClipDoc, TRUE, FALSE, bIncludeObjects );           // Ab ins Clipboard
 
         ScAddress aOldEnd( aRange.aEnd );       // Zusammengefasste Zellen im Bereich?
         pDoc->ExtendMerge( aRange, TRUE );
@@ -298,6 +299,8 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc )
 
         rMark.MarkToMulti();
         pDoc->DeleteSelection( IDF_ALL, rMark );
+        if ( bIncludeObjects )
+            pDoc->DeleteObjectsInSelection( rMark );
         rMark.MarkToSimple();
 
         if ( !AdjustRowHeight( aRange.aStart.Row(), aRange.aEnd.Row() ) )
@@ -321,7 +324,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc )
 //----------------------------------------------------------------------------
 //      C O P Y
 
-BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi )
+BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bIncludeObjects )
 {
     BOOL bDone = FALSE;
     UpdateInputLine();
@@ -350,11 +353,22 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi )
                     pChangeTrack->ResetLastCut();   // kein CutMode mehr
             }
 
+            if ( bSysClip && bIncludeObjects )
+            {
+                BOOL bAnyOle = pDoc->HasOLEObjectsInArea( aRange, &rMark );
+                // update ScGlobal::pDrawClipDocShellRef
+                ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+            }
+
             pDoc->CopyToClip( aRange.aStart.Col(), aRange.aStart.Row(),
                               aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                              bCut, pClipDoc, FALSE, &rMark );
+                              bCut, pClipDoc, FALSE, &rMark, FALSE, bIncludeObjects );
             if (bSysClip)
+            {
+                ScDrawLayer::SetGlobalDrawPersist(NULL);
+
                 ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
+            }
             pClipDoc->ExtendMerge( aRange, TRUE );
 
             if (bSysClip)
@@ -367,6 +381,12 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi )
 
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+                if ( ScGlobal::pDrawClipDocShellRef )
+                {
+                    SvEmbeddedObjectRef aPersistRef( *ScGlobal::pDrawClipDocShellRef );
+                    pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+                }
 
                 pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard
                 SC_MOD()->SetClipObject( pTransferObj, NULL );      // internal clipboard
@@ -586,6 +606,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     BOOL bCutMode = pClipDoc->IsCutMode();      // if transposing, take from original clipdoc
     BOOL bIncludeFiltered = bCutMode;
 
+    BOOL bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & IDF_OBJECTS ) );
+
+    ScDocShellRef aTransShellRef;   // for objects in pTransClip - must remain valid as long as pTransClip
     ScDocument* pOrigClipDoc = NULL;
     ScDocument* pTransClip = NULL;
     if ( bTranspose )
@@ -601,9 +624,18 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
         pOrigClipDoc = pClipDoc;        // fuer Referenzen
 
+        if ( bPasteDraw )
+        {
+            aTransShellRef = new ScDocShell;        // DocShell needs a Ref immediately
+            aTransShellRef->DoInitNew(NULL);
+        }
+        ScDrawLayer::SetGlobalDrawPersist(aTransShellRef);
+
         pTransClip = new ScDocument( SCDOCMODE_CLIP );
         pClipDoc->TransposeClip( pTransClip, nFlags, bAsLink );
         pClipDoc = pTransClip;
+
+        ScDrawLayer::SetGlobalDrawPersist(NULL);
     }
 
     USHORT nStartCol;
@@ -841,10 +873,11 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
     }
 
+    USHORT nNoObjFlags = nFlags & ~IDF_OBJECTS;
     if (!bAsLink)
     {
         //  copy normally (original range)
-        pDoc->CopyFromClip( aUserRange, rMark, nFlags, pRefUndoDoc, pClipDoc,
+        pDoc->CopyFromClip( aUserRange, rMark, nNoObjFlags, pRefUndoDoc, pClipDoc,
                                 TRUE, FALSE, bIncludeFiltered );
 
         // bei Transpose Referenzen per Hand anpassen
@@ -854,7 +887,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     else if (!bTranspose)
     {
         //  kopieren mit bAsLink=TRUE
-        pDoc->CopyFromClip( aUserRange, rMark, nFlags, pRefUndoDoc, pClipDoc, TRUE, TRUE, bIncludeFiltered );
+        pDoc->CopyFromClip( aUserRange, rMark, nNoObjFlags, pRefUndoDoc, pClipDoc, TRUE, TRUE, bIncludeFiltered );
     }
     else
     {
@@ -874,6 +907,21 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         pDoc->MixDocument( aUserRange, nFunction, bSkipEmpty, pMixDoc );
     }
     delete pMixDoc;
+
+    if ( bPasteDraw )
+        pDocSh->MakeDrawLayer();    // before AdjustBlockHeight, so BeginDrawUndo can be called
+
+    if ( bRecord )
+        pDoc->BeginDrawUndo();
+    AdjustBlockHeight();            // update row heights before pasting objects
+
+    if ( bPasteDraw )
+    {
+        //  Paste the drawing objects after the row heights have been updated.
+
+        pDoc->CopyFromClip( aUserRange, rMark, IDF_OBJECTS, pRefUndoDoc, pClipDoc,
+                                TRUE, FALSE, bIncludeFiltered );
+    }
 
     //
     //
@@ -950,7 +998,8 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     }
     pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                         nUndoEndCol, nUndoEndRow, nEndTab, nPaint, nExtFlags );
-    AdjustBlockHeight();                    //! Paint/Undo ?
+    // AdjustBlockHeight has already been called above
+
     aModificator.SetDocumentModified();
     pDocSh->UpdateOle(GetViewData());
 

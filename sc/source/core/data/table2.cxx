@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:44:01 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,16 +371,17 @@ void ScTable::CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
             aCol[i].CopyToClip(nRow1, nRow2, pTable->aCol[i], bKeepScenarioFlags);
 
         //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
+        //  also for all preceding columns/rows, to have valid positions for drawing objects
 
         if (pColFlags && pTable->pColFlags && pColWidth && pTable->pColWidth)
-            for (i=nCol1; i<=nCol2; i++)
+            for (i=0; i<=nCol2; i++)
             {
                 pTable->pColFlags[i] = pColFlags[i] & CR_HIDDEN;
                 pTable->pColWidth[i] = pColWidth[i];
             }
 
         if (pRowFlags && pTable->pRowFlags && pRowHeight && pTable->pRowHeight)
-            for (i=nRow1; i<=nRow2; i++)
+            for (i=0; i<=nRow2; i++)
             {
                 pTable->pRowFlags[i] = pRowFlags[i] & (CR_HIDDEN | CR_FILTERED | CR_MANUALSIZE);
                 pTable->pRowHeight[i] = pRowHeight[i];

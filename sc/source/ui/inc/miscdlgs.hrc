@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:52:44 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #define BTN_MV_DOWN     38
 #define BTN_MV_RIGHT    39
 #define FL_MOVE         40
+#define BTN_INSOBJECTS  41
 #define FL_SEP1         51
 #define FL_SEP2         52
 

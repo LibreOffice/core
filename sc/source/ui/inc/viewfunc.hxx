@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-26 18:15:30 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,9 @@ public:
 
     void            EnterDataAtCursor( const String& rString );         //! nicht benutzt ?
 
-    void            CutToClip( ScDocument* pClipDoc=NULL );
-    BOOL            CopyToClip( ScDocument* pClipDoc=NULL, BOOL bCut = FALSE, BOOL bApi = FALSE );
+    void            CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
+    BOOL            CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
+                                BOOL bIncludeObjects = FALSE );
     BOOL            PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
-//#include "dataobj.hxx"
 #include "drwtrans.hxx"
+#include "transobj.hxx"     // SetDrawClipDoc
 #include "drawutil.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
@@ -181,15 +181,12 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         const SdrMarkList& rMarkList = GetMarkList();
         lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
-        //---------------------------------------------------------
         ScDocShellRef aDragShellRef;
         if (bAnyOle)
         {
-            aDragShellRef = new ScDocShell;     // ohne Ref lebt die DocShell nicht !!!
+            aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
             aDragShellRef->DoInitNew(NULL);
         }
-        //---------------------------------------------------------
-
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
         SdrModel* pModel = GetAllMarkedModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
@@ -227,22 +224,8 @@ void ScDrawView::DoCopy()
     const SdrMarkList& rMarkList = GetMarkList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
-    //---------------------------------------------------------
-    delete ScGlobal::pDrawClipDocShellRef;
-    if (bAnyOle)
-    {
-        ScGlobal::pDrawClipDocShellRef =
-                        new ScDocShellRef(new ScDocShell);      // ohne Ref geht's nicht
-        (*ScGlobal::pDrawClipDocShellRef)->DoInitNew(NULL);
-        ScDrawLayer::SetGlobalDrawPersist(*ScGlobal::pDrawClipDocShellRef);
-    }
-    else
-    {
-        ScGlobal::pDrawClipDocShellRef = NULL;
-        ScDrawLayer::SetGlobalDrawPersist(NULL);
-    }
-    //---------------------------------------------------------
-
+    // update ScGlobal::pDrawClipDocShellRef
+    ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 

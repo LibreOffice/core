@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: er $ $Date: 2002-01-16 15:02:36 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,6 +920,8 @@ public:
     BOOL            IsCutMode();
     void            SetClipArea( const ScRange& rArea, BOOL bCut = FALSE );
 
+    BOOL            HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark = NULL );
+
     void            DeleteObjectsInArea( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
                                         const ScMarkData& rMark );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
@@ -932,7 +934,8 @@ public:
     void            DeleteAreaTab(const ScRange& rRange, USHORT nDelFlag);
     void            CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
                                 BOOL bCut, ScDocument* pClipDoc, BOOL bAllTabs,
-                                const ScMarkData* pMarks = NULL, BOOL bKeepScenarioFlags=FALSE);
+                                const ScMarkData* pMarks = NULL,
+                                BOOL bKeepScenarioFlags = FALSE, BOOL bIncludeObjects = FALSE);
     void            CopyTabToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
                                 USHORT nTab, ScDocument* pClipDoc = NULL);
     void            CopyBlockFromClip( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,

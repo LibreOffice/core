@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 16:42:19 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,7 +1045,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_COPY:              // fuer Grafiken in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CopyToClip();
+                pTabViewShell->CopyToClip( NULL, FALSE, FALSE, TRUE );
                 rReq.Done();
             }
             break;
@@ -1053,7 +1053,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CUT:               // fuer Grafiken in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CutToClip();
+                pTabViewShell->CutToClip( NULL, TRUE );
                 rReq.Done();
             }
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,14 @@ void ScSimpleUndo::BeginUndo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->HideAllCursors();       // z.B. wegen zusammengefassten Zellen
+
+    //  detective updates happened last, must be undone first
+    if (pDetectiveUndo)
+        pDetectiveUndo->Undo();
 }
 
 void ScSimpleUndo::EndUndo()
 {
-    if (pDetectiveUndo)
-        pDetectiveUndo->Undo();
-
     pDocShell->SetDocumentModified();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

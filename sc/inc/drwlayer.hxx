@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-05 14:14:51 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,11 @@ public:
                                             USHORT nCol2,USHORT nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
     void            DeleteObjects( USHORT nTab );
+
+    void            CopyToClip( ScDocument* pClipDoc, USHORT nTab, const Rectangle& rRange );
+    void            CopyFromClip( ScDrawLayer* pClipModel,
+                                    USHORT nSourceTab, const Rectangle& rSourceRange,
+                                    const ScAddress& rDestPos, const Rectangle& rDestRange );
 
     void            SetPageSize( USHORT nPageNo, const Size& rSize );
     ULONG           GetDefTextHeight() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-08 14:57:39 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,12 +263,21 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         if (pLinkManager)
             pDrawLayer->SetLinkManager( pLinkManager );
 
-        //  Draw-Pages initialisieren
+        //  Drawing pages are accessed by table number, so they must also be present
+        //  for preceding table numbers, even if the tables aren't allocated
+        //  (important for clipboard documents).
 
-        for (USHORT nTab=0; nTab<=MAXTAB; nTab++)
+        USHORT nDrawPages = 0;
+        USHORT nTab;
+        for (nTab=0; nTab<=MAXTAB; nTab++)
+            if (pTab[nTab])
+                nDrawPages = nTab + 1;          // needed number of pages
+
+        for (nTab=0; nTab<nDrawPages; nTab++)
+        {
+            pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
             if (pTab[nTab])
             {
-                pDrawLayer->ScAddPage( nTab );
                 String aName;
                 pTab[nTab]->GetName(aName);
                 pDrawLayer->ScRenamePage( nTab, aName );
@@ -279,9 +288,10 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
                 ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
                 pDrawLayer->SetPageSize( nTab, Size( nx, ny ) );
 #endif
-                pDrawLayer->SetDefaultTabulator(
-                                    GetDocOptions().GetTabDistance());
             }
+        }
+
+        pDrawLayer->SetDefaultTabulator( GetDocOptions().GetTabDistance() );
 
         UpdateDrawPrinter();
         UpdateDrawLanguages();
@@ -462,6 +472,50 @@ void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
 
     pDrawLayer->DeleteObjectsInSelection( rMark );
 }
+
+BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark )
+{
+    //  pTabMark is used only for selected tables. If pTabMark is 0, all tables of rRange are used.
+
+    if (!pDrawLayer)
+        return FALSE;
+
+    USHORT nStartTab = 0;
+    USHORT nEndTab = MAXTAB;
+    if ( !pTabMark )
+    {
+        nStartTab = rRange.aStart.Tab();
+        nEndTab = rRange.aEnd.Tab();
+    }
+
+    for (USHORT nTab = nStartTab; nTab <= nEndTab; nTab++)
+    {
+        if ( !pTabMark || pTabMark->GetTableSelect(nTab) )
+        {
+            Rectangle aMMRect = GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(),
+                                            rRange.aEnd.Col(), rRange.aEnd.Row(), nTab );
+
+            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            DBG_ASSERT(pPage,"Page ?");
+            if (pPage)
+            {
+                SdrObjListIter aIter( *pPage, IM_FLAT );
+                SdrObject* pObject = aIter.Next();
+                while (pObject)
+                {
+                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                            aMMRect.IsInside( pObject->GetBoundRect() ) )
+                        return TRUE;
+
+                    pObject = aIter.Next();
+                }
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 
 void ScDocument::StopAnimations( USHORT nTab, Window* pWin )
 {

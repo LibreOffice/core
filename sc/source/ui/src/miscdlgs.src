@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:56:30 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ ModalDialog RID_SCDLG_INSCONT
     OutputSize = TRUE ;
     HelpId = FID_INS_CELL_CONTENTS ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 173 ) ;
+    Size = MAP_APPFONT ( 260 , 187 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Inhalte einf¸gen : Inhalte einf≥gen */
     Text = "Inhalte einf¸gen" ;
     Text [ ENGLISH ] = "Insert Contents" ;
@@ -1049,6 +1049,15 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "For~mats";
         Text[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ~‡∏ö‡∏ö";
+    };
+    CheckBox BTN_INSOBJECTS
+    {
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "O~bjekte" ;
+        Text [ ENGLISH ] = "O~bjects" ;
+        Text [ english_us ] = "O~bjects" ;
+        TabStop = TRUE ;
     };
     CheckBox BTN_INSNOTES
     {
@@ -1287,7 +1296,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_SKIP_EMPTY
     {
-        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Leerzellen ¸berspringen : ~Leerzellen ≥berspringen */
         Text = "~Leerzellen ¸berspringen" ;
@@ -1317,7 +1326,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_TRANSPOSE
     {
-        Pos = MAP_APPFONT ( 12 , 141 ) ;
+        Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "Transp~onieren" ;
         Text [ ENGLISH ] = "~Tranpose" ;
@@ -1346,7 +1355,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_LINK
     {
-        Pos = MAP_APPFONT ( 12 , 155 ) ;
+        Pos = MAP_APPFONT ( 12 , 169 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verkn¸~pfen : Verkn≥~pfen */
         Text = "Verkn¸~pfen" ;
@@ -1376,7 +1385,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     FixedLine FL_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 116 ) ;
+        Pos = MAP_APPFONT ( 6 , 130 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
@@ -1405,7 +1414,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_NONE
     {
-        Pos = MAP_APPFONT ( 111 , 127 ) ;
+        Pos = MAP_APPFONT ( 111 , 141 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Nicht ~verschieben" ;
         Text [ ENGLISH ] = "~None" ;
@@ -1434,7 +1443,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_DOWN
     {
-        Pos = MAP_APPFONT ( 111 , 141 ) ;
+        Pos = MAP_APPFONT ( 111 , 155 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Nach ~unten" ;
         Text [ ENGLISH ] = "~Down" ;
@@ -1463,7 +1472,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_RIGHT
     {
-        Pos = MAP_APPFONT ( 111 , 155 ) ;
+        Pos = MAP_APPFONT ( 111 , 169 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Nach re~chts" ;
         Text [ ENGLISH ] = "~Right" ;
@@ -1492,7 +1501,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     FixedLine FL_MOVE
     {
-        Pos = MAP_APPFONT ( 105 , 116 ) ;
+        Pos = MAP_APPFONT ( 105 , 130 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Zellen verschieben" ;
         Text [ ENGLISH ] = "Move cells" ;

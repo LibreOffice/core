@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inscodlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 14:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 BOOL   ScInsertContentsDlg::bPreviousAllCheck = TRUE;
 USHORT ScInsertContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
-                                                 IDF_ATTRIB);
+                                                 IDF_ATTRIB   | IDF_OBJECTS);
 USHORT ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 USHORT ScInsertContentsDlg::nPreviousChecks2 = 0;
 USHORT ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
@@ -100,6 +100,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnInsFormulas ( this, ScResId( BTN_INSFORMULAS ) ),
     aBtnInsNotes    ( this, ScResId( BTN_INSNOTES ) ),
     aBtnInsAttrs    ( this, ScResId( BTN_INSATTRS ) ),
+    aBtnInsObjects  ( this, ScResId( BTN_INSOBJECTS ) ),
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnSkipEmptyCells( this, ScResId(BTN_SKIP_EMPTY ) ),
     aBtnTranspose   ( this, ScResId( BTN_TRANSPOSE ) ),
@@ -145,6 +146,8 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnInsNotes.Check   ( IS_SET( IDF_NOTE,
                                    ScInsertContentsDlg::nPreviousChecks ) );
     aBtnInsAttrs.Check   ( IS_SET( IDF_ATTRIB,
+                                   ScInsertContentsDlg::nPreviousChecks ) );
+    aBtnInsObjects.Check ( IS_SET( IDF_OBJECTS,
                                    ScInsertContentsDlg::nPreviousChecks ) );
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
@@ -197,6 +200,8 @@ USHORT ScInsertContentsDlg::GetInsContentsCmdBits() const
         ScInsertContentsDlg::nPreviousChecks |= IDF_NOTE;
     if ( aBtnInsAttrs.IsChecked()   )
         ScInsertContentsDlg::nPreviousChecks |= IDF_ATTRIB;
+    if ( aBtnInsObjects.IsChecked() )
+        ScInsertContentsDlg::nPreviousChecks |= IDF_OBJECTS;
 
     ScInsertContentsDlg::bPreviousAllCheck = aBtnInsAll.IsChecked();
 
@@ -229,6 +234,7 @@ void ScInsertContentsDlg::DisableChecks( BOOL bInsAllChecked )
         aBtnInsFormulas.Disable();
         aBtnInsNotes.Disable();
         aBtnInsAttrs.Disable();
+        aBtnInsObjects.Disable();
     }
     else
     {
@@ -238,6 +244,12 @@ void ScInsertContentsDlg::DisableChecks( BOOL bInsAllChecked )
         aBtnInsFormulas.Enable();
         aBtnInsNotes.Enable();
         aBtnInsAttrs.Enable();
+
+        //  "Objects" is disabled for "Fill Tables"
+        if ( bFillMode )
+            aBtnInsObjects.Disable();
+        else
+            aBtnInsObjects.Enable();
     }
 }
 
