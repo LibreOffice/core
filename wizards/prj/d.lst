@@ -8,7 +8,7 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\bin\eur*.res %_DEST%\bin%_EXT%\eur*.res
 ..\%__SRC%\bin\cal*.res %_DEST%\bin%_EXT%\cal*.res
 
-
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
 
 touch: ..\%__SRC%\misc\wizards.hid %_DEST%\bin%_EXT%\wizards.hid
 

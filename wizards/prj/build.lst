@@ -11,3 +11,4 @@ wz      wizards\source\tools                                    nmake           
 wz      wizards\source\webwizard                                nmake           -       all     wz_webwizard NULL
 wz      wizards\source\depot                                    nmake           -       all     wz_depot NULL
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
+wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz NULL
