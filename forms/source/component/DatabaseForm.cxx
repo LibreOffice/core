@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,6 +759,7 @@ ODatabaseForm::ODatabaseForm(const staruno::Reference<starlang::XMultiServiceFac
 
     {
         m_xAggregate = staruno::Reference<staruno::XAggregation>(m_xServiceFactory->createInstance(SRV_SDB_ROWSET), staruno::UNO_QUERY);
+        //  m_xAggregate = staruno::Reference<staruno::XAggregation>(m_xServiceFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.sdb.dbaccess.ORowSet")), staruno::UNO_QUERY);
         DBG_ASSERT(m_xAggregate.is(), "ODatabaseForm::ODatabaseForm : could not instantiate an SDB rowset !");
         m_xAggregateAsRowSet = staruno::Reference<starsdbc::XRowSet> (m_xAggregate,staruno::UNO_QUERY);
         setAggregation(m_xAggregate);
@@ -2227,55 +2228,30 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     sal_Bool bInsertRow = sal_False;
     if (m_xAggregateSet.is())
         bInsertRow = getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW));
-    if (bInsertRow)
+    if (bInsertRow && m_bSubForm)
     {
         // Iterate through all columns and set the default value
         staruno::Reference<starsdbcx::XColumnsSupplier>  xColsSuppl(m_xAggregateSet, staruno::UNO_QUERY);
-        staruno::Reference<starcontainer::XIndexAccess>  xIndexCols(xColsSuppl->getColumns(), staruno::UNO_QUERY);
-        for (sal_Int32 i = 0; i < xIndexCols->getCount(); i++)
-        {
-            staruno::Reference<starbeans::XPropertySet> xColAsSet;
-            ::cppu::extractInterface(xColAsSet, xIndexCols->getByIndex(i));
-            ::rtl::OUString aDefault;
-            xColAsSet->getPropertyValue(PROPERTY_DEFAULT_VALUE) >>= aDefault;
-            if (!getBOOL(xColAsSet->getPropertyValue(PROPERTY_ISREADONLY)))
-            {
-                try
-                {
-                    staruno::Reference<starsdb::XColumnUpdate>  xColUpdate(xColAsSet, staruno::UNO_QUERY);
-                    if (aDefault.getLength())
-                        xColUpdate->updateString(aDefault);
-                    else
-                        xColUpdate->updateNull();
-                }
-                catch(...)
-                {
-                }
-            }
-        }
 
         // now set the values on which a subform depends
-        if (m_bSubForm)
+        staruno::Reference<starsdbcx::XColumnsSupplier>  xParentColsSuppl(m_xParent, staruno::UNO_QUERY);
+        staruno::Reference<starcontainer::XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
+        sal_Int32 nMasterLen = m_aMasterFields.getLength();
+        if (xParentCols->hasElements() && (nMasterLen > 0))
         {
-            staruno::Reference<starsdbcx::XColumnsSupplier>  xParentColsSuppl(m_xParent, staruno::UNO_QUERY);
-            staruno::Reference<starcontainer::XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
-            sal_Int32 nMasterLen = m_aMasterFields.getLength();
-            if (xParentCols->hasElements() && (nMasterLen > 0))
-            {
-                staruno::Reference<starcontainer::XNameAccess>  xCols(xColsSuppl->getColumns(), staruno::UNO_QUERY);
-                const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+            staruno::Reference<starcontainer::XNameAccess>  xCols(xColsSuppl->getColumns(), staruno::UNO_QUERY);
+            const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
+            const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
 
-                for (sal_Int32 i = 0; i < nMasterLen; ++i)
+            for (sal_Int32 i = 0; i < nMasterLen; ++i)
+            {
+                staruno::Reference<starbeans::XPropertySet>  xMasterField, xField;
+                if (xParentCols->hasByName(pMasterFields[i]) &&
+                    xCols->hasByName(pDetailFields[i]))
                 {
-                    staruno::Reference<starbeans::XPropertySet>  xMasterField, xField;
-                    if (xParentCols->hasByName(pMasterFields[i]) &&
-                        xCols->hasByName(pDetailFields[i]))
-                    {
-                        ::cppu::extractInterface(xMasterField, xParentCols->getByName(pMasterFields[i]));
-                        ::cppu::extractInterface(xField, xCols->getByName(pDetailFields[i]));
-                        xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
-                    }
+                    ::cppu::extractInterface(xMasterField, xParentCols->getByName(pMasterFields[i]));
+                    ::cppu::extractInterface(xField, xCols->getByName(pDetailFields[i]));
+                    xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
                 }
             }
         }
