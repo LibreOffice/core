@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: as $ $Date: 2001-08-10 12:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace unocontrols{
 
 #define SERVICENAME_PROGRESSBAR             "com.sun.star.awt.XProgressBar"
 #define IMPLEMENTATIONNAME_PROGRESSBAR      "stardiv.UnoControls.ProgressBar"
-#define FREESPACE                           2
+#define FREESPACE                           4
 #define DEFAULT_HORIZONTAL                  sal_True
 #define DEFAULT_BLOCKDIMENSION              Size(1,1)
 #define DEFAULT_BACKGROUNDCOLOR             TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )    // lightgray
@@ -477,7 +477,7 @@ private:
     sal_Int32   m_nBackgroundColor  ;   //                                  (alpha,r,g,b)
     sal_Int32   m_nMinRange         ;   // lowest value  =   0%             [long, <_nMaxRange]
     sal_Int32   m_nMaxRange         ;   // highest value = 100%             [long, >_nMinRange]
-    sal_Int32   m_nBlockValue       ;   // value for one block              [long, >0]
+    double      m_nBlockValue       ;   // value for one block              [long, >0]
     sal_Int32   m_nValue            ;   // value for progress               [long]
 
 };  // class ProgressBar

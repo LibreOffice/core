@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: as $ $Date: 2001-08-10 12:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,28 +441,12 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
         rGraphics->setLineColor ( m_nBackgroundColor                        ) ;
         rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() ) ;
 
-        sal_Int32   nBlockStart     =   0   ;   // = left site of new block
-        sal_Int32   nBlockCount     =   0   ;   // = number of next block
-
         // same color for line and fill for blocks
         rGraphics->setFillColor ( m_nForegroundColor ) ;
         rGraphics->setLineColor ( m_nForegroundColor ) ;
 
-        sal_Int32 nDifference = labs ( m_nValue - m_nMinRange ) ;
-
-        if ( m_nBlockValue == 0 )
-        {
-            // Prevent "division by zero"
-            m_nBlockValue = 1 ;
-        }
-        // number of blocks for current value
-        nBlockCount = nDifference / m_nBlockValue ;
-
-        // Round to next valid block number
-        if ( fmod ( (float)nDifference, (float)m_nBlockValue ) != 0 )
-        {
-            ++nBlockCount ;
-        }
+        sal_Int32   nBlockStart     =   0                                                                           ;   // = left site of new block
+        sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? (sal_Int32)((m_nValue-m_nMinRange)/m_nBlockValue) : 0 ;   // = number of next block
 
         // Draw horizontal progressbar
         // decision in "recalcRange()"
@@ -519,21 +503,34 @@ void ProgressBar::impl_recalcRange ()
 {
     MutexGuard  aGuard (m_aMutex) ;
 
-    // Calculate size of block in progressbar
-    // and switch the orientation of the control
-    sal_Int32   nMaxBlock   = 0                 ;
-    sal_Int32   nWidth      = impl_getWidth  () ;   // it's better for debug !
-    sal_Int32   nHeight     = impl_getHeight () ;   // it's better for debug !
+    sal_Int32 nWindowWidth  = impl_getWidth()  ;
+    sal_Int32 nWindowHeight = impl_getHeight() ;
+    double    fBlockHeight                     ;
+    double    fBlockWidth                      ;
+    double    fMaxBlocks                       ;
 
-    // Default = horizontal progressbar ...
-    m_bHorizontal = sal_True ;
-
-    // ... but, if programmer say "NO IT's VERTICAL ..."
-    if ( nWidth > nHeight )
+    if( nWindowWidth > nWindowHeight )
     {
-        // Don't forget to save this state! Used in "ProgressBar::paint()"
-        m_bHorizontal = sal_True ;
+        m_bHorizontal = sal_True                            ;
+        fBlockHeight  = (nWindowHeight-(2*FREESPACE))       ;
+        fBlockWidth   = fBlockHeight                        ;
+        fMaxBlocks    = nWindowWidth/(fBlockWidth+FREESPACE);
+    }
+    else
+    {
+        m_bHorizontal = sal_False                             ;
+        fBlockWidth   = (nWindowWidth-(2*FREESPACE))          ;
+        fBlockHeight  = fBlockWidth                           ;
+        fMaxBlocks    = nWindowHeight/(fBlockHeight+FREESPACE);
+    }
 
+    double fRange       = m_nMaxRange-m_nMinRange    ;
+    double fBlockValue  = fRange/fMaxBlocks          ;
+
+    m_nBlockValue       = fBlockValue            ;
+    m_aBlockSize.Height = (sal_Int32)fBlockHeight;
+    m_aBlockSize.Width  = (sal_Int32)fBlockWidth ;
+/*
         // Calculate count of blocks for actual size
         // (prevent error "division by zero")
         if ( nHeight == 0 )
@@ -567,6 +564,15 @@ void ProgressBar::impl_recalcRange ()
         // Don't forget to save this state! Used in "ProgressBar::paint()"
         m_bHorizontal = sal_False ;
 
+        double fBlockWidth  = (nHeight-(2*FREESPACE))       ;
+        double fBlockHeight = fBlockWidth                   ;
+        double fRange       = m_nMaxRange-m_nMinRange       ;
+        double fBlockValue  = fRange/(fBlockWidth+FREESPACE);
+
+        m_nBlockValue       = fBlockValue            ;
+        m_aBlockSize.Height = (sal_Int32)fBlockHeight;
+        m_aBlockSize.Width  = (sal_Int32)fBlockWidth ;
+
         // Calculate count of blocks for actual size
         // (prevent error "division by zero")
         if ( nWidth == 0 )
@@ -594,7 +600,9 @@ void ProgressBar::impl_recalcRange ()
         m_nBlockValue       =   ( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
         m_aBlockSize.Height =   ( ( nHeight / nMaxBlock ) - FREESPACE                   ) ;
         m_aBlockSize.Width  =   ( nWidth - ( FREESPACE * 2 )                            ) ;
+
     }
+*/
 }
 
 }   // namespace unocontrols
