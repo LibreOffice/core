@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-06 15:03:50 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 10:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,8 @@
 
 #include <ctype.h>
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>     // CH_TXTATR
@@ -112,8 +110,6 @@
 #ifdef DEBUG
 const sal_Char *GetLangName( const MSHORT nLang );
 #endif
-
-#ifdef VERTICAL_LAYOUT
 
 using namespace ::com::sun::star::i18n::ScriptType;
 
@@ -210,16 +206,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         LanguageType aLang =
             rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
 
-        // Oh my god!!!
-        if ( LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
-             LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
-             LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
-             LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
-             LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
-             LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
-             LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
-             LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
-             LANGUAGE_ARABIC_QATAR == aLang )
+        if ( SwScriptInfo::IsArabicLanguage( aLang ) )
             return pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
     }
 #endif
@@ -274,8 +261,6 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
 
     return nCnt;
 }
-
-#endif
 
 /*************************************************************************
  *                      class SwTxtPortion
@@ -677,30 +662,12 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
-#ifdef VERTICAL_LAYOUT
             nCnt += lcl_AddSpace( rInf, &aStr, *this );
-#else
-            for ( nPos = 0; nPos < aStr.Len(); ++nPos )
-            {
-                if( CH_BLANK == aStr.GetChar( nPos ) )
-                    ++nCnt;
-            }
-#endif
         }
     }
     else if( !IsDropPortion() )
     {
-#ifdef VERTICAL_LAYOUT
         nCnt += lcl_AddSpace( rInf, 0, *this );
-#else
-        xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
-        for ( nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
-        {
-            if( CH_BLANK == rInf.GetChar( nPos ) )
-                ++nCnt;
-        }
-#endif
-
         nPos = GetLen();
     }
     rCharCnt += nPos;
@@ -723,17 +690,7 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
             if( nSpaceAdd > 0 )
-            {
-#ifdef VERTICAL_LAYOUT
                 nCnt += lcl_AddSpace( rInf, &aStr, *this );
-#else
-                for ( xub_StrLen nPos = 0; nPos < aStr.Len(); ++nPos )
-                {
-                    if( CH_BLANK == aStr.GetChar( nPos ) )
-                        ++nCnt;
-                }
-#endif
-            }
             else
             {
                 nSpaceAdd = -nSpaceAdd;
@@ -744,20 +701,7 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
     else if( !IsDropPortion() )
     {
         if( nSpaceAdd > 0 )
-        {
-
-#ifdef VERTICAL_LAYOUT
             nCnt += lcl_AddSpace( rInf, 0, *this );
-#else
-            xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
-
-            for ( xub_StrLen nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
-            {
-                if( CH_BLANK == rInf.GetChar( nPos ) )
-                    ++nCnt;
-            }
-#endif
-        }
         else
         {
             nSpaceAdd = -nSpaceAdd;
