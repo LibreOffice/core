@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:50:16 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ russian ] = "√оризонтально";
         TEXT[ polish ] = "Poziomo";
         TEXT[ japanese ] = "Й°(~H)";
-        TEXT[ chinese_traditional ] = "Њо¶V(~H)";
+        TEXT[ chinese_traditional ] = "§ф•≠(~H)";
         TEXT[ arabic ] = "√Ёён";
         TEXT[ dutch ] = "~Horizontaal";
         TEXT[ chinese_simplified ] = "Їбѕт(~H)";
