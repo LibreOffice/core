@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:00:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,7 +1679,9 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             // window bounds. Thus, we correct the dest size here,
             // since we later use it (in nDstWidth/Height) for pixel
             // access)
-            aDstRect.SetSize( aBmp.GetSizePixel() );
+            // #i38887# reading from screen may sometimes fail
+            if( aBmp.ImplGetImpBitmap() )
+                aDstRect.SetSize( aBmp.GetSizePixel() );
 
             // #110958# Disable alpha VDev, we're doing the necessary
             // stuff explicitely furher below
@@ -1728,130 +1730,134 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                         pA->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
                         "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
 
-            if( GetBitCount() <= 8 )
+            // #i38887# reading from screen may sometimes fail
+            if( aBmp.ImplGetImpBitmap() )
             {
-                Bitmap              aDither( aBmp.GetSizePixel(), 8 );
-                BitmapColor         aIndex( 0 );
-                BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
-                BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
-
-                if( pB && pP && pA && pW )
+                if( GetBitCount() <= 8 )
                 {
-                    for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
+                    Bitmap              aDither( aBmp.GetSizePixel(), 8 );
+                    BitmapColor         aIndex( 0 );
+                    BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
+                    BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+
+                    if( pB && pP && pA && pW )
                     {
-                        const long nMapY = pMapY[ nY ];
-                        const long nModY = ( nOutY & 0x0FL ) << 4L;
-
-                        for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
+                        for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
                         {
-                            const long  nMapX = pMapX[ nX ];
-                            const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
+                            const long nMapY = pMapY[ nY ];
+                            const long nModY = ( nOutY & 0x0FL ) << 4L;
 
-                            aDstCol = pB->GetColor( nY, nX );
-                            aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (BYTE) pA->GetPixel( nMapY, nMapX ) );
-                            aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
-                                                      nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
-                                                      nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
-                            pW->SetPixel( nY, nX, aIndex );
+                            for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
+                            {
+                                const long  nMapX = pMapX[ nX ];
+                                const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
+
+                                aDstCol = pB->GetColor( nY, nX );
+                                aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (BYTE) pA->GetPixel( nMapY, nMapX ) );
+                                aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
+                                                        nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
+                                                        nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
+                                pW->SetPixel( nY, nX, aIndex );
+                            }
                         }
                     }
+
+                    aBmp.ReleaseAccess( pB );
+                    aDither.ReleaseAccess( pW );
+                    DrawBitmap( aDstRect.TopLeft(), aDither );
                 }
-
-                aBmp.ReleaseAccess( pB );
-                aDither.ReleaseAccess( pW );
-                DrawBitmap( aDstRect.TopLeft(), aDither );
-            }
-            else
-            {
-                BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
-
-                if( pP && pA && pB )
+                else
                 {
-                    switch( pP->GetScanlineFormat() )
+                    BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+
+                    if( pP && pA && pB )
                     {
-                        case( BMP_FORMAT_8BIT_PAL ):
+                        switch( pP->GetScanlineFormat() )
                         {
-                            for( nY = 0; nY < nDstHeight; nY++ )
+                            case( BMP_FORMAT_8BIT_PAL ):
                             {
-                                const long  nMapY = pMapY[ nY ];
-                                Scanline    pPScan = pP->GetScanline( nMapY );
-                                Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                for( nX = 0; nX < nDstWidth; nX++ )
+                                for( nY = 0; nY < nDstHeight; nY++ )
                                 {
-                                    const long nMapX = pMapX[ nX ];
-                                    aDstCol = pB->GetPixel( nY, nX );
-                                    pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
-                                                                         pAScan[ nMapX ] ) );
+                                    const long  nMapY = pMapY[ nY ];
+                                    Scanline    pPScan = pP->GetScanline( nMapY );
+                                    Scanline    pAScan = pA->GetScanline( nMapY );
+
+                                    for( nX = 0; nX < nDstWidth; nX++ )
+                                    {
+                                        const long nMapX = pMapX[ nX ];
+                                        aDstCol = pB->GetPixel( nY, nX );
+                                        pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
+                                                                            pAScan[ nMapX ] ) );
+                                    }
                                 }
                             }
-                        }
-                        break;
+                            break;
 
-                        case( BMP_FORMAT_24BIT_TC_BGR ):
-                        {
-                            for( nY = 0; nY < nDstHeight; nY++ )
+                            case( BMP_FORMAT_24BIT_TC_BGR ):
                             {
-                                const long  nMapY = pMapY[ nY ];
-                                Scanline    pPScan = pP->GetScanline( nMapY );
-                                Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                for( nX = 0; nX < nDstWidth; nX++ )
+                                for( nY = 0; nY < nDstHeight; nY++ )
                                 {
-                                    const long  nMapX = pMapX[ nX ];
-                                    Scanline    pTmp = pPScan + nMapX * 3;
+                                    const long  nMapY = pMapY[ nY ];
+                                    Scanline    pPScan = pP->GetScanline( nMapY );
+                                    Scanline    pAScan = pA->GetScanline( nMapY );
 
-                                    aDstCol = pB->GetPixel( nY, nX );
-                                    pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 2 ], pTmp[ 1 ], pTmp[ 0 ],
-                                                                         pAScan[ nMapX ] ) );
+                                    for( nX = 0; nX < nDstWidth; nX++ )
+                                    {
+                                        const long  nMapX = pMapX[ nX ];
+                                        Scanline    pTmp = pPScan + nMapX * 3;
+
+                                        aDstCol = pB->GetPixel( nY, nX );
+                                        pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 2 ], pTmp[ 1 ], pTmp[ 0 ],
+                                                                            pAScan[ nMapX ] ) );
+                                    }
                                 }
                             }
-                        }
-                        break;
+                            break;
 
-                        case( BMP_FORMAT_24BIT_TC_RGB ):
-                        {
-                            for( nY = 0; nY < nDstHeight; nY++ )
+                            case( BMP_FORMAT_24BIT_TC_RGB ):
                             {
-                                const long  nMapY = pMapY[ nY ];
-                                Scanline    pPScan = pP->GetScanline( nMapY );
-                                Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                for( nX = 0; nX < nDstWidth; nX++ )
+                                for( nY = 0; nY < nDstHeight; nY++ )
                                 {
-                                    const long  nMapX = pMapX[ nX ];
-                                    Scanline    pTmp = pPScan + nMapX * 3;
+                                    const long  nMapY = pMapY[ nY ];
+                                    Scanline    pPScan = pP->GetScanline( nMapY );
+                                    Scanline    pAScan = pA->GetScanline( nMapY );
 
-                                    aDstCol = pB->GetPixel( nY, nX );
-                                    pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ],
-                                                                         pAScan[ nMapX ] ) );
+                                    for( nX = 0; nX < nDstWidth; nX++ )
+                                    {
+                                        const long  nMapX = pMapX[ nX ];
+                                        Scanline    pTmp = pPScan + nMapX * 3;
+
+                                        aDstCol = pB->GetPixel( nY, nX );
+                                        pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ],
+                                                                            pAScan[ nMapX ] ) );
+                                    }
                                 }
                             }
-                        }
-                        break;
+                            break;
 
-                        default:
-                        {
-                            for( nY = 0; nY < nDstHeight; nY++ )
+                            default:
                             {
-                                const long  nMapY = pMapY[ nY ];
-                                Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                for( nX = 0; nX < nDstWidth; nX++ )
+                                for( nY = 0; nY < nDstHeight; nY++ )
                                 {
-                                    const long nMapX = pMapX[ nX ];
-                                    aDstCol = pB->GetPixel( nY, nX );
-                                    pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
-                                                                         pAScan[ nMapX ] ) );
+                                    const long  nMapY = pMapY[ nY ];
+                                    Scanline    pAScan = pA->GetScanline( nMapY );
+
+                                    for( nX = 0; nX < nDstWidth; nX++ )
+                                    {
+                                        const long nMapX = pMapX[ nX ];
+                                        aDstCol = pB->GetPixel( nY, nX );
+                                        pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
+                                                                            pAScan[ nMapX ] ) );
+                                    }
                                 }
                             }
+                            break;
                         }
-                        break;
                     }
-                }
 
-                aBmp.ReleaseAccess( pB );
-                DrawBitmap( aDstRect.TopLeft(), aBmp );
+                    aBmp.ReleaseAccess( pB );
+                    DrawBitmap( aDstRect.TopLeft(), aBmp );
+                }
             }
 
             // #110958# Enable alpha VDev again
