@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:06:27 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,6 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     //
     //      ... and so on ...
 
-    SvtDynMenuEntry   aItem         ;
     sal_uInt32  nItem     = 0 ;
     sal_uInt32  nPosition = 0 ;
     OUString    sName         ;
@@ -515,6 +514,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // 4 subkeys for every item!
     for( nItem=0; nItem<nNewCount; ++nItem )
     {
+        SvtDynMenuEntry   aItem                       ;
         lValues[nPosition] >>= aItem.sURL             ;
         ++nPosition;
         lValues[nPosition] >>= aItem.sTitle           ;
@@ -532,6 +532,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // 4 subkeys for every item!
     for( nItem=0; nItem<nWizardCount; ++nItem )
     {
+        SvtDynMenuEntry   aItem                       ;
         lValues[nPosition] >>= aItem.sURL             ;
         ++nPosition;
         lValues[nPosition] >>= aItem.sTitle           ;
@@ -549,6 +550,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // 4 subkeys for every item!
     for( nItem=0; nItem<nHelpBookmarksCount; ++nItem )
     {
+        SvtDynMenuEntry   aItem                       ;
         lValues[nPosition] >>= aItem.sURL             ;
         ++nPosition;
         lValues[nPosition] >>= aItem.sTitle           ;
