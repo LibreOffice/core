@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-06 15:56:29 $
+ *  last change: $Author: tbe $ $Date: 2001-07-09 16:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ void BasicIDE::DecBasicDialogCount()
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly )
+String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly )
 {
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
     SFX_APP()->EnterBasicCall();
@@ -294,12 +294,12 @@ void BasicIDE::DecBasicDialogCount()
 
     SFX_APP()->LeaveBasicCall();
 
-    return ::rtl::OUString( aURL );
+    return aURL;
 }
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
+String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
 {
     if ( rPreferredMacroDesciption.Len() )
         IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
