@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:51:06 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
         Text [ finnish ] = "~Ei mit��n" ;
-        Text [ danish ] = "Ingen" ;
+        Text [ danish ] = "Ing~en" ;
         Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
@@ -110,6 +110,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
         Text[ slovak ] = "~Nič";
+        Text[ hungarian ] = "~Egyik sem";
+        Text[ slovenian ] = "~Brez";
     };
     RadioButton BTN_AUTO
     {
@@ -122,7 +124,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ portuguese_brazilian ] = "~Autom�tico" ;
         Text [ portuguese ] = "~Automaticamente" ;
         Text [ finnish ] = "~Automaattinen" ;
-        Text [ danish ] = "Automatisk" ;
+        Text [ danish ] = "~Automatisk" ;
         Text [ french ] = "Automatique" ;
         Text [ swedish ] = "~Automatiskt" ;
         Text [ dutch ] = "~Automatisch" ;
@@ -145,6 +147,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~स्वचालित";
         Text[ slovak ] = "~Automaticky";
+        Text[ hungarian ] = "~Automatikus";
+        Text[ slovenian ] = "S~amodejno";
     };
     RadioButton BTN_USER
     {
@@ -157,7 +161,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ portuguese_brazilian ] = "Definido pelo ~usu�rio" ;
         Text [ portuguese ] = "Definido pelo ~utilizador" ;
         Text [ finnish ] = "~K�ytt�j�n m��ritt�m�t" ;
-        Text [ danish ] = "Brugerdefineret" ;
+        Text [ danish ] = "~Brugerdefineret" ;
         Text [ french ] = "D�fini par l'utilisateur" ;
         Text [ swedish ] = "~Anv�ndardefinierade" ;
         Text [ dutch ] = "Ge~bruikergedefinieerd" ;
@@ -180,6 +184,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "~Benutzerdefiniert";
         Text[ hindi ] = "~उपभोक्ता से परिभाषा किया हुआ";
         Text[ slovak ] = "~Užívateľom definované";
+        Text[ hungarian ] = "~Egyéni";
+        Text[ slovenian ] = "~Uporabniško določeno";
     };
     MultiListBox LB_FUNC
     {
@@ -598,6 +604,34 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Var (vzorka)" ; Default ; > ;
         < "VarP (populácia)" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (csak számok)" ; Default ; > ;
+        < "StDev (minta)" ; Default ; > ;
+        < "StDevP (sokaság)" ; Default ; > ;
+        < "Var (minta)" ; Default ; > ;
+        < "VarP (sokaság)" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Vsota" ; Default ; > ;
+        < "Seštevek" ; Default ; > ;
+        < "Povprečje" ; Default ; > ;
+        < "Maks" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Seštevek (samo števke)" ; Default ; > ;
+        < "Stand. odklon (vzorec)" ; Default ; > ;
+        < "Stand. odklon pop. (celotna populacija)" ; Default ; > ;
+        < "Varianca (vzorec)" ; Default ; > ;
+        < "Varianca pop. (celotna populacija)" ; Default ; > ;
+    };
     };
     FixedLine FL_FUNC
     {
@@ -619,7 +653,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ french ] = "Afficher les ~�l�ments sans donn�es";
         Text[ spanish ] = "~Mostrar elementos sin datos";
         Text[ italian ] = "Mostra ~elementi senza dati";
-        Text[ danish ] = "Vis elementer uden data";
+        Text[ danish ] = "Vis ~elementer uden data";
         Text[ swedish ] = "Visa objekt utan data";
         Text[ polish ] = "Poka� ~elementy bez danych";
         Text[ portuguese_brazilian ] = "Mostrar ~elementos sem dados";
@@ -637,6 +671,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "~Elemente ohne Daten anzeigen";
         Text[ hindi ] = "ड़ॉटा के बिना ~ऐलिमेन्ट् को दिखाओ";
         Text[ slovak ] = "Zobraz prvky b~ez dát";
+        Text[ hungarian ] = "Minta ~mutatása adat nélkül";
+        Text[ slovenian ] = "Pokaži ~elemente brez podatkov";
     };
     FixedText FT_NAMELABEL
     {
@@ -671,6 +707,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "Name:";
         Text[ hindi ] = "नाम:";
         Text[ slovak ] = "Názov:";
+        Text[ hungarian ] = "Név:";
+        Text[ slovenian ] = "Ime:";
     };
     FixedText FT_NAME
     {
@@ -727,6 +765,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "Teilergebnisse";
         Text[ hindi ] = "आधा कुलजोड";
         Text[ slovak ] = "Medzisúčty";
+        Text[ hungarian ] = "Részösszegek";
+        Text[ slovenian ] = "Delne vsote";
     };
     String STR_DATAFUNC
     {
@@ -759,6 +799,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hebrew ] = "Funktion";
         Text[ hindi ] = "फंक्शन्";
         Text[ slovak ] = "Funkcia";
+        Text[ hungarian ] = "Függvény";
+        Text[ slovenian ] = "Funkcija";
     };
     Text [ spanish ] = "Campo de datos" ;
     Text [ french ] = "Champ de donn�es" ;
@@ -782,7 +824,10 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ hebrew ] = "Datenfeld";
     Text[ hindi ] = "ड़ॉटा क्षेत्र";
     Text[ slovak ] = "Dátové pole";
+    Text[ hungarian ] = "Adatmező";
+    Text[ slovenian ] = "Podatkovno polje";
 };
+
 
 
 
