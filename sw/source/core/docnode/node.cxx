@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 16:02:34 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,8 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     : pStartOfSection( 0 ), nNodeType( nNdType )
 {
     bWrongDirty = bACmplWrdDirty = TRUE;
-    nAFmtNumLvl = nSetNumLSpace = 0;
+    bSetNumLSpace = bIgnoreDontExpand = FALSE;
+    nAFmtNumLvl = 0;
 
     SwNodes& rNodes = (SwNodes&)rWhere.GetNodes();
     SwNode* pInsNd = this;      // der MAC kann this nicht einfuegen !!
@@ -292,7 +293,8 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     : pStartOfSection( 0 ), nNodeType( nNdType )
 {
     bWrongDirty = bACmplWrdDirty = TRUE;
-    nAFmtNumLvl = nSetNumLSpace = 0;
+    bSetNumLSpace = bIgnoreDontExpand = FALSE;
+    nAFmtNumLvl = 0;
 
     SwNode* pInsNd = this;      // der MAC kann this nicht einfuegen !!
     if( nPos )
@@ -316,7 +318,9 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     }
 }
 
-SwNode::~SwNode() {}
+SwNode::~SwNode()
+{
+}
 
 // suche den TabellenNode, in dem dieser steht. Wenn in keiner
 // Tabelle wird 0 returnt.

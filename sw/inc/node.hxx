@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ class SwNode : private /* public*/ BigPtrEntry
     // fuer Textnodes: Stufungslevel der Autoformatierung. Ist erstmal hier
     //                  gelandet, weil noch Bits frei sind
     BYTE nAFmtNumLvl : 3;
-    BYTE nSetNumLSpace : 1;     // fuer Numerierung: TRUE Einzug setzen
+    BOOL bSetNumLSpace : 1;         // fuer Numerierung: TRUE Einzug setzen
+    BOOL bIgnoreDontExpand : 1;     // for Text Attributes - ignore the flag
 
 protected:
     SwStartNode* pStartOfSection;
@@ -158,8 +159,11 @@ public:
     inline const BYTE GetAutoFmtLvl() const     { return nAFmtNumLvl; }
     inline void SetAutoFmtLvl( BYTE nVal )      { nAFmtNumLvl = nVal; }
 
-    inline const BOOL IsSetNumLSpace() const    { return 0 != nSetNumLSpace; }
-    inline void SetNumLSpace( BOOL bFlag )      { nSetNumLSpace = bFlag ? 1 : 0; }
+    inline const BOOL IsSetNumLSpace() const    { return bSetNumLSpace; }
+    inline void SetNumLSpace( BOOL bFlag )      { bSetNumLSpace = bFlag; }
+
+    inline const BOOL IsIgnoreDontExpand() const    { return bIgnoreDontExpand; }
+    inline void SetIgnoreDontExpand( BOOL bNew )    { bIgnoreDontExpand = bNew; }
 
     BYTE    GetNodeType() const { return nNodeType; }
 
