@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:53:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,6 +885,9 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
             pGraphics->DrawGradient( aRect, aGradient );
 #endif
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawRect( rRect );
 }
 
 // -----------------------------------------------------------------------
@@ -1054,33 +1057,47 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
             if( !aDstRect.IsEmpty() )
             {
-                VirtualDevice   aVDev;
+                VirtualDevice*  pVDev;
                 const Size      aDstSize( aDstRect.GetSize() );
 
-                if( aVDev.SetOutputSizePixel( aDstSize) )
+                if( HasAlpha() )
+                {
+                    // #110958# Pay attention to alpha VDevs here, otherwise,
+                    // background will be wrong: Temp VDev has to have alpha, too.
+                    pVDev = new VirtualDevice( *this, 0, GetAlphaBitCount() > 1 ? 0 : 1 );
+                }
+                else
+                {
+                    // nothing special here. Plain VDev
+                    pVDev = new VirtualDevice();
+                }
+
+                if( pVDev->SetOutputSizePixel( aDstSize) )
                 {
                     MapMode         aVDevMap;
                     const RasterOp  eOldROP = GetRasterOp();
                     const BOOL      bOldMap = mbMap;
 
-                    mbMap = FALSE;
+                    EnableMapMode( FALSE );
 
-                    aVDev.DrawOutDev( Point(), aDstSize, aDstRect.TopLeft(), aDstSize, *this );
-                    aVDev.SetRasterOp( ROP_XOR );
+                    pVDev->DrawOutDev( Point(), aDstSize, aDstRect.TopLeft(), aDstSize, *this );
+                    pVDev->SetRasterOp( ROP_XOR );
                     aVDevMap.SetOrigin( Point( -aDstRect.Left(), -aDstRect.Top() ) );
-                    aVDev.SetMapMode( aVDevMap );
-                    aVDev.DrawGradient( aBoundRect, aGradient );
-                    aVDev.SetFillColor( COL_BLACK );
-                    aVDev.SetRasterOp( ROP_0 );
-                    aVDev.DrawPolyPolygon( aPolyPoly );
-                    aVDev.SetRasterOp( ROP_XOR );
-                    aVDev.DrawGradient( aBoundRect, aGradient );
+                    pVDev->SetMapMode( aVDevMap );
+                    pVDev->DrawGradient( aBoundRect, aGradient );
+                    pVDev->SetFillColor( COL_BLACK );
+                    pVDev->SetRasterOp( ROP_0 );
+                    pVDev->DrawPolyPolygon( aPolyPoly );
+                    pVDev->SetRasterOp( ROP_XOR );
+                    pVDev->DrawGradient( aBoundRect, aGradient );
                     aVDevMap.SetOrigin( Point() );
-                    aVDev.SetMapMode( aVDevMap );
-                    DrawOutDev( aDstRect.TopLeft(), aDstSize, Point(), aDstSize, aVDev );
+                    pVDev->SetMapMode( aVDevMap );
+                    DrawOutDev( aDstRect.TopLeft(), aDstSize, Point(), aDstSize, *pVDev );
 
-                    mbMap = bOldMap;
+                    EnableMapMode( bOldMap );
                 }
+
+                delete pVDev;
             }
         }
 #else
@@ -1089,6 +1106,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             pGraphics->DrawGradient( ImplLogicToDevicePixel( rPolyPoly ), aGradient );
 #endif
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
 // -----------------------------------------------------------------------
@@ -1202,13 +1222,13 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
 
         mpMetaFile = NULL;
-        mbMap = FALSE;
+        EnableMapMode( FALSE );
         Push( PUSH_LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         ImplInitLineColor();
         ImplDrawHatch( aPolyPoly, aHatch, FALSE );
         Pop();
-        mbMap = bOldMap;
+        EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;
 #else
         ImplServerGraphics* pGraphics = ImplGetServerGraphics();
@@ -1222,6 +1242,9 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         }
 #endif
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawHatch( rPolyPoly, rHatch );
 }
 
 // -----------------------------------------------------------------------
