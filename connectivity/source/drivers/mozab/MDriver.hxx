@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:06:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 
 
 #define MOZAB_MOZILLA_SCHEMA    "mozilla"
+#define MOZAB_THUNDERBIRD_SCHEMA "thunderbird"
 #define MOZAB_LDAP_SCHEMA       "ldap"
 #define MOZAB_OUTLOOK_SCHEMA    "outlook"
 #define MOZAB_OUTLOOKEXP_SCHEMA "outlookexp"
@@ -100,6 +101,7 @@ namespace connectivity
         enum EDriverType
         {
             Mozilla,
+            ThunderBird,
             LDAP,
             Outlook,
             OutlookExpress,
@@ -147,6 +149,7 @@ namespace connectivity
             static EDriverType acceptsURL_Stat( const ::rtl::OUString& url );
             // static methods to return the names of the uri
             static const sal_Char*    getSDBC_SCHEME_MOZILLA();
+            static const sal_Char*    getSDBC_SCHEME_THUNDERBIRD();
             static const sal_Char*    getSDBC_SCHEME_LDAP();
             static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
             static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
