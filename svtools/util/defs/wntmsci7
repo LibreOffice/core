@@ -13277,3 +13277,5 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?DataChanged@FontNameBox@@MAEXABVDataChangedEvent@@@Z
 ?InitBitmaps@FontNameBox@@AAEXXZ
 ?pMPostUserEvent@CommunicationLinkViaSocket@@1PAVOMutex@vos@@A
+??4CommunicationLinkRef@@QAEAAV0@ABV0@@Z
+?pMPostUserEvent@@3PAVOMutex@vos@@A
