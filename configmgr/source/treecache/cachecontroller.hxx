@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:01:46 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,23 @@ namespace configmgr
         */
         virtual CacheLocation refreshComponent(ComponentRequest const & _aRequest)
             CFG_UNO_THROW_ALL();
+         /** refreshes data of all existing components from the backend
+
+            <p> If the data is in the cache already, it is refreshed from the
+                backend and the change are notified to all registered listeners.
+            </p>
+            <p> If the data isn't in the cache nothing is done and
+                a NULL location is returned.
+            </p>
+
+            <p>Note: the caller <strong>must not</strong> hold any lock on the cache line affected.</p>
+
+             @throws com::sun::star::uno::Exception
+                if loading the data fails.
+                The exact exception being thrown may depend on the underlying backend.
+        */
+        virtual void refreshAllComponents()
+            CFG_UNO_THROW_ALL();
 
         /** locates a template in the cache.
 
@@ -352,6 +369,8 @@ namespace configmgr
         // load templates componentwise from backend
         std::auto_ptr<ISubtree> loadTemplateData(TemplateRequest const & _aRequest)
             CFG_UNO_THROW_ALL(  );
+
+        void flushPendingUpdates() CFG_NOTHROW();
         // add templates componentwise to cache
         data::TreeAddress addTemplates ( backend::ComponentData const & _aComponentInstance );
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
@@ -359,7 +378,7 @@ namespace configmgr
         OTreeDisposeScheduler   * createDisposer(const CreationContext& _xContext);
         OCacheWriteScheduler    * createCacheWriter(const CreationContext& _xContext);
 
-        void flushPendingUpdates();
+
 
         // disposing
         void disposeAll(bool _bFlushRemainingUpdates);
