@@ -3,9 +3,9 @@
  *
  *  $RCSfile: StartModuleCommands.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:53:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,18 +62,16 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="StartModuleCommands" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains general information about ~ and rules, and about actions based on office commands.</desc>
+		<desc >Contains general information about ~ and rules, and about actions based on office commands.</desc>
 	</info>
 	<templates>
         <group oor:name="LabelType">
             <info>
-                <desc xml:lang="en-US">Provides a mapping between commands and their textual representation on the user interface.</desc>
-            	<desc xml:lang="zh-CN">Provides a mapping between commands and their textual representation on the user interface.</desc>
+                <desc>Provides a mapping between commands and their textual representation on the user interface.</desc>
             </info>
             <prop oor:name="Label" oor:type="xs:string" oor:localized="true">
                 <info>
-                    <desc xml:lang="en-US">A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
-                	<desc xml:lang="zh-CN">A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
+                    <desc>A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
                 </info>
             </prop>
         </group>
@@ -81,19 +79,16 @@
 	<component>
 		<group oor:name="UserInterface">
 		    <info>
-		        <desc xml:lang="en-US">Contains user interface data for Office commands and identifiers that are used by the user interface."</desc>
-		    	<desc xml:lang="zh-CN">Contains user interface data for Office commands and identifiers that are used by the user interface.&quot;</desc>
+		        <desc>Contains user interface data for Office commands and identifiers that are used by the user interface."</desc>
 		    </info>
 		    <set oor:name="Commands" oor:node-type="LabelType">
 		        <info>
-		            <desc xml:lang="en-US">Contains label text for Office commands and identifiers that are used by the user interface."</desc>
-		        	<desc xml:lang="zh-CN">Contains label text for Office commands and identifiers that are used by the user interface.&quot;</desc>
+		            <desc>Contains label text for Office commands and identifiers that are used by the user interface."</desc>
 		        </info>
             </set>
             <set oor:name="Popups" oor:node-type="LabelType">
                 <info>
-		            <desc xml:lang="en-US">Contains label text for popup menus identifiers that are used by the user interface."</desc>
-                	<desc xml:lang="zh-CN">Contains label text for popup menus identifiers that are used by the user interface.&quot;</desc>
+		            <desc>Contains label text for popup menus identifiers that are used by the user interface."</desc>
                 </info>
             </set>
 		</group>
