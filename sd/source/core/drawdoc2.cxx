@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:44:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,10 +742,19 @@ void SdDrawDocument::SetSelected(SdPage* pPage, BOOL bSelect)
     if (ePageKind == PK_STANDARD)
     {
         pPage->SetSelected(bSelect);
-        SdPage* pNotesPage = (SdPage*) GetPage( pPage->GetPageNum() + 1 );
+
+        const sal_uInt16 nDestPageNum(pPage->GetPageNum() + 1);
+        SdPage* pNotesPage = 0L;
+
+        if(nDestPageNum < GetPageCount())
+        {
+            pNotesPage = (SdPage*)GetPage(nDestPageNum);
+        }
 
         if (pNotesPage && pNotesPage->GetPageKind() == PK_NOTES)
+        {
             pNotesPage->SetSelected(bSelect);
+        }
     }
     else if (ePageKind == PK_NOTES)
     {
@@ -829,7 +838,7 @@ void SdDrawDocument::CreateFirstPages()
                                   pHandoutPage->GetRgtBorder(),
                                   pHandoutPage->GetLwrBorder() );
         InsertMasterPage(pHandoutMPage, 0);
-        pHandoutPage->InsertMasterPage( pHandoutMPage->GetPageNum() );
+        pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
 
         /**********************************************************************
         * Seite einfuegen
@@ -892,7 +901,7 @@ void SdDrawDocument::CreateFirstPages()
                            pPage->GetRgtBorder(),
                            pPage->GetLwrBorder() );
         InsertMasterPage(pMPage, 1);
-        pPage->InsertMasterPage( pMPage->GetPageNum() );
+        pPage->TRG_SetMasterPage( *pMPage );
         if( bClipboard )
             pMPage->SetLayoutName( pPage->GetLayoutName() );
 
@@ -928,7 +937,7 @@ void SdDrawDocument::CreateFirstPages()
                                 pNotesPage->GetRgtBorder(),
                                 pNotesPage->GetLwrBorder() );
         InsertMasterPage(pNotesMPage, 2);
-        pNotesPage->InsertMasterPage( pNotesMPage->GetPageNum() );
+        pNotesPage->TRG_SetMasterPage( *pNotesMPage );
         if( bClipboard )
             pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
 
@@ -964,26 +973,25 @@ BOOL SdDrawDocument::CreateMissingNotesAndHandoutPages()
 
         SdPage* pHandoutPage = (SdPage*) GetPage(0);
         pHandoutPage->SetPageKind(PK_HANDOUT);
-        pHandoutPage->InsertMasterPage(pHandoutMPage->GetPageNum());
+        pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
 
         for (USHORT i = 1; i < nPageCount; i = i + 2)
         {
             SdPage* pPage = (SdPage*) GetPage(i);
 
-            if (pPage->GetMasterPageCount() == 0)
+            if(!pPage->TRG_HasMasterPage())
             {
                 // Keine MasterPage gesetzt -> erste Standard-MasterPage nehmen
                 // (Wenn bei PPT keine Standard-Seite vorhanden war)
-                pPage->InsertMasterPage(1);
+                pPage->TRG_SetMasterPage(*GetMasterPage(1));
             }
 
             SdPage* pNotesPage = (SdPage*) GetPage(i+1);
             pNotesPage->SetPageKind(PK_NOTES);
 
             // Notiz-MasterPages setzen
-            pNotesPage->RemoveMasterPage(0);
-            USHORT nNum = pPage->GetMasterPageNum(0) + 1;
-            pNotesPage->InsertMasterPage(nNum);
+            sal_uInt16 nMasterPageAfterPagesMasterPage = (pPage->TRG_GetMasterPage()).GetPageNum() + 1;
+            pNotesPage->TRG_SetMasterPage(*GetMasterPage(nMasterPageAfterPagesMasterPage));
         }
 
         bOK = TRUE;
@@ -1609,7 +1617,7 @@ USHORT SdDrawDocument::CreatePage (USHORT nPageNum)
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-    SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
+    SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     // Get layout from current page.
     AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
@@ -1640,7 +1648,6 @@ USHORT SdDrawDocument::CreatePage (
     SdPage* pPreviousNotesPage;
     SdPage* pStandardPage;
     SdPage* pNotesPage;
-    USHORT nPgNum;
 
     // From the given page determine the standard page and notes page of which
     // to take the layout and the position where to insert the new pages.
@@ -1672,8 +1679,8 @@ USHORT SdDrawDocument::CreatePage (
                               pPreviousStandardPage->GetLwrBorder() );
 
     // Use master page of current page.
-    nPgNum = pPreviousStandardPage->GetMasterPageNum(0);
-    pStandardPage->InsertMasterPage(nPgNum);
+    pStandardPage->TRG_SetMasterPage(pPreviousStandardPage->TRG_GetMasterPage());
+
     // User layout of current standard page.
     pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
     pStandardPage->SetAutoLayout(eStandardLayout, TRUE);
@@ -1682,9 +1689,10 @@ USHORT SdDrawDocument::CreatePage (
     // Create new notes page and set it up.
     pNotesPage = (SdPage*) AllocPage(FALSE);
     pNotesPage->SetPageKind(PK_NOTES);
+
     // Use master page of current page.
-    nPgNum = pPreviousNotesPage->GetMasterPageNum(0);
-    pNotesPage->InsertMasterPage(nPgNum);
+    pNotesPage->TRG_SetMasterPage(pPreviousNotesPage->TRG_GetMasterPage());
+
     // Use layout of current notes page.
     pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
     pNotesPage->SetAutoLayout(eNotesLayout, TRUE);
@@ -1717,7 +1725,7 @@ USHORT SdDrawDocument::DuplicatePage (USHORT nPageNum)
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-    SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
+    SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     // Get layout from current page.
     AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
@@ -1878,10 +1886,10 @@ void SdDrawDocument::SetupNewPage (
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        SetOfByte aVisibleLayers = pPreviousPage->GetMasterPageVisibleLayers(0);
+        SetOfByte aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
-        pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+        pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
 }
 
