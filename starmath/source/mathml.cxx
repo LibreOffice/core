@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 12:50:57 $
+ *  last change: $Author: cmc $ $Date: 2001-02-05 10:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,14 +364,19 @@ void SmXMLImport::endDocument(void)
             SmDocShell *pDocShell =
                 static_cast<SmDocShell*>(pModel->GetObjectShell());
             pDocShell->SetFormulaTree(pTree);
-            String &rText = pDocShell->GetText();
-            pTree->CreateTextFromNode(rText);
-            rText.EraseTrailingChars();
-            while((rText.GetChar(0) == '{') &&
-                (rText.GetChar(rText.Len()-1) == '}'))
+            if (aText.Len()) //If we picked up our annotation text then use it
+                pDocShell->GetText() = aText;
+            else    //Make up some editable text
             {
-                rText.Erase(0,1);
-                rText.Erase(rText.Len()-1,1);
+                String &rText = pDocShell->GetText();
+                pTree->CreateTextFromNode(rText);
+                rText.EraseTrailingChars();
+                if((rText.GetChar(0) == '{') &&
+                    (rText.GetChar(rText.Len()-1) == '}'))
+                {
+                    rText.Erase(0,1);
+                    rText.Erase(rText.Len()-1,1);
+                }
             }
         }
         DBG_ASSERT(pModel,"So there *was* a uno problem after all");
@@ -450,7 +455,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 }
 
 SmXMLExport::SmXMLExport() : SvXMLExport(MAP_INCH,sXML_math) , pTree(0) ,
-    bSuccess(sal_False)
+    bSuccess(sal_False),pText(0)
 {}
 
 sal_uInt32 SmXMLExport::exportDoc(const sal_Char *pClass)
@@ -466,6 +471,7 @@ sal_uInt32 SmXMLExport::exportDoc(const sal_Char *pClass)
         SmDocShell *pDocShell =
             static_cast<SmDocShell*>(pModel->GetObjectShell());
         pTree = pDocShell->GetFormulaTree();
+        pText = &(pDocShell->GetText());
     }
 
     GetDocHandler()->startDocument();
@@ -1123,6 +1129,51 @@ void SmXMLNumberContext_Impl::TCharacters(const ::rtl::OUString &rChars)
     GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_NUMBER));
 }
 
+class SmXMLAnnotationContext_Impl : public SmXMLImportContext
+{
+public:
+    SmXMLAnnotationContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
+        const OUString& rLName)
+        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(sal_False) {}
+    virtual void TCharacters(const ::rtl::OUString &rChars);
+    void StartElement(const uno::Reference<xml::sax::XAttributeList > &
+        xAttrList );
+private:
+    sal_Bool bIsStarMath;
+};
+
+void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
+    xml::sax::XAttributeList > & xAttrList )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i=0;i<nAttrCount;i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName(sAttrName,&aLocalName);
+
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap &rAttrTokenMap =
+            GetSmImport().GetAnnotationAttrTokenMap();
+        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        {
+            case XML_TOK_ENCODING:
+                bIsStarMath= sValue.equals(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("StarMath 5.0")));
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void SmXMLAnnotationContext_Impl::TCharacters(const ::rtl::OUString &rChars)
+{
+    if (bIsStarMath)
+        GetSmImport().GetText().Append(String(rChars));
+}
+
 class SmXMLTextContext_Impl : public SmXMLImportContext
 {
 public:
@@ -1131,6 +1182,8 @@ public:
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
     virtual void TCharacters(const ::rtl::OUString &rChars);
 };
+
+
 
 void SmXMLTextContext_Impl::TCharacters(const ::rtl::OUString &rChars)
 {
@@ -1644,6 +1697,7 @@ public:
 
 static __FAR_DATA SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
+    { XML_NAMESPACE_MATH,   sXML_semantics, XML_TOK_SEMANTICS },
     { XML_NAMESPACE_MATH,   sXML_math,      XML_TOK_MATH   },
     { XML_NAMESPACE_MATH,   sXML_mstyle,    XML_TOK_MSTYLE  },
     { XML_NAMESPACE_MATH,   sXML_merror,    XML_TOK_MERROR },
@@ -1689,8 +1743,16 @@ static __FAR_DATA SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aAnnotationAttrTokenMap[] =
+{
+    { XML_NAMESPACE_MATH,   sXML_encoding,      XML_TOK_ENCODING },
+    XML_TOKEN_MAP_END
+};
+
+
 static __FAR_DATA SvXMLTokenMapEntry aPresElemTokenMap[] =
 {
+    { XML_NAMESPACE_MATH,   sXML_annotation,    XML_TOK_ANNOTATION },
     { XML_NAMESPACE_MATH,   sXML_mi,    XML_TOK_MI },
     { XML_NAMESPACE_MATH,   sXML_mn,    XML_TOK_MN },
     { XML_NAMESPACE_MATH,   sXML_mo,    XML_TOK_MO },
@@ -1765,6 +1827,12 @@ const SvXMLTokenMap& SmXMLImport::GetOperatorAttrTokenMap()
     return *pOperatorAttrTokenMap;
 }
 
+const SvXMLTokenMap& SmXMLImport::GetAnnotationAttrTokenMap()
+{
+    if(!pAnnotationAttrTokenMap)
+        pAnnotationAttrTokenMap = new SvXMLTokenMap(aAnnotationAttrTokenMap);
+    return *pAnnotationAttrTokenMap;
+}
 
 const SvXMLTokenMap& SmXMLImport::GetPresElemTokenMap()
 {
@@ -1808,6 +1876,11 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
 
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
+        //Consider semantics a dummy except for any starmath annotations
+        case XML_TOK_SEMANTICS:
+            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName,
+                xAttrList);
+            break;
         /*General Layout Schemata*/
         case XML_TOK_MROW:
             pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName,
@@ -2115,6 +2188,12 @@ SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
             pContext = GetSmImport().CreateAlignGroupContext(nPrefix,rLocalName,
                 xAttrList);
             break;
+
+        case XML_TOK_ANNOTATION:
+            pContext = GetSmImport().CreateAnnotationContext(nPrefix,rLocalName,
+                xAttrList);
+            break;
+
         default:
             break;
     }
@@ -2412,6 +2491,13 @@ SvXMLImportContext *SmXMLImport::CreateTextContext(sal_uInt16 nPrefix,
         return new SmXMLTextContext_Impl(*this,nPrefix,rLocalName);
 }
 
+SvXMLImportContext *SmXMLImport::CreateAnnotationContext(sal_uInt16 nPrefix,
+    const OUString &rLocalName,
+    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+{
+        return new SmXMLAnnotationContext_Impl(*this,nPrefix,rLocalName);
+}
+
 SvXMLImportContext *SmXMLImport::CreateStringContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> &xAttrList)
@@ -2620,13 +2706,32 @@ SmXMLImport::~SmXMLImport()
         delete pColorTokenMap;
     if (pOperatorAttrTokenMap)
         delete pOperatorAttrTokenMap;
+    if (pAnnotationAttrTokenMap)
+        delete pAnnotationAttrTokenMap;
+
 }
 
 void SmXMLExport::_ExportContent()
 {
     SvXMLElementExport aEquation(*this,XML_NAMESPACE_MATH,sXML_math, sal_False,
         sal_True);
+
+    if (pText)
+    {
+        SvXMLElementExport aSemantics(*this,XML_NAMESPACE_MATH,sXML_semantics,
+            sal_True, sal_True);
+    }
+
     ExportNodes(pTree,0);
+
+    if (pText)
+    {
+        AddAttribute(XML_NAMESPACE_MATH,sXML_encoding,
+            OUString(RTL_CONSTASCII_USTRINGPARAM("StarMath 5.0")));
+        SvXMLElementExport aAnnotation(*this,XML_NAMESPACE_MATH,
+            sXML_annotation,sal_True, sal_True);
+        GetDocHandler()->characters(*pText);
+    }
 }
 
 void SmXMLExport::ExportLine(const SmNode *pNode,int nLevel)

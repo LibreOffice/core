@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 12:50:57 $
+ *  last change: $Author: cmc $ $Date: 2001-02-05 10:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ public:
     pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
         pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
         pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
-        pOperatorAttrTokenMap(0),pColorTokenMap(0),bSuccess(sal_False)
+        pOperatorAttrTokenMap(0),pColorTokenMap(0),pAnnotationAttrTokenMap(0),
+        bSuccess(sal_False)
         {}
     SmXMLImport(
         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
@@ -104,7 +105,8 @@ public:
         pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
         pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
         pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
-        pOperatorAttrTokenMap(0),pColorTokenMap(0),bSuccess(sal_False)
+        pOperatorAttrTokenMap(0),pColorTokenMap(0),pAnnotationAttrTokenMap(0),
+        bSuccess(sal_False)
         {}
     void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException,
@@ -134,6 +136,10 @@ public:
         const com::sun::star::uno::Reference <
         com::sun::star::xml::sax::XAttributeList> &xAttrList);
     SvXMLImportContext *CreateTextContext(sal_uInt16 nPrefix,
+        const rtl::OUString &rLocalName,
+        const com::sun::star::uno::Reference <
+        com::sun::star::xml::sax::XAttributeList> &xAttrList);
+    SvXMLImportContext *CreateAnnotationContext(sal_uInt16 nPrefix,
         const rtl::OUString &rLocalName,
         const com::sun::star::uno::Reference <
         com::sun::star::xml::sax::XAttributeList> &xAttrList);
@@ -242,6 +248,7 @@ public:
     const SvXMLTokenMap &GetPresLayoutAttrTokenMap();
     const SvXMLTokenMap &GetFencedAttrTokenMap();
     const SvXMLTokenMap &GetOperatorAttrTokenMap();
+    const SvXMLTokenMap &GetAnnotationAttrTokenMap();
     const SvXMLTokenMap &GetPresElemTokenMap();
     const SvXMLTokenMap &GetPresScriptEmptyElemTokenMap();
     const SvXMLTokenMap &GetPresTableElemTokenMap();
@@ -250,12 +257,14 @@ public:
     SmNodeStack & GetNodeStack() {return aNodeStack;}
     SmNode *GetTree() { return aNodeStack.Pop();}
     sal_Bool GetSuccess() { return bSuccess; }
+    String &GetText() { return aText;}
 private:
         SvXMLTokenMap *pMathElemTokenMap;
         SvXMLTokenMap *pPresLayoutElemTokenMap;
         SvXMLTokenMap *pPresLayoutAttrTokenMap;
         SvXMLTokenMap *pFencedAttrTokenMap;
         SvXMLTokenMap *pOperatorAttrTokenMap;
+        SvXMLTokenMap *pAnnotationAttrTokenMap;
         SvXMLTokenMap *pPresElemTokenMap;
         SvXMLTokenMap *pPresScriptEmptyElemTokenMap;
         SvXMLTokenMap *pPresTableElemTokenMap;
@@ -263,6 +272,7 @@ private:
 
         SmNodeStack aNodeStack;
         sal_Bool bSuccess;
+        String aText;
 };
 
 enum SmXMLMathElemTokenMap
@@ -272,6 +282,7 @@ enum SmXMLMathElemTokenMap
 
 enum SmXMLPresLayoutElemTokenMap
 {
+    XML_TOK_SEMANTICS,
     XML_TOK_MSTYLE,
     XML_TOK_MERROR,
     XML_TOK_MPHANTOM,
@@ -317,6 +328,7 @@ enum SmXMLPresTableElemTokenMap
 
 enum SmXMLPresElemTokenMap
 {
+    XML_TOK_ANNOTATION,
     XML_TOK_MI,
     XML_TOK_MN,
     XML_TOK_MO,
@@ -337,6 +349,12 @@ enum SmXMLOperatorAttrTokenMap
     XML_TOK_STRETCHY
 };
 
+enum SmXMLAnnotationAttrTokenMap
+{
+    XML_TOK_ENCODING
+};
+
+
 class SmXMLExport : public SvXMLExport
 {
 public:
@@ -344,7 +362,8 @@ public:
     SmXMLExport(const SmNode *pIn,const rtl::OUString &rFileName,
         com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler> &rHandler) :
-        SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False) {}
+        SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False),
+        pText(0){}
     virtual ~SmXMLExport() {};
 
     void _ExportAutoStyles() {}
@@ -379,6 +398,7 @@ protected:
     void ExportMatrix(const SmNode *pNode, int nLevel);
 private:
     const SmNode *pTree;
+    const String *pText;
     sal_Bool bSuccess;
 };
 #endif
