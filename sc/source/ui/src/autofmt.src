@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:24:20 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text [ italian ] = "Formattazione automatica" ;
     Text [ portuguese_brazilian ] = "Formatação Automática" ;
     Text [ portuguese ] = "AutoFormato" ;
-    Text [ finnish ] = "Automaattimuoto" ;
+    Text [ finnish ] = "Automaattinen muotoilu" ;
     Text [ danish ] = "AutoFormat" ;
     Text [ french ] = "AutoFormat" ;
     Text [ swedish ] = "Autoformat" ;
@@ -101,7 +101,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "~Formatta" ;
         Text [ portuguese_brazilian ] = "~Formato" ;
         Text [ portuguese ] = "Fo~rmatar" ;
-        Text [ finnish ] = "~Muoto" ;
+        Text [ finnish ] = "~Muotoile" ;
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "Cell~format" ;
@@ -166,7 +166,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Adatta ~larghezza/altezza" ;
         Text [ portuguese_brazilian ] = "Ajustar ~largura e altura" ;
         Text [ portuguese ] = "Ajustar ~largura/altura" ;
-        Text [ finnish ] = "Sovita le~veys ja korkeus" ;
+        Text [ finnish ] = "~Automaattinen leveyden ja korkeuden sovitus" ;
         Text [ danish ] = "Tilpas bredde/højde" ;
         Text [ french ] = "Ajuster la largeur/hauteur" ;
         Text [ swedish ] = "An~passa bredd och höjd" ;
@@ -197,7 +197,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "~Bordo" ;
         Text [ portuguese_brazilian ] = "~Borda" ;
         Text [ portuguese ] = "~Contornos" ;
-        Text [ finnish ] = "~Reunaviiva" ;
+        Text [ finnish ] = "~Reunat" ;
         Text [ danish ] = "Ramme" ;
         Text [ french ] = "~Bordure" ;
         Text [ swedish ] = "~Inramning" ;
@@ -290,7 +290,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Orien~tamento" ;
         Text [ portuguese_brazilian ] = "Orien~tação" ;
         Text [ portuguese ] = "~Alinhamento" ;
-        Text [ finnish ] = "S~uunta" ;
+        Text [ finnish ] = "~Tasaus" ;
         Text [ danish ] = "Justering" ;
         Text [ french ] = "~Alignement" ;
         Text [ swedish ] = "~Justering" ;
@@ -352,7 +352,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Formattazione" ;
         Text [ portuguese_brazilian ] = "Formatos" ;
         Text [ portuguese ] = "Formatar" ;
-        Text [ finnish ] = "Mu~odot" ;
+        Text [ finnish ] = "Muotoilu" ;
         Text [ danish ] = "Formatering" ;
         Text [ french ] = "Mise en forme" ;
         Text [ swedish ] = "Formatering" ;
@@ -418,7 +418,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "~Inserisci..." ;
         Text [ portuguese_brazilian ] = "~Add..." ;
         Text [ portuguese ] = "~Adicionar..." ;
-        Text [ finnish ] = "~Lisää..." ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj..." ;
         Text [ french ] = "A~jouter..." ;
         Text [ swedish ] = "Lägg ti~ll..." ;
@@ -502,6 +502,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ turkish ] = "~Yeniden adlandýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar ~nombre";
+        Text[ finnish ] = "~Nimeä uudelleen";
     };
 
     HelpButton BTN_HELP
@@ -521,7 +522,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Aggiungi formattazione automatica" ;
         Text [ portuguese_brazilian ] = "Acrescentar Formato automático" ;
         Text [ portuguese ] = "Adicionar AutoFormato" ;
-        Text [ finnish ] = "Lisää automaattimuoto" ;
+        Text [ finnish ] = "Lisää automaattinen muotoilu" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
         Text [ french ] = "Ajouter AutoFormat" ;
         Text [ swedish ] = "Lägg till autoformat" ;
@@ -565,6 +566,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ turkish ] = "Otom. formatlamayý yen. adlandýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar nombre del AutoFormato";
+        Text[ finnish ] = "Nimeä automaattinen muotoilu uudelleen";
     };
 
     String STR_ADD_LABEL
@@ -605,7 +607,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Cancella formattazione automatica" ;
         Text [ portuguese_brazilian ] = "Apagar Formato Automático" ;
         Text [ portuguese ] = "Eliminar AutoFormato" ;
-        Text [ finnish ] = "Poista automaattimuoto" ;
+        Text [ finnish ] = "Poista automaattinen muotoilu" ;
         Text [ danish ] = "Slet AutoFormat" ;
         Text [ french ] = "Supprimer l'AutoFormat" ;
         Text [ swedish ] = "Radera autoformat" ;
@@ -635,7 +637,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Cancellare la formattazione automatica #?" ;
         Text [ portuguese_brazilian ] = "Deseja realmente apagar o formato automático #?" ;
         Text [ portuguese ] = "Deseja realmente eliminar o formato automático #?" ;
-        Text [ finnish ] = "Haluatko varmasti poistaa automaattimuodon #?" ;
+        Text [ finnish ] = "Haluatko varmasti poistaa automaaattisen muotoilun ?" ;
         Text [ danish ] = "Er du sikker på, at du vil slette AutoFormat #?" ;
         Text [ french ] = "Confirmez-vous la suppression de l'AutoFormat # ?" ;
         Text [ swedish ] = "Skall autoformatet # verkligen raderas?" ;
@@ -854,7 +856,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Somma" ;
         Text [ portuguese_brazilian ] = "Soma" ;
         Text [ portuguese ] = "Soma" ;
-        Text [ finnish ] = "Summa" ;
+        Text [ finnish ] = "Yhteensä" ;
         Text [ danish ] = "Total" ;
         Text [ french ] = "Somme" ;
         Text [ swedish ] = "Summa" ;
