@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,31 +527,31 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
     // Noch kein UsrAny gemerkt, generiere Default-Eintrag und gib
     // diesen zurueck
 
-    SdrItemPool* pItemPool = SdrObject::GetGlobalDrawObjectItemPool();
-/*
-    if(!pItemPool)
-    {
-        // ItemPool generieren
-        ((SvxItemPropertySet*)this)->pItemPool = new SdrItemPool;
-        // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
-        SfxItemPool* pOutlPool=EditEngine::CreatePool();
-        // OutlinerPool als SecondaryPool des SdrPool
-        pItemPool->SetSecondaryPool(pOutlPool);
-    }
-*/
-    const SfxMapUnit eMapUnit = pItemPool ? pItemPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+    SdrItemPool& rItemPool = SdrObject::GetGlobalDrawObjectItemPool();
+//BFS04/*
+//BFS04 if(!pItemPool)
+//BFS04 {
+//BFS04     // ItemPool generieren
+//BFS04     ((SvxItemPropertySet*)this)->pItemPool = new SdrItemPool;
+//BFS04     // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
+//BFS04     SfxItemPool* pOutlPool=EditEngine::CreatePool();
+//BFS04     // OutlinerPool als SecondaryPool des SdrPool
+//BFS04     pItemPool->SetSecondaryPool(pOutlPool);
+//BFS04 }
+//BFS04*/
+    const SfxMapUnit eMapUnit = rItemPool.GetMetric((USHORT)pMap->nWID); //BFS01 : SFX_MAPUNIT_100TH_MM;
     BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
 
     uno::Any aVal;
-    SfxItemSet aSet( *pItemPool, pMap->nWID, pMap->nWID);
+    SfxItemSet aSet( rItemPool, pMap->nWID, pMap->nWID);
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
         // Default aus ItemPool holen
-        if(pItemPool->IsWhich(pMap->nWID))
-            aSet.Put(pItemPool->GetDefaultItem(pMap->nWID));
+        if(rItemPool.IsWhich(pMap->nWID))
+            aSet.Put(rItemPool.GetDefaultItem(pMap->nWID));
     }
 
     if(aSet.Count())
