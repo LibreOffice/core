@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:04:20 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,8 +548,9 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                                       aPageSize.Width() - aViewSize.Width());
 
                 USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+                USHORT i;
 
-                for (USHORT i = 0; i < nPageCnt; i++)
+                for ( i = 0; i < nPageCnt; i++)
                 {
                     SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
                     SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
@@ -607,8 +608,9 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                                       aPageSize.Height() - aViewSize.Height());
 
                 USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+                USHORT i;
 
-                for (USHORT i = 0; i < nPageCnt; i++)
+                for ( i = 0; i < nPageCnt; i++)
                 {
                     SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
                     SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
