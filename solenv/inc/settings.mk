@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.151 $
+#   $Revision: 1.152 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:18:02 $
+#   last change: $Author: kz $ $Date: 2004-08-30 17:21:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -782,6 +782,8 @@ BIN=$(OUT)$/ubin
 .ELSE
 BIN=$(OUT)$/bin
 .ENDIF
+# pointing to misc in common output tree if exists
+COMMONBIN=$(LOCAL_COMMON_OUT)$/bin
 
 # Include-Pfad
 # still without -I here s.a. target.mk INCLUDE
