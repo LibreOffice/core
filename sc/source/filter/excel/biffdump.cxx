@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:57:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ inline static void __Add16p16( ByteString& r, UINT32 n )
 
 static void lcl_AddRef( ByteString& rStr, sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    ScTripel aRef( nCol, nRow, 0 );
+    ScAddress aRef( nCol, nRow, 0 );
     rStr.Append( GETSTR( aRef.GetColRowString() ) );
 }
 
@@ -1142,7 +1142,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 AddUNICODEString( t, rIn, false, nNameLen );
                 if( bBuiltIn )
                 {
-                    static const sal_Char* ppcNames[] = {
+                    static const sal_Char* const ppcNames[] = {
                         "Consolidate_Area", "Auto_Open", "Auto_Close", "Extract", "Database",
                         "Criteria", "Print_Area", "Print_Titles", "Recorder", "Data_Form",
                         "Auto_Activate", "Auto_Deactivate", "Sheet_Title", "_FilterDatabase" };
@@ -1449,7 +1449,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 ADDTEXT( "family: " );          ADDDEC( 1 );
                 ADDTEXT( "   charset: " );      ADDDEC( 1 );
-                ADDTEXT( "   reserved: " );     ADDHEX( 1 );
+//               ADDTEXT( "   reserved: " );     ADDHEX( 1 );
+                rIn.Ignore( 1 );
                 ADDTEXT( "   " );
                 AddUNICODEString( t, rIn, FALSE );
                 PRINT();
@@ -1991,7 +1992,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 UINT16      nLen = Read2( rIn );
                 if( nLen == 0xFFFF )
                     ADDTEXT( "<name in cache>" );
-                else
+                else if( nLen )
                     AddUNICODEString( t, rIn, TRUE, nLen );
                 PRINT();
             }
@@ -2298,35 +2299,46 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDTEXT( pPre );
                     rIn >> __nFlags;
                     STARTFLAG();
-                    ADDFLAG( 0x0001, "fInIndexList" );
-                    ADDFLAG( 0x0002, "fNotInList" );
+                    ADDFLAG( 0x0001, "fOrigItems" );
+                    ADDFLAG( 0x0002, "fPostponed" );
+                    ADDFLAG( 0x0004, "fCalculated" );
+                    ADDFLAG( 0x0008, "fGroupChild" );
+                    ADDFLAG( 0x0010, "fNumGroup" );
                     ADDFLAG( 0x0200, "fLongIndex" );
-                    ADDTEXT( "   data type: " );
-                    __nFlags &= 0x0DFC;
-                    switch( __nFlags )
+                    ADDFLAG( 0x1000, "f1000?" );
+                    ADDFLAG( 0x8000, "f8000?" );
+                    ADDRESERVED( 0x6000 );
+                    ADDTEXT( "   data-type=" );
+                    __AddHex( t, static_cast< sal_uInt16 >( __nFlags & 0x0DE0 ) );
+                    ADDTEXT( "=" );
+                    switch( __nFlags & 0x0DE0 )
                     {
-                        case 0x0480:    ADDTEXT( "string" ); break;
-                        case 0x0520:    ADDTEXT( "double (fraction)" ); break;
-                        case 0x0560:    ADDTEXT( "double (int only)" ); break;
-                        case 0x05A0:    ADDTEXT( "string & double (fraction)" ); break;
-                        case 0x05E0:    ADDTEXT( "string & double (int only)" ); break;
-                        case 0x0900:    ADDTEXT( "date" ); break;
-                        case 0x0D00:    ADDTEXT( "date & (any) double" ); break;
-                        case 0x0D80:    ADDTEXT( "date & string (& double?)" ); break;
+                        case 0x0000:    ADDTEXT( "spc" );               break;
+                        case 0x0480:    ADDTEXT( "str" );               break;
+                        case 0x0520:    ADDTEXT( "int[+dbl]" );         break;
+                        case 0x0560:    ADDTEXT( "dbl" );               break;
+                        case 0x05A0:    ADDTEXT( "str+int[+dbl]" );     break;
+                        case 0x05E0:    ADDTEXT( "str+dbl" );           break;
+                        case 0x0900:    ADDTEXT( "dat" );               break;
+                        case 0x0D00:    ADDTEXT( "dat+int/dbl" );       break;
+                        case 0x0D80:    ADDTEXT( "dat+str[+int/dbl]" ); break;
                         default:        ADDTEXT( pU );
                     }
                     PRINT();
                     LINESTART();
                     ADDTEXT( pPre );
-                    ADDTEXT( "unknown: " );             ADDHEX( 2 );
-                    ADDTEXT( "   unknown: " );          ADDHEX( 2 );
-                    ADDTEXT( "   item count #1: " );    ADDDEC( 2 );
+                    ADDTEXT( "group-subfield=" );           ADDDEC( 2 );
+                    ADDTEXT( "   group-basefield=" );       ADDDEC( 2 );
                     PRINT();
                     LINESTART();
                     ADDTEXT( pPre );
-                    ADDTEXT( "unknown: " );             ADDHEX( 2 );
-                    ADDTEXT( "   unknown: " );          ADDHEX( 2 );
-                    ADDTEXT( "   item count #2: " );    ADDDEC( 2 );
+                    ADDTEXT( "item-count=" );               ADDDEC( 2 );
+                    ADDTEXT( "   group-item-count=" );      ADDDEC( 2 );
+                    PRINT();
+                    LINESTART();
+                    ADDTEXT( pPre );
+                    ADDTEXT( "base-item-count=" );          ADDDEC( 2 );
+                    ADDTEXT( "   source-item-count=" );     ADDDEC( 2 );
                     PRINT();
                     LINESTART();
                     ADDTEXT( pPre );
@@ -2337,7 +2349,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     }
                     else
                     {
-                        ADDTEXT( "name: " );
+                        ADDTEXT( "name=" );
                         AddUNICODEString( t, rIn );
                         PRINT();
                     }
@@ -2391,7 +2403,18 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
             }
             break;
-            case 0x00CD:        // SXSTRING - ByteString
+            case 0x00CC:        // SXINTEGER - signed 16bit integer
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nItemCnt, 3 );
+                ADDTEXT( " (integer): " );
+                nItemCnt++;
+                ADDTEXT( "  " );
+                ADDDEC( 2 );
+                PRINT();
+            }
+            break;
+            case 0x00CD:        // SXSTRING - String
             {
                 if( bSubStream )
                 {
@@ -2447,6 +2470,32 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddHex( t, nStrId );
                 PRINT();
                 DumpPivotCache( nStrId );
+            }
+            break;
+            case 0x00D8:        // SXNUMGROUP - numerical grouping in pivot cache field
+            {
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0001, "fAutoMin" );
+                ADDFLAG( 0x0002, "fAutoMax" );
+                ADDTEXT( "   data-type=" );
+                switch( (__nFlags & 0x003C) >> 2 )
+                {
+                    case 0x0001:    ADDTEXT( "seconds" );   break;
+                    case 0x0002:    ADDTEXT( "minutes" );   break;
+                    case 0x0003:    ADDTEXT( "hours" );     break;
+                    case 0x0004:    ADDTEXT( "days" );      break;
+                    case 0x0005:    ADDTEXT( "months" );    break;
+                    case 0x0006:    ADDTEXT( "quarters" );  break;
+                    case 0x0007:    ADDTEXT( "years" );     break;
+                    case 0x0008:    ADDTEXT( "numeric" );   break;
+                    default:        ADDTEXT( pU );
+                }
+                (__nFlags &= 0xFFC0) >>= 6;
+                ADDTEXT( "   remaining=" );         __AddHex( t, __nFlags );
+                ADDTEXT( "=" );                     __AddDec( t, __nFlags );
+                PRINT();
             }
             break;
             case 0xE0:
@@ -2518,6 +2567,38 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             case 0xEC:
             case 0xED:
                 EscherDump( nL );
+            break;
+            case 0x00F6:        // SXNAME
+            {
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0002, "fNameErr" );
+                ADDRESERVED( 0xFFFD );
+                ADDTEXT( "   field=" );             ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                sal_Int16 nFunc;
+                rIn >> nFunc;
+                ADDTEXT( "function=" );          __AddHex( t, (INT32)nFunc );
+                static const sal_Char* const ppcFuncs[] = {
+                    "none", 0, "sum", "counta", "count", "average", "max", "min",
+                    "product", "stdev", "stdevp", "var", "varp" };
+                lcl_AddEnum( t, nFunc, ppcFuncs, STATIC_TABLE_SIZE( ppcFuncs ), 0, -1 );
+                ADDTEXT( "   SXPAIR-count=" );      ADDDEC( 2 );
+                PRINT();
+            }
+            break;
+            case 0x00F9:        // SXFMLA
+            {
+                LINESTART();
+                sal_uInt16 nSize;
+                rIn >> nSize;
+                ADDTEXT( "formula-size=" );         __AddDec( t, nSize );
+                ADDTEXT( "   SXNAME-count=" );      ADDDEC( 2 );
+                PRINT();
+                FormulaDump( nSize, FT_RangeName );
+            }
             break;
             case 0xFC:
             {
@@ -6421,7 +6502,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 else if( nOpt & 0x10 )                      // AttrSum
                 {
                     t += " AttrSum";
-                    aStack.PushFunction( "SUM*", 1, nOp );
+                    aStack.PushFunction( "ATTRSUM", 1, nOp );
                 }
                 else
                     t += " AttrMISC";
