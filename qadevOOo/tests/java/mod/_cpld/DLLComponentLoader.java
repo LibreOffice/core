@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DLLComponentLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:35:35 $
+ *  last change:$Date: 2003-09-08 11:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,16 @@
 
 package mod._cpld;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for <code>com.sun.star.comp.stoc.DLLComponentLoader</code> service <p>
@@ -126,7 +128,6 @@ public class DLLComponentLoader extends TestCase {
         // adding object relation for XImplementationLoader ifc test
         tEnv.addObjRelation("ImplementationLoader",
             "com.sun.star.loader.SharedLibrary") ;
-        String fs = System.getProperty("file.separator");
         String os = (String) Param.get("OS");
         if (os == null || os == "")
             throw new StatusException(
