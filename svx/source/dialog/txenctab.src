@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:18:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,52 +1537,52 @@ ItemList [ language_user1 ] =
         < "西欧 (ISO-8859-14)"                        ; RTL_TEXTENCODING_ISO_8859_14      ; > ;
         < "西欧 (ISO-8859-15/EURO)"                   ; RTL_TEXTENCODING_ISO_8859_15      ; > ;
         < "希腊语 (DOS/OS2-737)"                     ; RTL_TEXTENCODING_IBM_737          ; > ;
-        < "波罗的海东岸诸国语言 (DOS/OS2-775)"                            ; RTL_TEXTENCODING_IBM_775          ; > ;
+        < "波罗的语 (DOS/OS2-775)"                          ; RTL_TEXTENCODING_IBM_775          ; > ;
         < "东欧 (DOS/OS2-852)"                            ; RTL_TEXTENCODING_IBM_852          ; > ;
-        < "西里尔语言 (DOS/OS2-855)"                       ; RTL_TEXTENCODING_IBM_855          ; > ;
+        < "西里尔文 (DOS/OS2-855)"                      ; RTL_TEXTENCODING_IBM_855          ; > ;
         < "土耳其语 (DOS/OS2-857)"                          ; RTL_TEXTENCODING_IBM_857          ; > ;
         < "希伯来语 (DOS/OS2-862)"                          ; RTL_TEXTENCODING_IBM_862          ; > ;
         < "阿拉伯语 (DOS/OS2-864)"                          ; RTL_TEXTENCODING_IBM_864          ; > ;
-        < "西里尔语 (DOS/OS2-866/俄语)"               ; RTL_TEXTENCODING_IBM_866          ; > ;
-        < "希腊语 (DOS/OS2-869/Modern)"                  ; RTL_TEXTENCODING_IBM_869          ; > ;
+        < "西里尔文 (DOS/OS2-866/俄语)"               ; RTL_TEXTENCODING_IBM_866          ; > ;
+        < "希腊语 (DOS/OS2-869/现代)"                  ; RTL_TEXTENCODING_IBM_869          ; > ;
         < "东欧 (Windows-1250/WinLatin 2)"                ; RTL_TEXTENCODING_MS_1250          ; > ;
-        < "西里尔语言 (Windows-1251)"                      ; RTL_TEXTENCODING_MS_1251          ; > ;
+        < "西里尔文 (Windows-1251)"                     ; RTL_TEXTENCODING_MS_1251          ; > ;
         < "希腊语 (Windows-1253)"                        ; RTL_TEXTENCODING_MS_1253          ; > ;
-        < "土耳其语 (Windows-1254)"                         ; RTL_TEXTENCODING_MS_1254          ; > ;
+        < "土耳其 (Windows-1254)"                            ; RTL_TEXTENCODING_MS_1254          ; > ;
         < "希伯来语 (Windows-1255)"                         ; RTL_TEXTENCODING_MS_1255          ; > ;
         < "阿拉伯语 (Windows-1256)"                         ; RTL_TEXTENCODING_MS_1256          ; > ;
-        < "波罗的海东岸诸国语言 (Windows-1257)"                           ; RTL_TEXTENCODING_MS_1257          ; > ;
+        < "波罗的语 (Windows-1257)"                         ; RTL_TEXTENCODING_MS_1257          ; > ;
         < "东欧 (Apple Macintosh)"                        ; RTL_TEXTENCODING_APPLE_CENTEURO   ; > ;
-        < "东欧 (Apple Macintosh/克罗帝亚语)"            ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
-        < "西里尔语言 (Apple Macintosh)"                   ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
+        < "东欧(Apple Macintosh/克罗地亚语)"         ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
+        < "西里尔文 (Apple Macintosh)"                  ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
         < "希腊语 (Apple Macintosh)"                 ; RTL_TEXTENCODING_APPLE_GREEK      ; > ;
         < "西欧 (Apple Macintosh/冰岛语)"          ; RTL_TEXTENCODING_APPLE_ICELAND    ; > ;
-        < "东欧 (Apple Macintosh/罗马尼亚语)"            ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
+        < "东欧 (Apple Macintosh/罗©¬尼亚语)"           ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
         < "土耳其语 (Apple Macintosh)"                      ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
-        < "西里尔语 (Apple Macintosh/乌克兰语)"         ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
-        < "中文简体 (Apple Macintosh)"      ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
-        < "中文繁体 (Apple Macintosh)"      ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
+        < "西里尔文 (Apple Macintosh/乌克兰语)"         ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
+        < "简体中文 (Apple Macintosh)"      ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
+        < "繁体中文 (Apple Macintosh)"      ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
         < "日语 (Apple Macintosh)"                        ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
-        < "韩文 (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
+        < "朝鲜语 (Apple Macintosh)"                 ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
         < "日语 (Windows-932)"                            ; RTL_TEXTENCODING_MS_932           ; > ;
-        < "中文简体 (Windows-936)"          ; RTL_TEXTENCODING_MS_936           ; > ;
-        < "韩文 (Windows-949)"                        ; RTL_TEXTENCODING_MS_949           ; > ;
-        < "中文繁体 (Windows-950)"          ; RTL_TEXTENCODING_MS_950           ; > ;
-        < "日语 (Shift-JIS)"                          ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
-        < "中文简体 (GB-2312)"              ; RTL_TEXTENCODING_GB_2312          ; > ;
-        < "中文简体 (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
-        < "中文繁体 (GBT-12345)"                ; RTL_TEXTENCODING_GBT_12345        ; > ;
-        < "中文简体 (GBK/GB-2312-80)"           ; RTL_TEXTENCODING_GBK              ; > ;
-        < "中文繁体 (BIG5)"                 ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "中文繁体 (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
-        < "日文 (EUC-JP)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "中文简体 (EUC-CN)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "中文繁体 (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "日文 (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "中文简体 (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "西里尔语 (KOI8-R)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "简体中文 (Windows-936)"          ; RTL_TEXTENCODING_MS_936           ; > ;
+        < "朝鲜语 (Windows-949)"                     ; RTL_TEXTENCODING_MS_949           ; > ;
+        < "繁体中文 (Windows-950)"          ; RTL_TEXTENCODING_MS_950           ; > ;
+        < "日语(Shift-JIS)"                           ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
+        < "简体中文 (GB-2312)"              ; RTL_TEXTENCODING_GB_2312          ; > ;
+        < "简体中文 (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
+        < "繁体中文 (GBT-12345)"                ; RTL_TEXTENCODING_GBT_12345        ; > ;
+        < "简体中文 (GBK/GB-2312-80)"           ; RTL_TEXTENCODING_GBK              ; > ;
+        < "简体中文 (Big5)"                 ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "繁体中文 (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "日语 (EUC-JP)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "简体中文 (EUC-CN)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "繁体中文 (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "日语 (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "简体中文 (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "西里尔文 (KOI8-R)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
         < "统一码 (UTF-7)"                                   ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "统一码 (UTF-8)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "统一码(UTF-8)"                                    ; RTL_TEXTENCODING_UTF8             ; > ;
         < "东欧 (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "东欧 (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "韩文 (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
