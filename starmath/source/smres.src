@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:42:53 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2572,7 +2572,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ polish ] = "~Ramka";
         Text[ japanese ] = "g(~B)";
         Text[ chinese_traditional ] = "Γδ®Ψ(~B)";
-        Text[ arabic ] = "ΕΨΗΡ";
+        Text[ arabic ] = "ίΗΟΡ";
         Text[ greek ] = "Περίγραμμα";
         Text[ korean ] = "ΕΧµΞΈ®(~O)";
         Text[ turkish ] = "Ηerηeve";
@@ -3456,7 +3456,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message[ chinese_simplified ] = "ΔϊÒª½«ΈόΈΔΧχΞª±κΧΌΈρΚ½΄ζΕΜ£Ώ\n\nΥβΈφΈόΈΔ»αΣ°ΟμΛωΣΠΠΒΉ«Κ½΅£";
     Message[ russian ] = "Ρξυπΰνθςό θημενενθÿ κΰκ ρςΰνδΰπςνϋε ?\n\nέςθ θημενενθÿ οξβλθÿώς νΰ βρε νξβϋε τξπμσλϋ.";
     Message[ polish ] = "Czy zapisaζ zmiany jako domylne?\n\nTe zmiany wywierajΉ wp³yw na wszystkie nowe formu³y.";
-    Message[ japanese ] = "‚±‚Μ•ΟX‚π•W€‚Ζ‚µ‚Δ•Ϋ‘¶‚µ‚ά‚·‚©?\n\n‚±‚Μ•ΟX‚Ν‚·‚Χ‚Δ‚ΜV‚µ‚Ά”®‚Ι‰e‹Ώ‚µ‚ά‚·B";
+    Message[ japanese ] = "‚±‚Μ•ΟX‚π•W€‚Ζ‚µ‚Δ•Ϋ‘¶‚µ‚ά‚·‚©B\n\n‚±‚Μ•ΟX‚Ν‚·‚Χ‚Δ‚ΜV‚µ‚Ά”®‚Ι‰e‹Ώ‚µ‚ά‚·B";
     Message[ chinese_traditional ] = "±z­n±NΕά§σ§@¬°ΌΠ·Η®ζ¦΅ΐx¦s΅H\n\n³o­ΣΕά§σ·|ΌvΕT©Ò¦³ªΊ·s¤½¦΅΅C";
     Message[ arabic ] = "εα ΚΡνΟ ΝέΩ ΗαΚΫννΡΗΚ ίΗέΚΡΗΦνΏ\n\nΣζέ νίζδ αεΠε ΗαΚΫννΡΗΚ ΓΛΡΗπ Ϊαμ ία ΗαΥνΫ ΗαΜΟνΟΙ.";
     Message[ greek ] = "Να αποθηκευτούν οι αλλαγές ως προεπιλογή;\n\nΟι αλλαγές αυτές θα έχουν επίδραση σε όλους τους νέους τύπους.";
