@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #include <comphelper/types.hxx>
 #endif
 
+using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace connectivity::dbase;

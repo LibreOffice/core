@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ namespace connectivity
         //************************************************************
         //  OCollection
         //************************************************************
-        class OCollection : public OCollectionBase
+        class SAL_NO_VTABLE OCollection : public OCollectionBase
         {
         protected:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:21 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,15 @@
 #ifndef CONNECTIVITY_DBASE_DCODE_HXX
 #include "dbase/DCode.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-using namespace cppu;
+using namespace ::cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -154,7 +159,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark),sal_True);
+    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark),sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
@@ -165,7 +170,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark)+rows,sal_True);
+    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark)+rows,sal_True);
 }
 
 // -------------------------------------------------------------------------
@@ -202,7 +207,7 @@ sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( 
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return connectivity::getINT32(bookmark);
+    return comphelper::getINT32(bookmark);
 }
 // -------------------------------------------------------------------------
 // XDeleteRows
@@ -249,16 +254,16 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
     return sal_False;
 }
 // -------------------------------------------------------------------------
-cppu::IPropertyArrayHelper & ODbaseResultSet::getInfoHelper()
+::cppu::IPropertyArrayHelper & ODbaseResultSet::getInfoHelper()
 {
     return *ODbaseResultSet_BASE3::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
-cppu::IPropertyArrayHelper* ODbaseResultSet::createArrayHelper() const
+::cppu::IPropertyArrayHelper* ODbaseResultSet::createArrayHelper() const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
-    return new cppu::OPropertyArrayHelper(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODbaseResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)

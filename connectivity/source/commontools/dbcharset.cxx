@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:04:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,10 @@ namespace dbtools
 //.........................................................................
 
     //-------------------------------------------------------------------------
-    template <class TYPE>
-    sal_Int32 getSequenceIndex( const ::std::vector< TYPE >& _rUnsortedContainer, const TYPE& _rLookupElement )
+    template <class T>
+    sal_Int32 getSequenceIndex( const ::std::vector< T >& _rUnsortedContainer, const T& _rLookupElement )
     {
-        for (   ::std::vector< TYPE >::const_iterator aSearch = _rUnsortedContainer.begin();
+        for (   ::std::vector< T >::const_iterator aSearch = _rUnsortedContainer.begin();
                 aSearch != _rUnsortedContainer.end();
                 ++aSearch
             )
@@ -153,7 +153,12 @@ namespace dbtools
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator    OCharsetMap::find(const rtl_TextEncoding _eEncoding) const
     {
-        return CharsetIterator(this, getSequenceIndex(m_aEncodings, _eEncoding));
+        sal_Int32 nSize = m_aEncodings.size();
+        TextEncVector::const_iterator aFind = ::std::find(m_aEncodings.begin(),m_aEncodings.end(),(sal_Int32)_eEncoding);
+        if(aFind != m_aEncodings.end())
+            nSize = aFind - m_aEncodings.begin();
+
+        return CharsetIterator(this, nSize);
     }
 
     //-------------------------------------------------------------------------
@@ -280,6 +285,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/27 08:04:07  fs
+ *  #86370# add UTF-8 to the list of supported charsets
+ *
  *  Revision 1.3  2001/04/09 06:09:58  fs
  *  m_nLivingIterators for _DEBUG, not DBG_UTIL
  *

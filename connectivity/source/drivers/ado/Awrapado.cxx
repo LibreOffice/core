@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,21 +261,21 @@ void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
 
 void WpADOCommand::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
+    IClassFactory2* pInterface2 = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
                           CLSCTX_INPROC_SERVER,
                           NULL,
                           IID_IClassFactory2,
-                          (void**)&pIUnknown );
+                          (void**)&pInterface2 );
 
     if( !FAILED( hr ) )
     {
-        pIUnknown->AddRef();
+        pInterface2->AddRef();
         ADOCommand* pCommand=NULL;
 
-        hr = pIUnknown->CreateInstanceLic(  pOuter,
+        hr = pInterface2->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADOCOMMAND_21,
                                             ADOS::GetKeyStr(),
@@ -286,7 +286,7 @@ void WpADOCommand::Create()
             pInterface = pCommand;
             pInterface->AddRef();
         }
-        pIUnknown->Release();
+        pInterface2->Release();
     }
 }
 
@@ -614,21 +614,21 @@ sal_Bool WpADOCommand::Cancel()
 }
  void WpADORecordset::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
+    IClassFactory2* pInterface2 = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
                           CLSCTX_INPROC_SERVER,
                           NULL,
                           IID_IClassFactory2,
-                          (void**)&pIUnknown );
+                          (void**)&pInterface2 );
 
     if( !FAILED( hr ) )
     {
-        pIUnknown->AddRef();
+        pInterface2->AddRef();
 
         ADORecordset *pRec = NULL;
-        hr = pIUnknown->CreateInstanceLic(  pOuter,
+        hr = pInterface2->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADORECORDSET_21,
                                             ADOS::GetKeyStr(),
@@ -639,7 +639,7 @@ sal_Bool WpADOCommand::Cancel()
             pInterface = pRec;
             pInterface->AddRef();
         }
-        pIUnknown->Release();
+        pInterface2->Release();
     }
 }
 
@@ -692,14 +692,14 @@ PositionEnum WpADORecordset::get_AbsolutePosition()
     return aTemp;
 }
 
- void WpADORecordset::GetDataSource(IUnknown** pIUnknown) const
+ void WpADORecordset::GetDataSource(IUnknown** _pInterface) const
 {
-    pInterface->get_DataSource(pIUnknown);
+    pInterface->get_DataSource(_pInterface);
 }
 
- void WpADORecordset::PutRefDataSource(IUnknown* pIUnknown)
+ void WpADORecordset::PutRefDataSource(IUnknown* _pInterface)
 {
-    pInterface->putref_DataSource(pIUnknown);
+    pInterface->putref_DataSource(_pInterface);
 }
 
  void WpADORecordset::GetBookmark(VARIANT& var)
@@ -1321,3 +1321,63 @@ sal_Bool WpADOUser::SetPermissions(
     ObjectTypeId.setNoArg();
     return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
 }
+
+WpBase::WpBase()
+{
+    pIUnknown = NULL;
+};
+WpBase::WpBase(IDispatch* pInt)
+    :pIUnknown(pInt)
+{
+}
+
+//inline
+WpBase& WpBase::operator=(const WpBase& rhs)
+{
+    if (rhs.pIUnknown != pIUnknown)
+    {
+        if (pIUnknown)  pIUnknown->Release();
+        pIUnknown = rhs.pIUnknown;
+        if (pIUnknown) pIUnknown->AddRef();
+    }
+    return *this;
+};
+
+WpBase& WpBase::operator=(IDispatch* rhs)
+{
+    if (pIUnknown != rhs)
+    {
+        if (pIUnknown)  pIUnknown->Release();
+        pIUnknown = rhs;
+        if (pIUnknown) pIUnknown->AddRef();
+    }
+    return *this;
+}
+
+WpBase::WpBase(const WpBase& aWrapper)
+{
+    operator=(aWrapper);
+}
+
+WpBase::~WpBase()
+{
+    if (pIUnknown)
+    {
+        pIUnknown->Release();
+        pIUnknown = NULL;
+    }
+}
+
+void WpBase::clear()
+{
+    if (pIUnknown)
+    {
+        pIUnknown->Release();
+        pIUnknown = NULL;
+    }
+}
+
+
+sal_Bool WpBase::IsValid() const {return pIUnknown != NULL;};
+WpBase::operator IDispatch*() { return pIUnknown; }
+

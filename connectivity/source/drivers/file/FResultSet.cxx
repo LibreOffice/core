@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,14 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
-
-
+using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
-using namespace cppu;
+using namespace ::cppu;
 using namespace dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -2202,7 +2204,7 @@ BOOL OResultSet::OpenImpl()
                                     Reference<XColumnsSupplier> xIndex;
                                     ::cppu::extractInterface(xIndex,xIndexes->getByIndex(i));
                                     Reference<XNameAccess> xIndexCols = xIndex->getColumns();
-                                    if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))))
+                                    if(xIndexCols->hasByName(comphelper::getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))))
                                     {
                                         m_pFileSet = new OKeySet();
 

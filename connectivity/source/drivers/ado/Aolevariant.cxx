@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:15:34 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,22 @@
 #ifndef _CONNECTIVITY_ADO_AOLEVARIANT_HXX_
 #include "ado/Aolevariant.hxx"
 #endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
+#include <com/sun/star/sdbc/SQLException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
 
 
 using namespace connectivity::ado;
@@ -248,15 +264,15 @@ VARTYPE OLEVariant::getType() const { return vt; }
 
 OLEVariant::operator ::com::sun::star::util::Date() const
 {
-    return connectivity::DateConversion::toDate(date,::com::sun::star::util::Date(30,12,1899));
+    return ::dbtools::DBTypeConversion::toDate(date,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::operator ::com::sun::star::util::Time() const
 {
-    return connectivity::DateConversion::toTime(date);
+    return ::dbtools::DBTypeConversion::toTime(date);
 }
 OLEVariant::operator ::com::sun::star::util::DateTime()const
 {
-    return connectivity::DateConversion::toDateTime(date,::com::sun::star::util::Date(30,12,1899));
+    return ::dbtools::DBTypeConversion::toDateTime(date,::com::sun::star::util::Date(30,12,1899));
 }
 
 VARIANT_BOOL OLEVariant::VariantBool(sal_Bool bEinBoolean)

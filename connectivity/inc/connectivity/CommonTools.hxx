@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:39 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,14 @@
 #include <osl/interlck.h>
 #endif
 
+#ifdef _MSC_VER
+#ifndef SAL_NO_VTABLE
+#define SAL_NO_VTABLE __declspec(novtable)
+#endif
+#else
+#define SAL_NO_VTABLE
+#endif
+
 namespace com { namespace sun { namespace star { namespace util {
     struct Date;
     struct DateTime;
@@ -98,18 +106,6 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace connectivity
 {
-    //------------------------------------------------------------------------------
-    sal_Int32 getINT32(const ::com::sun::star::uno::Any& _rAny);
-    //------------------------------------------------------------------------------
-    sal_Int16 getINT16(const ::com::sun::star::uno::Any& _rAny);
-    //------------------------------------------------------------------------------
-    double getDouble(const ::com::sun::star::uno::Any& _rAny);
-    //------------------------------------------------------------------------------
-    ::rtl::OUString getString(const ::com::sun::star::uno::Any& _rAny);
-    //------------------------------------------------------------------------------
-    sal_Bool getBOOL(const ::com::sun::star::uno::Any& _rAny);
-    //------------------------------------------------------------------------------
-
     //------------------------------------------------------------------------------
     sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
     //------------------------------------------------------------------------------

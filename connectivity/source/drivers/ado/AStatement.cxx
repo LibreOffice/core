@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
@@ -764,28 +769,28 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
-            setQueryTimeOut(connectivity::getINT32(rValue));
+            setQueryTimeOut(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_MAXFIELDSIZE:
-            setMaxFieldSize(connectivity::getINT32(rValue));
+            setMaxFieldSize(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_MAXROWS:
-            setMaxRows(connectivity::getINT32(rValue));
+            setMaxRows(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_CURSORNAME:
-            setCursorName(connectivity::getString(rValue));
+            setCursorName(comphelper::getString(rValue));
             break;
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            setResultSetConcurrency(connectivity::getINT32(rValue));
+            setResultSetConcurrency(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_RESULTSETTYPE:
-            setResultSetType(connectivity::getINT32(rValue));
+            setResultSetType(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_FETCHDIRECTION:
-            setFetchDirection(connectivity::getINT32(rValue));
+            setFetchDirection(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_FETCHSIZE:
-            setFetchSize(connectivity::getINT32(rValue));
+            setFetchSize(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
             //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);

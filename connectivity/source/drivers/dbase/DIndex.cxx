@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:50:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,16 @@
 #ifndef _CONNECTIVITY_DBASE_DRESULTSET_HXX_
 #include "dbase/DResultSet.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace ucb;
 using namespace utl;
-using namespace cppu;
+using namespace ::cppu;
 using namespace connectivity::file;
 using namespace connectivity::sdbcx;
 using namespace connectivity::dbase;

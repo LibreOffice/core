@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:53:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,11 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
+using namespace ::comphelper;
 inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 {
     return ch >= 0x0061 && ch <= 0x007a ? ch + 0x20 : ch;
@@ -104,43 +108,6 @@ namespace connectivity
     using namespace ::com::sun::star::beans;
     using namespace dbtools;
     //------------------------------------------------------------------------------
-    sal_Int32 getINT32(const Any& _rAny)
-    {
-        sal_Int32 nReturn = 0;
-        _rAny >>= nReturn;
-        return nReturn;
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Int16 getINT16(const Any& _rAny)
-    {
-        sal_Int16 nReturn = 0;
-        _rAny >>= nReturn;
-        return nReturn;
-    }
-
-    //------------------------------------------------------------------------------
-    double getDouble(const Any& _rAny)
-    {
-        double nReturn = 0.0;
-        _rAny >>= nReturn;
-        return nReturn;
-    }
-
-    //------------------------------------------------------------------------------
-    ::rtl::OUString getString(const Any& _rAny)
-    {
-        ::rtl::OUString nReturn;
-        _rAny >>= nReturn;
-        return nReturn;
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool getBOOL(const Any& _rAny)
-    {
-        return ::cppu::any2bool(_rAny);
-    }
-    //------------------------------------------------------------------
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
     // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,14 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
+using namespace ::comphelper;
 using namespace connectivity::calc;
 using namespace connectivity::file;
-using namespace cppu;
+using namespace ::cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -145,7 +149,7 @@ sal_Bool SAL_CALL OCalcResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark),sal_True);
+    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark),sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
@@ -156,7 +160,7 @@ sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark)+rows,sal_True);
+    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark)+rows,sal_True);
 }
 
 // -------------------------------------------------------------------------
@@ -180,7 +184,7 @@ sal_Int32 SAL_CALL OCalcResultSet::hashBookmark( const  Any& bookmark ) throw( S
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return connectivity::getINT32(bookmark);
+    return comphelper::getINT32(bookmark);
 }
 // -------------------------------------------------------------------------
 // XDeleteRows
@@ -199,16 +203,16 @@ sal_Bool OCalcResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xI
     return sal_False;
 }
 // -------------------------------------------------------------------------
-cppu::IPropertyArrayHelper & OCalcResultSet::getInfoHelper()
+::cppu::IPropertyArrayHelper & OCalcResultSet::getInfoHelper()
 {
     return *OCalcResultSet_BASE3::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
-cppu::IPropertyArrayHelper* OCalcResultSet::createArrayHelper() const
+::cppu::IPropertyArrayHelper* OCalcResultSet::createArrayHelper() const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
-    return new cppu::OPropertyArrayHelper(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
 }
 // -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

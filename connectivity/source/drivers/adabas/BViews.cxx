@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,13 @@
 #ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
 #include "connectivity/sdbcx/VView.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
-using namespace cppu;
+using namespace ::comphelper;
+
+using namespace ::cppu;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

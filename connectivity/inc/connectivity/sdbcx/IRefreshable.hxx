@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IRefreshable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,27 @@
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #define _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/CommonTools.hxx"
+#endif
+
 namespace connectivity
 {
     namespace sdbcx
     {
-        class IRefreshableGroups
+        class SAL_NO_VTABLE IRefreshableGroups
         {
         public:
             virtual void refreshGroups() = 0;
         };
 
-        class IRefreshableUsers
+        class SAL_NO_VTABLE IRefreshableUsers
         {
         public:
             virtual void refreshUsers() = 0;
         };
 
-        class IRefreshableColumns
+        class SAL_NO_VTABLE IRefreshableColumns
         {
         public:
             virtual void refreshColumns()   = 0;
