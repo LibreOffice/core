@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
+ *  last change: $Author: thb $ $Date: 2002-03-04 18:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _EEITEM_HXX //autogen
 #include "eeitem.hxx"
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #include <svtools/itemset.hxx>
@@ -339,8 +342,7 @@ LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) 
 
 Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
-    // TODO
-    return Rectangle();
+    return rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) );
 }
 
 Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
@@ -350,20 +352,31 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
     const ULONG nHeight = rEditEngine.GetTextHeight( nPara );
 
     return Rectangle( aPnt.X(), aPnt.Y(), nWidth, nHeight );
-
-    // TODO
-    return Rectangle();
 }
 
-sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
-    // TODO
-    return sal_False;
+    EPosition aDocPos = rEditEngine.FindDocPosition( rPos );
+
+    nPara = aDocPos.nPara;
+    nIndex = aDocPos.nIndex;
+
+    return sal_True;
 }
 
 sal_Bool SvxEditEngineForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
 {
-    // TODO 642_c
+    ESelection aRes = rEditEngine.GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
+
+    if( aRes.nStartPara == nPara &&
+        aRes.nStartPara == aRes.nEndPara )
+    {
+        nStart = aRes.nStartPos;
+        nEnd = aRes.nEndPos;
+
+        return sal_True;
+    }
+
     return sal_False;
 }
 

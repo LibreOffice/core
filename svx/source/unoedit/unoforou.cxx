@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
+ *  last change: $Author: thb $ $Date: 2002-03-04 18:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #include <svtools/itemset.hxx>
@@ -310,8 +313,7 @@ LanguageType SvxOutlinerForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) co
 
 Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
-    // TODO
-    return Rectangle();
+    return rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex) );
 }
 
 Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
@@ -323,15 +325,29 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
     return Rectangle( aPnt.X(), aPnt.Y(), aSize.Width(), nHeight );
 }
 
-sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
-    // TODO
-    return sal_False;
+    EPosition aDocPos = rOutliner.GetEditEngine().FindDocPosition( rPos );
+
+    nPara = aDocPos.nPara;
+    nIndex = aDocPos.nIndex;
+
+    return sal_True;
 }
 
 sal_Bool SvxOutlinerForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
 {
-    // TODO 642_c
+    ESelection aRes = rOutliner.GetEditEngine().GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
+
+    if( aRes.nStartPara == nPara &&
+        aRes.nStartPara == aRes.nEndPara )
+    {
+        nStart = aRes.nStartPos;
+        nEnd = aRes.nEndPos;
+
+        return sal_True;
+    }
+
     return sal_False;
 }
 

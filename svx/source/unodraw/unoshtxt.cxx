@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 12:25:03 $
+ *  last change: $Author: thb $ $Date: 2002-03-04 18:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,8 +630,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
                 mpView->EndTextEdit();
                 if( mpView->BegTextEdit( mpObject, NULL, NULL, (SdrOutliner*)NULL, NULL, FALSE, FALSE ) )
                 {
-                    SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-                    if( pTextObj && pTextObj->IsTextEditActive() )
+                    if( pTextObj->IsTextEditActive() )
                     {
                         // create new view forwarder
                         mpViewForwarder = CreateViewForwarder();
@@ -717,7 +716,18 @@ Rectangle SvxTextEditSourceImpl::GetVisArea() const
 {
     if( IsValid() )
     {
-        return mpView->GetVisibleArea( mpView->FindWin( const_cast< Window* > (mpWindow) ) );
+        Rectangle aVisArea = mpView->GetVisibleArea( mpView->FindWin( const_cast< Window* > (mpWindow) ) );
+
+        // offset vis area by edit engine left-top position
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        if( pTextObj )
+        {
+            Rectangle aAnchorRect;
+            pTextObj->TakeTextAnchorRect( aAnchorRect );
+            aVisArea.Move( -aAnchorRect.Left(), -aAnchorRect.Top() );
+
+            return aVisArea;
+        }
     }
 
     return Rectangle();
