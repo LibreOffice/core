@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-30 14:09:45 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 13:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
 // -----------------------------------------------------------------------------
 void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
 {
+    OSL_ENSURE(m_aBookmarks.find(_nPos) == m_aBookmarks.end(),"OSkipDeletedSet::insertNewPosition: Invalid position");
     m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(_nPos,m_aBookmarksPositions.size()+1)).first);
 }
 // -----------------------------------------------------------------------------
