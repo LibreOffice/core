@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:19:17 $
+ *  last change: $Author: mtg $ $Date: 2001-09-19 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
     {
         try
         {
-            xEncryptionData->aKey = rZipPackage.getEncryptionKey();
+            if (!xEncryptionData.isEmpty())
+                xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData);
         }
         catch (ZipException &)//rException)
