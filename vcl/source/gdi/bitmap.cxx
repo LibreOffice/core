@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-23 10:57:03 $
+ *  last change: $Author: ka $ $Date: 2002-04-24 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,7 +1188,7 @@ BOOL Bitmap::Expand( ULONG nDX, ULONG nDY, const Color* pInitColor )
 
                 if( pInitColor && nDY )
                     for( nY = nNewY; nY < nNewHeight; nY++ )
-                        for( nX = nNewX; nX < nNewWidth; nX++ )
+                        for( nX = 0; nX < nNewWidth; nX++ )
                             pWriteAcc->SetPixel( nY, nX, aColor );
 
                 aNewBmp.ReleaseAccess( pWriteAcc );
