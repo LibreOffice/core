@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:53:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,13 +113,3 @@
 #define CHKBTN_TRISTATE    30005
 #define CHKBTN_HITRISTATE  30006
 
-#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
-#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
-
-//duplicated from svx/inc/svxids.hrc
-#define SID_BASICIDE_IMAGESTART ( SID_BASICIDE_START + 50)
-
-#define IMGID_APPICON           ( SID_BASICIDE_IMAGESTART + 1 )
-#define IMGID_LIB               ( SID_BASICIDE_IMAGESTART + 2 )
-#define IMGID_MODULE            ( SID_BASICIDE_IMAGESTART + 3 )
-#define IMGID_DOCUMENT          ( SID_BASICIDE_IMAGESTART + 8 )

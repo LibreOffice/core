@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:53:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,13 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     m_sMyMacros(ResId(STR_MYMACROS)),
     m_sProdMacros(ResId(STR_PRODMACROS)),
     m_hdImage(ResId(IMG_HARDDISK)),
-    m_hdImage_hc(ResId(IMG_HARDDISK_HC))
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
+    m_libImage(ResId(IMG_LIB)),
+    m_libImage_hc(ResId(IMG_LIB_HC)),
+    m_macImage(ResId(IMG_MACRO)),
+    m_macImage_hc(ResId(IMG_MACRO_HC)),
+    m_docImage(ResId(IMG_DOC)),
+    m_docImage_hc(ResId(IMG_DOC_HC))
 /*  Beschreibung
     Diese Listbox zeigt alle Funktionsgruppen und Basics an, die zur Konfiguration
     zur Verf"ugung stehen. Basics werden noch in Bibliotheken und Module untergliedert.
@@ -440,11 +446,6 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) , BMP_COLOR_NORMAL );
     SetNodeBitmaps( Image( BMP_COLLAPSED_HC ), Image( BMP_EXPANDED_HC ), BMP_COLOR_HIGHCONTRAST );
-    ::rtl::OUString aResName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basctl" ));
-    aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
-    ResMgr* pBasResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
-    m_aImagesNormal = ImageList(ResId(RID_IMGLST_OBJECTS, pBasResMgr ));
-    m_aImagesHighContrast = ImageList(ResId(RID_IMGLST_OBJECTS_HC, pBasResMgr ));
 
     // Check configuration to see whether only Basic macros,
   // only Scripting Framework scripts, or both should be listed
@@ -920,9 +921,9 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             else
             {
                 if( bHighContrast == BMP_COLOR_NORMAL )
-                    aImage = m_aImagesNormal.GetImage(IMGID_DOCUMENT);
+                    aImage = m_docImage;
                 else
-                    aImage = m_aImagesHighContrast.GetImage(IMGID_DOCUMENT);
+                    aImage = m_docImage_hc;
             }
         }
     }
@@ -931,16 +932,16 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = m_aImagesNormal.GetImage(IMGID_MODULE);
+                aImage = m_macImage;
             else
-                aImage = m_aImagesHighContrast.GetImage(IMGID_MODULE);
+                aImage = m_macImage_hc;
         }
         else
         {
             if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = m_aImagesNormal.GetImage(IMGID_LIB);
+                aImage = m_libImage;
             else
-                aImage = m_aImagesHighContrast.GetImage(IMGID_LIB);
+                aImage = m_libImage_hc;
         }
     }
     return aImage;
