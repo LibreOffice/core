@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:47:48 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,54 +94,21 @@ http://www.virusbtn.com/vb2000/Programme/papers/bontchev.pdf
  *
  * cmc
  * */
-#define MACSKIP 20
-
-bool VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
-{
-    bool bSkipped = true;
-    //For no particularly good reason that I can see this occurs on
-    //occasion in macintosh xls documents, it looks like an object id
-    xVBAProject->SeekRel(2);
-    sal_uInt32 nIdA;
-    sal_uInt16 nIdB, nIdC;
-    *xVBAProject >> nIdA >> nIdB >> nIdC;
-
-    static const sal_uInt8 aKnownChunk[] =
-    {
-        0x85, 0x2E, 0x02, 0x60, 0x8C, 0x4D, 0x0B, 0xB4
-    };
-    sal_uInt8 aSeq[8];
-    xVBAProject->Read( aSeq, sizeof(aSeq) );
-    xVBAProject->SeekRel(2);
-
-    if (!(
-        nIdA == 0x0D452EE1 && nIdB == 0xE08F && nIdC == 0x101A &&
-        (0 == memcmp( aSeq, aKnownChunk, sizeof(aSeq)))
-       ))
-    {
-        xVBAProject->SeekRel(-MACSKIP);
-        bSkipped = false;
-    }
-    return bSkipped;
-}
-
+const int MINVBASTRING = 6;
 
 sal_uInt8 VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject,
     bool bIsUnicode)
 {
     sal_uInt16 nIdLen, nOut16;
     sal_uInt8 nType = 0, nOut8;
+    String sReference;
 
-    bool bSkippedMac = SkipTrickyMac(xVBAProject);
     *xVBAProject >> nIdLen;
 
-    if (nIdLen < 6) //Error recovery
-    {
+    if (nIdLen < MINVBASTRING) //Error recovery
         xVBAProject->SeekRel(-2); //undo 2 byte len
-        if (bSkippedMac)
-            xVBAProject->SeekRel(-MACSKIP);   //Undo Mac skip
-    }
     else
+    {
         for(sal_uInt16 i=0; i < nIdLen / (bIsUnicode ? 2 : 1); i++)
         {
             if (bIsUnicode)
@@ -151,6 +118,7 @@ sal_uInt8 VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject,
                 *xVBAProject >> nOut8;
                 nOut16 = nOut8;
             }
+            sReference += nOut16;
             if (i==2)
             {
                 if ((nOut16 == 'G') || (nOut16 == 'H') || (nOut16 == 'C') ||
@@ -158,16 +126,16 @@ sal_uInt8 VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject,
                 {
                     nType = static_cast<sal_uInt8>(nOut16);
                 }
-                if ( nType == 0)
+                if (nType == 0)
                 {
                     //Error recovery, 2byte len + 3 characters of used type
                     xVBAProject->SeekRel(-(2 + 3 * (bIsUnicode ? 2 : 1)));
-                    if (bSkippedMac)
-                        xVBAProject->SeekRel(-MACSKIP);   //Undo Mac skip
                     break;
                 }
             }
         }
+        maReferences.push_back(sReference);
+    }
     return nType;
 }
 
@@ -343,10 +311,11 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     protected by a number of secondry tests to prove its a valid string, and
     everything gives up if this isn't proven.
     */
+    bool bPredictsTrailingTwenty = false;
     while (1)
     {
-        sal_uInt8 nType;
-        nType = ReadPString(xVBAProject,bIsUnicode);
+        sal_uInt8 nType = ReadPString(xVBAProject,bIsUnicode);
+        //Type C and D seem to come as pairs, so skip the following one
         if (nType == 'C' || nType == 'D')
         {
             nType = ReadPString(xVBAProject,bIsUnicode);
@@ -355,13 +324,28 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
             if (nType != 'C' && nType != 'D')
                 return 0;
         }
-//      DBG_ASSERT( nType, "VBA: Bad String in VBA Project, panic!!" );
         if (!nType)
             break;
-        xVBAProject->SeekRel(12);
+        xVBAProject->SeekRel(10);
+        sal_uInt16 nPredictsTrailingTwenty;
+        *xVBAProject >> nPredictsTrailingTwenty;
+        if (nPredictsTrailingTwenty)
+            bPredictsTrailingTwenty = true;
+        if (bPredictsTrailingTwenty)
+        {
+            sal_uInt16 nTestIsNotString;
+            *xVBAProject >> nTestIsNotString;
+            if (nTestIsNotString < MINVBASTRING)
+            {
+                DBG_ASSERT(nTestIsNotString <= 1,
+                    "Haven't seen a len like this in VBA, report to CMC");
+                xVBAProject->SeekRel(18);
+                bPredictsTrailingTwenty = false;
+            }
+            else
+                xVBAProject->SeekRel(-2);
+        }
     }
-
-    SkipTrickyMac(xVBAProject);
 
     sal_Int16 nInt16s;
     *xVBAProject >> nInt16s;
