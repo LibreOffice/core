@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParseContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:18:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,16 @@
 #include <unotools/localedatawrapper.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace svxform
 {
     //==========================================================================
     //= OSystemParseContext
     //==========================================================================
-    class OSystemParseContext : public ::connectivity::IParseContext
+    class SVX_DLLPUBLIC OSystemParseContext : public ::connectivity::IParseContext
     {
     private:
         ByteString m_aSQLInternationals;
@@ -113,7 +117,7 @@ namespace svxform
     /** helper class which needs access to a (shared and ref-counted) OSystemParseContext
         instance.
     */
-    class OParseContextClient
+    class SVX_DLLPUBLIC OParseContextClient
     {
     protected:
         OParseContextClient();
