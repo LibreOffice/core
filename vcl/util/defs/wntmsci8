@@ -7648,3 +7648,4 @@ threadFunc
 ?sort@_STL@@YAXPAH0@Z
 ?sort_heap@_STL@@YAXPAH0U?$less@H@1@@Z
 ?swap@_STL@@YAXAAH0@Z
+?GetItemPos@ToolBox@@QBEGABVPoint@@@Z
