@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:38:43 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,7 +1021,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                 ::utl::TempFile     aTempFile;
                 const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-                if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).Len() )
+                if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
                 {
                     SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
@@ -1226,7 +1226,7 @@ BOOL ImpGraphic::ImplSwapOut()
             ::utl::TempFile     aTempFile;
             const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-            if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).Len() )
+            if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
             {
                 SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
