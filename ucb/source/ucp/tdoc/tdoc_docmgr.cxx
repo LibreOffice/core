@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:41:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,11 +707,11 @@ bool OfficeDocumentsManager::isOfficeDocument(
             {
                 m_xModuleMgr
                     = uno::Reference<
-                        drafts::com::sun::star::frame::XModuleManager >(
+                        ::com::sun::star::frame::XModuleManager >(
                             m_xSMgr->createInstance(
                                 rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM(
-                                        "drafts.com.sun.star.frame.ModuleManager" ) ) ),
+                                        "com.sun.star.frame.ModuleManager" ) ) ),
                             uno::UNO_QUERY );
             }
             catch ( uno::Exception const & )
@@ -735,7 +735,7 @@ bool OfficeDocumentsManager::isOfficeDocument(
         {
             OSL_ENSURE( false, "Caught IllegalArgumentException!" );
         }
-        catch ( drafts::com::sun::star::frame::UnknownModuleException const & )
+        catch ( ::com::sun::star::frame::UnknownModuleException const & )
         {
             OSL_ENSURE( false, "Caught UnknownModuleException!" );
         }
