@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:41:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
-#ifndef _COMPHELPER_DATETIME_HXX_
-#include <comphelper/datetime.hxx>
-#endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
@@ -122,6 +119,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
 #include <com/sun/star/awt/MouseEvent.hpp>
@@ -177,6 +180,13 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
+
+namespace
+{
+    typedef com::sun::star::util::Date UNODate;
+    typedef com::sun::star::util::Time UNOTime;
+    typedef com::sun::star::util::DateTime UNODateTime;
+}
 
 //.........................................................................
 namespace frm
@@ -256,8 +266,6 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
 
         s_xDefaultFormatsSupplier = xNewlyCreatedSupplier;
     }
-//
-//  s_xDefaultFormatsSupplier = static_cast< XNumberFormatsSupplier* >( static_cast< SvNumberFormatsSupplierObj* >( pSupplier ) );
 
     return xNewlyCreatedSupplier;
 }
@@ -462,6 +470,7 @@ void OFormattedModel::implConstruct()
     decrement(m_refCount);
 
     startAggregatePropertyListening( PROPERTY_FORMATKEY );
+    startAggregatePropertyListening( PROPERTY_FORMATSSUPPLIER );
 }
 
 //------------------------------------------------------------------
@@ -697,20 +706,35 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
             return;
         }
 
+        if ( evt.PropertyName.equals( PROPERTY_FORMATSSUPPLIER ) )
+        {
+            updateFormatterNullDate();
+            return;
+        }
+
         OBoundControlModel::_propertyChanged( evt );
     }
 }
 
 //------------------------------------------------------------------------------
-Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormatsSupplier() const
+void OFormattedModel::updateFormatterNullDate()
+{
+    // calc the current NULL date
+    Reference< XNumberFormatsSupplier > xSupplier( calcFormatsSupplier() );
+    if ( xSupplier.is() )
+        xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NullDate" ) ) ) >>= m_aNullDate;
+}
+
+//------------------------------------------------------------------------------
+Reference< XNumberFormatsSupplier > OFormattedModel::calcFormatsSupplier() const
 {
     Reference<XNumberFormatsSupplier>  xSupplier;
 
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatsSupplier : have no aggregate !");
     // hat mein aggregiertes Model einen FormatSupplier ?
     if( m_xAggregateSet.is() )
-
         m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
+
     if (!xSupplier.is())
         // check if my parent form has a supplier
         xSupplier = calcFormFormatsSupplier();
@@ -777,11 +801,6 @@ sal_Int32 OFormattedModel::calcFormatKey() const
     return 0;
 }
 
-//------------------------------------------------------------------------------
-void OFormattedModel::getFormatDescription(::rtl::OUString& sFormat, LanguageType& eLanguage)
-{
-}
-
 // XBoundComponent
 //------------------------------------------------------------------------------
 void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException)
@@ -803,30 +822,27 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star
 //------------------------------------------------------------------------------
 void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
-    static const ::rtl::OUString s_aNullDataProp = ::rtl::OUString::createFromAscii("NullDate");
-
     m_xOriginalFormatter = NULL;
 
     // get some properties of the field
     m_nFieldType = DataType::OTHER;
     Reference<XPropertySet> xField = getField();
     if ( xField.is() )
-    {
         xField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= m_nFieldType;
-    }
 
+    sal_Int32 nFormatKey = 0;
 
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::onConnectedDbColumn : have no aggregate !");
     if (m_xAggregateSet.is())
     {   // all the following doesn't make any sense if we have no aggregate ...
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
-        DBG_ASSERT(((Reference<XNumberFormatsSupplier> *)aSupplier.getValue())->is(), "OFormattedModel::onConnectedDbColumn : invalid property value !");
+        DBG_ASSERT( aSupplier.hasValue(), "OFormattedModel::onConnectedDbColumn : invalid property value !" );
         // das sollte im Constructor oder im read auf was richtiges gesetzt worden sein
 
         Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
-        if (!aFmtKey.hasValue())
-        {   // unser aggregiertes Model hat noch keine Format-Informationen, also geben wir die von dem Feld, an das
-            // wir gebunden sind, weiter
+        if ( !(aFmtKey >>= nFormatKey ) )
+        {   // nobody gave us a format to use. So we examine the field we're bound to for a
+            // format key, and use it ourself, too
             sal_Int32 nType = DataType::VARCHAR;
             if (xField.is())
             {
@@ -889,27 +905,15 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
 
                 setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bNumeric));
 
-                m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
-                xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
+                OSL_VERIFY( aFmtKey >>= nFormatKey );
             }
         }
-        else
-        {
-            Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
-
-            m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
-            m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
-            xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
-        }
     }
-    else
-    {   // try to get some defaults ...
-        Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
 
-        m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
-        m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), 0);
-        xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
-    }
+    Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
+    m_bNumeric = getBOOL( getPropertyValue( PROPERTY_TREATASNUMERIC ) );
+    m_nKeyType  = getNumberFormatType( xSupplier->getNumberFormats(), nFormatKey );
+    xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString::createFromAscii("NullDate") ) >>= m_aNullDate;
 
     OEditBaseModel::onConnectedDbColumn( _rxForm );
 }
@@ -1211,15 +1215,190 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool _bPostReset )
 }
 
 //------------------------------------------------------------------------------
-Any OFormattedModel::translateExternalValueToControlValue( )
+void OFormattedModel::onConnectedExternalValue( )
+{
+    OEditBaseModel::onConnectedExternalValue();
+    updateFormatterNullDate();
+}
+
+//------------------------------------------------------------------------------
+Type OFormattedModel::getExternalValueType() const
+{
+    OSL_PRECOND( hasExternalValueBinding(),
+        "OFormattedModel::getExternalValueType: There *is* no binding!" );
+
+    Type aExchangeType( ::getCppuType( static_cast< double* >( NULL ) ) );
+
+    Type aPreferredType;
+    if ( hasExternalValueBinding() )
+    {
+        switch ( m_nKeyType & ~NumberFormat::DEFINED )
+        {
+        case NumberFormat::DATE:
+            aPreferredType = ::getCppuType( static_cast< UNODate* >( NULL ) );
+            break;
+        case NumberFormat::TIME:
+            aPreferredType = ::getCppuType( static_cast< UNOTime* >( NULL ) );
+            break;
+        case NumberFormat::DATETIME:
+            aPreferredType = ::getCppuType( static_cast< UNODateTime* >( NULL ) );
+            break;
+
+        case NumberFormat::TEXT:
+            aPreferredType = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+            break;
+
+        case NumberFormat::LOGICAL:
+            aPreferredType = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
+            break;
+
+        case NumberFormat::CURRENCY:
+        case NumberFormat::NUMBER:
+        case NumberFormat::SCIENTIFIC:
+        case NumberFormat::FRACTION:
+        case NumberFormat::PERCENT:
+            // no need to change the default "double"
+            break;
+        }
+
+        if ( aPreferredType.getTypeClass() != TypeClass_VOID )
+        {
+            if ( getExternalValueBinding()->supportsType( aPreferredType ) )
+                aExchangeType = aPreferredType;
+        }
+    }
+    return aExchangeType;
+}
+
+//------------------------------------------------------------------------------
+Any OFormattedModel::translateExternalValueToControlValue( ) const
 {
     OSL_PRECOND( hasExternalValueBinding(),
         "OFormattedModel::translateExternalValueToControlValue: precondition not met!" );
 
-    Any aReturn;
+    Any aControlValue;
     if ( hasExternalValueBinding() )
-        aReturn = getExternalValueBinding()->getValue( ::getCppuType( static_cast< double* >( NULL ) ) );
-    return aReturn;
+    {
+        Any aExternalValue = getExternalValueBinding()->getValue( getExternalValueType() );
+        switch( aExternalValue.getValueTypeClass() )
+        {
+        case TypeClass_VOID:
+            break;
+
+        case TypeClass_STRING:
+            aControlValue = aExternalValue;
+            break;
+
+        case TypeClass_BOOLEAN:
+        {
+            sal_Bool bExternalValue = sal_False;
+            aExternalValue >>= bExternalValue;
+            aControlValue <<= (double)( bExternalValue ? 1 : 0 );
+        }
+        break;
+
+        default:
+        {
+            if ( aExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODate* >( NULL ) ) ) )
+            {
+                UNODate aDate;
+                aExternalValue >>= aDate;
+                aControlValue <<= DBTypeConversion::toDouble( aDate, m_aNullDate );
+            }
+            else if ( aExternalValue.getValueType().equals( ::getCppuType( static_cast< UNOTime* >( NULL ) ) ) )
+            {
+                UNOTime aTime;
+                aExternalValue >>= aTime;
+                aControlValue <<= DBTypeConversion::toDouble( aTime );
+            }
+            else if ( aExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODateTime* >( NULL ) ) ) )
+            {
+                UNODateTime aDateTime;
+                aExternalValue >>= aDateTime;
+                aControlValue <<= DBTypeConversion::toDouble( aDateTime, m_aNullDate );
+            }
+            else
+            {
+                OSL_ENSURE( aExternalValue.getValueTypeClass() == TypeClass_DOUBLE,
+                    "OFormattedModel::translateExternalValueToControlValue: don't know how to translate this type!" );
+                double fValue = 0;
+                OSL_VERIFY( aExternalValue >>= fValue );
+                aControlValue <<= fValue;
+            }
+        }
+        }
+    }
+    return aControlValue;
+}
+
+//------------------------------------------------------------------------------
+Any OFormattedModel::translateControlValueToExternalValue( ) const
+{
+    OSL_PRECOND( hasExternalValueBinding(),
+        "OFormattedModel::translateControlValueToExternalValue: precondition not met!" );
+
+    Any aControlValue( getControlValue() );
+    if ( !aControlValue.hasValue() )
+        return aControlValue;
+
+    Any aExternalValue;
+
+    // translate into the the external value type
+    Type aExternalValueType( getExternalValueType() );
+    switch ( aExternalValueType.getTypeClass() )
+    {
+    case TypeClass_STRING:
+    {
+        ::rtl::OUString sString;
+        if ( aControlValue >>= sString )
+        {
+            aExternalValue <<= sString;
+            break;
+        }
+    }
+    // NO break here!
+
+    case TypeClass_BOOLEAN:
+    {
+        double fValue = 0;
+        OSL_VERIFY( aControlValue >>= fValue );
+            // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
+            // and the control value is a string. This implies some weird misconfiguration
+            // of the FormattedModel, so we won't care for it for the moment.
+        aExternalValue <<= (sal_Bool)( fValue ? sal_True : sal_False );
+    }
+    break;
+
+    default:
+    {
+        double fValue = 0;
+        OSL_VERIFY( aControlValue >>= fValue );
+            // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
+            // and the control value is a string. This implies some weird misconfiguration
+            // of the FormattedModel, so we won't care for it for the moment.
+
+        if ( aExternalValueType.equals( ::getCppuType( static_cast< UNODate* >( NULL ) ) ) )
+        {
+            aExternalValue <<= DBTypeConversion::toDate( fValue, m_aNullDate );
+        }
+        else if ( aExternalValueType.equals( ::getCppuType( static_cast< UNOTime* >( NULL ) ) ) )
+        {
+            aExternalValue <<= DBTypeConversion::toTime( fValue );
+        }
+        else if ( aExternalValueType.equals( ::getCppuType( static_cast< UNODateTime* >( NULL ) ) ) )
+        {
+            aExternalValue <<= DBTypeConversion::toDateTime( fValue, m_aNullDate );
+        }
+        else
+        {
+            OSL_ENSURE( aExternalValueType.equals( ::getCppuType( static_cast< double* >( NULL ) ) ),
+                "OFormattedModel::translateControlValueToExternalValue: don't know how to translate this type!" );
+            aExternalValue <<= fValue;
+        }
+    }
+    break;
+    }
+    return aExternalValue;
 }
 
 //------------------------------------------------------------------------------
@@ -1255,8 +1434,3 @@ Any OFormattedModel::getDefaultForReset() const
 //.........................................................................
 }
 //.........................................................................
-
-
-
-
-
