@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:51:13 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ BOOL SfxApplication::QueryExit_Impl()
     SaveConfiguration();
     BOOL bQuit = TRUE;
 
-    // laufen noch Drucker?
+/*
     BOOL bPrinting = FALSE;
     for ( SfxViewShell *pViewSh = SfxViewShell::GetFirst();
           !bPrinting && pViewSh;
@@ -193,7 +193,7 @@ BOOL SfxApplication::QueryExit_Impl()
             return FALSE;
         }
     }
-
+*/
     // alles canceln was zu canceln ist
     GetCancelManager()->Cancel(TRUE);
 
@@ -204,13 +204,11 @@ BOOL SfxApplication::QueryExit_Impl()
         pAppData_Impl->bDirectAliveCount = FALSE;
     }
 
-    // vor Parasiten wie BasicIDESh etc. sch"utzen
-    pAppDispat->Flush();
-
     // alle "normal" bearbeiteten Dokumente schlie\sen
     MemCache_Impl &rCache = SfxPickList_Impl::Get()->GetMemCache();
     rCache.ClearObjects();
 
+/*
     SfxObjectShell *pLastDocSh = SfxObjectShell::GetFirst();
     if ( bQuit )
     {
@@ -218,9 +216,9 @@ BOOL SfxApplication::QueryExit_Impl()
         SfxViewFrame::CloseHiddenFrames_Impl();
         pLastDocSh = SfxObjectShell::GetFirst();
     }
-
+*/
     // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?
-    if ( !bQuit || SvFactory::GetAliveCount() )
+    if ( !bQuit )
     {
         // nicht wirklich beenden, nur minimieren
         pAppData_Impl->bOLEResize = TRUE;
