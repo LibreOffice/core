@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-20 11:17:05 $
+ *  last change: $Author: pl $ $Date: 2002-09-27 10:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4528,6 +4528,41 @@ void PDFWriterImpl::updateGraphicsState()
     m_aCurrentPDFState = m_aGraphicsStack.front();
     if( aLine.getLength() )
         writeBuffer( aLine.getStr(), aLine.getLength() );
+}
+
+void PDFWriterImpl::push( sal_uInt16 nFlags )
+{
+    m_aGraphicsStack.push_front( m_aGraphicsStack.front() );
+    m_aGraphicsStack.front().m_nFlags = nFlags;
+}
+
+void PDFWriterImpl::pop()
+{
+    GraphicsState aState = m_aGraphicsStack.front();
+    m_aGraphicsStack.pop_front();
+
+    // move those parameters back that were not pushed
+    // in the first place
+    if( ! (aState.m_nFlags & PUSH_LINECOLOR) )
+        m_aGraphicsStack.front().m_aLineColor = aState.m_aLineColor;
+    if( ! (aState.m_nFlags & PUSH_FILLCOLOR) )
+        m_aGraphicsStack.front().m_aFillColor = aState.m_aFillColor;
+    if( ! (aState.m_nFlags & PUSH_FONT) )
+        m_aGraphicsStack.front().m_aFont = aState.m_aFont;
+    if( ! (aState.m_nFlags & PUSH_MAPMODE) )
+        setMapMode( aState.m_aMapMode );
+    if( ! (aState.m_nFlags & PUSH_CLIPREGION) )
+        m_aGraphicsStack.front().m_aClipRegion = aState.m_aClipRegion;
+    if( ! (aState.m_nFlags & PUSH_TEXTLINECOLOR ) )
+        m_aGraphicsStack.front().m_aTextLineColor = aState.m_aTextLineColor;
+    if( ! (aState.m_nFlags & PUSH_TEXTALIGN ) )
+        m_aGraphicsStack.front().m_aFont.SetAlign( aState.m_aFont.GetAlign() );
+    if( ! (aState.m_nFlags & PUSH_TEXTFILLCOLOR) )
+        m_aGraphicsStack.front().m_aFont.SetFillColor( aState.m_aFont.GetFillColor() );
+    if( ! (aState.m_nFlags & PUSH_REFPOINT) )
+    {
+        // what ?
+    }
 }
 
 void PDFWriterImpl::setMapMode( const MapMode& rMapMode )

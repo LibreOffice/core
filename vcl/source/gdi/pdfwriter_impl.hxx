@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-26 10:40:53 $
+ *  last change: $Author: pl $ $Date: 2002-09-27 10:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,7 @@ private:
         sal_Int32       m_nAntiAlias;
         sal_Int32       m_nLayoutMode;
         sal_Int32       m_nTransparentPercent;
+        sal_uInt16      m_nFlags;
 
         GraphicsState() :
                 m_aLineColor( COL_TRANSPARENT ),
@@ -349,7 +350,9 @@ private:
                 m_aTextLineColor( COL_BLACK ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
-                m_nTransparentPercent( 0 ) {}
+                m_nTransparentPercent( 0 ),
+                m_nFlags( 0xffff )
+        {}
         GraphicsState( const GraphicsState& rState ) :
                 m_aFont( rState.m_aFont ),
                 m_aMapMode( rState.m_aMapMode ),
@@ -359,7 +362,8 @@ private:
                 m_aClipRegion( rState.m_aClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
-                m_nTransparentPercent( rState.m_nTransparentPercent )
+                m_nTransparentPercent( rState.m_nTransparentPercent ),
+                m_nFlags( rState.m_nFlags )
         {
         }
 
@@ -374,6 +378,7 @@ private:
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
             m_nTransparentPercent   = rState.m_nTransparentPercent;
+            m_nFlags                = rState.m_nFlags;
             return *this;
         }
     };
@@ -484,11 +489,8 @@ public:
     PDFWriter::PDFVersion getVersion() const { return m_eVersion; }
 
     /* graphics state */
-    void push()
-    { m_aGraphicsStack.push_front( m_aGraphicsStack.front() ); }
-
-    void pop()
-    { m_aGraphicsStack.pop_front(); }
+    void push( sal_uInt16 nFlags );
+    void pop();
 
     void setFont( const Font& rFont )
     { m_aGraphicsStack.front().m_aFont = rFont; }

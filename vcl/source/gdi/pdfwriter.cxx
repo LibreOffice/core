@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-11 13:38:54 $
+ *  last change: $Author: pl $ $Date: 2002-09-27 10:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,9 +299,9 @@ void PDFWriter::DrawTransparent( const PolyPolygon& rPolyPoly, USHORT nTranspare
     ((PDFWriterImpl*)pImplementation)->drawTransparent( rPolyPoly, nTransparencePercent );
 }
 
-void PDFWriter::Push()
+void PDFWriter::Push( USHORT nFlags )
 {
-    ((PDFWriterImpl*)pImplementation)->push();
+    ((PDFWriterImpl*)pImplementation)->push( nFlags );
 }
 
 void PDFWriter::Pop()
