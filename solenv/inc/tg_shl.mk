@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-17 18:56:16 $
+#   last change: $Author: hjs $ $Date: 2001-01-22 16:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -186,7 +186,9 @@ $(USE_SHL$(TNR)VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -199,6 +201,7 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""

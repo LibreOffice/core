@@ -86,7 +86,9 @@ $(USE_SHL1VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF1EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL1VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL1VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL1VERSIONMAP)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -99,6 +101,7 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL1VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -490,7 +493,9 @@ $(USE_SHL2VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF2EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL2VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL2VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL2VERSIONMAP)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -503,6 +508,7 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL2VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -894,7 +900,9 @@ $(USE_SHL3VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF3EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL3VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL3VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL3VERSIONMAP)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -907,6 +915,7 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL3VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -1298,7 +1307,9 @@ $(USE_SHL4VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF4EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL4VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL4VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL4VERSIONMAP)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -1311,6 +1322,7 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL4VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -1702,7 +1714,9 @@ $(USE_SHL5VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF5EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL5VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL5VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL5VERSIONMAP)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -1715,6 +1729,7 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL5VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -2106,7 +2121,9 @@ $(USE_SHL6VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF6EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL6VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL6VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL6VERSIONMAP)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -2119,6 +2136,7 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL6VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -2510,7 +2528,9 @@ $(USE_SHL7VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF7EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL7VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL7VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL7VERSIONMAP)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -2523,6 +2543,7 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL7VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -2914,7 +2935,9 @@ $(USE_SHL8VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF8EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL8VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL8VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL8VERSIONMAP)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -2927,6 +2950,7 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL8VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -3318,7 +3342,9 @@ $(USE_SHL9VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF9EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL9VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL9VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL9VERSIONMAP)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -3331,6 +3357,7 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL9VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
@@ -3722,7 +3749,9 @@ $(USE_SHL10VERSIONMAP) .PHONY:
     @+echo -----------------------------
 #	force_dmake_to_error
 .ENDIF			# "$(DEF10EXPORTFILE)"!=""
-.ENDIF			# "$(USE_SHL10VERSIONMAP)"!=""
+.ELSE			# "$(USE_SHL10VERSIONMAP)"!=""
+
+#and now for the plain non-generic way...
 .IF "$(SHL10VERSIONMAP)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
@@ -3735,6 +3764,7 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
+.ENDIF			# "$(USE_SHL10VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(NO_REC_RES)"!=""
