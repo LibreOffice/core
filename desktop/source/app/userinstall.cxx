@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:46:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,14 +327,27 @@ namespace desktop {
             theArgs[0] <<= v;
             Reference< XPropertySet > pset = Reference< XPropertySet >(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+            OUString aDefaultLocale( OUString::createFromAscii("DefaultLocale") );
+            OUString aDefaultLocale_CJK( OUString::createFromAscii("DefaultLocale_CJK") );
+            OUString aTmp;
             if (aUserLanguage.equalsAscii("ja") || aUserLanguage.equalsAscii("ko")
                 || aUserLanguage.equalsAscii("zh-CN") || aUserLanguage.equalsAscii("zh-TW"))
             {
-                pset->setPropertyValue(OUString::createFromAscii("DefaultLocale"), makeAny(OUString::createFromAscii("en-US")));
-                pset->setPropertyValue(OUString::createFromAscii("DefaultLocale_CJK"), makeAny(aUserLanguage));
+                // only set the locales if there is not already a value set
+                // (inititially there is no value set in the configuration)
+                pset->getPropertyValue(aDefaultLocale) >>= aTmp;
+                if (!aTmp.getLength())
+                    pset->setPropertyValue(aDefaultLocale, makeAny(OUString::createFromAscii("en-US")));
+                pset->getPropertyValue(aDefaultLocale_CJK) >>= aTmp;
+                if (!aTmp.getLength())
+                    pset->setPropertyValue(aDefaultLocale_CJK, makeAny(aUserLanguage));
             } else
             {
-                pset->setPropertyValue(OUString::createFromAscii("DefaultLocale"), makeAny(aUserLanguage));
+                // only set the locales if there is not already a value set
+                // (inititially there is no value set in the configuration)
+                pset->getPropertyValue(aDefaultLocale) >>= aTmp;
+                if (!aTmp.getLength())
+                    pset->setPropertyValue(aDefaultLocale, makeAny(aUserLanguage));
             }
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
