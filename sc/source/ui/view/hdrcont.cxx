@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: nn $ $Date: 2002-04-18 09:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
+#include <vcl/poly.hxx>
 
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -94,6 +95,8 @@
 #define SC_HDRPAINT_BOTTOM      5
 #define SC_HDRPAINT_TEXT        6
 #define SC_HDRPAINT_COUNT       7
+
+#define SC_HDR_TRANSPARENCY     85
 
 //==================================================================
 
@@ -251,6 +254,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     //  Linien zusammengefasst
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    BOOL bDark = ( rStyleSettings.GetFaceColor().GetLuminance() <= 25 );
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
     SetTextColor( aTextColor );
@@ -279,6 +283,9 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     long nPStart = bVertical ? rRect.Top() : rRect.Left();
     long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
 
+    long nTransStart = nPEnd;
+    long nTransEnd = 0;
+
     //  aeussere Linien komplett durchzeichnen
     //  Zuerst Ende der letzten Zelle finden
 
@@ -289,6 +296,16 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
         if (nSizePix)
         {
             nLineEnd += nSizePix;
+
+            if ( bMarkRange && i >= nMarkStart && i <= nMarkEnd )
+            {
+                long nLineStart = nLineEnd - nSizePix + 1;
+                if ( nLineStart < nTransStart )
+                    nTransStart = nLineStart;
+                if ( nLineEnd > nTransEnd )
+                    nTransEnd = nLineEnd;
+            }
+
             if ( nLineEnd > nPEnd )
             {
                 nLineEnd = nPEnd;
@@ -305,11 +322,27 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
     if ( nLineEnd >= nPStart )
     {
+        if ( nTransEnd >= nTransStart && bDark )
+        {
+            //  solid grey background for dark face color is drawn before lines
+
+            SetLineColor();
+            SetFillColor( COL_LIGHTGRAY );
+            if (bVertical)
+                DrawRect( Rectangle( 0, nTransStart, nBarSize-1, nTransEnd ) );
+            else
+                DrawRect( Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 ) );
+        }
+
+#if 0
+        // 3D border is no longer used
         SetLineColor( rStyleSettings.GetLightColor() );
         if (bVertical)
             DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) );
         else
             DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) );
+#endif
+
         SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
             DrawLine( Point( nBarSize-1, nPStart ), Point( nBarSize-1, nLineEnd ) );
@@ -323,11 +356,16 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     //
 
     ScGridMerger aGrid( this, 1, 1 );
-    for (USHORT nPass = 0; nPass < SC_HDRPAINT_COUNT; nPass++)
+
+    //  start at SC_HDRPAINT_BOTTOM instead of 0 - selection doesn't get different
+    //  borders, light border at top isn't used anymore
+
+    for (USHORT nPass = SC_HDRPAINT_BOTTOM; nPass < SC_HDRPAINT_COUNT; nPass++)
     {
         //  set line color etc. before entry loop
         switch ( nPass )
         {
+#if 0
             case SC_HDRPAINT_SEL_RIGHT:
                 SetLineColor( rStyleSettings.GetShadowColor() );
                 break;
@@ -343,11 +381,27 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
             case SC_HDRPAINT_SEL_BOTTOM:
                 SetLineColor( rStyleSettings.GetShadowColor() );
                 break;
+#endif
             case SC_HDRPAINT_BOTTOM:
                 SetLineColor( rStyleSettings.GetDarkShadowColor() );
                 break;
-            //case SC_HDRPAINT_TEXT:
-            //  break;
+            case SC_HDRPAINT_TEXT:
+                if ( nTransEnd >= nTransStart && !bDark )
+                {
+                    //  transparent selection background is drawn after lines, before text
+
+                    SetLineColor();
+                    SetFillColor( rStyleSettings.GetActiveColor() );
+                    Rectangle aTransRect;
+                    if (bVertical)
+                        aTransRect = Rectangle( 0, nTransStart, nBarSize-1, nTransEnd );
+                    else
+                        aTransRect = Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
+                    Polygon aPoly( aTransRect );
+                    PolyPolygon aPolyPoly( aPoly );
+                    DrawTransparent( aPolyPoly, SC_HDR_TRANSPARENCY );
+                }
+                break;
         }
 
         USHORT  nCount=0;
@@ -384,6 +438,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
                     switch ( nPass )
                     {
+#if 0
                         case SC_HDRPAINT_SEL_LEFT:
                             if (bMark)
                             {
@@ -432,6 +487,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                             else
                                 aGrid.AddVerLine( aScrPos.X(), aScrPos.Y(), aEndPos.Y()-1 );
                             break;
+#endif
 
                         case SC_HDRPAINT_BOTTOM:
                             if (bVertical)

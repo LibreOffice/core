@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:24:16 $
+ *  last change: $Author: nn $ $Date: 2002-04-18 09:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,22 +278,10 @@ void __EXPORT ScCornerButton::Paint( const Rectangle& rRect )
 
     Window::Paint(rRect);
 
-    if (bAdd)
-    {
-        SetLineColor( rStyleSettings.GetDarkShadowColor() );
-        DrawLine( Point(0,nPosY), Point(nPosX,nPosY) );
-        DrawLine( Point(nPosX,0), Point(nPosX,nPosY) );
-    }
-    else
-    {
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawLine( Point(0,0), Point(0,nPosY) );
-        DrawLine( Point(0,0), Point(nPosX,0) );
-//      SetLineColor( Color( SC_SMALL3DSHADOW ) );
-        SetLineColor( rStyleSettings.GetDarkShadowColor() );
-        DrawLine( Point(0,nPosY), Point(nPosX,nPosY) );
-        DrawLine( Point(nPosX,0), Point(nPosX,nPosY) );
-    }
+    //  both buttons have the same look now - only dark right/bottom lines
+    SetLineColor( rStyleSettings.GetDarkShadowColor() );
+    DrawLine( Point(0,nPosY), Point(nPosX,nPosY) );
+    DrawLine( Point(nPosX,0), Point(nPosX,nPosY) );
 }
 
 void ScCornerButton::StateChanged( StateChangedType nType )
