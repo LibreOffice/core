@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
+#include <svtools/options3d.hxx>
+#endif
 
 #ifndef _SVX_FILLITEM_HXX
 #include "xfillit.hxx"
@@ -141,10 +145,6 @@
 
 #ifndef _SVX_XLNWTIT_HXX
 #include "xlnwtit.hxx"
-#endif
-
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
@@ -303,9 +303,7 @@ BOOL E3dPolyScene::LocalPaint3D(ExtOutputDevice& rOut,
     pBase3D->SetTransformationSet(&rSet);
 
     // Dithering
-    String aTmp = SfxIniManager::Get()->Get( SFX_KEY_3D_DITHERING );
-    BOOL bGlobalDither = (aTmp.Len() && aTmp.GetChar(0) != sal_Unicode('0'));
-        pBase3D->SetDither(GetDither() && bGlobalDither);
+    pBase3D->SetDither(GetDither() && SvtOptions3D().IsDithering());
 
     // Licht setzen, vor Object->World setzen, um Lichter im
     // WKS zu positionieren

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unottabl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:57:49 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif

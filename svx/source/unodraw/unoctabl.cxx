@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,10 @@
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #endif
 */
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -127,15 +128,7 @@ public:
 
 SvxUnoColorTable::SvxUnoColorTable() throw()
 {
-    SfxIniManager* pIniMan = SfxIniManager::Get();
-    if( pIniMan )
-    {
-        pTable = new XColorTable( pIniMan->Get( SFX_KEY_PALETTE_PATH ) );
-    }
-    else
-    {
-        pTable = NULL;
-    }
+    pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
 }
 
 SvxUnoColorTable::~SvxUnoColorTable() throw()

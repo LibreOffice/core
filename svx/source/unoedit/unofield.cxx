@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-18 16:10:16 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 
 #include <rtl/uuid.h>

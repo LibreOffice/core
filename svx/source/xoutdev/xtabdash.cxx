@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:17:23 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,15 +328,20 @@ BOOL XDashList::Load()
     {
         bListDirty = FALSE;
 
-        INetURLObject aURL;
+        INetURLObject aURL( aPath );
 
-        aURL.SetSmartURL( aPath );
+        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+        {
+            DBG_ERROR( "invalid URL" );
+            return FALSE;
+        }
+
         aURL.Append( aName );
 
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtDash, 3 ) );
 
-        SfxMedium aMedium( aURL.PathToFileName(), STREAM_READ | STREAM_NOCREATE, TRUE );
+        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if( !pStream )
             return( FALSE );
@@ -366,15 +371,20 @@ BOOL XDashList::Load()
 BOOL XDashList::Save()
 {
 #ifndef SVX_LIGHT
-    INetURLObject aURL;
+    INetURLObject aURL( aPath );
 
-    aURL.SetSmartURL( aPath );
+    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        DBG_ERROR( "invalid URL" );
+        return FALSE;
+    }
+
     aURL.Append( aName );
 
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtDash, 3 ) );
 
-    SfxMedium aMedium( aURL.PathToFileName(), STREAM_WRITE | STREAM_TRUNC, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

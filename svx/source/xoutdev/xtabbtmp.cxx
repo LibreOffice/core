@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabbtmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,16 +312,20 @@ BOOL XBitmapList::Load()
     {
         bListDirty = FALSE;
 
-        INetURLObject aURL;
+        INetURLObject aURL( aPath );
 
-        aURL.SetSmartURL( aPath );
+        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+        {
+            DBG_ERROR( "invalid URL" );
+            return FALSE;
+        }
+
         aURL.Append( aName );
 
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtBitmap, 3 ) );
 
-        SfxMedium aMedium( aURL.PathToFileName(),
-                    STREAM_READ | STREAM_NOCREATE, TRUE );
+        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
 
         SvStream* pStream = aMedium.GetInStream();
         if( !pStream )
@@ -352,15 +356,21 @@ BOOL XBitmapList::Load()
 BOOL XBitmapList::Save()
 {
 #ifndef SVX_LIGHT
-    INetURLObject aURL;
 
-    aURL.SetSmartURL( aPath );
+    INetURLObject aURL( aPath );
+
+    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        DBG_ERROR( "invalid URL" );
+        return FALSE;
+    }
+
     aURL.Append( aName );
 
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtBitmap, 3 ) );
 
-    SfxMedium aMedium( aURL.PathToFileName(), STREAM_WRITE | STREAM_TRUNC, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

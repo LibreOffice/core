@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,15 +133,20 @@ BOOL XColorTable::Load()
     {
         bTableDirty = FALSE;
 
-        INetURLObject aURL;
+        INetURLObject aURL( aPath );
 
-        aURL.SetSmartURL( aPath );
+        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+        {
+            DBG_ERROR( "invalid URL" );
+            return FALSE;
+        }
+
         aURL.Append( aName );
 
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtColor, 3 ) );
 
-        SfxMedium aMedium( aURL.PathToFileName(), STREAM_READ | STREAM_NOCREATE, TRUE );
+        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if( !pStream )
             return( FALSE );
@@ -171,15 +176,20 @@ BOOL XColorTable::Load()
 BOOL XColorTable::Save()
 {
 #ifndef SVX_LIGHT
-    INetURLObject aURL;
+    INetURLObject aURL( aPath );
 
-    aURL.SetSmartURL( aPath );
+    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        DBG_ERROR( "invalid URL" );
+        return FALSE;
+    }
+
     aURL.Append( aName );
 
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtColor, 3 ) );
 
-    SfxMedium aMedium( aURL.PathToFileName(), STREAM_WRITE | STREAM_TRUNC, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

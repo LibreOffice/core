@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:58:28 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,9 @@ FASTBOOL SdrObjGroup::ReloadLinkedGroup(FASTBOOL bForceLoad)
 
             try
             {
-                INetURLObject aURL; aURL.SetSmartURL( pData->aFileName );
+                INetURLObject aURL( pData->aFileName );
+                DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
                 ::ucb::Content aCnt( aURL.GetMainURL(), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                 ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
                 ::com::sun::star::util::DateTime aDateTime;
@@ -570,7 +572,7 @@ void SdrObjGroup::ImpLinkAnmeldung()
                                                                INetURLObject::WAS_ENCODED,
                                                                INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-        if(!aURLObj.PathToFileName().Equals(aLinkURLObj.PathToFileName()))
+        if( !aURLObj.GetMainURL().Equals( aLinkURLObj.GetMainURL() ) )
         {
             // Keine gelinkten Objekte im eigenen Model
             pData->pLink = new ImpSdrObjGroupLink(this);

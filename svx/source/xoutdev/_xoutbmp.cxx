@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-13 11:58:00 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include <sot/factory.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/fsys.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/poly.hxx>
 #include <vcl/virdev.hxx>
@@ -76,16 +76,13 @@
 // - Defines -
 // -----------
 
-#define FORMAT_BMP  "bmp"
-#define FORMAT_GIF  "gif"
-#define FORMAT_JPG  "jpg"
+#define FORMAT_BMP  String(RTL_CONSTASCII_USTRINGPARAM("bmp"))
+#define FORMAT_GIF  String(RTL_CONSTASCII_USTRINGPARAM("gif"))
+#define FORMAT_JPG  String(RTL_CONSTASCII_USTRINGPARAM("jpg"))
+#define FORMAT_PNG  String(RTL_CONSTASCII_USTRINGPARAM("png"))
 
 #define OPT_BMP     "BMP-COLORS"
 #define OPT_JPG     "JPG_EXPORT_COLORMODE"
-
-#define TRANSFILTER "GIF - Graphics Interchange"
-#define BMPFILTER   "BMP - MS Windows"
-#define JPGFILTER   "JPG - JPEG"
 
 // --------------
 // - XOutBitmap -
@@ -275,14 +272,6 @@ void XOutBitmap::DrawTiledBitmapEx( OutputDevice* pOutDev,
 
 // ------------------------------------------------------------------------
 
-Bitmap XOutBitmap::GetBitmapFromGraphic( const Graphic& rGraphic )
-{
-    DBG_ERROR( "Please use Graphic::GetBitmap()!" );
-    return rGraphic.GetBitmap();
-}
-
-// ------------------------------------------------------------------------
-
 Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr, BOOL bVMirr )
 {
     Animation aNewAnim( rAnimation );
@@ -369,196 +358,162 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 #ifndef SVX_LIGHT
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
+        INetURLObject   aURL( rFileName );
         Graphic         aGraphic;
-        String          aFilter( rFilterName );
         String          aExt;
         GraphicFilter*  pFilter = GetGrfFilter();
-        USHORT          nErr = GRFILTER_FILTERERROR;
-        USHORT          nFilter = GRFILTER_FORMAT_NOTFOUND;
-        BOOL            bWriteTransGrf;
-        BOOL            bAnimated = rGraphic.IsAnimated();
+        USHORT          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
+        BOOL            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
-        aFilter.ToLowerAscii();
-        bWriteTransGrf = ( aFilter.EqualsAscii("transgrf") ) || ( aFilter.EqualsAscii("gif") ) || ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE );
+        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
-        if ( !bWriteTransGrf )
-            bWriteTransGrf = ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || rGraphic.IsTransparent() );
-
-        // richtige Filternummer bestimmen
-        if( !bWriteTransGrf )
+        // calculate correct file name
+        if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
         {
-            const USHORT nCount = pFilter->GetExportFormatCount();
+            String      aTimeStr( UniString::CreateFromInt32( Time().GetTime() ) );
+            String      aName( aURL.getName() );
+            xub_StrLen  nNameLen = aName.Len();
 
-            for( USHORT n = 0; n < nCount; n++ )
+            if( nNameLen > 3 )
             {
-                if( aFilter == pFilter->GetExportFormatShortName( n ).ToLowerAscii() )
+                nNameLen -= 3;
+
+                if( aName.GetChar( nNameLen - 1 ) == sal_Unicode( '.' ) )
+                    --nNameLen;
+            }
+
+            aURL.setName( aName.Insert( aTimeStr.Insert( sal_Unicode('_'), 0 ), nNameLen ) );
+        }
+
+        if( ( nFlags & XOUTBMP_USE_NATIVE_IF_POSSIBLE ) &&
+            !( nFlags & XOUTBMP_MIRROR_HORZ ) &&
+            !( nFlags & XOUTBMP_MIRROR_VERT ) &&
+            ( rGraphic.GetType() != GRAPHIC_GDIMETAFILE ) && rGraphic.IsLink() )
+        {
+            // try to write native link
+            const GfxLink aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
+
+            switch( aGfxLink.GetType() )
+            {
+                case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = FORMAT_GIF; break;
+                case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = FORMAT_JPG; break;
+                case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = FORMAT_PNG; break;
+
+                default:
+                break;
+            }
+
+            if( aExt.Len() )
+            {
+                aURL.setExtension( aExt );
+                rFileName = aURL.GetMainURL();
+
+                SfxMedium   aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+                SvStream*   pOStm = aMedium.GetOutStream();
+
+                if( pOStm && aGfxLink.GetDataSize() )
                 {
-                    nFilter = n;
-                    aExt = aFilter;
-                    break;
+                    pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                    aMedium.Commit();
+
+                    if( !aMedium.GetError() )
+                        nErr = GRFILTER_OK;
                 }
             }
         }
-        else
-        {
-            nFilter = pFilter->GetExportFormatNumber( String(TRANSFILTER, gsl_getSystemTextEncoding()) );
-            aExt = pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii();
-        }
 
-        // Graphic erstellen
-        if( bWriteTransGrf && ( GRFILTER_FORMAT_NOTFOUND != nFilter ) )
+        if( GRFILTER_OK != nErr )
         {
-            if ( bAnimated  )
-                aGraphic = rGraphic;
-            else
+            String  aFilter( rFilterName );
+            BOOL    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
+                                     ( aFilter.EqualsIgnoreCaseAscii( "gif" ) ) ||
+                                     ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
+                                     ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
+
+            // get filter and extension
+            if( bWriteTransGrf )
+                aFilter = FORMAT_GIF;
+
+            nFilter = pFilter->GetExportFormatNumberForShortName( aFilter );
+
+            if( GRFILTER_FORMAT_NOTFOUND == nFilter )
             {
-                if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
-                {
-                    VirtualDevice aVDev;
-                    const Size    aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
+                nFilter = pFilter->GetExportFormatNumberForShortName( FORMAT_JPG );
 
-                    if( aVDev.SetOutputSizePixel( aSize ) )
-                    {
-                        const Wallpaper aWallpaper( aVDev.GetBackground() );
-                        const Point     aPt;
-
-                        aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
-                        aVDev.Erase();
-                        rGraphic.Draw( &aVDev, aPt, aSize );
-
-                        const Bitmap aBitmap( aVDev.GetBitmap( aPt, aSize ) );
-
-                        aVDev.SetBackground( aWallpaper );
-                        aVDev.Erase();
-                        rGraphic.Draw( &aVDev, aPt, aSize );
-
-                        aVDev.SetRasterOp( ROP_XOR );
-                        aVDev.DrawBitmap( aPt, aSize, aBitmap );
-                        aGraphic = BitmapEx( aBitmap, aVDev.GetBitmap( aPt, aSize ) );
-                    }
-                    else
-                        aGraphic = rGraphic.GetBitmapEx();
-                }
-                else
-                    aGraphic = rGraphic.GetBitmapEx();
+                if( GRFILTER_FORMAT_NOTFOUND == nFilter )
+                    nFilter = pFilter->GetExportFormatNumberForShortName( FORMAT_BMP );
             }
-        }
-        else
-        {
-            if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
+
+            if( GRFILTER_FORMAT_NOTFOUND != nFilter )
             {
-                VirtualDevice   aVDev;
-                const Size      aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
-
-                if( aVDev.SetOutputSizePixel( aSize ) )
-                {
-                    rGraphic.Draw( &aVDev, Point(), aSize );
-                    aGraphic =  aVDev.GetBitmap( Point(), aSize );
-                }
-                else
-                    aGraphic = rGraphic.GetBitmap();
-            }
-            else
-                aGraphic = rGraphic.GetBitmap();
-        }
-
-        // Falls Filter nicht gefunden, erst einmal JPEG probieren, dann BMP
-        if( GRFILTER_FORMAT_NOTFOUND == nFilter )
-        {
-            nFilter = pFilter->GetExportFormatNumber( String(JPGFILTER, gsl_getSystemTextEncoding()) );
-            aExt = pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii();
-
-            if ( GRFILTER_FORMAT_NOTFOUND == nFilter )
-            {
-                nFilter = pFilter->GetExportFormatNumber( String(BMPFILTER, gsl_getSystemTextEncoding()) );
                 aExt = pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii();
-            }
-        }
 
-        // Pixel-Graphic ggf. spiegeln
-        if( nFlags )
-            aGraphic = MirrorGraphic( aGraphic, nFlags );
-
-        if( GRFILTER_FORMAT_NOTFOUND != nFilter  )
-        {
-            INetURLObject aURL;
-
-            aURL.SetSmartURL( rFileName );
-            aURL.setExtension( aExt );
-
-            if( INET_PROT_FILE == aURL.GetProtocol() )
-            {
-                if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
+                if( bWriteTransGrf )
                 {
-                    String      aName( aURL.getName() );
-                    xub_StrLen  nNameLen = aName.Len();
-
-                    if( nNameLen > 3 )
-                    {
-                        nNameLen -= 3;
-
-                        if( aName.GetChar( nNameLen - 1 ) == sal_Unicode( '.' ) )
-                            --nNameLen;
-                    }
-
-                    aURL.setName( aName.Insert( sal_Unicode( '*' ), nNameLen ) );
-
-                    // !!!DirEntry; create temporary file name
-                    DirEntry aPath( aURL.PathToFileName() );
-                    aURL.SetSmartURL( aPath.TempName().GetFull() );
-                }
-
-                rFileName = aURL.PathToFileName();
-
-                if( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( aExt.ToLowerAscii().EqualsAscii( "bmp" ) ) )
-                {
-                    SvFileStream aOStm( rFileName, STREAM_WRITE | STREAM_TRUNC );
-
-                    if( aOStm.IsOpen() )
-                    {
-                        aGraphic.GetBitmap().Write( aOStm, TRUE );
-                        nErr = aOStm.GetError() != 0 ? GRFILTER_IOERROR : 0;
-                    }
+                    if( bAnimated  )
+                        aGraphic = rGraphic;
                     else
-                        nErr = GRFILTER_IOERROR;
+                    {
+                        if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
+                        {
+                            VirtualDevice aVDev;
+                            const Size    aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
+
+                            if( aVDev.SetOutputSizePixel( aSize ) )
+                            {
+                                const Wallpaper aWallpaper( aVDev.GetBackground() );
+                                const Point     aPt;
+
+                                aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+                                aVDev.Erase();
+                                rGraphic.Draw( &aVDev, aPt, aSize );
+
+                                const Bitmap aBitmap( aVDev.GetBitmap( aPt, aSize ) );
+
+                                aVDev.SetBackground( aWallpaper );
+                                aVDev.Erase();
+                                rGraphic.Draw( &aVDev, aPt, aSize );
+
+                                aVDev.SetRasterOp( ROP_XOR );
+                                aVDev.DrawBitmap( aPt, aSize, aBitmap );
+                                aGraphic = BitmapEx( aBitmap, aVDev.GetBitmap( aPt, aSize ) );
+                            }
+                            else
+                                aGraphic = rGraphic.GetBitmapEx();
+                        }
+                        else
+                            aGraphic = rGraphic.GetBitmapEx();
+                    }
                 }
                 else
-                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, TRUE );
-            }
-            else if( INET_PROT_NOT_VALID != aURL.GetProtocol() )
-            {
-                if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
                 {
-                    String      aTimeStr( UniString::CreateFromInt32( Time().GetTime() ) );
-                    String      aName( aURL.getName() );
-                    xub_StrLen  nNameLen = aName.Len();
-
-                    if( nNameLen > 3 )
+                    if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
                     {
-                        nNameLen -= 3;
+                        VirtualDevice   aVDev;
+                        const Size      aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
 
-                        if( aName.GetChar( nNameLen - 1 ) == sal_Unicode( '.' ) )
-                            --nNameLen;
+                        if( aVDev.SetOutputSizePixel( aSize ) )
+                        {
+                            rGraphic.Draw( &aVDev, Point(), aSize );
+                            aGraphic =  aVDev.GetBitmap( Point(), aSize );
+                        }
+                        else
+                            aGraphic = rGraphic.GetBitmap();
                     }
-
-                    aTimeStr.Insert( sal_Unicode('_'), 0 );
-                    aName.Insert( aTimeStr, nNameLen );
-                    aURL.SetName( aName );
+                    else
+                        aGraphic = rGraphic.GetBitmap();
                 }
 
-                SfxMedium aMedium( rFileName = aURL.PathToFileName(), STREAM_WRITE | STREAM_SHARE_DENYNONE, TRUE );
+                // mirror?
+                if( ( nFlags & XOUTBMP_MIRROR_HORZ ) || ( nFlags & XOUTBMP_MIRROR_VERT ) )
+                    aGraphic = MirrorGraphic( aGraphic, nFlags );
 
-                aMedium.DownLoad();
-
-                INetURLObject aPhysURL; aPhysURL.SetSmartURL( aMedium.GetPhysicalName() );
-                nErr = ExportGraphic( aGraphic, aPhysURL, *pFilter, nFilter, TRUE );
-
-                // uebertragen
-                aMedium.Close();
-                aMedium.Commit();
-
-                if( aMedium.GetError() && nErr == GRFILTER_OK )
-                    nErr = 1;
+                if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GRAPHIC_NONE ) )
+                {
+                    aURL.setExtension( aExt );
+                    rFileName = aURL.GetMainURL();
+                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, TRUE );
+                }
             }
         }
 
@@ -575,82 +530,81 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 #pragma optimize ( "", off )
 #endif
 
-// !!!DirEntry
-USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const DirEntry& rPath,
-                                  GraphicFilter& rFilter, const USHORT nFormat,
-                                  BOOL bIgnoreOptions )
-{
-    INetURLObject aURL; aURL.SetSmartURL( rPath.GetFull() );
-    return ExportGraphic( rGraphic, aURL, rFilter, nFormat, bIgnoreOptions );
-}
-
-// ------------------------------------------------------------------------
-
 USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const USHORT nFormat,
                                   BOOL bIgnoreOptions )
 {
-    const String    aPath( rURL.PathToFileName() );
-    SvFileStream    aOStm( aPath, STREAM_WRITE | STREAM_TRUNC );
-    Config*         pOptionsConfig = rFilter.GetOptionsConfig();
-    USHORT          nRet;
+    DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
-    pGrfFilter = &rFilter;
+    SfxMedium   aMedium( rURL.GetMainURL(), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+    SvStream*   pOStm = aMedium.GetOutStream();
+    USHORT      nRet = 1;
 
-    if( bIgnoreOptions && rFilter.AreOptionsEnabled() )
+    if( pOStm )
     {
-        rFilter.EnableOptions( FALSE );
-        nRet = rFilter.ExportGraphic( rGraphic, aPath, aOStm, nFormat );
-        rFilter.EnableOptions( TRUE );
-    }
-    else
-    {
-        Graphic aGraphic;
+        Config* pOptionsConfig = rFilter.GetOptionsConfig();
 
-        if( pOptionsConfig )
+        pGrfFilter = &rFilter;
+
+        if( bIgnoreOptions && rFilter.AreOptionsEnabled() )
         {
-            const String aFormat( rFilter.GetExportFormatShortName( nFormat ).ToLowerAscii() );
+            rFilter.EnableOptions( FALSE );
+            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL(), *pOStm, nFormat );
+            rFilter.EnableOptions( TRUE );
+        }
+        else
+        {
+            Graphic aGraphic;
 
-            // Optionen fuer die einzelnen Format beruecksichtigen
-            if( aFormat.EqualsAscii( FORMAT_BMP ) )
+            if( pOptionsConfig )
             {
-                USHORT nColorRes = pOptionsConfig->ReadKey( ByteString(OPT_BMP) ).ToInt32();
+                const String aFormat( rFilter.GetExportFormatShortName( nFormat ).ToLowerAscii() );
 
-                if( !nColorRes || ( nColorRes > (USHORT) BMP_CONVERSION_24BIT ) )
-                    aGraphic = rGraphic;
-                else
+                // Optionen fuer die einzelnen Format beruecksichtigen
+                if( aFormat == FORMAT_BMP )
                 {
-                    Bitmap aTmp( rGraphic.GetBitmap() );
+                    USHORT nColorRes = pOptionsConfig->ReadKey( ByteString(OPT_BMP) ).ToInt32();
 
-                    if( aTmp.Convert( (BmpConversion) nColorRes ) )
+                    if( !nColorRes || ( nColorRes > (USHORT) BMP_CONVERSION_24BIT ) )
+                        aGraphic = rGraphic;
+                    else
+                    {
+                        Bitmap aTmp( rGraphic.GetBitmap() );
+
+                        if( aTmp.Convert( (BmpConversion) nColorRes ) )
+                            aGraphic = aTmp;
+                        else
+                            aGraphic = rGraphic;
+                    }
+                }
+                else if( aFormat == FORMAT_JPG )
+                {
+                    Bitmap              aTmp( rGraphic.GetBitmap() );
+                    const BOOL          bGreys = (BOOL) pOptionsConfig->ReadKey( ByteString(OPT_JPG) ).ToInt32();
+                    const BmpConversion eConv = bGreys ? BMP_CONVERSION_8BIT_GREYS : BMP_CONVERSION_24BIT;
+
+                    if( aTmp.Convert( eConv ) )
                         aGraphic = aTmp;
                     else
                         aGraphic = rGraphic;
                 }
-            }
-            else if( aFormat.EqualsAscii(FORMAT_JPG) )
-            {
-                Bitmap              aTmp( rGraphic.GetBitmap() );
-                const BOOL          bGreys = (BOOL)pOptionsConfig->ReadKey( ByteString(OPT_JPG) ).ToInt32();
-                const BmpConversion eConv = bGreys ? BMP_CONVERSION_8BIT_GREYS : BMP_CONVERSION_24BIT;
-
-                if( aTmp.Convert( eConv ) )
-                    aGraphic = aTmp;
+                else if( aFormat == FORMAT_GIF )
+                    aGraphic = rGraphic;
                 else
                     aGraphic = rGraphic;
             }
-            else if( aFormat.EqualsAscii(FORMAT_GIF) )
-                aGraphic = rGraphic;
             else
                 aGraphic = rGraphic;
+
+            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL(), *pOStm, nFormat );
         }
-        else
-            aGraphic = rGraphic;
 
-        nRet = rFilter.ExportGraphic( aGraphic, aPath, aOStm, nFormat );
+        pGrfFilter = NULL;
+        aMedium.Commit();
+
+        if( aMedium.GetError() && ( GRFILTER_OK == nRet  ) )
+            nRet = 1;
     }
-
-    pGrfFilter = NULL;
 
     return nRet;
 }

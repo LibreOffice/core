@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
+#include <svtools/options3d.hxx>
 #endif
 
 #ifndef _SVDOGRP_HXX
@@ -191,10 +195,6 @@
 
 #ifndef _SVX_XFLBMTIT_HXX
 #include <xflbmtit.hxx>
-#endif
-
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
 #endif
 
 #include "xlnwtit.hxx"
@@ -1402,9 +1402,8 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
                         // die nicht erlaubten Rotationen ausmaskieren
                         eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
-                        String aTmp = SfxIniManager::Get()->Get( SFX_KEY_3D_SHOWFULL );
                         pForcedMeth = new E3dDragRotate(*this, aMark, eDragDetail, eConstraint,
-                            aTmp.Len() && aTmp.GetChar(0) != sal_Unicode('0') );
+                                                        SvtOptions3D().IsShowFull() );
                     }
                     break;
 
@@ -1412,9 +1411,8 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            String aTmp = SfxIniManager::Get()->Get( SFX_KEY_3D_SHOWFULL );
                             pForcedMeth = new E3dDragMove(*this, aMark, eDragDetail, eDragHdl, eConstraint,
-                                aTmp.Len() && aTmp.GetChar(0) != sal_Unicode('0') );
+                                                          SvtOptions3D().IsShowFull() );
                         }
                     }
                     break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-06 15:51:55 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #include <tools/vcompat.hxx>
-#include <sfx2/inimgr.hxx>
 #include <ucbhelper/content.hxx>
+#include <svtools/pathoptions.hxx>
 #include "gallery.hxx"
 #include "galmisc.hxx"
 #include "galtheme.hxx"
@@ -332,7 +332,7 @@ void Gallery::ImplLoad( const String& rInitPath )
     const USHORT nTokenCount = rInitPath.GetTokenCount( ';' );
 
     bMultiPath = ( nTokenCount > 0 );
-    aUserPath = SFX_INIMANAGER()->Get( SFX_KEY_CONFIG_DIR );
+    aUserPath = SvtPathOptions().GetConfigPath();
     ImplLoadSubDirs( aUserPath, bMultiPath );
 
     if( bMultiPath )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
@@ -334,7 +337,9 @@ FASTBOOL SdrTextObj::ReloadLinkedText(FASTBOOL bForceLoad)
 
             try
             {
-                INetURLObject aURL; aURL.SetSmartURL( pData->aFileName );
+                INetURLObject aURL( pData->aFileName );
+                DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
                 ::ucb::Content aCnt( aURL.GetMainURL(), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                 ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
                 ::com::sun::star::util::DateTime aDateTime;
@@ -369,26 +374,44 @@ FASTBOOL SdrTextObj::ReloadLinkedText(FASTBOOL bForceLoad)
 
 FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet)
 {
-    SvFileStream aIn(rFileName, STREAM_READ);
-    aIn.SetStreamCharSet(eCharSet);
-    char cRTF[5];
-    cRTF[4] = 0;
-    aIn.Read(cRTF, 5);
+    INetURLObject   aFileURL( rFileName );
+    BOOL            bRet = FALSE;
 
-    BOOL bRTF = cRTF[0] == '{'
-        && cRTF[1] == '\\'
-        && cRTF[2] == 'r'
-        && cRTF[3] == 't'
-        && cRTF[4] == 'f';
-
-    aIn.Seek(0);
-
-    if(!aIn.GetError())
+    if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        SetText(aIn, bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT);
+        String aFileURLStr;
+
+        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aFileURLStr ) )
+            aFileURL = INetURLObject( aFileURLStr );
+        else
+            aFileURL.SetSmartURL( rFileName );
     }
 
-    return !aIn.GetError();
+    DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL(), STREAM_READ );
+
+    if( pIStm )
+    {
+        pIStm->SetStreamCharSet( eCharSet );
+        char cRTF[5];
+        cRTF[4] = 0;
+        pIStm->Read(cRTF, 5);
+
+        BOOL bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
+
+        pIStm->Seek(0);
+
+        if( !pIStm->GetError() )
+        {
+            SetText( *pIStm, bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT );
+            bRet = TRUE;
+        }
+
+        delete pIStm;
+    }
+
+    return bRet;
 }
 
 ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
