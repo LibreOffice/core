@@ -1,4 +1,4 @@
-sf	sfx2	:	idl setup2 NULL
+sf	sfx2	:	idl setup2 xmloff NULL
 sf	sfx2									usr1	-	all	sf_mkout NULL
 sf	sfx2\inc								get		-	all	sf_inc NULL
 sf	sfx2\prj								get		-	all	sf_prj NULL
