@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:28:07 $
+ *  last change: $Author: pl $ $Date: 2002-04-10 08:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,21 +63,41 @@
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
 #include <osl/file.hxx>
-#include <unotools/configmgr.hxx>
+#include <rtl/bootstrap.hxx>
 
 namespace psp {
 
-::rtl::OUString getOfficeInstallPath( ::utl::ConfigManager::ConfigProperty eWhich )
-{
-    ::com::sun::star::uno::Any  aConfigProperty;
-    ::rtl::OUString             aPath;
+enum whichOfficePath { NetPath, UserPath };
 
-    aConfigProperty = ::utl::ConfigManager::GetDirectConfigProperty( eWhich );
-    aConfigProperty >>= aPath;
-    return aPath;
+static const ::rtl::OUString& getOfficePath( enum whichOfficePath ePath )
+{
+    static ::rtl::OUString aNetPath;
+    static ::rtl::OUString aUserPath;
+    static ::rtl::OUString aEmpty;
+    static bool bOnce = false;
+
+    if( ! bOnce )
+    {
+        bOnce = true;
+        ::rtl::Bootstrap aBootstrap( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bootstraprc" ) ) );
+        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
+        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
+
+        if( ! aNetPath.compareToAscii( "file://", 7 ) )
+            aNetPath = aNetPath.copy( 7 );
+        if( ! aUserPath.compareToAscii( "file://", 7 ) )
+            aUserPath = aUserPath.copy( 7 );
+    }
+
+    switch( ePath )
+    {
+        case NetPath: return aNetPath;
+        case UserPath: return aUserPath;
+    }
+    return aEmpty;
 }
 
-::rtl::OUString getEnvironmentPath( const char* pKey, sal_Unicode cPrefix )
+static ::rtl::OUString getEnvironmentPath( const char* pKey, sal_Unicode cPrefix )
 {
     ::rtl::OUString aPath;
 
@@ -98,10 +118,10 @@ const ::rtl::OUString& psp::getPrinterPath()
 
     if( ! aPath.getLength() )
     {
-        aPath  = ::psp::getOfficeInstallPath( ::utl::ConfigManager::OFFICEINSTALL );
+        aPath  = getOfficePath( psp::NetPath );
         aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/psprint:" ) );
-        aPath += ::psp::getOfficeInstallPath( ::utl::ConfigManager::INSTALLPATH );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/psprint" ) );
+        aPath += getOfficePath( psp::UserPath );
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/psprint" ) );
         aPath += ::psp::getEnvironmentPath( "SAL_PSPRINT", (sal_Unicode)':' );
 
 #ifdef DEBUG
@@ -117,14 +137,12 @@ const ::rtl::OUString& psp::getFontPath()
 
     if( ! aPath.getLength() )
     {
-        ::rtl::OUString aOfficeFontPath = ::psp::getOfficeInstallPath(
-                                                   ::utl::ConfigManager::OFFICEINSTALL );
-        aPath  = aOfficeFontPath;
+        aPath  = getOfficePath( psp::NetPath );
         aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype;") );
-        aPath += aOfficeFontPath;
+        aPath += getOfficePath( psp::NetPath );
         aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/type1;") );
-        aPath += ::psp::getOfficeInstallPath( ::utl::ConfigManager::INSTALLPATH );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/fonts" ) );
+        aPath += getOfficePath( psp::UserPath );
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/fonts" ) );
         aPath += ::psp::getEnvironmentPath( "SAL_FONTPATH_PRIVATE", (sal_Unicode)';' );
 
 #ifdef DEBUG
