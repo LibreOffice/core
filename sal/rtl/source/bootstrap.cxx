@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:46 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,15 +236,6 @@ static void getExecutableDirectory(rtl_uString **ppDirURL)
     rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
 }
 
-static void getFileSize( oslFileHandle handle, sal_uInt64 *pSize )
-{
-    sal_uInt64 nOldPos=0;
-    OSL_VERIFY( osl_File_E_None == osl_getFilePos( handle, &nOldPos ) &&
-                osl_File_E_None == osl_setFilePos( handle, osl_Pos_End , 0 ) &&
-                osl_File_E_None == osl_getFilePos( handle, pSize ) &&
-                osl_File_E_None == osl_setFilePos( handle, osl_Pos_Absolut, nOldPos ) );
-}
-
 static void getFromEnvironment( rtl_uString **ppValue, rtl_uString *pName )
 {
     if( osl_Process_E_None != osl_getEnvironment( pName , ppValue ) )
@@ -333,7 +324,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
         rtl::ByteSequence seq;
         sal_uInt64 nSize = 0;
 
-        getFileSize(handle, &nSize);
+        osl_getFileSize(handle, &nSize);
         while (true)
         {
             sal_uInt64 nPos;
