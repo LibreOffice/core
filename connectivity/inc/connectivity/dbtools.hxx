@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:00 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 namespace com { namespace sun { namespace star {
 
 namespace sdb {
-    class XSQLQueryComposer;
+    class XSingleSelectQueryComposer;
     class SQLContext;
 }
 namespace sdbcx {
@@ -382,15 +382,18 @@ namespace dbtools
             sal_Bool _bUseRowSetOrder = sal_True
     )   SAL_THROW( ( ::com::sun::star::sdbc::SQLException ) );
 
-    /** create an XSQLQueryComposer which represents the current settings (Command/CommandType/Filter/Order)
-        of the given rowset.
-        As a XSQLQueryComposerFactory is needed for that, the functions searches for the connection the RowSet
-        is using via calcConnection. This implies that a connection will be set on the RowSet if needed.
+    /** create an <type scope="com::sun::star::sdb">XSingleSelectQueryComposer</type> which represents
+        the current settings (Command/CommandType/Filter/Order) of the given rowset.
+
+        As such an instance can be obtained from a <type scope="com::sun::star::sdb">Connection</type>
+        only the function searches for the connection the RowSet is using via calcConnection.
+        This implies that a connection will be set on the RowSet if needed.
         (need to changes this sometimes ...)
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer > getCurrentSettingsComposer(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+    );
 
     /** transfer and translate properties between two FormComponents
         @param      _rxOld      the source property set
@@ -493,10 +496,10 @@ namespace dbtools
 
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
-        @param _xConnection     the connection must support the iterface @see com::sun::star::sdb::XSQLQueryComposerFactory
+        @param _xConnection     the connection must be able to create <type scope="com::sun::star::sdb">SingleSelectQueryComposer</type>s
         @param _xPreparedStmt   the prepared statement where the parameters could be set when needed
     */
-    void askForParameters(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> & _xComposer,
+    void askForParameters(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xComposer,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler);
