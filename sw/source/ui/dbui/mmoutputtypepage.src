@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmoutputtypepage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:19:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <mmoutputtypepage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+TabPage DLG_MM_OUTPUTTYPE_PAGE
+{
+    HelpID = HID_MM_OUTPUTTYPEPAGE ;
+    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Bitte wählen Sie einen Dokumenttyp" ;
+        Text[ en-US ] = "Select a document type";
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Was für ein Dokument möchten Sie erstellen?" ;
+        Text[ en-US ] = "What type of document do you want to create?";
+    };
+    RadioButton RB_LETTER
+    {
+        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Text [ de ] = "Brief" ;
+        Text[ en-US ] = "~Letter";
+    };
+    RadioButton RB_MAIL
+    {
+        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Text [ de ] = "E-Mail-Nachricht" ;
+        Text[ en-US ] = "~E-mail message";
+    };
+    FixedText FI_HINTHEADER
+    {
+        Pos = MAP_APPFONT ( 12 ,  67) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
+    };
+    FixedText FI_HINT
+    {
+        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Size = MAP_APPFONT ( 242 , 26 ) ;
+        WordBreak = TRUE;
+    };
+    String    ST_LETTERHINTHEADER
+    {
+        Text [ de ] = "Brief:" ;
+        Text[ en-US ] = "Letter:";
+    };
+    String    ST_MAILHINTHEADER
+    {
+        Text [ de ] = "E-Mail-Nachricht:" ;
+        Text[ en-US ] = "E-Mail Message:";
+    };
+    String    ST_LETTERHINT
+    {
+        Text [ de ] = "Die Briefe werden an eine Liste von Empfängern verschickt. Sie können einen Adressblock und eine Anredezeile enthalten. Die Briefe können auch für jeden Empfänger personalisiert werden." ;
+        Text[ en-US ] = "Send letters to a group of recipients. The letters can contain an address block and a salutation. The letters can be personalized for each recipient.";
+    };
+    String    ST_MAILHINT
+    {
+        Text [ de ] = "Die E-Mail-Nachrichten werden an eine Liste von Empfängern verschickt. Die Nachrichten können eine Anredezeile enthalten. Sie können auch für jeden Empfänger personalisiert werden" ;
+        Text[ en-US ] = "Send e-mail messages to a group of recipients. The e-mail messages can contain a salutation. The e-mail messages can be personalized for each recipient.";
+    };
+    FixedText FT_NOMAILHINT
+    {
+        Pos = MAP_APPFONT ( 12 , 108 ) ;
+        Size = MAP_APPFONT ( 242 , 26 ) ;
+        WordBreak = TRUE;
+        Hide = TRUE;
+        Text [ de ] = "%PRODUCTNAME konnte auf Ihrem System keine Java Mail Anbindung finden. Um Nachrichten mit %PRODUCTNAME versenden zu können, muss die aktuellste Version von Java Mail installiert sein. Weitere Informationen zu Java Mail finden Sie im Internet unter 'http://java.sun.com/products/javamail/'." ;
+        Text[ en-US ] = "%PRODUCTNAME was unable to find a Java Mail connection. In order to send e-mail with %PRODUCTNAME, you need to install the latest version of Java Mail. You can find further information about Java Mail on the internet at 'http://java.sun.com/products/javamail/'.";
+    };
+};
+
+
+
