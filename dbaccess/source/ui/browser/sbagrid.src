@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-04 20:10:47 $
+ *  last change: $Author: kz $ $Date: 2002-08-16 20:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,13 +360,13 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ french ] = "Le nom # existe d�j�.";
     Text[ spanish ] = "Ya existe el nombre #.";
     Text[ finnish ] = "The name # already exists.";
-    Text[ italian ] = "Il nome # esiste gi�.";
+    Text[ italian ] = "Il nome \"#\" esiste gi�.";
     Text[ danish ] = "Navnet # findes allerede.";
     Text[ swedish ] = "Namnet # finns redan.";
     Text[ polish ] = "Nazwa # ju� istnieje.";
     Text[ portuguese_brazilian ] = "The name # already exists.";
     Text[ japanese ] = "名前 # はすでにあります。";
-    Text[ korean ] = "이름 #이(가) 이미 존재합니다.";
+    Text[ korean ] = "이름 #가(이) 이미 있습니다.";
     Text[ chinese_simplified ] = "名称 # 已经存在。";
     Text[ chinese_traditional ] = "名稱 # 已經存在。";
     Text[ turkish ] = "The name # already exists.";
