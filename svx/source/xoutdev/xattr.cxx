@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 12:18:58 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,7 @@
 
 #include <tools/stream.hxx>
 
-#ifndef SVX_LIGHT
 #include "unoapi.hxx"
-#endif
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
@@ -969,9 +967,7 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
-#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-#endif
         rVal <<= aApiName;
     }
     else
@@ -1488,7 +1484,6 @@ SfxItemPresentation XLineStartItem::GetPresentation
 
 sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -1502,13 +1497,11 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
         rVal <<= aBezier;
     }
 
-#endif
     return sal_True;
 }
 
 sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         return sal_False;
@@ -1527,7 +1520,6 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
                 SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
         }
     }
-#endif
 
     return sal_True;
 }
@@ -2205,7 +2197,6 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
 
 sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-#ifndef SVX_LIGHT
     if( nMemberId == MID_NAME )
     {
         return sal_False;
@@ -2224,7 +2215,7 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
                 SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
         }
     }
-#endif
+
     return sal_True;
 }
 
@@ -3273,9 +3264,7 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
-#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-#endif
         rVal <<= aApiName;
     }
     else
@@ -3810,9 +3799,7 @@ sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
-#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-#endif
         rVal <<= aApiName;
     }
     else

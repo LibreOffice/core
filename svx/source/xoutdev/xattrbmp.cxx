@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 13:21:41 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,7 @@
 #include "unomid.hxx"
 #include "unoprnms.hxx"
 
-#ifndef SVX_LIGHT
 #include "unoapi.hxx"
-#endif
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
@@ -753,9 +751,7 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
-#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-#endif
         rVal <<= aApiName;
     }
     else if( nMemberId == MID_GRAFURL )
@@ -793,7 +789,6 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
             return sal_True;
         }
     }
-#ifndef SVX_LIGHT
     else if( nMemberId == MID_GRAFURL )
     {
         ::rtl::OUString aURL;
@@ -805,7 +800,6 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
             return sal_True;
         }
     }
-#endif
     else
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;

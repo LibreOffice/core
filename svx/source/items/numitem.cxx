@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:30 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,16 +1029,12 @@ USHORT  SvxNumBulletItem::GetVersion( USHORT nFileVersion ) const
 
 sal_Bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-#ifndef SVX_LIGHT
     rVal <<= SvxCreateNumRule( pNumRule );
-#endif
-
     return sal_True;
 }
 
 sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-#ifndef SVX_LIGHT
     uno::Reference< container::XIndexReplace > xRule;
     if( rVal >>= xRule )
     {
@@ -1060,7 +1056,6 @@ sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE 
         {
         }
     }
-#endif
     return sal_False;
 }
 
