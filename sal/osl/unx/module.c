@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-09 18:12:20 $
+ *  last change: $Author: hr $ $Date: 2002-08-09 14:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ int dladdr(void *address, Dl_info *dl)
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
+#include <mach-o/dyld.h>
 extern oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath, sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
 #else /* MACOSX */
 extern int _dlclose(void *handle);
@@ -474,7 +475,95 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
-#ifndef MACOSX
+#ifdef MACOSX
+    struct mach_header      *imageMachHeader;
+    struct load_command     *loadCmd;
+    struct segment_command  *segCmd;
+    unsigned long           imageIndex;
+    unsigned long           numLoadedImages;
+    unsigned long           mhCmdIndex;
+    unsigned long           imageVMAddressSlide;
+    unsigned long           imageLowAddress;
+    unsigned long           imageHighAddress;
+    unsigned char           imageName[ 255 ] = "\0";        /* Is this large enough? */
+
+    /* Run through all loaded images in the process' address space and
+     * test each segment of each image for the address we want.
+     * NOTE:  This simply checks to see if the address is in the image's
+     *        address space.  That doesn't mean the symbol the address
+     *        is associated with is actually bound yet.
+     */
+    numLoadedImages = _dyld_image_count();
+    for( imageIndex = 0; ((imageIndex < numLoadedImages) && (result==sal_False)); imageIndex++ )
+    {
+    #ifdef DEBUG
+        fprintf( stderr, "  osl_getModuleURLFromAddress(): getting header for image %d.\n", imageIndex );
+    #endif
+
+        imageMachHeader = _dyld_get_image_header( imageIndex );
+        if ( imageMachHeader != NULL )
+        {
+    #ifdef DEBUG
+        fprintf( stderr, "  osl_getModuleURLFromAddress(): iterating commands for image %d.\n", imageIndex );
+    #endif
+            /* Get all the load commands from the image, loop through them, and test
+             * the segment they load for the address we were passed.
+             */
+            imageVMAddressSlide = _dyld_get_image_vmaddr_slide( imageIndex );
+
+            loadCmd = (struct load_command *)((char *)imageMachHeader + sizeof(struct mach_header));
+            for ( mhCmdIndex = 0; mhCmdIndex < imageMachHeader->ncmds; mhCmdIndex++ )
+            {
+                if ( loadCmd->cmd == LC_SEGMENT )
+                {
+    #ifdef DEBUG
+        fprintf( stderr, "  osl_getModuleURLFromAddress(): looking at segment %d image %d.\n", mhCmdIndex, imageIndex );
+    #endif
+                    segCmd = (struct segment_command *)loadCmd;
+                    imageLowAddress = segCmd->vmaddr + imageVMAddressSlide;
+                    imageHighAddress = segCmd->vmaddr + segCmd->vmsize + imageVMAddressSlide;
+                    if( (((unsigned long)(addr))>=imageLowAddress) && (((unsigned long)(addr))<imageHighAddress) )
+                    {
+    #ifdef DEBUG
+        fprintf( stderr, "  osl_getModuleURLFromAddress(): found address in image %d.\n", imageIndex );
+    #endif
+                        /* Address passed in is contained in this image. */
+                        strncpy( imageName, _dyld_get_image_name(imageIndex), 254 );
+                        result = sal_True;
+                        break;
+                    }
+                }
+                loadCmd = (struct load_command *)((char *)loadCmd + loadCmd->cmdsize);
+            }
+        }
+        else
+        {
+            /* Bad index was passed to _dyld_get_image_header() or the image
+             * doesn't exist.
+             */
+            #ifdef DEBUG
+                fprintf( stderr, "osl_getModuleURLFromAddress(): bad index passed to _dyld_get_image_header(), mach_header returned was NULL.\n" );
+            #endif
+            result = sal_False;
+        }
+    }
+    if ( result == sal_True )
+    {
+        rtl_uString * workDir = NULL;
+
+    #ifdef DEBUG
+        fprintf( stderr, "  osl_getModuleURLFromAddress(): getting URL for module.\n" );
+    #endif
+        osl_getProcessWorkingDir( &workDir );
+    #ifdef DEBUG
+        OSL_TRACE( "module.c::osl_getModuleURLFromAddress - %s\n", imageName );
+    #endif
+        rtl_string2UString( ppLibraryUrl, imageName, strlen(imageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+        osl_getFileURLFromSystemPath( *ppLibraryUrl, ppLibraryUrl ); // convert it to be a file url
+        osl_getAbsoluteFileURL( workDir, *ppLibraryUrl, ppLibraryUrl ); // ensure it is an abosolute file url
+    }
+
+#else   /* MACOSX */
     Dl_info dl_info;
 
     if(result = dladdr(addr, &dl_info))
@@ -483,22 +572,16 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         osl_getProcessWorkingDir(&workDir);
 
 #ifdef DEBUG
-        OSL_TRACE("module.c::osl_getModuleUrl - %s\n", dl_info.dli_fname);
+        OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", dl_info.dli_fname);
 #endif
 
         rtl_string2UString(ppLibraryUrl, dl_info.dli_fname, strlen(dl_info.dli_fname), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
-
         osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl); // convert it to be a file url
-
         osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl); // ensure it is an abosolute file url
 
         result = sal_True;
     }
-#else
-        // mh -> ed don't know how has to be implemented
-        result = sal_False;
-        fprintf( stderr, "osl_getModuleURLFrom address not impl." );
-#endif
+#endif  /* MACOSX */
     return result;
 }
 
