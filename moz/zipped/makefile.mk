@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2001-06-21 07:45:20 $
+#   last change: $Author: fs $ $Date: 2001-06-21 08:18:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)inc.zip
     +unzip -o -d $(INCCOM) $(OS)$(COM)inc.zip && $(TOUCH)	$@
 
 $(BIN)$/mozruntime.zip : $(OS)$(COM)runtime.zip
-    +copy $(OS)$(COM)runtime.zip $(BIN)$/mozruntime.zip
+    +$(COPY) $(OS)$(COM)runtime.zip $(BIN)$/mozruntime.zip
 
 .INCLUDE :  target.mk
 
