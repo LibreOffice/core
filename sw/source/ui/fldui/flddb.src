@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:47:24 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ TabPage TP_FLD_DB
         Text [ danish ] = "Fra database" ;
         Text [ italian ] = "Dal database" ;
         Text [ spanish ] = "De la base de datos" ;
-        Text [ french ] = "~De la B.D." ;
+        Text [ french ] = "~De la BD" ;
         Text [ dutch ] = "~Uit database" ;
         Text [ portuguese ] = "~Da base de dados" ;
         Text[ chinese_simplified ] = "´ÓÊý¾Ý¿â";
