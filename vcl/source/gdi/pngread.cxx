@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:23:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,6 +603,8 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt32 nDepth )
         case 2 : nAdd = 85; break;
         case 4 : nAdd = 17; break;
         case 8 : nAdd = 1; break;
+                 // TODO What is the correct value?
+        default: nAdd = 1; break;
     }
 
     for ( sal_uInt32 i = 0; nStart < 256; i++, nStart += nAdd )
@@ -955,6 +957,10 @@ void PNGReaderImpl::ImplResizeScanline( void )
                 mnYpos++;
                 nScansize = mnWidth;
             break;
+
+            default:
+                nScansize = 0;
+            break;
         }
 
         if ( ( mnYpos >= mnHeight ) || ( nX >= mnWidth ) )  // is pass to be skipped ?
@@ -990,7 +996,8 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     BYTE*       p2;
     BYTE*       p3;
     BYTE*       p4;
-    BYTE        nFilterType, nCol;
+    BYTE        nFilterType;
+    BYTE        nCol = 0;
     sal_uInt32  nXIndex, nX, nY = mnYpos, n1, n2, na, nb, nc;
     sal_Int32   np, npa, npb, npc;
 
