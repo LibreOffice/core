@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ public:
 class ScMyTables
 {
 private:
+    typedef std::list<com::sun::star::table::CellRangeAddress>          ScMyMatrixRangeList;
+
     ScXMLImport&                        rImport;
 
     ScMyShapeResizer                    aResizeShapes;
@@ -161,6 +163,7 @@ private:
     rtl::OUString                       sCurrentSheetName;
     rtl::OUString                       sPassword;
     std::vector<ScMyTableData*>         aTableVec;
+    ScMyMatrixRangeList                 aMatrixRangeList;
     com::sun::star::table::CellAddress  aRealCellPos;
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
@@ -213,6 +216,9 @@ public:
                                                 com::sun::star::table::CellAddress& rStartAddress,
                                                 com::sun::star::table::CellAddress& rEndAddress,
                                                 sal_Int32 nEndX, sal_Int32 nEndY);
+
+    void                                AddMatrixRange(sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn, sal_uInt32 nEndRow);
+    sal_Bool                            IsPartOfMatrix(sal_uInt32 nColumn, sal_uInt32 nRow);
 };
 
 #endif
