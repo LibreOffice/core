@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:07:33 $
+ *  last change: $Author: sj $ $Date: 2002-05-21 09:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,7 +1861,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="en-US">Web Page</value>
+        <value xml:lang="de">Webseite (%productname% Writer)</value>
+        <value xml:lang="x-translate">Webseite (%productname% Writer)</value>
+        <value xml:lang="x-comment">Webseite (%productname% Writer)</value>
+        <value xml:lang="en-US">Web Page (%productname% Writer)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,graphic_HTML,com.sun.star.drawing.DrawingDocument,,2,,0,,</value>
@@ -1872,7 +1875,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="en-US">Web Page</value>
+        <value xml:lang="de">Webseite (%productname% Writer)</value>
+        <value xml:lang="x-translate">Webseite (%productname% Writer)</value>
+        <value xml:lang="x-comment">Webseite (%productname% Writer)</value>
+        <value xml:lang="en-US">Web Page (%productname% Writer)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,graphic_HTML,com.sun.star.presentation.PresentationDocument,,2,,0,,</value>
@@ -3160,7 +3166,7 @@
         <value xml:lang="en-US">BMP - Windows Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,bmp_MS_Windows,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,bmp_MS_Windows,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_bmp_Export" oor:op="replace">
@@ -3171,7 +3177,7 @@
         <value xml:lang="en-US">BMP - Windows Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,bmp_MS_Windows,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,bmp_MS_Windows,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="bmp_Import" oor:op="replace">
@@ -3350,7 +3356,7 @@
         <value xml:lang="en-US">EMF - Enhanced Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,emf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,emf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_emf_Export" oor:op="replace">
@@ -3361,7 +3367,7 @@
         <value xml:lang="en-US">EMF - Enhanced Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,emf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,emf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="emf_Import" oor:op="replace">
@@ -3394,7 +3400,7 @@
         <value xml:lang="en-US">EPS - Encapsulated PostScript</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,eps_Encapsulated_PostScript,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,eps_Encapsulated_PostScript,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_eps_Export" oor:op="replace">
@@ -3405,7 +3411,7 @@
         <value xml:lang="en-US">EPS - Encapsulated PostScript</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,eps_Encapsulated_PostScript,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,eps_Encapsulated_PostScript,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="eps_Import" oor:op="replace">
@@ -3438,7 +3444,7 @@
         <value xml:lang="en-US">GIF - Graphics Interchange Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,gif_Graphics_Interchange,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,gif_Graphics_Interchange,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_gif_Export" oor:op="replace">
@@ -3449,7 +3455,7 @@
         <value xml:lang="en-US">GIF - Graphics Interchange Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,gif_Graphics_Interchange,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,gif_Graphics_Interchange,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="gif_Import" oor:op="replace">
@@ -3550,7 +3556,7 @@
         <value xml:lang="en-US">JPEG - Joint Photographic Experts Group</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,jpg_JPEG,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,jpg_JPEG,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_jpg_Export" oor:op="replace">
@@ -3561,7 +3567,7 @@
         <value xml:lang="en-US">JPEG - Joint Photographic Experts Group</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,jpg_JPEG,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,jpg_JPEG,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="jpg_Import" oor:op="replace">
@@ -3594,7 +3600,7 @@
         <value xml:lang="en-US">MET - OS/2 Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,met_OS2_Metafile,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,met_OS2_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_met_Export" oor:op="replace">
@@ -3605,7 +3611,7 @@
         <value xml:lang="en-US">MET - OS/2 Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,met_OS2_Metafile,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,met_OS2_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="met_Import" oor:op="replace">
@@ -3638,7 +3644,7 @@
         <value xml:lang="en-US">PBM - Portable Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pbm_Portable_Bitmap,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pbm_Portable_Bitmap,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_pbm_Export" oor:op="replace">
@@ -3649,7 +3655,7 @@
         <value xml:lang="en-US">PBM - Portable Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pbm_Portable_Bitmap,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pbm_Portable_Bitmap,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="pbm_Import" oor:op="replace">
@@ -3715,7 +3721,7 @@
         <value xml:lang="en-US">PCT - Mac Pict</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pct_Mac_Pict,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pct_Mac_Pict,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_pct_Export" oor:op="replace">
@@ -3726,7 +3732,7 @@
         <value xml:lang="en-US">PCT - Mac Pict</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pct_Mac_Pict,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pct_Mac_Pict,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="pct_Import" oor:op="replace">
@@ -3770,7 +3776,7 @@
         <value xml:lang="en-US">PGM - Portable Graymap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pgm_Portable_Graymap,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pgm_Portable_Graymap,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_pgm_Export" oor:op="replace">
@@ -3781,7 +3787,7 @@
         <value xml:lang="en-US">PGM - Portable Graymap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pgm_Portable_Graymap,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pgm_Portable_Graymap,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="pgm_Import" oor:op="replace">
@@ -3814,7 +3820,7 @@
         <value xml:lang="en-US">PNG - Portable Network Graphic</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,png_Portable_Network_Graphic,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,png_Portable_Network_Graphic,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_png_Export" oor:op="replace">
@@ -3825,7 +3831,7 @@
         <value xml:lang="en-US">PNG - Portable Network Graphic</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,png_Portable_Network_Graphic,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,png_Portable_Network_Graphic,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="png_Import" oor:op="replace">
@@ -3858,7 +3864,7 @@
         <value xml:lang="en-US">PPM - Portable Pixelmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ppm_Portable_Pixelmap,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,ppm_Portable_Pixelmap,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_ppm_Export" oor:op="replace">
@@ -3869,7 +3875,7 @@
         <value xml:lang="en-US">PPM - Portable Pixelmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ppm_Portable_Pixelmap,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,ppm_Portable_Pixelmap,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="ppm_Import" oor:op="replace">
@@ -3913,7 +3919,7 @@
         <value xml:lang="en-US">RAS - Sun Raster Image</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ras_Sun_Rasterfile,com.sun.star.drawing.DrawingDocument,,2,,0,,</value>
+        <value>0,ras_Sun_Rasterfile,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="impress_ras_Export" oor:op="replace">
@@ -3924,7 +3930,7 @@
         <value xml:lang="en-US">RAS - Sun Raster Image</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ras_Sun_Rasterfile,com.sun.star.presentation.PresentationDocument,,2,,0,,</value>
+        <value>0,ras_Sun_Rasterfile,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="ras_Import" oor:op="replace">
@@ -5310,7 +5316,7 @@
         <value xml:lang="en-US">SVG - Scalable Vector Graphics</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.drawing.DrawingDocument,,2,,0,,</value>
+        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="impress_svg_Export" oor:op="replace">
@@ -5321,7 +5327,7 @@
         <value xml:lang="en-US">SVG - Scalable Vector Graphics</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.presentation.PresentationDocument,,2,,0,,</value>
+        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="svm_Export" oor:op="replace">
@@ -5343,7 +5349,7 @@
         <value xml:lang="en-US">SVM - StarView Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svm_StarView_Metafile,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,svm_StarView_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_svm_Export" oor:op="replace">
@@ -5354,7 +5360,7 @@
         <value xml:lang="en-US">SVM - StarView Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svm_StarView_Metafile,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,svm_StarView_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="svm_Import" oor:op="replace">
@@ -6308,7 +6314,7 @@
         <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,tif_Tag_Image_File,com.sun.star.drawing.DrawingDocument,,2,,0,,</value>
+        <value>0,tif_Tag_Image_File,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="impress_tif_Export" oor:op="replace">
@@ -6319,7 +6325,7 @@
         <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,tif_Tag_Image_File,com.sun.star.presentation.PresentationDocument,,2,,0,,</value>
+        <value>0,tif_Tag_Image_File,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="tif_Import" oor:op="replace">
@@ -6352,7 +6358,7 @@
         <value xml:lang="en-US">WMF - Windows Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,wmf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,wmf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_wmf_Export" oor:op="replace">
@@ -6363,7 +6369,7 @@
         <value xml:lang="en-US">WMF - Windows Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,wmf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,wmf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="wmf_Import" oor:op="replace">
@@ -6588,7 +6594,7 @@
         <value xml:lang="en-US">XPM - X PixMap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,xpm_XPM,com.sun.star.drawing.DrawingDocument,,2,,0,,</value>
+        <value>0,xpm_XPM,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="impress_xpm_Export" oor:op="replace">
@@ -6599,7 +6605,7 @@
         <value xml:lang="en-US">XPM - X PixMap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,xpm_XPM,com.sun.star.presentation.PresentationDocument,,2,,0,,</value>
+        <value>0,xpm_XPM,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="xpm_Import" oor:op="replace">
