@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:05 $
+ *  last change: $Author: jp $ $Date: 2002-03-12 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,8 +843,38 @@ void SwUndoAttr::Undo( SwUndoIter& rUndoIter )
     SetPaM( rUndoIter );
 }
 
+int lcl_HasEqualItems( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+{
+    int nRet = -1;
+    SfxItemIter aIter1( rSet1 ), aIter2( rSet2 );
+    const SfxPoolItem *pI1 = aIter1.FirstItem(), *pI2 = aIter2.FirstItem();
+
+    while( pI1 && pI2 )
+    {
+        if( pI1->Which() != pI2->Which() ||
+            aIter1.IsAtEnd() != aIter2.IsAtEnd() )
+        {
+            nRet = 0;
+            break;
+        }
+        if( aIter1.IsAtEnd() )
+            break;
+        pI1 = aIter1.NextItem();
+        pI2 = aIter2.NextItem();
+    }
+    return nRet;
+}
+
 void SwUndoAttr::Repeat( SwUndoIter& rUndoIter )
 {
+    SwUndoAttr* pLast;
+    if( UNDO_INSATTR == rUndoIter.GetLastUndoId() &&
+        ( pLast = ((SwUndoAttr*)rUndoIter.pLastUndoObj))->aSet.Count() ==
+        aSet.Count() && pLast->nInsFlags == nInsFlags &&
+        lcl_HasEqualItems( aSet, pLast->aSet ))
+        return;
+
+
     // RefMarks sind nicht repeatfaehig
     if( SFX_ITEM_SET != aSet.GetItemState( RES_TXTATR_REFMARK, FALSE ) )
         rUndoIter.GetDoc().Insert( *rUndoIter.pAktPam, aSet, nInsFlags );
