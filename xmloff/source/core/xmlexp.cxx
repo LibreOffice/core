@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:55:05 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,6 +1794,8 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
         sRet =
             xEmbeddedResolver->resolveEmbeddedObjectURL( rEmbeddedObjectURL );
     }
+    else
+        sRet = GetRelativeReference( rEmbeddedObjectURL );
 
     return sRet;
 }
