@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-28 13:04:06 $
+ *  last change: $Author: os $ $Date: 2000-10-17 15:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,7 +1105,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 //  const SwCropGrf   &rSet.GetCropGrf(BOOL bInP) const
 
     const SwRotationGrf& rRotation = rSet.GetRotationGrf();
-    rGA.SetRotation( rRotation.GetValue(), rRotation.GetUnrotatedSize() );
+    rGA.SetRotation( rRotation.GetValue() );
 
     rGA.SetLuminance( rSet.GetLuminanceGrf().GetValue() );
     rGA.SetContrast( rSet.GetContrastGrf().GetValue() );
