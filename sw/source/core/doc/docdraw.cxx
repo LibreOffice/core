@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:44:43 $
+ *  last change: $Author: fme $ $Date: 2002-11-22 10:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,6 +694,15 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             * Measure-Field
             ******************************************************************/
             pInfo->ClearFldColor();
+        }
+        else if ( pField && pField->ISA(SvxExtTimeField))
+        {
+            /******************************************************************
+            * Time-Field
+            ******************************************************************/
+            pInfo->SetRepresentation(
+                ((const SvxExtTimeField*) pField)->GetFormatted(
+                        *GetNumberFormatter( TRUE ), LANGUAGE_SYSTEM) );
         }
         else
         {
