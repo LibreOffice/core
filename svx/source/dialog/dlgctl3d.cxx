@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:51 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,13 +209,14 @@ void Svx3DPreviewControl::Construct()
 
     SfxItemSet aSet( pModel->GetItemPool(),
         XATTR_LINESTYLE, XATTR_LINESTYLE,
-        XATTR_FILL_FIRST, XATTR_FILLBITMAP, 0 );
+        XATTR_FILL_FIRST, XATTR_FILLBITMAP,
+        0, 0 );
     aSet.Put( XLineStyleItem( XLINE_NONE ) );
     aSet.Put( XFillStyleItem( XFILL_SOLID ) );
     aSet.Put( XFillColorItem( String(), Color( COL_WHITE ) ) );
 
 //-/    pScene->NbcSetAttributes( aSet, FALSE );
-    pScene->SetItemSet(aSet);
+    pScene->SetMergedItemSet(aSet);
 
     // Default-Attribute holen (ohne markiertes Objekt)
 //  SfxItemSet aDefaultSet = p3DView->Get3DAttributes();
@@ -277,15 +278,17 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
 {
     if( nObjectType != nType || !p3DObj)
     {
-        SfxItemSet aSet(pModel->GetItemPool(),
+        SfxItemSet aSet(
+            pModel->GetItemPool(),
             SDRATTR_START,  SDRATTR_END,
             0, 0);
+
         nObjectType = nType;
 
         if( p3DObj )
         {
 //-/            p3DObj->TakeAttributes( aSet, FALSE, FALSE );
-            aSet.Put(p3DObj->GetItemSet());
+            aSet.Put(p3DObj->GetMergedItemSet());
 
             pScene->Remove3DObj( p3DObj );
             delete p3DObj;
@@ -319,7 +322,7 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
         pScene->Insert3DObj( p3DObj );
 
 //-/        p3DObj->NbcSetAttributes( aSet, FALSE );
-        p3DObj->SetItemSet(aSet);
+        p3DObj->SetMergedItemSet(aSet);
 
         // Refresh
         Resize();
