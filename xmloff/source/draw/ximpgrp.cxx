@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:52:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_EVENTS;
+using ::xmloff::token::XML_EVENT_LISTENERS;
 using ::xmloff::token::XML_GLUE_POINT;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -114,7 +114,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext* pContext = 0L;
 
-    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENTS ) )
+    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
