@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:30:24 $
+ *  last change: $Author: kz $ $Date: 2002-10-31 13:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ danish ] = "Til~bage" ;
         Text [ french ] = "~Vers le haut" ;
         Text [ swedish ] = "Baklдnges" ;
-        Text [ dutch ] = "Ac~hterwaarts" ;
+        Text [ dutch ] = "Ach~terwaarts" ;
         Text [ spanish ] = "Retroceder" ;
         Text [ english_us ] = "Bac~kwards" ;
         TabStop = TRUE ;
@@ -701,7 +701,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ danish ] = "No~ter" ;
         Text [ french ] = "Notes" ;
         Text [ swedish ] = "Anteckningar" ;
-        Text [ dutch ] = "Aan~tekeningen" ;
+        Text [ dutch ] = "Aantekenin~gen" ;
         Text [ spanish ] = "Not~as" ;
         Text [ english_us ] = "~Notes" ;
         Hide = TRUE ;
@@ -864,7 +864,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "~Cerca in tutte le tabelle" ;
         Text [ spanish ] = "~Buscar en todas las hojas" ;
         Text [ french ] = "~Rechercher dans toutes les feuilles" ;
-        Text [ dutch ] = "~In alle werkbladen zoeken" ;
+        Text [ dutch ] = "In alle werk~bladen zoeken" ;
         Text[ chinese_simplified ] = "ењЁж‰Ђжњ‰иЎЁж јдё­жђњеЇ»";
         Text[ russian ] = "Поиск во всех таблицах";
         Text[ polish ] = "Szukaj we wszystkich arkuszach";
