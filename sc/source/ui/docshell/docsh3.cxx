@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
+ *  last change: $Author: nn $ $Date: 2001-08-14 18:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void ScDocShell::UnlockDocument()
     if (nDocumentLock)
     {
         UnlockPaint_Impl(TRUE);
-        UnlockDocument_Impl(nDocumentLock + 1);
+        UnlockDocument_Impl(nDocumentLock - 1);
     }
     else
         DBG_ERROR("UnlockDocument without LockDocument");
