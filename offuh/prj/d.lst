@@ -78,7 +78,9 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star
 
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\form
 
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script
@@ -224,6 +226,11 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hdl
+..\%__SRC%\inc\drafts\com\sun\star\frame\status\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status\*.hpp
+..\%__SRC%\inc\drafts\com\sun\star\frame\status\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status\*.hdl
+
+..\%__SRC%\inc\drafts\com\sun\star\ui\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\ui\*.hpp
+..\%__SRC%\inc\drafts\com\sun\star\ui\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\ui\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\i18n\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\i18n\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n\*.hdl
