@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-20 10:15:05 $
+ *  last change: $Author: as $ $Date: 2002-09-16 10:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ namespace framework{
 #define SERVICENAME_CFGPROVIDER                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"    )   // describe cfg-provider service for fatoffice, network installation
 #define SERVICENAME_ADMINPROVIDER                           DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
 #define SERVICENAME_CFGUPDATEACCESS                         DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")
-#define SERVICENAME_SOUNDHANDLER                            DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
-#define SERVICENAME_CONTENTHANDLERFACTORY                   DECLARE_ASCII("com.sun.star.document.ContentHandlerFactory"         )
+#define SERVICENAME_SOUNDHANDLER                            DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
+#define SERVICENAME_CONTENTHANDLERFACTORY                   DECLARE_ASCII("com.sun.star.frame.ContentHandlerFactory"            )
 #define SERVICENAME_APPDISPATCHPROVIDER                     DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
 #define SERVICENAME_UCBCONTENTBROKER                        DECLARE_ASCII("com.sun.star.ucb.UniversalContentBroker"             )
 #define SERVICENAME_STATUSINDICATOR                         DECLARE_ASCII("com.sun.star.task.XStatusIndicator"                  )
