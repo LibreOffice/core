@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <svtools/itempool.hxx>
 #include <sfx2/docfile.hxx>
+#include <avmedia/mediawindow.hxx>
 #include "svdograf.hxx"
 #include "fmpage.hxx"
 #include "codec.hxx"
@@ -1160,7 +1161,7 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
         else
             pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat );
     }
-    else if( GalleryIsSoundFile( rURL ) )
+    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
         pNewObj = (SgaObject*) new SgaObjectSound( rURL );
 
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
