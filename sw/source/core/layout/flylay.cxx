@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:21:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,12 @@ void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPage,
 
 void SwFlyFreeFrm::MakeAll()
 {
+    // OD 2004-01-19 #110582#
+    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    {
+        return;
+    }
+
     if ( !GetAnchor() || IsLocked() || IsColLocked() )
         return;
     if( !GetPage() && GetAnchor() && GetAnchor()->IsInFly() )
