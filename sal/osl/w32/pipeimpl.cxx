@@ -709,7 +709,7 @@ extern "C" HANDLE WINAPI AcceptSimplePipeConnection( HANDLE hPipe )
     }
 }
 
-extern "C" BOOL WINAPI WaitForSimplePipe( LPCTSTR lpName, DWORD dwTimeOut )
+extern "C" BOOL WINAPI WaitForSimplePipe( LPCTSTR /*lpName*/, DWORD /*dwTimeOut*/ )
 {
     return FALSE;
 }
