@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScFilterDescriptorBase.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:30 $
+ *  last change:$Date: 2003-02-03 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.sheet.SheetFilterDescriptor</code>. <p>
@@ -134,8 +137,7 @@ public class ScFilterDescriptorBase extends TestCase {
     * @see com.sun.star.sheet.XSheetFilterable
     * @see com.sun.star.sheet.SheetFilterDescriptor
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
         XSheetFilterable SF = null;
@@ -149,11 +151,15 @@ public class ScFilterDescriptorBase extends TestCase {
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
-            oSheet = (XSpreadsheet)oIndexAccess.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get a spreadsheet", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get a spreadsheet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get a spreadsheet", e);
         }
