@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
 
 #define protected public
 #ifndef _SV_TIMER_HXX
@@ -134,12 +137,8 @@ void ImplDeInitTimer()
 
         pSVData->mpFirstTimerData   = NULL;
         pSVData->mnTimerPeriod      = 0;
-#ifndef REMOTE_APPSERVER
-        SalTimer::Stop();
-#else
-        if ( pSVData->mpOTimer )
-            pSVData->mpOTimer->StopTimer();
-#endif
+        delete pSVData->mpSalTimer;
+        pSVData->mpSalTimer = NULL;
     }
 }
 
@@ -150,24 +149,11 @@ static void ImplStartTimer( ImplSVData* pSVData, ULONG nMS )
     if ( !nMS )
         nMS = 1;
 
-#ifndef REMOTE_APPSERVER
     if ( nMS != pSVData->mnTimerPeriod )
     {
         pSVData->mnTimerPeriod = nMS;
-        SalTimer::Start( nMS );
+        pSVData->mpSalTimer->Start( nMS );
     }
-#else
-    pSVData->mnTimerPeriod = nMS;
-    if ( !pSVData->mpOTimer )
-    {
-        pSVData->mpOTimer = new VclOTimer;
-        pSVData->mpOTimer->acquire();
-    }
-    else
-        pSVData->mpOTimer->StopTimer();
-    pSVData->mpOTimer->setRemainingTime( nMS, 0 );
-    pSVData->mpOTimer->StartTimer();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -275,12 +261,7 @@ void ImplTimerCallbackProc()
     // Wenn keine Timer mehr existieren, dann Clock loeschen
     if ( !pSVData->mpFirstTimerData )
     {
-#ifndef REMOTE_APPSERVER
-        SalTimer::Stop();
-#else
-        if ( pSVData->mpOTimer )
-            pSVData->mpOTimer->StopTimer();
-#endif
+        pSVData->mpSalTimer->Stop();
         pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
     }
     else
@@ -402,9 +383,11 @@ void Timer::Start()
         if ( !pSVData->mpFirstTimerData )
         {
             pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
-#ifndef REMOTE_APPSERVER
-            SalTimer::SetCallback( ImplTimerCallbackProc );
-#endif
+            if( ! pSVData->mpSalTimer )
+            {
+                pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
+                pSVData->mpSalTimer->SetCallback( ImplTimerCallbackProc );
+            }
         }
 
         // insert timer and start
