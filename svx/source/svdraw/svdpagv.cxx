@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-14 10:20:50 $
+ *  last change: $Author: aw $ $Date: 2002-07-08 15:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,14 +574,38 @@ void SdrPageViewWinRec::CreateControlContainer()
             Window* pWindow = (Window*) pOutDev;
             xControlContainer = VCLUnoHelper::CreateControlContainer( pWindow );
 
-            // UnoContainerModel erzeugen
-            uno::Reference< awt::XWindow > xC(xControlContainer, uno::UNO_QUERY);
+            // #100394# xC->setVisible triggers window->Show() and this has
+            // problems when the view is not completely constructed which may
+            // happen when loading. This leads to accessibility broadcasts which
+            // throw asserts due to the not finished view. All this chan be avoided
+            // since xC->setVisible is here called only for the side effect in
+            // UnoControlContainer::setVisible(...) which calls createPeer(...).
+            // This will now be called directly from here.
 
+            // UnoContainerModel erzeugen
+            // uno::Reference< awt::XWindow > xC(xControlContainer, uno::UNO_QUERY);
+            // CreateControlContainer() is only used from
+            // , thus it seems not necessary to make
+            // it visible her at all.
             // #58917# Das Show darf nicht am VCL-Fenster landen, weil dann Assertion vom SFX
-            BOOL bVis = pWindow->IsVisible();
-            xC->setVisible(TRUE);
-            if ( !bVis )
-                pWindow->Hide();
+            // BOOL bVis = pWindow->IsVisible();
+            // xC->setVisible(TRUE);
+            // if ( !bVis )
+            //  pWindow->Hide();
+            //  if( !mxContext.is() && bVisible )
+            //      // Es ist ein TopWindow, also automatisch anzeigen
+            //      createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
+
+            uno::Reference< awt::XControl > xControl(xControlContainer, uno::UNO_QUERY);
+            if(xControl.is())
+            {
+                uno::Reference< uno::XInterface > xContext = xControl->getContext();
+                if(!xContext.is())
+                {
+                    xControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (),
+                        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
+                }
+            }
         }
         else
         {
