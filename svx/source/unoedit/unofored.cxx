@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:51:03 $
+ *  last change: $Author: cl $ $Date: 2001-11-13 15:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,30 @@ String SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
 
 SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
-    return rEditEngine.GetAttribs( rSel, bOnlyHardAttrib );
+    if( rSel.nStartPara == rSel.nEndPara )
+    {
+        sal_uInt8 nFlags;
+        switch( bOnlyHardAttrib )
+        {
+        case EditEngineAttribs_All:
+            nFlags = GETATTRIBS_ALL;
+            break;
+        case EditEngineAttribs_HardAndPara:
+            nFlags = GETATTRIBS_PARAATTRIBS|GETATTRIBS_CHARATTRIBS;
+            break;
+        case EditEngineAttribs_OnlyHard:
+            nFlags = GETATTRIBS_CHARATTRIBS;
+            break;
+        default:
+            DBG_ERROR("unknown flags for SvxOutlinerForwarder::GetAttribs");
+        }
+
+        return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
+    }
+    else
+    {
+        return rEditEngine.GetAttribs( rSel, bOnlyHardAttrib );
+    }
 }
 
 SfxItemSet SvxEditEngineForwarder::GetParaAttribs( USHORT nPara ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-05 13:55:33 $
+ *  last change: $Author: cl $ $Date: 2001-11-13 15:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,34 @@ String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
 
+static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib, EditEngine& rEditEngine )
+{
+    if( rSel.nStartPara == rSel.nEndPara )
+    {
+        sal_uInt8 nFlags;
+
+        switch( bOnlyHardAttrib )
+        {
+        case EditEngineAttribs_All:
+            nFlags = GETATTRIBS_ALL;
+            break;
+        case EditEngineAttribs_HardAndPara:
+            nFlags = GETATTRIBS_PARAATTRIBS|GETATTRIBS_CHARATTRIBS;
+            break;
+        case EditEngineAttribs_OnlyHard:
+            nFlags = GETATTRIBS_CHARATTRIBS;
+            break;
+        default:
+            DBG_ERROR("unknown flags for SvxOutlinerForwarder::GetAttribs");
+        }
+        return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
+    }
+    else
+    {
+        return rEditEngine.GetAttribs( rSel, bOnlyHardAttrib );
+    }
+}
+
 SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
     if( mpAttribsCache && ( 0 == bOnlyHardAttrib ) )
@@ -138,7 +166,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyH
     //! und warum ist GetAttribs an der EditEngine nicht const?
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
-    SfxItemSet aSet( rEditEngine.GetAttribs( rSel, bOnlyHardAttrib ) );
+    SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, bOnlyHardAttrib, rEditEngine ) );
 
     if( 0 == bOnlyHardAttrib )
     {
