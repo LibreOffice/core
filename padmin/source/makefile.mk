@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:37:15 $
+#   last change: $Author: rt $ $Date: 2004-05-21 16:30:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,18 +76,13 @@ SRS1NAME=$(TARGET)
 SRC1FILES=padialog.src rtsetup.src
 
 RESLIB1NAME=spa
+RESLIB1IMAGES=$(PRJ)$/source
 RESLIB1SRSFILES= $(SRS)$/padmin.srs
 RESLIB1DEPN=\
     padialog.src	\
     padialog.hrc	\
     rtsetup.src		\
     rtsetup.hrc
-RESLIB1BMPS=\
-    butter.bmp		\
-    fax.bmp			\
-    pdf.bmp			\
-    print.bmp		\
-    printer_large.bmp
 
 SLOFILES=\
     $(SLO)$/padialog.obj		\
