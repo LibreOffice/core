@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
         aItr->xRanges->Join(rRange);
 }
 
-void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const sal_Int16 nDx, const sal_Int16 nDy,
-        const sal_Int16 nDz, ScDocument* pDoc)
+void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const SCsCOL nDx, const SCsROW nDy,
+        const SCsTAB nDz, ScDocument* pDoc)
 {
     UpdateRefMode aRefMode = URM_INSDEL;
     if (pNumberList)
@@ -298,14 +298,14 @@ void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const sal_Int16 nDx, c
 
 void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
 {
-    InsertColRow(ScRange(0, static_cast<sal_uInt16>(nRow), static_cast<sal_uInt16>(nTab),
-        MAXCOL, MAXROW, static_cast<sal_uInt16>(nTab)), 0, 1, 0, pDoc);
+    InsertColRow(ScRange(0, static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab),
+        MAXCOL, MAXROW, static_cast<SCTAB>(nTab)), 0, 1, 0, pDoc);
 }
 
 void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
 {
-    InsertColRow(ScRange(static_cast<sal_uInt16>(nCol), 0, static_cast<sal_uInt16>(nTab),
-        MAXCOL, MAXROW, static_cast<sal_uInt16>(nTab)), 1, 0, 0, pDoc);
+    InsertColRow(ScRange(static_cast<SCCOL>(nCol), 0, static_cast<SCTAB>(nTab),
+        MAXCOL, MAXROW, static_cast<SCTAB>(nTab)), 1, 0, 0, pDoc);
 }
 
 void ScMyStyleRanges::SetStylesToRanges(ScRangeList* pList,
@@ -421,20 +421,20 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     DBG_ASSERT(aRowDefaultStyle != aCellStyles.end(), "no row default style")
     if (!aRowDefaultStyle->sStyleName.getLength())
     {
-        sal_uInt32 nStartCol(rRange.aStart.Col());
-        sal_uInt32 nEndCol(rRange.aEnd.Col());
+        SCCOL nStartCol(rRange.aStart.Col());
+        SCCOL nEndCol(rRange.aEnd.Col());
         if (aColDefaultStyles.size() > nStartCol)
         {
             ScMyStylesSet::iterator aPrevItr = aColDefaultStyles[nStartCol];
             DBG_ASSERT(aColDefaultStyles.size() > nEndCol, "to much columns");
-            for (sal_uInt32 i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); i++)
+            for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); i++)
             {
                 if (aPrevItr != aColDefaultStyles[i])
                 {
                     DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style")
                     ScRange aRange(rRange);
-                    aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
-                    aRange.aEnd.SetCol(static_cast<sal_uInt16>(i - 1));
+                    aRange.aStart.SetCol(nStartCol);
+                    aRange.aEnd.SetCol(i - 1);
                     if (pPrevStyleName)
                         delete pPrevStyleName;
                     pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
@@ -446,7 +446,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             if (aPrevItr != aCellStyles.end())
             {
                 ScRange aRange(rRange);
-                aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
+                aRange.aStart.SetCol(nStartCol);
                 if (pPrevStyleName)
                     delete pPrevStyleName;
                 pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
@@ -568,8 +568,8 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
 
 void ScMyStylesImportHelper::AddRange(const com::sun::star::table::CellRangeAddress& rRange)
 {
-    ScRange aScRange( static_cast<USHORT>(rRange.StartColumn), static_cast<USHORT>(rRange.StartRow), rRange.Sheet,
-        static_cast<USHORT>(rRange.EndColumn), static_cast<USHORT>(rRange.EndRow), rRange.Sheet );
+    ScRange aScRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), rRange.Sheet,
+        static_cast<SCCOL>(rRange.EndColumn), static_cast<SCROW>(rRange.EndRow), rRange.Sheet );
     AddRange(aScRange);
 }
 
@@ -581,7 +581,7 @@ void ScMyStylesImportHelper::AddCell(const ScAddress& rAddress)
 
 void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& rAddress)
 {
-    ScAddress aScAddress( static_cast<USHORT>(rAddress.Column), static_cast<USHORT>(rAddress.Row), rAddress.Sheet );
+    ScAddress aScAddress( static_cast<SCCOL>(rAddress.Column), static_cast<SCROW>(rAddress.Row), rAddress.Sheet );
     ScRange aScRange( aScAddress, aScAddress );
     AddRange(aScRange);
 }
