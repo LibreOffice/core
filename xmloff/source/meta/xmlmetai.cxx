@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-11 05:19:20 $
+ *  last change: $Author: thb $ $Date: 2001-10-24 15:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,10 @@ SfxXMLMetaContext::SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         xDocInfo = xSupp->getDocumentInfo();
         xInfoProp = uno::Reference<beans::XPropertySet>( xDocInfo, uno::UNO_QUERY );
     }
+#ifndef SVX_LIGHT
+    // this service is not available for player
     DBG_ASSERT( xInfoProp.is(), "no document info properties" );
+#endif
 }
 
 SfxXMLMetaContext::SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -762,7 +765,10 @@ SfxXMLMetaContext::SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
     pTokenMap ( NULL ),
     nUserKeys ( 0 )
 {
+#ifndef SVX_LIGHT
+    // this service is not available for player
     DBG_ASSERT( xInfoProp.is(), "no document info properties" );
+#endif
 }
 
 SfxXMLMetaContext::~SfxXMLMetaContext()

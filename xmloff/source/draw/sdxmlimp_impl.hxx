@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-14 11:23:41 $
+ *  last change: $Author: thb $ $Date: 2001-10-24 15:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,10 +279,8 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
     // namespace office
-#ifndef SVX_LIGHT
     SvXMLImportContext* CreateMetaContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-#endif
     SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext* CreateBodyContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);

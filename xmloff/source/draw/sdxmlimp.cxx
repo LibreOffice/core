@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 10:52:49 $
+ *  last change: $Author: thb $ $Date: 2001-10-24 15:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,13 +323,11 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_META:
         {
-#ifndef SVX_LIGHT
             if( GetImport().getImportFlags() & IMPORT_META )
             {
                 // office:meta inside office:document
                 pContext = GetSdImport().CreateMetaContext(rLocalName, xAttrList);
             }
-#endif // #ifndef SVX_LIGHT
             break;
         }
         case XML_TOK_DOC_SCRIPT:
@@ -798,7 +796,6 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
 
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef SVX_LIGHT
 SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -822,7 +819,6 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 
     return pContext;
 }
-#endif // #ifndef SVX_LIGHT
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-25 11:45:09 $
+#   last change: $Author: thb $ $Date: 2001-10-24 15:22:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,7 @@ LIB2TARGET= $(LB)$/xol.lib
 LIB2ARCHIV= $(LB)$/libxol.a
 LIB2FILES=  \
             $(LB)$/sxl_core.lib\
+            $(LB)$/sxl_meta.lib\
             $(LB)$/sxl_draw.lib\
             $(LB)$/sxl_forms.lib\
             $(LB)$/sxl_script.lib\
