@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:44:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
-
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
+#include "AutoControls.hrc"
+#endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
 #endif
@@ -82,6 +84,7 @@
 #define UNRELATED_CONTROLS  7
 #define EDIT_HEIGHT         12
 #define EDIT_X              101
+
 
 #define ADVANCED_PAGE_X     200
 #define ADVANCED_PAGE_Y     (105 + 4*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS)
@@ -463,6 +466,55 @@ TabPage PAGE_GENERAL
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_GENERAL;
 
+
+    FixedText FT_GENERALHEADERTEXT
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Willkommen zum %PRODUCTNAME Datenbank-Assistent." ;
+        Text [ en-US ] = "Welcome to the %PRODUCTNAME Database Wizard";
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_GENERALHELPTEXT
+    {
+        Pos = MAP_APPFONT (START_X , 27 );
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 5* FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Sie können eine neue Datenbank erstellen, oder eine Verbindung zu einer bestehenden  Datenbank herstellen.\nIn beiden Fällen wird eine Datenbankdatei erstellt. In dieser Datei werden Verbindungsdaten, Formulare und Berichte gespeichert.";
+        Text [ en-US ]  = "You can either create a new database or set up a connection to an existing database. In both cases, a file will be created. This file stores information such as connection  settings, forms and reports." ;
+        WordBreak = TRUE ;
+    };
+
+    FixedText FT_DATASOURCEHEADER
+    {
+        Pos = MAP_APPFONT ( START_X , 104 ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Wie möchten Sie fortfahren?";
+        Text [ en-US ] = "What do you want to do?";
+    };
+
+
+    RadioButton RB_CREATEDBDATABASE
+    {
+        HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE ;
+        Pos = MAP_APPFONT (START_X + 6 , 116 )  ;
+        Size = MAP_APPFONT ( 205 , 10 ) ;
+        Text [ de ] = "N~eue Datenbank erstellen";
+        Text [ en-US ]  = "Create a n~ew database" ;
+    };
+
+
+    RadioButton RB_GETEXISTINGDATABASE
+    {
+          HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE ;
+        Pos = MAP_APPFONT (START_X + 6 , 130 )  ;
+        Size = MAP_APPFONT ( 206 , 10 ) ;
+        Text [ de ] = "~Verbindung zu einer bestehenden Datenbank herstellen";
+        Text [ en-US ]  = "Connect to an e~xisting database" ;
+    };
+
+
+
     FixedText FT_DATASOURCETYPE_PRE
     {
         Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
@@ -479,15 +531,25 @@ TabPage PAGE_GENERAL
         Text [ en-US ] = "Database ~type ";
         Text [ x-comment ] = " ";
     };
+
     ListBox LB_DATATYPE
     {
         HelpId = HID_DSADMIN_DSTYPE;
         Pos = MAP_APPFONT ( 90, 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS -2 ) ;
-        Size = MAP_APPFONT ( 100, 120 ) ;
+        Size = MAP_APPFONT ( 70, 120 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE;
+    };
+
+
+    FixedText FT_DATATYPEAPPENDIX
+    {
+        Pos = MAP_APPFONT ( 90, 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS -2  + 72) ;
+        Size = MAP_APPFONT ( 60, 8 );
+        Text [ de ] = "Datenbank";
+        Text [ en-US ] = "Database";
     };
 
     FixedText FT_DATASOURCETYPE_POST
@@ -504,6 +566,12 @@ TabPage PAGE_GENERAL
         Size = MAP_APPFONT ( PAGE_X - 12, 3*FIXEDTEXT_HEIGHT );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
+    };
+
+    String STR_MYSQLENTRY
+    {
+        Text [ de ]= "MySQL" ;
+        Text [ en-US ] = "MySQL" ;
     };
 
     String STR_PARENTTITLE
@@ -900,7 +968,7 @@ TabPage PAGE_MYSQL_JDBC
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -2) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text [ de ] = "Klasse laden" ;
+        Text [ de ] = "Klasse testen" ;
         Text [ en-US ] = "Test class" ;
     };
 
@@ -937,7 +1005,7 @@ TabPage PAGE_ORACLE_JDBC
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT - 2) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text [ de ] = "Klasse laden" ;
+        Text [ de ] = "Klasse testen" ;
         Text [ en-US ] = "Test class" ;
     };
 
@@ -1029,173 +1097,18 @@ TabPage PAGE_TEXT
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_TEXT;
 
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Zeilenformat";
-        Text [ en-US ] = "Row format";
-    };
-    CheckBox CB_HEADER
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
-        Size = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
-        HelpId = HID_DSADMIN_TEXT_HEADER;
-        Text [ de ] = "~Text enthält Kopfzeile" ;
-        Text [ en-US ] = "~Text contains headers" ;
-    };
-    FixedText FT_FIELDSEPARATOR
-    {
-        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "~Feldtrenner" ;
-        Text [ en-US ] = "Field separator" ;
-        Text [ x-comment ] = " ";
-    };
-    ComboBox CM_FIELDSEPARATOR
-    {
-        Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
-        Size = MAP_APPFONT ( 48 , 60 ) ;
-        Text [ de ] = ";" ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        HelpId = HID_DSADMIN_FIELD_SEPARATOR;
-    };
-    FixedText FT_TEXTSEPARATOR
-    {
-        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "T~exttrenner" ;
-        Text [ en-US ] = "Text separator" ;
-        Text [ x-comment ] = " ";
-    };
-    ComboBox CM_TEXTSEPARATOR
-    {
-        Pos = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
-        Size = MAP_APPFONT ( 48 , 60 ) ;
-        Text [ de ] = "\"" ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        HelpId = HID_DSADMIN_TEXT_SEPARATOR;
-    };
-    FixedText FT_DECIMALSEPARATOR
-    {
-        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "~Dezimaltrennzeichen" ;
-        Text [ en-US ] = "Decimal separator" ;
-        Text [ x-comment ] = "LS: ; LS: ; LS: Access sagt \"s?arateur d?imal*";
-    };
-    ComboBox CM_DECIMALSEPARATOR
-    {
-        Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
-        Size = MAP_APPFONT ( 32 , 60 ) ;
-        Text [ de ] = ";" ;
-        TabStop = TRUE ;
-        MaxTextLength = 1 ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            "." ;
-            "," ;
-            ";" ;
-            ":" ;
-        };
-        HelpId = HID_DSADMIN_DECIMAL_SEPARATOR;
-    };
-    FixedText FT_THOUSANDSSEPARATOR
-    {
-        Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "T~ausendertrennzeichen" ;
-        Text [ en-US ] = "Thousands separator" ;
-        Text [ x-comment ] = "LS: ; LS: ; LS: auch laut Access";
-    };
-    ComboBox CM_THOUSANDSSEPARATOR
-    {
-        Pos = MAP_APPFONT ( EDIT_X , 5*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
-        Size = MAP_APPFONT ( 32 , 44 ) ;
-        Text [ de ] = "." ;
-        TabStop = TRUE ;
-        MaxTextLength = 1 ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            "," ;
-            "." ;
-        };
-        HelpId = HID_DSADMIN_THOUSANDS_SEPARATOR;
-    };
+    AUTO_SEPARATORCONTROLGROUP(UNRELATED_CONTROLS, PAGE_X)
+
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 4 , 6*UNRELATED_CONTROLS + RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 4 , 124) ;
         Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Dateiformat";
         Text [ en-US ] = "File format";
     };
-    FixedText FT_EXTENSION
-    {
-        Pos = MAP_APPFONT ( 6 , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "E~rweiterung" ;
-        Text [ en-US ] = "Extension" ;
-        Text [ x-comment ] = " ";
-    };
-    ComboBox CM_EXTENSION
-    {
-        Pos = MAP_APPFONT ( EDIT_X , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;
-        Size = MAP_APPFONT ( 32 , 44 ) ;
-        Text [ de ] = "txt" ;
-        TabStop = TRUE ;
-        MaxTextLength = 3 ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            "csv" ;
-            "sdf" ;
-            "txt" ;
-        };
-        HelpId = HID_DSADMIN_EXTENSION;
-    };
-    AUTO_CHARSET(           7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS +  7*FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT ) ;
 
-    String STR_FIELDSEPARATORLIST
-    {
-        Text [ x-comment ] = "EM Dec 2002: \"Space\" refers to what you get when you hit the space bar on your keyboard.";
-        Text [ de ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Leerzeichen}\t32" ;
-        Text [ en-US ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
-    };
+    AUTO_CHARSET(143) ;
 
-    String STR_TEXTSEPARATORLIST
-    {
-        Text [ de ] = "\"\t34\t'\t39" ;
-    };
-
-    String STR_TEXT_FIELD_SEP_NONE
-    {
-        Text [ de ] = "{Keiner}" ;
-        Text [ en-US ] = "{None}";
-    };
-
-    String STR_DELIMITER_MISSING
-    {
-        Text [ de ] = "#1 muss angegeben sein." ;
-        Text [ en-US ] = "#1 must be set." ;
-        Text [ x-comment ] = " ";
-    };
-    String STR_DELIMITER_MUST_DIFFER
-    {
-        Text [ de ] = "#1 und #2 müssen unterschiedlich sein." ;
-        Text [ en-US ] = "#1 and #2 must be different." ;
-        Text [ x-comment ] = " ";
-    };
-    String STR_NO_WILDCARDS
-    {
-        Text [ de ] = "Platzhalter wie *,? sind in der #1 nicht möglich." ;
-        Text [ en-US ] = "Wildcards such as ?,* are not allowed in #1." ;
-        Text [ x-comment ] = " ";
-    };
 };
 //.........................................................................
 TabPage PAGE_USERDRIVER
