@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 11:36:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@
 #include "bbdlg.hxx" //add for SvxBorderBackgroundDlg
 #include "cuisrchdlg.hxx" //add for SvxJSearchOptionsDialog
 #include "cuitbxform.hxx" //add for FmInputRecordNoDialog
-#include "taborder.hxx" //add for FmTabOrderDlg
 #include "optdict.hxx" //add for SvxNewDictionaryDialog
 #include "dlgname.hxx" //add for SvxNameDialog & SvxMessDialog
 #include "multipat.hxx" //add for SvxMultiPathDialog
@@ -1245,27 +1244,6 @@ AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordN
     return 0;
 }
 //CHINA001  FmInputRecordNoDialog end
-
-//CHINA001  FmTabOrderDlg begin
-VclAbstractDialog*      AbstractDialogFactory_Impl::CreateFmTabOrderDlg( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
-                                            Window* pParent, FmFormShell* pShell,
-                                            const ResId& rResId ) //add for FmTabOrderDlg
-{
-    Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case RID_SVXDLG_TAB_ORDER :
-            pDlg = new FmTabOrderDlg( _xORB, pParent, pShell );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
-}
-//CHINA001  FmTabOrderDlg end
 
 //CHINA001  SvxNewDictionaryDialog begin
 AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( Window* pParent,
