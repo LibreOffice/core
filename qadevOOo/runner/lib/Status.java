@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Status.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:41 $
+ *  last change:$Date: 2003-11-18 16:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,13 +190,13 @@ public abstract class Status {
                 return reason;
             }
 
-            public boolean equals(Object obj) {
+/*            public boolean equals(Object obj) {
                 if (obj == null || this.getClass() != obj.getClass()) {
                     return false;
                 }
                 return this.getRunStateString().equals(
                         ((Status)obj).getRunStateString());
-            }
+            } */
         };
     }
 
