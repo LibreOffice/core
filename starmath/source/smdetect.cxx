@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdetect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:53:03 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 
 #include "document.hxx"
 
@@ -295,76 +296,27 @@ SmFilterDetect::~SmFilterDetect()
                 }
                 else
                 {
-                    static const sal_Char sStrmNm_0[] = "StarMathDocument";
-                    static const sal_Char sStrmNm_1[] = "Equation Native";
-                    static const sal_Char sStrmNm_2[] = "content.xml";
-                    static const sal_Char sStrmNm_3[] = "Content.xml";
+                    SfxFilterMatcher aMatcher( String::CreateFromAscii("smath") );
+                    const SfxFilter* pFilter = 0;
+                    if (aFilterName.Len())
+                        pFilter = aMatcher.GetFilter4FilterName(aFilterName);
 
-                    static const sal_Char sFltrNm_0[] = "StarMath 5.0";
-                    static const sal_Char sFltrNm_1[] = "MathType 3.x";
-                    static const sal_Char sFltrNm_2[] = STAROFFICE_XML;
-                    static const sal_Char sFltrNm_3[] = STAROFFICE_XML;
+                    ULONG nFormat = pStorage->GetFormat();
+                    // check preselection
+                    if ( pFilter && pFilter->GetFormat() != nFormat )
+                            // preselected Filter has different ClipboardId -> doesn't match
+                            pFilter = 0;
 
-                    static const sal_Char sTypeNm_0[] = "math_StarMath_50";
-                    static const sal_Char sTypeNm_1[] = "math_MathType_3x";
-                    static const sal_Char sTypeNm_2[] = "math_StarOffice_XML_Math";
-                    static const sal_Char sTypeNm_3[] = "math_StarOffice_XML_Math";
+                    // make real detection by clipboard ID
+                    if( !pFilter )
+                        pFilter = aMatcher.GetFilter4ClipBoardId( nFormat );
 
-                    const sal_uInt16 nCount = 4;
-                    const sal_Char *aStrmNms[nCount] =
-                        { sStrmNm_0, sStrmNm_1, sStrmNm_2, sStrmNm_3 };
-                    const sal_Char *aFltrNms[nCount] =
-                        { sFltrNm_0, sFltrNm_1, sFltrNm_2, sFltrNm_3 };
-                    const sal_Char *aTypeNms[nCount] =
-                        { sTypeNm_0, sTypeNm_1, sTypeNm_2, sTypeNm_3 };
-
-                    String aStreamName;
-                    if( aPreselectedFilterName.Len() )
+                    aFilterName.Erase();
+                    aTypeName.Erase();
+                    if (pFilter)
                     {
-                        for( sal_uInt16 i=0; i < nCount; i++ )
-                        {
-                            if( aPreselectedFilterName.EqualsAscii(aFltrNms[i]) )
-                            {
-                                aStreamName.AssignAscii( aStrmNms[i] );
-                                if( pStorage->IsStream( aStreamName )
-                                    //&& ((*ppFilter)->GetFilterFlags() & nMust) == nMust
-                                    //&& ((*ppFilter)->GetFilterFlags() & nDont) == 0
-                                    )
-                                {
-                                    aFilterName.AssignAscii( aFltrNms[i] );
-                                    aTypeName.AssignAscii( aTypeNms[i] );
-                                }
-
-                                break;  // The old XML filter (Content.xml) will be
-                                        // detected in the next loop.
-                            }
-                        }
-                    }
-
-                    if( !aFilterName.Len() )
-                    {
-                        for( sal_uInt16 i=0; i < nCount; i++ )
-                        {
-                            aStreamName.AssignAscii( aStrmNms[i] );
-                            if( pStorage->IsStream( aStreamName ))
-                            {
-                                aFilterName.AssignAscii( aFltrNms[i] );
-                                aTypeName.AssignAscii( aTypeNms[i] );
-        /*
-                                const SfxFilter* pFilt = SFX_APP()->GetFilter(
-                                            SmDocShell::Factory(), sFilterName );
-
-                                if( pFilt &&
-                                    (pFilt->GetFilterFlags() & nMust) == nMust &&
-                                    (pFilt->GetFilterFlags() & nDont) == 0)
-                                {
-                                    *ppFilter = pFilt;
-                                    nReturn = ERRCODE_NONE;
-                                }
-          */
-                                break; // There are no two filters with the same strm name
-                            }
-                        }
+                        aFilterName = pFilter->GetName();
+                        aTypeName = pFilter->GetTypeName();
                     }
                 }
             }
@@ -401,35 +353,6 @@ SmFilterDetect::~SmFilterDetect()
         }
     }
 
-    if ( aFilterName.Len() )
-    {
-        // successful detection, get the filter name (without prefix)
-        if ( nIndexOfFilterName != -1 )
-            // convert to format with factory ( makes load more easy to implement )
-            lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
-        else
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
-            lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
-            nPropertyCount++;
-        }
-/*
-        if ( pFilter->IsOwnTemplateFormat() && nIndexOfTemplateFlag == -1 )
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-            lDescriptor[nPropertyCount].Value <<= sal_True;
-            nPropertyCount++;
-        }
-*/
-    }
-    else
-    {
-        aFilterName.Erase();
-        aTypeName.Erase();
-    }
-
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
@@ -460,6 +383,9 @@ SmFilterDetect::~SmFilterDetect()
         else
             lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
     }
+
+    if ( !aFilterName.Len() )
+        aTypeName.Erase();
 
     return aTypeName;
 }
