@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: nf $ $Date: 2000-11-14 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2191,7 +2191,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                 BOOL bFirst = TRUE;
                 for ( USHORT i = 0; i < LANGUAGES; i++ ) {
                     ByteString sText;
-                    BOOL bText = pEntry->GetText( sText, STRING_TYP_TEXT, i, TRUE );
+                    BOOL bText = pEntry->GetText( sText, STRING_TYP_QUICKHELPTEXT, i, TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
                         if ( bNextMustBeDefineEOL)  {
@@ -2233,7 +2233,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                 BOOL bFirst = TRUE;
                 for ( USHORT i = 0; i < LANGUAGES; i++ ) {
                     ByteString sText;
-                    BOOL bText = pEntry->GetText( sText, STRING_TYP_TEXT, i, TRUE );
+                    BOOL bText = pEntry->GetText( sText, STRING_TYP_TITLE, i, TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
                         if ( bNextMustBeDefineEOL)  {
