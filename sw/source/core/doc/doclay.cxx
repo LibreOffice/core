@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:01:39 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1856,9 +1856,11 @@ String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 
     sal_uInt16 nNum, nTmp, nFlagSize = ( rFmts.Count() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
+    sal_uInt16 n;
+
     memset( pSetFlags, 0, nFlagSize );
 
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    for( n = 0; n < rFmts.Count(); ++n )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ n ];
         if( RES_FLYFRMFMT == pFlyFmt->Which() &&
@@ -2076,7 +2078,8 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     while( pFlyNd )
     {
         // dann ueber den Anker nach oben "hangeln"
-        for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+        sal_uInt16 n;
+        for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
         {
             const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[ n ];
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
