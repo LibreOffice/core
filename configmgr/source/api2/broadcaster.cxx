@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-18 17:29:32 $
+ *  last change: $Author: jb $ $Date: 2002-10-15 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,6 +733,9 @@ namespace configmgr
 
             for (NodeChangesInformation::Iterator it = aChanges.begin(); it != stop; ++it)
             {
+                // #92463# Skip nodes that are not in the tree
+                if (it->location.getAffectedNodeID().isEmpty()) continue;
+
                 OSL_ENSURE( m_aChangingNodes.find( it->location.getChangingValueID() ) != m_aChangingNodes.end(), "Broadcasting unanticipated change");
 
                 notifySingleChange(*it, it != last, pEventNext);
