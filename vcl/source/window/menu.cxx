@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:13:06 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,13 +897,13 @@ void Menu::ImplLoadRes( const ResId& rResId )
     rResId.SetRT( RSC_MENU );
     GetRes( rResId );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if( nObjMask & RSC_MENU_ITEMS )
     {
-        USHORT nObjFollows = ReadShortRes();
+        ULONG nObjFollows = ReadLongRes();
         // MenuItems einfuegen
-        for( USHORT i = 0; i < nObjFollows; i++ )
+        for( ULONG i = 0; i < nObjFollows; i++ )
         {
             InsertItem( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
@@ -1115,22 +1115,22 @@ void Menu::InsertItem( USHORT nItemId,
 
 void Menu::InsertItem( const ResId& rResId, USHORT nPos )
 {
-    USHORT              nObjMask;
+    ULONG              nObjMask;
 
     GetRes( rResId.SetRT( RSC_MENUITEM ) );
-    nObjMask    = ReadShortRes();
+    nObjMask    = ReadLongRes();
 
     BOOL bSep = FALSE;
     if ( nObjMask & RSC_MENUITEM_SEPARATOR )
         bSep = (BOOL)ReadShortRes();
 
-    USHORT nItemId = 1;
+    ULONG nItemId = 1;
     if ( nObjMask & RSC_MENUITEM_ID )
-        nItemId = ReadShortRes();
+        nItemId = ReadLongRes();
 
-    USHORT nStatus = 0;
+    ULONG nStatus = 0;
     if ( nObjMask & RSC_MENUITEM_STATUS )
-        nStatus = ReadShortRes();
+        nStatus = ReadLongRes();
 
     String aText;
     if ( nObjMask & RSC_MENUITEM_TEXT )
