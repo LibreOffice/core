@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuiimoptdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:02:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,3 +108,4 @@ private:
 };
 
 #endif
+
