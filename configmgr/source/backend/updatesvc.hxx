@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,15 +80,17 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XUpdateHandler.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATEHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XUpdateHandler.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
-namespace drafts {
+
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
     class XLayerHandler;
     class XLayer;
 } } } } }
-}
+
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -100,7 +102,7 @@ namespace configmgr
         using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
         class UpdateService : public ::cppu::WeakImplHelper3<
