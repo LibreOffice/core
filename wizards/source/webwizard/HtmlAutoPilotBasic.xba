@@ -61,15 +61,11 @@ On Local Error Goto GlobalErrorHandler
 	oBaseDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
 	If Not GetWebWizardPaths() Then
-		oBaseDocument.dispose()
+		DisposeDocument(oBaseDocument)
 		Exit Sub
 	End If
 	LoadLanguage
 	SetProgressValue(10)
-	If Not GetWebWizardPaths() Then
-		oBaseDocument.dispose()
-		Exit Sub
-	End If
 	Layout() = getListBoxArrays(oUcb, &quot;/cnt&quot;)
 	GetCurIndex(DialogModel, Layout(),2)
 	SetProgressValue(30)
@@ -88,7 +84,7 @@ On Local Error Goto GlobalErrorHandler
 	Select Case RetValue
 		Case 0
 			MainDialog.Dispose()
-			oBaseDocument.Dispose()
+			DisposeDocument(oBaseDocument)
 		Case 1
 			EndDialog()
 			MainDialog.Dispose()
@@ -96,7 +92,7 @@ On Local Error Goto GlobalErrorHandler
 GLOBALERRORHANDLER:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrMsg$, 16, WebWiz_gWizardName$)
-		oBaseDocument.dispose()
+		DisposeDocument(oBaseDocument)
 		RESUME EXITWIZARD
 EXITWIZARD:
 	End If
@@ -369,7 +365,7 @@ Dim sExtension as String
 	End If
 	If Not bItemfound Then
 		MsgBox(WebWiz_gErrContentNotFound$, 16, WebWiz_gWizardName$)
-		oBaseDocument.Dispose()
+		DisposeDocument(oBaseDocument)
 		Stop
 	End If
 	getListBoxArrays = List()

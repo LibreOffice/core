@@ -21,28 +21,26 @@ End Sub
 Function GetWebWizardPaths() as Boolean
 Dim TemplatePath as String
 	TextureDir = GetOfficeSubPath(&quot;Gallery&quot;,&quot;www-back&quot;)
-		If TextureDir &lt;&gt; &quot;&quot; Then
-			GraphicsDir = GetOfficeSubPath(&quot;Gallery&quot;,&quot;www-graf/&quot;)
-			If GraphicsDir &lt;&gt; &quot;&quot; Then
-				BulletDir = GetOfficeSubPath(&quot;Gallery&quot;, &quot;bullets/&quot;)
-				If BulletDir &lt;&gt; &quot;&quot; Then
-					PhotosDir = GetPathSettings(&quot;Gallery&quot;, False, 1)
-					If PhotosDir &lt;&gt; &quot;&quot; Then
-						TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
-						If TemplatePath &lt;&gt; &quot;&quot; Then
-							SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
-							If SOBitmapPath &lt;&gt; &quot;&quot; Then
-								GetWebwizardPaths() = True
-								Exit Function
+	If TextureDir &lt;&gt; &quot;&quot; Then
+		GraphicsDir = GetOfficeSubPath(&quot;Gallery&quot;,&quot;www-graf/&quot;)
+		If GraphicsDir &lt;&gt; &quot;&quot; Then
+			BulletDir = GetOfficeSubPath(&quot;Gallery&quot;, &quot;bullets/&quot;)
+			If BulletDir &lt;&gt; &quot;&quot; Then
+				PhotosDir = GetPathSettings(&quot;Gallery&quot;, False, 1)
+				If PhotosDir &lt;&gt; &quot;&quot; Then
+					TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
+					If TemplatePath &lt;&gt; &quot;&quot; Then
+						SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+						If SOBitmapPath &lt;&gt; &quot;&quot; Then
+							GetWebwizardPaths() = True
+							Exit Function
 							End If
-						End If
 					End If
 				End If
 			End If
 		End If
-	If Not IsNull(oDocument) Then
-		oBaseDocument.dispose()
 	End If
+	DisposeDocument(oBaseDocument)
 	GetWebWizardPaths() = False
 End Function
 
