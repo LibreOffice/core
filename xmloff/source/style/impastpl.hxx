@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 10:15:09 $
+ *  last change: $Author: mh $ $Date: 2001-02-01 18:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <rtl/ustring.hxx>
 #endif
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
