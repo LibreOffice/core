@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:11:09 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,8 @@ void ScInputWindow::SetFuncString( const String& rString, BOOL bDoEdit )
     ScModule* pScMod = SC_MOD();
     if ( pScMod->IsEditMode() )
     {
-        aTextWindow.GrabFocus();
+        if ( bDoEdit )
+            aTextWindow.GrabFocus();
         aTextWindow.SetTextString( rString );
         EditView* pView = aTextWindow.GetEditView();
         if (pView)
@@ -570,6 +571,10 @@ void ScInputWindow::PosGrabFocus()
 
 void ScInputWindow::EnableButtons( BOOL bEnable )
 {
+    //  when enabling buttons, always also enable the input window itself
+    if ( bEnable && !IsEnabled() )
+        Enable();
+
     EnableItem( SID_INPUT_FUNCTION,                                   bEnable );
     EnableItem( bIsOkCancelMode ? SID_INPUT_CANCEL : SID_INPUT_SUM,   bEnable );
     EnableItem( bIsOkCancelMode ? SID_INPUT_OK     : SID_INPUT_EQUAL, bEnable );
