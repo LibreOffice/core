@@ -3,6 +3,9 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">&apos; Variables must be declared
 Option Explicit
 
+Public CurDocIndex as Integer
+Public CurWebPageIndex as Integer
+
 
 Public bWithBackGraphic as Boolean
 Public oStyle as Object
@@ -44,6 +47,7 @@ Public DialogModel as Object
 
 
 Sub Main
+Dim RetValue
 &apos;On Local Error Goto GlobalErrorHandler
 	Dim SOBitmapPath,sBitmapPath as String
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
@@ -78,9 +82,17 @@ Sub Main
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	DialogModel.ImagePreview.ImageURL = sBitmapPath
 	ToggleOptionButtons(DialogModel, bWithBackGraphic)
-	MainDialog.GetControl(&quot;lbTemplate&quot;).SetFocus = True
+	MainDialog.GetControl(&quot;lbTemplate&quot;).SetFocus()
 	DialogModel.cbGoOn.DefaultButton = True
-	MainDialog.Execute
+	RetValue = MainDialog.Execute
+	Select Case RetValue
+		Case 0 
+			MainDialog.Dispose()
+			oBaseDocument.Dispose()
+		Case 1
+			EndDialog()
+			MainDialog.Dispose()
+	End Select
 GLOBALERRORHANDLER:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrMsg$, 16, WebWiz_gWizardName$)
@@ -99,53 +111,57 @@ End Function
 
 
 Sub ReloadCurrentDocument()
-Dim CurInd as Integer
-&apos;On Local Error Goto ErrorOcurred
-&apos; Todo:Check if the pointer is really disabled, when set to Hourglass
-	ToggleDialogControls(False)
+Dim OldDocIndex as Integer
+On Local Error Goto ErrorOcurred
 	oBaseDocument.LockControllers
-	&apos; Get selected list entry and corresponding file name
-	CurInd = GetCurIndex(DialogModel.lbTemplate, Layout(), NumberofLayouts%, 2)
-	oCursor = oBaseDocument.Text.CreateTextCursor()
-	oCursor.GotoStart(False)
-	oCursor.GotoEnd(True)
-	oCursor.SetPropertyToDefault(&quot;CharHeight&quot;)
-	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
-	SetBulletAndGraphics
-	CheckControls(oBaseDocument.DrawPage)
-ErrorOcurred:
-	If Err &lt;&gt; 0 Then
-		MsgBox(WebWiz_gErrWhileReloading$, 16, WebWiz_gWizardName$)
-	End If
-	oBaseDocument.UnlockControllers
-	oViewCursor.GotoStart(False)
+	OldDocIndex = CurDocIndex
+	CurDocIndex = GetCurIndex(DialogModel.lbTemplate, Layout(), NumberofLayouts%, 2)
+	If OldDocIndex &lt;&gt; CurDocIndex Then
+		ToggleDialogControls(False)
+		oCursor = oBaseDocument.Text.CreateTextCursor()
+		oCursor.GotoStart(False)
+		oCursor.GotoEnd(True)
+		oCursor.SetPropertyToDefault(&quot;CharHeight&quot;)
+		oCursor.InsertDocumentfromURL(FileStr, NoArgs())
+		SetBulletAndGraphics
+		CheckControls(oBaseDocument.DrawPage)
+	ErrorOcurred:
+		If Err &lt;&gt; 0 Then
+			MsgBox(WebWiz_gErrWhileReloading$, 16, WebWiz_gWizardName$)
+		End If
+		oBaseDocument.UnlockControllers
+		oViewCursor.GotoStart(False)
 	ToggleDialogControls(True, &quot;lbTemplate&quot;)
+	End If
 End Sub
 
 
 
 Sub LoadWebPageStyles()
-Dim CurIndex as Integer
-	ToggleDialogControls(False)
-	oBaseDocument.LockControllers
-	CurIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
-	bWithBackGraphic = LoadNewStyles(oBaseDocument, DialogModel, CurIndex, FileStr, Style(), TextureDir)
-	CurrentBullet$ = BulletDir + Style(6, CurIndex)
-	CurrentPrev$ = GraphicsDir + Style(2, CurIndex)
-	CurrentNext$ = GraphicsDir + Style(3, CurIndex)
-	CurrentHome$ = GraphicsDir + Style(4, CurIndex)
-	CurrentTop$ = GraphicsDir + Style(5, CurIndex)
-	With oBaseDocument.DocumentInfo
-		.GetUserFieldValue(0) = ExtractGraphicNames(CurIndex,2)
-		.GetUserFieldValue(1) = ExtractGraphicNames(CurIndex, 4)
-		.GetUserFieldValue(2) = Style(6, CurIndex)       &apos; Bullet
-		.GetUserFieldValue(3) = Style(7, CurIndex)       &apos; Background
-	End With
-	SetBulletAndGraphics()
-	CheckControls(oBaseDocument.DrawPage)
-	oViewCursor.GotoStart(False)
-	oBaseDocument.UnlockControllers
-	ToggleDialogControls(True, &quot;lbStyles&quot;)
+Dim OldWebPageIndex as Integer
+	OldWebPageIndex = CurWebPageIndex
+	CurWebPageIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
+	If OldWebPageIndex &lt;&gt; CurWebPageIndex Then
+		ToggleDialogControls(False)
+		oBaseDocument.LockControllers
+		bWithBackGraphic = LoadNewStyles(oBaseDocument, DialogModel, CurWebPageIndex, FileStr, Style(), TextureDir)
+		CurrentBullet$ = BulletDir + Style(6, CurWebPageIndex)
+		CurrentPrev$ = GraphicsDir + Style(2, CurWebPageIndex)
+		CurrentNext$ = GraphicsDir + Style(3, CurWebPageIndex)
+		CurrentHome$ = GraphicsDir + Style(4, CurWebPageIndex)
+		CurrentTop$ = GraphicsDir + Style(5, CurWebPageIndex)
+		With oBaseDocument.DocumentInfo
+			.GetUserFieldValue(0) = ExtractGraphicNames(CurWebPageIndex,2)
+			.GetUserFieldValue(1) = ExtractGraphicNames(CurWebPageIndex, 4)
+			.GetUserFieldValue(2) = Style(6, CurWebPageIndex)       &apos; Bullet
+			.GetUserFieldValue(3) = Style(7, CurWebPageIndex)       &apos; Background
+		End With
+		SetBulletAndGraphics()
+		CheckControls(oBaseDocument.DrawPage)
+		oViewCursor.GotoStart(False)
+		oBaseDocument.UnlockControllers
+		ToggleDialogControls(True, &quot;lbStyles&quot;)
+	End If
 End Sub
 
 
@@ -192,15 +208,7 @@ Sub EndDialog()
 	Else
 		SetEvent()
 	End If
-	MainDialog.EndExecute()
-	MainDialog.Dispose()
-End Sub
-
-
-Sub CancelHTMLWizard()
-	MainDialog.EndExecute()
-	MainDialog.Dispose()
-	oBaseDocument.Dispose()
+&apos;	MainDialog.EndExecute()
 End Sub
 
 
@@ -392,24 +400,15 @@ Dim Bitmap As Object
 Dim sBitmapPath as String
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	WebWzrd.ImagePreview.ImageURL = sBitmapPath
-End Sub			
+End Sub
 
 
 Sub ToggleDialogControls(ByVal bDoEnable as Boolean, Optional FocusControlName as String)
-	With DialogModel
-		.cbCancel.Enabled = bDoEnable
-		.cbGoOn.Enabled = bDoEnable
-		.cbHelp.Enabled = bDoEnable
-		.lblTemplate.Enabled = bDoEnable
-		.lblStyle.Enabled = bDoEnable
-		.chkSaveasTemplate.Enabled = bDoEnable
-		.lbTemplate.Enabled = bDoEnable
-		.lbStyles.Enabled = bDoEnable
-		If bDoEnable Then
-			&apos; Enable Controls referring to Background graphic only when this Property is set
-			bDoEnable = bWithBackGraphic
-			MainDialog.GetControl(FocusControlName).SetFocus = True
-		End If
+	DialogModel.Enabled = bDoEnable
+	If bDoEnable Then
+		&apos; Enable Controls referring to Background graphic only when this Property is set
+		bDoEnable = bWithBackGraphic
 		ToggleOptionButtons(DialogModel, bDoEnable)
-	End With
+		MainDialog.GetControl(FocusControlName).SetFocus()
+	End If
 End Sub</script:module>
