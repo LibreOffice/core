@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:31:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,6 @@
 #include <comphelper/extract.hxx>
 #endif
 
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
-
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #include "controlpropertymap.hxx"
 #endif
@@ -114,6 +109,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER2_HPP_
 #include <com/sun/star/form/XFormsSupplier2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -164,6 +162,8 @@ namespace xmloff
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::text;
+
+    typedef ::com::sun::star::xforms::XFormsSupplier XXFormsSupplier;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
@@ -400,11 +400,33 @@ namespace xmloff
             implMoveIterators(_rxDrawPage, sal_False);
         OSL_ENSURE(bPageIsKnown, "OFormLayerXMLExport_Impl::exportForms: exporting a page which has not been examined!");
 
-        // export XForms models
-        exportXForms( m_rContext );
-
         // export forms collection
         exportCollectionElements(xCollectionIndex);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::exportXForms() const
+    {
+        // export XForms models
+        ::exportXForms( m_rContext );
+    }
+
+    //---------------------------------------------------------------------
+    bool OFormLayerXMLExport_Impl::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage ) const
+    {
+        Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
+        DBG_ASSERT( xFormsSupp.s(), "OFormLayerXMLExport_Impl::pageContainsForms: no XFormsSupplier2!" );
+        return xFormsSupp.is() && xFormsSupp->hasForms();
+    }
+
+    //---------------------------------------------------------------------
+    bool OFormLayerXMLExport_Impl::documentContainsXForms() const
+    {
+        Reference< XXFormsSupplier > xXFormSupp( m_rContext.GetModel(), UNO_QUERY );
+        Reference< XNameContainer > xForms;
+        if ( xXFormSupp.is() )
+            xForms = xXFormSupp->getXForms();
+        return xForms.is() && xForms->hasElements();
     }
 
     //---------------------------------------------------------------------
