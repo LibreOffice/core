@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-08 15:01:23 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,22 @@
 #include "viewdata.hxx"
 #endif
 
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
+
 class ScCellTextData;
 class ScDocShell;
 class ScViewForwarder;
 class ScPreviewViewForwarder;
 class ScEditViewForwarder;
 class ScPreviewShell;
+class EditTextObject;
 
-class ScAccessibleTextData : public ScCellTextData
+class ScAccessibleTextData : public SfxListener
 {
 public:
-                        ScAccessibleTextData(ScDocShell* pDocShell,
-                            const ScAddress& rP)
-                            : ScCellTextData(pDocShell, rP) {}
+                        ScAccessibleTextData() {}
     virtual             ~ScAccessibleTextData() {}
 
     virtual ScAccessibleTextData* Clone() const = NULL;
@@ -96,6 +99,10 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) = NULL;
     virtual SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
 
+    virtual void                UpdateData() = NULL;
+    virtual void                SetDoUpdate(sal_Bool bValue) = NULL;
+    virtual sal_Bool            IsDirty() const = NULL;
+
 private:
     mutable SfxBroadcaster maBroadcaster;
 
@@ -103,9 +110,24 @@ private:
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 };
 
+class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
+                                     public ScCellTextData
+{
+public:
+                        ScAccessibleCellBaseTextData(ScDocShell* pDocShell,
+                            const ScAddress& rP)
+                            : ScCellTextData(pDocShell, rP) {}
+    virtual             ~ScAccessibleCellBaseTextData() {}
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) { ScCellTextData::Notify(rBC, rHint); }
+
+    virtual void                UpdateData() { ScCellTextData::UpdateData(); }
+    virtual void                SetDoUpdate(sal_Bool bValue) { ScCellTextData::SetDoUpdate(bValue); }
+    virtual sal_Bool            IsDirty() const { return ScCellTextData::IsDirty(); }
+};
+
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
-class ScAccessibleCellTextData : public ScAccessibleTextData
+class ScAccessibleCellTextData : public ScAccessibleCellBaseTextData
 {
 public:
                         ScAccessibleCellTextData(ScTabViewShell* pViewShell,
@@ -134,7 +156,7 @@ private:
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
 };
 
-class ScAccessiblePreviewCellTextData : public ScAccessibleTextData
+class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
 {
 public:
                         ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
@@ -160,7 +182,7 @@ private:
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
 
-class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleTextData
+class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextData
 {
 public:
                         ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
@@ -187,6 +209,66 @@ private:
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
+};
+
+class ScAccessibleHeaderTextData : public ScAccessibleTextData
+{
+public:
+                        ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
+                            const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust);
+    virtual             ~ScAccessibleHeaderTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual SvxTextForwarder* GetTextForwarder();
+    virtual SvxViewForwarder* GetViewForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+
+    virtual void                UpdateData() {  }
+    virtual void                SetDoUpdate(sal_Bool bValue) {  }
+    virtual sal_Bool            IsDirty() const { return sal_False; }
+private:
+    ScPreviewViewForwarder* mpViewForwarder;
+    ScPreviewShell*         mpViewShell;
+    ScEditEngineDefaulter*  mpEditEngine;
+    SvxEditEngineForwarder* mpForwarder;
+    ScDocShell*             mpDocSh;
+    const EditTextObject*   mpEditObj;
+    sal_Bool                mbHeader;
+    sal_Bool                mbDataValid;
+    SvxAdjust               meAdjust;
+};
+
+class ScAccessibleNoteTextData : public ScAccessibleTextData
+{
+public:
+                        ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
+                            const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote);
+    virtual             ~ScAccessibleNoteTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual SvxTextForwarder* GetTextForwarder();
+    virtual SvxViewForwarder* GetViewForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+
+    virtual void                UpdateData() {  }
+    virtual void                SetDoUpdate(sal_Bool bValue) {  }
+    virtual sal_Bool            IsDirty() const { return sal_False; }
+private:
+    ScPreviewViewForwarder* mpViewForwarder;
+    ScPreviewShell*         mpViewShell;
+    ScEditEngineDefaulter*  mpEditEngine;
+    SvxEditEngineForwarder* mpForwarder;
+    ScDocShell*             mpDocSh;
+    String                  msText;
+    ScAddress               maCellPos;
+    sal_Bool                mbMarkNote;
+    sal_Bool                mbDataValid;
 };
 
 #endif

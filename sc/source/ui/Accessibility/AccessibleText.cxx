@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 11:17:58 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,14 @@
  *
  ************************************************************************/
 
+#include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <memory>
 
 #include "AccessibleText.hxx"
+
 #ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
 #endif
@@ -83,6 +88,11 @@
 #ifndef SC_PREVLOC_HXX
 #include "prevloc.hxx"
 #endif
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
+#endif
+#include "patattr.hxx"
+
 
 #ifndef _SVX_UNOFORED_HXX
 #include <svx/unofored.hxx>
@@ -95,6 +105,12 @@
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
+#endif
+#ifndef _EDITOBJ_HXX
+#include <svx/editobj.hxx>
+#endif
+#ifndef _SVX_ADJITEM_HXX
+#include <svx/adjitem.hxx>
 #endif
 
 class ScViewForwarder : public SvxViewForwarder
@@ -496,7 +512,7 @@ void ScEditViewForwarder::GrabFocus()
 
 ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
                             const ScAddress& rP, ScSplitPos eSplitPos)
-    : ScAccessibleTextData(GetDocShell(pViewShell), rP),
+    : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpViewForwarder(NULL),
@@ -523,7 +539,7 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
             mpViewShell = NULL;                     // invalid now
         }
     }
-    ScCellTextData::Notify(rBC, rHint);
+    ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
 
 ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
@@ -614,7 +630,7 @@ IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify );
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -635,7 +651,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
                             const ScAddress& rP)
-    : ScAccessibleTextData(GetDocShell(pViewShell), rP),
+    : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewShell(pViewShell),
     mpViewForwarder(NULL)
 {
@@ -657,7 +673,7 @@ void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint
             mpViewShell = NULL;                     // invalid now
         }
     }
-    ScCellTextData::Notify(rBC, rHint);
+    ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
 
 ScAccessibleTextData* ScAccessiblePreviewCellTextData::Clone() const
@@ -697,7 +713,7 @@ IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify);
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -718,7 +734,7 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
             const String& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader)
-    : ScAccessibleTextData(GetDocShell(pViewShell), rP),
+    : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewShell(pViewShell),
     mpViewForwarder(NULL),
     maText(rText),
@@ -743,7 +759,7 @@ void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const S
             mpViewShell = NULL;                     // invalid now
         }
     }
-    ScCellTextData::Notify(rBC, rHint);
+    ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
 
 ScAccessibleTextData* ScAccessiblePreviewHeaderCellTextData::Clone() const
@@ -794,9 +810,8 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
             Point aPoint;
             Rectangle aVisRect( aPoint, aOutputSize );
             Size aSize(mpViewShell->GetLocationData().GetHeaderCellOutputRect(aVisRect, aCellPos, mbColHeader).GetSize());
-            Window* pWin = mpViewShell->GetWindow();
-            if (pWin)
-                pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+            if (pWindow)
+                pWindow->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
             pEditEngine->SetPaperSize(aSize);
         }
         pEditEngine->SetText( maText );
@@ -821,7 +836,7 @@ IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify);
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -838,3 +853,224 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
     return pDocSh;
 }
 
+ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
+                            const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust)
+    :
+    mpViewShell(pViewShell),
+    mpEditObj(pEditObj),
+    mbHeader(bHeader),
+    mpEditEngine(NULL),
+    mpForwarder(NULL),
+    mpDocSh(NULL),
+    mpViewForwarder(NULL),
+    mbDataValid(sal_False),
+    meAdjust(eAdjust)
+{
+    if (pViewShell && pViewShell->GetDocument())
+        mpDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    if (mpDocSh)
+        mpDocSh->GetDocument()->AddUnoObject(*this);
+}
+
+ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
+{
+    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+
+    if (mpDocSh)
+        mpDocSh->GetDocument()->RemoveUnoObject(*this);
+    delete mpEditEngine;
+    delete mpForwarder;
+}
+
+ScAccessibleTextData* ScAccessibleHeaderTextData::Clone() const
+{
+    return new ScAccessibleHeaderTextData(mpViewShell, mpEditObj, mbHeader, meAdjust);
+}
+
+void ScAccessibleHeaderTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+        {
+            mpViewShell = NULL;// invalid now
+            mpDocSh = NULL;
+        }
+    }
+}
+
+SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
+{
+    if (!mpEditEngine)
+    {
+        SfxItemPool* pEnginePool = EditEngine::CreatePool();
+        pEnginePool->FreezeIdRanges();
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, TRUE );
+
+        pHdrEngine->EnableUndo( FALSE );
+        pHdrEngine->SetRefMapMode( MAP_TWIP );
+
+        //  default font must be set, independently of document
+        //  -> use global pool from module
+
+        SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
+        const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
+        rPattern.FillEditItemSet( &aDefaults );
+        //  FillEditItemSet adjusts font height to 1/100th mm,
+        //  but for header/footer twips is needed, as in the PatternAttr:
+        aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
+        aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
+        aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
+        aDefaults.Put( SvxAdjustItem( meAdjust, EE_PARA_JUST ) );
+        pHdrEngine->SetDefaults( aDefaults );
+
+        ScHeaderFieldData aData;
+        if (mpViewShell)
+            mpViewShell->FillFieldData(aData);
+        else
+            ScHeaderFooterTextObj::FillDummyFieldData( aData );
+        pHdrEngine->SetData( aData );
+
+        mpEditEngine = pHdrEngine;
+        mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+    }
+
+    if (mbDataValid)
+        return mpForwarder;
+
+    if ( mpViewShell  )
+    {
+        Rectangle aVisRect;
+        mpViewShell->GetLocationData().GetHeaderPosition(aVisRect);
+        Size aSize(aVisRect.GetSize());
+        Window* pWin = mpViewShell->GetWindow();
+        if (pWin)
+            pWin->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
+        mpEditEngine->SetPaperSize(aSize);
+    }
+    if (mpEditObj)
+        mpEditEngine->SetText(*mpEditObj);
+
+    mbDataValid = sal_True;
+    return mpForwarder;
+}
+
+SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
+{
+    if (!mpViewForwarder)
+        mpViewForwarder = new ScPreviewViewForwarder(mpViewShell);
+    return mpViewForwarder;
+}
+
+ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
+                            const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
+    :
+    mpViewShell(pViewShell),
+    msText(sText),
+    mpEditEngine(NULL),
+    mpForwarder(NULL),
+    mpDocSh(NULL),
+    mpViewForwarder(NULL),
+    mbDataValid(sal_False),
+    maCellPos(aCellPos),
+    mbMarkNote(bMarkNote)
+{
+    if (pViewShell && pViewShell->GetDocument())
+        mpDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    if (mpDocSh)
+        mpDocSh->GetDocument()->AddUnoObject(*this);
+}
+
+ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
+{
+    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+
+    if (mpDocSh)
+        mpDocSh->GetDocument()->RemoveUnoObject(*this);
+    delete mpEditEngine;
+    delete mpForwarder;
+}
+
+ScAccessibleTextData* ScAccessibleNoteTextData::Clone() const
+{
+    return new ScAccessibleNoteTextData(mpViewShell, msText, maCellPos, mbMarkNote);
+}
+
+void ScAccessibleNoteTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+        {
+            mpViewShell = NULL;// invalid now
+            mpDocSh = NULL;
+        }
+    }
+}
+
+SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
+{
+    if (!mpEditEngine)
+    {
+        if ( mpDocSh )
+        {
+            ScDocument* pDoc = mpDocSh->GetDocument();
+            mpEditEngine = pDoc->CreateFieldEditEngine();
+        }
+        else
+        {
+            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            pEnginePool->FreezeIdRanges();
+            mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+        }
+#if SUPD > 600
+        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+        //  this will be fixed (in EditEngine) by src600
+//      pEditEngine->SetUpdateMode( FALSE );
+#endif
+        mpEditEngine->EnableUndo( FALSE );
+        if (mpDocSh)
+            mpEditEngine->SetRefDevice(mpDocSh->GetVirtualDevice_100th_mm());
+        else
+            mpEditEngine->SetRefMapMode( MAP_100TH_MM );
+        mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+    }
+
+    if (mbDataValid)
+        return mpForwarder;
+
+    if (msText.Len() && mpEditEngine)
+    {
+
+        if ( mpViewShell  )
+        {
+            Size aOutputSize;
+            Window* pWindow = mpViewShell->GetWindow();
+            if ( pWindow )
+                aOutputSize = pWindow->GetOutputSizePixel();
+            Point aPoint;
+            Rectangle aVisRect( aPoint, aOutputSize );
+            Size aSize(mpViewShell->GetLocationData().GetNoteInRangeOutputRect(aVisRect, mbMarkNote, maCellPos).GetSize());
+            if (pWindow)
+                pWindow->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
+            mpEditEngine->SetPaperSize(aSize);
+        }
+        mpEditEngine->SetText( msText );
+    }
+
+    mbDataValid = TRUE;
+
+    if (mpEditEngine)
+        mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+
+    return mpForwarder;
+}
+
+SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
+{
+    if (!mpViewForwarder)
+        mpViewForwarder = new ScPreviewViewForwarder(mpViewShell);
+    return mpViewForwarder;
+}
