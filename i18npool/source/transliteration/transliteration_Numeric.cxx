@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Numeric.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:07:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
 
-using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
