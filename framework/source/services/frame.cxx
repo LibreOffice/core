@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:23:08 $
+ *  last change: $Author: as $ $Date: 2002-07-29 14:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3081,7 +3081,7 @@ void Frame::implts_setIconOnWindow()
             if( xModel.is() == sal_True )
             {
                 ::rtl::OUString  sFilter;
-                ArgumentAnalyzer aAnalyzer(xModel->getArgs(),(sal_uInt32)E_FILTERNAME);
+                ArgumentAnalyzer aAnalyzer(xModel->getArgs(),(sal_Bool)sal_True);
                 aAnalyzer.getArgument( E_FILTERNAME, sFilter );
 
                 if( sFilter.getLength() > 0 )
