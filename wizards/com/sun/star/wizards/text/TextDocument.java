@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextDocument.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:48:39 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:22:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -124,6 +124,32 @@ public class TextDocument {
             xTextDocument = (XTextDocument) oDoc;
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
         }
+        XWindow xWindow = xFrame.getComponentWindow();
+        //PosSize = xFrame.getComponentWindow().getPosSize();
+
+        if (bshowStatusIndicator) {
+            XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
+            xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
+            xProgressBar.start("", 100);
+            xProgressBar.setValue(5);
+        }
+        xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+        xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+
+        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
+        xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+    }
+
+        //creates an instance of TextDocument and creates a frame with an empty document
+    public TextDocument(XMultiServiceFactory xMSF,XTextDocument _textDocument, boolean bshowStatusIndicator) {
+        this.xMSF = xMSF;
+        XDesktop xDesktop = Desktop.getDesktop(xMSF);
+
+                xFrame = _textDocument.getCurrentController().getFrame();
+                xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, _textDocument);
+                xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
         XWindow xWindow = xFrame.getComponentWindow();
         //PosSize = xFrame.getComponentWindow().getPosSize();
 
