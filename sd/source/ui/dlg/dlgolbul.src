@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text = "Bullets" ;
                 Text [ ENGLISH ] = "Bullets" ;
                 Text [ english_us ] = "Bullets" ;
-                Text [ portuguese_brazilian ] = "Bullets" ;
+                Text [ portuguese_brazilian ] = "Marcas" ;
                 Text [ swedish ] = "Punkter" ;
                 Text [ danish ] = "Punkttegn" ;
                 Text [ italian ] = "Punti" ;
@@ -89,7 +89,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ portuguese ] = "Marcas" ;
                 Text[ chinese_simplified ] = "项目符号";
                 Text[ russian ] = "�������";
-                Text[ polish ] = "Znaki wypunktowywania";
+                Text[ polish ] = "Znaki wypunktowania";
                 Text[ japanese ] = "箇条書き";
                 Text[ chinese_traditional ] = "項目符號";
                 Text[ arabic ] = "������ �������";
@@ -100,6 +100,9 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ catalan ] = "Pics";
                 Text[ finnish ] = "Luettelomerkit";
                 Text[ thai ] = "สัญลักษณ์แสดงหัวข้อย่อย";
+                Text[ czech ] = "Odrážky";
+                Text[ hebrew ] = "Bullets";
+                Text[ hindi ] = "बुल्लेट्स";
             };
             PageItem
             {
@@ -107,7 +110,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text = "Nummerierungsart" ;
                 Text [ ENGLISH ] = "Digits" ;
                 Text [ english_us ] = "Numbering type" ;
-                Text [ portuguese_brazilian ] = "Numerierungsart" ;
+                Text [ portuguese_brazilian ] = "Tipo de numera��o" ;
                 Text [ swedish ] = "Numreringstyp" ;
                 Text [ danish ] = "Nummereringstype" ;
                 Text [ italian ] = "Tipo di numerazione" ;
@@ -117,7 +120,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ portuguese ] = "Tipo de numera��o" ;
                 Text[ chinese_simplified ] = "编号类型";
                 Text[ russian ] = "��� ���������";
-                Text[ polish ] = "Rodzaj numeracji";
+                Text[ polish ] = "Typ numeracji";
                 Text[ japanese ] = "番号付けの種類";
                 Text[ chinese_traditional ] = "編號類型";
                 Text[ language_user1 ] = "MS Word, KeyID23276";
@@ -128,6 +131,9 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ catalan ] = "Tipus de numeraci�";
                 Text[ finnish ] = "Numerointityyppi";
                 Text[ thai ] = "ชนิดลำดับตัวเลข";
+                Text[ czech ] = "Typ číslování";
+                Text[ hebrew ] = "Nummerierungsart";
+                Text[ hindi ] = "संख्या देना का क्रम";
             };
             PageItem
             {
@@ -135,7 +141,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text = "Grafiken" ;
                 Text [ ENGLISH ] = "Images" ;
                 Text [ english_us ] = "Graphics" ;
-                Text [ portuguese_brazilian ] = "Grafiken" ;
+                Text [ portuguese_brazilian ] = "Figuras" ;
                 Text [ swedish ] = "Grafik" ;
                 Text [ danish ] = "Grafik" ;
                 Text [ italian ] = "Immagini" ;
@@ -145,7 +151,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ portuguese ] = "Imagens" ;
                 Text[ chinese_simplified ] = "图形";
                 Text[ russian ] = "����������� �������";
-                Text[ polish ] = "Grafiki";
+                Text[ polish ] = "Grafika";
                 Text[ japanese ] = "図";
                 Text[ chinese_traditional ] = "圖形";
                 Text[ arabic ] = "���";
@@ -156,6 +162,9 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ catalan ] = "Imatges";
                 Text[ finnish ] = "Grafiikka";
                 Text[ thai ] = "กราฟิค";
+                Text[ czech ] = "Obrázky";
+                Text[ hebrew ] = "‮גרפיקה‬";
+                Text[ hindi ] = "सुचित्र";
             };
             PageItem
             {
@@ -163,7 +172,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text = "Position" ;
                 Text [ ENGLISH ] = "Position" ;
                 Text [ english_us ] = "Position" ;
-                Text [ portuguese_brazilian ] = "Position" ;
+                Text [ portuguese_brazilian ] = "Posi��o" ;
                 Text [ swedish ] = "Position" ;
                 Text [ danish ] = "Placering" ;
                 Text [ italian ] = "Posizione" ;
@@ -184,6 +193,9 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ catalan ] = "Posici�";
                 Text[ finnish ] = "Sijainti";
                 Text[ thai ] = "ตำแหน่ง";
+                Text[ czech ] = "Umístění";
+                Text[ hebrew ] = "‮מיקום‬";
+                Text[ hindi ] = "स्थान";
             };
             PageItem
             {
@@ -191,7 +203,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text = "Optionen" ;
                 Text [ ENGLISH ] = "Customize" ;
                 Text [ english_us ] = "Customize" ;
-                Text [ portuguese_brazilian ] = "~Optionen" ;
+                Text [ portuguese_brazilian ] = "Personalizar" ;
                 Text [ swedish ] = "Alternativ" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
@@ -201,7 +213,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ portuguese ] = "Op��es" ;
                 Text[ chinese_simplified ] = "选项";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Opcje";
+                Text[ polish ] = "Dostosuj";
                 Text[ japanese ] = "オプション";
                 Text[ chinese_traditional ] = "選項";
                 Text[ arabic ] = "������";
@@ -212,16 +224,19 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ catalan ] = "Personalitza";
                 Text[ finnish ] = "Mukauta";
                 Text[ thai ] = "กำหนดเอง";
+                Text[ czech ] = "Přizpůsobit";
+                Text[ hebrew ] = "‮התאמה אישית‬";
+                Text[ hindi ] = "व्यवस्था करो";
             };
         };
     };
     Text [ english ] = "Numbering/Bullets" ;
     Text [ english_us ] = "Numbering/Bullets" ;
-    Text [ portuguese_brazilian ] = "Numerierung/Aufz?hlung" ;
+    Text [ portuguese_brazilian ] = "Numera��o / Marcas" ;
     Text [ swedish ] = "Numrering/punktuppst�llning" ;
     Text [ danish ] = "Nummerering/punkttegn" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
-    Text [ spanish ] = "Numeraci�n/Vi�etas" ;
+    Text [ spanish ] = "Numeraci�n y vi�etas" ;
     Text [ french ] = "Num�rotation/Puces" ;
     Text [ dutch ] = "Nummering/opsomming" ;
     Text [ portuguese ] = "Numera��o & Marcas" ;
@@ -238,7 +253,19 @@ TabDialog TAB_OUTLINEBULLET
     Text[ catalan ] = "Numeraci�/Vinyetes";
     Text[ finnish ] = "Luettelomerkit ja numerointi";
     Text[ thai ] = "ลำดับตัวเลข/สัญลักษณ์แสดงหัวข้อย่อย";
+    Text[ czech ] = "Číslování/odrážky";
+    Text[ hebrew ] = "‮תבליטים/מיספור‬";
+    Text[ hindi ] = "संख्या देना/बुल्लेट्स";
 };
+
+
+
+
+
+
+
+
+
 
 
 
