@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 12:42:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,8 +212,8 @@ void SwXMLImport::SetStatisticAttributes(
     Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                        SwXTextCursor::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
     SwDocStat aDocStat( pDoc->GetDocStat() );
