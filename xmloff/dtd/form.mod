@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.19 2004-11-09 12:11:37 hr Exp $
+	$Id: form.mod,v 1.20 2005-01-27 11:06:35 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -101,6 +101,14 @@
 <!ENTITY % list-source-types "(table|query|sql|sql-pass-through|value-list|table-fields)">
 <!ENTITY % list-source-type "form:list-source-type %list-source-types; #IMPLIED">
 <!ENTITY % column-style-name "form:column-style-name %styleName; #IMPLIED">
+<!ENTITY % min-value "form:min-value %float; #IMPLIED">
+<!ENTITY % max-value "form:max-value %float; #IMPLIED">
+<!ENTITY % step-size "form:step-size %positiveInteger; '1'">
+<!ENTITY % page-step-size "form:page-step-size %positiveInteger; #IMPLIED">
+<!ENTITY % delay-for-repeat "form:delay-for-repeat %positiveInteger; #IMPLIED">
+<!ENTITY % orientation "form:orientation (horizontal|vertical) #IMPLIED">
+
+
 
 
 <!ELEMENT form:control (%controls;)+>
@@ -375,13 +383,6 @@
                            %page-step-size;
                            %delay-for-repeat;
                            %orientation;>
-
-<!ENTITY % min-value "form:min-value %float; #IMPLIED">
-<!ENTITY % max-value "form:max-value %float; #IMPLIED">
-<!ENTITY % step-size "form:step-size %positiveInteger; '1'">
-<!ENTITY % page-step-size "form:page-step-size %positiveInteger; #IMPLIED">
-<!ENTITY % delay-for-repeat "form:delay-for-repeat %positiveInteger; #IMPLIED">
-<!ENTITY % orientation "form:orientation (horizontal|vertical) #IMPLIED">
 
 <!ELEMENT form:properties (form:property+)>
 <!ELEMENT form:property (form:property-value*)>
