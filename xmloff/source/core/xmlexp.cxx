@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-18 17:33:48 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 14:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1587,7 +1587,7 @@ void SvXMLExport::Characters(const ::rtl::OUString& rChars)
         }
         catch ( SAXException& e )
         {
-            Sequence<OUString> aPars(0);
+            Sequence<OUString> aPars(1);
             aPars[0] = rChars;
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
                       aPars, e.Message, NULL );
@@ -1622,6 +1622,24 @@ void SvXMLExport::EndElement(const OUString& rName,
         }
     }
 }
+
+void SvXMLExport::IgnorableWhitespace()
+{
+    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    {
+        try
+        {
+            xHandler->ignorableWhitespace( sWS );
+        }
+        catch ( SAXException& e )
+        {
+            Sequence<OUString> aPars(0);
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                      aPars, e.Message, NULL );
+        }
+    }
+}
+
 
 void SvXMLExport::SetError(
     sal_Int32 nId,
