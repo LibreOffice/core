@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:38:09 $
+ *  last change: $Author: sab $ $Date: 2002-08-09 13:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,8 @@ SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
 
 SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool bCreate )
 {
-    if (!mpEditViewForwarder)
+    //#102219#; there should no EditViewForwarder be, because the cell is now readonly in this interface
+/*  if (!mpEditViewForwarder)
     {
         sal_uInt16 nCol, nRow;
         EditView* pEditView;
@@ -636,7 +637,8 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool b
     }
     else if (bCreate)
         mpEditViewForwarder->GrabFocus();
-    return mpEditViewForwarder;
+    return mpEditViewForwarder;*/
+    return NULL;
 }
 
 IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
