@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-02-02 15:26:00 $
+ *  last change: $Author: as $ $Date: 2001-02-07 12:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
@@ -132,6 +136,7 @@ namespace framework{
 #define HASH_MAP                    ::std::hash_map
 #define VECTOR                      ::std::vector
 #define XREGISTRYKEY                ::com::sun::star::registry::XRegistryKey
+#define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
 #define PROPERTYVALUE               ::com::sun::star::beans::PropertyValue
 
 //_________________________________________________________________________________________________________________
@@ -161,12 +166,24 @@ typedef VECTOR< OUSTRING > TStringList;
 // The internal name is the keyname of an item with these structure in our hash map or our configuration set!
 struct TType
 {
-    OUSTRING        sUIName             ;   // empty = ""
-    OUSTRING        sMediaType          ;   // empty = ""
-    OUSTRING        sClipboardFormat    ;   // empty = ""
-    TStringList     lURLPattern         ;   // empty = {}
-    TStringList     lExtensions         ;   // empty = {}
-    sal_Int32       nDocumentIconID     ;   // empty = 0
+    OUSTRING                    sUIName             ;   // empty = ""
+    SEQUENCE< PROPERTYVALUE >   lUINames            ;   // empty = {}
+    OUSTRING                    sMediaType          ;   // empty = ""
+    OUSTRING                    sClipboardFormat    ;   // empty = ""
+    TStringList                 lURLPattern         ;   // empty = {}
+    TStringList                 lExtensions         ;   // empty = {}
+    sal_Int32                   nDocumentIconID     ;   // empty = 0
+
+    inline void clear()
+    {
+        sUIName             = OUSTRING()                    ;
+        lUINames            = SEQUENCE< PROPERTYVALUE >()   ;
+        sMediaType          = OUSTRING()                    ;
+        sClipboardFormat    = OUSTRING()                    ;
+        nDocumentIconID     = 0                             ;
+        lURLPattern.clear();
+        lExtensions.clear();
+    }
 };
 
 //*****************************************************************************************************************
@@ -176,14 +193,28 @@ struct TType
 // The internal name is the keyname of an item with these structure in our hash map or our configuration set!
 struct TFilter
 {
-    OUSTRING        sType               ;   // empty not allowed!
-    OUSTRING        sUIName             ;   // empty = ""
-    OUSTRING        sDocumentService    ;   // empty = ""
-    OUSTRING        sFilterService      ;   // empty = ""
-    sal_Int32       nFlags              ;   // empty = 0
-    TStringList     lUserData           ;   // empty = {}
-    sal_Int32       nFileFormatVersion  ;   // empty = 0            ... should be moved in UserData ...!?
-    OUSTRING        sTemplateName       ;   // empty = ""           ... should be moved in UserData ...!?
+    OUSTRING                    sType               ;   // empty not allowed!
+    OUSTRING                    sUIName             ;   // empty = ""
+    SEQUENCE< PROPERTYVALUE >   lUINames            ;   // empty = {}
+    OUSTRING                    sDocumentService    ;   // empty = ""
+    OUSTRING                    sFilterService      ;   // empty = ""
+    sal_Int32                   nFlags              ;   // empty = 0
+    TStringList                 lUserData           ;   // empty = {}
+    sal_Int32                   nFileFormatVersion  ;   // empty = 0            ... should be moved in UserData ...!?
+    OUSTRING                    sTemplateName       ;   // empty = ""           ... should be moved in UserData ...!?
+
+    inline void clear()
+    {
+        sType               = OUSTRING()                    ;
+        sUIName             = OUSTRING()                    ;
+        lUINames            = SEQUENCE< PROPERTYVALUE >()   ;
+        sDocumentService    = OUSTRING()                    ;
+        sFilterService      = OUSTRING()                    ;
+        nFlags              = 0                             ;
+        nFileFormatVersion  = 0                             ;
+        sTemplateName       = OUSTRING()                    ;
+        lUserData.clear();
+    }
 };
 
 //*****************************************************************************************************************
@@ -193,6 +224,11 @@ struct TFilter
 struct TDetector
 {
     TStringList     lTypes          ;   // empty not allowed! min 1 item need!
+
+    inline void clear()
+    {
+        lTypes.clear();
+    }
 };
 
 //*****************************************************************************************************************
@@ -201,8 +237,16 @@ struct TDetector
 // in our hash map or our configuration set!
 struct TLoader
 {
-    OUSTRING        sUIName         ;   // empty = ""
-    TStringList     lTypes          ;   // empty not allowed! min 1 item need!
+    OUSTRING                    sUIName         ;   // empty = ""
+    SEQUENCE< PROPERTYVALUE >   lUINames        ;   // empty = {}
+    TStringList                 lTypes          ;   // empty not allowed! min 1 item need!
+
+    inline void clear()
+    {
+        sUIName     = OUSTRING()                    ;
+        lUINames    = SEQUENCE< PROPERTYVALUE >()   ;
+        lTypes.clear();
+    }
 };
 
 //*****************************************************************************************************************
@@ -251,6 +295,15 @@ typedef TPerformanceHash::const_iterator                            TConstPerfor
 typedef TPreferredHash::const_iterator                              TConstPreferredIterator     ;
 typedef CheckedIterator< TStringList >                              TCheckedStringListIterator  ;
 typedef CheckedIterator< TTypeHash >                                TCheckedTypeIterator        ;
+
+//*****************************************************************************************************************
+// describe type of current running office
+// used to create right configuration provider in impl_openConfiguration()!
+enum EOfficeType
+{
+    E_FATOFFICE ,
+    E_WEBTOP
+};
 
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
@@ -391,6 +444,24 @@ class FilterCache
         sal_Bool existsLoader   ( const OUSTRING& sName ) const;
 
         /*-****************************************************************************************************//**
+            @short      support registration of filter in current configuration
+            @descr      Use this methods to add or remove filter in our configuration files.
+                        We use the globale configuration to do that ... in fat office "share/config/registry/..."!
+
+            @seealso    -
+
+            @param      "sName"         , name of filter
+            @param      "lProperties"   , values of new filter
+            @return     state of operation as bool
+
+            @onerror    We return false then.
+        *//*-*****************************************************************************************************/
+
+        sal_Bool addFilter      (   const   OUSTRING&                   sName       ,
+                                    const   SEQUENCE< PROPERTYVALUE >&  lProperties );
+        sal_Bool removeFilter   (   const   OUSTRING&                   sName       );
+
+        /*-****************************************************************************************************//**
             @short      convert between internal and external structures
             @descr      We use some vector or self defined structures internal - but get sequences from configuration or must
                         return uno compatible values.
@@ -411,6 +482,8 @@ class FilterCache
         static void convertTFilterToPropertySequence    ( const TFilter&    rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
         static void convertTLoaderToPropertySequence    ( const TLoader&    rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
         static void convertTDetectorToPropertySequence  ( const TDetector&  rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
+
+        static void convertPropertySequenceToTFilter    ( const SEQUENCE< PROPERTYVALUE >& lSource, TFilter& rDestination );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -495,6 +568,12 @@ class FilterCache
         void impl_fillDetectorCache ( const REFERENCE< XREGISTRYKEY >& xRootKey, TDetectorHash& rCache  , TPerformanceHash& rFastCache  );
         void impl_fillLoaderCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TLoaderHash&   rCache  , TPerformanceHash& rFastCache  );
 
+        EOfficeType                         impl_detectOfficeType   ();
+        REFERENCE< XMULTISERVICEFACTORY >   impl_openConfiguration  ();
+
+        void impl_addFilterInternal     ( const OUSTRING& sName, const TFilter& aInfo );
+        void impl_removeFilterInternal  ( const OUSTRING& sName );
+
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
     //  (should be private everyway!)
@@ -555,6 +634,11 @@ class FilterCache
                                                                                         const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
         static sal_Bool impldbg_checkParameter_convertTDetectorToPropertySequence   (   const   TDetector&                  rSource             ,
                                                                                         const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
+        static sal_Bool impldbg_checkParameter_convertPropertySequenceToTFilter     (   const   SEQUENCE< PROPERTYVALUE >&  lSource             ,
+                                                                                                TFilter&                    rDestination        );
+        static sal_Bool impldbg_checkParameter_addFilter                            (   const   OUSTRING&                   sName               ,
+                                                                                        const   SEQUENCE< PROPERTYVALUE >&  lProperties         );
+        static sal_Bool impldbg_checkParameter_removeFilter                         (   const   OUSTRING&                   sName               );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 
