@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-19 11:20:42 $
+ *  last change: $Author: pl $ $Date: 2002-07-04 16:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,6 +964,8 @@ BOOL Printer::HasSupport( PrinterSupport eFeature, BOOL bInJob ) const
             return (BOOL)GetCapabilities( PRINTER_CAPABILITIES_SUPPORTDIALOG );
         case SUPPORT_FAX:
             return (BOOL) GetCapabilities( PRINTER_CAPABILITIES_FAX );
+        case SUPPORT_PDF:
+            return (BOOL) GetCapabilities( PRINTER_CAPABILITIES_PDF );
     }
 
     return TRUE;

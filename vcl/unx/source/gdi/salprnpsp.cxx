@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-19 11:21:25 $
+ *  last change: $Author: pl $ $Date: 2002-07-04 16:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,20 @@ ULONG SalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT nTy
             int nTokenCount = aFeatures.GetTokenCount( ',' );
             for( int i = 0; i < nTokenCount; i++ )
             {
-                if( aFeatures.GetToken( i ).CompareToAscii( "fax", 3 ) )
+                if( aFeatures.GetToken( i ).CompareToAscii( "fax", 3 ) == COMPARE_EQUAL )
+                    return 1;
+            }
+            return 0;
+        }
+        case PRINTER_CAPABILITIES_PDF:
+        {
+            PrinterInfoManager& rManager = PrinterInfoManager::get();
+            PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->maPrinterName ) );
+            String aFeatures( aInfo.m_aFeatures );
+            int nTokenCount = aFeatures.GetTokenCount( ',' );
+            for( int i = 0; i < nTokenCount; i++ )
+            {
+                if( aFeatures.GetToken( i ).CompareToAscii( "pdf=", 4 ) == COMPARE_EQUAL )
                     return 1;
             }
             return 0;
