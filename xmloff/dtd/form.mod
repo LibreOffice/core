@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.20 2005-01-27 11:06:35 rt Exp $
+	$Id: form.mod,v 1.21 2005-03-10 15:46:01 vg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -379,6 +379,7 @@
                            %max-value;
                            %current-value;
                            %value;
+                           %linked-cell;
                            %step-size;
                            %page-step-size;
                            %delay-for-repeat;
