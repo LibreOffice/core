@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 11:25:35 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 15:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,46 +1140,12 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnDatasourceSelected, ListBox*, _pBox)
 {
-    // first ask the current page if it is allowed to leave
-    if (!PrepareLeaveCurrentPage())
-    {   // the page did not allow us to leave -> restore the old selection
+    if (!prepareSwitchDatasource())
+    {   // restore the old selection
         if (m_sCurrentDatasource.getLength())
             m_aSelector.select(m_sCurrentDatasource);
         else
             m_aSelector.select(m_nCurrentDeletedDataSource);
-        return 1L;
-    }
-
-    // if the old data source is not a to-be-deleted one, save the modifications made in the tabpages
-    if (m_sCurrentDatasource.getLength())
-    {
-        // remember the settings for this data source
-        ODatasourceMap::ODatasourceInfo aPreviouslySelected = m_aDatasources[m_sCurrentDatasource];
-        if (aPreviouslySelected.isModified())
-            m_aDatasources.update(m_sCurrentDatasource, *pExampleSet);
-        // (The modified flag is set as soon as any UI element has any change (e.g. a single new character in a edit line).
-        // But when this flag is set, and other changes occur, no items are transfered.
-        // That's why the above statement "if (isModified()) update()" makes sense, though it may not seem so :)
-
-        // need a special handling for the name property
-        if (aPreviouslySelected.isModified())
-        {
-            String sName = aPreviouslySelected.getName().getStr();
-            DBG_ASSERT(m_sCurrentDatasource.equals(sName.GetBuffer()), "ODbAdminDialog::OnDatasourceSelected: inconsistent names!");
-
-            // first adjust the name which the datasource is stored under in our map.
-            String sNewName = m_aDatasources.adjustRealName(sName);
-            // if this was a real change ('cause the ds was stored under name "A", but the modifications set already contained
-            // an DSID_NAME item "B", which has been corrected by the previous call), tell the selector window that
-            // something changed
-            if (!sNewName.Equals(sName))
-            {
-                // tell our selector window that the name has changed
-                m_aSelector.renamed(sName, sNewName);
-                // update our "current database"
-                m_sCurrentDatasource = sNewName;
-            }
-        }
     }
 
     // switch the content of the pages
@@ -1815,8 +1781,54 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
 }
 
 //-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::prepareSwitchDatasource()
+{
+    // first ask the current page if it is allowed to leave
+    if (!PrepareLeaveCurrentPage())
+        // the page did not allow us to leave -> outta here
+        return sal_False;
+
+    // if the old data source is not a to-be-deleted one, save the modifications made in the tabpages
+    if (m_sCurrentDatasource.getLength())
+    {
+        // remember the settings for this data source
+        ODatasourceMap::ODatasourceInfo aPreviouslySelected = m_aDatasources[m_sCurrentDatasource];
+        if (aPreviouslySelected.isModified())
+            m_aDatasources.update(m_sCurrentDatasource, *pExampleSet);
+        // (The modified flag is set as soon as any UI element has any change (e.g. a single new character in a edit line).
+        // But when this flag is set, and other changes occur, no items are transfered.
+        // That's why the above statement "if (isModified()) update()" makes sense, though it may not seem so :)
+
+        // need a special handling for the name property
+        if (aPreviouslySelected.isModified())
+        {
+            String sName = aPreviouslySelected.getName().getStr();
+            DBG_ASSERT(m_sCurrentDatasource.equals(sName.GetBuffer()), "ODbAdminDialog::prepareSwitchDatasource: inconsistent names!");
+
+            // first adjust the name which the datasource is stored under in our map.
+            String sNewName = m_aDatasources.adjustRealName(sName);
+            // if this was a real change ('cause the ds was stored under name "A", but the modifications set already contained
+            // an DSID_NAME item "B", which has been corrected by the previous call), tell the selector window that
+            // something changed
+            if (!sNewName.Equals(sName))
+            {
+                // tell our selector window that the name has changed
+                m_aSelector.renamed(sName, sNewName);
+                // update our "current database"
+                m_sCurrentDatasource = sNewName;
+            }
+        }
+    }
+
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnNewDatasource, Window*, _pWindow)
 {
+    if (!prepareSwitchDatasource())
+        return 1L;
+
     ::rtl::OUString sNewName = getUniqueName();
     if (0 == sNewName.getLength())
         return 1L;  // no free names
@@ -2564,6 +2576,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2001/05/15 11:25:35  fs
+ *  #86996# use the connection pool instead of the driver manager
+ *
  *  Revision 1.48  2001/05/10 13:37:04  fs
  *  #86223# restore view settings after applying (no matter if syncronously or asynchronously / +successfullyConnected to make the password persistent
  *
