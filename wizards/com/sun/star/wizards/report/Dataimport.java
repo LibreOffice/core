@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-10 14:39:57 $
+ *  last change: $Author: bc $ $Date: 2002-09-11 09:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,8 +226,8 @@ public class Dataimport extends ReportWizard{
                             new Object[] {new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop});
 
         CurUNOProgressDialog.calculateDialogPosition(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
-        System.out.println("Vor dem Thread");
-        setDialogVisible(CurUNOProgressDialog);
+        CurUNOProgressDialog.xWindow.setVisible(true);
+//      setDialogVisible(CurUNOProgressDialog);
 
     return CurUNOProgressDialog;
     }
@@ -244,16 +244,16 @@ public class Dataimport extends ReportWizard{
 
 
     public void setDialogVisible(final UNODialogs CurUNOProgressDialog){
+
     Thread ProgressThread = new Thread(new Runnable() {
     public void run(){
     try{
         System.out.println("bin im Thread");
-        boolean bexists = (CurUNOProgressDialog != null);
+        boolean bexists = (CurUNOProgressDialog.xWindow != null);
         System.out.print("Dialog vorhanden: ");
         System.out.println(bexists);
         CurUNOProgressDialog.xWindow.setVisible(true);
         System.out.println("bin immer noch im thread");
-
     }
     catch (ThreadDeath td){
         System.out.println("could not stop thread");
