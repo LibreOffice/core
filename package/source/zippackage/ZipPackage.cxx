@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 11:00:26 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 11:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,8 +304,6 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
                 pPkgStream->setZipEntry( aEntry );
                 pPkgStream->setName( sStreamName );
-                aAny <<= OUString::createFromAscii("text/plain");
-                pPkgStream->setPropertyValue(OUString::createFromAscii("MediaType"), aAny);
                 aAny <<= Reference < XUnoTunnel > (pPkgStream);
                 xCurrent->insertByName(sStreamName, aAny);
             }
