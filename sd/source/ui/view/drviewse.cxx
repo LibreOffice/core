@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:10:17 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 17:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,11 @@
 #include "drawview.hxx"
 #include "docshell.hxx"
 #include "sdattr.hxx"
+
+// #97016#
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -468,8 +473,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_CIRCLECUT:
         case SID_DRAW_CIRCLECUT_NOFILL:
         {
-            pFuActual = new FuConstArc( this, pWindow, pDrView,
-                                              pDoc, rReq );
+            pFuActual = new FuConstArc( this, pWindow, pDrView, pDoc, rReq);
             ((FuConstArc*) pFuActual)->SetPermanent(bPermanent);
             rReq.Done();
         }
@@ -518,6 +522,33 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
     // Shell wird invalidiert, schneller als einzeln (laut MI)
     // Jetzt explizit der letzte Slot incl. Update()
     Invalidate();
+
+    // #97016# with qualifier construct directly
+    if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
+    {
+        // get SdOptions
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+        sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
+        sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
+        SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+
+        if(pPageView)
+        {
+            // calc position and size
+            Point aPagePos = pPageView->GetOffset();
+            Size aPageSize = pPageView->GetPage()->GetSize();
+            aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
+            aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
+            Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+            SdrObject* pObj = pFuActual->CreateDefaultObject(nSId, aNewObjectRectangle);
+
+            if(pObj)
+            {
+                // insert into page
+                pView->InsertObject(pObj, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
