@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 11:43:26 $
+ *  last change: $Author: os $ $Date: 2002-12-11 15:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3421,7 +3421,7 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
     Buttons = WB_OK ;
     DefButton = WB_DEF_YES ;
-    Message = "Die Datenquelle \"%1\" konnte nicht gefunden werden.\nÜberprüfen Sie die Einstellungen in \'Extras - Datenquellen...\'";
+    Message = "Die Datenquelle \'%1\' konnte nicht gefunden werden.\nÜberprüfen Sie die Einstellungen in \'Extras - Datenquellen...\'";
     Message[english_us] = "The data source \"%1\" was not found.\nCheck the settings in 'Tools - Data Sources...'";
     Message[ portuguese ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ russian ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
