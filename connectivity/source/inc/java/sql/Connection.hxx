@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:41:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #endif
 
 
-
 namespace connectivity
 {
     class java_sql_Driver;
@@ -99,8 +98,11 @@ namespace connectivity
         OWeakRefArray       m_aStatements;  //  vector containing a list
                                             //  of all the Statement objects
                                             //  for this Connection
-        java_sql_Driver*    m_pDriver;
-        sal_Bool        m_bParameterSubstitution;
+        const java_sql_Driver*  m_pDriver;
+        jobject             m_pDriverobject;
+
+        jclass              m_Driver_theClass;
+        sal_Bool            m_bParameterSubstitution;
         sal_Bool        m_bIgnoreDriverPrivileges;
 
         /** transform named parameter into unnamed one.
@@ -110,6 +112,7 @@ namespace connectivity
                 The new statement witgh unnamed parameters.
         */
         ::rtl::OUString transFormPreparedStatement(const ::rtl::OUString& _sSQL);
+        void loadDriverFromProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution_sal_Bool& _bIgnore);
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
@@ -118,23 +121,13 @@ namespace connectivity
 
         virtual ~java_sql_Connection();
     public:
-        static int TRANSACTION_NONE;
-        static int TRANSACTION_READ_COMMITTED;
-        static int TRANSACTION_READ_UNCOMMITTED;
-        static int TRANSACTION_REPEATABLE_READ;
-        static int TRANSACTION_SERIALIZABLE;
-
         static jclass getMyClass();
 
         DECLARE_SERVICE_INFO();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Connection(    JNIEnv * pEnv
-                                , jobject myObj
-                                ,java_sql_Driver* _pDriver
-                                ,const ::rtl::OUString& _sGeneredStmt
-                                ,sal_Bool _bGenEnabled
-                                ,sal_Bool _bParameterSubstitution
-                                ,sal_Bool _bIgnoreDriverPrivileges);
+        java_sql_Connection(const java_sql_Driver* _pDriver);
+        void construct( const ::rtl::OUString& url,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
         // OComponentHelper
