@@ -12,11 +12,11 @@ de = "{&MSSansBold8}&Entfernen"
 
 [OOO_RADIOBUTTON_4]
 en-US = "{&MSSansBold8}&Complete"
-de = "{&MSSansBold8}&Vervollständigen"
+de = "{&MSSansBold8}&Vollständig"
 
 [OOO_RADIOBUTTON_5]
 en-US = "{&MSSansBold8}Cu&stom"
-de = "{&MSSansBold8}Anpa&ssen"
+de = "{&MSSansBold8}Angepa&sst"
 
 [OOO_RADIOBUTTON_6]
 en-US = "I &do not accept the terms in the license agreement"
