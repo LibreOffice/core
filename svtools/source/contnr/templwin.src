@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:41:05 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 12:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,20 +391,38 @@ ModalDialog DLG_DOCTEMPLATE
     HelpId = HID_TEMPLATEDLG_DIALOG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT( 400, 245 );
+    Size = MAP_APPFONT( 320, 240 );
     Text = "Vorlagen und Dokumente" ;
     Text [ english_us ] = "Templates and Documents" ;
-    Closeable = TRUE ;
+    Text[ portuguese ] = "Modelos e documentos";
+    Text[ russian ] = "Øàáëîíû è äîêóìåíòû";
+    Text[ greek ] = "Templates and Documents";
+    Text[ dutch ] = "Templates and Documents";
+    Text[ french ] = "Modèles et documents";
+    Text[ spanish ] = "Plantillas y documentos";
+    Text[ italian ] = "Modelli e documenti";
+    Text[ danish ] = "Templates and Documents";
+    Text[ swedish ] = "Mallar och dokument";
+    Text[ polish ] = "Szablony i dokumenty";
+    Text[ portuguese_brazilian ] = "Templates and Documents";
+    Text[ japanese ] = "ÃÝÌßÚ°Ä‚ÆÄÞ·­ÒÝÄ";
+    Text[ korean ] = "¼­½ÄÆÄÀÏ°ú ¹®¼­";
+    Text[ chinese_simplified ] = "ÑùÊ½ºÍÎÄµµ";
+    Text[ chinese_traditional ] = "¼Ë¦¡©M¤å¥ó";
+    Text[ turkish ] = "Templates and Documents";
+    Text[ arabic ] = "Templates and Documents";
+    Text[ catalan ] = "Templates and Documents";
+    Text[ finnish ] = "Vorlagen und Dokumente";
     Moveable = TRUE ;
     FixedLine FL_DOCTEMPLATE
     {
-        Pos = MAP_APPFONT( 1, 219 );
-        Size = MAP_APPFONT( 398, 1 );
+        Pos = MAP_APPFONT( 0, 214 );
+        Size = MAP_APPFONT( 320, 1 );
     };
     PushButton BTN_DOCTEMPLATE_MANAGE
     {
-        Disable = TRUE;
-        Pos = MAP_APPFONT( 6, 225 );
+        Hide = TRUE;
+        Pos = MAP_APPFONT( 3, 220 );
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Verwalten...";
         Text [ english_us ] = "Organi~ze...";
@@ -430,7 +448,7 @@ ModalDialog DLG_DOCTEMPLATE
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
-        Pos = MAP_APPFONT( 59, 225 );
+        Pos = MAP_APPFONT( 3, 220 );
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Bearbeiten";
         Text [ english_us ] = "~Edit";
@@ -456,7 +474,7 @@ ModalDialog DLG_DOCTEMPLATE
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
-        Pos = MAP_APPFONT( 235, 225 );
+        Pos = MAP_APPFONT( 158, 220 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
         Text = "Ö~ffnen";
@@ -483,33 +501,14 @@ ModalDialog DLG_DOCTEMPLATE
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
-        Pos = MAP_APPFONT( 288, 225 );
+        Pos = MAP_APPFONT( 211, 220 );
         Size = MAP_APPFONT( 50, 14 );
     };
     HelpButton BTN_DOCTEMPLATE_HELP
     {
-        Pos = MAP_APPFONT( 344, 225 );
+        Pos = MAP_APPFONT( 267, 220 );
         Size = MAP_APPFONT( 50, 14 );
     };
-    Text[ portuguese ] = "Modelos e documentos";
-    Text[ russian ] = "Øàáëîíû è äîêóìåíòû";
-    Text[ greek ] = "Templates and Documents";
-    Text[ dutch ] = "Templates and Documents";
-    Text[ french ] = "Modèles et documents";
-    Text[ spanish ] = "Plantillas y documentos";
-    Text[ italian ] = "Modelli e documenti";
-    Text[ danish ] = "Templates and Documents";
-    Text[ swedish ] = "Mallar och dokument";
-    Text[ polish ] = "Szablony i dokumenty";
-    Text[ portuguese_brazilian ] = "Templates and Documents";
-    Text[ japanese ] = "ÃÝÌßÚ°Ä‚ÆÄÞ·­ÒÝÄ";
-    Text[ korean ] = "¼­½ÄÆÄÀÏ°ú ¹®¼­";
-    Text[ chinese_simplified ] = "ÑùÊ½ºÍÎÄµµ";
-    Text[ chinese_traditional ] = "¼Ë¦¡©M¤å¥ó";
-    Text[ turkish ] = "Templates and Documents";
-    Text[ arabic ] = "Templates and Documents";
-    Text[ catalan ] = "Templates and Documents";
-    Text[ finnish ] = "Vorlagen und Dokumente";
 };
 
 StringArray STRARY_SVT_DOCINFO
@@ -544,9 +543,9 @@ StringArray STRARY_SVT_DOCINFO
         < "Subject" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
-ItemList [ language_user1 ] =
+    ItemList [ language_user1 ] =
     {
-             < "Titel" ; DI_TITLE ; > ;
+         < "Titel" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
@@ -561,7 +560,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ portuguese ] =
     {
-             < "Título" ; DI_TITLE ; > ;
+         < "Título" ; DI_TITLE ; > ;
         < "De" ; DI_FROM ; > ;
         < "Data " ; DI_DATE ; > ;
         < "Palavras-chave" ; DI_KEYWORDS ; > ;
@@ -576,7 +575,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ russian ] =
     {
-             < "Çàãëàâèå" ; DI_TITLE ; > ;
+         < "Çàãëàâèå" ; DI_TITLE ; > ;
         < "Èç" ; DI_FROM ; > ;
         < "Äàòà" ; DI_DATE ; > ;
         < "Êëþ÷åâûå ñëîâà" ; DI_KEYWORDS ; > ;
@@ -591,7 +590,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ greek ] =
     {
-             < "Ôßôëïò" ; DI_TITLE ; > ;
+        < "Ôßôëïò" ; DI_TITLE ; > ;
         < "áðü" ; DI_FROM ; > ;
         < "Çìåñïìçíßá" ; DI_DATE ; > ;
         < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
@@ -606,7 +605,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ dutch ] =
     {
-             < "Title" ; DI_TITLE ; > ;
+        < "Title" ; DI_TITLE ; > ;
         < "Van" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Sleutelwoorden" ; DI_KEYWORDS ; > ;
@@ -621,7 +620,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ french ] =
     {
-             < "Titre" ; DI_TITLE ; > ;
+        < "Titre" ; DI_TITLE ; > ;
         < "De" ; DI_FROM ; > ;
         < "Date" ; DI_DATE ; > ;
         < "Mots-clés" ; DI_KEYWORDS ; > ;
@@ -636,7 +635,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ spanish ] =
     {
-             < "Título" ; DI_TITLE ; > ;
+        < "Título" ; DI_TITLE ; > ;
         < "De" ; DI_FROM ; > ;
         < "Fecha" ; DI_DATE ; > ;
         < "Palabras clave" ; DI_KEYWORDS ; > ;
@@ -651,7 +650,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ finnish ] =
     {
-             < "Nimiö" ; DI_TITLE ; > ;
+        < "Nimiö" ; DI_TITLE ; > ;
         < "Teksti -> Tietue" ; DI_FROM ; > ;
         < "Päivämäärä" ; DI_DATE ; > ;
         < "Avainsanat" ; DI_KEYWORDS ; > ;
@@ -666,7 +665,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ italian ] =
     {
-             < "Titolo" ; DI_TITLE ; > ;
+        < "Titolo" ; DI_TITLE ; > ;
         < "da" ; DI_FROM ; > ;
         < "Data" ; DI_DATE ; > ;
         < "Parole chiave" ; DI_KEYWORDS ; > ;
@@ -681,7 +680,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ danish ] =
     {
-             < "Overskrift" ; DI_TITLE ; > ;
+        < "Overskrift" ; DI_TITLE ; > ;
         < "Fra" ; DI_FROM ; > ;
         < "Dato" ; DI_DATE ; > ;
         < "Nøgleord" ; DI_KEYWORDS ; > ;
@@ -696,7 +695,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ swedish ] =
     {
-             < "Namn" ; DI_TITLE ; > ;
+        < "Namn" ; DI_TITLE ; > ;
         < "Av" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Nyckelord" ; DI_KEYWORDS ; > ;
@@ -711,7 +710,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ polish ] =
     {
-             < "Tytu³" ; DI_TITLE ; > ;
+        < "Tytu³" ; DI_TITLE ; > ;
         < "od" ; DI_FROM ; > ;
         < "Data" ; DI_DATE ; > ;
         < "S³owa kluczowe" ; DI_KEYWORDS ; > ;
@@ -726,7 +725,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ portuguese_brazilian ] =
     {
-             < "Titel" ; DI_TITLE ; > ;
+        < "Titel" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
@@ -741,7 +740,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ japanese ] =
     {
-             < "À²ÄÙ" ; DI_TITLE ; > ;
+        < "À²ÄÙ" ; DI_TITLE ; > ;
         < "ì¬ŽÒ" ; DI_FROM ; > ;
         < "“úŽž" ; DI_DATE ; > ;
         < "·°Ü°ÄÞ" ; DI_KEYWORDS ; > ;
@@ -756,7 +755,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ korean ] =
     {
-             < "Á¦¸ñ" ; DI_TITLE ; > ;
+        < "Á¦¸ñ" ; DI_TITLE ; > ;
         < "(À¸)·Î ºÎÅÍ" ; DI_FROM ; > ;
         < "ÀÏÀÚ" ; DI_DATE ; > ;
         < "Å°¿öµåµé" ; DI_KEYWORDS ; > ;
@@ -771,7 +770,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ chinese_simplified ] =
     {
-             < "´ó±êÌâ" ; DI_TITLE ; > ;
+        < "´ó±êÌâ" ; DI_TITLE ; > ;
         < "×÷Õß" ; DI_FROM ; > ;
         < "ÈÕÆÚ" ; DI_DATE ; > ;
         < "¹Ø¼ü×Ö" ; DI_KEYWORDS ; > ;
@@ -786,7 +785,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ chinese_traditional ] =
     {
-             < "¤j¼ÐÃD" ; DI_TITLE ; > ;
+        < "¤j¼ÐÃD" ; DI_TITLE ; > ;
         < "±q" ; DI_FROM ; > ;
         < "¤é´Á" ; DI_DATE ; > ;
         < "ÃöÁä¦r" ; DI_KEYWORDS ; > ;
@@ -801,7 +800,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ turkish ] =
     {
-             < "Bölüm baþlýðý" ; DI_TITLE ; > ;
+        < "Bölüm baþlýðý" ; DI_TITLE ; > ;
         < "Yazdýran" ; DI_FROM ; > ;
         < "Tarih" ; DI_DATE ; > ;
         < "Anahtar sözcük" ; DI_KEYWORDS ; > ;
@@ -831,7 +830,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ catalan ] =
     {
-             < "Titel" ; DI_TITLE ; > ;
+         < "Titel" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
@@ -844,10 +843,5 @@ ItemList [ language_user1 ] =
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
-    };
-
-
-
-
-
+};
 
