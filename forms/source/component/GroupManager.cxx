@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 12:08:20 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt)
+void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
@@ -388,7 +388,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt)
 
 // XContainerListener
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event)
+void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
     if (xSet.is())
@@ -396,7 +396,7 @@ void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event)
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event)
+void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
     if (xSet.is())
@@ -404,7 +404,7 @@ void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event)
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event)
+void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.ReplacedElement.getValue(), UNO_QUERY);
     if (xSet.is())
