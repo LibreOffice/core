@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:56:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
+#include "lotfntbf.hxx"
 
 #include "scitems.hxx"
 #include <svx/cntritem.hxx>
@@ -83,9 +77,6 @@
 #include "global.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
-
-#include "lotfntbf.hxx"
-#include "flttools.hxx"
 
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
