@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 09:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #ifndef _LANG_HXX //autogen
 #include <tools/lang.hxx>
 #endif
-#ifndef _FSYS_HXX //autogen
-#include <tools/fsys.hxx>
-#endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -98,6 +95,10 @@
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
+#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svxids.hrc>
@@ -1402,7 +1403,7 @@ BOOL SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, BOOL bNewFile )
     DBG_ASSERT(!aLangTable.IsKeyValid(ULONG(eLang)), "Sprache ist bereits vorhanden")
     String sFileTemp = GetAutoCorrFileName( eLang );
     SvxAutoCorrectLanguageListsPtr pLists = 0;
-    if( bNewFile || DirEntry( sFileTemp ).Exists() )
+    if( bNewFile || FStatHelper::IsDocument( sFileTemp ) )
     {
         pLists = new SvxAutoCorrectLanguageLists( *this, sFileTemp, eLang );
         aLangTable.Insert(ULONG(eLang), pLists);
@@ -1755,13 +1756,12 @@ BOOL SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
     if( aLastCheckTime > aAktTime ||                    // ueberlauf ?
         ( aAktTime -= aLastCheckTime ) > aMinTime )     // min Zeit vergangen
     {
-        DirEntry aDE( sAutoCorrFile );
-        FileStat aFStat( aDE );
-        bRet = aModifiedDate != aFStat.DateModified() ||
-               aModifiedTime != aFStat.TimeModified();
-
-        if( bRet )
+        Date aTstDate; Time aTstTime;
+        if( FStatHelper::GetModifiedDateTimeOfFile( sAutoCorrFile,
+                                            &aTstDate, &aTstTime ) &&
+            ( aModifiedDate != aTstDate || aModifiedTime != aTstTime ))
         {
+            bRet = TRUE;
             // dann mal schnell alle Listen entfernen!
             if( CplSttLstLoad & nFlags && pCplStt_ExcptLst )
                 delete pCplStt_ExcptLst, pCplStt_ExcptLst = 0;
@@ -1847,10 +1847,8 @@ void SvxAutoCorrectLanguageLists::LoadExceptList_Imp(
         }
 
         // Zeitstempel noch setzen
-        DirEntry aDE( sAutoCorrFile );
-        FileStat aFStat( aDE );
-        aModifiedDate = aFStat.DateModified();
-        aModifiedTime = aFStat.TimeModified();
+        FStatHelper::GetModifiedDateTimeOfFile( sAutoCorrFile,
+                                        &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time();
     }
 }
@@ -1907,12 +1905,9 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
         }
 
         // Zeitstempel noch setzen
-        DirEntry aDE( sAutoCorrFile );
-        FileStat aFStat( aDE );
-        aModifiedDate = aFStat.DateModified();
-        aModifiedTime = aFStat.TimeModified();
+        FStatHelper::GetModifiedDateTimeOfFile( sAutoCorrFile,
+                                        &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time();
-
     }
 }
 /* -----------------18.11.98 11:26-------------------
@@ -2044,10 +2039,8 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         }
 
         // Zeitstempel noch setzen
-        DirEntry aDE(  sAutoCorrFile );
-        FileStat aFStat( aDE );
-        aModifiedDate = aFStat.DateModified();
-        aModifiedTime = aFStat.TimeModified();
+        FStatHelper::GetModifiedDateTimeOfFile( sAutoCorrFile,
+                                        &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time();
     }
     return pAutocorr_List;
