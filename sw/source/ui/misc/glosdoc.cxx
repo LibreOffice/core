@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:35:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,8 +303,6 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
         pBlock->SetName(rTitle);
         PutGroupDoc(pBlock);
         rGroupName = sNewGroup;
-        rGroupName += GLOS_DELIM;
-        rGroupName += String::CreateFromInt32(nNewPath);
         return sal_True;
     }
     return sal_False;
