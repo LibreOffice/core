@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-23 10:01:06 $
+ *  last change: $Author: pl $ $Date: 2001-07-27 08:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,15 +175,9 @@ void GlyphCache::AddFontPath( const String& rFontPath )
         if( nBreaker2 == STRING_NOTFOUND )
             nBreaker2 = STRING_LEN;
 
-#ifdef TF_FILEURL
         ::rtl::OUString aUrlName;
         osl::FileBase::getFileURLFromSystemPath( rFontPath.Copy( nBreaker1, nBreaker2 ), aUrlName );
         pFtManager->AddFontDir( aUrlName );
-#else
-        ::rtl::OUString aNormalizedName;
-        osl::FileBase::normalizePath( rFontPath.Copy( nBreaker1, nBreaker2 ), aNormalizedName );
-        pFtManager->AddFontDir( aNormalizedName );
-#endif
     }
 }
 
