@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optitems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // forward ---------------------------------------------------------------
 namespace com{namespace sun{namespace star{
 namespace beans{
@@ -85,7 +89,7 @@ namespace linguistic2{
 
 #ifdef ITEMID_SPELLCHECK
 
-class SfxSpellCheckItem: public SfxPoolItem
+class SVX_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
 {
 public:
     TYPEINFO();
@@ -117,7 +121,7 @@ private:
 
 #ifdef ITEMID_HYPHENREGION
 
-class SfxHyphenRegionItem: public SfxPoolItem
+class SVX_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
 {
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;
