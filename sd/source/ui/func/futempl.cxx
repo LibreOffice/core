@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:19:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#include "tabtempl.hxx"
+//CHINA001 #include "tabtempl.hxx"
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
@@ -138,14 +138,18 @@
 #include "glob.hrc"
 #include "prlayout.hxx"         // enum PresentationObjects
 #include "prltempl.hrc"         // TAB_PRES_LAYOUT_TEMPLATE_x
-#include "prltempl.hxx"
+//CHINA001 #include "prltempl.hxx"
+#ifndef _SVX_TAB_AREA_HXX //autogen //CHINA001
+#include <svx/tabarea.hxx> //CHINA001
+#endif //CHINA001
 #include "sdresid.hxx"
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
 #include "strings.hrc"
 #include "helpids.h"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "tabtempl.hrc" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuTemplate, FuPoor );
@@ -321,8 +325,10 @@ FuTemplate::FuTemplate (
 
             if( pStyleSheet )
             {
-                SdTabTemplateDlg*         pStdDlg  = NULL;
-                SdPresLayoutTemplateDlg * pPresDlg = NULL;
+                SfxAbstractTabDialog*  pStdDlg  = NULL; //CHINA001 SdTabTemplateDlg*         pStdDlg  = NULL;
+                SfxAbstractTabDialog*  pPresDlg = NULL; //CHINA001 SdPresLayoutTemplateDlg * pPresDlg = NULL;
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
                 BOOL bOldDocInOtherLanguage = FALSE;
                 SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
 
@@ -330,9 +336,13 @@ FuTemplate::FuTemplate (
 
                 if (eFamily == SFX_STYLE_FAMILY_PARA)
                 {
-                    pStdDlg = new SdTabTemplateDlg( 0, pDoc->GetDocSh(),
+//CHINA001                  pStdDlg = new SdTabTemplateDlg( 0, pDoc->GetDocSh(),
+//CHINA001                  *pStyleSheet, pDoc,
+//CHINA001                  pView );
+                    pStdDlg = pFact->CreateSdTabTemplateDlg(ResId( TAB_TEMPLATE ), 0, pDoc->GetDocSh(),
                                                     *pStyleSheet, pDoc,
                                                     pView );
+                    DBG_ASSERT(pStdDlg, "Dialogdiet fail!");//CHINA001
                 }
                 else if (eFamily == SFX_STYLE_FAMILY_PSEUDO)
                 {
@@ -399,7 +409,11 @@ FuTemplate::FuTemplate (
                     }
 
                     if( !bOldDocInOtherLanguage )
-                        pPresDlg = new SdPresLayoutTemplateDlg( pDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool);
+                    { //add by CHINA001
+                        //CHINA001 pPresDlg = new SdPresLayoutTemplateDlg( pDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool);
+                        pPresDlg = pFact->CreateSdPresLayoutTemplateDlg(ResId( TAB_PRES_LAYOUT_TEMPLATE ), pDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool );
+                        DBG_ASSERT(pPresDlg, "Dialogdiet fail!");//CHINA001
+                    }
                 }
 
                 USHORT nResult = RET_CANCEL;
