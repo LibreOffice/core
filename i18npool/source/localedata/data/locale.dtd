@@ -11,7 +11,7 @@
 
     Please validate your locale data contribution using a validating parser. A
     validating parser, for example, may be found at
-    http://oss.software.ibm.com/cvs/icu4j/icu4j/src/com/ibm/icu/dev/tool/cldr/XMLValidator.java
+    http://unicode.org/cldr/data/tools/java/org/unicode/cldr/util/XMLValidator.java
     Compile it into a class-jar and call it in the
     i18npool/source/localedata/data/ directory:
     java -cp <your_path>/XMLValidator.jar com.ibm.icu.dev.tool.cldr.XMLValidator your_data.xml
@@ -48,8 +48,23 @@
 
 <!-- Locale is made of different sub categories -->
 <!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_COLLATION, LC_SEARCH, LC_INDEX, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
+<!ATTLIST Locale versionDTD CDATA #FIXED "2.0">
+<!-- Version identifier to prevent mismatching data files being submitted
+     because of older files being copied as templates. The version should be
+     less than or equal to the OOo release, or the OOo release number plus some
+     extension, like "2.0.enhanced", to be able to easily determine the
+     corresponding OOo version. New versions of the DTD with new required
+     elements SHOULD REALLY result in a new versionDTD here and
+     LOCALE_VERSION_DTD in ../LocaleNode.cxx, and *.xml files MUST be adapted
+     then, otherwise building the data or checking it with a validating parser
+     will throw an error.
+-->
+<!ATTLIST Locale allowUpdateFromCLDR (yes|no) #REQUIRED>
+<!-- Whether some data elements may be (automatically) updated from the Common
+     Locale Data Repository, see http://www.unicode.org/cldr/
+-->
 <!ATTLIST Locale  version CDATA #REQUIRED>
-<!-- Valid number -->
+<!-- Valid number, may designate versioned data -->
 
 <!ELEMENT LC_INFO (Language, Country, Platform?, Variant?)>
 
