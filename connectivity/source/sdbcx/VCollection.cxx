@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 08:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,13 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
             ODescriptor* pDescriptor = (ODescriptor*)xTunnel->getSomething(ODescriptor::getUnoTunnelImplementationId());
             if(pDescriptor)
                 pDescriptor->setNew(sal_False);
+        }
+
+        sName = xNewName->getName();
+        if(m_aNameMap.find(sName) != m_aNameMap.end())
+        {
+            OSL_ENSURE(0,"The descriptor was changed and is already in the list");
+            throw ElementExistException(sName,*this);
         }
 
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(sName,WeakReference< XNamed >(xNewName))));
