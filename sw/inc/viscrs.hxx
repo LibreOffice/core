@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-09-16 07:13:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ class SwSelPaintRects : public SwRects
 
 public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
-    ~SwSelPaintRects();
+    virtual ~SwSelPaintRects();
 
     void Show();
     void Hide();
