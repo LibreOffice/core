@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2001-03-14 11:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ public:
     AppError* FindErrorWin( const String& );
     AppWin* FindWin( const String& );
     AppWin* FindWin( USHORT nWinId );
+    AppWin* IsWinValid( AppWin* pMaybeWin );
     USHORT BreakHandler();          // Break-Handler-Callback
 
     void SetEditVar( SbxVariable *pVar ){ pEditVar = pVar;}

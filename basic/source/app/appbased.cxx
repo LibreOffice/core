@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2001-03-14 11:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,7 @@ void AppBasEd::Disassemble()
 
 void AppBasEd::Run()
 {
+    pFrame->Basic().Reset();
     SbxArray* pAllModules = pFrame->Basic().GetModules();
     for (USHORT i = 0; i < pAllModules->Count(); i++)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-13 15:55:46 $
+ *  last change: $Author: gh $ $Date: 2001-03-14 11:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1480,6 +1480,17 @@ AppWin* BasicFrame::FindWin( USHORT nWinId )
     for( p = pList->First(); p; p = pList->Next() )
     {
         if( p->GetWinId() == nWinId )
+            return p;
+    }
+    return NULL;
+}
+
+AppWin* BasicFrame::IsWinValid( AppWin* pMaybeWin )
+{
+    AppWin* p;
+    for( p = pList->First(); p; p = pList->Next() )
+    {
+        if( p == pMaybeWin )
             return p;
     }
     return NULL;

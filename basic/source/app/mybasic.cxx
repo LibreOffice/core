@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2000-11-07 14:03:46 $
+ *  last change: $Author: gh $ $Date: 2001-03-14 11:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,10 +204,15 @@ MyBasic::~MyBasic()
     }
 }
 
-BOOL MyBasic::Compile( SbModule* p )
+void MyBasic::Reset()
 {
     aErrors.Clear();
     nError = 0;
+}
+
+BOOL MyBasic::Compile( SbModule* p )
+{
+    Reset();
     return StarBASIC::Compile( p );
 }
 
@@ -222,9 +227,10 @@ BOOL MyBasic::ErrorHdl()
         if ( aModName.Copy(0,2).CompareToAscii("--") == COMPARE_EQUAL )
             aModName.Erase(0,2);
         GetActiveModule()->SetName(aModName);
-        AppWin* p = new AppBasEd( aBasicApp.pFrame, GetActiveModule() );
+        AppBasEd* p = new AppBasEd( aBasicApp.pFrame, GetActiveModule() );
         p->Show();
         p->GrabFocus();
+        pCurrWin = p;
     }
     if( IsCompilerError() )
     {
@@ -323,7 +329,7 @@ BasicError::BasicError
 
 void BasicError::Show()
 {
-    if( pWin ) {
+    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) ) {
         pWin->Highlight( nLine, nCol1, nCol2 );
         aBasicApp.pFrame->pStatus->Message( aText );
     } else MessBox( aBasicApp.pFrame, WB_OK, aBasicApp.pFrame->GetText(),
