@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:58:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,9 +1464,26 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
     sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
     if ( bHasBackground )
         bHasBackground = ( aAny >>= aXBackgroundPropSet );
-    sal_uInt16 nMode = 3;   // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
-    if ( !bHasBackground )
-        nMode |= 4;
+
+    sal_uInt16 nMode = 7;   // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundVisible" ) ) ) )
+    {
+        sal_Bool bBackgroundVisible;
+        if ( aAny >>= bBackgroundVisible )
+        {
+            if ( !bBackgroundVisible )
+                nMode &= ~4;
+        }
+    }
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) ) ) )
+    {
+        sal_Bool bBackgroundObjectsVisible;
+        if ( aAny >>= bBackgroundObjectsVisible )
+        {
+            if ( !bBackgroundObjectsVisible )
+                nMode &= ~1;
+        }
+    }
 
     const PHLayout& rLayout = ImplGetLayout( mXPagePropSet );
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
