@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 20:00:10 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,9 +801,12 @@ const struct SvEventDescription aAutotextEvents[] =
     { 0, NULL }
 };
 
-ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl )
+ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
+                                      SvxMacroTableDtor& rMacroTbl,
+                                      sal_Bool bFileAlreadyOpen )
 {
     // set current auto text
+
     aShort = aNames[ nIdx ]->aShort;
     aLong = aNames[ nIdx ]->aLong;
     aPackageName = aNames[ nIdx ]->aPackageName;
@@ -811,8 +814,12 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl 
     ULONG sRet = 0;
 
     // open stream in proper sub-storage
-    CloseFile();
-    if ( 0 == OpenFile ( TRUE ) )
+    if( !bFileAlreadyOpen )
+    {
+        CloseFile();
+        sRet == OpenFile ( TRUE );
+    }
+    if ( 0 == sRet )
     {
         xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGREAD );
 
@@ -1220,7 +1227,10 @@ void SwXMLTextBlocks::AddTextNode ( const OUString & rText )
     pTxtNode->Insert ( rText, aIdx );
 }
 
-ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTbl )
+ULONG SwXMLTextBlocks::SetMacroTable(
+    USHORT nIdx,
+    const SvxMacroTableDtor& rMacroTbl,
+    sal_Bool bFileAlreadyOpen )
 {
     // set current autotext
     aShort = aNames[ nIdx ]->aShort;
@@ -1245,8 +1255,13 @@ ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMac
         return ERR_SWG_WRITE_ERROR;
 
     // open stream in proper sub-storage
-    CloseFile();    // close (it may be open in read-only-mode)
-    if ( 0 == OpenFile ( FALSE ) )
+    if( !bFileAlreadyOpen )
+    {
+        CloseFile();    // close (it may be open in read-only-mode)
+        nRes = OpenFile ( FALSE );
+    }
+
+    if ( 0 == nRes )
     {
         xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGWRITE );
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("atevent.xml") );
@@ -1338,7 +1353,9 @@ ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMac
 
         // close file (because it's in write-mode)
         xRoot.Clear();
-        CloseFile();
+
+        if( !bFileAlreadyOpen )
+            CloseFile();
     }
     else
         nRes = ERR_SWG_WRITE_ERROR;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 19:59:13 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,11 @@ public:
     virtual void SetIsTextOnly( const String& rShort, BOOL bNewValue );
     virtual void SetIsTextOnly( USHORT nIdx, BOOL bNewValue );
 
-    virtual ULONG GetMacroTable( USHORT, SvxMacroTableDtor& rMacroTbl );
-    virtual ULONG SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTabl );
+    virtual ULONG GetMacroTable( USHORT, SvxMacroTableDtor& rMacroTbl,
+                                 sal_Bool bFileAlreadyOpen = sal_False );
+    virtual ULONG SetMacroTable( USHORT nIdx,
+                                 const SvxMacroTableDtor& rMacroTable,
+                                 sal_Bool bFileAlreadyOpen = sal_False );
     virtual BOOL PutMuchEntries( BOOL bOn );
     void ReadInfo();
     void WriteInfo();

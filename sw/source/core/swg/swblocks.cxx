@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 20:00:33 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,9 @@
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #include <SwXMLTextBlocks.hxx>
 #endif
-
+#ifndef _SFXMACITEM_HXX
+#include <svtools/macitem.hxx>
+#endif
 
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -335,13 +337,13 @@ BOOL SwImpBlocks::IsOnlyTextBlock( const String& ) const
     return FALSE;
 }
 
-ULONG SwImpBlocks::GetMacroTable( USHORT, SvxMacroTableDtor& )
+ULONG SwImpBlocks::GetMacroTable( USHORT, SvxMacroTableDtor&, sal_Bool )
 {
     return 0;
 }
 
 ULONG SwImpBlocks::SetMacroTable( USHORT nIdx,
-                                const SvxMacroTableDtor& rMacroTbl )
+                                const SvxMacroTableDtor& rMacroTbl, sal_Bool )
 {
     return 0;
 }
@@ -432,6 +434,7 @@ ULONG SwTextBlocks::ConvertToNew()
         // Jetzt wird umbenannt
         INetURLObject aOldFull( aName );
         INetURLObject aNewFull( aName );
+
         aOldFull.SetExtension( String::CreateFromAscii("bak") );
         String aOld( aOldFull.GetMainURL() );
         BOOL bError = FALSE;
@@ -443,6 +446,7 @@ ULONG SwTextBlocks::ConvertToNew()
             sMain.Erase(nSlashPos);
             ::ucb::Content aNewContent( sMain,
                                         Reference< XCommandEnvironment > ());
+
             Any aAny;
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
@@ -532,6 +536,12 @@ ULONG SwTextBlocks::ConvertToNew()
                         if( nErr )
                             break;
                     }
+
+                    // convert macros, too
+                    SvxMacroTableDtor aMacroTable;
+                    pOld->GetMacroTable( i, aMacroTable, sal_True );
+                    pNew->SetMacroTable( i, aMacroTable, sal_True );
+
                     if (SWBLK_SW2 == nType )
                         pNew->pDoc->SetPersist( 0 );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 19:58:27 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,9 +169,11 @@ public:
 
     virtual BOOL IsOnlyTextBlock( const String& rShort ) const;
 
-    virtual ULONG GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl );
+    virtual ULONG GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl,
+                                 sal_Bool bFileAlreadyOpen = sal_False );
     virtual ULONG SetMacroTable( USHORT nIdx,
-                                 const SvxMacroTableDtor& rMacroTbl );
+                                 const SvxMacroTableDtor& rMacroTbl,
+                                 sal_Bool bFileAlreadyOpen = sal_False );
     virtual BOOL PutMuchEntries( BOOL bOn );
 };
 
@@ -262,9 +264,11 @@ public:
 
     virtual BOOL IsOnlyTextBlock( const String& rShort ) const;
 
-    virtual ULONG GetMacroTable( USHORT, SvxMacroTableDtor& rMacroTbl );
+    virtual ULONG GetMacroTable( USHORT, SvxMacroTableDtor& rMacroTbl,
+                                 sal_Bool bFileAlreadyOpen = sal_False );
     virtual ULONG SetMacroTable( USHORT nIdx,
-                                 const SvxMacroTableDtor& rMacroTbl );
+                                 const SvxMacroTableDtor& rMacroTbl,
+                                 sal_Bool bFileAlreadyOpen = sal_False );
     virtual BOOL PutMuchEntries( BOOL bOn );
 
     void ReadInfo();
