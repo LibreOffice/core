@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 14:15:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 10:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,5 +85,12 @@ public:
     virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
+class XMLTextAnimationStepPropertyHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLTextAnimationStepPropertyHdl();
+    virtual sal_Bool importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
 
 #endif  //  _PROPIMP0_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 14:15:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 10:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 21 )
 #define XML_SD_TYPE_PRESPAGE_BACKSIZE               (XML_SD_TYPES_START + 22 )
 #define XML_TYPE_TEXT_ANIMATION_BLINKING            (XML_SD_TYPES_START + 23 )
+#define XML_TYPE_TEXT_ANIMATION_STEPS               (XML_SD_TYPES_START + 24 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )

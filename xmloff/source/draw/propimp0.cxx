@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 14:15:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 10:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,5 +196,71 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
     return bRet;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// implementation of an text animation step amount
+
+XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
+{
+}
+
+sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
+    const OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nValue = 0;
+
+    const OUString aPX( RTL_CONSTASCII_USTRINGPARAM( "px" ) );
+    sal_Int32 nPos = rStrImpValue.indexOf( aPX );
+    if( nPos != -1 )
+    {
+        if( rUnitConverter.convertNumber( nValue, rStrImpValue.copy( 0, nPos ) ) )
+        {
+            rValue <<= sal_Int16( -nValue );
+            bRet = sal_True;
+        }
+    }
+    else
+    {
+        if( rUnitConverter.convertMeasure( nValue, rStrImpValue ) )
+        {
+            rValue <<= sal_Int16( nValue );
+            bRet = sal_True;
+        }
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
+    OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int16 nVal;
+
+    if( rValue >>= nVal )
+    {
+        OUStringBuffer aOut;
+
+        if( nVal < 0 )
+        {
+            const OUString aPX( RTL_CONSTASCII_USTRINGPARAM( "px" ) );
+            rUnitConverter.convertNumber( aOut, (sal_Int32)-nVal );
+            aOut.append( aPX );
+        }
+        else
+        {
+            rUnitConverter.convertMeasure( aOut, nVal );
+        }
+
+        rStrExpValue = aOut.makeStringAndClear();
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
 
 

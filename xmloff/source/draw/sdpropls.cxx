@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 14:15:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 10:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "TextAnimationStopInside",    XML_NAMESPACE_TEXT, sXML_animation_stop_inside,     XML_TYPE_BOOL, 0 },
     { "TextAnimationCount",         XML_NAMESPACE_TEXT, sXML_animation_repeat,          XML_TYPE_NUMBER16, 0 },
     { "TextAnimationDelay",         XML_NAMESPACE_TEXT, sXML_animation_delay,           XML_TYPE_DURATION16_MS, 0 },
+    { "TextAnimationAmount",        XML_NAMESPACE_TEXT, sXML_animation_steps,           XML_TYPE_TEXT_ANIMATION_STEPS, 0 },
 
     // connector attributes
     { "EdgeNode1HorzDist",  XML_NAMESPACE_DRAW, sXML_start_line_spacing_horizontal, XML_TYPE_MEASURE, 0 },
@@ -730,6 +731,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_TYPE_TEXT_ANIMATION_DIRECTION:
                 pHdl = new XMLEnumPropertyHdl( pXML_TextAnimationDirection_Enum, ::getCppuType((const com::sun::star::drawing::TextAnimationDirection*)0) );
+                break;
+            case XML_TYPE_TEXT_ANIMATION_STEPS:
+                pHdl = new XMLTextAnimationStepPropertyHdl;
                 break;
         }
 
