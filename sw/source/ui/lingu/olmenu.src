@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:38:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ String STR_SPELL_OK
     Text [ ENGLISH ] = "Spell checking has finished." ;
     Text [ portuguese ] = "A verificação ortográfica está concluída!" ;
     Text [ english_us ] = "The spellcheck is complete." ;
-    Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung ist abgeschlossen!" ;
+    Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung ist abgeschlossen!" ;
     Text [ swedish ] = "Rättstavningskontrollen är avslutad!" ;
     Text [ danish ] = "Stavekontrollen er afsluttet!" ;
     Text [ italian ] = "Controllo ortografico terminato!" ;
