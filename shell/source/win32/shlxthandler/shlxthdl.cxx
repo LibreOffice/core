@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlxthdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:16:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,32 +59,32 @@
  *
  ************************************************************************/
 
-#ifndef _CONFIG_HXX_
-#include "config.hxx"
+#ifndef CONFIG_HXX_INCLUDED
+#include "internal/config.hxx"
 #endif
 
-#ifndef _GLOBAL_HXX_
-#include "global.hxx"
+#ifndef GLOBAL_HXX_INCLUDED
+#include "internal/global.hxx"
 #endif
 
-#ifndef _SHLXTHDL_HXX_
-#include "shlxthdl.hxx"
+#ifndef SHLXTHDL_HXX_INCLUDED
+#include "internal/shlxthdl.hxx"
 #endif
 
-#ifndef _CLASSFACTORY_HXX_
+#ifndef CLASSFACTORY_HXX_INCLUDED
 #include "classfactory.hxx"
 #endif
 
-#ifndef _REGISTRY_HXX_
-#include "registry.hxx"
+#ifndef REGISTRY_HXX_INCLUDED
+#include "internal/registry.hxx"
 #endif
 
-#ifndef _FILEEXTENSIONS_HXX_
-#include "fileextensions.hxx"
+#ifndef FILEEXTENSIONS_HXX_INCLUDED
+#include "internal/fileextensions.hxx"
 #endif
 
-#ifndef _UTILITIES_HXX_
-#include "utilities.hxx"
+#ifndef UTILITIES_HXX_INCLUDED
+#include "internal/utilities.hxx"
 #endif
 
 #include <tchar.h>
@@ -382,11 +382,10 @@ extern "C" STDAPI DllRegisterServer()
 
     HRESULT hr = S_OK;
 
-/*
 
 // register column handler
 #ifdef UNICODE
-    if (FAILED(RegisterColumnHandler(WStringToString(ModuleFileName))))
+    if (FAILED(RegisterColumnHandler(WStringToString(ModuleFileName).c_str())))
         hr = E_FAIL;
 #else
     if (FAILED(RegisterColumnHandler(ModuleFileName)))
@@ -399,7 +398,7 @@ extern "C" STDAPI DllRegisterServer()
 
 // register info tip control
 #ifdef UNICODE
-    if (FAILED(RegisterInfotipHandler(WStringToString(ModuleFileName))))
+    if (FAILED(RegisterInfotipHandler(WStringToString(ModuleFileName).c_str())))
         hr = E_FAIL;
 #else
     if (FAILED(RegisterInfotipHandler(ModuleFileName)))
@@ -409,8 +408,6 @@ extern "C" STDAPI DllRegisterServer()
     ApproveShellExtension(
         CLSID_INFOTIP_HANDLER,
         INFOTIP_HANDLER_DESCRIPTIVE_NAME);
-
-*/
 
 // register property sheet handler
 #ifdef UNICODE
@@ -427,7 +424,7 @@ extern "C" STDAPI DllRegisterServer()
 
     // notify the Shell that something has
     // changed
-    SHChangeNotify(SHCNE_ASSOCCHANGED, 0, 0, 0);
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 
     return hr;
 }
@@ -440,7 +437,7 @@ extern "C" STDAPI DllUnregisterServer()
 {
     HRESULT hr = S_OK;
 
-/*
+
     if (FAILED(UnregisterColumnHandler()))
         hr = E_FAIL;
 
@@ -451,7 +448,6 @@ extern "C" STDAPI DllUnregisterServer()
 
     UnapproveShellExtension(CLSID_INFOTIP_HANDLER);
 
-*/
 
     if (FAILED(UnregisterPropSheetHandler()))
         hr = E_FAIL;
@@ -460,7 +456,7 @@ extern "C" STDAPI DllUnregisterServer()
 
     // notify the Shell that something has
     // changed
-    SHChangeNotify(SHCNE_ASSOCCHANGED, 0, 0, 0);
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, 0, 0);
 
     return hr;
 }
