@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 10:43:56 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 12:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,8 @@ public:
                  SwRedlineType   eTypePrev_    = REDLINE_INSERT,
                  USHORT          nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
-        : SfxPoolItem(RES_FLTR_REDLINE), eType(eType_), nAutorNo(nAutorNo_),
-        aStamp(rStamp_), eTypePrev(eTypePrev_), nAutorNoPrev(nAutorNoPrev_)
+        : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_), eType(eType_),
+        eTypePrev(eTypePrev_), nAutorNo(nAutorNo_), nAutorNoPrev(nAutorNoPrev_)
     {
             if( pStampPrev_ )
                 aStampPrev = *pStampPrev_;
@@ -236,12 +236,12 @@ public:
 
     SwFltRedline(const SwFltRedline& rCpy):
         SfxPoolItem(RES_FLTR_REDLINE),
-        eType(          rCpy.eType        ),
-        nAutorNo(       rCpy.nAutorNo     ),
         aStamp(         rCpy.aStamp       ),
+        aStampPrev(     rCpy.aStampPrev   ),
+        eType(          rCpy.eType        ),
         eTypePrev(      rCpy.eTypePrev    ),
-        nAutorNoPrev(   rCpy.nAutorNoPrev ),
-        aStampPrev(     rCpy.aStampPrev   )
+        nAutorNo(       rCpy.nAutorNo     ),
+        nAutorNoPrev(   rCpy.nAutorNoPrev )
         {}
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem& rItem) const;
@@ -345,7 +345,7 @@ protected:
     SfxItemSet* NewFlyDefaults();
 
     SwFltOutBase(SwDoc& rDocu)
-        : rDoc(rDocu), bFlyAbsPos(FALSE), eFlyAnchor(FLY_AT_CNTNT)
+        : rDoc(rDocu), eFlyAnchor(FLY_AT_CNTNT), bFlyAbsPos(FALSE)
     {}
 
 public:
@@ -395,8 +395,9 @@ class SwFltOutDoc : public SwFltOutBase
     BOOL SeekCell( short nRow, short nCol, BOOL bPam );
     void SplitTable();
 public:
-    SwFltOutDoc(SwDoc& rDocu, SwPaM* pP, SwFltControlStack& rStk, SwFltEndStack& rEStk)
-         :SwFltOutBase(rDocu), pPaM(pP), rStack(rStk), rEndStack(rEStk),
+    SwFltOutDoc(SwDoc& rDocu, SwPaM* pP, SwFltControlStack& rStk,
+        SwFltEndStack& rEStk)
+    : SwFltOutBase(rDocu), rStack(rStk), rEndStack(rEStk), pPaM(pP),
           pFly(0), pTable(0), pTabSavedPos(0), pFlySavedPos(0),
           nTableWidth(0), bReadNoTbl(FALSE)
     {}
