@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:39:49 $
+ *  last change: $Author: os $ $Date: 2001-04-27 12:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,7 @@ class SectRepr
     USHORT                  nColumn;
     BOOL                    bContent    : 1; //zeigt an, ob evtl. Textinhalt im Bereich ist
     BOOL                    bSelected   : 1; //fuer Multiselektion erst markieren, dann mit der TreeListBox arbeiten!
-    BOOL                    bIsCondition: 1; //
-
+    ::com::sun::star::uno::Sequence <sal_Int8 >     aTempPasswd;
 public:
     SectRepr(USHORT nPos, SwSection& rSect);
     int     operator ==(SectRepr& rSectRef) const
@@ -187,9 +186,10 @@ public:
     void                SetSelected(){bSelected = TRUE;}
     BOOL                IsSelected() const {return bSelected;}
 
-    BOOL                IsConditionValid() const {return bIsCondition;}
-    void                SetConditionValid(BOOL bSet) { bIsCondition = bSet;}
 
+    const ::com::sun::star::uno::Sequence <sal_Int8 >& GetPasswd() const {return aSection.GetPasswd();}
+    ::com::sun::star::uno::Sequence <sal_Int8 >&    GetTempPasswd() {return aTempPasswd;}
+    void                                            SetTempPasswd(const ::com::sun::star::uno::Sequence <sal_Int8 >& aPasswd)    {aTempPasswd = aPasswd;}
 };
 
 /*************************************************************************
@@ -201,15 +201,12 @@ SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0, 4 )
 
 class SwEditRegionDlg : public SfxModalDialog
 {
-    SvTreeListBox   aTree;
-    CheckBox        aPasswdCB;
-    FixedText       aNameFT;
+    FixedLine       aNameFL;
     Edit            aCurName;
-    TriStateBox     aProtectCB;
-    TriStateBox     aHideCB;
-    TriStateBox     aCondCB;
-    ConditionEdit   aConditionED;
+    SvTreeListBox   aTree;
+    FixedLine       aSepFL;
 
+    FixedLine       aLinkFL;
     TriStateBox     aFileCB;
 #ifdef DDE_AVAILABLE
     CheckBox        aDDECB;
@@ -219,16 +216,25 @@ class SwEditRegionDlg : public SfxModalDialog
     FixedText       aDDECommandFT;
 #endif
     Edit            aFileNameED;
+    PushButton      aFilePB;
     ComboBox        aSubRegionED;
     FixedText       aSubRegionFT;
+
+    FixedLine       aProtectFL;
+    TriStateBox     aProtectCB;
+    CheckBox        aPasswdCB;
+    PushButton      aPasswdPB;
+
+    FixedLine       aHideFL;
+    TriStateBox     aHideCB;
+    FixedText       aConditionFT;
+    ConditionEdit   aConditionED;
+
     OKButton        aOK;
     CancelButton    aCancel;
     PushButton      aOptionsPB;
     PushButton      aDismiss;
     HelpButton      aHelp;
-    PushButton      aFilePB;
-    GroupBox        aGroupBoxName;
-    GroupBox        aGroupBoxOptions;
     Bitmap          aProtHideBM;
     Bitmap          aProtNoHideBM;
     Bitmap          aNoProtHideBM;
@@ -237,28 +243,20 @@ class SwEditRegionDlg : public SfxModalDialog
     Bitmap          aCollNode;
 
     Bitmap          aBmpArr[4];
-    ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
     SwWrtShell&     rSh;
     SectReprArr     aSectReprArr;
     SvLBoxEntry*    pAktEntry;
     const SwSection*pCurrSect;
 
-    BOOL            bIsPasswd       :1;
-    BOOL            bIsPasswdSet    :1;
+    BOOL            bDontCheckPasswd :1;
     BOOL            bWeb            :1;
 
 
     Bitmap&         BuildBitmap(BOOL bProtect,BOOL bHidden)
                     { return aBmpArr[bProtect+(bHidden<<1)]; }
 
-public:
-    SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
-    virtual ~SwEditRegionDlg();
-
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
     USHORT  FindArrPos(const SwSectionFmt* pFmt);
-
-    void    SetPassword( const ::com::sun::star::uno::Sequence <sal_Int8>& );
 
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );
@@ -267,10 +265,9 @@ public:
     DECL_LINK( NameEditHdl, Edit * );
     DECL_LINK( ConditionEditHdl, Edit * );
 
-    DECL_LINK( ChangePasswdHdl, CheckBox * );
+    DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( ChangeProtectHdl, TriStateBox * );
     DECL_LINK( ChangeHideHdl, TriStateBox * );
-    DECL_LINK( ChangeCondHdl, TriStateBox * );
     DECL_LINK( ChangeDismissHdl, CheckBox * );
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK( FileSearchHdl, PushButton* );
@@ -279,6 +276,11 @@ public:
 #ifdef DDE_AVAILABLE
     DECL_LINK( DDEHdl, CheckBox* );
 #endif
+    BOOL CheckPasswd(CheckBox* pBox = 0);
+public:
+    SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
+    virtual ~SwEditRegionDlg();
+
 };
 /*************************************************************************
     Dialog "Bereich einfuegen"
@@ -289,11 +291,12 @@ public:
  * --------------------------------------------------*/
 class SwInsertSectionTabPage : public SfxTabPage
 {
+    FixedLine       aNameFL;
     ComboBox        aCurName;
-    CheckBox        aProtectCB;
-    CheckBox        aHideCB;
-    CheckBox        aCondCB;
-    ConditionEdit   aConditionED;
+
+    FixedLine       aSepFL;
+
+    FixedLine       aLinkFL;
     CheckBox        aFileCB;
 #ifdef DDE_AVAILABLE
     CheckBox        aDDECB;
@@ -301,24 +304,32 @@ class SwInsertSectionTabPage : public SfxTabPage
 #endif
     FixedText       aFileNameFT;
     Edit            aFileNameED;
+    PushButton      aFilePB;
     FixedText       aSubRegionFT;
     ComboBox        aSubRegionED;
-    PushButton      aFilePB;
-    GroupBox        aGroupBoxName;
-    GroupBox        aGroupBoxOptions;
+
+    FixedLine       aProtectFL;
+    CheckBox        aProtectCB;
+    CheckBox        aPasswdCB;
+    PushButton      aPasswdPB;
+
+    FixedLine       aHideFL;
+    CheckBox        aHideCB;
+    FixedText       aConditionFT;
+    ConditionEdit   aConditionED;
+
     String          sSection;
     String          sFileName;
     String          sFilterName;
     String          sFilePasswd;
 
 //  SwFmtCol*       pCols;
-    const String*   pPasswdSect;
-//  SfxRequest*     pRequest;
+    ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
     SwWrtShell*     pWrtSh;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     DECL_LINK( ChangeProtectHdl, CheckBox * );
-    DECL_LINK( ChangeCondHdl, CheckBox * );
+    DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( NameEditHdl, Edit * );
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK( FileSearchHdl, PushButton* );
@@ -343,7 +354,7 @@ public:
 
 class SwSectionFtnEndTabPage : public SfxTabPage
 {
-    GroupBox        aGroupBoxFtn;
+    FixedLine       aFtnFL;
     CheckBox        aFtnNtAtTextEndCB;
 
     CheckBox        aFtnNtNumCB;
@@ -357,7 +368,7 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     FixedText       aFtnSuffixFT;
     Edit            aFtnSuffixED;
 
-    GroupBox        aGroupBoxEnd;
+    FixedLine       aEndFL;
     CheckBox        aEndNtAtTextEndCB;
 
     CheckBox        aEndNtNumCB;
