@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:25:03 $
+ *  last change: $Author: os $ $Date: 2001-07-20 09:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-07-14 20:25:03 $ $Revision: 1.22 $
+ // $Author: os $ $Date: 2001-07-20 09:00:33 $ $Revision: 1.23 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1644,7 +1644,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_OBJECT_ALIGN_MIDDLE; \
         SID_OBJECT_ALIGN_RIGHT; \
         SID_OBJECT_ALIGN_UP; \
-        SID_BASICCHOOSER; \
         SID_HYPERLINK_INSERT;           /* 10360    */  \
         SID_TBXCTL_INSERT;              /* 26626    */  \
         SID_TBXCTL_INSCELLS;            /* 26627    */  \
@@ -1690,7 +1689,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_ATTR_GRAF_CROP;\
     };                                                  \
     IdCount = {                                         \
-        170;                                            \
+        169;                                            \
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC
