@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:34:50 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
