@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:33:47 $
+ *  last change: $Author: hro $ $Date: 2002-06-14 10:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,29 +110,13 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore)
 {
     OSL_ASSERT(Semaphore != 0);
 
-    while(1)
+    switch ( WaitForSingleObject( (HANDLE)Semaphore, INFINITE ) )
     {
-        switch (MsgWaitForMultipleObjects(1, &((HANDLE)Semaphore),
-                                             FALSE, INFINITE, QS_SENDMESSAGE))
-        {
-            case WAIT_OBJECT_0:
-                return sal_True;
+        case WAIT_OBJECT_0:
+            return sal_True;
 
-            case WAIT_OBJECT_0 + 1:
-            {
-                MSG msg;
-
-                  while (PeekMessage(&msg, NULL, WM_USER - 1, WM_USER - 1, PM_REMOVE))
-                   {
-                    TranslateMessage(&msg);
-                      DispatchMessage(&msg);
-                   }
-                break;
-            }
-
-            default:
-                return (sal_False);
-        }
+        default:
+            return (sal_False);
     }
 }
 

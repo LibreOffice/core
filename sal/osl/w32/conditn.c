@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:04:44 $
+ *  last change: $Author: hro $ $Date: 2002-06-14 10:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,32 +135,16 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     else
         timeout = INFINITE;
 
-    while(1)
+    switch ( WaitForSingleObject( (HANDLE)Condition, timeout )  )
     {
-           switch (MsgWaitForMultipleObjects(1, &((HANDLE)Condition),
-                                             FALSE, timeout, QS_SENDMESSAGE))
-        {
-            case WAIT_OBJECT_0:
-                return (osl_cond_result_ok);
+        case WAIT_OBJECT_0:
+            return (osl_cond_result_ok);
 
-            case WAIT_OBJECT_0 + 1:
-            {
-                MSG msg;
+        case WAIT_TIMEOUT:
+            return (osl_cond_result_timeout);
 
-                  while (PeekMessage(&msg, NULL, WM_USER - 1, WM_USER - 1, PM_REMOVE))
-                   {
-                    TranslateMessage(&msg);
-                      DispatchMessage(&msg);
-                   }
-                break;
-            }
-
-            case WAIT_TIMEOUT:
-                return (osl_cond_result_timeout);
-
-            default:
-                return (osl_cond_result_error);
-        }
+        default:
+            return (osl_cond_result_error);
     }
 }
 
