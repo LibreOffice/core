@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 12:55:11 $
+ *  last change: $Author: os $ $Date: 2001-01-25 09:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
-    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
+    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((text::TextContentAnchorType*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
     ANCHOR_TYPES_PROPERTY\
     { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },                      \
     { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED ),        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },                          \
@@ -661,7 +661,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },          \
     { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },  \
     { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },     \
-    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },        \
+    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),             PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },        \
     { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },        \
     { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },                 \
     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},          \
@@ -687,9 +687,9 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 
 
 #define COMMON_TEXT_CONTENT_PROPERTIES \
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    FN_UNO_ANCHOR_TYPE, &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},\
+                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    FN_UNO_ANCHOR_TYPE, &::getCppuType((text::TextContentAnchorType*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},\
                     ANCHOR_TYPES_PROPERTY\
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         FN_UNO_TEXT_WRAP,   &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         FN_UNO_TEXT_WRAP,   &::getCppuType((text::WrapTextMode*)0),                 PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
 
 
 const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
@@ -884,7 +884,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aFrameStyleMap   [] =
                 {
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
+                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((text::TextContentAnchorType*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
                     { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },
                 //  { SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME),           RES_CHAIN,              &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_CHAIN_NEXTNAME},
                 //  { SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME),           RES_CHAIN,              &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_CHAIN_PREVNAME},
@@ -922,7 +922,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED    ),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
                     //Surround bleibt, weil es mit der 5.1 ausgeliefert wurde, obwohl es mit text::WrapTextMode identisch ist
                     { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),             RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
+                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),             RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),             PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
                     { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
                     { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((uno::Reference<text::XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
@@ -1093,13 +1093,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_TABLE_COLUMN_SEPARATORS),   FN_UNO_TABLE_COLUMN_SEPARATORS, &::getCppuType((const uno::Sequence<text::TableColumnSeparator>*)0),    PropertyAttribute::MAYBEVOID, 0 },
 #endif
                     { SW_PROP_NAME(UNO_NAME_TABLE_COLUMN_RELATIVE_SUM), FN_UNO_TABLE_COLUMN_RELATIVE_SUM,       &::getCppuType((const sal_Int16*)0),        PropertyAttribute::READONLY, 0 },
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0xff},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 FN_UNO_WRAP,    &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, 0xff   },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
@@ -1342,14 +1336,14 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aShapeMap_Impl[] =
                 {
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_PAGENUM      },
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORTYPE},
+                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((text::TextContentAnchorType*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORTYPE},
                     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_ORIENT   },
                     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_POSITION|CONVERT_TWIPS   },
                     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_RELATION },
                     { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_L_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_SURROUND_SURROUNDTYPE   },
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
+                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),             PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
                     { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_SURROUND_ANCHORONLY     },
                     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
@@ -1370,13 +1364,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PRIMARY_KEY),       WID_PRIMARY_KEY,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_SECONDARY_KEY),   WID_SECONDARY_KEY,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_MAIN_ENTRY),   WID_MAIN_ENTRY,       &::getBooleanCppuType()  ,      PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aIdxMarkMap_Impl;
@@ -1388,13 +1376,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),WID_ALT_TEXT,         &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL        ),   WID_LEVEL        ,    &::getCppuType((const sal_Int16*)0)  ,      PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCntntMarkMap_Impl;
@@ -1406,13 +1388,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),WID_ALT_TEXT,         &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USER_INDEX_NAME), WID_USER_IDX_NAME,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aUserMarkMap_Impl;
@@ -1730,13 +1706,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aBookmarkPropertyMap_Impl [] =
                 {
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),  FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aBookmarkPropertyMap_Impl;
@@ -1746,13 +1716,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aParagraphExtensionsMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    FN_UNO_ANCHOR_TYPE, &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         FN_UNO_TEXT_WRAP,   &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
 
@@ -1897,13 +1861,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aFootnoteMap_Impl[] =
                 {
                     {SW_PROP_NAME(UNO_NAME_REFERENCE_ID),   0, &::getCppuType((const sal_Int16*)0),PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID,    0},
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFootnoteMap_Impl;
