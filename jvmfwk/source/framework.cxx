@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:12:48 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,12 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         //Get a list of plugins which provide Java information
         std::vector<jfw::PluginLibrary> vecPlugins =
             aVendorSettings.getPluginData();
+
+        //Create a vector that holds the libraries, which will be later
+        //dynamically loaded;
+        boost::scoped_array<osl::Module> sarModules;
+        sarModules.reset(new osl::Module[vecPlugins.size()]);
+        osl::Module * arModules = sarModules.get();
         //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
         //Make sure that the contents are destroyed if this
         //function returns with an error
@@ -124,14 +130,15 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             node.getJRELocations();
         //Use every plug-in library to get Java installations.
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
-         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
+        int cModule = 0;
+         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++, cModule++)
          {
             const jfw::PluginLibrary & library = *i;
-            //todo : adapt getVersionInformation to receive an empty string
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(library.sVendor);
+            arModules[cModule].load(library.sPath);
+            osl::Module & pluginLib = arModules[cModule];
 
-            osl::Module pluginLib(library.sPath);
             if (pluginLib.is() == sal_False)
             {
                 rtl::OString msg = rtl::OUStringToOString(
@@ -190,6 +197,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 jfw::CJavaInfo aInfo;
                 plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
                     sLocation.pData,
+                    library.sVendor.pData,
                     versionInfo.sMinVersion.pData,
                     versionInfo.sMaxVersion.pData,
                     versionInfo.getExcludeVersions(),
@@ -284,17 +292,6 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         //been created.
         if (g_pJavaVM != NULL)
             return JFW_E_RUNNING_JVM;
-        //check if Java is disabled
-        sal_Bool bEnabled = sal_False;
-        if ((errcode = jfw_getEnabled(&bEnabled)) == JFW_E_NONE)
-        {
-            if (bEnabled == sal_False)
-                return JFW_E_JAVA_DISABLED;
-        }
-        else
-        {
-            return errcode;
-        }
 
         if (ppVM == NULL)
             return JFW_E_INVALID_ARG;
@@ -305,6 +302,18 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
 
         if (mode == jfw::JFW_MODE_APPLICATION)
         {
+            //check if Java is disabled
+            sal_Bool bEnabled = sal_False;
+            if ((errcode = jfw_getEnabled(&bEnabled)) == JFW_E_NONE)
+            {
+                if (bEnabled == sal_False)
+                    return JFW_E_JAVA_DISABLED;
+            }
+            else
+            {
+                return errcode;
+            }
+
 #ifdef WNT
             //Because on Windows there is no system setting that we can use to determine
             //if Assistive Technology Tool support is needed, we ship a .reg file that the
@@ -500,17 +509,24 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         jfw::VendorSettings aVendorSettings;
         std::vector<jfw::PluginLibrary> vecPlugins =
              aVendorSettings.getPluginData();
+        //Create a vector that holds the libraries, which will be later
+        //dynamically loaded;
+        boost::scoped_array<osl::Module> sarModules;
+        sarModules.reset(new osl::Module[vecPlugins.size()]);
+        osl::Module * arModules = sarModules.get();
 
         //Use every plug-in library to get Java installations. At the first usable
         //Java the loop will break
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
+        int cModule = 0;
+        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++, cModule++)
         {
             const jfw::PluginLibrary & library = *i;
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(library.sVendor);
 
-            osl::Module pluginLib(library.sPath);
+            arModules[cModule].load(library.sPath);
+            osl::Module & pluginLib = arModules[cModule];
             if (pluginLib.is() == sal_False)
                 return JFW_E_NO_PLUGIN;
 
@@ -614,6 +630,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                     jfw::CJavaInfo aInfo;
                     javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
                         sLocation.pData,
+                        library.sVendor.pData,
                         versionInfo.sMinVersion.pData,
                         versionInfo.sMaxVersion.pData,
                         versionInfo.getExcludeVersions(),
@@ -792,6 +809,12 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         //Get a list of plugins which provide Java information
         std::vector<jfw::PluginLibrary> vecPlugins =
             aVendorSettings.getPluginData();
+        //Create a vector that holds the libraries, which will be later
+        //dynamically loaded;
+        boost::scoped_array<osl::Module> sarModules;
+        sarModules.reset(new osl::Module[vecPlugins.size()]);
+        osl::Module * arModules = sarModules.get();
+
         typedef std::vector<rtl::OUString>::const_iterator CIT_VENDOR;
         std::vector<rtl::OUString> vecVendors =
             aVendorSettings.getSupportedVendors();
@@ -799,13 +822,14 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         //Use every plug-in library to determine if the path represents a
         //JRE. If a plugin recognized it then the loop will break
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
+        int cModule = 0;
+        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++, cModule)
         {
             const jfw::PluginLibrary & library = *i;
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(library.sVendor);
-
-            osl::Module pluginLib(library.sPath);
+            arModules[cModule].load(library.sPath);
+            osl::Module & pluginLib = arModules[cModule];
             if (pluginLib.is() == sal_False)
             {
                 rtl::OString msg = rtl::OUStringToOString(
@@ -829,6 +853,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             JavaInfo* pInfo = NULL;
             javaPluginError plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
                 pPath,
+                library.sVendor.pData,
                 versionInfo.sMinVersion.pData,
                 versionInfo.sMaxVersion.pData,
                 versionInfo.getExcludeVersions(),
@@ -958,16 +983,9 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-        {
-            if (jfw::BootParams::getDisable() == true)
-                *pbEnabled = sal_False;
-            else
-                *pbEnabled = sal_True;
-            return JFW_E_NONE;
-        }
-
+            return JFW_E_DIRECT_MODE;
+        osl::MutexGuard guard(jfw::getFwkMutex());
         if (pbEnabled == NULL)
             return JFW_E_INVALID_ARG;
         jfw::CNodeJava node;
