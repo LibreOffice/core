@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:31 $
+ *  last change:$Date: 2003-02-12 15:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,15 +111,15 @@ public class AccessibleSlideView extends TestCase {
         XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
             UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
         XDrawPages oDPn = oDPS.getDrawPages();
-        final XDrawPage fDP1 = oDPn.insertNewByIndex(1);
-        final XDrawPage fDP2 = oDPn.insertNewByIndex(2);
+        XDrawPage fDP1 = oDPn.insertNewByIndex(1);
+        XDrawPage fDP2 = oDPn.insertNewByIndex(2);
 
         shortWait();
 
         XWindow xWindow = at.getCurrentWindow (Param.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot);
+        //at.printAccessibleTree(log, xRoot);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
@@ -131,14 +131,12 @@ public class AccessibleSlideView extends TestCase {
 
         util.dbg.printInterfaces(oObj);
 
-        final XDrawView xView = (XDrawView) UnoRuntime.queryInterface
-            (XDrawView.class, aModel.getCurrentController()) ;
+        final XDrawPages DrawPages = oDPn;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
-                    xView.setCurrentPage(fDP1);
-                    xView.setCurrentPage(fDP2);
+                    DrawPages.insertNewByIndex(2);
                 }
             });
 
