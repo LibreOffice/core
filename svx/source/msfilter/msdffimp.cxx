@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:19:07 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1770,12 +1770,12 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( UINT16 nRecId, DffSeekToCont
 
 struct EscherBlipCacheEntry
 {
-    Graphic     aGraphic;
+    ByteString  aUniqueID;
     sal_uInt32  nBlip;
 
-    EscherBlipCacheEntry( sal_uInt32 nBlipId, const Graphic& rGraf ) :
+    EscherBlipCacheEntry( sal_uInt32 nBlipId, const ByteString& rUniqueID ) :
         nBlip( nBlipId ),
-        aGraphic( rGraf ) {}
+        aUniqueID( rUniqueID ) {}
 };
 
 void SvxMSDffManager::Scale( long& rVal ) const
@@ -2557,8 +2557,6 @@ static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rectangle& aBoundRect, const DffObjData& rObjData ) const
 {
     SdrObject* pRet = NULL;
-
-    Graphic aGraf;
     String aFilename;
 
     MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
@@ -2567,279 +2565,283 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
     // Grafik verlinkt
     bLinkGrf = 0 != ( eFlags & mso_blipflagLinkToFile );
-
-    if( SeekToContent( DFF_Prop_pibName, rSt ) )
-        MSDFFReadZString( rSt, aFilename, GetPropertyValue( DFF_Prop_pibName ), TRUE );
-
-    //   UND, ODER folgendes:
-    if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
     {
-        if (!(bGrfRead = GetBLIP(nBlipId, aGraf)))
+        Graphic aGraf;  // be sure this graphic is deleted before swapping out
+        if( SeekToContent( DFF_Prop_pibName, rSt ) )
+            MSDFFReadZString( rSt, aFilename, GetPropertyValue( DFF_Prop_pibName ), TRUE );
+
+        //   UND, ODER folgendes:
+        if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
         {
+            if (!(bGrfRead = GetBLIP(nBlipId, aGraf)))
+            {
+                /*
+                Still no luck, lets look at the end of this record for a FBSE pool,
+                this fallback is a specific case for how word does it sometimes
+                */
+                rObjData.rSpHd.SeekToEndOfRecord( rSt );
+                DffRecordHeader aHd;
+                rSt >> aHd;
+                if( DFF_msofbtBSE == aHd.nRecType )
+                {
+                    const ULONG nSkipBLIPLen = 20;
+                    const ULONG nSkipShapePos = 4;
+                    const ULONG nSkipBLIP = 4;
+                    const ULONG nSkip =
+                        nSkipBLIPLen + 4 + nSkipShapePos + 4 + nSkipBLIP;
+
+                    if (nSkip <= aHd.nRecLen)
+                    {
+                        rSt.SeekRel(nSkip);
+                        if (0 == rSt.GetError())
+                            bGrfRead = GetBLIPDirect( rSt, aGraf );
+                    }
+                }
+            }
+        }
+        if ( bGrfRead )
+        {   // the writer is doing it's own cropping, so this part affects only impress and calc
+            if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS )
+            {
+                sal_Int32 nCropTop      = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromTop, 0 );
+                sal_Int32 nCropBottom   = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromBottom, 0 );
+                sal_Int32 nCropLeft     = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromLeft, 0 );
+                sal_Int32 nCropRight    = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromRight, 0 );
+
+                if( nCropTop || nCropBottom || nCropLeft || nCropRight )
+                {
+                    double      fFactor;
+                    Size        aCropSize;
+                    BitmapEx    aCropBitmap;
+                    sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
+                    sal_Bool    bUseCropAttributes = ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0; // we do not support cropping attributes on ole objects
+
+                    if (bUseCropAttributes)
+                        aCropSize = lcl_GetPrefSize(aGraf, MAP_100TH_MM);
+                    else
+                    {
+                        aCropBitmap = aGraf.GetBitmapEx();
+                        aCropSize = aCropBitmap.GetSizePixel();
+                    }
+                    if ( nCropTop )
+                    {
+                        fFactor = (double)nCropTop / 65536.0;
+                        nTop = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+                    }
+                    if ( nCropBottom )
+                    {
+                        fFactor = (double)nCropBottom / 65536.0;
+                        nBottom = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+                    }
+                    if ( nCropLeft )
+                    {
+                        fFactor = (double)nCropLeft / 65536.0;
+                        nLeft = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+                    }
+                    if ( nCropRight )
+                    {
+                        fFactor = (double)nCropRight / 65536.0;
+                        nRight = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+                    }
+                    if ( bUseCropAttributes )
+                        rSet.Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
+                    else
+                    {
+                        Rectangle aCropRect( nLeft, nTop, aCropSize.Width() - nRight, aCropSize.Height() - nBottom );
+                        aCropBitmap.Crop( aCropRect );
+                        aGraf = aCropBitmap;
+                    }
+                }
+            }
+            if ( IsProperty( DFF_Prop_pictureTransparent ) )
+            {
+                UINT32 nTransColor = GetPropertyValue( DFF_Prop_pictureTransparent, 0 );
+
+                if ( aGraf.GetType() == GRAPHIC_BITMAP )
+                {
+                    BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
+                    Bitmap      aBitmap( aBitmapEx.GetBitmap() );
+                    Bitmap      aMask( aBitmap.CreateMask( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 ) );
+                    if ( aBitmapEx.IsTransparent() )
+                        aMask.CombineSimple( aBitmapEx.GetMask(), BMP_COMBINE_OR );
+                    aGraf = BitmapEx( aBitmap, aMask );
+                }
+            }
+
+            sal_Int32 nContrast = GetPropertyValue( DFF_Prop_pictureContrast, 0x10000 );
             /*
-            Still no luck, lets look at the end of this record for a FBSE pool,
-            this fallback is a specific case for how word does it sometimes
+            0x10000 is msoffice 50%
+            < 0x10000 is in units of 1/50th of 0x10000 per 1%
+            > 0x10000 is in units where
+            a msoffice x% is stored as 50/(100-x) * 0x10000
+
+            plus, a (ui) microsoft % ranges from 0 to 100, OOO
+            from -100 to 100, so also normalize into that range
             */
-            rObjData.rSpHd.SeekToEndOfRecord( rSt );
-            DffRecordHeader aHd;
-            rSt >> aHd;
-            if( DFF_msofbtBSE == aHd.nRecType )
+            if ( nContrast > 0x10000 )
             {
-                const ULONG nSkipBLIPLen = 20;
-                const ULONG nSkipShapePos = 4;
-                const ULONG nSkipBLIP = 4;
-                const ULONG nSkip =
-                    nSkipBLIPLen + 4 + nSkipShapePos + 4 + nSkipBLIP;
-
-                if (nSkip <= aHd.nRecLen)
-                {
-                    rSt.SeekRel(nSkip);
-                    if (0 == rSt.GetError())
-                        bGrfRead = GetBLIPDirect( rSt, aGraf );
-                }
+                double fX = nContrast;
+                fX /= 0x10000;
+                fX /= 51;   // 50 + 1 to round
+                fX = 1/fX;
+                nContrast = static_cast<sal_Int32>(fX);
+                nContrast -= 100;
+                nContrast = -nContrast;
+                nContrast = (nContrast-50)*2;
             }
-        }
-    }
-    if ( bGrfRead )
-    {   // the writer is doing it's own cropping, so this part affects only impress and calc
-        if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS )
-        {
-            sal_Int32 nCropTop      = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromTop, 0 );
-            sal_Int32 nCropBottom   = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromBottom, 0 );
-            sal_Int32 nCropLeft     = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromLeft, 0 );
-            sal_Int32 nCropRight    = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromRight, 0 );
-
-            if( nCropTop || nCropBottom || nCropLeft || nCropRight )
-            {
-                double      fFactor;
-                Size        aCropSize;
-                BitmapEx    aCropBitmap;
-                sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
-                sal_Bool    bUseCropAttributes = ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0; // we do not support cropping attributes on ole objects
-
-                if (bUseCropAttributes)
-                    aCropSize = lcl_GetPrefSize(aGraf, MAP_100TH_MM);
-                else
-                {
-                    aCropBitmap = aGraf.GetBitmapEx();
-                    aCropSize = aCropBitmap.GetSizePixel();
-                }
-                if ( nCropTop )
-                {
-                    fFactor = (double)nCropTop / 65536.0;
-                    nTop = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
-                }
-                if ( nCropBottom )
-                {
-                    fFactor = (double)nCropBottom / 65536.0;
-                    nBottom = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
-                }
-                if ( nCropLeft )
-                {
-                    fFactor = (double)nCropLeft / 65536.0;
-                    nLeft = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
-                }
-                if ( nCropRight )
-                {
-                    fFactor = (double)nCropRight / 65536.0;
-                    nRight = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
-                }
-                if ( bUseCropAttributes )
-                    rSet.Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
-                else
-                {
-                    Rectangle aCropRect( nLeft, nTop, aCropSize.Width() - nRight, aCropSize.Height() - nBottom );
-                    aCropBitmap.Crop( aCropRect );
-                    aGraf = aCropBitmap;
-                }
-            }
-        }
-        if ( IsProperty( DFF_Prop_pictureTransparent ) )
-        {
-            UINT32 nTransColor = GetPropertyValue( DFF_Prop_pictureTransparent, 0 );
-
-            if ( aGraf.GetType() == GRAPHIC_BITMAP )
-            {
-                BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
-                Bitmap      aBitmap( aBitmapEx.GetBitmap() );
-                Bitmap      aMask( aBitmap.CreateMask( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 ) );
-                if ( aBitmapEx.IsTransparent() )
-                    aMask.CombineSimple( aBitmapEx.GetMask(), BMP_COMBINE_OR );
-                aGraf = BitmapEx( aBitmap, aMask );
-            }
-        }
-
-        sal_Int32 nContrast = GetPropertyValue( DFF_Prop_pictureContrast, 0x10000 );
-        /*
-        0x10000 is msoffice 50%
-        < 0x10000 is in units of 1/50th of 0x10000 per 1%
-        > 0x10000 is in units where
-          a msoffice x% is stored as 50/(100-x) * 0x10000
-
-        plus, a (ui) microsoft % ranges from 0 to 100, OOO
-        from -100 to 100, so also normalize into that range
-        */
-        if ( nContrast > 0x10000 )
-        {
-            double fX = nContrast;
-            fX /= 0x10000;
-            fX /= 51;   // 50 + 1 to round
-            fX = 1/fX;
-            nContrast = static_cast<sal_Int32>(fX);
-            nContrast -= 100;
-            nContrast = -nContrast;
-            nContrast = (nContrast-50)*2;
-        }
-        else if ( nContrast == 0x10000 )
-            nContrast = 0;
-        else
-        {
-            nContrast *= 101;   //100 + 1 to round
-            nContrast /= 0x10000;
-            nContrast -= 100;
-        }
-        sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
-        sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
-        GraphicDrawMode eDrawMode   = GRAPHICDRAWMODE_STANDARD;
-        switch ( GetPropertyValue( DFF_Prop_pictureActive ) & 6 )
-        {
-            case 4 : eDrawMode = GRAPHICDRAWMODE_GREYS; break;
-            case 6 : eDrawMode = GRAPHICDRAWMODE_MONO; break;
-            case 0 :
-            {
-                //office considers the converted values of (in OOo) 70 to be the
-                //"watermark" values, which can vary slightly due to rounding from the
-                //above values
-                if (( nContrast == -70 ) && ( nBrightness == 70 ))
-                {
-                    nContrast = 0;
-                    nBrightness = 0;
-                    eDrawMode = GRAPHICDRAWMODE_WATERMARK;
-                };
-            }
-            break;
-        }
-
-        if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GRAPHICDRAWMODE_STANDARD ) )
-        {
-
-            // Was: currently the luminance and contrast items are available
-            // in impress only
-            // Now: available in writer as well, so logically only do
-            // hackery for excel import
-            if ( !(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL)
-                    && ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ) )
-            {
-                if ( nBrightness )
-                    rSet.Put( SdrGrafLuminanceItem( nBrightness ) );
-                if ( nContrast )
-                    rSet.Put( SdrGrafContrastItem( (sal_Int16)nContrast ) );
-                if ( nGamma != 0x10000 )
-                    rSet.Put( SdrGrafGamma100Item( nGamma / 655 ) );
-                if ( eDrawMode != GRAPHICDRAWMODE_STANDARD )
-                    rSet.Put( SdrGrafModeItem( eDrawMode ) );
-            }
+            else if ( nContrast == 0x10000 )
+                nContrast = 0;
             else
             {
-                if ( eDrawMode == GRAPHICDRAWMODE_WATERMARK )
-                {
-                    nContrast = 60;
-                    nBrightness = 70;
-                    eDrawMode = GRAPHICDRAWMODE_STANDARD;
-                }
-                switch ( aGraf.GetType() )
-                {
-                    case GRAPHIC_BITMAP :
-                    {
-                        BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
-                        if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                            aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, FALSE );
-                        if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
-                            aBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
-                        else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
-                            aBitmapEx.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-                        aGraf = aBitmapEx;
-
-                    }
-                    break;
-
-                    case GRAPHIC_GDIMETAFILE :
-                    {
-                        GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
-                        if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                            aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, FALSE );
-                        if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
-                            aGdiMetaFile.Convert( MTF_CONVERSION_8BIT_GREYS );
-                        else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
-                            aGdiMetaFile.Convert( MTF_CONVERSION_1BIT_THRESHOLD );
-                        aGraf = aGdiMetaFile;
-                    }
-                    break;
-                }
+                nContrast *= 101;   //100 + 1 to round
+                nContrast /= 0x10000;
+                nContrast -= 100;
             }
-        }
-    }
+            sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
+            sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
+            GraphicDrawMode eDrawMode   = GRAPHICDRAWMODE_STANDARD;
+            switch ( GetPropertyValue( DFF_Prop_pictureActive ) & 6 )
+            {
+                case 4 : eDrawMode = GRAPHICDRAWMODE_GREYS; break;
+                case 6 : eDrawMode = GRAPHICDRAWMODE_MONO; break;
+                case 0 :
+                {
+                    //office considers the converted values of (in OOo) 70 to be the
+                    //"watermark" values, which can vary slightly due to rounding from the
+                    //above values
+                    if (( nContrast == -70 ) && ( nBrightness == 70 ))
+                    {
+                        nContrast = 0;
+                        nBrightness = 0;
+                        eDrawMode = GRAPHICDRAWMODE_WATERMARK;
+                    };
+                }
+                break;
+            }
 
-    // sollte es ein OLE-Object sein?
-    if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
-        pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, aBoundRect );
-    if( !pRet )
-    {
-        pRet = new SdrGrafObj;
-        if( bGrfRead )
-            ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
-        if( bLinkGrf )
-        {
-            UniString aName( ::URIHelper::SmartRelToAbs( aFilename, FALSE,
-                                                                INetURLObject::WAS_ENCODED,
-                                                                    INetURLObject::DECODE_UNAMBIGUOUS ) );
-            sal_Bool bSetFileName = TRUE;
-
-            if ( bGrfRead )
+            if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GRAPHICDRAWMODE_STANDARD ) )
             {
 
-                // There is still an embedded graphic that could be used. Sometimes
-                // a graphiclink is also set. The problem is that the graphic cache will
-                // not swapout graphics when a graphiclink exists, so a validity check has to be done
-
-                if ( ( eFlags & mso_blipflagLinkToFile ) == mso_blipflagComment )
-                    bSetFileName = FALSE;
+                // Was: currently the luminance and contrast items are available
+                // in impress only
+                // Now: available in writer as well, so logically only do
+                // hackery for excel import
+                if ( !(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL)
+                        && ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ) )
+                {
+                    if ( nBrightness )
+                        rSet.Put( SdrGrafLuminanceItem( nBrightness ) );
+                    if ( nContrast )
+                        rSet.Put( SdrGrafContrastItem( (sal_Int16)nContrast ) );
+                    if ( nGamma != 0x10000 )
+                        rSet.Put( SdrGrafGamma100Item( nGamma / 655 ) );
+                    if ( eDrawMode != GRAPHICDRAWMODE_STANDARD )
+                        rSet.Put( SdrGrafModeItem( eDrawMode ) );
+                }
                 else
                 {
-                    try
+                    if ( eDrawMode == GRAPHICDRAWMODE_WATERMARK )
                     {
-                        ::ucb::Content  aCnt( aName, uno::Reference<
-                            ::com::sun::star::ucb::XCommandEnvironment >() );
-                        ::rtl::OUString     aTitle;
-
-                        aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
-                        bSetFileName = ( aTitle.getLength() > 0 );
+                        nContrast = 60;
+                        nBrightness = 70;
+                        eDrawMode = GRAPHICDRAWMODE_STANDARD;
                     }
-                    catch( ... )
+                    switch ( aGraf.GetType() )
                     {
-                        // this file did not exist, so we will not set this as graphiclink
-                        bSetFileName = FALSE;
+                        case GRAPHIC_BITMAP :
+                        {
+                            BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
+                            if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
+                                aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, FALSE );
+                            if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
+                                aBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
+                            else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
+                                aBitmapEx.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+                            aGraf = aBitmapEx;
+
+                        }
+                        break;
+
+                        case GRAPHIC_GDIMETAFILE :
+                        {
+                            GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
+                            if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
+                                aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, FALSE );
+                            if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
+                                aGdiMetaFile.Convert( MTF_CONVERSION_8BIT_GREYS );
+                            else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
+                                aGdiMetaFile.Convert( MTF_CONVERSION_1BIT_THRESHOLD );
+                            aGraf = aGdiMetaFile;
+                        }
+                        break;
                     }
                 }
             }
-            if ( bSetFileName )
-                ((SdrGrafObj*)pRet)->SetFileName( aName );
         }
-    }
-    if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
-    {                                               // name is already set in ImportOLE !!
-        // JP 01.12.99: SetName before SetModel - because in the other order the Bug 70098 is active
-        if ( ( eFlags & mso_blipflagType ) != mso_blipflagComment )
+
+        // sollte es ein OLE-Object sein?
+        if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, aBoundRect );
+        if( !pRet )
         {
-            INetURLObject aURL;
-            aURL.SetSmartURL( aFilename );
-            pRet->SetName( aURL.getBase() );
+            pRet = new SdrGrafObj;
+            if( bGrfRead )
+                ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
+            if( bLinkGrf )
+            {
+                UniString aName( ::URIHelper::SmartRelToAbs( aFilename, FALSE,
+                                                                    INetURLObject::WAS_ENCODED,
+                                                                        INetURLObject::DECODE_UNAMBIGUOUS ) );
+                sal_Bool bSetFileName = TRUE;
+
+                if ( bGrfRead )
+                {
+
+                    // There is still an embedded graphic that could be used. Sometimes
+                    // a graphiclink is also set. The problem is that the graphic cache will
+                    // not swapout graphics when a graphiclink exists, so a validity check has to be done
+
+                    if ( ( eFlags & mso_blipflagLinkToFile ) == mso_blipflagComment )
+                        bSetFileName = FALSE;
+                    else
+                    {
+                        try
+                        {
+                            ::ucb::Content  aCnt( aName, uno::Reference<
+                                ::com::sun::star::ucb::XCommandEnvironment >() );
+                            ::rtl::OUString     aTitle;
+
+                            aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
+                            bSetFileName = ( aTitle.getLength() > 0 );
+                        }
+                        catch( ... )
+                        {
+                            // this file did not exist, so we will not set this as graphiclink
+                            bSetFileName = FALSE;
+                        }
+                    }
+                }
+                if ( bSetFileName )
+                    ((SdrGrafObj*)pRet)->SetFileName( aName );
+            }
         }
-        else
-            pRet->SetName( aFilename );
+        if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
+        {                                               // name is already set in ImportOLE !!
+            // JP 01.12.99: SetName before SetModel - because in the other order the Bug 70098 is active
+            if ( ( eFlags & mso_blipflagType ) != mso_blipflagComment )
+            {
+                INetURLObject aURL;
+                aURL.SetSmartURL( aFilename );
+                pRet->SetName( aURL.getBase() );
+            }
+            else
+                pRet->SetName( aFilename );
+        }
     }
     pRet->SetModel( pSdrModel ); // fuer GraphicLink erforderlich
     pRet->SetLogicRect( aBoundRect );
+    if ( pRet->ISA( SdrGrafObj ) )
+        ((SdrGrafObj*)pRet)->ForceSwapOut();
     return pRet;
 }
 
@@ -4547,9 +4549,14 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
                     pEntry = (EscherBlipCacheEntry*)pEscherBlipCache->Next() )
             {
                 if ( pEntry->nBlip == nIdx_ )
-                {
-                    rData = pEntry->aGraphic;
-                    bOk = sal_True;
+                {   /* if this entry is available, then it should be possible
+                    to get the Graphic via GraphicObject */
+                    GraphicObject aGraphicObject( pEntry->aUniqueID );
+                    rData = aGraphicObject.GetGraphic();
+                    if ( rData.GetType() != GRAPHIC_NONE )
+                        bOk = sal_True;
+                    else
+                        delete (EscherBlipCacheEntry*)pEscherBlipCache->Remove();
                     break;
                 }
             }
@@ -4605,9 +4612,10 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
             if ( bOk )
             {
                 // create new BlipCacheEntry for this graphic
+                GraphicObject aGraphicObject( rData );
                 if ( !pEscherBlipCache )
                     const_cast <SvxMSDffManager*> (this)->pEscherBlipCache = new List();
-                EscherBlipCacheEntry* pNewEntry = new EscherBlipCacheEntry( nIdx_, rData );
+                EscherBlipCacheEntry* pNewEntry = new EscherBlipCacheEntry( nIdx_, aGraphicObject.GetUniqueID() );
                 pEscherBlipCache->Insert( pNewEntry, LIST_APPEND );
             }
         }
