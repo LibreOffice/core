@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:22:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ russian ] = "Ñêğûòûé ıëåìåíò óïğàâëåíèÿ";
                         Text[ polish ] = "Ukryty formant";
                         Text[ japanese ] = "‰B‚µºİÄÛ°Ù";
-                        Text[ chinese_traditional ] = "Áô¤J±±¨î";
+                        Text[ chinese_traditional ] = "Áô¤J±±»s¶µ";
                         Text[ arabic ] = "ÚäÕÑ ÊÍßã ãÎİí";
                         Text[ greek ] = "Êñõ~öü óôïé÷åßï åëİã÷ïõ";
                         Text[ korean ] = "¼û°ÜÁø ÄÁÆ®·Ñ";
@@ -344,7 +344,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ japanese ] = "µ°ÄºİÄÛ°ÙÌ«°¶½";
             Text[ korean ] = "ÀÚµ¿ Æ÷Ä¿½º ÄÁÆ®·Ñ";
             Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆµ¥Ôª";
-            Text[ chinese_traditional ] = "¦Û°Ê¹ï­ã±±¨î¶µ";
+            Text[ chinese_traditional ] = "¦Û°Ê¹ï·Ç±±»s¶µ";
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = "ÊÑßíÒ ÊáŞÇÆí áÚäÕÑ ÇáÊÍßã";
             Text[ catalan ] = "Foco automático de control";
@@ -460,7 +460,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ portuguese_brazilian ] = "F~rameControl";
             Text[ japanese ] = "¸ŞÙ°ÌßÎŞ¯¸½(~R)";
             Text[ korean ] = "±×·ì ¹Ú½º(~R)";
-            Text[ chinese_simplified ] = "Ğ¡×é¿ò(~R)";
+            Text[ chinese_simplified ] = "×éºÏ¿ò(~R)";
             Text[ chinese_traditional ] = "²Õ¦X¤è¶ô(~R)";
             Text[ arabic ] = "ßÇÏÑ ÊÌãíÚ";
             Text[ turkish ] = "Grup çerçevesi";
@@ -791,7 +791,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ japanese ] = "²Ò°¼ŞºİÄÛ°ÙÌ¨°ÙÄŞ(~G)";
             Text[ korean ] = "ÀÌ¹ÌÁö ÄÁÆ®·Ñ ÇÊµå(~G)";
             Text[ chinese_simplified ] = "Í¼Ê½¿ØÖÆ(~G)";
-            Text[ chinese_traditional ] = "¹Ï¦¡±±¨î¶µ(~G)";
+            Text[ chinese_traditional ] = "¹Ï¦¡±±»s¶µ(~G)";
             Text[ arabic ] = "ÚäÕÑ ÊÍßã ÑÓæãí";
             Text[ turkish ] = "Grafiksel komut alanı";
             Text[ catalan ] = "Control de ima~gen";
@@ -981,6 +981,7 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ catalan ] = "Navegador de formulario";
     Text[ finnish ] = "Lomakkeen siirtymävalikko";
 };
+
 
 
 
