@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:52:58 $
+ *  last change: $Author: fs $ $Date: 2002-05-30 11:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,14 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, BOOL b
         return;
 
     if( !bAdd )
-        SetNoSelection();
+    {
+        if ( 0 == ( nFlags & F_CLEARING_SELECTION ) )
+        {
+            nFlags |= F_CLEARING_SELECTION;
+            DeselectAllBut( pEntry, sal_True );
+            nFlags &= ~F_CLEARING_SELECTION;
+        }
+    }
     if( pEntry->IsSelected() != bSelect )
     {
         pHdlEntry = pEntry;
@@ -1836,16 +1843,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
     }
     else
     {
-        if( bSelected && !bCursored )
-        {
-            bSolidTextRect = TRUE;
-            bSolidImageRect = TRUE;
-            if( (nWinBits & WB_NOHIDESELECTION) || pView->HasFocus() )
-                pOut->SetFillColor( rSettings.GetHighlightColor() );
-            else
-                pOut->SetFillColor( rSettings.GetDeactiveColor() );
-        }
-        else
+        if ( !bSelected || bCursored )
         {
             if( !pView->HasFontFillColor() )
                 pOut->SetFillColor( pOut->GetBackground().GetColor() );
@@ -2008,12 +2006,25 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     }
     */
 
-    if ( ( (bSelected && !bCursored) || bDropTarget) && !bNoEmphasis &&
-         ( eSelectionMode != NO_SELECTION ) )
+    String aEntryText( pView->GetEntryText( pEntry, FALSE ) );
+    Rectangle aTextRect( CalcTextRect(pEntry,&rPos,FALSE,&aEntryText));
+    Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos ) );
+
+    sal_Bool    bShowSelection =
+        (   (   ( bSelected && !bCursored )
+            ||  bDropTarget
+            )
+        &&  !bNoEmphasis
+        &&  ( eSelectionMode != NO_SELECTION )
+        );
+    sal_Bool bActiveSelection = ( 0 != ( nWinBits & WB_NOHIDESELECTION ) ) || pView->HasFocus();
+
+    if ( bShowSelection )
     {
         const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
         Font aNewFont( aTempFont );
-        aNewFont.SetColor( rSettings.GetHighlightTextColor() );
+        aNewFont.SetColor( rSettings.GetWindowTextColor() );
+
         // bei hart attributierter Font-Fuellcolor muessen wir diese
         // hart auf die Highlight-Color setzen
         if( pView->HasFontFillColor() )
@@ -2024,10 +2035,11 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
                 aNewFont.SetFillColor( rSettings.GetDeactiveColor() );
         }
         pOut->SetFont( aNewFont );
+
+        pOut->SetFillColor( pOut->GetBackground().GetColor() );
+        pOut->DrawRect( CalcFocusRect( pEntry ) );
+        pOut->SetFillColor( );
     }
-    String aEntryText( pView->GetEntryText( pEntry, FALSE ) );
-    Rectangle aTextRect( CalcTextRect(pEntry,&rPos,FALSE,&aEntryText));
-    Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos ) );
 
     BOOL bResetClipRegion = FALSE;
     if( !pView->IsClipRegion() && (aVerSBar.IsVisible() || aHorSBar.IsVisible()) )
@@ -2051,25 +2063,23 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     }
 #endif
 
-    switch( nWinBits & (VIEWMODE_MASK) )
-    {
-        case WB_ICON:
-            if( !bNoEmphasis )
-                PaintEmphasis(aTextRect,aBmpRect,bSelected,bDropTarget,bCursored,pOut,bIsBackgroundPainted);
-            PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry,
-                       PAINTFLAG_HOR_CENTERED | PAINTFLAG_VER_CENTERED, pOut );
-            PaintItem( aTextRect, IcnViewFieldTypeText, pEntry,
-                       PAINTFLAG_HOR_CENTERED, pOut, &aEntryText );
-            break;
+    sal_Bool bLargeIconMode = WB_ICON == ( nWinBits & (VIEWMODE_MASK) );
+    USHORT nBmpPaintFlags = PAINTFLAG_VER_CENTERED;
+    if ( bLargeIconMode )
+        nBmpPaintFlags |= PAINTFLAG_HOR_CENTERED;
+    USHORT nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
-        case WB_SMALLICON:
-        case WB_DETAILS:
-            if( !bNoEmphasis )
-                PaintEmphasis(aTextRect,aBmpRect,bSelected,bDropTarget,bCursored,pOut,bIsBackgroundPainted);
-            PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry, PAINTFLAG_VER_CENTERED, pOut );
-            PaintItem( aTextRect, IcnViewFieldTypeText, pEntry,PAINTFLAG_VER_CENTERED, pOut );
-            break;
-    }
+    if( !bNoEmphasis )
+        PaintEmphasis(aTextRect,aBmpRect,bSelected,bDropTarget,bCursored,pOut,bIsBackgroundPainted);
+
+    PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, pOut );
+
+    if ( bShowSelection )
+        pView->DrawSelectionBackground( CalcFocusRect( pEntry ),
+        bActiveSelection ? 2 : 0 /* highlight */, sal_False /* check */, sal_True /* border */, sal_False /* ext border only */ );
+
+    PaintItem( aTextRect, IcnViewFieldTypeText, pEntry,
+        nTextPaintFlags, pOut );
 
     // Highlight-Frame zeichnen
     if( pEntry == pCurHighlightFrame && !bNoEmphasis )
