@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-25 17:13:57 $
+ *  last change: $Author: pl $ $Date: 2002-09-26 08:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                 aNormalClipRegion.Union( aRect );
         }
         // draw normal text
+        Color aNormalTextColor = GetTextColor();
         SetClipRegion( aNormalClipRegion );
         SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
         DrawText( aPos, aText, nStart, nEnd - nStart );
@@ -620,6 +621,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         SetTextColor( rStyleSettings.GetHighlightTextColor() );
         SetTextFillColor( rStyleSettings.GetHighlightColor() );
         DrawText( aPos, aText, nStart, nEnd - nStart );
+
         // if IME info exists loop over portions and output different font attributes
         if( mpIMEInfos && mpIMEInfos->pAttribs )
         {
@@ -628,50 +630,55 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                 Region aRegion;
                 if( n == 0 )
                 {
+                    SetTextColor( aNormalTextColor );
+                    SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+                    aRegion = aNormalClipRegion;
+                }
+                else
+                {
                     SetTextColor( rStyleSettings.GetHighlightTextColor() );
                     SetTextFillColor( rStyleSettings.GetHighlightColor() );
                     aRegion = aHiglightClipRegion;
                 }
-                else
-                {
-                    SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
-                    aRegion = aNormalClipRegion;
-                }
 
-                for( i = 0; i < mpIMEInfos->nLen; i++ )
+                for( i = 0; i < mpIMEInfos->nLen; )
                 {
-                    Rectangle aRect( aPos, Size( 10, nTH ) );
-                    aRect.Left() = pDX[2*(i+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
-                    aRect.Right() = pDX[2*(i+mpIMEInfos->nPos)+1] + mnXOffset + ImplGetExtraOffset();
-                    aRect.Justify();
-
-                    Region aClip = aRegion;
-                    if( aClip.Intersect( aRect ) )
+                    USHORT nAttr = mpIMEInfos->pAttribs[i];
+                    Region aClip;
+                    int nIndex = i;
+                    while( mpIMEInfos->pAttribs[nIndex] == nAttr && nIndex < mpIMEInfos->nLen )
                     {
-                        USHORT nAttr = mpIMEInfos->pAttribs[i];
-                        if ( nAttr )
+                        Rectangle aRect( aPos, Size( 10, nTH ) );
+                        aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
+                        aRect.Right() = pDX[2*(nIndex+mpIMEInfos->nPos)+1] + mnXOffset + ImplGetExtraOffset();
+                        aRect.Justify();
+                        aClip.Union( aRect );
+                        nIndex++;
+                    }
+                    i = nIndex;
+                    if( aClip.Intersect( aRegion ) && nAttr )
+                    {
+                        Font aFont = GetFont();
+                        if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
+                            aFont.SetUnderline( UNDERLINE_SINGLE );
+                        else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
+                            aFont.SetUnderline( UNDERLINE_BOLD );
+                        else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
+                            aFont.SetUnderline( UNDERLINE_DOTTED );
+                        else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
+                            aFont.SetUnderline( UNDERLINE_DOTTED );
+                        else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
                         {
-                            Font aFont = GetFont();
-                            if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
-                                aFont.SetUnderline( UNDERLINE_SINGLE );
-                            else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
-                                aFont.SetUnderline( UNDERLINE_BOLD );
-                            else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
-                                aFont.SetUnderline( UNDERLINE_DOTTED );
-                            else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
-                                aFont.SetUnderline( UNDERLINE_DOTTED );
-                            else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
-                            {
-                                aFont.SetUnderline( UNDERLINE_WAVE );
-                                SetTextLineColor( Color( COL_LIGHTGRAY ) );
-                            }
-                            SetFont( aFont );
-
-                            if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
-                                SetTextColor( Color( COL_RED ) );
-                            else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
-                                SetTextColor( Color( COL_LIGHTGRAY ) );
+                            aFont.SetUnderline( UNDERLINE_WAVE );
+                            SetTextLineColor( Color( COL_LIGHTGRAY ) );
                         }
+                        SetFont( aFont );
+
+                        if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
+                            SetTextColor( Color( COL_RED ) );
+                        else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
+                            SetTextColor( Color( COL_LIGHTGRAY ) );
+
                         SetClipRegion( aClip );
                         DrawText( aPos, aText, nStart, nEnd - nStart );
                     }
