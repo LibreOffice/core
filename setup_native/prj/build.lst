@@ -10,5 +10,6 @@ pk  setup_native\source\win32\customactions\netframework  nmake   -  w   sn_netf
 pk  setup_native\source\win32\customactions\quickstarter  nmake   -  w   sn_quickstarter NULL
 pk  setup_native\source\win32\customactions\shellextensions nmake   -  w   sn_shellextensions NULL
 pk  setup_native\source\win32\customactions\indexingfilter nmake   -  w   sn_indexingfilter NULL
+pk  setup_native\source\win32\customactions\languagepacks nmake   -  w   sn_languagepacks NULL
 pk  setup_native\source\ulfconv                           nmake   -  all sn_ulfconv NULL
 
