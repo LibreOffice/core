@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 11:35:19 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 11:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ public:
     ULONG           GetError() const;
     BOOL            Good() const          { return BOOL( nError == SVSTREAM_OK ); }
     StreamMode      GetMode() const  { return nMode;  }
+    void            SetAutoCommit( BOOL bSet )
+                    { bAutoCommit = bSet; }
 };
 
 class BaseStorageStream : public StorageBase
@@ -176,12 +178,13 @@ public:
 
 class StorageStream : public BaseStorageStream, public OLEStorageBase
 {
-friend class Storage;
+//friend class Storage;
     ULONG           nPos;                             // current position
-                    StorageStream( StgIo*, StgDirEntry*, StreamMode );
+protected:
+                    ~StorageStream();
 public:
                     TYPEINFO();
-                    ~StorageStream();
+                    StorageStream( StgIo*, StgDirEntry*, StreamMode );
     virtual ULONG   Read( void * pData, ULONG nSize );
     virtual ULONG   Write( const void* pData, ULONG nSize );
     virtual ULONG   Seek( ULONG nPos );
@@ -204,11 +207,12 @@ class Storage : public BaseStorage, public OLEStorageBase
     BOOL                        bIsRoot;
     void                        Init( BOOL bCreate );
                                 Storage( StgIo*, StgDirEntry*, StreamMode );
+protected:
+                                ~Storage();
 public:
                                 TYPEINFO();
                                 Storage( const String &, StreamMode = STREAM_STD_READWRITE, BOOL bDirect = TRUE );
                                 Storage( SvStream& rStrm, BOOL bDirect = TRUE );
-                                ~Storage();
 
     static BOOL                 IsStorageFile( const String & rFileName );
     static BOOL                 IsStorageFile( SvStream* );
@@ -261,13 +265,14 @@ class UCBStorageStream : public BaseStorageStream
 {
 friend class UCBStorage;
 
-    UCBStorageStream_Impl*      pImp;
-
+    UCBStorageStream_Impl*
+            pImp;
+protected:
+                                ~UCBStorageStream();
 public:
                                 TYPEINFO();
                                 UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect );
                                 UCBStorageStream( UCBStorageStream_Impl* );
-                                ~UCBStorageStream();
 
     virtual ULONG               Read( void * pData, ULONG nSize );
     virtual ULONG               Write( const void* pData, ULONG nSize );
@@ -290,13 +295,14 @@ class UCBStorage : public BaseStorage
 {
     UCBStorage_Impl*            pImp;
 
+protected:
+                                ~UCBStorage();
 public:
     static BOOL                 IsStorageFile( SvStream* );
 
                                 UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, BOOL bDirect = TRUE );
-                                ~UCBStorage();
 
                                 TYPEINFO();
     virtual const String&       GetName() const;
@@ -349,5 +355,6 @@ public:
 #endif
 
 };
+
 
 #endif
