@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mm $ $Date: 2001-05-14 11:23:33 $
+ *  last change: $Author: rt $ $Date: 2001-05-15 14:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,8 +298,9 @@ static String ToUpperUnicode( const String & rStr )
     aLocale.Language = OUString::createFromAscii( "en" );
     aLocale.Country  = OUString::createFromAscii( "US" );
     */
-    static CharClass aCC( com::sun::star::lang::Locale( rtl::OUString::createFromAscii( "en" ),
-                            rtl::OUString::createFromAscii( "US" ), rtl::OUString() ) );
+    static rtl::OUString aEN=rtl::OUString::createFromAscii( "en" );
+    static rtl::OUString aUS=rtl::OUString::createFromAscii( "US" );
+    static CharClass aCC( com::sun::star::lang::Locale( aEN, aUS, rtl::OUString() ) );
     return aCC.toUpper( rStr, 0, rStr.Len() );
 }
 
