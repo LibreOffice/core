@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:21:51 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,7 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -122,9 +120,10 @@ namespace dbaui
     {
     public:
         DECLARE_STL_MAP(::rtl::OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
-        typedef ::std::vector<TColumns::const_iterator> TColumnVector;
+        typedef ::std::vector<TColumns::const_iterator>             TColumnVector;
+        typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
     protected:
-        ::std::vector<sal_Int32>        m_vColumns;     // Welche Spalten "ubernommen werden sollen
+        TPositions                      m_vColumns;     // Welche Spalten "ubernommen werden sollen
         ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff
         ::std::vector<sal_Int32>        m_vColumnSize;
         ::std::vector<sal_Int32>        m_vFormatKey;
@@ -189,7 +188,7 @@ namespace dbaui
                         const OTypeInfoMap* _pInfoMap = 0);
         // wird f"ur auto. Typ-Erkennung gebraucht
         ODatabaseExport(sal_Int32 nRows,
-                        const ::std::vector<sal_Int32> &_rColumnPositions,
+                        const TPositions& _rColumnPositions,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* rList = 0,

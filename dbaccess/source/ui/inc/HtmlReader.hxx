@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ namespace dbaui
         // wird f"ur auto. Typ-Erkennung gebraucht
         OHTMLReader(SvStream& rIn,
                     sal_Int32 nRows,
-                    const ::std::vector<sal_Int32> &_rColumnPositions,
+                    const TPositions &_rColumnPositions,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                     const TColumnVector* rList = 0,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ namespace dbaui
         ::std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
         TNameMapping                m_mNameMapping;
 
-        ::std::vector<sal_Int32>    m_vColumnPos;
+        ODatabaseExport::TPositions m_vColumnPos;
         ::std::vector<sal_Int32>    m_vColumnTypes;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDestObject; // can be a query or a table
@@ -270,7 +270,7 @@ namespace dbaui
         void                CheckButtons(); // checks which button can be disabled, enabled
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is CONTAINER_ENTRY_NOTFOUND == (sal_uInt32)-1
-        ::std::vector<sal_Int32>    GetColumnPositions()    const { return m_vColumnPos; }
+        ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
         ::std::vector<sal_Int32>    GetColumnTypes()        const { return m_vColumnTypes; }
         const TNameMapping*         GetNameMapping()        const { return &m_mNameMapping; }
 
