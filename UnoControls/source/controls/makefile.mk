@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+#   last change: $Author: pluby $ $Date: 2000-10-06 16:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,13 @@ SLOFILES=\
             $(SLO)$/progressmonitor.obj					\
             $(SLO)$/OConnectionPointHelper.obj			\
             $(SLO)$/OConnectionPointContainerHelper.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbcontrols.obj
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
