@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 12:27:34 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:52:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.77 $$"
+LIBSMKREV!:="$$Revision: 1.78 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -138,8 +138,13 @@ VCLLIB=$(SVLIB)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(OFFICEUPD)$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(SYSTEM_FREETYPE)"=="YES"
+FREETYPELIB=$(FREETYPE_LIBS)
+FREETYPELIBST=$(FREETYPE_LIBS)
+.ELSE
 FREETYPELIB=-lfreetype
 FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
+.ENDIF
 XPLIB=-l_xp
 TKLIB=-ltk$(OFFICEUPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(OFFICEUPD)$(DLLPOSTFIX)
@@ -180,17 +185,31 @@ HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
 LNGLIB=-llng$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(SYSTEM_EXPAT)"=="YES"
+EXPAT3RDLIB=-lexpat
+EXPATASCII3RDLIB=-lexpat
+.ELSE
 EXPAT3RDLIB=-lexpat_xmlparse -lexpat_xmltok
 EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
+.ENDIF
 .IF "$(SYSTEM_ZLIB)"=="YES"
 ZLIB3RDLIB=-lz
 .ELSE
 ZLIB3RDLIB=-lzlib
 .ENDIF
+.IF "$(SYSTEM_JPEG)"=="YES"
+JPEG3RDLIB=-ljpeg
+.ELSE
 JPEG3RDLIB=-ljpeglib
+.ENDIF
 NEON3RDLIB=-lneon
+.IF "$(SYSTEM_DB3)"=="YES"
+BERKELEYLIB=-ldb-3
+BERKELEYCPPLIB=-ldb_cxx-3
+.ELSE
 BERKELEYLIB=-ldb-3.2
 BERKELEYCPPLIB=-ldb_cxx-3.2
+.ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
@@ -230,7 +249,11 @@ SYSSHELLLIB=-lsysshell
 SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
-XML2LIB = -lxml2
+.IF "$(SYSTEM_LIBXML)"=="YES"
+XML2LIB=$(LIBXML_LIBS)
+.ELSE
+XML2LIB=-lxml2
+.ENDIF
 JVMFWKLIB = -ljvmfwk
 
 # #110743#
