@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:49:04 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ IMPL_LINK( SdDocPreviewWin, PaintProc, SdrPaintProcRec *, pRecord )
     SdrObject* pObj = pRecord->pObj;
     if( pObj->GetPage() && pObj->GetPage()->checkVisibility( pRecord, false ) )
     {
-        pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
+        // #i29486# use DoPaintObject instead of SingleObjectPainter in PaintProc recalls
+        pObj->DoPaintObject( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
 
     return 0;
