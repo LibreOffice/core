@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 12:12:46 $
+ *  last change: $Author: os $ $Date: 2002-05-28 14:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10757,7 +10757,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ DUTCH ] = "lch_out31.bmp" ;
         File [ SWEDISH ] = "lch_out46.bmp" ;
     };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_STDBTN_COLOR_HC ;
     _ID_LIST
 };
 
@@ -10775,7 +10775,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ DUTCH ] = "sch_out31.bmp" ;
         File [ SWEDISH ] = "sch_out46.bmp" ;
     };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_STDBTN_COLOR_HC ;
     _ID_LIST
 };
 
