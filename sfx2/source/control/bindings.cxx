@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:33:43 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,6 +891,13 @@ void SfxBindings::InvalidateAll
 
     for ( sal_uInt16 n = 0; n < pImp->pCaches->Count(); ++n )
         pImp->pCaches->GetObject(n)->Invalidate(bWithMsg);
+
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
+        ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+
+    if ( xFrame.is() )
+        xFrame->contextChanged();
+
     pImp->nMsgPos = 0;
     if ( !nRegLevel )
     {
