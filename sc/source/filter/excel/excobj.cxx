@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-06 12:36:56 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ void ImportExcel::ChartSeriesText()
     UINT16  nId;
     aIn >> nId;
     if( pChart )
-        aIn.AppendByteString( pChart->aLastLabel, eQuellChar, FALSE );
+        aIn.AppendByteString( pChart->aLastLabel, FALSE );
 }
 
 
@@ -1003,7 +1003,7 @@ void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
                 rIn >> n16;     // string length
                 if ( n16 )
                 {   // the 4th way Xcl stores a unicode string: not even a Grbit byte present if length 0
-                    rIn.AppendUniString( aUserName, *pExcRoot->pCharset, n16 );
+                    rIn.AppendUniString( aUserName, n16 );
                     // 0:= ID follows, 1:= pad byte + ID
 #ifndef PRODUCT
                     INT32 nLeft = INT32(nFmlaLen) - (rIn.GetRecPos() - nPos0);

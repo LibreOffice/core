@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ const double ImportExcel::fExcToTwips =
     ( double ) TWIPS_PER_CHAR / 256.0;
 
 
-ImportTyp::ImportTyp( SvStream& aStream, ScDocument* pDoc, CharSet eQ ): aIn( aStream )
+ImportTyp::ImportTyp( SvStream& aStream, ScDocument* pDoc, CharSet eQ ): aIn( aStream, &eQuellChar )
 {
     eQuellChar = eQ;
     pD = pDoc;
@@ -455,7 +455,7 @@ void ImportExcel::RecString( void )
 {
     if( pLastFormCell )
     {
-        pLastFormCell->SetString( aIn.ReadByteString( eQuellChar, pExcRoot->eHauptDateiTyp != Biff2 ) );
+        pLastFormCell->SetString( aIn.ReadByteString( pExcRoot->eHauptDateiTyp != Biff2 ) );
 
         pLastFormCell = NULL;
     }
@@ -585,7 +585,7 @@ void ImportExcel::Name25( void )
         aIn >> nLenName >> nLenExpr;
 
         // Namen einlesen
-        String aName( aIn.ReadRawByteString( eQuellChar, nLenName ) );
+        String aName( aIn.ReadRawByteString( nLenName ) );
         ScFilterTools::ConvertName( aName );
 
         pFormConv->Reset();
@@ -619,7 +619,7 @@ void ImportExcel::Name25( void )
         nLenSeekRel += nLen;
 
         // Namen einlesen
-        String aName( aIn.ReadRawByteString( eQuellChar, nLenName ) );
+        String aName( aIn.ReadRawByteString( nLenName ) );
         // jetzt steht Lesemarke an der Formel
 
         const BOOL      bHidden = TRUEBOOL( nOpt & EXC_NAME_HIDDEN );
@@ -695,7 +695,7 @@ void ImportExcel::Note( void )
     aIn >> nRow >> nCol;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
-        pD->SetNote( nCol, nRow, nTab, aIn.ReadByteString( eQuellChar, TRUE ) );
+        pD->SetNote( nCol, nRow, nTab, aIn.ReadByteString( TRUE ) );
     else
         bTabTruncated = TRUE;
 
@@ -728,7 +728,7 @@ void ImportExcel::Format235( void )
     if( pExcRoot->eHauptDateiTyp == Biff5 )
         aIn.Ignore( 2 );
 
-    pValueFormBuffer->NewValueFormat( aIn.ReadByteString( eQuellChar, FALSE ) );
+    pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
 }
 
 
@@ -833,7 +833,7 @@ void ImportExcel::Externname25( void )
 
     aIn >> nOpt >> nRes;
 
-    String aName( aIn.ReadByteString( eQuellChar, FALSE ) );
+    String aName( aIn.ReadByteString( FALSE ) );
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
@@ -952,7 +952,7 @@ void ImportExcel::Font25( void )
         aIn.Ignore( 1 );
         nIndexCol =  32767;
 
-        aIn.AppendByteString( aName, eQuellChar, FALSE );
+        aIn.AppendByteString( aName, FALSE );
         pFB->NewFont( nHeight, nAttr0, nIndexCol, aName );
     }
     else
@@ -965,7 +965,7 @@ void ImportExcel::Font25( void )
         aIn >> nIndexCol >> nWeight >> nScript >> nUnder >> nFam >> nChar;
         aIn.Ignore( 1 );    // Reserved
 
-        aIn.AppendByteString( aName, eQuellChar, FALSE );
+        aIn.AppendByteString( aName, FALSE );
         pFB->NewFont( nHeight, nAttr0, nScript, nUnder, nIndexCol, nWeight, nFam, nChar, aName );
     }
 }
@@ -1171,7 +1171,7 @@ void ImportExcel::Boundsheet( void )
     else
         nGrbit = 0x0000;
 
-    String aName( aIn.ReadByteString( eQuellChar, FALSE ) );
+    String aName( aIn.ReadByteString( FALSE ) );
     ScFilterTools::ConvertName( aName );
 
     *pExcRoot->pTabNameBuff << aName;
@@ -1604,7 +1604,7 @@ void ImportExcel::Rstring( void )
 
     aIn >> nRow >> nCol >> nXF;
 
-    String aString( aIn.ReadByteString( eQuellChar, TRUE ) );
+    String aString( aIn.ReadByteString( TRUE ) );
 
     aIn >> nCount;
 
@@ -1860,7 +1860,7 @@ void ImportExcel::Name34( void )
     aIn >> nLenName >> nLenExpr;
 
     // Namen einlesen
-    String aName( aIn.ReadRawByteString( eQuellChar, nLenName ) );
+    String aName( aIn.ReadRawByteString( nLenName ) );
     sal_Char cFirstNameChar = ( sal_Char ) aName.GetChar( 0 );
 
     if( nLenName == 1 && cFirstNameChar < EXC_BUILTIN_UNKNOWN )
@@ -1973,7 +1973,7 @@ void ImportExcel::Font34( void )
     aIn.Ignore( 1 );
     aIn >> nIndexCol;
 
-    pExcRoot->pFontBuffer->NewFont( nHeight, nAttr0, nIndexCol, aIn.ReadByteString( eQuellChar, FALSE ) );
+    pExcRoot->pFontBuffer->NewFont( nHeight, nAttr0, nIndexCol, aIn.ReadByteString( FALSE ) );
 }
 
 
@@ -2170,7 +2170,7 @@ void ImportExcel::Bof4( void )
 void ImportExcel::Format4( void )
 {
     aIn.Ignore( 2 );
-    pValueFormBuffer->NewValueFormat( aIn.ReadByteString( eQuellChar, FALSE ) );
+    pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
 }
 
 
@@ -2625,7 +2625,7 @@ void ImportExcel::GetHF( BOOL bHeader )
 
 void ImportExcel::GetHFString( String& rStr )
 {
-    aIn.AppendByteString( rStr, eQuellChar, FALSE );
+    aIn.AppendByteString( rStr, FALSE );
 }
 
 
@@ -2853,26 +2853,24 @@ void ImportExcel::PostDocLoad( void )
 }
 
 
-void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, ByteString& r, const UINT16 nXF )
+void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, const UINT16 nXF )
 {
     if( nR <= MAXROW && nC <= MAXCOL )
     {
         if( r.Len() )
         {
-            String                  aStr( r, eQuellChar );
-
             ScBaseCell*             pZelle;
 
             if( pExcRoot->pXF_Buffer->HasAttribSuperOrSubscript( nXF ) )
             {// jetzt kommt 'ne Edit-Engine in's Spiel!
-                EditTextObject*     pTObj = CreateFormText( 0, aStr, nXF );
+                EditTextObject*     pTObj = CreateFormText( 0, r, nXF );
 
                 pZelle = new ScEditCell( pTObj, pD, GetEdEng().GetEditTextObjectPool() );
 
                 delete pTObj;
             }
             else
-                pZelle = ScBaseCell::CreateTextCell( aStr, pD );
+                pZelle = ScBaseCell::CreateTextCell( r, pD );
 
             pD->PutCell( nC, nR, nTab, pZelle, ( BOOL ) TRUE );
         }

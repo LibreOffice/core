@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-22 11:46:27 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
     const BOOL              bRangeName = eFT == FT_RangeName;
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
-    const CharSet           eCharSet = *pExcRoot->pCharset;
     UINT32                  nExtCnt = 0;
 
     SingleRefData           aSRD;
@@ -395,7 +394,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;        // und?
                 aString.Erase();
-                aIn.AppendUniString( aString, eCharSet, nLen ); // reads Grbit even if nLen==0
+                aIn.AppendUniString( aString, nLen ); // reads Grbit even if nLen==0
 
                 aStack << aPool.Store( aString );
                 break;

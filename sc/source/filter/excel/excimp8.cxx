@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ void TxoCont::ReadCont( XclImpStream& rStrm, RootData& rRootData, ScEditEngineDe
             if( !pText )
             {
                 pText = new String;
-                rStrm.AppendUniString( *pText, *rRootData.pCharset, nTextLen );
+                rStrm.AppendUniString( *pText, nTextLen );
             }
         }
 
@@ -742,7 +742,7 @@ void TxoCont::ReadCont( XclImpStream& rStrm, RootData& rRootData, ScEditEngineDe
                 aMemStrm << nChar << nFont;
             }
 
-            XclImpStream aImpStrm( aMemStrm, TRUE );
+            XclImpStream aImpStrm( aMemStrm, rRootData.pCharset, TRUE );
             aImpStrm.StartNextRecord();
             ShStrTabFormEntry aHelpObj( *pText, aImpStrm, nFormCnt );
 
@@ -1305,7 +1305,7 @@ void ImportExcel8::RecString( void )
 {
     if( pLastFormCell )
     {
-        pLastFormCell->SetString( aIn.ReadUniString( eQuellChar ) );
+        pLastFormCell->SetString( aIn.ReadUniString() );
 
         pLastFormCell = NULL;
     }
@@ -1417,7 +1417,7 @@ void ImportExcel8::Note( void )
 void ImportExcel8::Format( void )
 {
     UINT16  nInd = aIn.ReaduInt16();
-    pValueFormBuffer->NewValueFormat( nInd, aIn.ReadUniString( eQuellChar ) );
+    pValueFormBuffer->NewValueFormat( nInd, aIn.ReadUniString() );
 }
 
 
@@ -1429,7 +1429,7 @@ void ImportExcel8::Externname( void )
 
     aIn >> nOpt >> nRes >> nLen;
 
-    String aName( aIn.ReadUniString( eQuellChar, nLen ) );
+    String aName( aIn.ReadUniString( nLen ) );
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {
@@ -1461,7 +1461,7 @@ void ImportExcel8::Font( void )
 
     aIn >> nLen;
 
-    String aName( aIn.ReadUniString( eQuellChar, nLen ) );
+    String aName( aIn.ReadUniString( nLen ) );
 
     // Font in Pool batschen
     pExcRoot->pFontBuffer->NewFont(
@@ -1656,7 +1656,7 @@ void ImportExcel8::Boundsheet( void )
     aIn.Ignore( 4 );
     aIn >> nGrbit >> nLen;
 
-    String aName( aIn.ReadUniString( eQuellChar, nLen ) );
+    String aName( aIn.ReadUniString( nLen ) );
 
     ScFilterTools::ConvertName( aName );
     *pExcRoot->pTabNameBuff << aName;
@@ -1968,7 +1968,7 @@ void ImportExcel8::Sst( void )
 
     while( aIn.GetRecLeft() )
     {
-        pEntry = XclImpHelper::CreateUnicodeEntry( aIn, eQuellChar );
+        pEntry = XclImpHelper::CreateUnicodeEntry( aIn );
         aSharedStringTable.Append( pEntry );
     }
 }
@@ -2070,7 +2070,7 @@ void ImportExcel8::Label( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ShStrTabEntry*  p = XclImpHelper::CreateUnicodeEntry( aIn, eQuellChar );
+        ShStrTabEntry*  p = XclImpHelper::CreateUnicodeEntry( aIn );
 
         ScBaseCell*     pCell = CreateCellFromShStrTabEntry( p, nXF );
         if( pCell )
@@ -2125,7 +2125,7 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
 {
     if( bHasBasic )
     {
-        String aName( aIn.ReadUniString( eQuellChar ) );
+        String aName( aIn.ReadUniString() );
 
         DBG_ASSERT( pExcRoot->pExtDocOpt, "-ImportExcel8::Codename(): nothing there to store!" );
 
@@ -2143,10 +2143,10 @@ void ImportExcel8::Dv( void )
 
     aIn >> nFlags;
 
-    String      aPromptTitle( aIn.ReadUniString( eQuellChar ) );
-    String      aErrorTitle( aIn.ReadUniString( eQuellChar ) );
-    String      aPromptMessage( aIn.ReadUniString( eQuellChar ) );
-    String      aErrorMessage( aIn.ReadUniString( eQuellChar ) );
+    String      aPromptTitle( aIn.ReadUniString() );
+    String      aErrorTitle( aIn.ReadUniString() );
+    String      aPromptMessage( aIn.ReadUniString() );
+    String      aErrorMessage( aIn.ReadUniString() );
 
     // vals
     if( aIn.GetRecLeft() > 8 )
@@ -2289,7 +2289,7 @@ void ImportExcel8::Hlink( void )
     if( nFlags & EXC_HLINK_NET )
     {
         aIn >> nStrLen;
-        pLongname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16) nStrLen, TRUE ) );
+        pLongname = new String( aIn.ReadRawUniString( (UINT16) nStrLen, TRUE ) );
         lcl_GetAbs( *pLongname, 0, pD->GetDocumentShell() );
     }
     // file link or URL
@@ -2303,14 +2303,14 @@ void ImportExcel8::Hlink( void )
             {
                 aIn.Ignore( 12 );
                 aIn >> nLevel >> nStrLen;
-                pShortname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16) nStrLen, FALSE ) );
+                pShortname = new String( aIn.ReadRawUniString( (UINT16) nStrLen, FALSE ) );
                 aIn.Ignore( 24 );
                 aIn >> nStrLen;
                 if( nStrLen )
                 {
                     aIn >> nStrLen;
                     aIn.Ignore( 2 );
-                    pLongname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16)(nStrLen >> 1), TRUE ) );
+                    pLongname = new String( aIn.ReadRawUniString( (UINT16)(nStrLen >> 1), TRUE ) );
                     lcl_GetAbs( *pLongname, nLevel, pD->GetDocumentShell() );
                 }
                 else
@@ -2321,7 +2321,7 @@ void ImportExcel8::Hlink( void )
             {
                 aIn.Ignore( 12 );
                 aIn >> nStrLen;
-                pLongname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16)(nStrLen >> 1), TRUE ) );
+                pLongname = new String( aIn.ReadRawUniString( (UINT16)(nStrLen >> 1), TRUE ) );
             }
             break;
             default:
@@ -2333,7 +2333,7 @@ void ImportExcel8::Hlink( void )
     if( nFlags & EXC_HLINK_MARK )
     {
         aIn >> nStrLen;
-        pTextmark = new String( aIn.ReadRawUniString( eQuellChar, (UINT16) nStrLen, TRUE ) );
+        pTextmark = new String( aIn.ReadRawUniString( (UINT16) nStrLen, TRUE ) );
     }
 
     DBG_ASSERT( !aIn.GetRecLeft(), "ImportExcel8::HLink - record size mismatch" );
@@ -2413,7 +2413,7 @@ void ImportExcel8::Name( void )
     nLenSeekRel += nLen;
 
     // Namen einlesen
-    String              aName( aIn.ReadUniString( eQuellChar, nLenName ) );
+    String              aName( aIn.ReadUniString( nLenName ) );
     // jetzt steht Lesemarke an der Formel
 
     sal_Unicode         cFirstChar = aName.GetChar( 0 );
@@ -2494,14 +2494,14 @@ void ImportExcel8::Style( void )
     {
         nXf &= 0x0FFF;  // only bit 0...11 is used for XF-index
 
-        pExcRoot->pXF_Buffer->SetStyle( nXf, aIn.ReadUniString( eQuellChar ) );
+        pExcRoot->pXF_Buffer->SetStyle( nXf, aIn.ReadUniString() );
     }
 }
 
 
 void ImportExcel8::GetHFString( String& rStr )
 {
-    aIn.AppendUniString( rStr, eQuellChar );
+    aIn.AppendUniString( rStr );
 }
 
 
@@ -2851,7 +2851,7 @@ void ImportExcel8::Crn( void )
                 pCrn = new XclImpCrnDouble( nCol, nRow, aIn.ReadDouble() );
             break;
             case EXC_CRN_STRING:
-                pCrn = new XclImpCrnString( nCol, nRow, aIn.ReadUniString( eQuellChar ) );
+                pCrn = new XclImpCrnString( nCol, nRow, aIn.ReadUniString() );
             break;
             case EXC_CRN_BOOL:
             case EXC_CRN_ERROR:
@@ -2973,7 +2973,7 @@ void XclImpSupbook::ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rS
 //static
 void XclImpSupbook::ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName )
 {
-    rStrm.AppendUniString( rTabName, *rExcRoot.pCharset );
+    rStrm.AppendUniString( rTabName );
     ScFilterTools::ConvertName( rTabName );
 }
 
@@ -3113,7 +3113,7 @@ const XclImpSupbook* XclImpExternsheetBuffer::GetSupbook( ULONG nXtiIndex ) cons
 void ImportExcel8::Qsi()
 {
     aIn.Ignore( 10 );
-    String aName( aIn.ReadUniString( eQuellChar ) );
+    String aName( aIn.ReadUniString() );
     USHORT nIndex;
     if( pExcRoot->pScRangeName->SearchName( aName, nIndex ) )
     {
@@ -3155,7 +3155,7 @@ void ImportExcel8::SXString()
     if( !pQuery ) return;
 
     pQuery->aFilename.Erase();
-    aIn.AppendUniString( pQuery->aFilename, eQuellChar );
+    aIn.AppendUniString( pQuery->aFilename );
 }
 
 void ImportExcel8::WebQrySettings()
@@ -3182,7 +3182,7 @@ void ImportExcel8::WebQryTables()
     {
         aIn.Ignore( 4 );
         pQuery->aTables.Erase();
-        aIn.AppendUniString( pQuery->aTables, eQuellChar );
+        aIn.AppendUniString( pQuery->aTables );
         pQuery->ConvertTableNames();
     }
 }
@@ -3584,7 +3584,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 
         for( nE = 0; nE < 2; nE++ )
             if( nStrLen[ nE ] && pEntryStr[ nE ] )
-                pEntryStr[ nE ]->Assign( rStrm.ReadUniString( *pExcRoot->pCharset, nStrLen[ nE ] ) );
+                pEntryStr[ nE ]->Assign( rStrm.ReadUniString( nStrLen[ nE ] ) );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:15:14 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,8 +804,6 @@ void ExcScenarioCell::SetValue( const String& r )
 
 ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( *rR.pAktTab )
 {
-    const CharSet   eSrc = *rR.pCharset;
-
     UINT16          nCref;
     UINT8           nName, nComment;
 
@@ -815,17 +813,17 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( *rR.pA
     rIn.Ignore( 1 );        // statt nUser!
 
     if( nName )
-        pName = new String( rIn.ReadUniString( eSrc, nName ) );
+        pName = new String( rIn.ReadUniString( nName ) );
     else
     {
         pName = new String( RTL_CONSTASCII_USTRINGPARAM( "Scenery" ) );
         rIn.Ignore( 1 );
     }
 
-    pUserName = new String( rIn.ReadUniString( eSrc ) );
+    pUserName = new String( rIn.ReadUniString() );
 
     if( nComment )
-        pComment = new String( rIn.ReadUniString( eSrc ) );
+        pComment = new String( rIn.ReadUniString() );
     else
         pComment = new String;
 
@@ -844,7 +842,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( *rR.pA
     ExcScenarioCell*    p = EXCSCFIRST();
     while( p )
     {
-        p->SetValue( rIn.ReadUniString( eSrc ) );
+        p->SetValue( rIn.ReadUniString() );
 
         p = EXCSCNEXT();
     }

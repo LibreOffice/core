@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:45:54 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
         if( (pInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != ~((ULONG)0)) )
         {
             pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pStrm = new XclImpStream( *pInStrm );
+            pStrm = new XclImpStream( *pInStrm, pExcRoot->pCharset );
             if( pStrm )
             {
                 pChangeTrack = new ScChangeTrack( pExcRoot->pDoc );
@@ -254,7 +254,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     SvMemoryStream aMemStrm;
     aMemStrm << (sal_uInt16) 0x0001 << nFmlSize;
     pStrm->CopyToStream( aMemStrm, nFmlSize );
-    XclImpStream aFmlaStrm( aMemStrm );
+    XclImpStream aFmlaStrm( aMemStrm, pExcRoot->pCharset );
     aFmlaStrm.StartNextRecord();
     XclImpChTrFmlConverter aFmlConv( pExcRoot, aFmlaStrm, *this );
 
@@ -295,7 +295,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_STRING:
         {
-            String sString( pStrm->ReadUniString( *pExcRoot->pCharset ) );
+            String sString( pStrm->ReadUniString() );
             if( pStrm->IsValid() )
                 rpCell = new ScStringCell( sString );
         }
@@ -362,7 +362,7 @@ void XclImpChangeTrack::ReadChTrInsert()
 void XclImpChangeTrack::ReadChTrInfo()
 {
     pStrm->Ignore( 32 );
-    String sUsername( pStrm->ReadUniString( *pExcRoot->pCharset ) );
+    String sUsername( pStrm->ReadUniString() );
     if( !pStrm->IsValid() ) return;
 
     if( sUsername.Len() )

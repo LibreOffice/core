@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-07 15:37:38 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,111 +525,65 @@ static void AddString( ByteString& t, XclImpStream& r, const UINT16 nLen )
 }
 
 
-static BOOL AddUNICODEString( ByteString& t, XclImpStream& r, const BOOL b = TRUE, UINT16 n = 0 )
-{ // ByteString& rInOut, SvStream& rInStream, const BOOL bWordLen, UINT16 nPrefetchLen )
-    BOOL        bRet = TRUE;
+static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL b16BitLen = TRUE, UINT16 nLen = 0 )
+{
+    BOOL bRet = TRUE;
 
-    if( !n )
-    {
-        if( b )
-            r >> n;
-        else
-            n = r.ReaduInt8();
-    }
-    UINT8   nGrbit;
+    if( !nLen )
+        nLen = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+    UINT8 nGrbit = rStrm.ReaduInt8();
+
     UINT32  nExtLen;
     UINT16  nCrun;
     BOOL    b16Bit, bFarEast, bRichString;
-    r >> nGrbit;
-    ULONG nSeek = r.SeekUniStringData( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
+    ULONG   nSeek = rStrm.ReadUniStringExtHeader( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
 
-    const sal_Char* p;
-    t += "[l=";
-    __AddDec( t, n );
-    t += ", f=";
-    __AddHex( t, nGrbit );
-    t += " (";
-    if( b16Bit )
-        p = "16-Bit, ";
+    rStr += "[l=";
+    __AddDec( rStr, nLen );
+    rStr += ", f=";
+    __AddHex( rStr, nGrbit );
+    rStr += " (";
+    rStr += b16Bit ? "16-Bit, " : "8-Bit, ";
+
+    if( bRichString && bFarEast )
+        rStr += "FarEast RichString";
+    else if( bRichString && !bFarEast )
+        rStr += "RichString";
+    else if ( !bRichString && bFarEast )
+        rStr += "FarEast";
     else
-        p = "8-Bit, ";
-    t += p;
+        rStr += "Standard";
+    rStr += ")]: \'";
 
-    p = NULL;
-    if( bRichString )
-    {
-        p = "Rich-ByteString";
-    }
-    if( bFarEast )
-    {
-        if( p )
-            p = "Far East Rich-ByteString";
-        else
-            p = "Far East";
-    }
-    if( !p )
-        p = "standard";
-    t += p;
-    t += ")]: \'";
-
-    UINT8           nC;
-    const UINT32    nLimit = 256;
-    const BOOL      bCut = n > nLimit;
-    ULONG           nRest = 0;
-
-    if( bCut )
-    {
-        nRest = (n - nLimit) * (b16Bit ? 2 : 1);
-        n = nLimit;
-    }
-
-    while( n )
-    {
-        if( b16Bit )
-            nC = (UINT8) r.ReaduInt16();
-        else
-            r >> nC;
-        if( nC < ' ' )
-        {
-            t += '<';
-            __AddHex( t, nC );
-            t += '>';
-        }
-        else
-            t += ( sal_Char ) nC;
-        n--;
-    }
-
-    if( nRest )
-        r.Ignore( nRest );
-
-    t += '\'';
-    if( bCut )
-        t += "...";
+    ByteString aData( rStrm.ReadRawUniString( nLen, b16Bit ), RTL_TEXTENCODING_MS_1252 );
+    rStr += aData.Copy( 0, 255 );
+    rStr += '\'';
+    if( aData.Len() > 255 )
+        rStr += "...";
 
     if( nCrun )
     {
-        t += " + ";
-        __AddDec( t, nCrun );
-        t += " format blocks (";
+        rStr += " + ";
+        __AddDec( rStr, nCrun );
+        rStr += " format blocks (";
         nCrun *= 4;
-        __AddDec( t, nCrun );
-        t += " Bytes)";
+        __AddDec( rStr, nCrun );
+        rStr += " Bytes)";
     }
     if( nExtLen )
     {
-        t += " + ";
-        __AddDec( t, nExtLen );
-        t += " Byte extended info";
+        rStr += " + ";
+        __AddDec( rStr, nExtLen );
+        rStr += " Byte extended info";
     }
 
-    if( nSeek > 2048  )
+    if( nSeek > 2048 )
     {
-        t += " (Gruetze!)";
+        rStr += " (Gruetze!)";
         bRet = FALSE;
     }
 
-    r.SkipUniStringExt( nSeek );
+    rStrm.SkipUniStringExtData( nSeek );
 
     return bRet;
 }
@@ -1100,7 +1054,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddDec( t, nNameText );
                 ADDTEXT( "] = " );
                 if( nNameText )
-                    sTemp = GETSTR( rIn.ReadUniString( *pExcRoot->pCharset, nNameText ) );
+                    sTemp = GETSTR( rIn.ReadUniString( nNameText ) );
                 else
                     rIn >> n8;
                 if( (__nFlags & 0x0020) && (nNameText == 1) )
@@ -4371,7 +4325,8 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
     Print( sOutput );
 
     XclImpStream* pOldStream = pIn;
-    pIn = new XclImpStream( *pStream );
+    CharSet eCharSet = RTL_TEXTENCODING_MS_1252;
+    pIn = new XclImpStream( *pStream, &eCharSet );
     XclImpStream& rIn = *pIn;
     rIn.SetWarningMode( bWarnings );
 
@@ -5189,7 +5144,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += "] = \"";
 
                 if( nLen )
-                    t += GETSTR( pIn->ReadUniString( *pExcRoot->pCharset, nLen ) );
+                    t += GETSTR( pIn->ReadUniString( nLen ) );
                 else
                     pIn->Ignore( 1 );
                 t += "\"";

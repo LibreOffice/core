@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:57:14 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ inline sal_uInt16 XclImpChangeTrack::ReadTabNum()
 
 inline void XclImpChangeTrack::ReadString( String& rString )
 {
-    pStrm->AppendUniString( rString, *pExcRoot->pCharset );
+    pStrm->AppendUniString( rString );
 }
 
 inline void XclImpChangeTrack::IgnoreString()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:53:19 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ protected:
 
     virtual void            PostDocLoad( void );
     virtual void            SetTextCell( const UINT16 nCol, const UINT16 nRow,
-                                        ByteString& rUnconvertedText, const UINT16 nXF );
+                                        String& rUnconvertedText, const UINT16 nXF );
                                             // Achtung: rUnconvertedText wird moeglicherweise veraendert
     UINT16                  CalcColWidth( const UINT16 nExcColWidth );
 public:

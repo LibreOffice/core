@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-04 09:53:11 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
     const BOOL      bRangeName = eFT == FT_RangeName;
     const BOOL      bSharedFormula = eFT == FT_SharedFormula;
     const BOOL      bRNorSF = bRangeName || bSharedFormula;
-    const CharSet   eCharSet = *pExcRoot->pCharset;
 
     SingleRefData   aSRD;
     aSRD.InitFlags();
@@ -425,7 +424,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;
                 aString.Erase();
-                aIn.AppendRawByteString( aString, eCharSet, nLen );
+                aIn.AppendRawByteString( aString, nLen );
 
                 aStack << aPool.Store( aString );
                 break;
