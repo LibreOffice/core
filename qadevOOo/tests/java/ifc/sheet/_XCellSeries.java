@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCellSeries.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:59:32 $
+ *  last change:$Date: 2005-02-24 17:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,10 @@ import com.sun.star.uno.UnoRuntime;
 public class _XCellSeries extends MultiMethodTest {
     public XCellSeries oObj = null;
     protected XSpreadsheet oSheet = null;
-    boolean isSpreadSheet = false;
+    protected boolean isSpreadSheet = false;
+    protected boolean fillAuto = true;
+    protected boolean forceFillAuto = false;
+
 
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
@@ -89,14 +92,23 @@ public class _XCellSeries extends MultiMethodTest {
             } else {
                 isSpreadSheet = true;
             }
+        }
 
+        Boolean myFillAuto = (Boolean) tEnv.getObjRelation("XCELLSERIES_FILLAUTO");
+
+        if (myFillAuto != null) fillAuto = myFillAuto.booleanValue();
+
+        if (tParam.containsKey("force_fillauto")){
+            fillAuto = tParam.getBool("force_fillauto");
+            forceFillAuto = tParam.getBool("force_fillauto");
         }
     }
 
     public void _fillAuto() {
 
-        if (isSpreadSheet) {
+        if ((isSpreadSheet && !forceFillAuto) || !fillAuto) {
             log.println("This method consumes to much time for a complete SpreadSheet");
+            log.println("Please use parameter '-force_fillauto true' to force this test");
             tRes.tested("fillAuto()",Status.skipped(true));
             return;
         }
