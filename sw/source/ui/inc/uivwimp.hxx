@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:23:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _UIVWIMP_HXX
 #define _UIVWIMP_HXX
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
 
 #ifndef _SWVIEW_HXX //autogen
 #include <view.hxx>
@@ -156,7 +160,7 @@ class SwView_Impl
     // temporary document for printing text of selection / multi selection
     // in PDF export.
     SfxObjectShellRef           xTmpSelDocSh;
-    SvEmbeddedObjectRef         aEmbeddedObjRef;
+    SfxObjectShellRef           aEmbeddedObjRef;
 
     SwView* pView;
     SwScannerEventListener*     pScanEvtLstnr;
@@ -184,7 +188,8 @@ public:
     void                            AddClipboardListener();
 
     SfxObjectShellRef &             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
-    SvEmbeddedObjectRef &           GetEmbeddedObjRef()     { return (SvEmbeddedObjectRef&)(long&)aEmbeddedObjRef; }
+
+    SfxObjectShellRef&              GetEmbeddedObjRef()     { return (SfxObjectShellRef&)(long&)aEmbeddedObjRef; }
 
     void                            AddTransferable(SwTransferable& rTransferable);
 
