@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 13:18:45 $
+ *  last change: $Author: th $ $Date: 2001-02-06 20:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ static int ImplStrFullMatch( const XubString& rStr1, const char* pStr2 )
         pStr1++;
         pStr2++;
     }
-    return !(*pStr1);
+    return !(*pStr2);
 }
 
 // =======================================================================
@@ -535,6 +535,7 @@ static const char* aImplRomanMatchList[] =
     "newyork",
     "palatino",
     "timmons",
+    "serif",
     NULL
 };
 
@@ -796,6 +797,7 @@ static const char* aImplStdSwissList[] =
     "lucida",
     "geneva",
     "helmet",
+    "sansserif",
     NULL
 };
 
@@ -812,6 +814,7 @@ static const char* aImplStdRomanList[] =
     "bookman",
     "garamond",
     "timmons",
+    "serif",
     NULL
 };
 
@@ -823,6 +826,7 @@ static const char* aImplStdFixedList[] =
     "lucidatypewriter",
     "lucida sans typewriter",
     "lucidasanstypewriter",
+    "monospaced",
     NULL
 };
 
@@ -1806,7 +1810,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_ROMAN );
             // Wenn alles nichts hilft, nehmen wir den ersten
             if ( !pFoundData )
-                pFontList->Get( 0 );
+                pFoundData = pFontList->Get( 0 );
         }
 #else
         // 1. Token vom Fontnamen nehmen und Sonderzeichen entfernen
