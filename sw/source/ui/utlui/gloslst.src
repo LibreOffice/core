@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯Ğ¡×é";
         Text[ russian ] = "Àâòîòåêñò - Ãğóïïà";
         Text[ polish ] = "Autotekst - Grupa";
-        Text[ japanese ] = "“ü—Íx‰‡  ¸ŞÙ°Ìß";
+        Text[ japanese ] = "“ü—Íx‰‡¸ŞÙ°Ìß";
         Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¤p²Õ";
         Text[ arabic ] = "ãÌãæÚÉ äÕ ÊáŞÇÆí";
         Text[ greek ] = "ÏìÜäá ÁõôïÊåéìİíïõ";
