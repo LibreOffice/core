@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 
 #ifndef _SC_XCLTOOLS_HXX
 #include "XclTools.hxx"
+#endif
+#ifndef _SC_XCLEXPDOCCONTENT_HXX
+#include "XclExpDocContent.hxx"
 #endif
 #ifndef _SC_XCLEXPEXTERNSHEET_HXX
 #include "XclExpExternsheet.hxx"
@@ -617,6 +620,8 @@ void ExcTable::FillAsTable( void )
     ExcArrays               aShrdFmlaList;
     ExcShrdFmla*            pShrdFmla = NULL;
 
+    XclExpRecDval*          pRecDval = NULL;        // data validation
+
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
     DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
@@ -1019,9 +1024,9 @@ void ExcTable::FillAsTable( void )
                 rR.pNoteRecs->Add( new XclNote( rR, aScPos, sNoteText, sNoteAuthor ) );
         }
 
-        // merged cells
-        if( pPatt )
+        if( pPatt && (rR.eDateiTyp >= Biff8) )
         {
+            // merged cells
             ScMergeAttr& rItem = (ScMergeAttr&) pPatt->GetItem( ATTR_MERGE );
             if( rItem.IsMerged() )
             {
@@ -1030,6 +1035,18 @@ void ExcTable::FillAsTable( void )
                             (pLastRKMulRK ? pLastRKMulRK->GetXF() : 0)));
                 for( UINT16 iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
                     rR.pCellMerging->Append( iCol, rItem.GetColMerge(), nRow, rItem.GetRowMerge(), nXF );
+            }
+
+            // data validation
+            const SfxPoolItem* pItem;
+            if( pPatt->GetItemSet().GetItemState( ATTR_VALIDDATA, FALSE, &pItem ) == SFX_ITEM_SET )
+            {
+                sal_uInt32 nHandle = ((const SfxUInt32Item*)pItem)->GetValue();
+                if( !pRecDval )
+                    pRecDval = new XclExpRecDval( rR );
+                ScRange aRange( aScPos );
+                aRange.aEnd.SetCol( aIterator.GetEndCol() );
+                pRecDval->InsertCellRange( aRange, nHandle );
             }
         }
 
@@ -1066,6 +1083,10 @@ void ExcTable::FillAsTable( void )
     // insert merged cells
     Add( rR.pCellMerging );
     rR.pCellMerging = NULL;
+    // insert data validation
+    if( pRecDval )
+        Add( pRecDval );
+    pRecDval = NULL;
     // update dimensions
     pDimensions->SetLimits( nFirstCol, nFirstRow, nLastCol, nLastRow );
     // update formula cells for multiple operations

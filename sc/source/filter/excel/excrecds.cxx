@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-04 12:59:00 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,53 @@ void ExcRecord::Save( XclExpStream& rStrm )
 
 
 
+// XclExpRecordBase ===========================================================
+
+XclExpRecordBase::~XclExpRecordBase()
+{
+}
+
+void XclExpRecordBase::Save( XclExpStream& rStrm )
+{
+}
+
+sal_uInt16 XclExpRecordBase::GetNum() const
+{
+    return 0;
+}
+
+sal_uInt32 XclExpRecordBase::GetLen() const
+{
+    return 0;
+}
+
+
+// XclExpRecord ===============================================================
+
+XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_uInt32 nRecSize ) :
+    mnRecId( nRecId ),
+    mnRecSize( nRecSize )
+{
+}
+
+XclExpRecord::~XclExpRecord()
+{
+}
+
+void XclExpRecord::WriteBody( XclExpStream& rStrm )
+{
+}
+
+void XclExpRecord::Save( XclExpStream& rStrm )
+{
+    DBG_ASSERT( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - Record ID uninitialized" );
+    rStrm.StartRecord( mnRecId, mnRecSize );
+    WriteBody( rStrm );
+    rStrm.EndRecord();
+}
+
+
+// ============================================================================
 //--------------------------------------------------------- class ExcEmptyRec -
 
 void ExcEmptyRec::Save( XclExpStream& rStrm )

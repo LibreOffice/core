@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:53:56 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,7 +1000,7 @@ void ImportExcel8::Dval()
     // drop down list object
     sal_uInt32 nObjId;
     aIn >> nObjId;
-    if( nObjId <= 0xFFFFFFFF )
+    if( nObjId < 0xFFFFFFFF )
         maIgnoreObjList.Append( nObjId );
 }
 

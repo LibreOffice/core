@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-04 12:58:14 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 12:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,108 @@ public:
 };
 
 
+// XclExpRecordBase ===========================================================
+
+/** Base class for all Excel records. Derive from this class to implement any
+    functionality to perform during saving the records expect really writing a
+    record (i.e. write a list of records contained in the class). Derive from
+    XclExpRecord instead from this class to write common records. */
+class XclExpRecordBase : public ExcRecord
+{
+private:
+    virtual sal_uInt16          GetNum() const;
+    virtual sal_uInt32          GetLen() const;
+
+public:
+    virtual                     ~XclExpRecordBase();
+
+    /** Overwrite this method to do any operation on saving the record list. */
+    virtual void                Save( XclExpStream& rStrm );
+};
+
+
+// XclExpRecord ===============================================================
+
+/** Base class for single records. This class handles writing the record
+    header. Derived classes only have to write the record body. Calculating the
+    record size before saving optimizes the write process (the stream does not
+    have to seek back and update the written record size). But it is not
+    required to calculate a valid size (maybe it would be too complex or just
+    impossible until the record is really written). */
+class XclExpRecord : public XclExpRecordBase
+{
+private:
+    sal_uInt16                  mnRecId;        /// The record ID.
+    sal_uInt32                  mnRecSize;      /// The predicted record size.
+
+    /** Writes the body of the record (without record header). Usually this
+        method will be overwritten by derived classes. */
+    virtual void                WriteBody( XclExpStream& rStrm );
+
+public:
+    /** @param nRecId  The record ID of this record. May be set later with SetRecId().
+        @param nRecSize  The predicted record size. May be set later with SetRecSize(). */
+                                XclExpRecord(
+                                    sal_uInt16 nRecId = EXC_ID_UNKNOWN,
+                                    sal_uInt32 nRecSize = 0 );
+
+    virtual                     ~XclExpRecord();
+
+    /** @return  The current record ID. */
+    inline sal_uInt16           GetRecId() const                    { return mnRecId; }
+    /** Sets a new record ID. */
+    inline void                 SetRecId( sal_uInt16 nRecId )       { mnRecId = nRecId; }
+
+    /** @return  The current record size prediction. */
+    inline sal_uInt32           GetRecSize() const                  { return mnRecSize; }
+    /** Sets a new record size prediction. */
+    inline void                 SetRecSize( sal_uInt32 nRecSize )   { mnRecSize = nRecSize; }
+
+    /** Writes the record header and calls WriteContent(). */
+    virtual void                Save( XclExpStream& rStrm );
+};
+
+
+// XclExpEmptyRecord ==========================================================
+
+/** A record without body. Only the record ID and the size 0 will be written. */
+class XclExpEmptyRecord : public XclExpRecord
+{
+public:
+    /** @param nRecId  The record ID of this record. */
+    inline                      XclExpEmptyRecord( sal_uInt16 nRecId );
+};
+
+
+inline XclExpEmptyRecord::XclExpEmptyRecord( sal_uInt16 nRecId ) :
+    XclExpRecord( nRecId, 0 )
+{
+}
+
+
+// XclExpRecordList ===========================================================
+
+/** A list of Excel record objects. Provides saving the compete list. This
+    class is derived from XclExpRecordBase, so it can be used as record in
+    another record list. The class RecType must contain a
+    Save( XclExpStream& ) method. */
+template< typename RecType >
+class XclExpRecordList : public XclExpRecordBase, public ScfObjList< RecType >
+{
+public:
+    /** Writes the complete record list. */
+    virtual void                Save( XclExpStream& rStrm );
+};
+
+template< typename RecType >
+void XclExpRecordList< RecType >::Save( XclExpStream& rStrm )
+{
+    for( RecType* pRec = First(); pRec; pRec = Next() )
+        pRec->Save( rStrm );
+}
+
+
+// ============================================================================
 //--------------------------------------------------------- class ExcEmptyRec -
 
 class ExcEmptyRec : public ExcRecord
