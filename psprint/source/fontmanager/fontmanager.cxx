@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 13:36:10 $
+ *  last change: $Author: pl $ $Date: 2001-06-28 09:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,7 +1159,7 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
     NameRecord* pNameRecord = (NameRecord*)pRecord;
     OUString aValue;
     if(
-       ( pNameRecord->platformID == 3 && pNameRecord->encodingID == 1 )  // MS, Unicode
+       ( pNameRecord->platformID == 3 && ( pNameRecord->encodingID == 0 || pNameRecord->encodingID == 1 ) )  // MS, Unicode
        ||
        ( pNameRecord->platformID == 0 ) // Apple, Unicode
        )
@@ -1549,9 +1549,13 @@ void PrintFontManager::initialize( void* pInitDisplay )
                         ::std::list< PrintFont* > aNewFonts;
                         if( analyzeFontFile( nDirID, aFileName, aXLFDs.size() ? false : true, aXLFDs, aNewFonts ) )
                         {
+                            bool bUpdateFont = aXLFDs.size() < aNewFonts.size();
                             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
                             {
-                                m_aFonts[ m_nNextFontID++ ] = *it;
+                                fontID aFont = m_nNextFontID++;
+                                m_aFonts[ aFont ] = *it;
+                                if( bUpdateFont && isPrivateFontFile( aFont ) )
+                                    changeFontProperties( aFont, OStringToOUString( getXLFD( *it ), RTL_TEXTENCODING_UTF8 ) );
 #ifdef DEBUG
                                 fprintf( stderr, "adding font \"%s\" from file \"%s/%s\"\n", OUStringToOString( m_pAtoms->getString( ATOM_FAMILYNAME, (*it)->m_nFamilyName ), RTL_TEXTENCODING_MS_1252 ).getStr(), aPath.getStr(), aFileName.getStr() );
 #endif
