@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 21:03:16 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 21:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2093,11 +2093,11 @@ TabPage TP_FRM_URL
         Text[ ENGLISH ] = "~Server-side Image Map" ;
         Text[ english_us ] = "~Server-side image map";
         Text[ portuguese ] = "~Server Site Image Map";
-        Text[ russian ] = "Клиентское отображение (Client-side image map)";
+        Text[ russian ] = "Серверное отображение (Server-side image map)";
         Text[ greek ] = "ДйбкпмйуфЮт";
         Text[ dutch ] = "~Server Site Image Map";
         Text[ french ] = "Image Map cфtй serveur";
-        Text[ spanish ] = "~Server site image map";
+        Text[ spanish ] = "Image map en la parte del ~servidor";
         Text[ finnish ] = "~Palvelinsivuston rakennekuva";
         Text[ italian ] = "Image Map dalla parte del ~Server";
         Text[ danish ] = "Server";
@@ -2124,7 +2124,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "РелЬфзт Site Image Map";
         Text[ dutch ] = "~Cliлnt Site Image Map";
         Text[ french ] = "Image Map cфtй client";
-        Text[ spanish ] = "~Client site Image Map";
+        Text[ spanish ] = "Image map en la parte ~cliente";
         Text[ finnish ] = "~Asiakassivuston rakennekuva";
         Text[ italian ] = "Image Map dalla parte del ~Client";
         Text[ danish ] = "Klient";
@@ -2535,6 +2535,7 @@ TabPage TP_FRM_ADD
         Text[ catalan ] = "Additional Setting";
     };
 };
+
 
 
 
