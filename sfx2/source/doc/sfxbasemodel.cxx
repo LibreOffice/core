@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-22 13:25:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,21 +435,25 @@ Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::ge
 
 Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() throw (RuntimeException)
 {
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNOQUERY );
-    if ( xPrintable.is() )
-        return xPrintable->getPrinter();
+    if( m_pData->m_pObjectShell.Is() )
+    {
+        Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
+        if ( xPrintable.is() )
+            return xPrintable->getPrinter();
+    }
     return Sequence< ::com::sun::star::beans::PropertyValue >();
 }
 
 Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException)
 {
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNOQUERY );
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->GetModel() : NULL, UNO_QUERY );
     return xPrintable;
 }
 
 void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
 {
-    m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2, NULL, NULL ) );
+    if( m_pData->m_pObjectShell.Is() )
+        m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2, NULL, NULL ) );
 }
 
 //________________________________________________________________________________________________________
@@ -657,7 +661,7 @@ REFERENCE< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( 
         throw DISPOSEDEXCEPTION();
 
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
-    if( !rxAccess.is() )
+    if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
     REFERENCE< XNAMECONTAINER > xRet;
@@ -678,7 +682,7 @@ void SAL_CALL SfxBaseModel::createLibrary( const OUSTRING& LibName, const OUSTRI
         throw DISPOSEDEXCEPTION();
 
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
-    if( !rxAccess.is() )
+    if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
     if( rxAccess.is() )
@@ -697,7 +701,7 @@ void SAL_CALL SfxBaseModel::addModule( const OUSTRING& LibraryName, const OUSTRI
         throw DISPOSEDEXCEPTION();
 
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
-    if( !rxAccess.is() )
+    if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
     if( rxAccess.is() )
@@ -716,7 +720,7 @@ void SAL_CALL SfxBaseModel::addDialog( const OUSTRING& LibraryName, const OUSTRI
         throw DISPOSEDEXCEPTION();
 
     REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
-    if( !rxAccess.is() )
+    if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
     if( rxAccess.is() )
@@ -1327,7 +1331,8 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
 
     // no own objections against closing!
     m_pData->m_bClosing = sal_True;
-    m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
+    if( m_pData->m_pObjectShell.Is() )
+        m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
     pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
     if (pContainer!=NULL)
     {
