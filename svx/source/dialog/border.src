@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-03-27 08:30:03 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 21:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@ TabPage RID_SVXPAGE_BORDER
     Text [ dutch ] = "Omranding" ;
     Text [ spanish ] = "Borde" ;
     Text [ english_us ] = "Borders" ;
-    Text[ chinese_simplified ] = "±ß¿ò";
+    Text[ chinese_simplified ] = "è¾¹æ¡†";
     Text[ russian ] = "Îáğàìëåíèå";
     Text[ polish ] = "Obramowanie";
-    Text[ japanese ] = "˜gü";
-    Text[ chinese_traditional ] = "Ãä®Ø";
+    Text[ japanese ] = "æ ç·š";
+    Text[ chinese_traditional ] = "é‚Šæ¡†";
     Text[ arabic ] = "ÇáÍÏæÏ";
     Text[ greek ] = "Ğåñßãñáììá";
-    Text[ korean ] = "Å×µÎ¸®";
+    Text[ korean ] = "í…Œë‘ë¦¬";
     Text[ turkish ] = "Kenarlık";
     Text[ language_user1 ] = " ";
     FixedLine FL_BORDER
@@ -105,24 +105,25 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Cornice" ;
         Text [ portuguese_brazilian ] = "Borda" ;
         Text [ portuguese ] = "Disposição de linhas" ;
-        Text [ finnish ] = "Linienanordnung" ;
+        Text [ finnish ] = "Viivojen järjestys" ;
         Text [ danish ] = "Ramme" ;
         Text [ french ] = "Disposition des lignes" ;
         Text [ swedish ] = "Linjeplacering" ;
         Text [ dutch ] = "Lijnen" ;
         Text [ spanish ] = "Disposición de líneas" ;
         Text [ english_us ] = "Line arrangement" ;
-        Text[ chinese_simplified ] = "ÏßÌõÅÅĞò";
+        Text[ chinese_simplified ] = "çº¿æ¡æ’åº";
         Text[ russian ] = "Ğàñïîëîæåíèå ëèíèè";
         Text[ polish ] = "Rozmieszczenie linii";
-        Text[ japanese ] = "ü‚ğˆø‚­ˆÊ’u";
-        Text[ chinese_traditional ] = "½u±ø±Æ§Ç";
+        Text[ japanese ] = "ç·šã‚’å¼•ãä½ç½®";
+        Text[ chinese_traditional ] = "ç·šæ¢æ’åº";
         Text[ arabic ] = "ßÇÏÑ";
         Text[ greek ] = "ÄéÜôáîç ãñáììşí";
-        Text[ korean ] = "¼± Á¤·Ä";
+        Text[ korean ] = "ì„  ì •ë ¬";
         Text[ turkish ] = "Çerçeve";
         Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
         Text[ catalan ] = "Marco";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     FixedText FT_DEFAULT
     {
@@ -130,6 +131,26 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 64, 8) ;
         Text = "~Standard" ;
         Text[ english_us ] = "~Default";
+        Text[ portuguese ] = "~Default";
+        Text[ russian ] = "~Default";
+        Text[ greek ] = "~Default";
+        Text[ dutch ] = "~Default";
+        Text[ french ] = "~Default";
+        Text[ spanish ] = "~Default";
+        Text[ finnish ] = "~Default";
+        Text[ italian ] = "~Default";
+        Text[ danish ] = "~Default";
+        Text[ swedish ] = "~Default";
+        Text[ polish ] = "~Default";
+        Text[ portuguese_brazilian ] = "~Default";
+        Text[ japanese ] = "~Default";
+        Text[ korean ] = "~Default";
+        Text[ chinese_simplified ] = "~Default";
+        Text[ chinese_traditional ] = "~Default";
+        Text[ turkish ] = "~Default";
+        Text[ arabic ] = "~Default";
+        Text[ catalan ] = "~Default";
+        Text[ thai ] = "~Default";
     };
     Control WIN_PRESETS
     {
@@ -145,6 +166,26 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 64, 8) ;
         Text = "~Benutzerdefiniert" ;
         Text[ english_us ] = "~User-defined";
+        Text[ portuguese ] = "~User-defined";
+        Text[ russian ] = "~User-defined";
+        Text[ greek ] = "~User-defined";
+        Text[ dutch ] = "~User-defined";
+        Text[ french ] = "~User-defined";
+        Text[ spanish ] = "~User-defined";
+        Text[ finnish ] = "~User-defined";
+        Text[ italian ] = "~User-defined";
+        Text[ danish ] = "~User-defined";
+        Text[ swedish ] = "~User-defined";
+        Text[ polish ] = "~User-defined";
+        Text[ portuguese_brazilian ] = "~User-defined";
+        Text[ japanese ] = "~User-defined";
+        Text[ korean ] = "~User-defined";
+        Text[ chinese_simplified ] = "~User-defined";
+        Text[ chinese_traditional ] = "~User-defined";
+        Text[ turkish ] = "~User-defined";
+        Text[ arabic ] = "~User-defined";
+        Text[ catalan ] = "~User-defined";
+        Text[ thai ] = "~User-defined";
     };
     Control WIN_FRAMESEL
     {
@@ -170,24 +211,25 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Linea" ;
         Text [ portuguese_brazilian ] = "Linhas" ;
         Text [ portuguese ] = "Linha" ;
-        Text [ finnish ] = "Viivat" ;
+        Text [ finnish ] = "Viiva" ;
         Text [ danish ] = "Streg" ;
         Text [ french ] = "Ligne" ;
         Text [ swedish ] = "Linje" ;
         Text [ dutch ] = "Lijn" ;
         Text [ spanish ] = "Línea" ;
         Text [ english_us ] = "Line" ;
-        Text[ chinese_simplified ] = "ÏßÌõ";
+        Text[ chinese_simplified ] = "çº¿æ¡";
         Text[ russian ] = "Ëèíèÿ";
         Text[ polish ] = "Linia";
-        Text[ japanese ] = "ü";
-        Text[ chinese_traditional ] = "½u±ø";
+        Text[ japanese ] = "ç·š";
+        Text[ chinese_traditional ] = "ç·šæ¢";
         Text[ arabic ] = "ÇáÎØ";
         Text[ greek ] = "ÃñáììŞ";
-        Text[ korean ] = "¼±";
+        Text[ korean ] = "ì„ ";
         Text[ turkish ] = "Çizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea";
+        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     FixedText FT_STYLE
     {
@@ -195,6 +237,26 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 77, 8) ;
         Text = "S~til" ;
         Text[ english_us ] = "St~yle";
+        Text[ portuguese ] = "St~yle";
+        Text[ russian ] = "St~yle";
+        Text[ greek ] = "St~yle";
+        Text[ dutch ] = "St~yle";
+        Text[ french ] = "St~yle";
+        Text[ spanish ] = "St~yle";
+        Text[ finnish ] = "St~yle";
+        Text[ italian ] = "St~yle";
+        Text[ danish ] = "St~yle";
+        Text[ swedish ] = "St~yle";
+        Text[ polish ] = "St~yle";
+        Text[ portuguese_brazilian ] = "St~yle";
+        Text[ japanese ] = "St~yle";
+        Text[ korean ] = "St~yle";
+        Text[ chinese_simplified ] = "St~yle";
+        Text[ chinese_traditional ] = "St~yle";
+        Text[ turkish ] = "St~yle";
+        Text[ arabic ] = "St~yle";
+        Text[ catalan ] = "St~yle";
+        Text[ thai ] = "St~yle";
     };
     ListBox LB_LINESTYLE
     {
@@ -208,6 +270,26 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 77, 8 ) ;
         Text = "~Farbe" ;
         Text[ english_us ] = "~Color";
+        Text[ portuguese ] = "~Color";
+        Text[ russian ] = "~Color";
+        Text[ greek ] = "~Color";
+        Text[ dutch ] = "~Color";
+        Text[ french ] = "~Color";
+        Text[ spanish ] = "~Color";
+        Text[ finnish ] = "~Color";
+        Text[ italian ] = "~Color";
+        Text[ danish ] = "~Color";
+        Text[ swedish ] = "~Color";
+        Text[ polish ] = "~Color";
+        Text[ portuguese_brazilian ] = "~Color";
+        Text[ japanese ] = "~Color";
+        Text[ korean ] = "~Color";
+        Text[ chinese_simplified ] = "~Color";
+        Text[ chinese_traditional ] = "~Color";
+        Text[ turkish ] = "~Color";
+        Text[ arabic ] = "~Color";
+        Text[ catalan ] = "~Color";
+        Text[ thai ] = "~Color";
     };
     ListBox LB_LINECOLOR
     {
@@ -234,22 +316,23 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "Ñëåâà";
         Text[ greek ] = "ÁñéóôåñÜ";
         Text[ dutch ] = "~Links";
-        Text[ french ] = "À ~gauche";
+        Text[ french ] = "À gauche";
         Text[ spanish ] = "~Izquierda";
-        Text[ italian ] = "~Sinistra";
+        Text[ italian ] = "Sinistra";
         Text[ danish ] = "Venstre";
         Text[ swedish ] = "~Vänster";
         Text[ polish ] = "Z lewej";
         Text[ portuguese_brazilian ] = "Left";
-        Text[ japanese ] = "¶(~L)";
-        Text[ korean ] = "¿ŞÂÊ(~L)";
-        Text[ chinese_simplified ] = "×ó(~L)";
-        Text[ chinese_traditional ] = "¥ª(~L)";
+        Text[ japanese ] = "å·¦(~L)";
+        Text[ korean ] = "ì™¼ìª½(~L)";
+        Text[ chinese_simplified ] = "å·¦(~L)";
+        Text[ chinese_traditional ] = "å·¦(~L)";
         Text[ arabic ] = "íÓÇÑ";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Izquierda";
-        Text[ finnish ] = "~Vasen";
+        Text[ finnish ] = "~Vasen:";
+        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
     };
     MetricField MF_LEFT
     {
@@ -272,27 +355,28 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "R~echts" ;
         Text [ ENGLISH ] = "R~ight" ;
-        Text[ english_us ] = "Ri~ght";
+        Text[ english_us ] = "Right";
         Text[ portuguese ] = "~Direita";
         Text[ russian ] = "Ñïğàâà";
         Text[ greek ] = "ÄåîéÜ";
         Text[ dutch ] = "~Rechts";
-        Text[ french ] = "À ~droite";
-        Text[ spanish ] = "~Derecha";
-        Text[ italian ] = "~Destra";
+        Text[ french ] = "À droite";
+        Text[ spanish ] = "Derecha";
+        Text[ italian ] = "Destra";
         Text[ danish ] = "Højre";
         Text[ swedish ] = "Hög~er";
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right";
-        Text[ japanese ] = "‰E(~R)";
-        Text[ korean ] = "¿À¸¥ÂÊ";
-        Text[ chinese_simplified ] = "ÓÒ";
-        Text[ chinese_traditional ] = "¥k";
+        Text[ japanese ] = "å³";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½";
+        Text[ chinese_simplified ] = "å³";
+        Text[ chinese_traditional ] = "å³";
         Text[ arabic ] = "íãíä";
         Text[ turkish ] = "S~ağ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
         Text[ finnish ] = "Oikea";
+        Text[ thai ] = "à¸‚à¸§à¸²";
     };
     MetricField MF_RIGHT
     {
@@ -320,22 +404,23 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "Ñâåğõó";
         Text[ greek ] = "ĞÜíù";
         Text[ dutch ] = "~Boven";
-        Text[ french ] = "En ~haut";
-        Text[ spanish ] = "~Arriba";
+        Text[ french ] = "En haut";
+        Text[ spanish ] = "Arriba";
         Text[ italian ] = "~Alto";
         Text[ danish ] = "Top";
         Text[ swedish ] = "~Uppe";
         Text[ polish ] = "W górze";
         Text[ portuguese_brazilian ] = "Top";
-        Text[ japanese ] = "ã(~T)";
-        Text[ korean ] = "À§(~T)";
-        Text[ chinese_simplified ] = "ÉÏ(~T)";
-        Text[ chinese_traditional ] = "¤W(~T)";
+        Text[ japanese ] = "ä¸Š(~T)";
+        Text[ korean ] = "ìœ„(~T)";
+        Text[ chinese_simplified ] = "ä¸Š(~T)";
+        Text[ chinese_traditional ] = "ä¸Š(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ turkish ] = "~Üst";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Arriba";
         Text[ finnish ] = "~Yläosa";
+        Text[ thai ] = "~à¸šà¸™";
     };
     MetricField MF_TOP
     {
@@ -363,21 +448,22 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "Ñíèçó";
         Text[ greek ] = "ÊÜô~ù";
         Text[ dutch ] = "Be~neden";
-        Text[ french ] = "En ~bas";
-        Text[ spanish ] = "~Abajo";
+        Text[ french ] = "En bas";
+        Text[ spanish ] = "Abajo";
         Text[ italian ] = "~Basso";
         Text[ danish ] = "Bund";
         Text[ swedish ] = "~Nere";
         Text[ polish ] = "W dole";
         Text[ portuguese_brazilian ] = "Bottom";
-        Text[ japanese ] = "‰º(~B)";
-        Text[ korean ] = "¾Æ·¡(~B)";
-        Text[ chinese_simplified ] = "ÏÂ(~B)";
-        Text[ chinese_traditional ] = "¤U(~B)";
+        Text[ japanese ] = "ä¸‹(~B)";
+        Text[ korean ] = "ì•„ë˜(~B)";
+        Text[ chinese_simplified ] = "ä¸‹(~B)";
+        Text[ chinese_traditional ] = "ä¸‹(~B)";
         Text[ arabic ] = "ÃÓİá";
         Text[ turkish ] = "Al~t";
         Text[ catalan ] = "~Abajo";
         Text[ finnish ] = "~Alaosa";
+        Text[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
     };
     MetricField MF_BOTTOM
     {
@@ -400,27 +486,28 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "S~ynchronisieren" ;
         Text [ ENGLISH ] = "Synchronize" ;
-        Text[ english_us ] = "Synchroni~ze";
+        Text[ english_us ] = "Synchronize";
         Text[ portuguese ] = "~Sincronizar";
         Text[ russian ] = "Ñèíõğîíèçèğîâàòü";
         Text[ greek ] = "Ó~õã÷ñïíéóìüò";
         Text[ dutch ] = "S~ynchroniseren";
-        Text[ french ] = "S~ynchroniser";
+        Text[ french ] = "Synchroniser";
         Text[ spanish ] = "~Sincronizar";
-        Text[ italian ] = "~Sincronizza";
+        Text[ italian ] = "Sincronizza";
         Text[ danish ] = "Synkroniser";
         Text[ swedish ] = "S~ynkronisera";
         Text[ polish ] = "Synchronizuj";
         Text[ portuguese_brazilian ] = "Synchronize";
-        Text[ japanese ] = "”ä—¦‚ğ•Û‚Â";
-        Text[ korean ] = "µ¿±âÈ­";
-        Text[ chinese_simplified ] = "Í¬²½»¯";
-        Text[ chinese_traditional ] = "¦P¨B¤Æ";
+        Text[ japanese ] = "æ¯”ç‡ã‚’ä¿ã¤";
+        Text[ korean ] = "ë™ê¸°í™”";
+        Text[ chinese_simplified ] = "åŒæ­¥åŒ–";
+        Text[ chinese_traditional ] = "åŒæ­¥åŒ–";
         Text[ arabic ] = "ÊÒÇãä";
         Text[ turkish ] = "~Eşitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sincronizar";
         Text[ finnish ] = "Synkronoi";
+        Text[ thai ] = "à¸—à¸³à¹ƒà¸«à¹‰à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸•à¸£à¸‡à¸à¸±à¸™";
     };
     FixedLine FL_DISTANCE
     {
@@ -440,15 +527,16 @@ TabPage RID_SVXPAGE_BORDER
         Text[ swedish ] = "Avstånd till innehåll";
         Text[ polish ] = "Odstêp od zawartoœci";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "“à—e‚Ü‚Å‚ÌŠÔŠu";
-        Text[ korean ] = "³»¿ë¿¡ ´ëÇÑ °£°İ";
-        Text[ chinese_simplified ] = "ÖÁÄÚÈİµÄ¾àÀë";
-        Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÂ÷";
+        Text[ japanese ] = "å†…å®¹ã¾ã§ã®é–“éš”";
+        Text[ korean ] = "ë‚´ìš©ì— ëŒ€í•œ ê°„ê²©";
+        Text[ chinese_simplified ] = "è‡³å†…å®¹çš„è·ç¦»";
+        Text[ chinese_traditional ] = "è‡³å…§æ–‡çš„è·é›¢";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáãÍÊæíÇÊ";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
         Text[ finnish ] = "Välit sisältöön";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸–à¸¶à¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
     };
 
     FixedText FT_SHADOWPOS
@@ -458,27 +546,28 @@ TabPage RID_SVXPAGE_BORDER
         Text = "~Position" ;
         Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
-        Text [ italian ] = "~Posizione" ;
+        Text [ italian ] = "Posizione" ;
         Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~Posição" ;
         Text [ finnish ] = "~Sijainti" ;
         Text [ danish ] = "Placering" ;
-        Text [ french ] = "~Position" ;
+        Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
         Text [ spanish ] = "~Posición" ;
         Text [ english_us ] = "~Position" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ(~P)";
+        Text[ chinese_simplified ] = "ä½ç½®(~P)";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u(~P)";
-        Text[ chinese_traditional ] = "¦ì¸m(~P)";
+        Text[ japanese ] = "ä½ç½®(~P)";
+        Text[ chinese_traditional ] = "ä½ç½®(~P)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡(~P)";
+        Text[ korean ] = "ìœ„ì¹˜(~P)";
         Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición";
+        Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     Control WIN_SHADOWS
     {
@@ -494,26 +583,27 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Distanz" ;
         Text [ ENGLISH ] = "~Distance" ;
-        Text[ english_us ] = "Dista~nce";
+        Text[ english_us ] = "Distan~ce";
         Text[ portuguese ] = "~Distância";
         Text[ russian ] = "Ğàññòîÿíèå";
         Text[ greek ] = "Ìİãåèïò";
         Text[ dutch ] = "~Afstand";
         Text[ french ] = "Distance";
-        Text[ spanish ] = "~Distancia";
-        Text[ finnish ] = "~Koko";
-        Text[ italian ] = "~Distanza";
+        Text[ spanish ] = "Distancia";
+        Text[ finnish ] = "~Etäisyys";
+        Text[ italian ] = "Distan~za";
         Text[ danish ] = "Størrelse";
         Text[ swedish ] = "~Distans";
         Text[ polish ] = "Odleg³oœæ";
         Text[ portuguese_brazilian ] = "Ta~manho";
-        Text[ japanese ] = "ŠÔŠu(~C)";
-        Text[ korean ] = "°Å¸®(~C)";
-        Text[ chinese_simplified ] = "¼ä¸ô(~C)";
-        Text[ chinese_traditional ] = "¶¡¹j(~C)";
+        Text[ japanese ] = "é–“éš”(~C)";
+        Text[ korean ] = "ê±°ë¦¬(~C)";
+        Text[ chinese_simplified ] = "é—´éš”(~C)";
+        Text[ chinese_traditional ] = "é–“éš”(~C)";
         Text[ turkish ] = "~Büyüklük";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ catalan ] = "~Tamaño";
+        Text[ thai ] = "à¸£à¸°~à¸¢à¸°";
     };
     MetricField ED_SHADOWSIZE
     {
@@ -537,27 +627,28 @@ TabPage RID_SVXPAGE_BORDER
         Text = "Far~be" ;
         Text [ ENGLISH ] = "C~olor" ;
         Text [ norwegian ] = "C~olor" ;
-        Text [ italian ] = "~Colore" ;
+        Text [ italian ] = "Colore" ;
         Text [ portuguese_brazilian ] = "C~or" ;
         Text [ portuguese ] = "C~or" ;
         Text [ finnish ] = "~Väri" ;
         Text [ danish ] = "Farve" ;
-        Text [ french ] = "~Couleur" ;
+        Text [ french ] = "Couleur" ;
         Text [ swedish ] = "Fä~rg" ;
         Text [ dutch ] = "K~leur" ;
-        Text [ spanish ] = "C~olor" ;
+        Text [ spanish ] = "Color" ;
         Text [ english_us ] = "C~olor" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«(~O)";
+        Text[ chinese_simplified ] = "é¢œè‰²(~O)";
         Text[ russian ] = "Öâåò";
         Text[ polish ] = "Kolor";
-        Text[ japanese ] = "F(~O)";
-        Text[ chinese_traditional ] = "ÃC¦â(~O)";
+        Text[ japanese ] = "è‰²(~O)";
+        Text[ chinese_traditional ] = "é¡è‰²(~O)";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "»ö(~O)";
+        Text[ korean ] = "ìƒ‰(~O)";
         Text[ turkish ] = "Re~nk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~olor";
+        Text[ thai ] = "~à¸ªà¸µ";
     };
     ListBox LB_SHADOWCOLOR
     {
@@ -577,24 +668,25 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Ombre" ;
         Text [ portuguese_brazilian ] = "Sombra" ;
         Text [ portuguese ] = "Sombras" ;
-        Text [ finnish ] = "Varjo" ;
+        Text [ finnish ] = "Varjotyyli" ;
         Text [ danish ] = "Skygge" ;
         Text [ french ] = "Ombre" ;
         Text [ swedish ] = "Skugga" ;
         Text [ dutch ] = "Schaduw" ;
         Text [ spanish ] = "Sombra" ;
         Text [ english_us ] = "Shadow style" ;
-        Text[ chinese_simplified ] = "ÒõÓ°";
+        Text[ chinese_simplified ] = "é˜´å½±";
         Text[ russian ] = "Òåíü";
         Text[ polish ] = "Cieñ";
-        Text[ japanese ] = "‰e•t‚«";
-        Text[ chinese_traditional ] = "³±¼v";
+        Text[ japanese ] = "å½±ä»˜ã";
+        Text[ chinese_traditional ] = "é™°å½±";
         Text[ arabic ] = "ÇáÙá";
         Text[ greek ] = "ÓêéÜ";
-        Text[ korean ] = "À½¿µ";
+        Text[ korean ] = "ìŒì˜";
         Text[ turkish ] = "Gölge";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sombra";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸²à¸£à¹à¸£à¹€à¸‡à¸²";
     };
     ImageList IL_PRE_BITMAPS
     {
@@ -629,6 +721,7 @@ TabPage RID_SVXPAGE_BORDER
         IdCount = { 5 ; };
     };
     Text[ catalan ] = "Borde";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
 };
  // **********************************************************************
 
