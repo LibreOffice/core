@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:06:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,11 @@ SwPosNotify::~SwPosNotify()
 
         // --> OD 2004-10-20 #i35640# - additional notify anchor text frame
         // Needed for negative positioned drawing objects
-        if ( mpAnchoredDrawObj->GetAnchorFrm()->IsTxtFrm() )
+        // --> OD 2005-03-01 #i43255# - refine condition to avoid unneeded
+        // invalidations: anchored object had to be on the page of its anchor
+        // text frame.
+        if ( mpAnchoredDrawObj->GetAnchorFrm()->IsTxtFrm() &&
+             mpOldPageFrm == mpAnchoredDrawObj->GetAnchorFrm()->FindPageFrm() )
         {
             mpAnchoredDrawObj->AnchorFrm()->Prepare( PREP_FLY_LEAVE );
         }
@@ -420,9 +424,13 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
     // If yes, after each object positioning the anchor frame is formatted.
     // If after the anchor frame format the object position isn't valid, the
     // object is positioned again.
+    // --> OD 2005-02-22 #i43255# - refine condition: anchor frame format not
+    // allowed, if another anchored object, has to be consider its wrap influence
     const bool bFormatAnchor =
             !static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked() &&
-            !ConsiderObjWrapInfluenceOnObjPos();
+            !ConsiderObjWrapInfluenceOnObjPos() &&
+            !ConsiderObjWrapInfluenceOfOtherObjs();
+    // <--
 
     if ( bFormatAnchor )
     {
