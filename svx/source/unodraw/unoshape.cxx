@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-10 15:02:23 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 16:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,7 +917,7 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
         {
             if(pPage->GetObj(nNum) == pObj)
             {
-                delete pPage->NbcRemoveObject(nNum);
+                delete pPage->RemoveObject(nNum);
                 InvalidateSdrObject();
                 break;
             }
