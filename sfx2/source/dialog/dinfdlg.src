@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:11:25 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ TabPage TP_DOCINFODESC
         Text[ arabic ] = "«·⁄‰Ê«‰";
         Text[ turkish ] = "~Ba˛l˝k";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~TÌtulo";
     };
     Edit ED_TITLE
     {
@@ -138,6 +139,7 @@ TabPage TP_DOCINFODESC
         Text[ arabic ] = "«·„Ê÷Ê⁄";
         Text[ turkish ] = "K~onu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tema";
     };
     Edit ED_THEMA
     {
@@ -176,6 +178,7 @@ TabPage TP_DOCINFODESC
         Text[ arabic ] = "«·ﬂ·„«  «·√”«”Ì…";
         Text[ turkish ] = "~Anahtar sˆzc¸kler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Palabras clave";
     };
     Edit ED_KEYWORDS
     {
@@ -214,6 +217,7 @@ TabPage TP_DOCINFODESC
         Text[ arabic ] = "«·Ê’›";
         Text[ turkish ] = "~Tan˝m";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~DescripciÛn";
     };
     MultiLineEdit ED_COMMENT
     {
@@ -275,6 +279,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«·‰Ê⁄:";
         Text[ turkish ] = "Tip:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo:";
     };
     FixedText FT_FILE_SHOW_TYP
     {
@@ -306,6 +311,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "··ﬁ—«¡… ›ﬁÿ";
         Text[ turkish ] = "S~alt okunur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Solo lectura";
     };
     FixedText FT_FILE
     {
@@ -332,6 +338,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«·„Êﬁ⁄:";
         Text[ turkish ] = "Yer:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "UbicaciÛn:";
     };
     FixedText FT_FILE_VAL
     {
@@ -363,6 +370,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«·ÕÃ„:";
         Text[ turkish ] = "B¸y¸kl¸k:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "TamaÒo:";
     };
     FixedText FT_FILE_SHOW_SIZE
     {
@@ -399,6 +407,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = " «—ÌŒ «·≈‰‘«¡:";
         Text[ turkish ] = "Olu˛turma tarihi:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Creado el:";
     };
     FixedText FT_CREATE_VAL
     {
@@ -432,6 +441,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "„Õ——:";
         Text[ turkish ] = "D¸zenleme:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Abierto desde :";
     };
     FixedText FT_TIMELOG_VAL
     {
@@ -463,6 +473,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = " «—ÌŒ «· ⁄œÌ·:";
         Text[ turkish ] = "Dei˛tirme tarihi:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificado el:";
     };
     FixedText FT_CHANGE_VAL
     {
@@ -494,6 +505,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«·≈’œ«—:";
         Text[ turkish ] = "S¸r¸m:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "VersiÛn:";
     };
     FixedText FT_DOCNO_VAL
     {
@@ -525,6 +537,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = " «—ÌŒ «·ÿ»«⁄…:";
         Text[ turkish ] = "Yazd˝rma tarihi:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Impreso el:";
     };
     FixedText FT_PRINT_VAL
     {
@@ -556,6 +569,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_traditional ] = "ßR∞£(~D)";
         Text[ arabic ] = "Õ–›";
         Text[ turkish ] = "~Sil";
+        Text[ catalan ] = "~Eliminar";
     };
     CheckBox CB_USE_USERDATA
     {
@@ -583,6 +597,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«” Œœ«„ »Ì«‰«  «·„” Œœ„";
         Text[ turkish ] = "~Kullan˝c˝ verilerini kullan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Utilice los ~datos del usuario";
     };
     FixedLine FL_FILE_3
     {
@@ -616,6 +631,7 @@ TabPage TP_DOCINFODOC
         Text[ korean ] = "º≠Ωƒ∆ƒ¿œ:";
         Text[ arabic ] = "«·ﬁ«·»:";
         Text[ turkish ] = "ﬁablon:";
+        Text[ catalan ] = "Plantilla:";
     };
     FixedText FT_TEMPL_VAL
     {
@@ -645,6 +661,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "€Ì— „⁄—Ê›";
         Text[ turkish ] = "bilinmiyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "desconocido";
     };
 };
 
@@ -743,6 +760,7 @@ TabPage TP_DOCINFOUSER
         Text[ arabic ] = "ÕﬁÊ· „⁄·Ê„« ...";
         Text[ turkish ] = "~Bilgi alanlar˝...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ca~mpo informaciÛn...";
     };
 };
 
@@ -778,6 +796,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "≈⁄«œ…  Õ„Ì·  ·ﬁ«∆Ì ··ﬂ·";
         Text[ turkish ] = "~Otm. yeniden y¸kleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Autorecargar cada";
     };
     NumericField ED_SECONDS
     {
@@ -817,6 +836,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "«·ÀÊ«‰Ì";
         Text[ turkish ] = "~saniyede bir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Segundos";
     };
     FixedText FT_URL
     {
@@ -843,6 +863,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "URL~";
         Text[ turkish ] = "~URL";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~URL";
     };
     Edit ED_URL
     {
@@ -875,6 +896,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "≈ÿ«—";
         Text[ turkish ] = "~Frame";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Frame";
     };
     ComboBox LB_DEFAULT
     {
@@ -936,6 +958,7 @@ TabDialog SID_DOCINFO
                 Text[ arabic ] = "⁄«„";
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "General";
             };
             PageItem
             {
@@ -961,6 +984,7 @@ TabDialog SID_DOCINFO
                 Text[ arabic ] = "«·Ê’›";
                 Text[ turkish ] = "Tan˝m";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "DescripciÛn";
             };
             PageItem
             {
@@ -988,6 +1012,7 @@ TabDialog SID_DOCINFO
                 Text[ arabic ] = "«·„” Œœ„";
                 Text[ turkish ] = "Kullan˝c˝";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Usuario";
             };
             PageItem
             {
@@ -1013,6 +1038,7 @@ TabDialog SID_DOCINFO
                 Text[ arabic ] = "≈‰ —‰ ";
                 Text[ turkish ] = "Internet";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Internet";
             };
         };
     };
@@ -1021,6 +1047,7 @@ TabDialog SID_DOCINFO
     Text[ arabic ] = "Œ’«∆’ ";
     Text[ turkish ] = "÷zellikler ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades de  ";
 };
 
  // ********************************************************************** EOF
