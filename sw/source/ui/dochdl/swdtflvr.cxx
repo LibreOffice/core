@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:40:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,7 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
     pImageMap( 0 ),
     pTargetURL( 0 )
 {
+    rSh.GetView().AddTransferable(*this);
     SwDocShell* pDShell = rSh.GetDoc()->GetDocShell();
     if( pDShell )
     {
@@ -442,12 +443,15 @@ SwTransferable::~SwTransferable()
     aDocShellRef.Clear();
 
     SwModule* pMod = SW_MOD();
-    if ( pMod->pClipboard == this )
-        pMod->pClipboard = 0;
-    else if ( pMod->pDragDrop == this )
-        pMod->pDragDrop = 0;
-    else if ( pMod->pXSelection == this )
-        pMod->pXSelection = 0;
+    if(pMod)
+    {
+        if ( pMod->pClipboard == this )
+            pMod->pClipboard = 0;
+        else if ( pMod->pDragDrop == this )
+            pMod->pDragDrop = 0;
+        else if ( pMod->pXSelection == this )
+            pMod->pXSelection = 0;
+    }
 
     delete pClpGraphic;
     delete pClpBitmap;
@@ -532,7 +536,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
-    if( !HasFormat( nFormat ) )
+    if( !HasFormat( nFormat ) || !pWrtShell)
         return sal_False;
 
     if( !pClpDocFac )
@@ -838,6 +842,8 @@ int SwTransferable::Cut()
 
 void SwTransferable::DeleteSelection()
 {
+    if(!pWrtShell)
+        return;
     // Selektionsart vor Action-Klammerung erfragen
     const int nSelection = pWrtShell->GetSelectionType();
     pWrtShell->StartUndo( UNDO_DELETE );
@@ -852,6 +858,8 @@ void SwTransferable::DeleteSelection()
 int SwTransferable::Copy( BOOL bIsCut )
 {
     int nRet = 1;
+    if(!pWrtShell)
+        return 0;;
 
     String sGrfNm;
     const int nSelection = pWrtShell->GetSelectionType();
@@ -1049,6 +1057,8 @@ int SwTransferable::Copy( BOOL bIsCut )
 
 int SwTransferable::CalculateAndCopy()
 {
+    if(!pWrtShell)
+        return 0;
     SwWait aWait( *pWrtShell->GetView().GetDocShell(), TRUE );
 
     String aStr( pWrtShell->Calculate() );
@@ -1069,6 +1079,8 @@ int SwTransferable::CalculateAndCopy()
 int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
                                     const String& rStr )
 {
+    if(!pWrtShell)
+        return 0;
     SwWait aWait( *pWrtShell->GetView().GetDocShell(), TRUE );
 
     pClpDocFac = new SwDocFac;
@@ -2913,6 +2925,8 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
 
 void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
 {
+    if(!pWrtShell)
+        return;
     String sGrfNm;
     const int nSelection = pWrtShell->GetSelectionType();
     if( SwWrtShell::SEL_GRF == nSelection)
@@ -3044,6 +3058,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
 
 void SwTransferable::StartDrag( Window* pWin, const Point& rPos )
 {
+    if(!pWrtShell)
+        return;
     bOldIdle = pWrtShell->GetViewOptions()->IsIdle();
     bCleanUp = TRUE;
 
@@ -3435,12 +3451,43 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
                                      const ViewShell * _pCreatorView)
 {
     SwModule *pMod = SW_MOD();
-    if( pMod->pXSelection && pMod->pXSelection->pWrtShell == &rSh &&
+    if( pMod->pXSelection &&
+        ((!pMod->pXSelection->pWrtShell) || (pMod->pXSelection->pWrtShell == &rSh)) &&
         /* #96392# */
-        pMod->pXSelection->pCreatorView == _pCreatorView )
+        (!_pCreatorView || (pMod->pXSelection->pCreatorView == _pCreatorView)) )
     {
         TransferableHelper::ClearSelection( rSh.GetWin() );
     }
+}
+/* -----------------3/31/2003 11:46AM----------------
+
+ --------------------------------------------------*/
+const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
+{
+    static Sequence< sal_Int8 > aSeq;
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex           aCreateMutex;
+        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+    return aSeq;
+}
+/* -----------------3/31/2003 11:46AM----------------
+
+ --------------------------------------------------*/
+sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw( RuntimeException )
+{
+    sal_Int64 nRet;
+    if( ( rId.getLength() == 16 ) &&
+        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    {
+        nRet = (sal_Int64) this;
+    }
+    else
+        nRet = TransferableHelper::getSomething(rId);
+    return nRet;
 }
 
 /*  */
