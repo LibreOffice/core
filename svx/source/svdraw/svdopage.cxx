@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,161 +79,109 @@
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef _SDR_PROPERTIES_PAGEPROPERTIES_HXX
+#include <svx/sdr/properties/pageproperties.hxx>
+#endif
+
+// #111111#
+#ifndef _SDR_CONTACT_VIEWCONTACTOFPAGEOBJ_HXX
+#include <svx/sdr/contact/viewcontactofpageobj.hxx>
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
+
+sdr::properties::BaseProperties* SdrPageObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::PageProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrPageObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfPageObj(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// #111111#
+// To make things more safe, make a PageUser from myself so that i know when the page is deleted.
+
+void SdrPageObj::PageInDestruction(const SdrPage& rPage)
+{
+    if(mpShownPage && mpShownPage == &rPage)
+    {
+        ActionChanged();
+        mpShownPage = 0L;
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPageObj,SdrObject);
 
-SdrPageObj::SdrPageObj(USHORT nNewPageNum):
-    mpPageItemSet(0L),
-    nPageNum(nNewPageNum),
-    bPainting(FALSE),
-    bNotifying(FALSE)
+SdrPageObj::SdrPageObj(SdrPage* pNewPage)
+:   mpShownPage(pNewPage)
 {
+    if(mpShownPage)
+    {
+        mpShownPage->AddPageUser(*this);
+    }
 }
 
-SdrPageObj::SdrPageObj(const Rectangle& rRect, USHORT nNewPageNum):
-    mpPageItemSet(0L),
-    nPageNum(nNewPageNum),
-    bPainting(FALSE),
-    bNotifying(FALSE)
+SdrPageObj::SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage)
+:   mpShownPage(pNewPage)
 {
-    aOutRect=rRect;
+    if(mpShownPage)
+    {
+        mpShownPage->AddPageUser(*this);
+    }
+
+    aOutRect = rRect;
 }
 
 SdrPageObj::~SdrPageObj()
 {
-    if(mpPageItemSet)
-        delete mpPageItemSet;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-const SfxItemSet& SdrPageObj::GetItemSet() const
-{
-    if(!mpPageItemSet)
-        ((SdrPageObj*)this)->mpPageItemSet = ((SdrPageObj*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
-    return *mpPageItemSet;
-}
-
-SfxItemSet* SdrPageObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    return new SfxItemSet(rPool);
-}
-
-void SdrPageObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
-{
-    // #86481# simply ignore item setting on page objects
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void __EXPORT SdrPageObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const SfxHint& rHint, const TypeId&)
-{
-    SdrHint* pSdrHint = PTR_CAST(SdrHint, &rHint);
-
-    if(pSdrHint)
+    // #111111#
+    if(mpShownPage)
     {
-        SdrHintKind eHint = pSdrHint->GetKind();
-
-        if(eHint == HINT_PAGEORDERCHG)
-        {
-            SendRepaintBroadcast();
-        }
-        else
-        {
-            const SdrPage* pChangedPage = pSdrHint->GetPage();
-
-            if(pSdrHint->GetObject() != this
-                && pModel
-                && bInserted
-                && pChangedPage
-                && pChangedPage != pPage)
-            {
-                const SdrPage* pShownPage = pModel->GetPage(nPageNum);
-
-                if(pShownPage)
-                {
-                    if(pShownPage == pChangedPage)
-                    {
-                        if(eHint == HINT_OBJCHG || eHint == HINT_OBJLISTCLEARED)
-                        {
-                            // do nothing, else loop with HINT_OBJCHG cause
-                            // it can not be decided if hint comes from 21 lines
-                            // above (SendRepaintBroadcast())or normally from
-                            // object. Doing nothing leads to not updating
-                            // object moves on a 2nd opened view showing the page
-                            // as handout or notice page. (AW 06052000)
-                            //
-                            // one solution would be to invalidate without using
-                            // SendRepaintBroadcast(), so I made some tries, but it
-                            // did'nt work:
-                            //
-                            //SdrHint aHint(*this);
-                            //aHint.SetNeedRepaint(TRUE);
-                            //aHint.SetKind(HINT_PAGECHG);
-                            //pModel->Broadcast(aHint);
-                            //SdrPageView* pPV;
-                            //if(pModel && (pPV = pModel->GetPaintingPageView()))
-                            //{
-                            //  pPV->InvalidateAllWin(pSdrHint->GetRect(), TRUE);
-                            //}
-                            // GetPageView(pChangedPage);
-                            // SdrPageView::InvalidateAllWin(pSdrHint->GetRect(), TRUE);
-                        }
-                        else
-                        {
-                            // send normal
-                            SendRepaintBroadcast();
-                        }
-                    }
-                    else if(pChangedPage->IsMasterPage())
-                    {
-                        UINT16 nMaPgAnz = pShownPage->GetMasterPageCount();
-                        BOOL bDone(FALSE);
-
-                        for(UINT16 i=0; i<nMaPgAnz && !bDone; i++)
-                        {
-                            const SdrPage* pMaster = pShownPage->GetMasterPage(i);
-
-                            if(pMaster == pChangedPage)
-                            {
-                                if(eHint == HINT_OBJCHG || eHint == HINT_OBJLISTCLEARED)
-                                {
-                                    // see comment above...
-                                }
-                                else
-                                {
-                                    // send normal
-                                    SendRepaintBroadcast();
-                                    bDone = TRUE;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        mpShownPage->RemovePageUser(*this);
     }
 }
 
-
-void SdrPageObj::SetModel(SdrModel* pNewModel)
+// #111111#
+SdrPage* SdrPageObj::GetReferencedPage() const
 {
-    SdrModel* pOldMod=pModel;
-    SdrObject::SetModel(pNewModel);
-    if (pModel!=pOldMod) {
-        if (pOldMod!=NULL) EndListening(*pOldMod);
-        if (pModel!=NULL) StartListening(*pModel);
-    }
+    return mpShownPage;
 }
 
+// #111111#
+void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
+{
+    if(mpShownPage != pNewPage)
+    {
+        if(mpShownPage)
+        {
+            mpShownPage->RemovePageUser(*this);
+        }
+
+        mpShownPage = pNewPage;
+
+        if(mpShownPage)
+        {
+            mpShownPage->AddPageUser(*this);
+        }
+
+        SetChanged();
+        BroadcastObjectChange();
+    }
+}
 
 UINT16 SdrPageObj::GetObjIdentifier() const
 {
     return UINT16(OBJ_PAGE);
 }
-
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
@@ -253,227 +201,11 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPolyLineToArea=FALSE;
 }
 
-FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
-
-    Color aBackgroundColor( 0xffffff );
-
-    SdrPageView* pPV = NULL;
-    if( pModel && ( pPV = pModel->GetPaintingPageView() ) )
-        pPV->SetPaintingPageObj( (SdrPageObj*) this );
-
-    FASTBOOL bOk=TRUE;
-    SdrPage* pMainPage= pModel==NULL ? NULL : pModel->GetPage(nPageNum);
-    FASTBOOL bWindow    =rXOut.GetOutDev()->GetOutDevType()==OUTDEV_WINDOW;
-    FASTBOOL bPrinter   =rXOut.GetOutDev()->GetOutDevType()==OUTDEV_PRINTER;
-    FASTBOOL bPageValid =pMainPage!=NULL;
-    FASTBOOL bPaintArea =bPainting && bPageValid; // Grau fuellen, wenn Rekursion
-    FASTBOOL bPaintFrame=bPaintArea || bWindow || bPageValid; // Nur auf dem Drucker bei ungueltiter PageNum kein Rahmen Zeichnen
-    FASTBOOL bPaintObjs =!bPainting && bPageValid;
-
-    if(bPaintArea)
-    {
-        OutputDevice& rOut=*rXOut.GetOutDev();
-        svtools::ColorConfig aColorConfig;
-        svtools::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ) );
-        svtools::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svtools::DOCBOUNDARIES ) );
-
-        rOut.SetFillColor( aDocColor.nColor );
-        rOut.SetLineColor( aBorderColor.bIsVisible ? aBorderColor.nColor: aDocColor.nColor );
-        rOut.DrawRect(aOutRect);
-    }
-
-    if(bPaintObjs)
-    {
-        // Casten auf nonconst. Flag setzen um Rekursion zu erkennen, wenn
-        // naemlich das PageObj auf der Seite sitzt, die es anzeigen soll
-        // oder auf einer MasterPage dieser Seite, ...
-        ((SdrPageObj*)this)->bPainting=TRUE;
-        if (pModel!=NULL) {
-            SdrPage* pMainPage=pModel->GetPage(nPageNum);
-
-            if( pPV && pMainPage )
-            {
-                SdrOutliner& rOutl=pModel->GetDrawOutliner(NULL);
-                aBackgroundColor = rOutl.GetBackgroundColor();
-
-                rOutl.SetBackgroundColor( pMainPage->GetBackgroundColor(pPV) );
-            }
-
-            if (pMainPage!=NULL) {
-                // Checken, ob das setzen eines Clippings erforderlich ist
-                Rectangle aPageRect(0,0,pMainPage->GetWdt(),pMainPage->GetHgt());
-                FASTBOOL bClipIt=!aPageRect.IsInside(pMainPage->GetAllObjBoundRect());
-                if (!bClipIt) { // MasterPages auch checken
-                    USHORT nMaPgAnz=pMainPage->GetMasterPageCount();
-                    for (USHORT i=0; i<nMaPgAnz && !bClipIt; i++) {
-                        SdrPage* pPg=pMainPage->GetMasterPage(i);
-                        bClipIt=!aPageRect.IsInside(pPg->GetAllObjBoundRect());
-                    }
-                }
-                FASTBOOL bClip0=FALSE;
-                Region aClip0;
-                if (bClipIt) {
-                    // Hier koennte ich mal noch einbauen, dass eine eventuelle
-                    // Metafileaufzeichnung pausiert wird, damit keine
-                    // SetClipRegion-Actions erzeugt werden.
-                    bClip0=rXOut.GetOutDev()->IsClipRegion();
-                    aClip0=rXOut.GetOutDev()->GetClipRegion();
-                }
-#ifndef NORELMAPMODE
-                Point aZero;
-                Fraction aFact1(1,1);
-                Point aOfs(aOutRect.TopLeft());
-                rXOut.GetOutDev()->SetMapMode(MapMode(MAP_RELATIVE,aOfs,aFact1,aFact1));
-                long nXMul=aOutRect.GetWidth();     // SJ: #99149# fixed problem with
-                long nYMul=aOutRect.GetHeight();    // one pixel wide preview objects
-                long nXDiv=pMainPage->GetWdt();
-                long nYDiv=pMainPage->GetHgt();
-                Fraction aXScl(nXMul,nXDiv);
-                Fraction aYScl(nYMul,nYDiv);
-                // nun auf 10 Binaerstellen kuerzen (ca. 3 Dezimalstellen). Joe, 01-12-1995, BugId 21483
-                Kuerzen(aXScl,10); // auf 7 Binaerstellen Kuerzen = ca. 2 Dezimalstellen
-                Kuerzen(aYScl,10); // auf 7 Binaerstellen Kuerzen = ca. 2 Dezimalstellen
-                nXMul=aXScl.GetNumerator();
-                nXDiv=aXScl.GetDenominator();
-                nYMul=aYScl.GetNumerator();
-                nYDiv=aYScl.GetDenominator();
-                rXOut.GetOutDev()->SetMapMode(MapMode(MAP_RELATIVE,aZero,aXScl,aYScl));
-#else
-                MapMode aMapMerk(rXOut.GetOutDev()->GetMapMode());
-                MapMode aMapNeu(aMapMerk);
-                Point aOrg(aMapNeu.GetOrigin());
-                Fraction aSclx(aMapNeu.GetScaleX());
-                Fraction aScly(aMapNeu.GetScaleY());
-                Point aOfs(aOutRect.TopLeft());
-                aOrg+=aOfs;
-                ResizePoint(aOrg,Point(),Fraction(pMainPage->GetWdt(),aOutRect.GetWidth()),
-                                         Fraction(pMainPage->GetHgt(),aOutRect.GetHeight()));
-                aSclx*=Fraction(aOutRect.GetWidth(),pMainPage->GetWdt());
-                aScly*=Fraction(aOutRect.GetHeight(),pMainPage->GetHgt());
-                // nun auf 10 Binaerstellen kuerzen (ca. 3 Dezimalstellen). Joe, 01-12-1995, BugId 21483
-                Kuerzen(aSclx,10); // auf 7 Binaerstellen Kuerzen = ca. 2 Dezimalstellen
-                Kuerzen(aScly,10); // auf 7 Binaerstellen Kuerzen = ca. 2 Dezimalstellen
-                aMapNeu.SetOrigin(aOrg);
-                aMapNeu.SetScaleX(aSclx);
-                aMapNeu.SetScaleY(aScly);
-                rXOut.GetOutDev()->SetMapMode(aMapNeu);
-#endif
-                if (bClipIt) {
-                    // Hier koennte ich mal noch einbauen, dass eine eventuelle
-                    // Metafileaufzeichnung pausiert wird, damit keine
-                    // SetClipRegion-Actions erzeugt werden.
-                    rXOut.GetOutDev()->IntersectClipRegion(aPageRect);
-                }
-                SdrPaintInfoRec aInfoRec(rInfoRec);
-                aInfoRec.aCheckRect=Rectangle(); // alles Malen!
-                USHORT nMaPgAnz=pMainPage->GetMasterPageCount();
-                USHORT i=0;
-                do {
-                    aInfoRec.nPaintMode=rInfoRec.nPaintMode & ~SDRPAINTMODE_MASTERPAGE;
-                    aInfoRec.nPaintMode&=~SDRPAINTMODE_GLUEPOINTS;
-                    aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
-                    SdrPage* pPg;
-                    const SetOfByte* pMLayers=NULL;
-                    if (i<nMaPgAnz) {
-                        pPg=pMainPage->GetMasterPage(i);
-                        pMLayers=&pMainPage->GetMasterPageVisibleLayers(i);
-                        aInfoRec.nPaintMode|=SDRPAINTMODE_MASTERPAGE;
-                    }
-                    else
-                        pPg=pMainPage;
-
-                    i++;
-                    if (pPg!=NULL)
-                    {   // ansonsten evtl. ungueltige Masterpage
-                        ULONG nObjAnz=pPg->GetObjCount();
-                        for ( ULONG i=0; i<nObjAnz; i++ )
-                        {
-                            if( i == 0 && pPg->IsMasterPage() && pMainPage->GetBackgroundObj() )
-                            {
-                                SdrObject* pBackgroundObj = pMainPage->GetBackgroundObj();
-                                if( pBackgroundObj->GetLogicRect() != aPageRect )
-                                {
-                                    pBackgroundObj->SetLogicRect( aPageRect );
-                                    pBackgroundObj->RecalcBoundRect();
-                                }
-                                pBackgroundObj->Paint( rXOut, aInfoRec );
-                            }
-                            else
-                            {
-                                SdrObject* pObj=pPg->GetObj(i);
-                                const Rectangle& rBoundRect=pObj->GetBoundRect();
-                                if (rInfoRec.aPaintLayer.IsSet(pObj->GetLayer()) &&        // Layer des Obj nicht sichtbar
-                                    (pMLayers==NULL || pMLayers->IsSet(pObj->GetLayer()))) // MasterPageLayer visible
-                                {
-                                     pObj->Paint(rXOut,aInfoRec);
-                                }
-                            }
-                        }
-                    }
-                } while (i<=nMaPgAnz);
-#ifndef NORELMAPMODE
-                rXOut.GetOutDev()->SetMapMode(MapMode(MAP_RELATIVE,aZero,Fraction(nXDiv,nXMul),Fraction(nYDiv,nYMul)));
-                aOfs.X()=-aOfs.X();
-                aOfs.Y()=-aOfs.Y();
-                rXOut.GetOutDev()->SetMapMode(MapMode(MAP_RELATIVE,aOfs,aFact1,aFact1));
-#else
-                rXOut.GetOutDev()->SetMapMode(aMapMerk);
-#endif
-                if (bClipIt) {
-                    if (bClip0) rXOut.GetOutDev()->SetClipRegion(aClip0);
-                    else rXOut.GetOutDev()->SetClipRegion();
-                }
-            }
-        }
-        // IsInPainting-Flag zuruecksetzen
-        ((SdrPageObj*)this)->bPainting=FALSE;
-    }
-
-    if(bPaintFrame)
-    {
-        svtools::ColorConfig aColorConfig;
-        svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
-
-        if( aColor.bIsVisible )
-        {
-            OutputDevice& rOut=*rXOut.GetOutDev();
-            rOut.SetFillColor();
-            rOut.SetLineColor( aColor.nColor );
-            rOut.DrawRect(aOutRect);
-        }
-    }
-
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rXOut,rInfoRec);
-    }
-
-    if( pPV )
-    {
-        pPV->SetPaintingPageObj( NULL );
-
-        SdrPage* pPage = pPV->GetPage();
-        if( pPage )
-        {
-            SdrOutliner& rOutl=pModel->GetDrawOutliner(NULL);
-            rOutl.SetBackgroundColor( aBackgroundColor );
-        }
-    }
-
-
-    return bOk;
-}
-
-
 void SdrPageObj::operator=(const SdrObject& rObj)
 {
     SdrObject::operator=(rObj);
-    nPageNum=((const SdrPageObj&)rObj).nPageNum;
+    SetReferencedPage(((const SdrPageObj&)rObj).GetReferencedPage());
 }
-
 
 void SdrPageObj::TakeObjNameSingul(XubString& rName) const
 {
@@ -489,52 +221,10 @@ void SdrPageObj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
-
 void SdrPageObj::TakeObjNamePlural(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNamePluralPAGE);
 }
-
-
-const Rectangle& SdrPageObj::GetBoundRect() const
-{
-    return SdrObject::GetBoundRect();
-}
-
-
-const Rectangle& SdrPageObj::GetSnapRect() const
-{
-    return SdrObject::GetSnapRect();
-}
-
-
-const Rectangle& SdrPageObj::GetLogicRect() const
-{
-    return SdrObject::GetLogicRect();
-}
-
-
-void SdrPageObj::NbcSetSnapRect(const Rectangle& rRect)
-{
-    SdrObject::NbcSetSnapRect(rRect);
-}
-
-
-void SdrPageObj::NbcSetLogicRect(const Rectangle& rRect)
-{
-    SdrObject::NbcSetLogicRect(rRect);
-}
-
-
-void SdrPageObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
-{
-    SdrObject::TakeXorPoly(rPoly,bDetail);
-}
-
-void SdrPageObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
-
 
 void SdrPageObj::WriteData(SvStream& rOut) const
 {
@@ -543,7 +233,16 @@ void SdrPageObj::WriteData(SvStream& rOut) const
 #ifdef DBG_UTIL
     aCompat.SetID("SdrPageObj");
 #endif
-    rOut<<nPageNum;
+
+    // #111111#
+    if(mpShownPage)
+    {
+        rOut << (sal_uInt16)mpShownPage->GetPageNum();
+    }
+    else
+    {
+        rOut << (sal_uInt16)0;
+    }
 }
 
 void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
@@ -554,9 +253,17 @@ void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 #ifdef DBG_UTIL
     aCompat.SetID("SdrPageObj");
 #endif
-    rIn>>nPageNum;
+
+    // #111111#
+    sal_uInt16 nPageNum;
+    rIn >> nPageNum;
+
+    if(GetModel())
+    {
+        SdrPage* pNewPage = GetModel()->GetPage(nPageNum);
+        SetReferencedPage(pNewPage);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+// eof
