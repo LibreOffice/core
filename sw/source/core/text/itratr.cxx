@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:52:23 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@
 #include <fmtsrnd.hxx>
 #endif
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 
 /*************************************************************************
  *                      SwAttrIter::Chg()
@@ -293,7 +293,7 @@ USHORT SwAttrIter::ScriptType( const xub_StrLen nPos )
     for( USHORT nX = 0; nX < aScriptChg.Count(); ++nX )
         if( nPos < aScriptChg[ nX ] )
             return aScriptType[ nX ];
-    return ScriptType::LATIN;
+    return i18n::ScriptType::LATIN;
 }
 
 
@@ -418,9 +418,9 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
     }
     USHORT nScript = ScriptType( nNewPos );
     BYTE nScr = SW_LATIN;
-    if( nScript == ScriptType::ASIAN )
+    if( nScript == i18n::ScriptType::ASIAN )
         nScr = SW_CJK;
-    else if( nScript == ScriptType::COMPLEX )
+    else if( nScript == i18n::ScriptType::COMPLEX )
         nScr = SW_CTL;
     pFnt->SetActual( nScr );
     if( pRedln )

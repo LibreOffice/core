@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:53:36 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@
 #include <extinput.hxx>
 #endif
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 
 /*************************************************************************
  *                      SwAttrIter::CtorInit()
@@ -180,7 +180,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
         USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
         xub_StrLen nChg = 0;
         USHORT nCnt = 0;
-        if( ScriptType::WEAK == nScript )
+        if( i18n::ScriptType::WEAK == nScript )
         {
             nChg = pBreakIt->xBreak->endOfScript( rTxt, 0, nScript );
             if( nChg < rTxt.Len() )
@@ -193,9 +193,9 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
             aScriptType.Insert( nScript, nCnt++ );
             BYTE nTmp = 4;
             switch ( nScript ) {
-                case ScriptType::ASIAN :
+                case i18n::ScriptType::ASIAN :
                     if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
-                case ScriptType::COMPLEX :
+                case i18n::ScriptType::COMPLEX :
                     if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
                 default:
                     if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:47:12 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@
 #include <porrst.hxx>
 #endif
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 
 /*************************************************************************
  *                      class SwFldPortion
@@ -242,13 +242,13 @@ SwFldSlot::~SwFldSlot()
 #ifdef DEBUG
 USHORT lcl_Script( const xub_Unicode aChar )
 {
-    USHORT nRet = ScriptType::WEAK;
+    USHORT nRet = i18n::ScriptType::WEAK;
     if( 'A' <= aChar && aChar <= 'Z' )
-        nRet = ScriptType::LATIN;
+        nRet = i18n::ScriptType::LATIN;
     else if( 'a' <= aChar && aChar <= 'z' )
-        nRet = ScriptType::ASIAN;
+        nRet = i18n::ScriptType::ASIAN;
     else if( '0' <= aChar && aChar <= '9' )
-        nRet = ScriptType::COMPLEX;
+        nRet = i18n::ScriptType::COMPLEX;
     return nRet;
 }
 #endif
@@ -276,9 +276,9 @@ BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
                 nScript = lcl_Script( rTxt.GetChar( nChg ) );
                 BYTE nScr = nActual;
                 switch ( nScript ) {
-                    case ScriptType::LATIN : nScr = SW_LATIN; break;
-                    case ScriptType::ASIAN : nScr = SW_CJK; break;
-                    case ScriptType::COMPLEX : nScr = SW_CTL; break;
+                    case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
+                    case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
+                    case i18n::ScriptType::COMPLEX : nScr = SW_CTL; break;
                 }
                 if( nActual != nScr )
                     break;
@@ -287,10 +287,11 @@ BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
         else
 #endif
         {
-            nScript = ScriptType::LATIN;
+            nScript = i18n::ScriptType::LATIN;
             if( nActual )
-                nScript = nActual==SW_CJK ? ScriptType::ASIAN : ScriptType::COMPLEX;
-            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+                nScript = nActual == SW_CJK ? i18n::ScriptType::ASIAN
+                                            : i18n::ScriptType::COMPLEX;
+            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript(rTxt,nChg,nScript);
         }
         if( rFull > nChg )
         {
@@ -299,9 +300,9 @@ BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
             if( !bTestCJK )
 #endif
             nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-            if( ScriptType::ASIAN == nScript )
+            if( i18n::ScriptType::ASIAN == nScript )
                 nRet += SW_CJK;
-            else if( ScriptType::COMPLEX == nScript )
+            else if( i18n::ScriptType::COMPLEX == nScript )
                 nRet += SW_CTL;
             rFull = nChg;
         }
@@ -324,10 +325,10 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             nScript = lcl_Script( aTxt.GetChar(0) );
             xub_StrLen nChg = 0;
             USHORT nCnt = 0;
-            if( ScriptType::WEAK == nScript )
+            if( i18n::ScriptType::WEAK == nScript )
             {
                 while( ++nChg < aTxt.Len() &&
-                        ScriptType::WEAK == lcl_Script( aTxt.GetChar( nChg ) ) )
+                    i18n::ScriptType::WEAK == lcl_Script( aTxt.GetChar(nChg) ) )
                     ;
                 if( nChg < aTxt.Len() )
                     nScript = lcl_Script( aTxt.GetChar( nChg ) );
@@ -339,7 +340,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
             USHORT nCnt = 0;
-            if( ScriptType::WEAK == nScript )
+            if( i18n::ScriptType::WEAK == nScript )
             {
                 nChg =(xub_StrLen)pBreakIt->xBreak->endOfScript(aTxt,0,nScript);
                 if( nChg < aTxt.Len() )
@@ -348,9 +349,9 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         }
         BYTE nTmp;
         switch ( nScript ) {
-            case ScriptType::LATIN : nTmp = SW_LATIN; break;
-            case ScriptType::ASIAN : nTmp = SW_CJK; break;
-            case ScriptType::COMPLEX : nTmp = SW_CTL; break;
+            case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
+            case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
+            case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
             default: nTmp = nActual;
         }
         if( nTmp != nActual )
