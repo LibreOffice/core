@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: toolbar.dtd,v 1.3 2001-06-20 13:17:31 cd Exp $
+	$Id: toolbar.dtd,v 1.4 2001-08-03 16:46:20 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -79,7 +79,7 @@
 <!ATTLIST toolbar:toolbarlayouts
 	xmlns:toolbar CDATA #FIXED "http://openoffice.org/2001/toolbar"
 >
-<!ELEMENT toolbar:toolbarlayout (toolbar:toolbarconfigitems?)>
+<!ELEMENT toolbar:toolbarlayout EMPTY>
 <!ATTLIST toolbar:toolbarlayout
 	toolbar:id CDATA #REQUIRED
 	toolbar:floatingposleft %numeric; #IMPLIED
@@ -89,12 +89,4 @@
 	toolbar:align %alignment; #IMPLIED
 	toolbar:visible %boolean; #IMPLIED
 	toolbar:floating %boolean; #IMPLIED
->
-<!ELEMENT toolbar:toolbarconfigitems (toolbar:toolbarconfigitem*)>
-<!ELEMENT toolbar:toolbarconfigitem EMPTY>
-<!ATTLIST toolbar:toolbarconfigitem
-	toolbar:context CDATA #REQUIRED
-	toolbar:toolbarname CDATA #REQUIRED
-	toolbar:visible %boolean; #IMPLIED
-	toolbar:style %style; #IMPLIED
 >
