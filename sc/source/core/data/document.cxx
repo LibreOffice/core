@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:49:11 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2188,6 +2188,19 @@ BOOL ScDocument::HasStringCells( const ScRange& rRange ) const
             return TRUE;
 
     return FALSE;
+}
+
+
+BOOL ScDocument::HasSelectionData( USHORT nCol, USHORT nRow, USHORT nTab ) const
+{
+    sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
+    if( nValidation )
+    {
+        const ScValidationData* pData = GetValidationEntry( nValidation );
+        if( pData && pData->HasSelectionList() )
+            return TRUE;
+    }
+    return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
 }
 
 
