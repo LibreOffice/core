@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-15 11:57:37 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,14 +561,83 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     }
 
 #ifdef DEBUG
-    DBG_ASSERT( rSet.Count() == nItems, "Unknown item detected!" );
-    const USHORT *pRanges = rSet.GetRanges();
-    while ( *pRanges )
+    if ( rSet.Count() != nItems )
     {
-        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        const USHORT *pRanges = rSet.GetRanges();
+        while ( *pRanges )
         {
-            const SfxPoolItem* pIt = rSet.GetItem( nWhich );
-            pIt = 0;
+            for(USHORT nId = *pRanges++; nId <= *pRanges; ++nId)
+            {
+                if ( rSet.GetItemState(nId) < SFX_ITEM_SET )
+                    continue;
+
+                USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
+                for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
+                {
+                    const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
+        //            USHORT nWhich = rPool.GetWhich( pArg->nSlotId );
+                    if ( nId == rArg.nSlotId )
+                        break;
+
+                    if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
+                    {
+                        if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
+                            break;
+                        if ( nId == SID_VIEW_DATA )
+                            break;
+                        if ( nId == SID_FILTER_DATA )
+                            break;
+                        if ( nId == SID_DOCUMENT )
+                            break;
+                        if ( nId == SID_INPUTSTREAM )
+                            break;
+                        if ( nId == SID_OUTPUTSTREAM )
+                            break;
+                        if ( nId == SID_POSTDATA )
+                            break;
+                        if ( nId == SID_TEMPLATE )
+                            break;
+                        if ( nId == SID_OPEN_NEW_VIEW )
+                            break;
+                        if ( nId == SID_VIEW_ID )
+                            break;
+                        if ( nId == SID_PLUGIN_MODE )
+                            break;
+                        if ( nId == SID_DOC_READONLY )
+                            break;
+                        if ( nId == SID_SELECTION )
+                            break;
+                        if ( nId == SID_HIDDEN )
+                            break;
+                        if ( nId == SID_SILENT )
+                            break;
+                        if ( nId == SID_PREVIEW )
+                            break;
+                        if ( nId == SID_TARGETNAME )
+                            break;
+                        if ( nId == SID_ORIGURL )
+                            break;
+                        if ( nId == SID_DOC_SALVAGE )
+                            break;
+                        if ( nId == SID_CONTENTTYPE )
+                            break;
+                        if ( nId == SID_TEMPLATE_NAME )
+                            break;
+                        if ( nId == SID_TEMPLATE_REGIONNAME )
+                            break;
+                        if ( nId == SID_JUMPMARK )
+                            break;
+                        if ( nId == SID_OPENURL )
+                            break;
+                        if ( nId == SID_CHARSET )
+                            break;
+                    }
+                }
+
+                ByteString aDbg( "Unknown item detected: ");
+                aDbg += ByteString::CreateFromInt32( nId );
+                DBG_ASSERT( nArg<nFormalArgs, aDbg.GetBuffer() );
+            }
         }
     }
 #endif
