@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-30 09:58:43 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 12:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,9 +271,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
 
     if( ServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
-        OUString aShapeType( ServiceSpecifier.copy( aDrawingPrefix.getLength() ) );
-
-        UINT32 nType = aSdrShapeIdentifierMap.getId( aShapeType );
+        UINT32 nType = aSdrShapeIdentifierMap.getId( ServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
         {
             UINT16 nT = (UINT16)(nType & ~E3D_INVENTOR_FLAG);
@@ -356,8 +354,6 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames()
     throw( uno::RuntimeException )
 {
-    const OUString aPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
-
     UHashMapEntry* pMap = pSdrShapeIdentifierMap;
 
     UINT32 nCount = 0;
@@ -374,9 +370,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames
     UINT32 nIdx = 0;
     while(pMap->aIdentifier.getLength())
     {
-        OUString aServiceName( aPrefix );
-        aServiceName += pMap->aIdentifier;
-        pStrings[nIdx] = aServiceName;
+        pStrings[nIdx] = pMap->aIdentifier;
         pMap++;
         nIdx++;
     }

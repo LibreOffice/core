@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-12 07:33:33 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 12:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,8 +523,6 @@ void SvxShape::Init() throw()
     // is it one of ours (svx) ?
     if( nInventor == SdrInventor || nInventor == E3dInventor || nInventor == FmFormInventor )
     {
-        UHashMapEntry* pMap = pSdrShapeIdentifierMap;
-
         if(nInventor == FmFormInventor)
         {
             mpImpl->mnObjId = OBJ_UNO;
@@ -547,20 +545,6 @@ void SvxShape::Init() throw()
         case E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG:
             mpImpl->mnObjId = E3D_SCENE_ID | E3D_INVENTOR_FLAG;
             break;
-        }
-
-        while(pMap->aIdentifier.getLength() && ( pMap->nId != mpImpl->mnObjId ) )
-            pMap++;
-
-        if(pMap->aIdentifier)
-        {
-            OUString aType(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing." ) );
-            aType += pMap->aIdentifier;
-            aShapeType = aType;
-        }
-        else
-        {
-            DBG_ASSERT(aShapeType.getLength() == 0, "[CL] unknown SdrObjekt identifier");
         }
     }
 }
@@ -1022,7 +1006,8 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
     if (!pSdrHint || ((pSdrHint->GetKind() != HINT_OBJREMOVED) &&
         (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
-        (pSdrHint->GetKind() != HINT_OBJLISTCLEAR)))
+        (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
+        (pSdrHint->GetKind() != HINT_OBJCHG)))
         return;
 
     uno::Reference< uno::XInterface > xSelf( pObj->getWeakUnoShape() );
@@ -1034,32 +1019,41 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 
     sal_Bool bClearMe = sal_False;
 
-    if( pSdrHint->GetKind() == HINT_OBJREMOVED )
+    switch( pSdrHint->GetKind() )
     {
-        if( pObj == pSdrHint->GetObject() )
+        case HINT_OBJCHG:
+        {
+            updateShapeKind();
+            break;
+        }
+        case HINT_OBJREMOVED:
+        {
+            if( pObj == pSdrHint->GetObject() )
+                bClearMe = sal_True;
+            break;
+        }
+        case HINT_MODELCLEARED:
         {
             bClearMe = sal_True;
+            pModel = NULL;
+            break;
         }
-    }
-    else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
-    {
-        bClearMe = sal_True;
-        pModel = NULL;
-    }
-    else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
-    {
-        SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
-        while( pObjList )
+        case HINT_OBJLISTCLEAR:
         {
-            if( pSdrHint->GetObjList() == pObjList )
+            SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
+            while( pObjList )
             {
-                bClearMe = sal_True;
-                break;
-            }
+                if( pSdrHint->GetObjList() == pObjList )
+                {
+                    bClearMe = sal_True;
+                    break;
+                }
 
-            pObjList = pObjList->GetUpList();
+                pObjList = pObjList->GetUpList();
+            }
+            break;
         }
-    }
+    };
 
     if( bClearMe )
     {
@@ -1263,6 +1257,22 @@ void SAL_CALL SvxShape::setName( const ::rtl::OUString& aName ) throw(::com::sun
 //----------------------------------------------------------------------
 OUString SAL_CALL SvxShape::getShapeType() throw(uno::RuntimeException)
 {
+    if( 0 == aShapeType.getLength() )
+    {
+        UHashMapEntry* pMap = pSdrShapeIdentifierMap;
+        while(pMap->aIdentifier.getLength() && ( pMap->nId != mpImpl->mnObjId ) )
+            pMap++;
+
+        if(pMap->aIdentifier)
+        {
+            return pMap->aIdentifier;
+        }
+        else
+        {
+            DBG_ERROR("[CL] unknown SdrObjekt identifier");
+        }
+    }
+
     return aShapeType;
 }
 
@@ -3733,6 +3743,39 @@ sal_Int16 SAL_CALL SvxShape::resetActionLocks(  ) throw (::com::sun::star::uno::
     mnLockCount = 0;
 
     return nOldLocks;
+}
+
+//----------------------------------------------------------------------
+
+/** since polygon shapes can change theire kind during editing, we have
+    to recheck it here.
+    Circle shapes also change theire kind, but theire all treated equal
+    so no update is necessary.
+*/
+void SvxShape::updateShapeKind()
+{
+    switch( mpImpl->mnObjId )
+    {
+        case OBJ_LINE:
+        case OBJ_POLY:
+        case OBJ_PLIN:
+        case OBJ_PATHLINE:
+        case OBJ_PATHFILL:
+        case OBJ_FREELINE:
+        case OBJ_FREEFILL:
+        case OBJ_PATHPOLY:
+        case OBJ_PATHPLIN:
+        {
+            const sal_uInt32 nId = pObj->GetObjIdentifier();
+
+            if( nId != mpImpl->mnObjId )
+            {
+                mpImpl->mnObjId = nId;
+
+            }
+            break;
+        }
+    };
 }
 
 /***********************************************************************

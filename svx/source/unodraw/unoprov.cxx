@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-24 08:45:20 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,36 +677,36 @@ SvxUnoPropertyMapProvider aSvxMapProvider;
 
 UHashMapEntry pSdrShapeIdentifierMap[] =
 {
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("RectangleShape"),        OBJ_RECT ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("EllipseShape"),          OBJ_CIRC ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("ControlShape"),          OBJ_UNO  ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("ConnectorShape"),        OBJ_EDGE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("MeasureShape"),          OBJ_MEASURE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("LineShape"),             OBJ_LINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("PolyPolygonShape"),      OBJ_POLY ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("PolyLineShape"),         OBJ_PLIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("OpenBezierShape"),       OBJ_PATHLINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("ClosedBezierShape"),     OBJ_PATHFILL ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("OpenFreeHandShape"),     OBJ_FREELINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("ClosedFreeHandShape"),   OBJ_FREEFILL ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("PolyPolygonPathShape"),  OBJ_PATHPOLY ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("PolyLinePathShape"),     OBJ_PATHPLIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("GraphicObjectShape"),    OBJ_GRAF ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("GroupShape"),            OBJ_GRUP ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("TextShape"),             OBJ_TEXT ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("OLE2Shape"),             OBJ_OLE2 ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("PageShape"),             OBJ_PAGE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("CaptionShape"),          OBJ_CAPTION ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("FrameShape"),            OBJ_FRAME ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("PluginShape"),           OBJ_OLE2_PLUGIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("AppletShape"),           OBJ_OLE2_APPLET ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),       OBJ_RECT ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),         OBJ_CIRC ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),         OBJ_UNO  ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),       OBJ_EDGE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),         OBJ_MEASURE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),            OBJ_LINE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),     OBJ_POLY ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),        OBJ_PLIN ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),      OBJ_PATHLINE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),    OBJ_PATHFILL ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),    OBJ_FREELINE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"),  OBJ_FREEFILL ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"), OBJ_PATHPOLY ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),    OBJ_PATHPLIN ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),   OBJ_GRAF ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),           OBJ_GRUP ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),            OBJ_TEXT ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),            OBJ_OLE2 ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),            OBJ_PAGE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),         OBJ_CAPTION ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),           OBJ_FRAME ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET ),
 
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DSceneObject"),    E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DCubeObject"),     E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DSphereObject"),   E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DLatheObject"),    E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DExtrudeObject"),  E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DPolygonObject"),  E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),   E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"),  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM(""),  0 )
 };
 

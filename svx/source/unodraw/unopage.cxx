@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-11 09:28:06 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 12:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,15 +442,10 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
 //----------------------------------------------------------------------
 SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & xShape ) throw()
 {
-    OUString aType( xShape->getShapeType() );
-    const OUString aPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
-    if(aType.compareTo( aPrefix, aPrefix.getLength() ) == 0)
-        aType = aType.copy( aPrefix.getLength() );
-
     sal_uInt16 nType;
     sal_uInt32 nInventor;
 
-    GetTypeAndInventor( nType, nInventor, aType );
+    GetTypeAndInventor( nType, nInventor, xShape->getShapeType() );
     SdrObject* pNewObj = 0;
 
     if( nType != 0 )
@@ -777,19 +772,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
             break;
         }
 
-        UHashMapEntry* pMap = pSdrShapeIdentifierMap;
-        while (pMap->aIdentifier.getLength())
-        {
-            if(pMap->nId == nObjId)
-            {
-                OUString aIdent( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
-                aIdent += pMap->aIdentifier;
-                pRet->SetShapeType(aIdent);
-                pRet->setShapeKind(nObjId);
-                break ;
-            }
-            pMap++;
-        }
+        pRet->setShapeKind(nObjId);
     }
 
     return pRet;
