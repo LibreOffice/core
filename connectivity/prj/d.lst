@@ -1,51 +1,15 @@
-..\%__SRC%\bin\sdbc*.dll %_DEST%\bin%_EXT%\sdbc*.dll
-..\%__SRC%\bin\jdbc*.dll %_DEST%\bin%_EXT%\jdbc*.dll
-..\%__SRC%\bin\odbc*.dll %_DEST%\bin%_EXT%\odbc*.dll
-..\%__SRC%\bin\dbase*.dll %_DEST%\bin%_EXT%\dbase*.dll
-..\%__SRC%\bin\adabas*.dll %_DEST%\bin%_EXT%\adabas*.dll
-..\%__SRC%\bin\ado*.dll %_DEST%\bin\%_EXT%\ado*.dll
-..\%__SRC%\bin\oterro*.dll %_DEST%\bin\%_EXT%\oterro*.dll
-..\%__SRC%\lib\libsdbc*.so %_DEST%\lib%_EXT%\libsdbc*.so
-..\%__SRC%\lib\libjdbc*.so %_DEST%\lib%_EXT%\libjdbc*.so
-..\%__SRC%\lib\libodbc*.so %_DEST%\lib%_EXT%\libodbc*.so
-..\%__SRC%\lib\libdbase*.so %_DEST%\lib%_EXT%\libdbase*.so
-..\%__SRC%\lib\libadabas*.so %_DEST%\lib%_EXT%\libadabas*.so
-..\%__SRC%\lib\libsdbc*.dylib %_DEST%\lib%_EXT%\libsdbc*.dylib
-..\%__SRC%\lib\libjdbc*.dylib %_DEST%\lib%_EXT%\libjdbc*.dylib
-..\%__SRC%\lib\libodbc*.dylib %_DEST%\lib%_EXT%\libodbc*.dylib
-..\%__SRC%\lib\libdbase*.dylib %_DEST%\lib%_EXT%\libdbase*.dylib
-..\%__SRC%\lib\libadabas*.dylib %_DEST%\lib%_EXT%\libadabas*.dylib
-
-..\%__SRC%\bin\dbt*.dll %_DEST%\bin%_EXT%\dbt*.dll
-..\%__SRC%\lib\libdbt* %_DEST%\lib%_EXT%\libdbt*
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\libconnectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
+..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib%_EXT%\idbt*
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
 
-hedabu: ..\inc\connectivity\CommonTools.hxx %_DEST%\inc%_EXT%\connectivity\CommonTools.hxx
-hedabu: ..\inc\connectivity\DateConversion.hxx %_DEST%\inc%_EXT%\connectivity\DateConversion.hxx
-hedabu: ..\inc\connectivity\PColumn.hxx %_DEST%\inc%_EXT%\connectivity\PColumn.hxx
-hedabu: ..\inc\connectivity\sqliterator.hxx %_DEST%\inc%_EXT%\connectivity\sqliterator.hxx
-hedabu: ..\inc\connectivity\sqlnode.hxx %_DEST%\inc%_EXT%\connectivity\sqlnode.hxx
-hedabu: ..\inc\connectivity\sqlparse.hxx %_DEST%\inc%_EXT%\connectivity\sqlparse.hxx
+hedabu: ..\inc\connectivity\*.hxx %_DEST%\inc%_EXT%\connectivity\*.hxx
 hedabu: ..\%__SRC%\inc\connectivity\sqlbison.hxx %_DEST%\inc%_EXT%\connectivity\sqlbison.hxx
-hedabu: ..\inc\connectivity\sdbcx\IRefreshable.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\IRefreshable.hxx
-hedabu: ..\inc\connectivity\sdbcx\VCatalog.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VCatalog.hxx
-hedabu: ..\inc\connectivity\sdbcx\VColumn.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VColumn.hxx
-hedabu: ..\inc\connectivity\sdbcx\VIndexColumn.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VIndexColumn.hxx
-hedabu: ..\inc\connectivity\sdbcx\VKey.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VKey.hxx
-hedabu: ..\inc\connectivity\sdbcx\VKeyColumn.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VKeyColumn.hxx
-hedabu: ..\inc\connectivity\sdbcx\VCollection.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VCollection.hxx
-hedabu: ..\inc\connectivity\sdbcx\VGroup.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VGroup.hxx
-hedabu: ..\inc\connectivity\sdbcx\VUser.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VUser.hxx
-hedabu: ..\inc\connectivity\sdbcx\VDescriptor.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VDescriptor.hxx
-hedabu: ..\inc\connectivity\sdbcx\VIndex.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VIndex.hxx
-hedabu: ..\inc\connectivity\sdbcx\VIndexColumn.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VIndexColumn.hxx
-hedabu: ..\inc\connectivity\sdbcx\VTable.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VTable.hxx
-hedabu: ..\inc\connectivity\sdbcx\VView.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VView.hxx
-hedabu: ..\inc\connectivity\sdbcx\VTypeDef.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VTypeDef.hxx
+hedabu: ..\inc\connectivity\sdbcx\*.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\*.hxx
 
-hedabu: ..\inc\connectivity\dbexception.hxx %_DEST%\inc%_EXT%\connectivity\dbexception.hxx
-hedabu: ..\inc\connectivity\dbconversion.hxx %_DEST%\inc%_EXT%\connectivity\dbconversion.hxx
-hedabu: ..\inc\connectivity\dbtools.hxx %_DEST%\inc%_EXT%\connectivity\dbtools.hxx
+
