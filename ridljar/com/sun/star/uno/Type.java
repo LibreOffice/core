@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:16:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,56 +88,100 @@ public class Type {
     // first in the class definition, so that the class can be initialized
     // sucessfully:
 
+    private static final String TYPE_NAME_VOID = "void";
+    private static final String TYPE_NAME_BOOLEAN = "boolean";
+    private static final String TYPE_NAME_BYTE = "byte";
+    private static final String TYPE_NAME_SHORT = "short";
+    private static final String TYPE_NAME_UNSIGNED_SHORT = "unsigned short";
+    private static final String TYPE_NAME_LONG = "long";
+    private static final String TYPE_NAME_UNSIGNED_LONG = "unsigned long";
+    private static final String TYPE_NAME_HYPER = "hyper";
+    private static final String TYPE_NAME_UNSIGNED_HYPER = "unsigned hyper";
+    private static final String TYPE_NAME_FLOAT = "float";
+    private static final String TYPE_NAME_DOUBLE = "double";
+    private static final String TYPE_NAME_CHAR = "char";
+    private static final String TYPE_NAME_STRING = "string";
+    private static final String TYPE_NAME_TYPE = "type";
+    private static final String TYPE_NAME_ANY = "any";
+
     // must be sorted same as TypeClass:
     private static final String[] __typeClassToTypeName = new String[] {
-        "void",
-        "char",
-        "boolean",
-        "byte",
-        "short",
-        "unsigned short",
-        "long",
-        "unsigned long",
-        "hyper",
-        "unsigned hyper",
-        "float",
-        "double",
-        "string",
-        "type",
-        "any"
+        TYPE_NAME_VOID,
+        TYPE_NAME_CHAR,
+        TYPE_NAME_BOOLEAN,
+        TYPE_NAME_BYTE,
+        TYPE_NAME_SHORT,
+        TYPE_NAME_UNSIGNED_SHORT,
+        TYPE_NAME_LONG,
+        TYPE_NAME_UNSIGNED_LONG,
+        TYPE_NAME_HYPER,
+        TYPE_NAME_UNSIGNED_HYPER,
+        TYPE_NAME_FLOAT,
+        TYPE_NAME_DOUBLE,
+        TYPE_NAME_STRING,
+        TYPE_NAME_TYPE,
+        TYPE_NAME_ANY
     };
 
-    private static final HashMap __javaClassToTypeName = new HashMap();
-
-    private static final HashMap __typeNameToTypeClass = new HashMap();
-
+    private static final HashMap __javaClassToTypeClass = new HashMap();
     static {
-        for (int i = 0; i < __typeClassToTypeName.length; ++i) {
-            __typeNameToTypeClass.put(__typeClassToTypeName[i],
-                                      TypeClass.fromInt(i));
-        }
-        __javaClassToTypeName.put(Void.class, "void");
-        __javaClassToTypeName.put(void.class, "void");
-        __javaClassToTypeName.put(Character.class, "char");
-        __javaClassToTypeName.put(char.class, "char");
-        __javaClassToTypeName.put(Boolean.class, "boolean");
-        __javaClassToTypeName.put(boolean.class, "boolean");
-        __javaClassToTypeName.put(Byte.class, "byte");
-        __javaClassToTypeName.put(byte.class, "byte");
-        __javaClassToTypeName.put(Short.class, "short");
-        __javaClassToTypeName.put(short.class, "short");
-        __javaClassToTypeName.put(Integer.class, "long");
-        __javaClassToTypeName.put(int.class, "long");
-        __javaClassToTypeName.put(Long.class, "hyper");
-        __javaClassToTypeName.put(long.class, "hyper");
-        __javaClassToTypeName.put(Float.class, "float");
-        __javaClassToTypeName.put(float.class, "float");
-        __javaClassToTypeName.put(Double.class, "double");
-        __javaClassToTypeName.put(double.class, "double");
-        __javaClassToTypeName.put(String.class, "string");
-        __javaClassToTypeName.put(Type.class, "type");
-        __javaClassToTypeName.put(Any.class, "any");
-        __javaClassToTypeName.put(Object.class, "any");
+        __javaClassToTypeClass.put(
+            void.class, new TypeClass[] { TypeClass.VOID, TypeClass.VOID });
+        __javaClassToTypeClass.put(
+            Void.class, new TypeClass[] { TypeClass.VOID, TypeClass.VOID });
+        __javaClassToTypeClass.put(
+            boolean.class,
+            new TypeClass[] { TypeClass.BOOLEAN, TypeClass.BOOLEAN });
+        __javaClassToTypeClass.put(
+            Boolean.class,
+            new TypeClass[] { TypeClass.BOOLEAN, TypeClass.BOOLEAN });
+        __javaClassToTypeClass.put(
+            byte.class, new TypeClass[] { TypeClass.BYTE, TypeClass.BYTE });
+        __javaClassToTypeClass.put(
+            Byte.class, new TypeClass[] { TypeClass.BYTE, TypeClass.BYTE });
+        __javaClassToTypeClass.put(
+            short.class,
+            new TypeClass[] { TypeClass.SHORT, TypeClass.UNSIGNED_SHORT });
+        __javaClassToTypeClass.put(
+            Short.class,
+            new TypeClass[] { TypeClass.SHORT, TypeClass.UNSIGNED_SHORT });
+        __javaClassToTypeClass.put(
+            int.class,
+            new TypeClass[] { TypeClass.LONG, TypeClass.UNSIGNED_LONG });
+        __javaClassToTypeClass.put(
+            Integer.class,
+            new TypeClass[] { TypeClass.LONG, TypeClass.UNSIGNED_LONG });
+        __javaClassToTypeClass.put(
+            long.class,
+            new TypeClass[] { TypeClass.HYPER, TypeClass.UNSIGNED_HYPER });
+        __javaClassToTypeClass.put(
+            Long.class,
+            new TypeClass[] { TypeClass.HYPER, TypeClass.UNSIGNED_HYPER });
+        __javaClassToTypeClass.put(
+            float.class, new TypeClass[] { TypeClass.FLOAT, TypeClass.FLOAT });
+        __javaClassToTypeClass.put(
+            Float.class, new TypeClass[] { TypeClass.FLOAT, TypeClass.FLOAT });
+        __javaClassToTypeClass.put(
+            double.class,
+            new TypeClass[] { TypeClass.DOUBLE, TypeClass.DOUBLE });
+        __javaClassToTypeClass.put(
+            Double.class,
+            new TypeClass[] { TypeClass.DOUBLE, TypeClass.DOUBLE });
+        __javaClassToTypeClass.put(
+            char.class, new TypeClass[] { TypeClass.CHAR, TypeClass.CHAR });
+        __javaClassToTypeClass.put(
+            Character.class,
+            new TypeClass[] { TypeClass.CHAR, TypeClass.CHAR });
+        __javaClassToTypeClass.put(
+            String.class,
+            new TypeClass[] { TypeClass.STRING, TypeClass.STRING });
+        __javaClassToTypeClass.put(
+            Type.class, new TypeClass[] { TypeClass.TYPE, TypeClass.TYPE });
+        __javaClassToTypeClass.put(
+            Any.class, new TypeClass[] { TypeClass.ANY, TypeClass.ANY });
+        __javaClassToTypeClass.put(
+            Object.class,
+            new TypeClass[] { TypeClass.ANY, TypeClass.INTERFACE });
     }
 
     public static final Type VOID = new Type(void.class);
@@ -146,13 +190,13 @@ public class Type {
     public static final Type BYTE = new Type(byte.class);
     public static final Type SHORT = new Type(short.class);
     public static final Type UNSIGNED_SHORT = new Type(
-        "unsigned short", TypeClass.UNSIGNED_SHORT);
+        TYPE_NAME_UNSIGNED_SHORT, TypeClass.UNSIGNED_SHORT);
     public static final Type LONG = new Type(int.class);
     public static final Type UNSIGNED_LONG = new Type(
-        "unsigned long", TypeClass.UNSIGNED_LONG);
+        TYPE_NAME_UNSIGNED_LONG, TypeClass.UNSIGNED_LONG);
     public static final Type HYPER = new Type(long.class);
     public static final Type UNSIGNED_HYPER = new Type(
-        "unsigned hyper", TypeClass.UNSIGNED_HYPER);
+        TYPE_NAME_UNSIGNED_HYPER, TypeClass.UNSIGNED_HYPER);
     public static final Type FLOAT = new Type(float.class);
     public static final Type DOUBLE = new Type(double.class);
     public static final Type STRING = new Type(String.class);
@@ -187,47 +231,116 @@ public class Type {
      * Constructs a new <code>Type</code> from the given
      * <code>java.lang.Class</code>.
      *
+     * <p>This is equivalent to <code>Type(zClass, false)</code>.</p>
+     *
      * @param zClass the Java class of this type.  Must not be
      *     <code>null</code>.
      *
      * @since UDK3.0
      */
     public Type(Class zClass) {
-        _class = zClass;
+        this(zClass, false);
+    }
 
-        _typeName = (String)__javaClassToTypeName.get(zClass);
-        if(_typeName != null)
-            _typeClass = (TypeClass)__typeNameToTypeClass.get(_typeName);
-
-        else {
-            if (XInterface.class.isAssignableFrom(zClass))
-            {
-                _typeClass = TypeClass.INTERFACE;
-                if (zClass.isInterface())
-                    _typeName = zClass.getName();
-                else
-                    _typeName = XInterface.class.getName();
-            }
-            else if(zClass.isArray()) {
-                _typeClass = TypeClass.SEQUENCE;
-                _typeName = "[]" + (new Type(_class.getComponentType()).getTypeName());
-            }
-            else if(Enum.class.isAssignableFrom(zClass)) {
-                _typeClass = TypeClass.ENUM;
-                _typeName  = zClass.getName();
-            }
-            else if(Throwable.class.isAssignableFrom(zClass)) {
-                _typeClass = TypeClass.EXCEPTION;
-                _typeName  = zClass.getName();
-            }
-            else if(Union.class.isAssignableFrom(zClass)) {
-                _typeClass = TypeClass.UNION;
-                _typeName  = zClass.getName();
-            }
-            else {
-                _typeClass = TypeClass.STRUCT;
-                _typeName  = zClass.getName();
-            }
+    /**
+     * Constructs a new <code>Type</code> from the given
+     * <code>java.lang.Class</code>, handling ambiguous cases.
+     *
+     * <p>In certain cases, one Java class corresponds to two UNO types (e.g.,
+     * the Java class <code>short[].class</code> corresponds to both a sequence
+     * of <codde>SHORT</code> and a sequence of <code>UNSIGNED SHORT</code> in
+     * UNO).  In such ambiguous cases, the parameter <code>alternative</code>
+     * controls which UNO type is chosen:</p>
+     * <ul>
+     *   <li>If the Java type is (an array type with element type)
+     *   <code>short</code> or <code>java.lang.Short</code>:  If
+     *   <code>alternative</code> is <code>false</code>, the chosen UNO type is
+     *   (a sequence type with element type) <code>SHORT</code>.  If
+     *   <code>alternative</code> is <code>true</code>, the chosen UNO type is
+     *   (a sequence type with element type) <code>UNSIGNED SHORT</code>.</li>
+     *
+     *   <li>If the Java type is (an array type with element type)
+     *   <code>int</code> or <code>java.lang.Integer</code>:  If
+     *   <code>alternative</code> is <code>false</code>, the chosen UNO type is
+     *   (a sequence type with element type) <code>LONG</code>.  If
+     *   <code>alternative</code> is <code>true</code>, the chosen UNO type is
+     *   (a sequence type with element type) <code>UNSIGNED LONG</code>.</li>
+     *
+     *   <li>If the Java type is (an array type with element type)
+     *   <code>long</code> or <code>java.lang.Long</code>:  If
+     *   <code>alternative</code> is <code>false</code>, the chosen UNO type is
+     *   (a sequence type with element type) <code>HYPER</code>.  If
+     *   <code>alternative</code> is <code>true</code>, the chosen UNO type is
+     *   (a sequence type with element type) <code>UNSIGNED HYPER</code>.</li>
+     *
+     *   <li>If the Java type is (an array type with element type)
+     *   <code>java.lang.Object</code>:  If <code>alternative</code> is
+     *   <code>false</code>, the chosen UNO type is (a sequence type with
+     *   element type) <code>ANY</code>.  If <code>alternative</code> is
+     *   <code>true</code>, the chosen UNO type is (a sequence type with element
+     *   type) <code>com.sun.star.uno.XInterface</code>.</li>
+     * </ul>
+     * <p>In all other cases, the value of <code>alternative</code> is
+     * ignored.</p>
+     *
+     * @param zClass the Java class of this type; must not be <code>null</code>
+     * @param alternative controls which UNO type to choose in case of
+     *     ambiguities
+     *
+     * @since UDK 3.2
+     */
+    public Type(Class zClass, boolean alternative) {
+        TypeClass[] tc = (TypeClass[]) __javaClassToTypeClass.get(zClass);
+        if (tc != null) {
+            // tc only contains primitive type classes, except for
+            // TypeClass.INTERFACE, which stands for XInterface (the alternative
+            // interpretation of java.lang.Object):
+            _typeClass = tc[alternative ? 1 : 0];
+            _typeName = _typeClass == TypeClass.INTERFACE
+                ? XInterface.class.getName()
+                : __typeClassToTypeName[_typeClass.getValue()];
+            // do not assign _class from zClass, as _class should always be
+            // normalized (e.g., boolean.class instead of
+            // java.lang.Boolean.class); getZClass will later calculate the
+            // correct class when needed
+        } else if (zClass.isArray()) {
+            Type t = new Type(zClass.getComponentType(), alternative);
+            _typeClass = t.getTypeClass() != TypeClass.UNKNOWN
+                ? TypeClass.SEQUENCE : TypeClass.UNKNOWN;
+            _typeName = "[]" + t.getTypeName();
+            // do not assign _class from zClass, as _class should always be
+            // normalized (e.g., boolean[].class instead of
+            // java.lang.Boolean[].class); getZClass will later calculate the
+            // correct class when needed
+        } else if (Enum.class.isAssignableFrom(zClass)) {
+            _typeClass = zClass != Enum.class
+                ? TypeClass.ENUM : TypeClass.UNKNOWN;
+            _typeName = zClass.getName();
+            _class = zClass;
+        } else if (Throwable.class.isAssignableFrom(zClass)) {
+            _typeClass
+                = com.sun.star.uno.Exception.class.isAssignableFrom(zClass)
+                || com.sun.star.uno.RuntimeException.class.isAssignableFrom(
+                    zClass)
+                ? TypeClass.EXCEPTION : TypeClass.UNKNOWN;
+            _typeName = zClass.getName();
+            _class = zClass;
+        } else if (zClass.isInterface()) {
+            _typeClass = XInterface.class.isAssignableFrom(zClass)
+                ? TypeClass.INTERFACE : TypeClass.UNKNOWN;
+            _typeName = zClass.getName();
+            _class = zClass;
+        } else if (XInterface.class.isAssignableFrom(zClass)) {
+            // This case is needed by code that uses this constructor to
+            // calculate the UNO type corresponding to a Java object:
+            _typeClass = TypeClass.INTERFACE;
+            _typeName = XInterface.class.getName();
+            _class = XInterface.class;
+        } else {
+            // assert zClass != Object.class && !zClass.isPrimitive();
+            _typeClass = TypeClass.STRUCT;
+            _typeName = zClass.getName();
+            _class = zClass;
         }
     }
 
@@ -265,11 +378,14 @@ public class Type {
      * @since UDK3.0
      */
     public Type(String typeName) {
-        _typeClass = (TypeClass)__typeNameToTypeClass.get(typeName);
-
-        if(_typeClass == null)
-            _typeClass = TypeClass.UNKNOWN;
-
+        TypeClass tc = TypeClass.UNKNOWN;
+        for (int i = 0; i < __typeClassToTypeName.length; ++i) {
+            if (__typeClassToTypeName[i].equals(typeName)) {
+                tc = TypeClass.fromInt(i);
+                break;
+            }
+        }
+        _typeClass = tc;
         _typeName = typeName;
     }
 
@@ -321,18 +437,8 @@ public class Type {
     /**
      * Gets the Java class.
      *
-     * <p>The implementation of
-     * <code>com.sun.star.lib.uno.typedesc.TypeDescription</code> (for example,
-     * <code>getTypeDescription(Type)</code>) seems to require that the mapping
-     * from UNO types to Java classes is an injection.  Therefore, for example,
-     * the UNO type <code>SHORT</code> maps to the Java class
-     * <code>short.class</code>, but the UNO type <code>UNSIGNED SHORT</code>
-     * maps to <code>null</code>.
-     *
      * @return the type name; may be <code>null</code> in extreme situations
-     *     (inconsistent <code>TypeClass</code>, error loading a class), or when
-     *     there is no distinct Java class to represent a UNO type (so that the
-     *     mapping from UNO types to Java classes is an injection)
+     *     (inconsistent <code>TypeClass</code>, error loading a class)
      *
      * @since UDK1.0
      */
@@ -410,9 +516,9 @@ public class Type {
 
     // @see java.lang.Object#equals
     public boolean equals(Object obj) {
-        return this == obj
-            || (obj instanceof Type
-                && _typeName.equals(((Type) obj)._typeName));
+        return obj instanceof Type
+            && _typeClass == ((Type) obj)._typeClass
+            && _typeName.equals(((Type) obj)._typeName);
     }
 
     // @see java.lang.Object#hashCode
@@ -428,29 +534,52 @@ public class Type {
     private Class determineClass() {
         switch (_typeClass.getValue()) {
         case TypeClass.VOID_value:
-            return void.class;
+            return _typeName.equals(TYPE_NAME_VOID) ? void.class : null;
+
         case TypeClass.BOOLEAN_value:
-            return boolean.class;
+            return _typeName.equals(TYPE_NAME_BOOLEAN) ? boolean.class : null;
+
         case TypeClass.BYTE_value:
-            return byte.class;
+            return _typeName.equals(TYPE_NAME_BYTE) ? byte.class : null;
+
         case TypeClass.SHORT_value:
-            return short.class;
+            return _typeName.equals(TYPE_NAME_SHORT) ? short.class : null;
+
+        case TypeClass.UNSIGNED_SHORT_value:
+            return _typeName.equals(TYPE_NAME_UNSIGNED_SHORT)
+                ? short.class : null;
+
         case TypeClass.LONG_value:
-            return int.class;
+            return _typeName.equals(TYPE_NAME_LONG) ? int.class : null;
+
+        case TypeClass.UNSIGNED_LONG_value:
+            return _typeName.equals(TYPE_NAME_UNSIGNED_LONG) ? int.class : null;
+
         case TypeClass.HYPER_value:
-            return long.class;
+            return _typeName.equals(TYPE_NAME_HYPER) ? long.class : null;
+
+        case TypeClass.UNSIGNED_HYPER_value:
+            return _typeName.equals(TYPE_NAME_UNSIGNED_HYPER)
+                ? long.class : null;
+
         case TypeClass.FLOAT_value:
-            return float.class;
+            return _typeName.equals(TYPE_NAME_FLOAT) ? float.class : null;
+
         case TypeClass.DOUBLE_value:
-            return double.class;
+            return _typeName.equals(TYPE_NAME_DOUBLE) ? double.class : null;
+
         case TypeClass.CHAR_value:
-            return char.class;
+            return _typeName.equals(TYPE_NAME_CHAR) ? char.class : null;
+
         case TypeClass.STRING_value:
-            return String.class;
+            return _typeName.equals(TYPE_NAME_STRING) ? String.class : null;
+
         case TypeClass.TYPE_value:
-            return Type.class;
+            return _typeName.equals(TYPE_NAME_TYPE) ? Type.class : null;
+
         case TypeClass.ANY_value:
-            return Object.class;
+            return _typeName.equals(TYPE_NAME_ANY) ? Object.class : null;
+
         case TypeClass.SEQUENCE_value:
             StringBuffer buf = new StringBuffer();
             int offset = 0;
@@ -459,35 +588,43 @@ public class Type {
                 buf.append('[');
             }
             String base = _typeName.substring(offset);
-            if (base.equals("void")) {
+            if (base.equals(TYPE_NAME_VOID)) {
                 buf.append('V');
-            } else if (base.equals("boolean")) {
+            } else if (base.equals(TYPE_NAME_BOOLEAN)) {
                 buf.append('Z');
-            } else if (base.equals("byte")) {
+            } else if (base.equals(TYPE_NAME_BYTE)) {
                 buf.append('B');
-            } else if (base.equals("short")) {
+            } else if (base.equals(TYPE_NAME_SHORT)
+                       || base.equals(TYPE_NAME_UNSIGNED_SHORT)) {
                 buf.append('S');
-            } else if (base.equals("long")) {
+            } else if (base.equals(TYPE_NAME_LONG)
+                       || base.equals(TYPE_NAME_UNSIGNED_LONG)) {
                 buf.append('I');
-            } else if (base.equals("hyper")) {
+            } else if (base.equals(TYPE_NAME_HYPER)
+                       || base.equals(TYPE_NAME_UNSIGNED_HYPER)) {
                 buf.append('J');
-            } else if (base.equals("float")) {
+            } else if (base.equals(TYPE_NAME_FLOAT)) {
                 buf.append('F');
-            } else if (base.equals("double")) {
+            } else if (base.equals(TYPE_NAME_DOUBLE)) {
                 buf.append('D');
-            } else if (base.equals("char")) {
+            } else if (base.equals(TYPE_NAME_CHAR)) {
                 buf.append('C');
-            } else if (base.equals("string")) {
+            } else if (base.equals(TYPE_NAME_STRING)) {
                 buf.append("Ljava.lang.String;");
-            } else if (base.equals("type")) {
+            } else if (base.equals(TYPE_NAME_TYPE)) {
                 buf.append("Lcom.sun.star.uno.Type;");
-            } else if (base.equals("any")) {
+            } else if (base.equals(TYPE_NAME_ANY)) {
                 buf.append("Ljava.lang.Object;");
-            } else if (base.equals("unsigned short")
-                       || base.equals("unsigned long")
-                       || base.equals("unsigned hyper")) {
-                return null;
             } else {
+                Class c = null;
+                try {
+                    c = Class.forName(base);
+                } catch (ClassNotFoundException e) {}
+                if (c == null
+                    || new Type(c).getTypeClass() == TypeClass.UNKNOWN)
+                {
+                    return null;
+                }
                 buf.append('L');
                 buf.append(base);
                 buf.append(';');
@@ -497,15 +634,19 @@ public class Type {
             } catch (ClassNotFoundException e) {
                 return null;
             }
+
         case TypeClass.ENUM_value:
         case TypeClass.STRUCT_value:
         case TypeClass.EXCEPTION_value:
         case TypeClass.INTERFACE_value:
+            Class c;
             try {
-                return Class.forName(_typeName);
+                    c = Class.forName(_typeName);
             } catch (ClassNotFoundException e) {
                 return null;
             }
+            return new Type(c).equals(this) ? c : null;
+
         default:
             return null;
         }
@@ -517,7 +658,7 @@ public class Type {
 
     protected TypeClass _typeClass; // TODO should be final
     protected String _typeName; // TODO should be final
-    protected Class _class; // TODO should be final
 
+    protected Class _class;
     protected ITypeDescription _iTypeDescription;
 }
