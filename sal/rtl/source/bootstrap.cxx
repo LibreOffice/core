@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mhu $ $Date: 2002-04-21 13:38:41 $
+ *  last change: $Author: hr $ $Date: 2002-04-22 15:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ struct MyAllocator
         return size_type(-1)/sizeof(T);
     }
 
-    pointer allocate (size_type n)
+    pointer allocate (size_type n, void const * = 0)
     {
         n *= sizeof(T);
         return (pointer)rtl_allocateMemory(sal_uInt32(n));
