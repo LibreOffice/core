@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:34:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "§R°£(~D)";
             Text[ arabic ] = "ΝΠέ";
             Text[ greek ] = "Διαγρα~φή";
-            Text[ korean ] = "»θΑ¦";
+            Text[ korean ] = "»θΑ¦(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
         };
@@ -249,7 +249,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
             Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ";
             Text[ greek ] = "Μετονομασία";
-            Text[ korean ] = "ΐΜΈ§ Ί―°ζ";
+            Text[ korean ] = "ΐΜΈ§ Ί―°ζ(~R)";
             Text[ turkish ] = "Yeniden adlandύr";
             Text[ language_user1 ] = " ";
         };
@@ -275,7 +275,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "Δέ©Κ(~I)";
             Text[ arabic ] = "ΞΥΗΖΥ";
             Text[ greek ] = "Ιδιότητ~ες";
-            Text[ korean ] = "µξ·ΟΑ¤ΊΈ";
+            Text[ korean ] = "µξ·ΟΑ¤ΊΈ(~I)";
             Text[ turkish ] = "Φzellikler";
             Text[ language_user1 ] = " ";
         };
@@ -297,7 +297,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_simplified ] = "ΣΓΙθΌΖΔ£Κ½΄ςΏª";
             Text[ russian ] = "Ξςκπϋςό β πεζθμε οπξεκςΰ";
             Text[ polish ] = "Otwσrz w trybie projektu";
-            Text[ japanese ] = "‰Ί‘‚«Σ°Δή‚ΕJ‚­";
+            Text[ japanese ] = "Γή»ή²έΣ°Δή‚ΕJ‚­";
             Text[ chinese_traditional ] = "¶}±Ò³]­pΌÒ¦΅";
             Text[ arabic ] = "έΚΝ έν ζΦΪ ΗαΚΥγνγ";
             Text[ greek ] = "Άνοιγμα σε κατάσταση σ~χεδιασμού";
@@ -344,7 +344,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "~Textfeld" ;
             Text [ ENGLISH ] = "~TextField" ;
             Text[ english_us ] = "~Text Box";
-            Text[ portuguese ] = "~Campo de texto";
+            Text[ portuguese ] = "~Caixa de texto";
             Text[ russian ] = "Òεκρςξβξε οξλε";
             Text[ greek ] = "Πεδίο ~κειμένου";
             Text[ dutch ] = "~Tekstveld";
@@ -406,10 +406,10 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Etikettfδlt";
             Text[ polish ] = "Pole etykiety";
             Text[ portuguese_brazilian ] = "~Label";
-            Text[ japanese ] = "ΧΝήΩΜ¨°ΩΔή(~C)";
+            Text[ japanese ] = "ΧΝήΩΜ¨°ΩΔή(~B)";
             Text[ korean ] = "¶σΊ§ ΗΚµε(~B)";
             Text[ chinese_simplified ] = "±κΗ©ΐΈ(~B)";
-            Text[ chinese_traditional ] = "ΌΠΕÒΔζ¦μ(~C)";
+            Text[ chinese_traditional ] = "ΌΠΕÒΔζ¦μ(~B)";
             Text[ arabic ] = "Νήα ΪδζδΙ";
             Text[ turkish ] = "Etiket alanύ";
             Text[ language_user1 ] = " ";
@@ -552,7 +552,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ russian ] = "Γπΰτθχερκΰÿ κνξοκΰ";
             Text[ greek ] = "~Γραφικό πεδίο επιλογής";
             Text[ dutch ] = "~Afbeeldingenknop";
-            Text[ french ] = "Bouton ~imagι";
+            Text[ french ] = "Bouton ~picto";
             Text[ spanish ] = "Botσn g~rαfico";
             Text[ italian ] = "P~ulsante immagine";
             Text[ danish ] = "Grafisk knap";
@@ -599,7 +599,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "D~atumsfeld" ;
             Text [ ENGLISH ] = "~Date Field" ;
             Text[ english_us ] = "~Date Field";
-            Text[ portuguese ] = "Campo de d~ata";
+            Text[ portuguese ] = "Campo para d~ata";
             Text[ russian ] = "Οξλε δΰςϋ";
             Text[ greek ] = "Πεδίο ημερομηνί~ας";
             Text[ dutch ] = "~Datumveld";
@@ -677,7 +677,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "~Wδhrungsfeld" ;
             Text [ ENGLISH ] = "C~urrency Field" ;
             Text[ english_us ] = "C~urrency Field";
-            Text[ portuguese ] = "Campo de moe~da";
+            Text[ portuguese ] = "Campo para moe~da";
             Text[ russian ] = "Οξλε δλÿ βΰλώςϋ";
             Text[ greek ] = "Πε~δίο νομίσματος";
             Text[ dutch ] = "~Valutaveld";
@@ -716,7 +716,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ japanese ] = "Κίΐ°έΜ¨°ΩΔή(~P)";
             Text[ korean ] = "ΖΠΕΟ ΗΚµε(~P)";
             Text[ chinese_simplified ] = "ΡΪΒλΗψ(~P)";
-            Text[ chinese_traditional ] = "±»½XΔζ(~P)";
+            Text[ chinese_traditional ] = "ΎBΈnΔζ¦μ(~P)";
             Text[ arabic ] = "Νήα γυήδψσΪ";
             Text[ turkish ] = "Maskelenmiώ alan";
         };
@@ -727,11 +727,11 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "G~rafisches Kontrollfeld" ;
             Text [ ENGLISH ] = "Ima~ge Control" ;
             Text[ english_us ] = "Ima~ge Control";
-            Text[ portuguese ] = "Controlo de i~magem";
+            Text[ portuguese ] = "Controlo g~rαfico";
             Text[ russian ] = "Γπΰτθχερκθι ύλεμενς σοπΰβλενθÿ";
             Text[ greek ] = "Γ~ραφικό πεδίο ελέγχου";
             Text[ dutch ] = "Grafisch c~ontroleveld";
-            Text[ french ] = "Champ de contrτle ~graphique";
+            Text[ french ] = "Contrτle ~picto";
             Text[ spanish ] = "Control de ima~gen";
             Text[ italian ] = "Campo di controllo ~immagine";
             Text[ danish ] = "Grafisk kontrolelement";
