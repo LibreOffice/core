@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-05 15:24:05 $
+ *  last change: $Author: obr $ $Date: 2001-11-08 12:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,9 +663,9 @@ const _pair _locale_extension_list[] = {
 #if (0)
     { "sun_eu_greek", RTL_TEXTENCODING_DONTKNOW    },
 #endif
+    { "utf-16",       RTL_TEXTENCODING_UNICODE     },
     { "utf-7",        RTL_TEXTENCODING_UTF7        },
-    { "utf-8",        RTL_TEXTENCODING_UTF8        },
-    { "utf-16",       RTL_TEXTENCODING_UNICODE     }
+    { "utf-8",        RTL_TEXTENCODING_UTF8        }
 };
 
 const _pair _iso_language_list[] = {
