@@ -1,0 +1,6 @@
+rem @echo off
+iff "%PERL%" == "" then
+	call perl5 %SOLARENV%\bin\mkdir.pl %1&
+else
+	call %PERL% %SOLARENV%\bin\mkdir.pl %1&
+endiff
