@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,6 +1205,7 @@ void Content::insert(
     }
 
     OUString aNewURL = m_aUri.getParentUri();
+    aNewURL += OUString::createFromAscii( "/" );
     aNewURL += m_aProps.aTitle;
     PackageUri aNewUri( aNewURL );
 
@@ -1382,9 +1383,9 @@ void Content::transfer( const TransferInfo& rInfo )
 
         OUString aType = xSource->isFolder()
                        ? OUString::createFromAscii(
-                               PACKAGE_FOLDER_CONTENT_SERVICE_NAME )
+                               PACKAGE_FOLDER_CONTENT_TYPE )
                        : OUString::createFromAscii(
-                               PACKAGE_STREAM_CONTENT_SERVICE_NAME );
+                               PACKAGE_STREAM_CONTENT_TYPE );
         ContentInfo aInfo;
         aInfo.Type = aType;
         aInfo.Attributes = 0;
