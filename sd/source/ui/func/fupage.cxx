@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-28 07:06:43 $
+ *  last change: $Author: thb $ $Date: 2001-06-06 15:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,10 +335,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
         aMergedAttr.Put(aNewAttr);
 
-        BOOL bAreaTabPage = ( ePageKind == PK_NOTES &&
-                              ( (SdDrawViewShell*) pViewSh )->GetEditMode() == EM_MASTERPAGE ) ||
-                            ( ePageKind == PK_HANDOUT );
-        SdPageDlg* pDlg = new SdPageDlg( pDocSh, NULL, &aMergedAttr, bAreaTabPage );
+        SdPageDlg* pDlg = new SdPageDlg( pDocSh, NULL, &aMergedAttr,
+                                         // shall we display background area tabpage?
+                                         (ePageKind == PK_STANDARD) ? TRUE : FALSE );
 
         USHORT nResult = pDlg->Execute();
 

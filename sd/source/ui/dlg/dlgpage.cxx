@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: thb $ $Date: 2001-06-06 15:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
     nGradientListState = CT_NONE;
     nHatchingListState = CT_NONE;
 
-    if( bAreaPage)  // I have to add the page before I remove it !
+    if(!bAreaPage)  // I have to add the page before I remove it !
         RemoveTabPage( RID_SVXPAGE_AREA );
 }
 
