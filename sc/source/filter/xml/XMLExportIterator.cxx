@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 17:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,20 @@
 #include "XMLExportIterator.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONANCHOR_HPP_
-#include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_XSIMPLETEXT_HPP_
 #include <com/sun/star/text/XSimpleText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLADDRESSABLE_HPP_
+#include <com/sun/star/sheet/XCellAddressable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
+#include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CELLFLAGS_HPP_
+#include <com/sun/star/sheet/CellFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONSSUPPLIER_HPP_
+#include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -585,6 +594,15 @@ ScMyCell::~ScMyCell()
 
 //==============================================================================
 
+sal_Bool ScMyAnnotation::operator<(const ScMyAnnotation& rAnno)
+{
+    if( aCellAddress.Row != rAnno.aCellAddress.Row )
+        return (aCellAddress.Row < rAnno.aCellAddress.Row);
+    else
+        return (aCellAddress.Column < rAnno.aCellAddress.Column);
+}
+
+
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
     : rExport(rTempXMLExport),
     pCellItr(NULL),
@@ -640,26 +658,30 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 {
     aCell.bHasAnnotation = sal_False;
-    if (xCellRange.is())
+    if (!aAnnotations.empty())
     {
-        aCell.xCell = xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row);
-        uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(aCell.xCell, uno::UNO_QUERY);
-        if (xSheetAnnotationAnchor.is())
+        ScMyAnnotationList::iterator aItr = aAnnotations.begin();
+        if ((aCell.aCellAddress.Column == aItr->aCellAddress.Column) &&
+            (aCell.aCellAddress.Row == aItr->aCellAddress.Row))
         {
-            uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation = xSheetAnnotationAnchor->getAnnotation();
-            uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
-            if (xSheetAnnotation.is() && xSimpleText.is())
+            aCell.xAnnotation = aItr->xAnnotation;
+            uno::Reference<text::XSimpleText> xSimpleText(aCell.xAnnotation, uno::UNO_QUERY);
+            if (aCell.xAnnotation.is() && xSimpleText.is())
             {
-                OUString sText = xSimpleText->getString();
-                if (sText.getLength())
+                aCell.sAnnotationText = xSimpleText->getString();
+                if (aCell.sAnnotationText.getLength())
                     aCell.bHasAnnotation = sal_True;
             }
+            aAnnotations.erase(aItr);
         }
     }
+    if (xCellRange.is())
+        aCell.xCell = xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row);
 }
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
 {
+    DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
     if (nCurrentTable != nTable)
     {
         nCurrentTable = static_cast<sal_Int16>(nTable);
@@ -680,6 +702,31 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
                     uno::Any aTable = xIndex->getByIndex(nCurrentTable);
                     aTable>>=xTable;
                     xCellRange = uno::Reference<table::XCellRange>(xTable, uno::UNO_QUERY);
+                    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
+                    uno::Reference<sheet::XSheetAnnotationsSupplier> xSheetAnnotationsSupplier (xTable, uno::UNO_QUERY);
+                    if (xSheetAnnotationsSupplier.is())
+                    {
+                        uno::Reference<container::XEnumerationAccess> xAnnotationAccess ( xSheetAnnotationsSupplier->getAnnotations(), uno::UNO_QUERY);
+                        if (xAnnotationAccess.is())
+                        {
+                            uno::Reference<container::XEnumeration> xAnnotations = xAnnotationAccess->createEnumeration();
+                            if (xAnnotations.is())
+                            {
+                                while (xAnnotations->hasMoreElements())
+                                {
+                                    uno::Any aAny = xAnnotations->nextElement();
+                                    ScMyAnnotation aAnnotation;
+                                    if (aAny >>= aAnnotation.xAnnotation)
+                                    {
+                                        aAnnotation.aCellAddress = aAnnotation.xAnnotation->getPosition();
+                                        aAnnotations.push_back(aAnnotation);
+                                    }
+                                }
+                                if (!aAnnotations.empty())
+                                    aAnnotations.sort();
+                            }
+                        }
+                    }
                 }
             }
         }

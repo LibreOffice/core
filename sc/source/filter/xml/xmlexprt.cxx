@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 05:44:33 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 17:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2358,66 +2358,53 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
 
 void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
 {
-    if( rMyCell.bHasAnnotation )
+    if( rMyCell.bHasAnnotation && rMyCell.xAnnotation.is())
     {
-        uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(rMyCell.xCell, uno::UNO_QUERY);
-        if (xSheetAnnotationAnchor.is())
+        rtl::OUString sAuthor(rMyCell.xAnnotation->getAuthor());
+        if (sAuthor.getLength())
+            AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, sAuthor);
+        String aDate(rMyCell.xAnnotation->getDate());
+        if (pDoc)
         {
-            uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation = xSheetAnnotationAnchor->getAnnotation();
-            uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
-            if (xSheetAnnotation.is() && xSimpleText.is())
+            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+            double fDate;
+            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+            if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
             {
-                rtl::OUString sOUText = xSimpleText->getString();
-                if (sOUText.getLength())
-                {
-                    rtl::OUString sAuthor(xSheetAnnotation->getAuthor());
-                    if (sAuthor.getLength())
-                        AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, sAuthor);
-                    String aDate(xSheetAnnotation->getDate());
-                    if (pDoc)
-                    {
-                        SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-                        double fDate;
-                        sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-                        if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
-                        {
-                            rtl::OUStringBuffer sBuf;
-                            GetMM100UnitConverter().convertDateTime(sBuf, fDate);
-                            AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date, sBuf.makeStringAndClear());
-                        }
-                        else
-                            AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
-                    }
-                    else
-                        AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
-                    if (xSheetAnnotation->getIsVisible())
-                        AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_true);
-                    SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_True);
-                    sal_Int32 i = 0;
-                    rtl::OUStringBuffer sTemp;
-                    sal_Bool bPrevCharWasSpace(sal_True);
-                    String sText(sOUText);
-                    rtl::OUString sOUText2 (sText.ConvertLineEnd(LINEEND_LF));
-                    while(i < sOUText2.getLength())
-                    {
-                        if (sOUText2[i] == '\n')
-                        {
-                            SvXMLElementExport aElemP(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                            GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
-                        }
-                        else
-                            sTemp.append(sOUText2[i]);
-                        i++;
-                    }
-                    if (sTemp.getLength())
-                    {
-                        SvXMLElementExport aElemP(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                        GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
-                    }
-                }
+                rtl::OUStringBuffer sBuf;
+                GetMM100UnitConverter().convertDateTime(sBuf, fDate);
+                AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date, sBuf.makeStringAndClear());
             }
-            CheckAttrList();
+            else
+                AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
         }
+        else
+            AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
+        if (rMyCell.xAnnotation->getIsVisible())
+            AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_true);
+        SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_True);
+        sal_Int32 i = 0;
+        rtl::OUStringBuffer sTemp;
+        sal_Bool bPrevCharWasSpace(sal_True);
+        String sText(rMyCell.sAnnotationText);
+        rtl::OUString sOUText2 (sText.ConvertLineEnd(LINEEND_LF));
+        while(i < sOUText2.getLength())
+        {
+            if (sOUText2[i] == '\n')
+            {
+                SvXMLElementExport aElemP(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+                GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+            }
+            else
+                sTemp.append(sOUText2[i]);
+            i++;
+        }
+        if (sTemp.getLength())
+        {
+            SvXMLElementExport aElemP(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+            GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+        }
+        CheckAttrList();
     }
 }
 

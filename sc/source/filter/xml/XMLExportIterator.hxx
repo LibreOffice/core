@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 17:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATION_HPP_
+#include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -314,11 +317,13 @@ struct ScMyCell
 {
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
     com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
+    com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
     com::sun::star::table::CellAddress      aCellAddress;
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
 
     rtl::OUString               sStringValue;
+    rtl::OUString               sAnnotationText;
 
     ScMyAreaLink                aAreaLink;
     ScMyShapeVec                aShapeVec;
@@ -353,10 +358,20 @@ struct ScMyCell
 
 //==============================================================================
 
+struct ScMyAnnotation
+{
+    com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
+    com::sun::star::table::CellAddress      aCellAddress;
+    sal_Bool operator<(const ScMyAnnotation& rDetOp);
+};
+
+typedef ::std::list< ScMyAnnotation > ScMyAnnotationList;
+
 class ScMyNotEmptyCellsIterator
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
     com::sun::star::uno::Reference<com::sun::star::table::XCellRange> xCellRange;
+    ScMyAnnotationList                  aAnnotations;
 
     ScMyShapesContainer*                pShapes;
     ScMyEmptyDatabaseRangesContainer*   pEmptyDatabaseRanges;
