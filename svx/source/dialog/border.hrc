@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:35:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@
 #define CB_MERGEWITHNEXT        65
 
 // ImageListe fuer ValueSets:
-#define IL_PRE_BITMAPS          1
+#define IL_PRE_BITMAPS          1400
+#define ILH_PRE_BITMAPS         1401
 #define IID_PRENONE             1
 #define IID_TABLE_PRE1          2
 #define IID_TABLE_PRE2          3
@@ -112,15 +113,14 @@
 #define IID_PARAGRAPH_PRE2      7
 #define IID_PARAGRAPH_PRE3      8
 #define IID_PARAGRAPH_PRE4      9
-#define ILH_PRE_BITMAPS         10
 
-#define IL_SDW_BITMAPS          2
+#define IL_SDW_BITMAPS          1500
+#define ILH_SDW_BITMAPS         1501
 #define IID_SHADOWNONE          1
 #define IID_SHADOW_BOT_RIGHT    2
 #define IID_SHADOW_BOT_LEFT     3
 #define IID_SHADOW_TOP_RIGHT    4
 #define IID_SHADOW_TOP_LEFT     5
-#define ILH_SDW_BITMAPS         6
 
 
 #endif
