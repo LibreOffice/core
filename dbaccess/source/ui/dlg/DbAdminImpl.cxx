@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 15:03:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,34 +384,32 @@ void ODbDataSourceAdministrationHelper::clearPassword()
         m_pItemSetHelper->getWriteOutputSet()->ClearItem(DSID_PASSWORD);
 }
 // -----------------------------------------------------------------------------
-Reference<XConnection> ODbDataSourceAdministrationHelper::createConnection()
+::std::pair< Reference<XConnection>,sal_Bool> ODbDataSourceAdministrationHelper::createConnection()
 {
-    Reference<XConnection> xConnection;
-//  //  if (bValid)
-    {   // get the current table list from the connection for the current settings
-        // the PropertyValues for the current dialog settings
-        Sequence< PropertyValue > aConnectionParams;
-        if ( getCurrentSettings(aConnectionParams) )
+    ::std::pair< Reference<XConnection>,sal_Bool> aRet;
+    aRet.second = sal_False;
+    Sequence< PropertyValue > aConnectionParams;
+    if ( getCurrentSettings(aConnectionParams) )
+    {
+        // the current DSN
+        // fill the table list with this connection information
+        SQLExceptionInfo aErrorInfo;
+        try
         {
-            // the current DSN
-            // fill the table list with this connection information
-            SQLExceptionInfo aErrorInfo;
-            try
-            {
-                WaitObject aWaitCursor(m_pParent);
-                xConnection = getDriver()->connect(getConnectionURL(), aConnectionParams);
-            }
-            catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-            catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-            catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
-
-            showError(aErrorInfo,m_pParent,getORB());
+            WaitObject aWaitCursor(m_pParent);
+            aRet.first = getDriver()->connect(getConnectionURL(), aConnectionParams);
+            aRet.second = sal_True;
         }
+        catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+
+        showError(aErrorInfo,m_pParent,getORB());
     }
-    if(xConnection.is())
+    if ( aRet.first.is() )
         successfullyConnected();// notify the admindlg to save the password
 
-    return xConnection;
+    return aRet;
 }
 // -----------------------------------------------------------------------------
 Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
@@ -545,6 +543,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                     sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
                     // TODO: what's that? Why is the database name transported via the URL Item?
                     // Huh? Anybody there?
+                    // OJ: It is needed when the connection properties are changed. There the URL is used for every type.
 
                 if ( sDatabaseName.Len() )
                 {
@@ -557,13 +556,16 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_ORACLE_PORTNUMBER, sal_True);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
                 sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("@"));
                 sNewUrl += lcl_createHostWithPort(pHostName,pPortNumber);
-                String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
-                if ( sUrl.Len() )
+                String sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : String();
+                if ( !sDatabaseName.Len() && pUrlItem )
+                    sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
+                if ( sDatabaseName.Len() )
                 {
                     sNewUrl += String::CreateFromAscii(":");
-                    sNewUrl += sUrl;
+                    sNewUrl += sDatabaseName;
                 }
             }
             break;
