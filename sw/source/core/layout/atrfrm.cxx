@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:43:44 $
+ *  last change: $Author: os $ $Date: 2001-06-07 07:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,9 @@ sal_Int16 lcl_RelToINT(SwRelationOrient eRelation)
 SwRelationOrient    lcl_IntToRelation(const uno::Any& rVal)
 {
     SwRelationOrient eRet = FRAME;
-    switch(*(sal_Int16*)rVal.getValue())
+    sal_Int16 nVal;
+    rVal >>= nVal;
+    switch(nVal)
     {
         case  text::RelOrientation::PRINT_AREA:     eRet =   PRTAREA           ; break;
         case  text::RelOrientation::CHAR:       eRet =   REL_CHAR          ; break;
@@ -516,17 +518,22 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_FRMSIZE_SIZE:
         {
-            awt::Size aVal(*(awt::Size*)rVal.getValue());
-            Size aTmp(aVal.Width, aVal.Height);
-            if(bConvert)
-            {
-                aTmp.Height() = MM100_TO_TWIP(aTmp.Height());
-                aTmp.Width() = MM100_TO_TWIP(aTmp.Width());
-            }
-            if(aTmp.Height() && aTmp.Width())
-                aSize = aTmp;
-            else
+            awt::Size aVal;
+            if(!(rVal >>= aVal))
                 bRet = sal_False;
+            else
+            {
+                Size aTmp(aVal.Width, aVal.Height);
+                if(bConvert)
+                {
+                    aTmp.Height() = MM100_TO_TWIP(aTmp.Height());
+                    aTmp.Width() = MM100_TO_TWIP(aTmp.Width());
+                }
+                if(aTmp.Height() && aTmp.Width())
+                    aSize = aTmp;
+                else
+                    bRet = sal_False;
+            }
         }
         break;
         case MID_FRMSIZE_REL_HEIGHT:
@@ -569,33 +576,45 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_WIDTH :
         {
-            sal_Int32 nWd = *(sal_Int32*)rVal.getValue();
-            if(bConvert)
-                nWd = MM100_TO_TWIP(nWd);
-            if(nWd > 0)
-                aSize.Width() = nWd;
+            sal_Int32 nWd;
+            if(rVal >>= nWd)
+            {
+                if(bConvert)
+                    nWd = MM100_TO_TWIP(nWd);
+                if(nWd > 0)
+                    aSize.Width() = nWd;
+                else
+                    bRet = sal_False;
+            }
             else
                 bRet = sal_False;
         }
         break;
         case MID_FRMSIZE_HEIGHT:
         {
-            sal_Int32 nHg = *(sal_Int32*)rVal.getValue();
-            if(bConvert)
-                nHg = MM100_TO_TWIP(nHg);
-            if(nHg > 0)
-                aSize.Height() = nHg;
+            sal_Int32 nHg;
+            if(rVal >>= nHg)
+            {
+                if(bConvert)
+                    nHg = MM100_TO_TWIP(nHg);
+                if(nHg > 0)
+                    aSize.Height() = nHg;
+                else
+                    bRet = sal_False;
+            }
             else
                 bRet = sal_False;
         }
         break;
         case MID_FRMSIZE_SIZE_TYPE:
         {
-            sal_Int16 nType = *(sal_Int16*)rVal.getValue();
-            if(nType <= ATT_MIN_SIZE )
+            sal_Int16 nType;
+            if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
             {
                 SetSizeType((SwFrmSize)nType);
             }
+            else
+                bRet = sal_False;
         }
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
@@ -900,8 +919,14 @@ BOOL SwFmtPageDesc::PutValue( const uno::Any& rVal, BYTE nMemberId )
     switch ( nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
-            SetNumOffset( *(sal_uInt16*)rVal.getValue());
-            break;
+        {
+            sal_Int16 nOffset;
+            if(rVal >>= nOffset)
+                SetNumOffset( nOffset );
+            else
+                bRet = sal_False;
+        }
+        break;
 
         case MID_PAGEDESC_PAGEDESCNAME:
             /* geht nicht, weil das Attribut eigentlich nicht den Namen
@@ -1184,10 +1209,11 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
     }
     else
     {
-        uno::Reference< text::XTextColumns > * pxCols = (uno::Reference< text::XTextColumns > *)rVal.getValue();
-        if(pxCols)
+        uno::Reference< text::XTextColumns > xCols;
+        rVal >>= xCols;
+        if(xCols.is())
         {
-            uno::Sequence<text::TextColumn> aSetColumns = (*pxCols)->getColumns();
+            uno::Sequence<text::TextColumn> aSetColumns = xCols->getColumns();
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             aColumns.DeleteAndDestroy(0, aColumns.Count());
             //max. Count ist hier 64K - das kann das Array aber nicht
@@ -1206,7 +1232,7 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             nWidth = nWidthSum;
             bOrtho = sal_False;
 
-            uno::Reference<lang::XUnoTunnel> xNumTunnel((*pxCols), uno::UNO_QUERY);
+            uno::Reference<lang::XUnoTunnel> xNumTunnel(xCols, uno::UNO_QUERY);
             SwXTextColumns* pSwColums = 0;
             if(xNumTunnel.is())
             {
@@ -1591,7 +1617,9 @@ BOOL SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_HORIORIENT_ORIENT:
         {
-            switch( *(sal_Int16*)rVal.getValue() )
+            sal_Int16 nVal;
+            rVal >>= nVal;
+            switch( nVal )
             {
                 case text::HoriOrientation::NONE:       eOrient = HORI_NONE ;   break;
                 case text::HoriOrientation::RIGHT:  eOrient = HORI_RIGHT;   break;
@@ -1613,7 +1641,9 @@ BOOL SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_HORIORIENT_POSITION:
         {
-            sal_Int32 nVal = *(sal_Int32*)rVal.getValue();
+            sal_Int32 nVal;
+            if(!(rVal >>= nVal))
+                bRet = sal_False;
             if(bConvert)
                 nVal = MM100_TO_TWIP(nVal);
             SetPos( nVal );
@@ -1791,8 +1821,8 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_ANCHOR_PAGENUM:
         {
-            sal_Int16 nVal = *(sal_Int16*)rVal.getValue();
-            if(nVal > 0)
+            sal_Int16 nVal;
+            if((rVal >>= nVal) && nVal > 0)
             {
                 SetPageNum( nVal );
                 if( FLY_PAGE == GetAnchorId() && pCntntAnchor )
@@ -1941,13 +1971,25 @@ BOOL SwFmtURL::PutValue( const uno::Any& rVal, BYTE nMemberId )
     switch ( nMemberId )
     {
         case MID_URL_URL:
-            SetURL( *(OUString*)rVal.getValue(), bIsServerMap );
+        {
+            OUString sTmp;
+            rVal >>= sTmp;
+            SetURL( sTmp, bIsServerMap );
+        }
         break;
         case MID_URL_TARGET:
-            SetTargetFrameName( *(OUString*)rVal.getValue() );
+        {
+            OUString sTmp;
+            rVal >>= sTmp;
+            SetTargetFrameName( sTmp );
+        }
         break;
         case MID_URL_HYPERLINKNAME:
-            SetName( *(OUString*)rVal.getValue() );
+        {
+            OUString sTmp;
+            rVal >>= sTmp;
+            SetName( sTmp );
+        }
         break;
         case MID_URL_CLIENTMAP:
         {
@@ -2275,8 +2317,14 @@ BOOL SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
             SetCountLines( *(sal_Bool*)rVal.getValue() );
             break;
         case MID_LINENUMBER_STARTVALUE:
-            SetStartValue( *(sal_Int32*)rVal.getValue());
-            break;
+        {
+            sal_Int16 nVal;
+            if(rVal >>= nVal)
+                SetStartValue( nVal );
+            else
+                bRet = sal_False;
+        }
+        break;
         default:
             ASSERT( !this, "unknown MemberId" );
             bRet = sal_False;
