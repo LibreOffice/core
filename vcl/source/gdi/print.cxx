@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: pl $ $Date: 2000-09-22 12:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1674,10 +1674,7 @@ BOOL Printer::StartJob( const XubString& rJobName )
     Reference< ::com::sun::star::connection::XConnection > xConnection;
     Reference< ::com::sun::star::bridge::XBridgeFactory > xBridgeFactory;
 
-    if( ! aServerName.EqualsAscii( RVP_CLIENT_SERVER_NAME ) )
-        pSVData->mpRemotePrinterList->CreateNewPrinterConnection( maPrinterName.GetToken( 1, '@' ), xServerFactory, xConnection, xBridgeFactory );
-    else
-        xServerFactory = pSVData->mxClientFactory;
+    pSVData->mpRemotePrinterList->CreateNewPrinterConnection( maPrinterName.GetToken( 1, '@' ), xServerFactory, xConnection, xBridgeFactory );
     if( xServerFactory.is() )
     {
         REF( NMSP_CLIENT::XRmSpoolLauncher ) xLauncher( xServerFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficeSpoolLauncher.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
