@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-07 17:30:49 $
+#   last change: $Author: rt $ $Date: 2005-03-29 12:18:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -248,6 +248,8 @@ DOCUFILES+= \
     $(DESTDIRDOCUIMAGES)$/arrow-2.gif \
     $(DESTDIRDOCUIMAGES)$/arrow-3.gif \
     $(DESTDIRDOCUIMAGES)$/bg_table.gif \
+    $(DESTDIRDOCUIMAGES)$/bg_table2.gif \
+    $(DESTDIRDOCUIMAGES)$/bg_table3.gif \
     $(DESTDIRDOCUIMAGES)$/bluball.gif \
     $(DESTDIRDOCUIMAGES)$/nada.gif \
     $(DESTDIRDOCUIMAGES)$/nav_down.png \
