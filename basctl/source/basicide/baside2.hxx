@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:38:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     void            DoSyntaxHighlight( ULONG nPara );
-    void            ToggleHighlightMode();
     String          GetWordAtCursor();
     BOOL            ImpCanModify();
 
