@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-18 14:30:50 $
+ *  last change: $Author: hdu $ $Date: 2002-11-21 09:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,9 +180,9 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
             // #99019# don't use glyph indices for non-TT fonts
             // also for printer, because the drivers often transparently replace TTs with PS fonts
             TEXTMETRICA aTextMetricA;
-            if( ::GetTextMetricsA( mhDC, &aTextMetricA ) )
-                if( (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE)
-                ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE) )
+            if( !::GetTextMetricsA( mhDC, &aTextMetricA )
+            ||  (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE)
+            || !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE) )
                     bDisableGlyphs = true;
         }
 
@@ -524,7 +524,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
         if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
-                nGlyphIndex |= GetVerticalFlags( (sal_Unicode)(nGlyphIndex & GF_IDXMASK) );
+                nGlyphIndex |= GetVerticalFlags( nGlyphIndex & GF_IDXMASK );
             nGlyphIndex |= GF_ISCHAR;
         }
         *(pGlyphs++) = nGlyphIndex;
@@ -1062,7 +1062,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     aScriptState.fDigitSubstitute   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
     aScriptState.fArabicNumContext  = aScriptState.fDigitSubstitute & aScriptState.uBidiLevel;
     DWORD nLangId = 0;  // TODO: get language from font
-    SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
+    SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,true,false,false,0};
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
