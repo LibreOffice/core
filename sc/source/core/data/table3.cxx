@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:28:32 $
+ *  last change: $Author: er $ $Date: 2001-03-12 19:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, USHORT nRow1, USHORT nRow2 )
 
 void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
 {
-    memmove( &aSortParam, &rSortParam, sizeof(ScSortParam) );
+    aSortParam = rSortParam;
     bGlobalKeepQuery = bKeepQuery;
     if (rSortParam.bByRow)
     {
@@ -1031,7 +1031,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             case SC_BOTPERC:
             {
                 ScSortParam aLocalSortParam( rParam, rEntry.nField );
-                memmove( &aSortParam, &aLocalSortParam, sizeof(ScSortParam) );
+                aSortParam = aLocalSortParam;
                 ScSortInfoArray* pArray = CreateSortInfoArray( nRow1, rParam.nRow2 );
                 DecoladeRow( pArray, nRow1, rParam.nRow2 );
                 QuickSort( pArray, nRow1, rParam.nRow2 );
