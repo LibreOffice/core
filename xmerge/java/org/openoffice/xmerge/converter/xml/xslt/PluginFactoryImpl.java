@@ -67,6 +67,10 @@ import org.openoffice.xmerge.converter.dom.DOMDocument;
 //import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
+import org.openoffice.xmerge.DocumentMerger;
+import org.openoffice.xmerge.DocumentMergerFactory;
+import org.openoffice.xmerge.ConverterCapabilities;
+import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -94,12 +98,16 @@ import java.util.Properties;
  *  @author   Aidan Butler
  */
 public final class PluginFactoryImpl extends PluginFactory
-    implements DocumentDeserializerFactory, DocumentSerializerFactory {
+    implements DocumentDeserializerFactory, DocumentSerializerFactory, DocumentMergerFactory
+{
 
     public PluginFactoryImpl (ConverterInfo ci) {
            super(ci);
     }
 
+    /** ConverterCapabilities object for this type of conversion. */
+    private final static ConverterCapabilities converterCap =
+        new ConverterCapabilitiesImpl();
 
 
     /**
@@ -194,6 +202,21 @@ public final class PluginFactoryImpl extends PluginFactory
     return ext;
     }
 
+    /**
+     *  Returns an instance of <code>DocumentMergerImpl</code>,
+     *  which is an implementation of the <code>DocumentMerger</code>
+     *  interface.
+     *
+     *  @param  doc  <code>Document</code> to merge.
+     *
+     *  @return  A DocumentMergerImpl object.
+     */
+    public DocumentMerger createDocumentMerger(Document doc) {
+    ConverterCapabilities cc = converterCap;
+        DocumentMergerImpl merger = new DocumentMergerImpl(doc, cc);
+        return merger;
+
+    }
 
 }
 
