@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-26 13:11:57 $
+ *  last change: $Author: aw $ $Date: 2002-11-07 12:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,9 +256,16 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     else
         aPaperMin.Height() = 0; // #33102#
 
-    if (eHAdj!=SDRTEXTHORZADJUST_BLOCK || bFitToSize) {
+    if(eHAdj!=SDRTEXTHORZADJUST_BLOCK || bFitToSize) {
         aPaperMin.Width()=0;
     }
+
+    // #103516# For complete ver adjust support, set paper min height to 0, here.
+    if(SDRTEXTHORZADJUST_BLOCK != eVAdj || bFitToSize)
+    {
+        aPaperMin.Height() = 0;
+    }
+
     if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
     if (pPaperMax!=NULL) *pPaperMax=aPaperMax;
     if (pViewInit!=NULL) *pViewInit=aViewInit;
