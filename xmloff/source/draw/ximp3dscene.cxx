@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-08 15:17:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
 #include <com/sun/star/drawing/CameraGeometry.hpp>
+#endif
+
+#ifndef _XMLOFF_EVENTIMP_HXX
+#include "eventimp.hxx"
 #endif
 
 using namespace ::rtl;
@@ -235,9 +239,12 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
 {
     SvXMLImportContext* pContext = 0L;
 
+    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENTS ) )
+    {
+        pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+    }
     // look for local light context first
-    if(nPrefix == XML_NAMESPACE_DR3D
-        && IsXMLToken( rLocalName, XML_LIGHT ) )
+    else if(nPrefix == XML_NAMESPACE_DR3D && IsXMLToken( rLocalName, XML_LIGHT ) )
     {
         // dr3d:light inside dr3d:scene context
         pContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
