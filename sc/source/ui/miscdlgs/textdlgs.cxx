@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,9 @@ ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
 {
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_CHAR_STD, SvxCharStdPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_CHAR_EXT, SvxCharExtPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_CHAR_POSITION, SvxCharPositionPage::Create, 0);
 }
 
 // -----------------------------------------------------------------------
@@ -105,17 +106,17 @@ void __EXPORT ScCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
-        case RID_SVXPAGE_CHAR_STD:
+        case RID_SVXPAGE_CHAR_NAME:
         {
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            ( (SvxCharStdPage&) rPage ).SetFontList( aItem );
+            ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
         }
         break;
 
-        case RID_SVXPAGE_CHAR_EXT:
-            ( (SvxCharExtPage&) rPage ).DisableControls(
+        case RID_SVXPAGE_CHAR_EFFECTS:
+            ( (SvxCharEffectsPage&) rPage ).DisableControls(
                             DISABLE_CASEMAP);
             break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:57:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,15 @@ TabDialog RID_SCDLG_ATTR
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
             };
+
+            PageItem
+            {
+                Identifier = TP_FONTEFF ;
+                PageResID = 262 ;
+                Text = "Schrifteffekt" ;
+                Text [ ENGLISH ] = "Character Extension" ;
+            };
+
             PageItem
             {
                 Identifier = TP_ALIGNMENT ;

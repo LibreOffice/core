@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "tabvwsh.hxx"
 #include "prevwsh.hxx"
 #include "hfedtdlg.hrc"
+#include "textdlgs.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -525,27 +526,14 @@ void ScEditWindow::SetCharAttriutes()
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 
-        const SfxPoolItem* pInfoItem
-            = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
-
-        SfxSingleTabDialog* pDlg
-            = new SfxSingleTabDialog( pViewSh->GetViewFrame(),
-                                      GetParent(),
-                                      aSet,
-                                      RID_SVXPAGE_CHAR_STD,
-                                      FALSE );
-        SvxCharStdPage* pPage
-            = (SvxCharStdPage*)SvxCharStdPage::Create( pDlg, aSet );
-
-        pPage->SetFontList( (const SvxFontListItem&)*pInfoItem );
-        pDlg->SetTabPage( pPage );
+        ScCharDlg* pDlg = new ScCharDlg( GetParent(), &aSet, pDocSh );
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
-
         if ( pDlg->Execute() == RET_OK )
         {
             aSet.Put( *pDlg->GetOutputItemSet() );
             pEdView->SetAttribs( aSet );
         }
+
         if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(FALSE);
         delete pDlg;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
         case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen
             {
                 AddTabPage( TP_NUMBER, &SvxNumberFormatTabPage::Create, &SvxNumberFormatTabPage::GetRanges );
-                AddTabPage( TP_FONT, &SvxCharStdPage::Create,           &SvxCharStdPage::GetRanges );
+                AddTabPage( TP_FONT, &SvxCharNamePage::Create,          &SvxCharNamePage::GetRanges );
+                AddTabPage( TP_FONTEFF, &SvxCharEffectsPage::Create,            &SvxCharEffectsPage::GetRanges );
                 AddTabPage( TP_ALIGNMENT, &SvxAlignmentTabPage::Create, &SvxAlignmentTabPage::GetRanges );
                 AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,       &SvxBorderTabPage::GetRanges );
                 AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,   &SvxBackgroundTabPage::GetRanges );
@@ -165,11 +166,12 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 
                     DBG_ASSERT( pInfoItem, "FontListItem nicht gefunden!" );
 
-                    ((SvxCharStdPage&)rTabPage).
+                    ((SvxCharNamePage&)rTabPage).
                         SetFontList(
                             (const SvxFontListItem&)*pInfoItem );
                 }
                 break;
+
             default:
             break;
         }

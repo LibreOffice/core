@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #ifndef PCH
 #include "scitems.hxx"
-#include <segmentc.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <svx/numfmt.hxx>
@@ -99,9 +98,7 @@
 
 #pragma hdrstop
 
-SEG_EOFGLOBALS()
 //==================================================================
-#pragma SEG_FUNCDEF(attrdlg_01)
 
 ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
                       Window*           pParent,
@@ -113,7 +110,8 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
                       pCellAttrs )
 {
     AddTabPage( TP_NUMBER,      SvxNumberFormatTabPage::Create, 0 );
-    AddTabPage( TP_FONT,        SvxCharStdPage::Create,         0 );
+    AddTabPage( TP_FONT,        SvxCharNamePage::Create,        0 );
+    AddTabPage( TP_FONTEFF,     SvxCharEffectsPage::Create,     0 );
     AddTabPage( TP_ALIGNMENT,   SvxAlignmentTabPage::Create,    0 );
     AddTabPage( TP_BORDER,      SvxBorderTabPage::Create,       0 );
     AddTabPage( TP_BACKGROUND,  SvxBackgroundTabPage::Create,   0 );
@@ -122,14 +120,12 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(attrdlg_02)
 
 __EXPORT ScAttrDlg::~ScAttrDlg()
 {
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(attrdlg_03)
 
 void __EXPORT ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 {
@@ -151,7 +147,7 @@ void __EXPORT ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 
             DBG_ASSERT( pInfoItem, "FontListItem  not found :-(" );
 
-            ((SvxCharStdPage&)rTabPage).
+            ((SvxCharNamePage&)rTabPage).
                 SetFontList( *((const SvxFontListItem*)pInfoItem) );
         }
         break;
@@ -162,7 +158,6 @@ void __EXPORT ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(attrdlg_04)
 
 IMPL_LINK( ScAttrDlg, OkHandler, void*, EMPTYARG )
 {
@@ -171,127 +166,4 @@ IMPL_LINK( ScAttrDlg, OkHandler, void*, EMPTYARG )
     return NULL;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.42  2000/09/17 14:08:55  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.41  2000/08/31 16:38:19  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.40  1997/12/05 19:05:04  ANK
-    Includes geaendert
-
-
-      Rev 1.39   05 Dec 1997 20:05:04   ANK
-   Includes geaendert
-
-      Rev 1.38   02 Oct 1997 18:30:18   ANK
-   Geaendert fuer SfxItem bei NumDialog
-
-      Rev 1.37   29 Oct 1996 14:04:36   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.36   23 Jan 1996 11:52:54   MO
-   neuer Link
-
-      Rev 1.35   08 Nov 1995 14:31:32   TRI
-   301 Anpassung
-
-      Rev 1.34   04 Oct 1995 18:59:32   MO
-   257-Aenderung wieder entfernt
-
-      Rev 1.32   24 Aug 1995 17:07:40   HJS
-   header umstellung
-
-      Rev 1.31   23 Aug 1995 15:57:12   MI
-   SfxDocumentShell zu SfxObjectShell)
-
-      Rev 1.30   19 Jul 1995 12:33:16   MO
-   Ok-Handler an NumberPage uebergeben => Beenden des Dialoges ueber DoppelClick
-   (BugId: 15805)
-   Benoetigt Svx-Nachzieher
-
-      Rev 1.29   15 Jun 1995 09:27:30   TRI
-   EXPORT
-
-      Rev 1.28   18 May 1995 14:12:40   MO
-   Alignment: ScTabPage-> SvxTabPage, ScAttrs -> SvxItems
-
-      Rev 1.27   17 May 1995 13:52:20   MO
-   ViewFrame-Ctor
-
-      Rev 1.26   19 Feb 1995 19:01:40   TRI
-   sfxdoc.hxx included
-
-      Rev 1.25   16 Feb 1995 17:51:48   MO
-   * DocShell-Member nicht noetig
-   -
-
-      Rev 1.24   05 Feb 1995 12:14:42   MO
-   New logfile T:/sc/source/ui/attrdlg/temp.__v
-   Enter description of workfile.
-
-      Rev 1.23   30 Jan 1995 12:22:54   TRI
-   sbx.hxx include eingebaut
-
-      Rev 1.22   27 Jan 1995 10:14:28   MO
-   SvxNumberTabPage eingebaut
-
-      Rev 1.21   26 Jan 1995 17:58:34   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.20   22 Jan 1995 15:09:12   SC
-   2.37 Anpassung
-
-      Rev 1.19   18 Jan 1995 13:07:42   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.18   14 Dec 1994 13:50:32   MO
-   Globale ResIds jetzt in sc.hrc
-
-      Rev 1.17   13 Dec 1994 17:09:36   MO
-   Dialog bekommt wieder eine SfxMap (SfxWhichMap nur fuer SfxTabDlg gedacht)
-
-      Rev 1.16   07 Dec 1994 09:54:40   MO
-   SfxMap -> SfxWhichMap (Sfx 233.b)
-
-      Rev 1.15   21 Nov 1994 15:30:24   MO
-
-      Rev 1.13   10 Nov 1994 14:28:52   MO
-   PCHs
-
-      Rev 1.12   09 Nov 1994 18:05:56   MO
-   SvxBackground-Page
-
-      Rev 1.11   06 Oct 1994 11:43:38   MO
-   Anpassungen an Sfx 228g
-
-      Rev 1.9   04 Oct 1994 15:56:26   MO
-   Umstellung auf allgemeine Sfx-Loesung
-
-      Rev 1.8   27 Sep 1994 16:10:40   MO
-
-      Rev 1.7   20 Sep 1994 19:53:38   MO
-   No change.
-
-      Rev 1.6   19 Sep 1994 13:18:14   MO
-
-      Rev 1.5   14 Sep 1994 12:13:48   MO
-   Attribute werden nicht mehr aktiv vom Dialog geliefert, sondern
-   muessen ueber GetCurAttrs() erfragt werden.
-   Als Parameter wird jetzt SfxSetItem erwartet.
-
-      Rev 1.4   09 Sep 1994 12:56:16   MO
-   Hintergrund- und Zeichenseiten rudimentaer implementiert
-
-      Rev 1.3   06 Sep 1994 16:54:24   MO
-   Hintergrund-TabPage rudimentaer implementiert
-
-      Rev 1.2   01 Sep 1994 12:46:00   MO
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

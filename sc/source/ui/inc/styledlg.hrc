@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,4 +68,5 @@
 #define TP_PAGE_HEADER  9
 #define TP_PAGE_FOOTER 10
 #define TP_TABLE       11
+#define TP_FONTEFF     12
 

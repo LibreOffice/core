@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:14:43 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 08:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 #include "namepast.hxx"
 #include "reffind.hxx"
 #include "tabvwsh.hxx"
+#include "textdlgs.hxx"
 
 #define ScEditShell
 #include "scslots.hxx"
@@ -335,17 +336,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 SfxItemSet aAttrs( pTableView->GetAttribs() );
 
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
-                const SvxFontListItem* pFontListItem =
-                    (const SvxFontListItem*) pObjSh->GetItem( SID_ATTR_CHAR_FONTLIST);
 
-                SfxSingleTabDialog* pDlg
-                    = new SfxSingleTabDialog( pViewData->GetViewShell()->GetViewFrame(),
-                                                pViewData->GetDialogParent(),
-                                                aAttrs, RID_SCDLG_EDITCHAR, FALSE );
-                SfxTabPage* pPage = SvxCharStdPage::Create( pDlg, aAttrs );
-                ((SvxCharStdPage*)pPage)->SetFontList( *pFontListItem );
-                pDlg->SetTabPage( pPage );
-
+                ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(), &aAttrs, pObjSh );
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
