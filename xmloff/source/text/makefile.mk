@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:21:44 $
+#   last change: $Author: dvo $ $Date: 2001-03-09 14:54:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,8 +96,6 @@ CXXFILES = \
         XMLAutoTextEventExport.cxx \
         XMLAutoTextEventImport.cxx \
         XMLAutoTextContainerEventImport.cxx \
-        XMLAutoTextGroupEventImport.cxx \
-        XMLAutoTextEntryEventImport.cxx \
         XMLChangedRegionImportContext.cxx \
         XMLChangeElementImportContext.cxx \
         XMLChangeInfoContext.cxx \
@@ -176,8 +174,6 @@ SLOFILES =	\
         $(SLO)$/XMLAutoTextEventExport.obj \
         $(SLO)$/XMLAutoTextEventImport.obj \
         $(SLO)$/XMLAutoTextContainerEventImport.obj \
-        $(SLO)$/XMLAutoTextGroupEventImport.obj \
-        $(SLO)$/XMLAutoTextEntryEventImport.obj \
         $(SLO)$/XMLChangedRegionImportContext.obj \
         $(SLO)$/XMLChangeElementImportContext.obj \
         $(SLO)$/XMLChangeInfoContext.obj \
