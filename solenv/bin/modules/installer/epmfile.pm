@@ -1478,7 +1478,7 @@ sub create_new_directory_structure
 
 sub put_childprojects_into_installset
 {
-    my ($newdir) = @_;
+    my ($newdir, $allvariables) = @_;
 
     my $infoline = "";
 
@@ -1492,34 +1492,40 @@ sub put_childprojects_into_installset
 
     my $sourcefile = "";
 
-    if ( $installer::globals::javafilename ne "" )
+    if ( $allvariables->{'JAVAPRODUCT'} )
     {
-        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename;
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
-    }
+        if ( $installer::globals::javafilename ne "" )
+        {
+            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename;
+            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
+            installer::systemactions::copy_one_file($sourcefile, $destdir);
+        }
 
-    if ( $installer::globals::javafilename2 ne "" )
-    {
-        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename2;
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
-    }
+        if ( $installer::globals::javafilename2 ne "" )
+        {
+            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename2;
+            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
+            installer::systemactions::copy_one_file($sourcefile, $destdir);
+        }
 
-    if ( $installer::globals::javafilename3 ne "" )
-    {
-        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename3;
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
+        if ( $installer::globals::javafilename3 ne "" )
+        {
+            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename3;
+            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
+            installer::systemactions::copy_one_file($sourcefile, $destdir);
+        }
     }
 
     # adding Ada
 
-    if ( $installer::globals::adafilename ne "" )
+    if ( $allvariables->{'ADAPRODUCT'} )
     {
-        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Ada file not found: $sourcefile !", "put_childprojects_into_installset"); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
+        if ( $installer::globals::adafilename ne "" )
+        {
+            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
+            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Ada file not found: $sourcefile !", "put_childprojects_into_installset"); }
+            installer::systemactions::copy_one_file($sourcefile, $destdir);
+        }
     }
 
     # unpacking and removing the ada tar.gz file
