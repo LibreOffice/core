@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-10 16:10:21 $
+ *  last change: $Author: dl $ $Date: 2001-05-11 10:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,12 +316,12 @@ void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
 
 void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
+    SdrAttrObj::BurnInStyleSheetAttributes();
+
     if ( pModel && pOutlinerParaObject && !pEdtOutl && !IsLinkedText() )
     {
         Outliner* pOutliner = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
         pOutliner->SetText( *pOutlinerParaObject );
-
-        SdrAttrObj::BurnInStyleSheetAttributes();
 
         USHORT nParaCount = (USHORT) pOutliner->GetParagraphCount();
         if ( nParaCount > 0 )
