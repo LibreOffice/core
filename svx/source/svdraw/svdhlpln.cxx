@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-02 13:53:05 $
+ *  last change: $Author: cl $ $Date: 2002-05-06 08:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 
 #include "svdhlpln.hxx"
 #include "svdio.hxx"
-
-#ifndef _SVX_COLORCFG_HXX
-#include "colorcfg.hxx"
-#endif
 
 #ifndef _GDIOBJ_HXX //autogen
 #include <vcl/gdiobj.hxx>
@@ -260,12 +256,7 @@ void SdrHelpLineList::DrawAll(OutputDevice& rOut, const Point& rOfs) const
 {
     Color aOldLineColor( rOut.GetLineColor() );
 
-    svx::ColorConfig aColorConfig;
-
-    // !!! KA=>CL: changed this temp. from svx::DRAWGUIDES to svx::DRAWGRID
-    svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::DRAWGRID ) );
-
-    rOut.SetLineColor( Color( aColor.nColor ) );
+    rOut.SetLineColor( Color( COL_GREEN ) );
 
     USHORT nAnz=GetCount();
     for (USHORT i=0; i<nAnz; i++)
