@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDatabaseRange.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:00:47 $
+ *  last change:$Date: 2004-03-19 15:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ public class _XDatabaseRange extends MultiMethodTest {
         requiredMethod("getSubTotalDescriptor()");
         requiredMethod("setDataArea()");
 
-        for(int i = STARTROW; i < ENDROW; i++) {
+        for(int i = STARTROW; i < ENDROW+1; i++) {
             try {
                 XCell cell = xCellRange.getCellByPosition(COL, i);
                 cell.setValue(i);
