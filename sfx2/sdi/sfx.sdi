@@ -7616,6 +7616,30 @@ SfxUInt16Item Signature SID_SIGNATURE
 ]
 
 //--------------------------------------------------------------------------
+SfxUInt16Item Signature SID_SIGNATURE
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    NoRecord;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem VersionVisible SID_VERSION_VISIBLE
 (SfxBoolItem Show SID_VERSION_VISIBLE)
 [
