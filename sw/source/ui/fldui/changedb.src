@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:28:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,18 @@
 
 ModalDialog DLG_CHANGE_DB
 {
-     // HelpID = HID_EDIT_FIELD;
     OutputSize = TRUE ;
-     // Hide = TRUE;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 266 , 151 ) ;
+    Size = MAP_APPFONT ( 286 , 175 ) ;
+
     Text [ de ] = "Datenbank austauschen" ;
     Text [ en-US ] = "Exchange Databases" ;
     Moveable = TRUE ;
     FixedLine FL_DBLIST
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 198 , 8 ) ;
+        Size = MAP_APPFONT ( 218 , 8 ) ;
+
         Text [ de ] = "Datenbank austauschen" ;
         Text [ en-US ] = "Exchange databases" ;
         Text [ x-comment ] = " ";
@@ -84,7 +84,7 @@ ModalDialog DLG_CHANGE_DB
     FixedText FT_USEDDB
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text [ de ] = "Verwendete Datenbanken" ;
         Left = TRUE ;
         Text [ en-US ] = "Databases in Use" ;
@@ -92,9 +92,8 @@ ModalDialog DLG_CHANGE_DB
     };
     FixedText FT_AVAILDB
     {
-        Pos = MAP_APPFONT ( 108 , 14 ) ;
-        Size = MAP_APPFONT ( 80 ,  8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Verfügbare Datenbanken : Verf³gbare Datenbanken */
+        Pos = MAP_APPFONT ( 118 , 14 ) ;
+        Size = MAP_APPFONT ( 90 ,  8 ) ;
         Text [ de ] = "Verfügbare Datenbanken" ;
         Left = TRUE ;
         Text [ en-US ] = "Available Databases" ;
@@ -104,45 +103,35 @@ ModalDialog DLG_CHANGE_DB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 90 , 52 ) ;
+        Size = MAP_APPFONT ( 100 , 62 ) ;
         TabStop = TRUE ;
     };
     Control TLB_AVAILDB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 25 ) ;
-        Size = MAP_APPFONT ( 90 , 52 ) ;
+        Pos = MAP_APPFONT ( 118 , 25 ) ;
+        Size = MAP_APPFONT ( 100 , 62 ) ;
         TabStop = TRUE ;
+    };
+    PushButton PB_ADDDB
+    {
+        Pos = MAP_APPFONT ( 118 ,  90  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "~Durchsuchen..." ;
+        Text [ en-US ] = "Browse..." ;
     };
     FixedText FT_DESC
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
-        Size = MAP_APPFONT ( 190 , 45 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich. : In diesem Dialog k÷nnen Sie Datenbanken, auf die Sie in Ihrem Dokument ³ber Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k÷nnen nur eine Žnderung pro Arbeitsgang durchf³hren. In der linken Liste ist Mehrfachselektion m÷glich. */
-        Text [ de ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 210 , 45 ) ;
+        Text [ de ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich.\n Benutzen Sie die Durchsuchen Schaltfläche, um eine Datenbankdatei auszuwählen." ;
         WordBreak = TRUE ;
         Left = TRUE ;
-        Text [ en-US ] = "Use this dialog to replace the databases you access in your document via database fields, with other databases. You can only make one change at a time. Multiple selection is possible in the list on the left." ;
-        Text [ x-comment ] = " ";
+        Text [ en-US ] = "Use this dialog to replace the databases you access in your document via database fields, with other databases. You can only make one change at a time. Multiple selection is possible in the list on the left.\nUse the browse button to select a database file." ;
     };
-    /*  MultiListBox LB_USEDDB {
-            Sort = TRUE;
-            Border = TRUE;
-            SimpleMode = TRUE;
-            Pos = MAP_APPFONT( 12, 73 );
-            Size = MAP_APPFONT( 90, 52 );
-            TabStop = TRUE;
-        };
-    ListBox LB_AVAILDB {
-            Sort = TRUE;
-            Border = TRUE;
-            Pos = MAP_APPFONT( 108, 73 );
-            Size = MAP_APPFONT( 90, 52 );
-            TabStop = TRUE;
-        };*/
     FixedText FT_DOCDBTEXT
     {
-        Pos = MAP_APPFONT ( 6 , 136 ) ;
+        Pos = MAP_APPFONT ( 6 , 161 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ de ] = "Am Dokument gesetzte Datenbank:" ;
         Left = TRUE ;
@@ -151,25 +140,16 @@ ModalDialog DLG_CHANGE_DB
     };
     FixedText FT_DOCDBNAME
     {
-        Pos = MAP_APPFONT ( 109 , 136 ) ;
-        Size = MAP_APPFONT ( 94 , 8 ) ;
-        Text [ de ] = "Adressen.Adressen" ;
+        Pos = MAP_APPFONT ( 109 , 161 ) ;
+        Size = MAP_APPFONT ( 114 , 8 ) ;
         Left = TRUE ;
+        Text [ de ] = "Adressen.Adressen" ;
         Text [ en-US ] = "Addresses.Addresses" ;
         Text [ x-comment ] = " ";
     };
-/*  PushButton BT_CHANGEDB
-    {
-        Pos = MAP_APPFONT ( 210 , 135 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text[ de ] = "Festlegen" ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Define" ;
-    };
-  */
     OKButton BT_OK
     {
-        Pos = MAP_APPFONT ( 210 , 6 ) ;
+        Pos = MAP_APPFONT ( 230 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -180,7 +160,7 @@ ModalDialog DLG_CHANGE_DB
     };
     CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT ( 210 , 23 ) ;
+        Pos = MAP_APPFONT ( 230 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ de ] = "~Schließen" ;
@@ -188,42 +168,11 @@ ModalDialog DLG_CHANGE_DB
     };
     HelpButton BT_HELP
     {
-        Pos = MAP_APPFONT ( 210 , 60 ) ;
+        Pos = MAP_APPFONT ( 230 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
