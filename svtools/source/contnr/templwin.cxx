@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-11 07:22:58 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 06:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     SvxIconChoiceCtrlEntry* pEntry =
         aIconCtrl.InsertEntry( aEntryStr, aImage, ICON_POS_NEWDOC );
     pEntry->SetUserData( new String( aNewDocumentRootURL ) );
+    pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_NEWDOC_HELP ) ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     long nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)
@@ -373,6 +374,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
         pEntry = aIconCtrl.InsertEntry(
             aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_TEMPLATES_HC : IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
         pEntry->SetUserData( new String( aTemplateRootURL ) );
+        pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_TEMPLATES_HELP ) ) );
         DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
         nTemp = pEntry->GetBoundRect().GetSize().Width();
         if (nTemp > nMaxTextLength)
@@ -384,6 +386,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     pEntry = aIconCtrl.InsertEntry(
         aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_MYDOCS_HC : IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
     pEntry->SetUserData( new String( aMyDocumentsRootURL ) );
+    pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_MYDOCS_HELP ) ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
     if( nTemp > nMaxTextLength )
@@ -394,6 +397,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     pEntry = aIconCtrl.InsertEntry(
         aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_SAMPLES_HC : IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
     pEntry->SetUserData( new String( aSamplesFolderRootURL ) );
+    pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_SAMPLES_HELP ) ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-31 10:28:47 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 06:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,7 +953,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Assumpte" ; DI_THEME ; > ;
         < "Mida" ; DI_SIZE ; > ;
     };
-ItemList [ thai ] =
+    ItemList [ thai ] =
     {
          < "Title" ; DI_TITLE ; > ;
         < "By" ; DI_FROM ; > ;
@@ -968,22 +968,26 @@ ItemList [ thai ] =
         < "Subject" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
-    };
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_SVT_NEWDOC_HELP
+{
+    Text = "Von hier können Sie neue Dokumente erstellen.";
+    Text [ english_us ] = "Click here to create new documents.";
+};
+String STR_SVT_MYDOCS_HELP
+{
+    Text = "Enthält Ihre Briefe, Berichte und andere Dokumente";
+    Text [ english_us ] = "Contains your letters, reports and other documents";
+};
+String STR_SVT_TEMPLATES_HELP
+{
+    Text = "Enthält Vorlagen aus denen Sie neue Dokumente erstellen können";
+    Text [ english_us ] = "Contains templates for creating new documents";
+};
+String STR_SVT_SAMPLES_HELP
+{
+    Text = "Enthält Beispieldokumente für Briefe, Berichte und andere Dokumente";
+    Text [ english_us ] = "Contains a selection of sample letters, reports and other documents";
+};
 
