@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-21 21:44:36 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 14:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,10 +139,10 @@ ModalDialog RID_SANE_DIALOG
         Text[ catalan ] = "Crear\n~Previsualización";
         Text[ finnish ] = "Luo\nesikatselu";
     };
-    GroupBox RID_PREVIEW_BOX
+    FixedLine RID_PREVIEW_BOX
     {
         Pos = MAP_APPFONT ( PREVIEW_UPPER_LEFT - 5 , PREVIEW_UPPER_TOP - 8 ) ;
-        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , PREVIEW_HEIGHT + 14 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 8 ) ;
         Text = "Vorschau" ;
         Text [ English ] = "Preview" ;
         Text [ portuguese ] = "Previsualizar" ;
@@ -168,10 +168,10 @@ ModalDialog RID_SANE_DIALOG
         Text[ catalan ] = "Previsualización";
         Text[ finnish ] = "Esikatselu";
     };
-    GroupBox RID_SCANAREA_BOX
+    FixedLine RID_SCANAREA_BOX
     {
         Pos = MAP_APPFONT ( SCAN_AREA_LEFT - 5 , SCAN_AREA_TOP - 12 ) ;
-        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 78 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 8 ) ;
         Text = "Scanbereich" ;
         Text [ English ] = "Scan area" ;
         Text [ english_us ] = "Scan area" ;

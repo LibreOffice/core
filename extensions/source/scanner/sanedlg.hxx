@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 14:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ private:
     ListBox         maQuantumRangeBox;
     ListBox         maStringRangeBox;
 
-    GroupBox        maPreviewBox;
-    GroupBox        maAreaBox;
+    FixedLine       maPreviewBox;
+    FixedLine       maAreaBox;
 
     CheckBox        maBoolCheckBox;
 
