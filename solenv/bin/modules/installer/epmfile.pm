@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: is $ $Date: 2004-09-02 15:10:48 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:21:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -293,6 +293,20 @@ sub create_epm_header
     {
         $licensefilename = "LICENSE";
         $readmefilename = "README";
+    }
+
+    if ( $installer::globals::languagepack )    # in language packs the files LICENSE and README are removed, because they are not language specific
+    {
+        if ( $installer::globals::iswindowsbuild )
+        {
+            $licensefilename = "license_$searchlanguage.txt";
+            $readmefilename = "readme_$searchlanguage.txt";
+        }
+        else
+        {
+            $licensefilename = "LICENSE_$searchlanguage";
+            $readmefilename = "README_$searchlanguage";
+        }
     }
 
     for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
