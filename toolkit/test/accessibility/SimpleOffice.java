@@ -41,6 +41,8 @@ import drafts.com.sun.star.accessibility.XAccessibleComponent;
 import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
 import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 
+import drafts.com.sun.star.awt.XExtendedToolkit;
+
 
 /** This class tries to simplify some tasks like loading a document or
     getting various objects.
@@ -174,6 +176,32 @@ public class SimpleOffice
         return mxDesktop;
     }
 
+
+    /** Return a reference to the extended toolkit which is a broadcaster of
+        top window, key, and focus events.
+    */
+    public XExtendedToolkit getExtendedToolkit ()
+    {
+        XExtendedToolkit xToolkit = null;
+        try
+        {
+            //  Get the factory of the connected office.
+            XMultiServiceFactory xMSF = aConnection.getServiceManager ();
+            if (xMSF != null)
+            {
+                xToolkit = (XExtendedToolkit) UnoRuntime.queryInterface(
+                    XExtendedToolkit.class,
+                    xMSF.createInstance ("stardiv.Toolkit.VCLXToolkit")
+                    );
+            }
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while creating extended toolkit: " + e);
+        }
+
+        return xToolkit;
+    }
 
 
 
