@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,11 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#include "comcore.hrc"
+#include "editsh.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -1299,6 +1303,26 @@ sal_Bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFla
     return sal_True;
 }
 
+/* #107318# Convert list of ranges of whichIds to a corresponding list
+    of whichIds*/
+SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
+{
+    SvUShorts * pResult = new SvUShorts();
+
+    int i = 0;
+    while (pRanges[i] != 0)
+    {
+        ASSERT(pRanges[i+1] != 0, "malformed ranges");
+
+        for (USHORT j = pRanges[i]; j < pRanges[i+1]; j++)
+            pResult->Insert(j, pResult->Count());
+
+        i += 2;
+    }
+
+    return pResult;
+}
+
 void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
 {
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
@@ -1407,12 +1431,31 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             SwTxtNode* pDelNd = aIdx.GetNode().GetTxtNode();
             if( pTxtNd->Len() )
                 pDelNd->FmtToTxtAttr( pTxtNd );
-            else if( pDelNd->GetpSwAttrSet() )
+            else
             {
-                // nur die Zeichenattribute kopieren
-                SfxItemSet aTmpSet( pDoc->GetAttrPool(), aCharFmtSetRange );
-                aTmpSet.Put( *pDelNd->GetpSwAttrSet() );
-                pTxtNd->SwCntntNode::SetAttr( aTmpSet );
+                /* #107318# This case was missed:
+
+                   <something></something>   <-- pTxtNd
+                   <other>ccc</other>        <-- pDelNd
+
+                   <something> and <other> are paragraph
+                   attributes. The attribute <something> stayed if not
+                   overwritten by an attribute in "ccc". Fixed by
+                   first resetting all character attributes in first
+                   paragraph (pTxtNd).
+                */
+                SvUShorts * pShorts =
+                    lcl_RangesToUShorts(aCharFmtSetRange);
+                pTxtNd->ResetAttr(*pShorts);
+                delete pShorts;
+
+                if( pDelNd->GetpSwAttrSet() )
+                {
+                    // nur die Zeichenattribute kopieren
+                    SfxItemSet aTmpSet( pDoc->GetAttrPool(), aCharFmtSetRange );
+                    aTmpSet.Put( *pDelNd->GetpSwAttrSet() );
+                    pTxtNd->SwCntntNode::SetAttr( aTmpSet );
+                }
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
@@ -1428,6 +1471,7 @@ sal_Bool SwDoc::DeleteAndJoin( SwPaM & rPam )
         sal_uInt16 nUndoSize = 0;
         SwUndoRedlineDelete* pUndo = 0;
         SwRedlineMode eOld = GetRedlineMode();
+        checkRedlining(eOld);
         if( DoesUndo() )
         {
             ClearRedo();
@@ -1544,6 +1588,7 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
             AppendUndo( new SwUndoDelete( rPam ) );
 
         SetModified();
+
         return sal_True;
     }
 
@@ -1633,9 +1678,9 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
         CompressRedlines();
     SetModified();
+
     return sal_True;
 }
-
 
 uno::Reference< uno::XInterface >  SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
@@ -1980,6 +2025,7 @@ sal_Bool SwDoc::Replace( SwPaM& rPam, const String& rStr, sal_Bool bRegExpRplc )
         if( IsRedlineOn() )
         {
             SwRedlineMode eOld = GetRedlineMode();
+            checkRedlining(eOld);
             if( DoesUndo() )
             {
                 StartUndo();
@@ -2355,5 +2401,26 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
             delete pUndo;
     }
 }
-
+#define MAX_REDLINE_COUNT   250
+// -----------------------------------------------------------------------------
+void SwDoc::checkRedlining(SwRedlineMode& _rReadlineMode)
+{
+    const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
+    SwEditShell* pEditShell = GetEditShell();
+    Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
+    if ( pParent && !bReadlineChecked && rRedlineTbl.Count() > MAX_REDLINE_COUNT
+        && !((_rReadlineMode & REDLINE_SHOW_DELETE) == REDLINE_SHOW_DELETE) )
+    {
+        WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_READLINE_QUESTION));
+        USHORT nResult = aWarning.Execute();
+        bReadlineChecked = sal_True;
+        if ( nResult == RET_YES )
+        {
+            sal_Int32 nMode = (sal_Int32)_rReadlineMode;
+            nMode |= REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
+            _rReadlineMode = (SwRedlineMode)nMode;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 
