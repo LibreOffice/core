@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-24 20:32:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@ String  RID_BIB_STR_SECTION
     Text[ swedish ] = "Avsnitt";
     Text[ polish ] = "Sekcja";
     Text[ portuguese_brazilian ] = "Section";
-    Text[ japanese ] = "¾¸¼®İ";
-    Text[ korean ] = "Àå";
-    Text[ chinese_simplified ] = "¶ÎÂä";
-    Text[ chinese_traditional ] = "°Ï¬q";
+    Text[ japanese ] = "ï½¾ï½¸ï½¼ï½®ï¾";
+    Text[ korean ] = "ì¥";
+    Text[ chinese_simplified ] = "æ®µè½";
+    Text[ chinese_traditional ] = "å€æ®µ";
     Text[ arabic ] = "äØÇŞ";
     Text[ turkish ] = "Bölüm";
     Text[ catalan ] = "Sección";
@@ -109,10 +109,10 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ swedish ] = "Fälturval:";
     Text[ polish ] = "Wybór pola:";
     Text[ portuguese_brazilian ] = "Fieldselection:";
-    Text[ japanese ] = "Ì¨°ÙÄŞ‘I‘ğ:";
-    Text[ korean ] = "ÇÊµå ¼±ÅÃ:";
-    Text[ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î£º";
-    Text[ chinese_traditional ] = "¿ï¾ÜÄæ¦ì¡G";
+    Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾é¸æŠ:";
+    Text[ korean ] = "í•„ë“œ ì„ íƒ:";
+    Text[ chinese_simplified ] = "é€‰æ‹©å­—æ®µï¼š";
+    Text[ chinese_traditional ] = "é¸æ“‡æ¬„ä½ï¼š";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
     Text[ turkish ] = "Alan seçimi:";
     Text[ language_user1 ] = " ";
@@ -136,10 +136,10 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ swedish ] = "Tabell;Sökning;Sql;Sql [Native]";
     Text[ polish ] = "Tabela;Kwerenda;Sql;Sql [Native]";
     Text[ portuguese_brazilian ] = "Table;Query;Sql;Sql [Native]";
-    Text[ japanese ] = "Ã°ÌŞÙ;¸´Ø°;Sql;Sql [Native]";
-    Text[ korean ] = "Å×ÀÌºí;ÁúÀÇ;Sql;Sql [Native]";
-    Text[ chinese_simplified ] = "±í¸ñ;²éÑ¯;Sql;Sql [Native]";
-    Text[ chinese_traditional ] = "ªí®æ;¬d¸ß;Sql;Sql [Native]";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™;ï½¸ï½´ï¾˜ï½°;Sql;Sql [Native]";
+    Text[ korean ] = "í…Œì´ë¸”;ì§ˆì˜;Sql;Sql [Native]";
+    Text[ chinese_simplified ] = "è¡¨æ ¼;æŸ¥è¯¢;Sql;Sql [Native]";
+    Text[ chinese_traditional ] = "è¡¨æ ¼;æŸ¥è©¢;Sql;Sql [Native]";
     Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]";
     Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
     Text[ catalan ] = "Tabla;Consulta;Sql;Sql [Native]";
@@ -161,10 +161,10 @@ String RID_BIB_STR_FRAME_TITLE
     Text[ swedish ] = "Litteraturdatabas";
     Text[ polish ] = "Bibliograficzna baza danych";
     Text[ portuguese_brazilian ] = "Bibliography database";
-    Text[ japanese ] = "‘ ‘ŠÇ—ÃŞ°ÀÍŞ°½";
-    Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º";
-    Text[ chinese_simplified ] = "ÎÄÏ×Êı¾İ¿â";
-    Text[ chinese_traditional ] = "¤åÄm¸ê®Æ®w";
+    Text[ japanese ] = "è”µæ›¸ç®¡ç†ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½";
+    Text[ korean ] = "ì°¸ê³ ë¬¸í—Œ ë°ì´í„°ë² ì´ìŠ¤";
+    Text[ chinese_simplified ] = "æ–‡çŒ®æ•°æ®åº“";
+    Text[ chinese_traditional ] = "æ–‡ç»è³‡æ–™åº«";
     Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça veritabanı";
     Text[ catalan ] = "Base de datos bibliográfica";
@@ -186,15 +186,16 @@ String RID_MAP_QUESTION
     Text[ swedish ] = "Vill Du redigera kolumntilldelningen?";
     Text[ polish ] = "Chcesz edytowaæ przyporz¹dkowanie kolumn?";
     Text[ portuguese_brazilian ] = "Dow you want to edit the column arrangement";
-    Text[ japanese ] = "—ñ‚Ì•ª—Ş‚ğ•ÒW‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "¿­ ¹è¿­À» ÆíÁıÇÏ½Ã°Ú½À´Ï±î?";
-    Text[ chinese_simplified ] = "ÄúÒª±à¼­ÁĞµÄÅÅÁĞË³Ğò£¿";
-    Text[ chinese_traditional ] = "±z­n½s±ÆÄæ¡H";
+    Text[ japanese ] = "åˆ—ã®åˆ†é¡ã‚’ç·¨é›†ã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "ì—´ ë°°ì—´ì„ í¸ì§‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "æ‚¨è¦ç¼–è¾‘åˆ—çš„æ’åˆ—é¡ºåºï¼Ÿ";
+    Text[ chinese_traditional ] = "æ‚¨è¦ç·¨æ’æ¬„ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÊÍÑíÑ ÊÚííä ÇáÚãæÏ¿";
     Text[ turkish ] = "Sütunları düzenlemek istiyor musunuz?";
     Text[ catalan ] = "¿Desea modificar el orden de las columnas?";
     Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
 };
+
 
 
 
