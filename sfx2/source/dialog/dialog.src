@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:17:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,6 +1024,13 @@ String STR_BASICMACROS
     TEXT[ hungarian ] = "BASIC makrók";
     TEXT[ slovenian ] = "BASIC makri";
 };
+String STR_MACROS
+{
+  TEXT = "%PRODUCTNAME Makros" ;
+  TEXT [ ENGLISH ] = "%PRODUCTNAME Macros" ;
+  TEXT [ english_us ] = "%PRODUCTNAME Macros" ;
+};
+
 InfoBox MSG_LAYOUT_NOT_LOADING
 {
     BUTTONS = WB_OK ;
