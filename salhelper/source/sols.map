@@ -1,12 +1,35 @@
 UDK_3.1 { # OOo 1.1.2 SDK
     global:
+        __1cJsalhelperJCondition2t6MrnDoslFMutex__v_;
         __1cJsalhelperJCondition2t5B6MrnDoslFMutex__v_;
+        __1cJsalhelperJCondition2T6M_v_;
         __1cJsalhelperJCondition2T5B6M_v_;
-        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_L_v_;
-        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition__v_;
-        __1cJsalhelperPConditionWaiter2T6M_v_;
+        __1cJsalhelperbF__RTTI__1nJsalhelperJCondition__;
+        __1cJsalhelperbH__RTTI__1CpnJsalhelperJCondition__;
+        __1cJsalhelperbI__RTTI__1CpknJsalhelperJCondition__;
+
         __1cJsalhelperRConditionModifier2t6Mrn0AJCondition__v_;
+        __1cJsalhelperRConditionModifier2t5B6Mrn0AJCondition__v_;
         __1cJsalhelperRConditionModifier2T6M_v_;
+        __1cJsalhelperRConditionModifier2T5B6M_v_;
+
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition__v_;
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition__v_;
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_L_v_;
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition_L_v_;
+        __1cJsalhelperPConditionWaiter2T6M_v_;
+        __1cJsalhelperPConditionWaiter2T5B6M_v_;
+
+        __1cJsalhelperPConditionWaiterItimedout2t6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2t5B6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2t6Mrk2_v_;
+        __1cJsalhelperPConditionWaiterItimedout2t5B6Mrk2_v_;
+        __1cJsalhelperPConditionWaiterItimedout2T6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2T5B6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2G6Mrk2_r2_;
+        __1cJsalhelperbU__RTTI__1nJsalhelperPConditionWaiterItimedout__;
+        __1cJsalhelperbW__RTTI__1CpnJsalhelperPConditionWaiterItimedout__;
+        __1cJsalhelperbX__RTTI__1CpknJsalhelperPConditionWaiterItimedout__;
 } UDK_3.0;
 
 UDK_3.0 {
