@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-30 13:07:12 $
+ *  last change: $Author: bm $ $Date: 2001-04-25 16:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT     ( XML_SCH_CTF_START + 16 )
 #define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL   ( XML_SCH_CTF_START + 17 )
 #define XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT       ( XML_SCH_CTF_START + 18 )
+#define XML_SCH_CONTEXT_SPECIAL_DATA_ROW_SOURCE     ( XML_SCH_CTF_START + 19 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, XML_SCH_CONTEXT_##c }
@@ -154,6 +155,9 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "Vertical", CHART, vertical, XML_TYPE_BOOL ),
     MAP_ENTRY( "NumberOfLines", CHART, lines_used, XML_TYPE_NUMBER ),
     MAP_ENTRY( "StackedBarsConnected", CHART, connect_bars, XML_TYPE_BOOL ),
+
+    // plot-area properties
+    MAP_SPECIAL( "DataRowSource", CHART, reinterpret_data_in_rows, XML_TYPE_BOOL, DATA_ROW_SOURCE ),
 
     // axis properties
     MAP_ENTRY( "DisplayLabels", CHART, display_label, XML_TYPE_BOOL ),

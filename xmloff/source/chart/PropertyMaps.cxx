@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:24:47 $
+ *  last change: $Author: bm $ $Date: 2001-04-25 16:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,14 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
 #include <com/sun/star/drawing/LineJoint.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
 
+// header for any2enum
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -170,7 +177,6 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 // here we have a constant rather than an enum
                 pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
                 break;
-
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
@@ -328,6 +334,15 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     SvXMLUnitConverter::convertDouble( sValueBuffer, fVal );
                 }
                 break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_ROW_SOURCE:
+                {
+                    chart::ChartDataRowSource eRowSource;
+                    cppu::any2enum< chart::ChartDataRowSource >( eRowSource, rProperty.maValue );
+                    SvXMLUnitConverter::convertBool( sValueBuffer,
+                                                     ( eRowSource == chart::ChartDataRowSource_ROWS ));
+                }
+                break;
+
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
                 {
                     rProperty.maValue >>= nValue;
@@ -426,6 +441,16 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     SvXMLUnitConverter::convertDouble( fVal, rValue );
                     nValue = (sal_Int32)( fVal * 100.0 );
                     rProperty.maValue <<= nValue;
+                }
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_ROW_SOURCE:
+                {
+                    SvXMLUnitConverter::convertBool( bValue, rValue );
+                    if( bValue ) // ie data in rows is true
+                    {
+                        chart::ChartDataRowSource eRowSource( chart::ChartDataRowSource_ROWS );
+                        rProperty.maValue <<= eRowSource;
+                    }
                 }
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:

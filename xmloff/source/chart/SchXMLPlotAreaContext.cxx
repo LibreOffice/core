@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 19:30:43 $
+ *  last change: $Author: bm $ $Date: 2001-04-25 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ void SchXMLPlotAreaContext::EndElement()
 {
     sal_Int32 i;
     sal_Bool bIsThreeDim = sal_False;
+    sal_Bool bRowSourceColumns = sal_True;
 
     // set properties
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
@@ -346,7 +347,10 @@ void SchXMLPlotAreaContext::EndElement()
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
+            chart::ChartDataRowSource eRowSource;
             xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" )) >>= bIsThreeDim;
+            xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
+            bRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
         }
     }
 
@@ -385,9 +389,9 @@ void SchXMLPlotAreaContext::EndElement()
 
     if( pStylesCtxt )
     {
-        for( ::std::list< ::chartxml::DataRowPointStyle >::iterator iStyle = maSeriesStyleList.begin();
-             iStyle != maSeriesStyleList.end();
-             iStyle++ )
+        ::std::list< ::chartxml::DataRowPointStyle >::iterator iStyle;
+        // iterate over series attributes first ...
+        for( iStyle = maSeriesStyleList.begin(); iStyle != maSeriesStyleList.end(); iStyle++ )
         {
             if( iStyle->mnIndex == -1 )
             {
@@ -432,14 +436,22 @@ void SchXMLPlotAreaContext::EndElement()
                     }
                 }
             }
-            else
+        }
+
+        // ... then iterate over data-point attributes, so the latter are not overwritten
+        for( iStyle = maSeriesStyleList.begin(); iStyle != maSeriesStyleList.end(); iStyle++ )
+        {
+            if( iStyle->mnIndex != -1 )
             {
                 // data point style
                 for( i = 0; i < iStyle->mnRepeat; i++ )
                 {
                     try
                     {
-                        xProp = mxDiagram->getDataPointProperties( iStyle->mnIndex + i, iStyle->mnSeries );
+                        if( bRowSourceColumns )
+                            xProp = mxDiagram->getDataPointProperties( iStyle->mnIndex + i, iStyle->mnSeries );
+                        else
+                            xProp = mxDiagram->getDataPointProperties( iStyle->mnSeries, iStyle->mnIndex + i );
 
                         if( xProp.is())
                         {
