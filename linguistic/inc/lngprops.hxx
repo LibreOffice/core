@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngprops.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-08 12:42:05 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 13:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <svtools/linguprops.hxx>
 #endif
+
+// maximal number of suggestions to be returned in spelling  context-menu
+// (may not include results added by looking up user dictionaries)
+#define UPN_MAX_NUMBER_OF_SUGGESTIONS       "MaxNumberOfSuggestions"
 
 // WIDs for property names
 //!! Don't change values! They are used as the property handles in
