@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:53:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #ifndef SD_TAB_CONTROL_HXX
 #include "TabControl.hxx"
 #endif
-#ifndef SD_LAYER_TAB_BAR_HXX
-#include "LayerTabBar.hxx"
-#endif
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
 #endif
@@ -106,9 +103,9 @@ class SdrLayer;
 namespace sd {
 
 class DrawView;
+class LayerTabBar;
 class Ruler;
 class SdUnoDrawView;
-class FormShellManager;
 
 #define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
 
@@ -141,10 +138,14 @@ public:
     DrawViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
+        ::Window* pParentWindow,
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = NULL);
 
-    DrawViewShell(SfxViewFrame* pFrame, const DrawViewShell& rShell);
+    DrawViewShell(
+        SfxViewFrame* pFrame,
+        ::Window* pParentWindow,
+        const DrawViewShell& rShell);
 
     virtual ~DrawViewShell (void);
 
@@ -170,7 +171,7 @@ public:
         @param rSize
             The new size in pixel.
     */
-    virtual void    AdjustPosSizePixel(const Point &rPos, const Size &rSize);
+    //  virtual void    AdjustPosSizePixel(const Point &rPos, const Size &rSize);
 
     /** Arrange and resize the GUI elements like rulers, sliders, and
         buttons as well as the actual document view according to the size of
@@ -187,14 +188,16 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
-    virtual void    OuterResizePixel(const Point& rPos, const Size& rSize);
+    virtual void Resize (const Point& rPos, const Size& rSize);
+    //  virtual void    OuterResizePixel(const Point& rPos, const Size& rSize);
+    //  virtual void    InnerResizePixel(const Point& rPos, const Size& rSize);
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
     virtual void    AddWindow(::sd::Window* pWin);
     virtual void    RemoveWindow(::sd::Window* pWin);
 
-    void            ChangeEditMode(EditMode eMode, BOOL bLMode);
+    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
     virtual void    SetZoom( long nZoom );
     virtual void    SetZoomRect( const Rectangle& rZoomRect );
@@ -297,7 +300,7 @@ public:
     BOOL            IsSwitchPageAllowed() const;
 
     BOOL            GotoBookmark(const String& rBookmark);
-    void            MakeVisible(const Rectangle& rRect, Window& rWin);
+    void            MakeVisible(const Rectangle& rRect, ::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView);
     virtual void    WriteFrameViewData();
@@ -326,7 +329,8 @@ public:
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
-    BOOL            GetLayerMode() const { return bLayerMode; }
+    //af    SdUnoDrawView*  GetController() const { return pController; }
+    bool IsLayerModeActive (void) const;
 
     USHORT*         GetSlotArray() const { return pSlotArray; }
 
@@ -402,6 +406,8 @@ public:
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
+    virtual DrawController* GetController (void);
+
 protected:
     DrawView* pDrView;
     SdPage*         pActualPage;
@@ -410,12 +416,7 @@ protected:
     Point           aMousePos;
     BOOL            bMousePosFreezed;
     TabControl aTabControl;
-    LayerTabBar aLayerTab;
-    ImageButton     aPageBtn;
-    ImageButton     aMasterPageBtn;
-    ImageButton     aLayerBtn;
     EditMode        eEditMode;
-    BOOL            bLayerMode;
     PageKind        ePageKind;
     BOOL            bZoomOnPage;
     BOOL            bIsRulerDrag;
@@ -440,7 +441,6 @@ protected:
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
                     DECL_LINK( CloseHdl, Timer* pTimer );
                     DECL_LINK( TabSplitHdl, TabBar * );
-                    DECL_LINK( TabModeBtnHdl, Button * );
                     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
                     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
@@ -453,7 +453,6 @@ protected:
     virtual void    UpdateVRuler();
     virtual long    GetHCtrlWidth();
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY);
-    virtual void    InnerResizePixel(const Point& rPos, const Size& rSize);
     virtual Size    GetOptimalSizePixel() const;
 
     void            DestroyPolygons();
@@ -470,20 +469,26 @@ protected:
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:
+    /** This flag controls whether the layer mode is active, i.e. the layer
+        dialog is visible.
+    */
+    bool mbIsLayerModeActive;
+
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
     /** Depending on the given request create a new page or duplicate an
-        existing one.
-        @param rReq
-            The request as passed to
+        existing one.  See ViewShell::CreateOrDuplicatePage() for more
+        information.
     */
-    void CreateOrDuplicatePage (SfxRequest& rReq);
+    virtual void CreateOrDuplicatePage (
+        SfxRequest& rRequest,
+        PageKind ePageKind,
+        SdPage* pPage);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  mxScannerManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
     TransferableClipboardListener*                                                  pClipEvtLstnr;
     BOOL                                                                            bPastePossible;
-    ::std::auto_ptr<FormShellManager> mpFormShellManager;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
 };
