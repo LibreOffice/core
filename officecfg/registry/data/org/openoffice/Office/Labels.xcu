@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-08 16:50:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5120,7 +5120,7 @@
           <value>4207 Price Marking</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4064;1270;3810;953;1270;0;5;0</value>
+          <value>C;4064;1270;3810;953;1270;0;5;1</value>
         </prop>
       </node>
       <node oor:name="L251" oor:op="replace" oor:finalized="true">
@@ -5128,7 +5128,7 @@
           <value>4144 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;6604;2540;6350;2381;2159;0;3;0</value>
+          <value>C;6604;2540;6350;2381;2159;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L252" oor:op="replace" oor:finalized="true">
@@ -5136,7 +5136,7 @@
           <value>4021 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7874;2540;7620;2381;1143;0;4;0</value>
+          <value>C;7874;2540;7620;2381;1143;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L253" oor:op="replace" oor:finalized="true">
@@ -5144,7 +5144,7 @@
           <value>4145 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;1270;0;1;0</value>
+          <value>C;8890;2540;8890;2381;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L254" oor:op="replace" oor:finalized="true">
@@ -5152,7 +5152,7 @@
           <value>4013 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;953;0;1;0</value>
+          <value>C;8890;2540;8890;2381;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L255" oor:op="replace" oor:finalized="true">
@@ -5160,7 +5160,7 @@
           <value>R-4013 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;953;0;1;0</value>
+          <value>C;8890;2540;8890;2381;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L256" oor:op="replace" oor:finalized="true">
@@ -5168,7 +5168,7 @@
           <value>4030 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;2540;8890;2381;1143;0;2;0</value>
+          <value>C;9144;2540;8890;2381;1143;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L257" oor:op="replace" oor:finalized="true">
@@ -5176,7 +5176,7 @@
           <value>4031 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;2540;8890;2381;889;0;3;0</value>
+          <value>C;9144;2540;8890;2381;889;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L258" oor:op="replace" oor:finalized="true">
@@ -5184,7 +5184,7 @@
           <value>4029 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;2540;8890;2381;1143;0;4;0</value>
+          <value>C;9144;2540;8890;2381;1143;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L259" oor:op="replace" oor:finalized="true">
@@ -5192,7 +5192,7 @@
           <value>4060 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3651;953;0;1;0</value>
+          <value>C;8890;3810;8890;3651;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L260" oor:op="replace" oor:finalized="true">
@@ -5200,7 +5200,7 @@
           <value>4065 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;2540;10160;2381;1270;0;1;0</value>
+          <value>C;10160;2540;10160;2381;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L261" oor:op="replace" oor:finalized="true">
@@ -5208,7 +5208,7 @@
           <value>4143 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;2540;10160;2381;1651;0;2;0</value>
+          <value>C;10414;2540;10160;2381;1651;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L262" oor:op="replace" oor:finalized="true">
@@ -5216,7 +5216,7 @@
           <value>4066 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;2540;10160;2381;889;0;2;0</value>
+          <value>C;10414;2540;10160;2381;889;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L263" oor:op="replace" oor:finalized="true">
@@ -5224,7 +5224,7 @@
           <value>4146 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;3810;10160;3651;953;0;1;0</value>
+          <value>C;10160;3810;10160;3651;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L264" oor:op="replace" oor:finalized="true">
@@ -5232,7 +5232,7 @@
           <value>4014 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;3810;10160;3651;953;0;1;0</value>
+          <value>C;10160;3810;10160;3651;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L265" oor:op="replace" oor:finalized="true">
@@ -5240,7 +5240,7 @@
           <value>4032 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;3810;10160;3651;889;0;2;0</value>
+          <value>C;10414;3810;10160;3651;889;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L266" oor:op="replace" oor:finalized="true">
@@ -5248,7 +5248,7 @@
           <value>4033 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;3810;10160;3651;889;0;3;0</value>
+          <value>C;10414;3810;10160;3651;889;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L267" oor:op="replace" oor:finalized="true">
@@ -5256,7 +5256,7 @@
           <value>4022 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;5080;10160;4921;1270;0;1;0</value>
+          <value>C;10160;5080;10160;4921;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L268" oor:op="replace" oor:finalized="true">
@@ -5264,7 +5264,7 @@
           <value>4162 Address-Clear</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;953;0;1;0</value>
+          <value>C;8890;2540;8890;2381;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L269" oor:op="replace" oor:finalized="true">
@@ -5272,7 +5272,7 @@
           <value>4601 Address-Clear</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;953;0;1;0</value>
+          <value>C;8890;2540;8890;2381;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L270" oor:op="replace" oor:finalized="true">
@@ -5280,7 +5280,7 @@
           <value>4161 Shipping-Red Border</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;7620;10160;7461;953;0;1;0</value>
+          <value>C;10160;7620;10160;7461;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L271" oor:op="replace" oor:finalized="true">
@@ -5288,7 +5288,7 @@
           <value>4088 Shipping</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10795;7620;10795;7461;953;0;1;0</value>
+          <value>C;10795;7620;10795;7461;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L272" oor:op="replace" oor:finalized="true">
@@ -5296,7 +5296,7 @@
           <value>4076 Shipping</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;12700;7620;12700;7461;953;0;1;0</value>
+          <value>C;12700;7620;12700;7461;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L273" oor:op="replace" oor:finalized="true">
@@ -5304,7 +5304,7 @@
           <value>4110 Shipping</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;14605;7620;14605;7461;953;0;1;0</value>
+          <value>C;14605;7620;14605;7461;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L274" oor:op="replace" oor:finalized="true">
@@ -5312,7 +5312,7 @@
           <value>4027 File Folder / Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;1270;8890;1111;953;0;1;0</value>
+          <value>C;8890;1270;8890;1111;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L275" oor:op="replace" oor:finalized="true">
@@ -5320,7 +5320,7 @@
           <value>4255 File Folder</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;1270;8890;1111;1270;0;1;0</value>
+          <value>C;8890;1270;8890;1111;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L276" oor:op="replace" oor:finalized="true">
@@ -5328,7 +5328,7 @@
           <value>4266 File Folder-Assorted</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;1270;8890;1111;1270;0;1;0</value>
+          <value>C;8890;1270;8890;1111;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L277" oor:op="replace" oor:finalized="true">
@@ -5336,7 +5336,7 @@
           <value>4163 Piggyback</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;953;0;1;0</value>
+          <value>C;8890;2540;8890;2381;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L278" oor:op="replace" oor:finalized="true">
@@ -5344,7 +5344,7 @@
           <value>4160 Name Badge</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;6350;8890;6191;953;0;1;0</value>
+          <value>C;8890;6350;8890;6191;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L279" oor:op="replace" oor:finalized="true">
@@ -5352,7 +5352,7 @@
           <value>4241 3-1/2" Diskette</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;6985;7620;6985;6985;2223;0;1;0</value>
+          <value>C;6985;7620;6985;6985;2223;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L280" oor:op="replace" oor:finalized="true">
@@ -5360,7 +5360,7 @@
           <value>4166 Index Card</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;12700;7620;12700;7620;1270;0;1;0</value>
+          <value>C;12700;7620;12700;7620;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L281" oor:op="replace" oor:finalized="true">
@@ -5368,7 +5368,7 @@
           <value>4167 Post Card</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;15240;8890;15240;8890;1270;0;1;0</value>
+          <value>C;15240;8890;15240;8890;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L282" oor:op="replace" oor:finalized="true">
@@ -5376,7 +5376,7 @@
           <value>4037 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;6604;2540;6350;2381;889;0;2;0</value>
+          <value>C;6604;2540;6350;2381;889;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L283" oor:op="replace" oor:finalized="true">
@@ -5384,7 +5384,7 @@
           <value>4020 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7620;2540;7620;2381;1270;0;1;0</value>
+          <value>C;7620;2540;7620;2381;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L284" oor:op="replace" oor:finalized="true">
@@ -5392,7 +5392,7 @@
           <value>4109 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8636;2540;8382;2381;1651;0;4;0</value>
+          <value>C;8636;2540;8382;2381;1651;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L285" oor:op="replace" oor:finalized="true">
@@ -5400,7 +5400,7 @@
           <value>4018 Address - Removable</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2381;953;0;1;0</value>
+          <value>C;8890;2540;8890;2381;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L286" oor:op="replace" oor:finalized="true">
@@ -5408,7 +5408,7 @@
           <value>4062 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;3810;8890;3651;889;0;3;0</value>
+          <value>C;9144;3810;8890;3651;889;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L287" oor:op="replace" oor:finalized="true">
@@ -5416,7 +5416,7 @@
           <value>4035 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;5080;8890;4921;953;0;1;0</value>
+          <value>C;8890;5080;8890;4921;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L288" oor:op="replace" oor:finalized="true">
@@ -5424,7 +5424,7 @@
           <value>4052 Data Storage</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9843;5080;9843;4604;953;0;1;0</value>
+          <value>C;9843;5080;9843;4604;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L289" oor:op="replace" oor:finalized="true">
@@ -5432,7 +5432,7 @@
           <value>4067 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;2540;10160;2381;889;0;3;0</value>
+          <value>C;10414;2540;10160;2381;889;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L290" oor:op="replace" oor:finalized="true">
@@ -5440,7 +5440,7 @@
           <value>4019 Address - Removable</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;3810;10160;3651;953;0;1;0</value>
+          <value>C;10160;3810;10160;3651;953;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L291" oor:op="replace" oor:finalized="true">
@@ -5448,7 +5448,7 @@
           <value>4015 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;12700;2540;12700;2381;1270;0;1;0</value>
+          <value>C;12700;2540;12700;2381;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L292" oor:op="replace" oor:finalized="true">
@@ -5456,7 +5456,7 @@
           <value>4090 Address</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;12700;5080;12700;4921;1270;0;1;0</value>
+          <value>C;12700;5080;12700;4921;1270;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L293" oor:op="replace" oor:finalized="true">
@@ -5464,7 +5464,7 @@
           <value>4043 Shipping</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;13970;8467;13970;7779;1270;0;1;0</value>
+          <value>C;13970;8467;13970;7779;1270;0;1;1</value>
         </prop>
       </node>
     </node>
@@ -8130,7 +8130,7 @@
           <value>3600 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L333" oor:op="replace" oor:finalized="true">
@@ -8138,7 +8138,7 @@
           <value>3601 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L334" oor:op="replace" oor:finalized="true">
@@ -8146,7 +8146,7 @@
           <value>3602 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L335" oor:op="replace" oor:finalized="true">
@@ -8154,7 +8154,7 @@
           <value>3603 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L336" oor:op="replace" oor:finalized="true">
@@ -8162,7 +8162,7 @@
           <value>3604 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;2794;1693;2540;1450;1690;0;3;0</value>
+          <value>C;2794;1693;2540;1450;1690;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L337" oor:op="replace" oor:finalized="true">
@@ -8170,7 +8170,7 @@
           <value>3605 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4314;1693;4060;1450;1440;0;2;0</value>
+          <value>C;4314;1693;4060;1450;1440;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L338" oor:op="replace" oor:finalized="true">
@@ -8178,7 +8178,7 @@
           <value>3606 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;5074;2117;4820;1870;1430;0;2;0</value>
+          <value>C;5074;2117;4820;1870;1430;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L339" oor:op="replace" oor:finalized="true">
@@ -8186,7 +8186,7 @@
           <value>3607 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4064;2540;3810;2300;1690;0;2;0</value>
+          <value>C;4064;2540;3810;2300;1690;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L340" oor:op="replace" oor:finalized="true">
@@ -8194,7 +8194,7 @@
           <value>3608 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L341" oor:op="replace" oor:finalized="true">
@@ -8202,7 +8202,7 @@
           <value>3609 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7370;1270;7370;1030;1315;0;1;0</value>
+          <value>C;7370;1270;7370;1030;1315;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L342" oor:op="replace" oor:finalized="true">
@@ -8210,7 +8210,7 @@
           <value>3610 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2300;1055;0;1;0</value>
+          <value>C;8890;2540;8890;2300;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L343" oor:op="replace" oor:finalized="true">
@@ -8218,7 +8218,7 @@
           <value>3611 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1243;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1243;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L344" oor:op="replace" oor:finalized="true">
@@ -8226,7 +8226,7 @@
           <value>3612 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;3810;10160;3570;1335;0;1;0</value>
+          <value>C;10160;3810;10160;3570;1335;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L345" oor:op="replace" oor:finalized="true">
@@ -8234,7 +8234,7 @@
           <value>3613 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10670;5080;10670;4840;1080;0;1;0</value>
+          <value>C;10670;5080;10670;4840;1080;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L346" oor:op="replace" oor:finalized="true">
@@ -8242,7 +8242,7 @@
           <value>3614 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;11430;5080;11430;4840;1119;0;1;0</value>
+          <value>C;11430;5080;11430;4840;1119;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L347" oor:op="replace" oor:finalized="true">
@@ -8250,7 +8250,7 @@
           <value>3615 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1243;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1243;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L348" oor:op="replace" oor:finalized="true">
@@ -8258,7 +8258,7 @@
           <value>3617 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;5080;10160;4840;1335;0;1;0</value>
+          <value>C;10160;5080;10160;4840;1335;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L349" oor:op="replace" oor:finalized="true">
@@ -8266,7 +8266,7 @@
           <value>3620 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;3810;10160;3570;1215;0;2;0</value>
+          <value>C;10414;3810;10160;3570;1215;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L350" oor:op="replace" oor:finalized="true">
@@ -8274,7 +8274,7 @@
           <value>3621 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4572;3810;4318;3570;1182;0;2;0</value>
+          <value>C;4572;3810;4318;3570;1182;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L351" oor:op="replace" oor:finalized="true">
@@ -8282,7 +8282,7 @@
           <value>3623 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;5080;10160;4840;1215;0;2;0</value>
+          <value>C;10414;5080;10160;4840;1215;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L352" oor:op="replace" oor:finalized="true">
@@ -8290,7 +8290,7 @@
           <value>3633 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7624;3810;7370;3570;1445;0;3;0</value>
+          <value>C;7624;3810;7370;3570;1445;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L353" oor:op="replace" oor:finalized="true">
@@ -8298,7 +8298,7 @@
           <value>3634 Computer-Etikett, schnittgestanzt</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9500;3810;9500;3810;1055;0;1;0</value>
+          <value>C;9500;3810;9500;3810;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L354" oor:op="replace" oor:finalized="true">
@@ -8306,7 +8306,7 @@
           <value>3635 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1243;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1243;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L355" oor:op="replace" oor:finalized="true">
@@ -8314,7 +8314,7 @@
           <value>3643 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;3558;2540;3050;2300;2850;0;6;0</value>
+          <value>C;3558;2540;3050;2300;2850;0;6;1</value>
         </prop>
       </node>
       <node oor:name="L356" oor:op="replace" oor:finalized="true">
@@ -8322,7 +8322,7 @@
           <value>3645 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2300;1055;0;1;0</value>
+          <value>C;8890;2540;8890;2300;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L357" oor:op="replace" oor:finalized="true">
@@ -8330,7 +8330,7 @@
           <value>3646 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;5080;8890;4840;1055;0;1;0</value>
+          <value>C;8890;5080;8890;4840;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L358" oor:op="replace" oor:finalized="true">
@@ -8338,7 +8338,7 @@
           <value>3647 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4574;1270;4320;1030;1180;0;2;0</value>
+          <value>C;4574;1270;4320;1030;1180;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L359" oor:op="replace" oor:finalized="true">
@@ -8346,7 +8346,7 @@
           <value>3648 Computer-Etikett, ablösbar</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2300;1055;0;1;0</value>
+          <value>C;8890;2540;8890;2300;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L360" oor:op="replace" oor:finalized="true">
@@ -8354,7 +8354,7 @@
           <value>3674 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;2794;1693;2540;1450;1690;0;3;0</value>
+          <value>C;2794;1693;2540;1450;1690;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L361" oor:op="replace" oor:finalized="true">
@@ -8362,7 +8362,7 @@
           <value>3675 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4064;2540;3810;2300;1690;0;2;0</value>
+          <value>C;4064;2540;3810;2300;1690;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L362" oor:op="replace" oor:finalized="true">
@@ -8370,7 +8370,7 @@
           <value>3676 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;5074;2117;4820;1870;1430;0;2;0</value>
+          <value>C;5074;2117;4820;1870;1430;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L363" oor:op="replace" oor:finalized="true">
@@ -8378,7 +8378,7 @@
           <value>5100 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7370;1270;7370;1030;1315;0;1;0</value>
+          <value>C;7370;1270;7370;1030;1315;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L364" oor:op="replace" oor:finalized="true">
@@ -8386,7 +8386,7 @@
           <value>5101 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;2540;8890;2300;1055;0;1;0</value>
+          <value>C;8890;2540;8890;2300;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L365" oor:op="replace" oor:finalized="true">
@@ -8394,7 +8394,7 @@
           <value>5103 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;5080;8890;4840;1243;0;1;0</value>
+          <value>C;8890;5080;8890;4840;1243;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L366" oor:op="replace" oor:finalized="true">
@@ -8402,7 +8402,7 @@
           <value>5104 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;1270;10160;1030;1335;0;1;0</value>
+          <value>C;10160;1270;10160;1030;1335;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L367" oor:op="replace" oor:finalized="true">
@@ -8410,7 +8410,7 @@
           <value>5105 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;2540;10160;2300;1335;0;1;0</value>
+          <value>C;10160;2540;10160;2300;1335;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L368" oor:op="replace" oor:finalized="true">
@@ -8418,7 +8418,7 @@
           <value>5106 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;3810;10160;3570;1335;0;1;0</value>
+          <value>C;10160;3810;10160;3570;1335;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L369" oor:op="replace" oor:finalized="true">
@@ -8426,7 +8426,7 @@
           <value>5107 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;5080;10160;4840;1335;0;1;0</value>
+          <value>C;10160;5080;10160;4840;1335;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L370" oor:op="replace" oor:finalized="true">
@@ -8434,7 +8434,7 @@
           <value>5108 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10670;3810;10670;3570;1080;0;1;0</value>
+          <value>C;10670;3810;10670;3570;1080;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L371" oor:op="replace" oor:finalized="true">
@@ -8442,7 +8442,7 @@
           <value>5109 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10670;5080;10670;4840;1080;0;1;0</value>
+          <value>C;10670;5080;10670;4840;1080;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L372" oor:op="replace" oor:finalized="true">
@@ -8450,7 +8450,7 @@
           <value>5110 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;11430;5080;11430;4840;1119;0;1;0</value>
+          <value>C;11430;5080;11430;4840;1119;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L373" oor:op="replace" oor:finalized="true">
@@ -8458,7 +8458,7 @@
           <value>5111 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;12700;2540;12700;2300;1150;0;1;0</value>
+          <value>C;12700;2540;12700;2300;1150;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L374" oor:op="replace" oor:finalized="true">
@@ -8466,7 +8466,7 @@
           <value>5112 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;12700;3810;12700;3570;1150;0;1;0</value>
+          <value>C;12700;3810;12700;3570;1150;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L375" oor:op="replace" oor:finalized="true">
@@ -8474,7 +8474,7 @@
           <value>5121 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L376" oor:op="replace" oor:finalized="true">
@@ -8482,7 +8482,7 @@
           <value>5122 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L377" oor:op="replace" oor:finalized="true">
@@ -8490,7 +8490,7 @@
           <value>5123 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L378" oor:op="replace" oor:finalized="true">
@@ -8498,7 +8498,7 @@
           <value>5124 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8890;3810;8890;3570;1055;0;1;0</value>
+          <value>C;8890;3810;8890;3570;1055;0;1;1</value>
         </prop>
       </node>
       <node oor:name="L379" oor:op="replace" oor:finalized="true">
@@ -8506,7 +8506,7 @@
           <value>5130 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;3810;8890;3570;1360;0;2;0</value>
+          <value>C;9144;3810;8890;3570;1360;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L380" oor:op="replace" oor:finalized="true">
@@ -8514,7 +8514,7 @@
           <value>5131 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;5080;8890;4840;1360;0;2;0</value>
+          <value>C;9144;5080;8890;4840;1360;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L381" oor:op="replace" oor:finalized="true">
@@ -8522,7 +8522,7 @@
           <value>5132 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;3810;10160;3570;1215;0;2;0</value>
+          <value>C;10414;3810;10160;3570;1215;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L382" oor:op="replace" oor:finalized="true">
@@ -8530,7 +8530,7 @@
           <value>5133 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;5080;10160;4840;1215;0;2;0</value>
+          <value>C;10414;5080;10160;4840;1215;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L383" oor:op="replace" oor:finalized="true">
@@ -8538,7 +8538,7 @@
           <value>5137 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;5334;2540;5080;2300;1170;0;2;0</value>
+          <value>C;5334;2540;5080;2300;1170;0;2;1</value>
         </prop>
       </node>
       <node oor:name="L384" oor:op="replace" oor:finalized="true">
@@ -8546,7 +8546,7 @@
           <value>5140 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;4574;1270;4320;1030;1254;0;3;0</value>
+          <value>C;4574;1270;4320;1030;1254;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L385" oor:op="replace" oor:finalized="true">
@@ -8554,7 +8554,7 @@
           <value>5141 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;2540;8890;2300;1665;0;3;0</value>
+          <value>C;9144;2540;8890;2300;1665;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L386" oor:op="replace" oor:finalized="true">
@@ -8562,7 +8562,7 @@
           <value>5142 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;3810;8890;3570;1665;0;3;0</value>
+          <value>C;9144;3810;8890;3570;1665;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L387" oor:op="replace" oor:finalized="true">
@@ -8570,7 +8570,7 @@
           <value>5143 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;9144;5080;8890;4840;1665;0;3;0</value>
+          <value>C;9144;5080;8890;4840;1665;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L388" oor:op="replace" oor:finalized="true">
@@ -8578,7 +8578,7 @@
           <value>5145 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10414;3810;10160;3570;1260;0;3;0</value>
+          <value>C;10414;3810;10160;3570;1260;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L389" oor:op="replace" oor:finalized="true">
@@ -8586,7 +8586,7 @@
           <value>5146 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10924;3810;10670;3570;1495;0;3;0</value>
+          <value>C;10924;3810;10670;3570;1495;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L390" oor:op="replace" oor:finalized="true">
@@ -8594,7 +8594,7 @@
           <value>5147 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10924;5080;10670;4840;1495;0;3;0</value>
+          <value>C;10924;5080;10670;4840;1495;0;3;1</value>
         </prop>
       </node>
       <node oor:name="L391" oor:op="replace" oor:finalized="true">
@@ -8602,7 +8602,7 @@
           <value>5160 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;6604;2540;6350;2300;1550;0;4;0</value>
+          <value>C;6604;2540;6350;2300;1550;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L392" oor:op="replace" oor:finalized="true">
@@ -8610,7 +8610,7 @@
           <value>5161 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7624;3810;7370;3570;1760;0;4;0</value>
+          <value>C;7624;3810;7370;3570;1760;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L393" oor:op="replace" oor:finalized="true">
@@ -8618,7 +8618,7 @@
           <value>5162 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8384;2540;8130;2300;1490;0;4;0</value>
+          <value>C;8384;2540;8130;2300;1490;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L394" oor:op="replace" oor:finalized="true">
@@ -8626,7 +8626,7 @@
           <value>5163 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8384;3810;8130;3570;1490;0;4;0</value>
+          <value>C;8384;3810;8130;3570;1490;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L395" oor:op="replace" oor:finalized="true">
@@ -8634,7 +8634,7 @@
           <value>5164 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8500;3810;8000;3530;2020;0;4;0</value>
+          <value>C;8500;3810;8000;3530;2020;0;4;1</value>
         </prop>
       </node>
       <node oor:name="L396" oor:op="replace" oor:finalized="true">
@@ -8642,7 +8642,7 @@
           <value>5170 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;6604;2540;6350;2300;1875;0;5;0</value>
+          <value>C;6604;2540;6350;2300;1875;0;5;1</value>
         </prop>
       </node>
       <node oor:name="L397" oor:op="replace" oor:finalized="true">
@@ -8650,7 +8650,7 @@
           <value>5171 Computer-Etikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;6374;3595;6350;3570;1875;0;5;</value>
+          <value>C;6374;3595;6350;3570;1875;0;5;1</value>
         </prop>
       </node>
     </node>
@@ -8660,7 +8660,7 @@
           <value>083200/6 Adressetikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8900;3800;8900;3570;900;100;1;0</value>
+          <value>C;8900;3800;8900;3570;900;100;1;1</value>
         </prop>
       </node>
       <node oor:name="L1" oor:op="replace" oor:finalized="true">
@@ -8668,7 +8668,7 @@
           <value>083200/6 Adressetikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8900;3800;8900;3570;900;100;1;0</value>
+          <value>C;8900;3800;8900;3570;900;100;1;1</value>
         </prop>
       </node>
       <node oor:name="L2" oor:op="replace" oor:finalized="true">
@@ -8676,7 +8676,7 @@
           <value>083203/0 Adressetikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8900;5080;8900;4840;1100;100;1;0</value>
+          <value>C;8900;5080;8900;4840;1100;100;1;1</value>
         </prop>
       </node>
       <node oor:name="L3" oor:op="replace" oor:finalized="true">
@@ -8684,7 +8684,7 @@
           <value>083204/8 Adressetikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;10160;3800;10160;3570;900;100;1;0</value>
+          <value>C;10160;3800;10160;3570;900;100;1;1</value>
         </prop>
       </node>
       <node oor:name="L4" oor:op="replace" oor:finalized="true">
@@ -8692,7 +8692,7 @@
           <value>083205/5 Diskettenetikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7000;7620;7000;6960;1850;300;1;0</value>
+          <value>C;7000;7620;7000;6960;1850;300;1;1</value>
         </prop>
       </node>
       <node oor:name="L5" oor:op="replace" oor:finalized="true">
@@ -8700,7 +8700,7 @@
           <value>083207/1 Adressetikett</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;8900;3800;8900;3570;1100;100;2;0</value>
+          <value>C;8900;3800;8900;3570;1100;100;2;1</value>
         </prop>
       </node>
       <node oor:name="L6" oor:op="replace" oor:finalized="true">
@@ -13502,7 +13502,7 @@
           <value>8299 Endlosetiketten 1-bahnig, 5,25"-Diskette, ablösbar</value>
         </prop>
         <prop oor:name="Measure">
-          <value>C;7112;3386;7112;3146;1444;0;1;</value>
+          <value>C;7112;3386;7112;3146;1444;0;1;1</value>
         </prop>
       </node>
     </node>
