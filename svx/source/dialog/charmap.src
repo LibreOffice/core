@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:30:50 $
+ *  last change: $Author: vg $ $Date: 2001-07-20 20:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,7 @@ String RID_SUBSETSTR_BOPOMOFO
         Text[ japanese ] = "íçâπéöïÍ";
         Text[ korean ] = "Bopomofo";
         Text[ chinese_simplified ] = "æ… Ω◊¢“Ù∑˚∫≈";
-        Text[ chinese_traditional ] = "µ˘≠µ≤≈∏π";
+        Text[ chinese_traditional ] = "™`≠µ";
         Text[ turkish ] = "Bopomofo";
         Text[ arabic ] = "»Ê»Ê„Ê›Ê";
         Text[ catalan ] = "Bopomofo";
@@ -2694,6 +2694,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
