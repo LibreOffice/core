@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:15:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -240,7 +244,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
-    if( aShapeInfoVector.size() <= nZIndex )
+    if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
     {
         DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): no shape info allocated for a given shape" );
         return;
@@ -468,17 +472,16 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // -------------------
     if( aShapeInfo.meShapeType == XmlShapeTypeDrawConnectorShape )
     {
-        uno::Reference< drawing::XShape > xConnection;
+        uno::Reference< uno::XInterface > xConnection;
 
         // create shape ids for export later
-        if( xPropSet->getPropertyValue( msStartShape ) >>= xConnection )
-        {
-            createShapeId( xConnection );
-        }
-        if( xPropSet->getPropertyValue( msEndShape ) >>= xConnection )
-        {
-            createShapeId( xConnection );
-        }
+        xPropSet->getPropertyValue( msStartShape ) >>= xConnection;
+        if( xConnection.is() )
+            rExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
+
+        xPropSet->getPropertyValue( msEndShape ) >>= xConnection;
+        if( xConnection.is() )
+            rExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
     }
 
     maShapeInfos.push_back( aShapeInfo );
@@ -518,7 +521,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
-    if( aShapeInfoVector.size() <= nZIndex )
+    if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
     {
         DBG_ERROR( "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
         return;
@@ -590,12 +593,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // export shapes id if needed
     // --------------------------
     {
-        const sal_Int32 nShapeId = getShapeId( xShape );
-        if( nShapeId != -1 )
-        {
-            const OUString sId( OUString::valueOf( nShapeId ) );
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
-        }
+        uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
+        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        if( rShapeId.getLength() )
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, rShapeId );
     }
 
     // --------------------------
@@ -907,32 +908,6 @@ void XMLShapeExport::exportAutoStyles()
             GetExport().GetNamespaceMap()
             );
     }
-}
-
-///////////////////////////////////////////////////////////////////////
-
-/** creates a unique id for this shape, this id is saved and exported with this shape later
-    with the exportShape method. Its ok to call this twice with the same shape */
-void XMLShapeExport::createShapeId( const uno::Reference < drawing::XShape >& xShape )
-{
-    ShapeIdsMap::iterator aId( maShapeIds.find( xShape ) );
-
-    if( aId == maShapeIds.end() )
-        maShapeIds[xShape] = mnNextUniqueShapeId++;
-}
-
-///////////////////////////////////////////////////////////////////////
-
-/** returns the unique id for this shape. It returns -1 if the was no createShapeId call
-    for this shape yet. */
-sal_Int32 XMLShapeExport::getShapeId( const uno::Reference < drawing::XShape >& xShape )
-{
-    ShapeIdsMap::iterator aId( maShapeIds.find( xShape ) );
-
-    if( aId != maShapeIds.end() )
-        return (*aId).second;
-
-    return -1;
 }
 
 ///////////////////////////////////////////////////////////////////////
