@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-08 16:18:37 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
 }
 
 BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
-                                SvDataObject* pDataObject )
+                                const Size* pDescSize )
 {
     MakeDrawLayer();
     if ( pObj )
@@ -562,16 +562,11 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
         MapMode aMap100( MAP_100TH_MM );
         MapMode aMapObj( pObj->GetMapUnit() );
 
-        Size aSize;
-        if (pDataObject)        // Size aus DataObject in IPObject uebernehmen
-        {
-            SvObjectDescriptor aDesc(pDataObject);
-            Size aDescSize = aDesc.GetSize();
-            if( aDescSize.Width() && aDescSize.Height() )
-                pObj->SetVisAreaSize(OutputDevice::LogicToLogic( aDescSize, aMap100, aMapObj ));
-        }
+        // use size from object descriptor if given
+        if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
+            pObj->SetVisAreaSize(OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj ));
 
-        aSize = pObj->GetVisArea().GetSize();
+        Size aSize = pObj->GetVisArea().GetSize();
         aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
 
         if( aSize.Height() == 0 || aSize.Width() == 0 )
