@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,14 @@
 #include <offmgr/fltrcfg.hxx>
 #include <offmgr/app.hxx>
 
+#include <svtools/wmf.hxx>
+
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
+#include <svx/brshitem.hxx>
 #include <svx/editdata.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
@@ -100,6 +103,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 
+#include <vcl/graph.hxx>
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -1236,6 +1240,13 @@ void ImportExcel8::RecString( void )
 }
 
 
+void ImportExcel8::Protect( void )
+{
+    if( Read2() )
+        pD->SetTabProtection( nTab, TRUE, EMPTY_STRING );
+}
+
+
 void ImportExcel8::Verticalpagebreaks( void )
 {
     UINT16      n;
@@ -1919,6 +1930,38 @@ void ImportExcel8::Cellmerging( void )
         pD->DoMerge( nTab, nC1, nR1, nC2, nR2 );
         n--;
     }
+}
+
+
+UINT32 ImportExcel8::BGPic( UINT32 n )
+{
+    // no documentation available, but it might be, that it's only wmf format
+    DBG_ASSERT( n <= 0xFFFF, "*ImportExcel8::BGPic(): record to long!" );
+    DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::BGPic(): f... no style sheet!" );
+
+    UINT32              nSumLen;
+    UINT32              nNextRecord;
+
+    SvMemoryStream*     pMemStr = CreateContinueStream( ( UINT16 ) n, nSumLen, nNextRecord, TRUE );
+    pMemStr->Seek( STREAM_SEEK_TO_BEGIN );
+
+    BOOL                b = FALSE;
+    if( b )
+    {
+        SvFileStream    aOStr( _STRINGCONST( "svstr.dmp" ), STREAM_STD_WRITE );
+        aOStr << *pMemStr;
+        aOStr.Close();
+    }
+
+//  SvxBrushItem        aBGItem( ( const SvxBrushItem& ) pStyleSheetItemSet->Get( ATTR_BACKGROUND ) );
+
+    GDIMetaFile         aGDIMF;
+    if( ConvertWMFToGDIMetaFile( *pMemStr, aGDIMF ) )
+        pStyleSheetItemSet->Put( SvxBrushItem( Graphic( aGDIMF ), GPOS_AREA ) );
+
+    delete pMemStr;
+
+    return nNextRecord;
 }
 
 

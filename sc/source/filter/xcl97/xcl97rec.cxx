@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-25 13:46:24 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2867,6 +2867,27 @@ UINT16 XclHlink::GetLen() const
     pVarData->Seek( STREAM_SEEK_TO_END );
     return IsValid()? ( UINT16 ) ( 12 + StaticLen() + VarLen() ) : 0;
                     // 12 = cols/rows + flags
+}
+
+
+const BYTE      XclProtection::pMyData[] =
+{
+    0x12, 0x00, 0x02, 0x00, 0x01, 0x00,         // PROTECT
+    0xDD, 0x00, 0x02, 0x00, 0x01, 0x00,         // SCENPROTECT
+    0x63, 0x00, 0x02, 0x00, 0x01, 0x00          // OBJPROTECT
+};
+const UINT16    XclProtection::nMyLen = sizeof( XclProtection::pMyData );
+
+
+UINT16 XclProtection::GetLen( void ) const
+{
+    return nMyLen;
+}
+
+
+const BYTE* XclProtection::GetData( void ) const
+{
+    return pMyData;
 }
 
 

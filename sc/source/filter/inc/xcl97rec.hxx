@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,76 +1257,20 @@ inline const String* XclHlink::GetRepr( void ) const
 }
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.23  2000/09/17 14:08:49  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.22  2000/09/01 10:02:35  gt
-    export hyperlink
-
-    Revision 1.20  2000/07/28 15:12:03  gt
-    export print range/title + im-/export styles
-
-    Revision 1.19  2000/07/14 07:57:59  dr
-    export: external references
-
-    Revision 1.18  2000/07/04 07:39:31  dr
-    export: scenarios
-
-    Revision 1.17  2000/06/23 11:32:57  dr
-    add: class XclObjDropDown
-
-    Revision 1.16  2000/05/29 14:36:17  dr
-    class ExcPalette2 - color reduction algorithm
-
-    Revision 1.15  2000/05/08 14:02:46  gt
-    #75548# merge from branch
-
-    Revision 1.14  2000/05/05 15:27:20  dr
-    new: XclCellMerging, XclCellMergingList
-
-    Revision 1.13  2000/05/05 09:25:53  gt
-    UNICODE
-
-    Revision 1.12  2000/04/20 08:07:42  dr
-    pivot table export
-
-    Revision 1.11  2000/02/25 12:00:04  gt
-    #73585# Filter Options and VBA-recognition by Excel
-
-    Revision 1.10  2000/02/07 19:13:31  er
-    #72775# new: XclObjOle
-
-    Revision 1.9  2000/01/31 08:30:52  gt
-    #72481# export conditional format
-
-    Revision 1.8  1999/10/12 16:30:47  er
-    new: XclObjChart
-
-    Revision 1.7  1999/09/29 15:56:26  er
-    new: XclObjChart
-
-    Revision 1.6  1999/09/22 19:09:01  er
-    chg: OBJ records
-
-    Revision 1.5  1999/07/27 14:55:06  ER
-    new: Msodrawinggroup, Msodrawing, Obj, ObjComment, Note, NoteList, Txo
 
 
-      Rev 1.4   27 Jul 1999 16:55:06   ER
-   new: Msodrawinggroup, Msodrawing, Obj, ObjComment, Note, NoteList, Txo
+class XclProtection : public ExcDummyRec
+{
+    // replacement for records PROTECT, SCENPROTECT, OBJPROTECT...
+private:
+    static const BYTE           pMyData[];
+    static const UINT16         nMyLen;
+public:
+    virtual UINT16              GetLen( void ) const;
+    virtual const BYTE*         GetData( void ) const;
+};
 
-      Rev 1.3   01 Jul 1999 17:20:18   ER
-   chg: WINDOW2 sets selected sheet tab, ExcDummy_03 only SELECTION
 
-      Rev 1.2   16 Jun 1999 19:57:50   ER
-   new: XclObjList, XclObj, XclObjComment, XclTxo, XclNote
 
-      Rev 1.1   11 Jun 1999 20:08:08   ER
-   xcl97exp Formula: References, SupbookList, ExtsheetList, literal Strings
-
-------------------------------------------------------------------------*/
 
 #endif // _XCL97REC_HXX

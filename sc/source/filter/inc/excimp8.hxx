@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-09-28 10:41:46 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,6 +508,7 @@ class ImportExcel8 : public ImportExcel
 
         void                    Formula( void );                // 0x06
         void                    RecString( void );              // 0x07
+        void                    Protect( void );                // 0x12
         void                    Verticalpagebreaks( void );     // 0x1A
         void                    Horizontalpagebreaks( void );   // 0x1B
         void                    Note( void );                   // 0x1C
@@ -537,6 +538,7 @@ class ImportExcel8 : public ImportExcel
         void                    Xf( void );                     // 0xE0
         void                    SXVs( void );                   // 0xE3
         void                    Cellmerging( void );            // 0xE5     geraten...
+        UINT32                  BGPic( UINT32 nLenRecord );     // 0xE9     background picture (guess so, no documentation)
         UINT32                  Msodrawinggroup( const UINT32 nLenRecord );     // 0xEB
                                                                 // liefert Pos vom Folgerecord
         void                    Msodrawing( const UINT32 nLenRecord );          // 0xEC

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,6 +1494,7 @@ aIn.Seek( nNextRecord );
 #endif
 
                         break;
+                    case 0x12:  Protect(); break;
                     case 0x1A:  Verticalpagebreaks(); break;
                     case 0x1B:  Horizontalpagebreaks(); break;
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345   ]
@@ -1510,6 +1511,7 @@ aIn.Seek( nNextRecord );
                     case 0x9B:  FilterMode(); break;    // FILTERMODE
                     case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
+                    case 0xE9:  nNextRecord = BGPic( nLaengeRec ); break;
                     case 0x01BA: Codename( FALSE ); break;
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345   ]
                     case 0x0208: Row34(); break;        // ROW          [  34    ]

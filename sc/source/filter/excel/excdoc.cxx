@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,9 @@ void ExcTable::FillAsTable( void )
     Add( new ExcHeader( &rR, eDateiTyp >= Biff8 ) );
     Add( new ExcFooter( &rR, eDateiTyp >= Biff8 ) );
     Add( new ExcSetup( &rR ) );
+
+    if( rDoc.IsTabProtected( nScTab ) )
+        Add( new XclProtection() );
 
     if ( eDateiTyp < Biff8 && rR.pExtSheetCntAndRecs )
         Add( new ExcExternDup( *rR.pExtSheetCntAndRecs ) );
