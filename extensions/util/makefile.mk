@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2001-04-20 10:54:15 $
+#   last change: $Author: hjs $ $Date: 2001-06-27 12:14:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,19 +69,14 @@ GEN_HID=TRUE
 
 .INCLUDE :	settings.mk
 
-ALL: \
-    ALLTAR \
-    $(SRS)$/hidother.hid
-    
-
 .INCLUDE : target.mk
 
-$(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
 .IF "$(BUILD_SOSL)"==""
+ALLTAR : $(SRS)$/hidother.hid
+.ENDIF
+.ENDIF
+
+$(SRS)$/hidother.hid: hidother.src
     +-mhids hidother.src ..\$(INPATH)$/srs ext hidother $(INCLUDE)
-.ENDIF
-.ELSE
-    @+echo nix
-.ENDIF
 
