@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BindableDataAwareControlModel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:36:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,14 +125,16 @@ module com {  module sun {  module star {  module form { module binding {
                 in the external binding. This is a difference to SQL bindings of most
                 <type scope="com::sun::star::form">DataAwareControlModel</type>'s, where changes
                 in the control model's value are only propagated to the bound column upon explicit
-                request via <member scope="com::sun::star::form">XBoundComponent::commit</member>.
+                request via <member scope="com::sun::star::form">XBoundComponent::commit</member>.<br/>
+                Note that this restriction is inherited from the <type>BindableControlModel</type>.
             </li>
             <li><b>Cloning</b><br/>
                 <type scope="com::sun::star::form">FormControlModel</type>s support cloning themself
                 via the <type scope="com::sun::star::util">XCloneable</type> interface which they
                 inherit from the <type scope="com::sun::star::awt">UnoControlModel</type> service.</br>
                 When a <type>BindableDataAwareControlModel</type> is cloned while it has an active
-                external value binding, then the clone is also bound to the same binding instance.
+                external value binding, then the clone is also bound to the same binding instance.<br/>
+                Note that this restriction is inherited from the <type>BindableControlModel</type>.
             </li>
         </ul>
     </p>
