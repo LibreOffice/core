@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:08:14 $
+ *  last change: $Author: mba $ $Date: 2001-11-02 16:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,11 +211,11 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
 
         if ( nHelpId )
             SfxHelp::OpenHelpAgent( pFrame, nHelpId );
-        return sal_True;
     }
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        return pView->GetViewShell()->GlobalKeyInput_Impl( *rNEvt.GetKeyEvent() );
+        if ( pView->GetViewShell()->GlobalKeyInput_Impl( *rNEvt.GetKeyEvent() ) )
+            return TRUE;
     }
     else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG )
     {
