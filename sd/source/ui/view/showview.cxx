@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,32 +179,33 @@ void ShowView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 
 void ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
-    BOOL bMPCache = FALSE;
-
-    if (bAllowMasterPageCaching && pViewSh &&
-        pViewSh == (SdViewShell*) SfxViewShell::Current() &&
-        pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
-        pOutDev->GetOutDevType() != OUTDEV_PRINTER)
-    {
-        // Aktive ViewShell: Caching einschalten
-        bMPCache = TRUE;
-    }
-
-    if (bMPCache)
-    {
-        if (!IsMasterPagePaintCaching())
-        {
-            SetMasterPagePaintCaching(TRUE);
-        }
-    }
-    else
-    {
-        if (IsMasterPagePaintCaching())
-        {
-            ReleaseMasterPagePaintCache();
-            SetMasterPagePaintCaching(FALSE);
-        }
-    }
+// #110094#-7
+//  BOOL bMPCache = FALSE;
+//
+//  if (bAllowMasterPageCaching && pViewSh &&
+//      pViewSh == (SdViewShell*) SfxViewShell::Current() &&
+//      pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
+//      pOutDev->GetOutDevType() != OUTDEV_PRINTER)
+//  {
+//      // Aktive ViewShell: Caching einschalten
+//      bMPCache = TRUE;
+//  }
+//
+//  if (bMPCache)
+//  {
+//      if (!IsMasterPagePaintCaching())
+//      {
+//          SetMasterPagePaintCaching(TRUE);
+//      }
+//  }
+//  else
+//  {
+//      if (IsMasterPagePaintCaching())
+//      {
+//          ReleaseMasterPagePaintCache();
+//          SetMasterPagePaintCaching(FALSE);
+//      }
+//  }
 
     FmFormView::InitRedraw(pOutDev, rReg, SDRPAINTMODE_ANILIKEPRN);
 }
