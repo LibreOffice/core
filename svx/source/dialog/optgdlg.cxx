@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:07:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,15 @@
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
 #endif
+
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/uno/Any.hxx>
+
+
 #include "optgdlg.hrc"
 #include "optgdlg.hxx"
 #include "ofaitem.hxx"
@@ -208,6 +217,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 using namespace ::utl;
 using namespace ::rtl;
 
@@ -904,10 +915,27 @@ struct LanguageConfig_Impl
 
  ---------------------------------------------------------------------------*/
 static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
+
+// some things we'll need...
+static const OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+static const OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+static const OUString sAccessUpdSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+static const OUString sInstalledLocalesPath = OUString::createFromAscii("org.openoffice.Setup/Office/InstalledLocales");
+static OUString sUserLocalePath = OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
+//static const OUString sUserLocalePath = OUString::createFromAscii("org.openoffice.Office/Linguistic");
+static const OUString sUserLocaleKey = OUString::createFromAscii("UILocale");
+static const OUString sSystemLocalePath = OUString::createFromAscii("org.openoffice.System/L10N");
+static const OUString sSystemLocaleKey = OUString::createFromAscii("UILocale");
+static const OUString sOfficeLocalePath = OUString::createFromAscii("org.openoffice.Office/L10N");
+static const OUString sOfficeLocaleKey = OUString::createFromAscii("ooLocale");
+static Sequence< OUString > seqInstalledLanguages;
+
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, ResId( OFA_TP_LANGUAGES, DIALOG_MGR() ), rSet ),
     aUILanguageGB(this,         ResId(FL_UI_LANG        )),
     aLocaleSettingFI(this,      ResId(FI_LOCALESETTING)),
+    aUserInterfaceFT(this,      ResId(FT_USERINTERFACE)),
+    aUserInterfaceLB(this,      ResId(LB_USERINTERFACE)),
     aLocaleSettingFT(this,      ResId(FT_LOCALESETTING)),
     aLocaleSettingLB(this,      ResId(LB_LOCALESETTING)),
     aCurrencyFI( this,          ResId(FI_CURRENCY       )),
@@ -927,10 +955,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aComplexLanguageLB(this,    ResId(LB_COMPLEX_LANG   )),
     aCurrentDocCB(this,         ResId(CB_CURRENT_DOC    )),
     aAsianSupportFI(this,       ResId(FI_ASIANSUPPORT   )),
-    aAsianSupportFL(this,       ResId(FL_ASIANSUPPORT    )),
+    aEnhancedFL(this,           ResId(FL_ENHANCED    )),
     aAsianSupportCB(this,       ResId(CB_ASIANSUPPORT   )),
     aCTLSupportFI(this,         ResId(FI_CTLSUPPORT    )),
-    aCTLSupportFL(this,         ResId(FL_CTLSUPPORT    )),
     aCTLSupportCB(this,         ResId(CB_CTLSUPPORT   )),
     pLangConfig(new LanguageConfig_Impl)
 {
@@ -938,15 +965,75 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
 
+    // initialize user interface language selection
+    SvxLanguageTable* pLanguageTable = new SvxLanguageTable;
+    String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
+    aUserInterfaceLB.InsertEntry(aStr);
+    aUserInterfaceLB.SetEntryData(0, 0);
+    aUserInterfaceLB.SelectEntryPos(0);
+    try
+    {
+        OUString sOfficeLocaleValue;
+        OUString sSystemLocaleValue;
+
+        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
+            theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW);
+        Sequence< Any > theArgs(1);
+        Reference< XNameAccess > theNameAccess;
+
+        // find out which locales are currently installed and add them to the listbox
+        theArgs[0] = makeAny(sInstalledLocalesPath);
+        theNameAccess = Reference< XNameAccess > (
+            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+        seqInstalledLanguages = theNameAccess->getElementNames();
+        LanguageType aLang = LANGUAGE_DONTKNOW;
+        for (sal_Int32 i=0; i<seqInstalledLanguages.getLength(); i++)
+        {
+            aLang = ConvertIsoStringToLanguage(seqInstalledLanguages[i]);
+            if (aLang != LANGUAGE_DONTKNOW)
+            {
+                //USHORT p = aUserInterfaceLB.InsertLanguage(aLang);
+                String aLangStr( pLanguageTable->GetString( aLang ) );
+                USHORT p = aUserInterfaceLB.InsertEntry(aLangStr);
+                aUserInterfaceLB.SetEntryData(p, (void*)(i+1));
+            }
+        }
+
+        // find out whether the user has a specific locale specified
+        theArgs[0] = makeAny(sUserLocalePath);
+        theNameAccess = Reference< XNameAccess > (
+            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+        if (theNameAccess->hasByName(sUserLocaleKey))
+            theNameAccess->getByName(sUserLocaleKey) >>= m_sUserLocaleValue;
+        // select the user specified locale in the listbox
+        if (m_sUserLocaleValue.getLength() > 0)
+        {
+            sal_Int32 d = 0;
+            for (sal_Int32 i=0; i < aUserInterfaceLB.GetEntryCount(); i++)
+            {
+                d = (sal_Int32)aUserInterfaceLB.GetEntryData(i);
+                if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1].equals(m_sUserLocaleValue))
+                    aUserInterfaceLB.SelectEntryPos(i);
+            }
+        }
+
+    }
+    catch (Exception &e)
+    {
+        // we'll just leave the box in it's default setting and won't
+        // even give it event handler...
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMsg.getStr());
+    }
+
     aWesternLanguageLB.SetLanguageList( LANG_LIST_WESTERN | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
     aAsianLanguageLB  .SetLanguageList( LANG_LIST_CJK     | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
     aComplexLanguageLB.SetLanguageList( LANG_LIST_CTL     | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
     aLocaleSettingLB  .SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, FALSE, FALSE, FALSE);
     aLocaleSettingLB.InsertLanguage( LANGUAGE_SYSTEM );
 
-    SvxLanguageTable* pLanguageTable = new SvxLanguageTable;
     // insert SYSTEM entry, no specific currency
-    String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
     aCurrencyLB.InsertEntry( aStr );
     // all currencies
     String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  " ) );
@@ -1068,6 +1155,45 @@ void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[]
 
 BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
+    try
+    {
+        // handle settings for UI Language
+        // a change of setting needs to bring up a warning message
+        OUString aLangString;
+        sal_Int32 d = (sal_Int32)aUserInterfaceLB.GetEntryData(aUserInterfaceLB.GetSelectEntryPos());
+        if( d > 0 && seqInstalledLanguages.getLength() > d-1)
+            aLangString = seqInstalledLanguages[d-1];
+
+        /*
+        if( aUserInterfaceLB.GetSelectEntryPos() > 0)
+            aLangString = ConvertLanguageToIsoString(aUserInterfaceLB.GetSelectLanguage());
+        */
+        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
+            theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW);
+        Sequence< Any > theArgs(1);
+        theArgs[0] = makeAny(sUserLocalePath);
+        Reference< XPropertySet >xProp(
+            theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
+        if ( !m_sUserLocaleValue.equals(aLangString))
+        {
+            // OSL_ENSURE(sal_False, "UserInterface language was changed, restart.");
+            // write new value
+            xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
+            Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+            // display info
+            InfoBox aBox(this, ResId(RID_SVX_MSGBOX_LANGUAGE_RESTART, DIALOG_MGR()));
+            aBox.Execute();
+        }
+    }
+    catch (Exception& e)
+    {
+        // we'll just leave the box in it's default setting and won't
+        // even give it event handler...
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMsg.getStr());
+    }
+
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( TRUE );
 
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
@@ -1216,6 +1342,8 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         pInvalidItems[0] = new SfxVoidItem(SID_CTLFONT_STATE);
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
+
+
 
     if ( pLangConfig->aSysLocaleOptions.IsModified() )
         pLangConfig->aSysLocaleOptions.Commit();
@@ -1379,7 +1507,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
 
 namespace
 {
-    void lcl_checkLanguageCheckBox(CheckBox& _rCB,FixedLine& _rFL,sal_Bool _bNewValue,sal_Bool _bOldValue)
+    void lcl_checkLanguageCheckBox(CheckBox& _rCB,sal_Bool _bNewValue,sal_Bool _bOldValue)
     {
         if ( _bNewValue )
             _rCB.Check(TRUE);
@@ -1388,7 +1516,6 @@ namespace
 // #i15082# do not call SaveValue() in running dialog...
 //      _rCB.SaveValue();
         _rCB.Enable( !_bNewValue );
-        _rFL.Enable( !_bNewValue );
     }
 }
 /* -----------------08.06.01 17:56-------------------
@@ -1403,7 +1530,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
     {
         sal_Bool bIsCTLFixed = nType & SCRIPTTYPE_COMPLEX;
-        lcl_checkLanguageCheckBox(aCTLSupportCB,aCTLSupportFL,bIsCTLFixed,m_bOldCtl);
+        lcl_checkLanguageCheckBox(aCTLSupportCB, bIsCTLFixed, m_bOldCtl);
         SupportHdl( &aCTLSupportCB );
     }
     // second check if CJK must be enabled
@@ -1411,7 +1538,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
     {
         sal_Bool bIsCJKFixed = nType & SCRIPTTYPE_ASIAN;
-        lcl_checkLanguageCheckBox(aAsianSupportCB,aAsianSupportFL,bIsCJKFixed,m_bOldAsian);
+        lcl_checkLanguageCheckBox(aAsianSupportCB, bIsCJKFixed, m_bOldAsian);
         SupportHdl( &aAsianSupportCB );
     }
 
