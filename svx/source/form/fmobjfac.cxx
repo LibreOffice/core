@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:47:23 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,16 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case OBJ_FM_FORMATTEDFIELD:
             {
                 pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FORMATTEDFIELD,pObjFactory->nIdentifier);
+            }   break;
+            case OBJ_FM_SCROLLBAR:
+            {
+                pObjFactory->pNewObj = new FmFormObj( FM_SUN_COMPONENT_SCROLLBAR, pObjFactory->nIdentifier );
+                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
+            }   break;
+            case OBJ_FM_SPINBUTTON:
+            {
+                pObjFactory->pNewObj = new FmFormObj( FM_SUN_COMPONENT_SPINBUTTON, pObjFactory->nIdentifier );
+                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
             }   break;
             default:
                 return 0;
