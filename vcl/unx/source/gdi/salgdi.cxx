@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2000-10-12 13:59:12 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,19 @@
 
 #include <tools/debug.hxx>
 
+#if !defined(USE_PSPRINT)
 #ifndef PRINTER_DUMMY
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
 #undef Font
 #undef Region
+#endif
+#endif
+
+#if defined(USE_PSPRINT)
+#include <psprint/printergfx.hxx>
+#include <psprint/jobdata.hxx>
 #endif
 
 // -=-= SalPolyLine =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,6 +137,10 @@ inline SalPolyLine::~SalPolyLine()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final SalGraphicsData::SalGraphicsData()
 {
+    #if defined(USE_PSPRINT)
+    m_pJobData          = NULL;
+    m_pPrinterGfx       = NULL;
+    #endif
     hDrawable_          = None;
 
     pClipRegion_        = NULL;
@@ -177,22 +188,27 @@ final SalGraphicsData::SalGraphicsData()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final SalGraphicsData::~SalGraphicsData()
 {
-    Display *pDisplay = GetXDisplay();
+#ifdef USE_PSPRINT
+    if( ! ( m_pJobData || m_pPrinterGfx ) )
+#endif
+    {
+        Display *pDisplay = GetXDisplay();
 
-    DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" )
-    if( pClipRegion_ ) XDestroyRegion( pClipRegion_ );
+        DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" )
+            if( pClipRegion_ ) XDestroyRegion( pClipRegion_ );
 
-    if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ );
-    if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ );
-    if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ );
-    if( pBrushGC_ )     XFreeGC( pDisplay, pBrushGC_ );
-    if( pMonoGC_ )      XFreeGC( pDisplay, pMonoGC_ );
-    if( pCopyGC_ )      XFreeGC( pDisplay, pCopyGC_ );
-    if( pMaskGC_ )      XFreeGC( pDisplay, pMaskGC_ );
-    if( pInvertGC_ )    XFreeGC( pDisplay, pInvertGC_ );
-    if( pInvert50GC_ )  XFreeGC( pDisplay, pInvert50GC_ );
-    if( pStippleGC_ )   XFreeGC( pDisplay, pStippleGC_ );
-    if( pTrackingGC_ )  XFreeGC( pDisplay, pTrackingGC_ );
+        if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ );
+        if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ );
+        if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ );
+        if( pBrushGC_ )     XFreeGC( pDisplay, pBrushGC_ );
+        if( pMonoGC_ )      XFreeGC( pDisplay, pMonoGC_ );
+        if( pCopyGC_ )      XFreeGC( pDisplay, pCopyGC_ );
+        if( pMaskGC_ )      XFreeGC( pDisplay, pMaskGC_ );
+        if( pInvertGC_ )    XFreeGC( pDisplay, pInvertGC_ );
+        if( pInvert50GC_ )  XFreeGC( pDisplay, pInvert50GC_ );
+        if( pStippleGC_ )   XFreeGC( pDisplay, pStippleGC_ );
+        if( pTrackingGC_ )  XFreeGC( pDisplay, pTrackingGC_ );
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -460,6 +476,18 @@ final SalGraphics::~SalGraphics()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pJobData != NULL)
+    {
+        int x, y;
+        maGraphicsData.m_pJobData->m_aContext.getResolution( x, y );
+        rDPIX = x;
+        rDPIY = y;
+    }
+    else
+    {
+    #endif
+
     SalDisplay *pDisplay = _GetDisplay();
 
     rDPIX = pDisplay->GetResolution().A();
@@ -469,11 +497,22 @@ final void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
         rDPIX = Divide( rDPIX * 96, rDPIY );
         rDPIY = 96;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // const
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->GetScreenFontResolution (rDPIX, rDPIY);
+    else
+    {
+    #endif
+
     GetResolution ( rDPIX, rDPIY );
 
     if( rDPIY < 108 )
@@ -481,15 +520,39 @@ final void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // c
         rDPIX = Divide( rDPIX * 108, rDPIY );
         rDPIY = 108;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final USHORT SalGraphics::GetBitCount() // const
-{ return _GetVisual()->GetDepth(); }
+{
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        return maGraphicsData.m_pPrinterGfx->GetBitCount ();
+    else
+    {
+    #endif
+
+    return _GetVisual()->GetDepth();
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
+}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::ResetClipRegion()
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->ResetClipRegion ();
+    else
+    {
+    #endif
+
     if( _GetClipRegion() )
     {
         _IsPenGC()          = FALSE;
@@ -505,25 +568,41 @@ final void SalGraphics::ResetClipRegion()
         XDestroyRegion( _GetClipRegion() );
         _GetClipRegion()    = NULL;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::BeginSetClipRegion( ULONG )
+final void SalGraphics::BeginSetClipRegion( ULONG n )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->BeginSetClipRegion(n);
+    else
+    {
+    #endif
+
     if( _GetClipRegion() )
         XDestroyRegion( _GetClipRegion() );
     _GetClipRegion() = XCreateRegion();
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nDX, long nDY )
 {
-#ifdef DEBUG
-    if( nDX <= 0 || nX + nDX > 32767 )
-        fprintf( stderr, "CombineClipRegion %ld %ld\n", nX, nDX );
-    if( nDY <= 0 || nX + nDY > 32767 )
-        fprintf( stderr, "CombineClipRegion %ld %ld\n", nY, nDY );
-#endif
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        return maGraphicsData.m_pPrinterGfx->UnionClipRegion (nX, nY, nDX, nDY);
+    else
+    {
+    #endif
+
     if (!nDX || !nDY)
         return TRUE;
 
@@ -536,11 +615,22 @@ BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nDX, long nDY )
     XUnionRectWithRegion( &aRect, _GetClipRegion(), _GetClipRegion() );
 
     return TRUE;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::EndSetClipRegion()
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->EndSetClipRegion ();
+    else
+    {
+    #endif
+
     _IsPenGC()      = FALSE;
     _IsFontGC()     = FALSE;
     _IsBrushGC()    = FALSE;
@@ -551,52 +641,102 @@ final void SalGraphics::EndSetClipRegion()
     _IsStippleGC()  = FALSE;
     _IsTrackingGC() = FALSE;
 
-//  if( _GetPaintRegion() )
-//      XIntersectRegion( _GetClipRegion(), _GetPaintRegion(), _GetClipRegion() );
-//  else
-
     if( XEmptyRegion( _GetClipRegion() ) )
     {
         XDestroyRegion( _GetClipRegion() );
         _GetClipRegion()    = NULL;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetLineColor()
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->SetLineColor ();
+    else
+    {
+    #endif
+
     if( _GetPenColor() != 0xFFFFFFFF )
     {
         _GetPenColor()      = 0xFFFFFFFF;
         _IsPenGC()          = FALSE;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetLineColor( SalColor nSalColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
+                             SALCOLOR_GREEN (nSalColor),
+                             SALCOLOR_BLUE  (nSalColor));
+        maGraphicsData.m_pPrinterGfx->SetLineColor (aColor);
+    }
+    else
+    {
+    #endif
+
     if( _GetPenColor() != nSalColor )
     {
         _GetPenColor()      = nSalColor;
         _GetPenPixel()      = _GetPixel( nSalColor );
         _IsPenGC()          = FALSE;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetFillColor()
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->SetFillColor ();
+    else
+    {
+    #endif
+
     if( _GetBrushColor() != 0xFFFFFFFF )
     {
         _IsDitherBrush()    = FALSE;
         _GetBrushColor()    = 0xFFFFFFFF;
         _IsBrushGC()        = FALSE;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetFillColor( SalColor nSalColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
+                             SALCOLOR_GREEN (nSalColor),
+                             SALCOLOR_BLUE  (nSalColor));
+        maGraphicsData.m_pPrinterGfx->SetFillColor (aColor);
+    }
+    else
+    {
+    #endif
+
     if( _GetBrushColor() != nSalColor )
     {
         _IsDitherBrush()    = FALSE;
@@ -623,11 +763,24 @@ final void SalGraphics::SetFillColor( SalColor nSalColor )
              _IsDitherBrush() = maGraphicsData.GetDitherPixmap(nSalColor);
         _IsBrushGC()        = FALSE;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ASSERT( 0, "Error: PrinterGfx::SetROPLineColor() not implemented" );
+    }
+    else
+    {
+    #endif
+
     switch( nROPColor )
     {
         case SAL_ROP_0 : // 0
@@ -642,11 +795,24 @@ final void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
     }
     _GetPenColor()  = _GetColor( _GetPenPixel() );
     _IsPenGC()      = FALSE;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ASSERT( 0, "Error: PrinterGfx::SetROPFillColor() not implemented" );
+    }
+    else
+    {
+    #endif
+
     switch( nROPColor )
     {
         case SAL_ROP_0 : // 0
@@ -662,11 +828,24 @@ final void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
     _IsDitherBrush()    = FALSE;
     _GetBrushColor()    = _GetColor( _GetBrushPixel() );
     _IsBrushGC()        = FALSE;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::SetXORMode( BOOL bSet )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ASSERT( !bSet, "Error: PrinterGfx::SetXORMode() not implemented" );
+    }
+    else
+    {
+    #endif
+
     if( !_IsXORMode() == bSet )
     {
         _IsXORMode()    = bSet;
@@ -679,17 +858,44 @@ final void SalGraphics::SetXORMode( BOOL bSet )
         _IsStippleGC()  = FALSE;
         _IsTrackingGC() = FALSE;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::DrawPixel( long nX, long nY )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->DrawPixel (Point(nX, nY));
+    else
+    {
+    #endif
+
     if( _GetPenColor() !=  0xFFFFFFFF )
         XDrawPoint( _GetXDisplay(), _GetDrawable(), _SelectPen(), nX, nY );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 final void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
+                             SALCOLOR_GREEN (nSalColor),
+                             SALCOLOR_BLUE  (nSalColor));
+        maGraphicsData.m_pPrinterGfx->DrawPixel (Point(nX, nY), aColor);
+    }
+    else
+    {
+    #endif
+
     if( nSalColor != 0xFFFFFFFF )
     {
         Display *pDisplay = _GetXDisplay();
@@ -714,11 +920,22 @@ final void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
                 XSetForeground( pDisplay, pGC, _GetPenPixel() );
         }
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->DrawLine (Point(nX1, nY1), Point(nX2, nY2));
+    else
+    {
+    #endif
+
     if( _GetPenColor() != 0xFFFFFFFF )
     {
         if ( _GetDisplay()->GetProperties() & PROPERTY_BUG_DrawLine )
@@ -732,11 +949,22 @@ final void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
             XDrawLine( _GetXDisplay(), _GetDrawable(),_SelectPen(),
                        nX1, nY1, nX2, nY2 );
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
+    else
+    {
+    #endif
+
     if( _GetBrushColor() != 0xFFFFFFFF )
         XFillRectangle( _GetXDisplay(),
                         _GetDrawable(),
@@ -749,40 +977,52 @@ void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
                         _GetDrawable(),
                         _SelectPen(),
                         nX, nY, nDX-1, nDY-1 );
-}
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if 0
-// Ausgetauscht durch SalGraphics::Invert
-final void SalGraphics::InvertTracking( ULONG nPoints, const SalPoint *pPtAry )
-{
-    SalPolyLine Points( nPoints, pPtAry );
-
-    maGraphicsData.DrawLines( nPoints, Points, _GetTrackingGC() );
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
-#endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->DrawPolyLine (nPoints, (Point*)pPtAry);
+    else
+    {
+    #endif
+
     if( _GetPenColor() != 0xFFFFFFFF )
     {
         SalPolyLine Points( nPoints, pPtAry );
 
         maGraphicsData.DrawLines( nPoints, Points, _SelectPen() );
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
+    #if defined(USE_PSPRINT)
+    // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
+    else
+    {
+    #endif
+
     if( nPoints < 3 )
     {
         if( !nPoints )
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             fprintf( stderr, "SalGraphics::DrawPolygon !nPoints\n" );
-#endif
+            #endif
         }
         else if( !_IsXORMode() )
         {
@@ -808,6 +1048,10 @@ final void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
     if( _GetPenColor() != 0xFFFFFFFF )
         maGraphicsData.DrawLines( nPoints, Points, _SelectPen() );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -815,6 +1059,13 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
                                    const ULONG     *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        maGraphicsData.m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
+    else
+    {
+    #endif
+
     if( _GetBrushColor() != 0xFFFFFFFF )
     {
         ULONG       i, n;
@@ -874,6 +1125,10 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
     if( _GetPenColor() != 0xFFFFFFFF )
         for( ULONG i = 0; i < nPoly; i++ )
             DrawPolyLine( pPoints[i], pPtAry[i] );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -882,6 +1137,15 @@ beta void SalGraphics::Invert( ULONG nPoints,
                                 const SalPoint* pPtAry,
                                 SalInvert nFlags )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ASSERT( 0, "Error: PrinterGfx::Invert() not implemented" );
+    }
+    else
+    {
+    #endif
+
     SalDisplay *pDisp = _GetDisplay();
     SalPolyLine Points ( nPoints, pPtAry );
 
@@ -895,29 +1159,27 @@ beta void SalGraphics::Invert( ULONG nPoints,
         pGC = maGraphicsData.GetInvertGC();
 
     maGraphicsData.DrawLines ( nPoints, Points, pGC );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#if 0
- struct XpEPS_trf
- {
-     double origin_x, origin_y;
-     double scale_x, scale_y;
-     double rotate;
- };
- struct XpBox
- {
-     double llx,lly;
-     double urx,ury;
- };
- extern "C" void* XpEPS_Put( Display*, FILE*, struct XpEPS_trf* );
- extern "C" struct XpBox* XpEPS_GetBoundingBox( Display*, FILE* );
-#endif
-
 BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
 {
-#ifndef PRINTER_DUMMY
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_WARNING ("Warning: PrinterGfx::DrawEPS() not implemented");
+        return FALSE;
+    }
+    else
+    {
+    #endif
+
+    #if !defined(PRINTER_DUMMY) && !defined(USE_PSPRINT)
     if( _IsPrinter() )
     {
         // convert \r to \n (#60367#, EPS-files with mac format)
@@ -958,9 +1220,9 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
         {
             aTransfer.scale_x = 1;
             aTransfer.scale_y = 1;
-#ifdef DEBUG
+            #ifdef DEBUG
             fprintf( stderr, "Warning: XpEPS_GetBoundingBox returned NULL\n" );
-#endif
+            #endif
         }
 
         XpEPS_Put( _GetXDisplay(), fp, &aTransfer );
@@ -969,7 +1231,12 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
 
         return TRUE;
     }
-#endif
+    #endif
+
     return FALSE;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 

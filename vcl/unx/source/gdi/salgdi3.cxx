@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 12:09:32 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,18 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
-#ifndef USE_PSPRINT
-#ifndef PRINTER_DUMMY
+#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY)
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
 #undef Font
 #undef Region
 #endif
+
+#if defined(USE_PSPRINT)
+#include <psprint/printergfx.hxx>
+#include <psprint/fontmanager.hxx>
+#include <psprint/jobdata.hxx>
 #endif
 
 #ifndef ANSI1252_HXX_
@@ -897,7 +901,18 @@ SalGraphicsData::DrawText( long nX, long nY,
 void
 SalGraphics::DrawText( long nX, long nY, const xub_Unicode* pStr, USHORT nLen )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+         maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen);
+    else
+    {
+    #endif
+
     maGraphicsData.DrawText( nX, nY, pStr, nLen );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 //--------------------------------------------------------------------------
@@ -986,8 +1001,25 @@ SalGraphicsData::DrawText(
 USHORT
 SalGraphics::SetFont( ImplFontSelectData *pEntry )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        sal_Bool bVertical = pEntry->mbVertical;
+        sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
+
+        return maGraphicsData.m_pPrinterGfx->SetFont(nID, pEntry->mnHeight,
+                                                     pEntry->mnOrientation);
+    }
+    else
+    {
+    #endif
+
     maGraphicsData.SetFont( pEntry );
     return _IsPrinter() ? SAL_SETFONT_USEDRAWTEXTARRAY : 0;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // ----------------------------------------------------------------------------
@@ -996,7 +1028,18 @@ void
 SalGraphics::DrawTextArray( long nX, long nY,
         const xub_Unicode *pStr, USHORT nLen, const long *pDXAry )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+         maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen, pDXAry);
+    else
+    {
+    #endif
+
     maGraphicsData.DrawText( nX, nY, pStr, nLen, pDXAry );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1004,19 +1047,153 @@ SalGraphics::DrawTextArray( long nX, long nY,
 void
 SalGraphics::SetTextColor( SalColor nSalColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
+                                  SALCOLOR_GREEN (nSalColor),
+                                  SALCOLOR_BLUE  (nSalColor));
+        maGraphicsData.m_pPrinterGfx->SetTextColor (aColor);
+    }
+    else
+    {
+    #endif
+
     if( _GetTextColor() != nSalColor )
     {
         _GetTextColor()     = nSalColor;
         _GetTextPixel()     = _GetPixel( nSalColor );
         _IsFontGC()         = FALSE;
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
+
+// ----------------------------------------------------------------------------
+
+#if defined(USE_PSPRINT)
+
+static FontWidth
+ToFontWidth (psp::width::type eWidth)
+{
+    switch (eWidth)
+    {
+        case psp::width::UltraCondensed: return WIDTH_ULTRA_CONDENSED;
+        case psp::width::ExtraCondensed: return WIDTH_EXTRA_CONDENSED;
+        case psp::width::Condensed:      return WIDTH_CONDENSED;
+        case psp::width::SemiCondensed:  return WIDTH_SEMI_CONDENSED;
+        case psp::width::Normal:         return WIDTH_NORMAL;
+        case psp::width::SemiExpanded:   return WIDTH_SEMI_EXPANDED;
+        case psp::width::Expanded:       return WIDTH_EXPANDED;
+        case psp::width::ExtraExpanded:  return WIDTH_EXTRA_EXPANDED;
+        case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
+    }
+    return WIDTH_DONTKNOW;
+}
+
+static FontWeight
+ToFontWeight (psp::weight::type eWeight)
+{
+    switch (eWeight)
+    {
+        case psp::weight::Thin:       return WEIGHT_THIN;
+        case psp::weight::UltraLight: return WEIGHT_ULTRALIGHT;
+        case psp::weight::Light:      return WEIGHT_LIGHT;
+        case psp::weight::SemiLight:  return WEIGHT_SEMILIGHT;
+        case psp::weight::Normal:     return WEIGHT_NORMAL;
+        case psp::weight::Medium:     return WEIGHT_MEDIUM;
+        case psp::weight::SemiBold:   return WEIGHT_SEMIBOLD;
+        case psp::weight::Bold:       return WEIGHT_BOLD;
+        case psp::weight::UltraBold:  return WEIGHT_ULTRABOLD;
+        case psp::weight::Black:      return WEIGHT_BLACK;
+    }
+    return WEIGHT_DONTKNOW;
+}
+
+static FontPitch
+ToFontPitch (psp::pitch::type ePitch)
+{
+    switch (ePitch)
+    {
+        case psp::pitch::Fixed:     return PITCH_FIXED;
+        case psp::pitch::Variable:  return PITCH_VARIABLE;
+    }
+    return PITCH_DONTKNOW;
+}
+
+static FontItalic
+ToFontItalic (psp::italic::type eItalic)
+{
+    switch (eItalic)
+    {
+        case psp::italic::Upright:  return ITALIC_NONE;
+        case psp::italic::Oblique:  return ITALIC_OBLIQUE;
+        case psp::italic::Italic:   return ITALIC_NORMAL;
+    }
+    return ITALIC_DONTKNOW;
+}
+
+static FontFamily
+ToFontFamily (psp::family::type eFamily)
+{
+    switch (eFamily)
+    {
+        case psp::family::Decorative: return FAMILY_DECORATIVE;
+        case psp::family::Modern:     return FAMILY_MODERN;
+        case psp::family::Roman:      return FAMILY_ROMAN;
+        case psp::family::Script:     return FAMILY_SCRIPT;
+        case psp::family::Swiss:      return FAMILY_SWISS;
+        case psp::family::System:     return FAMILY_SYSTEM;
+    }
+    return FAMILY_DONTKNOW;
+}
+
+#endif /* USE_PSPRINT */
 
 // ----------------------------------------------------------------------------
 
 void
 SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pJobData != NULL)
+    {
+        ::std::list< psp::fontID > aList;
+
+        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+        rMgr.getFontList( aList, maGraphicsData.m_pJobData->m_pParser );
+
+        ::std::list< psp::fontID >::iterator it;
+        for (it = aList.begin(); it != aList.end(); ++it)
+        {
+            psp::FastPrintFontInfo aInfo;
+            if (rMgr.getFontFastInfo (*it, aInfo))
+            {
+                ImplFontData *pFontData = new ImplFontData;
+                pFontData->mpSysData = (void*)*it;
+
+                pFontData->meFamily     = ToFontFamily (aInfo.m_eFamilyStyle);
+                pFontData->meWeight     = ToFontWeight (aInfo.m_eWeight);
+                pFontData->meItalic     = ToFontItalic (aInfo.m_eItalic);
+                pFontData->meWidthType  = ToFontWidth  (aInfo.m_eWidth);
+                pFontData->mePitch      = ToFontPitch  (aInfo.m_ePitch);
+                pFontData->meCharSet    = aInfo.m_aEncoding;
+                pFontData->maName       = aInfo.m_aFamilyName;
+                /* pFontData->maStyleName  = XXX */
+
+                pFontData->mbOrientation = TRUE;
+                pFontData->mbDevice      = aInfo.m_eType == psp::fonttype::Builtin;
+
+                pList->Add( pFontData );
+            }
+        }
+    }
+    else
+    {
+    #endif
+
     XlfdStorage* pFonts = _GetDisplay()->GetXlfdList();
 
     for ( int nIdx = 0; nIdx < pFonts->GetCount(); nIdx++ )
@@ -1025,6 +1202,10 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
         pFonts->Get(nIdx)->ToImplFontData( pFontData );
         pList->Add( pFontData );
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1035,19 +1216,56 @@ sal_DivideNeg( long n1, long n2 )
     return ( n1 < 0 ) ? (n1 - n2 / 2) / n2 : (n1 + n2 / 2) / n2;
 }
 
+// ----------------------------------------------------------------------------
+
 void
 SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+        psp::PrintFontInfo aInfo;
+
+        if (rMgr.getFontInfo (maGraphicsData.m_pPrinterGfx->GetFontID(), aInfo))
+        {
+            sal_Int32 nTextSize = maGraphicsData.m_pPrinterGfx->GetFontSize();
+
+            pMetric->mnOrientation  = maGraphicsData.m_pPrinterGfx->GetFontAngle();
+            pMetric->mnSlant        = 0;
+            pMetric->mbDevice       = sal_True;
+
+            pMetric->meCharSet      = aInfo.m_aEncoding;
+
+            pMetric->meFamily       = ToFontFamily (aInfo.m_eFamilyStyle);
+            pMetric->meWeight       = ToFontWeight (aInfo.m_eWeight);
+            pMetric->mePitch        = ToFontPitch  (aInfo.m_ePitch);
+            pMetric->meItalic       = ToFontItalic (aInfo.m_eItalic);
+            pMetric->meType         = TYPE_SCALABLE;
+
+            pMetric->mnFirstChar    =   0;
+            pMetric->mnLastChar     = 255;
+
+            pMetric->mnWidth        = aInfo.m_nWidth * nTextSize / 1000;
+            pMetric->mnAscent       = aInfo.m_nAscend * nTextSize / 1000;
+            pMetric->mnDescent      = aInfo.m_nDescend * nTextSize / 1000;
+            pMetric->mnLeading      = aInfo.m_nLeading * nTextSize / 1000;
+        }
+    }
+    else
+    {
+    #endif
+
     ExtendedFontStruct* pFont = maGraphicsData.xFont_;
 
     if ( pFont != NULL )
     {
         pFont->ToImplFontMetricData( pMetric );
 
-#ifndef USE_PSPRINT
+        #ifndef USE_PSPRINT
         if( XSalCanDrawRotString( maGraphicsData.GetXDisplay(), None ) )
             pMetric->mnOrientation = maGraphicsData.nFontOrientation_;
-#endif
+        #endif
         if ( maGraphicsData.bFontVertical_ )
             pMetric->mnOrientation = 2700;
 
@@ -1073,6 +1291,10 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             pMetric->mnSlant    = sal_DivideNeg( pMetric->mnSlant,   n );
         }
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // ---------------------------------------------------------------------------
@@ -1088,9 +1310,18 @@ InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
     return nPrecision;
 }
 
+// ---------------------------------------------------------------------------
+
 long
 SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+        return maGraphicsData.m_pPrinterGfx->GetCharWidth(nChar1, nChar2, pWidthAry);
+    else
+    {
+    #endif
+
     // return the precision of the calculated charwidth, e.g. 1000 = 3 digits
     // defaultet to 1 for now
     const long nPrecision = 1;
@@ -1129,6 +1360,10 @@ SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
 
     // return
     return nPrecision;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // ---------------------------------------------------------------------------

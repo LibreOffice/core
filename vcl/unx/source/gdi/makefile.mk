@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2000-09-27 08:35:21 $
+#   last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,13 +87,10 @@ SLOFILES=	\
         $(SLO)$/salbmp.obj		\
         $(SLO)$/salgdi.obj		\
         $(SLO)$/salvd.obj		\
-        $(SLO)$/salprn.obj		\
         $(SLO)$/salogl.obj		\
-        $(SLO)$/salpimpl.obj	\
         $(SLO)$/charnames.obj	\
         $(SLO)$/dtint.obj		\
         $(SLO)$/kdeint.obj		\
-        $(SLO)$/salconfig.obj	\
         $(SLO)$/salcvt.obj		\
         $(SLO)$/ansi1252.obj	\
         $(SLO)$/xfont.obj		\
@@ -102,6 +99,14 @@ SLOFILES=	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj
 
+.IF "$(PSPRINT)" == ""
+SLOFILES+=\
+        $(SLO)$/salprn.obj 		\
+        $(SLO)$/salpimpl.obj 	\
+        $(SLO)$/salconfig.obj
+.ELSE
+SLOFILES+=$(SLO)$/salprnpsp.obj
+.ENDIF
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj
 ENVCFLAGS+=-DUSE_CDE

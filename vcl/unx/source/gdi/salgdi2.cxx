@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,18 @@
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-#ifndef PRINTER_DUMMY
+
+#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY)
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
 #undef Font
 #undef Region
+#endif
+
+#if defined(USE_PSPRINT)
+#include <psprint/printergfx.hxx>
+#include <bmpacc.hxx>
 #endif
 
 #undef SALGDI2_TESTTRANS
@@ -397,11 +403,216 @@ final GC SalGraphicsData::SetMask( int           &nX,
     return pMaskGC_;
 }
 
+// ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
+
+class SalPrinterBmp : public psp::PrinterBmp
+{
+    private:
+
+        BitmapBuffer*       mpBmpBuffer;
+
+        FncGetPixel         mpFncGetPixel;
+        Scanline            mpScanAccess;
+        sal_Int32           mnScanOffset;
+
+        sal_uInt32          ColorOf (BitmapColor& rColor) const;
+        sal_uInt8           GrayOf  (BitmapColor& rColor) const;
+
+                            SalPrinterBmp ();
+
+    public:
+
+                            SalPrinterBmp (BitmapBuffer* pBitmap);
+        virtual             ~SalPrinterBmp ();
+        virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const;
+        virtual sal_uInt32  GetPaletteEntryCount () const;
+        virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const;
+        virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const;
+        virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const;
+        virtual sal_uInt32  GetWidth () const;
+        virtual sal_uInt32  GetHeight() const;
+        virtual sal_uInt32  GetDepth () const;
+};
+
+SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer) :
+        mpBmpBuffer (pBuffer)
+{
+    DBG_ASSERT (mpBmpBuffer, "SalPrinterBmp::SalPrinterBmp () can't acquire Bitmap");
+
+    // calibrate scanline buffer
+    if( BMP_SCANLINE_ADJUSTMENT( mpBmpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+    {
+        mpScanAccess = mpBmpBuffer->mpBits;
+        mnScanOffset = mpBmpBuffer->mnScanlineSize;
+    }
+    else
+    {
+        mpScanAccess = mpBmpBuffer->mpBits
+                       + (mpBmpBuffer->mnHeight - 1) * mpBmpBuffer->mnScanlineSize;
+        mnScanOffset = - mpBmpBuffer->mnScanlineSize;
+    }
+
+    // request read access to the pixels
+    switch( BMP_SCANLINE_FORMAT( mpBmpBuffer->mnFormat ) )
+    {
+        case BMP_FORMAT_1BIT_MSB_PAL:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;  break;
+        case BMP_FORMAT_1BIT_LSB_PAL:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_LSB_PAL;  break;
+        case BMP_FORMAT_4BIT_MSN_PAL:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_4BIT_MSN_PAL;  break;
+        case BMP_FORMAT_4BIT_LSN_PAL:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_4BIT_LSN_PAL;  break;
+        case BMP_FORMAT_8BIT_PAL:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_8BIT_PAL;      break;
+        case BMP_FORMAT_8BIT_TC_MASK:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_8BIT_TC_MASK;  break;
+        case BMP_FORMAT_16BIT_TC_MASK:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_16BIT_TC_MASK; break;
+        case BMP_FORMAT_24BIT_TC_BGR:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_BGR;  break;
+        case BMP_FORMAT_24BIT_TC_RGB:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_RGB;  break;
+        case BMP_FORMAT_24BIT_TC_MASK:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_MASK; break;
+        case BMP_FORMAT_32BIT_TC_ABGR:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_ABGR; break;
+        case BMP_FORMAT_32BIT_TC_ARGB:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_ARGB; break;
+        case BMP_FORMAT_32BIT_TC_BGRA:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_BGRA; break;
+        case BMP_FORMAT_32BIT_TC_RGBA:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_RGBA; break;
+        case BMP_FORMAT_32BIT_TC_MASK:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_MASK; break;
+
+        default:
+            DBG_ERROR("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");
+        break;
+    }
+}
+
+SalPrinterBmp::~SalPrinterBmp ()
+{
+}
+
+sal_uInt32
+SalPrinterBmp::GetWidth () const
+{
+    return mpBmpBuffer->mnWidth;
+}
+
+sal_uInt32
+SalPrinterBmp::GetHeight () const
+{
+    return mpBmpBuffer->mnHeight;
+}
+
+sal_uInt32
+SalPrinterBmp::GetDepth () const
+{
+    sal_uInt32 nDepth;
+
+    switch (mpBmpBuffer->mnBitCount)
+    {
+        case 1:
+        case 4:
+        case 8:
+            nDepth = 8;
+            break;
+
+        case 16:
+        case 24:
+        case 32:
+            nDepth = 24;
+            break;
+
+        default:
+            DBG_ERROR ("Error: unsupported bitmap depth in SalPrinterBmp::GetDepth()");
+            break;
+    }
+
+    return nDepth;
+}
+
+sal_uInt32
+SalPrinterBmp::ColorOf (BitmapColor& rColor) const
+{
+    if (rColor.IsIndex())
+        return ColorOf (mpBmpBuffer->maPalette[rColor.GetIndex()]);
+    else
+        return    ((rColor.GetBlue())        & 0x000000ff)
+                | ((rColor.GetGreen() <<  8) & 0x0000ff00)
+                | ((rColor.GetRed()   << 16) & 0x00ff0000);
+}
+
+sal_uInt8
+SalPrinterBmp::GrayOf (BitmapColor& rColor) const
+{
+    if (rColor.IsIndex())
+        return GrayOf (mpBmpBuffer->maPalette[rColor.GetIndex()]);
+    else
+        return (  rColor.GetBlue()  *  28UL
+                + rColor.GetGreen() * 151UL
+                + rColor.GetRed()   *  77UL ) >> 8;
+}
+
+sal_uInt32
+SalPrinterBmp::GetPaletteEntryCount () const
+{
+    return mpBmpBuffer->maPalette.GetEntryCount ();
+}
+
+sal_uInt32
+SalPrinterBmp::GetPaletteColor (sal_uInt32 nIdx) const
+{
+    return ColorOf (mpBmpBuffer->maPalette[nIdx]);
+}
+
+sal_uInt32
+SalPrinterBmp::GetPixelRGB (sal_uInt32 nRow, sal_uInt32 nColumn) const
+{
+    Scanline pScan = mpScanAccess + nRow * mnScanOffset;
+    BitmapColor& aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
+
+    return ColorOf (aColor);
+}
+
+sal_uInt8
+SalPrinterBmp::GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const
+{
+    Scanline pScan = mpScanAccess + nRow * mnScanOffset;
+    BitmapColor& aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
+
+    return GrayOf (aColor);
+}
+
+sal_uInt8
+SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
+{
+    Scanline pScan = mpScanAccess + nRow * mnScanOffset;
+    BitmapColor& aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
+
+    if (aColor.IsIndex())
+        return aColor.GetIndex();
+    else
+        return 0;
+}
+
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
                                   SalGraphics      *pSrcGraphics )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR( "Error: PrinterGfx::CopyBits() not implemented" );
+    }
+    else
+    {
+    #endif
+
     if( pPosAry->mnSrcWidth <= 0
         || pPosAry->mnSrcHeight <= 0
         || pPosAry->mnDestWidth <= 0
@@ -490,6 +701,10 @@ final void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
     }
     else
         stderr0( "SalGraphics::CopyBits from Printer not yet implemented\n" );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // --------------------------------------------------------------------------
@@ -499,6 +714,15 @@ final void SalGraphics::CopyArea ( long nDestX,    long nDestY,
                                    long nSrcWidth, long nSrcHeight,
                                    USHORT nFlags )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR( "Error: PrinterGfx::CopyArea() not implemented" );
+    }
+    else
+    {
+    #endif
+
     SalTwoRect aPosAry;
 
     aPosAry.mnDestX = nDestX;
@@ -512,11 +736,34 @@ final void SalGraphics::CopyArea ( long nDestX,    long nDestY,
     aPosAry.mnSrcHeight = nSrcHeight;
 
     CopyBits ( &aPosAry, 0 );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        Rectangle aSrc (Point(pPosAry->mnSrcX, pPosAry->mnSrcY),
+                        Size(pPosAry->mnSrcWidth, pPosAry->mnSrcHeight));
+        Rectangle aDst (Point(pPosAry->mnDestX, pPosAry->mnDestY),
+                        Size(pPosAry->mnDestWidth, pPosAry->mnDestHeight));
+
+        BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(sal_True);
+
+        SalPrinterBmp aBmp (pBuffer);
+        maGraphicsData.m_pPrinterGfx->DrawBitmap (aDst, aSrc, aBmp);
+
+        const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, sal_True);
+    }
+    else
+    {
+    #endif
+
     SalDisplay*         pSalDisp = maGraphicsData.GetDisplay();
     Display*            pXDisp = pSalDisp->GetDisplay();
     const Drawable      aDrawable( maGraphicsData.GetDrawable() );
@@ -531,6 +778,7 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
     aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
     XChangeGC( pXDisp, aGC, nValues, &aNewVal );
 
+    #if !defined(USE_PSPRINT)
     if( _IsPrinter() )
     {
         SalTwoRect  aTwoRect = { pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
@@ -548,10 +796,15 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
         }
     }
     else
+    #endif
         rSalBitmap.ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
 
     XChangeGC( pXDisp, aGC, nValues, &aOldVal );
     XFlush( pXDisp );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -559,6 +812,15 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
 final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransBitmap )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
+    }
+    else
+    {
+    #endif
+
     DBG_ASSERT( !_IsPrinter(), "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
     SalDisplay*     pSalDisp = maGraphicsData.GetDisplay();
@@ -631,19 +893,45 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
 
     if( aBG )
         XFreePixmap( pXDisp, aBG );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
                               SalColor nTransparentColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent color");
+    }
+    else
+    {
+    #endif
+
     DBG_ERROR( "::DrawBitmap with transparent color not supported" );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitmap,
                                   SalColor nMaskColor )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR("Error: PrinterGfx::DrawMask() not implemented");
+    }
+    else
+    {
+    #endif
+
     SalDisplay* pSalDisp = maGraphicsData.GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
     Drawable    aDrawable( maGraphicsData.GetDrawable() );
@@ -679,11 +967,25 @@ final void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rS
     }
     else
         DrawBitmap( pPosAry, rSalBitmap );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_WARNING ("Warning: PrinterGfx::GetBitmap() not implemented");
+        return NULL;
+    }
+    else
+    {
+    #endif
+
     if( _IsPrinter() && !_IsVirtualDevice() )
         return NULL;
 
@@ -743,11 +1045,25 @@ final SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
     pSalBitmap->ImplCreateFromDrawable( _GetDrawable(), nBitCount, nX, nY, nDX, nDY );
 
     return pSalBitmap;
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final SalColor SalGraphics::GetPixel( long nX, long nY )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR ("Warning: PrinterGfx::GetPixel() not implemented");
+        return 0;
+    }
+    else
+    {
+    #endif
+
     if( _IsWindow() && !_IsVirtualDevice() )
     {
         XWindowAttributes aAttrib;
@@ -778,6 +1094,10 @@ final SalColor SalGraphics::GetPixel( long nX, long nY )
     XDestroyImage( pXImage );
 
     return _GetColormap().GetColor( aXColor.pixel );
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -787,6 +1107,15 @@ final void SalGraphics::Invert( long        nX,
                                 long        nDY,
                                 SalInvert   nFlags )
 {
+    #if defined(USE_PSPRINT)
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
+    }
+    else
+    {
+    #endif
+
     SalDisplay *pDisp = _GetDisplay();
 
     GC pGC;
@@ -806,5 +1135,9 @@ final void SalGraphics::Invert( long        nX,
         pGC = maGraphicsData.GetInvertGC();
         XFillRectangle( _GetXDisplay(), _GetDrawable(),  pGC, nX, nY, nDX, nDY );
     }
+
+    #if defined(USE_PSPRINT)
+    }
+    #endif
 }
 
