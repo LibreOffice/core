@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
+ *  last change: $Author: cmc $ $Date: 2002-11-21 13:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2528,10 +2528,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         case 4: //4 wrap tightly around object
         case 5: //5 wrap tightly, but allow holes
             eSurround = SURROUND_PARALLEL;
-            // ensure the object will be conterted into a Writer structure!
-            // the Writer doesn't support Contour on Sdr objects
-            if( bReplaceable )
-                bContour = true;
+            bContour = true;
             break;
     }
 
