@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:32:03 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,23 +624,29 @@ static void SAL_CALL typelib_callback(
         {
             try
             {
-                OUString const & rTypeName = * reinterpret_cast< OUString const * >( &pTypeName );
+                OUString const & rTypeName = OUString::unacquired( &pTypeName );
                 Reference< XTypeDescription > xTD;
-                if (reinterpret_cast< container::XHierarchicalNameAccess * >( pContext )->getByHierarchicalName(
-                    rTypeName ) >>= xTD)
+                if (reinterpret_cast< container::XHierarchicalNameAccess * >(
+                        pContext )->getByHierarchicalName(
+                            rTypeName ) >>= xTD)
                 {
                     *ppRet = createCTD( xTD );
                 }
             }
-            catch (...)
+            catch (Exception & exc)
             {
+                OSL_ENSURE(
+                    0, OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
 #if OSL_DEBUG_LEVEL > 0
-        if (! *ppRet)
+        if (0 == *ppRet)
         {
-            OString aTypeName( OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### typelib type not accessable: %s\n", aTypeName.getStr() );
+            OString msg(
+                OString("typelibrary type not accessable: ") +
+                OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, msg.getStr() );
         }
 #endif
     }
