@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-11 14:32:31 $
+ *  last change: $Author: gt $ $Date: 2000-12-13 08:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2958,7 +2958,6 @@ static sal_Bool lcl_ExportBackgroundGraphic( SvStream& rOut, const Graphic& rGra
                     rOut << ( sal_uInt8 ) 0;
 
             }
-            aBmp.ReleaseAccess( pAcc );
             bRetValue = TRUE;
         }
         aBmp.ReleaseAccess( pAcc );
