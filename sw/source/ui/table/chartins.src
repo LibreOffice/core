@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 16:21:46 $
+ *  last change: $Author: os $ $Date: 2002-10-30 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ french ] = "Sélection" ;
         Text [ dutch ] = "Selectie" ;
         Text [ swedish ] = "Urval" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "Vælg" ;
         Text [ portuguese_brazilian ] = "Auswahl" ;
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "é€‰æ‹©";
@@ -99,8 +99,9 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "ÅğéëïãŞ";
         Text[ korean ] = "ì„ íƒ";
         Text[ turkish ] = "Seçim";
-        Text[ catalan ] = "Selección";
+        Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
+        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
     };
     FixedText FT_RANGE
     {
@@ -128,8 +129,9 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Ğåñéï÷Ş";
         Text[ korean ] = "ì˜ì—­(~R)";
         Text[ turkish ] = "~Aralık";
-        Text[ catalan ] = "~Área";
-        Text[ finnish ] = "~Alue";
+        Text[ catalan ] = "~Àrea";
+        Text[ finnish ] = "A~lue";
+        Text[ thai ] = "à¸à¸·à¹‰~à¸™à¸—à¸µà¹ˆ";
     };
     Edit ED_RANGE
     {
@@ -148,7 +150,7 @@ ModelessDialog DLG_INSERT_CHART
         Check = TRUE ;
         Text [ italian ] = "Prima riga come dicitura" ;
         Text [ spanish ] = "Primera ~fila como etiqueta" ;
-        Text [ french ] = "Première ~ligne comme étiquette" ;
+        Text [ french ] = "Première ligne comme étiquette" ;
         Text [ dutch ] = "Eerste ~rij als kop" ;
         Text [ swedish ] = "Första ~raden som etikett" ;
         Text [ danish ] = "Første række som etiket" ;
@@ -165,8 +167,9 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Ğñşôç ãñáììŞ ùò åğéãñáöŞ";
         Text[ korean ] = "ì²«ë²ˆì§¸ í–‰ì„ ìº¡ì…˜ìœ¼ë¡œ(~F)";
         Text[ turkish ] = "Başlıklar ~birinci satırda";
-        Text[ catalan ] = "Primera ~fila como etiqueta";
+        Text[ catalan ] = "La ~primera fila com a llegenda";
         Text[ finnish ] = "~Ensimmäinen rivi kuvaotsikkona";
+        Text[ thai ] = "à¹à¸–à¸§à¹~à¸£à¸à¹€à¸›à¹‡à¸™à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸ à¸²à¸";
     };
     CheckBox CB_FIRST_COL
     {
@@ -179,7 +182,7 @@ ModelessDialog DLG_INSERT_CHART
         Check = TRUE ;
         Text [ italian ] = "Prima colonna come dicitura" ;
         Text [ spanish ] = "Primera c~olumna como etiqueta" ;
-        Text [ french ] = "Première ~colonne comme étiquette" ;
+        Text [ french ] = "Première colonne comme étiquette" ;
         Text [ dutch ] = "Eerste ~kolom als kop" ;
         Text [ swedish ] = "Första kolumnen ~som etikett" ;
         Text [ danish ] = "Første kolonne som etiket" ;
@@ -196,20 +199,21 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Ğñşôç óôŞëç ùò åğéãñáöŞ";
         Text[ korean ] = "ì²«ë²ˆì§¸ ì—´ì„ ìº¡ì…˜ìœ¼ë¡œ(~C)";
         Text[ turkish ] = "Başlıklar ~birinci sütunda";
-        Text[ catalan ] = "Primera c~olumna como etiqueta";
+        Text[ catalan ] = "La primera ~columna com a llegenda";
         Text[ finnish ] = "~Ensimmäinen sarake kuvaotsikkona";
+        Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹à¸£à¸à¹€à¸›à¹‡à¸™à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸ à¸²à¸";
     };
     FixedText FT_TEXT
     {
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 285 , 62 ) ;
-        Text = "Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten" ;
+        Text = "Falls die ausgewählten Zellen nicht die gewünschten Daten enthalten, wählen Sie jetzt den Bereich aus.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbeschriftungen mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten." ;
         Text [ ENGLISH ] =
         "If the marked area does not represent the desired data, mark your data now.\nInclude the cells containing the column- and row identifier in case you want them to be included in your chart." ;
         Text [ ENGLISH_US ] = "If the marked cells do not represent the desired data, mark the area now.\nInclude the cells containing the column and row labels if you want them to be included in your chart." ;
         WordBreak = TRUE ;
         Text [ italian ] = "Se le celle evidenziate non contengono i dati voluti, selezionate l'area.\n\nIncludete le celle contenenti i titoli delle colonne e delle righe se volete che compaiano nel diagramma." ;
-        Text [ spanish ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico." ;
+        Text [ spanish ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con los títulos de las columnas y filas si desea que éstas aparezcan en el gráfico." ;
         Text [ french ] = "Si les cellules marquées ne contiennent pas les données souhaitées, sélectionnez à présent la plage. \n\nIncluez les cellules avec les intitulés de colonnes et de lignes pour les faire figurer dans le diagramme." ;
         Text [ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven." ;
         Text [ swedish ] = "Om de markerade cellerna inte innehåller de önskade data, markera då området nu.\n\nTa med de celler som innehåller kolumn- och radöverskrifter om dessa skall visas i grafiken." ;
@@ -219,7 +223,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ chinese_simplified ] = "å¦‚æœé€‰ä¸­çš„å•å…ƒæ ¼æ²¡æœ‰æ•°æ®ï¼Œé‚£ä¹ˆè¯·æ‚¨é€‰æ‹©åŒºåŸŸã€‚\n\næ‚¨å¯ä»¥ä¹Ÿé€‰ä¸­åˆ—æ ‡é¢˜å’Œè¡Œæ ‡é¢˜ï¼Œå¦‚æ­¤è¿™äº›èµ„æ–™ä¹Ÿä¼šè¢«æ˜¾ç¤ºåœ¨å›¾è¡¨å†…ã€‚";
         Text[ russian ] = "Åñëè âûäåëåííûå ÿ÷åéêè íå ñîäåğæàò òğåáóåìûõ äàííûõ, âûäåëèòå ñåé÷àñ äèàïàçîí ÿ÷ååê ñ íóæíûì ñîäåğæèìûì.\n\nÂûäåëèòå òàêæå ÿ÷åéêè ñ íàçâàíèÿìè ñòîëáöîâ èëè ñòğîê, åñëè îíè äîëæíû áûòü ïğåäñòàâëåíû íà ğèñóíêå.";
         Text[ polish ] = "Jeœli zaznaczone komórki nie zawieraj¹ potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz równie¿ komórki z etykietami wierszy lub kolumn , jeœli maj¹ one zostaæ przedstawione w twojej grafice.";
-        Text[ japanese ] = "å¿…è¦ãªï¾ƒï¾ï½°ï¾€ãŒå«ã¾ã‚Œã¦ã„ã‚‹ç¯„å›²ãŒé¸æŠã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã€ä»Šé¸æŠã—ã¦ãã ã•ã„ã€‚\n\nï½¸ï¾ï¾—ï¾Œã«é …ç›®åã‚’è¡¨ç¤ºã™ã‚‹ã«ã¯ã€è¡Œã¨åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚ãŸï½¾ï¾™ç¯„å›²ã‚’é¸æŠã—ã¾ã™ã€‚";
+        Text[ japanese ] = "å¿…è¦ãªãƒ‡ãƒ¼ã‚¿ãŒå«ã¾ã‚Œã¦ã„ã‚‹ç¯„å›²ãŒé¸æŠã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã€ä»Šé¸æŠã—ã¦ãã ã•ã„ã€‚\n\nã‚°ãƒ©ãƒ•ã«é …ç›®åã‚’è¡¨ç¤ºã™ã‚‹ã«ã¯ã€è¡Œã¨åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚ãŸã‚»ãƒ«ç¯„å›²ã‚’é¸æŠã—ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "å¦‚æœé¸å–çš„å„²å­˜æ ¼æ²’æœ‰è³‡æ–™ï¹å°±è«‹æ‚¨é¸æ“‡å€åŸŸã€‚\n\næ‚¨å¯ä»¥é¸ä¸­åˆ—æ¨™é¡Œå’Œè¡Œæ¨™é¡Œï¼Œé€™æ¨£ï¼Œåœ–è¡¨ä¹Ÿæœƒé¡¯ç¤ºå‡ºé€™äº›è³‡æ–™ã€‚";
         Text[ arabic ] = "ÅĞÇ ßÇäÊ ÇáÎáÇíÇ ÇáãÍÏÏÉ áÇ ÊÍÊæí Úáì ÇáÈíÇäÇÊ ÇáãØáæÈÉ¡ Şã ÈÊÍÏíÏ ÇáäØÇŞ\n\nÈãÇ İí Ğáß ÇáÎáÇíÇ¡ ÇáÊí ÊÍÊæí Úáì ÚäÇæíä Õİæİ Ãæ ÃÚãÏÉ¡ æĞáß ÅĞ";
         Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
@@ -227,8 +231,9 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Óôçí ğåñßğôùóç ğïõ ôá åğéëåãìİíá êåëéÜ äåí ğåñéİ÷ïõí ôá äåäïìİíá ğïõ åğéèõìåßôå, åğéëİîôå åóåßò ôçí óùóôŞ ğåñéï÷Ş.\n\n Áí èİëåôå íá åìöáíéóôïıí óôï ãñáöéêü óáò êáé ïé åğéãñáöİò ôùí óôçëşí êáé ôùí ãñáììşí, ôüôå èá ğñİğåé íá óõìğåñéëçöèïıí êáé áõôÜ ôá äåäïìİíá óôçí ğåñéï÷Ş ôçò åğéëïãŞò óáò.";
         Text[ korean ] = "ë§ˆí¬í‘œì‹œëœ ì…€ì´ ì›í•˜ëŠ” ë°ì´í„°ë¥¼ í¬í•¨í•˜ê³  ìˆì§€ ì•Šì„ ê²½ìš°, ì§€ê¸ˆ ì˜ì—­ì„ ë§ˆí¬í‘œì‹œí•˜ì‹­ì‹œì˜¤.\n\nì—´ ë‚´ì§€ í–‰ ë¼ë²¨ì´ ìˆëŠ” ì…€ë“¤ì„ ê·¸ë˜í”½ì— ë‚˜íƒ€ë‚´ê³ ìí•˜ë©´ ì´ ì…€ë“¤ì„ í•¨ê»˜ í¬í•¨ì‹œí‚¤ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "Seçilen hücreler, istenen verileri içermiyorsa aralığı şimdi seçin.\n\nGrafikte görünmelerini istiyorsanız, sütun ya da satır başlıklarını içeren hücreleri de seçin";
-        Text[ catalan ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico.";
+        Text[ catalan ] = "En cas que les cel.les marcades no tinguin les dades desitjades, marqueu ara l'àrea.\n\nHeu d'incloure les cel.les amb els noms de les columnes i files si voleu que apareguin al gràfic.";
         Text[ finnish ] = "Jos merkityt solut eivät esitä haluttuja tietoja, merkitse alue nyt.\nSisällytä valintaan sarake- ja riviotsikot sisältävät solut, jos haluat niiden näkyvän kaaviossa.";
+        Text[ thai ] = "à¸–à¹‰à¸²à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¹„à¸§à¹‰à¹„à¸¡à¹ˆà¹à¸ªà¸”à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£ à¹ƒà¸«à¹‰à¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹€à¸”à¸µà¹‹à¸¢à¸§à¸™à¸µà¹‰\nà¸£à¸§à¸¡à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¸¡à¸µà¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹à¸¥à¸°à¹à¸–à¸§à¸–à¹‰à¸²à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹ƒà¸«à¹‰à¸¡à¸±à¸™à¸£à¸§à¸¡à¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸‚à¸­à¸‡à¸„à¸¸à¸“";
     };
     FixedLine FL_HLINE
     {
@@ -261,7 +266,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ english_us ] = "<< ~Back" ;
         Text [ italian ] = "Selezione" ;
         Text [ spanish ] = "<< ~Regresar" ;
-        Text [ french ] = "<< ~Précédent" ;
+        Text [ french ] = "<< Précédent" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
         Text [ danish ] = "<< Tilbage" ;
         Text [ portuguese ] = "<< ~Anterior" ;
@@ -275,10 +280,11 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "<< Vor~ige";
         Text[ chinese_simplified ] = "<< è¿”å›(~B)";
         Text[ greek ] = "<< Ğßóù";
-        Text[ korean ] = "<<ë’¤ë¡œ)(~B)";
+        Text[ korean ] = "<<ë’¤ë¡œ(~B)";
         Text[ turkish ] = "<< G~eri";
-        Text[ catalan ] = "<< ~Regresar";
-        Text[ finnish ] = "<< ~Takaisin";
+        Text[ catalan ] = "<< ~Enrere";
+        Text[ finnish ] = "<< Edellinen";
+        Text[ thai ] = "<< ~à¸à¸¥à¸±à¸šà¹„à¸›";
     };
     PushButton BT_NEXT
     {
@@ -292,24 +298,25 @@ ModelessDialog DLG_INSERT_CHART
         Text [ english_us ] = "~Next >>" ;
         Text [ italian ] = "~Avanti >>" ;
         Text [ spanish ] = "~Siguiente >>" ;
-        Text [ french ] = "~Suivant >>" ;
+        Text [ french ] = "Suivant >>" ;
         Text [ swedish ] = "~Nästa >>" ;
         Text [ danish ] = "Næste >>" ;
         Text [ portuguese ] = "~Continuar >>" ;
         Text [ portuguese_brazilian ] = "~Weiter >>" ;
-        Text[ chinese_simplified ] = "ç»§ç»­ (~N) >>";
+        Text[ chinese_simplified ] = "ç»§ç»­(~N) >>";
         Text[ russian ] = "Äàëåå >>";
         Text[ polish ] = "Dalej >>";
-        Text[ japanese ] = "æ¬¡ã¸  (~N) >>";
+        Text[ japanese ] = "æ¬¡ã¸(~N) >>";
         Text[ chinese_traditional ] = "ç¹¼çºŒ(~N)";
         Text[ arabic ] = "ÇáÊÇáí <<";
         Text[ dutch ] = "~Volgende >>";
-        Text[ chinese_simplified ] = "ç»§ç»­ (~N) >>";
+        Text[ chinese_simplified ] = "ç»§ç»­(~N) >>";
         Text[ greek ] = "Åğüìåíï >>";
-        Text[ korean ] = "ë‹¤ìŒ (~N) >>";
+        Text[ korean ] = "ë‹¤ìŒ(~N) >>";
         Text[ turkish ] = "~İleri >>";
-        Text[ catalan ] = "~Siguiente >>";
+        Text[ catalan ] = "~Següent >>";
         Text[ finnish ] = "~Seuraava >>";
+        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸› >>";
     };
     PushButton BT_FINISH
     {
@@ -322,7 +329,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ english_us ] = "Cre~ate" ;
         Text [ italian ] = "~Crea" ;
         Text [ spanish ] = "~Crear" ;
-        Text [ french ] = "~Créer" ;
+        Text [ french ] = "Créer" ;
         Text [ swedish ] = "~Färdigställ" ;
         Text [ danish ] = "Udfør" ;
         Text [ portuguese ] = "~Criar" ;
@@ -338,8 +345,9 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Äçìéïõñãßá";
         Text[ korean ] = "ë§Œë“¤ê¸°(~A)";
         Text[ turkish ] = "~Oluştur";
-        Text[ catalan ] = "~Crear";
+        Text[ catalan ] = "Cre~a";
         Text[ finnish ] = "~Luo";
+        Text[ thai ] = "à¸ªà¸£à¹‰à¸²~à¸‡";
     };
     Text [ italian ] = "Formattazione automatica diagramma (1-4)" ;
     Text [ spanish ] = "AutoFormato diagrama (1-4)" ;
@@ -352,22 +360,18 @@ ModelessDialog DLG_INSERT_CHART
     Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼å›¾è¡¨(1-4)";
     Text[ russian ] = "Àâòîôîğìàò äèàãğàììû (1-4)";
     Text[ polish ] = "Autoformat wykresu (1-4)";
-    Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„ï½¸ï¾ï¾—ï¾Œ(1-4)";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚°ãƒ©ãƒ•(1-4)";
     Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼åœ–è¡¨(1-4)";
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí áÑÓã ÈíÇäí (1Ü4)";
     Text[ dutch ] = "AutoOpmaak diagram (1-4)";
     Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼å›¾è¡¨(1-4)";
     Text[ greek ] = "ÁõôïÌïñöŞ ÄéÜãñáììá (1-4)";
-    Text[ korean ] = "ìë™ì„œì‹ ì°¨íŠ¸ (1-4)";
+    Text[ korean ] = "ìë™ ì„œì‹ ì°¨íŠ¸ (1-4)";
     Text[ turkish ] = "Otomatik şema formatlama (1-4)";
-    Text[ catalan ] = "AutoFormato diagrama (1-4)";
+    Text[ catalan ] = "AutoFormat diagrama (1-4)";
     Text[ finnish ] = "Automaattinen kaavion muotoilu(1-4)";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ (1-4)";
 };
-
-
-
-
-
 
 
 
