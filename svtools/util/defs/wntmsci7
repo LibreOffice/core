@@ -9422,3 +9422,4 @@ _real@4@3ffdaaaaaaaaaaaaa800
 ?EnableDelete@SvtFileView@@QAEXE@Z
 ?GetName@INetURLObject@@QBE?AVString@@W4DecodeMechanism@1@G@Z
 ?replaceAt@OUString@rtl@@QBE?AV12@JJABV12@@Z
+?CreateTableDataOptionsValNum@HTMLOutFuncs@@SAAAVByteString@@AAV2@ENKAAVSvNumberFormatter@@GPAVString@@@Z
