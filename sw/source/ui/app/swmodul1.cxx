@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,11 @@ sal_uInt16 SwModule::GetRedlineAuthor()
 
 const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
+    DBG_ASSERT(nPos<pAuthorNames->Count(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
+    while (!(nPos<pAuthorNames->Count()))
+    {
+        InsertRedlineAuthor(String(RTL_CONSTASCII_USTRINGPARAM("nn")));
+    };
     return *pAuthorNames->GetObject(nPos);
 }
 
