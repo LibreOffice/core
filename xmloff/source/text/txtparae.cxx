@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-07 18:18:53 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 09:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,8 +1391,12 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     // draw:name
     Reference < XNamed > xNamed( rPropSet, UNO_QUERY );
     if( xNamed.is() )
-        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_name,
-                                  xNamed->getName() );
+    {
+        OUString sName( xNamed->getName() );
+        if( sName.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_name,
+                                      xNamed->getName() );
+    }
 
     Any aAny;
     OUStringBuffer sValue;

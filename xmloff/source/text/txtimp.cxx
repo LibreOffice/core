@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 09:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@
 #endif
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include "ProgressBarHelper.hxx"
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
 #endif
 
 
@@ -971,6 +974,28 @@ const XMLFontStylesContext *XMLTextImportHelper::GetFontDecls() const
     return (XMLFontStylesContext *)&xFontDecls;
 }
 
+sal_Bool XMLTextImportHelper::HasDrawNameAttribute(
+        const Reference< XAttributeList > & xAttrList,
+        SvXMLNamespaceMap& rNamespaceMap )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            rNamespaceMap.GetKeyByAttrName( rAttrName, &aLocalName );
+        if( XML_NAMESPACE_DRAW == nPrefix &&
+            aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name ) - 1 ) )
+        {
+            return xAttrList->getValueByIndex(i).getLength() != 0;
+        }
+    }
+
+    return sal_False;
+}
+
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1038,26 +1063,44 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_TEXTBOX_PAGE:
         if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
         {
-            TextContentAnchorType eAnchorType =
-                XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
-                                               : TextContentAnchorType_AT_PAGE;
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                eAnchorType,
-                                                XML_TEXT_FRAME_TEXTBOX );
+            if( HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
+            {
+                TextContentAnchorType eAnchorType =
+                    XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
+                                                   : TextContentAnchorType_AT_PAGE;
+                pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    eAnchorType,
+                                                    XML_TEXT_FRAME_TEXTBOX );
+            }
+            else
+            {
+                Reference < XShapes > xShapes;
+                pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                        rImport, nPrefix, rLocalName, xAttrList, xShapes );
+            }
         }
         break;
 
     case XML_TOK_TEXT_IMAGE_PAGE:
         if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
         {
-            TextContentAnchorType eAnchorType =
-                XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
-                                               : TextContentAnchorType_AT_PAGE;
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                eAnchorType,
-                                                XML_TEXT_FRAME_GRAPHIC );
+            if( HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
+            {
+                TextContentAnchorType eAnchorType =
+                    XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
+                                                   : TextContentAnchorType_AT_PAGE;
+                pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    eAnchorType,
+                                                    XML_TEXT_FRAME_GRAPHIC );
+            }
+            else
+            {
+                Reference < XShapes > xShapes;
+                pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                        rImport, nPrefix, rLocalName, xAttrList, xShapes );
+            }
         }
         break;
 

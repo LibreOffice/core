@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 09:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,17 +1537,37 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_TEXTBOX:
-        pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER,
-                                            XML_TEXT_FRAME_TEXTBOX );
+        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) ||
+              rImport.GetTextImport()->IsInHeaderFooter() )
+        {
+            pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                                rLocalName, xAttrList,
+                                                TextContentAnchorType_AS_CHARACTER,
+                                                XML_TEXT_FRAME_TEXTBOX );
+        }
+        else
+        {
+            Reference < XShapes > xShapes;
+            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
+        }
         break;
 
     case XML_TOK_TEXT_IMAGE:
-        pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER,
-                                            XML_TEXT_FRAME_GRAPHIC );
+        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) ||
+              rImport.GetTextImport()->IsInHeaderFooter() )
+        {
+            pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                                rLocalName, xAttrList,
+                                                TextContentAnchorType_AS_CHARACTER,
+                                                XML_TEXT_FRAME_GRAPHIC );
+        }
+        else
+        {
+            Reference < XShapes > xShapes;
+            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
+        }
         break;
 
     case XML_TOK_TEXT_OBJECT:
