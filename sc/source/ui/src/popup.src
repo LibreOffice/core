@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:50:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ String RID_POPUP_CELLS
     Text [ italian ] = "Menu cella di scelta rapida" ;
     Text [ portuguese_brazilian ] = "Menu Popup da Célula" ;
     Text [ portuguese ] = "Menu instantâneo para células" ;
-    Text [ finnish ] = "Solun kohovalikko" ;
+    Text [ finnish ] = "Solun ponnahdusvalikko" ;
     Text [ danish ] = "Popop-menu for celler" ;
     Text [ french ] = "Menu Pop-up pour les cellules" ;
     Text [ swedish ] = "Popupmeny för celler" ;
@@ -140,6 +140,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "±âº»°ª(~D)";
             Text[ turkish ] = "~Standart";
             Text[ catalan ] = "~Predeterminado";
+            Text[ finnish ] = "~Oletusarvo";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -154,7 +155,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Formatta celle..." ;
             Text [ portuguese_brazilian ] = "~Format Cells..." ;
             Text [ portuguese ] = "Formatar ~células..." ;
-            Text [ finnish ] = "~Muotoile solut..." ;
+            Text [ finnish ] = "~Muotoile solut" ;
             Text [ danish ] = "Formater celler..." ;
             Text [ french ] = "~Formater les cellules..." ;
             Text [ swedish ] = "~Formatera celler..." ;
@@ -190,7 +191,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "~Inserisci celle..." ;
             Text [ portuguese_brazilian ] = "Insert Cells..." ;
             Text [ portuguese ] = "~Inserir células..." ;
-            Text [ finnish ] = "Lisää soluja..." ;
+            Text [ finnish ] = "~Lisää solut" ;
             Text [ danish ] = "Indsæt celler..." ;
             Text [ french ] = "~Insérer des cellules..." ;
             Text [ swedish ] = "~Infoga celler..." ;
@@ -224,7 +225,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Elimina celle..." ;
             Text [ portuguese_brazilian ] = "Delete Cells..." ;
             Text [ portuguese ] = "Eliminar ~células..." ;
-            Text [ finnish ] = "Poista soluja..." ;
+            Text [ finnish ] = "~Poista solut" ;
             Text [ danish ] = "Slet celler..." ;
             Text [ french ] = "Supprimer des ce~llules..." ;
             Text [ swedish ] = "Radera ce~ller..." ;
@@ -258,7 +259,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Elimina contenuti..." ;
             Text [ portuguese_brazilian ] = "Delete Data..." ;
             Text [ portuguese ] = "Eliminar co~nteúdos..." ;
-            Text [ finnish ] = "Poista tiedot..." ;
+            Text [ finnish ] = "~Poista sisällöt" ;
             Text [ danish ] = "Slet indhold..." ;
             Text [ french ] = "Supprimer du ~contenu..." ;
             Text [ swedish ] = "Ra~dera innehåll..." ;
@@ -321,7 +322,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Copia" ;
             Text [ portuguese_brazilian ] = "C~opiar" ;
             Text [ portuguese ] = "C~opiar" ;
-            Text [ finnish ] = "K~opioi" ;
+            Text [ finnish ] = "~Kopioi" ;
             Text [ danish ] = "K~opier" ;
             Text [ french ] = "Co~pier" ;
             Text [ swedish ] = "K~opiera" ;
@@ -351,7 +352,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "~Incolla" ;
             Text [ portuguese_brazilian ] = "Colar" ;
             Text [ portuguese ] = "~Inserir" ;
-            Text [ finnish ] = "L~iitä" ;
+            Text [ finnish ] = "~Liitä" ;
             Text [ danish ] = "Sæt i~nd" ;
             Text [ french ] = "Coller" ;
             Text [ swedish ] = "K~listra in" ;
@@ -381,7 +382,7 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Incolla ~speciale..." ;
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
-            Text [ finnish ] = "Liitä ~määräten..." ;
+            Text [ finnish ] = "~Liitä määräten" ;
             Text [ danish ] = "Indsæt ind~hold..." ;
             Text [ french ] = "Collage spécial..." ;
             Text [ swedish ] = "Klistra in innehåll..." ;
@@ -429,6 +430,7 @@ Menu RID_POPUP_CELLS
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Mostrar nota";
+            Text[ finnish ] = "~Näytä huomautus";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -462,6 +464,7 @@ Menu RID_POPUP_CELLS
             Text[ turkish ] = "Seçim listesi...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Lista de selección...";
+            Text[ finnish ] = "~Valintaluettelo";
         };
     };
 };
@@ -475,7 +478,7 @@ String RID_POPUP_TAB
     Text [ italian ] = "Menu di scelta rapida per barra tabella" ;
     Text [ portuguese_brazilian ] = "Menu Popup de Controle da Tabela" ;
     Text [ portuguese ] = "Menu instantâneo para barra de tabelas" ;
-    Text [ finnish ] = "Taulukon hallinnan kohovalikko" ;
+    Text [ finnish ] = "Lomakerivin ponnahdusvalikko" ;
     Text [ danish ] = "Popup-menu for regnearkslinjen" ;
     Text [ french ] = "Menu Pop-up pour la barre des feuilles" ;
     Text [ swedish ] = "Popupmeny för tabellist" ;
@@ -510,7 +513,7 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "~Inserisci..." ;
             Text [ portuguese_brazilian ] = "~Inserir..." ;
             Text [ portuguese ] = "~Inserir..." ;
-            Text [ finnish ] = "Lisää..." ;
+            Text [ finnish ] = "~Lisää" ;
             Text [ danish ] = "~Indsæt..." ;
             Text [ french ] = "~Insérer..." ;
             Text [ swedish ] = "~Infoga..." ;
@@ -541,7 +544,7 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "Elimina..." ;
             Text [ portuguese_brazilian ] = "Apagar..." ;
             Text [ portuguese ] = "E~liminar..." ;
-            Text [ finnish ] = "Poista..." ;
+            Text [ finnish ] = "~Poista" ;
             Text [ danish ] = "Slet..." ;
             Text [ french ] = "~Supprimer..." ;
             Text [ swedish ] = "~Radera..." ;
@@ -571,7 +574,7 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "Rinomina..." ;
             Text [ portuguese_brazilian ] = "Rename..." ;
             Text [ portuguese ] = "~Mudar nome..." ;
-            Text [ finnish ] = "Nimeä..." ;
+            Text [ finnish ] = "~Nimeä uudelleen" ;
             Text [ danish ] = "Omdøb..." ;
             Text [ french ] = "Ren~ommer..." ;
             Text [ swedish ] = "~Byt namn..." ;
@@ -600,7 +603,7 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "Sposta/copia..." ;
             Text [ portuguese_brazilian ] = "Move/Copy..." ;
             Text [ portuguese ] = "~Mover/Copiar..." ;
-            Text [ finnish ] = "Siirrä/Kopioi..." ;
+            Text [ finnish ] = "~Siirrä/kopioi" ;
             Text [ danish ] = "Flyt/kopier..." ;
             Text [ french ] = "~Déplacer/Copier..." ;
             Text [ swedish ] = "~Flytta/kopiera..." ;
@@ -633,7 +636,7 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "Seleziona tutte le tabelle" ;
             Text [ portuguese_brazilian ] = "Selecionar Tudo" ;
             Text [ portuguese ] = "Seleccionar ~todas" ;
-            Text [ finnish ] = "Valitse kaikki" ;
+            Text [ finnish ] = "~Valitse kaikki lomakkeet" ;
             Text [ danish ] = "Marker alle ark" ;
             Text [ french ] = "Sélectionne~r toutes les feuilles" ;
             Text [ swedish ] = "Markera alla ~tabeller" ;
@@ -670,7 +673,7 @@ String RID_POPUP_PIVOT
     Text [ spanish ] = "Menú emergente del piloto de datos" ;
     Text [ danish ] = "Popup-menu for datapiloten" ;
     Text [ swedish ] = "Popupmeny för datapiloten" ;
-    Text [ finnish ] = "Data Pilot Popup Menu" ;
+    Text [ finnish ] = "Tietojen ohjauksen ponnahdusvalikko" ;
     Text [ english_us ] = "DataPilot pop-up menu" ;
     Text[ chinese_simplified ] = "Êý¾ÝÖúÀíµ¯³öÊ½²Ëµ¥";
     Text[ russian ] = "Âñïëûâàþùåå ìåíþ äëÿ ñâîäíîé òàáëèöû";
@@ -704,7 +707,7 @@ Menu RID_POPUP_PIVOT
             Text [ spanish ] = "~Activar..." ;
             Text [ danish ] = "Aktiver..." ;
             Text [ swedish ] = "~Kör..." ;
-            Text [ finnish ] = "~Run..." ;
+            Text [ finnish ] = "~Aloita" ;
             Text [ english_us ] = "~Start..." ;
             Text[ chinese_simplified ] = "Æô¶¯(~S)...";
             Text[ russian ] = "Âûçâàòü...";
@@ -731,7 +734,7 @@ Menu RID_POPUP_PIVOT
             Text [ italian ] = "Aggiorna" ;
             Text [ portuguese_brazilian ] = "~Atualizar" ;
             Text [ portuguese ] = "A~ctualizar" ;
-            Text [ finnish ] = "~Laske uudelleen" ;
+            Text [ finnish ] = "~Päivitä" ;
             Text [ danish ] = "Opdater" ;
             Text [ french ] = "A~ctualiser" ;
             Text [ swedish ] = "~Uppdatera" ;
@@ -796,7 +799,7 @@ String RID_POPUP_PREVIEW
     Text [ italian ] = "Menu di scelta rapida per l'anteprima pagina" ;
     Text [ portuguese_brazilian ] = "Page Preview Popup Menu" ;
     Text [ portuguese ] = "Menu instantâneo para visualizar página" ;
-    Text [ finnish ] = "Page Preview Popup Menu" ;
+    Text [ finnish ] = "Sivun esikatselun ponnahdusvalikko" ;
     Text [ danish ] = "Popup-menu for sidevisning" ;
     Text [ french ] = "Menu Pop-up pour l'aperçu de page" ;
     Text [ swedish ] = "Popupmeny för sidförhandsvisning" ;
@@ -830,7 +833,7 @@ Menu RID_POPUP_PREVIEW
             Text [ italian ] = "Pagina ~precedente" ;
             Text [ portuguese_brazilian ] = "Anterior página" ;
             Text [ portuguese ] = "Página ~anterior" ;
-            Text [ finnish ] = "Previous page" ;
+            Text [ finnish ] = "~Edellinen sivu" ;
             Text [ danish ] = "Forrige side" ;
             Text [ french ] = "~Page précédente" ;
             Text [ swedish ] = "~Föregående sida" ;
@@ -861,7 +864,7 @@ Menu RID_POPUP_PREVIEW
             Text [ italian ] = "Pagina successiva" ;
             Text [ portuguese_brazilian ] = "Próxima página" ;
             Text [ portuguese ] = "Página ~seguinte" ;
-            Text [ finnish ] = "Next page" ;
+            Text [ finnish ] = "~Seuraava sivu" ;
             Text [ danish ] = "Næste side" ;
             Text [ french ] = "Page ~suivante" ;
             Text [ swedish ] = "~Nästa sida" ;
@@ -894,7 +897,7 @@ Menu RID_POPUP_PREVIEW
             Text [ italian ] = "Layout di pagina..." ;
             Text [ portuguese_brazilian ] = "Page layout..." ;
             Text [ portuguese ] = "Configurar ~página..." ;
-            Text [ finnish ] = "Page layout..." ;
+            Text [ finnish ] = "~Sivun taitto" ;
             Text [ danish ] = "Sidelayout..." ;
             Text [ french ] = "~Mise en page..." ;
             Text [ swedish ] = "Sid~layout..." ;
@@ -924,7 +927,7 @@ Menu RID_POPUP_PREVIEW
             Text [ italian ] = "Chiudi" ;
             Text [ portuguese_brazilian ] = "Fechar" ;
             Text [ portuguese ] = "~Fechar" ;
-            Text [ finnish ] = "Sulje" ;
+            Text [ finnish ] = "~Sulje" ;
             Text [ danish ] = "~Luk" ;
             Text [ french ] = "~Fermer" ;
             Text [ swedish ] = "~Stäng" ;
@@ -973,6 +976,7 @@ String RID_POPUP_EDIT
     Text[ turkish ] = "Metin giriþi için popup mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente para entrada de texto";
+    Text[ finnish ] = "Tekstin syöttämisen ponnahdusvalikko";
 };
 
 Menu RID_POPUP_EDIT
@@ -1008,6 +1012,7 @@ Menu RID_POPUP_EDIT
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Predeterminado";
+            Text[ finnish ] = "~Oletusarvo";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1086,6 +1091,7 @@ Menu RID_POPUP_EDIT
                         Text[ turkish ] = "Altýný çift çiz";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Subrayado ~doble";
+                        Text[ finnish ] = "~Kaksinkertainen alleviivaus";
                     };
                     MenuItem
                     {
@@ -1113,7 +1119,7 @@ Menu RID_POPUP_EDIT
                         Text [ italian ] = "Apice" ;
                         Text [ portuguese_brazilian ] = "Sobrescrito" ;
                         Text [ portuguese ] = "~Superior à linha" ;
-                        Text [ finnish ] = "Yläindeksi" ;
+                        Text [ finnish ] = "~Yläindeksi" ;
                         Text [ danish ] = "Hævet" ;
                         Text [ french ] = "E~xposant" ;
                         Text [ swedish ] = "~Upphöjt" ;
@@ -1142,7 +1148,7 @@ Menu RID_POPUP_EDIT
                         Text [ italian ] = "Pedice" ;
                         Text [ portuguese_brazilian ] = "Subscrito" ;
                         Text [ portuguese ] = "~Inferior à linha" ;
-                        Text [ finnish ] = "Alaindeksi" ;
+                        Text [ finnish ] = "~Alaindeksi" ;
                         Text [ danish ] = "Sænket" ;
                         Text [ french ] = "I~ndice" ;
                         Text [ swedish ] = "~Nedsänkt" ;
@@ -1183,6 +1189,7 @@ Menu RID_POPUP_EDIT
             Text[ turkish ] = "Biçim";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Estilo";
+            Text[ finnish ] = "~Tyyli";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1219,6 +1226,7 @@ String RID_POPUP_AUDIT
     Text[ turkish ] = "Doldurma kipi (dedektif) için popup mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente para el modo Detective de relleno";
+    Text[ finnish ] = "Havainnoivan täyttötilan ponnahdusvalikko";
 };
 
 Menu RID_POPUP_AUDIT
@@ -1239,7 +1247,7 @@ Menu RID_POPUP_AUDIT
             Text [ italian ] = "Individua ~precedenti" ;
             Text [ portuguese_brazilian ] = "Traçar Predecessor" ;
             Text [ portuguese ] = "Analisar ~precedentes" ;
-            Text [ finnish ] = "Etsi edeltäjä" ;
+            Text [ finnish ] = "Jäljitä ~edeltäjät" ;
             Text [ danish ] = "Spor overordnede" ;
             Text [ french ] = "Repérer les ~antécédents" ;
             Text [ swedish ] = "Spår till ö~verordnade" ;
@@ -1272,7 +1280,7 @@ Menu RID_POPUP_AUDIT
             Text [ italian ] = "Rimuovi traccia sul precedente" ;
             Text [ portuguese_brazilian ] = "Remover Predecessor" ;
             Text [ portuguese ] = "Remover pr~ecedentes" ;
-            Text [ finnish ] = "Poista edeltäjä" ;
+            Text [ finnish ] = "~Poista edeltäjä" ;
             Text [ danish ] = "Fjern overordnede pile" ;
             Text [ french ] = "~Supprimer le repérage des antécédents" ;
             Text [ swedish ] = "Ta bort spår till öv~erordnade" ;
@@ -1304,7 +1312,7 @@ Menu RID_POPUP_AUDIT
             Text [ italian ] = "Individua dipendenti" ;
             Text [ portuguese_brazilian ] = "Traçar Sucessor" ;
             Text [ portuguese ] = "Analisar ~dependentes" ;
-            Text [ finnish ] = "Etsi seuraaja" ;
+            Text [ finnish ] = "~Jäljitä seuraaja" ;
             Text [ danish ] = "Spor underordnede" ;
             Text [ french ] = "R~epérer les dépendants" ;
             Text [ swedish ] = "Spår till u~nderordnade" ;
@@ -1365,7 +1373,7 @@ Menu RID_POPUP_AUDIT
             Text [ italian ] = "Rimuovi tutte le evidenziazioni" ;
             Text [ portuguese_brazilian ] = "Remover todos os Traços" ;
             Text [ portuguese ] = "Remover ~todas as setas" ;
-            Text [ finnish ] = "Poista merkinnät" ;
+            Text [ finnish ] = "~Poista kaikki jäljet" ;
             Text [ danish ] = "Fjern alle pile" ;
             Text [ french ] = "S~upprimer tous les repères" ;
             Text [ swedish ] = "Ta bort ~alla spår" ;
@@ -1414,6 +1422,7 @@ Menu RID_POPUP_AUDIT
             Text[ turkish ] = "Doldurma kipinden çýk";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Salir del modo de relleno";
+            Text[ finnish ] = "Poistu täyttötilasta";
         };
     };
 };
@@ -1443,6 +1452,7 @@ String RID_POPUP_PAGEBREAK
     Text[ turkish ] = "Sayfa sonu önizlemesi için popup mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente para previsualización de saltos de página";
+    Text[ finnish ] = "Sivunvaihdon esikatselun ponnahdusvalikko";
 };
 
 Menu RID_POPUP_PAGEBREAK
@@ -1475,6 +1485,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Predeterminado";
+            Text[ finnish ] = "~Oletusarvo";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1489,7 +1500,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ italian ] = "Formatta ~celle..." ;
             Text [ portuguese_brazilian ] = "~Format Cells..." ;
             Text [ portuguese ] = "Formatar ~células..." ;
-            Text [ finnish ] = "~Muotoile solut..." ;
+            Text [ finnish ] = "~Muotoile solut" ;
             Text [ danish ] = "Formater celler..." ;
             Text [ french ] = "~Formater les cellules..." ;
             Text [ swedish ] = "~Formatera celler..." ;
@@ -1538,6 +1549,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Satýr sonu ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar salto de ~fila";
+            Text[ finnish ] = "~Lisää rivinvaihto";
         };
         MenuItem
         {
@@ -1566,6 +1578,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Sütun sonu ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar salto de ~columna";
+            Text[ finnish ] = "~Lisää sarakevaihto";
         };
         MenuItem
         {
@@ -1594,6 +1607,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Tüm manüel kesmeleri sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Eliminar todos los saltos ~manuales";
+            Text[ finnish ] = "Poista kaikki manuaaliset vaihdot";
         };
         MenuItem
         {
@@ -1621,6 +1635,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Ölçeklendirmeyi kaldýr";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Restablecer ~escala";
+            Text[ finnish ] = "Palauta skaala";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1651,6 +1666,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Yazdýrma aralýðýný tanýmla";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Definir área de impresión";
+            Text[ finnish ] = "Määritä tulostusalue";
         };
         MenuItem
         {
@@ -1679,6 +1695,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Yazdýrma aralýðýný ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Añadir área de impresión";
+            Text[ finnish ] = "Lisää tulostusalue";
         };
         MenuItem
         {
@@ -1706,6 +1723,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Yazdýrma aralýðýný kaldýr";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Restablecer área de impresión";
+            Text[ finnish ] = "Peruuta tulostusalue";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1736,6 +1754,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Sayfa formatý...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Formato de ~página...";
+            Text[ finnish ] = "Sivun muoto";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1766,6 +1785,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Mostrar ~nota";
+            Text[ finnish ] = "~Näytä huomautus";
         };
     };
 };
