@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:46:36 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1917,7 +1917,8 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             pMetric->mnWidth        = nTextWidth;
             pMetric->mnAscent       = ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
             pMetric->mnDescent      = ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
-            pMetric->mnLeading      = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
+            pMetric->mnIntLeading       = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
+            pMetric->mnExtLeading       = 0; //TODO!!!
         }
         return;
     }
@@ -1943,7 +1944,8 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             pMetric->mnWidth    *= n;
             pMetric->mnAscent   *= n;
             pMetric->mnDescent  *= n;
-            pMetric->mnLeading  *= n;
+            pMetric->mnIntLeading*= n;
+            pMetric->mnExtLeading*= n;
             pMetric->mnSlant    *= n;
         }
 
@@ -1953,7 +1955,8 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             pMetric->mnWidth    = Divide( pMetric->mnWidth, n );
             pMetric->mnAscent   = sal_DivideNeg( pMetric->mnAscent,  n );
             pMetric->mnDescent  = sal_DivideNeg( pMetric->mnDescent, n );
-            pMetric->mnLeading  = sal_DivideNeg( pMetric->mnLeading, n );
+            pMetric->mnIntLeading = sal_DivideNeg( pMetric->mnIntLeading, n );
+            pMetric->mnExtLeading = sal_DivideNeg( pMetric->mnExtLeading, n );
             pMetric->mnSlant    = sal_DivideNeg( pMetric->mnSlant,   n );
         }
     }
