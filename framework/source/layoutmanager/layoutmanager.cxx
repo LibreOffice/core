@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:18:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,8 @@ throw (::com::sun::star::uno::RuntimeException)
 
         if ( m_xFrame.is() )
         {
-            m_pInplaceMenuBar = new MenuBarManager( m_xFrame, (MenuBar *)(long)pInplaceMenuBarPointer, sal_False, sal_False );
+            // #110897# m_pInplaceMenuBar = new MenuBarManager( m_xFrame, (MenuBar *)(long)pInplaceMenuBarPointer, sal_False, sal_False );
+            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, (MenuBar *)(long)pInplaceMenuBarPointer, sal_False, sal_False );
 
             Window* pWindow = VCLUnoHelper::GetWindow( m_xFrame->getContainerWindow() );
             while ( pWindow && !pWindow->IsSystemWindow() )
