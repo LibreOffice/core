@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generic.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2000-12-12 10:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,13 @@ ________________________________________________________________________________
     ::rtl::OUStringToOString( SUNICODEVALUE, RTL_TEXTENCODING_UTF8 )
 
 #define B2U( SASCIIVALUE )                                                                                      \
-    ::rtl::OUStringToOString( SASCIIVALUE, RTL_TEXTENCODING_UTF8 )
+    ::rtl::OStringToOUString( SASCIIVALUE, RTL_TEXTENCODING_UTF8 )
 
 #define U2B_ENC( SUNICODEVALUE, AENCODING )                                                                     \
     ::rtl::OUStringToOString( SUNICODEVALUE, AENCODING )
 
 #define B2U_ENC( SASCIIVALUE, AENCODING )                                                                       \
-    ::rtl::OUStringToOString( SASCIIVALUE, AENCODING )
+    ::rtl::OStringToOUString( SASCIIVALUE, AENCODING )
 
 //*****************************************************************************************************************
 //  end of file
