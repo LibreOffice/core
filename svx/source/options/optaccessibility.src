@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2002-04-24 11:28:14 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,27 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Einstellungen für Kontrastdarstellung verwenden" ;
         Text [ English ] = "Use settings for high contrast appearance" ;
-        Text[ english_us ] = "Use settings for high contrast appearance";
+        Text[ english_us ] = "Settings for high contrast appearance";
+        Text[ portuguese ] = "Settings for high contrast appearance";
+        Text[ russian ] = "Settings for high contrast appearance";
+        Text[ greek ] = "Settings for high contrast appearance";
+        Text[ dutch ] = "Settings for high contrast appearance";
+        Text[ french ] = "Settings for high contrast appearance";
+        Text[ spanish ] = "Settings for high contrast appearance";
+        Text[ finnish ] = "Settings for high contrast appearance";
+        Text[ italian ] = "Settings for high contrast appearance";
+        Text[ danish ] = "Settings for high contrast appearance";
+        Text[ swedish ] = "Settings for high contrast appearance";
+        Text[ polish ] = "Settings for high contrast appearance";
+        Text[ portuguese_brazilian ] = "Settings for high contrast appearance";
+        Text[ japanese ] = "Settings for high contrast appearance";
+        Text[ korean ] = "Settings for high contrast appearance";
+        Text[ chinese_simplified ] = "Settings for high contrast appearance";
+        Text[ chinese_traditional ] = "Settings for high contrast appearance";
+        Text[ turkish ] = "Settings for high contrast appearance";
+        Text[ arabic ] = "Settings for high contrast appearance";
+        Text[ catalan ] = "Settings for high contrast appearance";
+        Text[ thai ] = "Settings for high contrast appearance";
     };
     CheckBox CB_DRAWINGS
     {
@@ -86,6 +106,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Für ~Zeichnungen und Präsentationen" ;
         Text [ ENGLISH ] = "For ~drawings and presentations" ;
         Text[ english_us ] = "For ~drawings and presentations";
+        Text[ portuguese ] = "For ~drawings and presentations";
+        Text[ russian ] = "For ~drawings and presentations";
+        Text[ greek ] = "For ~drawings and presentations";
+        Text[ dutch ] = "For ~drawings and presentations";
+        Text[ french ] = "For ~drawings and presentations";
+        Text[ spanish ] = "For ~drawings and presentations";
+        Text[ finnish ] = "For ~drawings and presentations";
+        Text[ italian ] = "For ~drawings and presentations";
+        Text[ danish ] = "For ~drawings and presentations";
+        Text[ swedish ] = "For ~drawings and presentations";
+        Text[ polish ] = "For ~drawings and presentations";
+        Text[ portuguese_brazilian ] = "For ~drawings and presentations";
+        Text[ japanese ] = "For ~drawings and presentations";
+        Text[ korean ] = "For ~drawings and presentations";
+        Text[ chinese_simplified ] = "For ~drawings and presentations";
+        Text[ chinese_traditional ] = "For ~drawings and presentations";
+        Text[ turkish ] = "For ~drawings and presentations";
+        Text[ arabic ] = "For ~drawings and presentations";
+        Text[ catalan ] = "For ~drawings and presentations";
+        Text[ thai ] = "For ~drawings and presentations";
     };
     CheckBox CB_PAGE_PREVIEWS
     {
@@ -95,6 +135,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "In Seiten~ansicht/Seitendruck" ;
         Text [ ENGLISH ] = "For page ~previews" ;
         Text[ english_us ] = "For page ~previews";
+        Text[ portuguese ] = "For page ~previews";
+        Text[ russian ] = "For page ~previews";
+        Text[ greek ] = "For page ~previews";
+        Text[ dutch ] = "For page ~previews";
+        Text[ french ] = "For page ~previews";
+        Text[ spanish ] = "For page ~previews";
+        Text[ finnish ] = "For page ~previews";
+        Text[ italian ] = "For page ~previews";
+        Text[ danish ] = "For page ~previews";
+        Text[ swedish ] = "For page ~previews";
+        Text[ polish ] = "For page ~previews";
+        Text[ portuguese_brazilian ] = "For page ~previews";
+        Text[ japanese ] = "For page ~previews";
+        Text[ korean ] = "For page ~previews";
+        Text[ chinese_simplified ] = "For page ~previews";
+        Text[ chinese_traditional ] = "For page ~previews";
+        Text[ turkish ] = "For page ~previews";
+        Text[ arabic ] = "For page ~previews";
+        Text[ catalan ] = "For page ~previews";
+        Text[ thai ] = "For page ~previews";
     };
     FixedLine GB_MISC
     {
@@ -103,6 +163,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Sonstige Optionen" ;
         Text [ English ] = "Miscellaneous options" ;
         Text[ english_us ] = "Miscellaneous options";
+        Text[ portuguese ] = "Miscellaneous options";
+        Text[ russian ] = "Miscellaneous options";
+        Text[ greek ] = "Miscellaneous options";
+        Text[ dutch ] = "Miscellaneous options";
+        Text[ french ] = "Miscellaneous options";
+        Text[ spanish ] = "Miscellaneous options";
+        Text[ finnish ] = "Miscellaneous options";
+        Text[ italian ] = "Miscellaneous options";
+        Text[ danish ] = "Miscellaneous options";
+        Text[ swedish ] = "Miscellaneous options";
+        Text[ polish ] = "Miscellaneous options";
+        Text[ portuguese_brazilian ] = "Miscellaneous options";
+        Text[ japanese ] = "Miscellaneous options";
+        Text[ korean ] = "Miscellaneous options";
+        Text[ chinese_simplified ] = "Miscellaneous options";
+        Text[ chinese_traditional ] = "Miscellaneous options";
+        Text[ turkish ] = "Miscellaneous options";
+        Text[ arabic ] = "Miscellaneous options";
+        Text[ catalan ] = "Miscellaneous options";
+        Text[ thai ] = "Miscellaneous options";
     };
     CheckBox CB_TIPHELP
     {
@@ -112,6 +192,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Tipp-~Hilfe verschwindet nach " ;
         Text [ ENGLISH ] = "~Help tips disappear after " ;
         Text[ english_us ] = "~Help tips disappear after ";
+        Text[ portuguese ] = "~Help tips disappear after ";
+        Text[ russian ] = "~Help tips disappear after ";
+        Text[ greek ] = "~Help tips disappear after ";
+        Text[ dutch ] = "~Help tips disappear after ";
+        Text[ french ] = "~Help tips disappear after ";
+        Text[ spanish ] = "~Help tips disappear after ";
+        Text[ finnish ] = "~Help tips disappear after ";
+        Text[ italian ] = "~Help tips disappear after ";
+        Text[ danish ] = "~Help tips disappear after ";
+        Text[ swedish ] = "~Help tips disappear after ";
+        Text[ polish ] = "~Help tips disappear after ";
+        Text[ portuguese_brazilian ] = "~Help tips disappear after ";
+        Text[ japanese ] = "~Help tips disappear after ";
+        Text[ korean ] = "~Help tips disappear after ";
+        Text[ chinese_simplified ] = "~Help tips disappear after ";
+        Text[ chinese_traditional ] = "~Help tips disappear after ";
+        Text[ turkish ] = "~Help tips disappear after ";
+        Text[ arabic ] = "~Help tips disappear after ";
+        Text[ catalan ] = "~Help tips disappear after ";
+        Text[ thai ] = "~Help tips disappear after ";
     };
     NumericField NF_TIPHELP
     {
@@ -133,6 +233,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Sekunden" ;
         Text [ ENGLISH ] = "seconds" ;
         Text[ english_us ] = "seconds";
+        Text[ portuguese ] = "seconds";
+        Text[ russian ] = "seconds";
+        Text[ greek ] = "seconds";
+        Text[ dutch ] = "seconds";
+        Text[ french ] = "seconds";
+        Text[ spanish ] = "seconds";
+        Text[ finnish ] = "seconds";
+        Text[ italian ] = "seconds";
+        Text[ danish ] = "seconds";
+        Text[ swedish ] = "seconds";
+        Text[ polish ] = "seconds";
+        Text[ portuguese_brazilian ] = "seconds";
+        Text[ japanese ] = "seconds";
+        Text[ korean ] = "seconds";
+        Text[ chinese_simplified ] = "seconds";
+        Text[ chinese_traditional ] = "seconds";
+        Text[ turkish ] = "seconds";
+        Text[ arabic ] = "seconds";
+        Text[ catalan ] = "seconds";
+        Text[ thai ] = "seconds";
     };
     CheckBox CB_ANIMATED_GRAPHICS
     {
@@ -142,6 +262,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Animierte ~Grafiken zulassen" ;
         Text [ ENGLISH ] = "Allow animated ~graphics" ;
         Text[ english_us ] = "Allow animated ~graphics";
+        Text[ portuguese ] = "Allow animated ~graphics";
+        Text[ russian ] = "Allow animated ~graphics";
+        Text[ greek ] = "Allow animated ~graphics";
+        Text[ dutch ] = "Allow animated ~graphics";
+        Text[ french ] = "Allow animated ~graphics";
+        Text[ spanish ] = "Allow animated ~graphics";
+        Text[ finnish ] = "Allow animated ~graphics";
+        Text[ italian ] = "Allow animated ~graphics";
+        Text[ danish ] = "Allow animated ~graphics";
+        Text[ swedish ] = "Allow animated ~graphics";
+        Text[ polish ] = "Allow animated ~graphics";
+        Text[ portuguese_brazilian ] = "Allow animated ~graphics";
+        Text[ japanese ] = "Allow animated ~graphics";
+        Text[ korean ] = "Allow animated ~graphics";
+        Text[ chinese_simplified ] = "Allow animated ~graphics";
+        Text[ chinese_traditional ] = "Allow animated ~graphics";
+        Text[ turkish ] = "Allow animated ~graphics";
+        Text[ arabic ] = "Allow animated ~graphics";
+        Text[ catalan ] = "Allow animated ~graphics";
+        Text[ thai ] = "Allow animated ~graphics";
     };
     CheckBox CB_ANIMATED_TEXTS
     {
@@ -151,6 +291,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Animierten ~Text zulassen" ;
         Text [ ENGLISH ] = "Allow animated ~text" ;
         Text[ english_us ] = "Allow animated ~text";
+        Text[ portuguese ] = "Allow animated ~text";
+        Text[ russian ] = "Allow animated ~text";
+        Text[ greek ] = "Allow animated ~text";
+        Text[ dutch ] = "Allow animated ~text";
+        Text[ french ] = "Allow animated ~text";
+        Text[ spanish ] = "Allow animated ~text";
+        Text[ finnish ] = "Allow animated ~text";
+        Text[ italian ] = "Allow animated ~text";
+        Text[ danish ] = "Allow animated ~text";
+        Text[ swedish ] = "Allow animated ~text";
+        Text[ polish ] = "Allow animated ~text";
+        Text[ portuguese_brazilian ] = "Allow animated ~text";
+        Text[ japanese ] = "Allow animated ~text";
+        Text[ korean ] = "Allow animated ~text";
+        Text[ chinese_simplified ] = "Allow animated ~text";
+        Text[ chinese_traditional ] = "Allow animated ~text";
+        Text[ turkish ] = "Allow animated ~text";
+        Text[ arabic ] = "Allow animated ~text";
+        Text[ catalan ] = "Allow animated ~text";
+        Text[ thai ] = "Allow animated ~text";
     };
     CheckBox CB_AUTOMATIC_FONT_COLOR
     {
@@ -160,6 +320,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Automatische Schrift~farbe für Bildschirmdarstellung" ;
         Text [ ENGLISH ] = "Always use automatic font ~color for screen display" ;
         Text[ english_us ] = "Always use automatic font ~color for screen display";
+        Text[ portuguese ] = "Always use automatic font ~color for screen display";
+        Text[ russian ] = "Always use automatic font ~color for screen display";
+        Text[ greek ] = "Always use automatic font ~color for screen display";
+        Text[ dutch ] = "Always use automatic font ~color for screen display";
+        Text[ french ] = "Always use automatic font ~color for screen display";
+        Text[ spanish ] = "Always use automatic font ~color for screen display";
+        Text[ finnish ] = "Always use automatic font ~color for screen display";
+        Text[ italian ] = "Always use automatic font ~color for screen display";
+        Text[ danish ] = "Always use automatic font ~color for screen display";
+        Text[ swedish ] = "Always use automatic font ~color for screen display";
+        Text[ polish ] = "Always use automatic font ~color for screen display";
+        Text[ portuguese_brazilian ] = "Always use automatic font ~color for screen display";
+        Text[ japanese ] = "Always use automatic font ~color for screen display";
+        Text[ korean ] = "Always use automatic font ~color for screen display";
+        Text[ chinese_simplified ] = "Always use automatic font ~color for screen display";
+        Text[ chinese_traditional ] = "Always use automatic font ~color for screen display";
+        Text[ turkish ] = "Always use automatic font ~color for screen display";
+        Text[ arabic ] = "Always use automatic font ~color for screen display";
+        Text[ catalan ] = "Always use automatic font ~color for screen display";
+        Text[ thai ] = "Always use automatic font ~color for screen display";
     };
     CheckBox CB_SYSTEM_FONT
     {
@@ -169,6 +349,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
         Text [ ENGLISH ] = "Use system ~font for user interface" ;
         Text[ english_us ] = "Use system ~font for user interface";
+        Text[ portuguese ] = "Use system ~font for user interface";
+        Text[ russian ] = "Use system ~font for user interface";
+        Text[ greek ] = "Use system ~font for user interface";
+        Text[ dutch ] = "Use system ~font for user interface";
+        Text[ french ] = "Use system ~font for user interface";
+        Text[ spanish ] = "Use system ~font for user interface";
+        Text[ finnish ] = "Use system ~font for user interface";
+        Text[ italian ] = "Use system ~font for user interface";
+        Text[ danish ] = "Use system ~font for user interface";
+        Text[ swedish ] = "Use system ~font for user interface";
+        Text[ polish ] = "Use system ~font for user interface";
+        Text[ portuguese_brazilian ] = "Use system ~font for user interface";
+        Text[ japanese ] = "Use system ~font for user interface";
+        Text[ korean ] = "Use system ~font for user interface";
+        Text[ chinese_simplified ] = "Use system ~font for user interface";
+        Text[ chinese_traditional ] = "Use system ~font for user interface";
+        Text[ turkish ] = "Use system ~font for user interface";
+        Text[ arabic ] = "Use system ~font for user interface";
+        Text[ catalan ] = "Use system ~font for user interface";
+        Text[ thai ] = "Use system ~font for user interface";
     };
     CheckBox CB_ACCESSIBILITY_TOOL
     {
@@ -179,6 +379,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Unterstützung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
         Text [ ENGLISH ] = "Support ~assistive technology tools (program restart required)" ;
         Text[ english_us ] = "Support ~assistive technology tools (program restart required)";
+        Text[ portuguese ] = "Support ~assistive technology tools (program restart required)";
+        Text[ russian ] = "Support ~assistive technology tools (program restart required)";
+        Text[ greek ] = "Support ~assistive technology tools (program restart required)";
+        Text[ dutch ] = "Support ~assistive technology tools (program restart required)";
+        Text[ french ] = "Support ~assistive technology tools (program restart required)";
+        Text[ spanish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ finnish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ italian ] = "Support ~assistive technology tools (program restart required)";
+        Text[ danish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ swedish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ polish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
+        Text[ japanese ] = "Support ~assistive technology tools (program restart required)";
+        Text[ korean ] = "Support ~assistive technology tools (program restart required)";
+        Text[ chinese_simplified ] = "Support ~assistive technology tools (program restart required)";
+        Text[ chinese_traditional ] = "Support ~assistive technology tools (program restart required)";
+        Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
+        Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
+        Text[ thai ] = "Support ~assistive technology tools (program restart required)";
     };
     FixedText FT_NOTE
     {
@@ -188,7 +408,27 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         WordBreak = TRUE;
         Text = "Hinweis: Für die Kommunikation mit Programmen, die einen behindertengerechten Zugriff auf den Computer ermöglichen, wird Sun Microsystems Java benutzt. Beim ersten Programmstart muss daher die Java Laufzeitumgebung geladen werden. Dies kann zu einer verlängerten Startzeit führen." ;
         Text [ ENGLISH ] = "Please note that accessibility support relies on Sun Microsystems Java for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the Java runtime environment has to be started as well." ;
-        Text[ english_us ] = "Please note that accessibility support relies on Sun Microsystems Java for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the Java runtime environment has to be started as well.";
+        Text[ english_us ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ portuguese ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ russian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ greek ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ dutch ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ french ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ spanish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ finnish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ italian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ danish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ swedish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ polish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ portuguese_brazilian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ japanese ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ korean ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ chinese_simplified ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ chinese_traditional ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ turkish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ arabic ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ catalan ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ thai ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
     };
 };
 
