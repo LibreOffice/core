@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:20:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -261,6 +264,7 @@ namespace frm
         REGISTER_PROP_2( MAXTEXTLEN,        m_nMaxTextLength,       BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( MULTILINE,         m_bMultiLine,           BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( TEXT,              m_sLastKnownEngineText, BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( LINEEND_FORMAT,    m_nLineEndFormat,       BOUND, MAYBEDEFAULT );
 
         REGISTER_VOID_PROP_2( ALIGN,        m_aAlign,           sal_Int16, BOUND, MAYBEDEFAULT );
     }
@@ -463,6 +467,10 @@ namespace frm
 
         switch ( _nHandle )
         {
+        case PROPERTY_ID_LINEEND_FORMAT:
+            aDefault <<= (sal_Int16)LineEndFormat::LINE_FEED;
+            break;
+
         case PROPERTY_ID_ECHO_CHAR:
         case PROPERTY_ID_ALIGN:
         case PROPERTY_ID_MAXTEXTLEN:
