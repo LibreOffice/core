@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2001-12-07 14:52:03 $
+ *  last change: $Author: jsc $ $Date: 2001-12-07 15:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1608,6 +1608,23 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         }
         nError++;
     }
+
+    if ( nError &&
+         (!keyName.compareTo(OUString::createFromAscii("/UCR/drafts"), 11) ||
+          !keyName.compareTo(OUString::createFromAscii("/drafts"), 7)) )
+    {
+        if ( options.forceOutput() )
+        {
+            if ( bDump )
+            {
+                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                bDump = sal_False;
+            }
+            fprintf(stderr, "    Note: \"drafts\" type changed incompatible, no effect to the final API\n");
+        }
+        return 0;
+    }
+
     return nError;
 }
 
