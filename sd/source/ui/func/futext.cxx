@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:41:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _SVXERR_HXX //autogen
 #include <svx/svxerr.hxx>
 #endif
-#ifndef _OFA_OSPLCFG_HXX //autogen
-#include <offmgr/osplcfg.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -82,9 +79,6 @@
 #endif
 #ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
@@ -622,7 +616,6 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
 
             // #91853# Needs to be set since default is SDRTEXTHORZADJUST_BLOCK
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-
             pTxtObj->SetMergedItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(SdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
@@ -984,7 +977,6 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 }
 
                 pTextObj->SetMergedItemSet(aSet);
-
                 pTextObj->SetDisableAutoWidthOnDragging(TRUE);
                 SetInEditMode(rMEvt, FALSE);
             }
