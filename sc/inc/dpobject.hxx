@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:51:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ public:
     void                SetTag(const String& rNew);
     const String&       GetTag() const                  { return aTableTag; }
 
+    BOOL                IsDimNameInUse( const String& rName ) const;
     String              GetDimName( long nDim, BOOL& rIsDataLayout );
     BOOL                IsDuplicated( long nDim );
     long                GetDimCount();
