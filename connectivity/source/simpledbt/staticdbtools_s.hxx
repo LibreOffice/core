@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:03:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,10 @@ namespace connectivity
                                         sal_Bool _bDefault = sal_False) const;
 
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-            getComponentContextConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+        virtual bool isEmbeddedInDatabase(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
+        );
 
         // disambiguate IReference
         // ------------------------------------------------
