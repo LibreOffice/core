@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:52:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,7 +1679,7 @@ sal_Bool SfxOrganizeDlg_Impl::GetServiceName_Impl( String& rName, String& rFileU
         {
             uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                                                     rFileURL,
-                                                    embed::ElementModes::READWRITE );
+                                                    embed::ElementModes::READ );
             ULONG nFormat = SotStorage::GetFormatID( xStorage );
             const SfxFilter* pFilter =
                 SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
