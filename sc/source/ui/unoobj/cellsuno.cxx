@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-04 10:33:57 $
+ *  last change: $Author: nn $ $Date: 2002-06-26 10:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3274,7 +3274,9 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
         {
             bFound = FALSE;
 
-            ScMarkData aMarkData(*GetMarkData());
+            //  #97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
+            ScMarkData aMarkData;
+            aMarkData.MarkFromRangeList( aNewRanges, FALSE );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             ULONG nCount = aNewRanges.Count();
@@ -3329,7 +3331,9 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
             bFound = FALSE;
             ULONG nRangesCount = aNewRanges.Count();
 
-            ScMarkData aMarkData(*GetMarkData());
+            //  #97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
+            ScMarkData aMarkData;
+            aMarkData.MarkFromRangeList( aNewRanges, FALSE );
             aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             USHORT nTab = lcl_FirstTab(aNewRanges);                 //! alle Tabellen
