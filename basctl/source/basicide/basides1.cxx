@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:02:12 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,9 +349,24 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 SfxBindings &rBindings = BasicIDE::GetBindings();
                 rBindings.Invalidate( SID_DOC_MODIFIED );
                 rBindings.Invalidate( SID_SAVEDOC );
+                rBindings.Invalidate( SID_SIGNATURE );
             }
         }
         break;
+        case SID_SIGNATURE:
+        {
+            if ( pCurWin )
+            {
+                SfxObjectShell* pShell = pCurWin->GetShell();
+                if ( pShell )
+                {
+                    pShell->SignScriptingContent();
+                    BasicIDE::GetBindings().Invalidate( SID_SIGNATURE );
+                }
+            }
+        }
+        break;
+
         case SID_BASICIDE_MODULEDLG:
         {
             if ( rReq.GetArgs() )
@@ -836,6 +851,18 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_SAVEASDOC:
             {
                 rSet.DisableItem( nWh );
+            }
+            break;
+            case SID_SIGNATURE:
+            {
+                sal_uInt16 nState = 0;
+                if ( pCurWin )
+                {
+                    SfxObjectShell* pShell = pCurWin->GetShell();
+                    if ( pShell )
+                        nState = pShell->GetScriptingSignatureState();
+                }
+                rSet.Put( SfxUInt16Item( SID_SIGNATURE, nState ) );
             }
             break;
             case SID_BASICIDE_MODULEDLG:
