@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nf $ $Date: 2003-07-14 08:38:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1573,7 +1573,7 @@
 					<label xml:lang="it">Don&apos;t distort objects in curve</label>
 					<label xml:lang="sv">Don&apos;t distort objects in curve</label>
 					<label xml:lang="pl">Don&apos;t distort objects in curve</label>
-					<label xml:lang="pt-BR">Don&amp;apos;t distort objects in curve</label>
+					<label xml:lang="pt-BR">Don&apos;t distort objects in curve</label>
 					<label xml:lang="ja">円形にする、ゆがめない</label>
 					<label xml:lang="ko">Don&apos;t distort objects in curve</label>
 					<label xml:lang="tr">Don&apos;t distort objects in curve</label>
@@ -2211,7 +2211,7 @@
 				<prop oor:name="Steps" oor:type="xs:short">
 					<!-- OldPath: Draw/Cross_fading -->
 					<!-- OldLocation: drawing.cfg -->
-					<!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
+					<!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
 					<info>
 						<author>AF</author>
 						<desc xml:lang="en-US">Specifies the number of intermediate morphing steps between two objects.</desc>
@@ -2330,7 +2330,7 @@
 				<prop oor:name="Orientation" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Cross_fading -->
 					<!-- OldLocation: drawing.cfg -->
-					<!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
+					<!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
 					<info>
 						<author>AF</author>
 						<desc xml:lang="en-US">Indicates whether two objects to be morphed shall have the same orientation.</desc>
@@ -2389,7 +2389,7 @@
 				<prop oor:name="Attributes" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Cross_fading -->
 					<!-- OldLocation: drawing.cfg -->
-					<!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
+					<!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
 					<info>
 						<author>AF</author>
 						<desc xml:lang="en-US">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
