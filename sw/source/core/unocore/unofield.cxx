@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 11:42:16 $
+ *  last change: $Author: os $ $Date: 2001-04-23 13:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _DOCSTAT_HXX //autogen
 #include <docstat.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
@@ -2125,6 +2128,8 @@ void SwXTextField::attachToRange(
                                                 m_pProps->nFormat,
                                                 m_pProps->nUSHORT1);
                 ((SwPageNumberField*)pFld)->SetUserString(m_pProps->sPar1);
+                Any aVal; aVal <<= m_pProps->nSubType;
+                pFld->PutValue(aVal, C2U(UNO_NAME_SUB_TYPE));
             }
             break;
             case SW_SERVICE_FIELDTYPE_DDE:
@@ -2511,7 +2516,11 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             break;
             case FIELD_PROP_SUBTYPE:
             {
-                aValue >>= m_pProps->nSubType;
+                try
+                {
+                    m_pProps->nSubType = ::comphelper::getEnumAsINT32(aValue);
+                }
+                catch(Exception &) {}
             }
             break;
             case FIELD_PROP_BYTE1 :
