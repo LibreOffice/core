@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:24:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,49 @@
                     <desc>Identifies the organization, group or person that provided this language pack.</desc>
                 </info>
 			</prop>
-        </group>
+		</group>
+		<group oor:name="MigrationStep">
+			<info>
+				<author>LO</author>
+				<desc>Describes one step of migration</desc>
+			</info>
+			<prop oor:name="MigrationService" oor:type="xs:string">
+				<info>
+					<author>LO</author>
+					<desc>an optional uno service that is called after files and nodes have been copied in order to perform custom migration actions. The service needs to support XInitializable and XJob interfaces according do http://specs.openoffice.org/appwide/migration/spec_migration.sxw</desc>
+				</info>
+			</prop>
+			<prop oor:name="ServiceConfigComponents" oor:type="oor:string-list">
+				<info>
+					<author>LO</author>
+					<desc>a list of config components that are to be passed to service</desc>
+				</info>
+			</prop>
+			<prop oor:name="IncludedFiles" oor:type="oor:string-list">
+				<info>
+					<author>LO</author>
+					<desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
+				</info>
+			</prop>
+			<prop oor:name="ExcludedFiles" oor:type="oor:string-list">
+				<info>
+					<author>LO</author>
+					<desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
+				</info>
+			</prop>
+			<prop oor:name="IncludedNodes" oor:type="oor:string-list">
+				<info>
+					<author>LO</author>
+					<desc>a list of configuration node paths that are to be moved from the old user layer to the new user layer</desc>
+				</info>
+			</prop>
+			<prop oor:name="ExcludedNodes" oor:type="oor:string-list">
+				<info>
+					<author>LO</author>
+					<desc>a list of configuration node paths that are not to be moved from the old user layer to the new user layer</desc>
+				</info>
+			</prop>
+		</group>
 		<group oor:name="Factory">
 			<info>
                 <author>AS</author>
@@ -251,12 +293,19 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooLicenseAcceptDate" oor:type="xs:string">
+			<prop oor:name="LicenseAcceptDate" oor:type="xs:string">
 				<info>
 					<author>LO</author>
-					<desc>The xsd:date (YYYYMMDD) on which the user has accepted the license. If the current installation has a license that is newer then this date, the license has to be accepted again.</desc>
+					<desc>The xsd:datetime (YYYY-MM-DDTHH:MM:SS) on which the user has accepted the license. If the current installation has a license that is newer then this date, the license has to be accepted again.</desc>
 				</info>
 			</prop>
+			<prop oor:name="FirstStartWizardCompleted" oor:type="xs:boolean">
+				<info>
+					<author>LO</author>
+					<desc>is set to true, when the FirstStartWizard has been completed</desc>
+				</info>
+				<value>false</value>
+			</prop>						
 			<set oor:name="Factories" oor:node-type="Factory">
 				<info>
 					<author>AS</author>
@@ -323,5 +372,24 @@
 				</info>
 			</prop>
 		</group>
+		<group oor:name="Migration">
+			<info>
+				<author>LO</author>
+				<desc>Contains settings that control configuration data access.</desc>
+			</info>
+			<set oor:name="MigrationSteps" oor:node-type="MigrationStep">
+				<info>
+					<author>LO</author>
+					<desc>The enumeration of migration steps that are to be applied on first start</desc>
+				</info>
+			</set>
+			<prop oor:name="SupportedVersions" oor:type="oor:string-list">
+				<info>
+					<author>LO</author>
+					<desc>version identifiers, that are supported for migration</desc>
+				</info>
+                <value/>
+			</prop>
+		</group>		
 	</component>
 </oor:component-schema>
