@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-15 14:01:15 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 13:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@
 #include "dispatch.hxx"
 #include "openflag.hxx"
 #include "helper.hxx"
+
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -772,11 +773,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             // Version in die Liste aufnehmen; diese mu\s vorher schon vom
             // "alten" Medium "ubertragen worden sein
+            sal_Bool bUseXML = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion();
             rMedium.AddVersion_Impl( aInfo );
-            rMedium.SaveVersionList_Impl();
+            rMedium.SaveVersionList_Impl( bUseXML );
 
             // Den Storage f"ur die Versionen "offnen
-            SvStorageRef xVersion = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ?
+            SvStorageRef xVersion = bUseXML ?
                     aMedRef->OpenUCBStorage( DEFINE_CONST_UNICODE( "Versions" ) ) :
                     aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
 
@@ -790,7 +792,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 while( pInfo )
                 {
                     const String& rName = pInfo->aName;
-                    if ( xOldVersions->IsStream( rName ) )
+                    if ( xOldVersions->IsContained( rName ) )
                         xOldVersions->CopyTo( rName, xVersion, rName );
                     pInfo = pList->GetObject(n++);
                 }
@@ -844,11 +846,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
         else if ( pImp->bIsSaving )
         {
-            rMedium.SaveVersionList_Impl();
+            sal_Bool bUseXML = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion();
+
+            rMedium.SaveVersionList_Impl( bUseXML );
             const SfxVersionTableDtor *pList = rMedium.GetVersionList();
             if ( pList && pList->Count() )
             {
-                SvStorageRef xVersion = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ?
+                SvStorageRef xVersion = bUseXML ?
                     aMedRef->OpenUCBStorage( DEFINE_CONST_UNICODE( "Versions" ) ) :
                     aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
                 SvStorageRef xOldVersions = GetStorage()->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY | STREAM_NOCREATE );
@@ -859,7 +863,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     while( pInfo )
                     {
                         const String& rName = pInfo->aName;
-                        if ( xOldVersions->IsStream( rName ) )
+                        if ( xOldVersions->IsContained( rName ) )
                             xOldVersions->CopyTo( rName, xVersion, rName );
                         pInfo = pList->GetObject(n++);
                     }

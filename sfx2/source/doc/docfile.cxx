@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:51:14 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 13:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,8 @@ using namespace ::com::sun::star::ucb;
 #if SUPD<613//MUSTINI
 #include "inimgr.hxx"       // Backup Path
 #endif
+
+#include "xmlversion.hxx"
 
 #define MAX_REDIRECT 5
 
@@ -2320,6 +2322,14 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
             pImp->pVersions = new SfxVersionTableDtor;
             pImp->pVersions->Read( *aStream );
         }
+        else
+        {
+            SfxVersionTableDtor *pList = new SfxVersionTableDtor;
+            if ( SfxXMLVersList_Impl::ReadInfo( GetStorage(), pList ) )
+                pImp->pVersions = pList;
+            else
+                delete pList;
+        }
     }
 
     return pImp->pVersions;
@@ -2395,19 +2405,27 @@ sal_Bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
     return sal_False;
 }
 
-sal_Bool SfxMedium::SaveVersionList_Impl()
+sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
 {
     if ( GetStorage() )
     {
         if ( !pImp->pVersions )
             return sal_True;
 
-        SvStorageStreamRef aStream =
-            GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READWRITE );
-        if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+        if ( bUseXML )
         {
-            pImp->pVersions->Write( *aStream );
+            SfxXMLVersList_Impl::WriteInfo( aStorage, pImp->pVersions );
             return sal_True;
+        }
+        else
+        {
+            SvStorageStreamRef aStream =
+                GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READWRITE );
+            if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+            {
+                pImp->pVersions->Write( *aStream );
+                return sal_True;
+            }
         }
     }
 
