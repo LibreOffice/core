@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 07:35:48 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         sal_Int32 nEndCol(rRange.aEnd.Col());
         ScMyStylesSet::iterator aPrevItr = aColDefaultStyles[nStartCol];
         DBG_ASSERT(aColDefaultStyles.size() > static_cast<sal_uInt32>(nEndCol), "to much columns");
-        for (sal_Int32 i = nStartCol + 1; i <= nEndCol; i++)
+        for (sal_Int32 i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); i++)
         {
             if (aPrevItr != aColDefaultStyles[i])
             {
@@ -410,11 +410,15 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                 aPrevItr = aColDefaultStyles[i];
             }
         }
-        DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style")
-        ScRange aRange(rRange);
-        aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
-        sPrevStyleName = aPrevItr->sStyleName;
-        AddSingleRange(aRange);
+        if (aPrevItr != aCellStyles.end())
+        {
+            ScRange aRange(rRange);
+            aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
+            sPrevStyleName = aPrevItr->sStyleName;
+            AddSingleRange(aRange);
+        }
+        else
+            DBG_ERROR("no column default style");
     }
     else
     {
