@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdUnoOutlineView.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-06 09:44:09 $ 
+'*  last change:$Date: 2003-03-06 13:16:37 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -86,8 +86,13 @@ Global oComponentInstance As Object
 ' Required for frame.XDispatchProvider
 Global dispatchUrl As String
 
-Global oSecDoc As Object
+' Required for awt.XWindow
+Global oXWindow As Object
+Global oCtrlShape as Object
 
+
+Global oSecDoc As Object
+Global oXComponentDoc as Object
 
 Sub CreateObj()
 
@@ -97,11 +102,15 @@ Sub CreateObj()
 '*************************************************************************
 On Error Goto ErrHndl
     Dim bOK As Boolean
+    Dim o
+    
     bOK = true
 
     oDoc = utils.createImpressDocument(cObjectName)
-
+    oXComponentDoc = utils.createImpressDocument(cObjectName+ "XComponent")
+    
     oObj = oDoc.getCurrentController()
+    oComponentInstance = oXComponentDoc.getCurrentController()
 
     Out.log("Change to Outline view")
     Dim aSlotID As String
@@ -122,6 +131,13 @@ On Error Goto ErrHndl
         Out.log("queryDispatch FAILED... Object SdUnoOutlineView can't be created")
         oObj =  NULL_OBJECT
     endif
+    
+    xDispatcher = oComponentInstance.queryDispatch( url,"",0)
+    if Not IsNULL(xDispatcher) then
+        xDispatcher.dispatch( url, DimArray() )
+    else
+        Out.log("queryDispatch FAILED... Object SdUnoOutlineView can't be created")
+    endif
 
     oSecDoc = utils.createImpressDocument("For frame.XController")
     bHasNoViewData = false
@@ -130,9 +146,12 @@ On Error Goto ErrHndl
     oFrameToAttach = StarDesktop.getCurrentFrame()
     oModelToAttach = oSecDoc
 
-    oComponentInstance = oObj
 
     dispatchUrl = "slot:27069"
+    
+    ' For awt.XWindow
+    oXWindow = utils.at_getCurrentWindow(oSecDoc)
+    
 Exit Sub
 ErrHndl:
     Test.Exception()
