@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 08:45:06 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 11:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,20 +797,26 @@ void ScXMLDPConditionContext::EndElement()
         aFilterField.eConnect = SC_AND;
     pFilterContext->SetIsCaseSensitive(bIsCaseSensitive);
     sal_Bool bUseRegularExpressions;
-    double dVal;
+    double dVal(0.0);
     getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions, dVal);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
     aFilterField.nField = static_cast<USHORT>(nField);
     if (IsXMLToken(sDataType, XML_NUMBER))
     {
         aFilterField.nVal = sConditionValue.toDouble();
+        *aFilterField.pStr = sConditionValue;
         aFilterField.bQueryByString = sal_False;
+        if (dVal != 0.0)
+        {
+            aFilterField.nVal = dVal;
+            *aFilterField.pStr = EMPTY_STRING;
+        }
     }
     else
     {
         aFilterField.pStr = new String(sConditionValue);
         aFilterField.bQueryByString = sal_True;
-        aFilterField.nVal = dVal;
+        aFilterField.nVal = 0;
     }
     pFilterContext->AddFilterField(aFilterField);
 }
