@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 08:40:20 $
+ *  last change: $Author: sab $ $Date: 2002-10-11 07:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,9 @@
 #define SC_UNONAME_USINDEX          "UserSortListIndex"
 #define SC_UNONAME_COLLLOC          "CollatorLocale"
 #define SC_UNONAME_COLLALG          "CollatorAlgorithm"
+#define SC_UNONAME_AUTOFLT          "AutoFilter"
+#define SC_UNONAME_FLTCRT           "FilterCriteriaSource"
+#define SC_UNONAME_USEFLTCRT        "UseFilterCriteriaSource"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-10 10:25:21 $
+ *  last change: $Author: sab $ $Date: 2002-10-11 07:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/DataImportMode.hpp>
 
 #include "datauno.hxx"
@@ -88,6 +89,12 @@
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "globstr.hrc"
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
+#endif
+#ifndef SC_SCATTR_HXX
+#include "attrib.hxx"
+#endif
 
 using namespace com::sun::star;
 
@@ -139,12 +146,15 @@ const SfxItemPropertyMap* lcl_GetDBRangePropertyMap()
 {
     static SfxItemPropertyMap aDBRangePropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_AUTOFLT),  0,  &getBooleanCppuType(),                      0},
+        {MAP_CHAR_LEN(SC_UNONAME_FLTCRT),   0,  &getCppuType((table::CellRangeAddress*)0),  0},
         {MAP_CHAR_LEN(SC_UNONAME_ISUSER),   0,  &getBooleanCppuType(),           beans::PropertyAttribute::READONLY },
-        {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),           0},
+        {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),                      0},
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),           0},
-        {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),           0},
+        {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),                      0},
+        {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),                      0},
+        {MAP_CHAR_LEN(SC_UNONAME_USEFLTCRT),0,  &getBooleanCppuType(),                      0},
         {0,0,0,0}
     };
     return aDBRangePropertyMap_Impl;
@@ -1808,6 +1818,44 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             aNewData.SetDoSize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNONAME_STRIPDAT ) )
             aNewData.SetStripData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        else if (aString.EqualsAscii( SC_UNONAME_AUTOFLT ))
+        {
+            sal_Bool bAutoFilter(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
+            aNewData.SetAutoFilter(bAutoFilter);
+            ScRange aRange;
+            aNewData.GetArea(aRange);
+            ScDocument* pDoc = pDocShell->GetDocument();
+            if (bAutoFilter && pDoc)
+                pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                     aRange.aEnd.Col(), aRange.aStart.Row(),
+                                     aRange.aStart.Tab(), SC_MF_AUTO );
+            else  if (!bAutoFilter && pDoc)
+                pDoc->RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+                                     aRange.aEnd.Col(), aRange.aStart.Row(),
+                                     aRange.aStart.Tab(), SC_MF_AUTO );
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_USEFLTCRT ))
+        {
+            if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+            {
+                ScRange aRange;
+                aNewData.GetAdvancedQuerySource(aRange);
+                aNewData.SetAdvancedQuerySource(&aRange);
+            }
+            else
+                aNewData.SetAdvancedQuerySource(NULL);
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_FLTCRT ))
+        {
+            table::CellRangeAddress aRange;
+            if (aValue >>= aRange)
+            {
+                ScRange aCoreRange;
+                ScUnoConversion::FillScRange(aCoreRange, aRange);
+
+                aNewData.SetAdvancedQuerySource(&aCoreRange);
+            }
+        }
         else
             bDo = FALSE;
 
@@ -1848,6 +1896,28 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
         }
         else if ( aString.EqualsAscii( SC_UNO_LINKDISPNAME ) )
             aRet <<= rtl::OUString( aName );
+        else if (aString.EqualsAscii( SC_UNONAME_AUTOFLT ))
+        {
+            sal_Bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());
+
+            ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoFilter );
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_USEFLTCRT ))
+        {
+            ScRange aRange;
+            sal_Bool bIsAdvancedSource(GetDBData_Impl()->GetAdvancedQuerySource(aRange));
+
+            ScUnoHelpFunctions::SetBoolInAny( aRet, bIsAdvancedSource );
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_FLTCRT ))
+        {
+            table::CellRangeAddress aRange;
+            ScRange aCoreRange;
+            if (GetDBData_Impl()->GetAdvancedQuerySource(aCoreRange))
+                ScUnoConversion::FillApiRange(aRange, aCoreRange);
+
+            aRet <<= aRange;
+        }
     }
     return aRet;
 }
