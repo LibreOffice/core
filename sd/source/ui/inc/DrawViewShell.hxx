@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:54:43 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,8 @@ public:
     void            ModelHasChanged();
     virtual void    Activate(BOOL bIsMDIActivate);
     virtual void    Deactivate(BOOL IsMDIActivate);
-    virtual void    UIActivate( SvInPlaceObject* );
-    virtual void    UIDeactivate( SvInPlaceObject* );
+    virtual void    UIActivating( SfxInPlaceClient* );
+    virtual void    UIDeactivated( SfxInPlaceClient* );
     virtual String  GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
     void            SetHelpIdBySelection();
