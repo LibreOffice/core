@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:26:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,12 @@
 TabPage DLG_MM_ADDRESSBLOCK_PAGE
 {
     HelpID = HID_MM_ADDRESSBLOCKPAGE;
-    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Size = MAP_APPFONT ( 260 , 230 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Adressblock einfügen";
         Text [ en-US ] = "Insert address block";
@@ -89,7 +89,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
 
     FixedText FI_ADDRESSLIST
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 20 ) ;
         WordBreak = TRUE;
         Text [ de ] = "1. Wählen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten der Adressenliste werden für den Adressblock benötigt." ;
@@ -97,7 +97,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     PushButton      PB_ADDRESSLIST
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
         Text [ de ] = "Adressenliste auswählen..." ;
         Text[ en-US ] = "Select A~ddress List...";
@@ -109,7 +109,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     FixedText   FI_CURRENTADDRESS
     {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 242 , 8 ) ;
         Hide = TRUE;
         Text [ de ] = "Aktuelle Adressenliste: %1" ;
@@ -117,26 +117,27 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     FixedText       FI_SETTINGS
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "2. Wählen Sie den Adressblock, der in das Dokument eingefügt werden soll." ;
         Text[ en-US ] = "2. Select the address block you want inserted in the document";
     };
     CheckBox        CB_ADDRESS
     {
-        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ de ] = "Dieses Dokument soll einen Adressblock enthalten" ;
         Text[ en-US ] = "~This document shall contain an address block";
     };
     Window          WIN_SETTINGS
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 176 , 45 ) ;
     };
     PushButton      PB_SETTINGS
     {
-        Pos = MAP_APPFONT ( 194 , 98 ) ;
+        Pos = MAP_APPFONT ( 194 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Group = FALSE;
         Text [ de ] = "Mehr..." ;
@@ -144,32 +145,33 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     FixedText       FI_PREVIEW
     {
-        Pos = MAP_APPFONT ( 6 , 146 ) ;
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "3. Überprüfen Sie, ob alle Adressdaten verfügbar sind." ;
         Text[ en-US ] = "3. Check if the address data matches correctly.";
     };
     Window          WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 12 , 162 ) ;
         Size = MAP_APPFONT ( 176 , 46 ) ;
     };
     PushButton      PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 194 , 157 ) ;
+        Pos = MAP_APPFONT ( 194 , 162 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ de ] = "Felder zuordnen..." ;
         Text[ en-US ] = "Match ~Fields...";
     };
     FixedText       FI_DOCINDEX
     {
-        Pos = MAP_APPFONT ( 111 , 205 ) ;
+        Pos = MAP_APPFONT ( 111 , 210 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Right = TRUE;
     };
     ImageButton     IB_PREVSET
     {
-        Pos = MAP_APPFONT ( 167 , 204 ) ;
+        Pos = MAP_APPFONT ( 167 , 209 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
         QuickHelpText [ de ] = "Adressblock des vorigen Dokuments ansehen" ;
@@ -177,7 +179,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     ImageButton     IB_NEXTSET
     {
-        Pos = MAP_APPFONT ( 178 , 204 ) ;
+        Pos = MAP_APPFONT ( 178 , 209 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
         QuickHelpText [ de ] = "Adressblock des nächsten Dokuments ansehen" ;
@@ -201,7 +203,7 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     Size = MAP_APPFONT ( 260 , 219 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Addressblock wählen";
+    Text [ de ] = "Adressblock wählen";
     Text [ en-US ] = "Select Address Block";
 
     FixedText       FT_SELECT
@@ -213,6 +215,7 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     };
     Window WIN_PREVIEW
     {
+        Border = TRUE;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 192 , 100 ) ;
         DialogControl = TRUE;
@@ -277,8 +280,8 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
 
     FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 188 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 0 , 188 ) ;
+        Size = MAP_APPFONT ( 260 , 8 ) ;
     };
 
     OKButton        PB_OK
@@ -312,6 +315,12 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     Text [ de ] = "Neuer Adressblock";
     Text [ en-US ] = "New Address Block";
 
+    String ST_TITLE_EDIT
+    {
+        Text [ de ] = "Adressblock bearbeiten";
+        Text [ en-US ] = "Edit Address Block";
+    };
+
     String ST_TITLE_MALE
     {
         Text [ de ] = "Eigene Briefanrede (männliche Empfänger)";
@@ -338,12 +347,12 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     {
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 68 , 121 ) ;
+        TabStop = TRUE;
         Border = TRUE;
-        DialogControl = TRUE;
     };
     ImageButton     IB_INSERTFIELD
     {
-        Pos = MAP_APPFONT ( 80 , 59 ) ;
+        Pos = MAP_APPFONT ( 80 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT;
         QuickHelpText [ de ] = "In Adresse übernehmen" ;
@@ -356,7 +365,7 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ImageButton     IB_REMOVEFIELD
     {
-        Pos = MAP_APPFONT ( 80 , 76 ) ;
+        Pos = MAP_APPFONT ( 80 , 46 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT;
         QuickHelpText [ de ] = "Aus Adresse entfernen" ;
@@ -448,8 +457,8 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     FixedLine       FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 145 ) ;
-        Size = MAP_APPFONT ( 308 , 8 ) ;
+        Pos = MAP_APPFONT ( 0 , 145 ) ;
+        Size = MAP_APPFONT ( 320 , 8 ) ;
     };
     OKButton        PB_OK
     {
@@ -547,7 +556,6 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     Text [ de ] = "Felder zuordnen";
     Text [ en-US ] = "Match Fields";
 
-
     FixedText FI_MATCHING
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -614,11 +622,12 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     {
         Pos = MAP_APPFONT ( 6 , 163 ) ;
         Size = MAP_APPFONT ( 248 , 45 ) ;
+        Border = TRUE;
     };
     FixedLine       FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 214 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 0 , 214 ) ;
+        Size = MAP_APPFONT ( 260 , 8 ) ;
     };
     OKButton        PB_OK
     {
