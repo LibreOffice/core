@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:23:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,7 +1675,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     if (!xCurrentForms.is())
     {   // im alive-Modus sind meine Forms nicht gesetzt, wohl aber die an der Page
         if (m_pShell->GetCurPage())
-            xCurrentForms = Reference< XIndexAccess>(m_pShell->GetCurPage()->GetForms(), UNO_QUERY);
+            xCurrentForms = Reference< XIndexAccess>( m_pShell->GetCurPage()->GetForms( false ), UNO_QUERY );
     }
     if (!xCurrentForms.is())
         return;
@@ -2702,13 +2702,11 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     FmFormPage* pPage = m_pShell->GetCurPage();
     if (pPage)
     {
-        if (bDesign)
-        {
-            Reference< XIndexAccess> xIndex(pPage->GetForms(), UNO_QUERY);
-            ResetForms(xIndex, sal_False);
-        }
-        else
-            ResetForms();
+        Reference< XIndexAccess > xForms;
+        if ( bDesign )
+            xForms = xForms.query( pPage->GetForms( false ) );
+
+        ResetForms( xForms, sal_False );
     }
 
     m_pShell->m_bDesignMode = bDesign;
@@ -4044,8 +4042,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
 
         // load all forms
         Reference< XIndexAccess >  xForms;
-        xForms = xForms.query( _pPage->GetForms() );
-        DBG_ASSERT( xForms.is(), "FmXFormShell::loadForms: invalid forms collection!" );
+        xForms = xForms.query( _pPage->GetForms( false ) );
 
         if ( xForms.is() )
         {
