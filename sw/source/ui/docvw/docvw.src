@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:47:19 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "~HTML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò HTM~L";
             Text[ polish ] = "Tekst Ÿród³owy HTML";
-            Text[ japanese ] = "HTML¿°½(~M)";
+            Text[ japanese ] = "HT~ML ¿°½";
             Text[ chinese_traditional ] = "~HTML ­ì©lÀÉ";
             Text[ arabic ] = "HTML ãÕÏÑ";
             Text[ dutch ] = "~HTML - brontekst";
@@ -727,7 +727,7 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Çàãğóçèòü ğèñóíêè";
             Text[ polish ] = "Za³aduj grafiki";
             Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ(~L)";
-            Text[ chinese_traditional ] = "¸Ë¸ü¹Ï¤ù";
+            Text[ chinese_traditional ] = "¸ü¤J¹Ï¤ù";
             Text[ arabic ] = "ÊÍãíá ÇáÕæÑ";
             Text[ dutch ] = "A~fbeeldingen laden";
             Text[ chinese_simplified ] = "×°ÔØÍ¼ĞÎ";
@@ -784,7 +784,7 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Îòêëş÷èòü Plug-Ins";
             Text[ polish ] = "Wy³¹cz wtyczki Plug-In";
             Text[ japanese ] = "Ìß×¸Ş²İ µÌ(~P)";
-            Text[ chinese_traditional ] = "¥¢¬¡ ~PlugIn";
+            Text[ chinese_traditional ] = "Ãö³¬ ~PlugIn";
             Text[ arabic ] = "ÅíŞÇİ Plug-Ins";
             Text[ dutch ] = "~PlugIns uitschakelen";
             Text[ chinese_simplified ] = "Ê§»î ~Plug-In";
@@ -1151,7 +1151,7 @@ String STR_ENDNOTE
     Text[ russian ] = "Êîíöåâàÿ ñíîñêà:  ";
     Text[ polish ] = "Przypis koñcowy:  ";
     Text[ japanese ] = "•¶––‹r’: ";
-    Text[ chinese_traditional ] = "§Àª`: ";
+    Text[ chinese_traditional ] = "§Àµù: ";
     Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ: ";
     Text[ dutch ] = "Eindnoot:   ";
     Text[ chinese_simplified ] = "Î²×¢: ";
