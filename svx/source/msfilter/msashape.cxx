@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-12 16:12:47 $
+ *  last change: $Author: sj $ $Date: 2002-03-12 17:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4828,9 +4828,9 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
             {
                 nNumElemSeg = nTmp16;
                 bSegAlloc = TRUE;
-                pSegData = new sal_uInt16[ nNumElemSeg ];
-#ifdef __BIGENDIAN
-                sal_uInt32 i = nNumElemSeg;
+                pSegData = new sal_uInt16[ nNumElemSeg + 1 ];   // #97948# allocate one more element,
+#ifdef __BIGENDIAN                                              // so it won't be difficult to append
+                sal_uInt32 i = nNumElemSeg;                     // a missing end segment action
                 sal_uInt16* pTmp = pSegData;
                 while( i-- )
                 {
@@ -4839,6 +4839,8 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
 #else
                 rSt.Read( pSegData, nNumElemSeg << 1 );
 #endif
+                if ( pSegData[ nNumElemSeg - 1 ] != 0x8000 )    // #97948# append the missing segm action
+                    pSegData[ nNumElemSeg++ ] = 0x8000;
             }
         }
         if ( rPropReader.SeekToContent( 342, rSt ) )
