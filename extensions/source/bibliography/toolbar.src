@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-05-07 13:55:20 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 05:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 #include <offmgr/sba.hrc>
 #include "extensio.hrc"
 #include "toolbar.hrc"
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
 ToolBox RID_BIB_TOOLBAR
 {
@@ -316,13 +318,13 @@ ToolBox RID_BIB_TOOLBAR
 ImageList RID_TOOLBAR_IMGLIST
 {
     ImageBitmap = Bitmap { File = "sc_bibdb.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR
     BIB_IMAGES
 };
 ImageList RID_TOOLBAR_IMGLIST_HC
 {
     ImageBitmap = Bitmap { File = "sch_bibdb.bmp" ; };
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+    MASKCOLOR
     BIB_IMAGES
 };
 
