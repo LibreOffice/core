@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:34:26 $
+ *  last change: $Author: af $ $Date: 2001-02-07 13:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 TabPage TP_OPTIONS_SNAP
 {
     HelpID = HID_SD_OPTIONS_SNAP ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Pos = MAP_APPFONT ( 0 , 0  ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     Text = "Fangen/Einrasten" ;
     Text [ ENGLISH ] = "Fangen/Einrasten" ;
@@ -82,8 +82,8 @@ TabPage TP_OPTIONS_SNAP
     Text [ PORTUGUESE ] = "Captura/Encaixe" ;
     FixedText FI_SNAP
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 105 , 33 ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 106 , 33 ) ;
         WordBreak = TRUE ;
         Text = "Das Fangen bezieht sich sowohl auf das Erzeugen als auch auf das Bewegen von Grafikobjekten." ;
         Text [ ENGLISH ] = "Snap To refers to the creation and movement of graphic objects." ;
@@ -111,8 +111,8 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_SNAP_GRID
     {
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 51  ) ;
+        Size = MAP_APPFONT ( 106 , 10 ) ;
         TabStop = TRUE ;
         Text = "Am ~Raster" ;
         Text [ ENGLISH ] = "Am Raster" ;
@@ -140,8 +140,8 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_SNAP_HELPLINES
     {
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 65  ) ;
+        Size = MAP_APPFONT ( 106 , 10 ) ;
         TabStop = TRUE ;
         Text = "An ~Fanglinien" ;
         Text [ ENGLISH ] = "An Fanglinien" ;
@@ -170,8 +170,8 @@ TabPage TP_OPTIONS_SNAP
     CheckBox CBX_SNAP_BORDER
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 72 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 79  ) ;
+        Size = MAP_APPFONT ( 106 , 10 ) ;
         Text = "An den ~Seitenrändern" ;
         Text [ ENGLISH ] = "An den Seitenrändern" ;
         Text [ english_us ] = "~Page margins" ;
@@ -196,8 +196,8 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_SNAP_FRAME
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 93  ) ;
+        Size = MAP_APPFONT ( 106 , 10 ) ;
         TabStop = TRUE ;
         Text = "Am ~Objektrahmen" ;
         Text [ ENGLISH ] = "Am Objektrahmen" ;
@@ -225,8 +225,8 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_SNAP_POINTS
     {
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 107  ) ;
+        Size = MAP_APPFONT ( 106 , 10 ) ;
         TabStop = TRUE ;
         Text = "~An Objektpunkten" ;
         Text [ ENGLISH ] = "An Objektpunkten" ;
@@ -254,7 +254,7 @@ TabPage TP_OPTIONS_SNAP
     };
     FixedText FT_SNAP_AREA
     {
-        Pos = MAP_APPFONT ( 13 , 113 ) ;
+        Pos = MAP_APPFONT ( 12 , 123  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "Fang~bereich" ;
         Text [ ENGLISH ] = "Fangbereich" ;
@@ -283,8 +283,8 @@ TabPage TP_OPTIONS_SNAP
     MetricField MTR_FLD_SNAP_AREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 111 ) ;
-        Size = MAP_APPFONT ( 47 , 12 ) ;
+        Pos = MAP_APPFONT ( 70 , 121  ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -320,8 +320,8 @@ TabPage TP_OPTIONS_SNAP
     };
     GroupBox GRP_SNAP
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 118 , 125 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 119 , 136 ) ;
         Text = "Fangen" ;
         Text [ ENGLISH ] = "Fangen" ;
         Text [ NORWEGIAN ] = "Fangen" ;
@@ -348,8 +348,8 @@ TabPage TP_OPTIONS_SNAP
     };
     FixedText FI_ORTHO
     {
-        Pos = MAP_APPFONT ( 135 , 14 ) ;
-        Size = MAP_APPFONT ( 111 , 57 ) ;
+        Pos = MAP_APPFONT ( 136 , 14  ) ;
+        Size = MAP_APPFONT ( 112 , 59 ) ;
         WordBreak = TRUE ;
         Text = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
         Text [ ENGLISH ] = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
@@ -377,9 +377,9 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_ORTHO
     {
-        Pos = MAP_APPFONT ( 136 , 73 ) ;
+        Pos = MAP_APPFONT ( 136 , 77  ) ;
          // 136, 84
-        Size = MAP_APPFONT ( 111 , 12 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
         TabStop = TRUE ;
         Text = "Beim ~Erzeugen und Bewegen" ;
         Text [ ENGLISH ] = "Beim Erzeugen und Bewegen" ;
@@ -407,9 +407,9 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_BIGORTHO
     {
-        Pos = MAP_APPFONT ( 136 , 84 ) ;
+        Pos = MAP_APPFONT ( 136 , 91  ) ;
          // 136, 95
-        Size = MAP_APPFONT ( 111 , 12 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Längere Kantenlänge" ;
         Text [ ENGLISH ] = "Längere Kantenlänge" ;
@@ -437,9 +437,9 @@ TabPage TP_OPTIONS_SNAP
     };
     CheckBox CBX_ROTATE
     {
-        Pos = MAP_APPFONT ( 136 , 96 ) ;
+        Pos = MAP_APPFONT ( 136 , 107  ) ;
          // 136, 111
-        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
         TabStop = TRUE ;
         Text = "Beim ~Drehen" ;
         Text [ ENGLISH ] = "Beim Drehen" ;
@@ -468,9 +468,9 @@ TabPage TP_OPTIONS_SNAP
     MetricField MTR_FLD_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 194 , 96 ) ;
+        Pos = MAP_APPFONT ( 194 , 105  ) ;
          // 190, 111
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -504,7 +504,7 @@ TabPage TP_OPTIONS_SNAP
     };
     FixedText FT_BEZ_ANGLE
     {
-        Pos = MAP_APPFONT ( 136 , 113 ) ;
+        Pos = MAP_APPFONT ( 136 , 123  ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "~Punktreduktion" ;
         Text [ ENGLISH ] = "Point reduction" ;
@@ -531,8 +531,8 @@ TabPage TP_OPTIONS_SNAP
     MetricField MTR_FLD_BEZ_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 194 , 111 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 194 , 121  ) ;
+        Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -566,8 +566,8 @@ TabPage TP_OPTIONS_SNAP
     };
     GroupBox GRP_ORTHO
     {
-        Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 122 , 125 ) ;
+        Pos = MAP_APPFONT ( 130 , 3  ) ;
+        Size = MAP_APPFONT ( 124 , 136 ) ;
         Text = "Einrasten" ;
         Text [ ENGLISH ] = "Einrasten" ;
         Text [ NORWEGIAN ] = "Einrasten" ;
@@ -607,7 +607,7 @@ TabPage TP_OPTIONS_SNAP
 TabPage TP_OPTIONS_LAYOUT
 {
     HelpID = HID_SD_OPTIONS_LAYOUT ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     Text = "Layout" ;
     Text [ ENGLISH ] = "Layout" ;
@@ -622,8 +622,8 @@ TabPage TP_OPTIONS_LAYOUT
     Text [ portuguese ] = "Configuração" ;
     CheckBox CBX_RULER
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 134 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Lineale sichtbar" ;
         Text [ ENGLISH ] = "Lineale" ;
@@ -651,8 +651,8 @@ TabPage TP_OPTIONS_LAYOUT
     };
     CheckBox CBX_HELPLINES
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 134 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 28  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text = "Hilfslinien beim ~Verschieben" ;
         Text [ ENGLISH ] = "Hilfslinien beim Verschieben" ;
@@ -678,8 +678,8 @@ TabPage TP_OPTIONS_LAYOUT
     };
     CheckBox CBX_HANDLES_BEZIER
     {
-        Pos = MAP_APPFONT ( 12 , 36 ) ;
-        Size = MAP_APPFONT ( 134 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 42  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Alle Steuerpunkte im Bezier-Editor" ;
         Text [ ENGLISH ] = "~All handles in Bézier editor" ;
@@ -705,8 +705,8 @@ TabPage TP_OPTIONS_LAYOUT
     };
     CheckBox CBX_MOVE_OUTLINE
     {
-        Pos = MAP_APPFONT ( 12 , 47 ) ;
-        Size = MAP_APPFONT ( 134 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 56  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Umriss jedes einzelnen Objektes" ;
         Text [ ENGLISH ] = "Umriß jedes einzelnen Objektes" ;
@@ -732,8 +732,8 @@ TabPage TP_OPTIONS_LAYOUT
     };
     GroupBox GRP_DISPLAY
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 144 , 63 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 146 , 69 ) ;
         Text = "Anzeigen" ;
         Text [ ENGLISH ] = "Anzeigen" ;
         Text [ english_us ] = "Display" ;
@@ -780,14 +780,14 @@ TabPage TP_OPTIONS_LAYOUT
     ListBox LB_METRIC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , 86  ) ;
         Size = MAP_APPFONT ( 60 , 50 ) ;
         DropDown = TRUE ;
     };
     GroupBox GRP_METRIC
     {
-        Pos = MAP_APPFONT ( 156 , 3 ) ;
-        Size = MAP_APPFONT ( 98 , 30 ) ;
+        Pos = MAP_APPFONT ( 6 , 75  ) ;
+        Size = MAP_APPFONT ( 146 , 30 ) ;
         Text = "Maßeinheit" ;
         Text [ ENGLISH ] = "Metric Units" ;
         Text [ norwegian ] = "Metriske Enheter" ;
@@ -815,7 +815,7 @@ TabPage TP_OPTIONS_LAYOUT
     MetricField MTR_FLD_TABSTOP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 48 ) ;
+        Pos = MAP_APPFONT ( 12 , 119  ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -831,8 +831,8 @@ TabPage TP_OPTIONS_LAYOUT
     };
     GroupBox GRP_TABSTOP
     {
-        Pos = MAP_APPFONT ( 156 , 36 ) ;
-        Size = MAP_APPFONT ( 98 , 30 ) ;
+        Pos = MAP_APPFONT ( 6 , 108  ) ;
+        Size = MAP_APPFONT ( 146 , 28 ) ;
         Text = "Tabulatorabstand" ;
         Text [ ENGLISH ] = "Tab distance" ;
         Text [ english_us ] = "Tab stops" ;
@@ -870,7 +870,7 @@ TabPage TP_OPTIONS_LAYOUT
 TabPage TP_OPTIONS_CONTENTS
 {
     HelpID = HID_SD_OPTIONS_CONTENTS ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     Text = "Inhalte" ;
     Text [ ENGLISH ] = "Contents" ;
@@ -885,8 +885,8 @@ TabPage TP_OPTIONS_CONTENTS
     Text [ portuguese_brazilian ] = "Inhalte" ;
     CheckBox CBX_EXTERN_GRAPHIC
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Fremdgrafiken andeuten" ;
         Text [ ENGLISH ] = "Fremdgrafiken andeuten" ;
@@ -914,8 +914,8 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_OUTLINEMODE
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 28  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Umrissmodus" ;
         Text [ ENGLISH ] = "Umrißmodus" ;
@@ -941,8 +941,8 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_NOTEXT
     {
-        Pos = MAP_APPFONT ( 12 , 36 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 42  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Text andeuten" ;
         Text [ ENGLISH ] = "Text andeuten" ;
@@ -968,8 +968,8 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_HAIRLINEMODE
     {
-        Pos = MAP_APPFONT ( 12 , 47 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 56  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Nur Haarlinien anzeigen" ;
         Text [ ENGLISH ] = "Nur Haarlinien anzeigen" ;
@@ -997,8 +997,8 @@ TabPage TP_OPTIONS_CONTENTS
     };
     GroupBox GRP_VIEW_SUBSTITUTE
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 130 , 61 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 132 , 69 ) ;
         Text = "Ersatzdarstellung" ;
         Text [ ENGLISH ] = "Ersatzdarstellung" ;
         Text [ NORWEGIAN ] = "Ersatzdarstellung" ;
@@ -1038,7 +1038,7 @@ TabPage TP_OPTIONS_CONTENTS
 TabPage TP_OPTIONS_MISC
 {
     HelpID = HID_SD_OPTIONS_MISC ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     Text = "Sonstiges" ;
     Text [ ENGLISH ] = "Miscellaneous" ;
@@ -1053,8 +1053,8 @@ TabPage TP_OPTIONS_MISC
     Text [ portuguese ] = "Outros" ;
     CheckBox CBX_QUICKEDIT
     {
-        Pos = MAP_APPFONT ( 12 , 13 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 13  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Schnellbearbeitung zulassen" ;
         Text [ ENGLISH ] = "Quick edit" ;
@@ -1080,8 +1080,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_PICKTHROUGH
     {
-        Pos = MAP_APPFONT ( 12 , 24 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 27  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Nur Textbereich selektierbar" ;
         Text [ ENGLISH ] = "Only textarea selectable" ;
@@ -1107,8 +1107,8 @@ TabPage TP_OPTIONS_MISC
     };
     GroupBox GRP_TEXT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 130 , 37 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 132 , 40 ) ;
         Text = "Textobjekte" ;
         Text [ ENGLISH ] = "Text objects" ;
         Text [ english_us ] = "Text objects" ;
@@ -1133,8 +1133,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 57  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "Mit ~Autopiloten starten" ;
         Text [ ENGLISH ] = "~Start with autopilot" ;
@@ -1160,8 +1160,8 @@ TabPage TP_OPTIONS_MISC
     };
     GroupBox GRP_PROGRAMSTART
     {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 130 , 25 ) ;
+        Pos = MAP_APPFONT ( 6 , 46  ) ;
+        Size = MAP_APPFONT ( 132 , 27 ) ;
         Text = "Neues Dokument" ;
         Text [ ENGLISH ] = "New document" ;
         Text [ english_us ] = "New document" ;
@@ -1234,8 +1234,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
-        Pos = MAP_APPFONT ( 12 , 81 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 87  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Cache für Hintergrund benutzen" ;
         Text [ ENGLISH ] = "Use Master page cache" ;
@@ -1261,8 +1261,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_COPY
     {
-        Pos = MAP_APPFONT ( 12 , 92 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 101  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Kopie beim Verschieben" ;
         Text [ ENGLISH ] = "Drag with copy" ;
@@ -1288,8 +1288,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
-        Pos = MAP_APPFONT ( 12 , 103 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 115  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Objekte immer verschiebbar" ;
         Text [ ENGLISH ] = "Objekte immer verschiebbar" ;
@@ -1317,8 +1317,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 129  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "S~etzen auf Kreis: nicht verzerren" ;
         Text [ ENGLISH ] = "Setzen auf Kreis: nicht verzerren" ;
@@ -1346,8 +1346,8 @@ TabPage TP_OPTIONS_MISC
     };
     GroupBox GRP_OTHER
     {
-        Pos = MAP_APPFONT ( 6 , 71 ) ;
-        Size = MAP_APPFONT ( 130 , 58 ) ;
+        Pos = MAP_APPFONT ( 6 , 76  ) ;
+        Size = MAP_APPFONT ( 132 , 69 ) ;
         Text = "Sonstiges" ;
         Text [ ENGLISH ] = "Sonstiges" ;
         Text [ NORWEGIAN ] = "Sonstiges" ;
@@ -1374,8 +1374,8 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
-        Pos = MAP_APPFONT ( 148 , 13 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 159  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Immer mit aktueller Seite" ;
         Text [ ENGLISH ] = "Always with actual page" ;
@@ -1401,8 +1401,8 @@ TabPage TP_OPTIONS_MISC
     };
     GroupBox GRP_START_WITH_ACTUAL_PAGE
     {
-        Pos = MAP_APPFONT ( 142 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 25 ) ;
+        Pos = MAP_APPFONT ( 6 , 148  ) ;
+        Size = MAP_APPFONT ( 132 , 31 ) ;
         Text = "Starten der Präsentation" ;
         Text [ ENGLISH ] = "Start presentation" ;
         Text [ english_us ] = "Start presentation" ;
@@ -1436,3 +1436,6 @@ TabPage TP_OPTIONS_MISC
     Text[ turkish ] = "Diðer";
     Text[ language_user1 ] = " ";
 };
+
+
+

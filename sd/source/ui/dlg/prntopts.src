@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:43:45 $
+ *  last change: $Author: af $ $Date: 2001-02-07 13:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ TabPage TP_PRINT_OPTIONS
 {
     HelpID = HID_SD_PRINT_OPTIONS ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Optionen" ;
     Text [ ENGLISH ] = "Options" ;
     Text [ norwegian ] = "Options" ;
@@ -82,8 +82,8 @@ TabPage TP_PRINT_OPTIONS
     Hide = TRUE;
     RadioButton RBT_DEFAULT
     {
-        Pos = MAP_APPFONT ( 120 , 14 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
+        Pos = MAP_APPFONT ( 120 , 14  ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "St~andard" ;
         Text [ ENGLISH ] = "~Default" ;
         TabStop = TRUE ;
@@ -109,8 +109,8 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_PAGESIZE
     {
-        Pos = MAP_APPFONT ( 120 , 24 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
+        Pos = MAP_APPFONT ( 120 , 28  ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "An ~Seitengröße anpassen" ;
         Text [ ENGLISH ] = "~Fit to page size" ;
         Text [ norwegian ] = "~Tilpass sidestørrelse" ;
@@ -138,8 +138,8 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_PAGETILE
     {
-        Pos = MAP_APPFONT ( 120 , 34 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
+        Pos = MAP_APPFONT ( 120 , 42  ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "Seiten ~kacheln" ;
         Text [ ENGLISH ] = "~Tile pages" ;
         TabStop = TRUE ;
@@ -165,8 +165,8 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_BOOKLET
     {
-        Pos = MAP_APPFONT ( 120 , 44 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
+        Pos = MAP_APPFONT ( 120 , 56  ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "~Prospekt" ;
         Text [ ENGLISH ] = "~Booklet" ;
         TabStop = TRUE ;
@@ -192,8 +192,8 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_FRONT
     {
-        Pos = MAP_APPFONT ( 131 , 56 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 131 , 70  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text = "~Vorderseite" ;
         Text [ ENGLISH ] = "Front" ;
         TabStop = TRUE ;
@@ -219,8 +219,8 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_BACK
     {
-        Pos = MAP_APPFONT ( 188 , 56 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 190 , 70  ) ;
+        Size = MAP_APPFONT ( 58 , 10 ) ;
         Text = "~Rückseite" ;
         Text [ ENGLISH ] = "Back" ;
         TabStop = TRUE ;
@@ -246,8 +246,8 @@ TabPage TP_PRINT_OPTIONS
     };
     GroupBox GRP_PAGE
     {
-        Pos = MAP_APPFONT ( 114 , 3 ) ;
-        Size = MAP_APPFONT ( 140 , 67 ) ;
+        Pos = MAP_APPFONT ( 114 , 3  ) ;
+        Size = MAP_APPFONT ( 139 , 83 ) ;
          //98
         Text = "Seitenoptionen" ;
         Text [ ENGLISH ] = "Page options" ;
@@ -275,7 +275,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_COLOR
     {
-        Pos = MAP_APPFONT ( 120 , 83 ) ;
+        Pos = MAP_APPFONT ( 120 , 100  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Standard" ;
         Text [ ENGLISH ] = "Default" ;
@@ -302,7 +302,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_GRAYSCALE
     {
-        Pos = MAP_APPFONT ( 120 , 93 ) ;
+        Pos = MAP_APPFONT ( 120 , 114  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Graustufen" ;
         Text [ ENGLISH ] = "Grayscale" ;
@@ -329,7 +329,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_BLACKWHITE
     {
-        Pos = MAP_APPFONT ( 120 , 103 ) ;
+        Pos = MAP_APPFONT ( 120 , 128  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Schwarzweiß" ;
         Text [ ENGLISH ] = "Black & White" ;
@@ -356,8 +356,8 @@ TabPage TP_PRINT_OPTIONS
     };
     GroupBox GRP_OUTPUT
     {
-        Pos = MAP_APPFONT ( 114 , 72 ) ;
-        Size = MAP_APPFONT ( 140 , 45 ) ;
+        Pos = MAP_APPFONT ( 114 , 89  ) ;
+        Size = MAP_APPFONT ( 139 , 55 ) ;
         Text = "Ausgabequalität" ;
         Text [ ENGLISH ] = "Output quality" ;
         Text [ english_us ] = "Quality" ;
@@ -382,7 +382,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_PAGENAME
     {
-        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Pos = MAP_APPFONT ( 12 , 86  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Seiten~name" ;
         Text [ ENGLISH ] = "Page~name" ;
@@ -411,7 +411,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_DATE
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 100  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Dat~um" ;
         Text [ ENGLISH ] = "~Date" ;
@@ -440,7 +440,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_TIME
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Pos = MAP_APPFONT ( 12 , 114  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Z~eit" ;
         Text [ ENGLISH ] = "~Time" ;
@@ -469,7 +469,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_HIDDEN_PAGES
     {
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Pos = MAP_APPFONT ( 12 , 128  ) ;
          // 120 , 14
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Ausge~blendeten Seiten" ;
@@ -497,8 +497,8 @@ TabPage TP_PRINT_OPTIONS
     };
     GroupBox GRP_PRINT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 102 , 62 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 102 , 69 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
@@ -526,7 +526,7 @@ TabPage TP_PRINT_OPTIONS
     CheckBox CBX_DRAW
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Ze~ichnung" ;
         Text [ ENGLISH ] = "Drawing" ;
@@ -552,7 +552,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_NOTES
     {
-        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "No~tizen" ;
         Text [ ENGLISH ] = "Notes" ;
@@ -579,7 +579,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_HANDOUTS
     {
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Pos = MAP_APPFONT ( 12 , 42  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Handzette~l" ;
         Text [ ENGLISH ] = "Handouts" ;
@@ -606,7 +606,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_OUTLINE
     {
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 56  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Gliederung" ;
         Text [ ENGLISH ] = "Outliner" ;
@@ -633,8 +633,8 @@ TabPage TP_PRINT_OPTIONS
     };
     GroupBox GRP_PRINT_EXT
     {
-        Pos = MAP_APPFONT ( 6 , 68 ) ;
-        Size = MAP_APPFONT ( 102 , 61 ) ;
+        Pos = MAP_APPFONT ( 6 , 75  ) ;
+        Size = MAP_APPFONT ( 102 , 69 ) ;
         Text = "Drucken von" ;
         Text [ ENGLISH ] = "Print" ;
         Text [ norwegian ] = "Skriv ut" ;
@@ -681,7 +681,7 @@ TabPage TP_PRINT_OPTIONS
 */
     CheckBox CBX_PAPERBIN
     {
-        Pos = MAP_APPFONT ( 114 , 121 ) ;
+        Pos = MAP_APPFONT ( 114 , 150  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Papierschacht aus ~Druckereinstellung" ;
         Text [ ENGLISH ] = "Paperbin from ~Printer settings" ;
@@ -716,3 +716,4 @@ TabPage TP_PRINT_OPTIONS
     Text[ turkish ] = "Seçenekler";
     Text[ language_user1 ] = " ";
 };
+
