@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: as $ $Date: 2001-08-22 13:06:35 $
+ *  last change: $Author: cd $ $Date: 2001-08-24 14:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ void Desktop::Main()
     if ( aFinalDate < aDate )
     {
         String aMsg;
-        aMsg += DEFINE_CONST_UNICODE("This Early Access Version has expired!\n");
+        aMsg += DEFINE_CONST_UNICODE("This Beta Version has expired!\n");
         InfoBox aBox( NULL, aMsg );
         aBox.Execute();
         return;
