@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:54:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ String STR_POOLCHR_BUL_LEVEL
     Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ";
     Text[ russian ] = "Ìàğêåğû ñïèñêà";
     Text[ polish ] = "Symbol wypunktowania";
-    Text[ japanese ] = "‰Óğ‘‚«‹L†‚Æ’i—”Ô†";
+    Text[ japanese ] = "‰Óğ‘‚«‘•ü‹L†";
     Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹";
     Text[ arabic ] = "ÚáÇãÇÊ ÇáÊÚÏÇÏ";
     Text[ greek ] = "Óıìâïëá áñßèìçóçò";
@@ -3887,7 +3887,7 @@ String STR_POOLCOLL_HTML_DD
     Text [ portuguese_brazilian ] = "Listeninhalt" ;
     Text[ chinese_simplified ] = "ÁĞ±íÄÚÈİ";
     Text[ russian ] = "Ñïèñîê ñîäåğæàíèÿ";
-    Text[ polish ] = "Treœæ listy";
+    Text[ polish ] = "Zawartoœæ listy";
     Text[ japanese ] = "Ø½Ä‚Ì“à—e";
     Text[ chinese_traditional ] = "²M³æ¤º®e";
     Text[ arabic ] = "ãÍÊæíÇÊ ÇáŞÇÆãÉ";
