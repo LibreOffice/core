@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 14:57:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,30 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
+#endif
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
+#endif
+
+#ifndef _SVX_BLNKITEM_HXX
+#include <svx/blnkitem.hxx>
+#endif
+#ifndef _SV_MULTISEL_HXX //autogen
+#include <tools/multisel.hxx>
+#endif
+#ifndef _CHARFMT_HXX //autogen
+#include <charfmt.hxx>
+#endif
+#ifndef _FCHRFMT_HXX //autogen
+#include <fchrfmt.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>       // SwRedlineTbl
+#endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>      // SwRedline
 #endif
 
 using namespace ::com::sun::star;
@@ -557,7 +579,6 @@ BYTE SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScrip
     return SW_LATIN;
 }
 
-
 /*************************************************************************
  *                      SwScriptInfo::InitScriptInfo()
  *
@@ -573,6 +594,31 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 {
     if( !pBreakIt->xBreak.is() )
         return;
+
+    const String& rTxt = rNode.GetTxt();
+
+    //
+    // HIDDEN TEXT INFORMATION
+    //
+    Range aRange( 0, rTxt.Len() ? rTxt.Len() - 1 : 0 );
+    MultiSelection aHiddenMulti( aRange );
+    CalcHiddenRanges( rNode, aHiddenMulti );
+
+    aHiddenChg.Remove( 0, aHiddenChg.Count() );
+    USHORT nHiddenIdx = 0;
+    for( USHORT i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+    {
+        const Range& rRange = aHiddenMulti.GetRange( i );
+        const xub_StrLen nStart = (xub_StrLen)rRange.Min();
+        const xub_StrLen nEnd = (xub_StrLen)rRange.Max() + 1;
+
+        aHiddenChg.Insert( nStart, nHiddenIdx++ );
+        aHiddenChg.Insert( nEnd, nHiddenIdx++ );
+    }
+
+    //
+    // SCRIPT AND SCRIPT RELATED INFORMATION
+    //
 
     xub_StrLen nChg = nInvalidityPos;
 
@@ -590,8 +636,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     USHORT nCntKash = 0;
 
     BYTE nScript;
-
-    const String& rTxt = rNode.GetTxt();
 
     // compression type
     const SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
@@ -1153,6 +1197,179 @@ BYTE SwScriptInfo::DirType( const xub_StrLen nPos ) const
 }
 
 /*************************************************************************
+ *                        SwScriptInfo::MaskHiddenRanges(..)
+ * Takes a string and replaced the hidden ranges with cChar.
+ **************************************************************************/
+
+USHORT SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
+                                       const xub_Unicode* pChar )
+{
+    PositionList aList;
+    xub_StrLen nHiddenStart;
+    xub_StrLen nHiddenEnd;
+    USHORT nNumOfHiddenChars = 0;
+    GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
+    PositionList::const_reverse_iterator rFirst( aList.end() );
+    PositionList::const_reverse_iterator rLast( aList.begin() );
+    while ( rFirst != rLast )
+    {
+        nHiddenEnd = *(rFirst++);
+        nHiddenStart = *(rFirst++);
+        nNumOfHiddenChars += ( nHiddenEnd - nHiddenStart );
+
+        if ( pChar )
+        {
+            while ( nHiddenStart < nHiddenEnd && nHiddenStart < rText.Len() )
+                rText.SetChar( nHiddenStart++, *pChar );
+        }
+        else
+            rText.Erase( nHiddenStart, nHiddenEnd - nHiddenStart );
+    }
+
+    return nNumOfHiddenChars;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::GetBoundsOfHiddenRange(..)
+ * static version
+ **************************************************************************/
+
+bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos,
+                                           xub_StrLen& rnStartPos, xub_StrLen& rnEndPos,
+                                           PositionList* pList )
+{
+    rnStartPos = STRING_LEN;
+    rnEndPos = 0;
+
+    bool bNewContainsHiddenChars = false;
+
+    //
+    // Optimization: First examine the flags at the text node:
+    //
+    if ( !rNode.IsCalcHiddenCharFlags() )
+    {
+        bool bWholePara = rNode.HasHiddenCharAttribute( true );
+        bool bContainsHiddenChars = rNode.HasHiddenCharAttribute( false );
+        if ( !bContainsHiddenChars )
+            return false;
+
+        if ( bWholePara )
+        {
+            if ( pList )
+            {
+                pList->push_back( 0 );
+                pList->push_back( rNode.GetTxt().Len() );
+            }
+
+            rnStartPos = 0;
+            rnEndPos = rNode.GetTxt().Len();
+            return true;
+        }
+    }
+
+    const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rNode );
+    if ( pSI )
+    {
+        //
+        // Check first, if we have a valid SwScriptInfo object for this text node:
+        //
+        bNewContainsHiddenChars = pSI->GetBoundsOfHiddenRange( nPos, rnStartPos, rnEndPos, pList );
+        const bool bNewHiddenCharsHidePara = ( rnStartPos == 0 && rnEndPos >= rNode.GetTxt().Len() );
+        rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
+    }
+    else
+    {
+        //
+        // No valid SwScriptInfo Object, we have to do it the hard way:
+        //
+        Range aRange( 0, rNode.GetTxt().Len() ? rNode.GetTxt().Len() - 1 : 0 );
+        MultiSelection aHiddenMulti( aRange );
+        SwScriptInfo::CalcHiddenRanges( rNode, aHiddenMulti );
+        for( USHORT i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+        {
+            const Range& rRange = aHiddenMulti.GetRange( i );
+            const xub_StrLen nHiddenStart = (xub_StrLen)rRange.Min();
+            const xub_StrLen nHiddenEnd = (xub_StrLen)rRange.Max() + 1;
+
+            if ( nHiddenStart > nPos )
+                break;
+            else if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
+            {
+                rnStartPos = nHiddenStart;
+                rnEndPos   = Min( nHiddenEnd, rNode.GetTxt().Len() );
+                break;
+            }
+        }
+
+        if ( pList )
+        {
+            for( USHORT i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+            {
+                const Range& rRange = aHiddenMulti.GetRange( i );
+                pList->push_back( (xub_StrLen)rRange.Min() );
+                pList->push_back( (xub_StrLen)rRange.Max() + 1 );
+            }
+        }
+
+        bNewContainsHiddenChars = aHiddenMulti.GetRangeCount() > 0;
+    }
+
+    return bNewContainsHiddenChars;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::GetBoundsOfHiddenRange(..)
+ * non-static version
+ **************************************************************************/
+
+bool SwScriptInfo::GetBoundsOfHiddenRange( xub_StrLen nPos, xub_StrLen& rnStartPos,
+                                           xub_StrLen& rnEndPos, PositionList* pList ) const
+{
+    rnStartPos = STRING_LEN;
+    rnEndPos = 0;
+
+    USHORT nEnd = CountHiddenChg();
+    for( USHORT nX = 0; nX < nEnd; ++nX )
+    {
+        const xub_StrLen nHiddenStart = GetHiddenChg( nX++ );
+        const xub_StrLen nHiddenEnd = GetHiddenChg( nX );
+
+        if ( nHiddenStart > nPos )
+            break;
+        else if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
+        {
+            rnStartPos = nHiddenStart;
+            rnEndPos   = nHiddenEnd;
+            break;
+        }
+    }
+
+    if ( pList )
+    {
+        for( USHORT nX = 0; nX < nEnd; ++nX )
+        {
+            pList->push_back( GetHiddenChg( nX++ ) );
+            pList->push_back( GetHiddenChg( nX ) );
+        }
+    }
+
+    return CountHiddenChg() > 0;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::IsInHiddenRange()
+ **************************************************************************/
+
+bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
+{
+    xub_StrLen nStartPos;
+    xub_StrLen nEndPos;
+    SwScriptInfo::GetBoundsOfHiddenRange( rNode, nPos, nStartPos, nEndPos );
+    return nStartPos != STRING_LEN;
+}
+
+
+/*************************************************************************
  *                        SwScriptInfo::CompType(..)
  * returns the type of the compressed character
  *************************************************************************/
@@ -1450,7 +1667,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
             pScriptInfo = (SwScriptInfo*)((SwTxtFrm*)pLast)->GetScriptInfo();
             if ( pScriptInfo )
             {
-                if ( ! bAllowInvalid && STRING_LEN != pScriptInfo->GetInvalidity() )
+                if ( !bAllowInvalid && STRING_LEN != pScriptInfo->GetInvalidity() )
                     pScriptInfo = 0;
                 else break;
             }
@@ -1574,4 +1791,120 @@ SwTwips SwTxtFrm::HangingMargin() const
     if( !nRet ) // actualize the margin-flag
         ((SwParaPortion*)GetPara())->SetMargin( sal_False );
     return nRet;
+}
+
+
+/*************************************************************************
+ *                      SwScriptInfo::CalcHiddenRanges()
+ *
+ * Returns a MultiSection indicating the hidden ranges.
+ *************************************************************************/
+
+void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHiddenMulti )
+{
+    const SfxPoolItem* pItem = 0;
+    if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, TRUE, &pItem ) &&
+        ((SvxCharHiddenItem*)pItem)->GetValue() )
+    {
+        rHiddenMulti.SelectAll();
+    }
+
+    const SwpHints* pHints = rNode.GetpSwpHints();
+    const SwTxtAttr* pTxtAttr = 0;
+    bool bHidden = false;
+    bool bHiddenSelect = false;
+
+    if( pHints )
+    {
+        MSHORT nTmp = 0;
+
+        while( nTmp < pHints->GetStartCount() )
+        {
+            pTxtAttr = pHints->GetStart( nTmp++ );
+            switch ( pTxtAttr->Which() )
+            {
+                case RES_CHRATR_HIDDEN:
+                {
+                    bHidden = sal_True;
+                    bHiddenSelect = pTxtAttr->GetCharHidden().GetValue();
+                }
+                break;
+                case RES_TXTATR_CHARFMT:
+                {
+                    SwCharFmt* pFmt;
+                    const SfxPoolItem* pItem;
+                    pFmt = pTxtAttr->GetCharFmt().GetCharFmt();
+                    if ( pFmt )
+                    {
+                        if( SFX_ITEM_SET == pFmt->GetAttrSet().
+                            GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
+                        {
+                            bHidden = sal_True;
+                            bHiddenSelect = ((SvxCharHiddenItem*)pItem)->GetValue();
+                        }
+                    }
+                }
+                break;
+            }
+            if( bHidden )
+            {
+                xub_StrLen nSt = *pTxtAttr->GetStart();
+                xub_StrLen nEnd = *pTxtAttr->GetEnd();
+                if( nEnd > nSt )
+                {
+                    Range aTmp( nSt, nEnd - 1 );
+                    if( bHidden )
+                        rHiddenMulti.Select( aTmp, bHiddenSelect );
+                }
+                bHidden = sal_False;
+            }
+        }
+    }
+
+    // If there are any hidden ranges in the current text node, we have
+    // to unhide the redlining ranges:
+    const SwDoc& rDoc = *rNode.GetDoc();
+    if ( rHiddenMulti.GetRangeCount() && ::IsShowChanges( rDoc.GetRedlineMode() ) )
+    {
+        USHORT nAct = rDoc.GetRedlinePos( rNode );
+
+        for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
+        {
+            const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+
+            if ( pRed->Start()->nNode > rNode.GetIndex() )
+                break;
+
+            xub_StrLen nRedlStart;
+            xub_StrLen nRedlnEnd;
+            pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
+            if ( nRedlnEnd > nRedlStart )
+            {
+                Range aTmp( nRedlStart, nRedlnEnd - 1 );
+                rHiddenMulti.Select( aTmp, false );
+            }
+        }
+    }
+
+    //
+    // We calculated a lot of stuff. Finally we can update the flags at the text node.
+    //
+    const bool bNewContainsHiddenChars = rHiddenMulti.GetRangeCount() > 0;
+    bool bNewHiddenCharsHidePara = false;
+    if ( bNewContainsHiddenChars )
+    {
+        const Range& rRange = rHiddenMulti.GetRange( 0 );
+        const xub_StrLen nHiddenStart = (xub_StrLen)rRange.Min();
+        const xub_StrLen nHiddenEnd = (xub_StrLen)rRange.Max() + 1;
+        bNewHiddenCharsHidePara = ( nHiddenStart == 0 && nHiddenEnd >= rNode.GetTxt().Len() );
+    }
+    rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
+}
+
+void SwTxtNode::CalcHiddenCharFlags() const
+{
+    xub_StrLen nStartPos;
+    xub_StrLen nEndPos;
+    // Update of the flags is done inside GetBoundsOfHiddenRange()
+    SwScriptInfo::GetBoundsOfHiddenRange( *this, 0, nStartPos, nEndPos );
 }
