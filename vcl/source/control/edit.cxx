@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 12:31:34 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 12:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
-
-#include <comphelper/processfactory.hxx>
 
 #include <unohelp.hxx>
 
@@ -1651,7 +1649,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         if ( mpIMEInfos )
         {
-            xub_StrLen nCursorPos = GetSelection().Max();
+            xub_StrLen nCursorPos = (USHORT)GetSelection().Max();
             SetCursorRect( NULL, GetTextWidth(
                 maText, nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
