@@ -10411,7 +10411,7 @@ SfxBoolItem TwainSelect SID_TWAIN_SELECT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem TwainTransfer SID_TWAIN_TRANSFER
+SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER()
 
 [
     /* flags: */
@@ -10426,8 +10426,6 @@ SfxBoolItem TwainTransfer SID_TWAIN_TRANSFER
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -11232,4 +11230,30 @@ SvxCharScaleWidthItem CharacterWidthScalingFactor SID_ATTR_CHAR_SCALEWIDTH
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
+SfxUInt32Item NumberFormatValue SID_ATTR_NUMBERFORMAT_VALUE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
 
