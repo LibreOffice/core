@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:07:02 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 11:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,7 @@ bool office_is_running( Reference< XComponentContext > const & xContext )
                 OUString(), status.getFileURL(), user_path )
             != ::osl::FileBase::E_None)
         {
-            throw RuntimeException(
-                OUSTR("Cannot normalize path ") + user_path, 0 );
+            return false;
         }
 
         rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
