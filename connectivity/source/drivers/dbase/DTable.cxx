@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,13 +563,13 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     sal_Int32 i=0;
-    for(;pBegin != pEnd;++pBegin,++i)
+    for(;pBegin != pEnd;++pBegin)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
             //  *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)  ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
-            aRet.getArray()[i] = *pBegin;
+            aRet.getArray()[i++] = *pBegin;
         }
     }
     aRet.getArray()[i] = ::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 );

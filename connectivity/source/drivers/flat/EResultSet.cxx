@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 06:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,13 +141,13 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     sal_Int32 i=0;
-    for(;pBegin != pEnd;++pBegin,++i)
+    for(;pBegin != pEnd;++pBegin)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XDeleteRows>*)0) ||
             *pBegin == ::getCppuType((const Reference<XResultSetUpdate>*)0) ||
             *pBegin == ::getCppuType((const Reference<XRowUpdate>*)0)))
         {
-            aRet.getArray()[i] = *pBegin;
+            aRet.getArray()[i++] = *pBegin;
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,11 +707,11 @@ void SAL_CALL OCalcTable::disposing(void)
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    Sequence< Type > aRet(aTypes.getLength()-3);
+    Sequence< Type > aRet(aTypes.getLength()-4);
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     sal_Int32 i=0;
-    for(;pBegin != pEnd;++pBegin,++i)
+    for(;pBegin != pEnd;++pBegin)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
             *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
@@ -719,7 +719,7 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
             *pBegin == ::getCppuType((const Reference<XAlterTable>*)0) ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
-            aRet.getArray()[i] = *pBegin;
+            aRet.getArray()[i++] = *pBegin;
         }
     }
     aRet.getArray()[i] = ::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 );

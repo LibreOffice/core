@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,9 @@ void OAdabasCatalog::refreshTables()
         }
     }
     if(m_pTables)
-        delete m_pTables;
-    m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables->reFill(aVector);
+    else
+        m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshViews()
@@ -153,8 +154,9 @@ void OAdabasCatalog::refreshViews()
         }
     }
     if(m_pViews)
-        delete m_pViews;
-    m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
+        m_pViews->reFill(aVector);
+    else
+        m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshGroups()
@@ -170,8 +172,9 @@ void OAdabasCatalog::refreshGroups()
             aVector.push_back(xRow->getString(1));
     }
     if(m_pGroups)
-        delete m_pGroups;
-    m_pGroups = new OGroups(*this,m_aMutex,aVector,m_pConnection,this);
+        m_pGroups->reFill(aVector);
+    else
+        m_pGroups = new OGroups(*this,m_aMutex,aVector,m_pConnection,this);
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshUsers()
@@ -187,8 +190,9 @@ void OAdabasCatalog::refreshUsers()
             aVector.push_back(xRow->getString(1));
     }
     if(m_pUsers)
-        delete m_pUsers;
-    m_pUsers = new OUsers(*this,m_aMutex,aVector,m_pConnection,this);
+        m_pUsers->reFill(aVector);
+    else
+        m_pUsers = new OUsers(*this,m_aMutex,aVector,m_pConnection,this);
 }
 // -------------------------------------------------------------------------
 
