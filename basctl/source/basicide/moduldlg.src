@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:22:10 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ greek ] = "Λειτουργικές μονάδες";
                 Text[ korean ] = "λª¨λ“";
                 Text[ turkish ] = "Modόller";
-                Text[ catalan ] = "Mσdulos";
+                Text[ catalan ] = "Mςduls";
             };
             PageItem
             {
@@ -144,7 +144,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ greek ] = "Βιβλιοθήκες";
                 Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬";
                 Text[ turkish ] = "Kitaplύklar";
-                Text[ catalan ] = "Bibliotecas";
+                Text[ catalan ] = "Biblioteques";
                 Text[ finnish ] = "Kirjastot";
             };
         };
@@ -161,7 +161,7 @@ TabDialog RID_TD_ORGANIZE
     Text[ greek ] = "Διαχείριση μακροεντολών";
     Text[ korean ] = "λ§¤ν¬λ΅ κ΄€λ¦¬";
     Text[ turkish ] = "Makrolarύ yφnet";
-    Text[ catalan ] = "Administrar";
+    Text[ catalan ] = "Organitzador de macros";
     Text[ finnish ] = "Makrojen jδrjestelytyφkalu";
 };
 TabPage RID_TP_MODULS
@@ -196,7 +196,7 @@ TabPage RID_TP_MODULS
         Text[ greek ] = "Λειτουργική μ~ονάδα/Διάλογος";
         Text[ korean ] = "λª¨λ“/λ€ν™” μƒμ(~O)";
         Text[ turkish ] = "Modόl/diyalog";
-        Text[ catalan ] = "Mσd~ulo/Diαlogo";
+        Text[ catalan ] = "Mςdul/Diΰleg";
     };
     /*
     Edit RID_EDIT
@@ -253,7 +253,7 @@ TabPage RID_TP_MODULS
         Text[ japanese ] = "η·¨ι›†(~E)";
         Text[ korean ] = "νΈμ§‘(~E)";
         Text[ turkish ] = "Dόzenle";
-        Text[ catalan ] = "~Editar";
+        Text[ catalan ] = "~Edita";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -293,7 +293,7 @@ TabPage RID_TP_MODULS
         Text[ japanese ] = "ι–‰γγ‚‹";
         Text[ korean ] = "λ‹«κΈ°";
         Text[ turkish ] = "Kapat";
-        Text[ catalan ] = "Cerrar";
+        Text[ catalan ] = "Tanca";
     };
     PushButton RID_PB_NEWMOD
     {
@@ -322,7 +322,7 @@ TabPage RID_TP_MODULS
         Text[ greek ] = "Δημιουργία λειτουργικής ~μονάδας...";
         Text[ korean ] = "μƒ λª¨λ“(~M)...";
         Text[ turkish ] = "Yeni modόl...";
-        Text[ catalan ] = "Nuevo ~mσdulo...";
+        Text[ catalan ] = "~Mςdul nou...";
     };
     PushButton RID_PB_NEWDLG
     {
@@ -351,7 +351,7 @@ TabPage RID_TP_MODULS
         Text[ greek ] = "Δημιουργία διαλό~γου...";
         Text[ korean ] = "μƒ λ€ν™”μƒμ(~N)...";
         Text[ turkish ] = "Yeni diyalog...";
-        Text[ catalan ] = "Nuevo diαlo~go...";
+        Text[ catalan ] = "Diΰleg ~nou...";
     };
     PushButton RID_PB_DELETE
     {
@@ -381,7 +381,7 @@ TabPage RID_TP_MODULS
         Text[ greek ] = "Διαγραφή";
         Text[ korean ] = "μ κ±°(~D)...";
         Text[ turkish ] = "Sil...";
-        Text[ catalan ] = "E~liminar...";
+        Text[ catalan ] = "~Suprimeix...";
     };
 };
 TabPage RID_TP_LIBS
@@ -396,6 +396,26 @@ TabPage RID_TP_LIBS
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Text = "Applikation/D~okument" ;
         Text [ ENGLISH ] = "Application/D~ocument" ;
+        Text[ english_us ] = "Application/D~ocument";
+        Text[ portuguese ] = "Aplicaηγo/D~ocumento";
+        Text[ russian ] = "Application/D~ocument";
+        Text[ greek ] = "Application/D~ocument";
+        Text[ dutch ] = "Application/D~ocument";
+        Text[ french ] = "Application/D~ocument";
+        Text[ spanish ] = "Aplicaciσn/D~ocumento";
+        Text[ finnish ] = "Application/D~ocument";
+        Text[ italian ] = "Applicazione/D~ocumento";
+        Text[ danish ] = "Application/D~ocument";
+        Text[ swedish ] = "Tillδmpning/d~okument";
+        Text[ polish ] = "Aplikacja/D~okument";
+        Text[ portuguese_brazilian ] = "Application/D~ocument";
+        Text[ japanese ] = "Application/D~ocument";
+        Text[ korean ] = "Application/D~ocument";
+        Text[ chinese_simplified ] = "εΊ”η”¨η¨‹εΊ/ζ–‡ζ΅£(~O)";
+        Text[ chinese_traditional ] = "ζ‡‰η”¨η¨‹εΌ/ζ–‡δ»¶(~O)";
+        Text[ turkish ] = "Application/D~ocument";
+        Text[ arabic ] = "Application/D~ocument";
+        Text[ catalan ] = "Application/D~ocument";
     };
     ListBox RID_LB_BASICS
     {
@@ -478,7 +498,7 @@ TabPage RID_TP_LIBS
         Text[ japanese ] = "η·¨ι›†(~E)";
         Text[ korean ] = "νΈμ§‘(~E)";
         Text[ turkish ] = "Dόzenle";
-        Text[ catalan ] = "~Editar";
+        Text[ catalan ] = "~Edita";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -518,7 +538,7 @@ TabPage RID_TP_LIBS
         Text[ japanese ] = "ι–‰γγ‚‹";
         Text[ korean ] = "λ‹«κΈ°";
         Text[ turkish ] = "Kapat";
-        Text[ catalan ] = "Cerrar";
+        Text[ catalan ] = "Tanca";
     };
     PushButton RID_PB_PASSWORD
     {
@@ -547,7 +567,7 @@ TabPage RID_TP_LIBS
         Text[ greek ] = "Κωδικός ~πρόσβασης";
         Text[ korean ] = "ν¨μ¤μ›λ“(~P)...";
         Text[ turkish ] = "ήifre...";
-        Text[ catalan ] = "~Contraseρa...";
+        Text[ catalan ] = "~Contrasenya...";
     };
     PushButton RID_PB_NEWLIB
     {
@@ -576,7 +596,7 @@ TabPage RID_TP_LIBS
         Text[ greek ] = "Δημιουργία...";
         Text[ korean ] = "μƒλ΅(~N)...";
         Text[ turkish ] = "Yeni...";
-        Text[ catalan ] = "~Nuevo...";
+        Text[ catalan ] = "~Nou...";
     };
     PushButton RID_PB_APPEND
     {
@@ -603,7 +623,7 @@ TabPage RID_TP_LIBS
         Text[ greek ] = "Προσθήκη...";
         Text[ korean ] = "μ¶”κ°€(~A)...";
         Text[ turkish ] = "Ekle...";
-        Text[ catalan ] = "~Aρadir...";
+        Text[ catalan ] = "~Afegeix...";
         Text[ finnish ] = "~Liitδ";
     };
     PushButton RID_PB_DELETE
@@ -634,7 +654,7 @@ TabPage RID_TP_LIBS
         Text[ greek ] = "Διαγραφή";
         Text[ korean ] = "μ κ±°(~D)...";
         Text[ turkish ] = "Sil...";
-        Text[ catalan ] = "Elim~inar...";
+        Text[ catalan ] = "~Suprimeix...";
     };
 };
 Resource RID_RES_CHECKBITMAPS
@@ -704,7 +724,7 @@ ModalDialog RID_DLG_LIBS
         Text[ greek ] = "Επιλογές";
         Text[ korean ] = "μ‚¬μ©μ ν™κ²½ μ„¤μ •";
         Text[ turkish ] = "Seηenekler";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
     };
     CheckBox RID_CB_REF
@@ -733,7 +753,7 @@ ModalDialog RID_DLG_LIBS
         Text[ greek ] = "Εισαγωγή ως αναφορά (μόνο για ανάγνωση)";
         Text[ korean ] = "μ°Έμ΅°λ΅μ„ μ‚½μ… (μ½κΈ° μ „μ©)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
-        Text[ catalan ] = "Insertar como referencia (solo leer)";
+        Text[ catalan ] = "Insereix com a referθncia (nomιs de lectura)";
         Text[ finnish ] = "Lisδδ viite (vain luku)";
     };
     CheckBox RID_CB_SEP
@@ -760,7 +780,7 @@ ModalDialog RID_DLG_LIBS
         Text[ greek ] = "Αποθήκευση ως ξεχωριστό αρχείο";
         Text[ korean ] = "λ³„λ„ νμΌλ΅μ„  μ €μ¥";
         Text[ turkish ] = "Ayrύ dosya olarak kaydet";
-        Text[ catalan ] = "Guardar como archivo separado";
+        Text[ catalan ] = "Desa com a fitxer independent";
         Text[ finnish ] = "Tallenna erillisenδ tiedostona";
     };
     CheckBox RID_CB_REPL
@@ -787,7 +807,7 @@ ModalDialog RID_DLG_LIBS
         Text[ greek ] = "Αντικατάσταση υπάρχουσες βιβλιοθήκες";
         Text[ korean ] = "κΈ°μ΅΄ λΌμ΄λΈλ¬λ¦¬ λ€μ²΄";
         Text[ turkish ] = "Mevcut kitaplύπύ deπiώtir";
-        Text[ catalan ] = "Reemplazar bibliotecas existentes";
+        Text[ catalan ] = "Reemplaηa les biblioteques existents";
         Text[ finnish ] = "Korvaa nykyiset kirjastot";
     };
 };
@@ -835,7 +855,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ greek ] = "Ό~νομα:";
         Text[ korean ] = "μ΄λ¦„(~N):";
         Text[ turkish ] = "Ad:";
-        Text[ catalan ] = "~Nombre:";
+        Text[ catalan ] = "~Nom:";
         Text[ finnish ] = "~Nimi:";
     };
     Edit RID_ED_LIBNAME
@@ -871,10 +891,11 @@ ModalDialog RID_DLG_NEWLIB
         Text[ greek ] = "Δημιουργία ξεχωρι~στού αρχείου";
         Text[ korean ] = "λ³„λ„ νμΌ μ‘μ„±(~C)";
         Text[ turkish ] = "Ayrύ dosya oluώtur";
-        Text[ catalan ] = "Crear archivo ~separado";
+        Text[ catalan ] = "Crea un fitxer ~separat";
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
