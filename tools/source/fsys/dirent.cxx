@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-10-18 15:35:30 $
+ *  last change: $Author: hro $ $Date: 2000-10-19 09:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2187,8 +2187,7 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
             // everyone. Use mkdir instead of DirEntry::MakeDir because
             // this returns TRUE even if directory already exists.
 
-                if ( !mkdir( aName.GetBuffer ) )
-                    chmod( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO );
+            mkdir( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO );
 
             // This will not create a directory but perhaps FileStat called
             // there modifies the DirEntry
