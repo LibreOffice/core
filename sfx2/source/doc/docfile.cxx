@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 10:17:37 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2425,6 +2425,45 @@ void SfxMedium::ReOpen()
     GetMedium_Impl();
     pImp->bUseInteractionHandler = bUseInteractionHandler;
 }
+
+//------------------------------------------------------------------
+
+void SfxMedium::CompleteReOpen()
+{
+    // do not use temporary file for reopen and in case of success throw the temporary file away
+    BOOL bUseInteractionHandler = pImp->bUseInteractionHandler;
+    pImp->bUseInteractionHandler = FALSE;
+
+    ::utl::TempFile* pTmpFile = NULL;
+    if ( pImp->pTempFile )
+    {
+        pTmpFile = pImp->pTempFile;
+        pImp->pTempFile = NULL;
+        aName = String();
+    }
+
+    GetMedium_Impl();
+
+    if ( GetError() )
+    {
+        if ( pImp->pTempFile )
+        {
+            pImp->pTempFile->EnableKillingFile( sal_True );
+            delete pImp->pTempFile;
+        }
+        pImp->pTempFile = pTmpFile;
+        aName = pImp->pTempFile->GetFileName();
+    }
+    else
+    {
+        pTmpFile->EnableKillingFile( sal_True );
+        delete pTmpFile;
+
+    }
+
+    pImp->bUseInteractionHandler = bUseInteractionHandler;
+}
+
 //------------------------------------------------------------------
 SfxMedium::SfxMedium
 (
