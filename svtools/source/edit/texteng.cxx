@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-21 09:59:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 12:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2712,7 +2712,7 @@ void TextEngine::RemoveAttribs( ULONG nPara, BOOL bIdleFormatAndUpdate )
         }
     }
 }
-void TextEngine::RemoveAttribs( ULONG nPara, USHORT nWhich )
+void TextEngine::RemoveAttribs( ULONG nPara, USHORT nWhich, BOOL bIdleFormatAndUpdate )
 {
     if ( nPara < mpDoc->GetNodes().Count() )
     {
@@ -2729,7 +2729,10 @@ void TextEngine::RemoveAttribs( ULONG nPara, USHORT nWhich )
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
             pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().Len() );
             mbFormatted = FALSE;
-            FormatAndUpdate( NULL );
+            if(bIdleFormatAndUpdate)
+                IdleFormatAndUpdate( NULL, 0xFFFF );
+            else
+                FormatAndUpdate( NULL );
         }
     }
 }
