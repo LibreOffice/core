@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-28 12:18:14 $
+ *  last change: $Author: pl $ $Date: 2002-06-10 17:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,10 @@ SalFrame *SalInstance::CreateFrame( SalFrame *pParent,
     if( pParent )
         pParent->maFrameData.maChildren.push_back( pFrame );
     pFrame->maFrameData.Init( nSalFrameStyle );
+
+    // initialize system settings update
+    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( pFrame );
+    pIntegrator->Acquire();
 
     return pFrame;
 }
@@ -2010,84 +2014,12 @@ inline Color getColorFromLong( long nColor )
 void SalFrame::UpdateSettings( AllSettings& rSettings )
 {
 
-    static SystemLookInfo aInfo;
-    static BOOL bHaveInfo = FALSE;
-    static BOOL bInit = FALSE;
-
-    if( ! bInit )
-    {
-        bInit = TRUE;
-        DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( this );
-        if( pIntegrator )
-            bHaveInfo = pIntegrator->GetSystemLook( aInfo );
-    }
-
-    if( bHaveInfo )
-    {
-        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-        if( aInfo.windowActiveStart.GetColor() != COL_TRANSPARENT )
-        {
-            aStyleSettings.SetActiveColor( aInfo.windowActiveStart );
-            if( aInfo.windowActiveEnd.GetColor() != COL_TRANSPARENT )
-                aStyleSettings.SetActiveColor2( aInfo.windowActiveEnd );
-        }
-        if( aInfo.windowInactiveStart.GetColor() != COL_TRANSPARENT )
-        {
-            aStyleSettings.SetDeactiveColor( aInfo.windowInactiveStart );
-            if( aInfo.windowInactiveEnd.GetColor() != COL_TRANSPARENT )
-                aStyleSettings.SetDeactiveColor2( aInfo.windowInactiveEnd );
-        }
-        if( aInfo.activeBorder.GetColor() != COL_TRANSPARENT )
-            aStyleSettings.SetActiveBorderColor( aInfo.activeBorder );
-        if( aInfo.inactiveBorder.GetColor() != COL_TRANSPARENT )
-            aStyleSettings.SetDeactiveBorderColor( aInfo.inactiveBorder );
-        if( aInfo.activeForeground.GetColor() != COL_TRANSPARENT )
-            aStyleSettings.SetActiveTextColor( aInfo.activeForeground );
-        if( aInfo.inactiveForeground.GetColor() != COL_TRANSPARENT )
-            aStyleSettings.SetDeactiveTextColor( aInfo.inactiveForeground );
-        if( aInfo.selectForeground.GetColor() != COL_TRANSPARENT )
-            aStyleSettings.SetHighlightTextColor( aInfo.selectForeground );
-        if( aInfo.selectBackground.GetColor() != COL_TRANSPARENT )
-            aStyleSettings.SetHighlightColor( aInfo.selectBackground );
-        if( aInfo.foreground.GetColor() != COL_TRANSPARENT )
-        {
-            aStyleSettings.SetDialogTextColor( aInfo.foreground );
-            aStyleSettings.SetMenuTextColor( aInfo.foreground );
-            aStyleSettings.SetButtonTextColor( aInfo.foreground );
-            aStyleSettings.SetRadioCheckTextColor( aInfo.foreground );
-            aStyleSettings.SetGroupTextColor( aInfo.foreground );
-            aStyleSettings.SetLabelTextColor( aInfo.foreground );
-            aStyleSettings.SetInfoTextColor( aInfo.foreground );
-        }
-        if( aInfo.background.GetColor() != COL_TRANSPARENT )
-        {
-            aStyleSettings.Set3DColors( aInfo.background );
-            aStyleSettings.SetFaceColor( aInfo.background );
-            aStyleSettings.SetDialogColor( aInfo.background );
-            aStyleSettings.SetMenuColor( aInfo.background );
-            aStyleSettings.SetMenuBarColor( aInfo.background );
-            if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
-                aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-            else
-            {
-                // calculate Checked color
-                Color   aColor2 = aStyleSettings.GetLightColor();
-                BYTE    nRed    = (BYTE)(((USHORT)aInfo.background.GetRed()   + (USHORT)aColor2.GetRed())/2);
-                BYTE    nGreen  = (BYTE)(((USHORT)aInfo.background.GetGreen() + (USHORT)aColor2.GetGreen())/2);
-                BYTE    nBlue   = (BYTE)(((USHORT)aInfo.background.GetBlue()  + (USHORT)aColor2.GetBlue())/2);
-                aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
-            }
-        }
-
-        if( aInfo.windowFont.Len() )
-        {
-            Font aWindowFont = aStyleSettings.GetTitleFont();
-            aWindowFont.SetName( aInfo.windowFont );
-            aStyleSettings.SetTitleFont( aWindowFont );
-        }
-
-        rSettings.SetStyleSettings( aStyleSettings );
-    }
+    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( this );
+#ifdef DEBUG
+    fprintf( stderr, "DtIntegrator: %d\n", pIntegrator ? pIntegrator->GetDtType() : -1 );
+#endif
+    if( pIntegrator )
+        pIntegrator->GetSystemLook( rSettings );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2875,17 +2807,13 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         XFree (pHints);
     }
 
-    if( nWidth_ != pEvent->width || nHeight_ != pEvent->height )
-    {
-        nWidth_     = pEvent->width;
-        nHeight_    = pEvent->height;
+    nWidth_     = pEvent->width;
+    nHeight_    = pEvent->height;
 
-        if( maResizeBuffer.IsEmpty() )
-            maResizeBuffer = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
-                                        Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
-
-        maResizeTimer.Start();
-    }
+    if( maResizeBuffer.IsEmpty() )
+        maResizeBuffer = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
+                                    Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
+    maResizeTimer.Start();
 
     pFrame_->maGeometry.nX      = pEvent->x;
     pFrame_->maGeometry.nY      = pEvent->y;
@@ -2922,7 +2850,7 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
         Call ( SALEVENT_RESIZE, NULL );
     else if( bMoved && ! bSized )
         Call ( SALEVENT_MOVE, NULL );
-    else
+    else if( bMoved && bSized )
         Call ( SALEVENT_MOVERESIZE, NULL );
 
     SalPaintEvent aPEvt;

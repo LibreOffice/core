@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:38:14 $
+ *  last change: $Author: pl $ $Date: 2002-06-10 17:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #define _SV_DTINT_HXX
 
 #include <cstdio>
-#include <dlfcn.h>
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -77,9 +76,8 @@
 
 class SalFrame;
 class SalBitmap;
-class String;
 class SalDisplay;
-class FastItemInfo;
+class AllSettings;
 
 #ifndef _XLIB_H_
 // forwards from X
@@ -89,68 +87,9 @@ struct XEvent;
 #define XLIB_Window UINT32
 #endif
 
-#define XDND_PROTOCOL_VERSION 3
-
-// NETBSD has no RTLD_GLOBAL
-#ifndef RTLD_GLOBAL
-#define DLOPEN_MODE (RTLD_LAZY)
-#else
-#define DLOPEN_MODE (RTLD_GLOBAL | RTLD_LAZY)
-#endif
-
 class DtIntegrator;
 
 DECLARE_LIST( DtIntegratorList, DtIntegrator* );
-
-struct SystemLookInfo
-{
-    /** system foreground color */
-    Color                           foreground;
-    /** system background color */
-    Color                           background;
-    /** system foreground color for a selection */
-    Color                           selectForeground;
-    /** system background color for a selection */
-    Color                           selectBackground;
-
-    /** gradient for an active window */
-    Color                           windowActiveStart;
-    Color                           windowActiveEnd;
-    /** border color for active window */
-    Color                           activeBorder;
-    /** text color for active window bar */
-    Color                           activeForeground;
-    /** gradient of an inactive window */
-    Color                           windowInactiveStart;
-    Color                           windowInactiveEnd;
-    /** border color for inactive window */
-    Color                           inactiveBorder;
-    /** text color for inactive window bar */
-    Color                           inactiveForeground;
-
-    /** font to use for controls. Empty if not set. */
-    String                          controlFont;
-    /** font to use for dragbars. Empty if not set. */
-    String                          windowFont;
-
-    SystemLookInfo()
-        {
-            foreground.SetColor( COL_TRANSPARENT );
-            background.SetColor( COL_TRANSPARENT );
-            selectBackground.SetColor( COL_TRANSPARENT );
-            selectForeground.SetColor( COL_TRANSPARENT );
-
-            windowActiveStart.SetColor( COL_TRANSPARENT );
-            windowActiveEnd.SetColor( COL_TRANSPARENT );
-            activeBorder.SetColor( COL_TRANSPARENT );
-            activeForeground.SetColor( COL_TRANSPARENT );
-
-            windowInactiveStart.SetColor( COL_TRANSPARENT );
-            windowInactiveEnd.SetColor( COL_TRANSPARENT );
-            inactiveBorder.SetColor( COL_TRANSPARENT );
-            inactiveForeground.SetColor( COL_TRANSPARENT );
-        }
-};
 
 enum DtType {
     DtGeneric,
@@ -169,6 +108,7 @@ protected:
     SalDisplay*         mpSalDisplay;
     SalFrame*           mpSalFrame;
     int                 mnRefCount;
+    int                 mnSystemLookCommandProcess;
 
 
     DtIntegrator( SalFrame* );
@@ -176,13 +116,21 @@ protected:
     static DtIntegratorList aIntegratorList;
     static String           aHomeDir;
 
+    // executes pCommand and parses its output
+    // to get system look information
+    // different DtIntegrators can rely
+    // on native programs to query system settings
+    // pass NULL as command to read the VCL_SYSTEM_SETTINGS property
+    void GetSystemLook( const char* pCommand, AllSettings& rSettings );
+    bool StartSystemLookProcess( const char* pCommand );
+
 public:
     static DtIntegrator* CreateDtIntegrator( SalFrame* );
 
     virtual ~DtIntegrator();
 
     // SystemLook
-    virtual BOOL GetSystemLook( SystemLookInfo& rInfo );
+    virtual void GetSystemLook( AllSettings& rSettings );
 
     DtType          GetDtType() { return meType; }
     SalFrame*       GetFrame() { return mpSalFrame; }
@@ -201,35 +149,6 @@ inline void DtIntegrator::Release()
         aIntegratorList.Remove( this );
         delete this;
     }
-}
-
-// helper funktions for dynamic loading
-extern BOOL bSymbolLoadFailed;
-
-inline void* _LoadSymbol( void* pLibrary, char* pSymbolname )
-{
-    void *pRet = dlsym( pLibrary, pSymbolname );
-    if( ! pRet )
-    {
-        std::fprintf( stderr, "Could not load symbol %s: %s\n",
-                 pSymbolname, dlerror() );
-        bSymbolLoadFailed = TRUE;
-    }
-    return pRet;
-}
-inline void* _LoadLibrary( char* pLibname )
-{
-    bSymbolLoadFailed = FALSE;
-    void *pRet = dlopen( pLibname, DLOPEN_MODE );
-    if( ! pRet )
-    {
-#ifdef DEBUG
-        std::fprintf( stderr, "%s could not be opened: %s\n",
-                 pLibname, dlerror() );
-#endif
-        bSymbolLoadFailed = TRUE;
-    }
-    return pRet;
 }
 
 #endif

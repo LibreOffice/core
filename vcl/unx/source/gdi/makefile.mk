@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+#   last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SLOFILES=	\
         $(SLO)$/charnames.obj	\
         $(SLO)$/dtint.obj		\
         $(SLO)$/kdeint.obj		\
+        $(SLO)$/gnomeint.obj	\
         $(SLO)$/salcvt.obj		\
         $(SLO)$/ansi1252.obj	\
         $(SLO)$/xfont.obj		\

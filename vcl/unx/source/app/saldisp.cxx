@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cp $ $Date: 2002-02-18 19:16:13 $
+ *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,9 @@ extern "C" { int gethostname(char*,int); }
 #include <osl/socket.h>
 #include <rtl/ustring>
 
+using namespace rtl;
+using namespace vcl_sal;
+
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PSEUDOCOLOR12
@@ -427,7 +430,7 @@ sal_IsDisplayNumber( const char *pDisplayString )
 
 // check whether host1 and host2 point to the same ip address
 static BOOL
-sal_EqualHosts( const ::rtl::OUString& Host1, const ::rtl::OUString& Host2)
+sal_EqualHosts( const OUString& Host1, const OUString& Host2)
 {
     oslSocketAddr pHostAddr1;
     oslSocketAddr pHostAddr2;
@@ -488,11 +491,11 @@ sal_IsLocalDisplay( Display *pDisplay )
 
     if( pPtr != NULL )
     {
-        ::rtl::OUString aLocalHostname;
+        OUString aLocalHostname;
         if( osl_getLocalHostname( &aLocalHostname.pData ) == osl_Socket_Ok)
         {
             *pPtr = '\0';
-            ::rtl::OUString aDisplayHostname( pDisplayHost, strlen( pDisplayHost ), gsl_getSystemTextEncoding() );
+            OUString aDisplayHostname( pDisplayHost, strlen( pDisplayHost ), osl_getThreadTextEncoding() );
             bEqual = sal_EqualHosts( aLocalHostname, aDisplayHostname );
             bEqual = bEqual && sal_IsDisplayNumber( pPtr + 1 );
         }
@@ -853,11 +856,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         pScreen_        = ScreenOfDisplay( pDisp_, nScreen_ );
         hRootWindow_    = RootWindowOfScreen( pScreen_ );
 
-        // we are interested in create and destroy notify events
-        // for salsystem
-        if( hRootWindow_ != None )
-            XSelectInput( pDisp_, hRootWindow_, SubstructureNotifyMask );
-
         bLocal_         = FALSE; /* dont care, initialize later by
                                     calling SalDisplay::IsLocal() */
         mbLocalIsValid  = FALSE; /* bLocal_ is not yet initialized */
@@ -892,7 +890,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                                          &aXWAttributes );
 
         // set client leader and session id
-        const ByteString& rSessionID( SessionManagerClient::getSessionID() );
+        const ByteString& rSessionID = SessionManagerClient::getSessionID();
         if( hRefWindow_ )
         {
             if( rSessionID.Len() )
@@ -920,11 +918,14 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 
                              );
 
-            ByteString aExec( SessionManagerClient::getExecName(), gsl_getSystemTextEncoding() );
+            ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
             char* argv[2];
             argv[0] = "/bin/sh";
             argv[1] = const_cast<char*>(aExec.GetBuffer());
             XSetCommand( pDisp_, hRefWindow_, argv, 2 );
+
+            XSelectInput( pDisp_, hRefWindow_, PropertyChangeMask );
+
         }
 
         // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
@@ -1257,18 +1258,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
 #ifdef DBG_UTIL
     PrintInfo();
-#endif
-
-#ifdef DEBUG
-    fprintf( stderr, "Keyboard name: %s\n", GetKeyboardName() );
-    String aConvert = GetKeyNameFromKeySym( XK_Control_L );
-    fprintf( stderr, "Control: %s\n", aConvert.Len() ? ByteString( aConvert, gsl_getSystemTextEncoding() ).GetBuffer() : "<nil>" );
-    aConvert = GetKeyNameFromKeySym( XK_Shift_L );
-    fprintf( stderr, "Shift: %s\n", aConvert.Len() ? ByteString( aConvert, gsl_getSystemTextEncoding() ).GetBuffer() : "<nil>" );
-    aConvert = GetKeyNameFromKeySym( XK_Alt_L );
-    fprintf( stderr, "Alt: %s\n", aConvert.Len() ? ByteString( aConvert, gsl_getSystemTextEncoding() ).GetBuffer() : "<nil>" );
-    aConvert = GetKeyNameFromKeySym( XK_Alt_R );
-    fprintf( stderr, "AltGr: %s\n", aConvert.Len() ? ByteString( aConvert, gsl_getSystemTextEncoding() ).GetBuffer() : "<nil>" );
 #endif
 }
 
@@ -2608,6 +2597,18 @@ long SalDisplay::Dispatch( XEvent *pEvent )
                                       pEvent ) )
                 ;
             break;
+        case PropertyNotify:
+            if( pEvent->xproperty.window == hRefWindow_ &&
+                pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
+            {
+                SalFrame *pFrame = GetSalData()->pFirstFrame_;
+                while( pFrame )
+                {
+                    pFrame->maFrameData.Call( SALEVENT_SETTINGSCHANGED, NULL );
+                    pFrame = pFrame->maFrameData.GetNextFrame();
+                }
+            }
+            return 0;
 
         case MappingNotify:
             if( MappingKeyboard == pEvent->xmapping.request )

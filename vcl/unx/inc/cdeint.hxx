@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2002-06-10 17:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ private:
 public:
     virtual ~CDEIntegrator();
 
-    virtual BOOL GetSystemLook( SystemLookInfo& rInfo );
+    virtual void GetSystemLook( AllSettings& rSettings );
 };
 
 #endif

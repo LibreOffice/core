@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-01 12:56:44 $
+ *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include <salunx.h>
 #include <saldisp.hxx>
 #include <cdeint.hxx>
-#include <salbmp.hxx>
 #include <salframe.hxx>
-#include <soicon.hxx>
+#include <settings.hxx>
+
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
@@ -95,7 +94,7 @@ static int getHexDigit( const char c )
 }
 
 
-BOOL CDEIntegrator::GetSystemLook( SystemLookInfo& rInfo )
+void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
 {
     static Color aColors[ 8 ];
     static sal_Bool bRead = sal_False;
@@ -218,26 +217,53 @@ BOOL CDEIntegrator::GetSystemLook( SystemLookInfo& rInfo )
             XFree( aTextProperty.value );
     }
 
-    rInfo.windowActiveStart = aColors[0];
-    rInfo.windowActiveEnd = aColors[0];
-    rInfo.activeBorder = aColors[0];
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
-    rInfo.windowInactiveStart = aColors[1];
-    rInfo.windowInactiveEnd = aColors[1];
-    rInfo.inactiveBorder = aColors[1];
+    aStyleSettings.SetActiveColor( aColors[0] );
+    aStyleSettings.SetActiveColor2( aColors[0] );
+    aStyleSettings.SetActiveBorderColor( aColors[0] );
 
-    rInfo.activeForeground =
+    aStyleSettings.SetDeactiveColor( aColors[0] );
+    aStyleSettings.SetDeactiveColor2( aColors[0] );
+    aStyleSettings.SetDeactiveBorderColor( aColors[0] );
+
+    Color aActive =
         aColors[ 0 ].GetBlue() < 128        ||
         aColors[ 0 ].GetGreen() < 128       ||
         aColors[ 0 ].GetRed() < 128
         ? Color( COL_WHITE ) : Color( COL_BLACK );
-    rInfo.inactiveForeground =
+    Color aDeactive =
         aColors[ 1 ].GetBlue() < 128        ||
         aColors[ 1 ].GetGreen() < 128       ||
         aColors[ 1 ].GetRed() < 128
         ? Color( COL_WHITE ) : Color( COL_BLACK );
-    rInfo.foreground    = rInfo.inactiveForeground;
-    rInfo.background    = aColors[ 1 ];
+    aStyleSettings.SetActiveTextColor( aActive );
+    aStyleSettings.SetDeactiveTextColor( aDeactive );
 
-    return TRUE;
+    aStyleSettings.SetDialogTextColor( aActive );
+    aStyleSettings.SetMenuTextColor( aActive );
+    aStyleSettings.SetButtonTextColor( aActive );
+    aStyleSettings.SetRadioCheckTextColor( aActive );
+    aStyleSettings.SetGroupTextColor( aActive );
+    aStyleSettings.SetLabelTextColor( aActive );
+    aStyleSettings.SetInfoTextColor( aActive );
+
+    aStyleSettings.Set3DColors( aColors[1] );
+    aStyleSettings.SetFaceColor( aColors[1] );
+    aStyleSettings.SetDialogColor( aColors[1] );
+    aStyleSettings.SetMenuColor( aColors[1] );
+    aStyleSettings.SetMenuBarColor( aColors[1] );
+    if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
+        aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
+    else
+    {
+        // calculate Checked color
+        Color   aColor2 = aStyleSettings.GetLightColor();
+        BYTE    nRed    = (BYTE)(((USHORT)aColors[1].GetRed()   + (USHORT)aColor2.GetRed())/2);
+        BYTE    nGreen  = (BYTE)(((USHORT)aColors[1].GetGreen() + (USHORT)aColor2.GetGreen())/2);
+        BYTE    nBlue   = (BYTE)(((USHORT)aColors[1].GetBlue()  + (USHORT)aColor2.GetBlue())/2);
+        aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
+    }
+
+    rSettings.SetStyleSettings( aStyleSettings );
 }
