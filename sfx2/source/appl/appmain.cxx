@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:03:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,35 +341,43 @@ USHORT SfxApplication::ParseCommandLine_Impl()
 }
 
 //---------------------------------------------------------------------------
-void SfxApplication::InitLabelResMgr( const char* pLabelPrefix )
+bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bException )
 {
+    bool bRet = false;
     // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
     pAppData_Impl->bBean = FALSE;
     pAppData_Impl->nAppEvent = ParseCommandLine_Impl();
-    if ( pLabelPrefix )
+    if ( _pLabelPrefix )
     {
         // versuchen, die Label-DLL zu erzeugen
-        pAppData_Impl->pLabelResMgr = CreateResManager( pLabelPrefix );
+        pAppData_Impl->pLabelResMgr = CreateResManager( _pLabelPrefix );
 
         // keine separate Label-DLL vorhanden?
         if ( !pAppData_Impl->pLabelResMgr )
         {
-            // maybe corrupted installation
-            throw (::com::sun::star::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("iso resource could not be loaded by SfxApplication"),
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
-
+            if ( _bException )
+            {
+                // maybe corrupted installation
+                throw (::com::sun::star::uno::RuntimeException(
+                    ::rtl::OUString::createFromAscii("iso resource could not be loaded by SfxApplication"),
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
+            }
         }
+        else
+            bRet = true;
     }
     else
     {
         pAppData_Impl->bBean = TRUE;
         pAppData_Impl->bInvisible = TRUE;
+        bRet = true;
     }
 
     // merken, falls Applikation normal gestartet wurde
     if ( 0 == pAppData_Impl->nAppEvent || DISPATCH_OPEN == pAppData_Impl->nAppEvent )
         pAppData_Impl->bDirectAliveCount = TRUE;
+
+    return bRet;
 }
 
 void SfxApplication::Main( )
