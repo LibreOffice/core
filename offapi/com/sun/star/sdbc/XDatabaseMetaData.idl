@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 12:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Can all the procedures returned by getProcedures be called by the
         current user?
 
-<!-- JRH:/MI: These questions are unclear, see "@return\<TRUE>..." examples in this document for a better solution. -->
+<!-- JRH:/MI: These questions are unclear, see "@return\<TRUE/>..." examples in this document for a better solution. -->
      */
     boolean allProceduresAreCallable() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -358,15 +358,15 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTypeConversion
     /** @returns
-            <TRUE>, if the Database supports the CONVERT function between SQL types,
-            otherwise <FALSE>.
+            <TRUE/>, if the Database supports the CONVERT function between SQL types,
+            otherwise <FALSE/>.
      */
     boolean supportsTypeConversion() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsConvert
     /** @returns
-            <TRUE>, if the Database supports the CONVERT between the given SQL types
+            <TRUE/>, if the Database supports the CONVERT between the given SQL types
             otherwise <FALSE>.
      */
     boolean supportsConvert([in]long fromType, [in]long toType)
@@ -445,7 +445,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMinimumSQLGrammar
     /** @returns
-            <TRUE>, if the database supports ODBC Minimum SQL grammar,
+            <TRUE/>, if the database supports ODBC Minimum SQL grammar,
             otherwise <FALSE>.
      */
     boolean supportsMinimumSQLGrammar() raises (SQLException);
@@ -453,7 +453,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCoreSQLGrammar
     /** @returns
-            <TRUE>, if the database supports ODBC Core SQL grammar,
+            <TRUE/>, if the database supports ODBC Core SQL grammar,
             otherwise <FALSE>.
      */
      */
@@ -462,7 +462,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsExtendedSQLGrammar
     /** @returns
-            <TRUE>, if the database supports ODBC Extended SQL grammar,
+            <TRUE/>, if the database supports ODBC Extended SQL grammar,
             otherwise <FALSE>.
      */
     boolean supportsExtendedSQLGrammar() raises (SQLException);
@@ -470,7 +470,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92EntryLevelSQL
     /** @returns
-            <TRUE>, if the database supports ANSI92 entry level SQL grammar,
+            <TRUE/>, if the database supports ANSI92 entry level SQL grammar,
             otherwise <FALSE>.
      */
     boolean supportsANSI92EntryLevelSQL() raises (SQLException);
@@ -478,7 +478,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92IntermediateSQL
     /** @returns
-            <TRUE>, if the database supports ANSI92 intermediate SQL grammar,
+            <TRUE/>, if the database supports ANSI92 intermediate SQL grammar,
             otherwise <FALSE>.
      */
     boolean supportsANSI92IntermediateSQL() raises (SQLException);
@@ -486,7 +486,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92FullSQL
     /** @returns
-            <TRUE>, if the database supports ANSI92 full SQL grammar,
+            <TRUE/>, if the database supports ANSI92 full SQL grammar,
             otherwise <FALSE>.
      */
     boolean supportsANSI92FullSQL() raises (SQLException);
@@ -494,7 +494,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsIntegrityEnhancementFacility
     /** returns
-            <TRUE>, if the Database supports SQL Integrity Enhancement Facility,
+            <TRUE/>, if the Database supports SQL Integrity Enhancement Facility,
             otherwise <FALSE>.
      */
     boolean supportsIntegrityEnhancementFacility() raises (SQLException);
@@ -502,7 +502,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOuterJoins
     /** @returns
-            <TRUE>, if some form of outer join is supported,
+            <TRUE/>, if some form of outer join is supported,
             otherwise <FALSE>.
      */
     boolean supportsOuterJoins() raises (SQLException);
@@ -510,7 +510,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsFullOuterJoins
     /** @returns
-            <TRUE>, if full nested outer joins are supported,
+            <TRUE/>, if full nested outer joins are supported,
             otherwise <FALSE>.
      */
     boolean supportsFullOuterJoins() raises (SQLException);
@@ -518,7 +518,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsLimitedOuterJoins
     /** @returns
-            <TRUE>, if there is limited support for outer joins.
+            <TRUE/>, if there is limited support for outer joins.
             (This will be true if supportFullOuterJoins is true.)
             <FALSE> is returned otherwise.
      */
@@ -2064,6 +2064,9 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.5  2001/03/16 16:41:35  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
