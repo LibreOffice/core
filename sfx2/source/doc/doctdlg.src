@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:17:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ japanese ] = "ζ–°γ—γ„γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγƒ†γƒ³γƒ—γƒ¬γƒΌγƒ";
         Text[ chinese_traditional ] = "ι–‹ε•ζ–°ζ–‡δ»¶ζ¨£εΌ";
         Text[ arabic ] = "ήΗαΘ γΣΚδΟ ΜΟνΟ";
-        Text[ greek ] = "Δημιουργία πρότυπου εγγράφου";
+        Text[ greek ] = "Δημιουργία προτύπου";
         Text[ korean ] = "μƒ μ„μ‹ νμΌ";
         Text[ turkish ] = "Yeni ώablon";
         Text[ language_user1 ] = " ";
@@ -337,6 +337,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text[ hindi ] = "ΰ¤¨ΰ¤®ΰ¥‚ΰ¤¨ΰ¥‡ΰ¤‚";
     Text[ slovak ] = "Ε ablΓ³ny";
 };
+
 
 
 
