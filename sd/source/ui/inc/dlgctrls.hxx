@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrls.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:21:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef SD_DLGCTRLS_HXX
 #define SD_DLGCTRLS_HXX
 
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
-#include <com/sun/star/presentation/FadeEffect.hpp>
+#ifndef _SD_TRANSITIONPRESET_HXX
+#include "TransitionPreset.hxx"
 #endif
 
 #ifndef _SV_LSTBOX_HXX //autogen
@@ -87,21 +87,25 @@
 |* FadeEffectLB
 |*
 \************************************************************************/
+
+struct FadeEffectLBImpl;
+
 class SD_DLLPUBLIC FadeEffectLB : public ListBox
 {
-private:
+public:
+                                FadeEffectLB( Window* pParent, SdResId Id );
+                                FadeEffectLB( Window* pParent, WinBits aWB );
+                                ~FadeEffectLB();
+    virtual void                Fill();
 
+/*  void                        selectEffectFromPage( SdPage* pPage ); */
+    void                        applySelected( SdPage* pSlide ) const;
+
+private:
     USHORT                      GetSelectEntryPos() const { return ListBox::GetSelectEntryPos(); }
     void                        SelectEntryPos( USHORT nPos ) { ListBox::SelectEntryPos( nPos ); }
 
-public:
-                                FadeEffectLB( Window* pParent, SdResId Id ) : ListBox( pParent, Id ) {}
-                                FadeEffectLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
-
-    virtual void                Fill();
-
-    void                                        SelectEffect( ::com::sun::star::presentation::FadeEffect eFE );
-    ::com::sun::star::presentation::FadeEffect  GetSelectedEffect() const;
+    FadeEffectLBImpl*           mpImpl;
 };
 
 #endif // SD_DLGCTRLS_HXX
