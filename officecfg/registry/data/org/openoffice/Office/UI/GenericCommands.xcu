@@ -61,7 +61,7 @@
                     <value xml:lang="th">Bildlaufleiste</value>
                     <value xml:lang="tr">Bildlaufleiste</value>
                     <value xml:lang="hi">Bildlaufleiste</value>
-                    <value xml:lang="zh-CN">Bildlaufleiste</value>
+                    <value xml:lang="zh-CN">滚动条</value>
                     <value xml:lang="pt">Bildlaufleiste</value>
                 </prop>
             </node>
@@ -154,7 +154,7 @@
                     <value xml:lang="th">Ersetzen durch Bildlaufleiste</value>
                     <value xml:lang="tr">Ersetzen durch Bildlaufleiste</value>
                     <value xml:lang="hi">Ersetzen durch Bildlaufleiste</value>
-                    <value xml:lang="zh-CN">Ersetzen durch Bildlaufleiste</value>
+                    <value xml:lang="zh-CN">用滚动条替换</value>
                     <value xml:lang="pt">Ersetzen durch Bildlaufleiste</value>
                 </prop>
             </node>
@@ -185,7 +185,7 @@
                     <value xml:lang="th">Ersetzen durch Drehfeld</value>
                     <value xml:lang="tr">Ersetzen durch Drehfeld</value>
                     <value xml:lang="hi">Ersetzen durch Drehfeld</value>
-                    <value xml:lang="zh-CN">Ersetzen durch Drehfeld</value>
+                    <value xml:lang="zh-CN">用选值按钮替换</value>
                     <value xml:lang="pt">Ersetzen durch Drehfeld</value>
                 </prop>
             </node>
@@ -4668,7 +4668,7 @@
                     <value xml:lang="fi">Numeerinen kenttä</value>
                     <value xml:lang="fr">Champ numérique</value>
                     <value xml:lang="he">‮שדה נומרי‬</value>
-                    <value xml:lang="it">Campo  numerico</value>
+                    <value xml:lang="it">Campo numerico</value>
                     <value xml:lang="ja">番号フィールド</value>
                     <value xml:lang="ko">숫자 필드</value>
                     <value xml:lang="nl">Numeriek veld</value>
@@ -6204,7 +6204,7 @@
                     <value xml:lang="th">กระดา~ษคำนวณ</value>
                     <value xml:lang="tr">~Tablo</value>
                     <value xml:lang="hi">~स्प्रेडशीट्</value>
-                    <value xml:lang="zh-CN">工作表(~R)</value>
+                    <value xml:lang="zh-CN">工作表</value>
                     <value xml:lang="pt">~Folha de cálculo...</value>
                 </prop>
             </node>
@@ -6917,7 +6917,7 @@
                     <value xml:lang="th">ออกแ~บบตัวอักษร</value>
                     <value xml:lang="tr">Yazı tipi düzeni</value>
                     <value xml:lang="hi">फ़ॉ~न्टवर्क</value>
-                    <value xml:lang="zh-CN">美工字体(~O)</value>
+                    <value xml:lang="zh-CN">美工字体</value>
                     <value xml:lang="pt">Font~Work</value>
                 </prop>
             </node>
@@ -7204,7 +7204,7 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Frame löschen</value>
                     <value xml:lang="en-US">Delete Frame</value>
-                    <value xml:lang="ar">حذف  إطار</value>
+                    <value xml:lang="ar">حذف إطار</value>
                     <value xml:lang="no">Delete Frame</value>
                     <value xml:lang="ca">Suprimeix el marc</value>
                     <value xml:lang="zh-TW">刪除訊框</value>
@@ -9614,7 +9614,7 @@
                     <value xml:lang="th">ไพวงกลม, ไม่เติม</value>
                     <value xml:lang="tr">Boş daire dilimi</value>
                     <value xml:lang="hi">वृत्त पई, न भरा हुआ</value>
-                    <value xml:lang="zh-CN">圆扇形，未填色</value>
+                    <value xml:lang="zh-CN">扇形，未填色</value>
                     <value xml:lang="pt">Sector de círculo, não preenchido</value>
                 </prop>
             </node>
@@ -9676,7 +9676,7 @@
                     <value xml:lang="th">ส่วนของวงกลม, ไม่เติม</value>
                     <value xml:lang="tr">Boş daire parçası</value>
                     <value xml:lang="hi">वृत्त भाग, न भरा हुआ</value>
-                    <value xml:lang="zh-CN">圆缺，未填色</value>
+                    <value xml:lang="zh-CN">弓形，未填色</value>
                     <value xml:lang="pt">Segmento de círculo, não preenchido</value>
                 </prop>
             </node>
@@ -9769,7 +9769,7 @@
                     <value xml:lang="th">รูปหลายเหลี่ยม (45ฐ), เติม</value>
                     <value xml:lang="tr">Dolu çokgen (45°)</value>
                     <value xml:lang="hi">बहुभुज क्षेत्र (45Â°), भरा हुआ</value>
-                    <value xml:lang="zh-CN">填色直角多边形(45度)</value>
+                    <value xml:lang="zh-CN">多边形(45度)，填色</value>
                     <value xml:lang="pt">Polígono (45°), preenchido</value>
                 </prop>
             </node>
@@ -12538,7 +12538,7 @@
                     <value xml:lang="th">ตัวควบคุมแบบฟอร์ม</value>
                     <value xml:lang="tr">Form Fonksiyonlarını Göster</value>
                     <value xml:lang="hi">फ़ॉर्म नियंत्रण</value>
-                    <value xml:lang="zh-CN">显示表单功能</value>
+                    <value xml:lang="zh-CN">显示表单函数</value>
                     <value xml:lang="pt">Campos de controlo - Formulário</value>
                 </prop>
             </node>
@@ -12600,7 +12600,7 @@
                     <value xml:lang="th">ปุ่มตัวเลือก</value>
                     <value xml:lang="tr">Seçenek düğmesi</value>
                     <value xml:lang="hi">विकल्प बटन</value>
-                    <value xml:lang="zh-CN">选项字段</value>
+                    <value xml:lang="zh-CN">选项按钮</value>
                     <value xml:lang="pt">Botão de opção</value>
                 </prop>
             </node>
@@ -12910,7 +12910,7 @@
                     <value xml:lang="th">คว~บคุม...</value>
                     <value xml:lang="tr">Kon~trol...</value>
                     <value xml:lang="hi">नियं~त्रण...</value>
-                    <value xml:lang="zh-CN">控制(~T)...</value>
+                    <value xml:lang="zh-CN">控制...</value>
                     <value xml:lang="pt">~Controlo...</value>
                 </prop>
             </node>
@@ -12941,7 +12941,7 @@
                     <value xml:lang="th">แ~บบฟอร์ม...</value>
                     <value xml:lang="tr">For~m...</value>
                     <value xml:lang="hi">फ़ॉ~र्म...</value>
-                    <value xml:lang="zh-CN">表单(~M)...</value>
+                    <value xml:lang="zh-CN">表单...</value>
                     <value xml:lang="pt">~Formulário...</value>
                 </prop>
             </node>
@@ -14150,7 +14150,7 @@
                     <value xml:lang="th">เอกสารเป็น~อีเมล์...</value>
                     <value xml:lang="tr">Belgeyi E-Posta olarak...</value>
                     <value xml:lang="hi">लेखपत्र ~इ-मेइल जैसे...</value>
-                    <value xml:lang="zh-CN">文档当作电子邮件(~E)...</value>
+                    <value xml:lang="zh-CN">文档当作电子邮件...</value>
                     <value xml:lang="pt">~Documento como e-mail...</value>
                 </prop>
             </node>
@@ -14615,7 +14615,7 @@
                     <value xml:lang="th">ใช้ตัวกรอง</value>
                     <value xml:lang="tr">Form Tabanlı Süzgeci Uygula</value>
                     <value xml:lang="hi">फ़िल्टर लागू करो</value>
-                    <value xml:lang="zh-CN">使用表单式的筛选</value>
+                    <value xml:lang="zh-CN">运用筛选功能</value>
                     <value xml:lang="pt">Aplicar filtro</value>
                 </prop>
             </node>
@@ -14646,7 +14646,7 @@
                     <value xml:lang="th">การนำตัวกรอง</value>
                     <value xml:lang="tr">Filtre navigasyonu</value>
                     <value xml:lang="hi">फ़िल्टर नाविगेशन</value>
-                    <value xml:lang="zh-CN">转换器助手</value>
+                    <value xml:lang="zh-CN">筛选浏览</value>
                     <value xml:lang="pt">Navegação filtros</value>
                 </prop>
             </node>
@@ -15266,7 +15266,7 @@
                     <value xml:lang="th">โฟกัสควบคุมอัตโนมัติ</value>
                     <value xml:lang="tr">Otomatik odaklanma komutu</value>
                     <value xml:lang="hi">स्वचालित नियंत्रण केन्द्रिभूत होना</value>
-                    <value xml:lang="zh-CN">自动对准控制单元</value>
+                    <value xml:lang="zh-CN">自动控制焦点</value>
                     <value xml:lang="pt">Foco automático de controlo</value>
                 </prop>
             </node>
