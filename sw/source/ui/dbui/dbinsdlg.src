@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:20:09 $
+ *  last change: $Author: os $ $Date: 2002-08-29 06:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "≈ÈÛ·„˘„ﬁ ‰Â‰ÔÏ›Ì˘Ì ˘Ú:";
         Text[ korean ] = "Î°ú Îç∞Ïù¥ÌÑ∞ ÏÇΩÏûÖ:";
         Text[ turkish ] = "Eklenecek verilerin t¸r¸:";
-        Text[ catalan ] = "Insertar datos como:";
+        Text[ catalan ] = "Insereix la data com:";
         Text[ finnish ] = "Lis‰‰ tiedot muodossa:";
+        Text[ thai ] = "Insert data as:";
     };
     RadioButton RB_AS_TABLE
     {
@@ -129,10 +130,11 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "T~abel";
         Text[ chinese_simplified ] = "Ë°®Ê†º(~A)";
         Text[ greek ] = "–ﬂÌ·Í·Ú";
-        Text[ korean ] = "Ìëú(~A)";
+        Text[ korean ] = "ÏãúÌä∏(~A)";
         Text[ turkish ] = "T~ablo";
-        Text[ catalan ] = "T~abla";
+        Text[ catalan ] = "T~aula";
         Text[ finnish ] = "~Taulukko";
+        Text[ thai ] = "‡∏ï‡∏≤~‡∏£‡∏≤‡∏á";
     };
     RadioButton RB_AS_FIELD
     {
@@ -161,8 +163,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "–Â‰ﬂ·";
         Text[ korean ] = "ÌïÑÎìú(~F)";
         Text[ turkish ] = "~Alanlar";
-        Text[ catalan ] = "~Campos";
+        Text[ catalan ] = "~Camps";
         Text[ finnish ] = "~Kent‰t";
+        Text[ thai ] = "‡πÄ~‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
     };
     RadioButton RB_AS_TEXT
     {
@@ -191,8 +194,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = " ÂﬂÏÂÌÔ";
         Text[ korean ] = "ÌÖçÏä§Ìä∏(~T)";
         Text[ turkish ] = "~Metin";
-        Text[ catalan ] = "~Texto";
+        Text[ catalan ] = "~Text";
         Text[ finnish ] = "~Teksti";
+        Text[ thai ] = "~‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
     };
     OKButton BT_OK
     {
@@ -246,8 +250,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "”ÙﬁÎÂÚ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
         Text[ korean ] = "Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§ Ïó¥(~C)";
         Text[ turkish ] = "Veritaban˝ ~s¸tunlar˝";
-        Text[ catalan ] = "~Columnas de la base de datos";
+        Text[ catalan ] = "~Columnes de la base de dades";
         Text[ finnish ] = "~Tietokannan sarakkeet";
+        Text[ thai ] = "~‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå‡∏Ç‡∏≠‡∏á‡∏ê‡∏≤‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
     };
     FixedLine FL_FORMAT
     {
@@ -258,7 +263,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "For~mat" ;
         Text [ portuguese_brazilian ] = "For~mat" ;
         Text [ swedish ] = "For~mat" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "For~mat" ;
         Text [ italian ] = "For~mato" ;
         Text [ spanish ] = "For~mato" ;
         Text [ french ] = "Format" ;
@@ -275,8 +280,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "~ÃÔÒˆﬁ";
         Text[ korean ] = "ÏÑúÏãù(~M)";
         Text[ turkish ] = "For~mat";
-        Text[ catalan ] = "For~mato";
+        Text[ catalan ] = "For~mat";
         Text[ finnish ] = "~Muotoile";
+        Text[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ~‡∏ö‡∏ö";
     };
     RadioButton RB_DBFMT_FROM_DB
     {
@@ -306,8 +312,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "¡¸ ‚‹ÛÁ ‰Â‰ÔÏ›Ì˘Ì";
         Text[ korean ] = "Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§Î°úÎ∂ÄÌÑ∞(~D)";
         Text[ turkish ] = "Kaynak veritaban˝";
-        Text[ catalan ] = "~De la base de datos";
+        Text[ catalan ] = "Des de la ~base de dades";
         Text[ finnish ] = "~Tietokannasta";
+        Text[ thai ] = "‡∏à‡∏≤‡∏Å~‡∏ê‡∏≤‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
     };
     RadioButton RB_DBFMT_FROM_USR
     {
@@ -345,12 +352,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "one_right.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MaskColor = IMAGE_STDBTN_COLOR ;
         };
     };
     MultiLineEdit ED_DB_TEXT
@@ -394,7 +396,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ greek ] = "–Ò¸Ùıo ·Ò·„Ò‹ˆÔı:";
         TEXT[ korean ] = "Îã®ÎùΩ ÌÖúÌîåÎ¶ø(~S):";
         TEXT[ turkish ] = "Paragraf b~iÁimi:";
-        TEXT[ catalan ] = "~Estilo de p·rrafo:";
+        TEXT[ catalan ] = "~Estil de par‡graf:";
+        TEXT[ thai ] = "~‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤:";
     };
     ListBox LB_DB_PARA_COLL
     {
@@ -425,12 +428,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "all_right.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MaskColor = IMAGE_STDBTN_COLOR ;
         };
     };
     ImageButton IB_DBCOL_ONE_TO
@@ -444,12 +442,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "one_right.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MaskColor = IMAGE_STDBTN_COLOR ;
         };
     };
     ImageButton IB_DBCOL_ONE_FROM
@@ -463,12 +456,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "one_left.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MaskColor = IMAGE_STDBTN_COLOR ;
         };
     };
     ImageButton IB_DBCOL_ALL_FROM
@@ -482,12 +470,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "all_left.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MaskColor = IMAGE_STDBTN_COLOR ;
         };
     };
     FixedText FT_TABLE_COL
@@ -514,10 +497,11 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Tabe~l";
         Text[ chinese_simplified ] = "Ë°®Ê†º(~L)";
         Text[ greek ] = "–ﬂÌ·Í·Ú";
-        Text[ korean ] = "Ìëú(~L)";
+        Text[ korean ] = "ÏãúÌä∏(~L)";
         Text[ turkish ] = "~Tablo";
-        Text[ catalan ] = "Tab~la";
+        Text[ catalan ] = "Tau~la";
         Text[ finnish ] = "~Taulukko";
+        Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤~‡∏á";
     };
     ListBox LB_TABLE_COL
     {
@@ -548,7 +532,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ spanish ] = "Insertar encabezado de tabla";
         Text[ finnish ] = "Lis‰‰ taulukon otsikko";
         Text[ italian ] = "Inserisci intestazione tabella";
-        Text[ danish ] = "Aktiver";
+        Text[ danish ] = "IndsÊt tabeloverskrift";
         Text[ swedish ] = "Infoga tabellˆverskrift";
         Text[ polish ] = "Wstaw tytu≥ tabeli";
         Text[ portuguese_brazilian ] = "E~inschalten";
@@ -558,7 +542,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_traditional ] = "ÊèíÂÖ•Ë°®Ê†ºÂ§ßÊ®ôÈ°å";
         Text[ turkish ] = "«al˝˛t˝r";
         Text[ arabic ] = " ‘€Ì·";
-        Text[ catalan ] = "~Activar";
+        Text[ catalan ] = "~Activat";
+        Text[ thai ] = "‡πÅ‡∏ó‡∏£‡∏Å‡∏´‡∏±‡∏ß‡∏Ç‡πâ‡∏≠‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
     };
     RadioButton RB_HEADL_COLNMS
     {
@@ -577,7 +562,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ spanish ] = "Aplicar ~nombres de columnas";
         Text[ finnish ] = "~Hyv‰ksy sarakkeen nimi";
         Text[ italian ] = "Importa nomi colonne";
-        Text[ danish ] = "Kolonnenavn";
+        Text[ danish ] = "Anvend k~olonnenavn";
         Text[ swedish ] = "Anv‰nd kolumn~namn";
         Text[ polish ] = "Przejmij nazwÍ kolumny";
         Text[ portuguese_brazilian ] = "S~paltenamen";
@@ -587,7 +572,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_traditional ] = "Êé°Áî®Ê¨ÑÂêç(~N)";
         Text[ turkish ] = "~S¸tun ad˝";
         Text[ arabic ] = "√”„«¡ «·√⁄„œ…";
-        Text[ catalan ] = "~Nombres de columnas";
+        Text[ catalan ] = "~Nom de la columna";
+        Text[ thai ] = "‡πÉ‡∏ä‡πâ~‡∏ä‡∏∑‡πà‡∏≠‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
     };
     RadioButton RB_HEADL_EMPTY
     {
@@ -605,7 +591,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ spanish ] = "Crear sÛlo fila";
         Text[ finnish ] = "Luo vain viiva";
         Text[ italian ] = "Crea solo righe";
-        Text[ danish ] = "tom";
+        Text[ danish ] = "Opret kun linje";
         Text[ swedish ] = "Skapa bara rad";
         Text[ polish ] = "UtwÛrz tylko wiersz";
         Text[ portuguese_brazilian ] = "lee~r";
@@ -615,8 +601,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_traditional ] = "ÂÉÖÊñ∞Â¢ûÂàó";
         Text[ turkish ] = "bo˛";
         Text[ arabic ] = "›«—€";
-        Text[ catalan ] = "~vacÌo";
+        Text[ catalan ] = "~buit";
         Text[ language_user1 ] = "(EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle ausw‰hlen und mindestens eine Zeile selektieren. Danach den Button ìDaten in Textî dr¸cken. Dann erscheint der Dialog ìDatenbankspalten einf¸genî. Optionsfeld ìTabelleî ausw‰hlen.";
+        Text[ thai ] = "‡∏™‡∏£‡πâ‡∏≤‡∏á‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡∏≠‡∏¢‡πà‡∏≤‡∏á‡πÄ‡∏î‡∏µ‡∏¢‡∏ß";
     };
     PushButton PB_TBL_FORMAT
     {
@@ -645,8 +632,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "…‰È¸ÙÁÙÂÚ...";
         Text[ korean ] = "Îì±Î°ùÏ†ïÎ≥¥(~O)...";
         Text[ turkish ] = "÷~zelikler...";
-        Text[ catalan ] = "P~ropiedades...";
+        Text[ catalan ] = "Pr~opietats...";
         Text[ finnish ] = "~Ominaisuudet...";
+        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì~‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥...";
     };
     PushButton PB_TBL_AUTOFMT
     {
@@ -675,8 +663,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "¡ıÙ~ÔÃÔÒˆﬁ...";
         Text[ korean ] = "ÏûêÎèô ÏÑúÏãù (~O)...";
         Text[ turkish ] = "Otomatik formatla...";
-        Text[ catalan ] = "~Autoformato...";
+        Text[ catalan ] = "~Autoformat...";
         Text[ finnish ] = "~Automaattinen muotoilu...";
+        Text[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ‡∏ö‡∏ö‡∏≠‡∏±‡πÇ‡∏ô~‡∏°‡∏±‡∏ï‡∏¥...";
     };
     String STR_NOTEMPL
     {
@@ -702,8 +691,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "<Í·Ì›Ì·>";
         Text[ korean ] = "<ÏóÜÏùå>";
         Text[ turkish ] = "<yok>";
-        Text[ catalan ] = "<ninguno>";
+        Text[ catalan ] = "<cap>";
         Text[ finnish ] = "<ei mit‰‰n>";
+        Text[ thai ] = "<‡πÑ‡∏°‡πà‡∏°‡∏µ>";
     };
     Text [ english_us ] = "Insert Database Columns" ;
     Text [ portuguese_brazilian ] = "Datenbankspalten einf?en" ;
@@ -725,8 +715,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ greek ] = "–ÒÔÛËﬁÍÁ ÛÙÁÎ˛Ì ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
     Text[ korean ] = "Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§ Ïó¥ ÏÇΩÏûÖ";
     Text[ turkish ] = "Veritaban˝ s¸tunu ekle";
-    Text[ catalan ] = "Insertar columnas de la base de datos";
+    Text[ catalan ] = "Insereix les columnes de la base de dades";
     Text[ finnish ] = "Lis‰‰ tietokantasarakkeet";
+    Text[ thai ] = "‡πÅ‡∏ó‡∏£‡∏Å‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå‡∏Ç‡∏≠‡∏á‡∏ê‡∏≤‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
 };
 
 

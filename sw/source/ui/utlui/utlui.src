@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 13:08:00 $
+ *  last change: $Author: os $ $Date: 2002-08-29 06:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1822,7 +1822,6 @@ String STR_HYPH_TITLE
     }; \
     IdCount = 5
 
-#define IMAGE_STDBTN_COLOR Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; }
 ImageList ILIST_DB_DLG
 {
     ImageBitmap = Bitmap { File = "sx_dbtree.bmp" ; };
@@ -1833,7 +1832,7 @@ ImageList ILIST_DB_DLG
 ImageList ILIST_DB_DLG_HC
 {
     ImageBitmap = Bitmap { File = "sxh_dbtree.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
     IMGLIST_IDS;
 };
 
@@ -1843,12 +1842,7 @@ Image IMG_ONE_LEFT_HC
     {
         File = "one_left_h.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFF00;
-        Green = 0x0000;
-        Blue = 0xFF00;
-    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 Image IMG_ONE_RIGHT_HC
@@ -1857,12 +1851,7 @@ Image IMG_ONE_RIGHT_HC
     {
         File = "one_right_h.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFF00;
-        Green = 0x0000;
-        Blue = 0xFF00;
-    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 Image IMG_ALL_LEFT_HC
@@ -1871,12 +1860,7 @@ Image IMG_ALL_LEFT_HC
     {
         File = "all_left_h.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFF00;
-        Green = 0x0000;
-        Blue = 0xFF00;
-    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 Image IMG_ALL_RIGHT_HC
@@ -1885,12 +1869,7 @@ Image IMG_ALL_RIGHT_HC
     {
         File = "all_right_h.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFF00;
-        Green = 0x0000;
-        Blue = 0xFF00;
-    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
 };
 String STR_HYPERCTRL_SEL
 {
