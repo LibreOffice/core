@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-20 11:40:56 $
+ *  last change: $Author: sj $ $Date: 2001-06-22 15:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,40 +799,56 @@ BOOL SdPPTImport::Import()
             {
                 ePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPageNum, PPT_SLIDEPAGE );
-                SdPage* pPage = (SdPage*)ImportPage();
-                if ( pPage )
+                SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
+                PptSlidePersistEntry* pMasterPersist = NULL;
+                if ( HasMasterPage( nPageNum, PPT_SLIDEPAGE ) )     // try to get the LayoutName from the masterpage
                 {
-                    pPage->SetPageKind( PK_STANDARD );
-                    ImportPageEffect( (SdPage*)pPage );
-                    pSdrModel->InsertPage( pPage );
-                    if ( HasNotesPage( nAktPageNum, eAktPageKind ) )
+                    sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                    pPage->InsertMasterPage( nMasterNum );
+                    PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+                    if ( pPageList && nMasterNum < pPageList->Count() )
+                        pMasterPersist = (*pPageList)[ nMasterNum ];
+                    pPage->SetLayoutName( ( (SdPage*)pPage->GetMasterPage( 0 ) )->GetLayoutName() );
+                }
+                ImportPage( pPage, pMasterPersist );
+                pPage->SetPageKind( PK_STANDARD );
+                ImportPageEffect( (SdPage*)pPage );
+                pSdrModel->InsertPage( pPage );
+                if ( HasNotesPage( nAktPageNum, eAktPageKind ) )
+                {
+                    nImportedPages++;
+                    USHORT nNotesPageNum = GetNotesPageIndex( nAktPageNum, eAktPageKind );
+                    SetPageNum( nNotesPageNum, PPT_NOTEPAGE );
+                    SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
+                    PptSlidePersistEntry* pMasterPersist = NULL;
+                    if ( HasMasterPage( nNotesPageNum, PPT_NOTEPAGE ) ) // try to get the LayoutName from the masterpage
                     {
-                        USHORT nNotesPageNum = GetNotesPageIndex( nAktPageNum, eAktPageKind );
-                        SetPageNum( nNotesPageNum, PPT_NOTEPAGE );
-                        SdPage* pPage = (SdPage*)ImportPage();
-                        nImportedPages++;
-                        if ( pPage )
-                        {
-                            pPage->SetPageKind( PK_NOTES );
-                            USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                            pPage->InsertMasterPage( nMasterNum );
-                            pPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
-                            pSdrModel->InsertPage( pPage );
-                        }
-                    }
-                    else
-                    {
-                        eAktPageKind = PPT_NOTEPAGE; // fuer das richtige Seitenformat
-                        SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
-                        pPage->SetPageKind( PK_NOTES );
-                        USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                        sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                         pPage->InsertMasterPage( nMasterNum );
-                        pPage->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
-                        pSdrModel->InsertPage( pPage );
-                        SdrObject* pPageObj = pPage->GetPresObj( PRESOBJ_PAGE, 1 );
-                        if ( pPageObj )
-                            ((SdrPageObj*)pPageObj)->SetPageNum( ( nPageNum << 1 ) + 1 );
+                        PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+                        if ( pPageList && nMasterNum < pPageList->Count() )
+                            pMasterPersist = (*pPageList)[ nMasterNum ];
+                        pPage->SetLayoutName( ( (SdPage*)pPage->GetMasterPage( 0 ) )->GetLayoutName() );
                     }
+                    ImportPage( pPage, pMasterPersist );
+                    pPage->SetPageKind( PK_NOTES );
+                    USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                    pPage->InsertMasterPage( nMasterNum );
+                    pPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
+                    pSdrModel->InsertPage( pPage );
+                }
+                else
+                {
+                    eAktPageKind = PPT_NOTEPAGE; // fuer das richtige Seitenformat
+                    SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
+                    pPage->SetPageKind( PK_NOTES );
+                    USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                    pPage->InsertMasterPage( nMasterNum );
+                    pPage->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
+                    pSdrModel->InsertPage( pPage );
+                    SdrObject* pPageObj = pPage->GetPresObj( PRESOBJ_PAGE, 1 );
+                    if ( pPageObj )
+                        ((SdrPageObj*)pPageObj)->SetPageNum( ( nPageNum << 1 ) + 1 );
                 }
                 if( pStbMgr )
                     pStbMgr->SetState( nImportedPages++ );
@@ -865,7 +881,6 @@ BOOL SdPPTImport::Import()
             ////////////////////
             SetPageNum( i, PPT_SLIDEPAGE );
             SdPage* pPage = pDoc->GetSdPage( i, PK_STANDARD );
-            pPage->SetLayoutName( ( (SdPage*)pPage->GetMasterPage( 0 ) )->GetLayoutName() );
             AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
             if ( pSlideLayout )
