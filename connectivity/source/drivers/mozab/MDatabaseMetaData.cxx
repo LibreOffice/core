@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:07:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,11 @@
 
 #include <vector>
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* _DEBUG */
+#else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
-#endif /* _DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 using namespace connectivity::mozab;
 using namespace connectivity;
