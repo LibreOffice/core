@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-17 16:06:29 $
+ *  last change: $Author: ama $ $Date: 2001-05-18 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
+#endif
+#ifndef _SVX_BRSHITEM_HXX //autogen
+#include <svx/brshitem.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -817,10 +820,34 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 --nCount;
             }
 
-            if ( SFX_ITEM_SET == rNewSet.GetItemState( RES_CHRATR_LANGUAGE,
-                                                       sal_False ) ||
-                 SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_CHARFMT,
-                                                       sal_False ) )
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_BACKGROUND, sal_False)
+                && !IsFollow() && GetDrawObjs() )
+            {
+                SwDrawObjs *pObjs = GetDrawObjs();
+                for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
+                {
+                    SdrObject *pO = (*pObjs)[MSHORT(i)];
+                    if ( pO->IsWriterFlyFrame() )
+                    {
+                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        if( !pFly->IsFlyInCntFrm() )
+                        {
+                            const SvxBrushItem &rBack =
+                                pFly->GetAttrSet()->GetBackground();
+                            if( rBack.GetColor().GetTransparency() &&
+                                rBack.GetGraphicPos() == GPOS_NONE )
+                            {
+                                pFly->SetCompletePaint();
+                                pFly->InvalidatePage();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_CHRATR_LANGUAGE,
+                sal_False ) || SFX_ITEM_SET == rNewSet.GetItemState(
+                RES_TXTATR_CHARFMT, sal_False ) )
                 SET_WRONG( 0, STRING_LEN, Invalidate );
 
             if( nCount )
@@ -1544,11 +1571,11 @@ KSHORT SwTxtFrm::GetParHeight() const
     if( !HasPara() )
     {   // Fuer nichtleere Absaetze ist dies ein Sonderfall, da koennen wir
         // bei UnderSized ruhig nur 1 Twip mehr anfordern.
-        KSHORT nRet = Prt().SSize().Height();
+        KSHORT nRet = (KSHORT)Prt().SSize().Height();
         if( IsUndersized() )
         {
             if( IsEmpty() )
-                nRet = EmptyHeight();
+                nRet = (KSHORT)EmptyHeight();
             else
                 ++nRet;
         }
@@ -1704,7 +1731,7 @@ KSHORT SwTxtFrm::FirstLineHeight() const
     if ( !HasPara() )
     {
         if( IsEmpty() && IsValid() )
-            return Prt().Height();
+            return (KSHORT)Prt().Height();
         return KSHRT_MAX;
     }
     const SwParaPortion *pPara = GetPara();
