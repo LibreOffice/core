@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:08:13 $
+ *  last change: $Author: os $ $Date: 2002-07-04 14:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,8 @@ int SwView::_CreateScrollbar( int bHori )
 
     (*ppScrollbar)->EnableDrag( TRUE );
 
-    InvalidateBorder();
+    if(GetWindow())
+        InvalidateBorder();
 
     // Scrollbar muss nochmals getestet werden, da im InvalidateBorder u.U. der
     // Scrollbar wieder geloescht wurde
