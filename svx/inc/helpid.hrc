@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:18:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,7 @@
 #define HID_OPTIONS_CTL                         (HID_SVX_EXT0_START + 12)
 #define HID_REDLINING_VIEW_DG_VIEW_TABLE        (HID_SVX_EXT0_START + 13)
 #define HID_REDLINING_VIEW_DG_VIEW_HEADER       (HID_SVX_EXT0_START + 14)
+#define HID_DIALOG_HANGULHANJA                  (HID_SVX_EXT0_START + 15)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
