@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 11:56:47 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 11:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,28 +67,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <osl/types.h>
-#include <osl/macros.hxx>
-#include <rtl/types.h>
-#include <rtl/macros.hxx>
-
-
-
 
 /********************************************************************************/
 /* Data types
 */
 
 /* Boolean */
-
 typedef unsigned char sal_Bool;
 #   define sal_False ((unsigned char)0)
 #   define sal_True  ((unsigned char)1)
-/*
-typedef int sal_Bool;
-#   define sal_False 0
-#   define sal_True  1
-*/
+
 typedef signed char         sal_Int8;
 typedef unsigned char       sal_uInt8;
 typedef signed short        sal_Int16;
@@ -102,19 +90,6 @@ typedef unsigned __int64    sal_uInt64;
 #   elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (__MWERKS__) || defined(__hpux) || defined (sgi)
 typedef long long           sal_Int64;
 typedef unsigned long long  sal_uInt64;
-#   else
-#   define SAL_INT64_IS_STRUCT
-typedef struct
-    {
-        sal_uInt32  Part1;
-        sal_uInt32  Part2;
-    } sal_Int64;
-
-typedef struct
-    {
-        sal_uInt32  Part1;
-        sal_uInt32  Part2;
-    } sal_uInt64;
 #endif
 
 typedef char                sal_Char;
@@ -152,28 +127,10 @@ typedef unsigned long       sal_Size;
 #   define SAL_DLLEXPORT
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
-#elif defined SAL_W16 /* BR: kopiert von SAL_W32 */
-#   define SAL_DLLEXPORT        __declspec(dllexport)
-#   define SAL_CALL         __cdecl
-#   define SAL_CALL_ELLIPSE __cdecl
 #else
 #   error("unknown platform")
 #endif
 
-void SAL_CALL sal_setInt64(sal_Int64* newInt, sal_uInt32 lowInt, sal_Int32 highInt);
-void SAL_CALL sal_getInt64(sal_Int64 newInt, sal_uInt32* lowInt, sal_Int32* highInt);
-
-void SAL_CALL sal_setUInt64(sal_uInt64* newInt, sal_uInt32 lowInt, sal_uInt32 highInt);
-void SAL_CALL sal_getUInt64(sal_uInt64 newInt, sal_uInt32* lowInt, sal_uInt32* highInt);
-
-#define SAL_PACK_PUSH
-#define SAL_PACK_POP
-
-#ifdef SAL_W16
-#define SAL_HUGE
-#else
-#define SAL_HUGE
-#endif
 
 
 #ifdef SAL_W32
@@ -255,36 +212,6 @@ enum __sal_NoAcquire
     SAL_NO_ACQUIRE
 };
 #endif /* __cplusplus */
-
-
-    /* Ende alte Typen */
-/* The #ifndef _TIMEVALUE is to prevent clashes with osl/time.h which also contains
-    TimeValue. osl/types.h will be removed soon.
-*/
-
-#ifndef _TIMEVALUE
-#define _TIMEVALUE
-
-#ifdef SAL_W32
-#   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(1)
-#endif
-
-/* Time since Jan-01-1970 */
-
-typedef struct {
-    sal_uInt32 Seconds;
-    sal_uInt32 Nanosec;
-} TimeValue;
-
-#ifdef SAL_W32
-#   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
-#endif
-//
-#endif
 
 
 #ifdef __cplusplus
