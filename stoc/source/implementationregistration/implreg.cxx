@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-12-03 17:41:51 $
+ *  last change: $Author: jbu $ $Date: 2001-12-03 17:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ static OUString getTempName()
     {
         OStringBuffer buf;
         buf.append( tmpPath );
-        if( tmpPath.getLength() && tmpPath.getStr()[ tmpPath.getLength() -1 ] != '\\' )
+        if( tmpPath.getLength() && tmpPath.getStr()[ tmpPath.getLength() -1 ] != SAL_PATHDELIMITER )
         {
             buf.append( (sal_Char) SAL_PATHDELIMITER );
         }
