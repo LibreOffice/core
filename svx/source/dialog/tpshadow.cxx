@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
     // Set line at the OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
+    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aTsbShowShadow.SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );

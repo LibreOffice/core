@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-10 11:06:03 $
+ *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ SvxLineTabPage::SvxLineTabPage
     aMtrLineWidth       ( this, ResId( MTR_FLD_LINE_WIDTH ) ),
     aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
     aMtrTransparent     ( this, ResId( MTR_LINE_TRANSPARENT ) ),
-    aGrpLine            ( this, ResId( GRP_LINE ) ),
+    aFlLine             ( this, ResId( FL_LINE ) ),
+    aFlLineSep          ( this, ResId( FL_LINE_SEP ) ),
     aFtLineEndsStyle    ( this, ResId( FT_LINE_ENDS_STYLE ) ),
     aFtLineEndsWidth    ( this, ResId( FT_LINE_ENDS_WIDTH ) ),
     aLbStartStyle       ( this, ResId( LB_START_STYLE ) ),
@@ -220,15 +221,14 @@ SvxLineTabPage::SvxLineTabPage
     aMtrEndWidth        ( this, ResId( MTR_FLD_END_WIDTH ) ),
     aTsbCenterEnd       ( this, ResId( TSB_CENTER_END ) ),
     aCbxSynchronize     ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aGrpLineEnds        ( this, ResId( GRP_LINE_ENDS ) ),
+    aFlLineEnds         ( this, ResId( FL_LINE_ENDS ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     aSymbolWidthFT      ( this, ResId(FT_SYMBOL_WIDTH)),
     aSymbolWidthMF      ( this, ResId(MF_SYMBOL_WIDTH)),
     aSymbolHeightFT     ( this, ResId(FT_SYMBOL_HEIGHT)),
     aSymbolHeightMF     ( this, ResId(MF_SYMBOL_HEIGHT)),
-    aSymbolGB           ( this, ResId(GB_SYMBOL_FORMAT)),
+    aSymbolFL           ( this, ResId(FL_SYMBOL_FORMAT)),
     aSymbolRatioCB      ( this, ResId(CB_SYMBOL_RATIO)),
     aSymbolMB           ( this, ResId(MB_SYMBOL_BITMAP)),
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
@@ -289,6 +289,8 @@ SvxLineTabPage::SvxLineTabPage
     aMtrTransparent.SetModifyHdl(
         LINK( this, SvxLineTabPage, ChangeTransparentHdl_Impl ) );
 
+    aFlLineSep.SetStyle( aFlLineSep.GetStyle() | WB_VERT );
+
     Link aStart = LINK( this, SvxLineTabPage, ChangeStartHdl_Impl );
     Link aEnd = LINK( this, SvxLineTabPage, ChangeEndHdl_Impl );
     aLbStartStyle.SetSelectHdl( aStart );
@@ -324,7 +326,7 @@ void SvxLineTabPage::ShowSymbolControls(BOOL bOn)
     aSymbolWidthMF.Show(bOn);
     aSymbolHeightFT.Show(bOn);
     aSymbolHeightMF.Show(bOn);
-    aSymbolGB.Show(bOn);
+    aSymbolFL.Show(bOn);
     aSymbolRatioCB.Show(bOn);
     aSymbolMB.Show(bOn);
     aCtlPreview.ShowSymbol(bOn);
@@ -431,8 +433,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aDashURL.getBase();
 
-        aGrpLine.SetText( aString );
-
         // LineEndliste
         if( ( *pnLineEndListState & CT_MODIFIED ) ||
             ( *pnLineEndListState & CT_CHANGED ) )
@@ -485,8 +485,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aLineURL.getBase();
 
-        aGrpLineEnds.SetText( aString );
-
         // Auswertung, ob von einer anderen TabPage ein anderer Fuelltyp gesetzt wurde
         if( aLbLineStyle.GetSelectEntryPos() != 0 )
         {
@@ -518,7 +516,8 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         aMtrEndWidth.Hide();
         aTsbCenterEnd.Hide();
         aCbxSynchronize.Hide();
-        aGrpLineEnds.Hide();
+        aFlLineSep.Hide();
+        aFlLineEnds.Hide();
     }
 }
 
@@ -1224,7 +1223,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         aCbxSynchronize.Disable();
         aFtLineEndsStyle.Disable();
         aFtLineEndsWidth.Disable();
-        aGrpLineEnds.Disable();
+        aFlLineEnds.Disable();
     }
 
     // Synchronisieren
@@ -1380,7 +1379,7 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
         aFtLineWidth.Disable();
         aMtrLineWidth.Disable();
 
-        if( aGrpLineEnds.IsEnabled() )
+        if( aFlLineEnds.IsEnabled() )
         {
             aFtLineEndsStyle.Disable();
             aFtLineEndsWidth.Disable();
@@ -1400,7 +1399,7 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
         aFtLineWidth.Enable();
         aMtrLineWidth.Enable();
 
-        if( aGrpLineEnds.IsEnabled() )
+        if( aFlLineEnds.IsEnabled() )
         {
             aFtLineEndsStyle.Enable();
             aFtLineEndsWidth.Enable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2001-05-15 14:43:38 $
+ *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1743,6 +1743,7 @@ SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId, XOutputD
     aSize.Height() -= aTmp.Height() /2;
 
     aRect = Rectangle( Point(), aSize );
+
     InitSettings( TRUE, TRUE );
 }
 
@@ -1824,6 +1825,9 @@ SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId,
     aRect = Rectangle( Point( aSize.Width(), aSize.Height() ), aSize );
     aShadow = Rectangle( Point( aSize.Width(), aSize.Height() ), aSize );
     InitSettings( TRUE, TRUE );
+
+    //  Draw the control's border as a flat thin black line.
+    SetBorderStyle (WINDOW_BORDER_MONO);
 }
 
 // -----------------------------------------------------------------------
@@ -1862,11 +1866,6 @@ void SvxXShadowPreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
 void SvxXShadowPreview::Paint( const Rectangle& rRect )
 {
-    SetFillColor( Color( COL_WHITE ) );
-    SetLineColor(Color( COL_BLACK) );
-    pXOutDev->DrawRect( rRect );
-    SetLineColor();
-
     aShadow.SetPos( aShadowPos + Point( aRect.GetWidth(), aRect.GetHeight() ) );
     if ( pShadowItem )
         pXOutDev->SetFillAttr( pShadowItem->GetItemSet() );
