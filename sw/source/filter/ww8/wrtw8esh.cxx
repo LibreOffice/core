@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:28:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,11 @@
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
+// --> OD 2005-01-06 #i30669#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+// <--
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
@@ -657,11 +662,17 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             const SdrObject* pObj = rFmt.FindRealSdrObject();
 
             Rectangle aRect;
-            const SwFmtVertOrient& rVOr = rFmt.GetVertOrient();
-            const SwFmtHoriOrient& rHOr = rFmt.GetHoriOrient();
+            SwFmtVertOrient rVOr = rFmt.GetVertOrient();
+            SwFmtHoriOrient rHOr = rFmt.GetHoriOrient();
+            // --> OD 2005-01-06 #i30669# - convert the positioning attributes.
+            // Most positions are converted, if layout information exists.
+            const bool bPosConverted =
+                 WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFmt );
+            // <--
+
+            Point aObjPos;
             if (RES_FLYFRMFMT == rFmt.Which())
             {
-                Point aObjPos;
                 SwRect aLayRect(rFmt.FindLayoutRect(false, &aObjPos));
                 // the Object is not visible - so get the values from
                 // the format. The Position may not be correct.
@@ -669,7 +680,25 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                     aRect.SetSize( rFmt.GetFrmSize().GetSize() );
                 else
                     aRect = aLayRect.SVRect();
+            }
+            else
+            {
+                ASSERT(pObj, "wo ist das SDR-Object?");
+                if (pObj)
+                {
+                    aRect = pObj->GetSnapRect();
+                }
+            }
 
+            // --> OD 2005-01-06 #i30669# - use converted position, if conversion
+            // is performed. Unify position determination of Writer fly frames
+            // and drawing objects.
+            if ( bPosConverted )
+            {
+                aRect.SetPos( Point( rHOr.GetPos(), rVOr.GetPos() ) );
+            }
+            else
+            {
                 aRect -= aIter->maParentPos;
                 aObjPos = aRect.TopLeft();
                 if (VERT_NONE == rVOr.GetVertOrient())
@@ -685,16 +714,7 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                     aObjPos.X() = rHOr.GetPos();
                 aRect.SetPos( aObjPos );
             }
-            else
-            {
-                ASSERT(pObj, "wo ist das SDR-Object?");
-                if (pObj)
-                {
-                    aRect = pObj->GetSnapRect();
-                    Point aObjPos(pObj->GetRelativePos());
-                    aRect.SetPos(aObjPos);
-                }
-            }
+            // <--
 
             INT32 nThick = aIter->mnThick;
 
@@ -2182,13 +2202,267 @@ void SwEscherEx::FinishEscher()
     delete pEscherStrm, pEscherStrm = 0;
 }
 
+/** method to perform conversion of positioning attributes with the help
+    of corresponding layout information
+
+    OD 2005-01-06 #i30669#
+    Because most of the Writer object positions doesn't correspond to the
+    object positions in WW8, this method converts the positioning
+    attributes. For this conversion the corresponding layout information
+    is needed. If no layout information exists - e.g. no layout exists - no
+    conversion is performed.
+    No conversion is performed for as-character anchored objects. Whose
+    object positions are already treated special in method <WriteData(..)>.
+
+    @author OD
+
+    @param _iorHoriOri
+    input/output parameter - containing the current horizontal position
+    attributes, which are converted by this method.
+
+    @param _iorVertOri
+    input/output parameter - containing the current vertical position
+    attributes, which are converted by this method.
+
+    @param _rFrmFmt
+    input parameter - frame format of the anchored object
+
+    @return boolean, indicating, if a conversion has been performed.
+*/
+bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
+                                         SwFmtVertOrient& _iorVertOri,
+                                         const SwFrmFmt& _rFrmFmt )
+{
+    if ( _rFrmFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+    {
+        // no conversion for as-character anchored objects
+        return false;
+    }
+
+    // determine anchored object
+    SwAnchoredObject* pAnchoredObj( 0L );
+    {
+        const SwContact* pContact = _rFrmFmt.FindContactObj();
+        if ( pContact )
+        {
+            std::vector<SwAnchoredObject*> aAnchoredObjs;
+            pContact->GetAnchoredObjs( aAnchoredObjs );
+            if ( !aAnchoredObjs.empty() )
+            {
+                pAnchoredObj = aAnchoredObjs.front();
+            }
+        }
+    }
+    if ( !pAnchoredObj )
+    {
+        // no anchored object found. Thus, the needed layout information can't
+        // be determined. --> no conversion
+        return false;
+    }
+
+    bool bConverted( false );
+
+    // determine value of attribute 'Follow text flow', because positions aligned
+    // at page areas have to be converted, if it's set.
+    const bool bFollowTextFlow = _rFrmFmt.GetFollowTextFlow().GetValue();
+
+    // convert horizontal position, if needed
+    {
+        enum HoriConv { NO_CONV, CONV2PG, CONV2COL, CONV2CHAR };
+        HoriConv eHoriConv( NO_CONV );
+
+        // determine, if conversion has to be performed due to the position orientation
+        bool bConvDueToOrientation( false );
+        {
+            const SwHoriOrient eHOri = _iorHoriOri.GetHoriOrient();
+            bConvDueToOrientation = eHOri == HORI_LEFT || eHOri == HORI_RIGHT ||
+                                    eHOri == HORI_INSIDE || eHOri == HORI_OUTSIDE ||
+                                    ( eHOri != HORI_CENTER && _iorHoriOri.IsPosToggle() );
+        }
+
+        // determine conversion type due to the position relation
+        switch ( _iorHoriOri.GetRelationOrient() )
+        {
+            case REL_PG_FRAME:
+            case REL_PG_PRTAREA:
+            {
+                if ( bConvDueToOrientation || bFollowTextFlow )
+                    eHoriConv = CONV2PG;
+            }
+            break;
+            case REL_PG_LEFT:
+            case REL_PG_RIGHT:
+            {
+                // relation not supported by WW8. Thus, conversion always needed.
+                eHoriConv = CONV2PG;
+            }
+            break;
+            case FRAME:
+            {
+                if ( bConvDueToOrientation )
+                    eHoriConv = CONV2COL;
+            }
+            break;
+            case PRTAREA:
+            case REL_FRM_LEFT:
+            case REL_FRM_RIGHT:
+            {
+                // relation not supported by WW8. Thus, conversion always needed.
+                eHoriConv = CONV2COL;
+            }
+            break;
+            case REL_CHAR:
+            {
+                if ( bConvDueToOrientation )
+                    eHoriConv = CONV2CHAR;
+            }
+            break;
+            default:
+                ASSERT( false,
+                        "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
+        }
+        if ( eHoriConv != NO_CONV )
+        {
+            _iorHoriOri.SetHoriOrient( HORI_NONE );
+            SwTwips nPosX( 0L );
+            {
+                Point aPos;
+                if ( eHoriConv == CONV2PG )
+                {
+                    _iorHoriOri.SetRelationOrient( REL_PG_FRAME );
+                    aPos = pAnchoredObj->GetRelPosToPageFrm();
+                }
+                else if ( eHoriConv == CONV2COL )
+                {
+                    _iorHoriOri.SetRelationOrient( FRAME );
+                    aPos = pAnchoredObj->GetRelPosToAnchorFrm();
+                }
+                else if ( eHoriConv == CONV2CHAR )
+                {
+                    _iorHoriOri.SetRelationOrient( REL_CHAR );
+                    aPos = pAnchoredObj->GetRelPosToChar();
+                }
+                // No distinction between layout directions, because of missing
+                // information about WW8 in vertical layout.
+                nPosX = aPos.X();
+            }
+            _iorHoriOri.SetPos( nPosX );
+            bConverted = true;
+        }
+    }
+
+    // convert vertical position, if needed
+    {
+        enum VertConv { NO_CONV, CONV2PG, CONV2PARA, CONV2LINE };
+        VertConv eVertConv( NO_CONV );
+
+        // determine, if conversion has to be performed due to the position orientation
+        bool bConvDueToOrientation( false );
+        {
+            const SwVertOrient eVOri = _iorVertOri.GetVertOrient();
+            bConvDueToOrientation = ( eVOri == VERT_TOP ||
+                                      eVOri == VERT_BOTTOM ||
+                                      eVOri == VERT_CHAR_TOP ||
+                                      eVOri == VERT_CHAR_BOTTOM ||
+                                      eVOri == VERT_CHAR_CENTER ||
+                                      eVOri == VERT_LINE_TOP ||
+                                      eVOri == VERT_LINE_BOTTOM ||
+                                      eVOri == VERT_LINE_CENTER );
+        }
+
+        // determine conversion type due to the position relation
+        switch ( _iorVertOri.GetRelationOrient() )
+        {
+            case REL_PG_FRAME:
+            case REL_PG_PRTAREA:
+            {
+                if ( bConvDueToOrientation || bFollowTextFlow )
+                    eVertConv = CONV2PG;
+            }
+            break;
+            case FRAME:
+            {
+                if ( bConvDueToOrientation ||
+                     _iorVertOri.GetVertOrient() == VERT_CENTER )
+                {
+                    eVertConv = CONV2PARA;
+                }
+            }
+            break;
+            case PRTAREA:
+            {
+                // relation not supported by WW8. Thus, conversion always needed.
+                eVertConv = CONV2PARA;
+            }
+            break;
+            case REL_CHAR:
+            {
+                // relation not supported by WW8. Thus, conversion always needed.
+                eVertConv = CONV2PARA;
+            }
+            break;
+            case REL_VERT_LINE:
+            {
+                if ( bConvDueToOrientation ||
+                     _iorVertOri.GetVertOrient() == VERT_NONE )
+                {
+                    eVertConv = CONV2LINE;
+                }
+            }
+            break;
+            case REL_PG_LEFT:
+            case REL_PG_RIGHT:
+            case REL_FRM_LEFT:
+            case REL_FRM_RIGHT:
+            default:
+                ASSERT( false,
+                        "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
+        }
+        if ( eVertConv != NO_CONV )
+        {
+            _iorVertOri.SetVertOrient( VERT_NONE );
+            SwTwips nPosY( 0L );
+            {
+                Point aPos;
+                if ( eVertConv == CONV2PG )
+                {
+                    _iorVertOri.SetRelationOrient( REL_PG_FRAME );
+                    aPos = pAnchoredObj->GetRelPosToPageFrm();
+                }
+                else if ( eVertConv == CONV2PARA )
+                {
+                    _iorVertOri.SetRelationOrient( FRAME );
+                    aPos = pAnchoredObj->GetRelPosToAnchorFrm();
+                }
+                else if ( eVertConv == CONV2LINE )
+                {
+                    _iorVertOri.SetRelationOrient( REL_VERT_LINE );
+                    aPos = pAnchoredObj->GetRelPosToLine();
+                }
+                // No distinction between layout directions, because of missing
+                // information about WW8 in vertical layout.
+                nPosY = aPos.Y();
+            }
+            _iorVertOri.SetPos( nPosY );
+            bConverted = true;
+        }
+    }
+
+    return bConverted;
+}
+
 void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
 {
     const RndStdIds eAnchor = rFmt.GetAnchor().GetAnchorId();
     mbInline = (eAnchor == FLY_IN_CNTNT);
 
-    const SwFmtHoriOrient& rHoriOri = rFmt.GetHoriOrient();
-    const SwFmtVertOrient& rVertOri = rFmt.GetVertOrient();
+    SwFmtHoriOrient rHoriOri = rFmt.GetHoriOrient();
+    SwFmtVertOrient rVertOri = rFmt.GetVertOrient();
+
+    // --> OD 2005-01-06 #i30669# - convert the positioning attributes.
+    // Most positions are converted, if layout information exists.
+    const bool bPosConverted = ConvertPosition( rHoriOri, rVertOri, rFmt );
+    // <--
 
     const SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
     // CMC, OD 24.11.2003 #i22673#
@@ -2225,7 +2499,9 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     // CMC, OD 24.11.2003 #i22673#
     // When adjustment is vertically relative to line or to char
     // bottom becomes top and vice versa
-    const bool bVertSwap = (eVRel == REL_CHAR) || (eVRel == REL_VERT_LINE);
+    const bool bVertSwap = !bPosConverted &&
+                           ( (eVRel == REL_CHAR) ||
+                             (eVRel == REL_VERT_LINE) );
     switch (eVOri)
     {
         default:
