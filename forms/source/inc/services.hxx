@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:10:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,25 +145,25 @@ namespace frm
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_IMAGECONTROL, "stardiv.one.form.component.ImageControl" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_FORMATTEDFIELD, "stardiv.one.form.component.FormattedField" );
 
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_EDIT, "stardiv.one.form.control.Edit" );                   // compatibility
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_TEXTFIELD, "stardiv.one.form.control.TextField" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_LISTBOX, "stardiv.one.form.control.ListBox" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_COMBOBOX, "stardiv.one.form.control.ComboBox" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_RADIOBUTTON, "stardiv.one.form.control.RadioButton" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_GROUPBOX, "stardiv.one.form.control.GroupBox" );               // compatibility
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_FIXEDTEXT, "stardiv.one.form.control.FixedText" );         // compatibility
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_COMMANDBUTTON, "stardiv.one.form.control.CommandButton" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_CHECKBOX, "stardiv.one.form.control.CheckBox" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_GRID, "stardiv.one.form.control.Grid" );                   // compatibility
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_GRIDCONTROL, "stardiv.one.form.control.GridControl" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_IMAGEBUTTON, "stardiv.one.form.control.ImageButton" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_TIMEFIELD, "stardiv.one.form.control.TimeField" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_DATEFIELD, "stardiv.one.form.control.DateField" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_NUMERICFIELD, "stardiv.one.form.control.NumericField" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_CURRENCYFIELD, "stardiv.one.form.control.CurrencyField" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_PATTERNFIELD, "stardiv.one.form.control.PatternField" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_IMAGECONTROL, "stardiv.one.form.control.ImageControl" );
-    FORMS_CONSTASCII_STRING( FRM_CONTROL_FORMATTEDFIELD, "stardiv.one.form.control.FormattedField" );
+    // <compatibility_I>
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_COMMANDBUTTON,   "stardiv.one.form.control.CommandButton" );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_RADIOBUTTON,     "stardiv.one.form.control.RadioButton"   );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_CHECKBOX,        "stardiv.one.form.control.CheckBox"      );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_EDIT,            "stardiv.one.form.control.Edit"          );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_LISTBOX,         "stardiv.one.form.control.ListBox"       );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_COMBOBOX,        "stardiv.one.form.control.ComboBox"      );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_GROUPBOX,        "stardiv.one.form.control.GroupBox"      );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_TEXTFIELD,       "stardiv.one.form.control.TextField"     );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_GRID,            "stardiv.one.form.control.Grid"          );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_IMAGEBUTTON,     "stardiv.one.form.control.ImageButton"   );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_TIMEFIELD,       "stardiv.one.form.control.TimeField"     );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_DATEFIELD,       "stardiv.one.form.control.DateField"     );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_NUMERICFIELD,    "stardiv.one.form.control.NumericField"  );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_CURRENCYFIELD,   "stardiv.one.form.control.CurrencyField" );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_PATTERNFIELD,    "stardiv.one.form.control.PatternField"  );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_IMAGECONTROL,    "stardiv.one.form.control.ImageControl"  );
+    FORMS_CONSTASCII_STRING( STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD,  "stardiv.one.form.control.FormattedField");
+    // </compatibility_I>
 
     // -----------------------
     // new (sun) service names
