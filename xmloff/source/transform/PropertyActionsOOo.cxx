@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:51:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
 //      NO_PARAMS }, /* new attribute */
     { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_FO, XML_CLIP, XML_ATACTION_COPY,
+    { XML_NAMESPACE_FO, XML_CLIP, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -353,8 +353,6 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_KEEP_TOGETHER, XML_ATACTION_COPY,
-          NO_PARAMS }, /* TODO: This is new on OOo, but not in the OASIS format */
     { XML_NAMESPACE_DRAW, XML_STROKE_DASH, XML_ATACTION_ENCODE_STYLE_NAME_REF,
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_MARKER_START, XML_ATACTION_ENCODE_STYLE_NAME_REF,
@@ -642,6 +640,12 @@ XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_TEXT_ROTATION_SCALE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_HYPHENATE, XML_ATACTION_COPY,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_HYPHENATION_REMAIN_CHAR_COUNT, XML_ATACTION_COPY,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_HYPHENATION_PUSH_CHAR_COUNT, XML_ATACTION_COPY,
+          NO_PARAMS }, /* generated entry */
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
@@ -675,13 +679,7 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_TAB_STOP_DISTANCE, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_FO, XML_HYPHENATE, XML_ATACTION_COPY,
-          NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_HYPHENATION_KEEP, XML_ATACTION_COPY,
-          NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_FO, XML_HYPHENATION_REMAIN_CHAR_COUNT, XML_ATACTION_COPY,
-          NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_FO, XML_HYPHENATION_PUSH_CHAR_COUNT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_HYPHENATION_LADDER_COUNT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -755,8 +753,6 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_BACKGROUND_TRANSPARENCY, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_KEEP_TOGETHER, XML_ATACTION_COPY,
-          NO_PARAMS }, /* TODO: This is a real bug */
     { XML_NAMESPACE_STYLE, XML_TEXT_AUTOSPACE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_PUNCTUATION_WRAP, XML_ATACTION_COPY,
@@ -765,6 +761,8 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_TEXT, XML_ENABLE_NUMBERING, XML_ATACTION_COPY,
           NO_PARAMS }, /* TODO: undocumented*/
+    { XML_NAMESPACE_FO, XML_KEEP_TOGETHER, XML_ATACTION_COPY,
+          NO_PARAMS }, /* TODO: Avoid assert caused by #i32577#  */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
@@ -888,6 +886,8 @@ XMLTransformerActionInit aTableCellPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_PRINT_CONTENT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_DECIMAL_PLACES, XML_ATACTION_COPY,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
@@ -1032,13 +1032,27 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_CHART, XML_INTERVAL_MAJOR, XML_PTACTION_INTERVAL_MAJOR, NO_PARAMS },
     { XML_NAMESPACE_CHART, XML_INTERVAL_MINOR, XML_PTACTION_INTERVAL_MINOR, NO_PARAMS },
 
+     { XML_NAMESPACE_CHART, XML_STOCK_UPDOWN_BARS, XML_ATACTION_RENAME,
+      XMLTransformerActionInit::QNameParam( XML_NAMESPACE_CHART,
+                                            XML_JAPANESE_CANDLE_STICK ), 0 },
+    { XML_NAMESPACE_CHART, XML_SYMBOL, XML_PTACTION_SYMBOL, NO_PARAMS },
+
+    // note: chart:symbol-image-name was only used before 6.0 beta
+    { XML_NAMESPACE_CHART, XML_SYMBOL_IMAGE_NAME, XML_PTACTION_SYMBOL_IMAGE_NAME, NO_PARAMS },
+
+    // #i32368# property should no longer be used as XML-property (in OASIS
+    // format), but is still ex-/imported for compatibility with the OOo file format
+     { XML_NAMESPACE_CHART, XML_LINES_USED, XML_ATACTION_COPY, NO_PARAMS },
+    // #i32366# property should no longer be used as XML-property (in OASIS
+    // format), but is still ex-/imported for compatibility with the OOo file format
+     { XML_NAMESPACE_CHART, XML_STOCK_WITH_VOLUME, XML_ATACTION_COPY, NO_PARAMS },
+
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
 XMLTransformerActionInit aChartPropertyOOoElemActionTable[] =
 {
-    { XML_NAMESPACE_CHART, XML_SYMBOL_IMAGE, XML_ATACTION_COPY,
-          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_STYLE, XML_SYMBOL_IMAGE, XML_ATACTION_COPY, NO_PARAMS },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
