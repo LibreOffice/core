@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:10:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,8 @@
 #ifndef SC_XESTRING_HXX
 #define SC_XESTRING_HXX
 
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
-#endif
-#ifndef SC_XLCONST_HXX
-#include "xlconst.hxx"
+#ifndef SC_XLSTRING_HXX
+#include "xlstring.hxx"
 #endif
 
 // ============================================================================
@@ -77,16 +74,20 @@ class EditTextObject;
 class XclExpStream;
 
 /** This class stores an unformatted or formatted string for Excel export.
-    @descr  The class supports two completely different types of Excel strings:
-    1)  BIFF2-BIFF7 byte strings: The text is encoded as a 8-bit character array.
-        The strings cannot contain any character formatting.
+
+    The class supports two completely different types of Excel strings:
+    1)  BIFF2-BIFF7 byte strings: The text is encoded as a 8-bit character
+        array. The strings cannot contain any character formatting.
     2)  BIFF8 Unicode strings: The text may be stored as UCS-2 character array,
-        or compressed to an 8-bit array, if all characters are less than U+0100.
-        Unicode strings may contain a formatting array, that specifies the used
-        FONT record for different ranges of characters.
-    The class fully supports NUL characters in strings. On construction or
-    assignment the passed flags specify the behaviour of the string while it is
-    written to a stream (the 'Write' functions and 'operator<<'). */
+        or compressed to an 8-bit array, if all characters are less than
+        U+0100. Unicode strings may contain a formatting array, that specifies
+        the used FONT record for different ranges of characters.
+
+    The class provides full support for NUL characters in strings. On
+    construction or assignment the passed flags specify the behaviour of the
+    string while it is written to a stream (the 'Write' functions and
+    'operator<<').
+ */
 class XclExpString
 {
 public:
