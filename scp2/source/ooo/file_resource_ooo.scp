@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.17 $
+*  $Revision: 1.18 $
 *
-*  last change: $Author: hr $ $Date: 2005-02-11 15:54:55 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:33:28 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -178,6 +178,8 @@ STD_RES_FILE( gid_File_Res_Tpl, tpl )
 STD_RES_FILE( gid_File_Res_Uui, uui )
 
 STD_RES_FILE( gid_File_Res_Vcl, vcl )
+
+STD_RES_FILE( gid_File_Res_Wzi, wzi )
 
 //STD_RES_FILE( gid_File_Res_Wwz, wwz )
 
