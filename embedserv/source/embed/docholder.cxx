@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-26 10:56:51 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 11:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,11 @@
  ************************************************************************/
 
 #include "docholder.hxx"
+#include "embeddoc.hxx"
 
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -82,18 +86,25 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
 
+
 using namespace ::com::sun::star;
+
+extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 
 // add mutex locking ???
 
-DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
+DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory,EmbedDocument_Impl *pOLEInterface)
+    : m_xFactory( xFactory ),
+      m_nStreamMode(0),
+      m_pOLEInterface(pOLEInterface)
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -155,19 +166,38 @@ void DocumentHolder::CloseDocument()
             {}
         }
     }
-
     m_xDocument = uno::Reference< frame::XModel >();
+    m_nStreamMode = 0;
+
+    uno::Reference<util::XCloseable> xCloseable(
+        m_xFrame,uno::UNO_QUERY);
+    if(xCloseable.is())
+        try {
+            xCloseable->close(sal_True);
+        }
+        catch( const uno::Exception& ) {
+        }
+
+    m_xFrame = uno::Reference< frame::XFrame >();
 }
 
-void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc )
+void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc,
+                                  DWORD nStreamMode)
 {
     if ( m_xDocument.is() )
         CloseDocument();
 
     m_xDocument = xDoc;
+    m_nStreamMode = nStreamMode;
+
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xDocument, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
         xBroadcaster->addCloseListener( (util::XCloseListener*)this );
+
+//      uno::Reference< util::XModifyBroadcaster > xMB(
+//          m_xDocument,uno::UNO_QUERY );
+//      if(xMB.is())
+//          xMB->addModifyListener((util::XModifyListener*)this);
 
     if ( m_xDocument.is() )
     {
@@ -178,6 +208,78 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc )
         m_xDocument->attachResource( ::rtl::OUString(), aSeq );
     }
 }
+
+
+uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
+{
+    if(! m_xFrame.is() )
+    {
+        rtl::OUString aDesktopSrvNm(
+            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
+
+        uno::Reference<frame::XDesktop> xDesktop(
+            m_xFactory->createInstance(aDesktopSrvNm),
+            uno::UNO_QUERY);
+
+        uno::Reference<frame::XFrame> xFrame(
+            xDesktop,uno::UNO_QUERY);
+
+        if( xFrame.is() )
+            m_xFrame = xFrame->findFrame(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")),0);
+    }
+
+    return m_xFrame;
+}
+
+
+void DocumentHolder::show()
+{
+    if(m_xFrame.is())
+        m_xFrame->activate();
+    else {
+        uno::Reference<frame::XComponentLoader> xComponentLoader(
+            DocumentFrame(),uno::UNO_QUERY);
+
+        if(xComponentLoader.is())
+        {
+            uno::Sequence<beans::PropertyValue> aSeq(2);
+
+            uno::Any aAny;
+            aAny <<= uno::Reference<uno::XInterface>(
+                GetDocument(),uno::UNO_QUERY);
+            aSeq[0] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("Model")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+
+            aAny <<= sal_False;
+            aSeq[1] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+
+            xComponentLoader->loadComponentFromURL(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("private:object")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+                0,
+                aSeq);
+        }
+    }
+}
+
+
+void DocumentHolder::hide()
+{
+    if(m_xFrame.is())
+        m_xFrame->deactivate();
+}
+
 
 void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
 {
@@ -194,10 +296,15 @@ void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sa
 
 void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 {
-    uno::Reference< util::XCloseBroadcaster > xEventBroadcaster( aSource.Source, uno::UNO_QUERY );
-
+    uno::Reference< util::XCloseBroadcaster > xEventBroadcaster(
+        aSource.Source, uno::UNO_QUERY );
     if ( xEventBroadcaster.is() )
         xEventBroadcaster->removeCloseListener( (util::XCloseListener*)this );
+
+    uno::Reference< util::XModifyBroadcaster > xModifyBroadcaster(
+        aSource.Source,uno::UNO_QUERY );
+    if(xModifyBroadcaster.is())
+        xModifyBroadcaster->removeModifyListener((util::XModifyListener*)this);
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
         m_xDocument = uno::Reference< frame::XModel >();
@@ -220,3 +327,11 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
         xDesktop->removeTerminateListener( (frame::XTerminateListener*)this );
 }
 
+
+
+void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    if(m_pOLEInterface)
+        m_pOLEInterface->notify();
+}

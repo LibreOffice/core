@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 11:13:01 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 11:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,6 @@ private:
     DWORD m_nStreamMode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-
-    sal_Bool IsReadOnly() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > DocumentFrame();
 
