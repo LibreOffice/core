@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:55:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,74 +68,159 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#include <vector>
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
+using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::lang::IllegalArgumentException;
+using com::sun::star::beans::Property;
+using com::sun::star::beans::XPropertySetInfo;
 
-#define CPPUTYPE(x) getCppuType(static_cast<x*>(NULL))
+oslInterlockedCount SAL_CALL PropertyAccessorBase::acquire()
+{
+    return ++m_refCount;
+}
 
+oslInterlockedCount SAL_CALL PropertyAccessorBase::release()
+{
+    if ( --m_refCount == 0 )
+    {
+        delete this;
+        return 0;
+    }
+    return m_refCount;
+}
 
-PropertySetBase::PropertySetBase()
+PropertySetBase::PropertySetBase( )
+    :m_pProperties( NULL )
 {
 }
 
-PropertySetBase::PropertySetBase( comphelper::PropertySetInfo* pInfo )
-    throw()
-    : PropertySetHelper( pInfo )
+PropertySetBase::~PropertySetBase( )
 {
+    DELETEZ( m_pProperties );
 }
 
-
-PropertySetBase::~PropertySetBase() throw()
+cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
 {
+    if ( !m_pProperties )
+    {
+        DBG_ASSERT( !m_aProperties.empty(), "PropertySetBase::getInfoHelper: no registered properties!" );
+        m_pProperties = new cppu::OPropertyArrayHelper( m_aProperties.begin(), m_aProperties.size(), sal_False );
+    }
+    return *m_pProperties;
 }
 
-
-Any PropertySetBase::queryInterface( Type const & rType )
-  throw( RuntimeException )
+Reference< XPropertySetInfo > SAL_CALL PropertySetBase::getPropertySetInfo(  ) throw(RuntimeException)
 {
-    Any aResult;
-    if( rType == CPPUTYPE( Reference<XPropertySet> ) )
-        aResult <<= Reference<XPropertySet>( this );
-    else if( rType == CPPUTYPE( Reference<XMultiPropertySet> ) )
-        aResult <<= Reference<XMultiPropertySet>( this );
-    else if( rType == CPPUTYPE( Reference<XPropertyState> ) )
-        aResult <<= Reference<XPropertyState>( this );
-    else
-        aResult = cppu::OWeakObject::queryInterface( rType );
-    return aResult;
+    return cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
 
-
-void PropertySetBase::acquire() throw ()
+void PropertySetBase::registerProperty( const Property& rProperty,
+    const ::rtl::Reference< PropertyAccessorBase >& rAccessor )
 {
-    cppu::OWeakObject::acquire();
+    DBG_ASSERT( rAccessor.get(), "PropertySetBase::registerProperty: invalid property accessor, this will crash!" );
+    m_aAccessors.insert( PropertyAccessors::value_type( rProperty.Handle, rAccessor ) );
+
+    DBG_ASSERT( ( rAccessor->isWriteable() == true )
+                == ( ( rProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY ) == 0 ),
+        "PropertySetBase::registerProperty: inconsistence!" );
+
+    m_aProperties.push_back( rProperty );
 }
 
-void PropertySetBase::release() throw ()
+void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
 {
-    cppu::OWeakObject::release();
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+    PropertyValueCache::iterator aPos = m_aCache.find( nHandle );
+    if ( aPos == m_aCache.end() )
+    {   // method has never before been invoked for this property
+        try
+        {
+            // determine the type of this property
+            ::cppu::IPropertyArrayHelper& rPropertyMetaData = getInfoHelper();
+            ::rtl::OUString sPropName;
+            OSL_VERIFY( rPropertyMetaData.fillPropertyMembersByHandle( &sPropName, NULL, nHandle ) );
+            Property aProperty = rPropertyMetaData.getPropertyByName( sPropName );
+            // default construct a value of this type
+            Any aEmptyValue( NULL, aProperty.Type );
+            // insert into the cache
+            aPos = m_aCache.insert( PropertyValueCache::value_type( nHandle, aEmptyValue ) ).first;
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR( "PropertySetBase::notifyAndCachePropertyValue: this is not expected to fail!" );
+        }
+    }
+    Any aOldValue = aPos->second;
+    // determine the current value
+    Any aNewValue;
+    getFastPropertyValue( aNewValue, nHandle );
+    // remember the old value
+    aPos->second = aNewValue;
+
+    aGuard.clear();
+    if ( aNewValue != aOldValue )
+        firePropertyChange( nHandle, aNewValue, aOldValue );
 }
 
-
-Sequence<Type> PropertySetBase::getTypes()
-    throw( RuntimeException )
+void PropertySetBase::initializePropertyValueCache( sal_Int32 nHandle )
 {
-    Sequence<Type> aTypes(3);
-    Type* pTypes = aTypes.getArray();
-    pTypes[0] = CPPUTYPE( Reference<XPropertySet> );
-    pTypes[1] = CPPUTYPE( Reference<XMultiPropertySet> );
-    pTypes[2] = CPPUTYPE( Reference<XPropertyState> );
-    return aTypes;
+    Any aCurrentValue;
+    getFastPropertyValue( aCurrentValue, nHandle );
+
+#if OSL_DEBUG_LEVEL > 0
+    ::std::pair< PropertyValueCache::iterator, bool > aInsertResult =
+#endif
+    m_aCache.insert( PropertyValueCache::value_type( nHandle, aCurrentValue ) );
+    DBG_ASSERT( aInsertResult.second, "PropertySetBase::initializePropertyValueCache: already cached a value for this property!" );
 }
 
-Sequence<sal_Int8> PropertySetBase::getImplementationId()
-    throw( RuntimeException )
+PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle ) const
 {
-    static cppu::OImplementationId aImplementationId;
+    PropertyAccessors::const_iterator aPropertyPos = m_aAccessors.find( nHandle );
+    DBG_ASSERT( aPropertyPos != m_aAccessors.end() && aPropertyPos->second.get(),
+        "PropertySetBase::locatePropertyHandler: accessor map is corrupted!" );
+        // neither should this be called for handles where there is no accessor, nor should a
+        // NULL accssor be in the map
+    return *aPropertyPos->second;
+}
 
-    return aImplementationId.getImplementationId();
+sal_Bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle,
+    const Any& rValue )
+    throw (IllegalArgumentException)
+{
+    PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
+    if ( !rAccessor.approveValue( rValue ) )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+
+    rAccessor.getValue( rOldValue );
+    if ( rOldValue != rValue )
+    {
+        rConvertedValue = rValue;   // no conversion at all
+        return sal_True;
+    }
+    return sal_False;
+}
+
+void SAL_CALL PropertySetBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+    throw (Exception)
+{
+    PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
+    rAccessor.setValue( rValue );
+}
+
+void SAL_CALL PropertySetBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+{
+    PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
+    rAccessor.getValue( rValue );
 }
