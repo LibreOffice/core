@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:36:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,6 @@
 #include <sfx2/docinf.hxx>
 #endif
 
-#ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -128,6 +121,8 @@
 #ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx>
 #endif
+
+#include <svtools/fltrcfg.hxx>
 
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
@@ -285,7 +280,7 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
 UINT32 SwMSDffManager::GetFilterFlags()
 {
     UINT32 nFlags(0);
-    if (const OfaFilterOptions* pOpt = OFF_APP()->GetFilterOptions())
+    if (const SvtFilterOptions* pOpt = SvtFilterOptions::Get())
     {
         if (pOpt->IsMathType2Math())
             nFlags |= OLE_MATHTYPE_2_STARMATH;
@@ -3473,8 +3468,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     eMode |= REDLINE_SHOW_DELETE;
                 if (pStg && !pGloss) /*meaningless for a glossary, cmc*/
                 {
-                    const OfaFilterOptions* pVBAFlags =
-                        OFF_APP()->GetFilterOptions();
+                    const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
                     SvxImportMSVBasic aVBasic(*mpDocShell, *pStg,
                                     pVBAFlags->IsLoadWordBasicCode(),
                                     pVBAFlags->IsLoadWordBasicStorage() );
