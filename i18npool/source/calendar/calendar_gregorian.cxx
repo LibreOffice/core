@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-06 18:34:16 $
+ *  last change: $Author: khong $ $Date: 2002-08-06 19:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,13 +305,17 @@ Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value ) throw(Runt
 sal_Bool SAL_CALL
 Calendar_gregorian::isValid() throw(RuntimeException)
 {
-    setValue();
-    for ( sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++ ) {
+    if (fieldSet) {
+        sal_Int32 tmp = fieldSet;
+        setValue();
+        memcpy(fieldSetValue, fieldValue, sizeof(fieldValue));
+        getValue();
+        for ( sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++ ) {
         // compare only with fields that are set and reset fieldSet[]
-        if (fieldSet & (1 << fieldIndex)) {
-        sal_Int32 value = body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
-        if (U_FAILURE(status) || value != fieldValue[fieldIndex])
+        if (tmp & (1 << fieldIndex)) {
+            if (fieldSetValue[fieldIndex] != fieldValue[fieldIndex])
             return sal_False;
+        }
         }
     }
     return true;
