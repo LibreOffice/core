@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-24 20:56:09 $
+ *  last change: $Author: jp $ $Date: 2000-12-06 15:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4250,10 +4250,12 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
         break;
     }
 
-    String sAdd( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                    ";Arial Unicode MS;Andale WT UI" )));
-    rAsian.GetFamilyName() += sAdd;
-    rComplex.GetFamilyName() += sAdd;
+    String sFirst( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
+                    "Andale WT UI;" )));
+    String sLast( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
+                    "Arial Unicode MS" )));
+    (rAsian.GetFamilyName().Insert( sFirst, 0 ) += ';' ) += sLast;
+    ((rComplex.GetFamilyName() += ';' ) += sFirst ) += sLast;
 }
 
 
