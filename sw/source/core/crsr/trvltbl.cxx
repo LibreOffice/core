@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:40:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,25 +185,6 @@ FASTBOOL SwCrsrShell::GoPrevCell()
     return bRet;
 }
 
-
-FASTBOOL SwCrsrShell::GotoTblBox( const String& rName )
-{
-    SwShellCrsr* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-
-    FASTBOOL bRet = pCrsr->GotoTblBox( rName );
-    if( bRet )
-    {
-        //JP 28.10.97: Bug 45028 - die "oberste" Position setzen fuer
-        //              wiederholte Kopfzeilen
-        pCrsr->GetPtPos() = Point();
-        UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                    SwCrsrShell::READONLY ); // und den akt. Updaten
-    }
-    return bRet;
-}
-
-
 FASTBOOL SwCrsrShell::SelTblRow()
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
@@ -286,62 +267,6 @@ FASTBOOL SwCrsrShell::SelTblCol()
     UpdateCrsr();                 // und den akt. Updaten
     return TRUE;
 }
-
-
-FASTBOOL SwCrsrShell::SelTblBox()
-{
-    // if we're in a table, create a table cursor, and select the cell
-    // that the current cursor's point resides in
-
-    // search for start node of our table box. If not found, exit realy
-    const SwStartNode* pStartNode =
-        pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-
-#ifndef PRODUCT
-    // the old code checks whether we're in a table by asking the
-    // frame. This should yield the same result as searching for the
-    // table box start node, right?
-    SwFrm *pFrm = GetCurrFrm();
-    DBG_ASSERT( !pFrm->IsInTab() == !(pStartNode != NULL),
-                "Schroedinger's table: We're in a box, and also we aren't." )
-#endif
-
-    if( pStartNode == NULL )
-        return FALSE;
-
-
-    SET_CURR_SHELL( this );
-
-    // create a table cursor, if there isn't one already
-    if( !pTblCrsr )
-    {
-        pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
-        pCurCrsr->DeleteMark();
-        pCurCrsr->SwSelPaintRects::Hide();
-    }
-
-    // select the complete box with our shiny new pTblCrsr
-    // 1. delete mark, and move point to first content node in box
-    // 2. set mark, and move point to last content node in box
-    // 3. exchange
-
-    pTblCrsr->DeleteMark();
-    *(pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
-    pTblCrsr->Move( fnMoveForward, fnGoNode );
-
-    pTblCrsr->SetMark();
-    *(pTblCrsr->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
-    pTblCrsr->Move( fnMoveBackward, fnGoNode );
-
-    pTblCrsr->Exchange();
-
-    // with some luck, UpdateCrsr() will now update everything that
-    // needs updateing
-    UpdateCrsr();
-
-    return TRUE;
-}
-
 
 // suche die naechste nicht geschuetzte Zelle innerhalb der Tabelle
 // Parameter:
