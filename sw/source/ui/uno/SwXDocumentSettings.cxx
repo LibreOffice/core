@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -164,7 +167,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_HORIZONTAL_GRID_SUBDIVISION,
     HANDLE_VERTICAL_GRID_RESOLUTION,
     HANDLE_VERTICAL_GRID_SUBDIVISION,
-    HANDLE_UPDATE_FROM_TEMPLATE
+    HANDLE_UPDATE_FROM_TEMPLATE,
+    HANDLE_PRINTER_INDEPENDENT_LAYOUT
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -189,6 +193,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   CPPUTYPE_INT32,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            CPPUTYPE_BOOLEAN,           0,   0},
+
+        { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      CPPUTYPE_INT16,             0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -375,9 +381,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             {
                 if( sPrinterName.getLength() > 0 )
                 {
-                    SfxPrinter *pPrinter = mpDoc->GetPrt();
-                    if ( !pPrinter )
-                        pPrinter = mpDoc->GetPrt ( sal_True );
+                    SfxPrinter* pPrinter = mpDoc->GetPrt( sal_True );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
                         SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
@@ -421,15 +425,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     // set printer only once; in _postSetValues
                     delete mpPrinter;
                     mpPrinter = pPrinter;
-
-                    if ( !pPrinter->IsOriginal() )
-                    {
-                        mpDocSh->UpdateFontList();
-                        SdrModel * pDrawModel = mpDoc->GetDrawModel();
-                        if ( pDrawModel )
-                            pDrawModel->SetRefDevice( pPrinter );
-                        mpDoc->SetOLEPrtNotifyPending();
-                    }
                 }
             }
             else
@@ -506,6 +501,18 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDocSh->GetDocInfo().SetQueryLoadTemplate( bTmp );
+        }
+        break;
+        case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
+        {
+            sal_Int16 nTmp;
+            rValue >>= nTmp;
+            if( (nTmp == document::PrinterIndependentLayout::ENABLED ) ||
+                (nTmp == document::PrinterIndependentLayout::DISABLED ) )
+                mpDoc->SetUseVirtualDevice(
+                    nTmp == document::PrinterIndependentLayout::ENABLED  );
+            else
+                throw IllegalArgumentException();
         }
         break;
         default:
@@ -661,6 +668,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDocSh->GetDocInfo().IsQueryLoadTemplate();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
+        {
+            sal_Int16 nTmp = mpDoc->IsUseVirtualDevice()
+                ? document::PrinterIndependentLayout::ENABLED
+                : document::PrinterIndependentLayout::DISABLED;
+            rValue <<= nTmp;
         }
         break;
         default:
