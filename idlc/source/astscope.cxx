@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:27:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,10 +382,6 @@ AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
         return NULL;
 
     AstDeclaration* pRetDecl = lookupByNameLocal(pDecl->getLocalName());
-
-    if ( (pRetDecl == NULL) &&
-         m_nodeType == NT_interface )
-        pRetDecl = lookupInInherited(pDecl->getLocalName());
 
    return pRetDecl;
 }
