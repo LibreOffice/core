@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-25 14:10:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2451,6 +2451,37 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    void OPropertyBrowserController::OnImageURLClicked( const String& _rName, const String& _rVal, void* _pData )
+    {
+            ::rtl::OUString aStrTrans = m_pPropertyInfo->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
+
+            ::sfx2::FileDialogHelper aFileDlg(SFXWB_GRAPHIC);
+
+            aFileDlg.SetTitle(aStrTrans);
+
+            Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
+            DBG_ASSERT(xController.is(), "OPropertyBrowserController::Clicked: missing the controller interface on the file picker!");
+            if (xController.is())
+            {
+                // do a preview by default
+                xController->setValue(FilePickerElementID::CBX_PREVIEW, ::cppu::bool2any(sal_True));
+
+                // "as link" is checked, but disabled
+                xController->setValue(FilePickerElementID::CBX_INSERT_AS_LINK, ::cppu::bool2any(sal_True));
+                xController->enableControl(FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
+            }
+
+            if (_rVal.Len() != 0)
+            {
+                aFileDlg.SetDisplayDirectory(_rVal);
+                // TODO: need to set the display directory _and_ the default name
+            }
+
+            if (!aFileDlg.Execute())
+                Commit( _rName, aFileDlg.GetPath(), _pData );
+    }
+
+    //------------------------------------------------------------------------
     void OPropertyBrowserController::Clicked( const String& aName, const String& aVal, void* pData )
     {
         try
@@ -2497,45 +2528,7 @@ namespace pcr
             // URL
             else if (nPropId == PROPERTY_ID_IMAGE_URL)
             {
-                ::rtl::OUString aStrTrans = m_pPropertyInfo->getPropertyTranslation( nPropId );
-
-                const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.FilePicker");
-                const ::rtl::OUString sInitializer = ::rtl::OUString::createFromAscii("FileOpen_LinkPreviewBox");
-
-                Reference< XFilePicker > xDialog(m_xORB->createInstance(sServiceName), UNO_QUERY);
-                Reference< XFilePickerControlAccess > xController(xDialog, UNO_QUERY);
-                Reference< XInitialization > xInit(xController, UNO_QUERY);
-                if (!xInit.is())
-                {
-                    DBG_ERROR("OPropertyBrowserController::Clicked: coult not instantiate the file picker!");
-                    return;
-                }
-
-                // initialize the dialog
-                Sequence< Any > aInitArguments(1);
-                aInitArguments[0] <<= sInitializer;
-                xInit->initialize(aInitArguments);
-                xDialog->setTitle(aStrTrans);
-
-                // do a preview by default
-                xController->setValue(FilePickerElementID::CBX_PREVIEW, ::cppu::bool2any(sal_True));
-
-                // "as link" is checked, but disabled
-                xController->setValue(FilePickerElementID::CBX_INSERT_AS_LINK, ::cppu::bool2any(sal_True));
-                xController->enableControl(FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
-
-                if (aVal.Len() != 0)
-                {
-                    xDialog->setDisplayDirectory(aVal);
-                    // TODO: need to set the display directory _and_ the default name
-                }
-
-                if (xDialog->execute())
-                {
-                    Sequence< ::rtl::OUString > aPaths = xDialog->getPath();
-                    if (aPaths.getLength() > 0)
-                        Commit( aName, aPaths[0], pData );
-                }
+                OnImageURLClicked(aName, aVal, pData);
             }
 
 
@@ -2807,6 +2800,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/05/25 14:10:16  fs
+ *  #86865# transport the FontSlant as FontSlant, not as Int16
+ *
  *  Revision 1.23  2001/05/21 04:45:11  fs
  *  #86712# UpdateUI: no 'formatting' for date 'n' time fields
  *
