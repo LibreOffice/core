@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:35:31 $
+ *  last change: $Author: os $ $Date: 2002-08-28 12:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,10 +396,18 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ catalan ] = "Use system ~font for user interface";
         Text[ thai ] = "Use system ~font for user interface";
     };
-    CheckBox CB_ACCESSIBILITY_TOOL
+    CheckBox CB_TEXTSELECTION
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWB_6 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Te~xtauswahlcursor in schreibgeschützten Textdokumenten verwenden" ;
+        Text[ english_us ] = "Use te~xt selection cursor in read-only text documents";
+    };
+    CheckBox CB_ACCESSIBILITY_TOOL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWB_7 );
         Size = MAP_APPFONT( CB_WIDTH, SUM( RSC_CD_FIXEDLINE_HEIGHT, RSC_CD_FIXEDLINE_HEIGHT ) );
         WordBreak = TRUE;
         Text = "Unterstützung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
@@ -429,7 +437,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     FixedText FT_NOTE
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( COL2 , ROWB_7 ) ;
+        Pos = MAP_APPFONT ( COL2 , ROWB_8 ) ;
         Size = MAP_APPFONT ( DIFF((COL2-COL1),CB_WIDTH) , LASTTEXT_HEIGHT ) ;
         WordBreak = TRUE;
         Text = "Hinweis: Für die Kommunikation mit Programmen, die einen behindertengerechten Zugriff auf den Computer ermöglichen, wird Sun Microsystems Java benutzt. Beim ersten Programmstart muss daher die Java Laufzeitumgebung geladen werden. Dies kann zu einer verlängerten Startzeit führen." ;

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2002-08-21 13:19:22 $
+ *  last change: $Author: os $ $Date: 2002-08-28 12:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4714,7 +4714,15 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 					<label xml:lang="en-US">Use system default user interface font</label>
 				</info>
 			</prop>
-		</group>
+            <prop oor:name="IsSelectionInReadonly" oor:type="xs:boolean">
+                <!-- Responsible: OS -->
+				<value>true</value>
+				<info>
+                    <desc xml:lang="en-US">Indicates whether or not the cursor is displayed in readonly texts.</desc>
+                    <label xml:lang="en-US">Use text selection mode in readonly texts.</label>
+				</info>
+			</prop>
+        </group>
 		<set oor:name="OfficeObjects" oor:node-type="ObjectNames"/>
 		<group oor:name="ExternalApps" oor:extensible="true">
 			<!--Responsible: OBR-->
