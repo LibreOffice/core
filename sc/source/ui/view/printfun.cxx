@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-30 18:39:34 $
+ *  last change: $Author: nn $ $Date: 2002-06-07 10:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2234,6 +2234,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         {
             pDev->SetLineColor( aGridColor );
             pDev->SetFillColor();
+            pDev->SetMapMode(aOffsetMode);
         }
 
         ScPatternAttr aPattern( pDoc->GetPool() );
