@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:23:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,28 +519,24 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
     return bRet;
 }
 
-BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
+void ScDocShell::BeforeXMLLoading()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
-
-    //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
-
     // prevent unnecessary broadcasts and updates
-    ScDocShellModificator aModificator( *this );
+    DBG_ASSERT(pModificator == NULL, "The Modificator should not exist");
+    pModificator = new ScDocShellModificator( *this );
 
     aDocument.SetImportingXML( TRUE );
     // prevent unnecessary broadcasts and "half way listeners"
     aDocument.SetInsertingFromOtherDoc( TRUE );
 
-    // no Seek(0) here - always loading from storage, GetInStream must not be called
+    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+        ScColumn::bDoubleAlloc = sal_True;
+}
 
-    ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
-    sal_Bool bRet(sal_False);
+void ScDocShell::AfterXMLLoading(sal_Bool bRet)
+{
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
     {
-        ScColumn::bDoubleAlloc = sal_True;
-        bRet = aImport.Import(sal_False);
-
         UpdateLinks();
         // don't prevent establishing of listeners anymore
         aDocument.SetInsertingFromOtherDoc( FALSE );
@@ -606,11 +602,38 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
         ScColumn::bDoubleAlloc = sal_False;
     }
     else
-    {
-        bRet = aImport.Import(sal_True);
         aDocument.SetInsertingFromOtherDoc( FALSE );
-    }
+
     aDocument.SetImportingXML( FALSE );
+
+    if (pModificator)
+    {
+        delete pModificator;
+        pModificator = NULL;
+    }
+    else
+        DBG_ERROR("The Modificator should exist");
+}
+
+BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
+
+    //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
+
+    // no Seek(0) here - always loading from storage, GetInStream must not be called
+
+    BeforeXMLLoading();
+
+    ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
+
+    sal_Bool bRet(sal_False);
+    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+        bRet = aImport.Import(sal_False);
+    else
+        bRet = aImport.Import(sal_True);
+
+    AfterXMLLoading(bRet);
 
     //! row heights...
 
@@ -2145,7 +2168,8 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         nDocumentLock   ( 0 ), \
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
         bUpdateEnabled  ( TRUE ), \
-        pVirtualDevice_100th_mm ( NULL )
+        pVirtualDevice_100th_mm ( NULL ), \
+        pModificator    ( NULL )
 
 //------------------------------------------------------------------
 
@@ -2237,6 +2261,12 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
     delete pVirtualDevice_100th_mm;
+
+    if (pModificator)
+    {
+        DBG_ERROR("The Modificator should not exist");
+        delete pModificator;
+    }
 }
 
 //------------------------------------------------------------------
