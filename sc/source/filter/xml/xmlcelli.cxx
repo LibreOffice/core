@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 10:53:36 $
+ *  last change: $Author: sab $ $Date: 2000-09-28 17:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,6 +877,10 @@ void ScXMLTableRowCellContext::EndElement()
                 uno::Reference<sheet::XSpreadsheet> xTable;
                 aTable>>=xTable;
                 uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
+                if (aCellPos.Column > MAXCOL)
+                    aCellPos.Column = MAXCOL - nCellsRepeated + 1;
+                if (aCellPos.Row > MAXROW)
+                    aCellPos.Row = MAXROW - nRepeatedRows + 1;
                 uno::Reference <table::XCell> xTempCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
                 uno::Reference <text::XText> xTempText (xTempCell, uno::UNO_QUERY);
                 if (xTempText.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-09-28 17:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,11 @@ void ScXMLTableRowContext::EndElement()
                         uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
                         if (xTableRows.is())
                         {
-                            uno::Any aRow = xTableRows->getByIndex(nCurrentRow);
+                            uno::Any aRow;
+                            if (nCurrentRow <= MAXROW)
+                                aRow = xTableRows->getByIndex(nCurrentRow);
+                            else
+                                aRow = xTableRows->getByIndex(MAXROW);
                             uno::Reference<table::XCellRange> xTableRow;
                             if (aRow >>= xTableRow)
                             {
