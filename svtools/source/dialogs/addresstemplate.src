@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:09:25 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Ulica";
     Text[ portuguese_brazilian ] = "Street";
     Text[ japanese ] = "s’¬‘º–¼";
-    Text[ korean ] = "°Å¸®";
+    Text[ korean ] = "°Å¸®¡¡ÀÌ¸§";
     Text[ chinese_simplified ] = "½ÖµÀ";
     Text[ chinese_traditional ] = "µó¹D";
     Text[ turkish ] = "Street";
@@ -562,7 +562,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
     Text[ japanese ] = "Œ¨‘‚«";
-    Text[ korean ] = "Á¦¸ñ";
+    Text[ korean ] = "Á÷ÇÔ";
     Text[ chinese_simplified ] = "Í·ÏÎ";
     Text[ chinese_traditional ] = "ºÙ¿×";
     Text[ turkish ] = "Title";
@@ -585,7 +585,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Stanowisko";
     Text[ portuguese_brazilian ] = "Position";
     Text[ japanese ] = "–ğE";
-    Text[ korean ] = "À§Ä¡";
+    Text[ korean ] = "Á÷À§";
     Text[ chinese_simplified ] = "Ö°Î»";
     Text[ chinese_traditional ] = "Â¾°È";
     Text[ turkish ] = "Position";
@@ -631,7 +631,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Inicja³y";
     Text[ portuguese_brazilian ] = "Initials";
     Text[ japanese ] = "²Æ¼¬Ù";
-    Text[ korean ] = "Ã¹±ÛÀÚ";
+    Text[ korean ] = "¸Ó¸®±ÛÀÚ";
     Text[ chinese_simplified ] = "ËõĞ´";
     Text[ chinese_traditional ] = "ÁY¼g";
     Text[ turkish ] = "Initials";
@@ -677,7 +677,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Telefon (pryw.)";
     Text[ portuguese_brazilian ] = "Telephon Home";
     Text[ japanese ] = "Tel.©‘î";
-    Text[ korean ] = "ÀüÈ­. ÀÚÅÃ";
+    Text[ korean ] = "Tel . ÀÚÅÃ";
     Text[ chinese_simplified ] = "Ë½ÈËµÄµç»°ºÅÂë";
     Text[ chinese_traditional ] = "¨p¤H¹q¸Ü¸¹½X";
     Text[ turkish ] = "Telephon Home";
@@ -700,7 +700,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Telefon (s³u¿b.)";
     Text[ portuguese_brazilian ] = "Telephon Work";
     Text[ japanese ] = "Tel.‰ïĞ";
-    Text[ korean ] = "ÀüÈ­, È¸»ç";
+    Text[ korean ] = "Tel£® È¸»ç";
     Text[ chinese_simplified ] = "¹«Ë¾µÄµç»°ºÅÂë";
     Text[ chinese_traditional ] = "¤½¥q¹q¸Ü¸¹½X";
     Text[ turkish ] = "Telephon Work";
@@ -955,7 +955,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Telefon (s³u¿b.)";
     Text[ portuguese_brazilian ] = "Telephon Office";
     Text[ japanese ] = "Tel.µÌ¨½";
-    Text[ korean ] = "ÀüÈ­, »ç¹«½Ç";
+    Text[ korean ] = "Tel£® »ç¹«½Ç";
     Text[ chinese_simplified ] = "°ì¹«ÊÒµÄµç»°ºÅÂë";
     Text[ chinese_traditional ] = "¿ì¤½«Ç¹q¸Ü¸¹½X";
     Text[ turkish ] = "Telephon Office";
@@ -1047,7 +1047,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Kalendarz";
     Text[ portuguese_brazilian ] = "Calendar";
     Text[ japanese ] = "¶ÚİÀŞ°";
-    Text[ korean ] = "´Ş·Â";
+    Text[ korean ] = "Ä®·»´õ";
     Text[ chinese_simplified ] = "ÈÕÀú";
     Text[ chinese_traditional ] = "¦æ¨Æ¾ú";
     Text[ turkish ] = "Calendar";
