@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:37:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,12 @@
 #define LINEH       12
 #define FLINEH      8
 #define LEFT        12
-#define MID         88
+#define MID         96
 #define RIGHT       248
 #define TOP         10
 #define LINE(y)     (14+y*15)
 #define FLINE(y)    (16+y*15)
-#define NAMELEN     78
+#define NAMELEN     74
 
 #endif // #ifndef _SVX_OPTGENRL_HRC
 
