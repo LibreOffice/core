@@ -100,7 +100,8 @@ MIMELIST = \
     oasis-presentation-template \
     oasis-formula \
     oasis-master-document \
-        oasis-database
+    oasis-web-template \
+    oasis-database
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
   
