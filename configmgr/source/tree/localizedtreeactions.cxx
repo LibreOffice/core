@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-11 14:06:01 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 10:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,9 +334,16 @@ std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUS
 
     else // needs reduction
     {
+        OUString const aTreeId = _pNode->getId();
+
         OCloneForLocale aCloner(_sLocale);
         aCloner.applyToNode(*_pNode);
         aResult = aCloner.getResult();
+
+        OSL_ENSURE(aResult.get(),"Cloning a tree for a locale unexpectedly produced NOTHING");
+        if (aResult.get())
+            if (ISubtree* pResultTree = aResult->asISubtree())
+                OIdPropagator::propagateIdToTree(aTreeId, *pResultTree);
     }
     return aResult;
 }
