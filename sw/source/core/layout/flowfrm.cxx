@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,8 +586,8 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
             if ( pCnt )
                 pCnt->InvalidatePage( pPage );
         }
-        else if ( pSh->GetDoc()->GetLineNumberInfo().IsRestartEachPage() &&
-                  pPage->FindFirstBodyCntnt() == &rThis )
+        else if ( pSh && pSh->GetDoc()->GetLineNumberInfo().IsRestartEachPage()
+                  && pPage->FindFirstBodyCntnt() == &rThis )
         {
             rThis._InvalidateLineNum();
         }
