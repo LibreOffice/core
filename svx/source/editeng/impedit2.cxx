@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:23:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4169,6 +4169,16 @@ void ImpEditEngine::CallNotify( EENotify& rNotify )
 
 void ImpEditEngine::EnterBlockNotifications()
 {
+    if( !nBlockNotifications )
+    {
+        // #109864# Send out START notification immediately, to allow
+        // external, non-queued events to be captured as well from
+        // client side
+        EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_START );
+        aNotify.pEditEngine = GetEditEnginePtr();
+        GetNotifyHdl().Call( &aNotify );
+    }
+
     nBlockNotifications++;
 }
 
@@ -4177,17 +4187,9 @@ void ImpEditEngine::LeaveBlockNotifications()
     DBG_ASSERT( nBlockNotifications, "LeaveBlockNotifications - Why?" );
 
     nBlockNotifications--;
-    if ( !nBlockNotifications && aNotifyCache.Count() )
+    if ( !nBlockNotifications )
     {
         // Call blocked notify events...
-        BOOL bMultipleNotifications = aNotifyCache.Count() > 1;
-        if ( bMultipleNotifications )
-        {
-            EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_START );
-            aNotify.pEditEngine = GetEditEnginePtr();
-            GetNotifyHdl().Call( &aNotify );
-        }
-
         while ( aNotifyCache.Count() )
         {
             EENotify* pNotify = aNotifyCache[0];
@@ -4197,12 +4199,9 @@ void ImpEditEngine::LeaveBlockNotifications()
             delete pNotify;
         }
 
-        if ( bMultipleNotifications )
-        {
-            EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );
-            aNotify.pEditEngine = GetEditEnginePtr();
-            GetNotifyHdl().Call( &aNotify );
-        }
+        EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );
+        aNotify.pEditEngine = GetEditEnginePtr();
+        GetNotifyHdl().Call( &aNotify );
     }
 }
 
