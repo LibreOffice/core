@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_body.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:15:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 #define TRANSLITERATION_ALL
 #include "transliteration_body.hxx"
-#include "data/transliteration_casemapping.h"
+#include "casefolding.hxx"
 
+using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
@@ -71,7 +72,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 Transliteration_body::Transliteration_body()
 {
-    aMappingType = 0;
+    nMappingType = 0;
     transliterationName = "Transliteration_body";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_body";
 }
@@ -104,7 +105,7 @@ Transliteration_body::transliterate( const OUString& inStr, sal_Int32 startPos, 
     Sequence< sal_Int32 >& offset) throw(RuntimeException)
 {
 #if 0
-/* Performace optimization:
+/* Performance optimization:
  * The two realloc() consume 48% (32% grow, 16% shrink) runtime of this method!
  * getValue() needs about 15%, so there is equal balance if we trade the second
  * (shrinking) realloc() for a getValue(). But if the caller initializes the
@@ -140,16 +141,19 @@ Transliteration_body::transliterate( const OUString& inStr, sal_Int32 startPos, 
     if (nCount > 512)
         out = aHeapBuf =  (sal_Unicode*) malloc((nCount * NMAPPINGMAX) * sizeof(sal_Unicode));
 
-    offset.realloc(nCount * NMAPPINGMAX);
+        if (useOffset)
+            offset.realloc(nCount * NMAPPINGMAX);
     sal_Int32 j = 0;
     for (sal_Int32 i = 0; i < nCount; i++) {
-        Mapping &map = getValue(in, i, nCount);
+        Mapping &map = casefolding::getValue(in, i, nCount, aLocale, nMappingType);
         for (sal_Int32 k = 0; k < map.nmap; k++) {
-        out[j] = map.map[k];
-        offset[j++] = i + startPos;
+                if (useOffset)
+                    offset[j] = i + startPos;
+        out[j++] = map.map[k];
         }
     }
-    offset.realloc(j);
+        if (useOffset)
+            offset.realloc(j);
 
     OUString r(out, j);
 
@@ -160,33 +164,95 @@ Transliteration_body::transliterate( const OUString& inStr, sal_Int32 startPos, 
 #else
     const sal_Unicode *in = inStr.getStr() + startPos;
 
-    sal_Int32 nOffCount = 0, i;
-    for (i = 0; i < nCount; i++)
+    // Two different blocks to eliminate the if(useOffset) condition inside the
+    // inner k loop. Yes, on massive use even such small things do count.
+    if ( useOffset )
     {
-        const Mapping &map = getValue(in, i, nCount);
-        nOffCount += map.nmap;
-    }
-
-    if ( nOffCount != offset.getLength() )
-        offset.realloc( nOffCount );
-    rtl_uString* pStr = x_rtl_uString_new_WithLength( nOffCount, 1 );  // our x_rtl_ustring.h
-    sal_Unicode* out = pStr->buffer;
-
-    sal_Int32 j = 0;
-    sal_Int32 * const pArr = offset.getArray();
-    for (i = 0; i < nCount; i++)
-    {
-        const Mapping &map = getValue(in, i, nCount);
-        for (sal_Int32 k = 0; k < map.nmap; k++)
+        sal_Int32 nOffCount = 0, i;
+        for (i = 0; i < nCount; i++)
         {
-            out[j] = map.map[k];
-            pArr[j++] = i + startPos;
+            const Mapping &map = casefolding::getValue(in, i, nCount, aLocale, nMappingType);
+            nOffCount += map.nmap;
         }
-    }
-    out[j] = 0;
+        rtl_uString* pStr = x_rtl_uString_new_WithLength( nOffCount, 1 );  // our x_rtl_ustring.h
+        sal_Unicode* out = pStr->buffer;
 
-    return OUString( pStr, SAL_NO_ACQUIRE );
+        if ( nOffCount != offset.getLength() )
+            offset.realloc( nOffCount );
+
+        sal_Int32 j = 0;
+        sal_Int32 * pArr = offset.getArray();
+        for (i = 0; i < nCount; i++)
+        {
+            const Mapping &map = casefolding::getValue(in, i, nCount, aLocale, nMappingType);
+            for (sal_Int32 k = 0; k < map.nmap; k++)
+            {
+                pArr[j] = i + startPos;
+                out[j++] = map.map[k];
+            }
+        }
+        out[j] = 0;
+
+        return OUString( pStr, SAL_NO_ACQUIRE );
+    }
+    else
+    {
+        // In the simple case of no offset sequence used we can eliminate the
+        // first getValue() loop. We could also assume that most calls result
+        // in identical string lengths, thus using a preallocated
+        // OUStringBuffer could be an easy way to assemble the return string
+        // without too much hassle. However, for single characters the
+        // OUStringBuffer::append() method is quite expensive compared to a
+        // simple array operation, so it pays here to copy the final result
+        // instead.
+
+        // Allocate the max possible buffer. Try to use stack instead of heap,
+        // which would have to be reallocated most times anyways.
+        const sal_Int32 nLocalBuf = 2048;
+        sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf, *pHeapBuf = NULL;
+        if ( nCount > nLocalBuf )
+            out = pHeapBuf = new sal_Unicode[ nCount * NMAPPINGMAX ];
+
+        sal_Int32 j = 0;
+        for ( sal_Int32 i = 0; i < nCount; i++)
+        {
+            const Mapping &map = casefolding::getValue(in, i, nCount, aLocale, nMappingType);
+            for (sal_Int32 k = 0; k < map.nmap; k++)
+            {
+                out[j++] = map.map[k];
+            }
+        }
+
+        OUString aRet( out, j );
+        if ( pHeapBuf )
+            delete [] pHeapBuf;
+        return aRet;
+    }
 #endif
+}
+
+OUString SAL_CALL
+Transliteration_body::transliterateChar2String( sal_Unicode inChar ) throw(RuntimeException)
+{
+        const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+        rtl_uString* pStr = x_rtl_uString_new_WithLength( map.nmap, 1 );  // our x_rtl_ustring.h
+        sal_Unicode* out = pStr->buffer;
+        sal_Int32 i;
+
+        for (i = 0; i < map.nmap; i++)
+            out[i] = map.map[i];
+        out[i] = 0;
+
+        return OUString( pStr, SAL_NO_ACQUIRE );
+}
+
+sal_Unicode SAL_CALL
+Transliteration_body::transliterateChar2Char( sal_Unicode inChar ) throw(MultipleCharsOutputException, RuntimeException)
+{
+        const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+        if (map.nmap > 1)
+            throw MultipleCharsOutputException();
+        return map.map[0];
 }
 
 OUString SAL_CALL
@@ -196,82 +262,9 @@ Transliteration_body::folding( const OUString& inStr, sal_Int32 startPos, sal_In
     return this->transliterate(inStr, startPos, nCount, offset);
 }
 
-static Mapping mapping_03a3[] = {{0, 1, 0x03c2, 0, 0 },{0, 1, 0x03c3, 0, 0}};
-static Mapping mapping_0307[] = {{0, 0, 0, 0, 0 },{0, 1, 0x0307, 0, 0}};
-static Mapping mapping_0049[] = {{0, 2, 0x0069, 0x0307, 0},{0, 1, 0x0131, 0, 0},{0, 1, 0x0069, 0, 0}};
-static Mapping mapping_004a[] = {{0, 2, 0x006a, 0x0307, 0},{0, 1, 0x006a, 0, 0}};
-static Mapping mapping_012e[] = {{0, 2, 0x012f, 0x0307, 0},{0, 1, 0x012f, 0, 0}};
-static Mapping mapping_00cc[] = {{0, 3, 0x0069, 0x0307, 0x0300},{0, 1, 0x00ec, 0, 0}};
-static Mapping mapping_00cd[] = {{0, 3, 0x0069, 0x0307, 0x0301},{0, 1, 0x00ed, 0, 0}};
-static Mapping mapping_0128[] = {{0, 3, 0x0069, 0x0307, 0x0303},{0, 1, 0x0129, 0, 0}};
-static Mapping mapping_0069[] = {{0, 1, 0x0130, 0, 0},{0, 1, 0x0049, 0, 0}};
-
-#define langIs(lang) (aLocale.Language.compareToAscii(lang) == 0)
-
-// only check simple case, there is more complicated case need to be checked.
-#define type_i(ch) (ch == 0x0069 || ch == 0x006a)
-
-#define cased_letter(ch) (CaseMappingIndex[ch>>8] >= 0 && (CaseMappingValue[(CaseMappingIndex[ch>>8] << 8) + (ch&0xff)].type & CasedLetter))
-
-Mapping& Transliteration_body::getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len) throw(RuntimeException)
-{
-    switch(str[pos]) {
-    case 0x03a3:
-        // final_sigma (not followed by cased and preceded by cased character)
-        // DOES NOT check ignorable sequence yet (more complicated implementation).
-        return !(pos < len && cased_letter(str[pos+1])) && (pos > 0 && cased_letter(str[pos-1])) ?
-        mapping_03a3[0] : mapping_03a3[1];
-    case 0x0307:
-        return ((aMappingType == MappingTypeLowerToUpper && langIs("lt") ||
-        aMappingType == MappingTypeUpperToLower && (langIs("tr") || langIs("az"))) &&
-        (pos > 0 && type_i(str[pos-1]))) ?  // after_i
-            mapping_0307[0] : mapping_0307[1];
-    case 0x0069:
-        return (langIs("tr") || langIs("az")) ? mapping_0069[0] : mapping_0069[1];
-    case 0x0049: return langIs("lt") ? mapping_0049[0] :
-            (langIs("tr") || langIs("az")) ? mapping_0049[1] : mapping_0049[2];
-    case 0x004a: return langIs("lt") ? mapping_004a[0] : mapping_004a[1];
-    case 0x012e: return langIs("lt") ? mapping_012e[0] : mapping_012e[1];
-    case 0x00cc: return langIs("lt") ? mapping_00cc[0] : mapping_00cc[1];
-    case 0x00cd: return langIs("lt") ? mapping_00cd[0] : mapping_00cd[1];
-    case 0x0128: return langIs("lt") ? mapping_0128[0] : mapping_0128[1];
-    }
-}
-
-Mapping& Transliteration_body::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len)  throw(RuntimeException)
-{
-    static Mapping dummy = { 0, 1, 0, 0, 0 };
-    sal_Int16 address = CaseMappingIndex[str[pos] >> 8] << 8;
-
-    dummy.map[0] = str[pos];
-
-    if (address >= 0 && (CaseMappingValue[address += (str[pos] & 0xFF)].type & aMappingType)) {
-        sal_uInt8 type = CaseMappingValue[address].type;
-        if (type & ValueTypeNotValue) {
-        if (CaseMappingValue[address].value == 0)
-            return getConditionalValue(str, pos, len);
-        else {
-            for (int map = CaseMappingValue[address].value;
-                map < CaseMappingValue[address].value + MaxCaseMappingExtras; map++) {
-            if (CaseMappingExtra[map].type & aMappingType) {
-                if (CaseMappingExtra[map].type & ValueTypeNotValue)
-                return getConditionalValue(str, pos, len);
-                else
-                return CaseMappingExtra[map];
-            }
-            }
-            // Should not come here
-            throw RuntimeException();
-        }
-        } else
-        dummy.map[0] = CaseMappingValue[address].value;
-    }
-    return dummy;
-}
-
 Transliteration_casemapping::Transliteration_casemapping()
 {
-    aMappingType = 0;
+    nMappingType = 0;
     transliterationName = "casemapping(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_casemapping";
 }
@@ -279,20 +272,20 @@ Transliteration_casemapping::Transliteration_casemapping()
 void SAL_CALL
 Transliteration_casemapping::setMappingType( const sal_uInt8 rMappingType, const Locale& rLocale )
 {
-    aMappingType = rMappingType;
+    nMappingType = rMappingType;
     aLocale = rLocale;
 }
 
 Transliteration_u2l::Transliteration_u2l()
 {
-    aMappingType = MappingTypeUpperToLower;
+    nMappingType = MappingTypeUpperToLower;
     transliterationName = "upper_to_lower(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_u2l";
 }
 
 Transliteration_l2u::Transliteration_l2u()
 {
-    aMappingType = MappingTypeLowerToUpper;
+    nMappingType = MappingTypeLowerToUpper;
     transliterationName = "lower_to_upper(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_l2u";
 }
