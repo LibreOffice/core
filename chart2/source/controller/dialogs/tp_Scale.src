@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_Scale.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,14 +279,14 @@ TabPage TP_SCALE_Y
             Text [ danish ] = "Overinterval:" ;
             Text [ portuguese_brazilian ] = "Intervalo ~Principal:" ;
             Text [ portuguese ] = "Intervalo ~principal:" ;
-            Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼(~I)ï¼š";
+            Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼ï¼š";
             Text[ russian ] = "Îñíîâíîé èíòåğâàë:";
             Text[ polish ] = "Przedz~ia³ g³.:";
             Text[ japanese ] = "ä¸»é–“éš”(~I):";
             Text[ chinese_traditional ] = "ä¸»å€é–“å€¼(~I)ï¼š";
             Text[ arabic ] = "İÊÑÉ İÇÕáÉ ÑÆíÓíÉ:";
             Text[ dutch ] = "Hoo~fdinterval:";
-            Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼(~I)ï¼š";
+            Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼ï¼š";
             Text[ greek ] = "Êıñéï ~äéÜóôçìá:";
         Text[ korean ] = "ì£¼ ê°„ê²©(~I):";
         Text[ turkish ] = "Ana A~ralık:";
@@ -358,14 +358,14 @@ TabPage TP_SCALE_Y
             Text [ danish ] = "Underinterval:" ;
             Text [ portuguese_brazilian ] = "~Intervalo auxiliar:" ;
             Text [ portuguese ] = "~Intervalo auxiliar:" ;
-            Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼(~N)ï¼š";
+            Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼ï¼š";
             Text[ russian ] = "Äîïîëíèòåëüíûé èíòåğâàë:";
             Text[ polish ] = "Przedzia³ pomocn.:";
             Text[ japanese ] = "è£œåŠ©é–“éš”(~N):";
             Text[ chinese_traditional ] = "æ¬¡å€é–“å€¼(~N)ï¼š";
             Text[ arabic ] = "İÊÑÉ İÇÕáÉ ãÓÇÚÏÉ:";
             Text[ dutch ] = "~Hulpinterval";
-            Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼(~N)ï¼š";
+            Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼ï¼š";
             Text[ greek ] = "Âïç~è. äéÜóôçìá:";
         Text[ korean ] = "ë³´ì¡° ê°„ê²©(~N):";
         Text[ turkish ] = "Kü~çük aralık";
@@ -575,11 +575,11 @@ TabPage TP_SCALE_Y
         Text[ polish ] = "Znaczniki osi";
         Text[ portuguese_brazilian ] = "Marcas nos eixos";
         Text[ japanese ] = "è»¸ã®åŒºåˆ‡ã‚Š";
-        Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼æ ‡è®°";
         Text[ chinese_traditional ] = "ä¸»å€é–“å€¼æ¨™è¨˜";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáãÍÇæÑ";
         Text[ dutch ] = "Asmarkeringen";
-        Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼æ ‡è®°";
         Text[ greek ] = "ÓçìÜíóåéò áîüíùí";
         Text[ korean ] = "ì£¼ ê°„ê²© í‘œì‹œ";
         Text[ turkish ] = "Büyük aralık işaretleri";
@@ -682,11 +682,11 @@ TabPage TP_SCALE_Y
         Text[ polish ] = "Znaczniki podzia³ki";
         Text[ portuguese_brazilian ] = "Marcas auxiliares";
         Text[ japanese ] = "è£œåŠ©åŒºåˆ‡ã‚Š";
-        Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ chinese_simplified ] = "è¾…åŒºé—´å€¼æ ‡è®°";
         Text[ chinese_traditional ] = "æ¬¡å€é–“å€¼æ¨™è¨˜";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáãÓÇÚÏÉ";
         Text[ dutch ] = "Hulpmarkeringen";
-        Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ chinese_simplified ] = "è¾…åŒºé—´å€¼æ ‡è®°";
         Text[ greek ] = "ÂïçèçôéêÜ óçìÜäéá";
         Text[ korean ] = "ë³´ì¡° ì„ íƒ í‘œì‹œ";
         Text[ turkish ] = "Küçük aralık işaretleri";

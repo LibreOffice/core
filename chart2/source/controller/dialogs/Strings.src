@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@ String STR_TITLE_GRID
     Text [ dutch ] = "Raster" ;
     Text [ spanish ] = "Cuadrícula" ;
     Text [ english_us ] = "Grid" ;
-    Text[ chinese_simplified ] = "ç½‘æ ¼çº¿";
+    Text[ chinese_simplified ] = "ç½‘æ ¼";
     Text[ russian ] = "Ñåòêà";
     Text[ polish ] = "Siatka";
     Text[ japanese ] = "ç›®ç››ç·š";
     Text[ chinese_traditional ] = "ç¶²æ ¼";
     Text[ arabic ] = "ÔÈßÉ";
     Text[ dutch ] = "Raster";
-    Text[ chinese_simplified ] = "ç½‘æ ¼çº¿";
+    Text[ chinese_simplified ] = "ç½‘æ ¼";
     Text[ greek ] = "ÐëÝãìá";
     Text[ korean ] = "ëˆˆê¸ˆì„ ";
     Text[ turkish ] = "Kýlavuz çizgiler";
@@ -2248,7 +2248,7 @@ String STR_CHART_DOCUMENT_FULLTYPE_60
     Text [ french ] = "%PRODUCTNAME 6.0 Diagramme" ;
     Text [ portuguese ] = "%PRODUCTNAME 6.0 Gráfico" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Chart" ;
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 å›¾è¡¨";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION å›¾è¡¨";
     Text[ russian ] = "Äèàãðàììà %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 Chart";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ã‚°ãƒ©ãƒ•";
