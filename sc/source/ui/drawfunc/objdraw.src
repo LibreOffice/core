@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:35:48 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@
                     Text [ french ] = "А ~droite" ; \
                     Text [ swedish ] = "Hцge~r" ; \
                     Text [ dutch ] = "Re~chts" ; \
-                    Text [ spanish ] = "Derecha" ; \
+                    Text [ spanish ] = "~Derecha" ; \
                     Text [ english_us ] = "~Right" ;\
                     Text[ chinese_simplified ] = "еђ‘еЏі(~R)";  \
                     Text[ russian ] = "Справа"; \
