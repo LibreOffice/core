@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:29:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,10 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         // declaration of pure virtual methods of base class <SwAnchoredObject>
         virtual void MakeObjPos();
         virtual void InvalidateObjPos();
+        inline bool IsValidPos() const
+        {
+            return mbValidPos;
+        }
 
         // accessors to the format
         virtual SwFrmFmt& GetFrmFmt();
