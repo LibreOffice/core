@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 13:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -112,7 +108,6 @@ private:
     Edit        aEdtMin;
     FixedText   aFtMax;
     Edit        aEdtMax;
-    GroupBox    aGrpValues;
 
     String      aStrMin;
     String      aStrMax;
@@ -144,11 +139,11 @@ class ScTPValidationHelp : public SfxTabPage
 {
 private:
     TriStateBox     aTsbHelp;
+    FixedLine       aFlContent;
     FixedText       aFtTitle;
     Edit            aEdtTitle;
     FixedText       aFtInputHelp;
     MultiLineEdit   aEdInputHelp;
-    GroupBox        aGrpContent;
 
     const SfxItemSet& rSet;
 
@@ -175,6 +170,7 @@ class ScTPValidationError : public SfxTabPage
 {
 private:
     TriStateBox     aTsbShow;
+    FixedLine       aFlContent;
     FixedText       aFtAction;
     ListBox         aLbAction;
     PushButton      aBtnSearch;
@@ -182,7 +178,6 @@ private:
     Edit            aEdtTitle;
     FixedText       aFtError;
     MultiLineEdit   aEdError;
-    GroupBox        aGrpContent;
 
     const SfxItemSet& rSet;
 

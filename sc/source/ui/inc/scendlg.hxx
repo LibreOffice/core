@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 13:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,6 @@
 #include <svtools/ctrlbox.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 //===================================================================
 
 class ScNewScenarioDlg : public ModalDialog
@@ -106,11 +102,11 @@ public:
                             Color& rColor, USHORT& rFlags ) const;
 
 private:
-    GroupBox            aGbName;
+    FixedLine           aFlName;
     Edit                aEdName;
-    GroupBox            aGbComment;
+    FixedLine           aFlComment;
     MultiLineEdit       aEdComment;
-    GroupBox            aGbOptions;
+    FixedLine           aFlOptions;
     CheckBox            aCbShowFrame;
     ColorListBox        aLbColor;
     //CheckBox          aCbPrintFrame;
@@ -125,6 +121,7 @@ private:
     BOOL                bIsEdit;
 
     DECL_LINK( OkHdl, OKButton * );
+    DECL_LINK( EnableHdl, CheckBox * );
 };
 
 

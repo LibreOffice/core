@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 13:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,29 +58,32 @@
  *
  *
  ************************************************************************/
-#define TP_VALIDATION_VALUES 696
+#define TP_VALIDATION_VALUES    696
 #define TP_VALIDATION_INPUTHELP 697
-#define TP_VALIDATION_ERROR 698
-#define TAB_DLG_VALIDATION 699
-#define FT_ALLOW 1
-#define LB_ALLOW 1
-#define TSB_ALLOW_BLANKS 1
-#define FT_VALUE 2
-#define LB_VALUE 2
-#define FT_MIN 3
-#define EDT_MIN 1
-#define FT_MAX 4
-#define EDT_MAX 2
-#define GRP_VALUES 1
-#define TSB_HELP 1
-#define FT_TITLE 1
-#define FT_INPUTHELP 2
-#define EDT_TITLE 1
-#define EDT_INPUTHELP 2
-#define TSB_SHOW 1
-#define FT_ACTION 3
-#define FT_ERROR 4
-#define LB_ACTION 2
-#define EDT_ERROR 1
-#define BTN_SEARCH 1
-#define GRP_CONTENT 1
+#define TP_VALIDATION_ERROR     698
+#define TAB_DLG_VALIDATION      699
+
+#define FT_ALLOW                1
+#define LB_ALLOW                2
+#define TSB_ALLOW_BLANKS        3
+#define FT_VALUE                4
+#define LB_VALUE                5
+#define FT_MIN                  6
+#define EDT_MIN                 7
+#define FT_MAX                  8
+#define EDT_MAX                 9
+
+#define FL_CONTENT              10
+
+#define TSB_HELP                11
+#define FT_TITLE                12
+#define EDT_TITLE               13
+#define FT_INPUTHELP            14
+#define EDT_INPUTHELP           15
+
+#define TSB_SHOW                21
+#define FT_ACTION               22
+#define FT_ERROR                23
+#define LB_ACTION               24
+#define EDT_ERROR               25
+#define BTN_SEARCH              26
