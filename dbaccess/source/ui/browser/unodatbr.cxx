@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:00:13 $
+ *  last change: $Author: fs $ $Date: 2001-02-20 09:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1397,14 +1397,18 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
     PopupMenu aContextMenu(ModuleRes(MENU_BROWSERTREE_CONTEXT));
     Point aPosition;
     SvLBoxEntry* pEntry = NULL;
+    SvLBoxEntry* pOldSelection = NULL;
     if (_pEvent->IsMouseEvent())
     {
         aPosition = _pEvent->GetMousePosPixel();
         // ensure that the entry which the user clicked at is selected
         pEntry = m_pTreeView->getListBox()->GetEntry(aPosition);
         OSL_ENSURE(pEntry,"No current entry!");
-//      if (pClickedAt && !m_pTreeView->getListBox()->IsSelected(pClickedAt))
-//          m_pTreeView->getListBox()->SelectEntry(pClickedAt);
+        if (pEntry && !m_pTreeView->getListBox()->IsSelected(pEntry))
+        {
+            pOldSelection = m_pTreeView->getListBox()->FirstSelected();
+            m_pTreeView->getListBox()->Select(pEntry);
+        }
     }
     else
     {
@@ -1471,6 +1475,11 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
 
     sal_Bool bReopenConn = sal_False;
     USHORT nPos = aContextMenu.Execute(m_pTreeView->getListBox(), aPosition);
+
+    // restore the old selection
+    if (pOldSelection)
+        m_pTreeView->getListBox()->Select(pOldSelection);
+
     switch (nPos)
     {
         case ID_TREE_ADMINISTRATE:
