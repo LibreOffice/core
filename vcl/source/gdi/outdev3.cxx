@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-15 11:17:51 $
+ *  last change: $Author: hdu $ $Date: 2002-08-19 06:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4727,59 +4727,6 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
 // -----------------------------------------------------------------------
 
-#ifndef ENABLE_CTL
-
-void OutputDevice::ImplFillDXAry( long* pDXAry,
-                                  const xub_Unicode* pStr, xub_StrLen nLen, long nWidth )
-{
-    ImplFontEntry* pFontEntry = mpFontEntry;
-
-    // Breiten-Array fuer errechnete Werte mit den Breiten der einzelnen
-    // Character fuellen
-    xub_StrLen  i;
-    long        nSum = 0;
-    for ( i = 0; i < nLen; i++ )
-    {
-        // Characterbreiten ueber Array holen
-        nSum += ImplGetCharWidth( pStr[i] );
-        pDXAry[i] = nSum / mpFontEntry->mnWidthFactor;
-    }
-    nSum /= mpFontEntry->mnWidthFactor;
-
-    // Differenz zwischen Soll- und Ist-Laenge errechnen
-    // Zusaetzliche Pixel per Character errechnen
-    // Anzahl der zusaetzlich verbliebenen Pixel errechnen
-    long nDelta        = (long)nWidth - nSum;
-    long nDeltaPerChar = 0;
-    long nDeltaRest    = 0;
-    if ( nLen > 1 )
-    {
-        nDeltaPerChar = nDelta / (long)(nLen-1);
-        nDeltaRest    = nDelta % (long)(nLen-1);
-    }
-    long nDeltaRestAbs = Abs( nDeltaRest );
-
-    long nErrorSum = nDeltaRestAbs;
-    long nDeltaSum = 0;
-    for ( i = 0; i < nLen-1; i++, nErrorSum += nDeltaRestAbs )
-    {
-        nDeltaSum += nDeltaPerChar;
-        if ( nErrorSum >= nLen-1 )
-        {
-            nErrorSum -= nLen-1;
-            if ( nDeltaRest > 0 )
-                nDeltaSum++;
-            else if ( nDeltaRest < 0 )
-                nDeltaSum--;
-        }
-        pDXAry[i] += nDeltaSum;
-    }
-}
-
-#endif // ENABLE_CTL
-
-// -----------------------------------------------------------------------
-
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const XubString& rStr,
                                      USHORT nStyle ) const
@@ -6697,26 +6644,27 @@ void OutputDevice::GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) cons
 
 // -----------------------------------------------------------------------
 
-BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen,  int nBase, MetricVector& rVector )
+BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
+    int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     DBG_TRACE( "OutputDevice::GetGlyphBoundRect_CTL()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    BOOL bRet = TRUE;
+    rVector.clear();
+
     if( nLen == STRING_LEN )
         nLen = rStr.Len() - nIndex;
 
-    for( int i = 0; i < nLen && bRet; i++ )
+    Rectangle aRect;
+    for( int i = 0; i < nLen; i++ )
     {
-        Rectangle aRect;
-        bRet = GetTextBoundRect( aRect, rStr, nBase, nIndex+i, 1 );
-        if( bRet )
-        {
-            aRect.Move( rOrigin.X(), rOrigin.Y() );
-            rVector.push_back( aRect );
-        }
+        if( !GetTextBoundRect( aRect, rStr, nBase, nIndex+i, 1 ) )
+            break;
+        aRect.Move( rOrigin.X(), rOrigin.Y() );
+        rVector.push_back( aRect );
     }
-    return bRet;
+
+    return (nLen == (int)rVector.size());
 }
 
 // -----------------------------------------------------------------------
@@ -6757,7 +6705,6 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
         Point aPos = pSalLayout->GetDrawPosition();
 
         // TODO: avoid use of outline for bounding rect calculation
-        // TODO: consider rotation
         PolyPolyVector aVector;
         bRet = pSalLayout->GetOutline( *mpGraphics, aVector );
         pSalLayout->Release();
@@ -7009,7 +6956,11 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     aFont.SetOutline(false);
     aFont.SetRelief(RELIEF_NONE);
     aFont.SetOrientation(0);
-    aFont.SetSize(xVDev->LogicToPixel(Size(0, GLYPH_FONT_HEIGHT), MAP_POINT));
+    if( bOptimize )
+    {
+        aFont.SetSize( Size( 0, GLYPH_FONT_HEIGHT ) );
+        xVDev->SetMapMode( MAP_PIXEL );
+    }
     xVDev->SetFont(aFont);
     xVDev->SetTextAlign(ALIGN_TOP);
     xVDev->SetTextColor(Color(COL_BLACK));
@@ -7030,27 +6981,21 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
 
     for (xub_StrLen i = nIndex; i < nIndex + nLen; ++i)
     {
+        // draw character into virtual device
         xVDev.reset(new VirtualDevice(1));
-        xVDev->SetFont(aFont);
-        xVDev->SetTextAlign(ALIGN_TOP);
-        xVDev->SetTextColor(Color(COL_BLACK));
-        xVDev->SetTextFillColor();
-
         pSalLayout = xVDev->ImplLayout(rStr, i, 1, Point(0, 0));
         if (pSalLayout == 0)
             return false;
         long nCharWidth = xVDev->ImplGetTextWidth(*pSalLayout);
-        pSalLayout->Release();
 
         Point aOffset(nCharWidth / 2, 8);
-        Size aSize(nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y());
-
-        if (!xVDev->SetOutputSizePixel(aSize))
-            return false;
-
-        pSalLayout->SetDrawPosition(aOffset - Point(mnTextOffX, mnTextOffY));
+        pSalLayout->SetDrawPosition( aOffset - Point(mnTextOffX, mnTextOffY) );
+        Size aSize( nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y() );
+        xVDev->SetOutputSizePixel(aSize);
         xVDev->ImplDrawText(*pSalLayout);
+        pSalLayout->Release();
 
+        // convert character image into outline
         Bitmap aBmp(xVDev->GetBitmap(Point(0, 0), aSize));
 
         PolyPolygon aPolyPoly;
@@ -7058,27 +7003,21 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                             BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES))
             return false;
 
+        // convert units to logical width
         for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
         {
-            Polygon & rPoly = aPolyPoly[j];
+            Polygon& rPoly = aPolyPoly[j];
             for (USHORT k = 0; k < rPoly.GetSize(); ++k)
             {
-                Point & rPt = rPoly[k];
-                rPt.X() = FRound(ImplDevicePixelToLogicWidth(rPt.X()
-                                                             - aOffset.X())
-                                 * fScaleX);
-                rPt.Y() = FRound(ImplDevicePixelToLogicHeight(rPt.Y()
-                                                              - aOffset.Y())
-                                 * fScaleY);
+                Point& rPt = rPoly[k];
+                rPt.X() = FRound( (rPt.X() - aOffset.X()) * fScaleX);
+                rPt.Y() = FRound( (rPt.Y() - aOffset.Y()) * fScaleY);
             }
         }
 
-        // FIXME  Move and rotate.
-/*
         // #83068#
         if( GetFont().GetOrientation() )
             aPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
-*/
 
         rVector.push_back(aPolyPoly);
     }
