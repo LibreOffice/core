@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:27:45 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ void SwHTMLParser::InsertEmbed()
 
     // das Plugin anlegen
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
-    SvFactory *pPlugInFactory = SvFactory::GetDefaultPlugInFactory();
+    SvFactory *pPlugInFactory = (SvFactory*) SvPlugInObject::ClassFactory();
     SvPlugInObjectRef pPlugin =
         &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
 
