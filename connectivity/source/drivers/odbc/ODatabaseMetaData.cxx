@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-13 12:39:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "odbc/OFunctiondefs.hxx"
 #endif
 #include "stdio.h"
+#include "TPrivilegesResultSet.hxx"
 
 
 using namespace connectivity::odbc;
@@ -499,6 +500,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
+    if ( m_pConnection->isIgnoreDriverPrivilegesEnabled() )
+    {
+        return new OResultSetPrivileges(this,catalog,schemaPattern,tableNamePattern);
+    }
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openTablePrivileges(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern);
