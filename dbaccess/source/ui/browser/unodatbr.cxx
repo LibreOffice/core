@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-28 10:36:26 $
+ *  last change: $Author: fs $ $Date: 2002-02-13 09:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,6 +1287,9 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+        // doin' a lot of VCL stuff here -> lock the SolarMutex
+
     Sequence< PropertyValue > aDescriptorSequence;
     if (!(_rSelection >>= aDescriptorSequence))
         throw IllegalArgumentException(::rtl::OUString(), *this, 1);
