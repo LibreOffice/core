@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-11 13:13:28 $
+ *  last change: $Author: ama $ $Date: 2002-11-15 16:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,12 +292,17 @@ void SwFrm::CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse )
 
 void SwFrm::CheckDirection( BOOL bVert )
 {
-    if( !IsHeaderFrm() && !IsFooterFrm() )
+    if( bVert )
     {
-        if( bVert )
+        if( !IsHeaderFrm() && !IsFooterFrm() )
+        {
             bDerivedVert = 1;
-        else
-            bDerivedR2L = 1;
+            SetDirFlags( bVert );
+        }
+    }
+    else
+    {
+        bDerivedR2L = 1;
         SetDirFlags( bVert );
     }
 }
