@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 11:20:00 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,6 @@ void Desktop::DeInit()
 
         // close splashscreen if it's still open
         CloseSplashScreen();
-
         Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
         DestroyApplicationServiceManager( xXMultiServiceFactory );
         // nobody should get a destroyd service factory...
@@ -719,6 +718,7 @@ BOOL Desktop::QueryExit()
     }
 
     BOOL bExit = ( !xDesktop.is() || xDesktop->terminate() );
+
 
     if ( !bExit && xPropertySet.is() )
     {
@@ -2026,7 +2026,7 @@ void Desktop::OpenClients()
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData);
-        if (bCrashed || bExistsRecoveryData)
+        if (bCrashed || (bCrashed && bExistsRecoveryData))
         {
             impl_callRecoveryUI(
                 sal_False          , // false => force recovery instead of emergency save
@@ -2045,10 +2045,7 @@ void Desktop::OpenClients()
             if ( xList->hasElements() )
                 bLoaded = sal_True;
         }
-
         // session management
-#if 0
-        // disabled
         try
         {
             Reference< XInitialization > aListener(::comphelper::getProcessServiceFactory()->createInstance(
@@ -2056,7 +2053,7 @@ void Desktop::OpenClients()
             if (aListener.is())
             {
                 aListener->initialize(Sequence< Any >(0));
-                Reference< XSessionManagerListener > r(aListener, UNO_QUERY);
+                    Reference< XSessionManagerListener > r(aListener, UNO_QUERY);
                 if (r.is() && !bLoaded)
                     bLoaded = r->doRestore();
             }
@@ -2067,7 +2064,7 @@ void Desktop::OpenClients()
                 + e.Message;
             OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
-#endif
+
 
     }
 
