@@ -1,6 +1,8 @@
-pk	package	:	tools unotools NULL
+pk	package	:	cppu cppuhelper ucbhelper sal zlib NULL
 pk	package									usr1	-	all	pk_mkout NULL
 pk	package\source\zipapi					nmake	-	all	pk_zipapi NULL
 pk	package\source\zippackage				nmake	-	all	pk_zippackage NULL
 pk	package\source\manifest					nmake	-	all	pk_manifest NULL
-pk	package\util							nmake	-	all	pk_util pk_zipapi pk_zippackage pk_manifest NULL
+pk	package\source\xstor					nmake	-	all	pk_xstor NULL
+pk	package\util							nmake	-	all	pk_util pk_zipapi pk_zippackage pk_manifest pk_xstor NULL
+
