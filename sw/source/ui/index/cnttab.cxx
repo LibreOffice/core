@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:33:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,10 +914,12 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     rHB.SetEndDragHdl(LINK(this, SwAddStylesDlg_Impl, HeaderDragHdl));
 
     long nWidth = rHB.GetSizePixel().Width();
+    sal_uInt16 i;
+
     nWidth /= 14;
     nWidth--;
     rHB.InsertItem( 100, sHBFirst,  4 * nWidth );
-    for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
+    for( i = 1; i <= MAXLEVEL; i++)
         rHB.InsertItem( 100 + i, String::CreateFromInt32(i), nWidth );
     rHB.Show();
 
@@ -1287,7 +1289,9 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
 
     //user + content
     sal_Bool bHasStyleNames = sal_False;
-    for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
+    sal_uInt16 i;
+
+    for( i = 0; i < MAXLEVEL; i++)
         if(rDesc.GetStyleNames(i).Len())
         {
             bHasStyleNames = sal_True;
