@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:34:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,7 +1566,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ηΰβθρθμϋε ÿχεικθ";
         Text[ polish ] = "led zaleΏnoci";
         Text[ japanese ] = "QΖζΔΪ°½";
-        Text[ chinese_traditional ] = "¤U¤@­Σ¦V«αªΊ°lΒά½bΈΉ";
+        Text[ chinese_traditional ] = "¦V«αªΊ°lΒά½bΈΉ";
         Text[ arabic ] = "ΚΚΘΪ ΗαΚζΗΘΪ";
         Text[ greek ] = "Ίχνος προς το επόμενο";
         Text[ korean ] = "ΑΎΌΣ Γίΐϋ";
@@ -1592,7 +1592,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Σαπΰςό ρςπελκθ κ ηΰβθρθμϋμ ÿχεικΰμ";
         Text[ polish ] = "Usuρ zaleΏnoci";
         Text[ japanese ] = "QΖ³ΔΪ°½‚Μν";
-        Text[ chinese_traditional ] = "§R°£¤U¤@­Σ¦V«αªΊ°lΒά½bΈΉ";
+        Text[ chinese_traditional ] = "§R°£¦V«αªΊ°lΒά½bΈΉ";
         Text[ arabic ] = "ΕÒΗαΙ ΗαΚζΗΘΪ";
         Text[ greek ] = "Κατάργηση ίχνους προς επόμενο";
         Text[ korean ] = "ΑΎΌΣ Γίΐϋ Α¦°Ε";
@@ -3257,11 +3257,11 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "- naar laatste positie verplaatsen -" ;
         Text [ spanish ] = "- desplazar a la ϊltima posiciσn -" ;
         Text [ english_us ] = "- move to end position -" ;
-        Text[ chinese_simplified ] = "- ΦΓΣΪΞ²¶Λ -";
+        Text[ chinese_simplified ] = "- ΦΓΣΪ½αΚψΞ»ΦΓ -";
         Text[ russian ] = "- οξμερςθςό β κξνφε -";
         Text[ polish ] = "- przenie na koρcowΉ pozycjκ -";
         Text[ japanese ] = "- ––”φ‚Ι‘}“ό -";
-        Text[ chinese_traditional ] = "- ²Ύ°Κ¨μ§ΐΊέ -";
+        Text[ chinese_traditional ] = "- ²Ύ°Κ¨μµ²§τ¦μΈm -";
         Text[ arabic ] = "- ΚΝΡνί Εαμ ΗαδεΗνΙ -";
         Text[ greek ] = "- μετακίνηση προς το τέλος -";
         Text[ korean ] = "- Έ¶ΑφΈ· ΑφΑ΅ΐΈ·Ξ ΐΜµΏ -";
@@ -4669,7 +4669,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Aantal" ;
         Text [ spanish ] = "Cantidad" ;
         Text [ english_us ] = "Count" ;
-        Text[ chinese_simplified ] = "ΧάΚύ";
+        Text[ chinese_simplified ] = "ΚύΔΏ";
         Text[ russian ] = "Κξλθχερςβξ";
         Text[ polish ] = "Liczba";
         Text[ japanese ] = "‘”";
@@ -4694,7 +4694,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Tζlv" ;
         Text [ portuguese ] = "Contar valores" ;
         Text [ portuguese_brazilian ] = "Anzahl2" ;
-        Text[ chinese_simplified ] = "ΧάΚύ 2";
+        Text[ chinese_simplified ] = "ΚύΔΏ2";
         Text[ russian ] = "Κξλθχερςβξ2";
         Text[ polish ] = "Liczba2";
         Text[ japanese ] = "‘”2";
@@ -7253,11 +7253,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Skal stavekontrollen fortsζttes fra arkets begyndelse?" ;
         Text [ portuguese ] = "Continuar a verificaηγo ortogrαfica no princνpio da folha?" ;
         Text [ portuguese_brazilian ] = "Soll die Rechtschreibpr?ung am Tabellenanfang fortgesetzt werden?" ;
-        Text[ chinese_simplified ] = "ΔϊÒª΄ΣΉ¤Χχ±νΚΧ¶ΛΏªΚΌΌΜΠψ½ψΠΠΖ΄Π΄Όμ²ιΒπ£Ώ";
+        Text[ chinese_simplified ] = "Òª΄ΣΉ¤Χχ±νµΔΖπΚΌΞ»ΦΓΏªΚΌΌΜΠψ½ψΠΠΖ΄Π΄Όμ²ι£Ώ";
         Text[ russian ] = "Οπξδξλζθςό οπξβεπκσ οπΰβξοθρΰνθÿ β νΰχΰλε ςΰαλθφϋ?";
         Text[ polish ] = "Czy sprawdzanie pisowni ma byζ kontynuowane na poczΉtku arkusza?";
         Text[ japanese ] = "•\\‚Μn‚ί‚Ι–ί‚Α‚Δ½ΝίΩΑª―Έ‚π‘±s‚µ‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "±z­n±q¤u§@ªν°_©l¦μΈm¶}©lΐΛ¬d«χΌg΅H";
+        Text[ chinese_traditional ] = "­n±q¤u§@ªνªΊ°_©l¦μΈm¶}©l«χΌgΐΛ¬d΅H";
         Text[ arabic ] = "εα ΚΡνΟ γΚΗΘΪΙ ΗαΚΟήνή ΗαΕγαΗΖν ΪδΟ ΘΟΗνΙ ΗαΜΟζαΏ";
         Text[ greek ] = "Συνέχεια του ορθογραφικού ελέγχου από την αρχή του πίνακα;";
         Text[ korean ] = "Ηφΐη ½ΓΖ®ΐΗ ½ΓΐΫΊΞΊΠΏ΅Ό­ ΈΒΓγΉύ °Λ»ηΈ¦ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -7782,11 +7782,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "%PRODUCTNAME Calc har sψgt til begyndelsen af arket. Vil du fortsζtte sψgningen fra arkets slutning?" ;
         Text [ portuguese ] = "O %PRODUCTNAME Calc procurou atι ao princνpio da folha. Deseja continuar a procura no fim?" ;
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. M?hten Sie die Suche am Tabellenende fortsetzen?" ;
-        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½Ή¤Χχ±νΚΧ¶Λ΅£ÒªΧΤΉ¤Χχ±νΞ²¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½Ή¤Χχ±νµΔΖπΚΌΞ»ΦΓ΅£ÒªΧΤΉ¤Χχ±νµΔ½αΚψΞ»ΦΓΌΜΠψΛΡΡ°£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β νΰχΰλε λθρςΰ. Οπξδξλζθςό οξθρκ β κξνφε λθρςΰ?";
         Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ arkusz do poczΉtku. Czy kontynuowaζ wyszukiwanie od koρca arkusza?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚Ν•\\‚Μn‚ί‚ά‚Ευ‚µ‚ά‚µ‚½B•\\‚ΜI‚θ‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤u§@ªν­ΊΊέ΅C­nΔ~Δς·j΄M¨μ¤u§@ªν§ΐΊέ΅H";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤u§@ªνªΊ°_©l¦μΈm΅C­nΔ~Δς±q¤u§@ªνªΊµ²§τ¦μΈm·j΄M΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ ΘΟΗνΙ ΗαΜΟζα. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ δεΗνΙ ΗαΜΟζαΏ";
         Text[ greek ] = "Το %PRODUCTNAME Calc εκτέλεσε την αναζήτηση ως την αρχή του πίνακα. Θέλετε να συνεχιστεί η αναζήτηση στο τέλος του πίνακα;";
         Text[ korean ] = "%PRODUCTNAME Calc ΄Β ½ΓΖ®ΐΗ ½ΓΐΫΊΞΊΠΐ» °Λ»φΗί½ΐ΄Ο΄Ω. Έ¶ΑφΈ· ±ξΑφ °θΌΣ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -7809,11 +7809,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "%PRODUCTNAME Calc har sψgt til slutningen af arket. Vil du fortsζtte sψgningen fra arkets begyndelse?" ;
         Text [ portuguese ] = "O %PRODUCTNAME Calc procurou atι ao fim da folha. Deseja continuar a procura no princνpio?" ;
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. M?hten Sie die Suche am Tabellenanfang fortsetzen?" ;
-        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½Ή¤Χχ±νµΔΞ²¶Λ΅£ÒªΧΤΉ¤Χχ±νΚΧ¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½Ή¤Χχ±νµΔ½αΚψΞ»ΦΓ΅£ÒªΧΤΉ¤Χχ±νµΔΖπΚΌΞ»ΦΓΌΜΠψΛΡΡ°£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β κξνφε λθρςΰ. Οπξδξλζθςό οξθρκ β νΰχΰλε λθρςΰ?";
         Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ arkusz do koρca. Czy kontynuowaζ wyszukiwanie od poczΉtku arkusza?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚Ν•\\‚ΜI‚θ‚ά‚Ευ‚µ‚ά‚µ‚½B•\\‚Μn‚ί‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤u§@ªνªΊ§ΐΊέ΅C­nΔ~Δς¦b¤u§@ªν­ΊΊέ·j΄M΅H";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤u§@ªνªΊµ²§τ¦μΈm΅C­nΔ~Δς¦b¤u§@ªνªΊ°_©l¦μΈm·j΄M΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ δεΗνΙ ΗαΜΟζα. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ ΘΟΗνΙ ΗαΜΟζαΏ";
         Text[ greek ] = "Το %PRODUCTNAME Calc εκτέλεσε την αναζήτηση ως το τέλος του πίνακα. Θέλετε να συνεχιστεί η αναζήτηση στην αρχή του πίνακα;";
         Text[ korean ] = "%PRODUCTNAME Calc ΄Β ½ΓΖ®ΐΗ Έ¶ΑφΈ· ΊΞΊΠΐ» °Λ»φΗί½ΐ΄Ο΄Ω. Γ³ΐ½ ΊΞΕΝ °θΌΣ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -7861,11 +7861,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "%PRODUCTNAME Calc ha buscado hasta el principio del documento.ΏDesea continuar la bϊsqueda por el final del documento?" ;
         Text [ french ] = "%PRODUCTNAME Calc a atteint le dιbut du classeur. Souhaitez-vous reprendre la recherche ΰ la fin du classeur ?" ;
         Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het begin van het document. Wilt u het zoeken aan het einde van het document voortzetten?" ;
-        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½ΞΔµµµΔΚΧ¶Λ΅£ÒªΧΤΞΔµµΞ²¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½ΞΔµµΖπΚΌΞ»ΦΓ΅£ÒªΧΤΞΔµµµΔ½αΚψΞ»ΦΓΌΜΠψΛΡΡ°£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β νΰοπΰβλενθθ κ νΰχΰλσ δξκσμενςΰ. Οπξδξλζθςό οξθρκ β νΰοπΰβλενθθ κ κξνφσ δξκσμενςΰ?";
         Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ dokument do poczΉtku. Czy kontynuowaζ wyszukiwanie od koρca dokumentu?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚ΝΔή·­ÒέΔ‚Μn‚ί‚ά‚Ευ‚µ‚ά‚µ‚½BΔή·­ÒέΔ‚ΜI‚θ‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤ε¥σ­ΊΊέ΅C­nΔ~Δς¦b¤ε¥σ§ΐΊέ·j΄M΅H";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤ε¥σªΊ°_©l¦μΈm΅C­nΔ~Δς¦b¤ε¥σªΊµ²§τ¦μΈm·j΄M΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ ΘΟΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ δεΗνΙ ΗαγΣΚδΟΏ";
         Text[ greek ] = "Το %PRODUCTNAME Calc ολοκλήρωσε την αναζήτηση ως την αρχή του εγγράφου. Θέλετε να συνεχιστεί η αναζήτηση από το τέλος του εγγράφου;";
         Text[ korean ] = "%PRODUCTNAME Calc ΄ΒΉ®Ό­ΐΗ ½ΓΐΫΊΞΊΠΐ» °Λ»φΗί½ΐ΄Ο΄Ω.  Έ¶ΑφΈ·±ξΑφ °θΌΣ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -7887,11 +7887,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "%PRODUCTNAME Calc ha buscado hasta el final del documento. ΏDesea continuar la bϊsqueda desde el principio del documento?" ;
         Text [ french ] = "%PRODUCTNAME Calc a atteint la fin du classeur. Souhaitez-vous reprendre la recherche au dιbut du classeur ?" ;
         Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het einde van het document. Wilt u het zoeken aan het begin van het document voortzetten?" ;
-        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½ΞΔµµµΔΞ²¶Λ΅£ÒªΧΤΞΔµµΚΧ¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½ΞΔµµµΔ½αΚψΞ»ΦΓ΅£ÒªΧΤΞΔµµµΔΖπΚΌΞ»ΦΓΌΜΠψΛΡΡ°£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β νΰοπΰβλενθθ κ κξνφσ δξκσμενςΰ. Οπξδξλζθςό οξθρκ β νΰοπΰβλενθθ κ νΰχΰλσ δξκσμενςΰ?";
         Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ dokument do koρca. Czy kontynuowaζ wyszukiwanie od poczΉtku dokumentu?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚ΝΔή·­ÒέΔ‚ΜI‚θ‚ά‚Ευ‚µ‚ά‚µ‚½BΔή·­ÒέΔ‚Μn‚ί‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤ε¥σ§ΐΊέ΅C­nΔ~Δς¦b¤ε¥σ­ΊΊέ·j΄M΅H";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg·j΄M¨μ¤ε¥σªΊµ²§τ¦μΈm΅C­nΔ~Δς¦b¤ε¥σªΊ°_©l¦μΈm·j΄M΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ δεΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ ΘΟΗνΙ ΗαγΣΚδΟΏ";
         Text[ greek ] = "Το %PRODUCTNAME Calc ολοκλήρωσε την αναζήτηση ως το τέλος του εγγράφου. Θέλετε να συνεχιστεί η αναζήτηση από την αρχή του εγγράφου;";
         Text[ korean ] = "%PRODUCTNAME Calc ΄Β Ή®Ό­ΐΗ Έ¶ΑφΈ· ΊΞΊΠΐ» °Λ»φΗί½ΐ΄Ο΄Ω. Γ³ΐ½ ΊΞΕΝ °θΌΣ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -8176,11 +8176,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Pladsholdere" ;
         Text [ portuguese ] = "Marcador de posiηγo" ;
         Text [ portuguese_brazilian ] = "Platzhalter" ;
-        Text[ chinese_simplified ] = "ΟΤΚΎΞ»ΦΓ";
+        Text[ chinese_simplified ] = "Ν¨Εδ·ϋ";
         Text[ russian ] = "Μερςξηΰοξλνθςελό";
         Text[ polish ] = "Symbol wieloznaczny";
         Text[ japanese ] = "²Ò°Όήg";
-        Text[ chinese_traditional ] = "Εγ¥ά¦μΈm";
+        Text[ chinese_traditional ] = "³q°t²Ε";
         Text[ arabic ] = "ΪδΗΥΡ δΗΖΘΙ";
         Text[ greek ] = "Σύμβολα κράτησης θέσης";
         Text[ korean ] = "ΗΓ·ΉΐΜ½ΊΘ¦΄υ";
@@ -10169,6 +10169,7 @@ Resource RID_GLOBSTR
     };
 */
 };
+
 
 
 
