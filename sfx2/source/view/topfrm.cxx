@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:48:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ void SfxTopFrame::SetPresentationMode( BOOL bSet )
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
 
-//    SetMenuBarOn_Impl( !bSet );
+    SetMenuBarOn_Impl( !bSet );
     if ( GetWorkWindow_Impl() )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
     if ( GetCurrentViewFrame() )
