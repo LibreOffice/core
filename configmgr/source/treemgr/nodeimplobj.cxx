@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:41:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,8 +649,11 @@ std::auto_ptr<SubtreeChange> DeferredSetNodeImpl::preCommitChanges(data::Accesso
             if (aNewElement.isValid())
             {
                 data::TreeSegment aAddedTree = aNewElement->releaseOwnedTree();
+                if (!aAddedTree.is())
+                {
+                    throw Exception("INTERNAL ERROR: Could not find data for the added ElementTree");
+                }
 
-                OSL_ENSURE( aAddedTree.is(), "Could not take the new tree from the ElementTree");
                 OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
 
                 AddNode* pAddNode = new AddNode(aAddedTree, aName.toString(), aNewElement.inDefault );
