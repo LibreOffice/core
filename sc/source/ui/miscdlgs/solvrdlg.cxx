@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         Close();
     }
 
-    return NULL;
+    return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -331,7 +331,7 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
     if( pEdit )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
 
-    return NULL;
+    return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -339,7 +339,7 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
 IMPL_LINK( ScSolverDlg, LoseFocusHdl, Control*, pCtrl )
 {
     bDlgLostFocus = !IsActive();
-    return NULL;
+    return 0;
 }
 
 
