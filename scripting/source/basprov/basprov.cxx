@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:13:28 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -166,7 +170,8 @@ namespace basprov
         ,m_xLibContainerDoc( 0 )
         ,m_xContext( xContext )
         ,m_xScriptingContext( 0 )
-    ,m_bIsAppScriptCtx( true )
+        ,m_bIsAppScriptCtx( true )
+        ,m_bIsUserCtx(true)
     {
     }
 
@@ -287,40 +292,6 @@ namespace basprov
     }
 
     // -----------------------------------------------------------------------------
-    // TO DO, this code needs removal after integration of URI parsing service
-    ::rtl::OUString BasicProviderImpl::getLocationFromURI( const ::rtl::OUString& scriptURI )
-    {
-        ::rtl::OUString language;
-        ::rtl::OUString attr;
-        sal_Int32 len = scriptURI.indexOf( '?' );
-        if( ( len < 0 ) || ( scriptURI.getLength() == 0 ) )
-        {
-            return language;
-        }
-        // if we have a match, then start the search after the ?
-
-        len++;
-        do
-        {
-            attr = scriptURI.getToken( 0, '&', len );
-            //OSL_TRACE( "chunk is %s, len is %d",
-            //    ::rtl::OUStringToOString( attr,
-            //        RTL_TEXTENCODING_ASCII_US ).pData->buffer, len  );
-            if( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "location" ) )
-                == sal_True )
-            {
-                sal_Int32 len2 = attr.indexOf('=');
-                language = attr.copy( len2 + 1 );
-                //OSL_TRACE( "Language name is %s",
-                //    ::rtl::OUStringToOString( language,
-                //        RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-                break;
-            }
-        }
-        while ( len >= 0 );
-        return language;
-
-    }
 
     // XScriptProvider
     // -----------------------------------------------------------------------------
@@ -333,18 +304,36 @@ namespace basprov
         ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
 
         Reference< provider::XScript > xScript;
+        Reference< lang::XMultiComponentFactory > xMcFac ( m_xContext->getServiceManager() );
+        Reference< uri::XUriReferenceFactory > xFac (
+            xMcFac->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
 
-        // parse scriptURI
-        // TODO: use URI parsing class
-        ::rtl::OUString aSchema( ::rtl::OUString::createFromAscii( "vnd.sun.star.script://" ) );
-        sal_Int32 nSchemaLen = aSchema.getLength();
-        sal_Int32 nLen = scriptURI.indexOf( '?' );
-        ::rtl::OUString aDescription;
-        ::rtl::OUString aLocation;
-        if ( nLen - nSchemaLen > 0 )
+        if ( !xFac.is() )
         {
-            aDescription = scriptURI.copy( nSchemaLen, nLen - nSchemaLen );
+            throw RuntimeException(
+                ::rtl::OUString::createFromAscii( "BasicProviderImpl::getScript(), could not instatiate UriReferenceFactory." ),
+                Reference< XInterface >() );
         }
+
+        Reference<  uri::XUriReference > uriRef(
+            xFac->parse( scriptURI ), UNO_QUERY );
+
+        Reference < uri::XVndSunStarScriptUrl > sfUri( uriRef, UNO_QUERY );
+
+        if ( !uriRef.is() || !sfUri.is() )
+        {
+            ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "BasicProviderImpl::getScript: failed to parse URI: " );
+            errorMsg.concat( scriptURI );
+            throw IllegalArgumentException( errorMsg,
+                Reference< XInterface >(), 1 );
+        }
+
+
+        ::rtl::OUString aDescription = sfUri->getName();
+        ::rtl::OUString aLocation = sfUri->getParameter(
+            ::rtl::OUString::createFromAscii( "location" ) );
+
         sal_Int32 nIndex = 0;
         ::rtl::OUString aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
         ::rtl::OUString aModule;
@@ -354,8 +343,12 @@ namespace basprov
         if ( nIndex != -1 )
             aMethod = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
-        aLocation = getLocationFromURI( scriptURI );
-
+        OSL_TRACE("** aLibrary = %s",
+            ::rtl::OUStringToOString( aLibrary, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+        OSL_TRACE("** aModule = %s",
+            ::rtl::OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+        OSL_TRACE("** aMethod = %s",
+            ::rtl::OUStringToOString( aMethod, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
         if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 && aLocation.getLength() != 0 )
         {
             BasicManager* pBasicMgr =  NULL;
