@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 15:00:20 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
 #include "DAVRequestEnvironment.hxx"
 #endif
 
+
+
 namespace webdav_ucp
 {
 
@@ -159,6 +161,11 @@ public:
                          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    virtual void GET( void* userData,
+                      const ::rtl::OUString & inPath,
+                      const DAVRequestEnvironment & rEnv )
+        throw( DAVException ) = 0;
+
     virtual void    GET( const ::rtl::OUString & inPath,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
         const DAVRequestEnvironment & rEnv )
@@ -169,6 +176,13 @@ public:
                          const std::vector< ::rtl::OUString > & inHeaderNames,
                          DAVResource & ioResource,
                          const DAVRequestEnvironment & rEnv )
+        throw( DAVException ) = 0;
+
+    virtual void GET( void* userData,
+                      const ::rtl::OUString & inPath,
+                      const std::vector< ::rtl::OUString > & inHeaderNames,
+                      DAVResource & ioResource,
+                      const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void    GET( const ::rtl::OUString & inPath,
