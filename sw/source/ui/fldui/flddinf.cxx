@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:27:05 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,9 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
         nSelEntryData = sVal.ToInt32();
     }
 
-    SvStringsDtor& rLst = GetFldMgr().GetSubTypes(nTypeId);
-    for (USHORT i = 0; i < rLst.Count(); ++i)
+    SvStringsDtor aLst;
+    GetFldMgr().GetSubTypes(nTypeId, aLst);
+    for (USHORT i = 0; i < aLst.Count(); ++i)
     {
         if (!IsFldEdit() || nSubType == i)
         {
@@ -199,14 +200,14 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
                     pInfo = aTypeTLB.InsertEntry(aInfoStr);
                     pInfo->SetUserData((void*)USHRT_MAX);
                 }
-                pEntry = aTypeTLB.InsertEntry(*rLst[i], pInfo);
+                pEntry = aTypeTLB.InsertEntry(*aLst[i], pInfo);
                 pEntry->SetUserData((void*)i);
             }
             else
             {
                 if (!(IsFldDlgHtmlMode() && (i == DI_EDIT || i == DI_THEMA || i == DI_PRINT)))
                 {
-                    pEntry = aTypeTLB.InsertEntry(*rLst[i]);
+                    pEntry = aTypeTLB.InsertEntry(*aLst[i]);
                     pEntry->SetUserData((void*)i);
                 }
             }
