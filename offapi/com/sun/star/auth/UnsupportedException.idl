@@ -63,6 +63,8 @@
 module com { module sun { module star { module auth {
 
 /** indicates an operation unsupported by the implementation.
+
+    @since #107627#
  */
 
 exception UnsupportedException : ::com::sun::star::uno::Exception

@@ -70,6 +70,8 @@ module com { module sun { module star { module auth {
     <P>This context may be used to authenticate a Single Signon initiator based
        on a security token sent by the intiator and to generate a token to be
        sent back to the initiator so that it can authenticate the acceptor.
+
+    @since #107627#
 */
 
 interface XSSOAcceptorContext : ::com::sun::star::auth::XSSOContext
