@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 07:05:49 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include "nmspmap.hxx"
 #include "xmlnmspe.hxx"
 #include "xmlimp.hxx"
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include "XMLBase64ImportContext.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -103,6 +106,9 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
 #include "xmlkywd.hxx"
@@ -136,6 +142,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::xmloff::token;
+using namespace ::com::sun::star::io;
 
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
         "SymbolTextDistance";
@@ -232,6 +239,8 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     OUString            sBulletFontName;
     OUString            sBulletFontStyleName;
     OUString            sImageURL;
+
+    Reference < XOutputStream > xBase64Stream;
 
     sal_Int32           nLevel;
     sal_Int32           nSpaceBefore;
@@ -420,7 +429,19 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
                                                                xAttrList,
                                                              *this );
     }
-    else
+    else if( xmloff::token::IsXMLToken( rLocalName,
+                                        xmloff::token::XML_BINARY_DATA ) )
+    {
+        if( bImage && !sImageURL.getLength() && !xBase64Stream.is() )
+        {
+            xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( xBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    xBase64Stream );
+        }
+    }
+    if( !pContext )
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
@@ -445,7 +466,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         nCount = 10L;
 
     }
-    if( bImage && sImageURL.getLength() > 0L &&
+    if( bImage && (sImageURL.getLength() > 0L || xBase64Stream.is()) &&
         nImageWidth > 0L && nImageHeight > 0L )
     {
         eType = NumberingType::BITMAP;
@@ -555,8 +576,19 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 
         if( bImage )
         {
+            if( sImageURL.getLength() )
+            {
+                sImageURL = GetImport().ResolveGraphicObjectURL( sImageURL,
+                                                                 sal_False );
+            }
+            else if( xBase64Stream.is() )
+            {
+                sImageURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+                xBase64Stream = 0;
+            }
             pProps[nPos].Name =
                     OUString::createFromAscii( XML_UNO_NAME_NRULE_GRAPHICURL );
+            pProps[nPos++].Value <<= sImageURL;
             pProps[nPos++].Value <<= GetImport().ResolveGraphicObjectURL( sImageURL,
                                                                        sal_False );
 
