@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-28 02:27:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         dateTime.Minutes = explTime.tm_min ;
         dateTime.Hours = explTime.tm_hour ;
         dateTime.Day = explTime.tm_mday ;
-        dateTime.Month = explTime.tm_month ;
+        dateTime.Month = explTime.tm_month+1 ;
         dateTime.Year = explTime.tm_year ;
 
         return dateTime ;
@@ -193,7 +193,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         dateTime.Minutes = explTime.tm_min ;
         dateTime.Hours = explTime.tm_hour ;
         dateTime.Day = explTime.tm_mday ;
-        dateTime.Month = explTime.tm_month ;
+        dateTime.Month = explTime.tm_month+1 ;
         dateTime.Year = explTime.tm_year ;
 
         return dateTime ;
