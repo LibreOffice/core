@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:13 $
+ *  last change: $Author: cmc $ $Date: 2002-11-14 15:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,6 +1707,8 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
 #if 1
 #if 1
                     rTblOffset = rHori.GetPos();
+                    const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
+                    rTblOffset += rLRSp.GetLeft();
 #else
                     Point aOffset = pFmt->FindLayoutRect(true).Pos();
                     rTblOffset = aOffset.X();
@@ -1742,36 +1744,37 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     rWW8Wrt.Out_SfxBreakItems(pFmt->GetAttrSet(), rNode);
 
     /*
-    ALWAYS relative (nPageSize + ( nPageSize / 10 )) < nTblSz, when HORI_FULL,
+    ALWAYS relative (nPageSize + ( nPageSize / 10 )) < nTblSz,
     in that case the cell width's and table width's are not real. The table
     width is maxed and cells relative, so we need the frame (generally page)
     width that the table is in to work out the true widths.
     */
     bool bRelBoxSize = true;
-    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
+    unsigned long nTblSz = static_cast<unsigned long>(pFmt->GetFrmSize().GetWidth());
 
-    SwTwips nPageSize = nTblSz;
-    const SwFmtHoriOrient &rOrient = pFmt->GetHoriOrient();
-    if (rOrient.GetHoriOrient() == HORI_FULL)
+    unsigned long nPageSize = nTblSz;
     {
         Point aPt;
         SwRect aRect(pFmt->FindLayoutRect(false, &aPt));
         if (aRect.IsEmpty())
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
-            const SwFrmFmt* pFmt = rWW8Wrt.pFlyFmt ? rWW8Wrt.pFlyFmt :
+            const SwFrmFmt* pParentFmt = rWW8Wrt.pFlyFmt ? rWW8Wrt.pFlyFmt :
                 rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
-
-            aRect = pFmt->FindLayoutRect(true);
-            if( 0 == ( nPageSize = aRect.Width() ))
+            aRect = pParentFmt->FindLayoutRect(true);
+            if (!(nPageSize = aRect.Width()))
             {
-                const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
-                nPageSize = pFmt->GetFrmSize().GetWidth() - rLR.GetLeft() -
+                const SvxLRSpaceItem& rLR = pParentFmt->GetLRSpace();
+                nPageSize = pParentFmt->GetFrmSize().GetWidth() - rLR.GetLeft() -
                     rLR.GetRight();
             }
         }
         else
             nPageSize = aRect.Width();
+
+        const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
+
+        nPageSize -= (rLR.GetLeft() + rLR.GetRight());
     }
 
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
