@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:44:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,18 @@ namespace sdr
         sal_Bool ViewContact::HasAnimationInfo() const
         {
             return (0L != mpAnimationInfo);
+        }
+
+        // access to SdrObject and/or SdrPage. May return 0L like the default
+        // implementations do. Needs to be overloaded as needed.
+        SdrObject* ViewContact::TryToGetSdrObject() const
+        {
+            return 0L;
+        }
+
+        SdrPage* ViewContact::TryToGetSdrPage() const
+        {
+            return 0L;
         }
     } // end of namespace contact
 } // end of namespace sdr
