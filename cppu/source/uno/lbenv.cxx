@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:31 $
+ *  last change: $Author: mh $ $Date: 2002-08-13 15:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,7 +1031,7 @@ static uno_Environment * initDefaultEnvironment(
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
         aLibName.append( rEnvTypeName );
 #ifdef MACOSX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.dylib.framework") );
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.dylib") );
 #else
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.so") );
 #endif
