@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:26:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ void SAL_CALL osl_breakDebug(void)
 
 /* Uncomment this define to get profiling time output */
 /* #define OSL_PROFILING */
-
+/* comment this define to stop output thread identifier*/
+#define OSL_TRACE_THREAD 1
 void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 {
     va_list args;
@@ -100,7 +101,11 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 #if defined(OSL_PROFILING)
     fprintf(stderr, "time : %06lu : ", osl_getGlobalTimer() );
 #else
+#if defined(OSL_TRACE_THREAD)
+    fprintf(stderr,"Thread: %6d :",osl_getThreadIdentifier(NULL));
+#else
     fprintf(stderr,"Trace Message : ");
+#endif
 #endif
 
     vfprintf(stderr,lpszFormat, args);
