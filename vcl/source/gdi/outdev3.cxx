@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-06 16:53:42 $
+ *  last change: $Author: hdu $ $Date: 2002-11-11 17:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6324,22 +6324,26 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
-            if ( nMnemonicPos < nIndex )
-                nIndex--;
-            else if ( (nLen < STRING_LEN) &&
-                      (nMnemonicPos >= nIndex) && (nMnemonicPos < (ULONG)(nIndex+nLen)) )
-                nLen--;
+            if( nMnemonicPos < nIndex )
+                --nIndex;
+            else if( nLen < STRING_LEN )
+            {
+                if( nMnemonicPos < (nIndex+nLen) )
+                    --nLen;
+                DBG_ASSERT( nMnemonicPos < (nIndex+nLen), "Mnemonic underline marker after last character" );
+            }
 
-            long *pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLen );
-            BOOL bRet = GetCaretPositions( aStr, pCaretXArray,
-                                      nIndex, nLen);
-            long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
-            long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
+            long *pCaretXArray = (long*)alloca( 2 * sizeof(long) * nLen );
+            BOOL bRet = GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
+            long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
+            long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
             nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
-            Point aTempPos = LogicToPixel( rPos );
-            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1,lc_x2) );
-            nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
+            Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
+            aTempPos += rPos;
+            aTempPos = LogicToPixel( aTempPos );
+            nMnemonicX = mnOutOffX + aTempPos.X();
+            nMnemonicY = mnOutOffY + aTempPos.Y();
         }
     }
 
