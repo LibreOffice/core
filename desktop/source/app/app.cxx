@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 16:50:50 $
+ *  last change: $Author: mav $ $Date: 2001-02-23 11:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,27 +156,49 @@ void Desktop::Main()
 {
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
-//  Read the common configuration items for optimization purpose
-    PreloadConfigTrees();
 
+    bool bTerminate = false;
+    int nParamCount = GetCommandLineParamCount();
+
+    for( int nActParam = 0; nActParam < nParamCount ; nActParam++ )
+    {
+        String sActParam = GetCommandLineParam( nActParam );
+        if( sActParam.EqualsIgnoreCaseAscii("-terminate_after_init") )
+        {
+            bTerminate = true;
+            break;
+        }
+    }
+
+//  Read the common configuration items for optimization purpose
+//  do not do it if terminate flag was specified, to avoid exception
+    if( !bTerminate )
+        PreloadConfigTrees();
+
+//  The only step that should be done if terminate flag was specified
+//  Typically called by the plugin only
     Installer* pInstaller = new Installer;
     pInstaller->InitializeInstallation( Application::GetAppFileName() );
     delete pInstaller;
 
-    SvtPathOptions* pPathOptions = new SvtPathOptions;
-    RegisterServices();
-    OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
-//    Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
-    SfxApplicationClass::Main();
-//    xWrapper->dispose();
-
-    if( pWrapper!=NULL)
+    if( !bTerminate )
     {
-        delete pWrapper;
-        pWrapper=NULL;
+        SvtPathOptions* pPathOptions = new SvtPathOptions;
+        RegisterServices();
+        OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
+//      Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
+        SfxApplicationClass::Main();
+//      xWrapper->dispose();
+
+        if( pWrapper!=NULL)
+        {
+            delete pWrapper;
+            pWrapper=NULL;
+        }
+
+        delete pPathOptions;
     }
 
-    delete pPathOptions;
     utl::ConfigManager::RemoveConfigManager();
 }
 
