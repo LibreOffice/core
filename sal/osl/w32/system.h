@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2002-06-20 08:34:45 $
+ *  last change: $Author: tra $ $Date: 2002-07-12 10:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,13 @@
 #include <io.h>
 #include <share.h>
 #include <direct.h>
+
+/* Must define this else build breaks because Winsock2.h
+    includes Windows.h and without WIN32_LEAN_AND_MEAN
+    also includes mswsock.h which needs a forward typedef
+    of SOCKET ...
+*/
+#define WIN32_LEAN_AND_MEAN
 
 #ifdef GCC
     // windows.h includes winsock2.h
