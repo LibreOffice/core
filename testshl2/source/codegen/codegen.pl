@@ -306,7 +306,10 @@ sub walkThroughJobFile
                         $sCurrentClass = $sClassName;
                         generateNewClass($sClassName);
                     }
-                    push(@sMethodNames, $sMethodName);
+                    if ($sMethodName)
+                    {
+                        push(@sMethodNames, $sMethodName);
+                    }
                 }
             }
         }
@@ -557,7 +560,7 @@ sub main
         open(EXPORTMAP, ">export.map") || die "can't create export.map";
         print EXPORTMAP "UDK_3.1 {\n";
         print EXPORTMAP "    global:\n";
-        print EXPORTMAP "        registerAllTestFunction\n";
+        print EXPORTMAP "        registerAllTestFunction;\n";
         print EXPORTMAP "\n";
         print EXPORTMAP "    local:\n";
         print EXPORTMAP "        *;\n";
