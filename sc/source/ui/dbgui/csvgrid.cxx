@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,9 +263,10 @@ void ScCsvGrid::InitColors()
     maAppBackColor = Color( mrColorConfig.GetColorValue( ::svtools::APPBACKGROUND ).nColor );
 
     const StyleSettings& rSett = GetSettings().GetStyleSettings();
-    maTextColor = rSett.GetButtonTextColor();
+    maTextColor = rSett.GetWindowTextColor();
     maHeaderBackColor = rSett.GetFaceColor();
     maHeaderGridColor = rSett.GetDarkShadowColor();
+    maHeaderTextColor = rSett.GetButtonTextColor();
     maSelectColor = rSett.GetActiveColor();
 
     InvalidateGfx();
@@ -1096,7 +1097,7 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
     rOutDev.DrawRect( Rectangle( nX1, 0, nX2, nHdrHt ) );
 
     rOutDev.SetFont( maHeaderFont );
-    rOutDev.SetTextColor( maTextColor );
+    rOutDev.SetTextColor( maHeaderTextColor );
     rOutDev.SetTextFillColor();
     rOutDev.DrawText( Point( nX1 + 1, 0 ), GetColumnTypeName( nColIndex ) );
 
@@ -1194,7 +1195,7 @@ void ScCsvGrid::ImplDrawRowHeaders()
 
     // line numbers
     maBackgrDev.SetFont( maHeaderFont );
-    maBackgrDev.SetTextColor( maTextColor );
+    maBackgrDev.SetTextColor( maHeaderTextColor );
     maBackgrDev.SetTextFillColor();
     sal_Int32 nLastLine = GetLastVisLine();
     for( sal_Int32 nLine = GetFirstVisLine(); nLine <= nLastLine; ++nLine )
