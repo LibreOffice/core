@@ -42,10 +42,10 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $bootfile, $newline, $comment, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
+my ( $outfile, $outfile_sh, $bootfile, $newline, $comment, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGWIN32, $USE_SHELL,
      $WScomp, $GNUcomp, $platform, $cygwinver, $machine_type, $empty, $no_jdk, $no_ant, $no_stl, $no_tcsh, $no_cl, $no_gcc, $no_gcc_home, $no_gcc_include, 
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $win_format_var, $perl_os);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -54,12 +54,12 @@ my ( $outfile, $bootfile, $newline, $comment, $compiler, $unsetenv, $setenv, $un
 # Platform independent constant values.
 my @LANGUAGES = ("ARAB", "CHINSIM", "CHINTRAD", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "ITAL",
 "JAPN", "KOREAN", "POL", "PORT", "RUSS", "SPAN", "SWED", "TURK" ); 
-my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PROFULLSWITCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
+my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PRODUCT, $PROFULLSWITCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
      $common_build, $MK_UNROLL, $NO_REC_RES, $PROEXT, $SO3, $SOLAR_JAVA, 
      $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $USE_NEWCHARSET, $USE_NEW_RSC, $VCL, 
      $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
      $USE_NAMESPACE, $BUILD_SOSL, $LOCAL_SOLENV, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
-     $USE_XPRINT, $BUILD_SOSL_RELEASE, $RSC_ONCE );
+     $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, $GUIENV,
@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME, $G
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, $COMPATH_ROOT, 
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARINCLUDES, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
-     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $WIN_HOME, 
+     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $WIN_HOME, $PSDK_HOME,
      $BISON_HAIRY, $BISON_SIMPLE, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG );
 #
@@ -204,6 +204,7 @@ chomp( $oldPATH );                  # cut off new line
 print "Setting platform independent values... ";
 # NB: Language options now set at 'ToFile' stage. 
 $NO_SRS_PATCH         = "true";
+$PRODUCT              = "full";
 $PROFULLSWITCH        = "product=full";
 $BIG_GOODIES          = "TRUE";
 $BMP_WRITES_FLAG      = "TRUE";
@@ -236,13 +237,7 @@ $LOCAL_SOLENV         = "true";
 $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
-if ( '@USE_XPRINT@' eq "TRUE" )
-{     $USE_XPRINT     = "TRUE";
-}
-else
-{     $USE_XPRINT     = "FALSE";
-}
-print "done\n";
+
 # Setting platform dependent constant values.
 if ( $platform eq "$Solaris" ) 
 {     print "Setting Solaris specific values... ";
@@ -494,6 +489,7 @@ elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
 elsif ( $platform eq "$Winnt" ) 
 { 
       $COMPATH        = PosixFormat('@COMPATH@');
+      $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
       $CPUNAME        = "INTEL";
       $CPU            = "I";
       $GUI            = "WNT";
@@ -619,7 +615,7 @@ else
 {  # JAVA_HOME as argument from autoconf.
    $JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
 }
-# Restore white spaces in Windows pathnames.
+
 if ( $platform eq "$Winnt" ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
@@ -747,7 +743,6 @@ if (($platform eq $Linux) or ($platform eq $NetBSD) or ($platform eq $FreeBSD) o
       }
       # 6. G++ include directory.
       # Check whether autoconf found the g++ 2.95.2 include directory.
-      print "$no_gxx_include = no_gxx_include, '@GXX_INCLUDE_PATH@' = argv(2)\n";
       if ( '@GXX_INCLUDE_PATH@' eq $no_gxx_include ) 
       {
          AddWarning( "set_soenv", "No g++-3 directory found." );
@@ -798,6 +793,14 @@ $USR_CCS              = $USR.$ds."ccs";
 $USR_OPENWIN          = $USR.$ds."openwin";
 $USR_DT               = $USR.$ds."dt";
 $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
+
+# Generate alternate output file for sh?
+if ($USE_SHELL eq "tcsh")
+{  $outfile_sh = $outfile.".sh";
+}
+else
+{  undef $outfile_sh;
+}
 
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB;
@@ -856,7 +859,7 @@ if ( $platform eq "$Macosx" )
 # Same as UPD, used in the buildproces.
 $SOLARUPD             = $UPD;
 # The project's workstamp.
-$WORK_STAMP            = "SRC".$UPD;
+$WORK_STAMP            = "SRX".$UPD;
 #
 $TF_ONE51             = $WORK_STAMP;
 # 
@@ -931,10 +934,10 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") || ($platform eq "$Tr
                         $ps.$JRELIBDIR.
                         $ps.$JRETOOLKITDIR.
                         $ps.$JRETHREADDIR.
-                        $ps.$USR_LOCAL.$LIB.
                         $ps.$par_dir.$LIB.
                         $ps_STLPORT_LIB.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                       $ps.$ENV{'LD_LIBRARY_PATH'};
 }
 elsif ($platform eq "$FreeBSD")
 {  $LD_LIBRARY_PATH   = $cur_dir.
@@ -1010,30 +1013,27 @@ if ($platform eq "$Solaris")
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||  ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64"))
-{  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
-                        $L.$LIB.
-                        $L.$USR.$LIB.
-                        $L.$USR.$LOCAL.$LIB;
+elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||  ($platform eq "$Tru64") ||
+       ($platform eq "$Irix") || ($platform eq "$Irix64") || ($platform eq "$FreeBSD"))
+{
+   $SOLAREXTRALIB     = $L.$par_dir.$LIB;
 }
 elsif ($platform eq "$Macosx") 
 {  $SOLAREXTRALIB     = $L.$LIB.
                         $L.$USR.$LIB;
 }
-elsif ($platform eq "$FreeBSD")
-{
-    $SOLAREXTRALIB    = $L.$par_dir.$LIB;
-}
 
 # Compiler include search directory paths.
-if (($platform eq "$Solaris") || ($platform eq "$Linux") || ($platform eq "$FreeBSD") || ($platform eq "$NetBSD") || ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64")) 
+if (($platform eq "$Solaris") || ($platform eq "$Linux") || ($platform eq "$FreeBSD") ||
+    ($platform eq "$NetBSD") || ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64")) 
 {  $SOLARINCLUDES     = $I.'$SOLARENV'.$INC;
 }
 elsif ($platform eq "$Winnt")
 {  $SOLARINCLUDES     = $I.$SOLARVER.$INC.
                         $I.$SOLARENV.$ds.$INPATH.$INC.
+                        $I.$SOLARENV.$INC.
                         $I.'$COMPATH'.$ds."include".
-                        $I.$SOLARENV.$INC;
+                        $I.'$PSDK_HOME'.$INCLUDE; # This must be the last
 }
 elsif ($platform eq "$Macosx")
 {  $SOLARINCLUDES     = $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
@@ -1051,15 +1051,17 @@ if ($platform eq "$Winnt")
    $IENV              = $cur_dir.
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$INC.
                         $ps.$SOLARENV.$ds.$OUTPATH.$INC.
+                        $ps.$SOLARENV.$INC.
                         $ps.'$COMPATH'.$INCLUDE.
-                        $ps.$SOLARENV.$INC;
-    
+                        $ps.'$PSDK_HOME'.$INCLUDE; # This must be the last.
+
    $WIN_LIB             = $cur_dir.$ps_STLPORT_LIB.$ps.
                         $ps.$SOLARVER.$ds.$UPD.$LIB.
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
                         $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
+                        $ps.$JAVA_HOME.$LIB.
                         $ps.'$COMPATH'.$LIB.
-                        $ps.$JAVA_HOME.$LIB;
+                        $ps.'$PSDK_HOME'.$LIB;
 
    if ( $JAVA_HOME ne "" )
    {
@@ -1090,49 +1092,17 @@ if ($platform eq "$Solaris")
 
    $PATH             .= GetCorrectPath($COMPATH.$BIN, $PERL_PATH, $TCSH_PATH, $compiler);
 
-   $PATH             .= $ps.$USR.$ds."sbin".
-                        $ps.$ETC.
-                        $ps.$USR.$BIN.$ds."X11".
-			$ps.$USR.$ds."X11".$BIN.
-                        $ps.$OPT.$ds."langtools".$BIN.
-                        $ps.$USR_OPENWIN.$BIN.
-                        $ps.$USR_DT.$BIN.
-                        $ps.$USR.$LIB.
-                        $ps.$USR_LOCAL.$BIN;
+   $PATH             .= $ps.$oldPATH;
 }
-elsif (($platform eq "$Linux") or ($platform eq "$NetBSD") or ($platform eq "$Tru64") or ($platform eq "$Irix") or ($platform eq "$Irix64"))
+elsif (($platform eq "$Linux") or ($platform eq "$NetBSD") 
+    or ($platform eq "$Tru64") or ($platform eq "$Irix") 
+	or ($platform eq "$Irix64") or ($platform eq "$FreeBSD"))
 {  $PATH              = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
-   if ( $JAVA_HOME ne "" )
-   {
-      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
-   }
-
-   $PATH             .= GetCorrectPath($COMPATH, $PERL_PATH, $TCSH_PATH, $compiler);
-
-   $PATH             .= $ps.$USR.$ds."sbin".
-                        $ps.$ETC.
-                        $ps.$USR.$BIN.$ds."X11".
-			$ps.$USR.$ds."X11".$BIN.
-                        $ps.$USR.$LIB;
-}
-elsif ($platform eq "$FreeBSD")
-{  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
-                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
-                        $ps.'$SOLARENV'.$BIN.
-                        $ps.'$JAVA_HOME'.$BIN.
-			$ps.$USR_LOCAL.$BIN.
-			$ps.$USR_LOCAL.$ds."sbin";
-
-   $PATH             .= GetCorrectPath($COMPATH, $PERL_PATH, $TCSH_PATH, $compiler);
-
-   $PATH             .= $ps.$USR.$ds."sbin".
-                        $ps.$USR.$ds."X11R6".$ds."bin".
-                        $ps.$USR.$LIB;
+   $PATH             .= $ps.$oldPATH;
 }
 
 elsif ($platform eq "$Winnt")
@@ -1213,6 +1183,7 @@ elsif ($platform eq $Macosx)
                         $ps.$ds."sbin".
                         $ps.'$SOLARENV'.$BIN.
                         $ps.$USR_LOCAL.$BIN.
+                        $ps.$USR.$ds."X11R6".$BIN.
                         $ps.$USR_LOCAL.$ds."sbin";
 }
                         
@@ -1248,9 +1219,6 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") || ($platform eq "$Tr
 			$L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.$LIB.
-                        $L.$USR_LIB.
-                        $L.$USR_LOCAL.$LIB.
                         $L.'$JAVA_HOME'.$LIB.
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
@@ -1282,6 +1250,11 @@ elsif ($platform eq "$Macosx")
                         $L.$JRETHREADDIR.
                         $L_STLPORT_LIB.
                         $L.$USR_LIB;
+# [ed] 6/15/02 Add in X11 libraries onto the library path
+    if ($GUIBASE eq "unx") {
+       $SOLARLIB      .= $L.$XLIB;
+    }
+
 }
 # Location of the compiler include search directory paths.
 $SOLARINC             = $I.$cur_dir.
@@ -1311,6 +1284,12 @@ $SOLARINC            .= '/SC5 ';
 # Platform dependent include path at the top of this list of include paths
 if ($platform eq "$Solaris") 
 {  $SOLARINC         .= $I.'$COMPATH'.$ds."include";
+}
+
+if ($platform eq "$Linux")
+{
+# This simply adds an include path, so even cases that break the FHS work
+   $SOLARINC         .= $STLPORT_inc_stlport;
 }
 
 $SOLARINC            .= $I.'$SOLARENV'.$INC.$ds."Xp31".
@@ -1345,9 +1324,7 @@ else
 
 #The tail, if needed
 if (($platform eq "$Linux") or  ($platform eq "$FreeBSD") or ($platform eq "$NetBSD"))
-{  $SOLARINC         .= $I.$XINC.
-                        $I.$GCC_INCLUDE.
-                        $I.$USR.$INCLUDE;
+{  $SOLARINC         .= $I.$XINC;
 }
 elsif ($platform eq "$Tru64") 
 {  $SOLARINC         .= $I.$XINC.
@@ -1361,13 +1338,18 @@ elsif (($platform eq "$Irix") or ($platform eq "$Irix64"))
 }
 elsif ($platform eq "$Winnt")
 {  $SOLARINC         .= $STLPORT_stlport.
-                        $I.'$COMPATH'.$ds."include".
                         $I.'$JAVA_HOME'.$ds."include".$ds."win32".
-                        $I.'$JAVA_HOME'.$ds."include";
+                        $I.'$JAVA_HOME'.$ds."include".
+                        $I.'$COMPATH'.$ds."include".
+                        $I.'$PSDK_HOME'.$INCLUDE; # This must be the last.
 }
 elsif ($platform eq "$Macosx")
 {  $SOLARINC         .= $STLPORT_stlport.
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
+# [ed] 6/15/02 Add in X11 headers as appropriate for the build
+   if ($GUIBASE eq "unx") {
+      $SOLARINC      .= $I.$XINC;
+   }
 }
                         
 
@@ -1379,21 +1361,21 @@ print "done\n";
 print "Setting the aliases... ";
 # 1. alias for a full product make. 
 if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" ))
-{  $dmake           = '`*dmake product=full`';
+{  $dmake           = '`*dmake`';
 $mkout           = '`perl %SOLARENV\bin\mkout.pl`';
 $deliver         = '`perl %SOLARENV\bin\deliver.pl`';
-$build           = '`perl %SOLARENV\bin\build.pl product=full`';
+$build           = '`perl %SOLARENV\bin\build.pl`';
 $zipdep          = '`perl %SOLARENV\bin\zipdep.pl`';
 }
 else
-{  $dmake           = '"dmake product=full"';
+{
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
-	$build           = '"perl $SOLARENV/bin/build.pl product=full"';
+	$build           = '"perl $SOLARENV/bin/build.pl"';
 	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
 }
 # 3. alias for a full product make
-$nmake           = '"dmake product=full"';
+$nmake           = '"dmake"';
 print "done\n";
 #
 #--------------------------
@@ -1402,13 +1384,21 @@ print "done\n";
 #
 open( OUT, ">$outfile" ) ||
    die "Cannot open $outfile: $!\n";
+
+if(defined($outfile_sh))
+{  # Create sh environment file
+   open( OUT_SH, ">$outfile_sh" ) ||
+   die "Cannot open $outfile_sh: $!\n";
+}
+
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
 #------------------------------------------
 #
 # Write file header.
-CreateFileHeader( $UPD, $platform );
+CreateFileHeader( *OUT, $UPD, $platform, "(t)csh" );
+CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh" ) if defined($outfile_sh);
 #
 # Writing the platform independent constant values to file.
 # (c = comment, e = environment variable, a = alias )
@@ -1452,6 +1442,7 @@ ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
 ToFile( "NO_SRS_PATCH",      $NO_SRS_PATCH,      "e" );
+ToFile( "PRODUCT",           $PRODUCT,           "e" );
 ToFile( "PROFULLSWITCH",     $PROFULLSWITCH,     "e" );
 ToFile( "BIG_GOODIES",       $BIG_GOODIES,       "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
@@ -1481,11 +1472,160 @@ ToFile( "TF_FILTER",         "TRUE",             "e" );
 if ($ENABLE_DEBUG eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
-if ( $platform ne "$Macosx" )
-{  ToFile( "PSPRINT",           "TRUE",             "e" );
-} elsif ( $GUIBASE eq "unx" ) {
-# Mac OS X hack: avoid build errors in printing code in X11
-ToFile( "USE_XPRINT",           "TRUE",             "e" );
+ToFile( "PSPRINT",           "TRUE",             "e" );
+# [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
+# There may be a better way to do this, like splitting unxmacxp into two, but
+# hopefully this hack will work for now...
+
+if ($platform eq "$Macosx")
+{
+    my $macosxCdefs="\"";
+    
+    if( ! -e "/usr/bin/osascript" ) {
+        # no command line applescript.  Chances are we're on a Darwin system
+        
+        $macosxCdefs.=" -DBUILD_OS_DARWIN";
+        open DARVER, "/usr/bin/uname -v |";
+        my $s=<DARVER>;
+        chomp $s;
+        if ( $s =~ /(\d+?)\.(\d+?)(.*?)/)
+        {
+            $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $1;
+            $macosxCdefs.=" -DBUILD_OS_MINOR=" . $2;
+            
+            $s=$3;
+            if ( $s =~ /(\d+?)/) {
+                $macosxCdefs.=" -DBUILD_OS_REV=" . $1;
+            } else {
+                $macosxCdefs.=" -DBUILD_OS_REV=0";
+            }
+        }
+        close DARVER;
+    }
+    else
+    {
+        $macosxCdefs.=" -DBUILD_OS_APPLEOSX";
+        
+        my $majorScript = <<EOF;
+on Num32ToHex(num)
+	if num < 0 then
+		set num to (2 ^ 32) + num
+	end if
+	set out to ""
+	repeat with idx from 7 to 0 by -1
+		set bas to (16 ^ idx) as integer
+		if num >= bas then
+			set mult to ((num - (num mod bas)) / bas) as integer
+			set out to out & character mult of "123456789ABCDEF"
+			set num to (num - bas * mult)
+		else
+			set out to out & "0"
+		end if
+	end repeat
+	return out
+end Num32ToHex
+
+tell application "Finder"
+	system attribute "sysv"
+end tell
+
+Num32ToHex(result)
+return (text 5 through 6 of result)
+EOF
+        open BLECH, ">/tmp/os$$";
+        print BLECH $majorScript;
+        close BLECH;
+        
+        open OSXMAJ, "/usr/bin/osascript </tmp/os$$|";
+        
+        my $tmp=<OSXMAJ>;
+        chomp $tmp;
+        $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $tmp;
+        close OSXMAJ;
+        unlink "/tmp/os$$";
+        
+        my $minorScript = <<EOF;
+on Num32ToHex(num)
+	if num < 0 then
+		set num to (2 ^ 32) + num
+	end if
+	set out to ""
+	repeat with idx from 7 to 0 by -1
+		set bas to (16 ^ idx) as integer
+		if num >= bas then
+			set mult to ((num - (num mod bas)) / bas) as integer
+			set out to out & character mult of "123456789ABCDEF"
+			set num to (num - bas * mult)
+		else
+			set out to out & "0"
+		end if
+	end repeat
+	return out
+end Num32ToHex
+
+tell application "Finder"
+	system attribute "sysv"
+end tell
+
+Num32ToHex(result)
+return (text 7 through 7 of result)
+EOF
+        
+        open BLECH, ">/tmp/os$$";
+        print BLECH $minorScript;
+        close BLECH;
+        
+        open OSXMIN, "/usr/bin/osascript </tmp/os$$|";
+        $tmp=<OSXMIN>;
+        chomp $tmp;
+        $macosxCdefs.=" -DBUILD_OS_MINOR=" . $tmp;
+        close OSXMIN;
+        unlink "/tmp/os$$";
+        
+        my $revScript = <<EOF;
+on Num32ToHex(num)
+	if num < 0 then
+		set num to (2 ^ 32) + num
+	end if
+	set out to ""
+	repeat with idx from 7 to 0 by -1
+		set bas to (16 ^ idx) as integer
+		if num >= bas then
+			set mult to ((num - (num mod bas)) / bas) as integer
+			set out to out & character mult of "123456789ABCDEF"
+			set num to (num - bas * mult)
+		else
+			set out to out & "0"
+		end if
+	end repeat
+	return out
+end Num32ToHex
+
+tell application "Finder"
+	system attribute "sysv"
+end tell
+
+Num32ToHex(result)
+return (text 8 through 8 of result)
+EOF
+        open BLECH, ">/tmp/os$$";
+        print BLECH $revScript;
+        close BLECH;
+                
+        open OSXREV, "/usr/bin/osascript </tmp/os$$|";
+        $tmp=<OSXREV>;
+        chomp $tmp;
+        $macosxCdefs.=" -DBUILD_OS_REV=" . $tmp;
+        close OSXREV;
+        unlink "/tmp/os$$";
+    }
+    
+    if ( $GUIBASE eq "aqua" ) {
+        $macosxCdefs.=" -DQUARTZ";
+    }
+    
+    $macosxCdefs .= "\"";
+    ToFile( "ENVCDEFS", $macosxCdefs, "e");
 }
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 #
@@ -1530,14 +1670,16 @@ ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform eq "$Winnt" )
 {  ToFile( "CYGWIN",            $CYGWIN,            "e" );
+   ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
+ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "SOLARUPD",          $SOLARUPD,          "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "TF_ONE51",          $TF_ONE51,          "e" );
-ToFile( "TF_SVDATA",          $TF_SVDATA,          "e" );
-ToFile( "TF_CFGDATA",          $TF_CFGDATA,          "e" );
+ToFile( "TF_SVDATA",         $TF_SVDATA,         "e" );
+ToFile( "TF_CFGDATA",        $TF_CFGDATA,        "e" );
 ToFile( "TF_FILEURL",        $TF_FILEURL,        "e" );
 ToFile( "URD_ONLY",          $URD_ONLY,          "e" );
 ToFile( "SOLARROOT",         $SOLARROOT,         "e" );
@@ -1576,7 +1718,9 @@ ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CXX",               $CXX,               "e" );
-ToFile( "LINK",				 $CXX,				 "e" );
+if ( $COM ne "MSC" ) {
+  ToFile( "LINK",			 $CXX,				 "e" );
+}
 ToFile( "BISON_HAIRY",       $BISON_HAIRY,       "e" );
 ToFile( "BISON_SIMPLE",      $BISON_SIMPLE,      "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,"e" );
@@ -1623,13 +1767,16 @@ if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" )) {
   ToFile( "DELIVER",           "deliver.pl",       "e" );
   ToFile( "MKOUT",             "mkout.pl",         "e" );
   ToFile( "ZIPDEP",            "zipdep.pl",         "e" );
+  ToFile( "GCCINSTLIB",        "gccinstlib.pl",    "e" );
 }
 ToFile( "USE_SHELL",         $USE_SHELL,         "e" );
 #
 # Writing the aliases to file.
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Aliases.",          $empty,             "c" );
-ToFile( "alias dmake",       $dmake,             "a" );
+if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" ))
+{ ToFile( "alias dmake",       $dmake,             "a" );
+}
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
@@ -1646,23 +1793,14 @@ if ( $platform eq "$Winnt" and $USE_SHELL eq "4nt" )
   ToFile( "if not exist \%SRC_ROOT\\dmake\\dmake.exe (cd \%SRC_ROOT\\dmake \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
   ToFile( "  ", $empty, "x");
 }
-if ( $platform eq "$Winnt" and $USE_SHELL eq "tcsh" )
-{
-  ToFile( "build the dmake executable.", $empty, "c");
-  ToFile( "if ( -e $SRC_ROOT/dmake/dmake.exe ) then", $empty, "x");
-  ToFile( "  echo \"Is already there!\"", $empty, "x");
-  ToFile( "else", $empty, "x");
-  ToFile( "  cd $SRC_ROOT/dmake", $empty, "x");
-  ToFile( "  ./autogen.sh", $empty, "x");
-  ToFile( "  make", $empty, "x");
-  ToFile( "  cd $SRC_ROOT", $empty, "x");
-  ToFile( "endif", $empty, "x");  
-  ToFile( " ", $empty, "x");  
-}
 #
 # Writing unset variables you might not need to file.
 # 
 print OUT $unsetvars;
+if(defined($outfile_sh))
+{  print OUT_SH "export $exportvars $newline";
+   print OUT_SH "unset $unsetvarssh $newline";
+}
 
 #
 #---------------------------
@@ -1670,6 +1808,9 @@ print OUT $unsetvars;
 #---------------------------
 #
 close( OUT ) || print "Can't close $outfile: $!";
+if( defined($outfile_sh))
+{  close( OUT_SH ) || print "Can't close $outfile_sh: $!";
+}
 #
 #------------------------------
 # IX. Sourcing the output file.
@@ -1712,6 +1853,13 @@ $tmp = $SRC_ROOT.$ds.$outfile;
 if (rename( $outfile, $tmp ) ne 1)
 {  `mv -f $outfile $tmp`;
 }
+if(defined($outfile_sh))
+{
+    $tmp = $SRC_ROOT.$ds.$outfile_sh;
+    if (rename( $outfile_sh, $tmp ) ne 1)
+    {  `mv -f $outfile_sh $tmp`;
+    }
+}
 #
 #--------------------------------------------------------
 # XII. Message at the end.
@@ -1736,8 +1884,10 @@ if ( $Warning ne "" )
 }
 
 print "$newline* USAGE: $newline";
-print "* Source $outfile in order to set up the build-environment $newline".
-      "* variables. $newline";
+print "* Source $outfile (in tcsh) ";
+print "or $outfile.sh (in sh) " if defined($outfile_sh);
+print "in order to set up $newline".
+      "* the build-environment variables. $newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
 {  print "* $newline";
 }
@@ -1767,6 +1917,9 @@ $tmp = $SRC_ROOT.$ds.$bootfile;
 if (rename( $bootfile, $tmp ) ne 1)
 {  `mv -f $bootfile $tmp`;
 }
+
+print "Configure completed\n";
+print "You may now run $tmp in $SRC_ROOT\n";
 #
 #-----------------
 # XII. Functions.
@@ -1842,22 +1995,25 @@ sub CheckPathExist
 #------------------------------------------------------------
 # Function name: CreateFileHeader 
 # Description:   Creates a header for the outfile.
-# Arguments:     1. UPD (string)
-#                2. Platform (string)
+# Arguments:     1. File to write to
+#                2. UPD (string)
+#                3. Platform (string)
+#                4. name of shell for this file
 # Return value:  void
 #------------------------------------------------------------
 sub CreateFileHeader 
 {  my $timestamp = `date`;
    chomp( $timestamp );
-   print OUT "$comment #################################################################"; 
-   print OUT $newline;
-   print OUT "$comment OpenOffice $_[ 0 ] build environment file for: $_[ 1 ]. $newline"; 
-   print OUT "$comment Generated on: $timestamp $newline"; 
-   print OUT "$comment Source this file to set up the build environment. $newline"; 
-   print OUT "$comment 1. exec (t)csh $newline"; 
-   print OUT "$comment 2. source $outfile $newline"; 
-   print OUT "$comment #################################################################"; 
-   print OUT $newline;
+   my $filehandle = $_[0];
+   print { $filehandle } "$comment #################################################################"; 
+   print { $filehandle } $newline;
+   print { $filehandle } "$comment OpenOffice $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
+   print { $filehandle } "$comment Generated on: $timestamp $newline"; 
+   print { $filehandle } "$comment Source this file to set up the build environment. $newline"; 
+   print { $filehandle } "$comment 1. exec $_[3] $newline"; 
+   print { $filehandle } "$comment 2. source $outfile $newline"; 
+   print { $filehandle } "$comment #################################################################"; 
+   print { $filehandle } $newline;
 }
 #---------------------------------------------------------
 # Function name: ToFile 
@@ -1874,7 +2030,12 @@ sub ToFile
       if (defined $_[ 1 ])
       {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
          if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-         {   print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";       # to file
+         {   
+             print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";          # to tcsh file
+             if(defined($outfile_sh))
+             {  print OUT_SH "$_[ 0 ]=\"$_[ 1 ]\"$newline";            # to sh file
+                $exportvars .= " $_[ 0 ]";                             # add to export list for sh file
+             }
          }
          else
          {   $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
@@ -1885,7 +2046,9 @@ sub ToFile
       else
       {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
          if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-         {  $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline";            # to file
+         {  
+            $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline";            # for tcsh file
+            $unsetvarssh .= " $_[ 0 ]";                                        # for sh file
          }
          else
          {  $unsetvars .= "$unset $_[ 0 ] >& NUL$newline";
@@ -1896,7 +2059,9 @@ sub ToFile
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";     # to stdout
       if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-      {  print OUT "$_[ 0 ] $_[ 1 ] $newline";               # to file
+      {  
+         print OUT "$_[ 0 ] $_[ 1 ] $newline";                            # to tcsh file
+         print OUT_SH "$_[ 0 ]=$_[ 1 ] $newline" if defined($outfile_sh); # to sh file
       }
       else
       {  print OUT "$_[ 0 ]=$_[ 1 ] $newline";
@@ -1913,10 +2078,18 @@ sub ToFile
       print OUT "$comment $_[ 0 ] $newline"; 
       print OUT "$comment $newline";     
 #      print OUT "$newline";
+      if(defined($outfile_sh))
+      {
+          print OUT_SH "$newline";
+          print OUT_SH "$comment $newline";
+          print OUT_SH "$comment $_[ 0 ] $newline"; 
+          print OUT_SH "$comment $newline";     
+      }
    }
    elsif ( $_[ 2 ] eq "n" ) 
    {  #Write a newline to a file
       print OUT "$newline";
+      print OUT_SH "$newline" if defined($outfile_sh);
    }
    elsif ( $_[ 2 ] eq "x" )
    {
@@ -1962,8 +2135,8 @@ sub PosixFormat
    $variable = $_[ 0 ];
    # ToDo: Do the replacement only if "Winnt" and var contains "\" and ":"
    if ( $platform eq "$Winnt" )
-   {   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables
-	   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables twice!
+   {   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables
+       $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables twice!
    	   if ( ( $variable =~ /\\/ ) and ( $variable =~ /:/ ) )
 	   {   $variable =~ s{([c-z]):}{/cygdrive/$1}gi;
 		   # Map drives to /cgydrive/drive
@@ -1984,25 +2157,22 @@ sub PosixFormat
 sub WinFormat         
 {  my ( $variable, $d1, $d1_prefix, @split_var );  
    $variable = $_[ 0 ];
-   $variable =~ s/^"//;
-   $variable =~ s/"$//;
+   $variable =~ s/^\s+//g ; #remove leading spaces
+   $variable =~ s/\s+$//g ; #remove trailing spaces
    # Here should be NO "\"! If yes, PosixFormat() was forgotten before !
    if ( $variable =~ /\\/ )
    {
 	   die("Error! Variable contains \"\\\" : $variable PosixFormat() missing?");
    }
-   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables
-   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables twice!
    $variable =~ s/\$\{PATH\}/%PATH/g ;     # explicit replace ${PATH}
+   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables
+   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables twice!
    $variable =~ s/:+/:/g ;                 # remove multiple ;
 
    if ( $cygwinver eq "b" )
    {
-	   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables
-	   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables twice!
-	   $variable =~ s/\$\{PATH\}/%PATH/g ;     # explicit replace ${PATH}
-	   $variable =~ s/:/;/g;                         # Change path-separator
-	   $variable =~ s{//([c-z])/}{$1:\\}gi;          # drives from cgywin-b20 (just in case ...)
+	   $variable =~ s/:/;/g;                   # Change path-separator
+	   $variable =~ s{//([c-z])/}{$1:\\}gi;    # drives from cgywin-b20 (just in case ...)
 	   $variable =~ s{/cygdrive/([c-z])/}{$1:\\}gi;  # more drives for cgywin-b20
        $variable =~ s!([;]|\A|-[iIlL])/!$1$SYSTEMDRIVE/!g; # get back the hidden drives
 	   $variable =~ s!/!\\!g;                        # Rest is windows stuff 
@@ -2010,22 +2180,33 @@ sub WinFormat
    else  # New cygwin
    {
        $variable =~ s/:/;/g;
-#       $variable =~ s/([;]|\A|-[iIlL])(\w);/$1$2:/g; # get back the drives
-	   $variable =~ s{/cygdrive/([c-z])/}{$1:\\}gi;  # more drives cgywin style
-       # Search for posix path entry and replace with cygpath -w entry
-       if ( $variable =~ /^\s+-\w/ )
+       # Search for posix path entry and replace with cygpath -w entry ( -d if filename contains space )
+       if ( $variable =~ /^\s*-\w/ )
        {
            # Include paths
-           @split_var = split(/ /,$variable);
+           @split_var = split(/\s+-/,$variable);
+		   $split_var[0] =~ s/^-//; # split deletes the "-" from all but the first element
            foreach $d1 ( @split_var )
            {
-               if ( $d1 =~ /^(-\w)(?:(?:\/[\w\.~]+)+)/ )
+			   $d1 = "-".$d1;
+               if ( $d1 =~ /^(-\w)(?:(?:\/[\w\.~ ]+)+)/ )
                {
                    $d1_prefix = $1;
                    $d1 =~ s/^-\w//;
-                   chomp( $d1 = qx{cygpath -w "$d1"} );
+				   if ( $d1 =~ / / )
+				   {
+					   chomp( $d1 = qx{cygpath -d "$d1"} ); # Use DOS 8.3 style to avoid quoting
+				   }                                        # ! This fails when $d1 doesn't exist!
+				   else
+				   {
+					   chomp( $d1 = qx{cygpath -w "$d1"} ); # Use "normal" filenames
+				   }
                    $d1 = $d1_prefix.$d1;
                }
+			   else
+			   {   # relative paths here
+				   # Do nothing.
+			   }
            }
            $variable = join(' ',@split_var);
        }
@@ -2036,10 +2217,21 @@ sub WinFormat
            @split_var = split(/;/,$variable);
            foreach $d1 ( @split_var )
            {
-               if ( $d1 =~ /(?:^\/[\w\.~]+)+/ )
+               if ( $d1 =~ /(?:^\/[\w\.~ ]+)+/ )
                {
-                   chomp( $d1 = qx{cygpath -w "$d1"} ) ;
+				   if ( $d1 =~ / / )
+				   {
+					   chomp( $d1 = qx{cygpath -d "$d1"} ); # Use DOS 8.3 style to avoid quoting
+				   }                                        # ! This fails when $d1 doesn't exist!
+				   else
+				   {
+					   chomp( $d1 = qx{cygpath -w "$d1"} ); # Use "normal" filenames
+				   }
                }
+			   else
+			   {   # relative paths here
+				   # Do nothing.
+			   }
            }
            $variable = join(';',@split_var);
        }
