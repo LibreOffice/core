@@ -14,7 +14,7 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(OBJTARGET)"!=""
 
@@ -32,7 +32,7 @@ $(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SVXLIGHTOBJTARGET)"!=""
 
@@ -44,7 +44,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    +echo. $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) >> $@
+    +echo. $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
 .ELSE
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF

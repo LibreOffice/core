@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
+#   last change: $Author: hjs $ $Date: 2001-08-08 17:16:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SLOTARGET)"!=""
 
@@ -97,7 +97,7 @@ $(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_SVXLIGHTSLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(REAL_SVXLIGHTSLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SVXLIGHTSLOTARGET)"!=""
 
@@ -115,7 +115,7 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)SLOTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
