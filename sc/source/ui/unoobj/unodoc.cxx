@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:19:51 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#include "docsh.hxx"
+
 using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL ScDocument_getImplementationName() throw()
@@ -96,23 +98,9 @@ uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SC_MOD(), "No StarCalc module!" );
-
-    if ( SC_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/scalc" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
-
-    return uno::Reference< uno::XInterface >();
+    ScDLL::Init();
+    SfxObjectShell* pShell = new ScDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 
