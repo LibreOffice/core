@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formhelpid.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:31:50 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 13:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@
 #define HID_PROP_SPIN                           (HID_FORMS_START +  83)
 #define HID_PROP_STRICTFORMAT                   (HID_FORMS_START +  84)
 #define HID_PROP_SHOWTHOUSANDSEP                (HID_FORMS_START +  85)
-#define HID_PROP_HARDLINEBREAKS                 (HID_FORMS_START +  86)
+    // FREE
 #define HID_PROP_PRINTABLE                      (HID_FORMS_START +  87)
 #define HID_PROP_TARGET_URL                     (HID_FORMS_START +  88)
 #define HID_PROP_TARGET_FRAME                   (HID_FORMS_START +  89)
@@ -235,6 +235,7 @@
 #define UID_PROP_DLG_NUMBER_FORMAT              (UID_PROP_DLG    +    6)
 #define UID_PROP_DLG_ATTR_DATASOURCE            (UID_PROP_DLG    +    4)
 #define UID_PROP_DLG_FILLCOLOR                  (UID_PROP_DLG    +    8)
+#define UID_PROP_DLG_SYMBOLCOLOR                (UID_PROP_DLG    +    9)
 
 // ----------------------------------------------------------------------------
 
@@ -243,51 +244,4 @@
 #define HID_FM_PROPDLG_TAB_EVT                  (HID_FORM_DLG_START +   8)
 
 #endif // _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.8.12.2  2003/11/24 13:58:54  obo
- *  undo last change
- *
- *  Revision 1.8  2003/10/21 09:05:10  obo
- *  INTEGRATION: CWS formcelllinkage (1.7.172); FILE MERGED
- *  2003/10/01 09:17:53 fs 1.7.172.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.7.172.1  2003/10/01 09:17:53  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.7.162.3  2003/09/16 15:58:04  fs
- *  #18994#
- *
- *  Revision 1.7.162.2  2003/09/11 15:12:22  fs
- *  #19371# user interface for binding list/combo controls to spreadsheet cell ranges
- *
- *  Revision 1.7.162.1  2003/09/03 13:32:28  fs
- *  #i18996# UI for binding form controls to calc cells
- *
- *  Revision 1.7  2001/11/08 11:36:53  fs
- *  #94300# removed ShowCentury property
- *
- *  Revision 1.6  2001/09/28 14:54:09  tbe
- *  #92258# click handler for Basic Scrollbar
- *
- *  Revision 1.5  2001/06/06 10:38:25  fs
- *  #86837# +HID_PROP_IMAGE_ALIGN
- *
- *  Revision 1.4  2001/04/26 09:15:35  tbe
- *  added progressbar properties
- *
- *  Revision 1.3  2001/02/06 10:18:10  fs
- *  #83479# reintroduced the HasNavigationBar property
- *
- *  Revision 1.2  2001/01/17 08:41:02  fs
- *  #82726# removed an obsolete id
- *
- *  Revision 1.1  2001/01/12 11:28:14  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 09.01.01 15:59:13  fs
- ************************************************************************/
 
