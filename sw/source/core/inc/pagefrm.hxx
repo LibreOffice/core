@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 07:51:04 $
+ *  last change: $Author: od $ $Date: 2002-11-20 13:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,9 +198,6 @@ public:
     BOOL HasGrid() const { return bHasGrid; }
 #endif
 
-    //Umrandungen aller Frms innerhalb der Seite Painten.
-    void PaintAllBorders( const SwRect &rRect ) const;
-
     //Zeilennummern usw malen
     void RefreshExtraData( const SwRect & ) const;
 
@@ -255,6 +252,25 @@ public:
         @return reference to an instance of class Color
     */
     const Color& GetDrawBackgrdColor() const;
+
+    /** paint margin area of a page
+
+        OD 20.11.2002 for #104598#:
+        implement paint of margin area; margin area will be painted for a
+        view shell with a window and if the document is not in online layout.
+
+        @author OD
+
+        @param _rOutputRect
+        input parameter - constant instance reference of the rectangle, for
+        which an output has to be generated.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, on which the output
+        has to be generated.
+    */
+    void PaintMarginArea( const SwRect& _rOutputRect,
+                          ViewShell* _pViewShell ) const;
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
