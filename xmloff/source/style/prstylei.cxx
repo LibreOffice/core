@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:24:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
             return;
 
         // connect parent
-        OUString sParent( GetParent() );
+        OUString sParent( GetParentName() );
         if( sParent.getLength() )
             sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
         if( sParent.getLength() && !xFamilies->hasByName( sParent ) )
