@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:38:55 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,6 +668,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* Tabellenmodus */
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
+#define FN_TABLE_BOX_TEXTDIRECTION  (FN_FORMAT + 192)  /*  text direction of table cells */
 
 #define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* Autosumme*/
 #define FN_SET_CONTROL_HANDLER      (FN_FORMAT + 199)  /* Macro setzen */
