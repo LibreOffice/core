@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=master-document
+Icon=oasis-master-document
 Type=MimeType
-Patterns=*.oom
-MimeType=application/x-vnd.oasis.openoffice.text-master
-Comment=Open Office Master Document
+Patterns=*.odm
+MimeType=application/vnd.oasis.opendocument.text-master
+Comment=OpenDocument Master Document
