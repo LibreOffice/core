@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:24:57 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,7 +893,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ japanese ] = "‹r’/•¶––‹r’";
                 Text[ korean ] = "°¢ÁÖ/¹ÌÁÖ";
                 Text[ chinese_simplified ] = "×¢½ÅºÍÎ²×¢";
-                Text[ chinese_traditional ] = "ª`¸}©M§Àª`";
+                Text[ chinese_traditional ] = "µù¸}©M§Àµù";
                 Text[ arabic ] = "ÍæÇÔí ÓİáíÉ/ÊÚáíŞÇÊ ÎÊÇãíÉ";
                 Text[ turkish ] = "Dipnot/Sonnot";
             };
@@ -1184,7 +1184,7 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ japanese ] = "‹r’/•¶––‹r’";
                 Text[ korean ] = "°¢ÁÖ/¹ÌÁÖ";
                 Text[ chinese_simplified ] = "×¢½ÅºÍÎ²×¢";
-                Text[ chinese_traditional ] = "ª`¸}©M§Àª`";
+                Text[ chinese_traditional ] = "µù¸}©M§Àµù";
                 Text[ arabic ] = "ÍæÇÔí ÓİáíÉ/ÊÚáíŞÇÊ ÎÊÇãíÉ";
                 Text[ turkish ] = "Dipnot/Sonnot";
             };
@@ -1312,7 +1312,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "Begynd med" ;
         Text [ portuguese_brazilian ] = "Be~ginn bei" ;
-        Text [ portuguese ] = "~Iniciar em" ;
+        Text [ portuguese ] = "~Começar em" ;
         Text[ chinese_simplified ] = "¿ªÊ¼´Ó(~S)";
         Text[ russian ] = "Íà÷àòü ñ";
         Text[ polish ] = "Zacznij od";
@@ -1479,7 +1479,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ japanese ] = "•¶––‹r’";
         Text[ korean ] = "¹ÌÁÖ";
         Text[ chinese_simplified ] = "Î²×¢";
-        Text[ chinese_traditional ] = "§Àª`";
+        Text[ chinese_traditional ] = "§Àµù";
         Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ";
         Text[ turkish ] = "Sonnot";
     };
