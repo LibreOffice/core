@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.21 2000-12-15 14:04:20 mib Exp $
+	$Id: drawing.mod,v 1.22 2000-12-19 14:43:37 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -73,6 +73,9 @@
 <!ENTITY % presentation-classes "(title|outline|subtitle|text|graphic|object|chart|table|orgchart|page|notes)" >
 <!-- ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED" -->
 <!ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED presentation:placeholder (true|false) #IMPLIED presentation:user-transformed (true|false) #IMPLIED">
+<!ENTITY % presentationEffects "(none|fade|move|stripes|open|close|dissolve|wavyline|random|lines|laser|appear|hide|move-short|checkerboard|rotate|stretch)" >
+<!ENTITY % presentationEffectDirections "(none|from-left|from-top|from-right|from-bottom|from-center|from-upper-left|from-upper-right|from-lower-left|from-lower-right|to-left|to-top|to-right|to-bottom|to-upper-left|to-upper-right|to-lower-right|to-lower-left|path|spiral-inward-left|spiral-inward-right|spiral-outward-left|spiral-outward-right|vertical|horizontal|to-center|clockwise|counter-clockwise)" >
+<!ENTITY % presentationSpeeds "(slow|medium|fast)" >
 
 <!-- Drawing shapes -->
 <!ELEMENT draw:rect %draw-text;>
@@ -83,6 +86,7 @@
 <!ATTLIST draw:rect %draw-transform; >
 <!ATTLIST draw:rect draw:corner-radius %nonNegativeLength; #IMPLIED>
 <!ATTLIST draw:rect %zindex;>
+<!ATTLIST draw:rect draw:id %shapeId;>
 
 <!ELEMENT draw:line %draw-text;>
 <!ATTLIST draw:line svg:x1 %length; #REQUIRED>
@@ -93,6 +97,7 @@
 <!ATTLIST draw:line %draw-transform; >
 <!ATTLIST draw:line %zindex;>
 <!ATTLIST draw:line %draw-end-position; >
+<!ATTLIST draw:line draw:id %shapeId;>
 
 <!ELEMENT draw:polyline %draw-text; >
 <!ATTLIST draw:polyline %draw-position; >
@@ -103,6 +108,7 @@
 <!ATTLIST draw:polyline %draw-transform; >
 <!ATTLIST draw:polyline %zindex;>
 <!ATTLIST draw:polyline %draw-end-position; >
+<!ATTLIST draw:polyline draw:id %shapeId;>
 
 <!ELEMENT draw:polygon %draw-text; >
 <!ATTLIST draw:polygon %draw-position; >
@@ -113,6 +119,7 @@
 <!ATTLIST draw:polygon %draw-style-name; >
 <!ATTLIST draw:polygon %draw-transform; >
 <!ATTLIST draw:polygon %zindex;>
+<!ATTLIST draw:polygon draw:id %shapeId;>
 
 <!ELEMENT draw:path %draw-text; >
 <!ATTLIST draw:path %draw-position;>
@@ -123,6 +130,7 @@
 <!ATTLIST draw:path %draw-style-name; >
 <!ATTLIST draw:path %draw-transform; >
 <!ATTLIST draw:path %zindex;>
+<!ATTLIST draw:path draw:id %shapeId;>
 
 <!ELEMENT draw:circle %draw-text; >
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
@@ -132,6 +140,7 @@
 <!ATTLIST draw:circle %draw-transform; >
 <!ATTLIST draw:circle %zindex;>
 <!ATTLIST draw:circle %draw-end-position; >
+<!ATTLIST draw:circle draw:id %shapeId;>
 
 <!ELEMENT draw:ellipse %draw-text; >
 <!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
@@ -142,6 +151,7 @@
 <!ATTLIST draw:ellipse %draw-transform; >
 <!ATTLIST draw:ellipse %zindex;>
 <!ATTLIST draw:ellipse %draw-end-position; >
+<!ATTLIST draw:ellipse draw:id %shapeId;>
 
 <!ELEMENT draw:connector %draw-text;>
 <!ATTLIST draw:connector draw:type (standard|lines|line|curve) "standard">
@@ -157,11 +167,13 @@
 <!ATTLIST draw:connector draw:end-glue-point %integer; #IMPLIED>
 <!ATTLIST draw:connector %zindex;>
 <!ATTLIST draw:connector %draw-end-position; >
+<!ATTLIST draw:connector draw:id %shapeId;>
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
 <!ATTLIST draw:g %zindex;>
 <!ATTLIST draw:g %draw-end-position; >
+<!ATTLIST draw:g draw:id %shapeId;>
 
 <!ELEMENT draw:page-thumbnail EMPTY>
 <!ATTLIST draw:page-thumbnail %draw-position; >
@@ -170,6 +182,7 @@
 <!ATTLIST draw:page-thumbnail %presentation-class; >
 <!ATTLIST draw:page-thumbnail %zindex;>
 <!ATTLIST draw:page-thumbnail %draw-end-position; >
+<!ATTLIST draw:page-thumbnail draw:id %shapeId;>
 
 <!ELEMENT draw:caption %draw-text;>
 <!ATTLIST draw:caption %draw-position; >
@@ -180,6 +193,7 @@
 <!ATTLIST draw:caption draw:caption-point-x %coordinate; #IMPLIED>
 <!ATTLIST draw:caption draw:caption-point-y %coordinate; #IMPLIED>
 <!ATTLIST draw:caption %zindex;>
+<!ATTLIST draw:caption draw:id %shapeId;>
 
 <!ELEMENT draw:measure %draw-text;>
 <!ATTLIST draw:measure svg:x1 %coordinate; #REQUIRED>
@@ -190,6 +204,7 @@
 <!ATTLIST draw:measure %draw-style-name; >
 <!ATTLIST draw:measure %draw-transform; >
 <!ATTLIST draw:measure %zindex;>
+<!ATTLIST draw:measure draw:id %shapeId;>
 
 <!-- graphic style elements -->
 <!ELEMENT draw:gradient EMPTY >
@@ -308,12 +323,60 @@
 <!ATTLIST style:properties draw:text-position-vertical (left|center|right|auto) #IMPLIED>
 <!ATTLIST style:properties draw:text-position-horizontal (top|center|bottom|auto) #IMPLIED>
 
+<!-- Animations -->
+<!ELEMENT presentation:sound EMPTY>
+<!ATTLIST presentation:sound xlink:href %uriReference; #REQUIRED>
+<!ATTLIST presentation:sound xlink:type (simple) #FIXED "simple">
+<!ATTLIST presentation:sound xlink:show (new|replace) #IMPLIED>
+<!ATTLIST presentation:sound xlink:actuate (onRequest) "onRequest">
+<!ATTLIST presentation:sound presentation:play-full %boolean; #IMPLIED>
+
+<!ELEMENT presentation:show-shape (presentation:sound)?>
+<!ATTLIST presentation:show-shape draw:shape-id %shapeId; #REQUIRED>
+<!ATTLIST presentation:show-shape presentation:effect %presentationEffects; "none">
+<!ATTLIST presentation:show-shape presentation:direction %presentationEffectDirections; "none">
+<!ATTLIST presentation:show-shape presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:show-shape presentation:path-id %shapeId; #IMPLIED>
+
+<!ELEMENT presentation:show-text (presentation:sound)?>
+<!ATTLIST presentation:show-text draw:shape-id %shapeId; #REQUIRED>
+<!ATTLIST presentation:show-text presentation:effect %presentationEffects; "none">
+<!ATTLIST presentation:show-text presentation:direction %presentationEffectDirections; "none">
+<!ATTLIST presentation:show-text presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:show-text presentation:path-id %shapeId; #IMPLIED>
+
+<!ELEMENT presentation:hide-shape (presentation:sound)?>
+<!ATTLIST presentation:hide-shape draw:shape-id %shapeId; #REQUIRED>
+<!ATTLIST presentation:hide-shape presentation:effect %presentationEffects; "none">
+<!ATTLIST presentation:hide-shape presentation:direction %presentationEffectDirections; "none">
+<!ATTLIST presentation:hide-shape presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:hide-shape presentation:path-id %shapeId; #IMPLIED>
+
+<!ELEMENT presentation:hide-text (presentation:sound)?>
+<!ATTLIST presentation:hide-text draw:shape-id %shapeId; #REQUIRED>
+<!ATTLIST presentation:hide-text presentation:effect %presentationEffects; "none">
+<!ATTLIST presentation:hide-text presentation:direction %presentationEffectDirections; "none">
+<!ATTLIST presentation:hide-text presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:hide-text presentation:path-id %shapeId; #IMPLIED>
+
+<!ELEMENT presentation:dim (presentation:sound)?>
+<!ATTLIST presentation:dim draw:shape-id %shapeId; #REQUIRED>
+<!ATTLIST presentation:dim draw:color %color; #REQUIRED>
+
+<!ELEMENT presentation:animations (presentation:show-shape|presentation:show-text|presentation:hide-shape|presentation:hide-text|presentation:dim)*>
+
+<!ELEMENT presentation:show EMPTY>
+<!ATTLIST presentation:show presentation:name %styleName; #REQUIRED>
+<!ATTLIST presentation:show presentation:pages CDATA #REQUIRED>
+<!ELEMENT presentation:shows (presentation:show)*>
+
 <!-- Drawing page -->
-<!ELEMENT draw:page ((%shapes;)*,presentation:notes?)>
+<!ELEMENT draw:page ((%shapes;)*,presentation:animations?,presentation:notes?)>
 <!ATTLIST draw:page draw:name %string; #IMPLIED>
 <!ATTLIST draw:page draw:style-name %styleName; #IMPLIED>
 <!ATTLIST draw:page draw:master-page-name %styleName; #REQUIRED>
 <!ATTLIST draw:page presentation:presentation-page-layout-name %styleName; #IMPLIED>
+<!ATTLIST draw:page draw:id %nonNegativeInteger; #IMPLIED>
 
 <!-- Presentation notes -->
 <!ELEMENT presentation:notes (%shapes;)*>
@@ -332,15 +395,9 @@
 <!-- presentation page attributes -->
 <!ATTLIST style:properties presentation:transition-type (manual|automatic|semi-automatic) #IMPLIED >
 <!ATTLIST style:properties presentation:transition-style (none|fade-from-left|fade-from-top|fade-from-right|fade-from-bottom|fade-to-center|fade-from-center|move-from-left|move-from-top|move-from-right|move-from-bottom|roll-from-left|roll-from-right|roll-from-bottom|vertical-stripes|horizontal-stripes|clockwise|counterclockwise|fade-from-upperleft|fade-from-upperright|fade-from-lowerleft|fade-from-lowerright|close-vertical|close-horizontal|open-vertical|open-horizontal|spiralin-left|spiralin-right|spiralout-left|spiralout-right|dissolve|wavyline-from-left|wavyline-from-top|wavyline-from-right|wavyline-from-bottom|random|stretch-from-left|stretch-from-top|stretch-from-right|stretch-from-bottom|vertical-lines|horizontal-lines) #IMPLIED >
-<!ATTLIST style:properties presentation:transition-speed (slow|medium|fast) #IMPLIED >
+<!ATTLIST style:properties presentation:transition-speed %presentationSpeeds; #IMPLIED >
 <!ATTLIST style:properties presentation:duration %timeDuration; #IMPLIED>
 <!ATTLIST style:properties presentation:visibility (visible|hidden) #IMPLIED>
-
-<!ELEMENT presentation:sound EMPTY>
-<!ATTLIST presentation:sound xlink:href %uriReference; #REQUIRED>
-<!ATTLIST presentation:sound xlink:type (simple) #IMPLIED>
-<!ATTLIST presentation:sound xlink:show (embed) #IMPLIED>
-<!ATTLIST presentation:sound xlink:actuate (onLoad) #IMPLIED>
 
 <!-- text boxes -->
 <!ELEMENT draw:text-box (text:h|text:p|text:ordered-list|
@@ -360,6 +417,7 @@
 <!ATTLIST draw:text-box %zindex;>
 <!ATTLIST draw:text-box %presentation-class; >
 <!ATTLIST draw:text-box %draw-transform; >
+<!ATTLIST draw:text-box draw:id %shapeId;>
 
 <!-- image -->
 <!ELEMENT draw:image (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
@@ -378,6 +436,7 @@
 <!ATTLIST draw:image svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:image %presentation-class; >
 <!ATTLIST draw:image %zindex;>
+<!ATTLIST draw:image draw:id %shapeId;>
 
 <!ELEMENT svg:desc (#PCDATA)>
 

@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.10 2000-12-15 14:04:20 mib Exp $
+	$Id: chart.mod,v 1.11 2000-12-19 14:43:37 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -73,6 +73,7 @@
 <!ATTLIST chart:chart %presentation-class; >
 <!ATTLIST chart:chart %zindex;>
 <!ATTLIST chart:chart %draw-end-position; >
+<!ATTLIST chart:chart draw:id %shapeId;>
 
 <!ATTLIST style:properties
 		  chart:scale-text %boolean; "true"

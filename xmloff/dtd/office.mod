@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.20 2000-12-15 14:04:20 mib Exp $
+	$Id: office.mod,v 1.21 2000-12-19 14:43:37 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -144,7 +144,8 @@
 		text:user-index|text:alphabetical-index|text:bibliography)*,
 		table:named-expressions?,
 		table:database-ranges?,table:data-pilot-tables?,
-		table:consolidation?)">
+		table:consolidation?,
+		presentation:shows?)">
 <!ELEMENT office:body %body;>
 
 <!-- DDE source: for text sections and tables -->
