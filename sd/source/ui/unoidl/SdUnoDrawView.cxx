@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-08-02 12:16:09 $
+ *  last change: $Author: thb $ $Date: 2002-08-19 08:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,7 @@ IPropertyArrayHelper & SdUnoDrawView::getInfoHelper()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    static OPropertyArrayHelper aInfo( getBasicProps(), PROPERTY_COUNT );
+    static OPropertyArrayHelper aInfo( getBasicProps(), PROPERTY_COUNT, sal_False );
     return aInfo;
 }
 
