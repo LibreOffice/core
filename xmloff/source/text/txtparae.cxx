@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-07 13:15:50 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,13 +2118,13 @@ void XMLTextParagraphExport::_exportTextGraphic(
     addTextFrameAttributes( rPropSet, sal_False );
 
     // xlink:href
-    OUString sURL;
+    OUString sOrigURL;
     aAny = rPropSet->getPropertyValue( sGraphicURL );
-    aAny >>= sURL;
-    sURL = GetExport().AddEmbeddedGraphicObject( sURL );
+    aAny >>= sOrigURL;
+    OUString sURL = GetExport().AddEmbeddedGraphicObject( sOrigURL );
     setTextEmbeddedGraphicURL( rPropSet, sURL );
 
-    // If there still is no url, then teh graphic is empty
+    // If there still is no url, then then graphic is empty
     if( sURL.getLength() )
     {
         GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
@@ -2161,6 +2161,9 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_image, sal_False, sal_True );
+
+    // optional office:binary-data
+    GetExport().AddEmbeddedGraphicObjectAsBase64( sOrigURL );
 
     // script:events
     Reference<XEventsSupplier> xEventsSupp( rPropSet, UNO_QUERY );

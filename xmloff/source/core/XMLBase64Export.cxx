@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBase64Export.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:33:18 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 14:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLBASE64EXPORT_HXX
 #include "XMLBase64Export.hxx"
@@ -121,4 +124,20 @@ sal_Bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
     return bRet;
 }
 
+sal_Bool XMLBase64Export::exportElement(
+            const Reference < XInputStream > & rIn,
+            sal_uInt16 nNamespace,
+            enum ::xmloff::token::XMLTokenEnum eName )
+{
+    SvXMLElementExport aElem( GetExport(), nNamespace, eName, sal_True,
+                              sal_True );
+    return exportXML( rIn );
+}
+
+sal_Bool XMLBase64Export::exportOfficeBinaryDataElement(
+            const Reference < XInputStream > & rIn )
+{
+    return exportElement( rIn, XML_NAMESPACE_OFFICE,
+                             ::xmloff::token::XML_BINARY_DATA );
+}
 

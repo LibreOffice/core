@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
-#include <com/sun/star/style/GraphicLocation.hpp>
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLTKMAP_HXX
@@ -85,6 +85,9 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include "XMLBase64ImportContext.hxx"
+#endif
 
 #ifndef _XMLBACKGROUNDIMAGECONTEXT_HXX
 #include "XMLBackgroundImageContext.hxx"
@@ -94,6 +97,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
@@ -226,8 +230,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
 {
     SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
 
-    OUString sURL, sFilter;
-    GraphicLocation ePos = GraphicLocation_NONE;
+    ePos = GraphicLocation_NONE;
 
     SvXMLUnitConverter& rUnitConverter = GetImport().GetMM100UnitConverter();
 
@@ -362,14 +365,6 @@ void XMLBackgroundImageContext::ProcessAttrs(
         }
     }
 
-    if( !sURL.getLength() )
-        ePos = GraphicLocation_NONE;
-    else if( GraphicLocation_NONE == ePos )
-        ePos = GraphicLocation_TILED;
-
-    aProp.maValue <<= GetImport().ResolveGraphicObjectURL( sURL, sal_False );
-    aPosProp.maValue <<= ePos;
-    aFilterProp.maValue <<= sFilter;
 }
 
 XMLBackgroundImageContext::XMLBackgroundImageContext(
@@ -391,8 +386,52 @@ XMLBackgroundImageContext::~XMLBackgroundImageContext()
 {
 }
 
+SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext;
+    if( xmloff::token::IsXMLToken( rLocalName,
+                                        xmloff::token::XML_BINARY_DATA ) )
+    {
+        if( !sURL.getLength() && !xBase64Stream.is() )
+        {
+            xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( xBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    xBase64Stream );
+        }
+    }
+    if( !pContext )
+    {
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return pContext;
+}
+
 void XMLBackgroundImageContext::EndElement()
 {
+    if( sURL.getLength() )
+    {
+        sURL = GetImport().ResolveGraphicObjectURL( sURL, sal_False );
+    }
+    else if( xBase64Stream.is() )
+    {
+        sURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+        xBase64Stream = 0;
+    }
+
+    if( !sURL.getLength() )
+        ePos = GraphicLocation_NONE;
+    else if( GraphicLocation_NONE == ePos )
+        ePos = GraphicLocation_TILED;
+
+    aProp.maValue <<= sURL;
+    aPosProp.maValue <<= ePos;
+    aFilterProp.maValue <<= sFilter;
+
     SetInsert( sal_True );
     XMLElementPropertyContext::EndElement();
 

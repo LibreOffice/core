@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:54:59 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > xPropSet;
     ::com::sun::star::uno::Reference <
-        ::com::sun::star::io::XOutputStream > xOLEStream;
+        ::com::sun::star::io::XOutputStream > xBase64Stream;
 
     const ::rtl::OUString sWidth;
     const ::rtl::OUString sRelativeWidth;
@@ -168,9 +168,10 @@ class XMLTextFrameContext : public SvXMLImportContext
     sal_Bool    bMinHeight : 1;
     sal_Bool    bSyncWidth : 1;
     sal_Bool    bSyncHeight : 1;
-    sal_Bool    bCreateOLEStreamFailed : 1;
+    sal_Bool    bCreateBase64StreamFailed : 1;
+    sal_Bool    bOwnBase64Stream : 1;
 
-    void Create( sal_Bool bLinked );
+    void Create( sal_Bool bHRefOrBase64 );
 
 public:
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: mib $ $Date: 2001-05-18 13:46:50 $
+#   last change: $Author: mib $ $Date: 2001-06-19 14:49:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,8 @@ SLOFILES =	\
         $(SLO)$/DocumentSettingsContext.obj \
         $(SLO)$/XMLEmbeddedObjectExportFilter.obj \
         $(SLO)$/XMLEmbeddedObjectImportContext.obj \
-        $(SLO)$/XMLBase64Export.obj
+        $(SLO)$/XMLBase64Export.obj \
+        $(SLO)$/XMLBase64ImportContext.obj
 
 CPPUMAKERFLAGS=
 UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb

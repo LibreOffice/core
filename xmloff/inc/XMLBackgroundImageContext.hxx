@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:24:56 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,28 @@
 #ifndef _XMLBACKGROUNDIMAGECONTEXT_HXX
 #define _XMLBACKGROUNDIMAGECONTEXT_HXX
 
+#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
+#include <com/sun/star/style/GraphicLocation.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLELEMENTPROPERTYCONTEXT_HXX
 #include "XMLElementPropertyContext.hxx"
 #endif
+
+namespace com { namespace sun { namespace star {
+    namespace io { class XOutputStream; }
+} } }
 
 class XMLBackgroundImageContext : public XMLElementPropertyContext
 {
     XMLPropertyState aPosProp;
     XMLPropertyState aFilterProp;
+
+    ::com::sun::star::style::GraphicLocation ePos;
+    ::rtl::OUString sURL;
+    ::rtl::OUString sFilter;
+
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xBase64Stream;
 
 private:
     void ProcessAttrs(
@@ -91,6 +105,11 @@ public:
         ::std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLBackgroundImageContext();
+
+    SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                const ::rtl::OUString& rLocalName,
+                 const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();
 };

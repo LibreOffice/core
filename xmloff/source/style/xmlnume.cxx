@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-20 15:10:43 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,12 +363,15 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
 //          String sURL( sImageURL );
 //          INetURLObject::AbsToRel( sURL );
 //          sImageURL = sURL;
-            sImageURL = GetExport().AddEmbeddedGraphicObject( sImageURL );
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sImageURL );
+            OUString sURL( GetExport().AddEmbeddedGraphicObject( sImageURL ) );
+            if( sURL.getLength() )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sURL );
 
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+            }
         }
         else
         {
@@ -586,6 +589,11 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                       sXML_properties, sal_True, sal_True );
+        }
+        if( NumberingType::BITMAP == eType && sImageURL.getLength() )
+        {
+            // optional office:binary-data
+            GetExport().AddEmbeddedGraphicObjectAsBase64( sImageURL );
         }
     }
 }

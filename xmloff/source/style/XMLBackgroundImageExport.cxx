@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:30:57 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,15 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
     rURL >>= sURL;
     if( sURL.getLength() && GraphicLocation_NONE != ePos )
     {
-        sURL = GetExport().AddEmbeddedGraphicObject( sURL );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sURL );
-        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
-                      sXML_simple );
-        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                      sXML_onLoad );
+        OUString sTempURL( GetExport().AddEmbeddedGraphicObject( sURL ) );
+        if( sTempURL.getLength() )
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sTempURL );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
+                          sXML_simple );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
+                          sXML_onLoad );
+        }
 
         OUStringBuffer aOut;
         switch( ePos )
@@ -180,5 +183,12 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         }
     }
 
-    SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, sal_True, sal_True );
+    {
+        SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, sal_True, sal_True );
+        if( sURL.getLength() && GraphicLocation_NONE != ePos )
+        {
+            // optional office:binary-data
+            GetExport().AddEmbeddedGraphicObjectAsBase64( sURL );
+        }
+    }
 }

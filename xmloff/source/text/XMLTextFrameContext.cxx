@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:50:59 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -113,6 +116,9 @@
 #endif
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 #include "XMLEmbeddedObjectImportContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include "XMLBase64ImportContext.hxx"
 #endif
 #ifndef _XMLOFF_PRSTYLEI_HXX_
 #include "prstylei.hxx"
@@ -376,7 +382,7 @@ XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
 
 TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 
-void XMLTextFrameContext::Create( sal_Bool bLinked )
+void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
 {
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
@@ -385,7 +391,7 @@ void XMLTextFrameContext::Create( sal_Bool bLinked )
     {
         case XML_TEXT_FRAME_OBJECT:
         case XML_TEXT_FRAME_OBJECT_OLE:
-            if( bLinked )
+            if( bHRefOrBase64 )
             {
                 OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef,
                                                                 OUString() ) );
@@ -562,13 +568,24 @@ void XMLTextFrameContext::Create( sal_Bool bLinked )
     if( XML_TEXT_FRAME_GRAPHIC == nType )
     {
         // URL
+        OSL_ENSURE( sHRef.getLength() > 0 || xBase64Stream.is(),
+                    "neither URL nor base64 image data given" );
         UniReference < XMLTextImportHelper > xTxtImport =
             GetImport().GetTextImport();
-        sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
-                              xTxtImport->IsBlockMode() ||
-                              xTxtImport->IsStylesOnlyMode() ||
-                              xTxtImport->IsOrganizerMode();
-        aAny <<= GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
+        if( sHRef.getLength() )
+        {
+            sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
+                                  xTxtImport->IsBlockMode() ||
+                                  xTxtImport->IsStylesOnlyMode() ||
+                                  xTxtImport->IsOrganizerMode();
+            sHRef = GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
+        }
+        else if( xBase64Stream.is() )
+        {
+            sHRef = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+            xBase64Stream = 0;
+        }
+        aAny <<= sHRef;
         xPropSet->setPropertyValue( sGraphicURL, aAny );
 
         // filter name
@@ -655,7 +672,8 @@ XMLTextFrameContext::XMLTextFrameContext(
     bMinHeight = sal_False;
     bSyncWidth = sal_False;
     bSyncHeight = sal_False;
-    bCreateOLEStreamFailed = sal_False;
+    bCreateBase64StreamFailed = sal_False;
+    bOwnBase64Stream = sal_False;
 
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
@@ -860,10 +878,12 @@ XMLTextFrameContext::~XMLTextFrameContext()
 
 void XMLTextFrameContext::EndElement()
 {
-    if( XML_TEXT_FRAME_OBJECT_OLE == nType && !xPropSet.is() &&
-        xOLEStream.is() )
+    if( ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
+          XML_TEXT_FRAME_GRAPHIC == nType )
+        && !xPropSet.is() && xBase64Stream.is() )
     {
-        xOLEStream->closeOutput();
+        if( bOwnBase64Stream )
+            xBase64Stream->closeOutput();
         Create( sal_True );
     }
 
@@ -936,23 +956,47 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                    rLocalName, xPropSet );
         }
     }
-    else if( (XML_NAMESPACE_OFFICE == nPrefix) &&
-             rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1) )
+    else if( (XML_NAMESPACE_OFFICE == nPrefix) )
     {
-        // do we still have the frame object?
-        if (xPropSet.is())
+        if( rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1) )
         {
-            // is it an event supplier?
-            Reference<XEventsSupplier> xEventsSupplier(xPropSet, UNO_QUERY);
-            if (xEventsSupplier.is())
+            // do we still have the frame object?
+            if (xPropSet.is())
             {
-                // OK, we have the events, so create the context
-                pContext = new XMLEventsImportContext(GetImport(), nPrefix,
-                                                  rLocalName, xEventsSupplier);
+                // is it an event supplier?
+                Reference<XEventsSupplier> xEventsSupplier(xPropSet, UNO_QUERY);
+                if (xEventsSupplier.is())
+                {
+                    // OK, we have the events, so create the context
+                    pContext = new XMLEventsImportContext(GetImport(), nPrefix,
+                                                      rLocalName, xEventsSupplier);
+                }
+                // else: no events, no event import
             }
-            // else: no events, no event import
+            // else: no object, no event import
         }
-        // else: no object, no event import
+        else if( xmloff::token::IsXMLToken( rLocalName,
+                                            xmloff::token::XML_BINARY_DATA ) )
+        {
+            if( !xPropSet.is() && !xBase64Stream.is() )
+            {
+                switch( nType )
+                {
+                case XML_TEXT_FRAME_GRAPHIC:
+                    xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+                    break;
+                case XML_TEXT_FRAME_OBJECT_OLE:
+                    sHRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
+                    xBase64Stream =
+                        GetImport().ResolveEmbeddedObjectURLFromBase64( sHRef );
+                    break;
+                }
+                if( xBase64Stream.is() )
+                    pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    xBase64Stream );
+            }
+        }
     }
     else if( XML_TEXT_FRAME_OBJECT == nType &&
              (XML_NAMESPACE_OFFICE == nPrefix &&
@@ -994,18 +1038,29 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
 void XMLTextFrameContext::Characters( const OUString& rChars )
 {
-    if( XML_TEXT_FRAME_OBJECT_OLE == nType && !xPropSet.is() )
+    if( ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
+          XML_TEXT_FRAME_GRAPHIC == nType) &&
+        !xPropSet.is() )
     {
         OUString sTrimmedChars( rChars. trim() );
         if( sTrimmedChars.getLength() )
         {
-            if( !xOLEStream.is() && !bCreateOLEStreamFailed )
+            if( !xBase64Stream.is() && !bCreateBase64StreamFailed )
             {
-                sHRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
-                xOLEStream =
-                    GetImport().ResolveEmbeddedObjectURLFromBase64( sHRef );
+                if( XML_TEXT_FRAME_GRAPHIC == nType )
+                {
+                    xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+                }
+                else
+                {
+                    sHRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
+                    xBase64Stream =
+                        GetImport().ResolveEmbeddedObjectURLFromBase64( sHRef );
+                }
+                if( xBase64Stream.is() )
+                    bOwnBase64Stream = sal_True;
             }
-            if( xOLEStream.is() )
+            if( bOwnBase64Stream && xBase64Stream.is() )
             {
                 OUString sChars;
                 if( sBase64CharsLeft )
@@ -1022,7 +1077,7 @@ void XMLTextFrameContext::Characters( const OUString& rChars )
                 sal_Int32 nCharsDecoded =
                     GetImport().GetMM100UnitConverter().
                         decodeBase64SomeChars( aBuffer, sChars );
-                xOLEStream->writeBytes( aBuffer );
+                xBase64Stream->writeBytes( aBuffer );
                 if( nCharsDecoded != sChars.getLength() )
                     sBase64CharsLeft = sChars.copy( nCharsDecoded );
             }

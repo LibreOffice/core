@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLBase64Export.hxx,v $
+ *  $RCSfile: XMLBase64ImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 14:44:43 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 14:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,35 +58,74 @@
  *
  *
  ************************************************************************/
-#ifndef _XMLOFF_XMLBASE64EXPORT_HXX
-#define _XMLOFF_XMLBASE64EXPORT_HXX
 
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream; } } } }
-class SvXMLExport;
-
-class XMLBase64Export
-{
-    SvXMLExport&        rExport;
-
-protected:
-
-    SvXMLExport& GetExport() { return rExport; }
-
-public:
-
-    XMLBase64Export( SvXMLExport& rExport );
-
-    sal_Bool exportXML( const ::com::sun::star::uno::Reference <
-            ::com::sun::star::io::XInputStream > & rIn );
-    sal_Bool exportElement( const ::com::sun::star::uno::Reference <
-            ::com::sun::star::io::XInputStream > & rIn,
-            sal_uInt16 nNamespace,
-            enum ::xmloff::token::XMLTokenEnum eName );
-    sal_Bool exportOfficeBinaryDataElement(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::io::XInputStream > & rIn );
-};
-
-
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include "XMLBase64ImportContext.hxx"
+#endif
+
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::io;
+
+//-----------------------------------------------------------------------------
+
+TYPEINIT1( XMLBase64ImportContext, SvXMLImportContext );
+
+
+XMLBase64ImportContext::XMLBase64ImportContext(
+        SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName,
+        const Reference< XAttributeList >& xAttrList,
+        const Reference< XOutputStream >& rOut ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    xOut( rOut )
+{
+}
+
+XMLBase64ImportContext::~XMLBase64ImportContext()
+{
+}
+
+
+void XMLBase64ImportContext::EndElement()
+{
+    xOut->closeOutput();
+}
+
+void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
+{
+    OUString sTrimmedChars( rChars. trim() );
+    if( sTrimmedChars.getLength() )
+    {
+        OUString sChars;
+        if( sBase64CharsLeft )
+        {
+            sChars = sBase64CharsLeft;
+            sChars += sTrimmedChars;
+            sBase64CharsLeft = OUString();
+        }
+        else
+        {
+            sChars = sTrimmedChars;
+        }
+        Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
+        sal_Int32 nCharsDecoded =
+            GetImport().GetMM100UnitConverter().
+                decodeBase64SomeChars( aBuffer, sChars );
+        xOut->writeBytes( aBuffer );
+        if( nCharsDecoded != sChars.getLength() )
+            sBase64CharsLeft = sChars.copy( nCharsDecoded );
+    }
+}
+
