@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:35:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -1383,8 +1386,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // check if caller wants to create a view
     BOOL bCreateView = TRUE;
     SFX_REQUEST_ARG( rReq, pCreateViewItem, SfxBoolItem, SID_VIEW, FALSE );
-    if ( pCreateViewItem && !pCreateViewItem->GetValue() )
-        bCreateView = FALSE;
+    if ( pCreateViewItem )
+    {
+        if ( !pCreateViewItem->GetValue() )
+            bCreateView = FALSE;
+        // this is an "SFX only" parameter
+        rReq.RemoveItem( SID_VIEW );
+    }
 
     // we can't load without a view - switch to hidden view
     if ( !bCreateView )
@@ -1497,10 +1505,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             {
                 // a blank frame would have been created in findFrame; in this case I am the owner and I must delete it
                 Reference < XCloseable > xClose( xFrame, UNO_QUERY );
-                if ( xClose.is() )
-                    xClose->close(sal_True);
-                else
-                    xFrame->dispose();
+                Reference < XDesktop > xDesktop( xFrame, UNO_QUERY );
+                if ( !xDesktop.is() )
+                {
+                    if ( xClose.is() )
+                        xClose->close(sal_True);
+                    else
+                        xFrame->dispose();
+                }
             }
         }
         else
