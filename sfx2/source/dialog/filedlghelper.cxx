@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-19 15:34:05 $
+ *  last change: $Author: dv $ $Date: 2001-06-21 11:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ public:
                                      String&         rFilter );
     ErrCode                 execute();
 
-    void                    setPath( const OUString& rPath ) { maPath = rPath; }
+    void                    setPath( const OUString& rPath );
     void                    setFilter( const OUString& rFilter );
 
     OUString                getPath() const { return maPath; }
@@ -306,14 +306,18 @@ void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent&
         // check, wether or not we have to display a preview
         if ( xCtrlAccess.is() )
         {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
-            sal_Bool bShowPreview = sal_False;
-
-            if ( aValue >>= bShowPreview )
+            try
             {
-                mbShowPreview = bShowPreview;
-                TimeOutHdl_Impl( NULL );
+                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
+                sal_Bool bShowPreview = sal_False;
+
+                if ( aValue >>= bShowPreview )
+                {
+                    mbShowPreview = bShowPreview;
+                    TimeOutHdl_Impl( NULL );
+                }
             }
+            catch( IllegalArgumentException ){}
         }
     }
 }
@@ -364,7 +368,11 @@ void FileDialogHelper_Impl::enablePasswordBox()
 
         Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-        xCtrlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, bEnablePasswd );
+        try
+        {
+            xCtrlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, bEnablePasswd );
+        }
+        catch( IllegalArgumentException ){}
     }
 }
 
@@ -406,21 +414,29 @@ void FileDialogHelper_Impl::updateVersions()
     Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
     Any aValue;
 
-    xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                    ListboxControlActions::DELETE_ITEMS, aValue );
+    try
+    {
+        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                        ListboxControlActions::DELETE_ITEMS, aValue );
+    }
+    catch( IllegalArgumentException ){}
 
     sal_Int32 nCount = aEntries.getLength();
 
     if ( nCount )
     {
-        aValue <<= aEntries;
-        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                        ListboxControlActions::ADD_ITEMS, aValue );
+        try
+        {
+            aValue <<= aEntries;
+            xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                            ListboxControlActions::ADD_ITEMS, aValue );
 
-        Any aPos;
-        aPos <<= (sal_Int16) 0;
-        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                        ListboxControlActions::SET_SELECT_ITEM, aPos );
+            Any aPos;
+            aPos <<= (sal_Int32) 0;
+            xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                            ListboxControlActions::SET_SELECT_ITEM, aPos );
+        }
+        catch( IllegalArgumentException ){}
     }
 }
 
@@ -485,19 +501,29 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
                 aData << aScaledBmp;
 
-                Sequence < sal_uChar > aBuffer( (sal_uChar*) aData.GetData(), aData.GetSize() );
+                Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
 
                 aAny <<= aBuffer;
             }
 
-            xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
+            try
+            {
+                xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
+            }
+            catch( IllegalArgumentException ){}
 
             delete pIStm;
         }
     }
     else
-        // clear the preview window
-        xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
+    {
+        try
+        {
+            // clear the preview window
+            xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
+        }
+        catch( IllegalArgumentException ){}
+    }
 
     return 0;
 }
@@ -601,8 +627,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
         Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
         if ( xExtDlg.is() )
         {
-            xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
-                               OUString( String( SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) ) ) );
+            try
+            {
+                xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
+                                   OUString( String( SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) ) ) );
+            }
+            catch( IllegalArgumentException ){}
         }
     }
 
@@ -635,12 +665,14 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
 
-    // set the path
-    if ( maPath.getLength() )
-        mxFileDlg->setDisplayDirectory( maPath );
-
     if ( maCurFilter.getLength() )
-        xFltMgr->setCurrentFilter( maCurFilter );
+    {
+        try
+        {
+            xFltMgr->setCurrentFilter( maCurFilter );
+        }
+        catch( IllegalArgumentException ){}
+    }
 
     loadConfig();
 
@@ -659,23 +691,27 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // check, wether or not we have to display a password box
         if ( mbHasPassword && xCtrlAccess.is() )
         {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
-            sal_Bool bPassWord = sal_False;
-            if ( ( aValue >>= bPassWord ) && bPassWord )
+            try
             {
-                // ask for the password
-                SfxPasswordDialog aPasswordDlg( NULL );
-                aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-                BOOL bOK = FALSE;
-                short nRet = aPasswordDlg.Execute();
-                if ( RET_OK == nRet )
+                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+                sal_Bool bPassWord = sal_False;
+                if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
-                    String aPasswd = aPasswordDlg.GetPassword();
-                    rpSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
+                    // ask for the password
+                    SfxPasswordDialog aPasswordDlg( NULL );
+                    aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
+                    BOOL bOK = FALSE;
+                    short nRet = aPasswordDlg.Execute();
+                    if ( RET_OK == nRet )
+                    {
+                        String aPasswd = aPasswordDlg.GetPassword();
+                        rpSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
+                    }
+                    else
+                        return ERRCODE_ABORT;
                 }
-                else
-                    return ERRCODE_ABORT;
             }
+            catch( IllegalArgumentException ){}
         }
 
         // set the read-only flag. When inserting a file, this flag is always set
@@ -753,12 +789,14 @@ ErrCode FileDialogHelper_Impl::execute()
     if ( ! mxFileDlg.is() || !xFltMgr.is() )
         return ERRCODE_ABORT;
 
-    // setDisplayDirectory will set the default name, too
-    if ( maPath.getLength() )
-        mxFileDlg->setDisplayDirectory( maPath );
-
     if ( maCurFilter.getLength() )
-        xFltMgr->setCurrentFilter( maCurFilter );
+    {
+        try
+        {
+            xFltMgr->setCurrentFilter( maCurFilter );
+        }
+        catch( IllegalArgumentException ){}
+    }
 
     loadConfig();
 
@@ -810,6 +848,22 @@ OUString FileDialogHelper_Impl::getRealFilter() const
     }
 
     return aFilter;
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::setPath( const OUString& rPath )
+{
+    maPath = rPath;
+
+    // set the path
+    if ( maPath.getLength() )
+    {
+        try
+        {
+            mxFileDlg->setDisplayDirectory( maPath );
+        }
+        catch( IllegalArgumentException ){}
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -873,7 +927,16 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
 
         // Add the filter for displaying all files, if there is none
         if ( !bHasAll )
-            xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+        {
+            try
+            {
+                xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+            }
+            catch( IllegalArgumentException )
+            {
+                DBG_ERRORFILE( "Could not append Filter" );
+            }
+        }
     }
 
     pDef = aIter.First();
@@ -881,7 +944,14 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
     {
         aUIName = pFilter->GetUIName();
-        xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
+        try
+        {
+            xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
+        }
+        catch( IllegalArgumentException )
+        {
+            DBG_ERRORFILE( "Could not append Filter" );
+        }
     }
 }
 
@@ -894,7 +964,14 @@ void FileDialogHelper_Impl::addFilter( const String& rFilterName,
     if ( ! xFltMgr.is() )
         return;
 
-    xFltMgr->appendFilter( rFilterName, rExtension );
+    try
+    {
+        xFltMgr->appendFilter( rFilterName, rExtension );
+    }
+    catch( IllegalArgumentException )
+    {
+        DBG_ERRORFILE( "Could not append Filter" );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -929,15 +1006,29 @@ void FileDialogHelper_Impl::addGraphicFilter()
         aExtensions = String::CreateFromAscii( FILEDIALOG_FILTER_ALL );
 #endif
 
-    xFltMgr->appendFilter( String( SfxResId( STR_SFX_IMPORT_ALL ) ),
-                           aExtensions );
+    try
+    {
+        xFltMgr->appendFilter( String( SfxResId( STR_SFX_IMPORT_ALL ) ),
+                               aExtensions );
+    }
+    catch( IllegalArgumentException )
+    {
+        DBG_ERRORFILE( "Could not append Filter" );
+    }
 
     // Now add the filter
     for ( i = 0; i < nCount; i++ )
     {
         String aName = pGraphicFilter->GetImportFormatName( i );
         String aWildcard = pGraphicFilter->GetImportWildcard( i );
-        xFltMgr->appendFilter( aName, aWildcard );
+        try
+        {
+            xFltMgr->appendFilter( aName, aWildcard );
+        }
+        catch( IllegalArgumentException )
+        {
+            DBG_ERRORFILE( "Could not append Filter" );
+        }
     }
 
     delete pGraphicFilter;
@@ -954,14 +1045,18 @@ void FileDialogHelper_Impl::saveConfig()
 
     if ( mbHasAutoExt )
     {
-        aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
-        sal_Bool bAutoExt = sal_False;
-        if ( aValue >>= bAutoExt )
+        try
         {
-            SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-            if ( aDlgOpt.Exists() )
-                aDlgOpt.SetUserData( String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
+            sal_Bool bAutoExt = sal_False;
+            if ( aValue >>= bAutoExt )
+            {
+                SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+                if ( aDlgOpt.Exists() )
+                    aDlgOpt.SetUserData( String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+            }
         }
+        catch( IllegalArgumentException ){}
     }
 
     if ( mbHasPreview || mbHasLink )
@@ -969,17 +1064,21 @@ void FileDialogHelper_Impl::saveConfig()
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
         String aUserData( ';' );// = aDlgOpt.GetUserData();
 
-        aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
-        sal_Bool bValue = sal_False;
-        if ( aValue >>= bValue )
-            aUserData.SetToken( 0, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
+        try
+        {
+            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
+            sal_Bool bValue = sal_False;
+            if ( aValue >>= bValue )
+                aUserData.SetToken( 0, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
 
-        aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
-        bValue = sal_False;
-        if ( aValue >>= bValue )
-            aUserData.SetToken( 1, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
+            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
+            bValue = sal_False;
+            if ( aValue >>= bValue )
+                aUserData.SetToken( 1, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
 
-        aDlgOpt.SetUserData( aUserData );
+            aDlgOpt.SetUserData( aUserData );
+        }
+        catch( IllegalArgumentException ){}
     }
 }
 
@@ -1001,7 +1100,11 @@ void FileDialogHelper_Impl::loadConfig()
         {
             sal_Int32 nFlag = aDlgOpt.GetUserData().toInt32();
             aValue <<= (sal_Bool) nFlag;
-            xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+            try
+            {
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+            }
+            catch( IllegalArgumentException ){}
         }
     }
 
@@ -1015,18 +1118,22 @@ void FileDialogHelper_Impl::loadConfig()
 
         if ( aUserData.Len() > 0 )
         {
-            // respect the last "insert as link" state
-            sal_Bool bLink = (sal_Bool) aUserData.GetToken(0).ToInt32();
-            aValue <<= bLink;
-            xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
+            try
+            {
+                // respect the last "insert as link" state
+                sal_Bool bLink = (sal_Bool) aUserData.GetToken(0).ToInt32();
+                aValue <<= bLink;
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
 
-            // respect the last "show preview" state
-            sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken(1).ToInt32();
-            aValue <<= bShowPreview;
-            xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
+                // respect the last "show preview" state
+                sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken(1).ToInt32();
+                aValue <<= bShowPreview;
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
-            // set the member so we know that we have to show the preview
-            mbShowPreview = bShowPreview;
+                // set the member so we know that we have to show the preview
+                mbShowPreview = bShowPreview;
+            }
+            catch( IllegalArgumentException ){}
         }
     }
 }
@@ -1245,7 +1352,6 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
 {
     ErrCode nRet;
     FileDialogHelper aDialog( nFlags, rFact );
-    aDialog.SetDisplayDirectory( aPath );
 
     nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
 
