@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:58:43 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 13:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,11 @@ sal_uInt32 SwXMLWriter::_Write()
             "com.sun.star.comp.Writer.XMLStylesExporter",
             aFilterArgs, aProps, bBlock );
 
+        WriteThroughComponent(
+            pStg, xModelComp, "settings.xml", xServiceFactory,
+            "com.sun.star.comp.Writer.XMLSettingsExporter",
+            aFilterArgs, aProps, bBlock );
+
         if( !bOrganizerMode )
             WriteThroughComponent(
                 pStg, xModelComp, "content.xml", xServiceFactory,
@@ -398,11 +403,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.21 2001-03-09 14:58:43 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.22 2001-03-19 13:45:17 mtg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/03/09 14:58:43  dvo
+      - fixed: unnecessary attext.xml stream removed (this is handled in core/swg)
+
       Revision 1.20  2001/03/07 15:23:07  mib
       set mime types
 
