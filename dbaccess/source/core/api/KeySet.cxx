@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-17 12:51:16 $
+ *  last change: $Author: oj $ $Date: 2002-03-18 13:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,9 +412,12 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
                     if((*_rOrginalRow)[aIter->second].isNull())
                         sIndexCondition += ::rtl::OUString::createFromAscii(" IS NULL");
                     else
+                    {
                         sIndexCondition += ::rtl::OUString::createFromAscii(" = ?");
+                        aIndexColumnPositions.push_back(aIter->second);
+                    }
                     sIndexCondition += aAnd;
-                    aIndexColumnPositions.push_back(aIter->second);
+
                     break;
                 }
             }
@@ -1351,6 +1354,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.31  2001/12/17 12:51:16  oj
+    #96052# quote tablename
+
     Revision 1.30  2001/12/11 09:09:42  oj
     #95779# use of alias tablename
 
