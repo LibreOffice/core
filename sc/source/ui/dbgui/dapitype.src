@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-03 22:35:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ japanese ] = "%PRODUCTNAME ‚É“o˜^‚µ‚½ÃŞ°À¿°½(~D)";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼Ò½º(~D)";
         Text[ chinese_simplified ] = "ÔÚ %PRODUCTNAME ÖĞµÇ¼ÇµÄÊı¾İÔ´(~D)";
-        Text[ chinese_traditional ] = "%PRODUCTNAME ¤w¸gµn°Oªº¸ê®Æ¨Ó·½(~D)";
+        Text[ chinese_traditional ] = "%PRODUCTNAME ¤w¸gµn°Oªº¸ê®Æ·½(~D)";
         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÓÌá İí %PRODUCTNAME";
         Text[ turkish ] = "%PRODUCTNAME'de kayıtlı veri kaynağı";
         Text[ language_user1 ] = " ";
@@ -172,7 +172,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ japanese ] = "ŠO•”¿°½/²İÀ°Ìª²½(~E)";
         Text[ korean ] = "¿ÜºÎ ¼Ò½º/ÀÎÅÍ ÆäÀÌ½º(~E)";
         Text[ chinese_simplified ] = "Íâ²¿Ô´/½çÃæ(~E)";
-        Text[ chinese_traditional ] = "¥~³¡¸ê®Æ¨Ó·½/¬É­±";
+        Text[ chinese_traditional ] = "¥~³¡¸ê®Æ·½/¬É­±(~E)";
         Text[ arabic ] = "ãÕÏÑ ÎÇÑÌí/æÇÌåÉ ÎÇÑÌíÉ";
         Text[ turkish ] = "~Dış kaynak/arabirim";
         Text[ language_user1 ] = " ";
@@ -222,7 +222,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ japanese ] = "¿°½‚Ì‘I‘ğ";
     Text[ korean ] = "¼Ò½º ¼±ÅÃ";
     Text[ chinese_simplified ] = "Ñ¡ÔñÔ´";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ¨Ó·½";
+    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½";
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ";
     Text[ turkish ] = "Kaynak seç";
     Text[ language_user1 ] = " ";
@@ -320,7 +320,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ japanese ] = "¿°½(~U)";
         Text[ korean ] = "¼Ò½º(~U)";
         Text[ chinese_simplified ] = "Ô´(~U)";
-        Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½(~U)";
+        Text[ chinese_traditional ] = "¸ê®Æ·½(~U)";
         Text[ arabic ] = "ÇáãÕÏÑ";
         Text[ turkish ] = "~Kaynak";
         Text[ language_user1 ] = " ";
@@ -483,7 +483,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ japanese ] = "ŠO•”ÃŞ°À¿°½";
     Text[ korean ] = "¿ÜºÎ µ¥ÀÌÅÍ¼Ò½º";
     Text[ chinese_simplified ] = "Íâ²¿Êı¾İÔ´";
-    Text[ chinese_traditional ] = "¥~³¡¸ê®Æ¨Ó·½";
+    Text[ chinese_traditional ] = "¥~³¡¸ê®Æ·½";
     Text[ arabic ] = "ãÕÏÑ ÈíÇäÇÊ ÎÇÑÌí";
     Text[ turkish ] = "Dış veri kaynağı";
     Text[ language_user1 ] = " ";
@@ -583,7 +583,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ japanese ] = "ÃŞ°À¿°½(~U)";
         Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º(~U)";
         Text[ chinese_simplified ] = "Êı¾İÔ´(~U)";
-        Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½(~U)";
+        Text[ chinese_traditional ] = "¸ê®Æ·½(~U)";
         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
         Text[ turkish ] = "Veri ka~ynağı";
         Text[ language_user1 ] = " ";
@@ -840,13 +840,14 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ japanese ] = "ÃŞ°À¿°½‚Ì‘I‘ğ";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃ";
     Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İÔ´";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ¨Ó·½";
+    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½";
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veri kaynağı seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar fuente de datos";
     Text[ finnish ] = "Valitse tietolähde";
 };
+
 
 
 
