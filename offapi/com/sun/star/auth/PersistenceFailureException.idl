@@ -64,7 +64,7 @@ module com { module sun { module star { module auth {
 
 /** indicates an underlying persistence implementation failure.
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 
 published exception PersistenceFailureException : ::com::sun::star::uno::Exception

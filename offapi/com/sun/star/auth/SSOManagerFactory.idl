@@ -87,7 +87,7 @@ module com { module sun { module star { module auth {
             send to the initiator side.</LI>
     </UL>
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 
 published service SSOManagerFactory
