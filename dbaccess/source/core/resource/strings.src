@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-27 20:20:34 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 15:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,13 +165,23 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
 };
 
 
+String RID_STR_COULDNOTCONNECT_UNSPECIFIED
+{
+    Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
+    Text [ english ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text [ english_us ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+};
 
+String RID_STR_COULDNOTCONNECT_NODRIVER
+{
+    Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
+    Text [ english ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text [ english_us ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+};
 
-
-
-
-
-
-
-
-
+String RID_STR_COULDNOTLOAD_MANAGER
+{
+    Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
+    Text [ english ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text [ english_us ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+};
