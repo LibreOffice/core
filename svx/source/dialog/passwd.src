@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:08:08 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ danish ] = "Adgangskode" ;
         Text [ portuguese_brazilian ] = "~Paßwort" ;
         Text [ portuguese ] = "~Senha" ;
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ russian ] = "Ïàğîëü";
         Text[ polish ] = "Has³o";
         Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
@@ -156,7 +156,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ danish ] = "Adgangskode" ;
         Text [ portuguese_brazilian ] = "Pa~ßwort" ;
         Text [ portuguese ] = "~Senha" ;
-        Text[ chinese_simplified ] = "¿ÚÁî(~S)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~S)";
         Text[ russian ] = "Ïàğîëü";
         Text[ polish ] = "Has³o";
         Text[ japanese ] = "Êß½Ü°ÄŞ(~S)";
@@ -181,7 +181,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text = "~Wiederholen" ;
         Text [ English ] = "~Repeat" ;
         Right = TRUE ;
-        Text [ english_us ] = "~Redo" ;
+        Text [ english_us ] = "~Repeat" ;
         Text [ italian ] = "Ripeti" ;
         Text [ spanish ] = "~Repetir" ;
         Text [ french ] = "~Répéter" ;
@@ -266,7 +266,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ danish ] = "Ugyldig adgangskode" ;
         Text [ portuguese ] = "Senha incorrecta" ;
         Text [ portuguese_brazilian ] = "Ungültiges Paßwort" ;
-        Text[ chinese_simplified ] = "¿ÚÁîÎŞĞ§";
+        Text[ chinese_simplified ] = "ÃÜÂëÎŞĞ§";
         Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü";
         Text[ polish ] = "Has³o nieprawid³owe";
         Text[ japanese ] = "–³Œø‚ÈÊß½Ü°ÄŞ";
@@ -292,7 +292,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ danish ] = "Adgangskode passer ikke" ;
         Text [ portuguese ] = "As senhas não combinam." ;
         Text [ portuguese_brazilian ] = "Paßwörter stimmen nicht überein" ;
-        Text[ chinese_simplified ] = "¿ÚÁî²»Ò»ÖÂ";
+        Text[ chinese_simplified ] = "ÃÜÂë²»Ò»ÖÂ";
         Text[ russian ] = "Ïàğîëè íå ñîâïàäàşò";
         Text[ polish ] = "Has³a nie zgadzaj¹ siê";
         Text[ japanese ] = "Êß½Ü°ÄŞ‚ªˆê’v‚µ‚Ü‚¹‚ñ";
@@ -312,7 +312,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text [ danish ] = "Modificer adgangskode" ;
     Text [ portuguese_brazilian ] = "Paßwort ändern" ;
     Text [ portuguese ] = "Mudar senha" ;
-    Text[ chinese_simplified ] = "¸ü¸Ä¿ÚÁî";
+    Text[ chinese_simplified ] = "¸ü¸ÄÃÜÂë";
     Text[ russian ] = "Èçìåíèòü ïàğîëü";
     Text[ polish ] = "Zmieñ has³o";
     Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•ÏX";
