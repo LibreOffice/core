@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-05 14:39:42 $
+ *  last change: $Author: arellano $ $Date: 2001-02-27 00:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ module com { module sun { module star { module configuration {
 //=============================================================================
 /** provides (read) access to a fragment of the configuration hierarchy.
 
+ <!-- Dennis: Why is "read" in () -->
+
  <p>Values that are direct or indirect descendants of a root element can be
  retrieved and, if themselves objects, navigated. Other interfaces provide
  access to information about this element and its context.
@@ -106,10 +108,13 @@ module com { module sun { module star { module configuration {
  (and so on recursively).
  </p>
 
+ <!-- Dennis: Can the above sentence be changed to read: Descendants of this service also
+ implement this service recursively. -->
+
  <p>Ultimately the configuration holds values. These values are organized into
  a hierarchy using structural elements. The structure is defined in advance in
  a schema. Necessary information from the schema is stored in the configuration
- repository itself, and is accessible through an implementation of this service.
+ repository itself and is accessible through an implementation of this service.
  </p>
 
  <p>Two different kinds of structural elements are used in the configuration
@@ -118,29 +123,31 @@ module com { module sun { module star { module configuration {
  <dl>
     <dt>Sets</dt>
         <dd>are dynamic containers of homogeneous elements. Which elements
-        a <em>set</em> contains can vary; their names are defined by the
-        clients that insert them. On the other hand the <em>type</em> of
+        a <em>set</em> contains can vary. Their names are defined by the
+        clients that insert them. On the other hand, the <em>type</em> of
         the elements is the same for all elements. In the case of elements
         that are themselves hierarchy objects, the <em>type</em> includes
         the structure of the hierarchy fragment they contain. Such types
         are defined in the configuration schema as <p>templates</p>.
         </dd>
 
+ <!-- Dennis: Is <p> the correct tag around "templates"? -->
+
     <dt>Groups</dt>
         <dd>are static collections of heterogeneous elements. The names and
-        types of the elements a <em>group</em> are completely defined in the
-        configuration schema. But here each element may be of a different
-        <em>type</em>, allowing even <em>groups</em> that contain a mix of
+        types of the elements of a <em>group</em> are completely defined in the
+        configuration schema. Here each element may be of a different
+        <em>type</em>, allowing <em>groups</em> that contain a mix of
         subobjects and simple values.
         </dd>
  </dl>
 
- <p>Objects in the configuration hierarchy (i.e. implementations of this service)
+ <p>Objects in the configuration hierarchy, for example, implementations of this service,
  can thus be classified in the following ways:
  </p>
  <ul>
     <li><em>Container</em> role:
-        An object can hold child elements as a <em>set</em> or a <em>group</em>.
+        An object that can hold child elements as a <em>set</em> or a <em>group</em>.
     </li>
     <li><em>Element</em> role:
         An object may be an element of a <em>set</em> or a <em>group</em>
@@ -153,15 +160,18 @@ module com { module sun { module star { module configuration {
  supported. The basic types are:
  </p>
 
+ <!-- Dennis: Should "Values" be in caps? -->
+ <!-- Dennis: Why is "scalar" in ()? -->
+
  <ul>
     <li><strong>string</strong> can hold a human-readable text.
         <p>Values are represented as <atom>string</atom>.</p>
         <p>Sequences are represented as <atom dim="[]">string</atom>.</p>
         <p>'<em>human-readable</em>' here excludes non-printing characters
         except for CR, LF and TAB [Unicode code points 9,10,13].
-        For binary data use type <strong>binary</strong> instead.</p>
+        For binary data, use type <strong>binary</strong> instead.</p>
     </li>
-    <li><strong>boolean</strong> can hold the values <TRUE/> or >FALSE/>.
+    <li><strong>boolean</strong> can hold the values <TRUE/> or <FALSE/>.
         <p>Values are represented as <atom>boolean</atom>.
         <p>Sequences are represented as <atom dim="[]">boolean</atom>.</p>
     </li>
@@ -187,6 +197,8 @@ module com { module sun { module star { module configuration {
     </li>
  </ul>
 
+ <!-- Dennis: Is the <atom> suppose to have visual effect? -->
+
  <p>Within templates an additional type <strong>any</strong> can occur. When
  such a template is used to create a new <type>SetElement</type>, the type
  of the element is initially reported as <atom>any</atom> (having no value).
@@ -198,6 +210,9 @@ module com { module sun { module star { module configuration {
  ), its contents may be <NULL/>.
  </p>
 
+ <!-- Dennis: Should the data between the <const> appear in the HTML. It is not. -->
+ <!-- Dennis: Some of the text is not appearing -->
+
  <p>The configuration should support explicit access to default values
  (implementing <type scope="com::sun::star::beans">XPropertyState</type>
  and  <type scope="com::sun::star::beans">XPropertyWithState</type>).
@@ -205,10 +220,10 @@ module com { module sun { module star { module configuration {
 
  @see ConfigurationProvider
     Root instances of this service can be requested from a
-    <type>ConfigurationProvider</type>
+    <type>ConfigurationProvider</type>.
 
  @see ConfigurationUpdateAccess
-    , which is an extended service that includes facilities for modifying
+    an extended service that includes facilities for modifying
     configuration data.
 */
 service ConfigurationAccess
@@ -221,49 +236,59 @@ service ConfigurationAccess
 
      <p>Implementations shall implement exactly one of:</p>
      <ul>
-        <li><type>SetAccess</type> if this element is a <em>Set</em>.<li>
-        <li><type>GroupAccess</type> if this element is a <em>Group</em>.<li>
+        <li><type>SetAccess</type> if this element is a <em>Set</em>.</li>
+        <li><type>GroupAccess</type> if this element is a <em>Group</em>.</li>
      </ul>
     */
     service HierarchyAccess;
 
     /** provides interfaces to obtain information about this element and its
-     role and context in the hierarchy
+     role and context in the hierarchy.
 
      <p>An implementation actually implements a specialization of this service,
      which depends on its <em>Element</em> role.
      </p>
+
+ <!-- Dennis: Is there a better way to say "An implementation actually implements"? -->
 
      <p>Implementations shall implement exactly one of:</p>
      <ul>
         <li><type>AccessRootElement</type> if this element is the
             <em>Root</em> of the whole hierarchy. Objects that can be
             created directly by a <type>ConfigurationProvider</type>
-            implement this service.<li>
+            implement this service.</li>
         <li><type>SetElement</type> if this element may be contained in a
-            <em>Set</em>.<li>
-        <li><type>GroupElement</type> if this element is child of a
-            <em>Group</em>.<li>
+            <em>Set</em>.</li>
+        <li><type>GroupElement</type> if this element is a child of a
+            <em>Group</em>.</li>
      </ul>
+ <!-- Dennis: If this is a true representation of the HTML, there are some strange line breaks -->
     */
     service HierarchyElement;
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Set</em>.
-     <BR/>[Alternatively to <type>GroupAccess</type>]
+     <BR/>This is an alternative to <type>GroupAccess</type>.
+
+ <!-- <BR/> is displaying -->
     */
     /*[optional]*/ service SetAccess;
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Group</em>.
-     <BR/>[Alternatively to <type>SetAccess</type>]
-    */
+     <BR/>This is an alternative to <type>SetAccess</type>.
+
+ <!-- <BR/> is displaying -->
+*/
     /*[optional]*/ service GroupAccess;
 
     /** specializes <type>HierarchyElement</type>,
      if this element is the <em>Root</em> of the whole hierarchy.
-     <BR/>[Alternatively to <type>SetElement</type>
-     or <type>GroupElement</type>]
+     <BR/>This is an alternative to <type>SetElement</type>
+     or <type>GroupElement</type>.
+
+ <!-- <BR/> is displaying -->
+
 
      @see ConfigurationProvider
         Instances obtained from a <type>ConfigurationProvider</type> will
@@ -273,16 +298,20 @@ service ConfigurationAccess
 
     /** specializes <type>HierarchyElement</type>,
      if this element may be contained in a <em>Set</em>.
-     <BR/>[Alternatively to <type>AccessRootElement</type>
-     or <type>GroupElement</type>]
-    */
+     <BR/>This is an alternative to <type>AccessRootElement</type>
+     or <type>GroupElement</type>.
+
+ <!-- <BR/> is displaying -->
+*/
     /*[optional]*/ service SetElement;
 
     /** specializes <type>HierarchyElement</type>,
-     if this element is child of a <em>Group</em>.
-     <BR/>[Alternatively to <type>AccessRootElement</type>
-     or <type>SetElement</type>]
-    */
+     if this element is a child of a <em>Group</em>.
+     <BR/>This is an alternative to <type>AccessRootElement</type>
+     or <type>SetElement</type>.
+
+ <!-- <BR/> is displaying -->
+*/
     /*[optional]*/ service GroupElement;
 };
 
