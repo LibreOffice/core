@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:53:12 $
+ *  last change: $Author: mba $ $Date: 2001-02-20 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@
 #include <basmgr.hxx>
 #endif
 
+#include <vos/mutex.hxx>
+
+#if SUPD>614
 #ifndef _SFXEVENT_HXX
 #include <event.hxx>
 #endif
@@ -178,8 +181,9 @@
 #ifndef _SFX_EVENTCONF_HXX
 #include <evntconf.hxx>
 #endif
-
-#include <vos/mutex.hxx>
+#else
+#include "sfxsids.hrc"
+#endif
 
 //________________________________________________________________________________________________________
 //  defines
@@ -238,7 +242,9 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XCONTROLLER >                        m_xCurrent              ;
     REFERENCE< XDOCUMENTINFO >                      m_xDocumentInfo         ;
     REFERENCE< XSTARBASICACCESS >                   m_xStarBasicAccess      ;
+#if SUPD>614
     REFERENCE< XNAMEREPLACE >                       m_xEvents               ;
+#endif
     SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
     SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
 
@@ -389,13 +395,14 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                                static_cast< XSTARBASICACCESS*       > ( this )  ,
                                                static_cast< XSTORABLE*              > ( this )  ) ) ;
 
+#if SUPD>614
     if ( aReturn.hasValue() == sal_False )
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
     }
-
+#endif
     // If searched interface supported by this class ...
     if ( aReturn.hasValue() == sal_True )
     {
@@ -463,9 +470,13 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                       ::getCppuType(( const REFERENCE< XMODIFIABLE          >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XPRINTABLE               >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XSTORABLE                >*)NULL ) ,
+#if SUPD>614
                                                       ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XEVENTBROADCASTER        >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER      >*)NULL ) ) ;
+#else
+                                                      ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ) ;
+#endif
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -712,14 +723,17 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
 {
     REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNO_QUERY );
     REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNO_QUERY );
+#if SUPD>614
     REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNO_QUERY );
+#endif
     if ( xMod.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xMod );
     else if ( xListener.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), xListener );
+#if SUPD>614
     else if ( xDocListener.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), xListener );
-
+#endif
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nCount = m_pData->m_seqControllers.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
@@ -1315,6 +1329,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL
     }
 }
 
+#if SUPD>614
 //--------------------------------------------------------------------------------------------------------
 //  XEventsSupplier
 //--------------------------------------------------------------------------------------------------------
@@ -1358,6 +1373,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XDOCEVENTLISTE
 
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), aListener );
 }
+#endif
 
 //________________________________________________________________________________________________________
 //  SfxListener
@@ -1371,9 +1387,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
             changing();
+#if SUPD>614
         SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
         if ( pNamedHint )
             postEvent_Impl( *pNamedHint );
+#endif
     }
 }
 
@@ -1557,6 +1575,7 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         throw SfxIOException_Impl( ERRCODE_IO_CANTWRITE );
 }
 
+#if SUPD>614
 //********************************************************************************************************
 
 void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
@@ -1577,4 +1596,4 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
             ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
     }
 }
-
+#endif
