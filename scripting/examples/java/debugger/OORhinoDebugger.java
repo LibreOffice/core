@@ -1,10 +1,18 @@
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 import javax.swing.SwingUtilities;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.tools.debugger.*;
+import java.io.InputStream;
+
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.tools.debugger.Main;
+import org.mozilla.javascript.tools.debugger.ScopeProvider;
+
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 
 public class OORhinoDebugger implements OOScriptDebugger {
 
+    // This code is based on the main method of the Rhino Debugger Main class
+    // We pass in the XScriptContext in the global scope for script execution
     public void go(final XScriptContext xsctxt, String filename) {
         try {
             final Main sdb = new Main("Rhino JavaScript Debugger");
@@ -31,10 +39,15 @@ public class OORhinoDebugger implements OOScriptDebugger {
                         return scope;
                     }
                 });
+            // This is the method we've added to open a file when starting
+            // the Rhino debugger
             sdb.openFile(filename);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
+    }
+
+    public void go(final XScriptContext xsctxt, InputStream in) {
     }
 
     static void swingInvoke(Runnable f) {

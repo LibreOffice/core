@@ -1,6 +1,11 @@
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.scripting.runtime.java.PathUtils;
 import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 
 public class DebugRunner {
@@ -13,17 +18,17 @@ public class DebugRunner {
         String filename) {
 
         OOScriptDebugger debugger;
-        InputStream is = null;
         String path = "";
 
-        System.out.println("uri: " + uri + ", language: " + language);
-
-        if (language.equals("Rhino"))
+        if (language.equals("Rhino")) {
             debugger = new OORhinoDebugger();
-        else if (language.equals("BeanShell"))
+        }
+        else if (language.equals("BeanShell")) {
             debugger = new OOBeanShellDebugger();
-        else
+        }
+        else {
             return;
+        }
 
         if (uri.startsWith(FILE_URL_PREFIX)) {
             uri = URLDecoder.decode(uri);
@@ -40,20 +45,27 @@ public class DebugRunner {
                     path = f.getAbsolutePath();
                 }
             }
+            debugger.go(xsctxt, path);
         }
-        else if (uri.startsWith("http://")) {
-            try {
-                if (!filename.equals(""))
-                    uri = uri + "/" + filename;
+        else {
+            if (!uri.endsWith("/")) {
+                uri += "/";
+            }
 
-                URL url = new URL(uri);
-                is = url.openStream();
+            String script = uri + filename;
+            InputStream is;
+
+            try {
+                is = PathUtils.getScriptFileStream(
+                    script, xsctxt.getComponentContext());
+
+                if (is != null) {
+                    debugger.go(xsctxt, is);
+                }
             }
             catch (IOException ioe) {
-                ioe.printStackTrace();
+                System.out.println("Error loading script: " + script);
             }
         }
-        System.out.println("path: " + path);
-        debugger.go(xsctxt, path);
     }
 }

@@ -1,13 +1,34 @@
-import java.util.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.text.Document;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import drafts.com.sun.star.script.framework.runtime.XScriptContext;
-import bsh.*;
+import bsh.Interpreter;
 
 public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, DocumentListener {
 
@@ -16,22 +37,18 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
     private GlyphGutter gg;
     private XScriptContext context;
     private int currentPosition = -1;
-    private ArrayList breakpoints;
     private int linecount;
-    private BufferedReader bufReader;
     private Interpreter sessionInterpreter;
     private Thread execThread = null;
     private String filename = null;
 
+    /* Entry point for script execution */
     public void go(XScriptContext context, String filename) {
-        this.context = context;
-        this.breakpoints = new ArrayList();
-        initUI();
-
         if (filename != null && filename != "") {
             try {
-                loadFile(filename);
+                FileInputStream fis = new FileInputStream(filename);
                 this.filename = filename;
+                go(context, fis);
             }
             catch (IOException ioe) {
                 JOptionPane.showMessageDialog(frame,
@@ -41,9 +58,9 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         }
     }
 
+    /* Entry point for script execution */
     public void go(XScriptContext context, InputStream in) {
         this.context = context;
-        this.breakpoints = new ArrayList();
         initUI();
 
         if (in != null) {
@@ -58,12 +75,10 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         }
     }
 
-    public void loadFile(String filename) throws IOException {
-        FileInputStream fis = new FileInputStream(filename);
-        loadFile(fis);
-    }
-
     public void loadFile(InputStream in) throws IOException {
+
+        /* Remove ourselves as a DocumentListener while loading the file
+           so we don't get a storm of DocumentEvents during loading */
         ta.getDocument().removeDocumentListener(this);
 
         byte[] contents = new byte[1024];
@@ -74,6 +89,13 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
             pos += len;
         }
 
+        try {
+            in.close();
+        }
+        catch (IOException ignore) {
+        }
+
+        /* Update the GlyphGutter and add back the DocumentListener */
         gg.update();
         ta.getDocument().addDocumentListener(this);
     }
@@ -93,7 +115,7 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         sp.setRowHeaderView(gg);
 
         ta.getDocument().addDocumentListener(this);
-        String[] labels = {"Run", /* "Stop", */ "Clear", "Save", "Close"};
+        String[] labels = {"Run", "Clear", "Save", "Close"};
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout());
 
@@ -109,6 +131,7 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         frame.show();
     }
 
+    /* Implementation of DocumentListener interface */
     public void insertUpdate(DocumentEvent e) {
         doChanged(e);
     }
@@ -121,6 +144,8 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         doChanged(e);
     }
 
+    /* If the number of lines in the JTextArea has changed then update the
+       GlyphGutter */
     public void doChanged(DocumentEvent e) {
         if (linecount != ta.getLineCount()) {
             gg.update();
@@ -134,6 +159,7 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
                 Interpreter interpreter = new Interpreter();
                 interpreter.getNameSpace().clear();
 
+                // reset position and repaint gutter so no red arrow appears
                 currentPosition = -1;
                 gg.repaint();
 
@@ -144,12 +170,13 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
                 catch (bsh.EvalError err) {
                     currentPosition = err.getErrorLineNumber() - 1;
                     try {
+                        // scroll to line of the error
                         int line = ta.getLineStartOffset(currentPosition);
                         Rectangle rect = ta.modelToView(line);
                         ta.scrollRectToVisible(rect);
                     }
                     catch (Exception e) {
-                        System.err.println("error: " + e.getMessage());
+                        // couldn't scroll to line, do nothing
                     }
                     gg.repaint();
 
@@ -168,108 +195,13 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         execThread.start();
     }
 
-    private void stopExecution() {
-        if (execThread != null) {
-            execThread.interrupt();
-            execThread = null;
-        }
-
-        ta.setEditable(true);
-        if (bufReader != null) {
-            try {
-                bufReader.close();
-            }
-            catch (IOException ioe) {}
-        }
-        bufReader = null;
-        currentPosition = -1;
-        gg.repaint();
-    }
-
-    private void startSession() {
-        /* Reader reader = new StringReader(ta.getText());
-        bsh.Parser parser = new bsh.Parser(reader);
-        boolean eof = false;
-
-        try {
-            Interpreter interpreter = new Interpreter();
-            interpreter.getNameSpace().clear();
-            interpreter.set("context", context);
-
-            CallStack callstack = new CallStack();
-            callstack.push(interpreter.getNameSpace());
-
-            bsh.SimpleNode node = null;
-            while(!eof) {
-                    eof = parser.Line();
-                    node = parser.popNode();
-                    System.out.println("Executing: " + node.getText());
-                    node.eval(callstack, interpreter);
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        } */
-
-        /* try {
-            sessionInterpreter = new Interpreter();
-            sessionInterpreter.getNameSpace().clear();
-            sessionInterpreter.set("context", context);
-        }
-        catch (bsh.EvalError err) {
-            JOptionPane.showMessageDialog(frame,
-                "Error at line " + String.valueOf(err.getErrorLineNumber()) +
-                "\n\n: " + err.getErrorText(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-            stopExecution();
-        }
-
-        ta.setEditable(false);
-        Reader reader = new StringReader(ta.getText());
-        bufReader = new BufferedReader(reader);
-        currentPosition = 0;
-        gg.repaint(); */
-    }
-
-    private void doStep() {
-        String line = null;
-
-        try {
-            line = bufReader.readLine();
-        }
-        catch (IOException ioe) {
-            JOptionPane.showMessageDialog(frame,
-                "Error reading line " + currentPosition +
-                "\n\n: " + ioe.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-            stopExecution();
-        }
-
-        if (line != null) {
-            try {
-                sessionInterpreter.eval(line);
-                currentPosition++;
-                gg.repaint();
-            }
-            catch (bsh.EvalError err) {
-                gg.repaint();
-
-                JOptionPane.showMessageDialog(frame,
-                    "Error at line " + String.valueOf(err.getErrorLineNumber()) +
-                    "\n\n: " + err.getErrorText(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        else
-            stopExecution();
-    }
-
     private void promptForSaveName() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
             public boolean accept(File f) {
-                if (f.isDirectory() || f.getName().endsWith(".bsh"))
+                if (f.isDirectory() || f.getName().endsWith(".bsh")) {
                     return true;
+                }
                 return false;
             }
 
@@ -282,20 +214,23 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
 
         if (ret == JFileChooser.APPROVE_OPTION) {
             filename = chooser.getSelectedFile().getAbsolutePath();
-            if (!filename.endsWith(".bsh"))
+            if (!filename.endsWith(".bsh")) {
                 filename += ".bsh";
+            }
         }
 
     }
 
     private void saveTextArea() {
-        if (filename == null)
+        if (filename == null) {
             promptForSaveName();
+        }
 
+        FileOutputStream fos = null;
         if (filename != null) {
             try {
                 File f = new File(filename);
-                FileOutputStream fos = new FileOutputStream(f);
+                fos = new FileOutputStream(f);
                 String s = ta.getText();
                 fos.write(s.getBytes(), 0, s.length());
             }
@@ -304,20 +239,31 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
                     "Error saving file: " + ioe.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
+            finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    }
+                    catch (IOException ignore) {
+                    }
+                }
+            }
         }
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Run"))
+        if (e.getActionCommand().equals("Run")) {
             startExecution();
-        else if (e.getActionCommand().equals("Stop"))
-            stopExecution();
-        else if (e.getActionCommand().equals("Close"))
+        }
+        else if (e.getActionCommand().equals("Close")) {
             frame.dispose();
-        else if (e.getActionCommand().equals("Save"))
+        }
+        else if (e.getActionCommand().equals("Save")) {
             saveTextArea();
-        else if (e.getActionCommand().equals("Clear"))
+        }
+        else if (e.getActionCommand().equals("Clear")) {
             ta.setText("");
+        }
     }
 
     public JTextArea getTextArea() {
@@ -327,52 +273,15 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
     public int getCurrentPosition() {
         return currentPosition;
     }
-
-    public void toggleBreakPoint(int line) {
-        Integer lineObj = new Integer(line);
-        int idx = breakpoints.indexOf(lineObj);
-        if (idx != -1)
-            breakpoints.remove(lineObj);
-        else
-            breakpoints.add(lineObj);
-    }
-
-    public boolean isBreakPoint(int line) {
-        if (breakpoints.contains(new Integer(line)))
-            return true;
-        return false;
-    }
 }
 
-class GlyphGutter extends JComponent implements MouseListener {
+class GlyphGutter extends JComponent {
 
     private OOBeanShellDebugger debugger;
-    private boolean isError = false;
-
-    public void mouseEntered(MouseEvent e) {
-    }
-    public void mousePressed(MouseEvent e) {
-    }
-    public void mouseClicked(MouseEvent e) {
-        if (e.getComponent() == this &&
-          (e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0) {
-            int x = e.getX();
-            int y = e.getY();
-            Font font = debugger.getTextArea().getFont();
-            FontMetrics metrics = getFontMetrics(font);
-            int h = metrics.getHeight();
-            int line = y/h;
-            debugger.toggleBreakPoint(line + 1);
-        }
-    }
-    public void mouseExited(MouseEvent e) {
-    }
-    public void mouseReleased(MouseEvent e) {
-    }
+    private final String DUMMY_STRING = "99";
 
     GlyphGutter(OOBeanShellDebugger debugger) {
         this.debugger = debugger;
-        // addMouseListener(this);
         update();
     }
 
@@ -380,13 +289,16 @@ class GlyphGutter extends JComponent implements MouseListener {
         JTextArea textArea = debugger.getTextArea();
         Font font = textArea.getFont();
         setFont(font);
+
         FontMetrics metrics = getFontMetrics(font);
         int h = metrics.getHeight();
         int lineCount = textArea.getLineCount() + 1;
+
         String dummy = Integer.toString(lineCount);
         if (dummy.length() < 2) {
-            dummy = "99";
+            dummy = DUMMY_STRING;
         }
+
         Dimension d = new Dimension();
         d.width = metrics.stringWidth(dummy) + 16;
         d.height = lineCount * h + 100;
@@ -413,7 +325,9 @@ class GlyphGutter extends JComponent implements MouseListener {
         int startLine = clip.y / h;
         int endLine = (clip.y + clip.height) / h + 1;
         int width = getWidth();
-        if (endLine > lineCount) endLine = lineCount;
+        if (endLine > lineCount) {
+            endLine = lineCount;
+        }
 
         for (int i = startLine; i < endLine; i++) {
             String text;
@@ -424,20 +338,11 @@ class GlyphGutter extends JComponent implements MouseListener {
             g.drawString(text, 0, y + ascent);
             int x = width - ascent;
 
-            if (debugger.isBreakPoint(i + 1))
-                drawBreakPoint(g, ascent, x, y);
-
-            if (i == debugger.getCurrentPosition())
+            // if currentPosition is not -1 then a red arrow will be drawn
+            if (i == debugger.getCurrentPosition()) {
                 drawArrow(g, ascent, x, y);
+            }
         }
-    }
-
-    private void drawBreakPoint(Graphics g, int ascent, int x, int y) {
-        g.setColor(new Color(0x80, 0x00, 0x00));
-        int dy = y + ascent - 9;
-        g.fillOval(x, dy, 9, 9);
-        g.drawOval(x, dy, 8, 8);
-        g.drawOval(x, dy, 9, 9);
     }
 
     private void drawArrow(Graphics g, int ascent, int x, int y) {

@@ -4,10 +4,11 @@
 
   <script language="Java">
     <locale lang="en">
-      <displayname value="asdf.doMethod" />
-      <description>asdf.doMethod</description>
+      <displayname value="Scripting Framework Debugger" />
+      <description>Script that starts debuggers for Rhino and BeanShell
+      </description>
     </locale>
-    <logicalname value="DebugRunner.Debug" />
+    <logicalname value="_$DebugRunner.Debug" />
     <functionname value="DebugRunner.go" />
     <languagedepprops>
       <prop name="classpath" value="debugger.jar"/>
