@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 08:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,8 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pSet )
     INT32 nX, nY;
     if( SetScale( aCbScale.GetText(), nX, nY ) )
     {
-        FillItemSet( *pSet );
+        if( pSet )
+            FillItemSet( *pSet );
         return( LEAVE_PAGE );
     }
     WarningBox aWarnBox( GetParent(), WB_YES_NO, String( SdResId( STR_WARN_SCALE_FAIL ) ) );
@@ -466,7 +467,8 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pSet )
     if( nReturn == RET_YES )
         return( KEEP_PAGE );
 
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return( LEAVE_PAGE );
 }
