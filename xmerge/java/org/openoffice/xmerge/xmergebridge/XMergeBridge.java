@@ -99,6 +99,7 @@ import java.util.Vector;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 
@@ -259,10 +260,14 @@ public class XMergeBridge {
         xParser.parseStream ( aInput );
 
         }
-        catch (Exception e){
+        catch (IOException e){
         System.out.println("Exception "+e);
+          return false;
         }
-
+         catch (Exception e){
+        System.out.println("Exception "+e.getMessage());
+          return false;
+        }
         return true;
     }
 
@@ -330,8 +335,9 @@ public class XMergeBridge {
         xOutStream = (XOutputStream) UnoRuntime.queryInterface(
                         XOutputStream.class , xPipeObj );
            }
-        catch (Exception e){
+          catch (Exception e){
         System.out.println("Exception "+e);
+          return false;
         }
         return true;
        }
@@ -344,9 +350,15 @@ public class XMergeBridge {
 
     public void endDocument()
     {
-
+        try{
         convert (xInStream,xos,true,udJarPath,sFileName,offMime,sdMime);
-
+        }
+        catch (IOException e){
+        System.out.println("Exception "+e);
+        }
+         catch (Exception e){
+        System.out.println("Exception "+e);
+        }
     }
 
     public void startElement (String str, com.sun.star.xml.sax.XAttributeList xattribs)
@@ -433,7 +445,7 @@ public class XMergeBridge {
 
 
     public void convert (com.sun.star.io.XInputStream xml,com.sun.star.io.XOutputStream device,
-             boolean convertFromOffice,String pluginUrl,String FileName,String offMime,String sdMime) throws com.sun.star.uno.RuntimeException {
+             boolean convertFromOffice,String pluginUrl,String FileName,String offMime,String sdMime) throws com.sun.star.uno.RuntimeException, IOException {
 
          String jarName = pluginUrl;
          String name= getFileName(FileName);
@@ -453,7 +465,7 @@ public class XMergeBridge {
          catch(Exception e){
          System.out.println("Error:"+e);
          }
-
+         ConverterInfoMgr. removeByJar(jarName);
          if (convertFromOffice)
          {
 
@@ -499,6 +511,7 @@ public class XMergeBridge {
          }
          catch (Exception e) {
              System.out.println("Error:"+e);
+              throw new IOException("Xmerge Exception");
              }
          }
          else{
@@ -529,7 +542,9 @@ public class XMergeBridge {
          }
          catch (Exception e) {
              System.out.println("Error:"+e);
+             throw new IOException("Xmerge Exception");
          }
+
 
          }
 
