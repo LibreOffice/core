@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-15 16:07:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ static void SAL_CALL typelib_callback(
             {
             }
         }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         if (! *ppRet)
         {
             OString aTypeName( OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
