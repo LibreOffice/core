@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-20 15:49:17 $
+ *  last change: $Author: pl $ $Date: 2002-09-25 17:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
-
 
 // - Redo
 // - Bei Tracking-Cancel DefaultSelection wieder herstellen
@@ -526,18 +525,44 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         return;
 
     XubString aText = ImplGetText();
-    if ( nStart >= aText.Len() )
+    nStart = 0;
+    nEnd = aText.Len();
+    ImplClearBackground( 0, GetOutputSizePixel().Width() );
+
+    long    nDXBuffer[256];
+    long*   pDXBuffer = NULL;
+    long*   pDX = nDXBuffer;
+    if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+    {
+        pDXBuffer = new long[2*(aText.Len()+1)];
+        pDX = pDXBuffer;
+    }
+
+    GetCaretPositions( aText, pDX, nStart, nEnd );
+
+    // center vertically
+    long    nH = GetOutputSize().Height();
+    long    nTH = GetTextHeight();
+    Point   aPos( mnXOffset, (nH-nTH)/2 );
+
+    if( bLayout )
+    {
+        long nPos = nStart ? pDX[2*nStart] : 0;
+        aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
+
+        MetricVector* pVector = &mpLayoutData->m_aUnicodeBoundRects;
+        String* pDisplayText = &mpLayoutData->m_aDisplayText;
+
+        DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
+
+        if( pDXBuffer )
+            delete pDXBuffer;
         return;
-
-    if ( nEnd > aText.Len() )
-        nEnd = aText.Len();
-
-    MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+    }
 
     Cursor* pCursor = GetCursor();
     BOOL bVisCursor = pCursor ? pCursor->IsVisible() : FALSE;
-    if ( pCursor && !pVector )
+    if ( pCursor )
         pCursor->Hide();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -548,99 +573,121 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
 
-    // In der Hoehe zentrieren
-    long    nH = GetOutputSize().Height();
-    long    nTH = GetTextHeight();
-    Point   aPos( mnXOffset, (nH-nTH)/2 );
-
     BOOL bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
+    long nPos = nStart ? pDX[2*nStart] : 0;
+    aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
     if ( !bDrawSelection && !mpIMEInfos )
     {
-        aPos.X() = GetTextWidth( aText, 0, nStart ) + mnXOffset + ImplGetExtraOffset();
-        DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
+        DrawText( aPos, aText, nStart, nEnd - nStart );
     }
     else
     {
+        // save graphics state
+        Push();
+        // first calculate higlighted and non highlighted clip regions
+        Region aHiglightClipRegion;
+        Region aNormalClipRegion;
         Selection aTmpSel( maSelection );
         aTmpSel.Justify();
-
-        xub_StrLen nIndex = nStart;
-        while ( nIndex < nEnd )
+        // selection is highlighted
+        for( int i = 0; i < aText.Len(); i++ )
         {
-            xub_StrLen nTmpEnd = nEnd;
-            USHORT      nAttr = 0;
-            if ( mpIMEInfos && mpIMEInfos->pAttribs )
+            Rectangle aRect( aPos, Size( 10, nTH ) );
+            aRect.Left() = pDX[2*i] + mnXOffset + ImplGetExtraOffset();
+            aRect.Right() = pDX[2*i+1] + mnXOffset + ImplGetExtraOffset();
+            aRect.Justify();
+            bool bHighlight = false;
+            if( i >= aTmpSel.Min() && i < aTmpSel.Max() )
+                bHighlight = true;
+
+            if( mpIMEInfos && mpIMEInfos->pAttribs &&
+                i >= mpIMEInfos->nPos && i < (mpIMEInfos->nPos+mpIMEInfos->nLen ) &&
+                ( mpIMEInfos->pAttribs[i-mpIMEInfos->nPos] & EXTTEXTINPUT_ATTR_HIGHLIGHT) )
+                bHighlight = true;
+
+            if( bHighlight )
+                aHiglightClipRegion.Union( aRect );
+            else
+                aNormalClipRegion.Union( aRect );
+        }
+        // draw normal text
+        SetClipRegion( aNormalClipRegion );
+        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+        DrawText( aPos, aText, nStart, nEnd - nStart );
+        // draw highlighted text
+        SetClipRegion( aHiglightClipRegion );
+        SetTextColor( rStyleSettings.GetHighlightTextColor() );
+        SetTextFillColor( rStyleSettings.GetHighlightColor() );
+        DrawText( aPos, aText, nStart, nEnd - nStart );
+        // if IME info exists loop over portions and output different font attributes
+        if( mpIMEInfos && mpIMEInfos->pAttribs )
+        {
+            for( int n = 0; n < 2; n++ )
             {
-                xub_StrLen nIMEEnd = mpIMEInfos->nPos+mpIMEInfos->nLen;
-                if ( (nIndex < mpIMEInfos->nPos) && (nTmpEnd > mpIMEInfos->nPos) )
+                Region aRegion;
+                if( n == 0 )
                 {
-                    nTmpEnd = mpIMEInfos->nPos;
+                    SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                    SetTextFillColor( rStyleSettings.GetHighlightColor() );
+                    aRegion = aHiglightClipRegion;
                 }
-                else if ( (nIndex >= mpIMEInfos->nPos) && (nIndex < nIMEEnd) )
+                else
                 {
-                    // Attributweise ausgeben...
-                    nTmpEnd = nIndex + 1;
-                    if ( (nIndex >= mpIMEInfos->nPos) && (nIndex < (mpIMEInfos->nPos+mpIMEInfos->nLen)) )
+                    SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+                    aRegion = aNormalClipRegion;
+                }
+
+                for( i = 0; i < mpIMEInfos->nLen; i++ )
+                {
+                    Rectangle aRect( aPos, Size( 10, nTH ) );
+                    aRect.Left() = pDX[2*(i+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
+                    aRect.Right() = pDX[2*(i+mpIMEInfos->nPos)+1] + mnXOffset + ImplGetExtraOffset();
+                    aRect.Justify();
+
+                    Region aClip = aRegion;
+                    if( aClip.Intersect( aRect ) )
                     {
-                        nAttr = mpIMEInfos->pAttribs[nIndex-mpIMEInfos->nPos];
-                        xub_StrLen nMax = mpIMEInfos->nPos+mpIMEInfos->nLen;
-                        while ( ( nTmpEnd < nMax ) && ( mpIMEInfos->pAttribs[ nTmpEnd - mpIMEInfos->nPos ] == nAttr ) )
-                            nTmpEnd++;
+                        USHORT nAttr = mpIMEInfos->pAttribs[i];
+                        if ( nAttr )
+                        {
+                            Font aFont = GetFont();
+                            if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
+                                aFont.SetUnderline( UNDERLINE_SINGLE );
+                            else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
+                                aFont.SetUnderline( UNDERLINE_BOLD );
+                            else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
+                                aFont.SetUnderline( UNDERLINE_DOTTED );
+                            else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
+                                aFont.SetUnderline( UNDERLINE_DOTTED );
+                            else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
+                            {
+                                aFont.SetUnderline( UNDERLINE_WAVE );
+                                SetTextLineColor( Color( COL_LIGHTGRAY ) );
+                            }
+                            SetFont( aFont );
+
+                            if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
+                                SetTextColor( Color( COL_RED ) );
+                            else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
+                                SetTextColor( Color( COL_LIGHTGRAY ) );
+                        }
+                        SetClipRegion( aClip );
+                        DrawText( aPos, aText, nStart, nEnd - nStart );
                     }
                 }
             }
-            else if ( bDrawSelection )
-            {
-                if ( ( nIndex < aTmpSel.Min() ) && ( nTmpEnd > aTmpSel.Min() ) )
-                    nTmpEnd = (xub_StrLen)aTmpSel.Min();
-                else if ( ( nIndex >= aTmpSel.Min() ) && ( nIndex < aTmpSel.Max() ) && ( nTmpEnd > aTmpSel.Max() ) )
-                    nTmpEnd = (xub_StrLen)aTmpSel.Max();
-            }
-
-            ImplInitSettings( mpIMEInfos ? TRUE : FALSE, TRUE, FALSE );
-            BOOL bSelected = bDrawSelection && ((xub_StrLen)aTmpSel.Min() <= nIndex ) && ((xub_StrLen)aTmpSel.Max() > nIndex );
-            if ( bSelected || ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT) )
-            {
-                SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                SetTextFillColor( rStyleSettings.GetHighlightColor() );
-            }
-            else
-            {
-                SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
-            }
-
-            if ( nAttr )
-            {
-                Font aFont = GetFont();
-                if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
-                    aFont.SetUnderline( UNDERLINE_SINGLE );
-                else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
-                    aFont.SetUnderline( UNDERLINE_BOLD );
-                else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
-                    aFont.SetUnderline( UNDERLINE_DOTTED );
-                else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
-                    aFont.SetUnderline( UNDERLINE_DOTTED );
-                else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
-                {
-                    aFont.SetUnderline( UNDERLINE_WAVE );
-                    SetTextLineColor( Color( COL_LIGHTGRAY ) );
-                }
-                SetFont( aFont );
-
-                if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
-                    SetTextColor( Color( COL_RED ) );
-                else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
-                    SetTextColor( Color( COL_LIGHTGRAY ) );
-            }
-            aPos.X() = GetTextWidth( aText, 0, nIndex ) + mnXOffset + ImplGetExtraOffset();
-            DrawText( aPos, aText, nIndex, nTmpEnd - nIndex, pVector, pDisplayText );
-            nIndex = nTmpEnd;
         }
+
+        // restore graphics state
+        Pop();
     }
 
-    if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) && !pVector )
+    if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) )
         pCursor->Show();
+
+    if( pDXBuffer )
+        delete pDXBuffer;
 }
 
 // -----------------------------------------------------------------------
@@ -821,12 +868,29 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
     Cursor*     pCursor = GetCursor();
     XubString   aText = ImplGetText();
-    long        nTextWidth = GetTextWidth( aText, 0, (xub_StrLen)maSelection.Max() );
+
+    long    nDXBuffer[256];
+    long*   pDXBuffer = NULL;
+    long*   pDX = nDXBuffer;
+    if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+    {
+        pDXBuffer = new long[2*(aText.Len()+1)];
+        pDX = pDXBuffer;
+    }
+
+    GetCaretPositions( aText, pDX, 0, aText.Len() );
+
+//  long        nTextWidth = GetTextWidth( aText, 0, (xub_StrLen)maSelection.Max() );
+    long nTextPos = 0;
+    if( maSelection.Max() < aText.Len() )
+        nTextPos = pDX[ 2*maSelection.Max() ];
+    else
+        nTextPos = pDX[ 2*aText.Len()-1 ];
 
     long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.Len()) )
         nCursorWidth = GetTextWidth( aText, (xub_StrLen)maSelection.Max(), 1 );
-    long nCursorPosX = nTextWidth + mnXOffset + ImplGetExtraOffset();
+    long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
 
     // Cursor muss im sichtbaren Bereich landen:
     Size aOutSize = GetOutputSizePixel();
@@ -836,7 +900,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
         if ( nCursorPosX < 0 )
         {
-            mnXOffset = - nTextWidth;
+            mnXOffset = - nTextPos;
             long nMaxX = 0;
             mnXOffset += aOutSize.Width() / 5;
             if ( mnXOffset > nMaxX )
@@ -844,9 +908,9 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
         }
         else
         {
-            mnXOffset = (aOutSize.Width()-ImplGetExtraOffset()) - nTextWidth;
+            mnXOffset = (aOutSize.Width()-ImplGetExtraOffset()) - nTextPos;
             // Etwas mehr?
-            if ( (aOutSize.Width()-ImplGetExtraOffset()) < nTextWidth )
+            if ( (aOutSize.Width()-ImplGetExtraOffset()) < nTextPos )
             {
                 long nMaxNegX = (aOutSize.Width()-ImplGetExtraOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
@@ -855,16 +919,12 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
             }
         }
 
-        nCursorPosX = nTextWidth + mnXOffset + ImplGetExtraOffset();
+        nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
         if ( nCursorPosX == aOutSize.Width() )  // dann nicht sichtbar...
             nCursorPosX--;
 
         if ( mnXOffset != nOldXOffset )
-        {
-            if ( mnXOffset > (-ImplGetExtraOffset()) )
-                ImplClearBackground( 0, mnXOffset+ImplGetExtraOffset() );
             ImplRepaint();
-        }
     }
 
     long nTextHeight = GetTextHeight();
@@ -872,6 +932,9 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
     pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
     pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
     pCursor->Show();
+
+    if( pDXBuffer )
+        delete pDXBuffer;
 }
 
 // -----------------------------------------------------------------------
@@ -890,8 +953,16 @@ void Edit::ImplAlign()
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraOffset();
-        if ( mnXOffset < nMinXOffset )
-            mnXOffset = nMinXOffset;
+        if( Application::GetSettings().GetLayoutRTL() )
+        {
+            if( mnXOffset != nMinXOffset && ( nTextWidth < nOutWidth ) )
+                mnXOffset = nMinXOffset;
+        }
+        else
+        {
+            if ( mnXOffset < nMinXOffset )
+                mnXOffset = nMinXOffset;
+        }
     }
     else if( mnAlign == EDIT_ALIGN_CENTER )
     {
@@ -906,37 +977,8 @@ void Edit::ImplAlign()
 
 void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
 {
-    long        nNewWidth = GetTextWidth( ImplGetText() );
-    xub_StrLen  nPaintStart = nChangedFrom;
-
-    long nOldXOffset = mnXOffset;
     ImplAlign();
-    if ( mnAlign == EDIT_ALIGN_LEFT )
-    {
-        if ( nOldWidth > nNewWidth )
-        {
-            if ( mnXOffset != nOldXOffset )
-            {
-                nPaintStart = 0;
-                if ( mnXOffset > (-ImplGetExtraOffset()) )
-                    ImplClearBackground( 0, mnXOffset+ImplGetExtraOffset() );
-            }
-            ImplClearBackground( nNewWidth+mnXOffset+ImplGetExtraOffset(), nOldWidth+nOldXOffset+ImplGetExtraOffset() );
-        }
-    }
-    else if ( mnAlign == EDIT_ALIGN_RIGHT )
-    {
-        nPaintStart = 0;
-        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1-ImplGetExtraOffset(), mnXOffset+1+ImplGetExtraOffset() );
-    }
-    else // EDIT_ALIGN_CENTER
-    {
-        nPaintStart = 0;
-        ImplClearBackground( 0, mnXOffset + 1 + ImplGetExtraOffset() );
-        ImplClearBackground( mnXOffset+nNewWidth-1, GetOutputSizePixel().Width() + ImplGetExtraOffset() );
-    }
-
-    ImplRepaint( nPaintStart, STRING_LEN );
+    ImplRepaint( 0, STRING_LEN );
     ImplShowCursor();
 }
 
@@ -944,7 +986,34 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
 
 xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
 {
-    return GetTextBreak( ImplGetText(), rWindowPos.X() - mnXOffset - ImplGetExtraOffset() );
+    xub_StrLen nIndex = STRING_LEN;
+    String aText = ImplGetText();
+
+    long    nDXBuffer[256];
+    long*   pDXBuffer = NULL;
+    long*   pDX = nDXBuffer;
+    if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+    {
+        pDXBuffer = new long[2*(aText.Len()+1)];
+        pDX = pDXBuffer;
+    }
+
+    GetCaretPositions( aText, pDX, 0, aText.Len() );
+    long nX = rWindowPos.X() - mnXOffset -ImplGetExtraOffset();
+    for( int i = 0; i < aText.Len(); i++ )
+    {
+        if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
+            (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
+        {
+            nIndex = i;
+            break;
+        }
+    }
+
+    if( pDXBuffer )
+        delete pDXBuffer;
+
+    return nIndex;
 }
 
 // -----------------------------------------------------------------------
@@ -2073,13 +2142,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
                 maSelection = aNew;
 
                 if ( bPaint && ( aOld.Len() || aNew.Len() ) )
-                {
-                    aOld.Justify();
-                    aNew.Justify();
-                    xub_StrLen nStart = (xub_StrLen)Min( aOld.Min(), aNew.Min() );
-                    xub_StrLen nEnd = (xub_StrLen)Max( aOld.Max(), aNew.Max() );
-                    ImplRepaint( nStart, nEnd );
-                }
+                    ImplRepaint( 0, maText.Len() );
                 ImplShowCursor();
 
                 ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );

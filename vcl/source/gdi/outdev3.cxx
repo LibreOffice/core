@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-20 15:51:41 $
+ *  last change: $Author: pl $ $Date: 2002-09-25 17:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5479,7 +5479,14 @@ bool OutputDevice::GetCaretPositions( const XubString& rStr, long* pCaretXArray,
 
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->GetCaretPositions( pCaretXArray );
+    long nWidth = pSalLayout->GetTextWidth();
     pSalLayout->Release();
+
+    if( Application::GetSettings().GetLayoutRTL() && IsRTLEnabled() )
+    {
+        for( int i = 0; i < 2 * nLen; ++i )
+            pCaretXArray[i] = nWidth - pCaretXArray[i] - 1;
+    }
 
     // convert from font units to logical units
     if( mbMap )
