@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:31:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <svx/ulspitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/zformat.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring>
