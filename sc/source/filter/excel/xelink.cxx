@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:43:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ class XclExpCrn : public XclExpRecord
 {
 protected:
     /** @param nAddSize  The size of additional data derived classes will write. */
-    explicit                    XclExpCrn( USHORT nScCol, USHORT nScRow, sal_uInt8 nId, sal_uInt32 nAddLen = 0 );
+    explicit                    XclExpCrn( SCCOL nScCol, SCROW nScRow, sal_uInt8 nId, sal_uInt32 nAddLen = 0 );
 
 private:
     /** Writes the start of the record that is equal in all CRN records and calls WriteAddData(). */
@@ -236,7 +236,7 @@ private:
 class XclExpCrnDouble : public XclExpCrn
 {
 public:
-    explicit                    XclExpCrnDouble( USHORT nScCol, USHORT nScRow, double fVal );
+    explicit                    XclExpCrnDouble( SCCOL nScCol, SCROW nScRow, double fVal );
 
 private:
     /** Writes the double value following the common record contents. */
@@ -253,7 +253,7 @@ private:
 class XclExpCrnString : public XclExpCrn
 {
 public:
-    explicit                    XclExpCrnString( USHORT nScCol, USHORT nScRow, const String& rText );
+    explicit                    XclExpCrnString( SCCOL nScCol, SCROW nScRow, const String& rText );
 
 private:
     /** Writes the string following the common record contents. */
@@ -270,7 +270,7 @@ private:
 class XclExpCrnBool : public XclExpCrn
 {
 public:
-    explicit                    XclExpCrnBool( USHORT nScCol, USHORT nScRow, bool bBoolVal );
+    explicit                    XclExpCrnBool( SCCOL nScCol, SCROW nScRow, bool bBoolVal );
 
 private:
     /** Writes the Boolean value following the common record contents. */
@@ -437,7 +437,7 @@ private:
         @return  The list index of the SUPBOOK record. */
     sal_uInt16                  Append( XclExpSupbook* pBook );
     /** Creates and appends an external SUPBOOK record from the Calc sheet nScTab. */
-    void                        AddExt( USHORT nScTab );
+    void                        AddExt( SCTAB nScTab );
 
 private:
     typedef XclExpRecordList< XclExpSupbook > XclExpSupbookList;
@@ -558,9 +558,9 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
     mnScCnt = rDoc.GetTableCount();
 
-    USHORT nScTab;
-    USHORT nScFirstVis = SCNOTAB;   // first visible sheet
-    USHORT nScFirstExp = SCNOTAB;   // first exported sheet
+    SCTAB nScTab;
+    SCTAB nScFirstVis = SCNOTAB;   // first visible sheet
+    SCTAB nScFirstExp = SCNOTAB;   // first exported sheet
 
     // --- initialize the flags in the index buffer ---
 
@@ -608,14 +608,14 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
         if( (nScFirstVis == SCNOTAB) || !IsExportTab( nScFirstVis ) )
         {
             // no exportable sheet at all -> use active sheet and export it
-            nScFirstVis = rExtDocOpt.nActTab;
+            nScFirstVis = static_cast<SCTAB>(rExtDocOpt.nActTab);
             SetFlag( nScFirstVis, EXC_TABBUF_SKIPMASK, false ); // clear skip flags
         }
         SetFlag( nScFirstVis, EXC_TABBUF_VISIBLE ); // must be visible, even if originally hidden
     }
 
     // find current active sheet
-    USHORT nScActive = rExtDocOpt.nActTab;
+    SCTAB nScActive = static_cast<SCTAB>(rExtDocOpt.nActTab);
     if( !IsExportTab( nScActive ) ) // selected sheet not exported (i.e. scenario) -> use first visible
         nScActive = nScFirstVis;
     SetFlag( nScActive, EXC_TABBUF_VISIBLE | EXC_TABBUF_SELECTED );
@@ -641,48 +641,48 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
         mnXclCodeCnt = ::ulimit< sal_uInt16 >( pCList->Count() );
 }
 
-bool XclExpTabInfo::IsExportTab( USHORT nScTab ) const
+bool XclExpTabInfo::IsExportTab( SCTAB nScTab ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsExportTab - sheet out of range" );
     return (nScTab < mnScCnt) && !GetFlag( nScTab, EXC_TABBUF_SKIPMASK );
 }
 
-bool XclExpTabInfo::IsExternalTab( USHORT nScTab ) const
+bool XclExpTabInfo::IsExternalTab( SCTAB nScTab ) const
 {
     return GetFlag( nScTab, EXC_TABBUF_EXTERN );
 }
 
-bool XclExpTabInfo::IsVisibleTab( USHORT nScTab ) const
+bool XclExpTabInfo::IsVisibleTab( SCTAB nScTab ) const
 {
     return GetFlag( nScTab, EXC_TABBUF_VISIBLE );
 }
 
-bool XclExpTabInfo::IsSelectedTab( USHORT nScTab ) const
+bool XclExpTabInfo::IsSelectedTab( SCTAB nScTab ) const
 {
     return GetFlag( nScTab, EXC_TABBUF_SELECTED );
 }
 
-bool XclExpTabInfo::IsActiveTab( USHORT nScTab ) const
+bool XclExpTabInfo::IsActiveTab( SCTAB nScTab ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
     return GetXclTab( nScTab ) == mnXclActive;
 }
 
-sal_uInt16 XclExpTabInfo::GetXclTab( USHORT nScTab ) const
+sal_uInt16 XclExpTabInfo::GetXclTab( SCTAB nScTab ) const
 {
     return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].first : EXC_EXTSH_DELETED;
 }
 
-USHORT XclExpTabInfo::GetRealScTab( USHORT nSortedTab ) const
+SCTAB XclExpTabInfo::GetRealScTab( sal_uInt16 nSortedTab ) const
 {
     DBG_ASSERT( nSortedTab < mnScCnt, "XclExpTabInfo::GetRealScIndex - sheet out of range" );
-    return (nSortedTab < mnScCnt) ? maFromSortedVec[ nSortedTab ] : SCNOTAB;
+    return (nSortedTab < mnScCnt) ? static_cast<SCTAB>(maFromSortedVec[ nSortedTab ]) : SCNOTAB;
 }
 
-USHORT XclExpTabInfo::GetSortedScTab( USHORT nScTab ) const
+sal_uInt16 XclExpTabInfo::GetSortedScTab( SCTAB nScTab ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetSortedScIndex - sheet out of range" );
-    return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : SCNOTAB;
+    return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : static_cast<sal_uInt16>(SCNOTAB);
 }
 
 void XclExpTabInfo::StartRefLog()
@@ -703,13 +703,13 @@ void XclExpTabInfo::AppendTabRef( sal_uInt16 nXclFirst, sal_uInt16 nXclLast )
         maRefLog.push_back( XclExpRefLogEntry( nXclFirst, nXclLast ) );
 }
 
-bool XclExpTabInfo::GetFlag( USHORT nScTab, sal_uInt8 nFlags ) const
+bool XclExpTabInfo::GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetFlag - sheet out of range" );
     return (nScTab < mnScCnt) && ::get_flag( maTabInfoVec[ nScTab ].second, nFlags );
 }
 
-void XclExpTabInfo::SetFlag( USHORT nScTab, sal_uInt8 nFlags, bool bSet )
+void XclExpTabInfo::SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet )
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::SetFlag - sheet out of range" );
     if( nScTab < mnScCnt )
@@ -719,7 +719,7 @@ void XclExpTabInfo::SetFlag( USHORT nScTab, sal_uInt8 nFlags, bool bSet )
 void XclExpTabInfo::CalcXclIndexes()
 {
     sal_uInt16 nXclTab = 0;
-    USHORT nScTab = 0;
+    SCTAB nScTab = 0;
 
     // --- pass 1: process regular sheets ---
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
@@ -749,7 +749,7 @@ void XclExpTabInfo::CalcXclIndexes()
 }
 
 
-typedef ::std::pair< String, USHORT >   XclExpTabName;
+typedef ::std::pair< String, sal_uInt16 >   XclExpTabName;
 typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 
 inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
@@ -761,13 +761,13 @@ inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
 void XclExpTabInfo::CalcSortedIndexes( ScDocument& rDoc )
 {
     XclExpTabNameVec aVec( mnScCnt );
-    USHORT nScTab;
+    SCTAB nScTab;
 
     // fill with sheet names
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
     {
         rDoc.GetName( nScTab, aVec[ nScTab ].first );
-        aVec[ nScTab ].second = nScTab;
+        aVec[ nScTab ].second = static_cast<sal_uInt16>(nScTab);
     }
     ::std::sort( aVec.begin(), aVec.end() );
 
@@ -777,7 +777,7 @@ void XclExpTabInfo::CalcSortedIndexes( ScDocument& rDoc )
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
     {
         maFromSortedVec[ nScTab ] = aVec[ nScTab ].second;
-        maToSortedVec[ aVec[ nScTab ].second ] = nScTab;
+        maToSortedVec[ aVec[ nScTab ].second ] = static_cast<sal_uInt16>(nScTab);
     }
 }
 
@@ -908,7 +908,7 @@ sal_uInt16 XclExpExtNameList::Append( XclExpExtNameBase* pName )
 
 // Cached external cells ======================================================
 
-XclExpCrn::XclExpCrn( USHORT nScCol, USHORT nScRow, sal_uInt8 nId, sal_uInt32 nAddLen ) :
+XclExpCrn::XclExpCrn( SCCOL nScCol, SCROW nScRow, sal_uInt8 nId, sal_uInt32 nAddLen ) :
     XclExpRecord( EXC_ID_CRN, 5 + nAddLen ),
     mnXclCol( static_cast< sal_uInt16 >( nScCol ) ),
     mnXclRow( static_cast< sal_uInt16 >( nScRow ) ),
@@ -928,7 +928,7 @@ void XclExpCrn::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCrnDouble::XclExpCrnDouble( USHORT nScCol, USHORT nScRow, double fVal ) :
+XclExpCrnDouble::XclExpCrnDouble( SCCOL nScCol, SCROW nScRow, double fVal ) :
     XclExpCrn( nScCol, nScRow, EXC_CACHEDVAL_DOUBLE, 8 ),
     mfVal( fVal )
 {
@@ -942,7 +942,7 @@ void XclExpCrnDouble::WriteAddData( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCrnString::XclExpCrnString( USHORT nScCol, USHORT nScRow, const String& rText ) :
+XclExpCrnString::XclExpCrnString( SCCOL nScCol, SCROW nScRow, const String& rText ) :
     XclExpCrn( nScCol, nScRow, EXC_CACHEDVAL_STRING ),
     maText( rText )
 {
@@ -958,7 +958,7 @@ void XclExpCrnString::WriteAddData( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCrnBool::XclExpCrnBool( USHORT nScCol, USHORT nScRow, bool bBoolVal ) :
+XclExpCrnBool::XclExpCrnBool( SCCOL nScCol, SCROW nScRow, bool bBoolVal ) :
     XclExpCrn( nScCol, nScRow, EXC_CACHEDVAL_BOOL, 8 ),
     mnBool( bBoolVal ? 1 : 0 )
 {
@@ -984,13 +984,13 @@ void XclExpXct::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange )
 {
     ScDocument& rDoc = rRoot.GetDoc();
     SvNumberFormatter& rFormatter = rRoot.GetFormatter();
-    USHORT nScTab = rRange.aStart.Tab();
-    USHORT nScLastCol = rRange.aEnd.Col();
-    USHORT nScLastRow = rRange.aEnd.Row();
+    SCTAB nScTab = rRange.aStart.Tab();
+    SCCOL nScLastCol = rRange.aEnd.Col();
+    SCROW nScLastRow = rRange.aEnd.Row();
 
-    for( USHORT nScRow = rRange.aStart.Row(); nScRow <= nScLastRow; ++nScRow )
+    for( SCROW nScRow = rRange.aStart.Row(); nScRow <= nScLastRow; ++nScRow )
     {
-        for( USHORT nScCol = rRange.aStart.Col(); nScCol <= nScLastCol; ++nScCol )
+        for( SCCOL nScCol = rRange.aStart.Col(); nScCol <= nScLastCol; ++nScCol )
         {
             if( !maUsedCells.IsCellMarked( nScCol, nScRow, TRUE ) )
             {
@@ -1166,7 +1166,7 @@ XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
 {
     XclExpTabInfo& rTabInfo = GetTabInfo();
 
-    USHORT nScCnt = rTabInfo.GetScTabCount();
+    SCTAB nScCnt = rTabInfo.GetScTabCount();
     sal_uInt16 nXclCnt = rTabInfo.GetXclTabCount();
     sal_uInt32 nCount = nXclCnt + rTabInfo.GetXclExtTabCount();
 
@@ -1184,7 +1184,7 @@ XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
         }
 
         // add SUPBOOKs with external references
-        for( USHORT nScTab = 0; nScTab < nScCnt; ++nScTab )
+        for( SCTAB nScTab = 0; nScTab < nScCnt; ++nScTab )
             if( rTabInfo.IsExternalTab( nScTab ) )
                 AddExt( nScTab );
     }
@@ -1308,7 +1308,7 @@ sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbook* pBook )
     return ::ulimit< sal_uInt16 >( maSupbookList.Count() - 1 );
 }
 
-void XclExpSupbookBuffer::AddExt( USHORT nScTab )
+void XclExpSupbookBuffer::AddExt( SCTAB nScTab )
 {
     sal_uInt16 nXclTab = GetTabInfo().GetXclTab( nScTab );
     DBG_ASSERT( nXclTab < maSBIndexBuffer.size(), "XclExpSupbookBuffer::AddExt - out of range" );
@@ -1348,9 +1348,9 @@ void XclExpLinkManager_Impl::StoreCellRange( const SingleRefData& rRef1, const S
 {
     if( (rRef1.nTab >= 0) && (rRef2.nTab >= 0) )
     {
-        USHORT nScFirst = static_cast< USHORT >( rRef1.nTab );
-        USHORT nScLast = static_cast< USHORT >( rRef2.nTab );
-        for( USHORT nScTab = nScFirst; nScTab <= nScLast; ++nScTab )
+        SCTAB nScFirst = rRef1.nTab;
+        SCTAB nScLast = rRef2.nTab;
+        for( SCTAB nScTab = nScFirst; nScTab <= nScLast; ++nScTab )
             if( GetTabInfo().IsExternalTab( nScTab ) )
                 maSBBuffer.StoreCellRange( ScRange(
                     rRef1.nCol, rRef1.nRow, nScTab, rRef2.nCol, rRef2.nRow, nScTab ) );

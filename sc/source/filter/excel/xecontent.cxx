@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:36:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_LABELRANGES )
 {
-    USHORT nScTab = rRoot.GetCurrScTab();
+    SCTAB nScTab = rRoot.GetCurrScTab();
 
     // row label ranges
     FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nScTab );
@@ -526,7 +526,7 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     SetRecSize( 4 + 8 * (maRowRanges.Count() + maColRanges.Count()) );
 }
 
-void XclExpLabelranges::FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, USHORT nScTab )
+void XclExpLabelranges::FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
 {
     for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
     {
@@ -1253,7 +1253,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
 
 XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 {
-    USHORT nScTab = rRoot.GetCurrScTab();
+    SCTAB nScTab = rRoot.GetCurrScTab();
     ScDocument& rDoc = rRoot.GetDoc();
     SfxObjectShell* pShell = rRoot.GetDocShell();
     if( !pShell ) return;
@@ -1282,7 +1282,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
         if( aLinkAny >>= xAreaLink )
         {
             CellRangeAddress aDestRange( xAreaLink->getDestArea() );
-            if( static_cast< USHORT >( aDestRange.Sheet ) == nScTab )
+            if( aDestRange.Sheet == nScTab )
             {
                 Reference< XPropertySet > xLinkProp( xAreaLink, UNO_QUERY );
                 if( xLinkProp.is() && ::getPropValue( aFilter, xLinkProp, aPropFilter ) && (aFilter == aWebQueryFilter) )
@@ -1308,7 +1308,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     {
                         ExcName* pExcName = new ExcName( *rRoot.mpRD, aScDestRange, aUrlObj.getBase() );
                         aRangeName = pExcName->GetName();
-                        rRoot.mpRD->pNameList->InsertSorted( *rRoot.mpRD, pExcName, nScTab );
+                        rRoot.mpRD->pNameList->InsertSorted( *rRoot.mpRD, pExcName, static_cast<sal_uInt16>(nScTab) );
                     }
 
                     // create and store the web query record
