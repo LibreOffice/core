@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 12:23:02 $
+ *  last change: $Author: jp $ $Date: 2001-03-30 15:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4055,15 +4055,6 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Effects";
         Text[ arabic ] = "«· √ÀÌ—« ";
     };
-    Control LB_EFFECTS
-    {
-        HelpId = HID_SVXPAGE_CHAR_EFFECTS_CTRL;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 166 , 15  );
-        Size = MAP_APPFONT ( 88 , 69 );
-        TabStop = TRUE;
-        Hide = TRUE;
-    };
     ListBox LB_EFFECTS2
     {
         Pos = MAP_APPFONT ( 166 , 15  ) ;
@@ -4381,28 +4372,6 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Pos = MAP_APPFONT ( 7 , 169  ) ;
         Size = MAP_APPFONT ( 246 , 10 ) ;
-    };
-    String STR_EFFECTS_TRANSPARENT
-    {
-        Text = "Transparent";
-        Text [ english_us ] = "Transparent";
-        Text[ portuguese ] = "Transparente";
-        Text[ russian ] = "œÓÁ‡˜Ì˚È";
-        Text[ greek ] = "ƒÈ·ˆ·Ì›Ú";
-        Text[ dutch ] = "Transparant";
-        Text[ french ] = "Transparent";
-        Text[ spanish ] = "Transparente";
-        Text[ italian ] = "Trasparente";
-        Text[ danish ] = "Transparent";
-        Text[ swedish ] = "Transparent";
-        Text[ polish ] = "Przezroczyste";
-        Text[ portuguese_brazilian ] = "Transparent";
-        Text[ japanese ] = "ìßâﬂê´";
-        Text[ korean ] = "≈ı∏Ì";
-        Text[ chinese_simplified ] = "Õ∏√˜";
-        Text[ chinese_traditional ] = "≥z©˙";
-        Text[ turkish ] = "Transparent";
-        Text[ arabic ] = "‘›«›";
     };
     String STR_EFFECTS_CAPITALS
     {

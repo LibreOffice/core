@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 12:23:02 $
+ *  last change: $Author: jp $ $Date: 2001-03-30 15:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,7 +1150,7 @@ SvxCharStdPage::SvxCharStdPage( Window* pParent,
     }
 
     aColorBox.SetUpdateMode( FALSE );
-    aColorBox.InsertEntry(Color(COL_AUTO), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
+    aColorBox.InsertAutomaticEntry();
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
@@ -3757,6 +3757,7 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
         const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
         FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
         rFont.SetUnderline( eUnderline );
+        m_aPreviewWin.SetTextLineColor( rItem.GetColor() );
     }
     else
         rFont.SetUnderline( UNDERLINE_NONE );
@@ -3930,7 +3931,8 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aPositionLB           ( this, ResId( LB_POSITION ) ),
 
     m_aEffectsFT            ( this, ResId( FT_EFFECTS ) ),
-    m_aEffectsLB            ( this, ResId( LB_EFFECTS ) ),
+//  m_aEffectsLB            ( this, ResId( LB_EFFECTS ) ),
+    m_aEffectsLB            ( this, 0 ),
 
     m_aEffects2LB           ( this, ResId( LB_EFFECTS2 ) ),
 
@@ -3943,29 +3945,10 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
 
     m_aPreviewLine          ( this, ResId( FL_EFFECTS_PREVIEW ) ),
     m_aPreviewWin           ( this, ResId( WIN_EFFECTS_PREVIEW ) ),
-    m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) ),
-
-    m_aTransparentColorName (       ResId( STR_EFFECTS_TRANSPARENT ) )
+    m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) )
 
 {
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_CAPITALS ) ) );
-    m_aEffectsLB.SetEntryData( 0, (void*)(ULONG)STR_EFFECTS_CAPITALS );
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_LOWERCASE ) ) );
-    m_aEffectsLB.SetEntryData( 1, (void*)(ULONG)STR_EFFECTS_LOWERCASE );
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_TITLE ) ) );
-    m_aEffectsLB.SetEntryData( 2, (void*)(ULONG)STR_EFFECTS_TITLE );
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_SMALL ) ) );
-    m_aEffectsLB.SetEntryData( 3, (void*)(ULONG)STR_EFFECTS_SMALL );
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_OUTLINE ) ) );
-    m_aEffectsLB.SetEntryData( 4, (void*)(ULONG)STR_EFFECTS_OUTLINE );
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_SHADOW ) ) );
-    m_aEffectsLB.SetEntryData( 5, (void*)(ULONG)STR_EFFECTS_SHADOW );
-    m_aEffectsLB.InsertEntry( String( ResId( STR_EFFECTS_BLINKING ) ) );
-    m_aEffectsLB.SetEntryData( 6, (void*)(ULONG)STR_EFFECTS_BLINKING );
-
-    m_aEffectsLB.SetHighlightRange();
-    m_aEffectsLB.SelectEntryPos( 0 );
-
+    m_aEffectsLB.Hide();
     FreeResource();
     Initialize();
 }
@@ -4007,13 +3990,12 @@ void SvxCharEffectsPage::Initialize()
     }
 
     m_aColorLB.SetUpdateMode( FALSE );
-
+    m_aColorLB.InsertAutomaticEntry();
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
         m_aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
-
     m_aColorLB.SetUpdateMode( TRUE );
 
     if ( bKillTable )
@@ -4027,11 +4009,13 @@ void SvxCharEffectsPage::Initialize()
     m_aPositionLB.SetSelectHdl( aLink );
     m_aEffects2LB.SetSelectHdl( aLink );
     m_aReliefLB.SetSelectHdl( aLink );
+    m_aColorLB.SetSelectHdl( aLink );
 
     m_aUnderlineLB.SelectEntryPos( 0 );
     m_aStrikeoutLB.SelectEntryPos( 0 );
     m_aEmphasisLB.SelectEntryPos( 0 );
     m_aPositionLB.SelectEntryPos( 0 );
+    m_aColorLB.SelectEntryPos( 0 );
     SelectHdl_Impl( NULL );
     SelectHdl_Impl( &m_aEmphasisLB );
 
@@ -4052,6 +4036,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     nPos = m_aStrikeoutLB.GetSelectEntryPos();
     FontStrikeout eStrikeout = (FontStrikeout)(ULONG)m_aStrikeoutLB.GetEntryData( nPos );
     rFont.SetUnderline( eUnderline );
+    m_aPreviewWin.SetTextLineColor( m_aColorLB.GetSelectEntryColor() );
     rFont.SetStrikeout( eStrikeout );
     nPos = m_aPositionLB.GetSelectEntryPos();
     BOOL bUnder = ( CHRDLG_POSITION_UNDER == (ULONG)m_aPositionLB.GetEntryData( nPos ) );
@@ -4107,6 +4092,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_aColorFT.Enable( bEnable );
         m_aColorLB.Enable( bEnable );
         m_aIndividualWordsBtn.Enable( bEnable );
+
     }
     UpdatePreview_Impl();
     return 0;
@@ -4254,8 +4240,6 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
                 Color aColor = rItem.GetColor();
                 USHORT nPos = m_aColorLB.GetEntryPos( aColor );
-                if ( nPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
-                    nPos = m_aColorLB.GetEntryPos( m_aTransparentColorName );
 
                 if ( LISTBOX_ENTRY_NOTFOUND != nPos )
                     m_aColorLB.SelectEntryPos( nPos );
@@ -4266,12 +4250,13 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
                         m_aColorLB.SelectEntryPos( nPos );
                     else
                         m_aColorLB.SelectEntryPos(
-                            m_aColorLB.InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+                            m_aColorLB.InsertEntry( aColor,
+                                String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
                 }
             }
             else
             {
-                m_aColorLB.SetNoSelection();
+                m_aColorLB.SelectEntry( Color( COL_AUTO ));
                 m_aColorLB.Disable();
             }
         }
@@ -4364,7 +4349,6 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     else
     {
         m_aEffectsFT.Disable( );
-        m_aEffectsLB.Disable( );
         m_aEffects2LB.Disable( );
     }
     SetCaseMap_Impl( eCaseMap );
@@ -5050,6 +5034,7 @@ void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
         const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
         FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
         rFont.SetUnderline( eUnderline );
+        m_aPreviewWin.SetTextLineColor( rItem.GetColor() );
     }
     else
         rFont.SetUnderline( UNDERLINE_NONE );
@@ -5714,6 +5699,7 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
         const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
         FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
         rFont.SetUnderline( eUnderline );
+        m_aPreviewWin.SetTextLineColor( rItem.GetColor() );
     }
     else
         rFont.SetUnderline( UNDERLINE_NONE );
