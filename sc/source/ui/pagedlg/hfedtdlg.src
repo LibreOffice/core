@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:26:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ TabPage RID_HFBASE
     FixedText FT_HF_DEFINED
     {
         Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
         Text [ de ] = "~Kopfzeile" ;
         Text [ en-US ] = "Hea~der" ;
     };
@@ -545,7 +545,7 @@ TabPage RID_HFBASE
     ListBox LB_DEFINED
     {
         Border = TRUE ;
-                Pos = MAP_APPFONT ( 66 , 100 ) ;
+                Pos = MAP_APPFONT ( 90 , 100 ) ;
                 Size = MAP_APPFONT ( 130 , 80 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
@@ -554,7 +554,7 @@ TabPage RID_HFBASE
     FixedText FT_HF_CUSTOM
     {
         Pos = MAP_APPFONT ( 12 , 124 ) ;
-        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
                 Text [ de ]  = "Benutzerdefiniert" ;
         Text [ en-US ] = "Custom header" ;
         Text [ x-comment ] = "German text shortened." ;
@@ -563,7 +563,7 @@ TabPage RID_HFBASE
     ImageButton BTN_TEXT
     {
         HelpId = HID_SC_HF_TEXT ;
-        Pos = MAP_APPFONT ( 66 , 122 ) ;
+        Pos = MAP_APPFONT ( 90 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Textattribute" ;
@@ -583,7 +583,7 @@ TabPage RID_HFBASE
     ImageButton BTN_FILE
     {
         HelpId = HID_SC_HF_FILE ;
-        Pos = MAP_APPFONT ( 89 , 122 ) ;
+        Pos = MAP_APPFONT ( 113 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Dateiname" ;
@@ -637,7 +637,7 @@ TabPage RID_HFBASE
     ImageButton BTN_TABLE
     {
         HelpId = HID_SC_HF_TABLE ;
-        Pos = MAP_APPFONT ( 106 , 122 ) ;
+        Pos = MAP_APPFONT ( 130 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Tabellenname" ;
@@ -657,7 +657,7 @@ TabPage RID_HFBASE
     ImageButton BTN_PAGE
     {
         HelpId = HID_SC_HF_PAGE ;
-        Pos = MAP_APPFONT ( 126 , 122 ) ;
+        Pos = MAP_APPFONT ( 150 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Seite" ;
@@ -677,7 +677,7 @@ TabPage RID_HFBASE
     ImageButton BTN_PAGES
     {
         HelpId = HID_SC_HF_PAGES ;
-        Pos = MAP_APPFONT ( 143 , 122 ) ;
+        Pos = MAP_APPFONT ( 167 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Seiten" ;
@@ -697,7 +697,7 @@ TabPage RID_HFBASE
     ImageButton BTN_DATE
     {
         HelpId = HID_SC_HF_DATE ;
-        Pos = MAP_APPFONT ( 163 , 122 ) ;
+        Pos = MAP_APPFONT ( 187 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Datum" ;
@@ -717,7 +717,7 @@ TabPage RID_HFBASE
     ImageButton BTN_TIME
     {
         HelpId = HID_SC_HF_TIME ;
-        Pos = MAP_APPFONT ( 180 , 122 ) ;
+        Pos = MAP_APPFONT ( 204 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Uhrzeit" ;
