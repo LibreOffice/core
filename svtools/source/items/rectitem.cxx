@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rectitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-28 11:37:16 $
+ *  last change: $Author: mba $ $Date: 2002-05-28 14:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,8 +194,8 @@ BOOL SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
                                              aVal.getHeight() );
             break;
         }
-        case MID_LEFT:  rVal <<= aVal.getX(); break;
-        case MID_RIGHT: rVal <<= aVal.getY(); break;
+        case MID_RECT_LEFT:  rVal <<= aVal.getX(); break;
+        case MID_RECT_RIGHT: rVal <<= aVal.getY(); break;
         case MID_WIDTH: rVal <<= aVal.getWidth(); break;
         case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
         default: DBG_ERROR("Wrong MemberID!"); return FALSE;
@@ -227,8 +227,8 @@ BOOL SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
                 aVal.setWidth( aValue.Width );
                 aVal.setHeight( aValue.Height );
                 break;
-            case MID_LEFT:  aVal.setX( nVal ); break;
-            case MID_RIGHT: aVal.setY( nVal ); break;
+            case MID_RECT_LEFT:  aVal.setX( nVal ); break;
+            case MID_RECT_RIGHT: aVal.setY( nVal ); break;
             case MID_WIDTH: aVal.setWidth( nVal ); break;
             case MID_HEIGHT: aVal.setHeight( nVal ); break;
             default: DBG_ERROR("Wrong MemberID!"); return FALSE;
