@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btndlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-05 15:16:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #include <rc.h>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
