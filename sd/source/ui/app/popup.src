@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:56:08 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@ Menu RID_LAYERTAB_POPUP
         MN_RENAME_LAYER
     };
 };
+
 
 
 
