@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:58:14 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 18:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,6 +1124,26 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
 }
 
 //------------------------------------------------------------------------------
+void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
+{
+    // the affected col
+    sal_uInt16 nColId = GetItemId( _rPreferredPos );
+
+    // the menu
+    PopupMenu aContextMenu( SVX_RES( RID_SVXMNU_COLS ) );
+
+    // let derivees modify the menu
+    PreExecuteColumnContextMenu( nColId, aContextMenu );
+    aContextMenu.RemoveDisabledEntries( sal_True, sal_True );
+
+    // execute the menu
+    sal_uInt16 nResult = aContextMenu.Execute( this, _rPreferredPos );
+
+    // let derivees handle the result
+    PostExecuteColumnContextMenu( nColId, aContextMenu, nResult );
+}
+
+//------------------------------------------------------------------------------
 void FmGridHeader::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -1133,12 +1153,7 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
             if (!rEvt.IsMouseEvent())
                 return;
 
-            sal_uInt16 nColId = GetItemId(rEvt.GetMousePosPixel());
-            PopupMenu aContextMenu(SVX_RES(RID_SVXMNU_COLS));
-
-            PreExecuteColumnContextMenu(nColId, aContextMenu);
-            aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
-            PostExecuteColumnContextMenu(nColId, aContextMenu, aContextMenu.Execute(this, rEvt.GetMousePosPixel()));
+            triggerColumnContextMenu( rEvt.GetMousePosPixel() );
         }
         break;
         default:
@@ -1157,6 +1172,31 @@ FmGridControl::FmGridControl(
         ,m_nMarkedColumnId(BROWSER_INVALIDID)
         ,m_pPeer(_pPeer)
 {
+}
+
+//------------------------------------------------------------------------------
+void FmGridControl::Command(const CommandEvent& _rEvt)
+{
+    if ( COMMAND_CONTEXTMENU == _rEvt.GetCommand() )
+    {
+        FmGridHeader* pHeader = static_cast< FmGridHeader* >( GetHeaderBar() );
+        if ( pHeader && !_rEvt.IsMouseEvent() )
+        {   // context menu requested by keyboard
+            if  ( 1 == GetSelectColumnCount() )
+            {
+                sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
+                ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
+
+                Point aRelativePos( pHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
+                pHeader->triggerColumnContextMenu( aRelativePos, FmGridHeader::AccessControl() );
+
+                // handled
+                return;
+            }
+        }
+    }
+
+    DbGridControl::Command( _rEvt );
 }
 
 // ::com::sun::star::beans::XPropertyChangeListener
