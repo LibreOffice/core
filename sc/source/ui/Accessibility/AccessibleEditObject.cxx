@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 06:24:56 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 15:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     mpWindow(pWin),
     mbCellInEditMode(bCellInEditMode)
 {
+    CreateTextHelper();
 }
 
 ScAccessibleEditObject::~ScAccessibleEditObject()
@@ -263,6 +264,32 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Cell in Editmode"));
     else
         return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Editline"));
+}
+
+    ///=====  XAccessibleEventBroadcaster  =====================================
+
+void SAL_CALL
+    ScAccessibleEditObject::addEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
+        throw (uno::RuntimeException)
+{
+    if (!mpTextHelper)
+        CreateTextHelper();
+
+    mpTextHelper->AddEventListener(xListener);
+
+    ScAccessibleContextBase::addEventListener(xListener);
+}
+
+void SAL_CALL
+    ScAccessibleEditObject::removeEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
+        throw (uno::RuntimeException)
+{
+    if (!mpTextHelper)
+        CreateTextHelper();
+
+    mpTextHelper->RemoveEventListener(xListener);
+
+    ScAccessibleContextBase::removeEventListener(xListener);
 }
 
     //=====  XServiceInfo  ====================================================

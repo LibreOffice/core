@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 14:50:31 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,24 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
+    ///=====  XAccessibleEventBroadcaster  =====================================
+
+    /** Add listener that is informed of future changes of name,
+          description and so on events.
+    */
+    virtual void SAL_CALL
+        addEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    //  Remove an existing event listener.
+    virtual void SAL_CALL
+        removeEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+        throw (com::sun::star::uno::RuntimeException);
+
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
