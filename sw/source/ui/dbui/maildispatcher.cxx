@@ -2,9 +2,9 @@
  *
  *  $RCSfile: maildispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:12:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,8 @@ namespace /* private */
 MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     mailserver_ (mailserver),
     run_(false),
-    shutdown_requested_(false)
+    shutdown_requested_(false),
+    bIsInRun(false)
 {
     wakening_call_.reset();
     mail_dispatcher_active_.reset();
@@ -234,10 +235,16 @@ void MailDispatcher::shutdown()
     wakening_call_.set();
 }
 
-bool MailDispatcher::isStarted()
+bool MailDispatcher::isStarted() const
 {
     return run_;
 }
+
+bool MailDispatcher::isRunning() const
+{
+    return bIsInRun;
+}
+
 
 void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> listener)
 {
@@ -294,6 +301,7 @@ void MailDispatcher::run()
     // signal that the mail dispatcher thread is now alive
     mail_dispatcher_active_.set();
 
+    bIsInRun = true;
     for(;;)
     {
         wakening_call_.wait();
@@ -321,6 +329,7 @@ void MailDispatcher::run()
             std::for_each(listeners_cloned.begin(), listeners_cloned.end(), GenericEventNotifier(&IMailDispatcherListener::idle, this));
         }
     } // end for        SSH ALI
+    bIsInRun = false;
 }
 /*-- 27.08.2004 12:04:46---------------------------------------------------
 
