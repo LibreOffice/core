@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-31 09:40:39 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 10:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,150 +978,6 @@ int SwFEShell::IsObjSelectable( const Point& rPt )
 #endif
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GotoFly()
-|*
-|*  Beschreibung        Wenn ein Fly selektiert ist, gehen wir von dessen
-|*      TopLeft aus, andernfalls von der Mitte des aktuellen CharRects.
-|*  Ersterstellung      OK  11.03.94 10:12
-|*  Letzte Aenderung    MA 29. Jul. 96
-|*
-*************************************************************************/
-
-BOOL SwFEShell::GotoFly( BOOL bNext, FlyCntType eType )
-{
-    if( !Imp()->HasDrawView() )
-        return FALSE;
-    else
-    {
-        const SwFlyFrm  *pBest  = 0,
-                        *pTop   = 0;
-
-        const long nTmp = bNext ? LONG_MAX : 0;
-        Point aBestPos( nTmp, nTmp );
-        Point aTopPos(  nTmp, nTmp );
-        Point aCurPos;
-        Point aPos;
-        BOOL  bRet = FALSE;
-
-        // Sonderfall, wenn der Cursor in einem Fly steht dann soll dieser
-        // selektiert werden !
-        pBest = GetCurrFrm( FALSE )->FindFlyFrm();
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
-
-        if( !pBest || rMrkList.GetMarkCount() == 1 )
-        {
-            // Ausgangspunkt bestimmen.
-            SwFlyFrm *pFly = ::GetFlyFromMarked( &rMrkList, this );
-            if( pFly )
-                aPos = pFly->Frm().Pos();
-            else
-                aPos = GetCharRect().Center();
-
-            SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage( 0 );
-            const ULONG nObjs = pPage->GetObjCount();
-            for( ULONG nObj = 0; nObj < nObjs; ++nObj )
-            {
-                SdrObject *pO = pPage->GetObj( nObj );
-                if ( !pO->IsWriterFlyFrame() )
-                    continue;
-
-                SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
-
-                SwFlyFrm *pFly = pObj->GetFlyFrm();
-
-                switch ( eType )
-                {
-                    case FLYCNTTYPE_FRM:
-                        if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
-                            continue;
-                    break;
-                    case FLYCNTTYPE_GRF:
-                        if ( pFly->Lower() &&
-                             (pFly->Lower()->IsLayoutFrm() ||
-                              !((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode()))
-                            continue;
-                    break;
-                    case FLYCNTTYPE_OLE:
-                        if ( pFly->Lower() &&
-                             (pFly->Lower()->IsLayoutFrm() ||
-                              !((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode()))
-                            continue;
-                    break;
-                }
-
-                aCurPos = pFly->Frm().Pos();
-
-                // Sonderfall wenn ein anderes Obj auf selber Y steht.
-                if( aCurPos != aPos &&          // nur wenn ich es nicht selber bin
-                    aCurPos.Y() == aPos.Y() &&  // ist die Y Position gleich
-                    (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
-                            (aCurPos.X() < aPos.X())) ) // " reverse
-                {
-                    aBestPos = Point( nTmp, nTmp );
-                    for( ULONG i = 0; i < nObjs; ++i )
-                    {
-                        SdrObject *pO = pPage->GetObj( i );
-                        if ( !pO->IsWriterFlyFrame() )
-                            continue;
-
-                        SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
-
-                        aCurPos = pObj->GetFlyFrm()->Frm().Pos();
-
-                        if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
-                            (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
-                                    (aCurPos.X() < aPos.X())) &&    // " reverse
-                            (bNext? (aCurPos.X() < aBestPos.X()) :  // besser als Beste
-                                    (aCurPos.X() > aBestPos.X())) ) // " reverse
-                        {
-                            aBestPos = aCurPos;
-                            pBest = pObj->GetFlyFrm();
-                        }
-                    }
-                    break;
-                }
-
-                if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
-                            (aPos.Y() > aCurPos.Y())) &&        // " reverse
-                    (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
-                            (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
-                            (aBestPos.Y() == aCurPos.Y() &&
-                    (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
-                            (aBestPos.X() < aCurPos.X()))))     // " reverse
-
-                {
-                    aBestPos = aCurPos;
-                    pBest = pObj->GetFlyFrm();
-                }
-
-                if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // hoeher als Beste
-                            (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
-                            (aTopPos.Y() == aCurPos.Y() &&
-                    (bNext? (aTopPos.X() > aCurPos.X()) :       // weiter links
-                            (aTopPos.X() < aCurPos.X()))))      // " reverse
-                {
-                    aTopPos = aCurPos;
-                    pTop = pObj->GetFlyFrm();
-                }
-            }
-            // leider nichts gefunden
-            if( (bNext? (aBestPos.X() == LONG_MAX) : (aBestPos.X() == 0)) )
-                pBest = pTop;
-        }
-
-        if( pBest )
-        {
-            SelectObj( pBest->Frm().Pos(), FALSE, FALSE, (SdrObject*)pBest->GetVirtDrawObj() );
-            if( !ActionPend() )
-                MakeVisible( pBest->Frm() );
-            CallChgLnk();
-            bRet = TRUE;
-        }
-        return bRet;
-    }
-}
 
 /*************************************************************************
 |*
@@ -1153,8 +1009,7 @@ FASTBOOL lcl_IsControlGroup( const SdrObject *pObj )
     return bRet;
 }
 
-
-BOOL SwFEShell::GotoObj( BOOL bNext, DrawObjType eType )
+BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
 {
     if( !Imp()->HasDrawView() )
         return FALSE;
@@ -1169,91 +1024,152 @@ BOOL SwFEShell::GotoObj( BOOL bNext, DrawObjType eType )
         Point aCurPos;
         Point aPos;
         BOOL  bRet = FALSE;
+        BOOL bNoDraw = 0 == (DRAW_ANY & eType);
+        BOOL bNoFly = 0 == (FLY_ANY & eType);
 
+        if( !bNoFly && bNoDraw )
+        {
+            SwFlyFrm *pFly = GetCurrFrm( FALSE )->FindFlyFrm();
+            if( pFly )
+                pBest = pFly->GetVirtDrawObj();
+        }
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
 
-        // Ausgangspunkt bestimmen.
-        if ( rMrkList.GetMarkCount() )
+        if( !pBest || rMrkList.GetMarkCount() == 1 )
         {
-            SdrObject *pObj = rMrkList.GetMark(0)->GetObj();
-            aPos = pObj->GetSnapRect().TopLeft();
-        }
-        else
-            aPos = GetCharRect().Center();
-
-        SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage( 0 );
-        const ULONG nObjs = pPage->GetObjCount();
-        for( ULONG nObj = 0; nObj < nObjs; ++nObj )
-        {
-            SdrObject *pObj = pPage->GetObj( nObj );
-
-            if ( pObj->IsWriterFlyFrame() ||
-                eType == DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ||
-                    eType == DRAW_CONTROL && !lcl_IsControlGroup( pObj ))
-                continue;
-
-            aCurPos = pObj->GetBoundRect().TopLeft();
-
-            // Sonderfall wenn ein anderes Obj auf selber Y steht.
-            if( aCurPos != aPos &&          // nur wenn ich es nicht selber bin
-                aCurPos.Y() == aPos.Y() &&  // ist die Y Position gleich
-                (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
-                        (aCurPos.X() < aPos.X())) ) // " reverse
+            // Ausgangspunkt bestimmen.
+            if ( rMrkList.GetMarkCount() )
             {
-                aBestPos = Point( nTmp, nTmp );
-                for( ULONG i = 0; i < nObjs; ++i )
-                {
-                    SdrObject *pObj = pPage->GetObj( i );
-                    if ( pObj->IsWriterFlyFrame() )
-                        continue;
+                SdrObject *pObj = rMrkList.GetMark(0)->GetObj();
+                if( pObj->IsWriterFlyFrame() )
+                    aPos = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Pos();
+                else
+                    aPos = pObj->GetSnapRect().TopLeft();
+            }
+            else
+                aPos = GetCharRect().Center();
 
+            SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage( 0 );
+            const ULONG nObjs = pPage->GetObjCount();
+            for( ULONG nObj = 0; nObj < nObjs; ++nObj )
+            {
+                SdrObject *pObj = pPage->GetObj( nObj );
+                BOOL bFlyFrm = pObj->IsWriterFlyFrame();
+                if( ( bNoFly && bFlyFrm ) ||
+                    ( bNoDraw && !bFlyFrm ) ||
+                    ( eType == DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ) ||
+                    ( eType == DRAW_CONTROL && !lcl_IsControlGroup( pObj ) ) )
+                    continue;
+                if( bFlyFrm )
+                {
+                    SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pObj;
+                    SwFlyFrm *pFly = pO->GetFlyFrm();
+                    if( FLY_ANY != ( FLY_ANY & eType ) )
+                    {
+                        switch ( eType )
+                        {
+                            case FLY_FRM:
+                                if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
+                                    continue;
+                            break;
+                            case FLY_GRF:
+                                if ( pFly->Lower() &&
+                                    (pFly->Lower()->IsLayoutFrm() ||
+                                    !((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode()))
+                                    continue;
+                            break;
+                            case FLY_OLE:
+                                if ( pFly->Lower() &&
+                                    (pFly->Lower()->IsLayoutFrm() ||
+                                    !((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode()))
+                                    continue;
+                            break;
+                        }
+                    }
+                    aCurPos = pFly->Frm().Pos();
+                }
+                else
                     aCurPos = pObj->GetBoundRect().TopLeft();
 
-                    if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
-                        (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
-                                (aCurPos.X() < aPos.X())) &&    // " reverse
-                        (bNext? (aCurPos.X() < aBestPos.X()) :  // besser als Beste
-                                (aCurPos.X() > aBestPos.X())) ) // " reverse
+                // Sonderfall wenn ein anderes Obj auf selber Y steht.
+                if( aCurPos != aPos &&          // nur wenn ich es nicht selber bin
+                    aCurPos.Y() == aPos.Y() &&  // ist die Y Position gleich
+                    (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
+                            (aCurPos.X() < aPos.X())) ) // " reverse
+                {
+                    aBestPos = Point( nTmp, nTmp );
+                    for( ULONG i = 0; i < nObjs; ++i )
                     {
-                        aBestPos = aCurPos;
-                        pBest = pObj;
+                        SdrObject *pObj = pPage->GetObj( i );
+                        bFlyFrm = pObj->IsWriterFlyFrame();
+                        if( ( bNoFly && bFlyFrm ) || ( bNoDraw && !bFlyFrm ) )
+                            continue;
+                        if( bFlyFrm )
+                        {
+                            SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pObj;
+                            aCurPos = pO->GetFlyFrm()->Frm().Pos();
+                        }
+                        else
+                            aCurPos = pObj->GetBoundRect().TopLeft();
+
+                        if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
+                            (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
+                                    (aCurPos.X() < aPos.X())) &&    // " reverse
+                            (bNext? (aCurPos.X() < aBestPos.X()) :  // besser als Beste
+                                    (aCurPos.X() > aBestPos.X())) ) // " reverse
+                        {
+                            aBestPos = aCurPos;
+                            pBest = pObj;
+                        }
                     }
+                    break;
                 }
-                break;
-            }
 
-            if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
-                        (aPos.Y() > aCurPos.Y())) &&        // " reverse
-                (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
-                        (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
-                        (aBestPos.Y() == aCurPos.Y() &&
-                (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
-                        (aBestPos.X() < aCurPos.X()))))     // " reverse
+                if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
+                            (aPos.Y() > aCurPos.Y())) &&        // " reverse
+                    (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
+                            (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
+                            (aBestPos.Y() == aCurPos.Y() &&
+                    (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
+                            (aBestPos.X() < aCurPos.X()))))     // " reverse
 
-            {
-                aBestPos = aCurPos;
-                pBest = pObj;
-            }
+                {
+                    aBestPos = aCurPos;
+                    pBest = pObj;
+                }
 
-            if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // hoeher als Beste
-                        (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
-                        (aTopPos.Y() == aCurPos.Y() &&
-                (bNext? (aTopPos.X() > aCurPos.X()) :       // weiter links
-                        (aTopPos.X() < aCurPos.X()))))      // " reverse
-            {
-                aTopPos = aCurPos;
-                pTop = pObj;
+                if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // hoeher als Beste
+                            (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
+                            (aTopPos.Y() == aCurPos.Y() &&
+                    (bNext? (aTopPos.X() > aCurPos.X()) :       // weiter links
+                            (aTopPos.X() < aCurPos.X()))))      // " reverse
+                {
+                    aTopPos = aCurPos;
+                    pTop = pObj;
+                }
             }
+            // leider nichts gefunden
+            if( (bNext? (aBestPos.X() == LONG_MAX) : (aBestPos.X() == 0)) )
+                pBest = pTop;
         }
-        // leider nichts gefunden
-        if( (bNext? (aBestPos.X() == LONG_MAX) : (aBestPos.X() == 0)) )
-            pBest = pTop;
 
         if( pBest )
         {
-            SelectObj( Point(), FALSE, FALSE, (SdrObject*)pBest );
-            if( !ActionPend() )
-                MakeVisible( pBest->GetBoundRect() );
+            BOOL bFlyFrm = pBest->IsWriterFlyFrame();
+            if( bFlyFrm )
+            {
+                SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pBest;
+                const SwRect& rFrm = pO->GetFlyFrm()->Frm();
+                SelectObj( rFrm.Pos(), FALSE, FALSE, (SdrObject*)pBest );
+                if( !ActionPend() )
+                    MakeVisible( rFrm );
+            }
+            else
+            {
+                SelectObj( Point(), FALSE, FALSE, (SdrObject*)pBest );
+                if( !ActionPend() )
+                    MakeVisible( pBest->GetBoundRect() );
+            }
             CallChgLnk();
             bRet = TRUE;
         }

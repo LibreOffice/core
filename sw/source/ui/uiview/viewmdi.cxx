@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 10:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,11 +412,11 @@ void SwView::MoveNavigation(BOOL bNext)
         case NID_GRF:
         case NID_OLE:
         {
-            FlyCntType eType = FLYCNTTYPE_FRM;
+            GotoObjType eType = FLY_FRM;
             if(nMoveType == NID_GRF)
-                eType = FLYCNTTYPE_GRF;
+                eType = FLY_GRF;
             else if(nMoveType == NID_OLE)
-                eType = FLYCNTTYPE_OLE;
+                eType = FLY_OLE;
             BOOL bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
                         rSh.GotoPrevFly(eType);
