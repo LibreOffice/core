@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:25:35 $
+ *  last change: $Author: kz $ $Date: 2002-08-06 20:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ String STR_RECOVER_QUERY
     Text[ korean ] = "파일 \"$1\"을(를） 복구하겠습니까?";
     Text[ turkish ] = "\"$1\" dosyas� geri getirilsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea restaurar el archivo \"$1\"?";
+    Text[ catalan ] = "Voleu restaurar el fitxer \"$1\"?";
     Text[ finnish ] = "Palautetaanko tiedosto $1?";
     Text[ thai ] = "จะคืนสภาพแฟ้ม \"$1\" หรือไม่?";
 };
@@ -116,7 +116,7 @@ String STR_RECOVER_TITLE
     Text[ korean ] = "파일 복구";
     Text[ turkish ] = "Dosya kurtarma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Recuperar archivo";
+    Text[ catalan ] = "Recupera el fitxer";
     Text[ finnish ] = "Tiedoston palautus";
     Text[ thai ] = "กู้คืนแฟ้ม";
 };
