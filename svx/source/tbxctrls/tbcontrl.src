@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:07:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String RID_SVXSTR_TRANSPARENT
     Text [ portuguese_brazilian ] = "Keine F?lung" ;
     Text[ chinese_simplified ] = "²»Ìî³ä";
     Text[ russian ] = "Áåç çàëèâêè";
-    Text[ polish ] = "Brak wype³nienia";
+    Text[ polish ] = "Bez wype³nienia";
     Text[ japanese ] = "“h‚è‚Â‚Ô‚µ‚È‚µ";
     Text[ chinese_traditional ] = "¤£¥R¶ñ";
     Text[ arabic ] = "ÈÏæä ÊÚÈÆÉ";
@@ -340,5 +340,6 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 };
 
 // ********************************************************************** EOF
+
 
 
