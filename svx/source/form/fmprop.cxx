@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:23:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,8 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus" );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover" );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
+
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_BUTTON_TYPE, "ButtonType" );
 
 }   // namespace svxform
 
