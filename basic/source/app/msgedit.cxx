@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:40:00 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,10 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
     }
     xub_StrLen nPos;
     LogMsg->aDebugData.aMsg.ConvertLineEnd();
+    // does the message have several lines -> repeat the call for each line
     if ( (nPos = LogMsg->aDebugData.aMsg.Search( CUniString("\n").ConvertLineEnd() )) != STRING_NOTFOUND )
     {
+        String aOriginalMsg = LogMsg->aDebugData.aMsg;
         xub_StrLen nSysLineEndLen = CUniString("\n").ConvertLineEnd().Len();
         String aLastPart = LogMsg->aDebugData.aMsg.Copy( nPos+nSysLineEndLen );
         LogMsg->aDebugData.aMsg.Erase( nPos );
@@ -167,6 +169,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             LogMsg->aDebugData.aMsg = aLastPart;
             AddAnyMsg( LogMsg );
         }
+        LogMsg->aDebugData.aMsg = aOriginalMsg;
     }
     else
     {
@@ -223,6 +226,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                 pAppError->UpdateFileInfo( HAS_BEEN_LOADED );
         }
     }
+    LogMsg->aDebugData.aMsg = pBasicFrame->GenRealString( LogMsg->aDebugData.aMsg );
 }
 
 void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
@@ -552,7 +556,7 @@ TextSelection MsgEdit::GetSelection() const
 
 void MsgEdit::SetSelection( const TextSelection& rSelection )
 {
-    USHORT nStart,nEnd;
+    ULONG nStart,nEnd;
 
     while ( aEditTree.GetSelectionCount() )
         aEditTree.Select( aEditTree.FirstSelected(), FALSE );
@@ -570,7 +574,7 @@ void MsgEdit::SetSelection( const TextSelection& rSelection )
 USHORT MsgEdit::GetLineNr() const
 {
     if ( aEditTree.GetCurEntry() )
-        return aEditTree.GetModel()->GetAbsPos(aEditTree.GetCurEntry() ) + 1;
+        return (USHORT)aEditTree.GetModel()->GetAbsPos(aEditTree.GetCurEntry() ) + 1;
     else
         return 0;
 }
