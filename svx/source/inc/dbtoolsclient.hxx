@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:54:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,13 @@ namespace svxform
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
         // ------------------------------------------------
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            sal_Bool _bSetAsActiveConnection
+        ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+                            , ::com::sun::star::lang::WrappedTargetException
+                            , ::com::sun::star::uno::RuntimeException) );
 
         // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
