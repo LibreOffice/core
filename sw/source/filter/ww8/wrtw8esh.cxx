@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:53 $
+ *  last change: $Author: cmc $ $Date: 2002-08-26 11:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2353,19 +2353,25 @@ INT32 SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
             rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
         }
-        else if( !((SvxBrushItem*)pItem)->GetColor().GetTransparency() )
+        else
         {
             UINT32 nFillColor = GetColor( ((SvxBrushItem*)pItem)->
                                                     GetColor(), false);
             rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
             rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+
+            if (((SvxBrushItem*)pItem)->GetColor().GetTransparency())
+            {
+                sal_uInt32 nOpaque =
+                    ((SvxBrushItem*)pItem)->GetColor().GetTransparency();
+                nOpaque = (nOpaque * 100) / 0xFE;
+                nOpaque = ((100 - nOpaque) << 16) / 100;
+                rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
+            }
+
         }
-        else
-            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
     }
-    else
-        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
 
     if (SFX_ITEM_SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
     {
