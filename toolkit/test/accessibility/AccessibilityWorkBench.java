@@ -32,7 +32,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
-
+import java.io.*;
 
 public class AccessibilityWorkBench
     extends JFrame
@@ -46,6 +46,8 @@ public class AccessibilityWorkBench
 {
     public static final String msVersion = "v1.1";
     public String msFileName;
+    public String msOptionsFileName = ".AWBrc";
+
     /*WinFilename
         //        = "file:///d|/tmp/impress-test-document.sxi";
         = "file:///d|/tmp/writer-test-document.sxw";
@@ -219,6 +221,21 @@ public class AccessibilityWorkBench
         aTextButton = createButton("Text", "text");
         aQuitButton = createButton ("Quit", "quit");
 
+        LoadOptions();
+
+        // Menu bar.
+        maMenuBar = new MenuBar ();
+        setMenuBar (maMenuBar);
+        Menu aOptionsMenu = new Menu ("Options");
+        maMenuBar.add (aOptionsMenu);
+        CheckboxMenuItem aItem;
+        aItem = new CheckboxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
+        aOptionsMenu.add (aItem);
+        aItem.addActionListener (this);
+        aItem = new CheckboxMenuItem ("Show Names", maCanvas.getShowNames());
+        aOptionsMenu.add (aItem);
+        aItem.addActionListener (this);
+
         maMainPanel.setLayout (aLayout);
         getContentPane().add ("Center", maMainPanel);
         maMainPanel.setVisible (true);
@@ -226,6 +243,95 @@ public class AccessibilityWorkBench
         setTitle("Accessibility Workbench " + msVersion);
     }
 
+
+    protected void LoadOptions ()
+    {
+        try
+        {
+            File aOptionsFile = new File (
+                System.getProperty ("user.home"),
+                msOptionsFileName);
+            StreamTokenizer aTokenizer = new StreamTokenizer (new FileReader (aOptionsFile));
+            aTokenizer.eolIsSignificant (true);
+            while (true)
+            {
+                if (aTokenizer.nextToken() != StreamTokenizer.TT_WORD)
+                {
+                    if (aTokenizer.ttype != StreamTokenizer.TT_EOF)
+                        System.out.println ("unexpected token in options file: " + aTokenizer.toString()
+                            + " instead of option name");
+                    break;
+                }
+                String sOptionName = aTokenizer.sval;
+
+                if (aTokenizer.nextToken() != '=')
+                {
+                    System.out.println ("unexpected token in options file: " + aTokenizer.toString()
+                        + " instead of =");
+                    break;
+                }
+
+                String sValue = null;
+                Number nValue = null;
+                switch (aTokenizer.nextToken())
+                {
+                    case StreamTokenizer.TT_WORD:
+                        sValue = aTokenizer.sval;
+                        break;
+                    case StreamTokenizer.TT_NUMBER:
+                        nValue = new Double (aTokenizer.nval);
+                        break;
+                }
+
+                System.out.print ("option value " + sOptionName + " is set to ");
+                if (sValue != null)
+                    System.out.println ("string " + sValue);
+                else if (nValue != null)
+                    System.out.println ("number " + nValue);
+                else
+                    System.out.println ("nothing");
+
+                if (aTokenizer.nextToken() == StreamTokenizer.TT_EOF)
+                    break;
+                if (aTokenizer.ttype != StreamTokenizer.TT_EOL)
+                {
+                    System.out.println ("unexpected token in options file: " + aTokenizer.toString()
+                        + " instead of newline");
+                    break;
+                }
+
+                if (sOptionName.compareTo ("ShowDescriptions") == 0)
+                    maCanvas.setShowDescriptions (sValue.compareTo ("true")==0);
+                else if (sOptionName.compareTo ("ShowNames") == 0)
+                    maCanvas.setShowNames (sValue.compareTo ("true")==0);
+                else
+                    System.out.println ("option " + sOptionName + " unknown");
+
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println ("caught exception while loading options file : " + e);
+        }
+    }
+
+    protected void SaveOptions ()
+    {
+        try
+        {
+            File aOptionsFile = new File (
+                System.getProperty ("user.home"),
+                msOptionsFileName);
+            PrintWriter aOut = new PrintWriter (new FileWriter (aOptionsFile));
+            aOut.println ("ShowDescriptions = " + maCanvas.getShowDescriptions());
+            aOut.println ("ShowNames = " + maCanvas.getShowNames());
+            aOut.close();
+        }
+        catch (Exception e)
+        {
+            System.out.println ("caught exception while writing options file : " + e);
+        }
+    }
 
 
     /** Create a new button and place at the right most position into the
@@ -320,6 +426,16 @@ public class AccessibilityWorkBench
         {
             Canvas.bPaintText = ! Canvas.bPaintText;
             maCanvas.repaint ();
+        }
+        else if (e.getActionCommand().equals ("Show Descriptions"))
+        {
+            maCanvas.setShowDescriptions ( ! maCanvas.getShowDescriptions());
+            SaveOptions ();
+        }
+        else if (e.getActionCommand().equals ("Show Names"))
+        {
+            maCanvas.setShowNames ( ! maCanvas.getShowNames());
+            SaveOptions ();
         }
         else
         {
@@ -573,4 +689,6 @@ public class AccessibilityWorkBench
         aExpandButton,
         aShapesButton,
         aTextButton;
+    private MenuBar
+        maMenuBar;
 }
