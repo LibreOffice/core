@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-19 16:38:00 $
+ *  last change: $Author: hdu $ $Date: 2002-06-03 14:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,8 +231,9 @@ int FontCharMap::ImplFindRange( sal_UCS4 cChar ) const
 {
     int nLower = 0;
     int nMid   = mnRangeCount;
-    int nUpper = 2 * mnRangeCount;
-    while( nLower < nUpper ) {
+    int nUpper = 2 * mnRangeCount - 1;
+    while( nLower < nUpper )
+    {
         if( cChar >= mpRangeCodes[ nMid ] )
             nLower = nMid;
         else
