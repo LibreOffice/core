@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-09-26 14:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    SdrOutliner* pOutliner = ::SdrMakeOutliner(0, pSdrView->GetModel());
+    SdrOutliner* pOutliner = ::SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrView->GetModel());
     uno::Reference< linguistic::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
@@ -679,131 +679,6 @@ void SwView::HyphenateDrawText()
     pSdrView->SetAttributes( aSet );
     GetViewFrame()->GetBindings().Invalidate(FN_HYPHENATE_OPT_DLG);
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.111  2000/09/18 16:06:13  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.110  2000/09/07 15:59:33  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.109  2000/09/04 11:45:19  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.108  2000/05/26 07:21:35  os
-    old SW Basic API Slots removed
-
-    Revision 1.107  2000/05/11 12:44:32  tl
-    if[n]def ONE_LINGU entfernt
-
-    Revision 1.106  2000/03/23 08:43:33  os
-    UNO III
-
-    Revision 1.105  2000/03/03 15:17:04  os
-    StarView remainders removed
-
-    Revision 1.104  2000/02/16 21:00:40  tl
-    #72219# Locale Umstellung
-
-    Revision 1.103  2000/02/09 13:36:38  os
-    #72716# Set Outliner language earlier
-
-    Revision 1.102  2000/01/18 16:54:02  os
-    #71416# #71428# online spelling and hyphenation in drawing objects
-
-    Revision 1.101  2000/01/18 11:19:15  os
-    #72016# LeaveOneGroup selects the group after leaving - call UnmarkAll
-
-    Revision 1.100  1999/11/19 16:40:24  os
-    modules renamed
-
-    Revision 1.99  1999/10/25 19:13:57  tl
-    ongoing ONE_LINGU implementation
-
-    Revision 1.98  1999/08/31 08:40:04  TL
-    #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.97   31 Aug 1999 10:40:04   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.96   04 Aug 1999 11:03:04   JP
-   have to change: Outliner -> SdrOutlines
-
-      Rev 1.95   21 Jun 1999 15:47:54   JP
-   Interface changes: SdrView::GetAttributes
-
-      Rev 1.94   18 Nov 1998 15:06:44   OM
-   #59280# FormController Create Modes verlassen
-
-      Rev 1.93   06 Jul 1998 16:09:26   OM
-   #52065# Gruppe verlassen bei Beendigung der DrawShell
-
-      Rev 1.92   12 Jun 1998 13:34:46   OM
-   Wieder SID_OBJECT_SELECT statt SID_DRAW_SELECT
-
-      Rev 1.91   09 Jun 1998 15:32:26   OM
-   VC-Controls entfernt
-
-      Rev 1.90   15 Apr 1998 15:33:20   OM
-   #49467 Objekte innerhalb von geschuetzten Rahmen duerfen nicht veraendert werden
-
-      Rev 1.89   08 Apr 1998 12:25:50   OM
-   #45639 Bei selektiertem Rahmen keine Drawshell melden
-
-      Rev 1.88   12 Mar 1998 10:04:16   OM
-   Forms korrekt erkennen
-
-      Rev 1.87   11 Mar 1998 17:38:32   OM
-   DB-FormShell
-
-      Rev 1.86   11 Mar 1998 17:01:54   OM
-   DB-FormShell
-
-      Rev 1.85   10 Mar 1998 14:17:58   OM
-   Konstruktionsmodul fuer Forms
-
-      Rev 1.84   29 Nov 1997 16:48:32   MA
-   includes
-
-      Rev 1.83   21 Nov 1997 15:00:18   MA
-   includes
-
-      Rev 1.82   03 Nov 1997 13:58:32   MA
-   precomp entfernt
-
-      Rev 1.81   04 Sep 1997 17:14:42   MA
-   includes
-
-      Rev 1.80   15 Aug 1997 15:27:32   OM
-   Draw- und Controlslots Bereichsumstellung
-
-      Rev 1.79   15 Aug 1997 14:45:36   OM
-   Draw- und Controlslots Bereichsumstellung
-
-      Rev 1.78   13 Aug 1997 12:18:36   OM
-   #42383# Selektion von Punkten im Konstruktionsmode
-
-      Rev 1.77   12 Aug 1997 13:32:40   OM
-   GPF beim Beenden gefixt
-
-      Rev 1.76   23 Jul 1997 21:42:32   HJS
-   includes
-
-      Rev 1.75   09 Jul 1997 18:31:56   MA
-   ein paar SS const
-
-      Rev 1.74   08 Jul 1997 12:07:42   OM
-   Draw-Selektionsmodi aufgeraeumt
-
-      Rev 1.73   25 Jun 1997 13:35:28   OM
-   #40966# DrawBaseShell-Ptr wieder eingefuehrt
-
-      Rev 1.72   17 Jun 1997 15:45:28   MA
-   DrawTxtShell nicht von BaseShell ableiten + Opts
-
-------------------------------------------------------------------------*/
 
 
 
