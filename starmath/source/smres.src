@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:29:53 $
+ *  last change: $Author: hjs $ $Date: 2004-07-05 14:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Zählerhöhe: : ~Zählerhöhe: */
-            Text [ de ] = "~Zählerhöhe" ;
+            Text [ de ] = "~ZÃ¤hlerhöhe" ;
             Text [ en-US ] = "~Numerator";
         };
         Bitmap 20
@@ -3986,6 +3986,13 @@ DockingWindow RID_CMDBOXWINDOW
     IdCount =    {        16;    };
 
 ImageList RID_DEFAULTIMAGELIST_LC
+{
+    Prefix = "lc";
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    _ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_SC
 {
     Prefix = "sc";
     MaskColor = IMAGE_STDBTN_COLOR ;
