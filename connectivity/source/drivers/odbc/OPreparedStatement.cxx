@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 16:00:24 $
+ *  last change: $Author: mh $ $Date: 2000-11-29 12:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -20,9 +20,6 @@
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software
-{
-}
-// ----------------------------------------------------------------------------- you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License version 2.1, as published by the Free Software Foundation.
  *
@@ -61,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
