@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:41:56 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 15:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2614,7 +2614,7 @@ void SalDisplay::Yield( BOOL bWait )
 
         nStateOfYield_ = 1;
 
-        DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex()->GetThreadId()) ==
+        DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex())->GetThreadId() ==
                    NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
                     "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
