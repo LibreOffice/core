@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:54:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,7 @@ ModalDialog DLG_DBSELECTION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 132 ) ;
-    Text = "Datenbankauswahl" ;
-    Text [ ENGLISH ] = "Database Selection" ;
+    Text [ de ] = "Datenbankauswahl" ;
     Moveable = TRUE ;
     Control TLB_DBLIST
     {
@@ -96,34 +95,8 @@ ModalDialog DLG_DBSELECTION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Database Selection" ;
-    Text [ italian ] = "Scelta database" ;
-    Text [ spanish ] = "Seleccionar base de datos" ;
-    Text [ french ] = "Sélection d'une base de données" ;
-    Text [ dutch ] = "Selectie database" ;
-    Text [ swedish ] = "Databasurval" ;
-    Text [ danish ] = "Databaseudvalg" ;
-    Text [ portuguese_brazilian ] = "Seleção do Banco de Dados" ;
-    Text [ portuguese ] = "Seleccionar base de dados" ;
-    Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®åº“";
-    Text[ russian ] = "Âûáîğ áàçû äàííûõ";
-    Text[ polish ] = "Wybór bazy danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®é¸æŠ";
-    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™åº«";
-    Text[ arabic ] = "ÇÎÊíÇÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text[ greek ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì„ íƒ";
-    Text[ turkish ] = "Veritabanı seçimi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecciona base de dades";
-    Text[ finnish ] = "Tietokantavalinta";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "VÃ½bÄ›r databÃ¡ze";
-    Text[ hebrew ] = "Datenbankauswahl";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤šà¥à¤¨à¤¾à¤µ";
-    Text[ slovak ] = "VÃ½ber databÃ¡zy";
-    Text[ hungarian ] = "AdatbÃ¡zis kivÃ¡lasztÃ¡sa";
-    Text[ slovenian ] = "Izbor zbirke podatkov";
+    Text [ en-US ] = "Database Selection" ;
+    Text [ x-comment ] = " ";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
@@ -137,8 +110,7 @@ ModelessDialog DLG_PRINTMONITOR
     _HEIGHT = 72 ;
     MOVEABLE = TRUE ;
     APP = FALSE ;
-    Text [ english ] = "Save Monitor" ;
-    Text = "Speichern-Monitor" ;
+    Text [ de ] = "Speichern-Monitor" ;
     FixedText FT_DOCNAME
     {
         HIDE = FALSE ;
@@ -162,39 +134,12 @@ ModelessDialog DLG_PRINTMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 100 ;
         _HEIGHT = 8 ;
-        TEXT = "wird ausgegeben als" ;
-        TEXT [ English ] = "is being printed as" ;
+        Text [ de ] = "wird ausgegeben als" ;
         LEFT = FALSE ;
         CENTER = TRUE ;
         RIGHT = FALSE ;
-        Text [ english_us ] = "is being printed on" ;
-        Text [ portuguese_brazilian ] = "está sendo impresso em" ;
-        Text [ swedish ] = "skrivs ut på" ;
-        Text [ danish ] = "udskrives på" ;
-        Text [ italian ] = "viene stampato su" ;
-        Text [ spanish ] = "se está imprimiendo en" ;
-        Text [ french ] = "en cours d'impression sur" ;
-        Text [ dutch ] = "wordt afgedrukt als" ;
-        Text [ portuguese ] = "está a ser impresso na" ;
-        Text[ chinese_simplified ] = "è¾“å‡ºè‡³";
-        Text[ russian ] = "Áóäåò íàïå÷àòàíî êàê";
-        Text[ polish ] = "jest drukowane na";
-        Text[ japanese ] = "å°åˆ·ä¸­";
-        Text[ chinese_traditional ] = "å‚³é€åˆ°";
-        Text[ arabic ] = "íÊã ØÈÇÚÊå ßÜ";
-        Text[ greek ] = "åêôõğşíåôáé ùò";
-        Text[ korean ] = "ì¸ì‡„ ì¤‘";
-        Text[ turkish ] = "Çıktı türü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "s'està imprimint en";
-        Text[ finnish ] = "tulostuu tulostimessa";
-        Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸´à¸¡à¸à¹Œà¸šà¸™";
-        Text[ czech ] = "se tiskne na";
-        Text[ hebrew ] = "wird ausgegeben als";
-        Text[ hindi ] = "à¤•à¥‡ à¤¦à¤¿à¤¨ à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾ ";
-        Text[ slovak ] = "sa tlaÄÃ­ na";
-        Text[ hungarian ] = "nyomtatÃ¡s alatt a kÃ¶vetkezÅ‘ nyomtatÃ³n:";
-        Text[ slovenian ] = "se tiska na";
+        Text [ en-US ] = "is being printed on" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_SENDING
     {
@@ -205,39 +150,12 @@ ModelessDialog DLG_PRINTMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 100 ;
         _HEIGHT = 8 ;
-        TEXT = "wird versandt an" ;
-        TEXT [ English ] = "is being send at" ;
+        Text [ de ] = "wird versandt an" ;
         LEFT = FALSE ;
         CENTER = TRUE ;
         RIGHT = FALSE ;
-        TEXT[ italian ] = "viene inviato a";
-        TEXT[ portuguese_brazilian ] = "está sendo enviado para";
-        TEXT[ portuguese ] = "está a ser enviado para";
-        TEXT[ danish ] = "bliver sendt til";
-        TEXT[ french ] = "va être envoyé à";
-        TEXT[ swedish ] = "skickas till";
-        TEXT[ dutch ] = "wordt verzonden aan";
-        TEXT[ spanish ] = "se envía a";
-        TEXT[ english_us ] = "is being send to";
-        TEXT[ chinese_simplified ] = "å¯„å‘ç»™";
-        TEXT[ russian ] = "Áóäåò îòïğàâëåíî";
-        TEXT[ polish ] = "jest przesy³ane do";
-        TEXT[ japanese ] = "å®›å…ˆã«é€ä¿¡ä¸­";
-        TEXT[ chinese_traditional ] = "å¯„ç™¼çµ¦";
-        TEXT[ arabic ] = "íÊã ÅÑÓÇáå Åáì";
-        TEXT[ greek ] = "áğïóôİëëåôáé ğñïò";
-        TEXT[ korean ] = "ë³´ë‚´ëŠ” ì¤‘";
-        TEXT[ turkish ] = "Alıcı";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "s'està enviant a";
-        TEXT[ finnish ] = "lähetetään kohteelle";
-        TEXT[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸–à¸¹à¸à¸ªà¹ˆà¸‡à¹„à¸›à¸¢à¸±à¸‡";
-        TEXT[ czech ] = "je odesÃ­lÃ¡no komu";
-        TEXT[ hebrew ] = "wird versandt an";
-        TEXT[ hindi ] = "à¤•à¥‡ à¤¦à¤¿à¤¨ à¤­à¥‡à¤œà¤¾";
-        TEXT[ slovak ] = "sa posiela komu";
-        TEXT[ hungarian ] = "kÃ¼ldÃ©s:";
-        TEXT[ slovenian ] = "se poÅ¡ilja";
+        Text [ en-US ] = "is being send to";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_PRINTER
     {
@@ -280,99 +198,19 @@ ModelessDialog DLG_PRINTMONITOR
     };
     String STR_EMAILMON
     {
-        Text [ english ] = "Send Monitor" ;
-        Text = "Versenden-Monitor" ;
-        Text[ italian ] = "Invia monitor";
-        Text[ portuguese_brazilian ] = "Monitor de Envio";
-        Text[ portuguese ] = "Enviar - Monitor";
-        Text[ danish ] = "Send-monitor";
-        Text[ french ] = "Moniteur d'envoi";
-        Text[ swedish ] = "Skicka monitor";
-        Text[ dutch ] = "Monitor \"Verzenden\"";
-        Text[ spanish ] = "Monitor de envío";
-        Text[ english_us ] = "Send-Monitor";
-        Text[ chinese_simplified ] = "å¯„å‘-ç›‘è§†å™¨";
-        Text[ russian ] = "Îòïğàâêà èçîáğàæåíèÿ ıêğàíà";
-        Text[ polish ] = "Monitor wysy³ania";
-        Text[ japanese ] = "é€ä¿¡ãƒ¢ãƒ‹ã‚¿ãƒ¼";
-        Text[ chinese_traditional ] = "å¯„ç™¼-ç›£è¦–å™¨";
-        Text[ arabic ] = "ãÑÇŞÈ ÇáÅÑÓÇá";
-        Text[ greek ] = "ÁğïóôïëŞ-Ïèüíç";
-        Text[ korean ] = "ì „ì†¡ ëª¨ë‹ˆí„°";
-        Text[ turkish ] = "Gönderme ekranı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Monitor d'enviament";
-        Text[ finnish ] = "Lähetysvalvonta";
-        Text[ thai ] = "à¸ˆà¸­à¸ à¸²à¸à¸à¸²à¸£à¸ªà¹ˆà¸‡";
-        Text[ czech ] = "Kontrola odeslÃ¡nÃ­";
-        Text[ hebrew ] = "Versenden-Monitor";
-        Text[ hindi ] = "à¤­à¥‡à¤œà¥‹-à¤®à¥‹à¤¨à¤¿à¤Ÿà¤°";
-        Text[ slovak ] = "Kontrola odosielania";
-        Text[ hungarian ] = "KÃ¼ldÃ©sek felÃ¼gyelete";
-        Text[ slovenian ] = "Nadzornik poÅ¡iljanja";
+        Text [ de ] = "Versenden-Monitor" ;
+        Text [ en-US ] = "Send-Monitor";
+        Text [ x-comment ] = " ";
     };
-    Text [ portuguese ] = "Monitor de impressão" ;
-    Text [ english_us ] = "Print monitor" ;
-    Text [ portuguese_brazilian ] = "Monitor de impressão" ;
-    Text [ swedish ] = "Skriv ut skärmbild" ;
-    Text [ danish ] = "Udskriftsoversigt" ;
-    Text [ italian ] = "Controllo stampa" ;
-    Text [ spanish ] = "Monitor de impresión" ;
-    Text [ french ] = "Moniteur d'impression" ;
-    Text [ dutch ] = "Monitor \"Opslaan\"" ;
-    Text[ chinese_simplified ] = "æ‰“å°ç›‘è§†";
-    Text[ russian ] = "Ïå÷àòü èçîáğàæåíèÿ ıêğàíà";
-    Text[ polish ] = "Monitor wydruku";
-    Text[ japanese ] = "ãƒ¡ãƒ¢ãƒªãƒ¢ãƒ‹ã‚¿ãƒ¼";
-    Text[ chinese_traditional ] = "åˆ—å°ç›£è¦–";
-    Text[ arabic ] = "ãÑÇŞÈ ÇáÍİÙ";
-    Text[ language_user1 ] = " ";
-    Text[ greek ] = "ÁğïèŞêåõóç-Ïèüíç";
-    Text[ korean ] = "ì €ì¥ ëª¨ë‹ˆí„°";
-    Text[ turkish ] = "Yazdırma ekranı";
-    Text[ catalan ] = "Monitor d'impressió";
-    Text[ finnish ] = "Tulostuksenvalvonta";
-    Text[ thai ] = "à¸ˆà¸­à¸ à¸²à¸à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
-    Text[ czech ] = "MonitorovÃ¡nÃ­ tisku";
-    Text[ hebrew ] = "Speichern-Monitor";
-    Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤®à¥‹à¤¨à¤¿à¤Ÿà¤°";
-    Text[ slovak ] = "Monitorovanie tlaÄe";
-    Text[ hungarian ] = "NyomtatÃ¡s felÃ¼gyelete";
-    Text[ slovenian ] = "Nadzornik tiskanja";
+    Text [ en-US ] = "Print monitor" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_DB_EMAIL
 {
-    TEXT = "E-Mail" ;
-    TEXT [ English ] = "E-mail" ;
-    Text [ english_us ] = "E-mail" ;
-    Text[ italian ] = "eMail";
-    Text[ portuguese_brazilian ] = "E-mail";
-    Text[ portuguese ] = "E-mail";
-    Text[ danish ] = "E-mail";
-    Text[ french ] = "E-mail";
-    Text[ swedish ] = "E-post";
-    Text[ dutch ] = "E-mail";
-    Text[ spanish ] = "Correo-e";
-    Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶";
-    Text[ russian ] = "İëåêòğîííàÿ ïî÷òà";
-    Text[ polish ] = "e-mail";
-    Text[ japanese ] = "E-mail";
-    Text[ chinese_traditional ] = "é›»å­éƒµä»¶";
-    Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
-    Text[ greek ] = "E-mail";
-    Text[ korean ] = "ì „ì ë©”ì¼";
-    Text[ turkish ] = "E-posta";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "correu electrònic";
-    Text[ finnish ] = "Sähköposti";
-    Text[ thai ] = "à¸­à¸µà¹€à¸¡à¸¥à¹Œ";
-    Text[ czech ] = "E-mail";
-    Text[ hebrew ] = "E-mail";
-    Text[ hindi ] = "E-mail";
-    Text[ slovak ] = "E-mail";
-    Text[ hungarian ] = "E-mail";
-    Text[ slovenian ] = "E-poÅ¡ta";
+    Text [ de ] = "E-Mail" ;
+    Text [ en-US ] = "E-mail" ;
+    Text [ x-comment ] = " ";
 };
 
 
