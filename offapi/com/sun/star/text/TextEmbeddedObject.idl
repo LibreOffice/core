@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEmbeddedObject.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:29:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 // DocMerge from xml: service com::sun::star::text::TextEmbeddedObject
 /** provides access to the properties and methods of an embedded object.
  */
-service TextEmbeddedObject
+published service TextEmbeddedObject
 {
     /** contains the definition of interfaces and properties that are supported by text frames,
      graphic objects and embeddedobjects.
