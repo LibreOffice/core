@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-14 16:34:37 $
+ *  last change: $Author: thb $ $Date: 2001-08-08 10:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,6 +1144,7 @@ bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, in
 */
 void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw()
 {
+#ifndef SVX_LIGHT
     String aNew = rInternalName;
 
     if( nWhich == XATTR_LINECOLOR )
@@ -1169,7 +1170,9 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
             }
         }
     }
+#endif
 
+    // just use previous name, if nothing else was found.
     rApiName = rInternalName;
 }
 
