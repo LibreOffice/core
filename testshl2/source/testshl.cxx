@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:06:03 $
+ *  last change: $Author: lla $ $Date: 2003-01-13 09:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ using namespace std;
 #include "cppunit/result/testshlTestResult.h"
 #include "cppunit/result/emacsTestResult.hxx"
 
+// Prototype for signal handling
+void setSignalFilename(GetOpt & opt);
+
+// -----------------------------------------------------------------------------
 
 Log initLog(GetOpt & _aOptions)
 {
@@ -141,7 +145,8 @@ int _cdecl main( int argc, char* argv[] )
         "-logPath=s,    destination path for logging",
         "-noerrors,     shows all tests, but not it's errors.",
         "-onlyerrors,   shows only the failed test functions",
-        "-tc=s@,        name(s) of testcase(s) to generate",
+/*      "-tc=s@,        name(s) of testcase(s) to generate", */
+        "-sf=s,         absolute path and name to the signal file.",
         "-jobonly=s,    job control file, these jobs should only executed.",
         "-jobfilter=s,  use a filter for just some tests.",
         "-onlyshowjobs, show only all jobs, do no tests.",
@@ -167,11 +172,22 @@ int _cdecl main( int argc, char* argv[] )
     {
         logPth = opt.getOpt( "-logPth" );
     }
+    setSignalFilename(opt);
+
+    bool bLibrary = true;
     if (opt.getParams().empty())
     {
-        std::cerr << "error: At least on library should given." << std::endl;
-        opt.showUsage();
-        exit(0);
+        // no library is given, but if a jobonly list is given, we should generate UNKNOWN errors.
+        if (! opt.hasOpt("-jobonly"))
+        {
+            std::cerr << "error: At least on library should given." << std::endl;
+            opt.showUsage();
+            exit(0);
+        }
+        else
+        {
+            bLibrary = false;
+        }
     }
 
     /* show usage screen if too less parameters */
@@ -186,7 +202,9 @@ int _cdecl main( int argc, char* argv[] )
     //# CmdLineBits nCmdlinebitflags = createFlags( argc, argv );
 
     //# rtl::OUString suLibraryName = rtl::OUString::createFromAscii(argv[1]);
-    rtl::OUString suLibraryName = rtl::OStringToOUString(opt.getFirstParam(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OUString suLibraryName;
+    if (bLibrary)
+        suLibraryName = rtl::OStringToOUString(opt.getFirstParam(), RTL_TEXTENCODING_ASCII_US );
 
     // Log aLog = initLog(opt);
     AutomaticRegisterHelper aHelper(suLibraryName, opt /*, &aJobs*/);
