@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-30 14:47:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,37 +155,47 @@ void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
     SdrPage* pPage = pModel->GetPage(nTab);
     if (pPage)
     {
+        Point aPos;
         Size aSize = pPage->GetSize();
-        if (aLogicRect.Right() >= aSize.Width())                    // rechts
+        if ( aSize.Width() < 0 )
         {
-            long nDiff = aLogicRect.Right() - aSize.Width() + 1;
+            aPos.X() = aSize.Width() + 1;       // negative
+            aSize.Width() = -aSize.Width();     // positive
+        }
+        Rectangle aPageRect( aPos, aSize );
+
+        if (aLogicRect.Right() > aPageRect.Right())
+        {
+            long nDiff = aLogicRect.Right() - aPageRect.Right();
             aLogicRect.Left() -= nDiff;
             aLogicRect.Right() -= nDiff;
             bChange = TRUE;
         }
-        if (aLogicRect.Bottom() >= aSize.Height())                  // unten
+        if (aLogicRect.Bottom() > aPageRect.Bottom())
         {
-            long nDiff = aLogicRect.Bottom() - aSize.Height() + 1;
+            long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
             aLogicRect.Top() -= nDiff;
             aLogicRect.Bottom() -= nDiff;
+            bChange = TRUE;
+        }
+
+        if (aLogicRect.Left() < aPageRect.Left())
+        {
+            long nDiff = aLogicRect.Left() - aPageRect.Left();
+            aLogicRect.Right() -= nDiff;
+            aLogicRect.Left() -= nDiff;
+            bChange = TRUE;
+        }
+        if (aLogicRect.Top() < aPageRect.Top())
+        {
+            long nDiff = aLogicRect.Top() - aPageRect.Top();
+            aLogicRect.Bottom() -= nDiff;
+            aLogicRect.Top() -= nDiff;
             bChange = TRUE;
         }
     }
     else
         DBG_ERROR("RequestObjAreaPixel: Page ist weg");
-
-    if (aLogicRect.Left() < 0)                                      // links
-    {
-        aLogicRect.Right() -= aLogicRect.Left();
-        aLogicRect.Left() = 0;
-        bChange = TRUE;
-    }
-    if (aLogicRect.Top() < 0)                                       // oben
-    {
-        aLogicRect.Bottom() -= aLogicRect.Top();
-        aLogicRect.Top() = 0;
-        bChange = TRUE;
-    }
 
         //  wieder in Pixel umrechnen
 
