@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=formula
+Type=MimeType
+Patterns=*.oof
+MimeType=application/x-vnd.oasis.openoffice.formula
+Comment=Open Office Formula
