@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:52:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,27 @@
 #ifndef _MSVBASIC_HXX
 #include <msvbasic.hxx>
 #endif
-
+#ifndef _MSOCXIMEX_HXX
+#include <msocximex.hxx>
+#endif
+#ifndef _SOT_STORINFO_HXX
+#include <sot/storinfo.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
+#include <com/sun/star/awt/XControlModel.hpp>
+#endif
+using namespace com::sun::star::beans;
+using namespace com::sun::star::io;
+using namespace com::sun::star::awt;
 #include <comphelper/storagehelper.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -97,6 +117,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
+using rtl::OUString;
 
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
@@ -107,11 +128,124 @@ int SvxImportMSVBasic::Import( const String& rStorageName,
                                     bAsComment, bStripped ))
         nRet |= 1;
 
+    if (bImport)
+        ImportForms_Impl(rStorageName, rSubStorageName);
+
     if( bCopy && CopyStorage_Impl( rStorageName, rSubStorageName ))
         nRet |= 2;
 
     return nRet;
 }
+
+bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
+    const String& rSubStorageName)
+{
+    SvStorageRef xVBAStg(xRoot->OpenSotStorage(rStorageName,
+        STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL));
+    if (!xVBAStg.Is() || xVBAStg->GetError())
+        return false;
+
+    std::vector<String> aUserForms;
+    SvStorageInfoList aContents;
+    xVBAStg->FillInfoList(&aContents);
+    for (USHORT nI = 0; nI < aContents.Count(); ++nI)
+    {
+          SvStorageInfo& rInfo = aContents.GetObject(nI);
+          if (!rInfo.IsStream() && rInfo.GetName() != rSubStorageName)
+              aUserForms.push_back(rInfo.GetName());
+    }
+
+    if (aUserForms.empty())
+        return false;
+
+    bool bRet = true;
+    SFX_APP()->EnterBasicCall();
+    try
+    {
+        Reference<XMultiServiceFactory> xSF(comphelper::getProcessServiceFactory());
+
+        Reference<XComponentContext> xContext;
+        Reference<XPropertySet> xProps(xSF, UNO_QUERY);
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext;
+
+
+        Reference<XLibraryContainer> xLibContainer = rDocSh.GetDialogContainer();
+        DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+
+        String aLibName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Standard")));
+        Reference<XNameContainer> xLib;
+        if (xLibContainer.is())
+        {
+            if( !xLibContainer->hasByName(aLibName))
+                xLibContainer->createLibrary(aLibName);
+
+            Any aLibAny = xLibContainer->getByName( aLibName );
+            aLibAny >>= xLib;
+        }
+
+        if(xLib.is())
+        {
+            typedef std::vector<String>::iterator myIter;
+            myIter aEnd = aUserForms.end();
+            for (myIter aIter = aUserForms.begin(); aIter != aEnd; ++aIter)
+            {
+                SvStorageRef xForm (xVBAStg->OpenSotStorage(*aIter,
+                    STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL));
+
+                if (!xForm.Is() || xForm->GetError())
+                    continue;
+
+                SvStorageStreamRef xFrame = xForm->OpenSotStream(
+                    String(RTL_CONSTASCII_STRINGPARAM("\3VBFrame"),
+                        RTL_TEXTENCODING_MS_1252),
+                    STREAM_STD_READ | STREAM_NOCREATE);
+
+                if (!xFrame.Is() || xFrame->GetError())
+                    continue;
+
+                SvStorageStreamRef xContents = xForm->OpenSotStream(
+                    String(RTL_CONSTASCII_STRINGPARAM("o"),
+                        RTL_TEXTENCODING_MS_1252),
+                    STREAM_STD_READ | STREAM_NOCREATE);
+
+                if (!xContents.Is() || xContents->GetError())
+                    continue;
+
+                SvStorageStreamRef xTypes = xForm->OpenSotStream(
+                    String(RTL_CONSTASCII_STRINGPARAM("f"),
+                        RTL_TEXTENCODING_MS_1252),
+                    STREAM_STD_READ | STREAM_NOCREATE);
+
+                if (!xTypes.Is() || xTypes->GetError())
+                    continue;
+
+                //<UserForm Name=""><VBFrame></VBFrame>"
+                String sData;
+                String sLine;
+                while(xFrame->ReadByteStringLine(sLine, RTL_TEXTENCODING_MS_1252))
+                {
+                    sData += sLine;
+                    sData += '\n';
+                }
+                sData.ConvertLineEnd();
+
+
+                OCX_UserForm aForm(*aIter);
+                sal_Bool bOk = aForm.Read(xTypes);
+                DBG_ASSERT(bOk, "Had unexpected content, not risking this module");
+                if (bOk)
+                    aForm.Import(xContents, xSF, xContext, xLib);
+            }
+        }
+    }
+    catch(...)
+    {
+        //bRet = false;
+    }
+    SFX_APP()->LeaveBasicCall();
+    return bRet;
+}
+
 
 BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
                                          const String& rSubStorageName)
@@ -193,6 +327,49 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 //const String &sBasicModule = aVBA.GetStreamName( i);
                 const String sBasicModule(sByteBasic,
                     RTL_TEXTENCODING_ASCII_US);
+                /* #117718# expose information regarding type of Module
+                * Class, Form or plain 'ould VBA module with a REM statment
+                * at the top of the module. Mapping of Module Name
+                * to type is performed in  VBA_Impl::Open() method,
+                * ( msvbasic.cxx ) by examining the PROJECT stream.
+                */
+
+                // using name from aVBA.GetStreamName
+                // because the encoding of the same returned
+                // is the same as the encoding for the names
+                // that are keys in the map used by GetModuleType method
+                const String &sOrigVBAModName = aVBA.GetStreamName( i );
+                ModuleType mType = aVBA.GetModuleType( sOrigVBAModName );
+
+                rtl::OUString sClassRem(
+                    rtl::OUString::createFromAscii("Rem Attribute VBA_ModuleType=") );
+                OSL_TRACE("Type for Module %s is %d",
+                    ::rtl::OUStringToOString( sOrigVBAModName, RTL_TEXTENCODING_ASCII_US ).pData->buffer, mType );
+
+                rtl::OUString modeTypeComment;
+
+                switch( mType )
+                {
+                    case Class:
+                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
+                            "VBAClassModule\n" );
+                        break;
+                    case Form:
+                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
+                            "VBAFormModule\n" );
+                        break;
+                    case Normal:
+                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
+                            "VBAModule\n" );
+                        break;
+                    case Unknown:
+                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
+                            "VBAUnknown\n" );
+                        break;
+                    default:
+                        break;
+                }
+
                 for(ULONG j=0;j<aDecompressed.GetSize();j++)
                 {
                     String sModule(sBasicModule);
@@ -245,6 +422,9 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 
                         ::rtl::OUString aModName( sModule );
                         ::rtl::OUString aSource( *aDecompressed.Get(j) );
+
+                        aSource = modeTypeComment + aSource;
+
                         Any aSourceAny;
                         aSourceAny <<= aSource;
                         if( xLib->hasByName( aModName ) )
