@@ -20,6 +20,7 @@ Sub Main()
 	End If
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	RetValue = 10
+	bIsFirstLogTable = True
 	bConversionIsRunning = False
 	sCRLF = CHR(13) &amp; CHR(10)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
