@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-02 12:40:46 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 11:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     sal_Bool                mbHasPreview            : 1;
     sal_Bool                mbShowPreview           : 1;
     sal_Bool                mbIsSaveDlg             : 1;
+    sal_Bool                mbExport                : 1;
 
     sal_Bool                mbDeleteMatcher         : 1;
     sal_Bool                mbInsert                : 1;
@@ -295,6 +296,7 @@ private:
     void                    addGraphicFilter();
     void                    enablePasswordBox();
     void                    updateFilterOptionsBox();
+    void                    updateSelectionBox();
     void                    updateVersions();
     void                    updatePreviewState( sal_Bool _bUpdatePreviewWindow = sal_True );
     void                    dispose();
@@ -495,6 +497,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
         case CommonFilePickerElementIds::LISTBOX_FILTER:
             updateFilterOptionsBox();
             enablePasswordBox();
+            updateSelectionBox();
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
@@ -579,6 +582,7 @@ struct CheckFilterOptionsCapability
 };
 
 // ------------------------------------------------------------------------
+
 void FileDialogHelper_Impl::updateFilterOptionsBox()
 {
     if ( !m_bHaveFilterOptions )
@@ -588,6 +592,19 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
         ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
         CheckFilterOptionsCapability()( getCurentSfxFilter() )
     );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::updateSelectionBox()
+{
+    if ( !mbExport )
+        return;
+
+    const SfxFilter* pFilter = getCurentSfxFilter();
+
+    updateExtendedControl(
+        ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
+        pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 );
 }
 
 // ------------------------------------------------------------------------
@@ -928,6 +945,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     mbHasLink               = sal_False;
     mbDeleteMatcher         = sal_False;
     mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
+    mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
     mbIsSaveDlg             = sal_False;
 
     mpMatcher = NULL;
@@ -1022,6 +1040,24 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
 
     if ( mbHasLink )        // generate graphic filter only on demand
         addGraphicFilter();
+
+    // Export dialog
+    if ( mbExport )
+    {
+        mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) ) ) );
+
+        Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
+        if ( xExtDlg.is() )
+        {
+            try
+            {
+                xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
+                                   OUString( String( SfxResId( STR_SFX_EXPLORERFILE_BUTTONEXPORT ) ) ) );
+                xExtDlg->enableControl( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
+            }
+            catch( IllegalArgumentException ){}
+        }
+    }
 
     // the "insert file" dialog needs another title
     if ( mbInsert )
@@ -1151,6 +1187,7 @@ IMPL_LINK( FileDialogHelper_Impl, InitControls, void*, NOTINTERESTEDIN )
 {
     enablePasswordBox( );
     updateFilterOptionsBox( );
+    updateSelectionBox( );
 
     return 0L;
 }
@@ -1250,6 +1287,22 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             }
             catch( IllegalArgumentException ){}
         }
+
+        if( mbExport )
+        {
+            try
+            {
+                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
+                sal_Bool bSelection = sal_False;
+                if ( ( aValue >>= bSelection ) && bSelection )
+                    rpSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
+            }
+            catch( IllegalArgumentException )
+            {
+                DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+            }
+        }
+
 
         // set the read-only flag. When inserting a file, this flag is always set
         if ( mbInsert )
