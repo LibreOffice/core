@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:34:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,48 +59,23 @@
  *
  ************************************************************************/
 
+#include "swtypes.hxx"
 
-#pragma hdrstop
-
+#ifndef _STRING_HXX
+#include "tools/string.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic2/XHyphenator.hpp>
-#endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#include <vcl/svapp.hxx>
 
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
@@ -160,12 +135,7 @@
 #include <sectfrm.hxx>
 #endif
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::comphelper;
+namespace css = com::sun::star;
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
@@ -189,9 +159,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtNode, 50, 50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwpHints, 25, 25 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFntObj, 50, 50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFontObj, 50, 50 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFrmFmt,     20, 20 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwBorderAttrs, 100, 100 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwCellFrm,    50, 50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwRowFrm,     10, 10 )
@@ -230,41 +197,31 @@ Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
 }
 
 
-Locale CreateLocale( LanguageType eLanguage )
-{
-    String aLangStr, aCtryStr;
-    if (LANGUAGE_NONE != eLanguage)
-        ConvertLanguageToIsoNames( eLanguage, aLangStr, aCtryStr );
-
-    return Locale( aLangStr, aCtryStr, rtl::OUString() );
-}
-
-
-Reference< XSpellChecker1 >  GetSpellChecker()
+css::uno::Reference< css::linguistic2::XSpellChecker1 >  GetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
 
-Reference< XHyphenator >  GetHyphenator()
+css::uno::Reference< css::linguistic2::XHyphenator >  GetHyphenator()
 {
     return LinguMgr::GetHyphenator();
 }
 
 
-Reference< XThesaurus >  GetThesaurus()
+css::uno::Reference< css::linguistic2::XThesaurus >  GetThesaurus()
 {
     return LinguMgr::GetThesaurus();
 }
 
 
-Reference< XDictionaryList >  GetDictionaryList()
+css::uno::Reference< css::linguistic2::XDictionaryList >  GetDictionaryList()
 {
     return LinguMgr::GetDictionaryList();
 }
 
 
-Reference< beans::XPropertySet >    GetLinguPropertySet()
+css::uno::Reference< css::beans::XPropertySet >     GetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }
