@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:48:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5282,7 +5282,7 @@
             <node oor:name=".uno:FilterCrit" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Standardfilter...</value>
-                    <value xml:lang="en-US">Default Filter...</value>
+                    <value xml:lang="en-US">Standard Filter...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
