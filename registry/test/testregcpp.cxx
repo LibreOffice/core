@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregcpp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:51:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 
@@ -77,6 +77,7 @@
 #include <rtl/ustring.hxx>
 #endif
 
+using namespace std;
 using namespace rtl;
 
 void test_coreReflection()
