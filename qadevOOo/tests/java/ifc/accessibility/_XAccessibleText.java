@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change:$Date: 2003-05-22 13:30:26 $
+ *  last change:$Date: 2003-05-27 12:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
+import com.sun.star.lang.XAccessibleText;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.TextSegment;
@@ -1111,7 +1112,7 @@ public class _XAccessibleText extends MultiMethodTest {
             String cbText = null;
             try {
                 cbText =
-                    util.SysUtils.getSysClipboardText(tParam.getMSF());
+                    util.SysUtils.getSysClipboardText((XMultiServiceFactory)tParam.getMSF());
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Couldn't access system clipboard :");
                 e.printStackTrace(log);
@@ -1126,7 +1127,7 @@ public class _XAccessibleText extends MultiMethodTest {
                 res &= locRes;
 
                 try {
-                    cbText = util.SysUtils.getSysClipboardText(tParam.getMSF());
+                    cbText = util.SysUtils.getSysClipboardText((XMultiServiceFactory)tParam.getMSF());
                 } catch (com.sun.star.uno.Exception e) {
                     log.println("Couldn't access system clipboard :");
                     e.printStackTrace(log);
