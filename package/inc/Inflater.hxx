@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:37:57 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 22:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,11 @@ private:
     sal_Bool                bFinished;
     sal_Bool                bSetParams;
     sal_Bool                bNeedDict;
-    sal_Int16               nOffset, nLength;
+    sal_Int32               nOffset, nLength;
     z_stream*               pStream;
     com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;
     void init   (sal_Bool bNowrap);
-    sal_Int16   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int16 nNewOffset, sal_Int16 nNewLength);
+    sal_Int32   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     Inflater(sal_Bool bNoWrap);

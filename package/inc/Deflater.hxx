@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:37:57 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 22:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,18 +84,18 @@ private:
     sal_Bool                bFinish;
     sal_Bool                bFinished;
     sal_Bool                bSetParams;
-    sal_Int16               nLevel, nStrategy;
-    sal_Int16               nOffset, nLength;
+    sal_Int32               nLevel, nStrategy;
+    sal_Int32               nOffset, nLength;
     z_stream*               pStream;
 
-    void init (sal_Int16 nLevel, sal_Int16 nStrategy, sal_Bool bNowrap);
-    sal_Int16 doDeflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int16 nNewOffset, sal_Int16 nNewLength);
+    void init (sal_Int32 nLevel, sal_Int32 nStrategy, sal_Bool bNowrap);
+    sal_Int32 doDeflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     Deflater();
     ~Deflater();
-    Deflater(sal_Int16 nSetLevel);
-    Deflater(sal_Int16 nSetLevel, sal_Bool bNowrap);
+    Deflater(sal_Int32 nSetLevel);
+    Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap);
     virtual void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
