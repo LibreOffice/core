@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-13 14:38:15 $
+ *  last change: $Author: nn $ $Date: 2001-02-19 19:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/sheet/XCompatibilityNames.hpp>
 
 #include "addincol.hxx"
 #include "compiler.hxx"
@@ -148,6 +149,8 @@ private:
     ScAddInArgDesc*     pArgDescs;
     long                nCallerPos;
     USHORT              nCategory;
+    uno::Sequence<sheet::LocalizedName> aCompNames;
+    BOOL                bCompInitialized;
 
 public:
                 ScUnoAddInFuncData( const String& rNam, const String& rLoc,
@@ -171,9 +174,7 @@ public:
     const String&           GetDescription() const      { return aDescription; }
     USHORT                  GetCategory() const         { return nCategory; }
 
-                            // dummy implementation
-    String                  GetExcelName( LanguageType eDestLang ) const            { return aOriginalName; }
-    BOOL                    HasFunctionalityOf( const String& rExcelName ) const    { return FALSE; }
+    const uno::Sequence<sheet::LocalizedName>& GetCompNames();
 };
 
 //------------------------------------------------------------------------
@@ -193,7 +194,8 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
     xFunction( rFunc ),
     aObject( rO ),
     nArgCount( nAC ),
-    nCallerPos( nCP )
+    nCallerPos( nCP ),
+    bCompInitialized( FALSE )
 {
     if ( nArgCount )
     {
@@ -211,6 +213,44 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
 ScUnoAddInFuncData::~ScUnoAddInFuncData()
 {
     delete[] pArgDescs;
+}
+
+const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames()
+{
+    if ( !bCompInitialized )
+    {
+        //  read sequence of compatibility names on demand
+
+        uno::Reference<sheet::XAddIn> xAddIn;
+        if ( aObject >>= xAddIn )
+        {
+            uno::Reference<sheet::XCompatibilityNames> xComp( xAddIn, uno::UNO_QUERY );
+            if ( xComp.is() && xFunction.is() )
+            {
+                rtl::OUString aMethodName = xFunction->getName();
+                aCompNames = xComp->getCompatibilityNames( aMethodName );
+
+                //  change all locale entries to default case
+                //  (language in lower case, country in upper case)
+                //  for easier searching
+
+                long nSeqLen = aCompNames.getLength();
+                if ( nSeqLen )
+                {
+                    sheet::LocalizedName* pArray = aCompNames.getArray();
+                    for (long i=0; i<nSeqLen; i++)
+                    {
+                        lang::Locale& rLocale = pArray[i].Locale;
+                        rLocale.Language = rLocale.Language.toLowerCase();
+                        rLocale.Country  = rLocale.Country.toUpperCase();
+                    }
+                }
+            }
+        }
+
+        bCompInitialized = TRUE;        // also if not successful
+    }
+    return aCompNames;
 }
 
 //------------------------------------------------------------------------
@@ -298,47 +338,82 @@ void ScUnoAddInCollection::Initialize()
     bInitialized = TRUE;        // with or without functions
 }
 
-BOOL ScUnoAddInCollection::GetExcelName( const String& r, LanguageType e, String& rRet )
+BOOL ScUnoAddInCollection::GetExcelName( const String& rCalcName,
+                                        LanguageType eDestLang, String& rRetExcelName )
 {
-    if (!bInitialized)
-        Initialize();
-
-    if (nFuncCount > 0)
+    ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
+    if ( pFuncData )
     {
-        ScUnoAddInFuncData* p;
-        for (long i=0; i<nFuncCount; i++)
+        const uno::Sequence<sheet::LocalizedName>& rSequence = pFuncData->GetCompNames();
+        long nSeqLen = rSequence.getLength();
+        if ( nSeqLen )
         {
-            p = ppFuncData[i];
-            if ( p && p->GetOriginalName() == r )
-            {
-                rRet = p->GetExcelName( e );
-                return TRUE;
-            }
+            const sheet::LocalizedName* pArray = rSequence.getConstArray();
+            long i;
+
+            String aLangStr, aCountryStr;
+            ConvertLanguageToIsoNames( eDestLang, aLangStr, aCountryStr );
+            rtl::OUString aUserLang = aLangStr.ToLowerAscii();
+            rtl::OUString aUserCountry = aCountryStr.ToUpperAscii();
+
+            //  first check for match of both language and country
+
+            for ( i=0; i<nSeqLen; i++)
+                if ( pArray[i].Locale.Language == aUserLang &&
+                     pArray[i].Locale.Country  == aUserCountry )
+                {
+                    rRetExcelName = pArray[i].Name;
+                    return TRUE;
+                }
+
+            //  second: check only language
+
+            for ( i=0; i<nSeqLen; i++)
+                if ( pArray[i].Locale.Language == aUserLang )
+                {
+                    rRetExcelName = pArray[i].Name;
+                    return TRUE;
+                }
+
+            //  third: use first (default) entry
+
+            rRetExcelName = pArray[0].Name;
+            return TRUE;
         }
     }
-
     return FALSE;
 }
 
-BOOL ScUnoAddInCollection::GetCalcName( const String& r, String& rRet )
+BOOL ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rRetCalcName )
 {
     if (!bInitialized)
         Initialize();
 
-    if (nFuncCount > 0)
+    String aUpperCmp = rExcelName;
+    ScGlobal::pCharClass->toUpper(aUpperCmp);
+
+    for (long i=0; i<nFuncCount; i++)
     {
-        ScUnoAddInFuncData* p;
-        for (long i=0; i<nFuncCount; i++)
+        ScUnoAddInFuncData* pFuncData = ppFuncData[i];
+        if ( pFuncData )
         {
-            p = ppFuncData[i];
-            if ( p && p->HasFunctionalityOf( r ) )
+            const uno::Sequence<sheet::LocalizedName>& rSequence = pFuncData->GetCompNames();
+            long nSeqLen = rSequence.getLength();
+            if ( nSeqLen )
             {
-                rRet = p->GetOriginalName();
-                return TRUE;
+                const sheet::LocalizedName* pArray = rSequence.getConstArray();
+                for ( long i=0; i<nSeqLen; i++)
+                    if ( ScGlobal::pCharClass->upper( pArray[i].Name ) == aUpperCmp )
+                    {
+                        //! store upper case for comparing?
+
+                        //  use the first function that has this name for any language
+                        rRetCalcName = pFuncData->GetOriginalName();
+                        return TRUE;
+                    }
             }
         }
     }
-
     return FALSE;
 }
 
@@ -1096,15 +1171,15 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix( nMaxColCount, nRowCount );
+                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const INT32* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol], nCol, nRow );
+                                pMatrix->PutDouble( pColArr[nCol], (USHORT)nCol, (USHORT)nRow );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0, nCol, nRow );
+                                pMatrix->PutDouble( 0.0, (USHORT)nCol, (USHORT)nRow );
                         }
                     }
                 }
@@ -1132,15 +1207,15 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix( nMaxColCount, nRowCount );
+                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol], nCol, nRow );
+                                pMatrix->PutDouble( pColArr[nCol], (USHORT)nCol, (USHORT)nRow );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0, nCol, nRow );
+                                pMatrix->PutDouble( 0.0, (USHORT)nCol, (USHORT)nRow );
                         }
                     }
                 }
@@ -1168,16 +1243,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix( nMaxColCount, nRowCount );
+                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
                                 pMatrix->PutString( String( pColArr[nCol] ),
-                                    nCol, nRow );
+                                    (USHORT)nCol, (USHORT)nRow );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING, nCol, nRow );
+                                pMatrix->PutString( EMPTY_STRING, (USHORT)nCol, (USHORT)nRow );
                         }
                     }
                 }
@@ -1206,7 +1281,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     if ( nMaxColCount && nRowCount )
                     {
                         rtl::OUString aUStr;
-                        pMatrix = new ScMatrix( nMaxColCount, nRowCount );
+                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1217,20 +1292,20 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                                 //if ( pRefl->equals( *OUString_getReflection() ) )
                                 if ( pColArr[nCol] >>= aUStr )
                                     pMatrix->PutString( String( aUStr ),
-                                        nCol, nRow );
+                                        (USHORT)nCol, (USHORT)nRow );
                                 else
                                 {
                                     // try to convert to double, empty if not possible
 
                                     double fCellVal;
                                     if ( lcl_ConvertToDouble( pColArr[nCol], fCellVal ) )
-                                        pMatrix->PutDouble( fCellVal, nCol, nRow );
+                                        pMatrix->PutDouble( fCellVal, (USHORT)nCol, (USHORT)nRow );
                                     else
-                                        pMatrix->PutEmpty( nCol, nRow );
+                                        pMatrix->PutEmpty( (USHORT)nCol, (USHORT)nRow );
                                 }
                             }
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING, nCol, nRow );
+                                pMatrix->PutString( EMPTY_STRING, (USHORT)nCol, (USHORT)nRow );
                         }
                     }
                 }
