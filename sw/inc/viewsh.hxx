@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:06:34 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _VIEWSH_HXX
 #define _VIEWSH_HXX
-
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif
@@ -395,9 +394,9 @@ public:
     const SwAccessibilityOptions* GetAccessibilityOptions() const { return pAccOptions;}
 
     static void           SetShellRes( ShellResource* pRes ) { pShellRes = pRes; }
-    static ShellResource* GetShellRes() { return pShellRes; }
+    static ShellResource* GetShellRes(); //CHINA001 { return pShellRes; }
 
-    static void           SetCareWin( Window* pNew ) { pCareWindow = pNew; }
+    static void           SetCareWin( Window* pNew ); //CHINA001 { pCareWindow = pNew; }
     static Window*        GetCareWin(ViewShell& rVSh)
                         { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
     static Window*        CareChildWin(ViewShell& rVSh);
