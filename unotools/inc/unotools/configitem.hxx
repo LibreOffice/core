@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 10:58:24 $
+ *  last change: $Author: th $ $Date: 2001-05-10 11:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
@@ -129,11 +129,11 @@ namespace utl
             //                      "en-US"     "my name"
             void impl_packLocalizedProperties   (   const   com::sun::star::uno::Sequence< rtl::OUString >&             lInNames    ,
                                                     const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
-                                                               com::sun::star::uno::Sequence< com::sun::star::uno::Any >&   lOutValues  );
+                                                            com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
             void impl_unpackLocalizedProperties (   const   com::sun::star::uno::Sequence< rtl::OUString >&             lInNames    ,
-                                                       const    com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
-                                                               com::sun::star::uno::Sequence< rtl::OUString >&              lOutNames   ,
-                                                               com::sun::star::uno::Sequence< com::sun::star::uno::Any >&   lOutValues  );
+                                                    const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
+                                                            com::sun::star::uno::Sequence< rtl::OUString >&             lOutNames   ,
+                                                            com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
 
         protected:
             ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
@@ -181,7 +181,7 @@ namespace utl
             virtual ~ConfigItem();
 
             /** is called from the ConfigManager before application ends of from the
-                 PropertyChangeListener if the sub tree broadcasts changes. */
+                PropertyChangeListener if the sub tree broadcasts changes. */
             virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
             /** is called from the ConfigManager if it is destroyed before the ConfigItem. */
