@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 06:48:21 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 07:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,10 +265,6 @@ namespace dbaui
                 if (xDriverManager.is())
                 {   // we have a driver manager to check
                     ::rtl::OUString sURLPrefix = m_pCollection->getDatasourcePrefix(eType);
-#ifdef FS_PRIV_DEBUG
-                    if (sURLPrefix == ::rtl::OUString::createFromAscii("sdbc:adabas:"))
-                        sURLPrefix = ::rtl::OUString();
-#endif
                     if (!xDriverManager->getDriverByURL(sURLPrefix).is())
                         // we have no driver for this prefix
                         // -> omit it
@@ -1171,6 +1167,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/30 06:48:21  fs
+ *  #87531# +SERVICE_EXTENDED_ADABAS_DRIVER (instead of hard coding the string)
+ *
  *  Revision 1.4  2001/05/30 06:05:45  oj
  *  #87149# addressbook ui impl
  *
