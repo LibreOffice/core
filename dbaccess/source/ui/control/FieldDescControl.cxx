@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:18:38 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,6 +905,17 @@ void OFieldDescControl::ArrangeAggregates()
         { m_pAutoIncrementValue, m_pAutoIncrementValueText, 3 },
     };
 
+    long nMaxWidth = 0;
+    for (int i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    {
+        if (adAggregates[i].pctrlTextControl)
+        {
+            nMaxWidth = ::std::max<long>(OutputDevice::GetTextWidth(adAggregates[i].pctrlTextControl->GetText()),nMaxWidth);
+        }
+    }
+
+    OSL_ENSURE(nMaxWidth != 0,"Invalid width!");
+
     // und los ...
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = NULL;
@@ -959,8 +970,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pDefaultText->SetText( ModuleRes(STR_DEFAULT_VALUE) );
         pDefault = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
         pDefault->SetHelpId(HID_TAB_ENT_DEFAULT);
-        SetPosSize( (Control**)&pDefaultText, m_nPos, 0 );
-        SetPosSize( (Control**)&pDefault, m_nPos, 3 );
+        //  SetPosSize( (Control**)&pDefaultText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pDefault, m_nPos, 3 );
 
         pDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -976,8 +987,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_pAutoIncrementValueText->SetText( ModuleRes(STR_AUTOINCREMENT_VALUE) );
         m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PRPOERTY_AUTOINCREMENT, WB_BORDER );
         m_pAutoIncrementValue->SetHelpId(HID_TAB_AUTOINCREMENTVALUE);
-        SetPosSize( (Control**)&m_pAutoIncrementValueText, m_nPos, 0 );
-        SetPosSize( (Control**)&m_pAutoIncrementValue, m_nPos, 3 );
+        //  SetPosSize( (Control**)&m_pAutoIncrementValueText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&m_pAutoIncrementValue, m_nPos, 3 );
 
         m_pAutoIncrementValue->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pAutoIncrementValue->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1006,8 +1017,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             pRequired->SelectEntryPos(1);
             pRequired->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-            SetPosSize( (Control**)&pRequiredText, m_nPos, 0 );
-            SetPosSize( (Control**)&pRequired, m_nPos, 2 );
+            //  SetPosSize( (Control**)&pRequiredText, m_nPos, 0 );
+            //  SetPosSize( (Control**)&pRequired, m_nPos, 2 );
 
             pRequired->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
             pRequired->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1032,8 +1043,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pAutoIncrement->SelectEntryPos(0);
         pAutoIncrement->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        SetPosSize( (Control**)&pAutoIncrementText, m_nPos, 0 );
-        SetPosSize( (Control**)&pAutoIncrement, m_nPos, 2 );
+        //  SetPosSize( (Control**)&pAutoIncrementText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pAutoIncrement, m_nPos, 2 );
 
         pAutoIncrement->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pAutoIncrement->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1056,8 +1067,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pTextLen->SetStrictFormat(TRUE);
 
         pTextLen->SetHelpId(HID_TAB_ENT_TEXT_LEN);
-        SetPosSize( (Control**)&pTextLenText, m_nPos, 0 );
-        SetPosSize( (Control**)&pTextLen, m_nPos, 1 );
+        //  SetPosSize( (Control**)&pTextLenText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pTextLen, m_nPos, 1 );
 
         pTextLen->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pTextLen->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1084,8 +1095,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_pType->SelectEntryPos(0);
         m_pType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        SetPosSize( (Control**)&m_pTypeText, m_nPos, 0 );
-        SetPosSize( (Control**)&m_pType, m_nPos, 2 );
+        //  SetPosSize( (Control**)&m_pTypeText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&m_pType, m_nPos, 2 );
 
         m_pType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1113,8 +1124,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 
-        SetPosSize( (Control**)&m_pColumnNameText, m_nPos, 0 );
-        SetPosSize( (Control**)&m_pColumnName, m_nPos, 1 );
+        //  SetPosSize( (Control**)&m_pColumnNameText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&m_pColumnName, m_nPos, 1 );
 
         m_pColumnName->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pColumnName->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1141,8 +1152,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pNumType->SelectEntryPos(2);
         pNumType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        SetPosSize( (Control**)&pNumTypeText, m_nPos, 0 );
-        SetPosSize( (Control**)&pNumType, m_nPos, 1 );
+        //  SetPosSize( (Control**)&pNumTypeText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pNumType, m_nPos, 1 );
 
         pNumType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pNumType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1165,8 +1176,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pLength->SetStrictFormat(TRUE);
 
         pLength->SetHelpId(HID_TAB_ENT_LEN);
-        SetPosSize( (Control**)&pLengthText, m_nPos, 0 );
-        SetPosSize( (Control**)&pLength, m_nPos, 1 );
+        //  SetPosSize( (Control**)&pLengthText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pLength, m_nPos, 1 );
 
         pLength->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pLength->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1189,8 +1200,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         pScale->SetHelpId(HID_TAB_ENT_SCALE);
 
-        SetPosSize( (Control**)&pScaleText, m_nPos, 0 );
-        SetPosSize( (Control**)&pScale, m_nPos, 1 );
+        //  SetPosSize( (Control**)&pScaleText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pScale, m_nPos, 1 );
 
         pScale->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pScale->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1241,8 +1252,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pBoolDefault->InsertEntry(aYes);
         pBoolDefault->InsertEntry(aNo);
         pBoolDefault->SetHelpId(HID_TAB_ENT_BOOL_DEFAULT);
-        SetPosSize( (Control**)&pBoolDefaultText, m_nPos, 0 );
-        SetPosSize( (Control**)&pBoolDefault, m_nPos, 3 );
+        //  SetPosSize( (Control**)&pBoolDefaultText, m_nPos, 0 );
+        //  SetPosSize( (Control**)&pBoolDefault, m_nPos, 3 );
 
         pBoolDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pBoolDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1468,6 +1479,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     {
     case 0:
         aPosition.X() = 0;
+        aPosition.Y() = 1;
         break;
     case 1:
     case 2:
@@ -1485,7 +1497,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         aPosition.X() = 0;
     }
 
-    aPosition.Y() = ((nRow+1)*CONTROL_SPACING_Y) +
+    aPosition.Y() += ((nRow+1)*CONTROL_SPACING_Y) +
                     (nRow*CONTROL_HEIGHT);
 
     //////////////////////////////////////////////////////////////////////
