@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-25 08:06:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #endif
 
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -237,18 +240,35 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         try
         {
-            Reference< provider::XScriptProviderSupplier > xSPS =
-                Reference< provider::XScriptProviderSupplier >
-                    ( xModel, UNO_QUERY );
-
-            if ( !xSPS.is() )
+            Reference< provider::XScriptProvider > xScriptProvider;
+            if ( xModel.is() )
             {
-                OSL_TRACE("SFURL_firing_impl(): Failed to get XScriptProvider");
-                return;
+                Reference< provider::XScriptProviderSupplier > xSupplier( xModel, UNO_QUERY );
+                OSL_ENSURE( xSupplier.is(), "SFURL_firing_impl: failed to get script provider supplier" );
+                if ( xSupplier.is() )
+                    xScriptProvider.set( xSupplier->getScriptProvider() );
             }
-
-            Reference< provider::XScriptProvider > xScriptProvider =
-                xSPS->getScriptProvider();
+            else
+            {
+                Reference< XComponentContext > xContext;
+                Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+                OSL_ASSERT( xProps.is() );
+                OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ) >>= xContext );
+                if ( xContext.is() )
+                {
+                    Reference< provider::XScriptProviderFactory > xFactory(
+                        xContext->getValueByName(
+                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ) ),
+                        UNO_QUERY );
+                    OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
+                    if ( xFactory.is() )
+                    {
+                        Any aCtx;
+                        aCtx <<= ::rtl::OUString::createFromAscii( "user" );
+                        xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
+                    }
+                }
+            }
 
             if ( !xScriptProvider.is() )
             {
