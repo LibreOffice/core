@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 10:22:01 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 10:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case PRODUCTEXTENSION:  sPath += C2U("Setup/Product"); break;
         case OFFICEINSTALL:
         case OFFICEINSTALLURL:  sPath += C2U("Office.Common/Path/Current"); break;
+        case DEFAULTCURRENCY:   sPath += C2U("Setup/L10N"); break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
@@ -503,6 +504,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case USERINSTALLURL:    sProperty = C2U("InstallURL"); break;
             case OFFICEINSTALLURL:  sProperty = C2U("OfficeInstallURL"); break;
 #endif
+            case DEFAULTCURRENCY:   sProperty += C2U("ooSetupCurrency"); break;
         }
         try
         {
@@ -510,6 +512,14 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         }
         catch(Exception&)
         {
+            OSL_ENSURE( sal_False,
+                (   ::rtl::OString( "ConfigManager::GetDirectConfigProperty: could not retrieve the property \"" )
+                +=  ::rtl::OString( sProperty.getStr(), sProperty.getLength(), RTL_TEXTENCODING_ASCII_US )
+                +=  ::rtl::OString( "\" under \"" )
+                +=  ::rtl::OString( sPath.getStr(), sPath.getLength(), RTL_TEXTENCODING_ASCII_US )
+                +=  ::rtl::OString( "\" (caught an exception)!" )
+                ).getStr()
+            );
         }
     }
 
