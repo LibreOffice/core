@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 14:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1533,7 +1533,7 @@ BOOL ScViewFunc::InsertTables(SvStrings *pNames, USHORT nTab,
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
-    if (bRecord && pDoc->IsUndoEnabled())
+    if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
     SvStrings *pNameList= NULL;
@@ -1606,7 +1606,7 @@ BOOL ScViewFunc::AppendTable( const String& rName, BOOL bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc   = pDocSh->GetDocument();
-    if (bRecord && pDoc->IsUndoEnabled())
+    if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
     WaitObject aWait( GetFrameWin() );
@@ -1659,7 +1659,7 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
     USHORT      nNewTab = TheTabs[0];
     int         i;
     WaitObject aWait( GetFrameWin() );
-    if (bRecord && pDoc->IsUndoEnabled())
+    if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
     while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
