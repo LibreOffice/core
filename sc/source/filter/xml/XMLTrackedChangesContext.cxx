@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
+ *  last change: $Author: rt $ $Date: 2001-02-01 15:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
