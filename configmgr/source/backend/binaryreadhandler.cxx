@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreadhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:45:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,33 +111,109 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        bool BinaryReadHandler::verifyFileHeader(rtl::OUString const & _aOwnerEntity,
-                                                 rtl::OUString const & _aLocale)
+        static inline
+        bool isRequestingNoLocale(localehelper::Locale const & aRequestedLocale)
+        {
+            OUString const & aLanguage = aRequestedLocale.Language;
+            return aLanguage.getLength() == 0 || localehelper::isDefaultLanguage(aLanguage);
+        }
+        // -----------------------------------------------------------------------------
+
+        static
+        bool supportsLocale(uno::Sequence< OUString > const & aStoredLocales, OUString const & aRequestedLocale)
+        {
+            for (sal_Int32 ix=0; ix<aStoredLocales.getLength(); ++ix)
+                if (aStoredLocales[ix].equalsIgnoreAsciiCase(aRequestedLocale))
+                    return true;
+
+            return false;
+        }
+        // -----------------------------------------------------------------------------
+
+        static
+        bool supportsAll(uno::Sequence< OUString > const & aStoredLocales, uno::Sequence< OUString > const & aRequestedLocales)
+        {
+            for (sal_Int32 jx=0; jx<aRequestedLocales.getLength(); ++jx)
+                if (!supportsLocale(aStoredLocales,aRequestedLocales[jx]))
+                    return false;
+
+            return true;
+        }
+        // -----------------------------------------------------------------------------
+
+        bool BinaryReadHandler::verifyFileHeader(  const uno::Reference<backenduno::XLayer> * pLayers,
+                                    sal_Int32 nNumLayers,
+                                    const OUString& _aOwnerEntity,
+                                    localehelper::Locale const & aRequestedLocale,
+                                    localehelper::LocaleSequence & outKnownLocales)
         {
             try
             {
                 //Open the reader
                 sal_Int16 nMagic, nVersion;
-                rtl::OUString aOwnerEntity;
-                rtl::OUString aLocale;
-
-                m_BinaryReader.read(aOwnerEntity);
-                if (!aOwnerEntity.equals(_aOwnerEntity))
-                    return false;
-
-                m_BinaryReader.read(aLocale);
-                if (!aLocale.equals(_aLocale))
-                    return false;
-
                 m_BinaryReader.read(nMagic);
                 m_BinaryReader.read(nVersion);
                 if (nMagic !=CFG_BINARY_MAGIC || nVersion != CFG_BINARY_VERSION )
                     return false;
 
+                rtl::OUString aOwnerEntity;
+                m_BinaryReader.read(aOwnerEntity);
+                if (!aOwnerEntity.equals(_aOwnerEntity))
+                    return false;
+
+                uno::Sequence< rtl::OUString > aAvailableLocales;
+                uno::Sequence< rtl::OUString > aKnownLocales;
+                m_BinaryReader.read(aKnownLocales);
+                m_BinaryReader.read(aAvailableLocales);
+                outKnownLocales = localehelper::makeLocaleSequence(aKnownLocales);
+
+                if (isRequestingNoLocale(aRequestedLocale))
+                {
+                    // any existing combination of locales (including none) is valid
+                }
+                else if (!localehelper::designatesAllLocales(aRequestedLocale))
+                {
+                    // one particular locale requested
+                    OUString const aIsoLocale = localehelper::makeIsoLocale(aRequestedLocale);
+                    if (!supportsLocale(aKnownLocales,aIsoLocale))
+                    {
+                        // a locale we didn't load previously
+                        return false;
+                    }
+                    else if (! supportsLocale(aAvailableLocales,aIsoLocale))
+                    {
+                        // a locale we handled by fallback previously
+                        uno::Sequence< rtl::OUString > aNewlyAvailableLocales =
+                            getAvailableLocales(pLayers,nNumLayers);
+
+                        // ... and that has become available now
+                        if (supportsLocale(aNewlyAvailableLocales,aIsoLocale))
+                            return false;
+
+                        // ... or other new locales have been added
+                        if (!supportsAll(aAvailableLocales,aNewlyAvailableLocales))
+                            return false;
+                    }
+                }
+                else
+                {
+                    uno::Sequence< rtl::OUString > aNewlyAvailableLocales =
+                        getAvailableLocales(pLayers,nNumLayers);
+
+                    // not all locales were requested yet
+                    if (!supportsAll(aKnownLocales,aNewlyAvailableLocales))
+                        return false;
+
+                    // new locales have been added
+                    if (!supportsAll(aAvailableLocales,aNewlyAvailableLocales))
+                        return false;
+                }
+
                 rtl::OUString aComponentName;
                 m_BinaryReader.read(aComponentName);
                 if (!aComponentName.equals(m_aComponentName))
                     return false;
+
                 return true;
             }
             catch (uno::Exception &)
@@ -552,7 +628,8 @@ namespace configmgr
         bool BinaryReadHandler::validateHeader( const uno::Reference<backenduno::XLayer> * pLayers,
                                                 sal_Int32 nNumLayers,
                                                 const OUString& _aOwnerEntity,
-                                                const OUString& _aLocale)
+                                                localehelper::Locale const & aRequestedLocale,
+                                                localehelper::LocaleSequence & outKnownLocales)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
 
@@ -560,7 +637,7 @@ namespace configmgr
             if (!m_BinaryReader.open())
                 return false;
 
-            if(!this->verifyFileHeader(_aOwnerEntity, _aLocale))
+            if(!this->verifyFileHeader(pLayers, nNumLayers, _aOwnerEntity, aRequestedLocale, outKnownLocales))
                 return false;
 
             //Check if layers are uptodate
