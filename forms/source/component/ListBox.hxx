@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:46:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
+#include <com/sun/star/awt/XListBox.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #endif
@@ -111,6 +114,11 @@
 #ifndef FORMS_ENTRYLISTHELPER_HXX
 #include "entrylisthelper.hxx"
 #endif
+#ifndef FORMS_SOURCE_INC_ASYNCNOTIFICATION_HXX
+#include "asyncnotification.hxx"
+#endif
+
+#include <memory>
 
 //.........................................................................
 namespace frm
@@ -251,17 +259,30 @@ private:
 //==================================================================
 //= OListBoxControl
 //==================================================================
-typedef ::cppu::ImplHelper3<    ::com::sun::star::awt::XFocusListener,
-                                ::com::sun::star::awt::XItemListener,
-                                ::com::sun::star::form::XChangeBroadcaster > OListBoxControl_BASE;
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XFocusListener
+                            ,   ::com::sun::star::awt::XItemListener
+                            ,   ::com::sun::star::awt::XListBox
+                            ,   ::com::sun::star::form::XChangeBroadcaster
+                            >   OListBoxControl_BASE;
+
+class ChangeListeners;
+class ItemListeners;
 
 class OListBoxControl   :public OBoundControl
                         ,public OListBoxControl_BASE
+                        ,public IEventProcessor
 {
-    ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
+private:
+    ::std::auto_ptr< ChangeListeners >      m_pChangeListeners;
+    ::std::auto_ptr< ItemListeners >        m_pItemListeners;
 
     ::com::sun::star::uno::Any              m_aCurrentSelection;
     Timer                                   m_aChangeTimer;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >
+                                            m_xAggregateListBox;
+
+    AsyncEventNotifier*                     m_pItemBroadcaster;
 
 protected:
     // UNO Anbindung
@@ -280,7 +301,7 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 // XChangeBroadcaster
-    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
 // XFocusListener
@@ -295,6 +316,35 @@ public:
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
+
+// XListBox
+    virtual void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItem( const ::rtl::OUString& aItem, ::sal_Int16 nPos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aItems, ::sal_Int16 nPos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getItemCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getItem( ::sal_Int16 nPos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getItems(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getSelectedItemPos(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSelectedItemsPos(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getSelectedItem(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedItems(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectItemPos( ::sal_Int16 nPos, ::sal_Bool bSelect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectItemsPos( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& aPositions, ::sal_Bool bSelect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectItem( const ::rtl::OUString& aItem, ::sal_Bool bSelect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isMutipleMode(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMultipleMode( ::sal_Bool bMulti ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 nLines ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL makeVisible( ::sal_Int16 nEntry ) throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    // IEventProcessor
+    virtual void processEvent( const EventReference& _rEvent );
+    virtual XComponentRef getComponent();
 
 private:
     DECL_LINK( OnTimeout, void* );
