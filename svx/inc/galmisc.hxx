@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 08:58:23 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ protected:
 #define GALLERY_HINT_THEME_RENAMED      0x00000004
 #define GALLERY_HINT_THEME_CREATED      0x00000008
 #define GALLERY_HINT_THEME_UPDATEVIEW   0x00000010
+#define GALLERY_HINT_CLOSE_OBJECT       0x00000020
+#define GALLERY_HINT_OBJECT_REMOVED     0x00000040
 
 // -----------------------------------------------------------------------------
 
