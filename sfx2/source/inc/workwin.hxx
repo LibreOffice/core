@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:15:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,10 @@ protected:
     BOOL                    bIsFullScreen : 1;
     BOOL                    bShowStatusBar : 1;
     BOOL                    bLocked : 1;
+    rtl::OUString           m_aStatusBarResName;
+    rtl::OUString           m_aLayoutManagerPropName;
+    rtl::OUString           m_aTbxTypeName;
+    rtl::OUString           m_aProgressBarResName;
 
 protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,BOOL);
