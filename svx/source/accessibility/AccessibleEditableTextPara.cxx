@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-27 16:41:00 $
+ *  last change: $Author: thb $ $Date: 2002-05-31 13:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,9 +646,10 @@ namespace accessibility
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // Get the string from the resource for the specified id.
-        String sStr(SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION));
+        String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION ) );
+        String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
         sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
-                               String( ::rtl::OUString::valueOf( GetParagraphIndex() ) ) );
+                               sParaIndex );
 
         // append first 40 characters from text, or first line, if shorter
         // (writer takes first sentence here, but that's not supported
@@ -686,9 +687,10 @@ namespace accessibility
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // Get the string from the resource for the specified id.
-        String sStr(SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_NAME));
+        String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_NAME) );
+        String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
         sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
-                               String( ::rtl::OUString::valueOf( GetParagraphIndex() ) ) );
+                               sParaIndex );
 
         return ::rtl::OUString( sStr );
     }
