@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:15:37 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifndef _WINDOW_HXX //autogen
+#include <vcl/window.hxx>
 #endif
 
 #ifndef _CHARATR_HXX
@@ -907,11 +910,33 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
         rInf.SetLen( nLn );
 
     FontUnderline nOldUnder;
+    SwFont* pUnderFnt = 0;
 
-    if( rInf.GetSpecialUnderline() )
+    if( rInf.GetUnderFnt() )
     {
         nOldUnder = GetUnderline();
         SetUnderline( UNDERLINE_NONE );
+        pUnderFnt = rInf.GetUnderFnt();
+
+        // !!! In case the font color and the underline color are both
+        // COL_AUTO, we set the color
+        if( COL_AUTO == GetColor().GetColor() )
+        {
+            ViewShell* pSh = rInf.GetShell();
+            ColorData nNewColor;
+            if( pSh && pSh->GetWin() )
+            {
+                const StyleSettings& rS = pSh->GetWin()->GetSettings().GetStyleSettings();
+                nNewColor = rInf.GetDarkBack()
+                    ? COL_WHITE : rS.GetWindowTextColor().GetColor();
+            }
+            else
+                nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
+
+            pUnderFnt->SetColor( Color( nNewColor ) );
+        }
+        else
+            pUnderFnt->SetColor( GetColor() );
     }
 
     if( !pLastFont || pLastFont->GetOwner()!=pMagic )
@@ -944,16 +969,13 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     }
     rInf.SetPos( rOld );
 
-    if( rInf.GetSpecialUnderline() )
+    if( rInf.GetUnderFnt() && nOldUnder != UNDERLINE_NONE )
     {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         Size aSize = _GetTxtSize( rInf );
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-        short nOldEsc = GetEscapement();
-        BYTE nOldProp = GetPropr();
-        BOOL bOldWord = IsWordLineMode();
-        SetWordLineMode( FALSE );
+
         xub_StrLen nOldIdx = rInf.GetIdx();
         xub_StrLen nOldLen = rInf.GetLen();
         long nSpace = 0;
@@ -970,19 +992,16 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         rInf.SetText( aStr );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
-        SetProportion( 100 );
-        SetEscapement( 0 );
         SetUnderline( nOldUnder );
         rInf.SetWidth( USHORT(aSize.Width() + nSpace) );
-        rInf.SetSpecialUnderline( FALSE );
-        _DrawStretchText( rInf );
-        rInf.SetSpecialUnderline( TRUE );
+        rInf.SetUnderFnt( 0 );
+
+        pUnderFnt->_DrawStretchText( rInf );
+
+        rInf.SetUnderFnt( pUnderFnt );
         rInf.SetText( rOldStr );
-        SetProportion( nOldProp );
-        SetEscapement( nOldEsc );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
-        SetWordLineMode( bOldWord );
     }
 }
 
@@ -992,11 +1011,13 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         return;
 
     FontUnderline nOldUnder;
+    SwFont* pUnderFnt = 0;
 
-    if( rInf.GetSpecialUnderline() )
+    if( rInf.GetUnderFnt() )
     {
         nOldUnder = GetUnderline();
         SetUnderline( UNDERLINE_NONE );
+        pUnderFnt = rInf.GetUnderFnt();
     }
 
     if ( !pLastFont || pLastFont->GetOwner() != pMagic )
@@ -1027,32 +1048,25 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
                             rInf.GetText() ), rInf.GetIdx(), rInf.GetLen() );
     }
 
-    if( rInf.GetSpecialUnderline() )
+    if( rInf.GetUnderFnt() && nOldUnder != UNDERLINE_NONE )
     {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-        short nOldEsc = GetEscapement();
-        BYTE nOldProp = GetPropr();
-        BOOL bOldWord = IsWordLineMode();
-        SetWordLineMode( FALSE );
         xub_StrLen nOldIdx = rInf.GetIdx();
         xub_StrLen nOldLen = rInf.GetLen();
         rInf.SetText( aStr );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
-        SetProportion( 100 );
-        SetEscapement( 0 );
         SetUnderline( nOldUnder );
-        rInf.SetSpecialUnderline( FALSE );
-        _DrawStretchText( rInf );
-        rInf.SetSpecialUnderline( TRUE );
+        rInf.SetUnderFnt( 0 );
+
+        pUnderFnt->_DrawStretchText( rInf );
+
+        rInf.SetUnderFnt( pUnderFnt );
         rInf.SetText( rOldStr );
-        SetProportion( nOldProp );
-        SetEscapement( nOldEsc );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
-        SetWordLineMode( bOldWord );
     }
 }
 
@@ -1155,3 +1169,4 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
         }
     }
 }
+

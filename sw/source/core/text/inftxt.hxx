@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ protected:
     OutputDevice *pWin;
     OutputDevice *pPrt;
     SwFont *pFnt;
+    SwFont *pUnderFnt; // Font for underlining
     SwTxtFrm *pFrm;
     const SwViewOption *pOpt;
     const XubString *pTxt;
@@ -220,7 +221,6 @@ protected:
     sal_Bool bNotEOL    : 1;
     sal_Bool bURLNotify : 1;
     sal_Bool bStopUnderFlow : 1;// Underflow gestoppt z.B. von einer FlyPortion
-    sal_Bool bSpecialUnderline : 1; // Hoch/Tief-Unterstreichung auf der Grundlinie
     sal_Bool bArrowDone : 1;    // Pfeil nach links bei gescrollten Absaetzen
     sal_Bool bFtnInside : 1;    // the current line contains a footnote
     sal_Bool bMulti : 1;        // inside a multiportion
@@ -265,9 +265,8 @@ public:
     inline void SetURLNotify( const sal_Bool bNew ) { bURLNotify = bNew; }
     inline sal_Bool StopUnderFlow() const { return bStopUnderFlow; }
     inline void SetStopUnderFlow( const sal_Bool bNew ) { bStopUnderFlow = bNew; }
-    inline sal_Bool SpecialUnderline() const { return bSpecialUnderline; }
-    inline void SetSpecialUnderline( const sal_Bool bNew )
-        { bSpecialUnderline = bNew; }
+    inline void SetUnderFnt( SwFont* pNew )
+        { pUnderFnt = pNew; }
     inline sal_Bool IsMulti() const { return bMulti; }
     inline void SetMulti( const sal_Bool bNew ) { bMulti = bNew; }
     inline sal_Bool IsFirstMulti() const { return bFirstMulti; }
@@ -299,6 +298,7 @@ public:
     inline const SwFont *GetFont() const { return pFnt; }
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     void SelectFont();
+    inline SwFont* GetUnderFnt() const { return pUnderFnt; }
     inline void SelectOut() const
     { if( pVsh ) ((SwTxtSizeInfo*)this)->_SelectOut(); }
 

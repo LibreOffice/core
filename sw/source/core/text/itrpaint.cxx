@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,27 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX //autogen
+#include <sfx2/printer.hxx>
+#endif
+#ifndef _FMTFTN_HXX //autogen
+#include <fmtftn.hxx>
+#endif
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>      // SwField
+#endif
+#ifndef _FMTHBSH_HXX //autogen
+#include <fmthbsh.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
 #include "txtcfg.hxx"
@@ -109,6 +130,23 @@
 #include "charfmt.hxx"  // SwFmtCharFmt
 #include "redlnitr.hxx" // SwRedlineItr
 #include "porrst.hxx"   // SwArrowPortion
+
+/*************************************************************************
+ *                  IsUnderlineBreak
+ *
+ * Returns, if we have an underline breaking situation
+ * Adding some more conditions here means you also have to change them
+ * in SwTxtPainter::CheckSpecialUnderline
+ *************************************************************************/
+sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
+{
+    return UNDERLINE_NONE == rFnt.GetUnderline() ||
+           rPor.IsFlyPortion() || rPor.IsFlyCntPortion() ||
+           rPor.IsBreakPortion() || rPor.IsMultiPortion() ||
+           rPor.IsHolePortion() || rPor.IsMarginPortion() ||
+           rFnt.GetEscapement() < 0 || rFnt.IsWordLineMode() ||
+           SVX_CASEMAP_KAPITAELCHEN == rFnt.GetCaseMap();
+}
 
 /*************************************************************************
  *                  SwTxtPainter::CtorInit()
@@ -193,6 +231,11 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
 void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const sal_Bool bUnderSz )
 {
+#ifdef DEBUG
+    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
+    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
+#endif
+
     // Adjustierung ggf. nachholen
     GetAdjusted();
     GetInfo().SetSpaceAdd( pCurr->GetpSpaceAdd() );
@@ -342,7 +385,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         DBG_LOOP;
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
-        GetInfo().SetSpecialUnderline( sal_False );
+
         const SwTwips nOldY = GetInfo().Y();
 
         if ( GetLineInfo().HasSpecialAlign() )
@@ -412,8 +455,17 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             pNext->PrePaint( GetInfo(), pPor );
         }
 
-        if( pFnt->GetEscapement() && UNDERLINE_NONE != pFnt->GetUnderline() )
-            CheckSpecialUnderline();
+        // We calculate a separate font for underlining. This font is valid for
+        // all underlined portions up to a portions with negative escapement,
+        // FlyPortions and FlyInCntPortions etc.
+        if ( IsUnderlineBreak( *pPor, *pFnt ) )
+        {
+            // delete underline font
+            delete GetInfo().GetUnderFnt();
+            GetInfo().SetUnderFnt( 0 );
+        }
+        else
+            CheckSpecialUnderline( pPor );
 
         if( pPor->IsMultiPortion() )
             PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
@@ -434,6 +486,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         pPor = !bDrawInWindow && GetInfo().X() > nMaxRight ? 0 : pNext;
     }
+
+    // delete underline font
+    delete GetInfo().GetUnderFnt();
+    GetInfo().SetUnderFnt( 0 );
 
     // paint remaining stuff
     if( bDrawInWindow )
@@ -487,48 +543,33 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 #endif
 }
 
-void SwTxtPainter::CheckSpecialUnderline()
+void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
 {
-    sal_Bool bSpecial = sal_False;
+    SwFont* pUnderlineFnt = 0;
+
+    Range aRange( 0, GetInfo().GetTxt().Len() );
+    MultiSelection aUnderMulti( aRange );
+    if( bUnderPara )
+        aUnderMulti.SelectAll();
+
+    SwTxtAttr* pTxtAttr;
     if( HasHints() )
     {
         sal_Bool bINet = sal_False;
-        MSHORT nTmp = 0;
-        Range aRange( 0, GetInfo().GetTxt().Len() );
-        MultiSelection aUnderMulti( aRange );
-        if( bUnderPara )
-            aUnderMulti.SelectAll();
-        MultiSelection aEscMulti( aRange );
-        if( bEscPara )
-            aEscMulti.SelectAll();
-        SwTxtAttr* pTxtAttr;
         sal_Bool bUnder = sal_False;
-        sal_Bool bEsc = sal_False;
+        MSHORT nTmp = 0;
+
         while( nTmp < pHints->GetStartCount() )
         {
             pTxtAttr = pHints->GetStart( nTmp++ );
             sal_Bool bUnderSelect;
-            sal_Bool bEscSelect;
             switch ( pTxtAttr->Which() )
             {
                 case RES_CHRATR_UNDERLINE:
                 {
                     bUnder = sal_True;
-                    bUnderSelect = UNDERLINE_NONE != pTxtAttr->GetUnderline().
-                                                          GetUnderline();
-                }
-                break;
-                case RES_CHRATR_ESCAPEMENT:
-                {
-                    bEsc = sal_True;
-                    bEscSelect = 0 != pTxtAttr->GetEscapement().GetEsc();
-                }
-                break;
-                case RES_TXTATR_FTN:
-                {
-                    xub_StrLen nStrt = *pTxtAttr->GetStart();
-                    Range aRg( nStrt, nStrt + 1 );
-                    aEscMulti.Select( aRg );
+                    bUnderSelect = pFnt->GetUnderline() == pTxtAttr->GetUnderline().
+                                                           GetUnderline();
                 }
                 break;
                 case RES_TXTATR_INETFMT: bINet = sal_True;
@@ -546,16 +587,9 @@ void SwTxtPainter::CheckSpecialUnderline()
                     if ( pFmt )
                     {
                         if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                            GetItemState( RES_CHRATR_ESCAPEMENT, sal_True, &pItem) )
-                        {
-                            bEscSelect = 0 !=
-                                ((SvxEscapementItem *)pItem)->GetEsc();
-                            bEsc = sal_True;
-                        }
-                        if( SFX_ITEM_SET == pFmt->GetAttrSet().
                             GetItemState( RES_CHRATR_UNDERLINE, sal_True, &pItem ) )
                         {
-                            bUnderSelect = UNDERLINE_NONE !=
+                            bUnderSelect = pFnt->GetUnderline() ==
                                  ((SvxUnderlineItem*)pItem)->GetUnderline();
                             bUnder = sal_True;
                         }
@@ -563,7 +597,7 @@ void SwTxtPainter::CheckSpecialUnderline()
                 }
                 break;
             }
-            if( bUnder || bEsc )
+            if( bUnder )
             {
                 xub_StrLen nSt = *pTxtAttr->GetStart();
                 xub_StrLen nEnd = *pTxtAttr->GetEnd();
@@ -572,50 +606,134 @@ void SwTxtPainter::CheckSpecialUnderline()
                     Range aTmp( nSt, nEnd - 1 );
                     if( bUnder )
                         aUnderMulti.Select( aTmp, bUnderSelect );
-                    if( bEsc )
-                        aEscMulti.Select( aTmp, bEscSelect );
                 }
                 bUnder = sal_False;
-                bEsc = sal_False;
             }
         }
-        MSHORT i;
-        xub_StrLen nEscStart = 0;
-        xub_StrLen nEscEnd = 0;
-        xub_StrLen nIndx = GetInfo().GetIdx();
-        MSHORT nCnt = (MSHORT)aEscMulti.GetRangeCount();
-        for( i = 0; i < nCnt; ++i )
-        {
-            const Range& rRange = aEscMulti.GetRange( i );
-            if( nEscEnd == rRange.Min() )
-                nEscEnd = rRange.Max();
-            else if( nIndx >= rRange.Min() )
-            {
-                nEscStart = rRange.Min();
-                nEscEnd = rRange.Max();
-            }
-            else
-                break;
-        }
-        xub_StrLen nUnderStart = 0;
-        xub_StrLen nUnderEnd = 0;
-        nCnt = (MSHORT)aUnderMulti.GetRangeCount();
-        for( i = 0; i < nCnt; ++i )
-        {
-            const Range& rRange = aUnderMulti.GetRange( i );
-            if( nUnderEnd == rRange.Min() )
-                nUnderEnd = rRange.Max();
-            else if( nIndx >= rRange.Min() )
-            {
-                nUnderStart = rRange.Min();
-                nUnderEnd = rRange.Max();
-            }
-            else
-                break;
-        }
-        bSpecial = nEscStart > nUnderStart || nEscEnd < nUnderEnd;
     }
-    if( bSpecial || ( GetRedln() && GetRedln()->ChkSpecialUnderline() ) )
-        GetInfo().SetSpecialUnderline( sal_True );
-}
 
+    MSHORT i;
+    xub_StrLen nIndx = GetInfo().GetIdx();
+    xub_StrLen nUnderStart = 0;
+    xub_StrLen nUnderEnd = 0;
+    MSHORT nCnt = (MSHORT)aUnderMulti.GetRangeCount();
+
+    // find the underline range the current portion is contained in
+    for( i = 0; i < nCnt; ++i )
+    {
+        const Range& rRange = aUnderMulti.GetRange( i );
+        if( nUnderEnd == rRange.Min() )
+            nUnderEnd = rRange.Max();
+        else if( nIndx >= rRange.Min() )
+        {
+            nUnderStart = rRange.Min();
+            nUnderEnd = rRange.Max();
+        }
+        else
+            break;
+    }
+
+    if ( GetStart() > nUnderStart )
+        nUnderStart = GetStart();
+
+    if ( GetEnd() && GetEnd() <= nUnderEnd )
+        nUnderEnd = GetEnd() - 1;
+
+    if ( nIndx > nUnderStart &&
+         ( nIndx <= nUnderEnd ||
+           // Special case: portion should be underlined but
+           // has no length. We choose the same underline font as for
+           // the last portion
+           ( nIndx == nUnderEnd + 1 && ! GetInfo().GetLen() ) ) &&
+         GetInfo().GetUnderFnt() )
+        // we do not need to build a new underlining font
+        return;
+
+    // check, if underlining is not isolated
+    if ( ( nIndx != nUnderStart || nIndx + GetInfo().GetLen() != nUnderEnd + 1 ) &&
+           nUnderEnd > nIndx )
+    {
+        //
+        // here starts the algorithm for calculating the underline font
+        //
+        OutputDevice* pOut = GetInfo().GetDoc()->GetPrt();
+
+        SwScriptInfo aScriptInfo;
+        SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
+                        aScriptInfo );
+
+        xub_StrLen nTmpIdx = nIndx;
+        ULONG nSumWidth = 0;
+        ULONG nSumHeight = 0;
+        ULONG nBold = 0;
+        ULONG nNormal = 0;
+        const ULONG nPorWidth = pPor->Width();
+
+        while( nTmpIdx <= nUnderEnd && pPor )
+        {
+            if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
+                pPor->IsBreakPortion() || pPor->IsMultiPortion() ||
+                pPor->IsHolePortion() )
+                break;
+
+            aIter.SeekAndChg( nTmpIdx, pOut );
+
+            if ( aIter.GetFnt()->GetEscapement() < 0 || pFnt->IsWordLineMode() ||
+                 SVX_CASEMAP_KAPITAELCHEN == pFnt->GetCaseMap() )
+                break;
+
+            if ( ! aIter.GetFnt()->GetEscapement() )
+            {
+                const ULONG nSize = pPor->Width();
+                nSumWidth += nSize;
+                // weighted sum of font heights
+                nSumHeight += nSize * aIter.GetFnt()->GetHeight();
+                if ( WEIGHT_NORMAL == aIter.GetFnt()->GetWeight() )
+                    nNormal += nSize;
+                else
+                    nBold += nSize;
+            }
+
+            nTmpIdx += pPor->GetLen();
+            pPor = pPor->GetPortion();
+        }
+
+        // resulting height
+        if ( nSumWidth && nSumWidth != nPorWidth )
+        {
+            const ULONG nAverageHeight = nSumHeight / nSumWidth;
+
+            pUnderlineFnt = new SwFont( *GetInfo().GetFont() );
+
+            // font height
+            const BYTE nActual = pUnderlineFnt->GetActual();
+            pUnderlineFnt->SetSize( Size( pUnderlineFnt->GetSize( nActual ).Width(),
+                                          nAverageHeight ), nActual );
+
+            // font weight
+            if ( nBold > nNormal )
+                pUnderlineFnt->SetWeight( WEIGHT_BOLD, nActual );
+            else
+                pUnderlineFnt->SetWeight( WEIGHT_NORMAL, nActual );
+        }
+    }
+
+    // an escaped redlined portion should also have a special underlining
+    if( ! pUnderlineFnt && pFnt->GetEscapement() > 0 && GetRedln() &&
+        GetRedln()->ChkSpecialUnderline() )
+        pUnderlineFnt = new SwFont( *pFnt );
+
+    delete GetInfo().GetUnderFnt();
+
+    if ( pUnderlineFnt )
+    {
+        pUnderlineFnt->SetProportion( 100 );
+        pUnderlineFnt->SetEscapement( 0 );
+        pUnderlineFnt->SetStrikeout( STRIKEOUT_NONE );
+
+        GetInfo().SetUnderFnt( pUnderlineFnt );
+    }
+    else
+        // I'm sorry, we do not have a special underlining font for you.
+        GetInfo().SetUnderFnt( 0 );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:16:50 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       pWin(((SwTxtSizeInfo&)rNew).GetWin()),
       pPrt(((SwTxtSizeInfo&)rNew).GetPrt()),
       pFnt(((SwTxtSizeInfo&)rNew).GetFont()),
+      pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
       pFrm(rNew.pFrm),
       pOpt(&rNew.GetOpt()),
       pTxt(&rNew.GetTxt()),
@@ -352,6 +353,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
 
     pFnt = pNewFnt;
+    pUnderFnt = 0;
 
     if( 0 == ( pPrt = pVsh ? pVsh->GetReferenzDevice():0 ) )
         pPrt = pNd->GetDoc()->GetPrt();
@@ -375,10 +377,10 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     nLen = nNewLen;
     bNotEOL = sal_False;
     bStopUnderFlow = sal_False;
-    bSpecialUnderline = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
     nDirection = DIR_LEFT2RIGHT;
+
     SetLen( GetMinLen( *this ) );
 }
 
@@ -391,6 +393,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       pWin(((SwTxtSizeInfo&)rNew).GetWin()),
       pPrt(((SwTxtSizeInfo&)rNew).GetPrt()),
       pFnt(((SwTxtSizeInfo&)rNew).GetFont()),
+      pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
       pFrm( rNew.pFrm ),
       pOpt(&rNew.GetOpt()),
       pTxt(&rTxt),
@@ -644,7 +647,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
                              rText, nStart, nLen, rPor.Width(), bBullet );
     aDrawInf.SetLeft( GetPaintRect().Left() );
     aDrawInf.SetRight( GetPaintRect().Right() );
-    aDrawInf.SetSpecialUnderline( bSpecialUnderline );
+    aDrawInf.SetUnderFnt( pUnderFnt );
     aDrawInf.SetSpace( nSpaceAdd );
     aDrawInf.SetKanaComp( nComp );
 

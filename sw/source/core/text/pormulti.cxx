@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@
 #endif
 
 using namespace ::com::sun::star;
+extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
 /*-----------------10.10.00 15:23-------------------
  *  class SwMultiPortion
@@ -1366,6 +1367,10 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     sal_Bool bRest = pLay->IsRest();
     sal_Bool bFirst = sal_True;
 
+    // delete underline font
+    delete GetInfo().GetUnderFnt();
+    GetInfo().SetUnderFnt( 0 );
+
     do
     {
         if( rMulti.HasRotation() )
@@ -1380,7 +1385,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
-        GetInfo().SetSpecialUnderline( sal_False );
+
         if( bRest && pPor->InFldGrp() && !pPor->GetLen() )
         {
             if( ((SwFldPortion*)pPor)->HasFont() )
@@ -1408,8 +1413,18 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pNext->PrePaint( GetInfo(), pPor );
         }
 
-        if( pFnt->GetEscapement() && UNDERLINE_NONE != pFnt->GetUnderline() )
-            CheckSpecialUnderline();
+        if ( IsUnderlineBreak( *pPor, *pFnt ) )
+        {
+            // delete underline font
+            delete GetInfo().GetUnderFnt();
+            GetInfo().SetUnderFnt( 0 );
+        }
+        else
+        {
+            CheckSpecialUnderline( pPor );
+            if ( GetInfo().GetUnderFnt() && rMulti.IsDouble() )
+                 GetInfo().GetUnderFnt()->SetProportion( 50 );
+        }
 
         pPor->Paint( GetInfo() );
 
@@ -1429,6 +1444,10 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
             aManip.SecondLine();
+
+            // delete underline font
+            delete GetInfo().GetUnderFnt();
+            GetInfo().SetUnderFnt( 0 );
 
             if( rMulti.HasRotation() )
             {
@@ -1451,6 +1470,10 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             }
         }
     } while( pPor );
+
+    // delete underline font
+    delete GetInfo().GetUnderFnt();
+    GetInfo().SetUnderFnt( 0 );
 
     GetInfo().SetIdx( nOldIdx );
     GetInfo().Y( nOldY );

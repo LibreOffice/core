@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-14 06:28:00 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@
 #endif
 
 using namespace ::com::sun::star::i18n;
+extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
 #define MAX_TXTPORLEN 300
 
@@ -275,6 +276,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // Truncate() untergehen wird.
     rInf.SetUnderFlow(0);
     rInf.SetSoftHyphPos( nSoftHyphPos );
+    rInf.SetPaintOfst( GetLeftMargin() );
 
     // Wir suchen die Portion mit der Unterlaufposition
     SwLinePortion *pPor = pCurr->GetFirstPortion();
@@ -474,6 +476,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     SwLinePortion *pPor = NewPortion( rInf );
     sal_Bool bFull;
+    SwTwips nUnderLineStart = 0;
     rInf.Y( Y() );
 
     while( pPor && !rInf.IsStop() )
@@ -565,16 +568,35 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( rInf.IsRuby() && !rInf.GetRest() )
             bFull = sal_True;
 
+        // if we are underlined, we store the beginning of this underlined
+        // segment for repaint optimization
+        if ( UNDERLINE_NONE != pFnt->GetUnderline() && ! nUnderLineStart )
+            nUnderLineStart = GetLeftMargin() + rInf.X();
+
         if ( pPor->IsFlyPortion() )
             pCurr->SetFly( sal_True );
         // some special cases, where we have to take care for the repaint
         // offset:
-        // 1. Right Tab
-        // 2. Multiportions
+        // 1. Underlined portions due to special underline feature
+        // 2. Right Tab
+        // 3. Multiportions
+        else if ( ( ! rInf.GetPaintOfst() || nUnderLineStart < rInf.GetPaintOfst() ) &&
+                  // 1. Underlined portions
+                  nUnderLineStart &&
+                     // reformat is at end of an underlined portion and next portion
+                     // is not underlined
+                  ( ( rInf.GetReformatStart() == rInf.GetIdx() &&
+                      UNDERLINE_NONE == pFnt->GetUnderline()
+                    ) ||
+                     // reformat is inside portion and portion is underlined
+                    ( rInf.GetReformatStart() >= rInf.GetIdx() &&
+                      rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() &&
+                      UNDERLINE_NONE != pFnt->GetUnderline() ) ) )
+            rInf.SetPaintOfst( nUnderLineStart );
         else if (  ! rInf.GetPaintOfst() &&
-                   // 1. Right Tab
+                   // 2. Right Tab
                    ( ( pPor->InTabGrp() && !pPor->IsTabLeftPortion() ) ||
-                   // 2. Multi Portion
+                   // 3. Multi Portion
                      ( pPor->IsMultiPortion() &&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
@@ -583,6 +605,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             // we store the beginning of the critical portion as our
             // paint offset
             rInf.SetPaintOfst( GetLeftMargin() + rInf.X() );
+
+        // under one of these conditions we are allowed to delete the
+        // start of the underline portion
+        if ( IsUnderlineBreak( *pPor, *pFnt ) )
+            nUnderLineStart = 0;
 
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )

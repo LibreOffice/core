@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:21:21 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 13:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ class SwDrawTextInfo
     const SwWrongList* pWrong;
     const Size* pSize;
     SwFont *pFnt;
+    SwFont* pUnderFnt;
     xub_StrLen* pHyphPos;
     Fraction aZoom;
     long nLeft;
@@ -205,7 +206,6 @@ class SwDrawTextInfo
     short nKern;
     short nSpace;
     BOOL bBullet : 1;
-    BOOL bSpecialUnderline : 1;
     BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
     BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
     BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
@@ -241,10 +241,11 @@ public:
                     const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
                     USHORT nW = 0, BOOL bB = FALSE)
     {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
-        nLen = nL; nKern = 0; nCompress = 0; nWidth = nW; bBullet = bB;
-        bSpecialUnderline = bGreyWave = bDarkBack = FALSE;
+        nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
+        bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = FALSE;
 #ifndef PRODUCT
-        bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec = bGreyWv = TRUE;
+        bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec =
+            bGreyWv = TRUE;
         bPos = bWrong = bSize = bFnt = bAscent = bSpace = bUppr =
             bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = FALSE;
 #endif
@@ -294,6 +295,10 @@ public:
     SwFont* GetFont() const {
         ASSERT( bFnt, "DrawTextInfo: Undefined Font" );
         return pFnt;
+    }
+    SwFont* GetUnderFnt() const {
+        ASSERT( bSpec, "DrawTextInfo: Undefined Underlinefont" );
+        return pUnderFnt;
     }
     xub_StrLen GetIdx() const {
         ASSERT( bIdx, "DrawTextInfo: Undefined Index" );
@@ -350,10 +355,6 @@ public:
     BOOL GetBullet() const {
         ASSERT( bBull, "DrawTextInfo: Undefined Bulletflag" );
         return bBullet;
-    }
-    BOOL GetSpecialUnderline() const {
-        ASSERT( bSpec, "DrawTextInfo: Undefined Underlineflag" );
-        return bSpecialUnderline;
     }
     BOOL GetUpper() const {
         ASSERT( bUppr, "DrawTextInfo: Undefined Upperflag" );
@@ -479,7 +480,7 @@ public:
         bBull = TRUE;
 #endif
     }
-    void SetSpecialUnderline( BOOL bNew ){ bSpecialUnderline = bNew;
+    void SetUnderFnt( SwFont* pFnt ){ pUnderFnt = pFnt;
 #ifndef PRODUCT
         bSpec = TRUE;
 #endif
@@ -504,4 +505,3 @@ public:
 };
 
 #endif
-
