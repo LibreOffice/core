@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:17:28 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,11 +242,11 @@ ModalDialog DLG_FILTERCRIT
     Text[ polish ] ="Filtr";
     Text[ portuguese_brazilian ] ="Filtro";
     Text[ japanese ] ="標準フィルタ";
-    Text[ chinese_simplified ] ="标准筛选";
+    Text[ chinese_simplified ] ="默认筛选";
     Text[ chinese_traditional ] ="標準篩選";
     Text[ arabic ] ="����";
     Text[ dutch ] ="Filter";
-    Text[ chinese_simplified ] ="标准筛选";
+    Text[ chinese_simplified ] ="默认筛选";
     Text[ greek ] ="������";
     Text[ korean ] ="기본 필터";
     Text[ turkish ] ="Varsay�lan S�zge�";
