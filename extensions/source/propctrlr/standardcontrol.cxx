@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:12:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,7 +1208,7 @@ namespace pcr
             }
             else if (!m_bEdit)
             {
-                Selection aSel = GetSelection();
+                Selection aSel = m_pImplEdit->GetSelection();
                 if (aSel.Min()!=aSel.Max())
                 {
                     aSel.Min()=FindPos(aSel.Min());
