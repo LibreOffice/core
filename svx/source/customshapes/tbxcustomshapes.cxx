@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcustomshapes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:09:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,13 @@
  ************************************************************************/
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+
 #ifndef _SVX_SVXIDS_HRC
 #include <svxids.hrc>
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-// header for class SfxBoolItem
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
@@ -76,9 +76,17 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
-#include <sfx2/imagemgr.hxx>
+#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#include <sfx2/imagemgr.hxx>
 
 #pragma hdrstop
 
@@ -212,31 +220,27 @@ void SvxTbxCtlCustomShapes::Select( BOOL bMod1 )
 
 void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
-    //add this if you want to remind the last command
-    // m_aCommand = rCommand;
-    /*
-    // Our sub-toolbar wants to executes a function. We have to change
-    // the image of our toolbar button to reflect the new function.
+    // remind the new command
+    m_aCommand = rCommand;
+    // Our sub-toolbar wants to execute a function.
+    // We have to change the image of our toolbar button to reflect the new function.
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !m_bDisposed )
     {
-        if ( aCommand.getLength() > 0 )
+        if ( m_aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
+            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
     }
-    */
 }
 
 void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    //add code here to change the image according to the last command
-    /*
-    // We should update the button image of our parent (toolbar). Use the stored
-    // command to set the correct current image.
+    // We should update the button image of our parent (toolbar).
+    // Use the stored command to set the correct current image.
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_aCommand.getLength() > 0 )
     {
@@ -245,5 +249,5 @@ void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::un
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }
-    */
 }
+
