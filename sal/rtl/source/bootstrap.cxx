@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:27:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
             OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
             sal_Int32 nIndex = line.indexOf('=');
             struct rtl_bootstrap_NameValue nameValue;
-            if (nIndex >= 1 && nIndex +1 < line.getLength())
+            if (nIndex >= 1)
             {
                 nameValue.sName = OStringToOUString(
                     line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US );
@@ -394,7 +394,16 @@ sal_Bool Bootstrap_Impl::getValue(
     bool further_macro_expansion = true;
 
     OUString const & name = *reinterpret_cast< OUString const * >( &pName );
-    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ORIGIN") ))
+    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_CPPU_ENV") ))
+    {
+#define MSTR_(x) # x
+#define MSTR(x) MSTR_(x)
+#define STR_CPPU_ENV() MSTR(CPPU_ENV)
+        OUString val( RTL_CONSTASCII_USTRINGPARAM(STR_CPPU_ENV()) );
+        rtl_uString_assign( ppValue, val.pData );
+        further_macro_expansion = false;
+    }
+    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ORIGIN") ))
     {
         OUString iniPath;
         sal_Int32 last_slash = _iniName.lastIndexOf( '/' );
@@ -405,12 +414,6 @@ sal_Bool Bootstrap_Impl::getValue(
     }
     else
     {
-        if (0 != _base_ini)
-        {
-            if (_base_ini->getValue( pName, ppValue, pDefault ))
-                return sal_True;
-        }
-
         if (0 != *ppValue)
         {
             rtl_uString_release( *ppValue );
@@ -422,10 +425,9 @@ sal_Bool Bootstrap_Impl::getValue(
             getFromCommandLineArgs( ppValue, pName );
             if(!*ppValue)
             {
-                getFromList( &_nameValueList, ppValue, pName );
+                getFromEnvironment( ppValue, pName );
                 if( ! *ppValue )
                 {
-                    // fallbacks
                     if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG") ))
                     {
                         oslSecurity security = osl_getCurrentSecurity();
@@ -450,13 +452,21 @@ sal_Bool Bootstrap_Impl::getValue(
                     }
                     else
                     {
-                        getFromEnvironment( ppValue, pName );
+                        getFromList( &_nameValueList, ppValue, pName );
                         if( ! *ppValue )
                         {
-                            result = sal_False;
+                            if (_base_ini != 0 &&
+                                _base_ini->getValue(pName, ppValue, pDefault))
+                            {
+                                further_macro_expansion = false;
+                            }
+                            else
+                            {
+                                result = sal_False;
 
-                            if(pDefault)
-                                rtl_uString_assign( ppValue, pDefault );
+                                if(pDefault)
+                                    rtl_uString_assign( ppValue, pDefault );
+                            }
                         }
                     }
                 }
@@ -579,6 +589,23 @@ void SAL_CALL rtl_bootstrap_args_close( rtlBootstrapHandle handle )
     }
 }
 
+static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW( () )
+{
+    MutexGuard guard( Mutex::getGlobalMutex() );
+    static rtlBootstrapHandle s_handle = 0;
+    if (s_handle == 0)
+    {
+        s_handle = rtl_bootstrap_args_open( getIniFileNameImpl().pData );
+        if (s_handle == 0)
+        {
+            Bootstrap_Impl * that = new Bootstrap_Impl( getIniFileNameImpl() );
+            ++that->_nRefCount;
+            s_handle = static_cast<rtlBootstrapHandle>(that);
+        }
+    }
+    return s_handle;
+}
+
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue,
     rtl_uString *pDefault )
@@ -588,15 +615,10 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     sal_Bool found = sal_False;
     if(ppValue && pName)
     {
-        if(handle)
-        {
-            found = static_cast< Bootstrap_Impl * >( handle )->getValue(
-                pName, ppValue, pDefault );
-        }
-        else
-        {
-            found = rtl_bootstrap_get(pName, ppValue, pDefault);
-        }
+        if (handle == 0)
+            handle = get_static_bootstrap_handle();
+        found = static_cast< Bootstrap_Impl * >( handle )->getValue(
+            pName, ppValue, pDefault );
     }
 
     return found;
@@ -626,26 +648,10 @@ void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
     file = pName;
 }
 
-static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW( () )
-{
-    MutexGuard guard( Mutex::getGlobalMutex() );
-
-    static Bootstrap_Impl * pBootstrap_Impl = 0;
-
-    if(!pBootstrap_Impl)
-    {
-        static Bootstrap_Impl g_bootstrap_Impl (getIniFileNameImpl());
-        pBootstrap_Impl = &g_bootstrap_Impl;
-    }
-
-    return pBootstrap_Impl;
-}
-
 sal_Bool SAL_CALL rtl_bootstrap_get(
     rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
 {
-    return rtl_bootstrap_get_from_handle(
-        get_static_bootstrap_handle(), pName, ppValue, pDefault);
+    return rtl_bootstrap_get_from_handle(0, pName, ppValue, pDefault);
 }
 
 void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
