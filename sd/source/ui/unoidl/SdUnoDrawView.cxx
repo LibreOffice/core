@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:18:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
             break;
 
         case ViewShell::ST_IMPRESS:
+        case ViewShell::ST_DRAW:
             bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoDrawViewService );
             break;
 
@@ -418,18 +419,17 @@ Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
         || (meViewShellType == ViewShell::ST_HANDOUT)
         || (meViewShellType == ViewShell::ST_PRESENTATION)
            ? 2 : 1);
-    OUString* pServices = aServices.getArray();
 
     int nIndex = 0;
     switch (meViewShellType)
     {
         case ViewShell::ST_NOTES:
-            pServices[nIndex++] = OUString(
+            aServices[nIndex++] = OUString(
                 RTL_CONSTASCII_USTRINGPARAM(pImplSdUnoNotesViewService));
             break;
 
         case ViewShell::ST_HANDOUT:
-            pServices[nIndex++] = OUString(
+            aServices[nIndex++] = OUString(
                 RTL_CONSTASCII_USTRINGPARAM(pImplSdUnoHandoutViewService));
         break;
     }
@@ -439,8 +439,10 @@ Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
         case ViewShell::ST_NOTES:
         case ViewShell::ST_HANDOUT:
         case ViewShell::ST_IMPRESS:
-            pServices[nIndex] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM(pImplSdUnoDrawViewService));
+        case ViewShell::ST_DRAW:
+            aServices[nIndex] = OUString(
+                   RTL_CONSTASCII_USTRINGPARAM(pImplSdUnoDrawViewService));
+            break;
     }
 
     return aServices;
