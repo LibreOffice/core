@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: Connection.idl,v $
+ *  $RCSfile: SingleSelectQueryAnalyzer.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-19 11:05:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-19 11:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,75 +58,47 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_Connection_idl__
-#define __com_sun_star_sdb_Connection_idl__
+#ifndef __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
+#define __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
-#include <com/sun/star/container/XChild.idl>
+#ifndef __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
 #endif
 
-#ifndef __com_sun_star_sdbc_Connection_idl__
-#include <com/sun/star/sdbc/Connection.idl>
-#endif
-
-#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__
-#include <com/sun/star/sdbcx/DatabaseDefinition.idl>
-#endif
-
-module com {  module sun {  module star {  module lang {
-    interface XMultiServiceFactory;
+ module com {  module sun {  module star {  module sdbcx {
+interface XTablesSupplier;
+interface XColumnsSupplier;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
 
-interface XSQLQueryComposerFactory;
-interface XQueriesSupplier;
-interface XCommandPreparation;
+ interface XParametersSupplier;
+/** represents a service for analyzing a single select statement.
 
+    <p>
+    It hides the complexity of parsing and evaluating a single select statement and provides
+    sophisticated methods for accessing a statements filter, group by, having and order
+    criteria, as well as the corresponding select columns and tables.
+    If supported, it even gives access to the parameters.
+    </p>
 
-// DocMerge from xml: service com::sun::star::sdb::Connection
-/** extends the
-    <type scope="com::sun::star::sdbc">Connection</type>
-    of SDBC by providing the data definitions of a connected database.
+    @see com::sun::star::sdb::SingleSelectQueryComposer
  */
-service Connection
+service SingleSelectQueryAnalyzer
 {
-    // DocMerge: empty anyway
-    service com::sun::star::sdbc::Connection;
+    interface XSingleSelectQueryAnalyzer;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::container::XChild
-    /** access to the owning data source.
+    /** access to the selected tables.
      */
-    interface com::sun::star::container::XChild;
+    interface com::sun::star::sdbcx::XTablesSupplier;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XCommandPreparation
-    /** interface for complex command execution.
+    /** access the selected columns.
      */
-    interface XCommandPreparation;
+    interface com::sun::star::sdbcx::XColumnsSupplier;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: service com::sun::star::sdbcx::DatabaseDefinition
-    /** access to the database definition information of the connection.
+    /** access to the parameters which are used in the where clause.
      */
-    service com::sun::star::sdbcx::DatabaseDefinition;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XQueriesSupplier
-    /** returns a container of associated queries.
-     */
-    interface XQueriesSupplier;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XSQLQueryComposerFactory
-    /** returns a tool for composing queries.
-     */
-    interface XSQLQueryComposerFactory;
-
-    /** allows the creation of different services which can only exists with a connection.
-     */
-    [optional] interface com::sun::star::lang::XMultiServiceFactory;
+    [optional] interface com::sun::star::sdb::XParametersSupplier;
 };
 
 //=============================================================================

@@ -1,0 +1,251 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSingleSelectQueryComposer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-12-19 11:05:40 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
+#define __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+
+/** simplifies the composing of single select statements.
+
+    <p>
+    The interface can be used for composing single SELECT statements without knowing the
+    structure of the used query.
+    </p>
+
+    @see com::sun::star::sdb::SingleSelectQueryComposer
+ */
+interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    // FILTER
+    //-------------------------------------------------------------------------
+
+    /** makes it possible to set a filter condition for the query.
+        @param filter
+            the filter to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't valid
+            or the statement isn't parseable.
+     */
+    void setFilter([in] string filter)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new set of filter criteria which is split into levels.
+        @param filter
+            The filter criteria is split into levels. Each level represents the
+            OR criterias. Within each level, the filters are provided as an AND criteria
+            with the name of the column and the filter condition. The filter condition
+            is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void setStructuredFilter([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
+        raises (com::sun::star::sdbc::SQLException,com::sun::star::lang::IllegalArgumentException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new filter condition by a
+        <type scope="com::sun::star::sdb">DataColumn</type>
+        providing the name and the value for the filter.
+        The value property must be supported by the <type scope="com::sun::star::sdb">DataColumn</type>.
+        @param column
+            the column which is used to create a filter
+        @paran  andCriteria
+            If <TRUE/> the filter condition will be appended as an AND condition, otherwise
+            the new filter condition will be appended as OR criteria.
+            E.g. (xx AND bb AND cc) OR newCriteria
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // GROUP BY
+    //-------------------------------------------------------------------------
+
+
+    /** appends an additional part to the group criteria of the select
+        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        @param column
+            the column which is used to create a group part
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendGroupByColumn([in] com::sun::star::beans::XPropertySet column)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** makes it possibile to set a group for the query.
+        @param group
+            the group part to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't valid
+            or the statement isn't parseable..
+     */
+    void setGroup([in] string group)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // HAVING
+    //-------------------------------------------------------------------------
+
+    /** makes it possible to set a HAVING filter condition for the query.
+        @param filter
+            the filter to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't valid
+            or the statement isn't parseable.
+     */
+    void setHavingClause([in] string filter)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new set of HAVING filter criteria which is split into levels.
+        @param filter
+            The HAVING filter criteria is split into levels. Each level represents the
+            OR criterias. Within each level, the filters are provided as an AND criteria
+            with the name of the column and the filter condition. The filter condition
+            is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void setStructuredHavingFilter([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new HAVING filter condition by a
+        <type scope="com::sun::star::sdb">DataColumn</type>
+        providing the name and the value for the filter.
+        @param column
+            the column which is used to create a filter
+        @paran  andCriteria
+            If <TRUE/> the filter condition will be appended as an AND condition, otherwise
+            the new filter condition will be appended as OR criteria.
+            E.g. (xx AND bb AND cc) OR newCriteria
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendHavingFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // ORDER BY
+    //-------------------------------------------------------------------------
+
+    /** appends an additional part to the sort order criteria of the select
+        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        @param column
+            the column which is used to create a order part
+        @param  ascending
+            <TRUE/> when the order should be ascending, otherwise if <FALSE/> descending.
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
+                              [in] boolean ascending)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** makes it possibile to set a sort condition for the query.
+        @param order
+            the order part to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the order isn't valid
+            or the statement isn't parseable.
+     */
+    void setOrder([in] string order)
+            raises (com::sun::star::sdbc::SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
+

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: Connection.idl,v $
+ *  $RCSfile: SingleSelectQueryComposer.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-19 11:05:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-19 11:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,75 +58,45 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_Connection_idl__
-#define __com_sun_star_sdb_Connection_idl__
+#ifndef __com_sun_star_sdb_SingleSelectQueryComposer_idl__
+#define __com_sun_star_sdb_SingleSelectQueryComposer_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
-#include <com/sun/star/container/XChild.idl>
+#ifndef __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
+#include <com/sun/star/sdb/SingleSelectQueryAnalyzer.idl>
+#endif
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
-#ifndef __com_sun_star_sdbc_Connection_idl__
-#include <com/sun/star/sdbc/Connection.idl>
-#endif
+module com {  module sun {  module star {  module sdb {
 
-#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__
-#include <com/sun/star/sdbcx/DatabaseDefinition.idl>
-#endif
+interface XSingleSelectQueryComposer;
+/** represents a service for composing a single select statement.
 
-module com {  module sun {  module star {  module lang {
-    interface XMultiServiceFactory;
-};};};};
+    <p>
+    It hides the complexity of parsing and evaluating a single select statement and provides
+    sophisticated methods for expanding a statement with filter, group by, having and order
+    criteria. To get the new extended statement use the methods from <type scope="com::sun::star::sdb">SingleSelectQueryAnalyzer</type>.
+    </p>
 
- module com {  module sun {  module star {  module sdb {
-
-interface XSQLQueryComposerFactory;
-interface XQueriesSupplier;
-interface XCommandPreparation;
-
-
-// DocMerge from xml: service com::sun::star::sdb::Connection
-/** extends the
-    <type scope="com::sun::star::sdbc">Connection</type>
-    of SDBC by providing the data definitions of a connected database.
+    @see com::sun::star::sdb::SingleSelectQueryAnalyzer
+    @see com::sun::star::sdb::XSingleSelectQueryAnalyzer
+    @see com::sun::star::sdb::XSingleSelectQueryComposer
  */
-service Connection
+service SingleSelectQueryComposer
 {
-    // DocMerge: empty anyway
-    service com::sun::star::sdbc::Connection;
+    // gives access to the properties.
+    interface com::sun::star::beans::XPropertySet;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::container::XChild
-    /** access to the owning data source.
+    /** access to the analyzer service.
      */
-    interface com::sun::star::container::XChild;
+    service SingleSelectQueryAnalyzer;
 
+    interface XSingleSelectQueryComposer;
 
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XCommandPreparation
-    /** interface for complex command execution.
-     */
-    interface XCommandPreparation;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: service com::sun::star::sdbcx::DatabaseDefinition
-    /** access to the database definition information of the connection.
-     */
-    service com::sun::star::sdbcx::DatabaseDefinition;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XQueriesSupplier
-    /** returns a container of associated queries.
-     */
-    interface XQueriesSupplier;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XSQLQueryComposerFactory
-    /** returns a tool for composing queries.
-     */
-    interface XSQLQueryComposerFactory;
-
-    /** allows the creation of different services which can only exists with a connection.
-     */
-    [optional] interface com::sun::star::lang::XMultiServiceFactory;
+    /** is the orignal SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
+    */
+    [readonly, property] string Original;
 };
 
 //=============================================================================

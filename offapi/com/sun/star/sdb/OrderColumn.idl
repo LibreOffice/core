@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: Connection.idl,v $
+ *  $RCSfile: OrderColumn.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-19 11:05:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-19 11:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,77 +58,28 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_Connection_idl__
-#define __com_sun_star_sdb_Connection_idl__
+#ifndef __com_sun_star_sdb_OrderColumn_idl__
+#define __com_sun_star_sdb_OrderColumn_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
-#include <com/sun/star/container/XChild.idl>
+#ifndef __com_sun_star_sdbcx_Column_idl__
+#include <com/sun/star/sdbcx/Column.idl>
 #endif
 
-#ifndef __com_sun_star_sdbc_Connection_idl__
-#include <com/sun/star/sdbc/Connection.idl>
-#endif
+module com {  module sun {  module star {  module sdb {
 
-#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__
-#include <com/sun/star/sdbcx/DatabaseDefinition.idl>
-#endif
+/** describes a column which is part of the ORDER clause.
 
-module com {  module sun {  module star {  module lang {
-    interface XMultiServiceFactory;
-};};};};
-
- module com {  module sun {  module star {  module sdb {
-
-interface XSQLQueryComposerFactory;
-interface XQueriesSupplier;
-interface XCommandPreparation;
-
-
-// DocMerge from xml: service com::sun::star::sdb::Connection
-/** extends the
-    <type scope="com::sun::star::sdbc">Connection</type>
-    of SDBC by providing the data definitions of a connected database.
- */
-service Connection
+    @see com::sun::star::sdb::XSingleSelectQueryComposer
+*/
+service OrderColumn
 {
-    // DocMerge: empty anyway
-    service com::sun::star::sdbc::Connection;
+    service com::sun::star::sdbcx::Column;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::container::XChild
-    /** access to the owning data source.
-     */
-    interface com::sun::star::container::XChild;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XCommandPreparation
-    /** interface for complex command execution.
-     */
-    interface XCommandPreparation;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: service com::sun::star::sdbcx::DatabaseDefinition
-    /** access to the database definition information of the connection.
-     */
-    service com::sun::star::sdbcx::DatabaseDefinition;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XQueriesSupplier
-    /** returns a container of associated queries.
-     */
-    interface XQueriesSupplier;
-
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XSQLQueryComposerFactory
-    /** returns a tool for composing queries.
-     */
-    interface XSQLQueryComposerFactory;
-
-    /** allows the creation of different services which can only exists with a connection.
-     */
-    [optional] interface com::sun::star::lang::XMultiServiceFactory;
+    /** describes which sort order this column has..
+        The default is <TRUE/>.
+    */
+    [property] boolean Ascending;
 };
-
 //=============================================================================
 
 }; }; }; };

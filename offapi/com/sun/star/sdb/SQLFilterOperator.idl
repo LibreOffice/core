@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: Connection.idl,v $
+ *  $RCSfile: SQLFilterOperator.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-19 11:05:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-19 11:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,77 +58,51 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_Connection_idl__
-#define __com_sun_star_sdb_Connection_idl__
+#ifndef __com_sun_star_sdb_SQLFilterOperator_idl__
+#define __com_sun_star_sdb_SQLFilterOperator_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
-#include <com/sun/star/container/XChild.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_Connection_idl__
-#include <com/sun/star/sdbc/Connection.idl>
-#endif
-
-#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__
-#include <com/sun/star/sdbcx/DatabaseDefinition.idl>
-#endif
-
-module com {  module sun {  module star {  module lang {
-    interface XMultiServiceFactory;
-};};};};
-
- module com {  module sun {  module star {  module sdb {
-
-interface XSQLQueryComposerFactory;
-interface XQueriesSupplier;
-interface XCommandPreparation;
+module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::Connection
-/** extends the
-    <type scope="com::sun::star::sdbc">Connection</type>
-    of SDBC by providing the data definitions of a connected database.
- */
-service Connection
+/** These constants are used to specify the filter operator
+    which should be applied when creating a filter
+    with the method <method>XSingleSelectQueryComposer::setStructuredFilter</method>.
+
+    @see com::sun::star::sdb::SingleSelectQueryComposer
+    @see com::sun::star::sdb::XSingleSelectQueryComposer
+*/
+constants SQLFilterOperator
 {
-    // DocMerge: empty anyway
-    service com::sun::star::sdbc::Connection;
+    /// equal to
+    const long EQUAL            = 1;
 
+    /// not equal to
+    const long NOT_EQUAL        = 2;
 
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::container::XChild
-    /** access to the owning data source.
-     */
-    interface com::sun::star::container::XChild;
+    /// less than
+    const long LESS             = 3;
 
+    /// greater than
+    const long GREATER          = 4;
 
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XCommandPreparation
-    /** interface for complex command execution.
-     */
-    interface XCommandPreparation;
+    /// less or eqal than
+    const long LESS_EQUAL       = 5;
 
+    /// greater or eqal than
+    const long GREATER_EQUAL    = 6;
 
-    // DocMerge from xml: service com::sun::star::sdb::Connection: service com::sun::star::sdbcx::DatabaseDefinition
-    /** access to the database definition information of the connection.
-     */
-    service com::sun::star::sdbcx::DatabaseDefinition;
+    /// like
+    const long LIKE             = 7;
 
+    /// not like
+    const long NOT_LIKE         = 8;
 
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XQueriesSupplier
-    /** returns a container of associated queries.
-     */
-    interface XQueriesSupplier;
+    /// is null
+    const long SQLNULL          = 9;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XSQLQueryComposerFactory
-    /** returns a tool for composing queries.
-     */
-    interface XSQLQueryComposerFactory;
-
-    /** allows the creation of different services which can only exists with a connection.
-     */
-    [optional] interface com::sun::star::lang::XMultiServiceFactory;
+    /// is not null
+    const long NOT_SQLNULL      = 10;
 };
-
 //=============================================================================
 
 }; }; }; };
