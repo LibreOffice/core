@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:07:50 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #ifdef SOLARIS
 #include <sys/time.h>
 #endif
 
 #ifdef WNT
-// #define UNDER_WINDOWS_DEBUGGING
+#define UNDER_WINDOWS_DEBUGGING
 // Nice feature, to debug under windows, install msdev locally and use DebugBreak() to stop a new process at a point you want.
 #ifdef UNDER_WINDOWS_DEBUGGING
 #include <tools/presys.h>
 #include <windows.h>
+#include <MAPIWin.h>
 #include <tools/postsys.h>
 
 #define VCL_NEED_BASETSD
@@ -104,6 +106,82 @@ using namespace std;
 
 // Prototype for signal handling
 void setSignalFilename(GetOpt & opt);
+
+void my_sleep(int sec)
+{
+#ifdef WNT
+            Sleep(sec * 1000);
+#else
+            usleep(sec * 1000000); // 10 ms
+#endif
+}
+
+// -----------------------------------------------------------------------------
+class ProcessHandler
+{
+    std::string m_sProcessIDFilename;
+    void write(int);
+    int  getPID();
+public:
+    ProcessHandler();
+    void setName(std::string const& _sFilename);
+    ~ProcessHandler();
+};
+
+// ------------------------------- ProcessHelper -------------------------------
+ProcessHandler::ProcessHandler() {}
+
+void ProcessHandler::setName(std::string const& _sPIDFilename)
+{
+    m_sProcessIDFilename = _sPIDFilename;
+    write(getPID());
+}
+
+int ProcessHandler::getPID()
+{
+    int nPID = 0;
+#ifdef WNT
+    nPID = GetCurrentProcessId();
+#else
+    nPID = getpid();
+#endif
+
+    return nPID;
+}
+
+void ProcessHandler::write(int _nPID)
+{
+    // get own PID
+
+    if (m_sProcessIDFilename.size() > 0)
+    {
+        FILE* out;
+        out = fopen(m_sProcessIDFilename.c_str(), "w");
+        if (!out)
+        {
+            fprintf(stderr, "warning: (testshl.cxx) can't write own pid.\n");
+            return;
+            // exit(0);
+        }
+        fprintf(out, "%d", _nPID);
+        fclose(out);
+        my_sleep(2); // short wait, so testshl2_timeout can find this pid.
+    }
+    else
+    {
+        fprintf(stderr, "warning: (testshl.cxx) PID Filename empty, must set.\n");
+    }
+}
+
+ProcessHandler::~ProcessHandler()
+{
+    if (m_sProcessIDFilename.size() > 0)
+    {
+        write(0);
+        my_sleep(2);
+        fprintf(stderr, "hint: it is save to remove PID file.\n");
+    }
+}
 
 // -----------------------------------------------------------------------------
 std::auto_ptr<CppUnit::TestResult> initResult(GetOpt & _aOptions)
@@ -150,6 +228,7 @@ std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
     return pOutputter;
 }
 
+
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
 int main( int argc, char* argv[] )
@@ -176,15 +255,26 @@ int _cdecl main( int argc, char* argv[] )
         "-buildid=s,    this text is added to the date output line.",
         "-waitforkey,   wait until key pressed.",
         "-verbose,      be verbose.",
+        "-pid=s,        write current process id to file",
+        "-endless,      testshl runs endless, for test only!!!",
         "-h:s,          display help or help on option",
         "-help:s,       see -h",
         NULL
     };
 
+    // rtl::OString* pTest = new rtl::OString("test");
+
+    ProcessHandler aCurrentProcess;
+
     GetOpt opt( argv, optionSet );
+    if ( opt.hasOpt("-pid") )
+    {
+        aCurrentProcess.setName(opt.getOpt("-pid").getStr());
+    }
+
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.10 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.11 $\n");
     }
 
     // someone indicates that he needs help
@@ -192,6 +282,14 @@ int _cdecl main( int argc, char* argv[] )
     {
         opt.showUsage();
         exit(0);
+    }
+
+    if ( opt.hasOpt("-endless"))
+    {
+        while(1)
+        {
+            my_sleep(1);
+        }
     }
 
     bool bLibrary = true;
@@ -217,9 +315,9 @@ int _cdecl main( int argc, char* argv[] )
     // if ( argc < 2 )
     //     usage();
 
-#ifdef UNDER_WINDOWS_DEBUGGING
-    DebugBreak();
-#endif
+//#ifdef UNDER_WINDOWS_DEBUGGING
+//    DebugBreak();
+//#endif
 
     // ---
     //# CmdLineBits nCmdlinebitflags = createFlags( argc, argv );
