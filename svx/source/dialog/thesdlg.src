@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:45:35 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ chinese_traditional ] = "¬d´M(~S)";
         Text[ arabic ] = "ÈÍË";
         Text[ greek ] = "Á~íáæÞôçóç";
-        Text[ korean ] = "Ã£¾Æ º¸±â";
+        Text[ korean ] = "Ã£¾Æ º¸±â(~S)";
         Text[ turkish ] = "A~ra";
         Text[ language_user1 ] = " ";
     };
@@ -209,7 +209,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ spanish ] = "~Significado  " ;
         Text [ english_us ] = "~Meaning " ;
         LEFT = TRUE ;
-        Text[ chinese_simplified ] = "º¬Òå(~M) ";
+        Text[ chinese_simplified ] = "º¬Òå (~M)";
         Text[ russian ] = "Çíà÷åíèå  ";
         Text[ polish ] = "Znaczenie ";
         Text[ japanese ] = "Œê‹`(~M)";
