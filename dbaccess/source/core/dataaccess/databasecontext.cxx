@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:59:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef SVTOOLS_FILENOTATION_HXX
+#include <svtools/filenotation.hxx>
+#endif
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -168,6 +171,8 @@ using namespace ::utl;
 using ::com::sun::star::task::InteractionClassification_ERROR;
 using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
 using ::com::sun::star::ucb::InteractiveIOException;
+using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
+using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING_PATH;
 
 //==========================================================================
 
@@ -377,45 +382,69 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
     }
     catch(InteractiveIOException e)
     {
-        throw WrappedTargetException( _sURL, Reference<XNamingService>(this), makeAny( e ) );
+        if  (   ( e.Code == IOErrorCode_NO_FILE )
+            ||  ( e.Code == IOErrorCode_NOT_EXISTING )
+            ||  ( e.Code == IOErrorCode_NOT_EXISTING_PATH )
+            )
+        {
+            // #i40463# #i39187#
+            String sErrorMessage( DBACORE_RESSTRING( RID_STR_FILE_DOES_NOT_EXIST ) );
+            ::svt::OFileNotation aTransformer( _sURL );
+            sErrorMessage.SearchAndReplaceAscii( "$file$", aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
+
+            SQLException aError;
+            aError.Message = sErrorMessage;
+
+            throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), makeAny( aError ) );
+        }
+        throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), makeAny( e ) );
     }
     catch(Exception e)
     {
         throw WrappedTargetException( _sURL, Reference<XNamingService>(this), makeAny( e ) );
     }
 
-    Reference< XInterface > xExistent = *(new ODatabaseSource(*this, _rName, m_xServiceManager,this));
+    Reference< XInterface > xExistent = getObject(_sURL);
+    if ( xExistent.is() ) // we found a object registered under the URL
+    {
+        m_aDatabaseObjects.erase(_sURL);
+        registerPrivate(_rName,xExistent);
+    }
+    else
+    {
+        xExistent = *(new ODatabaseSource(*this, _rName, m_xServiceManager,this));
 
-    Sequence< PropertyValue > aArgs(1);
-    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
-    aArgs[0].Value <<= _sURL;
+        Sequence< PropertyValue > aArgs(1);
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+        aArgs[0].Value <<= _sURL;
 
-    Reference<XModel> xModel(xExistent,UNO_QUERY);
-    xModel->attachResource(_sURL,aArgs);
+        Reference<XModel> xModel(xExistent,UNO_QUERY);
+        xModel->attachResource(_sURL,aArgs);
 
-    // check if we have any session persistent properties to initialize the new object with
-    if ( m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_sURL) )
-    {   // yes, we do ....
-        Reference< XPropertySet > xDSProps(xExistent, UNO_QUERY);
-        if (xDSProps.is())
-        {
-            const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
-            const PropertyValue* pSessionPersistentProps = rSessionPersistentProps.getConstArray();
-
-            for (sal_Int32 i=0; i<rSessionPersistentProps.getLength(); ++i, ++pSessionPersistentProps)
+        // check if we have any session persistent properties to initialize the new object with
+        if ( m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_sURL) )
+        {   // yes, we do ....
+            Reference< XPropertySet > xDSProps(xExistent, UNO_QUERY);
+            if (xDSProps.is())
             {
-                try
+                const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
+                const PropertyValue* pSessionPersistentProps = rSessionPersistentProps.getConstArray();
+
+                for (sal_Int32 i=0; i<rSessionPersistentProps.getLength(); ++i, ++pSessionPersistentProps)
                 {
-                    xDSProps->setPropertyValue(pSessionPersistentProps->Name, pSessionPersistentProps->Value);
-                }
-                catch(Exception&)
-                {
-                    DBG_ERROR("ODatabaseContext::getRegisteredObject: could not set a session-persistent property on the data source!");
+                    try
+                    {
+                        xDSProps->setPropertyValue(pSessionPersistentProps->Name, pSessionPersistentProps->Value);
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("ODatabaseContext::getRegisteredObject: could not set a session-persistent property on the data source!");
+                    }
                 }
             }
+            else
+                DBG_ERROR("ODatabaseContext::getRegisteredObject: missing an interface!");
         }
-        else
-            DBG_ERROR("ODatabaseContext::getRegisteredObject: missing an interface!");
     }
     return xExistent;
 }
