@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,37 +114,7 @@ public:
                                     SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 
-//-------------------------------------------------------------------------
-
-class ScModuleDummy: public SfxModule
-
-/*  [Description]
-
-    This tricky class keeps pointers to the SvFactories while
-    the DLL isn`t loaded. A pointer to the one instance is available
-    through SXX_MOD() (shared-lib-app-data).
-*/
-
-{
-public:
-                    // SvFactory name convention:
-                    // 'p' + SfxObjectShell-subclass + 'Factory'
-    SotFactory*     pScDocShellFactory;
-
-                    ScModuleDummy( ResMgr *pResMgr, BOOL bDummy, SfxObjectFactory* pFact )
-                    :   SfxModule(pResMgr, bDummy, pFact, NULL),
-                        pScDocShellFactory(pFact)
-                    {}
-
-    virtual SfxModule* Load();
-
-    static SvGlobalName GetID(USHORT nFileFormat);
-    static USHORT       HasID(const SvGlobalName& rName);
-};
-
-//-------------------------------------------------------------------------
-
-#define SC_DLL() ( *(ScModuleDummy**) GetAppData(SHL_CALC) )
+#define SC_DLL() ( *(ScModule**) GetAppData(SHL_CALC) )
 
 #endif
 
