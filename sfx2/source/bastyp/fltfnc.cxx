@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-05 14:46:57 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 17:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,8 +329,251 @@ typedef TFilterNames::const_iterator    TConstConverterIterator;
 
 TFilterNames            aConverterOld2New;
 TFilterNames            aConverterNew2Old;
+TFilterNames            aUserDataTable;
 
 //*****************************************************************************************************************
+// Fill hash to convert old filter name to new filter names.
+void impl_initUserDataTable( TFilterNames& aHash )
+{
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarOffice XML (Writer)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CXML"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 5.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW5V"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 4.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW4V"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 3.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW3V"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 2.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("SWG"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 1.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("SWG1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter DOS"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("SW6"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: HTML (StarWriter)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("HTML"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTA"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text Unix"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTX"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text Mac"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTM"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text DOS"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTD"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Rich Text Format"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("RTF"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 97"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 95"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CWW6"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 97 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 95 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CWW6"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 6.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CWW6"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 6.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W05_3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 5"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("WW6"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 2.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W44_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 1.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W44_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 5.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W05_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 4.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W05_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 3.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W05_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS MacWord 5.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W54_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS MacWord 4.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W54_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS MacWord 3.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W54_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect Mac 1 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W59_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect Mac 2 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W60_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect Mac 3 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W60_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 5.1-5.2 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W07_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 6.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W48_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 6.1 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W48_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 7.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W48_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 4.1 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W06_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 4.2 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W06_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 5.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W07_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 5.1 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W07_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 6.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W48_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 6.1 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W48_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar (Win) 1.x-2.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W37_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 2000 Rel. 3.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W09_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 2000 Rel. 3.5 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W09_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 3.3x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 3.45 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 4.0  (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 5.0  (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 5.5  (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 6.0  (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 7.0  (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W04_6"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Ami Pro 1.1-1.2 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W33_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Ami Pro 2.0-3.1 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W33_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Excel 4.0 (StarWriter)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("EXCEL"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Excel 5.0 (StarWriter)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CEXCEL"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Excel 95 (StarWriter)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CEXCEL"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Works 2.0 DOS (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W39_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Works 3.0 Win (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W39_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Works 4.0 Mac (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W58_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Mac Write 4.x 5.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W51_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Mac Write II (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W52_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Mac Write Pro (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W56_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Lotus 1-2-3 1.0 (DOS) (StarWriter)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("LOTUSD"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Lotus 1-2-3 1.0 (WIN) (StarWriter)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("LOTUSW"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Lotus Manuscript (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W24_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MASS 11 Rel. 8.0-8.3 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W31_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MASS 11 Rel. 8.5-9.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W31_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Claris Works (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W57_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: CTOS DEF (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W36_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: OfficeWriter 4.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W16_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: OfficeWriter 5.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W16_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: OfficeWriter 6.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W16_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite III ( W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W17_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite III+ ( W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W17_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite Signature (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W17_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite Sig. (Win) (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W17_3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite IV (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W17_4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite (Win) 1.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W17_5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 5.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W103_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 5.0 (Illustrator) (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W103_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 6.0 (Color Bitmap) (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W103_4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 6.0 (Res Graphic) (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W103_8"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WriteNow 3.0 (Macintosh) (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W62_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Writing Assistant (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W13_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: VolksWriter Deluxe (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W11_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: VolksWriter 3 and 4 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W14_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate 3.3 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W10_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate Adv. 3.6 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W10_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate Adv. II 3.7 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W10_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate 4 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W10_3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: NAVY DIF (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W18_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS Write (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W08_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS First Choice 1.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W08_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS First Choice 2.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W08_3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS First Choice 3.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W08_5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Professional Write 1.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W08_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Professional Write 2.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W08_4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Professional Write Plus (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W33_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Peach Text (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W27_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DCA Revisable Form Text (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W15_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DCA with Display Write 5 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W15_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DCA/FFT-Final Form Text (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W32_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DEC DX (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W30_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DEC WPS-PLUS (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W45_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DisplayWrite 2.0-4.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W15_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DisplayWrite 5.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W15_3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DataGeneral CEO Write (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W104_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: EBCDIC (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W02_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Enable (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W28_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Maker MIF 3.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W42_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Maker MIF 4.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W42_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Maker MIF 5.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W42_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Work III (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W29_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Work IV  (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W29_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: HP AdvanceWrite Plus (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W22_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: ICL Office Power 6 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W102_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: ICL Office Power 7 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W102_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Interleaf (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W35_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Interleaf 5 - 6 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W46_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Legacy Winstar onGO (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W37_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Q&A Write 1.0-3.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W23_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Q&A Write 4.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W23_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Rapid File 1.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W25_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Rapid File 1.2 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W25_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Samna Word IV-IV Plus (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W22_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Total Word (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W14_1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Uniplex onGO (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W37_2"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Uniplex V7-V8 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W101_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Wang PC (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W26_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Wang II SWP (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W88_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Wang WP Plus (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W89_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Win Write 3.x (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W43_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WITA (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W34_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WiziWord 3.0 (W4W)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("W4W47_0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text (encoded)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT_DLG"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: HTML"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("HTML"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter/Web 5.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW5VWEB"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter/Web 4.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW4VWEB"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text (StarWriter/Web)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTA"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text DOS (StarWriter/Web)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTD"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text Mac (StarWriter/Web)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTM"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text Unix (StarWriter/Web)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXTX"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text (encoded)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT_DLG"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0/GlobalDocument"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 4.0/GlobalDocument"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW5"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW4"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("CSW3"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: Text (encoded)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT_DLG"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarOffice XML (Impress)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("XML"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 4.0 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 5.0 (StarImpress)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 5.0 Vorlage (StarImpress)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 3.0 (StarImpress)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 3.0 Vorlage (StarImpress)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: MS PowerPoint 97"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("emp???**.dll"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: MS PowerPoint 97 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("emp???**.dll"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: CGM - Computer Graphics Metafile"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("icg???**.dll"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0 (packed)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarOffice XML (Draw)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("XML"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: GIF - Graphics Interchange"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCD - Photo CD"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCX - Zsoft Paintbrush"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PSD - Adobe Photoshop"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PNG - Portable Network Graphic"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PBM - Portable Bitmap"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PGM - Portable Graymap"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PPM - Portable Pixelmap"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: RAS - Sun Rasterfile"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TGA - Truevision TARGA"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGV - StarDraw 2.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TIF - Tag Image File"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGF - StarOffice Writer SGF"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XPM"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 5.0 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 5.0 (StarDraw)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 5.0 Vorlage (StarDraw)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 4.0 (StarDraw)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 4.0 Vorlage (StarDraw)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 3.0 Vorlage"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EMF - MS Windows Metafile"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: MET - OS/2 Metafile"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: DXF - AutoCAD Interchange"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EPS - Encapsulated PostScript"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: WMF - MS Windows Metafile"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCT - Mac Pict"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SVM - StarView Metafile"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: BMP - MS Windows"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarOffice XML (Calc)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 5.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 4.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 3.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 97"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 97 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 95"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 95 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 5.0/95"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 5.0/95 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 4.0 Vorlage/Template"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: Rich Text Format (StarCalc)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: SYLK"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: DIF"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: HTML (StarCalc)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: dBase"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: Lotus"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 1.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: Text - txt - csv (StarCalc)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarOffice XML (Chart)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("XML"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarChart 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarChart 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarChart 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarOffice XML (Math)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathML XML (Math)"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 5.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 4.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 3.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 2.0"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathType 3.x"))] = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+}
+
+
+
 // Fill hash to convert old filter name to new filter names.
 void impl_initFilterHashOld2New( TFilterNames& aHash )
 {
@@ -841,6 +1084,15 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
 }
 
 
+::rtl::OUString impl_getUserData( const ::rtl::OUString& sOldName )
+{
+    TConstConverterIterator pEntry = aUserDataTable.find(sOldName);
+    ::rtl::OUString sUserData;
+    if( pEntry!=aUserDataTable.end() )
+        sUserData = aUserDataTable[sOldName];
+    return sUserData;
+}
+
 
 //*****************************************************************************************************************
 ::rtl::OUString impl_getNewFilterName( const ::rtl::OUString& sOldName )
@@ -981,6 +1233,7 @@ SfxFilterContainer::SfxFilterContainer( const String& rName )
 
     impl_initFilterHashOld2New( aConverterOld2New );
     impl_initFilterHashNew2Old( aConverterNew2Old );
+    impl_initUserDataTable( aUserDataTable );
 }
 
 //----------------------------------------------------------------
@@ -1088,6 +1341,8 @@ IMPL_STATIC_LINK( SfxFilterContainer, LoadHdl_Impl, void*, EMPTYARG )
 
 //----------------------------------------------------------------
 
+#include <stdio.h>
+
 void SfxFilterContainer::RealLoad_Impl()
 /*   [Beschreibung]
 
@@ -1100,6 +1355,10 @@ void SfxFilterContainer::RealLoad_Impl()
 
     LoadArg_Impl* pArg = pImpl->pArg;
     String aString( pArg->aGroup);
+
+    ByteString aFile( "f:\\filters.dat" );
+    FILE* f = fopen( aFile.GetBuffer(), "a" );
+
     aString+=DEFINE_CONST_UNICODE("-Filters");
     if( pArg->bInstallIni )
     {
@@ -1213,8 +1472,25 @@ void SfxFilterContainer::RealLoad_Impl()
         pFilter->SetDefaultTemplate( aDefaultTemplate );
         if( nVersion )
             pFilter->SetVersion( nVersion );
-        AddFilter( pFilter, GetFilterCount() );
+//        AddFilter( pFilter, GetFilterCount() );
+
+        String aLeft = String::CreateFromAscii("aHash[OUString(RTL_CONSTASCII_USTRINGPARAM(");
+        aLeft += '"';
+        aLeft += pFilter->GetName();
+        aLeft += '"';
+        aLeft += String::CreateFromAscii( "))] = OUString(RTL_CONSTASCII_USTRINGPARAM(" );
+        aLeft += '"';
+        aLeft += pFilter->GetUserData();
+        aLeft += '"';
+        aLeft += String::CreateFromAscii( "));" );
+        ByteString aOut( aLeft, RTL_TEXTENCODING_UTF8 );
+        fprintf( f, "%s\n", aOut.GetBuffer() );
+
+        delete pFilter;
+//    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarOffice XML (Writer)"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarOffice_XML_Writer"));
     }
+
+    fclose( f );
 //    if( !bRecurse ) DELETEZ( pImpl->pArg );
 }
 
@@ -2309,6 +2585,7 @@ const SfxFilter* SfxExecutableFilterContainer::GetChooserFilter()
 
 void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 {
+ //   RealLoad_Impl();
     try
     {
         // get the FilterFactory service to access the registered filters
@@ -2418,9 +2695,10 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
             if ( bMatches && aType.getLength() )
             {
                 // register SfxFilter
-                aFilterName = impl_getOldFilterName( aType );
+                aFilterName = impl_getOldFilterName( aName );
                 if ( aFilterName.Len() )
                 {
+                    aUserData = impl_getUserData( aFilterName );
                     USHORT nPos = aFilterName.Search( ':' );
                     aFilterName.Erase( 0, nPos+2 );
                 }
