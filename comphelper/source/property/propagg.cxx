@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-18 13:54:19 $
+ *  last change: $Author: mh $ $Date: 2002-10-29 15:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace comphelper
             aSearch.Name = _rName;
 
             const void* pUntyped = _rProps.getConstArray();
-            return static_cast< const Property* >( bsearch( &aSearch, pUntyped, _rProps.getLength(), sizeof( Property ), &PropertyCompare ) );
+            return static_cast< Property* >( bsearch( &aSearch, pUntyped, _rProps.getLength(), sizeof( Property ), &PropertyCompare ) );
         }
     }
 //==================================================================
