@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-09 11:17:51 $
+ *  last change: $Author: cmc $ $Date: 2003-01-28 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
@@ -3106,8 +3108,9 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
 
             aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Align"));
             nFlags |= 0x40;
-            sal_Int16 nAlign;
-            aTmp >>= nAlign;
+            sal_Int16 nAlign(0);
+            if (aTmp.hasValue())
+                aTmp >>= nAlign;
             nJustification = ExportAlign(nAlign);
             *rContent << nJustification;
         }
@@ -3253,3 +3256,5 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
