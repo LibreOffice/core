@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:51:40 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 17:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3915,6 +3915,8 @@ Window::~Window()
 
     mbInDtor = TRUE;
 
+    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+
     // shutdown drag and drop
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
 
@@ -4605,8 +4607,8 @@ void Window::ImplCallEventListeners( ULONG nEvent, void* pData )
     Window* pWindow = this;
     while ( pWindow )
     {
-        if ( !mpDummy4_WindowChildEventListeners->empty() )
-            mpDummy4_WindowChildEventListeners->Call( &aEvent );
+        if ( !pWindow->mpDummy4_WindowChildEventListeners->empty() )
+            pWindow->mpDummy4_WindowChildEventListeners->Call( &aEvent );
 
         pWindow = pWindow->GetParent();
     }
@@ -7105,7 +7107,7 @@ Reference< XClipboard > Window::GetSelection()
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc( GetComponentInterface( TRUE ), ::com::sun::star::uno::UNO_QUERY );
     return xAcc;
 }
 
