@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:59:53 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ class SvxVertCTLTextTbxCtrl : public SfxToolBoxControl
 {
     sal_Bool bCheckVertical; //determines whether vertical mode or CTL mode has to be checked
 public:
-    SvxVertCTLTextTbxCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& );
+    SvxVertCTLTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxVertCTLTextTbxCtrl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -84,29 +84,18 @@ public:
  ---------------------------------------------------------------------------*/
 class SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
-    SfxStatusForwarder  aStateForwarder;
-
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxCTLTextTbxCtrl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
-        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ),
-        aStateForwarder( SID_CTLFONT_STATE, *this )
-        {SetVert(FALSE);};
-
+    SvxCTLTextTbxCtrl(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 };
 /* -----------------------------12.09.2002 11:50------------------------------
 
  ---------------------------------------------------------------------------*/
 class SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
-    SfxStatusForwarder  aStateForwarder;
-
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxVertTextTbxCtrl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
-        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ),
-        aStateForwarder( SID_VERTICALTEXT_STATE, *this )
-        {SetVert(TRUE);};
+    SvxVertTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 };
 
 #endif
