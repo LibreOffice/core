@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-28 18:51:59 $
+ *  last change: $Author: bm $ $Date: 2002-04-25 10:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1883,13 +1883,16 @@ EBulletInfo Outliner::GetBulletInfo( USHORT nPara )
     const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
     aInfo.nType = pFmt ? pFmt->GetNumberingType() : 0;
 
-    if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
+    if( pFmt )
     {
-        aInfo.aText = ImplGetBulletText( nPara );
-    }
-    else if ( pFmt && pFmt->GetBrush()->GetGraphicObject() )
-    {
-        aInfo.aGraphic = pFmt->GetBrush()->GetGraphicObject()->GetGraphic();
+        if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
+        {
+            aInfo.aText = ImplGetBulletText( nPara );
+        }
+        else if ( pFmt->GetBrush()->GetGraphicObject() )
+        {
+            aInfo.aGraphic = pFmt->GetBrush()->GetGraphicObject()->GetGraphic();
+        }
     }
 
     if ( aInfo.bVisible )
