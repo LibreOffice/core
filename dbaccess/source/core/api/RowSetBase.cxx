@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 13:42:39 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 10:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,7 +934,7 @@ sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    if(m_pCache->compareBookmarks(m_aBookmark,m_pCache->getBookmark()) != CompareBookmark::EQUAL)
+    if(m_pCache->m_bAfterLast || m_pCache->m_bBeforeFirst || m_pCache->compareBookmarks(m_aBookmark,m_pCache->getBookmark()) != CompareBookmark::EQUAL)
         m_pCache->moveToBookmark(m_aBookmark);
     return m_pCache->getRow();
 }
