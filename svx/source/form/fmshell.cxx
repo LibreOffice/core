@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 18:03:18 $
+ *  last change: $Author: fs $ $Date: 2002-05-28 07:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,6 +833,16 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_PATTERNFIELD:
         case SID_FM_FORMATTEDFIELD:
         {
+            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_GRABCONTROLFOCUS, sal_False );
+            if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
+            {   // see below
+                SfxViewShell* pShell = GetViewShell();
+                Window* pShellWnd = pShell ? pShell->GetWindow() : NULL;
+                if ( pShellWnd )
+                    pShellWnd->GrabFocus();
+                break;
+            }
+
             SfxUInt16Item aIdentifierItem( SID_FM_CONTROL_IDENTIFIER, nIdentifier );
             SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, FmFormInventor );
             const SfxPoolItem* pArgs[] =
@@ -846,6 +856,18 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_CREATE_CONTROL, SFX_CALLMODE_ASYNCHRON,
                                       pArgs, rReq.GetModifier(), pInternalArgs );
+
+            if ( rReq.GetModifier() & KEY_MOD1 )
+            {
+                //  #99013# if selected with control key, return focus to current view
+                // do this asynchron, so that the creation can be finished first
+                // reusing the SID_FM_GRABCONTROLFOCUS is somewhat hacky ... which it wouldn't if it would have another
+                // name, so I do not really have a big problem with this ....
+                SfxBoolItem aGrabFocusIndicatorItem( SID_FM_GRABCONTROLFOCUS, sal_True );
+                GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_ASYNCHRON,
+                                          &aGrabFocusIndicatorItem, NULL );
+            }
+
             rReq.Done();
         }   break;
     }
