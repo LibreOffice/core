@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpresid.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:15:43 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #define RID_STR_COULDNOTOPENTABLE       (RID_STRING_START +  5 )
 #define RID_STR_DATEPOSTFIX             (RID_STRING_START +  6 )
 #define RID_STR_TIMEPOSTFIX             (RID_STRING_START +  7 )
+#define RID_STR_TYPE_QUERY              (RID_STRING_START +  8 )
+#define RID_STR_TYPE_TABLE              (RID_STRING_START +  9 )
+#define RID_STR_TYPE_COMMAND            (RID_STRING_START + 10 )
 
 // please adjust RID_STRING_END (below) when adding new strings
 #define RID_STRING_END                  RID_STR_TIMEPOSTFIX
@@ -111,6 +114,7 @@
 #define RID_PAGE_LCW_CONTENTSELECTION_FIELD ( RID_PAGE_START +  8 )
 #define RID_PAGE_LCW_FIELDLINK              ( RID_PAGE_START +  9 )
 #define RID_PAGE_GW_FIELDSELECTION          ( RID_PAGE_START + 10 )
+#define RID_PAGE_FORM_DATASOURCE_STATUS     ( RID_PAGE_START + 11 )
 
 // please adjust RID_PAGE_END (below) when adding new tab pages
 #define RID_PAGE_END                        RID_PAGE_GW_FIELDSELECTION
@@ -153,6 +157,7 @@
 #define FL_DATABASEFIELD_EXPL       4
 #define FL_NAMEIT                   5
 #define FL_FRAME                    6
+#define FL_FORMSETINGS              7
 
 //........................................................................
 // FixedText
@@ -178,6 +183,12 @@
 #define FT_EXISTING_FIELDS          19
 #define FT_SELECTED_FIELDS          20
 #define FT_FIELDLINK_DESC           21
+#define FT_FORMDATASOURCELABEL      22
+#define FT_FORMDATASOURCE           23
+#define FT_FORMTABLELABEL           24
+#define FT_FORMTABLE                25
+#define FT_FORMCONTENTTYPELABEL     26
+#define FT_FORMCONTENTTYPE          27
 
 //........................................................................
 // ListBox
@@ -250,6 +261,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/30 13:15:43  fs
+ *  added a description to the laste page of the list box wizard
+ *
  *  Revision 1.5  2001/03/21 16:09:15  fs
  *  #85215# use a resource id range which is unique within the whole module
  *
