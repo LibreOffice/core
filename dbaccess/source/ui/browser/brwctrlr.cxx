@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:11:02 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 19:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,14 +1569,12 @@ void SbaXDataBrowserController::EmptyWindow()
 void SbaXDataBrowserController::AddSupportedFeatures()
 {
     // add all supported features
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")] = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")] = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:EditDoc")] = ID_BROWSER_EDITDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/copyContent")] = ID_BROWSER_COPY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/cutContent")] = ID_BROWSER_CUT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/pasteContent")] = ID_BROWSER_PASTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/EditDoc")] = ID_BROWSER_EDITDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")] = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")] = ID_BROWSER_PASTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")] = ID_BROWSER_REDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")] = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")] = ID_BROWSER_UNDO;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord")] = ID_BROWSER_SAVEDOC;
 }
 
 //------------------------------------------------------------------------------
