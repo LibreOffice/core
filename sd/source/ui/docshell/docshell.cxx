@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: af $ $Date: 2004-08-18 17:26:03 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             }
             break;
 
+            case SID_CHINESE_CONVERSION:
             case SID_HANGUL_HANJA_CONVERSION:
             {
                 if (!SvtCJKOptions().IsAnyEnabled())
