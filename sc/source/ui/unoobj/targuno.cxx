@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
+ *  last change: $Author: os $ $Date: 2002-08-14 09:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #include <svtools/itemprop.hxx>
 #include <svtools/smplhint.hxx>
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
 #endif
@@ -286,16 +292,10 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
     if (nImgId)
     {
-        ImageList aEntryImages( ScResId( RID_IMAGELIST_NAVCONT ) );
+        BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+        ImageList aEntryImages( ScResId( bHighContrast ? RID_IMAGELIST_H_NAVCONT : RID_IMAGELIST_NAVCONT ) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
-        Size aSize = rImage.GetSizePixel();
-
-        VirtualDevice aVDev;
-        aVDev.SetOutputSizePixel( aSize );
-        aVDev.DrawImage( Point(0,0), rImage );
-        Bitmap aBitmap = aVDev.GetBitmap( Point(0,0), aSize );
-
-        BitmapEx aBitmapEx( aBitmap );
+        BitmapEx aBitmapEx( rImage.GetBitmap() );
         uno::Reference< awt::XBitmap > xBmp = VCLUnoHelper::CreateBitmap( aBitmapEx );
         rRet <<= xBmp;
     }
