@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:49:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 10:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
+#endif
+
+#ifndef _SVX_LANGBOX_HXX
+#include <svx/langbox.hxx>
 #endif
 
 
@@ -175,6 +179,8 @@ private:
 
 class ScDocument;
 class ScRangeData;
+class CollatorRessource;
+class CollatorWrapper;
 
 class ScTabPageSortOptions : public SfxTabPage
 {
@@ -208,15 +214,21 @@ private:
     CheckBox    aBtnSortUser;
     ListBox     aLbSortUser;
 
+    FixedLine   aLineLang;
+    SvxLanguageBox aLbLanguage;
+    ListBox     aLbAlgorithm;
+
+    FixedLine   aLineDirection;
     RadioButton aBtnTopDown;
     RadioButton aBtnLeftRight;
-    GroupBox    aGbDirection;
+
     FixedText   aFtAreaLabel;
-    FixedInfo   aFtArea;
+//  FixedInfo   aFtArea;
     String      aStrRowLabel;
     String      aStrColLabel;
     String      aStrUndefined;
     String      aStrNoName;
+    String      aStrAreaLabel;
 
     const USHORT        nWhichSort;
     const ScSortParam&  rSortData;
@@ -224,6 +236,9 @@ private:
     ScDocument*         pDoc;
     ScSortDlg*          pDlg;
     ScAddress           theOutPos;
+
+    CollatorRessource*  pColRes;
+    CollatorWrapper*    pColWrap;
 
 #ifdef _TPSORT_CXX
 private:
@@ -236,6 +251,7 @@ private:
     DECL_LINK( SelOutPosHdl, ListBox * );
     void EdOutPosModHdl ( Edit* pEd );
     DECL_LINK( SortDirHdl, RadioButton * );
+    DECL_LINK( FillAlgorHdl, void * );
 #endif
 };
 

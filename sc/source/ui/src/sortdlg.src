@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:24:31 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_SORT_FIELDS ;
-    Size = MAP_APPFONT ( 208 , 170 ) ;
+    Size = MAP_APPFONT ( 208 , 185 ) ;
     ListBox LB_SORT1
     {
         Border = TRUE ;
@@ -357,7 +357,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_SORT_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 208 , 170 ) ;
+    Size = MAP_APPFONT ( 208 , 185 ) ;
     CheckBox BTN_CASESENSITIVE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
@@ -549,7 +549,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_SORT_USER
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 196 , 10 ) ;
         Text = "~Benutzerdefinierte Sortierreihenfolge" ;
         Text [ ENGLISH ] = "~Userdefined sort precedence" ;
@@ -580,14 +580,65 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 17 , 84 ) ;
+        Pos = MAP_APPFONT ( 17 , 85 ) ;
         Size = MAP_APPFONT ( 184 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
+    FixedLine FL_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 103 ) ;
+        Size = MAP_APPFONT ( 196 , 8 ) ;
+        Text = "S~prache" ;
+        Text [ ENGLISH ] = "Language Settings" ;
+    };
+    ListBox LB_LANGUAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 17 , 114 ) ;
+        Size = MAP_APPFONT ( 90 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_ALGORITHM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 111 , 114 ) ;
+        Size = MAP_APPFONT ( 90 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedLine FL_DIRECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 132 ) ;
+        Size = MAP_APPFONT ( 196 , 8 ) ;
+        Text = "Richtung" ;
+        Text [ ENGLISH ] = "Direction" ;
+        Text [ norwegian ] = "Retning" ;
+        Text [ italian ] = "Direzione" ;
+        Text [ portuguese_brazilian ] = "Direção" ;
+        Text [ portuguese ] = "Direcção" ;
+        Text [ finnish ] = "Suunta" ;
+        Text [ danish ] = "Retning" ;
+        Text [ french ] = "Direction" ;
+        Text [ swedish ] = "Riktning" ;
+        Text [ dutch ] = "Richting" ;
+        Text [ spanish ] = "Dirección" ;
+        Text [ english_us ] = "Direction" ;
+        Text[ chinese_simplified ] = "·½Ïò";
+        Text[ russian ] = "Íàïðàâëåíèå";
+        Text[ polish ] = "Kierunek";
+        Text[ japanese ] = "•ûŒü";
+        Text[ chinese_traditional ] = "¤è¦V";
+        Text[ arabic ] = "ÇáÇÊÌÇå";
+        Text[ greek ] = "Êáôåýèõíóç";
+        Text[ korean ] = "¹æÇâ";
+        Text[ turkish ] = "Yön";
+        Text[ language_user1 ] = " ";
+    };
     RadioButton BTN_TOP_DOWN
     {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Pos = MAP_APPFONT ( 12 , 143 ) ;
         Size = MAP_APPFONT ( 184 , 10 ) ;
         Text = "Von ~oben nach unten (Zeilen sortieren)" ;
         Text [ ENGLISH ] = "~Top to bottom (sort rows)" ;
@@ -616,7 +667,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     RadioButton BTN_LEFT_RIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Pos = MAP_APPFONT ( 12 , 156 ) ;
         Size = MAP_APPFONT ( 184 , 10 ) ;
         Text = "Von ~links nach rechts (Spalten sortieren)" ;
         Text [ ENGLISH ] = "~Left to right (sort columns)" ;
@@ -643,38 +694,10 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ turkish ] = "S~oldan saða (sütunlarý sýrala)";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_DIRECTION
-    {
-        Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 196 , 40 ) ;
-        Text = "Richtung" ;
-        Text [ ENGLISH ] = "Direction" ;
-        Text [ norwegian ] = "Retning" ;
-        Text [ italian ] = "Direzione" ;
-        Text [ portuguese_brazilian ] = "Direção" ;
-        Text [ portuguese ] = "Direcção" ;
-        Text [ finnish ] = "Suunta" ;
-        Text [ danish ] = "Retning" ;
-        Text [ french ] = "Direction" ;
-        Text [ swedish ] = "Riktning" ;
-        Text [ dutch ] = "Richting" ;
-        Text [ spanish ] = "Dirección" ;
-        Text [ english_us ] = "Direction" ;
-        Text[ chinese_simplified ] = "·½Ïò";
-        Text[ russian ] = "Íàïðàâëåíèå";
-        Text[ polish ] = "Kierunek";
-        Text[ japanese ] = "•ûŒü";
-        Text[ chinese_traditional ] = "¤è¦V";
-        Text[ arabic ] = "ÇáÇÊÌÇå";
-        Text[ greek ] = "Êáôåýèõíóç";
-        Text[ korean ] = "¹æÇâ";
-        Text[ turkish ] = "Yön";
-        Text[ language_user1 ] = " ";
-    };
     FixedText FT_AREA_LABEL
     {
-        Pos = MAP_APPFONT ( 6 , 146 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 172 ) ;
+        Size = MAP_APPFONT ( 196 , 10 ) ;
         Text = "Datenbereich:" ;
         Text [ ENGLISH ] = "Source data:" ;
         Text [ norwegian ] = "Kildedata:" ;
@@ -698,12 +721,6 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª:";
         Text[ turkish ] = "Veri alaný:";
         Text[ language_user1 ] = " ";
-    };
-    FixedText FT_AREA
-    {
-        Pos = MAP_APPFONT ( 6 , 157 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
-        Text = "< Bereich > (<Name>)" ;
     };
 };
 TabDialog RID_SCDLG_SORT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 10:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@
 #define BTN_DOWN3           12
 
 // TP_SORT_OPTIONS:
-#define GB_DIRECTION        1
+#define FL_DIRECTION        1
 #define LB_SORT_USER        2
 #define LB_OUTAREA          3
 #define ED_OUTAREA          4
 #define FT_AREA_LABEL       5
-#define FT_AREA             6
+//#define FT_AREA             6
 #define BTN_SORT_USER       7
 #define BTN_CASESENSITIVE   8
 #define BTN_LABEL           9
@@ -106,6 +106,9 @@
 #define BTN_LEFT_RIGHT      13
 #define STR_COL_LABEL       14
 #define STR_ROW_LABEL       15
+#define FL_LANGUAGE         16
+#define LB_LANGUAGE         17
+#define LB_ALGORITHM        18
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 10:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,12 @@
 
 #pragma hdrstop
 
-#ifndef PCH
 #include <vcl/msgbox.hxx>
-#include <segmentc.hxx>
-#endif
+#include <tools/isolang.hxx>
+#include <svtools/collatorres.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "scitems.hxx"
 #include "uiitems.hxx"
@@ -89,6 +91,8 @@
 #include "tpsort.hxx"
 #undef _TPSORT_CXX
 
+using namespace com::sun::star;
+
 // STATIC DATA -----------------------------------------------------------
 
 static USHORT pSortRanges[] =
@@ -97,8 +101,6 @@ static USHORT pSortRanges[] =
     SID_SORT,
     0
 };
-
-SEG_EOFGLOBALS()
 
 // -----------------------------------------------------------------------
 
@@ -124,7 +126,6 @@ SEG_EOFGLOBALS()
 //========================================================================
 //========================================================================
 // Sortierkriterien-Tabpage:
-#pragma SEG_FUNCDEF(tpsort_01)
 
 ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
                                           const SfxItemSet& rArgSet )
@@ -167,14 +168,12 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_1e)
 
 __EXPORT ScTabPageSortFields::~ScTabPageSortFields()
 {
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_02)
 
 void ScTabPageSortFields::Init()
 {
@@ -209,7 +208,6 @@ void ScTabPageSortFields::Init()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_1c)
 
 USHORT* __EXPORT ScTabPageSortFields::GetRanges()
 {
@@ -217,7 +215,6 @@ USHORT* __EXPORT ScTabPageSortFields::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_03)
 
 SfxTabPage* __EXPORT ScTabPageSortFields::Create( Window*   pParent,
                                          const SfxItemSet&  rArgSet )
@@ -226,7 +223,6 @@ SfxTabPage* __EXPORT ScTabPageSortFields::Create( Window*   pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_04)
 
 void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& rArgSet )
 {
@@ -287,7 +283,6 @@ void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& rArgSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_05)
 
 BOOL __EXPORT ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -354,7 +349,6 @@ BOOL __EXPORT ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_06)
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
 // void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
@@ -381,7 +375,6 @@ void __EXPORT ScTabPageSortFields::ActivatePage()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_07)
 
 int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSet )
 {
@@ -401,7 +394,6 @@ int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_08)
 
 void ScTabPageSortFields::DisableField( USHORT nField )
 {
@@ -417,7 +409,6 @@ void ScTabPageSortFields::DisableField( USHORT nField )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_09)
 
 void ScTabPageSortFields::EnableField( USHORT nField )
 {
@@ -433,7 +424,6 @@ void ScTabPageSortFields::EnableField( USHORT nField )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_0a)
 
 void ScTabPageSortFields::FillFieldLists()
 {
@@ -505,7 +495,6 @@ void ScTabPageSortFields::FillFieldLists()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_19)
 
 USHORT ScTabPageSortFields::GetFieldSelPos( USHORT nField )
 {
@@ -527,7 +516,6 @@ USHORT ScTabPageSortFields::GetFieldSelPos( USHORT nField )
 // -----------------------------------------------------------------------
 // Handler:
 //---------
-#pragma SEG_FUNCDEF(tpsort_0b)
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {
@@ -572,7 +560,6 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 //========================================================================
 // Sortieroptionen-Tabpage:
 //========================================================================
-#pragma SEG_FUNCDEF(tpsort_0c)
 
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )
@@ -585,15 +572,18 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aBtnHeader      ( this, ScResId( BTN_LABEL ) ),
         aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
         aBtnCopyResult  ( this, ScResId( BTN_COPYRESULT ) ),
-        aLbSortUser     ( this, ScResId( LB_SORT_USER ) ),
-        aBtnSortUser    ( this, ScResId( BTN_SORT_USER ) ),
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
         aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
+        aBtnSortUser    ( this, ScResId( BTN_SORT_USER ) ),
+        aLbSortUser     ( this, ScResId( LB_SORT_USER ) ),
+        aLineLang       ( this, ScResId( FL_LANGUAGE ) ),
+        aLbLanguage     ( this, ScResId( LB_LANGUAGE ) ),
+        aLbAlgorithm    ( this, ScResId( LB_ALGORITHM ) ),
+        aLineDirection  ( this, ScResId( FL_DIRECTION ) ),
         aBtnTopDown     ( this, ScResId( BTN_TOP_DOWN ) ),
         aBtnLeftRight   ( this, ScResId( BTN_LEFT_RIGHT ) ),
-        aGbDirection    ( this, ScResId( GB_DIRECTION ) ),
         aFtAreaLabel    ( this, ScResId( FT_AREA_LABEL ) ),
-        aFtArea         ( this, ScResId( FT_AREA ) ),
+//      aFtArea         ( this, ScResId( FT_AREA ) ),
         //
         aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
         aStrRowLabel    ( ScResId( STR_ROW_LABEL ) ),
@@ -605,7 +595,9 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         rSortData       ( ((const ScSortItem&)
                           rArgSet.Get( nWhichSort )).GetSortData() ),
         pViewData       ( NULL ),
-        pDoc            ( NULL )
+        pDoc            ( NULL ),
+        pColRes         ( NULL ),
+        pColWrap        ( NULL )
 {
     Init();
     FreeResource();
@@ -613,7 +605,6 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_0d)
 
 __EXPORT ScTabPageSortOptions::~ScTabPageSortOptions()
 {
@@ -621,13 +612,24 @@ __EXPORT ScTabPageSortOptions::~ScTabPageSortOptions()
 
     for ( USHORT i=1; i<nEntries; i++ )
         delete (String*)aLbOutPos.GetEntryData( i );
+
+    delete pColRes;
+    delete pColWrap;        //! not if from document
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_0e)
 
 void ScTabPageSortOptions::Init()
 {
+    aStrAreaLabel = aFtAreaLabel.GetText();
+    aStrAreaLabel.Append( (sal_Unicode) ' ' );
+
+    //  CollatorRessource has user-visible names for sort algorithms
+    pColRes = new CollatorRessource();
+
+    //! use CollatorWrapper from document?
+    pColWrap = new CollatorWrapper( comphelper::getProcessServiceFactory() );
+
     const ScSortItem&   rSortItem = (const ScSortItem&)
                                     GetItemSet().Get( nWhichSort );
 
@@ -636,6 +638,7 @@ void ScTabPageSortOptions::Init()
     aBtnSortUser.SetClickHdl  ( LINK( this, ScTabPageSortOptions, EnableHdl ) );
     aBtnTopDown.SetClickHdl   ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
     aBtnLeftRight.SetClickHdl ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
+    aLbLanguage.SetSelectHdl  ( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
     pDoc      = pViewData ? pViewData->GetDocument() : NULL;
@@ -696,15 +699,29 @@ void ScTabPageSortOptions::Init()
         theArea += theDbName;
         theArea += ')';
 
-        aFtArea.SetText( theArea );
+        //aFtArea.SetText( theArea );
+        theArea.Insert( aStrAreaLabel, 0 );
+        aFtAreaLabel.SetText( theArea );
+
         aBtnHeader.SetText( aStrColLabel );
     }
 
     FillUserSortListBox();
+
+    //  get available languages
+
+    aLbLanguage.InsertLanguage( LANGUAGE_SYSTEM );
+    uno::Sequence<lang::Locale> xLoc = LocaleDataWrapper::getInstalledLocaleNames();
+    sal_Int32 nCount = xLoc.getLength();
+    for ( sal_Int32 i=0; i<nCount; i++ )
+    {
+        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
+            xLoc[i].Country );
+        aLbLanguage.InsertLanguage( eLang );
+    }
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_1d)
 
 USHORT* __EXPORT ScTabPageSortOptions::GetRanges()
 {
@@ -712,7 +729,6 @@ USHORT* __EXPORT ScTabPageSortOptions::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_0f)
 
 SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
                                             Window*             pParent,
@@ -722,7 +738,6 @@ SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_10)
 
 void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& rArgSet )
 {
@@ -754,6 +769,16 @@ void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& rArgSet )
         aBtnHeader.SetText( aStrRowLabel );
     }
 
+    LanguageType eLang = ConvertIsoNamesToLanguage(
+                                    rSortData.aCollatorLocale.Language,
+                                    rSortData.aCollatorLocale.Country );
+    if ( eLang == LANGUAGE_DONTKNOW )
+        eLang = LANGUAGE_SYSTEM;
+    aLbLanguage.SelectLanguage( eLang );
+    FillAlgorHdl( &aLbLanguage );               // get algorithms, select default
+    if ( rSortData.aCollatorAlgorithm.Len() )
+        aLbAlgorithm.SelectEntry( pColRes->GetTranslation( rSortData.aCollatorAlgorithm ) );
+
     if ( pDoc && !rSortData.bInplace )
     {
         String aStr;
@@ -784,7 +809,6 @@ void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& rArgSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_11)
 
 BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -810,13 +834,27 @@ BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
                                     ? aLbSortUser.GetSelectEntryPos()
                                     : 0;
 
+    // get locale
+    LanguageType eLang = aLbLanguage.GetSelectLanguage();
+    String sLangStr, sCountry;
+    ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
+    lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
+    theSortData.aCollatorLocale = aLocale;
+
+    // get algorithm
+    String sAlg;
+    uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
+    USHORT nSel = aLbAlgorithm.GetSelectEntryPos();
+    if ( nSel < aAlgos.getLength() )
+        sAlg = aAlgos[nSel];
+    theSortData.aCollatorAlgorithm = sAlg;
+
     rArgSet.Put( ScSortItem( SCITEM_SORTDATA, &theSortData ) );
 
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_12)
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
 // void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
@@ -842,7 +880,6 @@ void __EXPORT ScTabPageSortOptions::ActivatePage()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_13)
 
 int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSet )
 {
@@ -890,7 +927,6 @@ int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_14)
 
 void ScTabPageSortOptions::FillUserSortListBox()
 {
@@ -908,7 +944,6 @@ void ScTabPageSortOptions::FillUserSortListBox()
 
 // -----------------------------------------------------------------------
 // Handler:
-#pragma SEG_FUNCDEF(tpsort_15)
 
 IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
 {
@@ -940,7 +975,6 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_16)
 
 IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 {
@@ -958,7 +992,6 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_17)
 
 IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 {
@@ -974,7 +1007,6 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsort_1b)
 
 void __EXPORT ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
@@ -1004,156 +1036,34 @@ void __EXPORT ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     }
 }
 
-/*------------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.44  2000/09/17 14:08:58  willem.vandorp
-    OpenOffice header added.
+IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
+{
+    LanguageType eLang = aLbLanguage.GetSelectLanguage();
+    String sLangStr, sCountry;
+    ConvertLanguageToIsoNames( eLang, sLangStr, sCountry );
 
-    Revision 1.43  2000/08/31 16:38:21  willem.vandorp
-    Header and footer replaced
+    lang::Locale aLocale( sLangStr, sCountry, rtl::OUString() );
+    uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
 
-    Revision 1.42  2000/05/23 13:41:40  nn
-    FillFieldLists: CreateFromInt32
+    aLbAlgorithm.SetUpdateMode( FALSE );
+    aLbAlgorithm.Clear();
 
-    Revision 1.41  2000/04/14 17:38:03  nn
-    unicode changes
+    long nCount = aAlgos.getLength();
+    const rtl::OUString* pArray = aAlgos.getConstArray();
+    for (long i=0; i<nCount; i++)
+    {
+        String sAlg = pArray[i];
+        String sUser = pColRes->GetTranslation( sAlg );
+        aLbAlgorithm.InsertEntry( sUser, LISTBOX_APPEND );
+    }
+    aLbAlgorithm.SelectEntryPos( 0 );       // first entry is default
 
-    Revision 1.40  2000/02/24 16:09:52  hr
-    #43447# gcc needs temporary
+    aLbAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
 
-    Revision 1.39  2000/02/11 12:24:13  hr
-    #70473# changes for unicode ( patched by automated patchtool )
+    aLbAlgorithm.SetUpdateMode( TRUE );
+    return 0;
+}
 
-    Revision 1.38  1999/05/28 16:05:24  NN
-    #66447# MAXFIELDS ist fuer Feldanzahl, nicht Spaltennummer
-
-
-      Rev 1.37   28 May 1999 18:05:24   NN
-   #66447# MAXFIELDS ist fuer Feldanzahl, nicht Spaltennummer
-
-      Rev 1.36   05 Dec 1997 19:54:20   ANK
-   Includes geaendert
-
-      Rev 1.35   12 Jun 1997 13:17:16   NN
-   #40646# STR_DB_NONAME statt SCSTR_NONAME fuer DB-Bereiche
-
-      Rev 1.34   05 Feb 1997 21:29:10   NN
-   SfxTabPage Umstellung: FillItemSet bekommt leeren Set
-
-      Rev 1.33   22 Jan 1997 17:09:44   NN
-   #35176# Header-Flag im FillItemSet der OptionsPage, alter Param als Default
-
-      Rev 1.32   29 Oct 1996 14:04:12   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.31   18 Jul 1996 16:52:48   NN
-   DB-Bereiche als Ziel, ScAreaNameIterator benutzen
-
-      Rev 1.30   29 Jan 1996 15:12:34   MO
-   neuer Link
-
-      Rev 1.29   17 Dec 1995 12:47:42   MD
-   Semikolon in Zeile 822 entfernt
-
-      Rev 1.28   28 Nov 1995 10:32:54   MO
-   Tripel/Area durch Address/Range ersetzt
-
-      Rev 1.27   08 Nov 1995 13:06:24   MO
-   301-Aenderungen
-
-      Rev 1.26   14 Sep 1995 12:43:12   MO
-   FixedInfos
-
-      Rev 1.25   24 Jul 1995 14:15:54   MO
-   EXPORT
-
-      Rev 1.24   04 Jul 1995 18:29:00   MO
-   __EXPORTs
-
-      Rev 1.23   30 Jun 1995 17:50:12   HJS
-   exports fuer create
-
-      Rev 1.22   18 Apr 1995 10:04:12   MO
-   FixedText fuer TabBereich mit Light-Font
-
-      Rev 1.21   02 Mar 1995 16:20:36   MO
-   InfoBoxen mit Rsc-Strings
-
-      Rev 1.20   05 Feb 1995 12:17:48   MO
-   * Reset() aus den Ctors entfernt
-
-
-      Rev 1.19   01 Feb 1995 09:32:20   MO
-   * __EXPORT vor Destruktoren
-
-
-      Rev 1.18   31 Jan 1995 11:55:36   MO
-   * User-Listen einlesen/auswerten
-   * Activate()-Handler wird nun wieder gerufen
-
-      Rev 1.17   27 Jan 1995 16:16:32   MO
-   * Umstellung auf Slot-IDs
-   * GetRanges()-Methode
-
-      Rev 1.16   25 Jan 1995 13:42:52   MO
-    Umbenennung tp_* tp*
-
-      Rev 1.15   25 Jan 1995 12:59:16   MO
-   * Kopierziel kann wie in den Filterdialogen ueber eine ListBox
-     ausgewaehlt werden.
-   * Auswertung der Zielposition im Reset()
-
-      Rev 1.14   22 Jan 1995 19:38:42   NN
-   Position des DB-Bereichs im Output-Item initialisieren
-
-      Rev 1.13   22 Jan 1995 15:10:14   SC
-   2.37 Anpassung
-
-      Rev 1.12   19 Jan 1995 16:40:10   TRI
-   __EXPORT vor verschiedene LinkHandler gesetzt
-
-      Rev 1.11   18 Jan 1995 13:56:24   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.10   13 Jan 1995 10:26:06   MO
-   Erkennen von DB-Bereichen in uebergebener Selektion
-   Ueberpruefung von eingegebenem Kopierbereich
-
-      Rev 1.9   12 Jan 1995 14:48:00   MO
-   * Verwendung von ScRangeUtil
-
-      Rev 1.8   10 Jan 1995 16:43:38   MO
-   ScSortParam mit Arrays
-
-      Rev 1.7   09 Jan 1995 11:16:16   MO
-   Umstellung auf ScSortItem mit ScSortParam als Member
-
-      Rev 1.6   05 Jan 1995 16:14:50   MO
-   Sortierfeld-Selektion bleibt jetzt erhalten, wenn auf Options-Page
-   zwischen Zeilen-/Spalten-weise sortieren bzw. Koepfe/nicht-Koepfe
-   umgeschaltet wird.
-
-      Rev 1.5   04 Jan 1995 19:28:40   MO
-   Verwendung von DbUiUtil
-
-      Rev 1.4   04 Jan 1995 13:10:38   MO
-   Reset(): Enable des zweiten Sortierkriteriums korrigiert
-
-      Rev 1.3   21 Dec 1994 18:16:12   MO
-   Feld- und Optionenseiten teilen sich ihre Aenderungen ueber
-   den TabDialog mit (Sortierrichtung und Koepfe ja/nein)
-
-      Rev 1.2   21 Dec 1994 12:16:24   MO
-   vorlaeufige Version
-
-      Rev 1.1   14 Dec 1994 13:51:58   MO
-   Globale ResIds jetzt in sc.hrc
-
-      Rev 1.0   13 Dec 1994 20:51:12   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
