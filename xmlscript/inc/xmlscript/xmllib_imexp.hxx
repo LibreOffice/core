@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_imexp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: ab $ $Date: 2001-10-23 15:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ struct LibDescriptor
     ::rtl::OUString aStorageURL;
     sal_Bool bLink;
     sal_Bool bReadOnly;
+    sal_Bool bPasswordProtected;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aElementNames;
 };
 
