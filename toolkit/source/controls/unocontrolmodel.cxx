@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:03:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
@@ -331,6 +334,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
     {
         switch ( nPropId )
         {
+            case BASEPROPERTY_VERTICALALIGN:
             case BASEPROPERTY_BORDERCOLOR:
             case BASEPROPERTY_SYMBOL_COLOR:
             case BASEPROPERTY_TABSTOP:
@@ -1214,7 +1218,13 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                         }
                     }
                     break;
-                    // TODO: perhaps we should allow us some more tolerance for enum types, too ....
+                    case TypeClass_ENUM:
+                    {
+                        sal_Int32 nValue = 0;
+                        if ( bConverted = ( rValue >>= nValue ) )
+                            rConvertedValue = ::cppu::int2enum( nValue, *pDestType );
+                    }
+                    break;
                 }
 
                 if (!bConverted)
