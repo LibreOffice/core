@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:34:40 $
+ *  last change: $Author: os $ $Date: 2002-03-07 09:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,9 +170,8 @@ __EXPORT SwInputWindow::~SwInputWindow()
     //Lineale aufwecken
     if(pView)
     {
-        pView->GetHLineal()->SetActive( TRUE );
-        if( pView->GetVLineal())
-            pView->GetVLineal()->SetActive( TRUE );
+        pView->GetHLineal().SetActive( TRUE );
+        pView->GetVLineal().SetActive( TRUE );
     }
     if ( pMgr )
         delete pMgr;
@@ -212,9 +211,8 @@ void SwInputWindow::Show()
     //Lineale anhalten
     if(pView)
     {
-        pView->GetHLineal()->SetActive( FALSE );
-        if( pView->GetVLineal())
-            pView->GetVLineal()->SetActive( FALSE );
+        pView->GetHLineal().SetActive( FALSE );
+        pView->GetVLineal().SetActive( FALSE );
 
         DBG_ASSERT(pWrtShell, "Keine WrtShell!")
         // Cursor in Tabelle
@@ -706,6 +704,9 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/08/16 09:34:40  fme
+    Fix #90760#: Removed VCL defines
+
     Revision 1.3  2001/06/11 09:18:10  mba
     #87722#: no global access for ImageManager
 
