@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 09:18:37 $
+ *  last change: $Author: os $ $Date: 2002-03-20 11:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,6 +1260,7 @@ MOVEPAGE:
             bNormalPrint = TRUE;
             SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
             return;
+        case FN_CLOSE_PAGEPREVIEW:
         case SID_PRINTPREVIEW:
             //  print preview is now always in the same frame as the tab view
             //  -> always switch this frame back to normal view
@@ -2261,6 +2262,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2002/03/20 09:18:37  os
+      #97978# keyboard access corrected
+
       Revision 1.12  2002/03/15 07:32:50  os
       #97978# page preview accessiblity implemented
 
