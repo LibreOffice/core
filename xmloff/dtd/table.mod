@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.43 2003-08-19 11:29:10 hjs Exp $
+	$Id: table.mod,v 1.44 2003-12-01 09:41:16 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -207,6 +207,7 @@
 	table:protected %boolean; "false"
 	table:protection-key CDATA #IMPLIED
 	table:print-ranges %cell-range-address-list; #IMPLIED
+	table:automatic-print-range %boolean; #IMPLIED
 >
 <!ELEMENT table:table-source EMPTY>
 <!ATTLIST table:table-source
