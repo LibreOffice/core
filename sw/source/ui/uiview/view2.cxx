@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-08-05 09:02:22 $
+ *  last change: $Author: os $ $Date: 2002-08-07 13:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1371,6 +1371,17 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
 
     if( bInsert )
     {
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                GetViewFrame()->GetBindings().GetRecorder();
+        if ( xRecorder.is() )
+        {
+            SfxRequest aRequest(GetViewFrame(), SID_INSERTDOC);
+            aRequest.AppendItem(SfxStringItem(SID_INSERTDOC, pMed->GetOrigURL()));
+            if(pMed->GetFilter())
+            aRequest.AppendItem(SfxStringItem(FN_PARAM_1, pMed->GetFilter()->GetName()));
+            aRequest.Done();
+        }
+
         SfxObjectShellRef aRef( pDocSh );
 
         pDocSh->RegisterTransfer( *pMed );
