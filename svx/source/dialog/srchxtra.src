@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:30:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "¦r«¬";
                 Text[ turkish ] = "Font";
                 Text[ arabic ] = "ÇÇáÎØ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -133,6 +134,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Font Effects";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ catalan ] = "Efectos de fuente";
             };
             PageItem
             {
@@ -156,6 +158,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
                 Text[ arabic ] = "ÇáãæÖÚ";
+                Text[ catalan ] = "Posición";
             };
             PageItem
             {
@@ -173,12 +176,13 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
-                Text[ japanese ] = "˜a•¶Ú²±³Ä";
+                Text[ japanese ] = "“ú–{ŒêÚ²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÖÐÈÕº«°æÊ½";
                 Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
+                Text[ catalan ] = "Diseño asiático";
             };
             PageItem
             {
@@ -208,6 +212,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "µé¿© ¾²±â¿Í °£°Ý";
                 Text[ turkish ] = "Girinti ve Aralýklar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sangrías y espacios";
             };
             PageItem
             {
@@ -233,6 +238,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineación";
             };
             PageItem
             {
@@ -262,6 +268,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
                 Text[ turkish ] = "Metin akýþý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Flujo del texto";
             };
             PageItem
             {
@@ -286,6 +293,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
             };
             PageItem
             {
@@ -313,6 +321,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
         };
     };
@@ -326,6 +335,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
     Text[ turkish ] = "Metin öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de texto ";
 };
  // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHATTR
@@ -383,6 +393,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     OKButton BTN_ATTR_OK
     {
@@ -410,6 +421,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     Text[ korean ] = "¼Ó¼º";
     Text[ turkish ] = "Öznitelikler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos";
 };
  // RID_SVXDLG_SEARCHSIMILARITY -------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHSIMILARITY
@@ -453,6 +465,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "¹®ÀÚ ±³È¯(~E)";
         Text[ turkish ] = "Ka~rakter deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cambiar caracteres";
     };
     NumericField NF_OTHER
     {
@@ -496,6 +509,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "¹®ÀÚ Ãß°¡(~A)";
         Text[ turkish ] = "~Karakter ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir caracteres";
     };
     NumericField NF_LONGER
     {
@@ -537,6 +551,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "¹®ÀÚ Á¦°Å(~R)";
         Text[ turkish ] = "Kar~akter kaldýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar caracteres";
     };
     NumericField NF_SHORTER
     {
@@ -579,6 +594,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "Á¶ÇÕ(~C)";
         Text[ turkish ] = "~Birleþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Co~mbinar";
     };
     GroupBox GB_SIMILARITY
     {
@@ -605,6 +621,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuración";
     };
     OKButton BTN_ATTR_OK
     {
@@ -638,5 +655,6 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ korean ] = "À¯»ç¼º Ã£±â";
     Text[ turkish ] = "Benzerleri ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Búsqueda por semejanza";
 };
  // ********************************************************************** EOF
