@@ -131,38 +131,15 @@ public class CellStyle extends Style implements Cloneable {
     /**
      *  Constructor for use when going from client device format to DOM
      *
-     *  @param  name     Name of text <code>Style</code>.  Can be null.
-     *  @param  family   Family of text <code>Style</code> (usually
-     *                   <i>text</i>).  Can be null.
-     *  @param  parent   Name of parent text <code>Style</code>, or null
-     *                   for none.
-     *  @param  mask     Bitwise mask of text attributes that this text
-     *                   <code>Style</code> will specify.  Can be any
-     *                   combination of the following, or'ed together:
-     *                   {@link #BOLD}, {@link #ITALIC}, {@link #UNDERLINE},
-     *                   {@link #STRIKETHRU}, {@link #SUPERSCRIPT},
-     *                   {@link #SUBSCRIPT}.  This parameter determines what
-     *                   attributes this <code>Style</code> will specify.
-     *                   When an attribute is specified in a
-     *                   <code>Style</code>, its value can be either
-     *                   <i>on</i> or <i>off</i>.  The on/off value for
-     *                   each attribute is controlled by the
-     *                   <code>values</code> parameter.
-     *  @param values    Values of text attributes that this text
-     *                   <code>Style</code> will be setting.  Any of the
-     *                   attributes ({@link #BOLD}, etc) listed for
-     *                   <code>mask</code> can be used for this.
-     *  @param fontSize  Font size in points.
-     *  @param fontName  Name of font.
-     *  @param sc        The <code>StyleCatalog</code>, which is used for
-     *                   looking up ancestor <code>Style</code> objects.
+     *  @param  name    Name of cell <code>Style</code>.  Can be null.
+     *  @param  family  Family of text <code>Style</code> (usually
+     *                  <i>text</i>).  Can be null.
+     *  @param  parent  Name of parent text <code>Style</code>, or null
+     *                  for none.
+     *  @param  fmt     size in points.
+     *  @param  sc      The <code>StyleCatalog</code>, which is used for
+     *                  looking up ancestor <code>Style</code> objects.
      */
-    public CellStyle(String name, String family, String parent,
-    int mask, int values, int fontSize, String fontName, StyleCatalog sc) {
-        super(name, family, parent, sc);
-        fmt = new Format(values, mask, fontSize, fontName);
-    }
-
     public CellStyle(String name, String family, String parent,Format fmt, StyleCatalog sc) {
         super(name, family, parent, sc);
         this.fmt = fmt;
@@ -380,8 +357,6 @@ public class CellStyle extends Style implements Cloneable {
             for (int m = Format.BOLD; m <= Format.SUBSCRIPT; m = m << 1) {
                 if ((fmt.getAttribute(m)) && (parentFormat.getAttribute(m))) {
                     resolvedFormat.setAttribute(m, parentFormat.getAttribute(m));
-                    // resolved.mask |= m;
-                    // resolved.values |= (parentStyle.mask & m);
                 }
             }
 

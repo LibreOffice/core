@@ -205,7 +205,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         doc = sxcDoc.getContentDOM();
         settings = sxcDoc.getSettingsDOM();
-
+        initFontTable();
         // Little fact for the curious reader: workbookName should
         // be the name of the StarCalc file minus the file extension suffix.
 
@@ -228,6 +228,34 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         return sxcDoc;
     }
 
+    /**
+     * This initializes a font table so we can imcluide some basic font
+     * support for spreadsheets
+     *
+     */
+    private void initFontTable() {
+
+        String fontTable[]= new String[] {  "Tahoma", "Tahoma", "swiss", "variable",
+                                            "Courier New", "&apos;Courier New&apos;", "modern", "fixed"};
+        //  Traverse to the office:body element.
+        //  There should only be one.
+        NodeList list = doc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
+        Node root = list.item(0);
+
+        for(int i=0;i<fontTable.length;) {
+
+            // Create an element node for the table
+            Element tableElement = (Element) doc.createElement(TAG_STYLE_FONT_DECL);
+
+            tableElement.setAttribute(ATTRIBUTE_STYLE_NAME, fontTable[i++]);
+               tableElement.setAttribute(ATTRIBUTE_FO_FONT_FAMILY, fontTable[i++]);
+               tableElement.setAttribute(ATTRIBUTE_FO_FONT_FAMILY_GENERIC, fontTable[i++]);
+            tableElement.setAttribute(ATTRIBUTE_STYLE_FONT_PITCH, fontTable[i++]);
+
+               root.appendChild(tableElement);
+        }
+
+    }
 
     /**
      *  Outer level method used to decode a WorkBook
@@ -243,7 +271,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         //  Traverse to the office:body element.
         //  There should only be one.
         NodeList list = doc.getElementsByTagName(TAG_OFFICE_BODY);
-        Node node = list.item(0);;
+        Node node = list.item(0);
 
         for (int i = 0; i < numSheets; i++) {
 

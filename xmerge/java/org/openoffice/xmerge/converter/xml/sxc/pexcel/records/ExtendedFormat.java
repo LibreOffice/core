@@ -314,7 +314,8 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      */
     public boolean compareTo(ExtendedFormat rhs) {
 
-        if(this.getBackground() != rhs.getBackground())
+        if(EndianConverter.readShort(icvFill) !=
+        EndianConverter.readShort(rhs.icvFill))
             return false;
 
         if(this.getTextAttr() != rhs.getTextAttr())

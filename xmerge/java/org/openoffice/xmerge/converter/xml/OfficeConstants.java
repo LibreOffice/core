@@ -99,9 +99,8 @@ public interface OfficeConstants {
     /** Element tag for <i>office:styles</i>. */
     public final static String TAG_OFFICE_STYLES = "office:styles";
 
- /** Element tag for <i>office:meta</i>. */
+    /** Element tag for <i>office:meta</i>. */
     public final static String TAG_OFFICE_META = "office:meta";
-
 
     /** Element tag for <i>office:automatic-styles</i>. */
     public final static String TAG_OFFICE_AUTOMATIC_STYLES = "office:automatic-styles";
@@ -179,6 +178,12 @@ public interface OfficeConstants {
      *  <i>fo:font-family</i>.
      */
     public final static String ATTRIBUTE_FO_FONT_FAMILY = "fo:font-family";
+
+    /**
+     *  Attribute tag for <i>fo:font-family</i> of element
+     *  <i>fo:font-family</i>.
+     */
+    public final static String ATTRIBUTE_FO_FONT_FAMILY_GENERIC = "fo:font-family-generic";
 
     /** Element tag for <i>text:p</i>. */
     public final static String TAG_PARAGRAPH = "text:p";
@@ -393,13 +398,13 @@ public interface OfficeConstants {
 
     /**
      * Attribute tag for <i>manifest:media-type</i> of element
-     * <i>manifest:file-entry.</i>
+     * <i>manifest:file-entry</i>.
      */
     public final static String ATTRIBUTE_MANIFEST_FILE_TYPE = "manifest:media-type";
 
     /**
      * Attribute tag for <i>manifest:full-path</i> of element
-     * <i>manifest:file-entry.</i>
+     * <i>manifest:file-entry</i>.
      */
     public final static String ATTRIBUTE_MANIFEST_FILE_PATH = "manifest:full-path";
 

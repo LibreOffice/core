@@ -323,12 +323,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 Node child = nodeList.item(i);
 
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    NameDefinition nd = new NameDefinition();
-                    nd.readNode(child);
+                    NameDefinition nd = new NameDefinition(child);
                     encoder.setNameDefinition(nd);
                 }
             }
-
         }
 
         Debug.log(Debug.TRACE, "</NAMED:EXPRESSIONS>");
@@ -638,21 +636,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
             Debug.log(Debug.TRACE, "No defined Style Attribute was found");
 
-        // if there is no style we need to check to see if there is a default
-        // cell style defined in the table-column
-        } else if (styleName.length()==0) {
-            int index = 1;
-            for(Enumeration e = ColumnRowList.elements();e.hasMoreElements();) {
-                ColumnRowInfo cri = (ColumnRowInfo) e.nextElement();
-                if(cri.isColumn()) {
-                    if(colID>=index && colID<(index+cri.getRepeated())) {
-                        fmt = new Format(cri.getFormat());
-                    }
-                    index += cri.getRepeated();
-                }
-            }
-
-        } else {
+        } else if(styleName.length()!=0) {
 
             CellStyle cStyle = (CellStyle)styleCat.lookup(styleName,
                                 SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
@@ -675,6 +659,27 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             // The cell is not repeated
             colsRepeated = 1;
         }
+
+
+        // if there is no style we need to check to see if there is a default
+        // cell style defined in the table-column's
+
+        if (fmt.isDefault() && styleName.length()==0) {
+            int index = 1;
+            for(Enumeration e = ColumnRowList.elements();e.hasMoreElements();) {
+                ColumnRowInfo cri = (ColumnRowInfo) e.nextElement();
+                if(cri.isColumn()) {
+                    if(colID>=index && colID<(index+cri.getRepeated())) {
+                        fmt = new Format(cri.getFormat());
+                    }
+                    index += cri.getRepeated();
+                }
+            }
+        }
+
+
+        // for (int j = 0; j < colsRepeated; j++) {
+
 
         if (tableValueTypeNode != null) {
 
@@ -781,9 +786,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             Debug.log(Debug.INFO,
             "TextNode, DateNode, TimeNode or BooleanNode\n");
             // This handles the case where we have style information but no content
-            if(styleName.length()!=0) {
-                addCell("");
-            }
             if (node.hasChildNodes()) {
                 NodeList childList = node.getChildNodes();
                 int len = childList.getLength();
@@ -797,6 +799,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                         }
                     }
                 }
+            } else if(!fmt.isDefault()) {
+                addCell("");
             }
         }
 
@@ -916,6 +920,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             for (int j = 0; j < colsRepeated; j++) {
 
                 Debug.log(Debug.TRACE, "<TD>");
+
 
                 // Add the cell data to the encoded spreadsheet document
                 encoder.addCell(row, col, fmt, cellValue);

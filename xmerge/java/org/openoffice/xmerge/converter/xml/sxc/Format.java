@@ -129,10 +129,9 @@ public class Format implements Cloneable {
      * by setting all the format attributes.
      *
      */
-       public Format(int attributes, int mask, int fontSize, String fontName) {
+       public Format(int attributes, int fontSize, String fontName) {
 
         this.attributes = attributes;
-        this.mask = mask;
         sizeInPoints = fontSize;
         this.fontName = fontName;
     }
@@ -157,6 +156,7 @@ public class Format implements Cloneable {
         vertAlign = fmt.getVertAlign();
         foreground = fmt.getForeground();
         background = fmt.getBackground();
+        sizeInPoints = fmt.sizeInPoints;
     }
 
 
@@ -170,6 +170,7 @@ public class Format implements Cloneable {
        decimalPlaces = 0;
        attributes = 0;
        mask = 0;
+       sizeInPoints = 10;
        align = LEFT_ALIGN;
        vertAlign = BOTTOM_ALIGN;
        fontName = "";
@@ -208,7 +209,7 @@ public class Format implements Cloneable {
 
     /**
      *  Return true if text <code>attribute</code> is set in this
-     *  <code>Style</code>.  An attribute that is set may have a
+     *  <code>Style</code>.An attribute that is set may have a
      *  value of <i>on</i> or <i>off</i>.
      *
      *  @param  attribute  The attribute to check ({@link #BOLD},
@@ -223,8 +224,8 @@ public class Format implements Cloneable {
 
 
     /**
-     *  Set the formatting category of this object, i.e. number, date,
-     *  currency.  The <code>OfficeConstants</code> class contains string
+     *  Set the formatting category of this object, ie number, date,
+     *  currency.The <code>OfficeConstants</code> class contains string
      *  constants for the category types.
      *
      *  @see  org.openoffice.xmerge.converter.xml.OfficeConstants
@@ -388,7 +389,8 @@ public class Format implements Cloneable {
       *                 foreground color.
       */
      public void setForeground(Color c) {
-        foreground = c;
+         if(c!=null)
+            foreground = new Color(c.getRGB());
      }
 
 
@@ -409,7 +411,8 @@ public class Format implements Cloneable {
       *                 the background color.
       */
      public void setBackground(Color c) {
-         background = c;
+         if(c!=null)
+             background = new Color(c.getRGB());
      }
 
 
@@ -430,6 +433,28 @@ public class Format implements Cloneable {
      public String toString() {
          return new String("Value : " + getValue() + " Category : " + getCategory());
      }
+
+    public boolean isDefault() {
+
+        Format rhs = new Format();
+
+        if (rhs.attributes!= attributes)
+                return false;
+
+        if (foreground!=rhs.foreground)
+            return false;
+
+        if (background!=rhs.background)
+            return false;
+
+        if (rhs.align!= align)
+                return false;
+
+        if (rhs.vertAlign!= vertAlign)
+                return false;
+
+        return true;
+    }
 
     /**
      *  Return true if <code>style</code> specifies as much or less
@@ -453,26 +478,14 @@ public class Format implements Cloneable {
                 return false;
         }
 
-        if (rhs.fontName != null) {
-            if (fontName == null)
-                return false;
-            if (!fontName.equals(rhs.fontName))
-                return false;
-        }
+        if (fontName!=rhs.fontName)
+            return false;
 
-        if (rhs.foreground != null) {
-            if (foreground== null)
-                return false;
-            if (!foreground.equals(rhs.foreground))
-                return false;
-        }
+        if (foreground!=rhs.foreground)
+            return false;
 
-        if (rhs.background != null) {
-            if (background== null)
-                return false;
-            if (!background.equals(rhs.background))
-                return false;
-        }
+        if (background!=rhs.background)
+            return false;
 
         if (rhs.align!= align)
                 return false;

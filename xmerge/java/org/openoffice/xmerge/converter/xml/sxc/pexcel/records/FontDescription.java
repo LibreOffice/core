@@ -59,6 +59,7 @@ import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.awt.Color;
 
 import org.openoffice.xmerge.converter.xml.sxc.Format;
@@ -99,7 +100,7 @@ public class FontDescription implements BIFFRecord {
 
         Debug.log(Debug.TRACE,"Building FontDescriptor based on Format : " + fmt);
 
-        this.dwHeight   = EndianConverter.writeShort((short) 200);
+        this.dwHeight   = EndianConverter.writeShort((short) (fmt.getFontSize()*20));
 
         grbit = new byte[] {(byte)0x00, (byte)0x00};
         bls = EndianConverter.writeShort((short) 400);
@@ -117,8 +118,16 @@ public class FontDescription implements BIFFRecord {
 
         bFamily     = 0;
         bCharSet    = 0;
-        cch         = 6;
-        rgch            = (new String("Tahoma")).getBytes("UTF-16LE");
+
+        String fontName = fmt.getFontName();
+        if( !fontName.equals("Tahoma") &&
+            !fontName.equals("Courier New")) {
+            // We will set our default font to be Tahoma
+            fontName = new String("Tahoma");
+        }
+
+        cch = (byte) fontName.length();
+        rgch = fontName.getBytes("UTF-16LE");
 
         Color foreground  = fmt.getForeground();
         if( foreground != null ) {
@@ -185,7 +194,15 @@ public class FontDescription implements BIFFRecord {
      */
     public boolean compareTo(FontDescription rhs) {
 
-        if(this.getForeground() != rhs.getForeground())
+        if(EndianConverter.readShort(icvFore) !=
+        EndianConverter.readShort(rhs.icvFore))
+            return false;
+
+        if (EndianConverter.readShort(dwHeight) !=
+        EndianConverter.readShort(dwHeight))
+            return false;
+
+        if (this.getFont() != rhs.getFont())
             return false;
 
         if (this.isBold() != rhs.isBold())
@@ -217,6 +234,30 @@ public class FontDescription implements BIFFRecord {
      */
     public short getBiffType() {
         return PocketExcelConstants.FONT_DESCRIPTION;
+    }
+
+       /**
+     * Get the Font size
+     *
+     */
+    public int getFontSize() {
+        return EndianConverter.readShort(dwHeight)/20;
+    }
+
+    /**
+     * Get the font name
+     *
+     */
+    public String getFont() {
+
+        String name;
+
+        try {
+            name = new String(rgch, "UTF-16LE");
+        } catch (UnsupportedEncodingException e){
+            name = "Tahoma";
+        }
+        return name;
     }
 
     /**

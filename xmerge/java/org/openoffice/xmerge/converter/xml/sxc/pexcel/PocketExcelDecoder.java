@@ -440,7 +440,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
     /**
      *  Create the format data for the new cell.
      */
-    private void readCellFormat() {
+    private void readCellFormat() throws IOException {
 
         fmt.clearFormatting();
 
@@ -463,6 +463,10 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         fmt.setAttribute(Format.BOTTOM_BORDER, xf.isBorder(ExtendedFormat.BOTTOM_BORDER));
         fmt.setAttribute(Format.RIGHT_BORDER, xf.isBorder(ExtendedFormat.RIGHT_BORDER));
         fmt.setAttribute(Format.LEFT_BORDER, xf.isBorder(ExtendedFormat.LEFT_BORDER));
+
+        fmt.setFontName(fd.getFont());
+        fmt.setFontSize(fd.getFontSize());
+
         fmt.setCategory(getCellDataType());
 
     }

@@ -122,6 +122,7 @@ public class Formula extends CellValue implements OfficeConstants {
             num = EndianConverter.writeDouble(toExcelSerialDate(fmt.getValue()));
         } else if(category.equalsIgnoreCase(CELLTYPE_TIME)) {
             Debug.log(Debug.TRACE,"Time Formula");
+            num = EndianConverter.writeDouble(toExcelSerialTime(fmt.getValue()));
         } else if(category.equalsIgnoreCase(CELLTYPE_PERCENT)) {
             Debug.log(Debug.TRACE,"Percent Formula");
             double percent = (double) Double.parseDouble(fmt.getValue());
@@ -265,6 +266,26 @@ public class Formula extends CellValue implements OfficeConstants {
                             day - 2415019 - 32075;
 
         return serialDate;
+    }
+
+    /**
+     * Excel times are a fraction of a 24 hour day expressed in seconds. This method converts
+     * to this time.
+     *
+     * @param s String representing a time in the form ??HH?MM?SS?
+     * @return The excel serial time
+     */
+    public double toExcelSerialTime(String s) throws IOException {
+
+        int hours = Integer.parseInt(s.substring(2,4));
+        int mins = Integer.parseInt(s.substring(5,7));
+        int secs = Integer.parseInt(s.substring(8,10));
+
+        int timeSecs = (hours*3600) + (mins*60) + (secs);
+
+        double d = (double) timeSecs / (24 * 3600);
+
+        return d;
     }
 
 }

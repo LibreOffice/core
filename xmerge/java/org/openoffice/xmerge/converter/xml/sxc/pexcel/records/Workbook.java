@@ -442,11 +442,17 @@ OfficeConstants {
                 currentWS.addCell(lc);
             }
         } else {
-            Debug.log(Debug.TRACE, "Label Cell : " + cellContents);
-            LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
-            currentWS.addCell(lc);  // three because we assume the last three
-                                    // Records in any worksheet is the selection,
-                                    // window2 and eof Records
+            if(cellContents.length()==0) {
+                Debug.log(Debug.TRACE, "Blank Cell");
+                BlankCell b = new BlankCell(row, col, ixfe);
+                currentWS.addCell(b);
+            } else {
+                Debug.log(Debug.TRACE, "Label Cell : " + cellContents);
+                LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
+                currentWS.addCell(lc);  // three because we assume the last three
+                                        // Records in any worksheet is the selection,
+                                        // window2 and eof Records
+            }
         }
     }
 
@@ -463,21 +469,21 @@ OfficeConstants {
         int nCols = 0;
         int nRows = 0;
 
-        Debug.log(Debug.TRACE,"Worksheet: addColInfo : " + columnRows);
+        Debug.log(Debug.TRACE,"Workbook: addColInfo()");
         for(Enumeration e = columnRows.elements();e.hasMoreElements();) {
             ColumnRowInfo cri =(ColumnRowInfo) e.nextElement();
             int ixfe = 0;
             int size = cri.getSize();
             int repeated = cri.getRepeated();
             if(cri.isColumn()) {
-                Debug.log(Debug.TRACE,"Worksheet: adding ColInfo width = " + size);
+                Debug.log(Debug.TRACE,"Workbook: adding ColInfo width = " + size);
                 ColInfo newColInfo = new ColInfo(   nCols,
-                                                    nCols+repeated,
+                                                    nCols+repeated-1,
                                                     size, ixfe);
                 currentWS.addCol(newColInfo);
                 nCols += repeated;
             } else if(cri.isRow()) {
-                Debug.log(Debug.TRACE,"Worksheet: adding Row Height = " + size);
+                Debug.log(Debug.TRACE,"Workbook: adding Row Height = " + size);
                 if(size!=255) {
                     for(int i=0;i<repeated;i++) {
                         Row newRow = new Row(nRows++, size);

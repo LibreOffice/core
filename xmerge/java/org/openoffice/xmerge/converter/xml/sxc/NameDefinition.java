@@ -87,6 +87,16 @@ public class NameDefinition implements OfficeConstants {
     }
 
     /**
+     * Constructor that takes a <code>Node</code> to build a
+     * <code>NameDefinition</code>
+     *
+     * @param root XML Node to read from
+     */
+    public NameDefinition(Node root) {
+        readNode(root);
+    }
+
+    /**
      * Default Constructor for a <code>NameDefinition</code>
      *
      */

@@ -938,7 +938,10 @@ public abstract class OfficeDocument
         // needed but StarCalc 6.0 will crash without this tag.
         Element root = contentDoc.getDocumentElement();
 
-        Element child = contentDoc.createElement(TAG_OFFICE_AUTOMATIC_STYLES);
+        Element child = contentDoc.createElement(TAG_OFFICE_FONT_DECLS);
+        root.appendChild(child);
+
+        child = contentDoc.createElement(TAG_OFFICE_AUTOMATIC_STYLES);
         root.appendChild(child);
 
         child = contentDoc.createElement(TAG_OFFICE_BODY);

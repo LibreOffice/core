@@ -92,21 +92,21 @@ public class SheetSettings implements OfficeConstants {
     final public static int SPLIT   = 0x01;
     final public static int FREEZE  = 0x02;
 
-    /**
-     * Default Constructor for a <code>SheetSettings</code>
-     *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
-     */
-    public SheetSettings(Node root) {
-        readNode(root);
-    }
 
     /**
      * Default Constructor for a <code>ColumnRowInfo</code>
      *
      */
     public SheetSettings() {
+    }
+
+    /**
+     * Constructor that takes a <code>Node</code> to build a <code>SheetSettings</code>
+     *
+     * @param root XML Node to read from
+     */
+    public SheetSettings(Node root) {
+        readNode(root);
     }
 
     /**
