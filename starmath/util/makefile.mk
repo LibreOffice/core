@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:58:27 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:39:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,14 +67,12 @@ TARGET=smath3
 LIBTARGET=NO
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
-
 
 # --- Files --------------------------------------------------------
 
@@ -85,57 +83,41 @@ RESLIB1SRSFILES=\
     $(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)$/sfx.srs
 
 SHL1TARGET= sm$(UPD)$(DLLPOSTFIX)
-SHL1VERSIONMAP= sm.map
-.IF "$(GUI)" == "WNT"
-SHL1RES=	$(RCTARGET)
-.ENDIF
-
 SHL1IMPLIB= smimp
-SHL1LIBS=   $(SLB)$/starmath.lib
+
+SHL1VERSIONMAP= sm.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=		$(SHL1TARGET)
+
 SHL1STDLIBS= \
-            $(TOOLSLIB) \
-                        $(TKLIB) \
-            $(SVTOOLLIB) \
-            $(SVLLIB)	\
-            $(SVMEMLIB) \
-            $(SVLIB) \
-            $(SOTLIB) \
-            $(SO2LIB) \
-            $(SFX2LIB) \
-            $(XMLOFFLIB) \
-            $(UNOTOOLSLIB) \
-            $(CPPULIB) \
-            $(CPPUHELPERLIB) \
             $(SVXLIB) \
-            $(SALLIB) \
-            $(VOSLIB) \
-                        $(UCBHELPERLIB) \
-                        $(COMPHELPERLIB)
+            $(SFX2LIB) \
+            $(SO2LIB) \
+            $(XMLOFFLIB) \
+            $(SVTOOLLIB) \
+            $(TKLIB) \
+            $(VCLLIB) \
+            $(SVLLIB)	\
+            $(SOTLIB) \
+            $(UNOTOOLSLIB) \
+            $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SALLIB)
 
-SHL1DEPN=               makefile.mk \
-                        $(MISC)$/$(SHL1TARGET).flt
-
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+SHL1DEPN=	makefile.mk
+SHL1LIBS=   $(SLB)$/starmath.lib
 
 .IF "$(GUI)" != "UNX"
 SHL1OBJS=   $(SLO)$/smdll.obj
-.ENDIF
+.ENDIF # ! UNX
 
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+.IF "$(GUI)" == "WNT"
+SHL1RES=	$(RCTARGET)
+.ENDIF # WNT
 
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-.IF "$(depend)" == ""
-
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-.ENDIF
 
