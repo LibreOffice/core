@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 14:56:28 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:58:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ SHL4STDLIBS= \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(GOODIESLIB) \
-            $(SO2LIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
@@ -131,7 +130,6 @@ SHL1STDLIBS= \
             $(GOODIESLIB) \
             $(BASEGFXLIB) \
             $(BASICLIB) \
-            $(SO2LIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
@@ -186,7 +184,6 @@ SHL2STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB)	\
             $(SVLIB) \
-            $(SO2LIB) \
             $(SOTLIB) \
             $(XMLOFFLIB) \
             $(SFX2LIB) \
