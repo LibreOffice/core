@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 12:57:26 $
+ *  last change: $Author: cl $ $Date: 2002-05-31 14:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,10 @@ void SdInsertPagesObjsDlg::Reset()
     else
     {
         Color aColor( COL_WHITE );
-        Image aImgText( Bitmap( SdResId( BMP_DOC_TEXT ) ), aColor );
-        Image aImgTextH( Bitmap( SdResId( BMP_DOC_TEXT_H ) ), Color( COL_BLACK ) );
+        Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
+        Image aImgText( aBmpText, aColor );
+        Bitmap aBmpTextH( SdResId( BMP_DOC_TEXT_H ) );
+        Image aImgTextH( aBmpTextH, Color( COL_BLACK ) );
         SvLBoxEntry* pEntry = aLbTree.InsertEntry( rName, aImgText, aImgText );
         aLbTree.SetExpandedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
         aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );

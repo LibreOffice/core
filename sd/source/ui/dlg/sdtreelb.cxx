@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 12:57:26 $
+ *  last change: $Author: cl $ $Date: 2002-05-31 14:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,17 +287,27 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     SdPage*      pPage = NULL;
     SvLBoxEntry* pEntry = NULL;
 
-    Image aImgPage( Bitmap( SdResId( BMP_PAGE ) ), aColor );
-    Image aImgPageExcl( Bitmap( SdResId( BMP_PAGE_EXCLUDED ) ), aColor );
-    Image aImgPageObjsExcl( Bitmap( SdResId( BMP_PAGEOBJS_EXCLUDED ) ), aColor );
-    Image aImgPageObjs( Bitmap( SdResId( BMP_PAGEOBJS ) ), aColor );
-    Image aImgObjects( Bitmap( SdResId( BMP_OBJECTS ) ), aColor );
+    Bitmap aBmpPage( SdResId( BMP_PAGE ) );
+    Image aImgPage( aBmpPage, aColor );
+    Bitmap aBmpPageExcl( SdResId( BMP_PAGE_EXCLUDED ) );
+    Image aImgPageExcl( aBmpPageExcl, aColor );
+    Bitmap aBmpPageObjsExcl( SdResId( BMP_PAGEOBJS_EXCLUDED ) );
+    Image aImgPageObjsExcl( aBmpPageObjsExcl, aColor );
+    Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
+    Image aImgPageObjs( aBmpPageObjs, aColor );
+    Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
+    Image aImgObjects( aBmpObjects, aColor );
 
-    Image aImgPageH( Bitmap( SdResId( BMP_PAGE_H ) ), Color( COL_BLACK ) );
-    Image aImgPageExclH( Bitmap( SdResId( BMP_PAGE_EXCLUDED_H ) ), Color( COL_BLACK ) );
-    Image aImgPageObjsExclH( Bitmap( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) ), Color( COL_BLACK ) );
-    Image aImgPageObjsH( Bitmap( SdResId( BMP_PAGEOBJS_H ) ), Color( COL_BLACK ) );
-    Image aImgObjectsH( Bitmap( SdResId( BMP_OBJECTS_H ) ), Color( COL_BLACK ) );
+    Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
+    Image aImgPageH( aBmpPageH , Color( COL_BLACK ) );
+    Bitmap aBmpPageExclH( SdResId( BMP_PAGE_EXCLUDED_H ) );
+    Image aImgPageExclH( aBmpPageExclH, Color( COL_BLACK ) );
+    Bitmap aBmpPageObjExclH( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) );
+    Image aImgPageObjsExclH( aBmpPageObjExclH, Color( COL_BLACK ) );
+    Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
+    Image aImgPageObjsH( aBmpPageObjsH, Color( COL_BLACK ) );
+    Bitmap aBmpObjectsH( SdResId( BMP_OBJECTS_H ) );
+    Image aImgObjectsH( aBmpObjectsH, Color( COL_BLACK ) );
 
     // Zuerst alle Pages incl. Objekte einfuegen
     USHORT nPage = 0;
@@ -428,10 +438,14 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     SvLBoxEntry* pFileEntry = NULL;
     SvLBoxEntry* pPageEntry = NULL;
 
-    Image aImgDocOpen( Bitmap( SdResId( BMP_DOC_OPEN ) ), aColor );
-    Image aImgDocClosed( Bitmap( SdResId( BMP_DOC_CLOSED ) ), aColor );
-    Image aImgDocOpenH( Bitmap( SdResId( BMP_DOC_OPEN_H ) ), Color( COL_BLACK ) );
-    Image aImgDocClosedH( Bitmap( SdResId( BMP_DOC_CLOSED_H ) ), Color( COL_BLACK ) );
+    Bitmap aBmpDocOpen( SdResId( BMP_DOC_OPEN ) );
+    Image aImgDocOpen( aBmpDocOpen, aColor );
+    Bitmap aBmpDocClosed( SdResId( BMP_DOC_CLOSED ) );
+    Image aImgDocClosed( aBmpDocClosed, aColor );
+    Bitmap aBmpDocOpenH( SdResId( BMP_DOC_OPEN_H ) );
+    Image aImgDocOpenH( aBmpDocOpenH, Color( COL_BLACK ) );
+    Bitmap aBmpDocClosedH( SdResId( BMP_DOC_CLOSED_H ) );
+    Image aImgDocClosedH( aBmpDocClosedH, Color( COL_BLACK ) );
 
     // Dokumentnamen einfuegen
     pFileEntry = InsertEntry( aDocName, aImgDocOpen, aImgDocClosed, NULL, TRUE ); // ChildsOnDemand
@@ -619,12 +633,18 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
             SdPage*      pPage = NULL;
             SvLBoxEntry* pPageEntry = NULL;
 
-            Image aImgPage( Bitmap( SdResId( BMP_PAGE ) ), aColor );
-            Image aImgPageObjs( Bitmap( SdResId( BMP_PAGEOBJS ) ), aColor );
-            Image aImgObjects( Bitmap( SdResId( BMP_OBJECTS ) ), aColor );
-            Image aImgPageH( Bitmap( SdResId( BMP_PAGE_H ) ), Color( COL_BLACK ) );
-            Image aImgPageObjsH( Bitmap( SdResId( BMP_PAGEOBJS_H ) ), Color( COL_BLACK ) );
-            Image aImgObjectsH( Bitmap( SdResId( BMP_OBJECTS_H ) ), Color( COL_BLACK ) );
+            Bitmap aBmpPage( SdResId( BMP_PAGE ) );
+            Image aImgPage( aBmpPage, aColor );
+            Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
+            Image aImgPageObjs( aBmpPageObjs, aColor );
+            Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
+            Image aImgObjects( aBmpObjects, aColor );
+            Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
+            Image aImgPageH( aBmpPageH, Color( COL_BLACK ) );
+            Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
+            Image aImgPageObjsH( aBmpPageObjsH, Color( COL_BLACK ) );
+            Bitmap aBmpImgObjectsH( SdResId( BMP_OBJECTS_H ) );
+            Image aImgObjectsH( aBmpImgObjectsH, Color( COL_BLACK ) );
 
             // Dokumentname ist schon eingefuegt
 
