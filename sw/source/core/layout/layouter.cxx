@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-07 09:54:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void SwLooping::Control( SwPageFrm* pPage )
     else if( ++nCount > LOOP_DETECT )
     {
 #ifndef PRODUCT
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         static BOOL bNoLouie = FALSE;
         if( bNoLouie )
             return;
