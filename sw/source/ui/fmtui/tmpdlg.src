@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-04 11:52:43 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,9 @@ TabDialog DLG_TEMPLATE_1
                 Text [ ENGLISH ] = "Position" ;
                 Text[ english_us ] = "Position";
                 Text[ portuguese ] = "Posição";
-                Text[ russian ] = "Position";
+                Text[ russian ] = "Ïîçèöèÿ";
                 Text[ greek ] = "ÈÝóç";
-                Text[ dutch ] = "Position";
+                Text[ dutch ] = "Positie";
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
@@ -162,7 +162,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
-                Text[ japanese ] = "Position";
+                Text[ japanese ] = "ˆÊ’u";
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
@@ -177,17 +177,17 @@ TabDialog DLG_TEMPLATE_1
                 Text [ ENGLISH ] = "Asian layout" ;
                 Text[ english_us ] = "Asian Layout";
                 Text[ portuguese ] = "Asian layout";
-                Text[ russian ] = "Asian layout";
+                Text[ russian ] = "Àçèàòñêàÿ ðàçìåòêà";
                 Text[ greek ] = "ÁóéáôéêÞ äéÜôáîç";
-                Text[ dutch ] = "Asian layout";
+                Text[ dutch ] = "Asiatisch lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Diseño asiático";
                 Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Uk³ad azjatycki";
+                Text[ polish ] = "Layout azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "Asian layout";
+                Text[ japanese ] = "±¼Þ±Ž®Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÑÇÖÞÎÄ×ÖµÄ°æÊ½";
                 Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
@@ -412,9 +412,9 @@ TabDialog DLG_TEMPLATE_2
                 Text [ ENGLISH ] = "Position" ;
                 Text[ english_us ] = "Position";
                 Text[ portuguese ] = "Posição";
-                Text[ russian ] = "Position";
+                Text[ russian ] = "Ïîçèöèÿ";
                 Text[ greek ] = "ÈÝóç";
-                Text[ dutch ] = "Position";
+                Text[ dutch ] = "Positie";
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
@@ -422,7 +422,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
-                Text[ japanese ] = "Position";
+                Text[ japanese ] = "ˆÊ’u";
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
@@ -437,9 +437,9 @@ TabDialog DLG_TEMPLATE_2
                 Text [ ENGLISH ] = "Asian layout" ;
                 Text[ english_us ] = "Asian Layout";
                 Text[ portuguese ] = "Asian layout";
-                Text[ russian ] = "Asian layout";
+                Text[ russian ] = "Àçèàòñêàÿ ðàçìåòêà";
                 Text[ greek ] = "ÁóéáôéêÞ äéÜôáîç";
-                Text[ dutch ] = "Asian layout";
+                Text[ dutch ] = "Asiatisch lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Diseño asiático";
                 Text[ italian ] = "Layout asiatico";
@@ -447,7 +447,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "Asian layout";
+                Text[ japanese ] = "±¼Þ±Ž®Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÑÇÖÞÎÄ×ÖµÄ°æÊ½";
                 Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
