@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-17 12:51:05 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 13:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
 
+using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
 
@@ -123,7 +124,7 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
     if( ! bHavePlugins )
     {
         rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-        NAMESPACE_STD(list)<PluginDescription*> aPlugins;
+        list<PluginDescription*> aPlugins;
         int i;
 
         // unix: search for plugins in /usr/lib/netscape/plugins,
@@ -209,8 +210,10 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
             }
         }
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
-        DBG_ASSERT( aPlugins.size(), "No Plugins Found !!\n" );
-        NAMESPACE_STD(list)<PluginDescription*>::iterator iter;
+#ifdef DEBUG
+        fprintf( stderr, "found %d plugins\n", aPlugins.size() );
+#endif
+        list<PluginDescription*>::iterator iter;
         for( iter = aPlugins.begin(), i=0; iter != aPlugins.end(); ++iter ,i++ )
         {
             aDescriptions.getArray()[ i ] = **iter;
