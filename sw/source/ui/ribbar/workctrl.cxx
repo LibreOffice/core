@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 08:02:36 $
+ *  last change: $Author: os $ $Date: 2002-04-04 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,17 +430,19 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
                                 const ResId &rId,
                                 SfxBindings & rBnd)
     : SfxPopupWindow(nId, rId, rBnd),
-    aVSet(this, WB_NAMEFIELD),
+    aToolBox(this, WB_NAMEFIELD),
+    aSeparator(this, ResId(FL_SEP)),
+    aInfoField(this, ResId(FI_INFO)),
     aIList(ResId(IL_VALUES)),
     rResId(rId),
     nFwdId(FN_START_OF_NEXT_PAGE),
     nBackId(FN_START_OF_PREV_PAGE)
 {
-    aVSet.SetHelpId(HID_NAVI_VS);
-    // die Konvertierungstabelle legt die Reihenfolge fest
+    aToolBox.SetHelpId(HID_NAVI_VS);
+    // determine the order of the toolbox items
     static USHORT __READONLY_DATA aInsert[ NAVI_ENTRIES ] =
     {
-        // -- erste Zeile
+        // -- first line
         NID_TBL,
         NID_FRM,
         NID_GRF,
@@ -450,7 +452,8 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
         NID_MARK,
         NID_DRW,
         NID_CTRL,
-        // -- zweite Zeile
+        NID_PREV,
+        // -- second line
         NID_REG,
         NID_BKM,
         NID_SEL,
@@ -459,23 +462,31 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
         NID_SRCH_REP,
         NID_INDEX_ENTRY,
         NID_TABLE_FORMULA,
-        NID_TABLE_FORMULA_ERROR
+        NID_TABLE_FORMULA_ERROR,
+        NID_NEXT
     };
 
-    aVSet.SetLineCount( 2 );
-    aVSet.SetColCount(NID_COUNT / 2 - 1);
-    for(USHORT i = 0; i < NID_COUNT - 2; i++)
+    aToolBox.SetLineCount( 2 );
+    aToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
+    for(USHORT i = 0; i < NID_COUNT; i++)
     {
         USHORT nId = aInsert[i];
-        aVSet.InsertItem(nId, aIList.GetImage(nId));
-        // -2, weil es fuer Next/Prev keinen String gibt
-        USHORT nResStr = ST_TBL - 2 + nId - NID_START;
-        aVSet.SetItemText(nId, ResId(nResStr));
+        String sText;
+        ToolBoxItemBits  nTbxBits = 0;
+        if((NID_PREV != nId) && (NID_NEXT != nId))
+        {
+            // -2, there's no string for Next/Prev
+            USHORT nResStr = ST_TBL - 2 + nId - NID_START;
+            sText = String(ResId(nResStr));
+            nTbxBits = TIB_CHECKABLE;
+        }
+        aToolBox.InsertItem(nId, aIList.GetImage(nId), sText, nTbxBits);
     }
-    // erst hier!
+    aToolBox.InsertBreak(NID_COUNT/2);
+    // don't call it before!
     FreeResource();
 
-    // diese Strings sind global
+    // these are global strings
     for( i = 0; i < 2 * NID_COUNT; i++)
     {
         sQuickHelp[i] = String(SW_RES(STR_IMGBTN_START + i));
@@ -484,13 +495,26 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
     Size aImgSize = aIList.GetImageSize();
     aImgSize.Width() += 5;
     aImgSize.Height() += 5;
-    Size aSz = aVSet.CalcWindowSizePixel(aImgSize, aVSet.GetItemCount() / 2, 2);
-    aVSet.SetPosSizePixel( Point(), aSz );
+    Size aSz = aToolBox.CalcWindowSizePixel(2);
+    aToolBox.SetPosSizePixel( Point(), aSz );
+    USHORT nItemId = SwView::GetMoveType();
+    aInfoField.SetText(aToolBox.GetItemText(nItemId));
+    aToolBox.CheckItem( nItemId, sal_True );
+    Size aFTSize(aInfoField.GetSizePixel());
+    Size aSepSize(aSeparator.GetSizePixel());
+    aSepSize.Width() = aSz.Width();
+
+    aSz.Height() += aFTSize.Height() + aSepSize.Height();
+    aInfoField.SetPosSizePixel(
+        Point(0, aSz.Height() - aFTSize.Height()), Size(aSz.Width(), aFTSize.Height()));
+
+    aSeparator.SetSizePixel(aSepSize);
+    aSeparator.SetPosPixel(Point(0, aSz.Height() - aFTSize.Height() - aSepSize.Height()));
+
     SetOutputSizePixel(aSz);
-    aVSet.SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
-    aVSet.StartSelection();
-    aVSet.Show();
-    SetBackground(Wallpaper(Color(COL_WHITE)));
+    aToolBox.SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
+    aToolBox.StartSelection();
+    aToolBox.Show();
 }
 /*-----------------19.02.97 12.45-------------------
 
@@ -512,14 +536,21 @@ SfxPopupWindow* SwScrollNaviPopup::Clone() const
 
 --------------------------------------------------*/
 
-IMPL_LINK(SwScrollNaviPopup, SelectHdl, ValueSet*, pSet)
+IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
 {
-    USHORT nSet = pSet->GetSelectItemId();
+    USHORT nSet = pSet->GetCurItemId();
     if( nSet != NID_PREV && nSet != NID_NEXT )
     {
         SwView::SetMoveType(nSet);
-        aVSet.SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
-        aVSet.SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
+        aToolBox.SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
+        aToolBox.SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
+        aInfoField.SetText(aToolBox.GetItemText(nSet));
+        //check the current button only
+        for(USHORT i = 0; i < NID_COUNT; i++)
+        {
+            USHORT nItemId = aToolBox.GetItemId( i );
+            aToolBox.CheckItem( nItemId, nItemId == nSet );
+        }
     }
     else
     {
@@ -533,9 +564,9 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ValueSet*, pSet)
 
 --------------------------------------------------*/
 
-void SwScrollNaviValueSet::MouseButtonUp( const MouseEvent& rMEvt )
+void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    ValueSet::MouseButtonUp(rMEvt);
+    ToolBox::MouseButtonUp(rMEvt);
     if ( ((SwScrollNaviPopup*)GetParent())->IsInPopupMode() )
         ((SwScrollNaviPopup*)GetParent())->EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
 }
@@ -543,37 +574,13 @@ void SwScrollNaviValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 /*-----------------20.06.97 13:28-------------------
 
 --------------------------------------------------*/
-void  SwScrollNaviValueSet::RequestHelp( const HelpEvent& rHEvt )
+void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
     USHORT nMoveType = SwView::GetMoveType();
     SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(TRUE));
     SetItemText(NID_PREV, SwScrollNaviPopup::GetQuickHelpText(FALSE));
-    ValueSet::RequestHelp( rHEvt );
+    ToolBox::RequestHelp( rHEvt );
 
-}
-/*-----------------21.02.97 11:25-------------------
-
---------------------------------------------------*/
-
-void  SwScrollNaviPopup::PopupModeEnd()
-{
-    if(aVSet.GetItemCount() < NID_COUNT)
-    {
-        aVSet.InsertItem(NID_NEXT, aIList.GetImage(NID_NEXT), NID_COUNT);
-        aVSet.InsertItem(NID_PREV, aIList.GetImage(NID_PREV), NID_COUNT/2 - 1);
-        USHORT nItemBits = aVSet.GetItemBits(NID_NEXT);
-        nItemBits |= VIB_NODOUBLECLICK;
-        aVSet.SetItemBits(NID_NEXT, nItemBits);
-        aVSet.SetItemBits(NID_PREV, nItemBits);
-        Size aImgSize = aIList.GetImageSize();
-        aImgSize.Width() += 5;
-        aImgSize.Height() += 5;
-        aVSet.SetColCount(NID_COUNT/2);
-        Size aSz = aVSet.CalcWindowSizePixel(aImgSize, NID_COUNT / 2, 2);
-        aVSet.SetPosSizePixel( Point(), aSz );
-        SetOutputSizePixel(aSz);
-    }
-    SfxPopupWindow::PopupModeEnd();
 }
 
 /*-----------------20.06.97 13:41-------------------

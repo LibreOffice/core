@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: os $ $Date: 2002-04-04 13:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
 #endif
-
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
+#endif
 #ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
 #endif
@@ -158,19 +160,21 @@ public:
 //
 //----------------------------------------------------------------------------
 
-class SwScrollNaviValueSet : public ValueSet
+class SwScrollNaviToolBox : public ToolBox
 {
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     public:
-        SwScrollNaviValueSet(Window* pParent, WinBits nWinStyle ) :
-            ValueSet(pParent, nWinStyle ) {}
+        SwScrollNaviToolBox(Window* pParent, WinBits nWinStyle ) :
+            ToolBox(pParent, nWinStyle ) {}
 };
 
 class SwScrollNaviPopup : public SfxPopupWindow
 {
-    SwScrollNaviValueSet    aVSet;
+    SwScrollNaviToolBox    aToolBox;
+    FixedLine       aSeparator;
+    FixedInfo       aInfoField;
     ImageList       aIList;
     const ResId&    rResId;
 
@@ -180,15 +184,15 @@ class SwScrollNaviPopup : public SfxPopupWindow
     USHORT          nBackId;
 
     protected:
-        DECL_LINK(SelectHdl, ValueSet*);
+        DECL_LINK(SelectHdl, ToolBox*);
 
     public:
         SwScrollNaviPopup( USHORT nId, const ResId &rId, SfxBindings & );
         ~SwScrollNaviPopup();
 
     static String           GetQuickHelpText(BOOL bNext);
-    virtual void            PopupModeEnd();
     virtual SfxPopupWindow* Clone() const;
+    void                GrabFocus(){aToolBox.GrabFocus();}
 };
 
 //----------------------------------------------------------------------------
