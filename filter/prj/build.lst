@@ -13,6 +13,11 @@ fl	filter\source\filtertracer				nmake	-	all fl_filtertracer		NULL
 fl	filter\source\xsltfilter				nmake	-	all fl_xsltfilter		NULL
 fl	filter\source\xsltvalidate				nmake	-	all fl_xsltvalidate		NULL
 fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash		NULL
-fl	filter\source\docbook				nmake	-	all fl_docbook		NULL
-fl	filter\source\mswordxml				nmake	-	all fl_mswordxml		NULL
-fl	filter\util     				    nmake	-	all fl_util fl_flash fl_xsltdialog fl_pdf NULL
+fl  filter\source\docbook                   nmake   -   all fl_docbook          NULL
+fl  filter\source\mswordxml                 nmake   -   all fl_mswordxml        NULL
+fl  filter\source\config\cache              nmake   -   all fl_config           NULL
+fl  filter\source\config\tools\utils        nmake   -   all fl_fcfg_utils       NULL
+fl  filter\source\config\tools\merge        nmake   -   all fl_fcfg_merge fl_fcfg_utils      NULL
+fl  filter\source\config\fragments          nmake   -   all fl_fcfg_fragments fl_fcfg_merge  NULL
+fl  filter\util                             nmake   -   all fl_util fl_flash fl_xsltdialog fl_pdf fl_config fl_fcfg_utils fl_fcfg_merge fl_fcfg_fragments NULL
+
