@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iprcache.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:36 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,42 +99,125 @@
 #include <unotools/processfactory.hxx>
 #endif
 
+#include <lngprops.hxx>
+
 using namespace utl;
 using namespace osl;
 using namespace rtl;
 using namespace com::sun::star;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+
+#define A2OU(x)     OUString::createFromAscii(x)
 
 namespace linguistic
 {
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define NUM_FLUSH_PROPS     6
+
+static const struct
+{
+    const char *pPropName;
+    INT32       nPropHdl;
+} aFlushProperties[ NUM_FLUSH_PROPS ] =
+{
+    UPN_IS_GERMAN_PRE_REFORM,           UPH_IS_GERMAN_PRE_REFORM,
+    UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST,
+    UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS,
+    UPN_IS_SPELL_UPPER_CASE,            UPH_IS_SPELL_UPPER_CASE,
+    UPN_IS_SPELL_WITH_DIGITS,           UPH_IS_SPELL_WITH_DIGITS,
+    UPN_IS_SPELL_CAPITALIZATION,        UPH_IS_SPELL_CAPITALIZATION
+};
+
+
+static void lcl_AddAsPropertyChangeListener(
+        Reference< XPropertyChangeListener > xListener,
+        Reference< XPropertySet > &rPropSet )
+{
+    if (xListener.is() && rPropSet.is())
+    {
+        for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
+        {
+            rPropSet->addPropertyChangeListener(
+                    A2OU(aFlushProperties[i].pPropName), xListener );
+        }
+    }
+}
+
+
+static void lcl_RemoveAsPropertyChangeListener(
+        Reference< XPropertyChangeListener > xListener,
+        Reference< XPropertySet > &rPropSet )
+{
+    if (xListener.is() && rPropSet.is())
+    {
+        for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
+        {
+            rPropSet->removePropertyChangeListener(
+                    A2OU(aFlushProperties[i].pPropName), xListener );
+        }
+    }
+}
+
+
+static BOOL lcl_IsFlushProperty( INT32 nHandle )
+{
+    int i;
+    for (i = 0;  i < NUM_FLUSH_PROPS;  ++i)
+    {
+        if (nHandle == aFlushProperties[i].nPropHdl)
+            break;
+    }
+    return i < NUM_FLUSH_PROPS;
+}
+
+
 FlushListener::FlushListener( Flushable *pFO )
 {
     SetFlushObj( pFO );
 }
 
+
 FlushListener::~FlushListener()
 {
 }
 
-void FlushListener::SetDicList( Reference<XDictionaryList> &xDL )
+
+void FlushListener::SetDicList( Reference<XDictionaryList> &rDL )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (xDicList != xDL)
+    if (xDicList != rDL)
     {
         if (xDicList.is())
             xDicList->removeDictionaryListEventListener( this );
 
-        xDicList = xDL;
+        xDicList = rDL;
         if (xDicList.is())
             xDicList->addDictionaryListEventListener( this, FALSE );
     }
 }
+
+
+void FlushListener::SetPropSet( Reference< XPropertySet > &rPS )
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+
+    if (xPropSet != rPS)
+    {
+        if (xPropSet.is())
+            lcl_RemoveAsPropertyChangeListener( this, xPropSet );
+
+        xPropSet = rPS;
+        if (xPropSet.is())
+            lcl_AddAsPropertyChangeListener( this, xPropSet );
+    }
+}
+
 
 void SAL_CALL FlushListener::disposing( const EventObject& rSource )
         throw(RuntimeException)
@@ -146,10 +229,16 @@ void SAL_CALL FlushListener::disposing( const EventObject& rSource )
         xDicList->removeDictionaryListEventListener( this );
         xDicList = NULL;    //! release reference
     }
+    if (xPropSet.is()  &&  rSource.Source == xPropSet)
+    {
+        lcl_RemoveAsPropertyChangeListener( this, xPropSet );
+        xPropSet = NULL;    //! release reference
+    }
 }
 
+
 void SAL_CALL FlushListener::processDictionaryListEvent(
-    const DictionaryListEvent& rDicListEvent )
+            const DictionaryListEvent& rDicListEvent )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -157,16 +246,36 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
     if (rDicListEvent.Source == xDicList)
     {
         INT16 nEvt = rDicListEvent.nCondensedEvent;
-        BOOL bFlush =      ( nEvt & DictionaryListEventFlags::ADD_NEG_ENTRY )
-                        || ( nEvt & DictionaryListEventFlags::DEL_POS_ENTRY )
-                        || ( nEvt & DictionaryListEventFlags::ACTIVATE_NEG_DIC )
-                        || ( nEvt & DictionaryListEventFlags::DEACTIVATE_POS_DIC );
+        INT16 nFlushFlags =
+                DictionaryListEventFlags::ADD_NEG_ENTRY     |
+                DictionaryListEventFlags::DEL_POS_ENTRY     |
+                DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
+                DictionaryListEventFlags::DEACTIVATE_POS_DIC;
+        BOOL bFlush = 0 != (nEvt & nFlushFlags);
 
-        DBG_ASSERT( pFlushObj, "lng : missing object (NULL pointer)" );
+        DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)
             pFlushObj->Flush();
     }
 }
+
+
+void SAL_CALL FlushListener::propertyChange(
+            const PropertyChangeEvent& rEvt )
+        throw(RuntimeException)
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+
+    if (rEvt.Source == xPropSet)
+    {
+        BOOL bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
+
+        DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
+        if (bFlush && pFlushObj != NULL)
+            pFlushObj->Flush();
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -227,11 +336,10 @@ IPRSpellCache::IPRSpellCache( ULONG nSize ) :
     nLost       ( 0 )
 #endif
 {
-    xDicList = GetDictionaryList();
-
     pFlushLstnr = new FlushListener( this );
     xFlushLstnr = pFlushLstnr;
-    pFlushLstnr->SetDicList( xDicList );    //! after reference is established
+    pFlushLstnr->SetDicList( GetDictionaryList() ); //! after reference is established
+    pFlushLstnr->SetPropSet( GetLinguProperties() );    //! after reference is established
 }
 
 IPRSpellCache::~IPRSpellCache()
@@ -239,6 +347,7 @@ IPRSpellCache::~IPRSpellCache()
     MutexGuard  aGuard( GetLinguMutex() );
 
     pFlushLstnr->SetDicList( Reference< XDictionaryList >() );
+    pFlushLstnr->SetPropSet( Reference< XPropertySet >() );
 
 #ifdef DBG_STATISTIC
     // Binary File oeffnen

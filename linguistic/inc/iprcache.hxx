@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iprcache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:29 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,18 @@
 #endif
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 
-#include <com/sun/star/lang/XEventListener.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 
@@ -95,13 +104,16 @@ public:
 ///////////////////////////////////////////////////////////////////////////
 
 class FlushListener :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper2
     <
-        ::com::sun::star::linguistic2::XDictionaryListEventListener
+        ::com::sun::star::linguistic2::XDictionaryListEventListener,
+        ::com::sun::star::beans::XPropertyChangeListener
     >
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >             xPropSet;
     Flushable                                              *pFlushObj;
 
     // don't allow to use copy-constructor and assignment-operator
@@ -112,20 +124,29 @@ public:
     FlushListener( Flushable *pFO );
     virtual ~FlushListener();
 
+    inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
+
     void        SetDicList(
                     ::com::sun::star::uno::Reference<
-                        ::com::sun::star::linguistic2::XDictionaryList > &xDL );
-    inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
+                        ::com::sun::star::linguistic2::XDictionaryList > &rDL );
+    void        SetPropSet(
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::beans::XPropertySet > &rPS );
 
     //XEventListener
     virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& Source )
+        disposing( const ::com::sun::star::lang::EventObject& rSource )
             throw(::com::sun::star::uno::RuntimeException);
 
     // XDictionaryListEventListener
     virtual void SAL_CALL
         processDictionaryListEvent(
-                const ::com::sun::star::linguistic2::DictionaryListEvent& aDicListEvent )
+                const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent )
+            throw(::com::sun::star::uno::RuntimeException);
+
+    // XPropertyChangeListener
+    virtual void SAL_CALL
+        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
             throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -136,12 +157,8 @@ class IPRSpellCache :
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryListEventListener >
-                      xFlushLstnr;
-    FlushListener    *pFlushLstnr;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >
-                      xDicList;
+                        xFlushLstnr;
+    FlushListener      *pFlushLstnr;
 
     IPRCachedWord   **ppHash;
     IPRCachedWord    *pFirst;
