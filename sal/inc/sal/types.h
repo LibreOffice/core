@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:43:33 $
+ *  last change: $Author: rt $ $Date: 2004-10-27 15:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ typedef void *                   sal_Handle;
 #     define SAL_DLLPUBLIC_EXPORT  __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
-#   elif defined(__GNUC__) && (__GNUC__ >= 3) && (__GNUC_MINOR__ >= 4)
+#   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
 #     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
