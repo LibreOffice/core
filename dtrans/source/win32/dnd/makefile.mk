@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+#   last change: $Author: jl $ $Date: 2001-02-26 16:01:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ stoponerror=tr
 
 SLOFILES=	$(SLO)$/dndentry.obj	\
             $(SLO)$/target.obj		\
+            $(SLO)$/idroptarget.obj	\
             $(SLO)$/source.obj		\
             $(SLO)$/globals.obj		\
             $(SLO)$/targetdropcontext.obj	\
