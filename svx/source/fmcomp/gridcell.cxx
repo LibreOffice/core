@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:56:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 14:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,6 +1066,7 @@ XubString DbFormattedField::GetFormatText(const ::com::sun::star::uno::Reference
 //------------------------------------------------------------------------------
 void DbFormattedField::UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
+    FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow);
     if (!_xVariant.is())
     {   // NULL-Wert -> leerer Text
         m_pWindow->SetText(XubString());
@@ -1081,14 +1082,16 @@ void DbFormattedField::UpdateFromField(const ::com::sun::star::uno::Reference< :
         if (_xVariant->wasNull())
             m_pWindow->SetText(XubString());
         else
-            ((FormattedField*)m_pWindow)->SetValue(dValue);
+            pFormattedWindow->SetValue(dValue);
     }
     else
     {
         // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
         // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
         XubString sText( _xVariant->getString());
-        ((FormattedField*)m_pWindow)->SetTextFormatted(sText);
+
+        pFormattedWindow->SetTextFormatted(sText);
+        pFormattedWindow->SetSelection(Selection(0, pFormattedWindow->GetText().Len()));
     }
 }
 
