@@ -1,5 +1,11 @@
-Warning: Before the control can be built 
-user has to add path to MS ATL headers into Makefile.
+						Compile.
+Warning: Before the control can be built user has to add path to MS ATL headers
+ into Makefile.
+
+If you use the build environment of the SDK you have to check which MS compiler 
+do you use. It you use the MS Visual Studio .NET compiler everything should work
+fine with the SDK. If you use an older MS compiler please edit the Makefile and 
+uncomment or remove the line 'CL_NEW_LIB=atls.lib'.
 
 						Description.
 
