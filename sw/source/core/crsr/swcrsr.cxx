@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:49:49 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,6 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
 FASTBOOL SwCursor::IsInProtectTable( FASTBOOL bMove, FASTBOOL bChgCrsr )
 {
     // stehe ich in einer Tabelle ??
-    SwDoc* pDoc = GetDoc();
     SwCntntNode* pCNd = GetCntntNode();
     if( !pCNd || pSavePos->nNode == GetPoint()->nNode.GetIndex() ||
         !pCNd->FindTableNode() ||
