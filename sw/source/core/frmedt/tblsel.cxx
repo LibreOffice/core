@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:00:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,7 +1536,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( pUndo )
                     pUndo->MoveBoxCntnt( aPam, aInsPos, aSaveFlyArr );
                 else
-                    pDoc->Move( aPam, aInsPos );
+                    pDoc->Move( aPam, aInsPos, DOC_MOVEREDLINES );
                 aPam.DeleteMark();
                 if( bCalcWidth )
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
