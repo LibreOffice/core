@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:49:46 $
+#   last change: $Author: rt $ $Date: 2004-05-03 08:59:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,21 +76,24 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/osl_Pipe.obj
 
-SHL1TARGET= Pipe
+SHL1TARGET= osl_Pipe
 SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+   $(SALLIB) \
+    $(CPPUNITLIB)
+
+#.IF "$(GUI)" == "WNT"
+#SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+#.ENDIF
+#.IF "$(GUI)" == "UNX"
+#SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+#.ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP = export.map
+# DEF1EXPORTFILE= export.exp
 # auto generated Target:Pipe
 # END ------------------------------------------------------------------
 
