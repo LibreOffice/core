@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 15:47:38 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,14 @@ LanguageSelectionDialog::LanguageSelectionDialog(ResMgr *pResMgr) :
     FreeResource();
 }
 
-LangList LanguageSelection::m_lLanguages;
+IsoList LanguageSelection::m_lLanguages;
 
 // execute the language selection
 // display a dialog if more than one language is installed
 // XXX this is a temporary solution
 static sal_Bool bFoundLanguage = sal_False;
-static LanguageType aFoundLanguageType = LANGUAGE_DONTKNOW;
+//static LanguageType aFoundLanguageType = LANGUAGE_DONTKNOW;
+static OUString aFoundLanguage;
 
 Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 {
@@ -129,8 +130,8 @@ void LanguageSelection::prepareLanguage()
 {
     // XXX make everything works without assertions in first run
     // in multi-language installations, some things might fail in first run
-    if (getUserLanguage() != LANGUAGE_DONTKNOW) return;
-    LangList l = getInstalledLanguages();
+    if (getUserLanguage().getLength() > 0) return;
+    IsoList l = getInstalledIsoLanguages();
     if (l.size() >= 1)
     {
         // throw any away existing default config
@@ -141,38 +142,38 @@ void LanguageSelection::prepareLanguage()
         OSL_ENSURE(theConfigProvider.is(), "cannot localize config manager.");
         if (theConfigProvider.is())
         {
-            OUString aLocaleString = ConvertLanguageToIsoString(*l.begin());
-            Locale l = LanguageSelection::IsoStringToLocale(aLocaleString);
-            theConfigProvider->setLocale(l);
+            OUString aLocaleString = *l.begin();
+            Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+            theConfigProvider->setLocale(loc);
         }
     }
 }
 
-LanguageType LanguageSelection::getLanguageType()
+OUString LanguageSelection::getLanguageString()
 {
 
     if (bFoundLanguage)
-        return aFoundLanguageType;
+        return aFoundLanguage;
 
     // check whether there was aleady a language selected by the user
-    LanguageType aUserLanguage = getUserLanguage();
-    if (aUserLanguage != LANGUAGE_DONTKNOW)
+    OUString aUserLanguage = getUserLanguage();
+    if (aUserLanguage.getLength() > 0 )
     {
        bFoundLanguage = sal_True;
-        aFoundLanguageType = aUserLanguage;
-        return aFoundLanguageType;
+        aFoundLanguage = aUserLanguage;
+        return aFoundLanguage;
     }
 
     // fill list
     if (m_lLanguages.size() < 1)
-        m_lLanguages = getInstalledLanguages();
+        m_lLanguages = getInstalledIsoLanguages();
 
     if (m_lLanguages.size() > 1) {
         // are there multiple languages installed?
         // get resource
         rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
-        LanguageType aLanguageType = LANGUAGE_DONTKNOW;
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLanguageType );
+        ::com::sun::star::lang::Locale aLocale;
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLocale );
         LanguageSelectionDialog lsd(pResMgr);
         StrList languages(getLanguageStrings(m_lLanguages));
         for (StrList::iterator str_iter = languages.begin(); str_iter != languages.end(); str_iter++)
@@ -182,36 +183,51 @@ LanguageType LanguageSelection::getLanguageType()
 
         lsd.Execute();
         short nSelected = lsd.m_aListBox.GetSelectEntryPos();
-        LangList::const_iterator i = m_lLanguages.begin();
+        IsoList::const_iterator i = m_lLanguages.begin();
         for (sal_Int32 n=0; n<nSelected; n++) i++;
         bFoundLanguage = sal_True;
-        aFoundLanguageType = *i;
-        return aFoundLanguageType;
+        aFoundLanguage = *i;
+        return aFoundLanguage;
     } else {
         // if there is only one language, use it
         if (m_lLanguages.size() == 1) {
             bFoundLanguage = sal_True;
-            aFoundLanguageType = *(m_lLanguages.begin());
-            return aFoundLanguageType;
+            aFoundLanguage = *(m_lLanguages.begin());
+            return aFoundLanguage;
         } else {
             // last resort
             // don't save
-            return (LanguageType) SvtPathOptions().SubstituteVariable(
-                String::CreateFromAscii("$(langid)")).ToInt32();
+            // what's this ?????
+//            return (LanguageType) SvtPathOptions().SubstituteVariable(
+//                String::CreateFromAscii("$(langid)")).ToInt32();
+            ::com::sun::star::lang::Locale aLocale;
+            OUString aLocString( aLocale.Language );
+            if ( aLocale.Country.getLength() != 0 )
+            {
+                aLocString += OUString::createFromAscii("-")
+                                + aLocale.Country;
+                if ( aLocale.Variant.getLength() != 0 )
+                {
+                    aLocString += OUString::createFromAscii("-")
+                                    + aLocale.Variant;
+                }
+            }
+            return aLocString;
         }
     }
 }
 
 
 // Get the localized selection strings for the list of languages
-StrList LanguageSelection::getLanguageStrings(const LangList& langLst)
+StrList LanguageSelection::getLanguageStrings(const IsoList& langLst)
 {
     StrList aList;
     rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
-    for (LangList::const_iterator lang_iter = langLst.begin(); lang_iter != langLst.end(); lang_iter++)
+    for (IsoList::const_iterator lang_iter = langLst.begin(); lang_iter != langLst.end(); lang_iter++)
     {
-        LanguageType lang = static_cast<LanguageType>(*lang_iter);
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, lang);
+        rtl::OUString lang = static_cast<OUString>(*lang_iter);
+        ::com::sun::star::lang::Locale aLocale = LanguageSelection::IsoStringToLocale(lang);
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLocale );
         if (pResMgr != NULL) {
             String aString(ResId(STR_LANGSELECT, pResMgr));
             aList.push_back(aString);
@@ -222,9 +238,9 @@ StrList LanguageSelection::getLanguageStrings(const LangList& langLst)
 }
 
 // get a language choosen by the user
-LanguageType LanguageSelection::getUserLanguage()
+OUString LanguageSelection::getUserLanguage()
 {
-    LanguageType aLanguageType = LANGUAGE_DONTKNOW;
+    OUString aLanguage;
     try{
 
         OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
@@ -237,7 +253,7 @@ LanguageType LanguageSelection::getUserLanguage()
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
                 theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
         // check provider
-        if (!theConfigProvider.is()) return LANGUAGE_DONTKNOW;
+        if (!theConfigProvider.is()) return aLanguage;
 
         // access the provider
         Sequence< Any > theArgs(1);
@@ -246,22 +262,66 @@ LanguageType LanguageSelection::getUserLanguage()
                 theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), UNO_QUERY );
         // check access
-        if (!theNameAccess.is()) return LANGUAGE_DONTKNOW;
+        if (!theNameAccess.is()) return aLanguage;
         // run query
         Any aResult = theNameAccess->getByName( sLocales );
         OUString aLangString;
         if (aResult >>= aLangString)
         {
-            aLanguageType = ConvertIsoStringToLanguage(aLangString);
+            aLanguage = aLangString;
         }
     } catch (com::sun::star::uno::RuntimeException)
     {
         // didn't work - return dontknow
-        return LANGUAGE_DONTKNOW;
+        return aLanguage;
     }
-    return aLanguageType;
+    return aLanguage;
 }
 
+// get a list with the languages that are installed
+IsoList LanguageSelection::getInstalledIsoLanguages()
+{
+    IsoList aList;
+    // read language list from org.openoffice.Setup/Office/ooSetupLocales
+    try{
+        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/");
+        OUString sLocales = OUString::createFromAscii("ooSetupLocales");
+
+        // get configuration provider
+        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
+                theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
+        // check provider
+        if (!theConfigProvider.is()) return aList;
+
+        // access the provider
+        Sequence< Any > theArgs(1);
+        theArgs[ 0 ] <<= sConfigURL;
+        Reference< XNameAccess > theNameAccess = Reference< XNameAccess > (
+                theConfigProvider->createInstanceWithArguments(
+                sAccessSrvc, theArgs ), UNO_QUERY );
+        //check access
+        if (!theNameAccess.is()) return aList;
+
+        Any aResult = theNameAccess->getByName( sLocales );
+        Sequence< OUString > aLangSeq;
+
+        // unpack result from Any type
+        if (aResult >>= aLangSeq)
+        {
+            for (int i=0; i<aLangSeq.getLength(); i++)
+                aList.push_back(aLangSeq[i]);
+        }
+    } catch (com::sun::star::uno::RuntimeException)
+    {
+        // didn't work - return empty list
+    }
+    return aList;
+}
+
+/*
 // get a list with the languages that are installed
 LangList LanguageSelection::getInstalledLanguages()
 {
@@ -304,5 +364,5 @@ LangList LanguageSelection::getInstalledLanguages()
     }
     return aList;
 }
-
+*/
 } // namespace desktop
