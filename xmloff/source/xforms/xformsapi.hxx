@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xformsapi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:16:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,17 @@ void lcl_setValue(
 
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_getXFormsModel( const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& );
 
+sal_uInt16 lcl_getTypeClass(
+    const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
+    const SvXMLNamespaceMap& rNamespaceMap,
+    const rtl::OUString& rXMLName );
+
 rtl::OUString lcl_getTypeName(
+    const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
+    const SvXMLNamespaceMap& rNamespaceMap,
+    const rtl::OUString& rXMLName );
+
+rtl::OUString lcl_getBasicTypeName(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );
