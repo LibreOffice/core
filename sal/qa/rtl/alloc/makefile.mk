@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:55:10 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,15 +77,16 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/rtl_alloc.obj
 
-SHL1TARGET= Alloc
+SHL1TARGET= rtl_Alloc
 SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+   $(SALLIB) \
+    $(CPPUNITLIB)
+# .IF "$(GUI)" == "WNT"
+# SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+# .ENDIF
+# .IF "$(GUI)" == "UNX"
+# SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+# .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -98,7 +99,7 @@ SHL1VERSIONMAP= export.map
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
