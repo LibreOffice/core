@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:15 $
+ *  last change: $Author: tra $ $Date: 2001-11-14 16:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ namespace // private
         NULL,
         NULL,
         ListboxGetItems,
-        ListboxGetSelectedItem
+        ListboxGetSelectedItem,
+        ListboxGetSelectedItemIndex
     };
     const size_t SIZE_LISTBOX_GETVALUE_ACTION_TABLE =
         sizeof( ListboxGetValueFunctionTable ) / sizeof( CTRL_GETVALUE_FUNCTION_T );
