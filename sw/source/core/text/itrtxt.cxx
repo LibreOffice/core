@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:27:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include <svx/paravertalignitem.hxx>
 #endif
 
-#ifdef VERTICAL_LAYOUT
 #include "pormulti.hxx"
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
@@ -85,6 +84,8 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+#ifndef _PORFLD_HXX
+#include <porfld.hxx>
 #endif
 
 #include "txtcfg.hxx"
@@ -481,6 +482,23 @@ const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
     return pCurr;
 }
 
+//
+// Local helper function to check, if pCurr needs a field rest portion:
+//
+sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
+{
+    const SwLinePortion *pPor = pCurr->GetPortion();
+    sal_Bool bRet = sal_False;
+    while( pPor && !bRet )
+    {
+        bRet = pPor->InFldGrp() && ((SwFldPortion*)pPor)->HasFollow();
+        if( !pPor->GetPortion() || !pPor->GetPortion()->InFldGrp() )
+            break;
+        pPor = pPor->GetPortion();
+    }
+    return bRet;
+}
+
 /*************************************************************************
  *                      SwTxtIter::TruncLines()
  *************************************************************************/
@@ -495,7 +513,8 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
         pCurr->SetNext( 0 );
         if( GetHints() && bNoteFollow )
         {
-            GetInfo().GetParaPortion()->SetFollowField( pDel->IsRest() );
+            GetInfo().GetParaPortion()->SetFollowField( pDel->IsRest() ||
+                                                        lcl_NeedsFieldRest( pCurr ) );
 
             // bug 88534: wrong positioning of flys
             SwTxtFrm* pFollow = GetTxtFrm()->GetFollow();
