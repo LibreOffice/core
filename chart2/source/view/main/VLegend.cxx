@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 15:48:53 $
+ *  last change: $Author: bm $ $Date: 2004-01-19 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ uno::Reference< drawing::XShape >
         }
         else if( aChartType.equals( C2U( "com.sun.star.chart2.NetChart" )))
         {
-            eSymbolStyle = chart2::LegendSymbolStyle_DIAGONAL_LINE;
+            eSymbolStyle = chart2::LegendSymbolStyle_LINE;
             ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
         }
 
