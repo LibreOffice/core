@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpusrlst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@ private:
     void    RemoveList          ( USHORT nList );
     void    ModifyList          ( USHORT        nSelList,
                                   const String& rEntriesStr );
-    void    CopyListFromArea    ( const ScRefTripel& rStartPos,
-                                  const ScRefTripel& rEndPos );
+    void    CopyListFromArea    ( const ScRefAddress& rStartPos,
+                                  const ScRefAddress& rEndPos );
 
     // Handler:
     DECL_LINK( LbSelectHdl,     ListBox* );
