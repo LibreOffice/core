@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:03:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,6 +776,8 @@ void CfgExport::WorkOnRessourceEnd()
                     ByteString sText = pStackData->sText[ sCur ];
                     if ( !sText.Len())
                         sText = sFallback;
+
+                    Export::UnquotHTML( sText );
 
                     ByteString sOutput( sPrj ); sOutput += "\t";
                     sOutput += sPath;
