@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:07:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 01:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ catalan ] = "Error al eliminar los registros de datos indicados.";
     Text[ finnish ] = "Virhe poistettaessa m‰‰ritettyj‰ tietueita";
 };
+
 
 
 
