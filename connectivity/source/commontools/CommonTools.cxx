@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:51:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ namespace connectivity
     sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName )
     {
         sal_Bool bRet = sal_False;
+#ifdef SOLAR_JAVA
         jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
         JNIEnv* pEnv = aGuard.getEnvironment();
         if( pEnv )
@@ -340,6 +341,7 @@ namespace connectivity
             bRet = out != NULL;
             pEnv->DeleteLocalRef( out );
         }
+#endif
         return bRet;
     }
 
