@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 11:19:18 $
+ *  last change: $Author: cl $ $Date: 2000-11-16 16:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,6 +923,11 @@ uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException 
 
     SfxStyleSheet* pStyleSheet = pObj->GetStyleSheet();
     if(!pStyleSheet)
+        return aAny;
+
+    // it is possible for shapes inside a draw to have a presentation style
+    // but we don't want this for the api
+    if( pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA && !mpModel->IsImpressDocument() )
         return aAny;
 
     // style::XStyleFamiliesSupplier
