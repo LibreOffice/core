@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:10:22 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,15 @@ namespace dbaui
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLESQL92CHECK,         "EnableSQL92Check");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS,         "AppendTableAlias");
     IMPLEMENT_CONSTASCII_USTRING( PARAM_INDEPENDENT_SQL_COMMAND,    "IndependentSQLCommand");
+    IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT,        "com.sun.star.comp.dbu.OColumnControl");
 
     //============================================================
     //= properties
     //============================================================
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE, "TriState");
 
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TABSTOP, "TabStop");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL, "DefaultControl");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLED, "Enabled");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_COLUMN, "Column");
 }
