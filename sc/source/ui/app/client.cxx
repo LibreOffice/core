@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-10 18:20:34 $
+ *  last change: $Author: nn $ $Date: 2002-04-17 13:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,15 @@ void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
             aNew.SetSize( aNewSize );
 
             if ( aNew != aOld )                     // veraendert nur, wenn mindestens 1 Pixel
+            {
                 pDrawObj->SetLogicRect( aNew );
+
+                //  set document modified (SdrModel::SetChanged is not used)
+                SfxViewShell* pSfxViewSh = GetViewShell();
+                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+                if (pViewSh)
+                    pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
+            }
         }
     }
 
