@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:43:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 14:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,8 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
             &aImplIsciiDevanagariTextEncodingData, /* ISCII_DEVANAGARI */
             &aImplJavaUtf8TextEncodingData, /* JAVA_UTF8 */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
-            &adobeSymbolEncodingData }; /* ADOBE_SYMBOL */
+            &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
+            &aImplPT154TextEncodingData }; /* PT154 */
     return
         nEncoding < sizeof aData / sizeof aData[0] ? aData[nEncoding] : NULL;
 }
