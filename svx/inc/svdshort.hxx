@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdshort.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #define SdrHelpLineKind              SdrFLK /* HL ist schon besetzt */
 #define SdrHelpLineList              SdrFLL /* HL ist schon besetzt */
 #define SdrHelpLine                  SdrFL  /* HL ist schon besetzt */
-#define SdrMasterPageDescriptorList  SdrMPL
-#define SdrMasterPageDescriptor      SdrMP
+//#define SdrMasterPageDescriptorList  SdrMPL
+//#define SdrMasterPageDescriptor      SdrMP
 #define SdrObjTransformInfoRec       SdrTI
 #define SdrDragCrook                 SdrDC
 #define SdrDragMirror                SdrDI
