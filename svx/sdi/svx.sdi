@@ -1061,11 +1061,9 @@ SvxBoxItem BorderOuter SID_ATTR_BORDER_OUTER
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetBorderStyle SID_ATTR_BORDER( SvxBoxItem OuterBorder SID_ATTR_BORDER_OUTER, SvxBoxInfoItem InnerBorder SID_ATTR_BORDER_INNER )
-
+SfxVoidItem SetBorderStyle SID_ATTR_BORDER
+(SvxBoxItem OuterBorder SID_ATTR_BORDER_OUTER,SvxBoxInfoItem InnerBorder SID_ATTR_BORDER_INNER)
 [
-    SlotType = SvxBoxItem;
-
     /* flags: */
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -1078,6 +1076,9 @@ SfxVoidItem SetBorderStyle SID_ATTR_BORDER( SvxBoxItem OuterBorder SID_ATTR_BORD
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    /* status: */
+    SlotType = SvxBoxItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -1113,7 +1114,7 @@ SfxVoidItem BringToFront SID_FRAME_TO_TOP
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Caption SID_DRAW_CAPTION
+SfxBoolItem DrawCaption SID_DRAW_CAPTION
 
 [
     /* flags: */
@@ -1730,8 +1731,8 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS( SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS )
-
+SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
+(SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -1747,7 +1748,7 @@ SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS( SfxUInt32Item Selec
     Synchron;
 
     /* status: */
-    SlotType = SvxClipboardFmtItem;
+    SlotType = SvxClipboardFmtItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -2515,7 +2516,7 @@ SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem CurrencyField SID_INSERT_CURRENCYFIELD
+SfxBoolItem InsertCurrencyField SID_INSERT_CURRENCYFIELD
 
 [
     /* flags: */
@@ -2649,7 +2650,7 @@ SfxBoolItem DateField SID_FM_DATEFIELD
 
 //--------------------------------------------------------------------------
 SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
-( SfxBoolItem On FN_PARAM_1 )
+(SfxBoolItem On FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4880,33 +4881,6 @@ TbxImageItem GraphicFilterToolbox SID_GRFFILTER
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Grid SID_GRID
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem Grid SID_FM_DBGRID
 
 [
@@ -5644,7 +5618,7 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
 
 //--------------------------------------------------------------------------
 SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
-( SfxBoolItem On FN_PARAM_1 )
+(SfxBoolItem On FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5698,8 +5672,8 @@ SfxVoidItem InsertObject SID_INSERT_OBJECT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertObjectStarChart SID_INSERT_DIAGRAM
-()
+SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
+(SfxBoolItem ColHeaders FN_PARAM_1,SfxBoolItem RowHeaders FN_PARAM_2,SfxBoolItem InNewTable FN_PARAM_4,SfxStringItem RangeList FN_PARAM_5)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5774,7 +5748,7 @@ SfxVoidItem InsertSound SID_INSERT_SOUND
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertSymbol SID_CHARMAP
-(SvxFontItem Font SID_CHARMAP, SfxStringItem Symbols SID_ATTR_SPECIALCHAR)
+(SvxFontItem Font SID_CHARMAP,SfxStringItem Symbols SID_ATTR_SPECIALCHAR)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5950,34 +5924,6 @@ SvxPostureItem Italic SID_ATTR_CHAR_POSTURE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem JustifyPara FN_SET_JUSTIFY_PARA
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    ImageRotation = TRUE;
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
 
 [
@@ -5995,6 +5941,7 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -8291,6 +8238,7 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -10020,7 +9968,7 @@ SfxBoolItem Text SID_ATTR_CHAR
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Text SID_DRAW_TEXT
+SfxBoolItem DrawText SID_DRAW_TEXT
 
 [
     /* flags: */
@@ -10194,33 +10142,6 @@ SfxBoolItem TimeField SID_FM_TIMEFIELD
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem TimeField SID_INSERT_TIMEFIELD
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
@@ -10418,8 +10339,8 @@ SfxBoolItem TwainSelect SID_TWAIN_SELECT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER()
-
+SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
+()
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -11106,7 +11027,9 @@ SfxBoolItem SelectMode SID_INSERT_SELECT
     GroupId = GID_CONTROLS;
 ]
 
+//--------------------------------------------------------------------------
 SvxParaVertAlignItem VerticalParagraphAlignment SID_PARA_VERTALIGN
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -11131,7 +11054,9 @@ SvxParaVertAlignItem VerticalParagraphAlignment SID_PARA_VERTALIGN
     GroupId = GID_CONTROLS;
 ]
 
+//--------------------------------------------------------------------------
 SvxCharReliefItem CharacterRelief SID_ATTR_CHAR_RELIEF
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -11264,7 +11189,9 @@ SfxUInt32Item NumberFormatValue SID_ATTR_NUMBERFORMAT_VALUE
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SvxHorJustifyItem HorizontalJustification SID_ATTR_ALIGN_HOR_JUSTIFY
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11289,7 +11216,9 @@ SvxHorJustifyItem HorizontalJustification SID_ATTR_ALIGN_HOR_JUSTIFY
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SvxVerJustifyItem VerticalJustification SID_ATTR_ALIGN_VER_JUSTIFY
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11314,7 +11243,9 @@ SvxVerJustifyItem VerticalJustification SID_ATTR_ALIGN_VER_JUSTIFY
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SfxUInt16Item AlignmentIndent SID_ATTR_ALIGN_INDENT
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11339,7 +11270,9 @@ SfxUInt16Item AlignmentIndent SID_ATTR_ALIGN_INDENT
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SfxBoolItem AlignmentHyphenation SID_ATTR_ALIGN_HYPHENATION
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11364,7 +11297,9 @@ SfxBoolItem AlignmentHyphenation SID_ATTR_ALIGN_HYPHENATION
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SfxInt32Item AlignmentRotation SID_ATTR_ALIGN_DEGREES
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11389,7 +11324,9 @@ SfxInt32Item AlignmentRotation SID_ATTR_ALIGN_DEGREES
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SvxRotateModeItem AlignmentRotationMode SID_ATTR_ALIGN_LOCKPOS
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11414,7 +11351,9 @@ SvxRotateModeItem AlignmentRotationMode SID_ATTR_ALIGN_LOCKPOS
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SvxMarginItem AlignmentMargin SID_ATTR_ALIGN_MARGIN
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11439,7 +11378,9 @@ SvxMarginItem AlignmentMargin SID_ATTR_ALIGN_MARGIN
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SvxOrientationItem AlignmentOrientation SID_ATTR_ALIGN_ORIENTATION
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11466,6 +11407,7 @@ SvxOrientationItem AlignmentOrientation SID_ATTR_ALIGN_ORIENTATION
 
 //--------------------------------------------------------------------------
 SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11474,7 +11416,7 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-        Toggle = TRUE,
+    Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
@@ -11493,6 +11435,7 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
 
 //--------------------------------------------------------------------------
 SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -11501,7 +11444,7 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-        Toggle = TRUE,
+    Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
@@ -11517,6 +11460,7 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+
 //--------------------------------------------------------------------------
 SfxBoolItem TextRTL SID_RULER_TEXT_RIGHT_TO_LEFT
 [
