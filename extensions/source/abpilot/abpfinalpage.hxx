@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpfinalpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef EXTENSIONS_ABP_ABPTYPES_HXX
 #include "abptypes.hxx"
 #endif
+#ifndef SVTOOLS_URLCONTROL_HXX
+#include <svtools/urlcontrol.hxx>
+#endif
 
 //.........................................................................
 namespace abp
@@ -84,11 +87,16 @@ namespace abp
     {
     protected:
         FixedText       m_aExplanation;
+        FixedText       m_aLocationLabel;
+        ::svt::OFileURLControl  m_aLocation;
+        PushButton      m_aBrowse;
+        CheckBox        m_aRegisterName;
         FixedText       m_aNameLabel;
         Edit            m_aName;
         FixedText       m_aDuplicateNameError;
 
         StringBag       m_aInvalidDataSourceNames;
+        sal_Bool        m_bCheckFileName;
 
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
@@ -106,10 +114,13 @@ namespace abp
         virtual sal_Bool    determineNextButtonState();
 
     private:
-        DECL_LINK( OnNameModified, void* );
+        DECL_LINK( OnNameModified, Edit* );
+        DECL_LINK( OnBrowse, PushButton* );
+        DECL_LINK( OnRegister, CheckBox* );
 
         sal_Bool    isValidName() const;
         void        implCheckName();
+        void        setFields();
     };
 
 //.........................................................................
