@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-30 14:38:12 $
+ *  last change: $Author: dvo $ $Date: 2001-11-08 18:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _CRSRSH_HXX
-#include <crsrsh.hxx>
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>           // fuer Undo Insert-Dokument
@@ -1074,6 +1074,10 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         }
     }
 
+    SwEditShell* pESh = pOutDoc->GetEditShell();
+    if( pESh )
+        pESh->StartAllAction();
+
     BOOL bWasPurgeOle = pOutDoc->IsPurgeOLE();
     pOutDoc->SetPurgeOLE( FALSE );
 
@@ -1086,6 +1090,8 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );
 
     pOutDoc->SetPurgeOLE( bWasPurgeOle );
+    if( pESh )
+        pESh->EndAllAction();
 
     // Falls nur zum Schreiben eine Selektion aufgespannt wurde, vor der
     // Rueckkehr den alten Crsr wieder herstellen.
