@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_NUM_NAMES
     Text[ portuguese_brazilian ] = "Gravar como";
     Text[ portuguese ] = "Guardar como";
     Text[ danish ] = "Ge~m som";
-    Text[ french ] = "Enregistrer sous";
+    Text[ french ] = "Enregistrer comme";
     Text[ swedish ] = "Spara som";
     Text[ dutch ] = "Opslaan als";
     Text[ spanish ] = "Guardar como";
@@ -126,7 +126,7 @@ ModalDialog DLG_NUM_NAMES
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ russian ] = "‘ÓÏ‡Ú";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "Ã´∞—";
+        Text[ japanese ] = "èëéÆ";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "™ÌÆÊ";
         Text[ arabic ] = "«· ‰”Ìﬁ";
@@ -1281,4 +1281,5 @@ TabPage TP_OUTLINE_NUM
         TEXT[ catalan ] = "(ninguna)";
     };
 };
+
 
