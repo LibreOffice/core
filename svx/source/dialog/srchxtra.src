@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:03:55 $
+ *  last change: $Author: obo $ $Date: 2002-08-16 20:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ russian ] = "Βϋαξπ";
         Text[ polish ] = "Wybσr";
         Text[ japanese ] = "ιΈζ";
-        Text[ chinese_traditional ] = "ιΈε–";
+        Text[ chinese_traditional ] = "ιΈι …";
         Text[ arabic ] = "ΗΞΚνΗΡ";
         Text[ greek ] = "Επιλογή";
         Text[ korean ] = "μ„ νƒ";
@@ -558,7 +558,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ chinese_simplified ] = "ε ι™¤ε­—η¬¦(~R)";
         Text[ russian ] = "Σαπΰςό ηνΰκθ";
         Text[ polish ] = "Usuρ znaki";
-        Text[ japanese ] = "ε‰ι™¤θ¨±ε―γ®ζ–‡ε­—ζ•°(~R)";
+        Text[ japanese ] = "δΈθ¶³θ¨±ε―γ®ζ–‡ε­—ζ•°(~R)";
         Text[ chinese_traditional ] = "εªι™¤ε­—ε…ƒ(~R)";
         Text[ arabic ] = "ΕÒΗαΙ ΓΝΡέ";
         Text[ greek ] = "Διαγραφή χαρακτήρων";
