@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 09:37:22 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ turkish ] = "~Цzellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Propietats...";
-        Text[ finnish ] = "Ominai~suudet";
+        Text[ finnish ] = "Ominaisuu~det...";
         Text[ thai ] = "аё„аёёаё“аёЄаёЎ~аёљаё±аё•аёґ...";
     };
     FixedText FT_STATUS
@@ -259,7 +259,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "Plaats" ;
         Text [ portuguese ] = "Lugar" ;
         Text[ chinese_simplified ] = "дЅЌзЅ®";
-        Text[ russian ] = "Локализация";
+        Text[ russian ] = "Расположение";
         Text[ polish ] = "Lokalizacja";
         Text[ japanese ] = "е ґж‰Ђ";
         Text[ chinese_traditional ] = "дЅЌзЅ®";
@@ -290,7 +290,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ italian ] = "Commento" ;
         Text [ spanish ] = "Comentario" ;
         Text [ french ] = "Commentaire" ;
-        Text [ dutch ] = "Commentaar" ;
+        Text [ dutch ] = "Opmerkingen" ;
         Text [ portuguese ] = "Comentбrio" ;
         Text[ chinese_simplified ] = "жіЁи§Ј";
         Text[ russian ] = "Комментарий";
@@ -358,10 +358,10 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ italian ] = "Stampa su ~file" ;
         Text [ spanish ] = "Imprimir ~en archivo" ;
         Text [ french ] = "Imprimer dans un ~fichier " ;
-        Text [ dutch ] = "Afdrukken in ~bestand" ;
+        Text [ dutch ] = "Afdrukken naar ~bestand" ;
         Text [ portuguese ] = "Imprimir em ~ficheiro" ;
         Text[ chinese_simplified ] = "ж‰“еЌ°ж€ђж–‡д»¶";
-        Text[ russian ] = "Печать в файл";
+        Text[ russian ] = "Печатать в файл";
         Text[ polish ] = "Drukuj do pliku";
         Text[ japanese ] = "гѓ•г‚Ўг‚¤гѓ«гЃёе‡єеЉ›";
         Text[ chinese_traditional ] = "е€—еЌ°ж€ђжЄ”жЎ€";
@@ -563,7 +563,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "E~xemplaren" ;
         Text [ portuguese ] = "E~xemplares" ;
         Text[ chinese_simplified ] = "ж‰“еЌ°д»Ѕж•°";
-        Text[ russian ] = "Экземпляра(ов)";
+        Text[ russian ] = "Количество копий";
         Text[ polish ] = "Egzemplarze";
         Text[ japanese ] = "йѓЁж•°";
         Text[ chinese_traditional ] = "е€—еЌ°д»¶ж•ё";
@@ -605,7 +605,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "S~orteren" ;
         Text [ portuguese ] = "~Ordenar" ;
         Text[ chinese_simplified ] = "жЋ’еєЏ(~L)";
-        Text[ russian ] = "Сортировать";
+        Text[ russian ] = "Упорядочить";
         Text[ polish ] = "Sortuj";
         Text[ japanese ] = "йѓЁеЌдЅЌгЃ§еЌ°е€·(~L)";
         Text[ chinese_traditional ] = "жЋ’еєЏ(~L)";
@@ -647,7 +647,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ italian ] = "E~xtra..." ;
         Text [ spanish ] = "~Opciones..." ;
         Text [ french ] = "Options..." ;
-        Text [ dutch ] = "~Overige..." ;
+        Text [ dutch ] = "O~verige..." ;
         Text[ chinese_simplified ] = "е…¶д»–(~O)...";
         Text[ russian ] = "Параметры...";
         Text[ polish ] = "Dodatki...";
@@ -659,7 +659,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ turkish ] = "~Seзenekler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Opcions";
-        Text[ finnish ] = "~Asetukset";
+        Text[ finnish ] = "~Asetukset...";
         Text[ thai ] = "~аё•аё±аё§а№ЂаёҐаё·аё­аёЃ...";
     };
     OKButton BTN_OK
@@ -689,7 +689,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ dutch ] = "<Alle>";
         Text[ french ] = "<Tout>";
         Text[ spanish ] = "<Todos>";
-        Text[ finnish ] = "<All>";
+        Text[ finnish ] = "<Kaikki>";
         Text[ italian ] = "<All>";
         Text[ danish ] = "<Alle>";
         Text[ swedish ] = "<Alla>";
