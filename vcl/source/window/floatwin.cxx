@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 14:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists" );
 
     // no Border, then we dont need a border window
-    if ( !(nStyle & (WB_BORDER|WB_MOVEABLE|WB_SIZEABLE)) )
+    //if ( !(nStyle & (WB_BORDER|WB_MOVEABLE|WB_SIZEABLE)) )
+    if ( !nStyle )
     {
         if ( nStyle & WB_SYSTEMWINDOW )
             mbFrame = TRUE;
