@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorage.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 18:07:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,32 +147,6 @@ interface XStorage
     /** allows to controll and track lifetime of the storage.
 
         <p>
-        A root storage is created by <type>StorageFactory</type> and is
-        controlled by refcounting. In case refcounting is decreased to zero
-        the storage will be disposed automatically. It is still strongly
-        recommended that a root storage is disposed explicitly since in
-        garbage collector based languages the refcounting can be decreased too
-        late and resources locked by the storage will not be freed until then.
-        </p>
-
-        <p>
-        A substorage is created by <type>XStorage</type> interface of storage.
-        Each time a substorage is opened it is locked ( in case it is opened
-        in readonly mode it is locked for writing, in case it is opened in
-        read-write mode it is locked for reading and writing ) until it is
-        disposed.  The lifetime of substorage is also controlled by
-        refcounting but because of mentioned garbage collection specific it is
-        strongly recommended to dispose substorages explicitly.
-        </p>
-
-        <p>
-        In case a storage object is disposed all the elements ( substorages
-        and substreams ) retrieved from the object are disposed.
-        If the storage was opened in read-write mode all noncommited changes
-        will be lost.
-        </p>
-
-        <p>
         In case a storage is disposed any call to it's methods should result
         in <type scope="com::sun::star::lang">DisposedException</type>.
         </p>
@@ -188,7 +162,7 @@ interface XStorage
         <p>
         The destination storage contents are overwritten.
         After the successful copying the target storage is automatically
-        commited.
+        commited if it implements transacted access.
         </p>
 
         @param xDest
@@ -216,16 +190,7 @@ interface XStorage
     /** allows to get access to a child stream of the storage.
 
         <p>
-        If the child stream is an encrypted one a corect common storage
-        password should be set through <type>XEncryptionProtectedSource</type>
-        interface to this storage or to a one of storages in parent hierarchy.
-        In case the password is not set or is a wrong one an exception will be
-        thrown.
-        </p>
-
-        <p>
-        This method returns <type>StorageStream</type> service
-        implementation. In case the stream is open in readonly mode the
+        In case the stream is open in readonly mode the
         <method scope="com::sun::star::io">XStream::getOutputStream</method>
         method will return an empty reference.
         </p>
@@ -265,11 +230,14 @@ interface XStorage
     /** allows to get access to a child encrypted stream with password.
 
         <p>
-        This method allows to specify reading password for the stream
-        explicitly. The password will be used to read the stream. It is
-        possible to specify a new password for stream storing through
-        <type>XEncryptionProtectedSource</type> interface. In case a new
-        password is not specified an old one will be used for storing.
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        </p>
+
+        <p>
+        In case the stream is open in readonly mode the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
         </p>
 
         @param sStreamName
@@ -317,7 +285,6 @@ interface XStorage
     /** allows to get access to a child storage.
 
         <p>
-        This method returns <type>Storage</type> service implementation.
         The opened substorage must support specified in 'nOpenMode' access
         modes. It can support 'read' mode in addition. But any child element
         can support one of those modes only in case this mode is supported by
@@ -354,29 +321,9 @@ interface XStorage
     /** allows to get readonly copy of a child stream of the storage.
 
         <p>
-        This method returns <type>StorageStream</type> service implementation.
         The stream is open in readonly mode so the
         <method scope="com::sun::star::io">XStream::getOutputStream</method>
         method will return an empty reference.
-        </p>
-
-        <p>
-        The latest flashed version of the stream will be used. The stream can
-        be flashed explicitly by
-        <method scope="com::sun::star::io">XOutputStream::flush</method> call.
-        A storage flashes on commit all the child streams it owns. So in case
-        after the stream is changed neither the storage was commited nor the
-        stream was flashed explicitly, the changes will not appear in the new
-        created stream. This method allows to retrieve copy of a child stream
-        even in case it is already opened for writing.
-        </p>
-
-        <p>
-        If the child stream is an encrypted one a corect common storage
-        password should be set through <type>XEncryptionProtectedSource</type>
-        interface to this storage or to a one of storages in parent
-        hierarchy. In case the password is not set or is a wrong one an
-        exception will be thrown.
         </p>
 
         @param sStreamName
@@ -408,22 +355,14 @@ interface XStorage
     /** allows to get readonly copy of a child encrypted stream with password.
 
         <p>
-        This method returns <type>StorageStream</type> service implementation.
-        The stream is open in readonly mode so the
-        <method scope="com::sun::star::io">XStream::getOutputStream</method>
-        method will return an empty reference.
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
         </p>
 
         <p>
-        The latest flashed version of the stream will be used. The stream can
-        be flashed explicitly by
-        <method scope="com::sun::star::io">XOutputStream::flush</method> call.
-        When the stream is disposed it is automatically flashed.
-        A storage flashes on commit all the child streams it owns. So in case
-        after the stream is changed neither the storage was commited nor the
-        stream was flashed explicitly, the changes will not appear in the new
-        created stream. This method allows to retrieve copy of a child stream
-        even in case it is already opened for writing.
+        The stream is open in readonly mode so the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
         </p>
 
         <p>
@@ -471,10 +410,8 @@ interface XStorage
     /** allows to get copy of this storage at the state of it's last commit.
 
         <p>
-        This method gets <type>Storage</type> service implementation and fills
-        it in with the latest commited version of this storage. So in case the
-        storage was not commited after it was changed, the changes will not
-        appear in the new created storage.
+        This method makes sence only for services implementations that allow
+        transaction in the storage.
         </p>
 
         @param xStorage
@@ -503,16 +440,8 @@ interface XStorage
     /** allows to get copy of a child storage at the state of it's last commit.
 
         <p>
-        This method gets <type>Storage</type> service implementation and fills
-        it in with the contents of the requested substorage. The latest
-        commited version of child storage will be used. So in case the child
-        storage was not commited after it was changed, the changes will not
-        appear in the new created storage.
-        </p>
-
-        <p>
-        This method allows to retrieve copy of a child storage even in case it
-        is already opened for writing.
+        This method makes sence only for services implementations that allow
+        transaction in the storage.
         </p>
 
         @param sStorName
@@ -577,7 +506,8 @@ interface XStorage
     /** allows to check if an element is a child storage with specified name.
 
         <p>
-        In case there is no child element with such name an exception will be thrown
+        In case there is no child element with such name an exception will be
+        thrown.
         </p>
 
         @param sElementName
@@ -604,10 +534,6 @@ interface XStorage
 
     // -----------------------------------------------------------------------
     /** removes an element from a storage.
-
-        <p>
-        If the element is opened the removing will fail.
-        </p>
 
         @param sElementName
             the name of the element to remove
@@ -766,7 +692,8 @@ interface XStorage
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
         storage stream to another without decryption. It is not reccomended to
-        use this method outside of storage implementation.
+        use this method outside of storage implementation since different
+        storages implementation could have different encryption format.
         </p>
 
         @param sStreamName
