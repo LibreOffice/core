@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-25 11:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,13 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_PAGE_TRANS_SPEED        1009
 #define CTF_PAGE_TRANS_DURATION     1010
 #define CTF_PAGE_BACKSIZE           1011
+#define CTF_DASHNAME                1012
+#define CTF_LINESTARTNAME           1013
+#define CTF_LINEENDNAME             1014
+#define CTF_FILLGRADIENTNAME        1015
+#define CTF_FILLHATCHNAME           1016
+#define CTF_FILLBITMAPNAME          1017
+#define CTF_FILLTRANSNAME           1018
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes

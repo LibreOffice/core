@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 15:28:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-25 11:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,13 +183,13 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // stroke attributes
     { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SD_TYPE_STROKE, 0 },
-    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, 0 },
+    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, CTF_DASHNAME },
     { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
     { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
-    { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, 0 },
+    { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, CTF_LINESTARTNAME },
     { "LineStartWidth", XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
     { "LineStartCenter",XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
-    { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, 0 },
+    { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, CTF_LINEENDNAME },
     { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
     { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
     { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
@@ -198,12 +198,12 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // fill attributes
     { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
     { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
-    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,XML_TYPE_STRING, 0 },
+    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,XML_TYPE_STRING, CTF_FILLGRADIENTNAME },
     { "FillGradientStepCount",  XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
-    { "FillHatchName",      XML_NAMESPACE_DRAW, sXML_fill_hatch_name,   XML_TYPE_STRING, 0 },
-    { "FillBitmapName",     XML_NAMESPACE_DRAW, sXML_fill_image_name,   XML_TYPE_STRING, 0 },
+    { "FillHatchName",      XML_NAMESPACE_DRAW, sXML_fill_hatch_name,   XML_TYPE_STRING, CTF_FILLHATCHNAME },
+    { "FillBitmapName",     XML_NAMESPACE_DRAW, sXML_fill_image_name,   XML_TYPE_STRING, CTF_FILLBITMAPNAME },
     { "FillTransparence",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16, 0 },
-    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
+    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, CTF_FILLTRANSNAME },
 
     { "FillBitmapSizeX",            XML_NAMESPACE_DRAW, sXML_fill_image_width,  XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,  XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
@@ -828,10 +828,10 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 break;
             case CTF_WRITINGMODE:
                 {
-                    sal_Bool bWritingMode;
-                    if( property->maValue >>= bWritingMode )
+                    text::WritingMode eWritingMode;
+                    if( property->maValue >>= eWritingMode )
                     {
-                        if( !bWritingMode )
+                        if( text::WritingMode_LR_TB == eWritingMode )
                             property->mnIndex = -1;
                     }
                 }
@@ -843,6 +843,24 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_REPEAT_OFFSET_Y:
                 pRepeatOffsetY = property;
                 break;
+
+            case CTF_DASHNAME:
+            case CTF_LINESTARTNAME:
+            case CTF_LINEENDNAME:
+            case CTF_FILLGRADIENTNAME:
+            case CTF_FILLHATCHNAME:
+            case CTF_FILLBITMAPNAME:
+            case CTF_FILLTRANSNAME:
+                {
+                    if( !mbIsInAutoStyles )
+                    {
+                        OUString aStr;
+                        if( (property->maValue >>= aStr) && 0 == aStr.getLength() )
+                            property->mnIndex = -1;
+                    }
+                }
+                break;
+
         }
     }
 
