@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
+ *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
         aEvent.Source = (::com::sun::star::frame::XDispatch*)this;
         m_xListener->statusChanged( aEvent );
     }
+
+    m_pWindow->UpdateToolbox();
 }
 
 // -----------------------------------------------------------------------
@@ -155,9 +157,22 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
         m_pHistory = new HelpHistoryList_Impl;
         m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), ((ULONG)0x0) );
         m_nCurPos = m_pHistory->Count() - 1;
+
+        m_pWindow->UpdateToolbox();
     }
     m_aCurrentURL = rURL;
 }
+
+sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
+{
+    return m_pHistory && ( m_nCurPos > 0 );
+}
+
+sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
+{
+    return m_pHistory && ( m_nCurPos < ( m_pHistory->Count() - 1 ) );
+}
+
 
 // -----------------------------------------------------------------------
 // XDispatchProvider
@@ -293,6 +308,8 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     }
                 }
             }
+
+            m_pWindow->UpdateToolbox();
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-06 14:02:33 $
+ *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2185,6 +2185,13 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
         }
     }
 }
+
+void SfxHelpWindow_Impl::UpdateToolbox()
+{
+    pTextWin->GetToolBox().EnableItem( TBI_BACKWARD, pHelpInterceptor->HasHistoryPred() );
+    pTextWin->GetToolBox().EnableItem( TBI_FORWARD, pHelpInterceptor->HasHistorySucc() );
+}
+
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 

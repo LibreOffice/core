@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-30 07:07:54 $
+ *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ struct HelpHistoryEntry_Impl
 DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*);
 
 class OpenStatusListener_Impl;
-class Window;
+class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
 
         ::com::sun::star::frame::XDispatchProviderInterceptor,
@@ -125,7 +125,7 @@ private:
 
     HelpHistoryList_Impl*       m_pHistory;
     OpenStatusListener_Impl*    m_pOpenListener;
-    Window*                     m_pWindow;
+    SfxHelpWindow_Impl*         m_pWindow;
     ULONG                       m_nCurPos;
     String                      m_aCurrentURL;
 
@@ -138,6 +138,9 @@ public:
     void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
     void                    SetStartURL( const String& rURL );
     String                  GetCurrentURL() const { return m_aCurrentURL; }
+
+    sal_Bool                HasHistoryPred() const;     // is there a predecessor for the current in the history
+    sal_Bool                HasHistorySucc() const;     // is there a successor for the current in the history
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
@@ -163,7 +166,7 @@ public:
     virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
 
     // extras
-    void                    InitWaiter( OpenStatusListener_Impl* pListener, Window* pWindow )
+    void                    InitWaiter( OpenStatusListener_Impl* pListener, SfxHelpWindow_Impl* pWindow )
                                 { m_pOpenListener = pListener; m_pWindow = pWindow; }
 };
 

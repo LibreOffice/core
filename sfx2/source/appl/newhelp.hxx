@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-06 14:02:33 $
+ *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,8 @@ public:
     void                    ToggleIndex( sal_Bool bOn );
 
     virtual void            GetFocus();
+
+    inline ToolBox&         GetToolBox() { return aToolBox; }
 };
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -439,6 +441,7 @@ public:
     void                SetHelpURL( const String& rURL );
     void                DoAction( USHORT nActionId );
 
+    void                UpdateToolbox();
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
