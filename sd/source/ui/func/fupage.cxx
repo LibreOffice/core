@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:00:03 $
+ *  last change: $Author: dl $ $Date: 2001-10-10 12:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         nLower = pPage->GetLwrBorder();
     }
 
-    if( bSetPageSizeAndBorder )
+    if( bSetPageSizeAndBorder || !bMasterPage )
         pViewSh->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower,
                                       bScaleAll, eOrientation, nPaperBin, bFullSize );
 
