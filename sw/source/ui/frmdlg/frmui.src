@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:48:24 $
+ *  last change: $Author: rt $ $Date: 2001-04-10 20:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ String STR_LEFT
     TEXT [ danish ] = "Venstre" ;
     TEXT [ french ] = "À gauche" ;
     TEXT [ swedish ] = "Vänster" ;
-    TEXT [ dutch ] = "Link" ;
+    TEXT [ dutch ] = "Links" ;
     TEXT [ spanish ] = "Izquierda" ;
     TEXT [ english_us ] = "Left" ;
     TEXT[ chinese_simplified ] = "×ó";
