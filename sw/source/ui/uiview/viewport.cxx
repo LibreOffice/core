@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:31:47 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,7 +1190,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     BOOL bIsPreview = pDocSh->IsPreview();
     if( bIsPreview )
     {
-        bShowH = bShowV = bHAuto = FALSE;
+        bShowH = bShowV = bHAuto = bAuto = FALSE;
     }
     if(pHScrollbar->IsVisible() != bShowH)
         ShowHScrollbar(bShowH);
