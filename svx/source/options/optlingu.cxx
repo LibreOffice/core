@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 10:54:03 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,45 +1113,11 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aLngCfg.SetProperty( aPropName, aAny );
     }
 
-    // force new spelling and flushing of spell caches
-    //! current implementation is a workaround until the correct
-    //! interface is implemented.
-    //TL:TODO: use XPropertyChangeListener mechanism to do this
-    Reference< XDictionary1 >  xDic( SvxGetIgnoreAllList() );
-    if (xDic.is())
-    {
-        OUString aTmp( C2U("v_7xj4") );
-        sal_Bool bOk = xDic->add( aTmp, sal_False, OUString() );
-        if (bOk)
-            xDic->remove( aTmp );
-    }
-
 #ifdef NOT_YET_IMPLEMENTED
     //!!! functionality needs to be implemented via XPropertySet listeners!
 
     sal_Bool bSpellAllAgain   = sal_False;
     sal_Bool bSpellWrongAgain = sal_False;
-    if( aNumsBtn.IsChecked() != aNumsBtn.GetSavedValue() )
-    {
-        if( aNumsBtn.IsChecked() )
-            bSpellAllAgain = sal_True;
-        else
-            bSpellWrongAgain = sal_True;
-    }
-    if( aCapsBtn.IsChecked() != aCapsBtn.GetSavedValue() )
-    {
-        if( aCapsBtn.IsChecked() )
-            bSpellAllAgain = sal_True;
-        else
-            bSpellWrongAgain = sal_True;
-    }
-    if( aUpLowBtn.IsChecked() != aUpLowBtn.GetSavedValue() )
-    {
-        if( aUpLowBtn.IsChecked() )
-            bSpellAllAgain = sal_True;
-        else
-            bSpellWrongAgain = sal_True;
-    }
     if( aAllLangBtn.IsChecked() != aAllLangBtn.GetSavedValue() )
     {
         if( aAllLangBtn.IsChecked() )
