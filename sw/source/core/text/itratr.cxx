@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:19:20 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,7 +623,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
             {
                 const SdrObject* pSObj = rpNd->FindSdrObject();
                 if( pSObj )
-                    nMin = pSObj->GetBoundRect().GetWidth();
+                    nMin = pSObj->GetCurrentBoundRect().GetWidth();
                 else
                 nMin = 0;
 
@@ -844,7 +844,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                         {
                             const SdrObject* pSObj = pFrmFmt->FindSdrObject();
                             if( pSObj )
-                                nAktWidth = pSObj->GetBoundRect().GetWidth();
+                                nAktWidth = pSObj->GetCurrentBoundRect().GetWidth();
                             else
                                 nAktWidth = 0;
                         }
