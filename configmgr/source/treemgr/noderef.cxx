@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,12 @@ bool Tree::hasChildren(NodeRef const& aNode) const
 
     if (!aView.isGroupNode(aNode)) return false;
 
+    view::GroupNode aGroupNode = aView.toGroupNode(aNode);
+
+    if (aView.hasValue(aGroupNode))return true;
+
     return aView.toGroupNode(aNode).getFirstChild().is();
+
 }
 //-----------------------------------------------------------------------------
 
