@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:43:24 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 14:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,23 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
 
     uno::Reference<XAccessible> xRet;
 
-    //! ...
+    if(mnChildCount < 0)
+        getAccessibleChildCount();
+
+    ScHFAreas::iterator aItr = maAreas.begin();
+    ScHFAreas::iterator aEndItr = maAreas.end();
+    while (!xRet.is() && (nIndex >= 0) && (aItr != aEndItr))
+    {
+        if (*aItr)
+        {
+            if (nIndex == 0)
+                xRet = *aItr;
+            else
+                --nIndex;
+        }
+        else
+            ++aItr;
+    }
 
     if ( !xRet.is() )
         throw lang::IndexOutOfBoundsException();
