@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:21:12 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2472,21 +2472,25 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
         {
-            if ( ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE )
-                && ( pTextObj->GetInstance() != TSS_TYPE_TEXT_IN_SHAPE )
-                    && ( pTextObj->GetInstance() != TSS_TYPE_UNUSED ) )
+            sal_Bool bCreatePlaceHolder = ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE ) && ( pTextObj->GetInstance() != TSS_TYPE_UNUSED );
+            sal_Bool bIsHeaderFooter = ( ePresKind == PRESOBJ_HEADER) || (ePresKind == PRESOBJ_FOOTER)
+                                        || (ePresKind == PRESOBJ_DATETIME) || (ePresKind == PRESOBJ_SLIDENUMBER);
+            if ( bCreatePlaceHolder && ( pTextObj->GetInstance() == TSS_TYPE_TEXT_IN_SHAPE ) )
+                bCreatePlaceHolder = bIsHeaderFooter;
+            if ( bCreatePlaceHolder )
             {
-                pText->SetNotVisibleAsMaster( TRUE );
-                pText->SetEmptyPresObj( TRUE );
-//              if ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE )
-//                  ePresKind = PRESOBJ_TITLE;
-                String aString( pPage->GetPresObjText( ePresKind ) );
+                if ( !bIsHeaderFooter )
+                {
+                    pText->SetNotVisibleAsMaster( TRUE );
+                    pText->SetEmptyPresObj( TRUE );
+                }
                 pText->SetUserCall( pPage );
                 pPage->InsertPresObj( pText, ePresKind );
                 SdrOutliner* pOutl = NULL;
                 if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
                     pOutl = GetDrawOutliner( pText );
-                pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aString);
+                if ( aPresentationText.Len() )
+                    pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
                 pText->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresKind ), TRUE );
                 SfxItemSet aTempAttr( pDoc->GetPool() );
                 SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
@@ -2497,34 +2501,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             }
             else
             {
-                if ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE )
-                {
-                    if( (ePresKind != PRESOBJ_HEADER) && (ePresKind != PRESOBJ_FOOTER) && (ePresKind != PRESOBJ_DATETIME) && (ePresKind != PRESOBJ_SLIDENUMBER) )
-                    {
-                        pText->SetNotVisibleAsMaster( TRUE );
-                        pText->SetEmptyPresObj( TRUE );
-                    }
-    //              if ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE )
-    //                  ePresKind = PRESOBJ_TITLE;
-                    pText->SetUserCall( pPage );
-                    pPage->InsertPresObj( pText, ePresKind );
-                    SdrOutliner* pOutl = NULL;
-                    if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
-                        pOutl = GetDrawOutliner( pText );
-                    if ( aPresentationText.Len() )
-                        pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
-                    pText->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresKind ), TRUE );
-                    SfxItemSet aTempAttr( pDoc->GetPool() );
-                    SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
-                    aTempAttr.Put( aMinHeight );
-                    SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
-                    aTempAttr.Put( aAutoGrowHeight );
-                    pText->SetMergedItemSet(aTempAttr);
-                }
-                else
-                {
-                    pRet = NULL;
-                }
+                pRet = NULL;
             }
         }
         else
