@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:49:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,12 +734,7 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
     {
         SwNodeNum aNdNum( 0 );
         const SwNodeNum* pNum;
-        if( bOutlineRule )
-        {
-            if( 0 == ( pNum = rNd.GetOutlineNum() ))
-                pNum = rNd.UpdateOutlineNum( aNdNum );
-        }
-        else if( 0 == ( pNum = rNd.GetNum() ))
+        if( 0 == ( pNum = rNd.GetNum() ))
             pNum = rNd.UpdateNum( aNdNum );
         nLvl = GetRealLevel( pNum->GetLevel() );
     }
