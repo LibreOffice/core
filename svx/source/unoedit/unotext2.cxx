@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 15:05:53 $
+ *  last change: $Author: cl $ $Date: 2001-07-04 10:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,8 @@ void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang
 uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration(  )
     throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     return new SvxUnoTextRangeEnumeration( rParentText, nParagraph );
 }
 
