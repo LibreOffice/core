@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:46:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include "hlinettp.hxx"
 #include "hyperdlg.hrc"
+#include "hlmarkwn_def.hxx" //ADD CHINA001
 
 #define STD_DOC_SUBPATH     "internal"
 #define STD_DOC_NAME        "url_transfer.htm"
