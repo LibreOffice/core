@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-21 10:22:31 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 14:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,15 +164,9 @@ ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
 
     // load the settings from the configuration
     if(m_aConfigurationNode.isValid())
-    {
         // our own settings
         loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
 
-        // our column's settings
-        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        if(pColumns)
-            pColumns->loadSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
-    }
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
     // (see getFastPropertyValue)
     m_nPrivileges = -1;
@@ -460,11 +454,10 @@ void ODBTable::flush_NoBroadcast_NoCommit()
     if(m_aConfigurationNode.isValid())
     {
         storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
+
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
         if(pColumns)
-        {
             pColumns->storeSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
-        }
     }
 }
 // XRename,
@@ -580,6 +573,9 @@ void ODBTable::refreshColumns()
     else
         m_pColumns->reFill(aVector);
 
+    // our column's settings
+    if (m_aConfigurationNode.isValid())
+        static_cast<OColumns*>(m_pColumns)->loadSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
 }
 // -------------------------------------------------------------------------
 void ODBTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
