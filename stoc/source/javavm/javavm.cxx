@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jl $ $Date: 2002-11-12 16:07:33 $
+ *  last change: $Author: jl $ $Date: 2002-11-13 16:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,42 +1093,51 @@ static void getJavaPropsFromConfig(JVM * pjvm,
     }
 
     //Read each line from the Java section
-    while(1)
+    if(bSectionFound)
     {
-        ByteSequence seq;
-        if(pIniFile->readLine(seq) == File::E_None)
+        while(1)
         {
-            sal_Bool bEOF;
-            pIniFile->isEndOfFile(&bEOF);
-            if(bEOF)
-                break;
-            //check if another Section starts
-            OString line((sal_Char*)seq.getArray(), seq.getLength());
-            if(line.indexOf('[') == 0)
-                break;
-            //check if there is '=' after the first word
-            bool bOk= false;
-            const sal_Char *pIndex= line.getStr();
-            sal_Int32 len= line.getLength();
-            const sal_Char *pEnd= pIndex + len;
-            while( pIndex != pEnd
-                   && *pIndex != ' '
-                   && *pIndex != '\t'
-                   && *pIndex != '=')
-                pIndex ++;
-            if(pIndex == pEnd || *pIndex != '=')
-                continue;   // no '=' found
+            ByteSequence seq;
+            if(pIniFile->readLine(seq) == File::E_None)
+            {
+                //check if another Section starts
+                OString line((sal_Char*)seq.getArray(), seq.getLength());
+                if(line.indexOf('[') == 0)
+                    break;
+                //check if there is '=' after the first word
+                bool bOk= false;
+                const sal_Char *pIndex= line.getStr();
+                //check for jvm options, e.g. -Xdebug, -D, ..
+                if( *pIndex != '-')
+                {
+                    //no jvm option, check for property, e.g RuntimeLib=XXX
+                    sal_Int32 len= line.getLength();
+                    const sal_Char *pEnd= pIndex + len;
+                    //the line must not contain spaces or tabs
+                    while( pIndex != pEnd
+                           && *pIndex != ' '
+                           && *pIndex != '\t'
+                           && *pIndex != '=')
+                        pIndex ++;
+                    if(pIndex == pEnd || *pIndex != '=')
+                        continue;   // no '=' found
+                }
+                // Ok, store the line
+                line.trim();
+                OUString usProp= OStringToOUString(line, osl_getThreadTextEncoding());
+                pjvm->pushProp(usProp);
 
-            // Ok, store the line
-            line.trim();
-            OUString usProp= OStringToOUString(line, osl_getThreadTextEncoding());
-            pjvm->pushProp(usProp);
+                sal_Bool bEOF;
+                pIniFile->isEndOfFile(&bEOF);
+                if(bEOF)
+                    break;
+            }
+            else
+                break;
         }
-        else
-            break;
+        pIniFile->close();
+        delete pIniFile;
     }
-    pIniFile->close();
-    delete pIniFile;
 }
 
 static const Bootstrap & getBootstrapHandle()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-15 13:26:07 $
+ *  last change: $Author: jl $ $Date: 2002-11-13 16:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,13 @@ namespace stoc_javavm {
     {
     }
 
-    void JVM::pushProp(const OUString & property) throw() {
+    void JVM::pushProp(const OUString & property) throw()
+    {
         sal_Int32 index = property.indexOf((sal_Unicode)'=');
-        OUString left = property.copy(0, index).trim();
-        OUString right(property.copy(index + 1).trim());
+        if(index > 0)
+        {
+            OUString left = property.copy(0, index).trim();
+            OUString right(property.copy(index + 1).trim());
 
 //  #ifdef DEBUG
 //      OString left_tmp = OUStringToOString(left, RTL_TEXTENCODING_ASCII_US);
@@ -112,63 +115,70 @@ namespace stoc_javavm {
 //      OSL_TRACE("javam - right %s", right_tmp.getStr());
 //  #endif
 
-        if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Debug"))))
-            setDebugPort(1199);
+            if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Debug"))))
+                setDebugPort(1199);
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Java"))))
-            setEnabled(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Java"))))
+                setEnabled(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Version"))))
-            ;
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Version"))))
+                ;
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Home"))))
-            _java_home = right;
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Home"))))
+                _java_home = right;
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VMType"))))
-            _vmtype = right;
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VMType"))))
+                _vmtype = right;
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemClasspath"))))
-            addSystemClasspath(right);
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemClasspath"))))
+                addSystemClasspath(right);
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("UserClasspath"))))
-            addUserClasspath(right);
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("UserClasspath"))))
+                addUserClasspath(right);
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DisableAsyncGC"))))
-            setDisableAsyncGC(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DisableAsyncGC"))))
+                setDisableAsyncGC(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("EnableClassGC"))))
-            setEnableClassGC(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("EnableClassGC"))))
+                setEnableClassGC(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("EnableVerboseGC"))))
-            setEnableVerboseGC(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("EnableVerboseGC"))))
+                setEnableVerboseGC(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("NativeStackSize"))))
-            setNativeStackSize(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("NativeStackSize"))))
+                setNativeStackSize(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("JavaStackSize"))))
-            setJavaStackSize(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("JavaStackSize"))))
+                setJavaStackSize(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VerifyMode"))))
-            setVerifyMode(right);
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VerifyMode"))))
+                setVerifyMode(right);
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("MinHeapSize"))))
-            setMinHeapSize(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("MinHeapSize"))))
+                setMinHeapSize(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("MaxHeapSize"))))
-            setMaxHeapSize(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("MaxHeapSize"))))
+                setMaxHeapSize(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DebugPort"))))
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DebugPort"))))
             setDebugPort(right.toInt32());
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("RuntimeLib"))))
-            setRuntimeLib(right);
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("RuntimeLib"))))
+                setRuntimeLib(right);
 
-        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("CheckSource"))))
-            setCheckSource(right.toInt32());
+            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("CheckSource"))))
+                setCheckSource(right.toInt32());
 
+            else
+                _props.push_back(property);
+        }
         else
+        { // no '=', could be -X
             _props.push_back(property);
+        }
+
     }
+
 
     void JVM::setEnabled(sal_Bool sbFlag) throw() {
         _enabled = sbFlag;
