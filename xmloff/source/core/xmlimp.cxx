@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-25 06:46:27 $
+ *  last change: $Author: dvo $ $Date: 2001-07-26 14:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,13 @@
 
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx> // used in StartElement for logging
 #endif
 
 #ifdef CONV_STAR_FONTS
@@ -435,11 +442,13 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
 void SAL_CALL SvXMLImport::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
+    RTL_LOGFILE_TRACE( "SvXMLImport::startDocument" );
 }
 
 void SAL_CALL SvXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException)
 {
+    RTL_LOGFILE_TRACE( "SvXMLImport::endDocument" );
 }
 
 void SAL_CALL SvXMLImport::startElement( const OUString& rName,
@@ -492,6 +501,14 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     }
     else
     {
+#ifdef TIMELOG
+        // If we do profiling, we want a trace message for the first element
+        // in order to identify the stream.
+        ByteString aString( (String)rName, RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_TRACE1( "SvXMLImport::StartElement( \"%s\", ... )",
+                            aString.GetBuffer() );
+#endif
+
         pContext = CreateContext( nPrefix, aLocalName, xAttrList );
     }
 

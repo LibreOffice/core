@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-26 11:32:47 $
+ *  last change: $Author: dvo $ $Date: 2001-07-26 14:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,10 @@
 #endif
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTEXPORTFILTER_HXX
 #include "XMLEmbeddedObjectExportFilter.hxx"
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 using namespace ::rtl;
@@ -520,6 +524,8 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 // XFilter
 sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLogContext, "SvXMLExport::filter" );
+
     // check for xHandler first... should have been supplied in initialize
     if( !xHandler.is() )
         return sal_False;
@@ -538,9 +544,24 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             {
                 if( !(rValue >>= sOrigFileName ) )
                     return sal_False;
+#ifdef TIMELOG
+                // file URL (if found) to identify the stream:
+                ByteString aString( (String)sOrigFileName,
+                                    RTL_TEXTENCODING_ASCII_US );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "URL: %s",
+                                            aString.GetBuffer() );
+#endif
+
             }
         }
 
+#ifdef TIMELOG
+        // we also want a trace message with the document class
+        ByteString aString( (String)GetXMLToken(meClass),
+                            RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class: %s",
+                                    aString.GetBuffer() );
+#endif
         exportDoc( meClass );
 
         return sal_True;
