@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 14:08:34 $
+ *  last change: $Author: mba $ $Date: 2000-10-20 14:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,15 @@ BOOL SotStorage::IsStorageFile( const String & rFileName )
 
 BOOL SotStorage::IsStorageFile( SvStream* pStream )
 {
-    return Storage::IsStorageFile( pStream );
+    if ( pStream )
+    {
+        long nPos = pStream->Tell();
+        BOOL bRet = Storage::IsStorageFile( pStream );
+        pStream->Seek( nPos );
+        return bRet;
+    }
+    else
+        return FALSE;
 }
 /*************************************************************************
 |*    SotStorage::GetStorage()
