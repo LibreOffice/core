@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pl $ $Date: 2002-02-06 11:36:30 $
+#   last change: $Author: hdu $ $Date: 2002-02-18 17:54:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,11 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/wall.obj		\
             $(SLO)$/opengl.obj		\
             $(SLO)$/fontcfg.obj
+
+
+.IF "$(ENABLE_CTL)"!=""
+    SLOFILES +=     $(SLO)$/sallayout.obj
+.ENDIF
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
