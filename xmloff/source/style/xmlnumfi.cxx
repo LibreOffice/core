@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-13 11:38:12 $
+ *  last change: $Author: sab $ $Date: 2002-05-08 12:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,11 @@ void SvXMLNumImpData::RemoveVolatileFormats()
     {
         const SvXMLNumFmtEntry* pObj = aNameEntries[i];
         if ( pObj->bRemoveAfterUse )
-            pFormatter->DeleteEntry( pObj->nKey );
+        {
+            const SvNumberformat* pFormat = pFormatter->GetEntry(pObj->nKey);
+            if (pFormat && (pFormat->GetType() & NUMBERFORMAT_DEFINED))
+                pFormatter->DeleteEntry( pObj->nKey );
+        }
     }
 }
 
