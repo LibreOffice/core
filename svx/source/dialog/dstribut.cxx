@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 15:04:13 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 11:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,15 @@ SvxDistributePage::SvxDistributePage(
     maVerCenter         (this, ResId(IMG_VER_CENTER     )),
     maVerHigh           (this, ResId(IMG_VER_HIGH       ))
 {
+    maHorLow.SetModeImage( Image( ResId( IMG_HOR_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorCenter.SetModeImage( Image( ResId( IMG_HOR_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorDistance.SetModeImage( Image( ResId( IMG_HOR_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorHigh.SetModeImage( Image( ResId( IMG_HOR_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerDistance.SetModeImage( Image( ResId( IMG_VER_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerLow.SetModeImage( Image( ResId( IMG_VER_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerCenter.SetModeImage( Image( ResId( IMG_VER_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerHigh.SetModeImage( Image( ResId( IMG_VER_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 }
 
