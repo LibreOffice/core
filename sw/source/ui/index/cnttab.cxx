@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 16:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1978,6 +1978,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aLevelFT.Show(nType & (TO_CONTENT));
     aLevelNF.Show(nType & (TO_CONTENT));
     aLevelFromChapterCB.Show(nType & (TO_USER));
+    aAreaFT.Show(nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT));
     aAreaFL.Show(nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT));
 
     aFromHeadingsCB.Show(nType & (TO_CONTENT));
