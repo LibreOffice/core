@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-29 10:41:25 $
+ *  last change: $Author: dvo $ $Date: 2002-06-27 14:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,16 +133,44 @@
 
 #else
 
+    // helper function for lcl_CheckRedline
+    // make sure that rPos.nContent points into rPos.nNode
+    // (or into the 'special' no-content-node-IndexReg)
+    void lcl_CheckPosition( const SwPosition& rPos )
+    {
+        SwPosition aComparePos( rPos );
+        aComparePos.nContent.Assign(
+            aComparePos.nNode.GetNode().GetCntntNode(), 0 );
+        ASSERT( rPos.nContent.GetIdxReg() == aComparePos.nContent.GetIdxReg(),
+                "redline table corrupted: illegal position" );
+    }
+
+    // check validity of the redline table. Checks redline bounds, and make
+    // sure the redlines are sorted and non-overlapping.
     void lcl_CheckRedline( const SwDoc* pDoc )
     {
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
         for( USHORT n = 1; n < rTbl.Count(); ++n )
         {
             const SwRedline* pPrev = rTbl[ n-1 ], *pCur = rTbl[ n ];
-            if( *pPrev->Start() > *pCur->Start() )
-            {
-                ASSERT( pDoc, "falche Reihenfolge" );
-            }
+
+            // check sorting redlines
+            ASSERT( *pPrev->Start() <= *pCur->Start(),
+                    "redline table corrupted: not sorted correctly" );
+
+            // check for overlapping redlines
+            ASSERT( *pPrev->End() <= *pCur->Start(),
+                    "redline table corrupted: overlapping redlines" );
+
+            // also check that redline position's content points into the
+            // proper node
+            lcl_CheckPosition( pCur->GetBound( TRUE ) );
+            lcl_CheckPosition( pCur->GetBound( FALSE ) );
+        }
+        if( rTbl.Count() > 0 )
+        {
+            lcl_CheckPosition( rTbl[0]->GetBound( TRUE ) );
+            lcl_CheckPosition( rTbl[0]->GetBound( FALSE ) );
         }
     }
 
@@ -3096,22 +3124,27 @@ void SwRedline::DelCopyOfSection()
 
             if( bDelLastPara )
             {
-                SvPtrarr aBehindArr( 16, 16 );
+                // #100611# To prevent dangling references to the paragraph to
+                // be deleted, redline that point into this paragraph should be
+                // moved to the new end position. Since redlines in the redline
+                // table are sorted and the pEnd position is an endnode (see
+                // bDelLastPara condition above), only redlines before the
+                // current ones can be affected.
                 const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
                 USHORT n = rTbl.GetPos( this );
-                for( BOOL bBreak = FALSE; !bBreak && n < rTbl.Count(); ++n )
+                ASSERT( n != USHRT_MAX, "How strange. We don't exist!" );
+                for( BOOL bBreak = FALSE; !bBreak && n > 0; )
                 {
+                    --n;
                     bBreak = TRUE;
-                    if( rTbl[ n ]->GetBound(TRUE) == *pEnd )
+                    if( rTbl[ n ]->GetBound(TRUE) == *aPam.GetPoint() )
                     {
-                        void* pTmp = &rTbl[ n ]->GetBound(TRUE);
-                        aBehindArr.Insert( pTmp, aBehindArr.Count());
+                        rTbl[ n ]->GetBound(TRUE) = *pEnd;
                         bBreak = FALSE;
                     }
-                    if( rTbl[ n ]->GetBound(FALSE) == *pEnd )
+                    if( rTbl[ n ]->GetBound(FALSE) == *aPam.GetPoint() )
                     {
-                        void* pTmp = &rTbl[ n ]->GetBound(FALSE);
-                        aBehindArr.Insert( pTmp, aBehindArr.Count() );
+                        rTbl[ n ]->GetBound(FALSE) = *pEnd;
                         bBreak = FALSE;
                     }
                 }
@@ -3125,9 +3158,6 @@ void SwRedline::DelCopyOfSection()
                 aPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
                 aPam.DeleteMark();
                 pDoc->DelFullPara( aPam );
-
-                for( n = 0; n < aBehindArr.Count(); ++n )
-                    *(SwPosition*)aBehindArr[ n ] = aEnd;
             }
         }
         else
@@ -3232,10 +3262,12 @@ void SwRedline::MoveFromSection()
         pDoc->DeleteSection( &pCntntSect->GetNode() );
         delete pCntntSect, pCntntSect = 0;
 
+        // #100611# adjustment of redline table positions must take start and
+        // end into account, not point and mark.
         for( n = 0; n < aBeforeArr.Count(); ++n )
-            *(SwPosition*)aBeforeArr[ n ] = *GetMark();
+            *(SwPosition*)aBeforeArr[ n ] = *Start();
         for( n = 0; n < aBehindArr.Count(); ++n )
-            *(SwPosition*)aBehindArr[ n ] = *GetPoint();
+            *(SwPosition*)aBehindArr[ n ] = *End();
     }
     else
         InvalidateRange();
