@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 19:38:20 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 12:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,9 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
                             TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
                     if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING, String( ScResId( SCSTR_CLIP_STRING ) ) );
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
                     if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF, String( ScResId( SCSTR_CLIP_RTF ) ) );
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
 
                     rSet.Put( aFormats );
                 }

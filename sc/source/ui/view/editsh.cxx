@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 19:37:12 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 12:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,8 +260,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FID_PASTE_CONTENTS:
             {
                 SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-                pDlg->Insert( SOT_FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
-                pDlg->Insert( SOT_FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
+                pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
+                pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
 
                 TransferableDataHelper aDataHelper(
                     TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
@@ -623,9 +623,9 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
                             TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
                     if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING, String( ScResId( SCSTR_CLIP_STRING ) ) );
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
                     if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF, String( ScResId( SCSTR_CLIP_RTF ) ) );
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
 
                     rSet.Put( aFormats );
                 }

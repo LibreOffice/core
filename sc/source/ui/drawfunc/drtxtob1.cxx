@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:22:22 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 12:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,8 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest &rReq )
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
 
-    pDlg->Insert( SOT_FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
-    pDlg->Insert( SOT_FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
+    pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
+    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
@@ -166,10 +166,13 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest &rReq )
 
     //! test if outliner view is still valid
 
-    if (nFormat == SOT_FORMAT_STRING)
-        pOutView->Paste();
-    else
-        pOutView->PasteSpecial();
+    if (nFormat > 0)
+    {
+        if (nFormat == SOT_FORMAT_STRING)
+            pOutView->Paste();
+        else
+            pOutView->PasteSpecial();
+    }
     delete pDlg;
 }
 

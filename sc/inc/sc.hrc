@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-27 15:03:28 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 12:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,11 +1239,6 @@
 #define SCSTR_ORIENTATION_TOPBOTTOM (STR_START + 110)
 #define SCSTR_ORIENTATION_BOTTOMTOP (STR_START + 111)
 #define SCSTR_ORIENTATION_STANDARD  (STR_START + 112)
-
-#define SCSTR_CLIP_STRING           (STR_START + 200)
-#define SCSTR_CLIP_RTF              (STR_START + 201)
-#define SCSTR_CLIP_DDE              (STR_START + 202)
-#define SCSTR_CLIP_DIF              (STR_START + 203)
 
 #define SCSTR_HUMAN_SCDOC_NAME      (STR_START + 210)
 #define SCSTR_SHORT_SCDOC_NAME      (STR_START + 211)

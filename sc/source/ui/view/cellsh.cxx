@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 20:28:13 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 12:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,25 +332,17 @@ void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
     {
-        USHORT nResId = 0;
+        //  #90675# translated format name strings are no longer inserted here,
+        //  handled by "paste special" dialog / toolbox controller instead.
+        //  Only the object type name has to be set here:
         String aStrVal;
-        switch ( nFormatId )
+        if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
-            case SOT_FORMATSTR_ID_LINK: nResId = SCSTR_CLIP_DDE;    break;
-            case SOT_FORMAT_STRING:     nResId = SCSTR_CLIP_STRING; break;
-            case SOT_FORMATSTR_ID_DIF:  nResId = SCSTR_CLIP_DIF;    break;
-            case SOT_FORMAT_RTF:        nResId = SCSTR_CLIP_RTF;    break;
-            case SOT_FORMATSTR_ID_EMBED_SOURCE:
-                {
-                    TransferableObjectDescriptor aDesc;
-                    if ( ((TransferableDataHelper&)rDataHelper).GetTransferableObjectDescriptor(
-                                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
-                        aStrVal = aDesc.maTypeName;
-                }
-                break;
+            TransferableObjectDescriptor aDesc;
+            if ( ((TransferableDataHelper&)rDataHelper).GetTransferableObjectDescriptor(
+                                        SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
+                aStrVal = aDesc.maTypeName;
         }
-        if ( nResId )
-            aStrVal = String( ScResId( nResId ) );
 
         if ( aStrVal.Len() )
             rFormats.AddClipbrdFormat( nFormatId, aStrVal );
