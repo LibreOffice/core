@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:10:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,15 +262,6 @@ using namespace ::cppu;
 
 //=========================================================================
 
-sal_Bool ShallSetBaseURL_Impl( SfxMedium &rMed )
-{
-    SvtSaveOptions aOpt;
-    sal_Bool bIsRemote = rMed.IsRemote();
-    return  aOpt.IsSaveRelINet() && bIsRemote || aOpt.IsSaveRelFSys() && !bIsRemote;
-}
-
-//=========================================================================
-
 sal_Bool SfxObjectShell::Save()
 {
     return SaveChildren();
@@ -278,9 +269,9 @@ sal_Bool SfxObjectShell::Save()
 
 //--------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::SaveAs( const uno::Reference< embed::XStorage >& xNewStg )
+sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 {
-    return SaveAsChildren( xNewStg );
+    return SaveAsChildren( rMedium );
 }
 
 //-------------------------------------------------------------------------
@@ -500,9 +491,9 @@ sal_Bool SfxObjectShell::InitNew( const uno::Reference< embed::XStorage >& xStor
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxObjectShell::Load( const uno::Reference< embed::XStorage >& xStorage )
+sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
 {
-    return GeneralInit_Impl( xStorage, sal_True );
+    return GeneralInit_Impl( rMedium.GetStorage(), sal_True );
 }
 
 //-------------------------------------------------------------------------
@@ -548,7 +539,7 @@ sal_Bool SfxObjectShell::DoInitNew_Impl( const ::rtl::OUString& rName )
 }
 
 
-sal_Bool SfxObjectShell::DoInitNew( const uno::Reference< embed::XStorage >& xStorage )
+sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 /*  [Beschreibung]
 
     Diese von SvPersist geerbte virtuelle Methode wird gerufen, um
@@ -572,9 +563,8 @@ sal_Bool SfxObjectShell::DoInitNew( const uno::Reference< embed::XStorage >& xSt
 
 {
     ModifyBlocker_Impl aBlock( this );
-    if ( xStorage.is() )
-        pMedium = new SfxMedium( xStorage );
-    else
+    pMedium = pMed;
+    if ( !pMedium )
     {
         bIsTmp = sal_True;
         pMedium = new SfxMedium;
@@ -582,7 +572,7 @@ sal_Bool SfxObjectShell::DoInitNew( const uno::Reference< embed::XStorage >& xSt
 
     pMedium->CanDisposeStorage_Impl( sal_True );
 
-    if ( InitNew( xStorage ) )
+    if ( InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
     {
         // empty documents always get their macros from the user, so there is no reason to restrict access
         pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
@@ -610,6 +600,7 @@ sal_Bool SfxObjectShell::DoInitNew( const uno::Reference< embed::XStorage >& xSt
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
         return sal_True;
     }
+
     return sal_False;
 }
 
@@ -688,41 +679,6 @@ sal_Bool SfxObjectShell::DoInitNew( const uno::Reference< embed::XStorage >& xSt
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::DoLoad( const uno::Reference< embed::XStorage >& xStorage )
-
-/*  [Beschreibung]
-
-    Diese von SvPersist geerbte virtuelle Methode steuert das Laden
-    des Objektes aus einem Storage. Dabei wird der SvStorage zun"achst
-    in einem SfxMedium verpackt und SfxObjectShell::DoLoad(SfxMedium*)
-    mit diesem gerufen.
-
-    [R"uckgabewert]
-    sal_True                Das Objekt wurde initialisiert.
-    sal_False               Das Objekt konnte nicht initialisiert werden
-*/
-
-{
-    pMedium = new SfxMedium( xStorage );
-
-    return DoLoad( pMedium );
-    // TODO/LATER: the title should be set by new api
-
-//REMOVE        if ( DoLoad( pMedium ) )
-//REMOVE        {
-//REMOVE            if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
-//REMOVE            {
-//REMOVE                ModifyBlocker_Impl aBlock( this );
-//REMOVE                SetTitle( pStor->GetName() );
-//REMOVE            }
-//REMOVE            return sal_True;
-//REMOVE        }
-//REMOVE
-//REMOVE        return sal_False;
-}
-
-//-------------------------------------------------------------------------
-
 sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
 /*  [Beschreibung]
@@ -783,12 +739,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         aBaseURL = pBaseItem->GetValue();
     else
     {
-        if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        {
-            aBaseURL = INetURLObject::GetBaseURL();
-            SetBaseURL( aBaseURL );
-        }
-        else if ( pSalvageItem )
+        if ( pSalvageItem )
         {
             String aName( pMed->GetPhysicalName() );
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
@@ -802,16 +753,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
     sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
-    if ( !bHasStorage && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
-    {
-        bHasStorage = pMed->TryStorage();
-        if ( bHasStorage )
-        {
-            String aName( pMed->GetPhysicalName() );
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
-        }
-    }
-
     if ( pMedium->GetFilter() )
     {
         sal_uInt32 nError = HandleFilter( pMedium, this );
@@ -894,13 +835,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             // Load
             if ( !GetError() )
             {
-                const String aOldURL( INetURLObject::GetBaseURL() );
-                if( aBaseURL.Len() )
-                    INetURLObject::SetBaseURL( aBaseURL );
-
                 pImp->nLoadedFlags = 0;
                 bOk = xStorage.is() && LoadOwnFormat( *pMed );
-                INetURLObject::SetBaseURL( aOldURL );
                 if ( bOk )
                 {
                     SfxDocumentInfo& rDocInfo = GetDocInfo();
@@ -926,8 +862,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         SetName( SfxResId( STR_NONAME ) );
 
         // Importieren
-        const String aOldURL( INetURLObject::GetBaseURL() );
-        if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
         sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
         if( !bHasStorage )
             pMedium->GetInStream();
@@ -944,8 +878,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
             bOk = ConvertFrom(*pMedium);
         }
-
-        INetURLObject::SetBaseURL( aOldURL );
     }
 
     if ( bOk )
@@ -1720,12 +1652,15 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XS
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::DoSaveAs( const uno::Reference< embed::XStorage >& xNewStor,
-                                    SfxItemSet* pSet )
+sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, BOOL bCommit )
 {
     sal_Bool bOk = sal_False;
     {
         ModifyBlocker_Impl aBlock( this );
+
+        uno::Reference < embed::XStorage > xNewStor = rMedium.GetStorage();
+        if ( !xNewStor.is() )
+            return sal_False;
 
         uno::Reference < beans::XPropertySet > xPropSet( xNewStor, uno::UNO_QUERY );
         if ( xPropSet.is() )
@@ -1739,23 +1674,18 @@ sal_Bool SfxObjectShell::DoSaveAs( const uno::Reference< embed::XStorage >& xNew
             }
 
             pImp->bIsSaving = sal_False;
-            SfxMedium* pNewMed = new SfxMedium( xNewStor );
-            if ( pSet )
-                pNewMed->GetItemSet()->Put( *pSet );
+            bOk = SaveAsOwnFormat( rMedium );
 
-            const String aOldURL( INetURLObject::GetBaseURL() );
-            bOk = SaveAsOwnFormat( *pNewMed );
-            INetURLObject::SetBaseURL( aOldURL );
-
-            delete pNewMed;
-
-            try {
-                uno::Reference< embed::XTransactedObject > xTransact( xNewStor, uno::UNO_QUERY_THROW );
-                xTransact->commit();
-            }
-            catch( uno::Exception& )
+            if ( bCommit )
             {
-                DBG_ERROR( "The strotage was not commited on DoSaveAs!\n" );
+                try {
+                    uno::Reference< embed::XTransactedObject > xTransact( xNewStor, uno::UNO_QUERY_THROW );
+                    xTransact->commit();
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_ERROR( "The strotage was not commited on DoSaveAs!\n" );
+                }
             }
         }
     }
@@ -1764,35 +1694,6 @@ sal_Bool SfxObjectShell::DoSaveAs( const uno::Reference< embed::XStorage >& xNew
 }
 
 //-------------------------------------------------------------------------
-
-sal_Bool SfxObjectShell::DoSaveAs( const uno::Reference< embed::XStorage >& xNewStor )
-{
-    sal_Bool bOk;
-    {
-        ModifyBlocker_Impl aBlock( this );
-
-        uno::Reference < beans::XPropertySet > xPropSet( xNewStor, uno::UNO_QUERY );
-        Any a = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) );
-        ::rtl::OUString aMediaType;
-        if ( !(a>>=aMediaType) || !aMediaType.getLength() )
-        {
-            OSL_ENSURE( sal_False, "The mediatype must be set already!\n" );
-            SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT );
-        }
-
-        pImp->bIsSaving = sal_False;
-        SfxMedium* pNewMed = new SfxMedium( xNewStor );
-        const String aOldURL( INetURLObject::GetBaseURL() );
-        bOk = SaveAsOwnFormat( *pNewMed );
-        INetURLObject::SetBaseURL( aOldURL );
-        delete pNewMed;
-    }
-
-    return bOk;
-}
-
-//-------------------------------------------------------------------------
-
 // TODO/LATER: may be the call must be removed completelly
 sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
 {
@@ -1802,18 +1703,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
     if ( GetError() )
         return sal_False;
 
-    const String aOldURL( INetURLObject::GetBaseURL() );
-    if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-        if ( ShallSetBaseURL_Impl( rMedium ) )
-            INetURLObject::SetBaseURL( rMedium.GetBaseURL() );
-        else
-            INetURLObject::SetBaseURL( String() );
-
     sal_Bool bRet = SaveTo_Impl( rMedium, NULL );
-    INetURLObject::SetBaseURL( aOldURL );
-//REMOVE        if( bRet )
-//REMOVE            DoHandsOff();
-//REMOVE        else
     if ( !bRet )
         SetError(rMedium.GetErrorCode());
     return bRet;
@@ -1821,7 +1711,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
+sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
@@ -1847,9 +1737,6 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
         {
             if( pNewMed->GetName().Len() )
                 bHasName = sal_True;
-            String aBase = GetBaseURL();
-            if( Current() == this && aBase.Len() )
-                INetURLObject::SetBaseURL( aBase );
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
         }
 
@@ -1924,13 +1811,6 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
     }
 
     return bOk;
-}
-
-//-------------------------------------------------------------------------
-
-sal_Bool SfxObjectShell::DoSaveCompleted( const uno::Reference< embed::XStorage >& xNewStor )
-{
-    return DoSaveCompleted( xNewStor.is() ? new SfxMedium( xNewStor ): 0 );
 }
 
 //-------------------------------------------------------------------------
@@ -2259,14 +2139,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         return sal_False;
     }
 
-    // some awful base URL stuff
-    const String aOldURL( INetURLObject::GetBaseURL() );
-    if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-        if ( ShallSetBaseURL_Impl(*pMedium) )
-            INetURLObject::SetBaseURL( pMedium->GetBaseURL() );
-        else
-            INetURLObject::SetBaseURL( String() );
-
     // copy version list from "old" medium to target medium, so it can be used on saving
     pMediumTmp->TransferVersionList_Impl( *pMedium );
 /*
@@ -2286,9 +2158,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     {
         bSaved = sal_True;
 
-        // restore BaseURL
-        INetURLObject::SetBaseURL( aOldURL );
-
         if( pMediumTmp->GetItemSet() )
         {
             pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
@@ -2306,9 +2175,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     }
     else
     {
-        // restore BaseURL
-        INetURLObject::SetBaseURL( aOldURL );
-
         // transfer error code from medium to objectshell
         SetError( pMediumTmp->GetError() );
 
@@ -2319,7 +2185,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 //REMOVE                    DBG_ERROR("Case not handled - no way to get a storage!");
 //REMOVE            }
 //REMOVE            else
-            DoSaveCompleted( uno::Reference< embed::XStorage >() );
+            DoSaveCompleted( 0 );
 
         if( pMedium->GetItemSet() )
         {
@@ -2342,7 +2208,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     SfxApplication *pSfxApp = SFX_APP();
 
     pImp->bIsSaving = sal_True;
-    sal_Bool bSaved;
+    sal_Bool bSaved = FALSE;
     SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
     if ( pSalvageItem )
     {
@@ -2580,14 +2446,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
     sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
 
-    // some base URL stuff ( awful, but not avoidable ... )
-    const String aOldURL( INetURLObject::GetBaseURL() );
-    if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-        if ( ShallSetBaseURL_Impl(*pNewFile) )
-            INetURLObject::SetBaseURL( pNewFile->GetBaseURL() );
-        else
-            INetURLObject::SetBaseURL( String() );
-
     // distinguish between "Save" and "SaveAs"
     pImp-> bIsSaving = sal_False;
 /*
@@ -2602,9 +2460,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL ) )
     {
         bOk = sal_True;
-
-        // restore old BaseURL
-        INetURLObject::SetBaseURL( aOldURL );
 
         // transfer a possible error from the medium to the document
         SetError( pNewFile->GetErrorCode() );
@@ -2671,14 +2526,13 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     }
     else
     {
-        INetURLObject::SetBaseURL( aOldURL );
         SetError( pNewFile->GetErrorCode() );
 
 //REMOVE            // reconnect to the old storage
 //REMOVE            if ( IsHandsOff() )
 //REMOVE                DoSaveCompleted( pMedium );
 //REMOVE            else
-        DoSaveCompleted( uno::Reference< embed::XStorage >() );
+        DoSaveCompleted( 0 );
 
         DELETEZ( pNewFile );
     }
@@ -2694,7 +2548,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::LoadFrom( const uno::Reference< embed::XStorage >& xStorage )
+sal_Bool SfxObjectShell::LoadFrom( SfxMedium& rMedium )
 {
     DBG_ERROR( "Base implementation, must not be called in general!" );
     return sal_True;
@@ -2881,7 +2735,7 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
             }
 
             // load document
-            return Load( xStorage );
+            return Load( rMedium );
         }
         return sal_False;
     }
@@ -2924,7 +2778,7 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 //REMOVE            }
 
         const SfxFilter* pFilter = rMedium.GetFilter();
-        return SaveAs( xStorage );
+        return SaveAs( rMedium );
     }
     else return sal_False;
 }
@@ -3055,9 +2909,13 @@ sal_Bool SfxObjectShell::SaveChildren()
     return bResult;
 }
 
-sal_Bool SfxObjectShell::SaveAsChildren( const uno::Reference< embed::XStorage >& xStorage )
+sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 {
     sal_Bool bResult = sal_True;
+
+    uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
+    if ( !xStorage.is() )
+        return sal_False;
 
     if ( xStorage == GetStorage() )
         return SaveChildren();
@@ -3377,7 +3235,7 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
     if ( bResult )
     {
         if ( pImp->m_xDocStorage != xStorage )
-            DoSaveCompleted( xStorage );
+            DoSaveCompleted( new SfxMedium( xStorage, GetMedium()->GetBaseURL() ) );
 
         if ( IsEnableSetModified() )
             SetModified( sal_True ); // ???
