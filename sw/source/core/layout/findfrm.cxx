@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:06:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,7 +1174,11 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
                   _pLayoutFrm->IsInFtn() )
         {
             if ( _pLayoutFrm->IsInTab() && !IsTabFrm() &&
-                 ( !IsCntntFrm() || ( NULL == IsInSplitTableRow() ) ) )
+                 ( !IsCntntFrm() || !IsInSplitTableRow() ||
+                   // --> FME 2004-12-08 #i36991# Consider content in rows in
+                   // cells in split table rows
+                   !const_cast<SwFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) ) )
+                   // <--
             {
                 bRetVal = false;
             }
