@@ -10226,3 +10226,4 @@ _real@8@4003a000000000000000
 ??1?$_List_base@UZOrderHint@@V?$allocator@UZOrderHint@@@_STL@@@_STL@@QAE@XZ
 ?merge@?$list@UZOrderHint@@V?$allocator@UZOrderHint@@@_STL@@@_STL@@QAEXAAV12@@Z
 ?swap@_STL@@YAXAAV?$_STL_alloc_proxy@PAU?$_List_node@UZOrderHint@@@_STL@@U12@V?$allocator@UZOrderHint@@@2@@1@0@Z
+?ExportIndexTemplate@XMLSectionExport@@IAEEW4SectionTypeEnum@@JABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@AAV?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@4567@@Z
