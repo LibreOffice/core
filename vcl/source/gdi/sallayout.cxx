@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-23 15:59:34 $
+ *  last change: $Author: hdu $ $Date: 2002-08-26 16:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ void GenericSalLayout::GetCursorPositions( long* pCursorXArray ) const
 
 // -----------------------------------------------------------------------
 
-int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
+int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
     long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
@@ -673,7 +673,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
     long nWidth = 0;
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
     {
-        nWidth += pCharWidths[ i - mnFirstCharIndex ];
+        nWidth += pCharWidths[ i - mnFirstCharIndex ] * nFactor;
         if( nWidth >= nMaxWidth )
             return i;
         nWidth += nCharExtra;
