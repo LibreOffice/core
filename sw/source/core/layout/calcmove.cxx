@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:44:27 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -839,9 +838,18 @@ void SwPageFrm::MakeAll()
                         if ( pSortedObjs )
                             lcl_CheckObjects( pSortedObjs, this, nBot );
                         nBot -= Frm().Top();
-                        if ( !GetPrev() )
+                        // --> OD 2004-11-10 #i35143# - If second page frame
+                        // exists, the first page doesn't have to fulfill the
+                        // visible area.
+                        if ( !GetPrev() && !GetNext() )
+                        // <--
+                        {
                             nBot = Max( nBot, pSh->VisArea().Height() );
-                        Frm().Height( nBot );
+                        }
+                        // --> OD 2004-11-10 #i35143# - Assure, that the page
+                        // doesn't exceed the defined browse height.
+                        Frm().Height( Min( nBot, BROWSE_HEIGHT ) );
+                        // <--
                     }
                     Prt().Left ( pAttrs->CalcLeftLine() + aBorder.Width() );
                     Prt().Top  ( nTop );
@@ -1316,8 +1324,22 @@ void SwCntntFrm::MakeAll()
             // fit and if not, performs necessary actions.
             if ( bValidSize && nOldH != (Frm().*fnRect->fnGetHeight)() )
             {
-                Prepare( PREP_ADJUST_FRM );
-                bValidSize = FALSE;
+                // --> OD 2004-11-25 #115759# - no PREP_ADJUST_FRM and size
+                // invalidation, if height decreases only by the additional
+                // lower space as last content of a table cell and an existing
+                // follow containing one line exists.
+                const SwTwips nHDiff = nOldH - (Frm().*fnRect->fnGetHeight)();
+                const bool bNoPrepAdjustFrm =
+                    nHDiff > 0 && IsInTab() && GetFollow() &&
+                    static_cast<SwTxtFrm*>(GetFollow())
+                            ->GetLineCount( STRING_LEN ) == 1 &&
+                    GetFollow()->CalcAddLowerSpaceAsLastInTableCell() == nHDiff;
+                if ( !bNoPrepAdjustFrm )
+                {
+                    Prepare( PREP_ADJUST_FRM );
+                    bValidSize = FALSE;
+                }
+                // <--
             }
             // <--
         }
