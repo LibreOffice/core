@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:26:55 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 11:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2396,8 +2396,12 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Tools";
         };
-    ITEM_WINDOW_MENU
-    ITEM_HELP_MENU
+        GLOBLMN_WINMN
+        {
+            ITEM_WINDOW_MDIWINDOWLIST
+            SubMenu = Menu { ItemList =  { }; };
+        };
+        ITEM_HELP_MENU
     };
 };
 

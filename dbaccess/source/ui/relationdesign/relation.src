@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-17 20:26:13 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 11:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,8 +596,12 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Tools";
         };
-    ITEM_WINDOW_MENU
-    ITEM_HELP_MENU
+        GLOBLMN_WINMN
+        {
+            ITEM_WINDOW_MDIWINDOWLIST
+            SubMenu = Menu { ItemList =  { }; };
+        };
+        ITEM_HELP_MENU
     };
 };
 
