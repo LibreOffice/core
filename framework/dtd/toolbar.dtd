@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: toolbar.dtd,v 1.2 2001-06-18 10:00:36 cd Exp $
+	$Id: toolbar.dtd,v 1.3 2001-06-20 13:17:31 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -52,13 +52,11 @@
 
    Contributor(s): _______________________________________
 -->
-
-<!ENTITY % boolean		"(true|false)">
-<!ENTITY % numeric		"CDATA">
-<!ENTITY % alignment	"(top|bottom|left|right)">
-<!ENTITY % style		"(symbol|text|symboltext)">
-
-<!ELEMENT toolbar:toolbar (toolbar:toolbaritem | toolbar:toolbarspace | toolbar:toolbarbreak | toolbar:toolbarseparator)+>
+<!ENTITY % boolean "(true|false)">
+<!ENTITY % numeric "CDATA">
+<!ENTITY % alignment "(top|bottom|left|right)">
+<!ENTITY % style "(symbol|text|symboltext)">
+<!ELEMENT toolbar:toolbar (toolbar:toolbaritem | toolbar:toolbarspace | toolbar:toolbarbreak | toolbar:toolbarseparator)*>
 <!ATTLIST toolbar:toolbar
 	xmlns:toolbar CDATA #FIXED "http://openoffice.org/2001/toolbar"
 	xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink"
@@ -77,12 +75,11 @@
 <!ELEMENT toolbar:toolbarbreak EMPTY>
 <!ELEMENT toolbar:toolbarseparator EMPTY>
 
-<!ELEMENT toolbar:toolbarlayouts (toolbar:toolbarlayout+)>
+<!ELEMENT toolbar:toolbarlayouts (toolbar:toolbarlayout*)>
 <!ATTLIST toolbar:toolbarlayouts
 	xmlns:toolbar CDATA #FIXED "http://openoffice.org/2001/toolbar"
 >
-
-<!ELEMENT toolbar:toolbarlayout (toolbar:toolbarconfigitems)>
+<!ELEMENT toolbar:toolbarlayout (toolbar:toolbarconfigitems?)>
 <!ATTLIST toolbar:toolbarlayout
 	toolbar:id CDATA #REQUIRED
 	toolbar:floatingposleft %numeric; #IMPLIED
@@ -93,9 +90,7 @@
 	toolbar:visible %boolean; #IMPLIED
 	toolbar:floating %boolean; #IMPLIED
 >
-
-<!ELEMENT toolbar:toolbarconfigitems (toolbar:toolbarconfigitem+)>
-
+<!ELEMENT toolbar:toolbarconfigitems (toolbar:toolbarconfigitem*)>
 <!ELEMENT toolbar:toolbarconfigitem EMPTY>
 <!ATTLIST toolbar:toolbarconfigitem
 	toolbar:context CDATA #REQUIRED
