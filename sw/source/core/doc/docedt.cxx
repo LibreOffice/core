@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:28:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,30 @@ struct _SaveRedline
         pRedl->GetMark()->nContent.Assign( 0, 0 );
     }
 
+    _SaveRedline( SwRedline* pR, const SwPosition& rPos )
+        : pRedl( pR )
+    {
+        const SwPosition* pStt = pR->Start(),
+            * pEnd = pR->GetMark() == pStt ? pR->GetPoint() : pR->GetMark();
+        sal_uInt32 nSttIdx = rPos.nNode.GetIndex();
+        nStt = pStt->nNode.GetIndex() - nSttIdx;
+        nSttCnt = pStt->nContent.GetIndex();
+        if( nStt == 0 )
+            nSttCnt -= rPos.nContent.GetIndex();
+        if( pR->HasMark() )
+        {
+            nEnd = pEnd->nNode.GetIndex() - nSttIdx;
+            nEndCnt = pEnd->nContent.GetIndex();
+            if( nEnd == 0 )
+                nEndCnt -= rPos.nContent.GetIndex();
+        }
+
+        pRedl->GetPoint()->nNode = 0;
+        pRedl->GetPoint()->nContent.Assign( 0, 0 );
+        pRedl->GetMark()->nNode = 0;
+        pRedl->GetMark()->nContent.Assign( 0, 0 );
+    }
+
     void SetPos( sal_uInt32 nInsPos )
     {
         pRedl->GetPoint()->nNode = nInsPos + nStt;
@@ -229,6 +253,17 @@ struct _SaveRedline
         {
             pRedl->GetMark()->nNode = nInsPos + nEnd;
             pRedl->GetMark()->nContent.Assign( pRedl->GetCntntNode(sal_False), nEndCnt );
+        }
+    }
+
+    void SetPos( const SwPosition& aPos )
+    {
+        pRedl->GetPoint()->nNode = aPos.nNode.GetIndex() + nStt;
+        pRedl->GetPoint()->nContent.Assign( pRedl->GetCntntNode(), nSttCnt + ( nStt == 0 ? aPos.nContent.GetIndex() : 0 ) );
+        if( pRedl->HasMark() )
+        {
+            pRedl->GetMark()->nNode = aPos.nNode.GetIndex() + nEnd;
+            pRedl->GetMark()->nContent.Assign( pRedl->GetCntntNode(sal_False), nEndCnt  + ( nEnd == 0 ? aPos.nContent.GetIndex() : 0 ) );
         }
     }
 };
@@ -543,6 +578,91 @@ int lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
     }
     return bUpdateFtn;
 }
+
+void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
+{
+    SwDoc* pDoc = aPam.GetNode()->GetDoc();
+
+    const SwPosition* pStart = aPam.Start();
+    const SwPosition* pEnd = aPam.End();
+
+    // get first relevant redline
+    sal_uInt16 nCurrentRedline;
+    pDoc->GetRedline( *pStart, &nCurrentRedline );
+    if( nCurrentRedline > 0)
+        nCurrentRedline--;
+
+    // redline mode REDLINE_IGNORE|REDLINE_ON; save old mode
+    SwRedlineMode eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    SwRedlineTbl& rRedlTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
+
+    // iterate over relevant redlines and decide for each whether it should
+    // be saved, or split + saved
+    SwRedlineTbl& rRedlineTable = const_cast<SwRedlineTbl&>( pDoc->GetRedlineTbl() );
+    for( ; nCurrentRedline < rRedlineTable.Count(); nCurrentRedline++ )
+    {
+        SwRedline* pCurrent = rRedlineTable[ nCurrentRedline ];
+        SwComparePosition eCompare =
+            ComparePosition( *pCurrent->Start(), *pCurrent->End(),
+                             *pStart, *pEnd);
+
+        // we must save this redline if it overlaps aPam
+        // (we may have to split it, too)
+        if( eCompare == POS_OVERLAP_BEHIND  ||
+            eCompare == POS_OVERLAP_BEFORE  ||
+            eCompare == POS_OUTSIDE ||
+            eCompare == POS_INSIDE ||
+            eCompare == POS_EQUAL )
+        {
+            rRedlineTable.Remove( nCurrentRedline-- );
+
+            // split beginning, if necessary
+            if( eCompare == POS_OVERLAP_BEFORE  ||
+                eCompare == POS_OUTSIDE )
+            {
+
+                SwRedline* pNewRedline = new SwRedline( *pCurrent );
+                *pNewRedline->End() = *pStart;
+                *pCurrent->Start() = *pStart;
+                pDoc->AppendRedline( pNewRedline );
+            }
+
+            // split end, if necessary
+            if( eCompare == POS_OVERLAP_BEHIND  ||
+                eCompare == POS_OUTSIDE )
+            {
+                SwRedline* pNewRedline = new SwRedline( *pCurrent );
+                *pNewRedline->Start() = *pEnd;
+                *pCurrent->End() = *pEnd;
+                pDoc->AppendRedline( pNewRedline );
+            }
+
+            // save the current redline
+            _SaveRedline* pSave = new _SaveRedline( pCurrent, *pStart );
+            rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
+        }
+    }
+
+    // restore old redline mode
+    pDoc->SetRedlineMode_intern( eOld );
+}
+
+void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rArr )
+{
+    SwRedlineMode eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+
+    for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
+    {
+        _SaveRedline* pSave = rArr[ n ];
+        pSave->SetPos( rPos );
+        pDoc->AppendRedline( pSave->pRedl );
+    }
+
+    pDoc->SetRedlineMode_intern( eOld );
+}
+
 
 void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
 {
@@ -998,6 +1118,24 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     _SaveFlyArr aSaveFlyArr;
     _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, DOC_MOVEALLFLYS & eMvFlags );
 
+    // save redlines (if DOC_MOVEREDLINES is used)
+    _SaveRedlines aSaveRedl( 0, 4 );
+    if( DOC_MOVEREDLINES & eMvFlags && GetRedlineTbl().Count() )
+    {
+        lcl_SaveRedlines( rPaM, aSaveRedl );
+
+        // #i17764# unfortunately, code below relies on undos being
+        //          in a particular order, and presence of bookmarks
+        //          will change this order. Hence, we delete bookmarks
+        //          here without undo.
+        BOOL bDoesUndo = DoesUndo();
+        DoUndo( FALSE );
+        _DelBookmarks( pStt->nNode, pEnd->nNode, NULL,
+                       &pStt->nContent, &pEnd->nContent );
+        DoUndo( bDoesUndo );
+    }
+
+
     int bUpdateFtn = sal_False;
     SwFtnIdxs aTmpFntIdx;
 
@@ -1007,6 +1145,7 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     {
         ClearRedo();
         pUndoMove = new SwUndoMove( rPaM, rPos );
+        pUndoMove->SetMoveRedlines( eMvFlags == DOC_MOVEREDLINES );
     }
     else
     {
@@ -1162,6 +1301,10 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     // verschiebe die Flys an die neue Position
     _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
+
+    // restore redlines (if DOC_MOVEREDLINES is used)
+    if( aSaveRedl.Count() )
+        lcl_RestoreRedlines( this, *pSavePam->Start(), aSaveRedl );
 
     if( bUpdateFtn )
     {
