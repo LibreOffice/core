@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:44:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1873,56 +1873,87 @@ SCROW ScAttrArray::GetLastEntryPos( BOOL bIncludeBottom ) const
 }
 
 
-BOOL ScAttrArray::HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const
+BOOL ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 {
     DBG_ASSERT( nCount, "nCount == 0" );
 
     BOOL bFound = FALSE;
     SCSIZE nStart = 0;
 
-    if ( bSkipFirst )                           // Anfang ueberspringen, wenn >1 Zeile
-    {
-        SCSIZE nVisStart = 1;
-        while ( nVisStart < nCount &&
-                pData[nVisStart].pPattern->IsVisibleEqual(*pData[nVisStart-1].pPattern) )
-            ++nVisStart;
-        if ( nVisStart >= nCount || pData[nVisStart-1].nRow > 0 )   // mehr als 1 Zeile?
-            nStart = nVisStart;
-    }
+    // Skip first entry if more than 1 row.
+    // Entries at the end are not skipped, GetFirstVisibleAttr may be larger than GetLastVisibleAttr.
 
-    SCSIZE nVisCount = nCount-1;                // am Ende zusammengehoerende weglassen
-    while ( nVisCount > nStart &&
-            pData[nVisCount].pPattern->IsVisibleEqual(*pData[nVisCount-1].pPattern) )
-        --nVisCount;
+    SCSIZE nVisStart = 1;
+    while ( nVisStart < nCount && pData[nVisStart].pPattern->IsVisibleEqual(*pData[nVisStart-1].pPattern) )
+        ++nVisStart;
+    if ( nVisStart >= nCount || pData[nVisStart-1].nRow > 0 )   // more than 1 row?
+        nStart = nVisStart;
 
-    while ( nStart < nVisCount && !bFound )
+    while ( nStart < nCount && !bFound )
     {
         if ( pData[nStart].pPattern->IsVisible() )
         {
             rFirstRow = nStart ? ( pData[nStart-1].nRow + 1 ) : 0;
-            rLastRow = pData[nStart].nRow;
             bFound = TRUE;
         }
         else
             ++nStart;
     }
 
-    if (!bFound)
-        return FALSE;
+    return bFound;
+}
 
-    BOOL bEnd = FALSE;
-    SCSIZE nPos = nVisCount;
-    while ( nPos > nStart && !bEnd )
+// size (rows) of a range of attributes after cell content where the search is stopped
+// (more than a default page size, 2*42 because it's as good as any number)
+
+const SCROW SC_VISATTR_STOP = 84;
+
+BOOL ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
+{
+    //  #i30830# changed behavior:
+    //  ignore all attributes starting with the first run of SC_VISATTR_STOP equal rows
+    //  below the last content cell
+
+    if ( nLastData == MAXROW )
     {
-        --nPos;
-        if ( pData[nPos].pPattern->IsVisible() )
-        {
-            rLastRow = pData[nPos].nRow;
-            bEnd = TRUE;
-        }
+        rLastRow = MAXROW;      // can't look for attributes below MAXROW
+        return TRUE;
     }
 
-    return TRUE;
+    BOOL bFound = FALSE;
+    SCROW nStartRow = nLastData + 1;
+
+    //  loop backwards from the end instead of using Search, assuming that
+    //  there usually aren't many attributes below the last cell
+
+    SCSIZE nPos = nCount;
+    while ( nPos > 0 && pData[nPos-1].nRow > nLastData )
+    {
+        SCSIZE nEndPos = nPos - 1;
+        SCSIZE nStartPos = nEndPos;         // find range of visually equal formats
+        while ( nStartPos > 0 &&
+                pData[nStartPos-1].nRow > nLastData &&
+                pData[nStartPos-1].pPattern->IsVisibleEqual(*pData[nStartPos].pPattern) )
+            --nStartPos;
+
+        SCROW nAttrStartRow = ( nStartPos > 0 ) ? ( pData[nStartPos-1].nRow + 1 ) : 0;
+        if ( nAttrStartRow <= nLastData )
+            nAttrStartRow = nLastData + 1;
+        SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
+        if ( nAttrSize >= SC_VISATTR_STOP )
+        {
+            bFound = FALSE;        // ignore this range and below
+        }
+        else if ( !bFound && pData[nEndPos].pPattern->IsVisible() )
+        {
+            rLastRow = pData[nEndPos].nRow;
+            bFound = TRUE;
+        }
+
+        nPos = nStartPos;           // look further from the top of the range
+    }
+
+    return bFound;
 }
 
 
