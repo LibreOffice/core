@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 13:54:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
 #endif
@@ -121,6 +124,7 @@ namespace xmloff
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -338,6 +342,47 @@ namespace xmloff
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aOrientationMap;
+                }
+                break;
+
+                case epVisualEffect:
+                {
+                    static SvXMLEnumMapEntry aVisualEffectMap[] =
+                    {
+                        { XML_NONE, VisualEffect::NONE },
+                        { XML_3D,   VisualEffect::LOOK3D },
+                        { XML_FLAT, VisualEffect::FLAT },
+                        { XML_TOKEN_INVALID, 0 }
+                    };
+                    rReturn = aVisualEffectMap;
+                }
+                break;
+
+                case epImagePosition:
+                {
+                    static SvXMLEnumMapEntry aImagePositionMap[] =
+                    {
+                        { XML_START,  0 },
+                        { XML_END,    1 },
+                        { XML_TOP,    2 },
+                        { XML_BOTTOM, 3 },
+                        { XML_CENTER, -1 },
+                        { XML_TOKEN_INVALID, 0 }
+                    };
+                    rReturn = aImagePositionMap;
+                }
+                break;
+
+                case epImageAlign:
+                {
+                    static SvXMLEnumMapEntry aImageAlignMap[] =
+                    {
+                        { XML_START,  0 },
+                        { XML_CENTER, 1 },
+                        { XML_END, 2 },
+                        { XML_TOKEN_INVALID, 0 }
+                    };
+                    rReturn = aImageAlignMap;
                 }
                 break;
             }
