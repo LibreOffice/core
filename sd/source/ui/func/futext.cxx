@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-18 15:24:48 $
+ *  last change: $Author: cl $ $Date: 2002-07-24 10:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
             aDragTimer.Stop();
     }
 
-    if (!bReturn && pView->IsAction())
+    if (!bReturn && pView->IsAction() && !pDocSh->IsReadOnly())
     {
         Point aPix(rMEvt.GetPosPixel());
         Point aPnt(pWindow->PixelToLogic(aPix));
