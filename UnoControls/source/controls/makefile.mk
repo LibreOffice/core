@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-06 16:30:31 $
+#   last change: $Author: as $ $Date: 2000-10-12 10:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ SLOFILES=\
             $(SLO)$/framecontrol.obj					\
             $(SLO)$/progressmonitor.obj					\
             $(SLO)$/OConnectionPointHelper.obj			\
-            $(SLO)$/OConnectionPointContainerHelper.obj
+            $(SLO)$/OConnectionPointContainerHelper.obj	\
+            $(SLO)$/statusindicator.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
