@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:21:57 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "¿é¤JªºÀÉ®×§t¦³¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ İí ãáİ ÇáÅÏÎÇá";
         TEXT[ greek ] = "ÓöÜëìá óôï áñ÷åßï åéóáãùãŞò";
-        TEXT[ korean ] = "ÀÔ·ÂÆÄÀÏ ¿À·ù";
+        TEXT[ korean ] = "ÀÔ·ÂÆÄÀÏ¿¡¼­ÀÇ ¿À·ù";
         TEXT[ turkish ] = "Girdi dosyasında hata";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error en el archivo de entrada";
@@ -548,21 +548,21 @@ Resource RID_SW_ERRHDL
         TEXT = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ portuguese ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição $(ARG2)(linha,coluna)";
         TEXT[ russian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ greek ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ french ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ spanish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
         TEXT[ italian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ swedish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ polish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ swedish ] = "Det har upptäckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
+        TEXT[ polish ] = "B³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ japanese ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ japanese ] = "Ì§²Ù‚Ì $(ARG2)(sA—ñ)‚É‚ ‚é•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘®´×°‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
         TEXT[ korean ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ chinese_simplified ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ chinese_traditional ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ chinese_simplified ] = "·¢ÏÖÎÄ¼şµÄ×ÓÎÄµµ$(ARG1)ÄÚº¬´íÎó£¬Î»ÖÃÔÚ $(ARG2)(ĞĞ,ÁĞ)";
+        TEXT[ chinese_traditional ] = "µo²{ÀÉ®×ªº¤l¤å¥ó$(ARG1)¤º§t¿ù»~¡A¦ì¸m¦b $(ARG2)(¦æ,Äæ)";
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -694,7 +694,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "³o­Ó¤å¥ó¥i¯à¶W¹L 3.1/4.0 ª©¥»¤å¥óªº¤j¤p¡C";
         Text[ arabic ] = "íÊÌÇæÒ ÇáãÓÊäÏ ÍÌã ãÓÊäÏ ÇáäÕ 3.1/4.0";
         Text[ greek ] = "Ôï İããñáöï õğåñâáßíåé ôï åğéôñåğüìåíï üñéï ìåãİèïõò åããñÜöïõ êåéìİíïõ ãéá ôçí İêäïóç 3.1/4.0";
-        Text[ korean ] = "¹®¼­°¡ Çô¿ëµÈ 3.1/4.0 ÅØ½ºÆ® ¹®¼­ Å©±â¸¦ ÃÊ°ú Çß½À´Ï´Ù.";
+        Text[ korean ] = "¹®¼­°¡ Çã¿ëµÈ 3.1/4.0 ÅØ½ºÆ® ¹®¼­ Å©±â¸¦ ÃÊ°ú Çß½À´Ï´Ù.";
         Text[ turkish ] = "Belge izin verilen 3.1/4.0 metin belgesi büyüklüğünü aşıyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento sobrepasa el tamaño posible 3.1/4.0 de documento";
@@ -705,21 +705,21 @@ Resource RID_SW_ERRHDL
         TEXT = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
         TEXT [ English ] = "Error in writing sub-document $(ARG1)" ;
         TEXT[ english_us ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ portuguese ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ portuguese ] = "Erro ao escrever o sub-documento $(ARG1)";
         TEXT[ russian ] = "Error in writing sub-document $(ARG1)";
         TEXT[ greek ] = "Error in writing sub-document $(ARG1)";
         TEXT[ dutch ] = "Error in writing sub-document $(ARG1)";
         TEXT[ french ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ spanish ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ spanish ] = "Error al escribir en el documento parcial $(ARG1)";
         TEXT[ italian ] = "Error in writing sub-document $(ARG1)";
         TEXT[ danish ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ swedish ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ polish ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ swedish ] = "Fel när deldokumentet $(ARG1) skulle skrivas";
+        TEXT[ polish ] = "Wyst¹pi³ b³¹d w trakcie pisania dokumentu podrzêdnego $(ARG1)";
         TEXT[ portuguese_brazilian ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ japanese ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ japanese ] = "•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘‚«‚Ş‚Ì´×°";
         TEXT[ korean ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ chinese_simplified ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ chinese_traditional ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ chinese_simplified ] = "ÔÚĞ´Èë×ÓÎÄµµ$(ARG1)Ê±·¢Éú´íÎó";
+        TEXT[ chinese_traditional ] = "¦b¼g¤J¤l¤å¥ó$(ARG1)®Éµo¥Í¿ù»~";
         TEXT[ turkish ] = "Error in writing sub-document $(ARG1)";
         TEXT[ arabic ] = "Error in writing sub-document $(ARG1)";
         TEXT[ catalan ] = "Error in writing sub-document $(ARG1)";
@@ -747,7 +747,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "%PRODUCTNAME Writer ÀÉ®×®æ¦¡§t¦³¤º³¡¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ %PRODUCTNAME Writer";
-        TEXT[ korean ] = "%PRODUCTNAME WriterÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
+        TEXT[ korean ] = "%PRODUCTNAME Writer ÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
         TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyası format hatası";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer";
@@ -963,7 +963,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "¸ü¤JÂà´«¾¹®Éµo¥Í¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãÍæá";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôïõ ìåôáôñïğİá";
-        TEXT[ korean ] = "º¯È¯ ·Îµå½Ã¿¡ ¿À·ù";
+        TEXT[ korean ] = "º¯È¯±â ·Îµå½Ã¿¡ ¿À·ù";
         TEXT[ turkish ] = "Dönüştürücü yükleme hatası";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error al cargar el convertidor";
@@ -990,7 +990,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "¸ü¤JÂà´«¾¹®Éµo¥Í¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãÍæá";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôïõ ìåôáôñïğİá";
-        TEXT[ korean ] = "º¯È¯ ·Îµå½Ã¿¡ ¿À·ù";
+        TEXT[ korean ] = "º¯È¯±â ·Îµå½Ã¿¡ ¿À·ù";
         TEXT[ turkish ] = "Dönüştürücü yükleme hatası";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error al cargar el convertidor";
@@ -1068,7 +1068,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "µLªk¤À¶}Àx¦s®æ";
         Text[ arabic ] = "áÇ íãßä ÊŞÓíã ÇáÎáÇíÇ ÃßËÑ ãä Ğáß";
         Text[ greek ] = "Ç åğéğëİïí äéáßñåóç ôùí êåëéşí åßíáé áäıíáôç";
-        Text[ korean ] = "¼¿Àº ´õÀÌ»ó ³ª´­¼ö¡¡¾ø½À´Ï´Ù.";
+        Text[ korean ] = "¼¿Àº ´õÀÌ»ó ºĞÇÒÇÒ ¼ö¡¡¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Hücreler daha fazla bölünemiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Las celdas no se pueden dividir más";
@@ -1121,7 +1121,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "¤£¯àÅÜ§ó¤@­Ó³sµ²ªºªí®æµ²ºc";
         Text[ arabic ] = "áÇ íãßä ÊÚÏíá ÈäíÉ ÌÏæá ãÑÊÈØ";
         Text[ greek ] = "Äåí åßíáé äõíáôŞ ç áëëáãŞ äïìŞò åíüò óõíäåäåìİíïõ ğßíáêá";
-        Text[ korean ] = "¿¬°áµÈ Ç¥¿¡¼­´Â¡¡±¸Á¶¸¦¡¡º¯°æÇØ¼­´Â¡¡¾ÈµË´Ï´Ù";
+        Text[ korean ] = "¸µÅ©µÈ Ç¥¿¡¼­´Â¡¡±¸Á¶¸¦¡¡º¯°æÇØ¼­´Â¡¡¾ÈµË´Ï´Ù";
         Text[ turkish ] = "Bağlantılı bir tablonun yapısı değiştirilmez";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se puede modificar la estructura de una tabla vinculada";
@@ -1362,7 +1362,7 @@ Resource RID_SW_ERRHDL
         Text[ polish ] = "Dokument HTML zawiera makra %PRODUCTNAME Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami eksportu.";
         Text[ portuguese_brazilian ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved because of the current export options.";
         Text[ japanese ] = "‚±‚Ì HTML Œ`®ÄŞ·­ÒİÄ‚É %PRODUCTNAME Basic Ï¸‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B\n‚»‚ê‚ç‚ÍŒ»İ‚Ì´¸½Îß°Äİ’è‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-        Text[ korean ] = "ÀÌ HTML ¹®¼­´Â %PRODUCTNAME Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÇöÀçÀÇ º¸³»±â ¼³Á¤À¸·Î´Â ¸ÅÅ©·Î°¡ ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ korean ] = "ÀÌ HTML ¹®¼­´Â %PRODUCTNAME Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÀÌ°ÍÀº ÇöÀçÀÇ ³»º¸³»±â ¼¼ÆÃÀ¸·Î ÀúÀåµÇÁö´Â ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "Õâ¸öHTMLÎÄµµº¬ÓĞ%PRODUCTNAME Basicºê¡£\nÎŞ·¨ÊôÓÚµ±Ç°µÄÊä³öÉè¶¨À´´æÅÌÕâĞ©ºê¡£";
         Text[ chinese_traditional ] = "HTML ¤å¥ó§t¦³ %PRODUCTNAME Basic ¥¨¶°¡C\nµLªk±Ä¥Î·í«eªº¿é¥X³]©w¨ÓÀx¦s¤å¥ó¡C";
         Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ HTML Úáì æÍÏÇÊ ãÇßÑæ %PRODUCTNAME Basic.\náã íÊã ÍİÙåÇ ÈÅÚÏÇÏÇÊ ÇáÊÕÏíÑ ÇáÍÇáíÉ.";
@@ -1376,21 +1376,21 @@ Resource RID_SW_ERRHDL
         TEXT = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
         TEXT [ English ] = "Error in writing sub-document $(ARG1)" ;
         TEXT[ english_us ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ portuguese ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ portuguese ] = "Erro ao escrever o sub-documento $(ARG1)";
         TEXT[ russian ] = "Error in writing sub-document $(ARG1)";
         TEXT[ greek ] = "Error in writing sub-document $(ARG1)";
         TEXT[ dutch ] = "Error in writing sub-document $(ARG1)";
         TEXT[ french ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ spanish ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ spanish ] = "Error de escritura en documento parcial $(ARG1)";
         TEXT[ italian ] = "Error in writing sub-document $(ARG1)";
         TEXT[ danish ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ swedish ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ polish ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ swedish ] = "Fel när deldokumentet $(ARG1) skulle skrivas";
+        TEXT[ polish ] = "Wyst¹pi³ b³¹d w trakcie pisania dokumentu podrzêdnego $(ARG1)";
         TEXT[ portuguese_brazilian ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ japanese ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ japanese ] = "•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘‚«‚Ş‚Ì´×°";
         TEXT[ korean ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ chinese_simplified ] = "Error in writing sub-document $(ARG1)";
-        TEXT[ chinese_traditional ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ chinese_simplified ] = "ÔÚĞ´Èë×ÓÎÄµµ$(ARG1)Ê±·¢Éú´íÎó";
+        TEXT[ chinese_traditional ] = "¦b¼g¤J¤l¤å¥ó$(ARG1)®Éµo¥Í¿ù»~";
         TEXT[ turkish ] = "Error in writing sub-document $(ARG1)";
         TEXT[ arabic ] = "Error in writing sub-document $(ARG1)";
         TEXT[ catalan ] = "Error in writing sub-document $(ARG1)";
@@ -1400,21 +1400,21 @@ Resource RID_SW_ERRHDL
         TEXT = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ portuguese ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição(ARG2)(linha,coluna)";
         TEXT[ russian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ greek ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ french ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ spanish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
         TEXT[ italian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ swedish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ polish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ swedish ] = "Det har upptäckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
+        TEXT[ polish ] = "B³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ japanese ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ japanese ] = "Ì§²Ù‚Ì $(ARG2)(sA—ñ) ‚É‚ ‚é•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘®´×°‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
         TEXT[ korean ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ chinese_simplified ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        TEXT[ chinese_traditional ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ chinese_simplified ] = "·¢ÏÖÎÄ¼şµÄ×ÓÎÄµµ$(ARG1)ÄÚº¬´íÎó£¬Î»ÖÃÔÚ $(ARG2)(ĞĞ,ÁĞ)";
+        TEXT[ chinese_traditional ] = "µo²{ÀÉ®×ªº¤l¤å¥ó$(ARG1)¤º§t¿ù»~¡A¦ì¸m¦b $(ARG2)(¦æ,Äæ)";
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
