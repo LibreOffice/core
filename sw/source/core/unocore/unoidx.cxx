@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:01:58 $
+ *  last change: $Author: os $ $Date: 2001-06-27 13:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,10 @@ using namespace ::rtl;
 //-----------------------------------------------------------------------------
 String lcl_AnyToString(uno::Any rVal) throw(IllegalArgumentException)
 {
-    if(rVal.getValueType() != ::getCppuType((OUString*)0))
+    OUString sRet;
+    if(!(rVal >>= sRet))
         throw IllegalArgumentException();
-    return String(*(OUString*)rVal.getValue());
+    return sRet;
 }
 //-----------------------------------------------------------------------------
 sal_Int16 lcl_AnyToInt16(uno::Any rVal) throw(IllegalArgumentException)
@@ -2296,26 +2297,26 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
             {
                 const String sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
-                if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenEntryNumber"))
+                if(sTokenType.EqualsAscii("TokenEntryNumber"))
                     aToken.eTokenType = TOKEN_ENTRY_NO;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenEntryText" ))
+                else if(sTokenType.EqualsAscii("TokenEntryText" ))
                     aToken.eTokenType = TOKEN_ENTRY_TEXT;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenTabStop"   ))
+                else if(sTokenType.EqualsAscii("TokenTabStop"   ))
                     aToken.eTokenType = TOKEN_TAB_STOP;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenText"      ))
+                else if(sTokenType.EqualsAscii("TokenText"      ))
                     aToken.eTokenType = TOKEN_TEXT;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenPageNumber"))
+                else if(sTokenType.EqualsAscii("TokenPageNumber"))
                     aToken.eTokenType = TOKEN_PAGE_NUMS;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenChapterInfo"      ))
+                else if(sTokenType.EqualsAscii("TokenChapterInfo"      ))
                     aToken.eTokenType = TOKEN_CHAPTER_INFO;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenHyperlinkStart" ))
+                else if(sTokenType.EqualsAscii("TokenHyperlinkStart" ))
                     aToken.eTokenType = TOKEN_LINK_START;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenHyperlinkEnd"))
+                else if(sTokenType.EqualsAscii("TokenHyperlinkEnd"))
                     aToken.eTokenType = TOKEN_LINK_END;
-                else if(COMPARE_EQUAL == sTokenType.CompareToAscii("TokenBibliographyDataField" ))
+                else if(sTokenType.EqualsAscii("TokenBibliographyDataField" ))
                     aToken.eTokenType = TOKEN_AUTHORITY;
             }
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("CharacterStyleName"  )  )
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharacterStyleName"  )  ))
             {
                 const String sCharStyleName =
                     SwXStyleFamilies::GetUIName(
@@ -2325,13 +2326,13 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 aToken.nPoolId = pSectFmt->GetDoc()->
                             GetPoolId( sCharStyleName, GET_POOLID_CHRFMT );
             }
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("TabStopRightAligned") )
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopRightAligned") ))
             {
                 sal_Bool bRight = lcl_AnyToBool(pProperties[j].Value);
                 aToken.eTabAlign = bRight ?
                                     SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT;
             }
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("TabStopPosition"  ))
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopPosition"  )))
             {
                 sal_Int32 nPosition;
                 if(pProperties[j].Value.getValueType() != ::getCppuType((sal_Int32*)0))
@@ -2342,7 +2343,7 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                     throw IllegalArgumentException();
                 aToken.nTabStopPosition = nPosition;
             }
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("TabStopFillCharacter" ))
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopFillCharacter" )))
             {
                 const String sFillChar =
                     lcl_AnyToString(pProperties[j].Value);
@@ -2351,14 +2352,13 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 aToken.cTabFillChar = sFillChar.Len() ?
                                 sFillChar.GetChar(0) : ' ';
             }
-
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("Text" ))
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text" )))
                {
                 const String sText =
                     lcl_AnyToString(pProperties[j].Value);
                 aToken.sText = sText;
             }
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("ChapterFormat"    ))
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChapterFormat"    )))
             {
                 sal_Int16 nFormat = lcl_AnyToInt16(pProperties[j].Value);
                 switch(nFormat)
@@ -2378,7 +2378,7 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 }
                 aToken.nChapterFormat = nFormat;
             }
-            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("BibliographyDataField"))
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
                 sal_Int16 nType; pProperties[j].Value >>= nType;
                 if(nType < 0 || nType > BibliographyDataField::ISBN)
@@ -2452,6 +2452,9 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         SwFormToken  aToken = aEnumerator.GetNextToken();
 
         Sequence< PropertyValue >& rCurTokenSeq = pTokenProps[nTokenCount-1];
+        const OUString aProgCharStyle(SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO     :
@@ -2464,10 +2467,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 //              pArr[0].Value <<= C2U("TokenEntryNumber");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(
-                    SwXStyleFamilies::GetProgrammaticName(
-                        aToken.sCharStyleName,
-                            SFX_STYLE_FAMILY_CHAR));
+                pArr[1].Value <<= aProgCharStyle;
             }
             break;
             case TOKEN_ENTRY        :   // no difference between Entry and Entry Text
@@ -2480,15 +2480,12 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenEntryText");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(
-                    SwXStyleFamilies::GetProgrammaticName(
-                        aToken.sCharStyleName,
-                            SFX_STYLE_FAMILY_CHAR));
+                pArr[1].Value <<= aProgCharStyle;
             }
             break;
             case TOKEN_TAB_STOP     :
             {
-                rCurTokenSeq.realloc(3);
+                rCurTokenSeq.realloc(4);
                 PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
@@ -2511,6 +2508,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 }
                 pArr[2].Name = C2U("TabStopFillCharacter");
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);
+                pArr[3].Name = C2U("CharacterStyleName");
+                pArr[3].Value <<= aProgCharStyle;
             }
             break;
             case TOKEN_TEXT         :
@@ -2522,10 +2521,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenText");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(
-                    SwXStyleFamilies::GetProgrammaticName(
-                        aToken.sCharStyleName,
-                            SFX_STYLE_FAMILY_CHAR));
+                pArr[1].Value <<= aProgCharStyle;
 
                 pArr[2].Name = C2U("Text");
                 pArr[2].Value <<= OUString(aToken.sText);
@@ -2540,10 +2536,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenPageNumber");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(
-                    SwXStyleFamilies::GetProgrammaticName(
-                        aToken.sCharStyleName,
-                            SFX_STYLE_FAMILY_CHAR));
+                pArr[1].Value <<= aProgCharStyle;
             }
             break;
             case TOKEN_CHAPTER_INFO :
@@ -2555,10 +2548,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenChapterInfo");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(
-                    SwXStyleFamilies::GetProgrammaticName(
-                        aToken.sCharStyleName,
-                            SFX_STYLE_FAMILY_CHAR));
+                pArr[1].Value <<= aProgCharStyle;
 
                 pArr[2].Name = C2U("ChapterFormat");
                 sal_Int16 nVal = text::ChapterFormat::NUMBER;
@@ -2599,10 +2589,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenBibliographyDataField");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(
-                    SwXStyleFamilies::GetProgrammaticName(
-                        aToken.sCharStyleName,
-                            SFX_STYLE_FAMILY_CHAR));
+                pArr[1].Value <<= aProgCharStyle;
 
                 pArr[2].Name = C2U("BibliographyDataField");
                 pArr[2].Value <<= sal_Int16(aToken.nAuthorityField);

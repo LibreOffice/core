@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 08:53:45 $
+ *  last change: $Author: os $ $Date: 2001-06-27 13:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3263,11 +3263,8 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         aCharStyleLB.SelectEntry(sNoCharStyle);
     //StyleSelectHdl(&aCharStyleLB);
 
-    sal_Bool bTabStop = pToken->eTokenType == TOKEN_TAB_STOP;
-
-    aCharStyleLB.Enable(!bTabStop);
     String sEntry = aCharStyleLB.GetSelectEntry();
-    aEditStylePB.Enable(!bTabStop && sEntry != sNoCharStyle);
+    aEditStylePB.Enable(sEntry != sNoCharStyle);
 
     if(pToken->eTokenType == TOKEN_CHAPTER_INFO)
     {
@@ -3277,6 +3274,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
             aChapterEntryLB.SetNoSelection();
     }
 
+    sal_Bool bTabStop = TOKEN_TAB_STOP == pToken->eTokenType;
     aFillCharFT.Show(bTabStop);
     aFillCharCB.Show(bTabStop);
     aTabPosFT.Show(bTabStop);
