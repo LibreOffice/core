@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:18:40 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 12:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ portuguese_brazilian ] = "Freie Indizes";
         Text[ japanese ] = "フリーインデックス(~F)";
         Text[ korean ] = "모든 색인(~F)";
-        Text[ chinese_simplified ] = "自由标志(~F)";
+        Text[ chinese_simplified ] = "自由的标志(~F)";
         Text[ chinese_traditional ] = "自由標誌(~F)";
         Text[ turkish ] = "Bo� dizinler:";
         Text[ arabic ] = "����� ���:";
@@ -392,6 +392,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2002/05/02 23:18:40  kz
+ *  Merge SRX642: 03.05.02 - 01:17:30
+ *
  *  Revision 1.19  2002/04/29 14:28:11  oj
  *  #98772# new images
  *
