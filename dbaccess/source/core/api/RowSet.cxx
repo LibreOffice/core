@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:41:52 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 17:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -1641,6 +1644,11 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False,::dbtools::eInDataManipulation);
 
                     m_pCache = new ORowSetCache(xRs,m_xAnalyzer,m_xServiceManager,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
+                    if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
+                    {
+                        m_nPrivileges = Privilege::SELECT;
+                        m_pCache->m_nPrivileges = Privilege::SELECT;
+                    }
                     m_pCache->setMaxRowSize(m_nFetchSize);
                     m_aCurrentRow   = m_pCache->createIterator();
                     m_aOldRow = m_pCache->registerOldRow();
