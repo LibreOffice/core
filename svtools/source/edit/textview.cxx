@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:38:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,7 +1230,10 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     aStr.ConvertLineEnd( LINEEND_LF );
 
                     if ( !mpImpl->mpTextEngine->GetMaxTextLen() || ImplCheckTextLen( aStr ) )
+                    {
                         InsertText( aText, FALSE );
+                        mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                    }
                 }
                 catch( const ::com::sun::star::datatransfer::UnsupportedFlavorException& )
                 {
