@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-22 10:40:58 $
+ *  last change: $Author: ssa $ $Date: 2002-04-15 16:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,8 +1019,11 @@ void SalFrame::ToTop( USHORT nFlags )
 
     XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
     for( ::std::list< SalFrame* >::const_iterator it = maFrameData.maChildren.begin();
-         it != maFrameData.maChildren.end(); ++it )
-        (*it)->ToTop( nFlags );
+        it != maFrameData.maChildren.end(); ++it )
+        (*it)->ToTop( nFlags & ~SAL_FRAME_TOTOP_GRABFOCUS );
+
+    if( ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS ) && maFrameData.bMapped_ )
+        XSetInputFocus( _GetXDisplay(), maFrameData.GetShellWindow(), RevertToParent, CurrentTime );
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::GetWorkArea( Rectangle& rWorkArea )
