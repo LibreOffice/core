@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-25 16:05:36 $
+ *  last change: $Author: cp $ $Date: 2001-04-27 13:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ class FontFallback
         ::psp::fontID       ImplFallbackFor () const ;
 
         ::psp::fontID       mnId;
-        void*               mpSysData;
+        ImplFontData        maFallbackFontData;
 
     public:
                             FontFallback ();
@@ -439,9 +439,9 @@ FontFallback::equalItalic (psp::italic::type from, psp::italic::type to)
 }
 
 FontFallback::FontFallback () :
-        mnId (-1),
-        mpSysData (NULL)
+        mnId (-1)
 {
+    maFallbackFontData.mpSysData = NULL;
     // get static fontlist
     ::std::list< psp::fontID > aList;
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -468,28 +468,27 @@ FontFallback::FontFallback () :
     if (mnId != -1)
     {
         GlyphCache& rGC = GlyphCache::GetInstance();
-        mpSysData = rGC.GetFontHandle (mnId);
-        if (mpSysData == NULL)
+        void* pSysData = rGC.GetFontHandle (mnId);
+        if( (maFallbackFontData.mpSysData = pSysData) == NULL)
             mnId = -1;
     }
 }
 
+
 ServerFont*
 FontFallback::ImplFallbackFor (const ImplFontSelectData *pData) const
 {
-    if (mpSysData == NULL)
+    if (mnId == -1 )
         return NULL;
 
     ImplFontSelectData  aFaksimile;
-    ImplFontData        aFaksimileData;
 
     aFaksimile.mnHeight              = pData->mnHeight;
     aFaksimile.mnWidth               = pData->mnWidth;
     aFaksimile.mnOrientation         = pData->mnOrientation;
     aFaksimile.mbVertical            = pData->mbVertical;
     aFaksimile.mbNonAntialiased      = pData->mbNonAntialiased;
-    aFaksimile.mpFontData            = &aFaksimileData;
-    aFaksimile.mpFontData->mpSysData = mpSysData;
+    aFaksimile.mpFontData            = const_cast<ImplFontData*>(&maFallbackFontData);
 
     return GlyphCache::GetInstance().CacheFont (aFaksimile);
 }
