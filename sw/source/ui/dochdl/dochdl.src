@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:25:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ String STR_NOGLOS2
     TEXT [ italian ] = "' non trovato." ;
     TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
     TEXT [ portuguese ] = "' não localizado." ;
-    TEXT [ finnish ] = "Kohdetta ' ei löydy." ;
+    TEXT [ finnish ] = "Kohdetta ' ei l?dy." ;
     TEXT [ danish ] = "' blev ikke fundet." ;
     TEXT [ french ] = "' introuvable." ;
     TEXT [ swedish ] = "' hittades inte." ;
@@ -139,7 +139,7 @@ String STR_NO_TABLE
     Text [ italian ] = "Adesso è impossibile inserire una tabella." ;
     Text [ portuguese_brazilian ] = "Inserir a tabela ? agora imposs?vel." ;
     Text [ portuguese ] = "De momento não é possível inserir a tabela." ;
-    Text [ finnish ] = "Tällä hetkellä taulukkoa ei voi lisätä" ;
+    Text [ finnish ] = "T?ll? hetkell? taulukkoa ei voi lis?t?" ;
     Text [ danish ] = "Det er for tiden ikke muligt at indsætte en tabel" ;
     Text [ french ] = "Impossible d'insérer un tableau maintenant." ;
     Text [ swedish ] = "En tabell kan inte infogas vid denna tidpunkt." ;
@@ -170,7 +170,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
     MESSAGE [ portuguese_brazilian ] = "N?o pude inserir Texto Autom?tico." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
-    MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
+    MESSAGE [ finnish ] = "Automaattista teksti? ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
     MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
@@ -201,7 +201,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE [ italian ] = "Il formato appunti richiesto non è disponibile." ;
     MESSAGE [ portuguese_brazilian ] = "Formato solicitado de clipboard n?o est? dispon?vel." ;
     MESSAGE [ portuguese ] = "Formato da área de transferência solicitado não se encontra disponível." ;
-    MESSAGE [ finnish ] = "Pyydetty leikepöydän muoto ei ole käytettävissä." ;
+    MESSAGE [ finnish ] = "Pyydetty leikep?d?n muoto ei ole k?ytett?viss?." ;
     MESSAGE [ danish ] = "Det anmodede udskriftsholderformat er ikke tilgængeligt." ;
     MESSAGE [ french ] = "Le format de presse-papiers souhaité n'est pas disponible." ;
     MESSAGE [ swedish ] = "Önskat urklippsformat är inte tillgängligt." ;
@@ -364,5 +364,6 @@ String STR_DDEFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vínculo DDE";
 };
+
 
 
