@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:56:15 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
+#endif
+
+#if !defined EXCEPTIONS_OFF
+#include <new>
 #endif
 
 class String;
@@ -202,13 +206,22 @@ public:
                                 sequence should be converted.
       @param    convertFlags    flags which controls the conversion.
                                 see RTL_TEXTTOUNICODE_FLAGS_...
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString( const sal_Char * value, sal_Int32 length,
               rtl_TextEncoding encoding,
-              sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS ) SAL_THROW(())
+              sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
     {
         pData = 0;
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
+#if defined EXCEPTIONS_OFF
+        OSL_ASSERT(pData != NULL);
+#else
+        if (pData == 0) {
+            throw std::bad_alloc();
+        }
+#endif
     }
 
     /** Convert a String (from the tools module) into an OUString.
