@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:22:04 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ japanese ] = "Œ»İ‚Ì‘I‘ğ(~C)";
         Text[ korean ] = "ÇöÀç ¼±ÅÃ(~C)";
         Text[ chinese_simplified ] = "µ±Ç°µÄÑ¡Ôñ(~C)";
-        Text[ chinese_traditional ] = "·í«eªº¿ï¤¤(~C)";
+        Text[ chinese_traditional ] = "·í«eªº¿ï¨ú(~C)";
         Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÍÇáí";
         Text[ turkish ] = "~Yürürlükteki seçim";
         Text[ language_user1 ] = " ";
