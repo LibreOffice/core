@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:14:34 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2335,33 +2335,6 @@ SfxBoolItem ConvertToSpinButton SID_FM_CONVERTTO_SPINBUTTON
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ConvertToGrid SID_FM_CONVERTTO_GRID
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem ConvertToGroup SID_FM_CONVERTTO_GROUPBOX
 
 [
@@ -3197,7 +3170,7 @@ SfxObjectItem FieldController SID_FM_FIELDS_CONTROL
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = ;
 ]
 
@@ -3493,7 +3466,7 @@ SfxObjectItem FmExplorerController SID_FM_FMEXPLORER_CONTROL
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = ;
 ]
 
@@ -3520,7 +3493,7 @@ SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = ;
 ]
 
@@ -3550,7 +3523,7 @@ SfxVoidItem FontDialog SID_CHAR_DLG
 ]
 
 //--------------------------------------------------------------------------
-SvxFontHeightItem FontHeight SID_ATTR_CHAR_FONTHEIGHT
+SvxFontHeightItem  FontHeight SID_ATTR_CHAR_FONTHEIGHT
 
 [
     /* flags: */
@@ -5944,7 +5917,7 @@ SfxVoidItem InsertSymbol SID_CHARMAP
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertTable SID_ATTR_TABLE
+SfxVoidItem InsertSpreadsheet SID_ATTR_TABLE
 ()
 [
     /* flags: */
@@ -7872,7 +7845,7 @@ SfxObjectItem PropertyController SID_FM_PROPERTY_CONTROL
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = ;
 ]
 
@@ -9002,6 +8975,9 @@ SvxLongULSpaceItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
     RecordPerSet;
     Synchron;
 
+    /* status: */
+    SlotType = SvxLongULSpaceItem
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9296,7 +9272,7 @@ SfxBoolItem ShowProperties SID_FM_SHOW_PROPERTIES
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -10560,33 +10536,6 @@ SfxBoolItem URLButton SID_INSERT_URLBUTTON
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem UrlButton SID_FM_URLBUTTON
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem UseWizards SID_FM_USE_WIZARDS
 
 [
@@ -11723,6 +11672,31 @@ SfxVoidItem HangulHanjaConversion SID_HANGUL_HANJA_CONVERSION
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
+()
+[
+    // flags:
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    // config:
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DOCUMENT;
 ]
 
 //--------------------------------------------------------------------------
