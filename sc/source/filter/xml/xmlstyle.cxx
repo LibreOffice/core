@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:01:01 $
+ *  last change: $Author: sab $ $Date: 2000-09-29 12:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 //  { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY },
 //  { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY_SOURCE },
     { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_SC_TYPE_ISCELLBACKGROUNDTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISCELLBACKGROUNDTRANSPARENT },
-//  { "IsTextWrapped", XML_NAMESPACE_STYLE, sXML_text_outline, XML_TYPE_BOOL, 0 },
+    { "IsTextWrapped", XML_NAMESPACE_STYLE, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
     { "Orientation", XML_NAMESPACE_FO, sXML_direction, XML_SC_TYPE_ORIENTATION, 0 },
     { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE, CTF_PARAINDENT },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding, XML_TYPE_MEASURE, CTF_ALLPADDING },
@@ -533,6 +533,11 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SC_TYPE_BREAKBEFORE :
             {
                 pHdl = new XmlScPropHdl_BreakBefore;
+            }
+            break;
+            case XML_SC_ISTEXTWRAPPED :
+            {
+                pHdl = new XmlScPropHdl_IsTextWrapped;
             }
             break;
         }
@@ -1698,3 +1703,66 @@ sal_Bool XmlScPropHdl_BreakBefore::exportXML(
     return bRetval;
 }
 
+XmlScPropHdl_IsTextWrapped::~XmlScPropHdl_IsTextWrapped()
+{
+}
+
+sal_Bool XmlScPropHdl_IsTextWrapped::equals(
+    const ::com::sun::star::uno::Any& r1,
+    const ::com::sun::star::uno::Any& r2 ) const
+{
+    sal_Bool aBreak1, aBreak2;
+
+    if((r1 >>= aBreak1) && (r2 >>= aBreak2))
+        return (aBreak1 == aBreak2);
+    return sal_False;
+}
+
+sal_Bool XmlScPropHdl_IsTextWrapped::importXML(
+    const ::rtl::OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRetval(sal_False);
+
+    sal_Bool bValue;
+    if (rStrImpValue.compareToAscii(sXML_wrap) == 0)
+    {
+        bValue = sal_True;
+        rValue <<= bValue;
+        bRetval = sal_True;
+    }
+    else if (rStrImpValue.compareToAscii(sXML_no_wrap) == 0)
+    {
+        bValue = sal_False;
+        rValue <<= bValue;
+        bRetval = sal_True;
+    }
+
+    return bRetval;
+}
+
+sal_Bool XmlScPropHdl_IsTextWrapped::exportXML(
+    ::rtl::OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bVal;
+    sal_Bool bRetval(sal_False);
+
+    if(rValue >>= bVal)
+    {
+        if (bVal)
+        {
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_wrap));
+            bRetval = sal_True;
+        }
+        else
+        {
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_no_wrap));
+            bRetval = sal_True;
+        }
+    }
+
+    return bRetval;
+}

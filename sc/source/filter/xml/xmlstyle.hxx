@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
+ *  last change: $Author: sab $ $Date: 2000-09-29 12:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define XML_SC_TYPE_BORDERTOP                       (XML_SC_TYPES_START + 11)
 #define XML_SC_TYPE_BORDERBOTTOM                    (XML_SC_TYPES_START + 12)
 #define XML_SC_TYPE_VERTJUSTIFY                     (XML_SC_TYPES_START + 13)
+#define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 14)
 //#define XML_SC_TYPE_NUMBERFORMAT                  (XML_SC_TYPES_START + 14)
 
 #define CTF_CELLBACKCOLOR                       1
@@ -398,3 +399,12 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 #endif
+
+class XmlScPropHdl_IsTextWrapped : public XMLPropertyHandler
+{
+public:
+    virtual ~XmlScPropHdl_IsTextWrapped();
+    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
