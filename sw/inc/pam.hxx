@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:23:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ class SwPaM : public Ring
     SwPosition aBound2;
     SwPosition *pPoint;
     SwPosition *pMark;
+    FASTBOOL bIsInFrontOfLabel;
 
     SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = 0 );
 
@@ -195,6 +196,9 @@ public:
     FASTBOOL Find(  const SfxItemSet& rAttr, FASTBOOL bNoColls = FALSE,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE );
+
+    FASTBOOL IsInFrontOfLabel() const;
+    void SetInFrontOfLabel(FASTBOOL bIsInFrontOfLabel); // #i27615#
 
     virtual void SetMark();
     void DeleteMark() { pMark = pPoint; }
