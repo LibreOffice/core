@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEmbeddedObject.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,34 +147,10 @@ service TextEmbeddedObject
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ChainNextName
-    /** If the object is linked, then this property contains the name of
-        the next object in the chain.
-     */
-    [property] string ChainNextName;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ChainPrevName
-    /** If the object is linked, then this property contains the name of
-        the previous object in the chain.
-     */
-    [property] string ChainPrevName;
-
-    //-------------------------------------------------------------------------
-
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ContentProtected
     /** determines if the content is protected.
      */
     [property] boolean ContentProtected;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::EditInReadonly
-    /** determines if the text content can be edited in read-only documents.
-     */
-    [property] boolean EditInReadonly;
-
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::FrameStyle
@@ -433,13 +409,6 @@ service TextEmbeddedObject
         is anchored wraps around the object.
      */
     [property] boolean SurroundAnchoronly;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::TextColumns
-    /** contains the description of text columns in the object.
-     */
-    [property] com::sun::star::text::XTextColumns TextColumns;
 
     //-------------------------------------------------------------------------
 
