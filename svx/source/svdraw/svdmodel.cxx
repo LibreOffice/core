@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 10:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "xtable.hxx"
 #include "xoutx.hxx"
 
+#include "svditer.hxx"
 #include "svdtrans.hxx"
 #include "svdio.hxx"
 #include "svdpage.hxx"
@@ -115,6 +116,10 @@
 
 #ifndef _SVX_BULITEM_HXX //autogen
 #include <bulitem.hxx>
+#endif
+
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2368,6 +2373,38 @@ void SdrModel::SetStarDrawPreviewMode(BOOL bPreview)
         bStarDrawPreviewMode = bPreview;
     }
 }
+
+
+void SdrModel::PrepareStore()
+{
+    // Prepare OutlinerParaObjects for storing
+    USHORT nCnt = GetMasterPageCount();
+    for ( USHORT i = 0; i < nCnt; i++ )
+    {
+        // MasterPages
+        SdrObjListIter aIter( *GetMasterPage( i ) );
+        while( aIter.IsMore() )
+        {
+            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
+            if( pOPO )
+                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
+        }
+    }
+
+    nCnt = GetPageCount();
+    for ( i = 0; i < nCnt; i++ )
+    {
+        // Pages
+        SdrObjListIter aIter( *GetPage( i ) );
+        while( aIter.IsMore() )
+        {
+            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
+            if( pOPO )
+                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
+        }
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
