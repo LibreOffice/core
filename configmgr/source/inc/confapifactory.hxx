@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 14:49:47 $
+ *  last change: $Author: jb $ $Date: 2002-05-16 10:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,40 +84,42 @@ namespace configmgr
     struct ServiceInfo;
     class ConnectionSettings;
 
+    typedef uno::Reference< lang::XMultiServiceFactory > CreationContext;
+
     typedef uno::Reference< uno::XInterface > (SAL_CALL * ProviderInstantiation)
             (
-                uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+                CreationContext const& rServiceManager,
                 ConnectionSettings const& _rConnectionSettings
             );
 
 // provider instantiation
     uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider
         (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            CreationContext const& rServiceManager,
             ConnectionSettings const& _rConnectionSettings
         );
 
     uno::Reference< uno::XInterface > SAL_CALL instantiateAdminProvider
         (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            CreationContext const& rServiceManager,
             ConnectionSettings const& _rConnectionSettings
         );
 
     uno::Reference< uno::XInterface > SAL_CALL instantiateUserAdminProvider
         (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            CreationContext const& rServiceManager,
             ConnectionSettings const& _rConnectionSettings
         );
 
     uno::Reference< uno::XInterface > SAL_CALL instantiateLocalAdminProvider
         (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            CreationContext const& rServiceManager,
             ConnectionSettings const& _rConnectionSettings
         );
 
     uno::Reference< uno::XInterface > SAL_CALL instantiateRemoteAdminProvider
         (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            CreationContext const& rServiceManager,
             ConnectionSettings const& _rConnectionSettings
         );
 
@@ -135,11 +137,20 @@ namespace configmgr
 
 // other services - instantiation and info
     uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry
-        (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
-        );
+        ( CreationContext const& rServiceManager );
+
     const ServiceInfo* getConfigurationRegistryServiceInfo();
 
+    namespace xml
+    {
+        uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser
+        ( CreationContext const& rServiceManager );
+        uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser
+        ( CreationContext const& rServiceManager );
+
+        const ServiceInfo* getSchemaParserServiceInfo();
+        const ServiceInfo* getLayerParserServiceInfo();
+    }
 } //  namespace configmgr
 
 #endif // CONFIGMGR_API_FACTORY_HXX_

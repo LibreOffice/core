@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 14:49:47 $
+ *  last change: $Author: jb $ $Date: 2002-05-16 10:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
+        RegisterService(configmgr::xml::getSchemaParserServiceInfo(), xKey);
+        RegisterService(configmgr::xml::getLayerParserServiceInfo(), xKey);
         // im/export
 #if 0
         RegisterService(configmgr::getDataExportServiceInfo(), xKey);
@@ -295,6 +297,16 @@ extern "C" void* SAL_CALL component_getFactory(
         aReq.CreateService(
             configmgr::getConfigurationRegistryServiceInfo(),
             &configmgr::instantiateConfigRegistry,
+            ::cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+            configmgr::xml::getSchemaParserServiceInfo(),
+            &configmgr::xml::instantiateSchemaParser,
+            ::cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+            configmgr::xml::getLayerParserServiceInfo(),
+            &configmgr::xml::instantiateLayerParser,
             ::cppu::createSingleFactory)
         ||
         false;
