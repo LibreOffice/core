@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-25 10:07:03 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XDesktop;
 }}}};
 
+class LocaleDataWrapper;
+
 ///////////////////////////////////////////////////////////////////////////
 
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
@@ -143,6 +145,8 @@ namespace linguistic
 ///////////////////////////////////////////////////////////////////////////
 
 ::osl::Mutex &  GetLinguMutex();
+
+LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang );
 
 ///////////////////////////////////////////////////////////////////////////
 
