@@ -245,7 +245,7 @@ $(SHL1TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
-    +$(COPY) $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
+    +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -701,7 +701,7 @@ $(SHL2TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
-    +$(COPY) $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
+    +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -1157,7 +1157,7 @@ $(SHL3TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
-    +$(COPY) $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
+    +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -1613,7 +1613,7 @@ $(SHL4TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
-    +$(COPY) $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
+    +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -2069,7 +2069,7 @@ $(SHL5TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
-    +$(COPY) $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
+    +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -2525,7 +2525,7 @@ $(SHL6TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
-    +$(COPY) $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
+    +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -2981,7 +2981,7 @@ $(SHL7TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
-    +$(COPY) $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
+    +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -3437,7 +3437,7 @@ $(SHL8TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
-    +$(COPY) $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
+    +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -3893,7 +3893,7 @@ $(SHL9TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
-    +$(COPY) $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
+    +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -4349,7 +4349,7 @@ $(SHL10TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
-    +$(COPY) $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
+    +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
