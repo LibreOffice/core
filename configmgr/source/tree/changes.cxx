@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
+ *  last change: $Author: jb $ $Date: 2002-01-08 15:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,14 +272,23 @@ AddNode::~AddNode()
 
 // -----------------------------------------------------------------------------
 AddNode::AddNode(const AddNode& _aObj)
-        : Change(_aObj), m_bReplacing(_aObj.m_bReplacing)
+        : Change(_aObj), m_bReplacing(_aObj.isReplacing())
 {
-    m_pNewNode = _aObj.m_pNewNode ? _aObj.m_pNewNode->clone() : NULL;
-    m_pOldNode = _aObj.m_pOldNode ? _aObj.m_pOldNode->clone() : NULL;
     if (_aObj.m_aOwnNewNode.get())
-        m_aOwnNewNode.reset(_aObj.m_aOwnNewNode.get()->clone());
+    {
+        m_aOwnNewNode.reset(_aObj.m_aOwnNewNode->clone());
+        m_pNewNode = m_aOwnNewNode.get();
+    }
+    else
+        m_pNewNode = NULL;
+
     if (_aObj.m_aOwnOldNode.get())
-        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode.get()->clone());
+    {
+        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode->clone());
+        m_pOldNode = m_aOwnOldNode.get();
+    }
+    else
+        m_pOldNode = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -326,9 +335,13 @@ RemoveNode::~RemoveNode()
 RemoveNode::RemoveNode(const RemoveNode& _aObj)
         :Change(_aObj)
 {
-    m_pOldNode = _aObj.m_pOldNode ? _aObj.m_pOldNode->clone() : NULL;
     if (_aObj.m_aOwnOldNode.get())
-        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode.get()->clone());
+    {
+        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode->clone());
+        m_pOldNode = m_aOwnOldNode.get();
+    }
+    else
+        m_pOldNode = NULL;
 }
 
 // -----------------------------------------------------------------------------
