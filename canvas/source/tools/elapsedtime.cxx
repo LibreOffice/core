@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elapsedtime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:07:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_TIME_H_
-#include <osl/time.h>
-#endif
-
-#include <canvas/elapsedtime.hxx>
+#include "osl/time.h"
+#include "osl/diagnose.h"
+#include "canvas/elapsedtime.hxx"
 
 #if defined(WIN) || defined(WNT)
 
@@ -76,109 +74,185 @@
 #include <mmsystem.h>
 #endif
 
+#include <algorithm>
+#include <limits>
 
-namespace canvas
+namespace canvas {
+namespace tools {
+
+
+#if defined(WIN) || defined(WNT)
+// TODO(Q2): is 0 okay for the failure case here?
+double ElapsedTime::getSystemTime()
 {
-    namespace tools
+    // TEMP!!!
+    // Awaiting corresponding functionality in OSL
+    //
+
+    // is there a performance counter available?
+    static bool bTimeSetupDone( false );
+    static bool bPerfTimerAvailable( false );
+    static LONGLONG nPerfCountFreq;
+
+    // TODO(F1): This _might_ cause problems, as it prevents correct
+    // time handling for very long lifetimes of this class's
+    // surrounding component in memory. When the difference between
+    // current sys time and nInitialCount exceeds IEEE double's
+    // mantissa, time will start to run jerky.
+    static LONGLONG nInitialCount;
+
+    if( !bTimeSetupDone )
     {
-        namespace
+        if( QueryPerformanceFrequency(
+                reinterpret_cast<LARGE_INTEGER *>(&nPerfCountFreq) ) )
         {
-#if defined(WIN) || defined(WNT)
-            static double fTimeFactor;
-#endif
-
-            double getTimeFactor()
-            {
-#if defined(WIN) || defined(WNT)
-                // value is hardware-dependent
-                return fTimeFactor;
-#else
-                // value is in nanoseconds
-                return 10e-10;
-#endif
-            }
-
-            sal_uInt64 getCurrentTime()
-            {
-#if defined(WIN) || defined(WNT)
-                sal_uInt64 bRet( 0 );
-
-                // TEMP!!!
-                // Awaiting corresponding functionality in OSL
-                //
-
-                // is there a performance counter available?
-                static bool bTimeSetupDone( false );
-                static bool bPerfTimerAvailable;
-
-                if( !bTimeSetupDone )
-                {
-                    LONGLONG nPerfCount;
-                    if( QueryPerformanceFrequency((LARGE_INTEGER *) &nPerfCount) )
-                    {
-                        // yes, timer choice flag
-                        bPerfTimerAvailable = true;
-
-                        // set scaling factor
-                        fTimeFactor = 1.0/nPerfCount;
-                    }
-                    else
-                    {
-                        // no performance counter, read in using timeGetTime
-                        bPerfTimerAvailable = false;
-
-                        // set timer scaling factor
-                        fTimeFactor = 0.001;
-                    }
-
-                    bTimeSetupDone = true;
-                }
-
-                if( bPerfTimerAvailable )
-                {
-                    LONGLONG nCurrTime;
-
-                    // read initial time
-                    QueryPerformanceCounter((LARGE_INTEGER *) &nCurrTime);
-
-                    bRet = nCurrTime;
-                }
-                else
-                {
-                    bRet = timeGetTime();
-                }
-#else
-                TimeValue aTimeVal;
-                sal_uInt64 bRet( 0 );
-
-                if( osl_getSystemTime( &aTimeVal ) )
-                {
-                    // combine to seconds + fraction of second
-                    bRet = ((sal_uInt64)aTimeVal.Seconds) * (sal_uInt64)1000000000 + (sal_uInt64)aTimeVal.Nanosec;
-                }
-#endif
-
-                return bRet; // TODO(Q2): is 0 okay for the failure case here?
-            }
+            // read initial time:
+            QueryPerformanceCounter(
+                reinterpret_cast<LARGE_INTEGER *>(&nInitialCount) );
+            bPerfTimerAvailable = true;
         }
+        bTimeSetupDone = true;
+    }
 
-        ElapsedTime::ElapsedTime() :
-            mnStartTime( getCurrentTime() ),
-            mfTimeFactor( getTimeFactor() )
-        {
-        }
-
-        void ElapsedTime::reset()
-        {
-            mnStartTime = getCurrentTime();
-        }
-
-        double ElapsedTime::getElapsedTime() const
-        {
-            sal_uInt64 nCurrTime( getCurrentTime() );
-
-            return mfTimeFactor * (nCurrTime - mnStartTime);
-        }
-
+    if( bPerfTimerAvailable )
+    {
+        LONGLONG nCurrCount;
+        QueryPerformanceCounter(
+            reinterpret_cast<LARGE_INTEGER *>(&nCurrCount) );
+        nCurrCount -= nInitialCount;
+        return (double)nCurrCount / nPerfCountFreq;
+    }
+    else
+    {
+        LONGLONG nCurrTime = timeGetTime();
+        return (double)nCurrTime / 1000.0;
     }
 }
+
+#else // ! WNT
+
+// TODO(Q2): is 0 okay for the failure case here?
+double ElapsedTime::getSystemTime()
+{
+    TimeValue aTimeVal;
+    if( osl_getSystemTime( &aTimeVal ) )
+        return ((aTimeVal.Nanosec * 10e-10) + aTimeVal.Seconds);
+    else
+        return 0.0;
+}
+
+#endif
+
+ElapsedTime::ElapsedTime()
+    : m_pTimeBase(),
+      m_fLastQueriedTime( 0.0 ),
+      m_fStartTime( getSystemTime() ),
+      m_fFrozenTime( 0.0 ),
+      m_bInPauseMode( false ),
+      m_bInHoldMode( false )
+{
+}
+
+ElapsedTime::ElapsedTime(
+    boost::shared_ptr<ElapsedTime> const & pTimeBase )
+    : m_pTimeBase( pTimeBase ),
+      m_fLastQueriedTime( 0.0 ),
+      m_fStartTime( getCurrentTime() ),
+      m_fFrozenTime( 0.0 ),
+      m_bInPauseMode( false ),
+      m_bInHoldMode( false )
+{
+}
+
+boost::shared_ptr<ElapsedTime> const & ElapsedTime::getTimeBase() const
+{
+    return m_pTimeBase;
+}
+
+void ElapsedTime::reset()
+{
+    m_fLastQueriedTime = 0.0;
+    m_fStartTime = getCurrentTime();
+    m_fFrozenTime = 0.0;
+    m_bInPauseMode = false;
+    m_bInHoldMode = false;
+}
+
+void ElapsedTime::adjustTimer( double fOffset, bool bLimitToLastQueriedTime )
+{
+#if 0
+    if (bLimitToLastQueriedTime) {
+        const double fCurrentTime = getElapsedTimeImpl();
+        if (m_fLastQueriedTime > (fCurrentTime + fOffset)) {
+            // TODO(Q3): Once the dust has settled, reduce to
+            // OSL_TRACE here!
+            OSL_ENSURE( false, "### adjustTimer(): clamping!" );
+            fOffset = (m_fLastQueriedTime - fCurrentTime);
+        }
+    }
+#endif
+    // to make getElapsedTime() become _larger_, have to reduce
+    // m_fStartTime.
+    m_fStartTime -= fOffset;
+
+    // also adjust frozen time, this method must _always_ affect the
+    // value returned by getElapsedTime()!
+    if (m_bInHoldMode || m_bInPauseMode)
+        m_fFrozenTime += fOffset;
+}
+
+double ElapsedTime::getCurrentTime() const
+{
+    return m_pTimeBase.get() == 0
+        ? getSystemTime() : m_pTimeBase->getElapsedTimeImpl();
+}
+
+double ElapsedTime::getElapsedTime() const
+{
+    m_fLastQueriedTime = getElapsedTimeImpl();
+    return m_fLastQueriedTime;
+}
+
+double ElapsedTime::getElapsedTimeImpl() const
+{
+    if (m_bInHoldMode || m_bInPauseMode)
+        return m_fFrozenTime;
+
+    return getCurrentTime() - m_fStartTime;
+}
+
+void ElapsedTime::pauseTimer()
+{
+    m_fFrozenTime = getElapsedTimeImpl();
+    m_bInPauseMode = true;
+}
+
+void ElapsedTime::continueTimer()
+{
+    m_bInPauseMode = false;
+
+    // stop pausing, time runs again. Note that
+    // getElapsedTimeImpl() honors hold mode, i.e. a
+    // continueTimer() in hold mode will preserve the latter
+    const double fPauseDuration( getElapsedTimeImpl() - m_fFrozenTime );
+
+    // adjust start time, such that subsequent getElapsedTime() calls
+    // will virtually start from m_fFrozenTime.
+    m_fStartTime += fPauseDuration;
+}
+
+void ElapsedTime::holdTimer()
+{
+    // when called during hold mode (e.g. more than once per time
+    // object), the original hold time will be maintained.
+    m_fFrozenTime = getElapsedTimeImpl();
+    m_bInHoldMode = true;
+}
+
+void ElapsedTime::releaseTimer()
+{
+    m_bInHoldMode = false;
+}
+
+} // namespace tools
+} // namespace canvas
