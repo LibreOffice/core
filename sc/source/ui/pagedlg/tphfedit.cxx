@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-14 09:21:35 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 12:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,7 @@ void ScEditWindow::SetCharAttriutes()
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {
+            aSet.ClearItem();
             aSet.Put( *pDlg->GetOutputItemSet() );
             pEdView->SetAttribs( aSet );
         }
