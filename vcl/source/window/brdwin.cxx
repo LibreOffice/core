@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 
 #define _SV_BRDWIN_CXX
 
-#ifdef REMOTE_APPSERVER
-#include <rmwindow.hxx>
-#endif
-
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
@@ -106,10 +102,6 @@
 #endif
 
 #include <tools/debug.hxx>
-
-#include <rvp.hxx>
-
-#pragma hdrstop
 
 using namespace ::com::sun::star::uno;
 
@@ -1375,7 +1367,6 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
             pDev->SetTextColor( rStyleSettings.GetDeactiveTextColor() );
             aColor2 = rStyleSettings.GetDeactiveColor2();
         }
-#ifndef REMOTE_APPSERVER
         BOOL bDrawRect;
         if ( pDev->GetColorCount() >= 256 )
         {
@@ -1420,7 +1411,6 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
             bDrawRect = TRUE;
 
         if ( bDrawRect )
-#endif
             pDev->DrawRect( aInRect );
 
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
@@ -3239,38 +3229,17 @@ Rectangle ImplMacBorderWindowView::DrawMacTitleButton( OutputDevice* pDev, const
 }
 
 // =======================================================================
-#ifdef REMOTE_APPSERVER
-void ImplBorderWindow::ImplInit( Window* pParent,
-                                 WinBits nStyle, USHORT nTypeStyle,
-                                 SystemParentData* pSystemParentData
-                                 )
-{
-    static ::com::sun::star::uno::Any aVoid;
-
-    DBG_ASSERT( pSystemParentData, "remote and non remote confusion, please clarify" );
-    ImplInit( pParent, nStyle, nTypeStyle, aVoid );
-}
-#else
 void ImplBorderWindow::ImplInit( Window* pParent,
                                  WinBits nStyle, USHORT nTypeStyle,
                                  const ::com::sun::star::uno::Any& aSystemToken )
 {
     ImplInit( pParent, nStyle, nTypeStyle, NULL );
 }
-#endif
 
-#ifndef REMOTE_APPSERVER
 void ImplBorderWindow::ImplInit( Window* pParent,
                                  WinBits nStyle, USHORT nTypeStyle,
                                  SystemParentData* pSystemParentData
                                  )
-#else
-void ImplBorderWindow::ImplInit( Window* pParent,
-                                 WinBits nStyle,
-                                 USHORT nTypeStyle,
-                                 const ::com::sun::star::uno::Any& aSystemToken
-                                 )
-#endif
 {
     // Alle WindowBits entfernen, die wir nicht haben wollen
     WinBits nOrgStyle = nStyle;
@@ -3303,11 +3272,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     else
         mbFloatWindow = FALSE;
 
-#ifndef REMOTE_APPSERVER
     Window::ImplInit( pParent, nStyle, pSystemParentData );
-#else
-    Window::ImplInit( pParent, nStyle, aSystemToken );
-#endif
     SetBackground();
     SetTextFillColor();
 
