@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pipe.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:50 $
+ *  last change:$Date: 2003-05-27 13:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public class Pipe extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.io.Pipe" );
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -123,7 +123,7 @@ public class Pipe extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         //add relation for io.XOutputStream
-        final XMultiServiceFactory msf = Param.getMSF();
+        final XMultiServiceFactory msf = (XMultiServiceFactory)Param.getMSF();
         final XInputStream iStream = (XInputStream)
                 UnoRuntime.queryInterface(XInputStream.class, oObj);
 
