@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:51:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ CheckBox CB_USE_PASSWD
     Text [ portuguese_brazilian ] = "~Senha" ;
     Text [ portuguese ] = "~Senha" ;
     Text [ finnish ] = "~Salasana" ;
-    Text [ danish ] = "Adgangskode" ;
+    Text [ danish ] = "~Adgangskode" ;
     Text [ french ] = "~Mot de passe" ;
     Text [ swedish ] = "~L�senord" ;
     Text [ dutch ] = "~Wachtwoord" ;
@@ -92,6 +92,8 @@ CheckBox CB_USE_PASSWD
     Text[ hebrew ] = "‮סיסמה‬";
     Text[ hindi ] = "~कूटशब्द";
     Text[ slovak ] = "~Heslo";
+    Text[ hungarian ] = "~Jelszó";
+    Text[ slovenian ] = "~Geslo";
 };
 CheckBox CB_READ_ONLY
 {
@@ -102,7 +104,7 @@ CheckBox CB_READ_ONLY
     Text [ portuguese_brazilian ] = "~Somente leitura" ;
     Text [ portuguese ] = "~S� leitura" ;
     Text [ finnish ] = "Vain ~luku" ;
-    Text [ danish ] = "Skrivebeskyttet" ;
+    Text [ danish ] = "Skrive~beskyttet" ;
     Text [ french ] = "En ~lecture seule" ;
     Text [ swedish ] = "Sk~rivskyddad" ;
     Text [ dutch ] = "~Alleen-lezen" ;
@@ -124,6 +126,8 @@ CheckBox CB_READ_ONLY
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "~केवल पढ़ने केलिए";
     Text[ slovak ] = "~Len na čítanie";
+    Text[ hungarian ] = "Csak ~olvasható";
+    Text[ slovenian ] = "Samo za ~branje";
 };
 String STR_LINKEDIT_TEXT
 {
@@ -157,6 +161,8 @@ String STR_LINKEDIT_TEXT
     Text[ hebrew ] = "Verknüpfungen bearbeiten";
     Text[ hindi ] = "लिंक्स का संपादन";
     Text[ slovak ] = "Upraviť odkazy";
+    Text[ hungarian ] = "Hivatkozások szerkesztése";
+    Text[ slovenian ] = "Uredi povezave";
 };
 String STR_PATH_NOT_FOUND1
 {
@@ -168,7 +174,7 @@ String STR_PATH_NOT_FOUND1
     Text [ portuguese_brazilian ] = "O diret�rio " ;
     Text [ portuguese ] = "O direct�rio '" ;
     Text [ finnish ] = "Hakemistoa" ;
-    Text [ danish ] = "Biblioteket '" ;
+    Text [ danish ] = "Kataloget '" ;
     Text [ french ] = "Le r�pertoire'" ;
     Text [ swedish ] = "Katalogen '" ;
     Text [ dutch ] = "Map '" ;
@@ -190,6 +196,8 @@ String STR_PATH_NOT_FOUND1
     Text[ hebrew ] = "Das Verzeichnis '";
     Text[ hindi ] = "डैरक्टरी '";
     Text[ slovak ] = "Adresár '";
+    Text[ hungarian ] = "A '";
+    Text[ slovenian ] = "Mapa '";
 };
 String STR_PATH_NOT_FOUND2
 {
@@ -202,7 +210,7 @@ String STR_PATH_NOT_FOUND2
     Text [ portuguese_brazilian ] = " n�o existe." ;
     Text [ portuguese ] = "' n�o existe." ;
     Text [ finnish ] = "ei ole olemassa." ;
-    Text [ danish ] = "' eksisterer ikke." ;
+    Text [ danish ] = "' findes ikke." ;
     Text [ french ] = "' n'existe pas." ;
     Text [ swedish ] = "' finns inte." ;
     Text [ dutch ] = "' bestaat niet." ;
@@ -224,11 +232,14 @@ String STR_PATH_NOT_FOUND2
     Text[ hebrew ] = "' existiert nicht.";
     Text[ hindi ] = "' अस्तित्व में नहीं है ।";
     Text[ slovak ] = " neexistuje.";
+    Text[ hungarian ] = "' könyvtár nem létezik.";
+    Text[ slovenian ] = "' ne obstaja.";
 };
 String STR_FLT_SGV
 {
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
+
 
 
 
