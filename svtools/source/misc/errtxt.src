@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:41:35 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 08:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,7 +1859,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "ΚΪΠΡ ήΡΗΑΙ γΪαζγΗΚ ΗαγΣΚδΟ γδ Ηαγαέ΅\nαΓδ ΚδΣνή γΪαζγΗΚ ΗαγΣΚδΟ\nΫνΡ γΪΡζέ΅ Γζ αΓδ γΪαζγΗΚ ΗαγΣΚδΟ \nΫνΡ γζΜζΟΙ";
         Text[ dutch ] = "Lezen van documentinfo niet mogelijk.\nDocumentformaat onbekend of geen documentinfo\nvoorhanden";
         Text[ chinese_simplified ] = "Ξή·¨¶Α³φΥβΈφΞΔΌώµΔΞΔµµΠΕΟΆ£¬\nÒςΞªΥβΈφΞΔµµΠΕΟΆµΔΈρΚ½²»Γχ»ςΞΔµµΠΕΟΆ²»΄ζΤΪ\n";
-        Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάγνωση των πληροφοριών του εγγράφου από το αρχείο\nείτε επειδή είναι άγνωστη η μορφή του εγγράφου πληροφοριών\n ";
+        Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάγνωση των πληροφοριών του εγγράφου από το αρχείο\nείτε επειδή είναι άγνωστη η μορφή του εγγράφου πληροφοριών\\";
         Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφΎΚΐΊ Ή®Ό­ Ό­½ΔΐΜ°Ε³ª\nΉ®Ό­ Α¤ΊΈ°΅ ΑΈΐηΗΟΑφ ΎΚ±β ¶§Ή®Ώ΅ ΖΔΐΟΏ΅Ό­΅΅Ή®Ό­ΐΗ Α¤ΊΈΈ¦\nΐΠΐ»Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belge bilgileri formatύ, bilinmediπi ya da belge\nbilgisi mevcut olmadύπύ iηin\ndosyadan okunamadύ\n";
         Text[ catalan ] = "La informaciσn del documento no se pudo leer del\narchivo ya que su formato es desconocido o no\nexiste ninguna informaciσn acerca del documento.";
@@ -2133,7 +2133,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "γΪαζγΗΚ ΗαΕδΚΡδΚ ΗαγΨαζΘΙ ΫνΡ γζΜζΟΙ έν ζΝΟΙ ΗαΚΞÒνδ ΗαγΔήΚΙ΅ ζαΗ νγίδ δήαεΗ΅ ΕΠ Γδ ζΦΪ ΗαΗΚΥΗα ΫνΡ δΤΨ";
         Text[ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is";
         Text[ chinese_simplified ] = "ÒςΞªΔϊµΔΌΖΛγ»ϊΊΝ»ΉΓ»ΣΠΊΝΉϊΌΚ»¥ΑªΝψΑ¬½Σ£¬¶ψΗÒΌΖΛγ»ϊ»Ί³εΗψÒ²Γ»ΣΠΔϊΗλΗσµΔΉϊΌΚ»¥ΑªΝψµΔΧΚΑΟ£¬Òς΄ΛΞή·¨΄«µέΘΞΊΞΚύΎέ΅£";
-        Text[ greek ] = "Τα ζητούμενα δεδομένα του Internet δεν βρίσκονται στην κρυφή μνήμη και δεν είναι δυνατόν να μεταδοθούν, επειδή εργάζεστε σε κατάσταση 'Χωρίς σύ ";
+        Text[ greek ] = "Τα ζητούμενα δεδομένα του Internet δεν βρίσκονται στην κρυφή μνήμη και δεν είναι δυνατόν να μεταδοθούν, επειδή εργάζεστε σε κατάσταση 'Χωρίς σ";
         Text[ korean ] = "ΏδΓ»µΘ ΐΞΕΝ³έ µ¥ΐΜΕΝ°΅ Δ³½ΓΏ΅ ΎψΐΈΈη ΏΒ¶σΐΞ Έπµε°΅ Θ°ΌΊΘ­µΗΎξ ΐΦΑφ ΎΚΎΖ µ¥ΐΜΕΝΈ¦ ΊΈ³Ύ Όφ Ύψΐ½";
         Text[ turkish ] = "έstenen Internet verileri φnbellekte bulunmuyor ve ηevrimiηi kipi etkin olmadύπύ iηin aktarύlamύyor";
         Text[ catalan ] = "Los datos de Internet solicitados no se encuentran en el cachι y no pueden ser transmitidos ya que el modo en lνnea no estα activo.";
@@ -2156,7 +2156,7 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "ÒªΈόΜζΡωΚ½ $(ARG1) £Ώ";
         Text[ russian ] = "Ηΰμενθςό ρςθλό $(ARG1)?";
         Text[ polish ] = "Zamieniζ styl $(ARG1)?";
-        Text[ japanese ] = "½ΐ²Ω $(ARG1)‚π’u·‚µ‚ά‚·‚©?";
+        Text[ japanese ] = "½ΐ²Ω $(ARG1)‚π’u·‚µ‚ά‚·‚©B";
         Text[ chinese_traditional ] = "­n§σ΄ΐ³o­ΣΌΛ¦΅ $(ARG1)΅H";
         Text[ arabic ] = "εα ΚΡνΟ ΗΣΚΘΟΗα ΗαδγΨ $(ARG1)Ώ";
         Text[ dutch ] = "Opmaakprofiel $(ARG1) vervangen?";
@@ -2989,6 +2989,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
