@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-09 13:02:12 $
+ *  last change: $Author: iha $ $Date: 2002-10-01 14:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,8 +477,17 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
         nH = aSize.Height();
     }
 
-    // Optionen aus Configdatei holen
-    pOptions->GetScale( nX, nY );
+    if(pFrameView)
+    {
+        const Fraction& rFraction =  pDoc->GetUIScale();
+        nX=rFraction.GetNumerator();
+        nY=rFraction.GetDenominator();
+    }
+    else
+    {
+        // Optionen aus Configdatei holen
+        pOptions->GetScale( nX, nY );
+    }
 
     pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
     pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
