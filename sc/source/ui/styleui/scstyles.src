@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstyles.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:51:33 $
+ *  last change: $Author: nn $ $Date: 2002-05-31 18:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,8 @@
 
 #include "sc.hrc"
 #include <svtools/style.hrc>
-#define IMPL_FAMILY(family,bmp,filter) \
+#define IMPL_FAMILY(family,filter) \
     StyleFamily = family;                       \
-    StyleImage = Image                          \
-    {                                           \
-       ImageBitmap = Bitmap { File = bmp; };    \
-       MaskColor   = STD_MASKCOLOR;             \
-    };                                          \
     FilterList = { filter }
 
  //------------------------------------------------------------------------
@@ -78,7 +73,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PARA ,
-            "scstlcel.bmp" ,
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
@@ -98,21 +92,21 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ·å¼";
             Text[ russian ] = "Ñòèëè ÿ÷åéêè";
                 Text[ polish ] = "Style komórki";
-                Text[ japanese ] = "ï½¾ï¾™ï½½ï¾€ï½²ï¾™";
+                Text[ japanese ] = "ã‚»ãƒ«ã‚¹ã‚¿ã‚¤ãƒ«";
                 Text[ chinese_traditional ] = "å„²å­˜æ ¼æ¨£å¼";
                 Text[ arabic ] = "ÃäãÇØ ÇáÎáÇíÇ";
                 Text[ dutch ] = "Celopmaakprofielen";
                 Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ·å¼";
                 Text[ greek ] = "Óôõë êåëéïı";
-                Text[ korean ] = "ì…€ ìœ í˜•";
+                Text[ korean ] = "ì…€ ìŠ¤íƒ€ì¼";
                 Text[ turkish ] = "Hücre biçimi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Estilos de celda";
+                Text[ catalan ] = "Estils de cel·la";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸‹à¸¥à¸¥à¹Œ";
             };
         SfxStyleFamilyItem
         {
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
-            "catpag.bmp" ,
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text = "Seitenvorlagen" ;
@@ -131,26 +125,36 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
             Text[ russian ] = "Ñòèëè ñòğàíèöû";
                 Text[ polish ] = "Style strony";
-                Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™";
+                Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«";
                 Text[ chinese_traditional ] = "é é¢æ¨£å¼";
                 Text[ arabic ] = "ÃäãÇØ ÕİÍÉ";
                 Text[ dutch ] = "Pagina-opmaakprofielen";
                 Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
                 Text[ greek ] = "Ğñüôõğá óåëßäáò";
-                Text[ korean ] = "ìª½ ìœ í˜•";
+                Text[ korean ] = "í˜ì´ì§€ ìŠ¤íƒ€ì¼";
                 Text[ turkish ] = "Sayfa biçimi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Estilos de página";
+                Text[ catalan ] = "Estils de pàgina";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸«à¸™à¹‰à¸²";
             };
     };
+
+    //  style family images are now taken from an ImageList
+    //  (for each family, there's one entry in the IdList)
+    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    {
+        ImageBitmap = Bitmap { File = "sf_out.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+        IdList = { 1; 2; };
+        IdCount = 2;
+    };
+    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
+    {
+        ImageBitmap = Bitmap { File = "sfh_out.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR ;
+        IdList = { 1; 2; };
+        IdCount = 2;
+    };
 };
-
-
-
-
-
-
-
-
 
 
