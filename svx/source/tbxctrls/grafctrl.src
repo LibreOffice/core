@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:16:27 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ arabic ] = "ÝáÇÊÑ";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtros";
 };
 
 // -----------
@@ -193,6 +194,7 @@ String RID_SVXSTR_UNDO_GRAFMODE
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
+    Text[ catalan ] = "Modo gráfico";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
@@ -216,6 +218,7 @@ String RID_SVXSTR_UNDO_GRAFRED
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kýrmýzý oraný";
+    Text[ catalan ] = "Proporción de rojo";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
@@ -239,6 +242,7 @@ String RID_SVXSTR_UNDO_GRAFGREEN
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeþil oraný";
+    Text[ catalan ] = "Proporción de verde";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
@@ -262,6 +266,7 @@ String RID_SVXSTR_UNDO_GRAFBLUE
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑÞ";
     Text[ turkish ] = "Mavi oraný";
+    Text[ catalan ] = "Proporción de azul";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
@@ -285,6 +290,7 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ chinese_traditional ] = "«G«×";
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklýk";
+    Text[ catalan ] = "Brillo";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
@@ -308,6 +314,7 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ chinese_traditional ] = "¹ï¤ñ«×";
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrast";
+    Text[ catalan ] = "Contraste";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
@@ -331,6 +338,7 @@ String RID_SVXSTR_UNDO_GRAFGAMMA
     Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ";
     Text[ arabic ] = "ÛÇãÇ";
     Text[ turkish ] = "Gamma";
+    Text[ catalan ] = "Gamma";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
@@ -354,6 +362,7 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ chinese_traditional ] = "³z©ú";
     Text[ arabic ] = "ÔÝÇÝíÉ";
     Text[ turkish ] = "Saydamlýk";
+    Text[ catalan ] = "Transparencia";
 };
 String RID_SVXSTR_GRAFCROP
 {
@@ -377,6 +386,7 @@ String RID_SVXSTR_GRAFCROP
     Text[ chinese_traditional ] = "°Å¤U";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇÞÊÕÇÕ";
+    Text[ catalan ] = "Recortar";
 };
 
 // ********************************************************************** EOF
