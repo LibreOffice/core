@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 20:01:38 $
+ *  last change: $Author: dl $ $Date: 2001-05-02 10:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,10 +292,10 @@ IMPL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*, EMPTYARG)
 |*
 \************************************************************************/
 
-__EXPORT SvxColorChildWindow::SvxColorChildWindow( Window* pParent,
-                                                   USHORT nId,
-                                                   SfxBindings* pBindings,
-                                                   SfxChildWinInfo* pInfo ) :
+SvxColorChildWindow::SvxColorChildWindow( Window* pParent,
+                                          USHORT nId,
+                                          SfxBindings* pBindings,
+                                          SfxChildWinInfo* pInfo ) :
     SfxChildWindow( pParent, nId )
 {
     SvxColorDockingWindow* pWin = new SvxColorDockingWindow( pBindings, this,
@@ -315,7 +315,7 @@ __EXPORT SvxColorChildWindow::SvxColorChildWindow( Window* pParent,
 |*
 \************************************************************************/
 
-__EXPORT SvxColorDockingWindow::SvxColorDockingWindow
+SvxColorDockingWindow::SvxColorDockingWindow
 (
     SfxBindings* pBindings,
     SfxChildWindow* pCW,
@@ -367,7 +367,7 @@ __EXPORT SvxColorDockingWindow::SvxColorDockingWindow
 |*
 \************************************************************************/
 
-__EXPORT SvxColorDockingWindow::~SvxColorDockingWindow()
+SvxColorDockingWindow::~SvxColorDockingWindow()
 {
     EndListening( GetBindings() );
 }
@@ -446,7 +446,7 @@ void SvxColorDockingWindow::SetSize()
 
     // Zeilen und Spalten berechnen
     nCols = (USHORT) ( aSize.Width() / aItemSize.Width() );
-    nLines = (USHORT) ( (float) aSize.Height() / (float) aItemSize.Height() + 0.35 );
+    nLines = (USHORT) ( (float) aSize.Height() / (float) aItemSize.Height() /*+ 0.35*/ );
     if( nLines == 0 )
         nLines++;
 
@@ -484,7 +484,7 @@ void SvxColorDockingWindow::SetSize()
 |*
 \************************************************************************/
 
-BOOL __EXPORT SvxColorDockingWindow::Close()
+BOOL SvxColorDockingWindow::Close()
 {
     SfxBoolItem aItem( SID_COLOR_CONTROL, FALSE );
     GetBindings().GetDispatcher()->Execute(
@@ -602,7 +602,7 @@ IMPL_LINK( SvxColorDockingWindow, SelectHdl, void *, EMPTYARG )
 \************************************************************************/
 
 
-void __EXPORT SvxColorDockingWindow::Resizing( Size& rNewSize )
+void SvxColorDockingWindow::Resizing( Size& rNewSize )
 {
     rNewSize.Width()  -= 4;
     rNewSize.Height() -= 4;
@@ -650,7 +650,7 @@ void __EXPORT SvxColorDockingWindow::Resizing( Size& rNewSize )
 |*
 \************************************************************************/
 
-void __EXPORT SvxColorDockingWindow::Resize()
+void SvxColorDockingWindow::Resize()
 {
     if ( !IsFloatingMode() || !GetFloatingWindow()->IsRollUp() )
         SetSize();
