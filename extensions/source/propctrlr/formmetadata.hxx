@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:45:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include "modulepcr.hxx"
 #endif
 
+#ifndef _COMPHELPER_COMPOSEDPROPS_HXX_
+#include <comphelper/composedprops.hxx>
+#endif
+
 //............................................................................
 namespace pcr
 {
@@ -77,10 +81,11 @@ namespace pcr
     struct OPropertyInfoImpl;
 
     //========================================================================
-    //= OFormPropertyInfoService
+    //= OPropertyInfoService
     //========================================================================
-    class OFormPropertyInfoService
+    class OPropertyInfoService
                 :public IPropertyInfoService
+                ,public ::comphelper::IPropertySetComposerCallback
                 ,public OModuleResourceClient
     {
     protected:
@@ -89,12 +94,16 @@ namespace pcr
         // TODO: a real structure which allows quick access by name as well as by id
 
     public:
-        sal_Int32               getPropertyId(const String& _rName) const;
-        String                  getPropertyTranslation(sal_Int32 _nId) const;
-        sal_Int32               getPropertyHelpId(sal_Int32 _nId) const;
-        sal_Int16               getPropertyPos(sal_Int32 _nId) const;
-        sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const;
+        // IPropertyInfoService
+        virtual sal_Int32               getPropertyId(const String& _rName) const;
+        virtual String                  getPropertyTranslation(sal_Int32 _nId) const;
+        virtual sal_Int32               getPropertyHelpId(sal_Int32 _nId) const;
+        virtual sal_Int16               getPropertyPos(sal_Int32 _nId) const;
+        virtual sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const;
         virtual ::std::vector< String > getPropertyEnumRepresentations(sal_Int32 _nId) const;
+
+        // IPropertySetComposerCallback
+        virtual sal_Bool                isComposeable( const ::rtl::OUString& _rPropertyName ) const;
 
     protected:
         static const OPropertyInfoImpl* getPropertyInfo();
@@ -145,15 +154,16 @@ namespace pcr
 #define PROP_FLAG_NONE              0x00000000  // no special flag
 #define PROP_FLAG_FORM_VISIBLE      0x00000001  // the property is visible when inspecting a form object
 #define PROP_FLAG_DIALOG_VISIBLE    0x00000002  // the property is visible when inspecting a dialog object
-#define PROP_FLAG_VIRTUAL_PROP      0x00000004  // the property is a "virtual" property
-#define PROP_FLAG_DATA_PROPERTY     0x00000008  // the property is to appear on the "Data" page
-#define PROP_FLAG_ACTUATING         0x00000010  // the property is "actuating" - when it changes,
+#define PROP_FLAG_DATA_PROPERTY     0x00000004  // the property is to appear on the "Data" page
+#define PROP_FLAG_ACTUATING         0x00000008  // the property is "actuating" - when it changes,
                                                 //  dependent properties (their UI, more concrete) need
                                                 //  also to be updated
 #define PROP_FLAG_ENUM              0x00000020  // the property is some kind of enum property, i.e. its
-                                                //  value is chose from a fixed list of possible values
-#define PROP_FLAG_ENUM_ONE          0x00000060  // the property is an enum property, which starts at 1
-                                                //  (not that the flags here include PROP_FLAG_ENUM)
+                                                // value is chosen from a fixed list of possible values
+#define PROP_FLAG_ENUM_ONE          0x00000060  // the property is an enum property starting with 1
+                                                //  (note that this includes PROP_FLAG_ENUM)
+#define PROP_FLAG_COMPOSEABLE       0x00000080  // the property is "composeable", i.e. an intersection of property
+                                                //  sets should expose it, if all elements do
 
     //========================================================================
     //= property ids (for all browseable properties)
@@ -303,6 +313,29 @@ namespace pcr
     #define PROPERTY_ID_HIDEINACTIVESELECTION 144
     #define PROPERTY_ID_VISUALEFFECT         145
     #define PROPERTY_ID_BORDERCOLOR          146
+    #define PROPERTY_ID_XML_DATA_MODEL       147
+    #define PROPERTY_ID_BIND_EXPRESSION      148
+    #define PROPERTY_ID_XSD_REQUIRED         149
+    #define PROPERTY_ID_XSD_RELEVANT         150
+    #define PROPERTY_ID_XSD_READONLY         151
+    #define PROPERTY_ID_XSD_CONSTRAINT       152
+    #define PROPERTY_ID_XSD_CALCULATION      153
+    #define PROPERTY_ID_XSD_DATA_TYPE        154
+    #define PROPERTY_ID_XSD_WHITESPACES      155
+    #define PROPERTY_ID_XSD_PATTERN          156
+    #define PROPERTY_ID_XSD_LENGTH           157
+    #define PROPERTY_ID_XSD_MIN_LENGTH       158
+    #define PROPERTY_ID_XSD_MAX_LENGTH       159
+    #define PROPERTY_ID_XSD_TOTAL_DIGITS     160
+    #define PROPERTY_ID_XSD_FRACTION_DIGITS  161
+    #define PROPERTY_ID_XSD_MAX_INCLUSIVE    162
+    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE    163
+    #define PROPERTY_ID_XSD_MIN_INCLUSIVE    164
+    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE    165
+    #define PROPERTY_ID_UNCHECKEDREFVALUE    166
+    #define PROPERTY_ID_SUBMISSION_ID        167
+    #define PROPERTY_ID_XFORMS_BUTTONTYPE    168
+    #define PROPERTY_ID_LIST_BINDING         169
 
 //............................................................................
 } // namespace pcr
