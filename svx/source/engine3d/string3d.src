@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:20:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text [ english_us ] = "Create 3D rotation object" ;
     Text [ italian ] = "Crea oggetto di rotazione 3D" ;
     Text [ spanish ] = "Crear objeto de rotaciσn 3D" ;
-    Text [ french ] = "Crιer un objet de rotation 3D" ;
+    Text [ french ] = "Crιer un corps de rιvolution 3D" ;
     Text [ dutch ] = "3D-rotatieobjecten maken" ;
     Text [ swedish ] = "Skapa 3D-rotationsobjekt" ;
     Text [ danish ] = "Opret 3D-rotationslegeme" ;
@@ -233,7 +233,7 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text [ swedish ] = "Kameraposition" ;
     Text [ danish ] = "Kameraposition" ;
     Text [ portuguese ] = "Posiηγo da cβmara" ;
-    Text [ portuguese_brazilian ] = "Posiηγo da camera" ;
+    Text [ portuguese_brazilian ] = "Posiηγo da cβmera" ;
     Text[ chinese_simplified ] = "η…§η›ΈζΊδ½η½®";
     Text[ russian ] = "Οξλξζενθε κΰμεπϋ";
     Text[ polish ] = "Pozycja kamery";
@@ -268,7 +268,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ chinese_simplified ] = "ζ—‹θ½¬ 3 η»΄ε―Ήθ±΅";
     Text[ russian ] = "Βπΰωΰςό ςπευμεπνϋι ξαϊεκς";
     Text[ polish ] = "Obrσζ obiekt 3D";
-    Text[ japanese ] = "3D δ½“γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®ε›θ»Ά";
+    Text[ japanese ] = "η«‹δ½“γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®ε›θ»Ά";
     Text[ chinese_traditional ] = "ζ—‹θ½‰ 3D η‰©δ»¶";
     Text[ arabic ] = "ΗΣΚΟΗΡΙ ίΗΖδ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Περιστροφή αντικειμένου 3Δ";
@@ -365,7 +365,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ chinese_simplified ] = "ε†εΌ€3η»΄ε―Ήθ±΅";
     Text[ russian ] = "Πΰηαθςό ςπευμεπνϋι ξαϊεκς";
     Text[ polish ] = "Podziel obiekt 3D";
-    Text[ japanese ] = "3D δ½“γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚’ε‡γ‚ι›Άγ™";
+    Text[ japanese ] = "η«‹δ½“γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚’ε‡γ‚ι›Άγ™";
     Text[ chinese_traditional ] = "ε†ι–‹ 3D η‰©δ»¶";
     Text[ arabic ] = "ΚήΣνγ ίΗΖδ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Διάσπαση αντικειμένου 3Δ";
@@ -396,7 +396,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ chinese_simplified ] = "3η»΄ε±ζ€§";
     Text[ russian ] = "Òπευμεπνϋε ΰςπθασςϋ";
     Text[ polish ] = "Atrybuty 3D";
-    Text[ japanese ] = "3D δ½“γ®ε±ζ€§";
+    Text[ japanese ] = "η«‹δ½“γ®ε±ζ€§";
     Text[ chinese_traditional ] = "3D ε±¬ζ€§";
     Text[ arabic ] = "ΣγΗΚ ΛαΗΛνΙ ΗαΓΘΪΗΟ";
     Text[ greek ] = "Ιδιότητες 3Δ";
@@ -412,6 +412,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ slovak ] = "3D atribΓΊty";
 };
  // ********************************************************************** EOF
+
 
 
 
