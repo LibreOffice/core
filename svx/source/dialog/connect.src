@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-29 20:54:22 $
+ *  last change: $Author: vg $ $Date: 2001-09-26 20:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,11 +322,11 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Début h~orizontal" ;
         Text [ dutch ] = "Begin h~orizontaal" ;
         Text [ portuguese ] = "Início h~orizontal" ;
-        Text[ chinese_simplified ] = "æ¥å¤´ä¸ºæ°´å¹³æ–¹å‘(~B)";
+        Text[ chinese_simplified ] = "èµ·å§‹éƒ¨åˆ†æ˜¯æ°´å¹³æ–¹å‘(~B)";
         Text[ russian ] = "Íà÷àëî ãîğèçîíòàëüíî";
         Text[ polish ] = "Pocz¹tek poziomo";
         Text[ japanese ] = "æ¨ªç·šã®å§‹ç‚¹(~B)";
-        Text[ chinese_traditional ] = "èµ·å§‹æ˜¯æ°´å¹³æ–¹å‘(~B)";
+        Text[ chinese_traditional ] = "èµ·å§‹æ–¹å‘æ˜¯æ°´å¹³æ–¹å‘(~B)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÃİŞíÇğ";
         Text[ greek ] = "Åêêßíçóç ïñéæüíôéá";
         Text[ korean ] = "ê°€ë¡œì„  ì‹œì‘(~B)";
@@ -414,7 +414,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ russian ] = "Íà÷àëî âåğòèêàëüíî";
         Text[ polish ] = "Pocz¹tek pionowo";
         Text[ japanese ] = "ç¸¦ç·šã®å§‹ç‚¹(~V)";
-        Text[ chinese_traditional ] = "åˆå§‹å‚ç›´æ–¹å‘(~V)";
+        Text[ chinese_traditional ] = "èµ·å§‹æ–¹å‘æ˜¯å‚ç›´æ–¹å‘(~V)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÑÃÓíÇğ";
         Text[ greek ] = "Áñ÷Ş êáôáêüñõ~öá";
         Text[ korean ] = "ì„¸ë¡œì„  ì‹œì‘(~V)";
@@ -526,6 +526,7 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ finnish ] = "Liitin";
 };
  // ******************************************************************* EOF
+
 
 
 
