@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:38:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,7 @@ namespace frm
 {
 //.........................................................................
 
-
-//------------------------------------------------------------------
+//---------------------------------------------------------------------
 Reference< XModel> getXModel(const Reference< XInterface>& xIface)
 {
     Reference< XInterface > xParent = xIface;
@@ -427,7 +426,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_aLoadListeners(m_aMutex)
         ,m_aRowSetApproveListeners(m_aMutex)
         ,m_aRowSetListeners(m_aMutex)
-        ,m_aResetListeners(m_aMutex)
+        ,m_aResetListeners( *this, m_aMutex )
         ,m_aSubmitListeners(m_aMutex)
         ,m_aErrorListeners(m_aMutex)
         ,m_bLoaded(sal_False)
@@ -1396,7 +1395,7 @@ void ODatabaseForm::disposing()
     m_aLoadListeners.disposeAndClear(aEvt);
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
     m_aParameterManager.disposing( aEvt );
-    m_aResetListeners.disposeAndClear(aEvt);
+    m_aResetListeners.disposing();
     m_aSubmitListeners.disposeAndClear(aEvt);
     m_aErrorListeners.disposeAndClear(aEvt);
 
@@ -1431,7 +1430,7 @@ void ODatabaseForm::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(21, m_xAggregateSet)
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(22, m_xAggregateSet)
         // we want to "override" the privileges, since we have additional "AllowInsert" etc. properties
         RemoveProperty( _rAggregateProps, PROPERTY_PRIVILEGES );
 
@@ -1470,8 +1469,9 @@ void ODatabaseForm::fillProperties(
         DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,               BOUND                          );
         DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,             BOUND                          );
         DECL_BOOL_PROP3 ( DYNAMIC_CONTROL_BORDER,                           BOUND, MAYBEVOID, MAYBEDEFAULT );
-        DECL_PROP3      ( CONTROL_BORDER_COLOR_FOCUS, sal_Int32,            BOUND, MAYBEVOID, MAYBEDEFAULT );
-        DECL_PROP3      ( CONTROL_BORDER_COLOR_MOUSE, sal_Int32,            BOUND, MAYBEVOID, MAYBEDEFAULT );
+        DECL_PROP3      ( CONTROL_BORDER_COLOR_FOCUS,   sal_Int32,          BOUND, MAYBEVOID, MAYBEDEFAULT );
+        DECL_PROP3      ( CONTROL_BORDER_COLOR_MOUSE,   sal_Int32,          BOUND, MAYBEVOID, MAYBEDEFAULT );
+        DECL_PROP3      ( CONTROL_BORDER_COLOR_INVALID, sal_Int32,          BOUND, MAYBEVOID, MAYBEDEFAULT );
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -1609,6 +1609,9 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
             rValue = m_aControlBorderColorMouse;
             break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
+            rValue = m_aControlBorderColorInvalid;
+            break;
     }
 }
 
@@ -1689,6 +1692,9 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             break;
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorMouse, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorInvalid, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
             break;
         default:
             DBG_ERROR("ODatabaseForm::convertFastPropertyValue : unknown property !");
@@ -1796,6 +1802,9 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
             m_aControlBorderColorMouse = rValue;
             break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
+            m_aControlBorderColorInvalid = rValue;
+            break;
         default:
             DBG_ERROR("ODatabaseForm::setFastPropertyValue_NoBroadcast : unknown property !");
     }
@@ -1852,6 +1861,10 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
             eState = m_aControlBorderColorMouse.hasValue() ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
             break;
 
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
+            eState = m_aControlBorderColorInvalid.hasValue() ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
+            break;
+
         default:
             eState = OPropertySetAggregationHelper::getPropertyStateByHandle(nHandle);
     }
@@ -1871,6 +1884,7 @@ void ODatabaseForm::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
             setFastPropertyValue( nHandle, getPropertyDefaultByHandle( nHandle ) );
             break;
 
@@ -1900,6 +1914,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_CYCLE:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
             return Any();
 
         default:
@@ -1922,7 +1937,7 @@ void SAL_CALL ODatabaseForm::reset() throw( RuntimeException )
         return;
     }
 
-    if (m_aResetListeners.getLength())
+    if ( !m_aResetListeners.empty() )
     {
         ::osl::MutexGuard aResetGuard(m_aResetSafety);
         ++m_nResetsPending;
@@ -1951,18 +1966,9 @@ void SAL_CALL ODatabaseForm::reset() throw( RuntimeException )
 //-----------------------------------------------------------------------------
 void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 {
-    if (_bAproveByListeners)
-    {
-        bool bCanceled = false;
-        ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-        EventObject aEvt(static_cast<XWeak*>(this));
-
-        while (aIter.hasMoreElements() && !bCanceled)
-            if (!((XResetListener*)aIter.next())->approveReset(aEvt))
-                bCanceled = true;
-        if (bCanceled)
+    if ( _bAproveByListeners )
+        if ( !m_aResetListeners.approveReset() )
             return;
-    }
 
     ReusableMutexGuard aResetGuard(m_aResetSafety);
     // do we have a database connected form and stay on the insert row
@@ -2066,8 +2072,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 
     aResetGuard.clear();
     {
-        EventObject aEvt(static_cast<XWeak*>(this));
-        NOTIFY_LISTENERS(m_aResetListeners, XResetListener, resetted, aEvt);
+        m_aResetListeners.resetted();
     }
 
     aResetGuard.attach(m_aResetSafety);
@@ -2082,13 +2087,13 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 //-----------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::addResetListener(const Reference<XResetListener>& _rListener) throw( RuntimeException )
 {
-    m_aResetListeners.addInterface(_rListener);
+    m_aResetListeners.addListener( _rListener );
 }
 
 //-----------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::removeResetListener(const Reference<XResetListener>& _rListener) throw( RuntimeException )
 {
-    m_aResetListeners.removeInterface(_rListener);
+    m_aResetListeners.removeListener( _rListener );
 }
 
 //==============================================================================
