@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:32:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,17 +125,6 @@ XTempFile::XTempFile ()
 , mbInClosed( sal_False )
 , mbOutClosed( sal_False )
 {
-    if ( ! TempFile::GetTempNameBaseDirectory().Len())
-    {
-        OUString aUserPath, aTmp;
-        ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
-        Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
-        aAny >>= aUserPath;
-
-        aUserPath += OUString ( RTL_CONSTASCII_USTRINGPARAM (DESKTOP_TEMPNAMEBASE_DIR ) );
-        FileBase::getFileURLFromSystemPath( aUserPath, aTmp );
-        TempFile::SetTempNameBaseDirectory( aTmp );
-    }
     mpTempFile = new TempFile;
     mpTempFile->EnableKillingFile ( sal_True );
     mpStream = mpTempFile->GetStream ( STREAM_STD_READWRITE );
