@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-07 12:25:07 $
+ *  last change: $Author: avy $ $Date: 2001-08-15 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1460,7 +1460,9 @@ String __EXPORT ScDoubleItem::GetValueText() const
 int __EXPORT ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
-    return int(nValue == ((const ScDoubleItem&)rItem).nValue);
+    const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
+    return int(nValue == _rItem.nValue);
+        //int(nValue == ((const ScDoubleItem&)rItem).nValue);
 }
 
 //------------------------------------------------------------------------
