@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 08:01:49 $
+ *  last change: $Author: cp $ $Date: 2001-06-21 11:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,22 +563,30 @@ const SdrLayer* SdrLayerAdmin::GetLayerPerID(USHORT nID) const
 SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
 {
     SetOfByte aSet;
-    FASTBOOL bDown=pParent==NULL;
-    USHORT j;
-    for (j=0; j<GetLayerCount(); j++) {
+    sal_Bool bDown = (pParent == NULL);
+    sal_Int32 j;
+    for (j=0; j<GetLayerCount(); j++)
+    {
         aSet.Set(GetLayer(j)->GetID());
     }
-    short i;
-    if (!bDown) {
+    SdrLayerID i;
+    if (!bDown)
+    {
         i=254;
-        while (i>0 && aSet.IsSet(BYTE(i))) i++;
-        if (i<0) i=254;
-    } else {
-        i=0;
-        while (i<=254 && aSet.IsSet(BYTE(i))) i++;
-        if (i>254) i=0;
+        while (i && aSet.IsSet(BYTE(i)))
+            --i;
+        if (i == 0)
+            i=254;
     }
-    return SdrLayerID(i);
+    else
+    {
+        i=0;
+        while (i<=254 && aSet.IsSet(BYTE(i)))
+            i++;
+        if (i>254)
+            i=0;
+    }
+    return i;
 }
 
 SdrLayerSet* SdrLayerAdmin::NewLayerSet(const XubString& rName, USHORT nPos)
