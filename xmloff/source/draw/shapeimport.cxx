@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,6 +1179,19 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
+    SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
+
+    // chain text attributes
+    pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper( rImport ) );
+    return pResult;
+}
+
+/** creates a shape property set mapper that can be used for non shape elements.
+    Only current feature is that the ShapeUserDefinedAttributes property is not included in this one. */
+SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateExternalShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
+{
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, 1 );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
     // chain text attributes

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
 
     // give an empty model. It is only used for numbering rules that don't exist in chart
     uno::Reference< frame::XModel > xEmptyModel;
-    ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel, mrImport ));
+    ChainImportMapper( XMLShapeImportHelper::CreateExternalShapePropMapper( xEmptyModel, mrImport ));
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents

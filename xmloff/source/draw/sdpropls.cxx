@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:12:57 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ using namespace ::xmloff::token;
 
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
+    // this entry must be first! this is needed for XMLShapeImportHelper::CreateExternalShapePropMapper
     MAP( "ShapeUserDefinedAttributes",      XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     // stroke attributes
@@ -1054,6 +1055,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
 XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
 : XMLPropertySetMapper( aXMLSDProperties, rFactoryRef )
+{
+}
+
+XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef, sal_uInt16 nOffset)
+: XMLPropertySetMapper( &aXMLSDProperties[nOffset], rFactoryRef )
 {
 }
 
