@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:06:23 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
-    if( aTmp.HasArea() )
+    if( !rSh.HasReadonlySel() && aTmp.HasArea() )
     {
         // OD 18.09.2003 #i18732# - add item <RES_FOLLOW_TEXT_FLOW>
         SfxItemSet aSet(rSh.GetAttrPool(),
