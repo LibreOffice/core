@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implsprite.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:02:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITE_HPP_
-#include <drafts/com/sun/star/rendering/XSprite.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XSPRITE_HPP_
+#include <com/sun/star/rendering/XSprite.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XANIMATEDSPRITE_HPP_
-#include <drafts/com/sun/star/rendering/XAnimatedSprite.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XANIMATEDSPRITE_HPP_
+#include <com/sun/star/rendering/XAnimatedSprite.hpp>
 #endif
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
@@ -80,7 +80,7 @@
 #include <implsprite.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas

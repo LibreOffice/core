@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implpolypolygon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:01:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,23 +65,23 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
-#include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_STROKEATTRIBUTES_HPP__
-#include <drafts/com/sun/star/rendering/StrokeAttributes.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_STROKEATTRIBUTES_HPP__
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #endif
 
 #include <cppcanvas/polypolygon.hxx>
 #include <canvasgraphichelper.hxx>
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RealPoint2D;
-} } } } }
+} } } }
 
 
 namespace cppcanvas
@@ -94,7 +94,7 @@ namespace cppcanvas
         public:
             ImplPolyPolygon( const CanvasSharedPtr& rParentCanvas,
                              const ::com::sun::star::uno::Reference<
-                                 ::drafts::com::sun::star::rendering::XPolyPolygon2D >& rPolyPoly );
+                                 ::com::sun::star::rendering::XPolyPolygon2D >& rPolyPoly );
 
             virtual ~ImplPolyPolygon();
 
@@ -112,16 +112,16 @@ namespace cppcanvas
             virtual bool            draw() const;
 
             virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const;
+                ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const;
 
         private:
             // default: disabled copy/assignment
             ImplPolyPolygon(const ImplPolyPolygon&);
             ImplPolyPolygon& operator= ( const ImplPolyPolygon& );
 
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
 
-            ::drafts::com::sun::star::rendering::StrokeAttributes                                           maStrokeAttributes;
+            ::com::sun::star::rendering::StrokeAttributes                                           maStrokeAttributes;
 
             ::com::sun::star::uno::Sequence< double >                                                       maFillColor;
             ::com::sun::star::uno::Sequence< double >                                                       maStrokeColor;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implspritecanvas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:02:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,15 +66,15 @@
 #include <basegfx/tools/canvastools.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_INTERPOLATIONMODE_HPP_
-#include <drafts/com/sun/star/rendering/InterpolationMode.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_INTERPOLATIONMODE_HPP_
+#include <com/sun/star/rendering/InterpolationMode.hpp>
 #endif
 
 #include <implspritecanvas.hxx>
 #include <implcustomsprite.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas

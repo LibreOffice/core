@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implpolypolygon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:01:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 #include <rtl/math.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP_
-#include <drafts/com/sun/star/rendering/PathJoinType.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP_
+#include <com/sun/star/rendering/PathJoinType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP_
-#include <drafts/com/sun/star/rendering/PathCapType.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP_
+#include <com/sun/star/rendering/PathCapType.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -81,7 +81,7 @@
 #include <tools.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 
