@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 11:01:01 $
+ *  last change: $Author: sj $ $Date: 2002-06-06 14:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,9 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HDL_
+#include <com/sun/star/io/XSeekable.hdl>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -394,10 +396,10 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
             }
             else
             {
-                Reference< XInterface > xPipe;
-
-                aMedium.GetInStream()->Seek( 0 );
                 aParserInput.aInputStream = aMedium.GetInputStream();
+                Reference< io::XSeekable > xSeek( aParserInput.aInputStream, UNO_QUERY );
+                if ( xSeek.is() )
+                    xSeek->seek( 0 );
             }
 
             if( xSource.is() )
