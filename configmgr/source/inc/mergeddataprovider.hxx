@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergeddataprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:59 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ namespace configmgr
     namespace backend
     {
 // ---------------------------------------------------------------------------
-
     /** Listener interface for receiving notifications
         about changes to previously requested data
     */
@@ -90,10 +89,9 @@ namespace configmgr
             @param _aOriginalRequest
                 identifies the data that changed
         */
-        virtual void dataChanged(NodeRequest const & _aOriginalRequest) CFG_NOTHROW() = 0;
+        virtual void dataChanged(ComponentRequest const & _aOriginalRequest) CFG_NOTHROW() = 0;
     };
 // ---------------------------------------------------------------------------
-
     /// Interface providing access to (merged) data for whole components
     struct SAL_NO_VTABLE IComponentDataProvider
     {
@@ -101,6 +99,9 @@ namespace configmgr
 
             @param _aRequest
                 identifies the component to be loaded
+
+            @param __bAddListenter
+                identifies is listener is to be registered to backend
 
             @returns
                 A valid component instance for the given component.
@@ -110,7 +111,8 @@ namespace configmgr
                 The exact exception being thrown may depend on the underlying backend.
 
         */
-        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest)
+        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest,
+                                                 bool _bAddListenter)
             CFG_UNO_THROW_ALL() = 0;
     };
 
@@ -183,8 +185,12 @@ namespace configmgr
 
             @param _pListener
                 a listener that was passed to a previous succes
+
+             @param _aRequest
+                identifies the component associated with the listener
         */
-        virtual void removeRequestListener(INodeDataListener * _pListener) CFG_NOTHROW() = 0;
+        virtual void removeRequestListener(INodeDataListener * _pListener,
+                                           const ComponentRequest& aRequest) CFG_NOTHROW() = 0;
     };
 // ---------------------------------------------------------------------------
 
