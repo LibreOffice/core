@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_atag2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ class Tok_AtTag : public Token
         incomplete = 10,
         version = 11,
         guarantees = 12,
-        exception = 13
+        exception = 13,
+        since = 14
     };
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
