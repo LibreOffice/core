@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 16:56:42 $
+ *  last change: $Author: mhu $ $Date: 2001-08-23 19:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,8 +273,13 @@ static void oslCleanupFunction(void* pData)
 
     pthread_mutex_lock(&pThreadImpl->m_HandleLock);
     pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_ACTIVE;
-    attached = pThreadImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED;
-    pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_ATTACHED;
+
+    if ((attached = pThreadImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED) > 0)
+    {
+        pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_ATTACHED;
+
+        pthread_detach(pThreadImpl->m_hThread);
+    }
     pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
 
     removeThreadId();
@@ -324,7 +329,6 @@ static void* oslWorkerWrapperFunction(void* pData)
         }
         while ( nRet != 0 );
     }
-
 
     pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
 
@@ -571,6 +575,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
     if ( (attached = (pThreadImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED)) > 0 )
     {
         pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_ATTACHED;
+
         pthread_detach(pThreadImpl->m_hThread);
     }
     pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
