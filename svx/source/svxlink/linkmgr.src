@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:26:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text[ japanese ] = "ε›³γ‚’γƒªγƒ³γ‚―γ™γ‚‹";
     Text[ chinese_traditional ] = "ι€£ηµε–ε½Ά";
     Text[ arabic ] = "ΡΘΨ ΗαΡΣζγΗΚ";
-    Text[ language_user1 ] = "LS 09.08.99 Wir wollen in der franz?ischen Version m?lichst Substantive als Dialog?erschriften haben. Hier wird die bestehende Verkn?fung ge?dert, d.h., es wird eine neue Grafik ausgew?lt";
+    Text[ language_user1 ] = "; LS 09.08.99 Wir wollen in der franz?ischen Version m?lichst Substantive als Dialog?erschriften haben. Hier wird die bestehende Verkn?fung ge?dert, d.h., es wird eine neue Grafik ausgew?lt";
     Text[ dutch ] = "Afbeelding koppelen";
     Text[ chinese_simplified ] = "ι“Ύζ¥ε›Ύε½Ά";
     Text[ greek ] = "Σύνδεση γραφικού";
@@ -201,6 +201,7 @@ Bitmap RID_SVXGRF_GRAPHICLOAD
 {
     File = "grfload.bmp" ;
 };
+
 
 
 
