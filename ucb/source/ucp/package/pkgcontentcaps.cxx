@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-03 17:34:22 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,27 +65,27 @@
 
     Props/Commands:
 
-                        folder  stream
-    ------------------------------------
-    ContentType           x       x
-    IsDocument            x       x
-    IsFolder              x       x
-    MediaType            (x)      x
-    Title                 x       x
-    Size                          x
-    Compressed                    x
-    Encrypted                     x
-    HasEncryptedEntries   x (root folder only)
+                        rootfolder folder  stream
+    ---------------------------------------------
+    ContentType           r         r         r
+    IsDocument            r         r         r
+    IsFolder              r         r         r
+    MediaType            (w)       (w)        w
+    Title                 r         w         w
+    Size                  -         -         r
+    Compressed            -         -         w
+    Encrypted             -         -         w
+    HasEncryptedEntries   r         -         -
 
-    getCommandInfo        x       x
-    getPropertySetInfo    x       x
-    getPropertyValues     x       x
-    setPropertyValues     x       x
-    insert                x       x
-    delete                x       x
-    open                  x       x
-    transfer              x
-    flush                 x
+    getCommandInfo        x         x         x
+    getPropertySetInfo    x         x         x
+    getPropertyValues     x         x         x
+    setPropertyValues     x         x         x
+    insert                -         x         x
+    delete                -         x         x
+    open                  x         x         x
+    transfer              x         x         -
+    flush                 x         x         -
 
  *************************************************************************/
 
@@ -181,6 +181,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY
                 ),
                 ///////////////////////////////////////////////////////////////
                 // Optional standard properties
@@ -350,82 +351,154 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
 
     if ( isFolder() )
     {
-        //=================================================================
-        //
-        // Folder: Supported commands
-        //
-        //=================================================================
-
-        static star::ucb::CommandInfo aFolderCommandInfoTable[] =
+        if ( m_aUri.isRootFolder() )
         {
-            ///////////////////////////////////////////////////////////
-            // Required commands
-            ///////////////////////////////////////////////////////////
-            star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
-                -1,
-                getCppuType(
-                    static_cast<
-                        uno::Sequence< beans::Property > * >( 0 ) )
-            ),
-            star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
-                -1,
-                getCppuType(
-                    static_cast<
-                        uno::Sequence< beans::PropertyValue > * >( 0 ) )
-            ),
-            ///////////////////////////////////////////////////////////
-            // Optional standard commands
-            ///////////////////////////////////////////////////////////
-            star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
-                -1,
-                getCppuBooleanType()
-            ),
-            star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
-                -1,
-                getCppuType(
-                    static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
-            ),
-            star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
-                -1,
-                getCppuType(
-                    static_cast< star::ucb::TransferInfo * >( 0 ) )
-            ),
-            ///////////////////////////////////////////////////////////
-            // New commands
-            ///////////////////////////////////////////////////////////
-            star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
-                -1,
-                getCppuVoidType()
-            )
-        };
+            //=================================================================
+            //
+            // Root Folder: Supported commands
+            //
+            //=================================================================
 
-        return uno::Sequence<
-                star::ucb::CommandInfo >( aFolderCommandInfoTable, 9 );
+            static star::ucb::CommandInfo aRootFolderCommandInfoTable[] =
+            {
+                ///////////////////////////////////////////////////////////
+                // Required commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast<
+                            uno::Sequence< beans::Property > * >( 0 ) )
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast<
+                            uno::Sequence< beans::PropertyValue > * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // Optional standard commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< star::ucb::TransferInfo * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // New commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
+                    -1,
+                    getCppuVoidType()
+                )
+            };
+
+            return uno::Sequence<
+                    star::ucb::CommandInfo >( aRootFolderCommandInfoTable, 7 );
+        }
+        else
+        {
+            //=================================================================
+            //
+            // Folder: Supported commands
+            //
+            //=================================================================
+
+            static star::ucb::CommandInfo aFolderCommandInfoTable[] =
+            {
+                ///////////////////////////////////////////////////////////
+                // Required commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast<
+                            uno::Sequence< beans::Property > * >( 0 ) )
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast<
+                            uno::Sequence< beans::PropertyValue > * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // Optional standard commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                    -1,
+                    getCppuBooleanType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< star::ucb::TransferInfo * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // New commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
+                    -1,
+                    getCppuVoidType()
+                )
+            };
+
+            return uno::Sequence<
+                    star::ucb::CommandInfo >( aFolderCommandInfoTable, 9 );
+        }
     }
     else
     {
