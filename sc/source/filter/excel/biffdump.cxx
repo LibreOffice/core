@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-10 09:42:03 $
+ *  last change: $Author: dr $ $Date: 2002-10-17 08:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4580,7 +4580,7 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
 
     aT += pLevelPre;
 
-    while( n > 0 )
+    while( pIn->IsValid() && (n > 0) )
     {
         *pIn >> nPre >> nR >> nL;
         n -= sizeof( nPre ) + sizeof( nR ) + sizeof( nL );
