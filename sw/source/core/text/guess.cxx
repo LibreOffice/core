@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:19:05 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( rInf.SnapToGrid() )
         {
             GETGRID( rInf.GetTxtFrm()->FindPageFrm() )
-            bAddItalic = ! pGrid || GRID_LINES_CHARS != pGrid->GetGridType();
+            bAddItalic = !pGrid || GRID_LINES_CHARS != pGrid->GetGridType();
         }
+
+        // do not add extra italic value for an isolated blank:
+        if ( 1 == rInf.GetLen() &&
+             CH_BLANK == rInf.GetTxt().GetChar( rInf.GetIdx() ) )
+            bAddItalic = sal_False;
 
 #ifdef MAC
         nItalic = bAddItalic ? nPorHeight / 4 : 0;
