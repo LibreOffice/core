@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterpasscrtdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:45:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,13 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ korean ] = "마스터 암호";
         Text[ chinese_simplified ] = "主密码";
         Text[ chinese_traditional ] = "主密碼";
-        Text[ turkish ] = "Master ~password";
+        Text[ turkish ] = "Ana Parola";
         Text[ arabic ] = "Master ~password";
         Text[ catalan ] = "Contrasenya ~mestra";
-        Text[ thai ] = "Master password";
+        Text[ thai ] = "รหัสผ่านหลัก";
+        Text[ czech ] = "Hlavní heslo";
+        Text[ hebrew ] = "Hauptkennwort";
+        Text[ hindi ] = "मास्टर कूटशब्द";
     };
     Edit ED_MASTERPASSWORD_CRT
     {
@@ -126,20 +129,23 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ dutch ] = "~Hoofdwachtwoord bevestigen";
         Text[ french ] = "Confirmation du mot de passe principal";
         Text[ spanish ] = "~Confirme la contrase�a principal";
-        Text[ finnish ] = "~Confirm master password";
+        Text[ finnish ] = "Vahvista ~p��salasana";
         Text[ italian ] = "~Conferma password principale";
         Text[ danish ] = "~Bekr�ft hovedadgangskode";
         Text[ swedish ] = "~Bekr�fta huvudl�senord";
         Text[ polish ] = "~Potwierd� has�o g��wne";
-        Text[ portuguese_brazilian ] = "~Confirm master password";
+        Text[ portuguese_brazilian ] = "~Confirmar senha principal";
         Text[ japanese ] = "マスターパスワードの確認(~C)";
         Text[ korean ] = "마스터 암호 확인";
         Text[ chinese_simplified ] = "确认主密码(~C)";
         Text[ chinese_traditional ] = "確認主密碼(~C)";
-        Text[ turkish ] = "~Confirm master password";
+        Text[ turkish ] = "~Ana parolay� onaylay�n";
         Text[ arabic ] = "~Confirm master password";
         Text[ catalan ] = "~Verificaci� de la contrasenya";
         Text[ thai ] = "~Confirm master password";
+        Text[ czech ] = "Potvrdit hlavní heslo";
+        Text[ hebrew ] = "Hauptkennwort ~bestätigen";
+        Text[ hindi ] = "मास्टर कूटशब्द को ~दृढ़ करो";
     };
     Edit ED_MASTERPASSWORD_REPEAT
     {
@@ -182,11 +188,23 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Text[ korean ] = "마스터 암호 입력";
     Text[ chinese_simplified ] = "输入主密码";
     Text[ chinese_traditional ] = "輸入主密碼";
-    Text[ turkish ] = "Please enter master password";
+    Text[ turkish ] = "Ana Parolay� Girin";
     Text[ arabic ] = "Please enter master password";
     Text[ catalan ] = "Introdu�u la contrasenya mestra";
-    Text[ thai ] = "Enter Master Password";
+    Text[ thai ] = "ใส่รหัสผ่านหลัก";
+    Text[ czech ] = "Zadat hlavní heslo";
+    Text[ hebrew ] = "Hauptkennwort festlegen";
+    Text[ hindi ] = "Enter Master Password";
 };
+
+
+
+
+
+
+
+
+
 
 
 
