@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 15:57:01 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 12:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ sal_Bool SfxObjectShell::Close()
             // Event nur bei echten Dokumenten
             pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, this) );
 */
-        Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+//      Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
         //pImp->bClosing = sal_False;
     }
 
