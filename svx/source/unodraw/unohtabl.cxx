@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohtabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
 class SvxUnoHatchTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XHatchList*     mpHatchList;
     SdrModel*       mpModel;
     SfxItemPool*    mpPool;
 
@@ -143,7 +142,6 @@ public:
 
 SvxUnoHatchTable::SvxUnoHatchTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpHatchList( pModel ? pModel->GetHatchList() : NULL ),
   mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
 }
@@ -254,11 +252,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getElementNames(  )
         {
             pStrings[nSurrogate] = pItem->GetName();
 
-            if( !pStrings[nSurrogate].getLength() )
-            {
-                CreateName( pStrings[nSurrogate] );
-                pItem->SetName( String( pStrings[nSurrogate] ) );
-            }
+            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillHatchItem in pool should have a name !");
         }
     }
 

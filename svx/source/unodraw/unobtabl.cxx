@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@ DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
 class SvxUnoBitmapTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XBitmapList*    mpBitmapList;
     SdrModel*       mpModel;
     SfxItemPool*    mpPool;
 
@@ -149,7 +148,6 @@ public:
 
 SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpBitmapList( pModel ? pModel->GetBitmapList() : NULL ),
   mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
 }
@@ -261,11 +259,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getElementNames(  )
         {
             pStrings[nSurrogate] = pItem->GetName();
 
-            if( !pStrings[nSurrogate].getLength() )
-            {
-                CreateName( pStrings[nSurrogate] );
-                pItem->SetName( String( pStrings[nSurrogate] ) );
-            }
+            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillBitmapItem in pool should have a name !");
         }
     }
 
@@ -319,7 +313,7 @@ void SvxUnoBitmapTable::CreateName( OUString& rStrName)
 }
 
 /**
- * Create a hatchtable
+ * Create a bitmaptable
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( SdrModel* pModel )
 {

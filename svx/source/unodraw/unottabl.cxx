@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unottabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,10 @@ DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
 class SvxUnoTransGradientTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XBitmapList*    mpBitmapList;
     SdrModel*       mpModel;
     SfxItemPool*    mpPool;
 
     ItemSetArray_Impl   aItemSetArray;
-
-    const OUString GetOrCreateName( USHORT nSurrogate );
 
 public:
     SvxUnoTransGradientTable( SdrModel* pModel ) throw();
@@ -149,7 +146,6 @@ public:
 
 SvxUnoTransGradientTable::SvxUnoTransGradientTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpBitmapList( pModel ? pModel->GetBitmapList() : NULL ),
   mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
 }
@@ -198,7 +194,7 @@ void SAL_CALL SvxUnoTransGradientTable::insertByName( const OUString& aName, con
         throw container::ElementExistException();
 
     SfxItemSet* mpInSet = new SfxItemSet( *mpPool, XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE );
-    aItemSetArray.Insert( mpInSet );//, aItemSetArray.Count() );
+    aItemSetArray.Insert( mpInSet );
 
     XFillFloatTransparenceItem aTransGradient;
     aTransGradient.SetName( String( aName ) );
@@ -225,7 +221,7 @@ uno::Any SAL_CALL SvxUnoTransGradientTable::getByName( const  OUString& aName )
 {
     if( mpPool )
     {
-        const OUString aSearchName( aName );
+        const String aSearchName( aName );
         const USHORT nCount = mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE);
         const XFillFloatTransparenceItem *pItem;
 
@@ -233,7 +229,7 @@ uno::Any SAL_CALL SvxUnoTransGradientTable::getByName( const  OUString& aName )
         {
             pItem = (XFillFloatTransparenceItem*)mpPool->GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
 
-            if( pItem && ( GetOrCreateName( nSurrogate ) == aSearchName ) )
+            if( pItem && ( pItem->GetName() == aSearchName ) )
             {
                 uno::Any aAny;
                 pItem->QueryValue( aAny );
@@ -256,8 +252,12 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getElementNames(  )
     for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         pItem = (XFillFloatTransparenceItem*)mpPool->GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
+
         if( pItem )
-            pStrings[nSurrogate] = GetOrCreateName( nSurrogate );
+        {
+            pStrings[nSurrogate] = pItem->GetName();
+            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillFloatTransparenceItem in pool should have a name !");
+        }
     }
 
     return aSeq;
@@ -266,7 +266,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getElementNames(  )
 sal_Bool SAL_CALL SvxUnoTransGradientTable::hasByName( const OUString& aName )
     throw( uno::RuntimeException )
 {
-    const OUString aSearchName( aName );
+    const String aSearchName( aName );
     const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE) : 0;
     uno::Sequence< OUString > aSeq( nCount );
     OUString* pStrings = aSeq.getArray();
@@ -275,32 +275,12 @@ sal_Bool SAL_CALL SvxUnoTransGradientTable::hasByName( const OUString& aName )
     for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         pItem = (XFillFloatTransparenceItem*)mpPool->GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
-        if( GetOrCreateName( nSurrogate ) == aSearchName )
+
+        if( pItem && pItem->GetName() == aSearchName )
             return sal_True;
     }
 
     return sal_False;
-}
-
-const OUString SvxUnoTransGradientTable::GetOrCreateName( USHORT nSurrogate )
-{
-    String aStrName;
-    XFillFloatTransparenceItem* pItem = (XFillFloatTransparenceItem*)mpPool->
-                                        GetItem( XATTR_FILLFLOATTRANSPARENCE, nSurrogate );
-    if( pItem )
-    {
-        aStrName = pItem->GetName();
-
-        if( !aStrName.Len() )
-        {
-            aStrName = String::CreateFromAscii( "TrGr" );
-            aStrName += String::CreateFromInt32( sal_Int32( nSurrogate ) );
-
-            pItem->SetName( aStrName );
-        }
-    }
-
-    return aStrName;
 }
 
 // XElementAccess

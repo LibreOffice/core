@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
 class SvxUnoMarkerTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XBitmapList*    mpBitmapList;
     SdrModel*       mpModel;
     SfxItemPool*    mpPool;
 
@@ -148,7 +147,6 @@ public:
 
 SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpBitmapList( pModel ? pModel->GetBitmapList() : NULL ),
   mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
 }
@@ -282,11 +280,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
         {
             pStrings[nSurrogate] = pEndItem->GetName();
 
-            if( !pStrings[nSurrogate].getLength() )
-            {
-                CreateName( pStrings[nSurrogate] );
-                pEndItem->SetName( String( pStrings[nSurrogate] ) );
-            }
+            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XLineEndItem in pool should have a name !");
         }
     }
 
@@ -299,11 +293,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
         {
             pStrings[nSurrogate+nEndCount] = pStartItem->GetName();
 
-            if( !pStrings[nSurrogate+nEndCount].getLength() )
-            {
-                CreateName( pStrings[nSurrogate+nEndCount] );
-                pStartItem->SetName( String( pStrings[nSurrogate+nEndCount] ) );
-            }
+            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XLineStartItem in pool should have a name !");
         }
     }
 
