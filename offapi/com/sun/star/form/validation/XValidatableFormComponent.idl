@@ -1,0 +1,157 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XValidatableFormComponent.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:40:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_XValidatableFormComponent_idl__
+#define __com_sun_star_form_validation_XValidatableFormComponent_idl__
+
+#ifndef __com_sun_star_form_validation_XValidatable_idl__
+#include <com/sun/star/form/validation/XValidatable.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NullPointerException_idl__
+#include <com/sun/star/lang/NullPointerException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+interface XFormComponentValidityListener;
+
+//=============================================================================
+
+/** is a convenience interface for accessing several aspects of a form component
+    which supports validation.
+
+    <p>A validatable form component has two aspects which other parties might
+    be interested in:
+    <ul>
+        <li>The pure validity flag: Whatever the user enters in the component, this is
+        either valid (relative to the active validator), or invalid.</li>
+        <li>The current value: Even if the validity flag does not change with the user
+        input (e.g. because the user replaces one invalid value with another invalid
+        value), observers might be interested in the current value, for example to
+        include it in a feedback message to the user.</li>
+    </ul>
+    </p>
+
+    <p>An <type>XValidatableFormComponent</type> allows to easily access both of these aspects.</p>
+
+    <p>Note that all of the information provided at this interface can also obtained by other means,
+    but much more inconviniently.</p>
+
+    @see XValidatable
+    @see XValidator
+*/
+interface XValidatableFormComponent : XValidatable
+{
+    /** determines whether the current value of the component passed the validity test
+        at the validator.
+
+        <p>Calling this is equal to calling <member>XValidator::isValid</member> with
+        the current value (see <member>getCurrentValue</member>) of the component, where
+        the validator is obtained via <member>XValidatable::getValidator</member>.</p>
+
+        <p>If no validator has been set (<member>XValidatable::setValidator</member>), this method
+        returns true.</p>
+    */
+    boolean isValid();
+
+    /** retrieves the current value of the component.
+
+        <p>The type of the current value, as well as it's semantics, depend on the service
+        implementing this interface.</p>
+
+        <p>Again, this is a convenience method. For example, for a <type scope="com::sun::star::form::component">FormattedField</type>,
+        calling this method is equivalent to retrieving the
+        <member scope="com::sun::star::awt">UnoControlFormattedFieldModel::EffectiveValue</member>.</p>
+    */
+    any getCurrentValue();
+
+    /** registers the given listener.
+
+        <p><type>XFormComponentValidityListener</type>s are called whenever <em>any</em> of the aspects
+        of the validatable form component (the validity flag, or the value) changed.</p>
+
+        @throws <type scope="com::sun::star::lang">NullPointerException</type>
+            if the given listener is <NULL/>
+    */
+    void    addFormComponentValidityListener( [in] XFormComponentValidityListener Listener )
+                raises( com::sun::star::lang::NullPointerException );
+
+    /** registers the given listener.
+
+        @throws <type scope="com::sun::star::lang">NullPointerException</type>
+            if the given listener is <NULL/>
+    */
+    void    removeFormComponentValidityListener( [in] XFormComponentValidityListener Listener )
+                raises( com::sun::star::lang::NullPointerException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
