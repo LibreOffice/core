@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:24 $
+ *  last change: $Author: dvo $ $Date: 2001-01-04 17:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,10 @@ void SwBaseEventDescriptor::replaceByName(
 
 Any SwBaseEventDescriptor::getByName(
     const OUString& rName )
-    throw(NoSuchElementException)
+    throw(
+        NoSuchElementException,
+        WrappedTargetException,
+        RuntimeException)
 {
     USHORT nMacroID = getMacroID(rName);
 
@@ -386,7 +389,8 @@ Any SwBaseEventDescriptor::getByName(
     return getAnyFromMacro(getByName(nMacroID));
 }
 
-Sequence<OUString> SwBaseEventDescriptor::getElementNames() throw()
+Sequence<OUString> SwBaseEventDescriptor::getElementNames()
+    throw(RuntimeException)
 {
     // this implementation is somewhat slower than it needs to be, but
     // I don't think it's worth the effort to speed it up...
@@ -407,18 +411,20 @@ Sequence<OUString> SwBaseEventDescriptor::getElementNames() throw()
 
 sal_Bool SwBaseEventDescriptor::hasByName(
     const OUString& rName )
-    throw()
+    throw(RuntimeException)
 {
     USHORT nMacroID = getMacroID(rName);
     return (nMacroID != 0);
 }
 
-Type SwBaseEventDescriptor::getElementType() throw()
+Type SwBaseEventDescriptor::getElementType()
+    throw(RuntimeException)
 {
     return ::getCppuType((Sequence<PropertyValue> *)0);
 }
 
-sal_Bool SwBaseEventDescriptor::hasElements() throw()
+sal_Bool SwBaseEventDescriptor::hasElements()
+    throw(RuntimeException)
 {
     // check if the first element of aSupportedMacroItemIDs is already
     // the delimiter
@@ -426,13 +432,13 @@ sal_Bool SwBaseEventDescriptor::hasElements() throw()
 }
 
 sal_Bool SwBaseEventDescriptor::supportsService(const OUString& rServiceName)
-    throw( )
+    throw(RuntimeException)
 {
     return sServiceName.equals(rServiceName);
 }
 
 Sequence<OUString> SwBaseEventDescriptor::getSupportedServiceNames(void)
-    throw()
+    throw(RuntimeException)
 {
     Sequence<OUString> aSequence(1);
     aSequence[0] = sServiceName;
