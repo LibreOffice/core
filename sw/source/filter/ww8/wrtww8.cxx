@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:19:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
+
+#include <unotools/ucbstreamhelper.hxx>
+
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -91,9 +103,7 @@
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
 #endif
@@ -2048,7 +2058,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
             #10570# Similiarly having msvbasic storage seems to also trigger
             creating this stream
             */
-            GetStorage().OpenStorage(CREATE_CONST_ASC(SL::aObjectPool),
+            GetStorage().OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }
 
@@ -2280,16 +2290,16 @@ ULONG SwWW8Writer::StoreDoc()
 #endif
 
     SvStream* pOldStrm = pStrm;         // JP 19.05.99: wozu das ???
-    SvStorageStreamRef xWwStrm( pStg->OpenStream( aMainStg ) );
+    SvStorageStreamRef xWwStrm( pStg->OpenSotStream( aMainStg ) );
     SvStorageStreamRef xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
     xWwStrm->SetBufferSize( 32768 );
 
     if( bWrtWW8 )
     {
         pFib->fWhichTblStm = 1;
-        xTableStrm = pStg->OpenStream(CREATE_CONST_ASC(SL::a1Table),
+        xTableStrm = pStg->OpenSotStream(CREATE_CONST_ASC(SL::a1Table),
             STREAM_STD_WRITE );
-        xDataStrm = pStg->OpenStream(CREATE_CONST_ASC(SL::aData),
+        xDataStrm = pStg->OpenSotStream(CREATE_CONST_ASC(SL::aData),
             STREAM_STD_WRITE );
 
         xDataStrm->SetBufferSize( 32768 );  // fuer Grafiken
@@ -2529,7 +2539,7 @@ void SwWW8Writer::PrepareStorage()
     SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x46 );
     pStg->SetClass( aGName, 0, String::CreateFromAscii( pName ));
-    SvStorageStreamRef xStor( pStg->OpenStream(sCompObj) );
+    SvStorageStreamRef xStor( pStg->OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
                 // noch mal ueberplaetten, um auch Clipboardformat zu setzen
     pDoc->GetInfo()->SavePropertySet( pStg );   // DocInfo
@@ -2646,22 +2656,30 @@ void SwWW8Writer::RestoreMacroCmds()
 {
     pFib->fcCmds = pTableStrm->Tell();
 
-    SvStorageRef xSrcRoot(pDoc->GetDocShell()->GetStorage());
-    SvStorageStreamRef xSrcStream =
-            xSrcRoot->OpenStream(CREATE_CONST_ASC(SL::aMSMacroCmds),
-            STREAM_STD_READ | STREAM_NOCREATE );
-
-    if (xSrcStream.Is() && SVSTREAM_OK == xSrcStream->GetError())
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xSrcRoot(pDoc->GetDocShell()->GetStorage());
+    try
     {
-        xSrcStream->Seek(STREAM_SEEK_TO_END);
-        pFib->lcbCmds = xSrcStream->Tell();
-        xSrcStream->Seek(0);
+        com::sun::star::uno::Reference < com::sun::star::io::XStream > xSrcStream =
+                xSrcRoot->openStreamElement( CREATE_CONST_ASC(SL::aMSMacroCmds), com::sun::star::embed::ElementModes::READ );
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
-        sal_uInt8 *pBuffer = new sal_uInt8[pFib->lcbCmds];
-        xSrcStream->Read(pBuffer, pFib->lcbCmds);
-        pTableStrm->Write(pBuffer, pFib->lcbCmds);
-        delete[] pBuffer;
+        if ( pStream && SVSTREAM_OK == pStream->GetError())
+        {
+            pStream->Seek(STREAM_SEEK_TO_END);
+            pFib->lcbCmds = pStream->Tell();
+            pStream->Seek(0);
 
+            sal_uInt8 *pBuffer = new sal_uInt8[pFib->lcbCmds];
+            pStream->Read(pBuffer, pFib->lcbCmds);
+            pTableStrm->Write(pBuffer, pFib->lcbCmds);
+            delete[] pBuffer;
+
+        }
+
+        delete pStream;
+    }
+    catch ( com::sun::star::uno::Exception& )
+    {
     }
 
     // set len to FIB
