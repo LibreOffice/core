@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-13 08:32:17 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 12:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,9 @@ SwDoc::SwDoc() :
     bIsRedlineMove =
     bInsOnlyTxtGlssry =
     bContains_MSVBasic =
+#ifndef PRODUCT
+    bXMLExport =
+#endif
                                 FALSE;
 
     bGroupUndo =

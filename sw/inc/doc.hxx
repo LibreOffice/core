@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 12:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,9 @@ class SwDoc
     sal_Bool    bInsOnlyTxtGlssry : 1;  // True: insert 'only text' glossary into doc
     sal_Bool    bContains_MSVBasic : 1; // True: MS-VBasic exist is in our storage
     sal_Bool    bPurgeOLE : 1;          // TRUE: Purge OLE-Objects
-
+#ifndef PRODUCT
+    sal_Bool    bXMLExport : 1;         // TRUE: during XML export
+#endif
     // -------------------------------------------------------------------
     // static - Members
     static SvStringsDtor    *pTextNmArray,          // Array fuer alle
@@ -576,7 +578,10 @@ public:
 
     sal_Bool IsPurgeOLE() const             { return bPurgeOLE; }
     void SetPurgeOLE( sal_Bool bFlag )      { bPurgeOLE = bFlag; }
-
+#ifndef PRODUCT
+    sal_Bool InXMLExport() const            { return bXMLExport; }
+    void SetXMLExport( sal_Bool bFlag )     { bXMLExport = bFlag; }
+#endif
         // das Dokument im Browse-Modus anzeigen
     void SetBrowseMode( sal_Bool bFlag = sal_True )     { bBrowseMode = bFlag; }
     sal_Bool IsBrowseMode() const                       { return bBrowseMode; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2000-12-06 12:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,6 +925,21 @@ void SwCntntFrm::MakeAll()
 
     LockJoin();
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
+
+#ifndef PRODUCT
+    SwDoc *pDoc = GetAttrSet()->GetDoc();
+    if( pDoc )
+    {
+        static sal_Bool bWarn = sal_False;
+        if( pDoc->InXMLExport() )
+        {
+            ASSERT( bWarn, "Formatting during XML-export!" );
+            bWarn = sal_True;
+        }
+        else
+            bWarn = sal_False;
+    }
+#endif
 
     //uebernimmt im DTor die Benachrichtigung
     SwCntntNotify *pNotify = new SwCntntNotify( this );
