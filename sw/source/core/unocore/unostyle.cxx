@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-19 11:17:56 $
+ *  last change: $Author: os $ $Date: 2002-06-19 12:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,9 @@
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include "svx/frmdiritem.hxx"
+#endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
 #endif
@@ -2750,6 +2752,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                         aFrmSz.SetWidth( nTmp );
                     }
                     pTargetFmt->SetAttr( aFrmSz );
+                    pTargetFmt->SetAttr( SvxFrameDirectionItem() );
                 }
                 else
                     pTargetFmt->ResetAllAttr();
