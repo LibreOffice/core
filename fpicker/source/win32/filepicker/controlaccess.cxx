@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-14 16:40:55 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,22 +261,21 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
     CTRL_CLASS aCtrlClass = UNKNOWN;
     char aClassName[256];
 
-    int nRet = GetClassNameA( hwndCtrl, aClassName, 256 );
-    if ( nRet )
+    int nRet = GetClassNameA(hwndCtrl,aClassName,sizeof(aClassName));
+    if (nRet)
     {
-        if ( 0 == _stricmp( aClassName, "button" ) )
+        if (0 == _stricmp(aClassName,"button"))
         {
             // button means many things so we have
             // to find out what button it is
-            LONG lBtnStyle = GetWindowLong( hwndCtrl, GWL_STYLE );
-            if ( lBtnStyle & BS_CHECKBOX )
+            LONG lBtnStyle = GetWindowLong(hwndCtrl,GWL_STYLE);
+            if (lBtnStyle & BS_CHECKBOX)
                 aCtrlClass = CHECKBOX;
-            else if ( (lBtnStyle & BS_PUSHBUTTON) ||
-                      (lBtnStyle & BS_DEFPUSHBUTTON) )
+            else if (((lBtnStyle & BS_PUSHBUTTON) == 0) || (lBtnStyle & BS_DEFPUSHBUTTON))
                 aCtrlClass = PUSHBUTTON;
         }
-        else if ( 0 == _stricmp( aClassName, "listbox" ) ||
-                  0 == _stricmp( aClassName, "combobox" ) )
+        else if (0 == _stricmp(aClassName,"listbox") ||
+                  0 == _stricmp(aClassName,"combobox"))
             aCtrlClass = LISTBOX;
     }
 
