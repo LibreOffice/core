@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:44:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,16 +132,17 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ finnish ] = "Näytä reunus";
         Text[ italian ] = "Mostra cornice in";
         Text[ danish ] = "Vis ramme i";
-        Text[ swedish ] = "Visa ~ram i";
+        Text[ swedish ] = "Visa ~ram";
         Text[ polish ] = "Poka¿ ramkê";
         Text[ portuguese_brazilian ] = "Rahmen anzeigen in";
         Text[ japanese ] = "˜g‚ğ•\\¦";
-        Text[ korean ] = "°æ°è¼± Ç¥½Ã";
+        Text[ korean ] = "Å×µÎ¸® Ç¥½Ã";
         Text[ chinese_simplified ] = "ÏÔÊ¾±ß¿ò";
         Text[ chinese_traditional ] = "Åã¥ÜÃä®Ø";
         Text[ turkish ] = "Çerçeve rengi";
         Text[ arabic ] = "ÅÙåÇÑ ÇáßÇÏÑ ÈÇááæä";
         Text[ catalan ] = "Mostrar borde en";
+        Text[ language_user1 ] = " ";
     };
     ListBox LB_COLOR
     {
@@ -175,7 +176,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ chinese_traditional ] = "¦C¦LÃä®Ø";
         Text[ arabic ] = "ØÈÇÚÉ ßÇÏÑ";
         Text[ greek ] = "Åêôığùóç ğëáéóßïõ";
-        Text[ korean ] = "ÇÁ·¹ÀÓ  ÀÎ¼â";
+        Text[ korean ] = "Å×µÎ¸® ÀÎ¼â";
         Text[ turkish ] = "Çerçeveyi yazdır";
         Text[ catalan ] = "Imprimir borde";
         Text[ finnish ] = "Tulosta reunus";
@@ -203,7 +204,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ chinese_traditional ] = "½Æ»s¦^¨Ó";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáäÓÎ";
         Text[ greek ] = "ÁíôéãñáöŞ ğßó~ù";
-        Text[ korean ] = "µÇµ¹·Á º¹»ç";
+        Text[ korean ] = "¿ªÀ¸·Î º¹»ç";
         Text[ turkish ] = "Geri kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar escenario con valores modificados";
@@ -289,7 +290,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ chinese_traditional ] = "½Æ»s¾ã­Ó¤u§@ªí";
         Text[ arabic ] = "äÓÎ ßá ÇáÌÏæá";
         Text[ greek ] = "Áí~ôéãñáöŞ ïëüêëçñïõ ğßíáêá";
-        Text[ korean ] = "ÀüÃ¼ ½ÃÆ® º¹»ç";
+        Text[ korean ] = "¸ğµç Å×ÀÌºí º¹»ç";
         Text[ turkish ] = "Tablonun tümünü kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copiar toda la hoja";
@@ -471,6 +472,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear escenario";
 };
+
 
 
 
