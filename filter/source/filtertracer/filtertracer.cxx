@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtertracer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:44 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #ifndef _FILTERTRACER_HXX
 #include "filtertracer.hxx"
 #endif
+#include <uno/mapping.hxx>
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
 #endif
-#include <uno/mapping.hxx>
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -167,6 +167,8 @@ void SAL_CALL FilterTracer::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
             rProp.Value >>= mxOutputStream;
         else if ( rProp.Name.equalsAscii( "URL" ) )
             rProp.Value >>= msURL;
+        else if ( rProp.Name.equalsAscii( "DocumentHandler" ) )
+            rProp.Value >>= mxDocumentHandler;
     }
 
     // check if we have to create the XOutputStream
@@ -227,7 +229,7 @@ void SAL_CALL FilterTracer::logp( sal_Int32 nLevel, const rtl::OUString& rSource
         const rtl::OUString& rSourceMethod, const rtl::OUString& rMessage )
      throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( mxOutputStream.is() )
+    if ( mxOutputStream.is() || mxDocumentHandler.is() )
     {
         if ( ! ( ImplFilter( msClassFilter, rSourceClass ) || ImplFilter( msMethodFilter, rSourceMethod )
             || ImplFilter( msMessageFilter, rMessage ) ) )
@@ -245,7 +247,10 @@ void SAL_CALL FilterTracer::logp( sal_Int32 nLevel, const rtl::OUString& rSource
                 pPtr += sMethod.getLength();
                 memcpy( pPtr, sMessage.getStr(), sMessage.getLength() );
                 pPtr += sMessage.getLength();
-                mxOutputStream->writeBytes( aData );
+                if ( mxOutputStream.is() )
+                    mxOutputStream->writeBytes( aData );
+                if ( mxDocumentHandler.is() )
+                    mxDocumentHandler->characters( ::rtl::OUString( (sal_Char*)aData.getArray(), aData.getLength(), RTL_TEXTENCODING_UTF8 ) );
             }
             catch ( ... )
             {
