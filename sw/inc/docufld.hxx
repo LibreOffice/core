@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:50:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,7 @@ public:
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual String      GetDescription() const;
 };
 
 /*--------------------------------------------------------------------
@@ -806,6 +807,8 @@ class SwScriptField : public SwField
 public:
     SwScriptField( SwScriptFieldType*, const String& rType,
                    const String& rCode, BOOL bURL=FALSE );
+
+    virtual String          GetDescription() const;
 
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
