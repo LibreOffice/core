@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-15 11:38:14 $
+ *  last change: $Author: ssa $ $Date: 2001-07-18 11:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,14 @@ int AtomClient::getAtom( int atomClass, const ::rtl::OUString& description, sal_
     int nAtom = m_aProvider.getAtom( atomClass, description, sal_False );
     if( nAtom == INVALID_ATOM && bCreate )
     {
-        nAtom = m_xServer->getAtom( atomClass, description, bCreate );
+        try
+        {
+            nAtom = m_xServer->getAtom( atomClass, description, bCreate );
+        }
+        catch( RuntimeException& )
+        {
+            return INVALID_ATOM;
+        }
         if( nAtom != INVALID_ATOM )
             m_aProvider.overrideAtom( atomClass, nAtom, description );
     }
@@ -345,7 +352,14 @@ const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
     if( ! m_aProvider.hasAtom( atomClass, atom ) )
     {
         Sequence< NMSP_UTIL::AtomDescription > aSeq;
-        aSeq = m_xServer->getRecentAtoms( atomClass, m_aProvider.getLastAtom( atomClass ) );
+        try
+        {
+            aSeq = m_xServer->getRecentAtoms( atomClass, m_aProvider.getLastAtom( atomClass ) );
+        }
+        catch( RuntimeException& )
+        {
+            return ::rtl::OUString();
+        }
         const NMSP_UTIL::AtomDescription* pDescriptions = aSeq.getConstArray();
         for( int i = 0; i < aSeq.getLength(); i++ )
             m_aProvider.overrideAtom( atomClass,
@@ -360,7 +374,15 @@ const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
             aSeq.getArray()[0].atomClass = atomClass;
             aSeq.getArray()[0].atoms.realloc( 1 );
             aSeq.getArray()[0].atoms.getArray()[0] = atom;
-            Sequence< ::rtl::OUString > aRet = m_xServer->getAtomDescriptions( aSeq );
+            Sequence< ::rtl::OUString > aRet;
+            try
+            {
+                aRet = m_xServer->getAtomDescriptions( aSeq );
+            }
+            catch( RuntimeException& )
+            {
+                return ::rtl::OUString();
+            }
             if( aRet.getLength() == 1 )
                 m_aProvider.overrideAtom( atomClass, atom, aRet.getConstArray()[0] );
         }
@@ -370,7 +392,15 @@ const ::rtl::OUString& AtomClient::getString( int atomClass, int atom )
 
 void AtomClient::updateAtomClasses( const Sequence< sal_Int32 >& atomClasses )
 {
-    Sequence< Sequence< NMSP_UTIL::AtomDescription > > aUpdate = m_xServer->getClasses( atomClasses );
+    Sequence< Sequence< NMSP_UTIL::AtomDescription > > aUpdate;
+    try
+    {
+        aUpdate = m_xServer->getClasses( atomClasses );
+    }
+    catch( RuntimeException& )
+    {
+        return;
+    }
     for( int i = 0; i < atomClasses.getLength(); i++ )
     {
         int nClass = atomClasses.getConstArray()[i];
