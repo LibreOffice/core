@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-13 21:15:53 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 19:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "ηΊΈεΌ ζ ΌεΌ";
         Text[ russian ] = "Τξπμΰς ασμΰγθ";
         Text[ polish ] = "Format papieru";
-        Text[ japanese ] = "η”¨η΄™ο½»ο½²ο½½οΎ";
+        Text[ japanese ] = "η”¨η΄™γ‚µγ‚¤γ‚Ί";
         Text[ chinese_traditional ] = "η΄™εΌµζ ΌεΌ";
         Text[ arabic ] = "ΝΜγ ΗαζΡή";
         Text[ greek ] = "Μέγεθος χαρτιού";
@@ -576,7 +576,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ swedish ] = "Layoutinstδllningar";
         Text[ polish ] = "Ustawienia uk³adu";
         Text[ portuguese_brazilian ] = "Layout settings";
-        Text[ japanese ] = "οΎο½²ο½±ο½³οΎ„θ¨­ε®";
+        Text[ japanese ] = "γƒ¬γ‚¤γ‚Άγ‚¦γƒθ¨­ε®";
         Text[ korean ] = "λ μ΄μ•„μ›ƒ μ„¤μ •";
         Text[ chinese_simplified ] = "θ®Ύε®η‰εΌ";
         Text[ chinese_traditional ] = "θ¨­ε®η‰εΌ";
@@ -604,7 +604,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "ι΅µιΆη‰εΌ";
         Text[ russian ] = "Πΰημεςκΰ ρςπΰνθφϋ";
         Text[ polish ] = "Uk³ad strony";
-        Text[ japanese ] = "οΎοΎο½°ο½ΌοΎοΎο½²ο½±ο½³οΎ„";
+        Text[ japanese ] = "γƒγƒΌγ‚Έγƒ¬γ‚¤γ‚Άγ‚¦γƒ";
         Text[ chinese_traditional ] = "ι ιΆη‰εΌ";
         Text[ arabic ] = "ΚΞΨνΨ ΗαΥέΝΙ";
         Text[ greek ] = "Διάταξη σελίδας";
@@ -1147,7 +1147,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ swedish ] = "~Anpassa objekt till pappersformat";
         Text[ polish ] = "Dopasuj obiekt do formatu papieru";
         Text[ portuguese_brazilian ] = "~Fit to size";
-        Text[ japanese ] = "ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„γ‚’η”¨η΄™ο½»ο½²ο½½οΎγ«εγ‚γ›γ‚‹(~F)";
+        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚’η”¨η΄™γ‚µγ‚¤γ‚Ίγ«εγ‚γ›γ‚‹(~F)";
         Text[ korean ] = "μ©μ§€ ν•μ‹μ— κ°μ²΄ λ§μ¶”κΈ°(~F)";
         Text[ chinese_simplified ] = "ε―Ήθ±΅ζ‰ι΅µιΆζ ΌεΌδ½θ°ƒζ•΄(~F)";
         Text[ chinese_traditional ] = "η‰©δ»¶δ½Ώη”¨ι ιΆζ ΌεΌ(~F)";
@@ -1204,7 +1204,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "θ―΄ζζ–‡ζ®µθ½ζ ·εΌ(~S)";
         Text[ russian ] = "Ρςθλό ρρϋλκθ";
         Text[ polish ] = "Szablon akapitu odwo³ania";
-        Text[ japanese ] = "ι©η”¨ζ®µθ½ο½½οΎ€ο½²οΎ™(~S)";
+        Text[ japanese ] = "ι©η”¨ζ®µθ½γ‚Ήγ‚Ώγ‚¤γƒ«(~S)";
         Text[ chinese_traditional ] = "εƒη…§ζ–‡ζ®µθ½ζ¨£εΌ(~S)";
         Text[ arabic ] = "δγΨ έήΡΙ γΡΜΪν";
         Text[ greek ] = "Πρό~τυπο παραγράφου αναφοράς";
@@ -1322,7 +1322,7 @@ String RID_SVXSTR_WRITER_PAGE
     Text[ chinese_simplified ] = "η»­ι΅µ";
     Text[ russian ] = "Ρλεδσώωΰÿ ρςπΰνθφΰ";
     Text[ polish ] = "Nastκpna strona";
-    Text[ japanese ] = "2οΎοΎο½°ο½ΌοΎη›®δ»¥ι™";
+    Text[ japanese ] = "2γƒγƒΌγ‚Έη›®δ»¥ι™";
     Text[ chinese_traditional ] = "ηΊι ";
     Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενη σελίδα";
@@ -1394,7 +1394,7 @@ String RID_SVXSTR_PAPER_USER
     Text[ chinese_simplified ] = "δ½Ώη”¨θ€…";
     Text[ russian ] = "Οξλόηξβΰςελό";
     Text[ polish ] = "UΏytkownik";
-    Text[ japanese ] = "οΎ•ο½°ο½»οΎο½°";
+    Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌ";
     Text[ chinese_traditional ] = "δ½Ώη”¨θ€…";
     Text[ arabic ] = "ΗαγΣΚΞΟγ";
     Text[ greek ] = "Χρήστης";
@@ -2030,7 +2030,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "Letter" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "οΎ•ο½°ο½»οΎο½°" ; PAPERSIZE_USER ; > ;
+        < "γƒ¦γƒΌγ‚¶γƒΌ" ; PAPERSIZE_USER ; > ;
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
@@ -2710,13 +2710,13 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Letter" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "οΎ•ο½°ο½»οΎο½°" ; PAPERSIZE_USER ; > ;
+        < "γƒ¦γƒΌγ‚¶γƒΌ" ; PAPERSIZE_USER ; > ;
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
         < "C65" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
-        < "ο½½οΎ—ο½²οΎ„οΎ" ; PAPERSIZE_DIA ; > ;
+        < "γ‚Ήγƒ©γ‚¤γƒ‰" ; PAPERSIZE_DIA ; > ;
         < "η”»ιΆ" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
@@ -2940,7 +2940,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ chinese_simplified ] = "[ι‡‡η”¨ζ‰“ε°ζΊθ®Ύε®]";
     Text[ russian ] = "[Θη νΰρςπξεκ οπθνςεπΰ]";
     Text[ polish ] = "[Z ustawienia drukarki]";
-    Text[ japanese ] = "[οΎοΎοΎοΎοΎ€γ®θ¨­ε®γ‹γ‚‰]";
+    Text[ japanese ] = "[γƒ—γƒªγƒ³γ‚Ώγ®θ¨­ε®γ‹γ‚‰]";
     Text[ greek ] = "[Από ρυθμίσεις εκτυπωτή]";
     Text[ korean ] = "[ν”„λ¦°ν„° μ„¤μ •μΌλ΅λ¶€ν„°]";
     Text[ chinese_traditional ] = "[ζ΅η”¨ε°θ΅¨ζ©θ¨­ε®]";
@@ -2950,6 +2950,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ finnish ] = "[Tulostinasetuksien mukaan]";
 };
  // ********************************************************************** EOF
+
 
 
 
