@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:10:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
-#include <com/sun/star/form/XFormsSupplier.hpp>
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER2_HPP_
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -203,9 +203,13 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::implCheckPage(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
     {
-        Reference< XFormsSupplier > xFormsSupp(_rxDrawPage, UNO_QUERY);
+        Reference< XFormsSupplier2 > xFormsSupp(_rxDrawPage, UNO_QUERY);
         OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLExport_Impl::implCheckPage: invalid draw page (no XFormsSupplier)! Doin' nothing!");
         if (!xFormsSupp.is())
+            return sal_False;
+
+        if ( !xFormsSupp->hasForms() )
+            // nothing to do at all
             return sal_False;
 
         _rxForms = Reference< XIndexAccess >(xFormsSupp->getForms(), UNO_QUERY);
