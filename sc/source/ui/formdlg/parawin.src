@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-98 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   parawin.src  $
- //   $Author: hr $
- //     $Date: 2000-09-18 16:44:57 $
- // $Revision: 1.1.1.1 $
+ //   $Author: rt $
+ //     $Date: 2000-11-15 21:21:51 $
+ // $Revision: 1.2 $
  //  $Logfile:   T:/sc/source/ui/formdlg/parawin.srv  $
  //----------------------------------------------------------------------------
 
@@ -128,7 +128,8 @@
     QuickHelpText[ arabic ] = "ΚΥΫνΡ";  \
     QuickHelpText[ greek ] = "Σμίκρυνση";   \
     QuickHelpText[ korean ] = "Shrink"; \
-    QuickHelpText[ language_user1 ] = " ";
+    QuickHelpText[ language_user1 ] = " ";  \
+    QuickHelpText[ turkish ] = "Verkleinern";
 
  //---------------------------------------------------------------------------
 
