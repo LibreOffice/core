@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:27:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,274 +62,58 @@
 
 String STR_SVT_STYLE_LIGHT
 {
-    Text = "Light" ;
-    Text [ ENGLISH ] = "Light" ;
-    Text [ english_us ] = "Light" ;
-    Text [ italian ] = "Light" ;
-    Text [ spanish ] = "Light" ;
-    Text [ french ] = "Light" ;
-    Text [ dutch ] = "Light" ;
-    Text [ swedish ] = "Mager" ;
-    Text [ danish ] = "Fin" ;
-    Text [ portuguese_brazilian ] = "Claro" ;
-    Text [ portuguese ] = "Claro" ;
-    Text[ russian ] = "Òîíêèé";
-    Text[ polish ] = "Lekka";
-    Text[ japanese ] = "ç´°å­—";
-    Text[ chinese_simplified ] = "ç»†";
-    Text[ chinese_traditional ] = "ç´°";
-    Text[ arabic ] = "İÇÊÍ";
-    Text[ greek ] = "Áğáëü";
-    Text[ korean ] = "ë°ê²Œ";
-    Text[ turkish ] = "İnce";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Clar";
-    Text[ finnish ] = "Vaalea";
-    Text[ thai ] = "à¸™à¹‰à¸­à¸¢";
-    Text[ czech ] = "LehkÃ©";
-    Text[ hebrew ] = "â€®×§×œâ€¬";
-    Text[ hindi ] = "à¤¹à¤²à¥à¤•à¤¾";
-    Text[ slovak ] = "SvetlÃ©";
-    Text[ hungarian ] = "VÃ©kony";
-    Text[ slovenian ] = "Svetlo";
+    Text [ de ] = "Light" ;
+    Text [ en-US ] = "Light" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_LIGHT_ITALIC
 {
-    Text = "Light Kursiv" ;
-    Text [ ENGLISH ] = "Light Italic" ;
-    Text [ english_us ] = "Light Italic" ;
-    Text [ italian ] = "Corsivo Light" ;
-    Text [ spanish ] = "Cursiva ligera" ;
-    Text [ french ] = "Italique Light" ;
-    Text [ dutch ] = "Light Cursief" ;
-    Text [ swedish ] = "Mager kursiv" ;
-    Text [ danish ] = "Tynd kursiv" ;
-    Text [ portuguese_brazilian ] = "Itálico claro" ;
-    Text [ portuguese ] = "Itálico claro" ;
-    Text[ russian ] = "Òîíêèé êóğñèâ";
-    Text[ polish ] = "Kursywa lekka";
-    Text[ japanese ] = "ç´°å­— æ–œä½“";
-    Text[ chinese_simplified ] = "ç»†æ–œä½“";
-    Text[ chinese_traditional ] = "ç´°æ–œé«”";
-    Text[ arabic ] = "İÇÊÍ ãÇÆá";
-    Text[ greek ] = "ĞëÜãéá ÁğáëÜ";
-    Text[ korean ] = "ì„¬ì„¸í•œ ì´íƒ¤ë¦­ì²´";
-    Text[ turkish ] = "İnce italik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cursiva lleu";
-    Text[ finnish ] = "Kevyesti kursivoitu";
-    Text[ thai ] = "à¹€à¸­à¸µà¸¢à¸‡à¸™à¹‰à¸­à¸¢";
-    Text[ czech ] = "Lehce sklonÄ›nÃ©";
-    Text[ hebrew ] = "â€®××™×˜×œ×§×™ ×§×œâ€¬";
-    Text[ hindi ] = "Light Italic";
-    Text[ slovak ] = "Mierna kurzÃ­va";
-    Text[ hungarian ] = "VÃ©kony dÅ‘lt";
-    Text[ slovenian ] = "Svetlo LeÅ¾eÄe";
+    Text [ de ] = "Light Kursiv" ;
+    Text [ en-US ] = "Light Italic" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_NORMAL
 {
-    Text = "Standard" ;
-    Text [ ENGLISH ] = "Regular" ;
-    Text [ english_us ] = "Regular" ;
-    Text [ italian ] = "Standard" ;
-    Text [ spanish ] = "Predeterminado" ;
-    Text [ french ] = "Normal" ;
-    Text [ dutch ] = "Standaard" ;
-    Text [ swedish ] = "Standard" ;
-    Text [ danish ] = "Normal" ;
-    Text [ portuguese_brazilian ] = "Regular" ;
-    Text [ portuguese ] = "Padrão" ;
-    Text[ russian ] = "Îáû÷íûé";
-    Text[ polish ] = "Regularna";
-    Text[ japanese ] = "æ¨™æº–";
-    Text[ chinese_simplified ] = "æ ‡å‡†";
-    Text[ chinese_traditional ] = "æ¨™æº–";
-    Text[ arabic ] = "ŞíÇÓí";
-    Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ korean ] = "ë³´í†µ";
-    Text[ turkish ] = "Normal";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Normal";
-    Text[ finnish ] = "Säännöllinen";
-    Text[ thai ] = "à¸›à¸à¸•à¸´";
-    Text[ czech ] = "BÄ›Å¾nÃ©";
-    Text[ hebrew ] = "â€®×¢×•×‘×™ ×¨×’×™×œâ€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯";
-    Text[ slovak ] = "BeÅ¾nÃ©";
-    Text[ hungarian ] = "NormÃ¡l";
-    Text[ slovenian ] = "Navadno";
+    Text [ de ] = "Standard" ;
+    Text [ en-US ] = "Regular" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_NORMAL_ITALIC
 {
-    Text = "Kursiv" ;
-    Text [ ENGLISH ] = "Italic" ;
-    Text [ english_us ] = "Italic" ;
-    Text [ italian ] = "Corsivo" ;
-    Text [ spanish ] = "Cursiva" ;
-    Text [ french ] = "Italique" ;
-    Text [ dutch ] = "Cursief" ;
-    Text [ swedish ] = "Kursiv" ;
-    Text [ danish ] = "Kursiv" ;
-    Text [ portuguese_brazilian ] = "Itálico" ;
-    Text [ portuguese ] = "Itálico" ;
-    Text[ russian ] = "Êóğñèâ";
-    Text[ polish ] = "Kursywa";
-    Text[ japanese ] = "æ–œä½“";
-    Text[ chinese_simplified ] = "æ–œä½“";
-    Text[ chinese_traditional ] = "æ–œé«”";
-    Text[ arabic ] = "ãÇÆá";
-    Text[ greek ] = "ĞëÜãéá";
-    Text[ korean ] = "ì´íƒ¤ë¦­ì²´";
-    Text[ turkish ] = "İtalik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cursiva";
-    Text[ finnish ] = "Kursivoitu";
-    Text[ thai ] = "à¹€à¸­à¸µà¸¢à¸‡";
-    Text[ czech ] = "KurzÃ­va";
-    Text[ hebrew ] = "â€®××™×˜×œ×§×™â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤¢à¤¼à¤¾";
-    Text[ slovak ] = "KurzÃ­va";
-    Text[ hungarian ] = "DÅ‘lt";
-    Text[ slovenian ] = "LeÅ¾eÄe";
+    Text [ de ] = "Kursiv" ;
+    Text [ en-US ] = "Italic" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_BOLD
 {
-    Text = "Fett" ;
-    Text [ ENGLISH ] = "Bold" ;
-    Text [ english_us ] = "Bold" ;
-    Text [ italian ] = "Grassetto" ;
-    Text [ spanish ] = "Negrita" ;
-    Text [ french ] = "Gras" ;
-    Text [ dutch ] = "Vet" ;
-    Text [ swedish ] = "Fet" ;
-    Text [ danish ] = "Fed" ;
-    Text [ portuguese_brazilian ] = "Negrito" ;
-    Text [ portuguese ] = "Negrito" ;
-    Text[ russian ] = "Æèğíûé";
-    Text[ polish ] = "Pogrubiona";
-    Text[ japanese ] = "å¤ªå­—";
-    Text[ chinese_simplified ] = "ç²—ä½“";
-    Text[ chinese_traditional ] = "ç²—é«”";
-    Text[ arabic ] = "ÚÑíÖ";
-    Text[ greek ] = "¸íôïíá";
-    Text[ korean ] = "êµµê²Œ";
-    Text[ turkish ] = "Kalın";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Negreta";
-    Text[ finnish ] = "Lihavoitu";
-    Text[ thai ] = "à¸«à¸™à¸²";
-    Text[ czech ] = "TuÄnÃ©";
-    Text[ hebrew ] = "â€®×¢×‘×”â€¬";
-    Text[ hindi ] = "à¤®à¥‹à¤Ÿà¤¾";
-    Text[ slovak ] = "TuÄnÃ©";
-    Text[ hungarian ] = "FÃ©lkÃ¶vÃ©r";
-    Text[ slovenian ] = "Krepko";
+    Text [ de ] = "Fett" ;
+    Text [ en-US ] = "Bold" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_BOLD_ITALIC
 {
-    Text = "Fett Kursiv" ;
-    Text [ ENGLISH ] = "Bold Italic" ;
-    Text [ english_us ] = "Bold Italic" ;
-    Text [ italian ] = "Corsivo Grassetto" ;
-    Text [ spanish ] = "Negrita cursiva" ;
-    Text [ french ] = "Italique gras" ;
-    Text [ dutch ] = "Vet Cursief" ;
-    Text [ swedish ] = "Fet kursiv" ;
-    Text [ danish ] = "Fed kursiv" ;
-    Text [ portuguese_brazilian ] = "Negrito Itálico" ;
-    Text [ portuguese ] = "Itálico negrito" ;
-    Text[ russian ] = "Æèğíûé êóğñèâ";
-    Text[ polish ] = "Pogrubiona kursywa";
-    Text[ japanese ] = "å¤ªå­—æ–œä½“";
-    Text[ chinese_simplified ] = "ç²—æ–œä½“";
-    Text[ chinese_traditional ] = "ç²—æ–œé«”";
-    Text[ arabic ] = "ÚÑíÖ ãÇÆá";
-    Text[ greek ] = "ĞëÜãéá ¸íôïíá";
-    Text[ korean ] = "ì´íƒ¤ë¦­ì²´(êµµê²Œ)";
-    Text[ turkish ] = "Kalın italik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Negreta cursiva";
-    Text[ finnish ] = "Lihavoitu ja kursivoitu";
-    Text[ thai ] = "à¸«à¸™à¸²à¹€à¸­à¸µà¸¢à¸‡";
-    Text[ czech ] = "TuÄnÃ¡ kurzÃ­va";
-    Text[ hebrew ] = "â€®××™×˜×œ×§×™ ×¢×‘×”â€¬";
-    Text[ hindi ] = "Bold Italic";
-    Text[ slovak ] = "TuÄnÃ¡ kurzÃ­va";
-    Text[ hungarian ] = "FÃ©lkÃ¶vÃ©r dÅ‘lt";
-    Text[ slovenian ] = "Krepko LeÅ¾eÄe";
+    Text [ de ] = "Fett Kursiv" ;
+    Text [ en-US ] = "Bold Italic" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_BLACK
 {
-    Text = "Black" ;
-    Text [ ENGLISH ] = "Black" ;
-    Text [ english_us ] = "Black" ;
-    Text [ italian ] = "Black" ;
-    Text [ spanish ] = "Black" ;
-    Text [ french ] = "Extra gras" ;
-    Text [ dutch ] = "Black" ;
-    Text [ swedish ] = "Svart" ;
-    Text [ danish ] = "Sort" ;
-    Text [ portuguese_brazilian ] = "Preto" ;
-    Text [ portuguese ] = "Preto" ;
-    Text[ russian ] = "×åğíûé";
-    Text[ polish ] = "Czarna";
-    Text[ japanese ] = "é»’";
-    Text[ chinese_simplified ] = "é»‘ä½“";
-    Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "é»‘é«”";
-    Text[ arabic ] = "ÃÓæÏ";
-    Text[ greek ] = "Ìáıñï";
-    Text[ korean ] = "ê²€ê²Œ";
-    Text[ turkish ] = "Siyah";
-    Text[ catalan ] = "Negre";
-    Text[ finnish ] = "Musta";
-    Text[ thai ] = "à¸”à¸³";
-    Text[ czech ] = "ÄŒernÃ©";
-    Text[ hebrew ] = "â€®×©×—×•×¨â€¬";
-    Text[ hindi ] = "à¤•à¤¾à¤²à¤¾";
-    Text[ slovak ] = "ÄŒierna";
-    Text[ hungarian ] = "GÃ³t";
-    Text[ slovenian ] = "ÄŒrna";
+    Text [ de ] = "Black" ;
+    Text [ en-US ] = "Black" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_STYLE_BLACK_ITALIC
 {
-    Text = "Black Kursiv" ;
-    Text [ ENGLISH ] = "Black Italic" ;
-    Text [ english_us ] = "Black Italic" ;
-    Text [ italian ] = "Corsivo Black" ;
-    Text [ spanish ] = "Cursiva black" ;
-    Text [ french ] = "Italique extra gras" ;
-    Text [ dutch ] = "Black Cursief" ;
-    Text [ swedish ] = "Svart kursiv" ;
-    Text [ danish ] = "Black kursiv" ;
-    Text [ portuguese_brazilian ] = "Preto itálico" ;
-    Text [ portuguese ] = "Preto itálico" ;
-    Text[ russian ] = "×åğíûé êóğñèâ";
-    Text[ polish ] = "Czarna kursywa";
-    Text[ japanese ] = "é»’ã®æ–œä½“";
-    Text[ chinese_simplified ] = "é»‘æ–œä½“";
-    Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "é»‘æ–œé«”";
-    Text[ arabic ] = "ÃÓæÏ ãÇÆá";
-    Text[ greek ] = "ĞëÜãéá Ìáıñï";
-    Text[ korean ] = "ê²€ê²Œ ì´íƒ¤ë¦­ì²´";
-    Text[ turkish ] = "Siyah italik";
-    Text[ catalan ] = "Negra cursiva";
-    Text[ finnish ] = "Musta kursivoitu";
-    Text[ thai ] = "à¸”à¸³à¹€à¸­à¸µà¸¢à¸‡";
-    Text[ czech ] = "ÄŒernÃ¡ kurzÃ­va";
-    Text[ hebrew ] = "â€®××™×˜×œ×§×™ ×©×—×•×¨â€¬";
-    Text[ hindi ] = "à¤•à¤¾à¤²à¤¾ à¤Ÿà¥‡à¤¢à¤¼à¤¾";
-    Text[ slovak ] = "ÄŒierna kurzÃ­va";
-    Text[ hungarian ] = "GÃ³t dÅ‘lt";
-    Text[ slovenian ] = "ÄŒrno LeÅ¾eÄe";
+    Text [ de ] = "Black Kursiv" ;
+    Text [ en-US ] = "Black Italic" ;
+    Text [ x-comment ] = " ";
 };
 
 /*
@@ -346,205 +130,40 @@ Finnische Texte:
 
 String STR_SVT_FONTMAP_BOTH
 {
-    TEXT = "Für Ausdruck und Anzeige am Bildschirm wird die gleiche Schriftart verwendet." ;
-    TEXT [ English ] = "The same font will be used on both your printer and your screen." ;
-    TEXT [ norwegian ] = "The same font will be used on both your printer and your screen." ;
-    TEXT [ italian ] = "Questo tipo di carattere verrà utilizzato sia per lo schermo che per la stampante." ;
-    TEXT [ portuguese_brazilian ] = "Esta fonte será utilizada simultaneamente na impressora e na tela." ;
-    TEXT [ portuguese ] = "O tipo de letra utilizado para a impressora e para o ecrã é o mesmo." ;
-    TEXT [ finnish ] = "Samaa fonttia käytetään sekä tulostimessa että näytössä." ;
-    TEXT [ danish ] = "Denne skrifttype vil blive brugt både på skærmen og på printeren." ;
-    TEXT [ french ] = "La même police est utilisée pour l'impression et l'affichage à l'écran." ;
-    TEXT [ swedish ] = "Samma teckensnitt används för både skrivare och bildskärm." ;
-    TEXT [ dutch ] = "Dit lettertype wordt voor zowel de printer als het scherm gebruikt." ;
-    TEXT [ spanish ] = "Se usará la misma fuente en la impresora y en la pantalla." ;
-    TEXT [ english_us ] = "The same font will be used on both your printer and your screen." ;
-    TEXT[ chinese_simplified ] = "å±å¹•æ˜¾ç¤ºå’Œæ‰“å°ä½¿ç”¨åŒä¸€ç§å­—ä½“ã€‚";
-    TEXT[ russian ] = "Äëÿ ïå÷àòè è âûâîäà íà ıêğàí èñïîëüçóåòñÿ îäèí è òîò æå øğèôò";
-    TEXT[ polish ] = "Ta sama czcionka bêdzie u¿yta zarówno na wydruku, jak i na ekranie.";
-    TEXT[ japanese ] = "å°åˆ·ã¨ç”»é¢è¡¨ç¤ºã«ã¯åŒã˜ãƒ•ã‚©ãƒ³ãƒˆãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚";
-    TEXT[ chinese_traditional ] = "è¢å¹•é¡¯ç¤ºå’Œåˆ—å°ä½¿ç”¨çµ±ä¸€çš„å­—å‹";
-    TEXT[ arabic ] = "Óæİ íÊã ÇÓÊÎÏÇã äİÓ ÇáÎØ ááØÇÈÚÉ æÇáÔÇÔÉ.";
-    TEXT[ greek ] = "Ç ãñáììáôïóåéñÜ áõôŞ èá ÷ñçóéìïğïéçèåß ãéá ôçí ïèüíç êáé ãéá ôïí åêôõğùôŞ.";
-    TEXT[ korean ] = "í”„ë¦°í„°ì™€ í™”ë©´ì—ëŠ” ê°™ì€ ê¸€ê¼´ì´ ì‚¬ìš©ë©ë‹ˆë‹¤.";
-    TEXT[ turkish ] = "Yazdırma ve ekranda görüntüleme için aynı yazıtipi kullanılacak.";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "S'utilitzarà el mateix tipus de lletra a la impressora i a la pantalla";
-    TEXT[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™à¸ˆà¸°à¸–à¸¹à¸à¹ƒà¸Šà¹‰à¸šà¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¹à¸¥à¸°à¸ˆà¸­à¸ à¸²à¸à¸‚à¸­à¸‡à¸„à¸¸à¸“à¸—à¸±à¹‰à¸‡à¸„à¸¹à¹ˆ";
-    TEXT[ czech ] = "StejnÃ© pÃ­smo bude pouÅ¾ito jak na tiskÃ¡rnÄ›, tak na vaÅ¡Ã­ obrazovce.";
-    TEXT[ hebrew ] = "â€®×”×ª×•×›× ×™×ª ×ª×©×ª××© ×‘××•×ª×• ×’×•×¤×Ÿ ×œ××¡×š ×•×œ××“×¤×¡×ªâ€¬";
-    TEXT[ hindi ] = "The same font will be used on both your printer and your screen.";
-    TEXT[ slovak ] = "TakÃ© istÃ© pÃ­smo bude pouÅ¾itÃ© na vaÅ¡ej tlaÄiarni aj obrazovke.";
-    TEXT[ hungarian ] = "Ugyanez a betÅ±kÃ©szlet jelenik meg kÃ©pernyÅ‘n Ã©s a nyomtatÃ³n is.";
-    TEXT[ slovenian ] = "Ista pisava bo uporabljena na vaÅ¡em tiskalniku in na zaslonu.";
+    Text [ de ] = "Für Ausdruck und Anzeige am Bildschirm wird die gleiche Schriftart verwendet." ;
+    Text [ en-US ] = "The same font will be used on both your printer and your screen." ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_FONTMAP_PRINTERONLY
 {
-    TEXT = "Druckerschrift. Die Bildschirmanzeige kann etwas abweichen." ;
-    TEXT [ English ] = "This is a printer font. The screen image may not exactly match." ;
-    TEXT [ norwegian ] = "This is a printer font. The screen image may not exactly match." ;
-    TEXT [ italian ] = "Il tipo di carattere visualizzato differisce da quello stampato." ;
-    TEXT [ portuguese_brazilian ] = "Esta é uma fonte de impressora. A imagem na tela pode ser diferente." ;
-    TEXT [ portuguese ] = "Letra de impressora. A letra vista no ecrã pode apresentar um pequeno desvio." ;
-    TEXT [ finnish ] = "Tämä on tulostinfontti. Näyttökuva saattaa olla erilainen." ;
-    TEXT [ danish ] = "Dette er en printerskrifttype. Tekst på skærmen kan afvige fra udskriften." ;
-    TEXT [ french ] = "Police d'imprimante. L'affichage et l'impression ne seront pas toujours identiques." ;
-    TEXT [ swedish ] = "Detta är ett skrivarteckensnitt. Visningen på skärmbilden kan avvika något." ;
-    TEXT [ dutch ] = "Dit is een printerlettertype. De weergave op het scherm kan iets afwijken." ;
-    TEXT [ spanish ] = "Fuente de impresora. La imagen en pantalla podría ser diferente." ;
-    TEXT [ english_us ] = "This is a printer font. The screen image may differ." ;
-    TEXT[ chinese_simplified ] = "è¿™æ˜¯æ‰“å°å­—ä½“ã€‚å±å¹•æ˜¾ç¤ºçš„å­—ä½“ä¸å…¶å¯èƒ½ä¼šæœ‰äº›åå·®ã€‚";
-    TEXT[ russian ] = "Øğèôò ïğèíòåğà. Èçîáğàæåíèå íà ıêğàíå ìîæåò îòëè÷àòüñÿ.";
-    TEXT[ polish ] = "To jest czcionka drukarkowa. Obraz na ekranie mo¿e siê nieco ró¿niæ.";
-    TEXT[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆã§ã™ã€‚ç”»é¢è¡¨ç¤ºã¨ã¯å°‘ã—ç•°ãªã‚Šã¾ã™ã€‚";
-    TEXT[ chinese_traditional ] = "åˆ—å°å­—å‹ã€‚è¢å¹•é¡¯ç¤ºå­—å‹å¯èƒ½ç•¥å¾®æœ‰äº›åå·®ã€‚";
-    TEXT[ arabic ] = "åĞÇ ÎØ ÇáØÇÈÚÉ. ŞÏ íÎÊáİ ÇáãÙåÑ Úáì ÇáÔÇÔÉ ÈÚÖ ÇáÔÆ.";
-    TEXT[ greek ] = "ÃñáììáôïóåéñÜ åêôõğùôŞ. Ç åìöÜíéóç ôçò óôçí ïèüíç åßíáé äõíáôüí íá äéáöİñåé.";
-    TEXT[ korean ] = "ì´ê²ƒì€ í”„ë¦°í„° ê¸€ê¼´ì…ë‹ˆë‹¤. í™”ë©´ ì´ë¯¸ì§€ëŠ” ì¼ë¶€ ë‹¤ë¥¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    TEXT[ turkish ] = "Yazıcı yazıtipi. Ekrandaki görüntü biraz farklı olabilir.";
-    TEXT[ catalan ] = "Lletra d'impressora. La imatge de pantalla podria ser diferent.";
-    TEXT[ thai ] = "à¸™à¸µà¹‰à¸„à¸·à¸­à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£ à¸ˆà¸­à¸ à¸²à¸à¸ˆà¸°à¹à¸•à¸à¸•à¹ˆà¸²à¸‡à¹„à¸›";
-    TEXT[ czech ] = "Toto je pÃ­smo pro tiskÃ¡rnu; na obrazovce se mÅ¯Å¾e liÅ¡it.";
-    TEXT[ hebrew ] = "â€®×’×•×¤×Ÿ ×–×” ××™×•×¢×“ ×œ×”×“×¤×¡×”, ××¨××”×• ×‘××¡×š ×©×•× ×”.â€¬";
-    TEXT[ hindi ] = "à¤¯à¤¹ à¤®à¤¦à¥à¤°à¤• à¤•à¤¾ à¤…à¤•à¥à¤·à¤° à¤¹à¥ˆ à¥¤ à¤ªà¤°à¤¦à¥‡ à¤®à¥‡à¤‚ à¤šà¤¿à¤¤à¥à¤° à¤­à¤¿à¤¨à¥à¤¨ à¤ªà¥à¤°à¤•à¤¾à¤° à¤•à¤¾ à¤¹à¥‹ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    TEXT[ slovak ] = "Toto je pÃ­smo tlaÄiarne, na obrazovke mÃ´Å¾e byÅ¥ inÃ©.";
-    TEXT[ hungarian ] = " Ez egy nyomtatÃ³-betÅ±kÃ©szlet. A kÃ©pernyÅ‘n megjelenÅ‘ kÃ©p kÃ¼lÃ¶nbÃ¶zhet.";
-    TEXT[ slovenian ] = "To je pisava tiskalnika. Njen videz na zaslonu je lahko drugaÄen.";
+    Text [ de ] = "Druckerschrift. Die Bildschirmanzeige kann etwas abweichen." ;
+    Text [ en-US ] = "This is a printer font. The screen image may differ." ;
 };
 
 String STR_SVT_FONTMAP_SCREENONLY
 {
-    TEXT = "Bildschirmschrift. Der Ausdruck kann etwas abweichen." ;
-    TEXT [ English ] = "This is a screen font. The printer image may not exactly match." ;
-    TEXT [ norwegian ] = "This is a screen font. The printer image may not exactly match." ;
-    TEXT [ italian ] = "Questo è un carattere per lo schermo. La stampa può essere leggermente diversa." ;
-    TEXT [ portuguese_brazilian ] = "Esta é uma fonte de tela. O resultado impresso pode ser diferente." ;
-    TEXT [ portuguese ] = "Letra de ecrã. A letra impressa pode apresentar um pequeno desvio." ;
-    TEXT [ finnish ] = "Tämä on näyttöfontti. Tulostinkuva saattaa olla erilainen." ;
-    TEXT [ danish ] = "Dette er en skærmskrifttype. Udskriften kan afvige herfra." ;
-    TEXT [ french ] = "Police d'écran. L'impression et l'affichage ne seront pas toujours identiques." ;
-    TEXT [ swedish ] = "Detta är ett skärmteckensnitt. Utskriften kan vara lätt avvikande." ;
-    TEXT [ dutch ] = "Dit is een schermlettertype. De afdruk kan iets afwijken." ;
-    TEXT [ spanish ] = "Fuente de pantalla. La imagen en la impresora podría ser diferente." ;
-    TEXT [ english_us ] = "This is a screen font. The printer image may differ." ;
-    TEXT[ chinese_simplified ] = "è¿™æ˜¯å±å¹•å­—ä½“ã€‚æ‰“å°å‡ºæ¥çš„å­—ä½“ä¸å…¶å¯èƒ½ä¼šæœ‰ä¸€äº›åå·®ã€‚";
-    TEXT[ russian ] = "Øğèôò ıêğàíà. Ïğè ïå÷àòè ìîãóò áûòü îòëè÷èÿ.";
-    TEXT[ polish ] = "To jest czcionka ekranowa. Wydruk mo¿e siê nieco ró¿niæ.";
-    TEXT[ japanese ] = "ç”»é¢ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆã§ã™ã€‚å°åˆ·ã‚¤ãƒ¡ãƒ¼ã‚¸ã¨ã¯å°‘ã—ç•°ãªã‚Šã¾ã™ã€‚";
-    TEXT[ chinese_traditional ] = "è¢å¹•å­—å‹ã€‚åˆ—å°å‡ºå¯èƒ½æœƒæœ‰ä¸€äº›åå·®ã€‚";
-    TEXT[ arabic ] = "åĞÇ ÎØ ÔÇÔÉ. ŞÏ íÎÊáİ ÇáãÙåÑ Úáì ÇáæÑŞ ÇáãØÈæÚ ÈÚÖ ÇáÔÆ.";
-    TEXT[ greek ] = "ÃñáììáôïóåéñÜ ïèüíçò. Ç åìöÜíéóç ôçò óôçí åêôığùóç åßíáé äõíáôüí íá äéáöİñåé.";
-    TEXT[ korean ] = "ì´ê²ƒì€ í™”ë©´ ê¸€ê¼´ì…ë‹ˆë‹¤. í”„ë¦°í„° ì´ë¯¸ì§€ëŠ” ì¼ë¶€ ë‹¤ë¥¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    TEXT[ turkish ] = "Ekran yazıtipi. Yazdırma biraz farklı olabilir.";
-    TEXT[ catalan ] = "Lletra de pantalla. La imatge a la impressora podria ser diferent.";
-    TEXT[ thai ] = "à¸™à¸µà¹‰à¸„à¸·à¸­à¸ˆà¸­à¸ à¸²à¸à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£  à¸ à¸²à¸à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¸ˆà¸°à¸­à¸•à¸à¸•à¹ˆà¸²à¸‡à¸­à¸­à¸à¹„à¸›";
-    TEXT[ czech ] = "Toto je pÃ­smo pro obrazovku; na tiskÃ¡rnÄ› se mÅ¯Å¾e liÅ¡it.";
-    TEXT[ hebrew ] = "â€®×’×•×¤×Ÿ ×–×” ××™×•×¢×“ ×œ××¡×š, ××¨××”×• ×‘×“×¤×•×¡ ×©×•× ×”.â€¬";
-    TEXT[ hindi ] = "à¤¯à¤¹ à¤ªà¤°à¤¦à¥‡ à¤•à¤¾ à¤…à¤•à¥à¤·à¤° à¤¹à¥ˆ à¥¤ à¤®à¥à¤¦à¥à¤°à¤• à¤®à¥‡à¤‚ à¤šà¤¿à¤¤à¥à¤° à¤­à¤¿à¤¨à¥à¤¨ à¤ªà¥à¤°à¤•à¤¾à¤° à¤•à¤¾ à¤¹à¥‹ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    TEXT[ slovak ] = "Toto je pÃ­smo obrazovky, vzhÄ¾ad na tlaÄiarni mÃ´Å¾e byÅ¥ inÃ½.";
-    TEXT[ hungarian ] = "Ez egy kÃ©pernyÅ‘-betÅ±kÃ©szlet. A nyomtatott kÃ©p kÃ¼lÃ¶nbÃ¶zhet.";
-    TEXT[ slovenian ] = "To je zaslonska pisava. Njen videz na tiskalniku je lahko drugaÄen.";
+    Text [ de ] = "Bildschirmschrift. Der Ausdruck kann etwas abweichen." ;
+    Text [ en-US ] = "This is a screen font. The printer image may differ." ;
 };
 
 String STR_SVT_FONTMAP_SIZENOTAVAILABLE
 {
-    TEXT = "Diese Schriftgröße ist nicht installiert. Die am besten passende vorhandene Größe wird benutzt." ;
-    TEXT [ English ] = "This font size is not installed. The closest available size will be used." ;
-    TEXT[ english_us ] = "This font size has not been installed. The closest available size will be used.";
-    TEXT[ portuguese ] = "Este tamanho de letra não está instalado. Será utilizado o tamanho disponível mais adequado.";
-    TEXT[ russian ] = "Òàêîé ğàçìåğ øğèôòà íå óñòàíîâëåí. Áóäåò èñïîëüçîâàí íàèáîëåå ïîõîæèé ğàçìåğ.";
-    TEXT[ greek ] = "Ôï ìİãåèïò ôçò ãñáììáôïóåéñÜò äåí İ÷åé åãêáôáóôáèåß. ×ñçóéìïğïéåßôáé ôï ğëçóéİóôåñï ìİãåèïò.";
-    TEXT[ dutch ] = "Deze schriftgrootte is niet geïnstalleerd. De meest overeenkomende beschikbare grootte wordt toegepast.";
-    TEXT[ french ] = "Cette taille de police n'a pas été installée. La taille disponible la plus appropriée va être utilisée.";
-    TEXT[ spanish ] = "Este tamaño de fuente no está instalado. Se utilizará el tamaño disponible más adecuado.";
-    TEXT[ italian ] = "Il tipo di carattere delle dimensioni indicate non è installato. Il programma utilizzerà le dimensioni disponibili.";
-    TEXT[ danish ] = "Denne skriftstørrelse er ikke installeret. Den nærmeste tilgængelige størrelse, vil blive brugt i stedet.";
-    TEXT[ swedish ] = "Den här teckenstorleken är inte installerad. Den tillgängliga storlek som passar bäst används.";
-    TEXT[ polish ] = "Ten rozmiar czcionki nie jest zainstalowany. Zostanie u¿yty dostêpny, najbardziej zbli¿ony rozmiar.";
-    TEXT[ portuguese_brazilian ] = "Este tamanho de fonte não foi instalado. Será utilizado um tamanho disponível mais parecido.";
-    TEXT[ japanese ] = "ã“ã®ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã¯ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æœ€ã‚‚é©åˆ‡ãªã‚µã‚¤ã‚ºãŒé¸ã°ã‚Œã¾ã™ã€‚";
-    TEXT[ korean ] = "ì´ ê¸€ê¼´ì˜ í¬ê¸°ëŠ” ì„¤ì¹˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ê¸°ì¡´ì˜ ê°€ì¥ ì í•©í•œ í¬ê¸°ê°€ ì‚¬ìš©ë©ë‹ˆë‹¤.";
-    TEXT[ chinese_simplified ] = "æ²¡æœ‰å®‰è£…è¿™ç§å­—ä½“å¤§å°ã€‚ä½¿ç”¨çš„æ˜¯ç°æœ‰çš„æœ€æ¥è¿‘çš„å­—ä½“å¤§å°ã€‚";
-    TEXT[ chinese_traditional ] = "æ²’æœ‰å®‰è£é€™å€‹å­—å‹ã€‚æ¡ç”¨æœ€è¿‘ä¼¼çš„å­—å‹ã€‚";
-    TEXT[ arabic ] = "ÍÌã ÇáÎØ åĞÇ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÃÍÌÇã ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
-    TEXT[ turkish ] = "Bu yazıtipi boyu yüklenmedi. Mevcut boylardan en uygun olanı kullanılacak.";
-    TEXT[ catalan ] = "Aquesta mida de lletra no està instal.lada. S'utilitzarà la mida disponible més adequada.";
-    TEXT[ finnish ] = "Tätä fonttikokoa ei ole asennettu. Lähintä käytettävissä olevaa kokoa käytetään.";
-    TEXT[ thai ] = "à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¸‚à¸™à¸²à¸”à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸™à¸µà¹‰   à¸‚à¸™à¸²à¸”à¸—à¸µà¹ˆà¹ƒà¸à¸¥à¹‰à¸—à¸µà¹ˆà¸ªà¸¸à¸”à¸ˆà¸°à¸–à¸¹à¸à¹ƒà¸Šà¹‰à¹„à¸”à¹‰";
-    TEXT[ czech ] = "Tato velikost pÃ­sma nebyla nainstalovÃ¡na. Bude pouÅ¾ita nejbliÅ¾Å¡Ã­ moÅ¾nÃ¡ velikost.";
-    TEXT[ hebrew ] = "â€®×”×’×•×¤×Ÿ ×œ× ××•×ª×§×Ÿ ×‘×’×•×“×œ ×”×–×”. ×”×ª×•×›× ×™×ª ×ª×‘×—×¨ ×’×•×¤×Ÿ ×“×•××”.â€¬";
-    TEXT[ hindi ] = "à¤‡à¤¸ à¤…à¤•à¥à¤·à¤° à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤•à¥‹ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤ à¤‡à¤¸à¤•à¥‡ à¤…à¤¤à¤¿ à¤¸à¤®à¥€à¤ª à¤…à¤•à¥à¤·à¤° à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤•à¥‹ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤à¤—à¤¾ à¥¤ ";
-    TEXT[ slovak ] = "TÃ¡to veÄ¾kosÅ¥ pÃ­sma nebola nainÅ¡talovanÃ¡. Bude pouÅ¾itÃ¡ najbliÅ¾Å¡ia veÄ¾kosÅ¥.";
-    TEXT[ hungarian ] = "A megadott betÅ±mÃ©ret nincs telepÃ­tve. A legkÃ¶zelebbi elÃ©rhetÅ‘ mÃ©ret jelenik meg.";
-    TEXT[ slovenian ] = "Ta velikost pisave ni nameÅ¡Äena. Uporabljena bo najbliÅ¾ja velikost, ki je na voljo.";
+    Text [ de ] = "Diese Schriftgröße ist nicht installiert. Die am besten passende vorhandene Größe wird benutzt." ;
+    Text [ en-US ] = "This font size has not been installed. The closest available size will be used.";
 };
 
 String STR_SVT_FONTMAP_STYLENOTAVAILABLE
 {
-    TEXT = "Dieser Schriftstil wird nachgebildet oder der am besten passende Stil wird verwendet." ;
-    TEXT [ English ] = "This font style will be generated or the closest matching style will be used." ;
-    TEXT[ english_us ] = "This font style will be simulated or the closest matching style will be used.";
-    TEXT[ portuguese ] = "Este estilo de letra será simulado ou será utilizado o estilo disponível mais adequado.";
-    TEXT[ russian ] = "Áóäåò ñîçäàí òàêîé ñòèëü øğèôòà èëè áóäåò èñïîëüçîâàí íàèáîëåå ïîõîæèé.";
-    TEXT[ greek ] = "Ôï óôõë áõôü ãñáììáôïóåéñÜò èá áíôéãñáöåß Ş èá ÷ñçóéìïğïéçèåß ôï ğëçóéİóôåñï óôõë..";
-    TEXT[ dutch ] = "Dit lettertype wordt nagebootst of het meest overeenkomende beschikbare type wordt gebruikt.";
-    TEXT[ french ] = "Ce style de police sera imité ou le style le plus approprié sera utilisé.";
-    TEXT[ spanish ] = "Se imitará este estilo de fuente o se usará el más adecuado.";
-    TEXT[ italian ] = "Verrà riprodotto lo stile di questo tipo di carattere oppure verrà utilizzato quello che gli è più simile.";
-    TEXT[ danish ] = "Denne skrifttype bliver reproduceret, eller den type, som passer bedst vil blive brugt i stedet.";
-    TEXT[ swedish ] = "Det här teckensnittet efterbildas eller närmast motsvarande teckensnitt används.";
-    TEXT[ polish ] = "Ten styl czcionki bêdzie symulowany lub zostanie u¿yty styl najbardziej podobny.";
-    TEXT[ portuguese_brazilian ] = "Este estilo de fonte será simulado ou será utilizado um estilo disponível mais parecido.";
-    TEXT[ japanese ] = "ã“ã®ãƒ•ã‚©ãƒ³ãƒˆã‚¹ã‚¿ã‚¤ãƒ«ã¯ä¿®æ­£ã•ã‚Œã‚‹ã‹ã€ã¾ãŸã¯æœ€ã‚‚é©åˆ‡ãªã‚¹ã‚¿ã‚¤ãƒ«ãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚";
-    TEXT[ korean ] = "ì´ ê¸€ê¼´ ìŠ¤íƒ€ì¼ì„ ëª¨ì˜í•˜ê±°ë‚˜ ê°€ì¥ ì í•©í•œ ê¸€ê¼´ ìŠ¤íƒ€ì¼ì´ ì‚¬ìš©ë©ë‹ˆë‹¤.";
-    TEXT[ chinese_simplified ] = "ç”Ÿæˆè¿™ç§å­—ä½“æˆ–ä½¿ç”¨æœ€æ¥è¿‘çš„å­—ä½“ã€‚";
-    TEXT[ chinese_traditional ] = "æ¨¡ä»¿é€™å€‹å­—å‹æˆ–æ¡ç”¨æœ€è¿‘ä¼¼çš„å­—å‹ã€‚";
-    TEXT[ arabic ] = "Óæİ íÊã ÊŞáíÏ äãØ ÇáÎØ åĞÇ¡ Ãæ Óæİ íÊã ÇÓÊÎÏÇã ÃŞÑÈ äãØğ áå.";
-    TEXT[ turkish ] = "Bu yazıtipi taklit edilecek ya da en uygun olan biçim kullanılacak.";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "S'imitarà aquest estil de lletra o s'utilitzarà el més adequat.";
-    TEXT[ finnish ] = "Tämä fonttityyli simuloidaan tai lähintä vastaavaa tyyliä käytetään.";
-    TEXT[ thai ] = "à¸ˆà¸³à¸¥à¸­à¸‡à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¸¥à¸±à¸à¸©à¸“à¸°à¸—à¸µà¹ˆà¸•à¸£à¸‡à¸à¸±à¸™à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”à¸ˆà¸°à¸–à¸¹à¸à¹ƒà¸Šà¹‰";
-    TEXT[ czech ] = "Tento styl pÃ­sma bude simulovÃ¡n nebo bude pouÅ¾it nejbliÅ¾Å¡Ã­ odpovÃ­dajÃ­cÃ­ styl.";
-    TEXT[ hebrew ] = "â€®×”×ª×•×›× ×™×ª ×ª×¡××œ×¥ ××ª ×”×¡×’× ×•×Ÿ ×”× ×‘×—×¨ ××• ×ª×‘×—×¨ ×¡×’× ×•×Ÿ ×“×•××”.â€¬";
-    TEXT[ hindi ] = "This font style will be simulated or the closest matching style will be used.";
-    TEXT[ slovak ] = "Tento Å¡tÃ½l pÃ­sma bude simulovanÃ½ alebo bude pouÅ¾itÃ½ najbliÅ¾Å¡Ã­ zodpovedajÃºci Å¡tÃ½l.";
-    TEXT[ hungarian ] = "Ez a betÅ±stÃ­lus mÃ¡s stÃ­lus Ã¡talakÃ­tÃ¡sÃ¡val, vagy a leginkÃ¡bb hasonlÃ³ stÃ­lus alkalmazÃ¡sÃ¡val jelenÃ­thetÅ‘ csak meg.";
-    TEXT[ slovenian ] = "Ta slog pisave bo simuliran ali pa bo uporabljen najbliÅ¾ji ustrezni slog.";
+    Text [ de ] = "Dieser Schriftstil wird nachgebildet oder der am besten passende Stil wird verwendet." ;
+    Text [ en-US ] = "This font style will be simulated or the closest matching style will be used.";
+    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_FONTMAP_NOTAVAILABLE
 {
-    TEXT = "Diese Schriftart ist nicht installiert. Die am besten passende vorhandene Schriftart wird benutzt." ;
-    TEXT [ English ] = "This font is not installed. The closest available font will be used." ;
-    TEXT[ english_us ] = "This font has not been installed. The closest available font will be used.";
-    TEXT[ portuguese ] = "Este tipo de letra não está instalado. Será utilizado o tipo de letra disponível mais adequado.";
-    TEXT[ russian ] = "İòîò øğèôò íå óñòàíîâëåí. Áóäåò èñïîëüçîâàí íàèáîëåå ïîõîæèé.";
-    TEXT[ greek ] = "Ç ãñáììáôïóåéñÜ äåí İ÷åé åãêáôáóôáèåß. ×ñçóéìïğïéåßôáé ç ğëçóéİóôåñç (áğü Üğïøç ÷áñáêôçñéóôéêşí) ãñáììáôïóåéñÜ.";
-    TEXT[ dutch ] = "Dit lettertype is niet geïnstalleerd. Het meest overeenkomende beschikbare type wordt gebruikt.";
-    TEXT[ french ] = "Ce type de police n'a pas été installé. Le type de police le plus approprié va être utilisé.";
-    TEXT[ spanish ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
-    TEXT[ italian ] = "Questo tipo di carattere non è installato. Il programma utilizzerà il tipo di carattere che gli è più simile.";
-    TEXT[ danish ] = "Denne skrifttype er ikke installeret. Den tilgængelige skrifttype, som passer bedst, vil blive brugt i stedet.";
-    TEXT[ swedish ] = "Det här teckensnittet är inte installerat. Det tillgängliga teckensnitt som passar bäst används.";
-    TEXT[ polish ] = "Ta czcionka nie jest zainstalowana. Zostanie u¿yta dostêpna, najbardziej podobna czcionka.";
-    TEXT[ portuguese_brazilian ] = "Esta fonte não foi instalada. Será utilizada uma fonte disponível mais parecida.";
-    TEXT[ japanese ] = "ã“ã®ãƒ•ã‚©ãƒ³ãƒˆã¯ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æœ€ã‚‚é©åˆ‡ãªãƒ•ã‚©ãƒ³ãƒˆãŒé¸ã°ã‚Œã¾ã™ã€‚";
-    TEXT[ korean ] = "ì´ ê¸€ê¼´ì€ ì„¤ì¹˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ê¸°ì¡´ì˜ ê°€ì¥ ì í•©í•œ ê¸€ê¼´ì´ ì‚¬ìš©ë©ë‹ˆë‹¤.";
-    TEXT[ chinese_simplified ] = "æ²¡æœ‰å®‰è£…è¿™ç§å­—ä½“ã€‚ä½¿ç”¨çš„æ˜¯ç°æœ‰çš„æœ€æ¥è¿‘çš„å­—ä½“ã€‚";
-    TEXT[ chinese_traditional ] = "æ²’æœ‰å®‰è£é€™å€‹å­—å‹ã€‚æ¡ç”¨æœ€è¿‘ä¼¼çš„å­—å‹ã€‚";
-    TEXT[ arabic ] = "åĞÇ ÇáÎØ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÎØæØ ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
-    TEXT[ turkish ] = "Bu yazıtipi yüklenmedi. Mevcut yazıtiplerinden en uygun olanı kullanılacak.";
-    TEXT[ catalan ] = "Aquest tipus de lletra no està instal.lat. S'utilitzarà la lletra existent més adequada.";
-    TEXT[ finnish ] = "Tätä fonttia ei ole asennettu. Lähintä käytettävissä olevaa fonttia käytetään.";
-    TEXT[ thai ] = "à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸™à¸µà¹‰ à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸—à¸µà¹ˆà¹ƒà¸à¸¥à¹‰à¹€à¸„à¸µà¸¢à¸‡à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”à¸ˆà¸°à¸–à¸¹à¸à¹ƒà¸Šà¹‰";
-    TEXT[ czech ] = "Toto pÃ­smo nebylo nainstalovÃ¡no. Bude pouÅ¾ito nejblÃ­Å¾e odpovÃ­dajÃ­cÃ­ pÃ­smo.";
-    TEXT[ hebrew ] = "â€®×’×•×¤×Ÿ ×–×” ×œ× ××•×ª×§×Ÿ. ×”×ª×•×›× ×™×ª ×ª×‘×—×¨ ×‘×’×•×¤×Ÿ ×”×“×•××” ×œ×• ××”×’×•×¤× ×™× ×”××•×ª×§× ×™×.â€¬";
-    TEXT[ hindi ] = "This font has not been installed. The closest available font will be used.";
-    TEXT[ slovak ] = "Toto pÃ­smo nebolo nainÅ¡talovanÃ©. Bude pouÅ¾itÃ© najbliÅ¾Å¡ie dostupnÃ© pÃ­smo.";
-    TEXT[ hungarian ] = "Ez a betÅ±kÃ©szlet nincs telepÃ­tve. A leginkÃ¡bb hasonlÃ³ betÅ±kÃ©szlet lesz lÃ¡thatÃ³.";
-    TEXT[ slovenian ] = "Ta pisava ni nameÅ¡Äena. Uporabljena bo najbolj podobna pisava, ki je na voljo.";
+    Text [ de ] = "Diese Schriftart ist nicht installiert. Die am besten passende vorhandene Schriftart wird benutzt." ;
+    Text [ en-US ] = "This font has not been installed. The closest available font will be used.";
 };
 
 
