@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:03:37 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@
 #ifndef _UCBHELPER_ACTIVEDATASINK_HXX
 #include <ucbhelper/activedatasink.hxx>
 #endif
+#ifndef _UCBHELPER_ACTIVEDATASTREAMER_HXX
+#include <ucbhelper/activedatastreamer.hxx>
+#endif
 #ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
 #endif
@@ -319,6 +322,36 @@ public:
 // Helpers.
 //=========================================================================
 
+static void ensureContentProviderForURL( const ucb::ContentBroker & rBroker,
+                                         const rtl::OUString & rURL )
+    throw ( ContentCreationException, RuntimeException )
+{
+    Reference< XContentProviderManager > xMgr
+        = rBroker.getContentProviderManagerInterface();
+    if ( !xMgr.is() )
+    {
+        throw RuntimeException(
+            rtl::OUString::createFromAscii(
+                "UCB does not implement mandatory interface "
+                "XContentProviderManager!" ),
+            Reference< XInterface >() );
+    }
+    else
+    {
+        Reference< XContentProvider > xProv
+            = xMgr->queryContentProvider( rURL );
+        if ( !xProv.is() )
+        {
+            throw ContentCreationException(
+                rtl::OUString::createFromAscii(
+                    "No Content Provider available for given URL!" ),
+                Reference< XInterface >(),
+                ContentCreationError_NO_CONTENT_PROVIDER );
+        }
+    }
+}
+
+//=========================================================================
 static ucb::ContentBroker* getContentBroker( bool bThrow )
     throw ( ContentCreationException, RuntimeException )
 {
@@ -327,15 +360,31 @@ static ucb::ContentBroker* getContentBroker( bool bThrow )
     if ( !pBroker )
     {
         if ( bThrow )
-            throw ContentCreationException(
+            throw RuntimeException(
                     rtl::OUString::createFromAscii( "No Content Broker!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_BROKER );
+                    Reference< XInterface >() );
     }
     else
-        OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                    ->queryContentProviders().getLength(),
-                    "Content Broker not configured (no providers)!" );
+    {
+#if OSL_DEBUG_LEVEL > 1
+        Reference< XContentProviderManager > xMgr
+            = pBroker->getContentProviderManagerInterface();
+        if ( !xMgr.is() )
+        {
+            if ( bThrow )
+                throw RuntimeException(
+                        rtl::OUString::createFromAscii(
+                            "UCB does not implement mandatory interface "
+                            "XContentProviderManager!" ),
+                        Reference< XInterface >() );
+        }
+        else
+        {
+            OSL_ENSURE( xMgr->queryContentProviders().getLength(),
+                        "Content Broker not configured (no providers)!" );
+        }
+#endif
+    }
 
     return pBroker;
 }
@@ -358,19 +407,24 @@ static Reference< XContentIdentifier > getContentIdentifier(
             return xId;
 
         if ( bThrow )
+        {
+            ensureContentProviderForURL( rBroker, rURL );
+
             throw ContentCreationException(
-                rtl::OUString::createFromAscii( "No Content Identifier!" ),
+                rtl::OUString::createFromAscii(
+                    "Unable to create Content Identifier!" ),
                 Reference< XInterface >(),
                 ContentCreationError_IDENTIFIER_CREATION_FAILED );
+        }
     }
     else
     {
         if ( bThrow )
-            throw ContentCreationException(
-                        rtl::OUString::createFromAscii(
-                            "No Content Identifier factory!" ),
-                        Reference< XInterface >(),
-                        ContentCreationError_NO_IDENTIFIER_FACTORY );
+            throw RuntimeException(
+                    rtl::OUString::createFromAscii(
+                        "UCB does not implement mandatory interface "
+                        "XContentIdentifierFactory!" ),
+                    Reference< XInterface >() );
     }
 
     return Reference< XContentIdentifier >();
@@ -394,24 +448,31 @@ static Reference< XContent > getContent(
         }
         catch ( IllegalIdentifierException const & )
         {
+            // handled below.
         }
 
         if ( xContent.is() )
             return xContent;
 
         if ( bThrow )
+        {
+            ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
+
             throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content!" ),
+                    rtl::OUString::createFromAscii(
+                        "Unable to create Content!" ),
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
+        }
     }
     else
     {
         if ( bThrow )
-            throw ContentCreationException(
-                    rtl::OUString::createFromAscii( "No Content Provider!" ),
-                    Reference< XInterface >(),
-                    ContentCreationError_NO_CONTENT_PROVIDER );
+            throw RuntimeException(
+                    rtl::OUString::createFromAscii(
+                        "UCB does not implement mandatory interface "
+                        "XContentProvider!" ),
+                    Reference< XInterface >() );
     }
 
     return Reference< XContent >();
@@ -1245,6 +1306,31 @@ Reference< XInputStream > Content::openStream()
     m_xImpl->executeCommand( aCommand );
 
     return xSink->getInputStream();
+}
+
+//=========================================================================
+Reference< XStream > Content::openWriteableStream()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    if ( !isDocument() )
+        return Reference< XStream >();
+
+    Reference< XActiveDataStreamer > xStreamer = new ActiveDataStreamer;
+
+    OpenCommandArgument2 aArg;
+    aArg.Mode       = OpenMode::DOCUMENT;
+    aArg.Priority   = 0; // unused
+    aArg.Sink       = xStreamer;
+    aArg.Properties = Sequence< Property >( 0 ); // unused
+
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aArg;
+
+    m_xImpl->executeCommand( aCommand );
+
+    return xStreamer->getStream();
 }
 
 //=========================================================================
