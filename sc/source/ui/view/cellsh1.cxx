@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:58:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,8 +311,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         eCmd = DEL_DELROWS;
                     else
                     {
+                        ScRange aRange;
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         BOOL bTheFlag=GetViewData()->IsMultiMarked() ||
+                                    ( GetViewData()->GetSimpleArea(aRange) && ScViewUtil::HasFiltered(aRange, pDoc) ) ||
                                     (pDoc->GetChangeTrack()!=NULL);
 
                         //CHINA001 ScDeleteCellDlg* pDlg = new ScDeleteCellDlg(
