@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 15:56:01 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,7 +1079,14 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             {
                 if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL )
                 {
-                    if ( bMatchWholeCell )
+                    if ( !rEntry.bQueryByString && rEntry.pStr->Len() == 0 )
+                    {
+                        // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
+                        // the query value is assigned directly, and the string is empty. In that case,
+                        // don't find any string (isEqual would find empty string results in formula cells).
+                        bOk = FALSE;
+                    }
+                    else if ( bMatchWholeCell )
                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
                     else
                     {
