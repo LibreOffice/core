@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 16:50:45 $
+ *  last change: $Author: cmc $ $Date: 2002-03-21 13:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3509,6 +3509,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 delete pObj;
                 pObj = pOrgObj = 0;
             }
+#if 0
             else
             {
                 //Either
@@ -3538,6 +3539,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if( pTextObj != pObj )
                 pTextImpRec = new SvxMSDffImportRec( *pImpRec );
+#else
+            pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
+            pTextObj->SetModel(pSdrModel);
+            pTextImpRec = new SvxMSDffImportRec(*pImpRec);
+#endif
 
             // Distance of Textbox to it's surrounding Autoshape
             INT32 nTextLeft  =GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
