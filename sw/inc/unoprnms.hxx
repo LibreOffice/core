@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:54:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 11:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ extern const SwPropNameTab aPropNameTab;
 // !!! function must not(!) be inline because it is called via the below  !!!
 // !!! listed macros from the swui DLL and that can not access the        !!!
 // !!! array aPropNameTab which is located in a different DLL.            !!!
-const SwPropNameLen& GetPropName( USHORT nId );
+SW_DLLPUBLIC const SwPropNameLen& GetPropName( USHORT nId );
 SW_DLLPUBLIC const SwPropNameLen& SwGetPropName( USHORT nId );
 
 #define SW_PROP_NAME(nId) \
