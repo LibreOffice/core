@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorImport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,16 @@
 #include "xmlictxt.hxx"
 #endif
 
+#ifndef _UNIVERSALL_REFERENCE_HXX
+#include "uniref.hxx"
+#endif
+
 #include <vector>
 
 
 class SvXMLImport;
 struct XMLPropertyState;
+class XMLPropertySetMapper;
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }
@@ -86,6 +91,7 @@ namespace com { namespace sun { namespace star {
 class XMLFootnoteSeparatorImport : public SvXMLImportContext
 {
     ::std::vector<XMLPropertyState> & rProperties;
+    UniReference<XMLPropertySetMapper> rMapper;
     sal_Int32 nPropIndex;
 
 public:
@@ -97,8 +103,7 @@ public:
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
-        /// Careful: we use indices nIndex-5..nIndex; the correctness must be
-        /// checked before calling the constructor
+        const UniReference<XMLPropertySetMapper> & rMapperRef,
         sal_Int32 nIndex);
 
     ~XMLFootnoteSeparatorImport();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "xmlprmap.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
 #endif
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
@@ -121,6 +121,7 @@
 using ::std::vector;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::style::NumberingType::ARABIC;
 
 
 void XMLSectionFootnoteConfigExport::exportXML(
@@ -130,76 +131,81 @@ void XMLSectionFootnoteConfigExport::exportXML(
     sal_uInt32 nIdx,
     const UniReference<XMLPropertySetMapper> & rMapper)
 {
-
-#ifndef PRODUCT
-    // check whether the properties are in the property state vector as
-    // expected. If any of these assertions fail, someone messed up the
-    // propertymap in txtprmap.cxx
-
-    static sal_Int16 aFootnoteIds[] =
-    {
-        CTF_SECTION_FOOTNOTE_NUM_OWN,
-        CTF_SECTION_FOOTNOTE_NUM_RESTART,
-        CTF_SECTION_FOOTNOTE_NUM_RESTART_AT,
-        CTF_SECTION_FOOTNOTE_NUM_TYPE,
-        CTF_SECTION_FOOTNOTE_NUM_PREFIX,
-        CTF_SECTION_FOOTNOTE_NUM_SUFFIX,
-        CTF_SECTION_FOOTNOTE_END
-    };
-
-    static sal_Int16 aEndnoteIds[] =
-    {
-        CTF_SECTION_ENDNOTE_NUM_OWN,
-        CTF_SECTION_ENDNOTE_NUM_RESTART,
-        CTF_SECTION_ENDNOTE_NUM_RESTART_AT,
-        CTF_SECTION_ENDNOTE_NUM_TYPE,
-        CTF_SECTION_ENDNOTE_NUM_PREFIX,
-        CTF_SECTION_ENDNOTE_NUM_SUFFIX,
-        CTF_SECTION_ENDNOTE_END
-    };
-
-    sal_Int16* pIds = bEndnote ? aEndnoteIds : aFootnoteIds;
-
-    // check map entries
-    DBG_ASSERT( pIds[0] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx-6].mnIndex),
-                "expect consecutive map entries" );
-    DBG_ASSERT( pIds[1] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx-5].mnIndex),
-                "expect consecutive map entries" );
-    DBG_ASSERT( pIds[2] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx-4].mnIndex),
-                "expect consecutive map entries" );
-    DBG_ASSERT( pIds[3] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx-3].mnIndex),
-                "expect consecutive map entries" );
-    DBG_ASSERT( pIds[4] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx-2].mnIndex),
-                "expect consecutive map entries" );
-    DBG_ASSERT( pIds[5] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx-1].mnIndex),
-                "expect consecutive map entries" );
-    DBG_ASSERT( pIds[6] ==
-                rMapper->GetEntryContextId((*pProperties)[nIdx].mnIndex),
-                "expect consecutive map entries" );
-#endif
-
-    // get the values from the properties
-    sal_Bool bNumOwn;
-    sal_Bool bNumRestart;
-    sal_Int16 nNumRestartAt;
-    sal_Int16 nNumberingType;
+    // store and initialize the values
+    sal_Bool bNumOwn = sal_False;
+    sal_Bool bNumRestart = sal_False;
+    sal_Int16 nNumRestartAt = 0;
+    sal_Int16 nNumberingType = ARABIC;
     OUString sNumPrefix;
     OUString sNumSuffix;
-    sal_Bool bEnd;
+    sal_Bool bEnd = sal_False;
 
-    (*pProperties)[nIdx-6].maValue >>= bNumOwn;
-    (*pProperties)[nIdx-5].maValue >>= bNumRestart;
-    (*pProperties)[nIdx-4].maValue >>= nNumRestartAt;
-    (*pProperties)[nIdx-3].maValue >>= nNumberingType;
-    (*pProperties)[nIdx-2].maValue >>= sNumPrefix;
-    (*pProperties)[nIdx-1].maValue >>= sNumSuffix;
-    (*pProperties)[nIdx  ].maValue >>= bEnd;
+    // find entries in property states vector
+    sal_uInt32 nCount = pProperties->size();
+    for(sal_uInt32 i = 0; i < nCount; i++)
+    {
+        const XMLPropertyState& rState = (*pProperties)[i];
+
+        sal_Int16 nContextId = rMapper->GetEntryContextId(rState.mnIndex);
+        if (!bEndnote)
+        {
+            switch (nContextId)
+            {
+                case CTF_SECTION_FOOTNOTE_NUM_OWN:
+                    rState.maValue >>= bNumOwn;
+                    break;
+                case CTF_SECTION_FOOTNOTE_NUM_RESTART:
+                    rState.maValue >>= bNumRestart;
+                    break;
+                case CTF_SECTION_FOOTNOTE_NUM_RESTART_AT:
+                    rState.maValue >>= nNumRestartAt;
+                    break;
+                case CTF_SECTION_FOOTNOTE_NUM_TYPE:
+                    rState.maValue >>= nNumberingType;
+                    break;
+                case CTF_SECTION_FOOTNOTE_NUM_PREFIX:
+                    rState.maValue >>= sNumPrefix;
+                    break;
+                case CTF_SECTION_FOOTNOTE_NUM_SUFFIX:
+                    rState.maValue >>= sNumSuffix;
+                    break;
+                case CTF_SECTION_FOOTNOTE_END:
+                    DBG_ASSERT( i == nIdx,
+                                "received wrong property state index" );
+                    rState.maValue >>= bEnd;
+                    break;
+            }
+        }
+        else
+        {
+            switch (nContextId)
+            {
+                case CTF_SECTION_ENDNOTE_NUM_OWN:
+                    rState.maValue >>= bNumOwn;
+                    break;
+                case CTF_SECTION_ENDNOTE_NUM_RESTART:
+                    rState.maValue >>= bNumRestart;
+                    break;
+                case CTF_SECTION_ENDNOTE_NUM_RESTART_AT:
+                    rState.maValue >>= nNumRestartAt;
+                    break;
+                case CTF_SECTION_ENDNOTE_NUM_TYPE:
+                    rState.maValue >>= nNumberingType;
+                    break;
+                case CTF_SECTION_ENDNOTE_NUM_PREFIX:
+                    rState.maValue >>= sNumPrefix;
+                    break;
+                case CTF_SECTION_ENDNOTE_NUM_SUFFIX:
+                    rState.maValue >>= sNumSuffix;
+                    break;
+                case CTF_SECTION_ENDNOTE_END:
+                    DBG_ASSERT( i == nIdx,
+                                "received wrong property state index" );
+                    rState.maValue >>= bEnd;
+                    break;
+            }
+        }
+    }
 
     // we only make an element if we have an own footnote/endnote numbering
     if (bEnd)
@@ -230,17 +236,19 @@ void XMLSectionFootnoteConfigExport::exportXML(
             }
 
             // number type: num format
-            rExport.GetMM100UnitConverter().convertNumFormat( sBuf, nNumberingType );
+            rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
+                                                              nNumberingType );
             rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_format,
                                  sBuf.makeStringAndClear());
 
             // and letter sync, if applicable
-            rExport.GetMM100UnitConverter().convertNumLetterSync( sBuf, nNumberingType );
+            rExport.GetMM100UnitConverter().convertNumLetterSync(
+                sBuf, nNumberingType );
             if (sBuf.getLength())
             {
                 rExport.AddAttribute(XML_NAMESPACE_STYLE,
-                                      sXML_num_letter_sync,
-                                      sBuf.makeStringAndClear());
+                                     sXML_num_letter_sync,
+                                     sBuf.makeStringAndClear());
             }
         }
 

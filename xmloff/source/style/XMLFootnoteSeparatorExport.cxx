@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include "xmlprmap.hxx"
 #endif
 
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #endif
@@ -124,74 +128,90 @@ void XMLFootnoteSeparatorExport::exportXML(
     const UniReference<XMLPropertySetMapper> & rMapper)
 {
     DBG_ASSERT(NULL != pProperties, "Need property states");
-    DBG_ASSERT(nIdx >= 6, "index too low");
 
-    if (nIdx >= 6)
+    // intialize values
+    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT;
+    sal_Int32 nLineColor = 0;
+    sal_Int32 nLineDistance = 0;
+    sal_Int8 nLineRelWidth = 0;
+    sal_Int32 nLineTextDistance = 0;
+    sal_Int16 nLineWeight = 0;
+
+    // find indices into property map and get values
+    sal_uInt32 nCount = pProperties->size();
+    for(sal_uInt32 i = 0; i < nCount; i++)
     {
-        // get the values from the properties
-        // enum text::HorizontalAdjust
-        sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT;
-        sal_Int32 nLineColor = 0;
-        sal_Int32 nLineDistance = 0;
-        sal_Int8 nLineRelWidth = 0;
-        sal_Int32 nLineTextDistance = 0;
-        sal_Int16 nLineWeight = 0;
+        const XMLPropertyState& rState = (*pProperties)[i];
 
-        (*pProperties)[nIdx-5].maValue >>= eLineAdjust;
-        (*pProperties)[nIdx-4].maValue >>= nLineColor;
-        (*pProperties)[nIdx-3].maValue >>= nLineDistance;
-        (*pProperties)[nIdx-2].maValue >>= nLineRelWidth;
-        (*pProperties)[nIdx-1].maValue >>= nLineTextDistance;
-        (*pProperties)[nIdx  ].maValue >>= nLineWeight;
-
-        OUStringBuffer sBuf;
-
-        // weight/width
-        if (nLineWeight > 0)
+        switch (rMapper->GetEntryContextId(rState.mnIndex))
         {
-            rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineWeight);
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_width,
-                                 sBuf.makeStringAndClear());
+        case CTF_PM_FTN_LINE_ADJUST:
+            rState.maValue >>= eLineAdjust;
+            break;
+        case CTF_PM_FTN_LINE_COLOR:
+            rState.maValue >>= nLineColor;
+            break;
+        case CTF_PM_FTN_DISTANCE:
+            rState.maValue >>= nLineDistance;
+            break;
+        case CTF_PM_FTN_LINE_WIDTH:
+            rState.maValue >>= nLineRelWidth;
+            break;
+        case CTF_PM_FTN_LINE_DISTANCE:
+            rState.maValue >>= nLineTextDistance;
+            break;
+        case CTF_PM_FTN_LINE_WEIGTH:
+            DBG_ASSERT( i == nIdx,
+                        "received wrong property state index" );
+            rState.maValue >>= nLineWeight;
+            break;
         }
-
-        // line text distance
-        if (nLineTextDistance > 0)
-        {
-            rExport.GetMM100UnitConverter().convertMeasure(sBuf,
-                                                           nLineTextDistance);
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_distance_before_sep,
-                                 sBuf.makeStringAndClear());
-        }
-
-        // line distance
-        if (nLineDistance > 0)
-        {
-            rExport.GetMM100UnitConverter().convertMeasure(sBuf,
-                                                           nLineDistance);
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_distance_after_sep,
-                                 sBuf.makeStringAndClear());
-        }
-
-        // adjustment
-        if (rExport.GetMM100UnitConverter().convertEnum(
-            sBuf, eLineAdjust, aXML_HorizontalAdjust_Enum))
-        {
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_adjustment,
-                                 sBuf.makeStringAndClear());
-        }
-
-
-        SvXMLUnitConverter::convertPercent(sBuf, nLineRelWidth);
-        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_rel_width,
-                             sBuf.makeStringAndClear());
-
-        // color
-        rExport.GetMM100UnitConverter().convertColor(sBuf, nLineColor);
-        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_color,
-                             sBuf.makeStringAndClear());
-
-        SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
-                                 sXML_footnote_sep, sal_True, sal_True);
     }
-    // else: ignore (illegal map)
+
+    OUStringBuffer sBuf;
+
+    // weight/width
+    if (nLineWeight > 0)
+    {
+        rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineWeight);
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_width,
+                             sBuf.makeStringAndClear());
+    }
+
+    // line text distance
+    if (nLineTextDistance > 0)
+    {
+        rExport.GetMM100UnitConverter().convertMeasure(sBuf,nLineTextDistance);
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_distance_before_sep,
+                             sBuf.makeStringAndClear());
+    }
+
+    // line distance
+    if (nLineDistance > 0)
+    {
+        rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineDistance);
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_distance_after_sep,
+                             sBuf.makeStringAndClear());
+    }
+
+    // adjustment
+    if (rExport.GetMM100UnitConverter().convertEnum(
+        sBuf, eLineAdjust, aXML_HorizontalAdjust_Enum))
+    {
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_adjustment,
+                             sBuf.makeStringAndClear());
+    }
+
+    // relative line width
+    SvXMLUnitConverter::convertPercent(sBuf, nLineRelWidth);
+    rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_rel_width,
+                         sBuf.makeStringAndClear());
+
+    // color
+    rExport.GetMM100UnitConverter().convertColor(sBuf, nLineColor);
+    rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_color,
+                         sBuf.makeStringAndClear());
+
+    SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
+                             sXML_footnote_sep, sal_True, sal_True);
 }

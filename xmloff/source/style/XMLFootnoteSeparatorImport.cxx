@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include "maptype.hxx"
 #endif
 
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -135,9 +139,11 @@ XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     vector<XMLPropertyState> & rProps,
+    const UniReference<XMLPropertySetMapper> & rMapperRef,
     sal_Int32 nIndex) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         rProperties(rProps),
+        rMapper(rMapperRef),
         nPropIndex(nIndex)
 {
 }
@@ -227,27 +233,35 @@ void XMLFootnoteSeparatorImport::StartElement(
 
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
+    sal_Int32 nIndex;
 
     aAny <<= eLineAdjust;
-    XMLPropertyState aLineAdjust( nPropIndex-5, aAny);
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_ADJUST);
+    XMLPropertyState aLineAdjust( nIndex, aAny);
     rProperties.push_back(aLineAdjust);
 
     aAny <<= nLineColor;
-    XMLPropertyState aLineColor( nPropIndex-4, aAny );
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_COLOR);
+    XMLPropertyState aLineColor( nIndex, aAny );
     rProperties.push_back(aLineColor);
 
     aAny <<= nLineDistance;
-    XMLPropertyState aLineDistance( nPropIndex-3, aAny );
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_DISTANCE);
+    XMLPropertyState aLineDistance( nIndex, aAny );
     rProperties.push_back(aLineDistance);
 
     aAny <<= nLineRelWidth;
-    XMLPropertyState aLineRelWidth( nPropIndex-2, aAny);
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WIDTH);
+    XMLPropertyState aLineRelWidth( nIndex, aAny);
     rProperties.push_back(aLineRelWidth);
 
     aAny <<= nLineTextDistance;
-    XMLPropertyState aLineTextDistance( nPropIndex-1, aAny);
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_DISTANCE);
+    XMLPropertyState aLineTextDistance( nIndex, aAny);
     rProperties.push_back(aLineTextDistance);
 
+    DBG_ASSERT( rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WEIGTH) == nPropIndex,
+                "Received wrong property map index!" );
     aAny <<= nLineWeight;
     XMLPropertyState aLineWeight( nPropIndex, aAny );
     rProperties.push_back(aLineWeight);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 16:39:27 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,58 +161,14 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                            rProperties );
         break;
     case CTF_SECTION_FOOTNOTE_END:
-        DBG_ASSERT( rProp.mnIndex >= 7, "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_NUM_OWN ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-6 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_NUM_RESTART ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-5 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_NUM_RESTART_AT ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-4 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_NUM_TYPE ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-3 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_NUM_PREFIX ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-2 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_NUM_SUFFIX ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-1 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_FOOTNOTE_END ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex ), "invalid property map!");
-        pContext =
-            new XMLSectionFootnoteConfigImport(
-                GetImport(), nPrefix, rLocalName, rProperties, rProp.mnIndex);
+        pContext = new XMLSectionFootnoteConfigImport(
+            GetImport(), nPrefix, rLocalName, rProperties,
+            xMapper->getPropertySetMapper(), rProp.mnIndex);
         break;
     case CTF_SECTION_ENDNOTE_END:
-        DBG_ASSERT( rProp.mnIndex >= 7, "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_NUM_OWN ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-6 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_NUM_RESTART ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-5 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_NUM_RESTART_AT ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-4 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_NUM_TYPE ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-3 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_NUM_PREFIX ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-2 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_NUM_SUFFIX ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex-1 ), "invalid property map!");
-        DBG_ASSERT( CTF_SECTION_ENDNOTE_END ==
-                    xMapper->getPropertySetMapper()->GetEntryContextId(
-                        rProp.mnIndex ), "invalid property map!");
-        pContext =
-            new XMLSectionFootnoteConfigImport(
-                GetImport(), nPrefix, rLocalName, rProperties, rProp.mnIndex);
+        pContext = new XMLSectionFootnoteConfigImport(
+            GetImport(), nPrefix, rLocalName, rProperties,
+            xMapper->getPropertySetMapper(), rProp.mnIndex);
         break;
     }
 

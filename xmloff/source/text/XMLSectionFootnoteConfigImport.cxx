@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,14 @@
 #include "xmlnumi.hxx"
 #endif
 
+#ifndef _XMLOFF_TEXTPRMAP_HXX_
+#include "txtprmap.hxx"
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 #include <vector>
 
 using namespace ::com::sun::star::style;
@@ -128,10 +136,12 @@ XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     vector<XMLPropertyState> & rProps,
+    const UniReference<XMLPropertySetMapper> & rMapperRef,
     sal_Int32 nIndex) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         rProperties(rProps),
-        nPropIndex(nIndex)
+        nPropIndex(nIndex),
+        rMapper(rMapperRef)
 {
 }
 
@@ -205,36 +215,55 @@ void XMLSectionFootnoteConfigImport::StartElement(
 
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
+    sal_Bool bEndnote = GetLocalName().equalsAsciiL(
+        sXML_endnotes_configuration,
+        sizeof(sXML_endnotes_configuration)-1 );
 
     aAny.setValue( &bNumOwn, ::getBooleanCppuType() );
-    XMLPropertyState aNumOwn( nPropIndex-6, aAny );
-    rProperties.push_back(aNumOwn);
+    sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_OWN : CTF_SECTION_FOOTNOTE_NUM_OWN );
+    XMLPropertyState aNumOwn( nIndex, aAny );
+    rProperties.push_back( aNumOwn );
 
     aAny.setValue( &bNumRestart, ::getBooleanCppuType() );
-    XMLPropertyState aNumRestart( nPropIndex-5, aAny );
-    rProperties.push_back(aNumRestart);
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_RESTART : CTF_SECTION_FOOTNOTE_NUM_RESTART );
+    XMLPropertyState aNumRestart( nIndex, aAny );
+    rProperties.push_back( aNumRestart );
 
     aAny <<= nNumRestartAt;
-    XMLPropertyState aNumRestartAtState( nPropIndex-4, aAny );
-    rProperties.push_back(aNumRestartAtState);
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_RESTART_AT :
+        CTF_SECTION_FOOTNOTE_NUM_RESTART_AT );
+    XMLPropertyState aNumRestartAtState( nIndex, aAny );
+    rProperties.push_back( aNumRestartAtState );
 
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
                                                     sNumFormat,
                                                     sNumLetterSync );
     aAny <<= nNumType;
-    XMLPropertyState aNumFormatState( nPropIndex-3, aAny);
-    rProperties.push_back(aNumFormatState);
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_TYPE : CTF_SECTION_FOOTNOTE_NUM_TYPE );
+    XMLPropertyState aNumFormatState( nIndex, aAny );
+    rProperties.push_back( aNumFormatState );
 
     aAny <<= sNumPrefix;
-    XMLPropertyState aPrefixState( nPropIndex-2, aAny);
-    rProperties.push_back(aPrefixState);
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_PREFIX : CTF_SECTION_FOOTNOTE_NUM_PREFIX );
+    XMLPropertyState aPrefixState( nIndex, aAny );
+    rProperties.push_back( aPrefixState );
 
     aAny <<= sNumSuffix;
-    XMLPropertyState aSuffixState( nPropIndex-1, aAny);
-    rProperties.push_back(aSuffixState);
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_SUFFIX : CTF_SECTION_FOOTNOTE_NUM_SUFFIX );
+    XMLPropertyState aSuffixState( nIndex, aAny );
+    rProperties.push_back( aSuffixState );
 
     aAny.setValue( &bEnd, ::getBooleanCppuType() );
-    XMLPropertyState aEndState( nPropIndex, aAny );
-    rProperties.push_back(aEndState);
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
+    DBG_ASSERT( nIndex == nPropIndex, "Wrong property mapper index received.");
+    XMLPropertyState aEndState( nIndex, aAny );
+    rProperties.push_back( aEndState );
 }
