@@ -218,7 +218,7 @@ End Sub
 
 
 Sub SwitchDialogHeight()
-	SwitchWizardDialogHeight(DlgFormDB, FormPath)
+	SwitchWizardDialogHeight(DlgFormDB, sReduceDialog, sHeightenDialog)
 End Sub
 
 

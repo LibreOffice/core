@@ -129,7 +129,7 @@ Sub SetDialogLanguage ()
 		sReduceDialog = GetResText(RID_FORM + 65)
 
 		.cmdSwitchHeight.HelpText = sReduceDialog
-		.cmdSwitchHeight.ImageURL = FormPath &amp; &quot;up.bmp&quot;
+		.cmdSwitchHeight.Label = CHR(9653)
 	End With
 End Sub
 
