@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-17 15:06:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-17 15:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,6 +1391,13 @@ sal_Bool SvtFileView::PreviousLevel( String& rNewURL )
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 SvtFileView::GetHelpId( ) const
+{
+    return mpImp->mpView->GetHelpId( );
 }
 
 // -----------------------------------------------------------------------

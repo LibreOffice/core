@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-22 11:13:06 $
+ *  last change: $Author: fs $ $Date: 2002-10-17 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ public:
     sal_Bool                PreviousLevel( String& rNewURL );
 
     void                    SetHelpId( sal_uInt32 nHelpId );
+    sal_uInt32              GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
     void                    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     void                    Initialize( const String& rURL, const String& rFilter );
