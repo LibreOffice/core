@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:05:00 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,9 @@ CalendarImpl::CalendarImpl(const Reference< XMultiServiceFactory > &rxMSF) : xMS
 CalendarImpl::~CalendarImpl()
 {
     // Clear lookuptable
-    for (lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
-            listItem; listItem = (lookupTableItem*)lookupTable.Next())
-        delete listItem;
-    lookupTable.Clear();
+    for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+        delete lookupTable[l];
+    lookupTable.clear();
 }
 
 
@@ -101,16 +100,17 @@ void SAL_CALL
 CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) throw (RuntimeException)
 {
     Reference < XExtendedCalendar > xOldCalendar( xCalendar );  // backup
+    sal_Int32 i;
 
-    lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
-    for ( ; listItem; listItem = (lookupTableItem*)lookupTable.Next()) {
+    for (i = 0; i < lookupTable.size(); i++) {
+        lookupTableItem *listItem = lookupTable[i];
         if (uniqueID == listItem->uniqueID) {
             xCalendar = listItem->xCalendar;
             break;
         }
     }
 
-    if (! listItem) {
+    if (i >= lookupTable.size()) {
         Reference < XInterface > xI = xMSF->createInstance(
                 OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
         if ( xI.is() )
@@ -118,7 +118,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
         else
             throw ERROR;
 
-        lookupTable.Insert( new lookupTableItem(uniqueID, xCalendar) );
+        lookupTable.push_back( new lookupTableItem(uniqueID, xCalendar) );
     }
 
     if ( !xCalendar.is() )
