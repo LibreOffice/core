@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 10:57:14 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,7 +979,7 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
             }
         }
 
-        if ( !xController.is() )
+        if ( !xController.is() && m_pToolBar && m_pToolBar->IsItemVisible(nId) )
         {
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
