@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenerbase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:52:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef DEBUG_HXX
 #include <tools/debug.hxx>
@@ -73,8 +74,8 @@
 
 SvtListenerBase::SvtListenerBase( SvtListener& rLst,
                                   SvtBroadcaster& rBroadcaster )
-    : pBroadcaster( &rBroadcaster ), pListener( &rLst ),
-    pLeft( 0 ), pRight( 0 )
+    : pLeft( 0 ), pRight( 0 ),
+    pBroadcaster( &rBroadcaster ), pListener( &rLst )
 {
     pNext = rLst.pBrdCastLst;
     rLst.pBrdCastLst = this;
