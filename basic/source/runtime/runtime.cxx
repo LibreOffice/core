@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 11:15:16 $
+ *  last change: $Author: ab $ $Date: 2001-09-07 14:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,16 @@
 
 #include "segmentc.hxx"
 #pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
+
+
+// #91147 Global reschedule flag
+static BOOL bStaticGlobalEnableReschedule = TRUE;
+
+void StarBASIC::StaticEnableReschedule( BOOL bReschedule )
+{
+    bStaticGlobalEnableReschedule = bReschedule;
+}
+
 
 struct SbiGosubStack {                  // GOSUB-Stack:
     SbiGosubStack* pNext;               // Chain
@@ -570,7 +580,7 @@ BOOL SbiRuntime::Step()
     if( bRun )
     {
         // Unbedingt gelegentlich die Kontrolle abgeben!
-        if( pInst->IsReschedule() && !( ++nOps & 0x1F ) )
+        if( !( ++nOps & 0x1F ) && pInst->IsReschedule() && bStaticGlobalEnableReschedule )
             Application::Reschedule();
 
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
