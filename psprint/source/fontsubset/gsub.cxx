@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:54:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
         if( (nDefaultLangsysOfs != 0) && (nDefaultLangsysOfs != nLangsysOffset) )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
-            const USHORT nLookupOrder   = NEXT_UShort( pLangSys );
+            /*const USHORT nLookupOrder   =*/ NEXT_UShort( pLangSys );
             const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
             const USHORT nCntFeature    = NEXT_UShort( pLangSys );
             aFeatureIndexList.push_back( nReqFeatureIdx );
@@ -163,7 +163,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
         if( nLangsysOffset != 0 )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
-            const USHORT nLookupOrder   = NEXT_UShort( pLangSys );
+            /*const USHORT nLookupOrder   =*/ NEXT_UShort( pLangSys );
             const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
             const USHORT nCntFeature    = NEXT_UShort( pLangSys );
             aFeatureIndexList.push_back( nReqFeatureIdx );
@@ -222,7 +222,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
         const USHORT nOfsLookupTable = *it;
         const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
         const USHORT eLookupType        = NEXT_UShort( pLookupTable );
-        const USHORT eLookupFlag        = NEXT_UShort( pLookupTable );
+        /*const USHORT eLookupFlag        =*/ NEXT_UShort( pLookupTable );
         const USHORT nCntLookupSubtable = NEXT_UShort( pLookupTable );
 
         // TODO: switch( eLookupType )
