@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:24:50 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,8 @@ void FontSubstConfigItem::getValues()
 
 const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, int nLanguage ) const
 {
+    // search if a  (language dep.) replacement table for the given font exists
+    // fallback is english
     String aSearchFont( rFontName );
     aSearchFont.ToLowerAscii();
     FontNameAttr aSearchAttr;
@@ -1185,10 +1187,14 @@ const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( cons
         ::std::map< int, ::std::vector< FontNameAttr > >::const_iterator lang = m_aSubstitutions.find( nLanguage );
         if( lang != m_aSubstitutions.end() )
         {
-            ::std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.begin(), lang->second.end(), aSearchAttr, WeakStringSort() );
+            // try to find an exact match first
+            ::std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.begin(), lang->second.end(), aSearchAttr, StrictStringSort() );
             if( it != lang->second.end() && aSearchFont.CompareTo( it->Name, aSearchFont.Len() ) == COMPARE_EQUAL )
                 return &(*it);
-
+            // search for the replacement table of a similarly named font
+            it = ::std::lower_bound( lang->second.begin(), lang->second.end(), aSearchAttr, WeakStringSort() );
+            if( it != lang->second.end()  )
+                return &(*it);
         }
         switch( i )
         {
@@ -1252,8 +1258,6 @@ void SettingsConfigItem::Commit()
 {
     if( ! IsValidConfigMgr() )
         return;
-
-    int i;
 
     ::std::hash_map< OUString, ::std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group;
 
