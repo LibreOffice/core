@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 12:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
+
+#include <algorithm>
 
 ScMyColumnRowGroup::ScMyColumnRowGroup()
 {

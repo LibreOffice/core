@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-15 08:34:19 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 12:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
 #endif
+
+#include <algorithm>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

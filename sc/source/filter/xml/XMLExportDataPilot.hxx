@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 12:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,10 @@
 
 #include <rtl/ustring>
 
+#include "global.hxx"
+
 class ScXMLExport;
 class ScDocument;
-enum ScQueryOp;
 struct ScQueryEntry;
 struct ScQueryParam;
 
