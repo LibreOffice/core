@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,7 @@ void ScDrawPagesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-SvxFmDrawPage* ScDrawPagesObj::GetObjectByIndex_Impl(INT32 nIndex) const
+uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(INT32 nIndex) const
 {
     if (pDocShell)
     {
@@ -1055,7 +1055,7 @@ SvxFmDrawPage* ScDrawPagesObj::GetObjectByIndex_Impl(INT32 nIndex) const
             DBG_ASSERT(pPage,"Draw-Page nicht gefunden");
             if (pPage)
             {
-                return new SvxFmDrawPage( pPage );
+                return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-16 13:28:23 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <svx/unomid.hxx>
 #include <svx/unoprnms.hxx>
 #include <svx/unotext.hxx>
+#include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
 #include <sch/schdll.hxx>   // SchMemChart
 #include <sch/memchrt.hxx>
@@ -5789,7 +5790,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
         DBG_ASSERT(pPage,"Draw-Page nicht gefunden");
         if (pPage)
-            return new SvxFmDrawPage( pPage );
+            return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
 
         //  Das DrawPage-Objekt meldet sich als Listener am SdrModel an
         //  und sollte von dort alle Aktionen mitbekommen
