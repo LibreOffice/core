@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 18:07:37 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,6 +857,35 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
     return new SvxEventConfigPage( pParent, rSet );
 }
 
+sal_Bool impl_showKeyConfigTabPage()
+{
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager");
+    static ::rtl::OUString SERVICENAME_DESKTOP       = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"             );
+    static ::rtl::OUString MODULEID_STARTMODULE      = ::rtl::OUString::createFromAscii("com.sun.star.frame.StartModule"         );
+
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XFrame >              xFrame  = xDesktop->getActiveFrame();
+        css::uno::Reference< dcss::frame::XModuleManager >     xMM     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+
+        if (xMM.is() && xFrame.is())
+        {
+            ::rtl::OUString sModuleId = xMM->identify(xFrame);
+            if (
+                ( sModuleId.getLength()                 ) &&
+                (!sModuleId.equals(MODULEID_STARTMODULE))
+               )
+               return sal_True;
+        }
+    }
+    catch(const css::uno::Exception&)
+        {}
+
+    return sal_False;
+}
+
 /******************************************************************************
  *
  * SvxConfigDialog is the configuration dialog which is brought up from the
@@ -878,6 +907,9 @@ SvxConfigDialog::SvxConfigDialog(
     AddTabPage( RID_SVXPAGE_KEYBOARD, CreateKeyboardConfigPage, NULL );
     AddTabPage( RID_SVXPAGE_TOOLBARS, CreateSvxToolbarConfigPage, NULL );
     AddTabPage( RID_SVXPAGE_EVENTS, CreateSvxEventConfigPage, NULL );
+
+    if (!impl_showKeyConfigTabPage())
+        RemoveTabPage( RID_SVXPAGE_KEYBOARD );
 
     const SfxPoolItem* pItem =
         pSet->GetItem( pSet->GetPool()->GetWhich( SID_CONFIG ) );
