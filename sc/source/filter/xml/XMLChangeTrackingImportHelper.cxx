@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
+ *  last change: $Author: er $ $Date: 2001-02-09 16:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,12 +700,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependences(ScMyContentAction* p
                 {
                     ScBaseCell* pNewCell = pOldCell->Clone(pDoc);
                     if (pNewCell)
-                    {
                         pPrevActContent->SetNewCell(pNewCell, pDoc);
-                        String sTemp;
-                        pActContent->GetOldString(sTemp);
-                        pPrevActContent->SetNewValue(sTemp, pDoc);
-                    }
                 }
             }
         }
@@ -722,7 +717,7 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
             ScMyDependences::iterator aItr = pAction->aDependences.begin();
             while(aItr != pAction->aDependences.end())
             {
-                pAct->LoadDependent(*aItr, pTrack);
+                pAct->AddDependent(*aItr, pTrack);
                 aItr = pAction->aDependences.erase(aItr);
             }
         }
@@ -731,7 +726,7 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
             ScMyDeletedList::iterator aItr = pAction->aDeletedList.begin();
             while(aItr != pAction->aDeletedList.end())
             {
-                pAct->LoadDeleted(aItr->nID, pTrack);
+                pAct->SetDeletedInThis(aItr->nID, pTrack);
                 if ((pAct->GetType() == SC_CAT_CONTENT) && aItr->pCellInfo)
                 {
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pAct);
@@ -742,7 +737,6 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
                         {
                             pCell = aItr->pCellInfo->CreateCell(pDoc);
                             pContentAct->SetNewCell(pCell, pDoc);
-                            pContentAct->SetNewValue(aItr->pCellInfo->sResult, pDoc);
                         }
                     }
                 }
