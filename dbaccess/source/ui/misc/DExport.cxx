@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:37:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,34 +323,24 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
 ODatabaseExport::~ODatabaseExport()
 {
     DBG_DTOR(ODatabaseExport,NULL);
-}
-//------------------------------------------------------------------------------
-String ODatabaseExport::ShortenFieldName( const String& rName, xub_StrLen nNewLength,
-                                         const Reference< XNameAccess>& rxDestList )
-{
-    xub_StrLen nLength = nNewLength ? nNewLength : rName.Len();
-    //////////////////////////////////////////////////////////////////////
-    // Wenn es schon einen gekuerzten Namen gibt, Namen durchnumerieren (bis 99)
-    String aNewName( rName.Copy( 0, nLength ));
-    String aBaseName( rName.Copy( 0, nLength - 2 ));
-    xub_StrLen i=1;
-    while( rxDestList->hasByName(aNewName) && (i<100) )
-    {
-        aNewName = aBaseName;
-        aNewName += String::CreateFromInt32(i);
-        i++;
-    }
+    ODatabaseExport::TColumns::iterator aIter = m_aDestColumns.begin();
+    ODatabaseExport::TColumns::iterator aEnd  = m_aDestColumns.end();
 
-    return aNewName;
+    for(;aIter != aEnd;++aIter)
+        delete aIter->second;
+    m_vDestVector.clear();
+    m_aDestColumns.clear();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseExport::insertValueIntoColumn()
 {
+    DBG_CHKTHIS(ODatabaseExport,NULL);
     if(m_nColumnPos < sal_Int32(m_vDestVector.size()))
     {
         OFieldDescription* pField = m_vDestVector[m_nColumnPos]->second;
         if(pField)
         {
+            OSL_ENSURE((m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos) < m_vColumns.size(),"Illegal index for vector");
             sal_Int32 nPos = m_vColumns[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos].first;
             if(nPos != CONTAINER_ENTRY_NOTFOUND)
             {
@@ -363,6 +353,7 @@ void ODatabaseExport::insertValueIntoColumn()
                 {
                     sal_Int32 nNumberFormat = 0;
                     double fOutNumber = 0.0;
+                    OSL_ENSURE((m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos) < m_vColumnTypes.size(),"Illegal index for vector");
                     if (m_vColumnTypes[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos] != DataType::VARCHAR)
                     {
                         Reference<XNumberFormatTypes> xNumType(m_xFormatter->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
@@ -417,6 +408,7 @@ void ODatabaseExport::insertValueIntoColumn()
 // -----------------------------------------------------------------------------
 sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOldFormat)
 {
+    DBG_CHKTHIS(ODatabaseExport,NULL);
     sal_Int32 F_Index = 0;
     double fOutNumber = 0.0;
     sal_Int32 nFormat = 0;
@@ -432,6 +424,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
         fOutNumber = m_xFormatter->convertStringToNumber(nFormat,aCheckToken);
 
         {
+            OSL_ENSURE((m_nColumnPos) < m_vColumns.size(),"Illegal index for vector");
             m_vFormatKey[m_vColumns[m_nColumnPos].first] = nFormat; // wird sp"ater f"ur die Column gebraucht
             switch(nType)
             {
@@ -533,6 +526,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
     }
     catch(Exception&)
     {
+        OSL_ENSURE((m_nColumnPos) < m_vColumns.size(),"Illegal index for vector");
         m_vFormatKey[m_vColumns[m_nColumnPos].first] =  100;
         nFormat = NumberFormat::TEXT; // Text "uberschreibt alles
     }
@@ -542,6 +536,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
 // -----------------------------------------------------------------------------
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
+    DBG_CHKTHIS(ODatabaseExport,NULL);
     if(_pList && _pInfoMap)
     {
         TColumnVector::const_iterator aIter = _pList->begin();
@@ -600,6 +595,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
 // -----------------------------------------------------------------------------
 void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 {
+    DBG_CHKTHIS(ODatabaseExport,NULL);
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
     ::rtl::OUString aAlias = _rColumnName;
@@ -653,12 +649,12 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::createRowSet()
 {
-    Reference<XResultSet> xDestSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+    DBG_CHKTHIS(ODatabaseExport,NULL);
+    Reference<XResultSet> xDestSet(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
     Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
     if(xProp.is())
     {
-        ::rtl::OUString sDestName;
-        ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xTable,sDestName,sal_False);
+        ::rtl::OUString sDestName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xTable,sal_False,::dbtools::eInDataManipulation);
 
         xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
         xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
@@ -670,18 +666,20 @@ sal_Bool ODatabaseExport::createRowSet()
         m_xResultSetMetaData = xSrcMetaSup->getMetaData();
         OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
     }
-    m_xResultSetUpdate  = Reference< XResultSetUpdate>(xDestSet,UNO_QUERY);
-    m_xRowUpdate        = Reference< XRowUpdate>(xDestSet,UNO_QUERY);
+    m_xResultSetUpdate.set(xDestSet,UNO_QUERY);
+    m_xRowUpdate.set(xDestSet,UNO_QUERY);
 
     return m_xResultSetUpdate.is() && m_xRowUpdate.is() && m_xResultSetMetaData.is();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
+    DBG_CHKTHIS(ODatabaseExport,NULL);
+    OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
+
     sal_Bool bError = sal_False;
     try
     {
-        OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
         aWizard.fillTypeInfo();
 
         OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
@@ -728,17 +726,20 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const
     }
     catch(SQLContext& e)
     {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),NULL,m_xFactory);
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),&aWizard,m_xFactory);
         bError = sal_True;
     }
     catch(SQLWarning& e)
     {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),NULL,m_xFactory);
+
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),&aWizard,m_xFactory);
         bError = sal_True;
     }
     catch(SQLException& e)
     {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),NULL,m_xFactory);
+
+
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),&aWizard,m_xFactory);
         bError = sal_True;
     }
     catch(Exception& )
