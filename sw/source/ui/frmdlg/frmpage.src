@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:58:38 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ TabDialog DLG_FRM_STD
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Rivit?" ;
+                Text [ finnish ] = "Rivit‰" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -408,7 +408,7 @@ TabDialog DLG_FRM_GRF
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Rivit?" ;
+                Text [ finnish ] = "Rivit‰" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -691,7 +691,7 @@ TabDialog DLG_FRM_OLE
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Rivit?" ;
+                Text [ finnish ] = "Rivit‰" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -1020,7 +1020,7 @@ TabPage TP_FRM_STD
         Text[ dutch ] = "~Proporties synchroniseren";
         Text[ french ] = "Proportionnel";
         Text[ spanish ] = "Igualar proporciones";
-        Text[ finnish ] = "~Keep ratio";
+        Text[ finnish ] = "~S‰ilyt‰ suhteet";
         Text[ italian ] = "~Proporzionale";
         Text[ danish ] = "Proport.";
         Text[ swedish ] = "Anpassa ~proportioner";
@@ -1074,7 +1074,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "Dimens. originale" ;
         Text [ portuguese_brazilian ] = "Tamanho real" ;
         Text [ portuguese ] = "~Tamanho original" ;
-        Text [ finnish ] = "Alkuper?inen koko" ;
+        Text [ finnish ] = "Alkuper‰inen koko" ;
         Text [ danish ] = "Oprindelig st¯rrelse" ;
         Text [ french ] = "Taille d'origine" ;
         Text [ swedish ] = "~Originalstorlek" ;
@@ -1151,7 +1151,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At page";
         Text[ arabic ] = "⁄·Ï «·’›Õ…";
         Text[ catalan ] = "A la p·~gina";
-        Text[ finnish ] = "An ~der Seite";
+        Text[ finnish ] = "Sivulle";
     };
     RadioButton RB_ANCHOR_PARA
     {
@@ -1178,7 +1178,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At paragraph";
         Text[ arabic ] = "⁄·Ï «·›ﬁ—…";
         Text[ catalan ] = "Al ~p·rrafo";
-        Text[ finnish ] = "Am Ab~satz";
+        Text[ finnish ] = "Kappaleeseen";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
@@ -1205,7 +1205,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At character";
         Text[ arabic ] = "⁄·Ï «·Õ—›";
         Text[ catalan ] = "Al car·~cter";
-        Text[ finnish ] = "Am Zeiche~n";
+        Text[ finnish ] = "Merkkiin";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
@@ -1233,7 +1233,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "Î¨∏ÏûêÎ°ú(~A)";
         Text[ turkish ] = "karakter o~larak";
         Text[ catalan ] = "Como ~car·cter";
-        Text[ finnish ] = "Als Ze~ichen";
+        Text[ finnish ] = "~Merkkin‰";
     };
     RadioButton RB_ANCHOR_FRAME
     {
@@ -1260,7 +1260,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At frame";
         Text[ arabic ] = "⁄·Ï «·ﬂ«œ—";
         Text[ catalan ] = "~Al marco";
-        Text[ finnish ] = "~Am Rahmen";
+        Text[ finnish ] = "Kehykseen";
     };
     FixedLine FL_TYPE
     {
@@ -1439,7 +1439,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "ÏßùÏàò ÌéòÏù¥ÏßÄ ÎßàÏ£ºÎ≥¥Í∏∞(~M)";
         Text[ turkish ] = "«ift numaral˝ sayfalarda ya~ns˝t";
         Text[ catalan ] = "Reflejar en ~p·ginas pares";
-        Text[ finnish ] = "~Mirror on even pages";
+        Text[ finnish ] = "~Peilaa parillisilla sivuilla";
     };
     FixedText FT_VERTICAL
     {
@@ -2071,7 +2071,7 @@ TabPage TP_FRM_URL
         Text[ dutch ] = "Link naar";
         Text[ french ] = "Lien vers";
         Text[ spanish ] = "VÌnculo a";
-        Text[ finnish ] = "Hyperlink";
+        Text[ finnish ] = "Linkki kohteeseen";
         Text[ italian ] = "Hyperlink";
         Text[ danish ] = "Hyperlink";
         Text[ swedish ] = "L‰nk till";
@@ -2365,7 +2365,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "ÎÇ¥Ïö©(~C)";
         Text[ turkish ] = "~›Áerik";
         Text[ catalan ] = "~Contenido";
-        Text[ finnish ] = "~Sis?lt?";
+        Text[ finnish ] = "~Sis‰ltˆ";
     };
     CheckBox CB_PROTECT_FRAME
     {
@@ -2520,7 +2520,7 @@ TabPage TP_FRM_ADD
         Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "PropriÈtÈs";
         Text[ spanish ] = "Propiedades";
-        Text[ finnish ] = "Additional Setting";
+        Text[ finnish ] = "Ominaisuudet";
         Text[ italian ] = "Propriet‡";
         Text[ danish ] = "Additional Setting";
         Text[ swedish ] = "Egenskaper";
@@ -2535,6 +2535,7 @@ TabPage TP_FRM_ADD
         Text[ catalan ] = "Additional Setting";
     };
 };
+
 
 
 
