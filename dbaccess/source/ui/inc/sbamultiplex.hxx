@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbamultiplex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 15:42:03 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,39 +469,6 @@ namespace dbaui
         DECLARE_MULTIPLEXER_VOID_METHOD(reloaded, ::com::sun::star::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::form::XPositioningListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPositioningMultiplexer, ::com::sun::star::form::XPositioningListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(positioned, ::com::sun::star::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
-    // ::com::sun::star::form::XInsertListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXInsertMultiplexer, ::com::sun::star::form::XInsertListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(inserting, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(inserted, ::com::sun::star::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
-    // ::com::sun::star::form::XRestoreListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRestoreMultiplexer, ::com::sun::star::form::XRestoreListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(restored, ::com::sun::star::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
-    // ::com::sun::star::form::XDeleteListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXDeleteMultiplexer, ::com::sun::star::form::XDeleteListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveDelete, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(deleted, ::com::sun::star::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
-    // ::com::sun::star::form::XUpdateListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXUpdateMultiplexer, ::com::sun::star::form::XUpdateListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveUpdate, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(updated, ::com::sun::star::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
-    // ::com::sun::star::form::XErrorListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXErrorMultiplexer, ::com::sun::star::form::XErrorListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(errorOccured, ::com::sun::star::form::ErrorEvent)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
     // ::com::sun::star::form::XDatabaseParameterListener
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXParameterMultiplexer, ::com::sun::star::form::XDatabaseParameterListener)
         DECLARE_MULTIPLEXER_BOOL_METHOD(approveParameter, ::com::sun::star::form::DatabaseParameterEvent)
@@ -516,11 +483,6 @@ namespace dbaui
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXResetMultiplexer, ::com::sun::star::form::XResetListener)
         DECLARE_MULTIPLEXER_BOOL_METHOD(approveReset, ::com::sun::star::lang::EventObject)
         DECLARE_MULTIPLEXER_VOID_METHOD(resetted, ::com::sun::star::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
-
-    // ::com::sun::star::util::XRefreshListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRefreshMultiplexer, ::com::sun::star::util::XRefreshListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(refreshed, ::com::sun::star::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
     // ::com::sun::star::sdbc::XRowSetListener
@@ -547,9 +509,6 @@ namespace dbaui
 
     // ::com::sun::star::beans::XVetoableChangeListener
     DECLARE_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, ::com::sun::star::beans::XVetoableChangeListener, vetoableChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException))
-
-    // ::com::sun::star::beans::XPropertyStateChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyStateChangeMultiplexer, ::com::sun::star::beans::XPropertyStateChangeListener, propertyStateChange, ::com::sun::star::beans::PropertyStateChangeEvent, (::com::sun::star::uno::RuntimeException))
 
     // ::com::sun::star::beans::XPropertiesChangeListener
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPropertiesChangeMultiplexer, ::com::sun::star::beans::XPropertiesChangeListener)
