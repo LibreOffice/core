@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-24 16:10:36 $
+ *  last change: $Author: ama $ $Date: 2002-09-04 13:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1676,6 +1676,7 @@ void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
         rpEnd = (SwLayoutFrm*)rpEnd->GetPrev();
 }
 
+
 void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,
                              const int bChkProtected )
@@ -1684,6 +1685,8 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     //die Gesamttabelle betrachtet werden, also inklusive Masters und
     //Follows.
     //Fuer den Start brauchen wir den Mutter-TabellenFrm.
+    if( !rpStart )
+        return;
     const SwTabFrm *pOrg = rpStart->FindTabFrm();
     const SwTabFrm *pTab = pOrg;
     const long nWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
@@ -1785,6 +1788,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 
     const SwTabFrm *pTable = pStart->FindTabFrm();
     const SwTabFrm *pEndTable = pEnd->FindTabFrm();
+    if( !pTable || !pEndTable )
+        return;
     BOOL bExchange = FALSE;
 
     if ( pTable != pEndTable )
