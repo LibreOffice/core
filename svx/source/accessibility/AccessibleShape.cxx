@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:53:05 $
+ *  last change: $Author: af $ $Date: 2002-06-13 13:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
 #endif
 #ifndef _SVX_UNOEDSRC_HXX
 #include "unoedsrc.hxx"
@@ -196,15 +199,19 @@ void AccessibleShape::Init (void)
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine
     // accessible.
-    SdrView* pView = maShapeTreeInfo.GetSdrView ();
-    const Window* pWindow = maShapeTreeInfo.GetWindow ();
-    if (pView != NULL && pWindow != NULL && mxShape.is())
+    Reference<text::XText> xText (mxShape, uno::UNO_QUERY);
+    if (xText.is())
     {
-        SvxEditSource* pEditSource = new SvxTextEditSource (
-            *GetSdrObjectFromXShape (mxShape), *pView, *pWindow);
-        mpText = new AccessibleTextHelper (
-            this,
-            ::std::auto_ptr<SvxEditSource>(pEditSource));
+        SdrView* pView = maShapeTreeInfo.GetSdrView ();
+        const Window* pWindow = maShapeTreeInfo.GetWindow ();
+        if (pView != NULL && pWindow != NULL && mxShape.is())
+        {
+            SvxEditSource* pEditSource = new SvxTextEditSource (
+                *GetSdrObjectFromXShape (mxShape), *pView, *pWindow);
+            mpText = new AccessibleTextHelper (
+                this,
+                ::std::auto_ptr<SvxEditSource>(pEditSource));
+        }
     }
 }
 
