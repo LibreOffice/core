@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 17:19:48 $
+#   last change: $Author: hr $ $Date: 2003-11-07 15:59:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,17 +71,10 @@ TARGET=so_icu
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=icu-2.2
+TARFILE_NAME=icu-2.6
 TARFILE_ROOTDIR=icu
 
-PATCH_FILE_NAME=icu-2.2.patch
-
-ADDITIONAL_FILES=source$/data$/brkitr$/edit_word.txt \
-        source$/data$/brkitr$/dict_word.txt \
-        source$/data$/brkitr$/count_word.txt
-
-# Currently no binary patch, but this is how it worked with ICU 2.0
-#BINARY_PATCH_FILE_NAME=icu-2.0-binary_patch.tar.gz
+PATCH_FILE_NAME=icu-2.6.patch
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -108,21 +101,30 @@ CONFIGURE_FLAGS=
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
 OUT2LIB= \
-    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).22.0 \
-    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).22 \
+    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).26.0 \
+    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).26 \
     $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST) \
     $(BUILD_DIR)$/common$/libicuuc.a \
-    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).22.0 \
-    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).22 \
+    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).26.0 \
+    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).26 \
     $(BUILD_DIR)$/common$/libicuuc$(DLLPOST) \
     $(BUILD_DIR)$/i18n$/libicui18n.a \
-    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).22.0 \
-    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).22 \
+    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).26.0 \
+    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).26 \
     $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST) \
     $(BUILD_DIR)$/layout$/libicule.a \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).22.0 \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).22 \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST)
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).26.0 \
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).26 \
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST) \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil.a \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST).26.0 \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST).26 \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST)
+
+OUT2BIN= \
+    $(BUILD_DIR)$/tools$/genccode$/genccode \
+    $(BUILD_DIR)$/tools$/genbrk$/genbrk
+
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
@@ -135,25 +137,55 @@ BUILD_ACTION_SEP=;
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) wdevenv allinone$/allinone Release
-BUILD_ACTION=devenv allinone$/allinone.sln /build Release /project all /useenv
+.IF "full_debug" == ""
+# Activating the debug mechanism produces incompatible libraries, you'd have
+# at least to relink all modules that are directly using ICU. Note that library
+# names get a 'd' appended and you'd have to edit the solenv/inc/libs.mk
+# ICU*LIB macros as well. Normally you don't want all this.
+#
+# Instead, use the normal already existing Release build and edit the
+# corresponding *.vcproj file of the section you're interested in. Make sure
+# that
+# - for the VCCLCompilerTool section the following line exists:
+#   DebugInformationFormat="3"
+# - and for the VCLinkerTool the line
+#   GenerateDebugInformation="TRUE"
+# Then delete the corresponding Release output directory, and delete the target
+# flag files
+# $(OUTPATH)/misc/build/so_built_so_icu
+# $(OUTPATH)/misc/build/so_predeliver_so_icu
+# and run dmake again, after which you may copy the resulting libraries to your
+# OOo/SO installation.
+ICU_BUILD_VERSION=Debug
+ICU_BUILD_LIBPOST=d
 .ELSE
-BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all - Win32 Release"
+ICU_BUILD_VERSION=Release
+ICU_BUILD_LIBPOST=
+.ENDIF
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) wdevenv allinone$/allinone $(ICU_BUILD_VERSION)
+BUILD_ACTION=devenv allinone$/allinone.sln /build $(ICU_BUILD_VERSION) /project all /useenv
+.ELSE
+BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all - Win32 $(ICU_BUILD_VERSION)"
 .ENDIF
 
 OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icudata.lib \
-    $(BUILD_DIR)$/..$/lib$/icuin.lib \
-    $(BUILD_DIR)$/..$/lib$/icuuc.lib \
-    $(BUILD_DIR)$/..$/lib$/icule.lib
+    $(BUILD_DIR)$/..$/lib$/icuin$(ICU_BUILD_LIBPOST).lib \
+    $(BUILD_DIR)$/..$/lib$/icuuc$(ICU_BUILD_LIBPOST).lib \
+    $(BUILD_DIR)$/..$/lib$/icule$(ICU_BUILD_LIBPOST).lib \
+    $(BUILD_DIR)$/..$/lib$/icutu$(ICU_BUILD_LIBPOST).lib
 
 OUT2BIN= \
-    $(BUILD_DIR)$/..$/bin$/icudt22l.dll \
-    $(BUILD_DIR)$/..$/bin$/icuin22.dll \
-    $(BUILD_DIR)$/..$/bin$/icuuc22.dll \
-    $(BUILD_DIR)$/..$/bin$/icule22.dll
-.ENDIF
+    $(BUILD_DIR)$/..$/bin$/icudt26l.dll \
+    $(BUILD_DIR)$/..$/bin$/icuin26$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icuuc26$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icule26$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icutu26$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/genccode.exe \
+    $(BUILD_DIR)$/..$/bin$/genbrk.exe
+
+.ENDIF		# "$(GUI)"=="WNT"
 
 # --- Targets ------------------------------------------------------
 
