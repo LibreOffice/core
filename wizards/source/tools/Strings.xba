@@ -58,7 +58,6 @@ Dim BigLen%,PreLen%,PostLen%
 End Function
 
 
-
 &apos; Deletes the String &apos;SmallString&apos; out of the String &apos;BigString&apos;
 &apos; in case SmallString&apos;s Position in BigString is right at the end
 Function RTrimStr(ByVal BigString, SmallString as String) as String
@@ -247,7 +246,7 @@ Dim Separator as String
 		sProductname = GetProductname()
 	End If
 	If BigString &lt;&gt; &quot;&quot; Then
-		If Instr(1,sProductname,&quot;Sun Webtop&quot;) = 0 Then
+		If IsFatOffice() Then
 			Separator = GetPathSeparator()
 			&apos; Is the delivered Path already a URL
 			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
@@ -333,10 +332,10 @@ Dim SepList() as String
 End Function
 
 
-Function DirectorynameoutofPath(sPath as String, Separator as String) as String
+Function DirectoryNameoutofPath(sPath as String, Separator as String) as String
 Dim LocFileName as String
 	LocFileName = FileNameoutofPath(sPath, Separator)
-	DirectoryNameoutofPath = DeleteStr(sPath, Separator &amp; LocFileName)
+	DirectoryNameoutofPath = RTrimStr(sPath, Separator &amp; LocFileName)
 End Function
 
 
