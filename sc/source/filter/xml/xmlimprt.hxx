@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:59:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef SC_XMLIMPRT_HXX
 #define SC_XMLIMPRT_HXX
-
 #ifndef _RSCSFX_HXX
 #include <rsc/rscsfx.hxx>
 #endif
@@ -668,7 +667,7 @@ struct ScMyNamedExpression
     rtl::OUString   sContent;
     rtl::OUString   sBaseCellAddress;
     rtl::OUString   sRangeType;
-    sal_Bool        bIsExpression : 1;
+    sal_Bool        bIsExpression;
 };
 
 typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
