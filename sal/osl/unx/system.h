@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-12 10:21:55 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 15:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,6 +411,9 @@ extern char *strdup(const char *);
 #   define  NO_PTHREAD_RTL
 /* for NSGetArgc/Argv/Environ */
 #       include <crt_externs.h>
+int  readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result );
+char *asctime_r( const struct tm *tm, char *buffer );
+char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
