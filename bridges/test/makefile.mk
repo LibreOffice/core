@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+#   last change: $Author: jbu $ $Date: 2001-01-02 11:28:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,8 +80,8 @@ ALLIDLFILES = test_bridge.idl
 #CPPUMAKERFLAGS += -C
 
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb  $(BIN)$/test.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb  $(BIN)$/test.rdb
 
 # output directory (one dir for each project)
 UNOUCROUT=$(OUT)$/inc
@@ -101,7 +101,6 @@ UNOTYPES = \
         com.sun.star.lang.XSingleServiceFactory \
         com.sun.star.lang.XMultiServiceFactory \
         com.sun.star.lang.XTypeProvider \
-        com.sun.star.frame.XComponentLoader\
         com.sun.star.registry.XSimpleRegistry \
         com.sun.star.loader.XImplementationLoader \
         com.sun.star.registry.XImplementationRegistration \
@@ -114,7 +113,6 @@ UNOTYPES = \
         com.sun.star.beans.Property\
         com.sun.star.corba.giop.RequestHeader_1_2\
              com.sun.star.container.XSet\
-        com.sun.star.text.XTextDocument\
         com.sun.star.lang.XServiceInfo\
         test.XTestFactory \
         com.sun.star.test.performance.XPerformanceTest \
@@ -152,8 +150,7 @@ OBJFILES=	\
             $(OBJ)$/testserver.obj \
             $(OBJ)$/testclient.obj \
             $(OBJ)$/testcomp.obj  \
-            $(OBJ)$/testsameprocess.obj \
-            $(OBJ)$/testoffice.obj
+            $(OBJ)$/testsameprocess.obj 
 
 
 # APP1TARGET=	testmarshal
@@ -238,22 +235,22 @@ APP4DEF=	$(MISC)$/$(APP4TARGET).def
 
 #----------------------------------
 
-APP5TARGET=	testoffice
-APP5OBJS=	$(OBJ)$/testoffice.obj \
-        $(OBJ)$/testcomp.obj
+# APP5TARGET=	testoffice
+# APP5OBJS=	$(OBJ)$/testoffice.obj \
+# 		$(OBJ)$/testcomp.obj
 
-.IF "$(OS)" == "LINUX"
-APP5STDLIBS+= -lstdc++
-.ENDIF
+# .IF "$(OS)" == "LINUX"
+# APP5STDLIBS+= -lstdc++
+# .ENDIF
 
-APP5STDLIBS+=	\
-            $(CPPULIB)	\
-            $(CPPUHELPERLIB)\
-            $(SALLIB)	\
-            $(VOSLIB)\
-            $(LIBCIMT) 
+# APP5STDLIBS+=	\
+# 			$(CPPULIB)	\
+# 			$(CPPUHELPERLIB)\
+# 			$(SALLIB)	\
+# 			$(VOSLIB)\
+# 			$(LIBCIMT) 
 
-APP5DEF=	$(MISC)$/$(APP5TARGET).def
+# APP5DEF=	$(MISC)$/$(APP5TARGET).def
 
 
 # --- Targets ------------------------------------------------------
