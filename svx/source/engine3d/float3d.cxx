@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 10:28:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 18:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
         // Favoriten
         aCtlFavorites       ( this, SVX_RES( CTL_FAVORITES ) ),
-        aGrpFavorites       ( this, SVX_RES( GRP_FAVORITES ) ),
+        aFLFavorites        ( this, SVX_RES( FL_FAVORITES ) ),
         aBtnOnly3D          ( this, SVX_RES( BTN_ONLY_3D ) ),
         aBtnAllAttributes   ( this, SVX_RES( BTN_ALL_ATTRIBUTES ) ),
 
@@ -178,7 +178,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aNumHorizontal      ( this, SVX_RES( NUM_HORIZONTAL ) ),
         aFtVertical         ( this, SVX_RES( FT_VERTICAL ) ),
         aNumVertical        ( this, SVX_RES( NUM_VERTICAL ) ),
-        aGrpSegments        ( this, SVX_RES( GRP_SEGMENTS ) ),
+        aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
         aFtPercentDiagonal  ( this, SVX_RES( FT_PERCENT_DIAGONAL ) ),
         aMtrPercentDiagonal ( this, SVX_RES( MTR_PERCENT_DIAGONAL ) ),
         aFtBackscale        ( this, SVX_RES( FT_BACKSCALE ) ),
@@ -187,14 +187,14 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aMtrEndAngle        ( this, SVX_RES( MTR_END_ANGLE ) ),
         aFtDepth            ( this, SVX_RES( FT_DEPTH ) ),
         aMtrDepth           ( this, SVX_RES( MTR_DEPTH ) ),
-        aGrpGeometrie       ( this, SVX_RES( GRP_GEOMETRIE ) ),
+        aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
 
         aBtnNormalsObj      ( this, SVX_RES( BTN_NORMALS_OBJ ) ),
         aBtnNormalsFlat     ( this, SVX_RES( BTN_NORMALS_FLAT ) ),
         aBtnNormalsSphere   ( this, SVX_RES( BTN_NORMALS_SPHERE ) ),
         aBtnTwoSidedLighting( this, SVX_RES( BTN_TWO_SIDED_LIGHTING ) ),
         aBtnNormalsInvert   ( this, SVX_RES( BTN_NORMALS_INVERT ) ),
-        aGrpNormals         ( this, SVX_RES( GRP_NORMALS ) ),
+        aFLNormals         ( this, SVX_RES( FL_NORMALS ) ),
 
         aBtnDoubleSided     ( this, SVX_RES( BTN_DOUBLE_SIDED ) ),
 
@@ -204,13 +204,13 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnShadow3d        ( this, SVX_RES( BTN_SHADOW_3D ) ),
         aFtSlant            ( this, SVX_RES( FT_SLANT ) ),
         aMtrSlant           ( this, SVX_RES( MTR_SLANT ) ),
-        aGrpShadow          ( this, SVX_RES( GRP_SHADOW ) ),
+        aFLShadow          ( this, SVX_RES( FL_SHADOW ) ),
         aFtDistance         ( this, SVX_RES( FT_DISTANCE ) ),
         aMtrDistance        ( this, SVX_RES( MTR_DISTANCE ) ),
         aFtFocalLeng        ( this, SVX_RES( FT_FOCAL_LENGTH ) ),
         aMtrFocalLength     ( this, SVX_RES( MTR_FOCAL_LENGTH ) ),
-        aGrpCamera          ( this, SVX_RES( GRP_CAMERA ) ),
-        aGrpRepresentation  ( this, SVX_RES( GRP_REPRESENTATION ) ),
+        aFLCamera          ( this, SVX_RES( FL_CAMERA ) ),
+        aFLRepresentation  ( this, SVX_RES( FL_REPRESENTATION ) ),
 
         // Beleuchtung
         aBtnLight1          ( this, SVX_RES( BTN_LIGHT_1 ) ),
@@ -230,15 +230,11 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aLbLight7           ( this, SVX_RES( LB_LIGHT_7 ) ),
         aLbLight8           ( this, SVX_RES( LB_LIGHT_8 ) ),
         aBtnLightColor      ( this, SVX_RES( BTN_LIGHT_COLOR ) ),
-        aGrpLightsource     ( this, SVX_RES( GRP_LIGHTSOURCE ) ),
+        aFTLightsource     ( this, SVX_RES( FT_LIGHTSOURCE ) ),
         aLbAmbientlight     ( this, SVX_RES( LB_AMBIENTLIGHT ) ),
         aBtnAmbientColor    ( this, SVX_RES( BTN_AMBIENT_COLOR ) ),
-        aGrpAmbientlight    ( this, SVX_RES( GRP_AMBIENTLIGHT ) ),
-        aGrpLight           ( this, SVX_RES( GRP_LIGHT ) ),
-        aFtLightX           ( this, SVX_RES( FT_LIGHT_X ) ),
-        aFtLightY           ( this, SVX_RES( FT_LIGHT_Y ) ),
-        aFtLightZ           ( this, SVX_RES( FT_LIGHT_Z ) ),
-        aGrpLightInfo       ( this, SVX_RES( GRP_LIGHT_INFO ) ),
+        aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),
+        aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
 
         // Texturen
         aFtTexKind          ( this, SVX_RES( FT_TEX_KIND ) ),
@@ -258,7 +254,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnTexObjectY      ( this, SVX_RES( BTN_TEX_OBJECT_Y ) ),
         aFtTexFilter        ( this, SVX_RES( FT_TEX_FILTER ) ),
         aBtnTexFilter       ( this, SVX_RES( BTN_TEX_FILTER ) ),
-        aGrpTexture         ( this, SVX_RES( GRP_TEXTURE ) ),
+        aFLTexture         ( this, SVX_RES( FL_TEXTURE ) ),
 
         // Material
         aFtMatFavorites     ( this, SVX_RES( FT_MAT_FAVORITES ) ),
@@ -274,8 +270,8 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnSpecularColor   ( this, SVX_RES( BTN_SPECULAR_COLOR ) ),
         aFtMatSpecularIntensity( this, SVX_RES( FT_MAT_SPECULAR_INTENSITY ) ),
         aMtrMatSpecularIntensity( this, SVX_RES( MTR_MAT_SPECULAR_INTENSITY ) ),
-        aGrpMatSpecular     ( this, SVX_RES( GRP_MAT_SPECULAR ) ),
-        aGrpMaterial        ( this, SVX_RES( GRP_MATERIAL ) ),
+        aFLMatSpecular     ( this, SVX_RES( FL_MAT_SPECULAR ) ),
+        aFLMaterial        ( this, SVX_RES( FL_MATERIAL ) ),
 
         // Unterer Bereich
         aBtnPerspective     ( this, SVX_RES( BTN_PERSPECTIVE ) ),
@@ -283,7 +279,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnLatheObject     ( this, SVX_RES( BTN_LATHE_OBJ ) ),
         aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
         aCtlLightPreview    ( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
-        aGrpPreview         ( this, SVX_RES( GRP_PREVIEW ) ),
 
         aImgLightOn         ( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
         aImgLightOff        ( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
@@ -412,6 +407,9 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aCtlLightPreview.SetUserInteractiveChangeCallback( aLink );
     aLink = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
     aCtlLightPreview.SetUserSelectionChangeCallback( aLink );
+
+    aCtlPreview.SetBorderStyle( WINDOW_BORDER_MONO );
+    aCtlLightPreview.SetBorderStyle( WINDOW_BORDER_MONO );
 
     aSize = GetOutputSizePixel();
     SetMinOutputSizePixel( aSize );
@@ -591,7 +589,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aNumHorizontal.Enable( !bCube );
             aFtVertical.Enable( !bCube );
             aNumVertical.Enable( !bCube );
-            aGrpSegments.Enable( !bCube );
+            aFLSegments.Enable( !bCube );
 
             aFtPercentDiagonal.Enable( !bCube && !bSphere );
             aMtrPercentDiagonal.Enable( !bCube && !bSphere );
@@ -626,7 +624,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aFtVertical.Enable( FALSE );
             aNumVertical.Enable( FALSE );
             aNumVertical.SetEmptyFieldValue();
-            aGrpSegments.Enable( FALSE );
+            aFLSegments.Enable( FALSE );
             aFtEndAngle.Enable( FALSE );
             aMtrEndAngle.Enable( FALSE );
             aMtrEndAngle.SetEmptyFieldValue();
@@ -638,7 +636,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnShadow3d.Enable( FALSE );
             aFtSlant.Enable( FALSE );
             aMtrSlant.Enable( FALSE );
-            aGrpShadow.Enable( FALSE );
+            aFLShadow.Enable( FALSE );
 
             aFtDistance.Enable( FALSE );
             aMtrDistance.Enable( FALSE );
@@ -646,7 +644,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aFtFocalLeng.Enable( FALSE );
             aMtrFocalLength.Enable( FALSE );
             aMtrFocalLength.SetEmptyFieldValue();
-            aGrpCamera.Enable( FALSE );
+            aFLCamera.Enable( FALSE );
 
             // Unterer Bereich
             aBtnConvertTo3D.Enable( FALSE );
@@ -679,7 +677,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     aBtnTexObjectY.Enable( bBitmap );
     aFtTexFilter.Enable( bBitmap );
     aBtnTexFilter.Enable( bBitmap );
-    aGrpTexture.Enable( bBitmap );
+    aFLTexture.Enable( bBitmap );
 
 
 // Geometrie
@@ -2403,14 +2401,13 @@ void __EXPORT Svx3DWin::Resize()
 
             aCtlPreview.Hide();
             aCtlLightPreview.Hide();
-            aGrpPreview.Hide();
 
-            aGrpFavorites.Hide();
-            aGrpGeometrie.Hide();
-            aGrpRepresentation.Hide();
-            aGrpLight.Hide();
-            aGrpTexture.Hide();
-            aGrpMaterial.Hide();
+            aFLFavorites.Hide();
+            aFLGeometrie.Hide();
+            aFLRepresentation.Hide();
+            aFLLight.Hide();
+            aFLTexture.Hide();
+            aFLMaterial.Hide();
 
             // Verschieben / Resizen
             aBtnUpdate.SetPosPixel( aBtnUpdate.GetPosPixel() + aXPt );
@@ -2423,21 +2420,18 @@ void __EXPORT Svx3DWin::Resize()
             aCtlPreview.SetOutputSizePixel( aObjSize );
             aCtlLightPreview.SetOutputSizePixel( aObjSize );
 
-                // Preview-Group
-            aObjSize = aGrpPreview.GetOutputSizePixel();
+            // Groups
+            aObjSize = aFLFavorites.GetOutputSizePixel();
             aObjSize.Width() += aDiffSize.Width();
-            aObjSize.Height() += aDiffSize.Height();
-            aGrpPreview.SetOutputSizePixel( aObjSize );
-
-                // Groups
-            aObjSize = aGrpFavorites.GetOutputSizePixel();
-            aObjSize.Width() += aDiffSize.Width();
-            aGrpFavorites.SetOutputSizePixel( aObjSize );
-            aGrpGeometrie.SetOutputSizePixel( aObjSize );
-            aGrpRepresentation.SetOutputSizePixel( aObjSize );
-            aGrpLight.SetOutputSizePixel( aObjSize );
-            aGrpTexture.SetOutputSizePixel( aObjSize );
-            aGrpMaterial.SetOutputSizePixel( aObjSize );
+            aFLFavorites.SetOutputSizePixel( aObjSize );
+            aFLGeometrie.SetOutputSizePixel( aObjSize );
+            aFLSegments.SetOutputSizePixel( aObjSize );
+            aFLShadow.SetOutputSizePixel( aObjSize );
+            aFLCamera.SetOutputSizePixel( aObjSize );
+            aFLRepresentation.SetOutputSizePixel( aObjSize );
+            aFLLight.SetOutputSizePixel( aObjSize );
+            aFLTexture.SetOutputSizePixel( aObjSize );
+            aFLMaterial.SetOutputSizePixel( aObjSize );
 
                 // Y-Position der unteren Buttons
             aBtnConvertTo3D.SetPosPixel( aBtnConvertTo3D.GetPosPixel() + aYPt );
@@ -2451,8 +2445,6 @@ void __EXPORT Svx3DWin::Resize()
             aBtnConvertTo3D.Show();
             aBtnLatheObject.Show();
             aBtnPerspective.Show();
-
-            aGrpPreview.Show();
 
             if( aBtnFavorites.IsChecked() )
                 ClickViewTypeHdl( &aBtnFavorites );
@@ -2543,14 +2535,14 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         if( eViewType == VIEWTYPE_FAVORITES )
         {
             aCtlFavorites.Show();
-            aGrpFavorites.Show();
+            aFLFavorites.Show();
             aBtnOnly3D.Show();
             aBtnAllAttributes.Show();
         }
         else
         {
             aCtlFavorites.Hide();
-            aGrpFavorites.Hide();
+            aFLFavorites.Hide();
             aBtnOnly3D.Hide();
             aBtnAllAttributes.Hide();
         }
@@ -2562,7 +2554,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aNumHorizontal.Show();
             aFtVertical.Show();
             aNumVertical.Show();
-            aGrpSegments.Show();
+            aFLSegments.Show();
             aFtPercentDiagonal.Show();
             aMtrPercentDiagonal.Show();
             aFtBackscale.Show();
@@ -2571,14 +2563,14 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aMtrEndAngle.Show();
             aFtDepth.Show();
             aMtrDepth.Show();
-            aGrpGeometrie.Show();
+            aFLGeometrie.Show();
 
             aBtnNormalsObj.Show();
             aBtnNormalsFlat.Show();
             aBtnNormalsSphere.Show();
             aBtnTwoSidedLighting.Show();
             aBtnNormalsInvert.Show();
-            aGrpNormals.Show();
+            aFLNormals.Show();
             aBtnDoubleSided.Show();
         }
         else
@@ -2587,7 +2579,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aNumHorizontal.Hide();
             aFtVertical.Hide();
             aNumVertical.Hide();
-            aGrpSegments.Hide();
+            aFLSegments.Hide();
             aFtPercentDiagonal.Hide();
             aMtrPercentDiagonal.Hide();
             aFtBackscale.Hide();
@@ -2596,14 +2588,14 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aMtrEndAngle.Hide();
             aFtDepth.Hide();
             aMtrDepth.Hide();
-            aGrpGeometrie.Hide();
+            aFLGeometrie.Hide();
 
             aBtnNormalsObj.Hide();
             aBtnNormalsFlat.Hide();
             aBtnNormalsSphere.Hide();
             aBtnTwoSidedLighting.Hide();
             aBtnNormalsInvert.Hide();
-            aGrpNormals.Hide();
+            aFLNormals.Hide();
             aBtnDoubleSided.Hide();
         }
 
@@ -2615,13 +2607,13 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnShadow3d.Show();
             aFtSlant.Show();
             aMtrSlant.Show();
-            aGrpShadow.Show();
+            aFLShadow.Show();
             aFtDistance.Show();
             aMtrDistance.Show();
             aFtFocalLeng.Show();
             aMtrFocalLength.Show();
-            aGrpCamera.Show();
-            aGrpRepresentation.Show();
+            aFLCamera.Show();
+            aFLRepresentation.Show();
         }
         else
         {
@@ -2630,13 +2622,13 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnShadow3d.Hide();
             aFtSlant.Hide();
             aMtrSlant.Hide();
-            aGrpShadow.Hide();
+            aFLShadow.Hide();
             aFtDistance.Hide();
             aMtrDistance.Hide();
             aFtFocalLeng.Hide();
             aMtrFocalLength.Hide();
-            aGrpCamera.Hide();
-            aGrpRepresentation.Hide();
+            aFLCamera.Hide();
+            aFLRepresentation.Hide();
         }
 
         // Beleuchtung
@@ -2652,11 +2644,11 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnLight8.Show();
             //aLbLight1.Show();
             aBtnLightColor.Show();
-            aGrpLightsource.Show();
+            aFTLightsource.Show();
             aLbAmbientlight.Show();
             aBtnAmbientColor.Show();
-            aGrpAmbientlight.Show();
-            aGrpLight.Show();
+            aFTAmbientlight.Show();
+            aFLLight.Show();
             //aFtLightX.Show();
             //aFtLightY.Show();
             //aFtLightZ.Show();
@@ -2688,15 +2680,11 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aLbLight7.Hide();
             aLbLight8.Hide();
             aBtnLightColor.Hide();
-            aGrpLightsource.Hide();
+            aFTLightsource.Hide();
             aLbAmbientlight.Hide();
             aBtnAmbientColor.Hide();
-            aGrpAmbientlight.Hide();
-            aGrpLight.Hide();
-            aFtLightX.Hide();
-            aFtLightY.Hide();
-            aFtLightZ.Hide();
-            aGrpLightInfo.Hide();
+            aFTAmbientlight.Hide();
+            aFLLight.Hide();
 
             if( !aCtlPreview.IsVisible() )
             {
@@ -2725,7 +2713,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnTexObjectY.Show();
             aFtTexFilter.Show();
             aBtnTexFilter.Show();
-            aGrpTexture.Show();
+            aFLTexture.Show();
         }
         else
         {
@@ -2746,7 +2734,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnTexObjectY.Hide();
             aFtTexFilter.Hide();
             aBtnTexFilter.Hide();
-            aGrpTexture.Hide();
+            aFLTexture.Hide();
         }
 
         // Material
@@ -2765,8 +2753,8 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnSpecularColor.Show();
             aFtMatSpecularIntensity.Show();
             aMtrMatSpecularIntensity.Show();
-            aGrpMatSpecular.Show();
-            aGrpMaterial.Show();
+            aFLMatSpecular.Show();
+            aFLMaterial.Show();
         }
         else
         {
@@ -2783,8 +2771,8 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             aBtnSpecularColor.Hide();
             aFtMatSpecularIntensity.Hide();
             aMtrMatSpecularIntensity.Hide();
-            aGrpMatSpecular.Hide();
-            aGrpMaterial.Hide();
+            aFLMatSpecular.Hide();
+            aFLMaterial.Hide();
         }
         if( bUpdatePreview && !aBtnLight.IsChecked() )
             UpdatePreview();
@@ -3183,14 +3171,6 @@ IMPL_LINK( Svx3DWin, ClickLightHdl, PushButton*, pBtn )
         USHORT nLightSource = GetLightSource( pBtn );
         ColorLB* pLb = GetLbByButton( pBtn );
         Color aColor( pLb->GetSelectEntryColor() );
-        if( nLightSource == 7 &&
-            aColor.GetRed()==9&&aColor.GetGreen()==4&&aColor.GetBlue()==67)
-        {
-            aFtLightX.Show();
-            aFtLightY.Show();
-            aFtLightZ.Show();
-            aGrpLightInfo.Show();
-        }
         *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
 
         pLightGroup->SetIntensity( aColor,
@@ -3331,30 +3311,6 @@ IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, p )
     *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
     //aCtlPreview.SetLightGroup( pLightGroup );
 
-    // Setzen der Vector Informationen
-    Base3DLightNumber eLight = aCtlLightPreview.GetPreviewControl().GetSelectedLight();
-    if( eLight != Base3DLightNone && aFtLightX.IsVisible() )
-    {
-        Vector3D aVector = pLightGroup->GetDirection( eLight );
-        aVector.Normalize();
-
-        String aStr;
-
-        aStr = String(SVX_RES(RID_SVXFLOAT3D_FIX_X));
-        aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((INT32)(aVector.X()*1000.0));
-        aFtLightX.SetText( aStr );
-
-        aStr = String(SVX_RES(RID_SVXFLOAT3D_FIX_Y));
-        aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((INT32)(aVector.Y()*1000.0));
-        aFtLightY.SetText( aStr );
-
-        aStr = String(SVX_RES(RID_SVXFLOAT3D_FIX_Z));
-        aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((INT32)(aVector.Z()*1000.0));
-        aFtLightZ.SetText( aStr );
-    }
     return( 0L );
 }
 
@@ -3425,29 +3381,6 @@ IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, p )
             aLbLight8.Enable( FALSE );
         }
         aBtnLightColor.Enable( FALSE );
-    }
-
-    if( eLight != Base3DLightNone && aFtLightX.IsVisible() )
-    {
-        Vector3D aVector = pLightGroup->GetDirection( eLight );
-        aVector.Normalize();
-
-        String aStr;
-
-        aStr = String(SVX_RES(RID_SVXFLOAT3D_FIX_X));
-        aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((INT32)(aVector.X()*1000.0));
-        aFtLightX.SetText( aStr );
-
-        aStr = String(SVX_RES(RID_SVXFLOAT3D_FIX_Y));
-        aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((INT32)(aVector.Y()*1000.0));
-        aFtLightY.SetText( aStr );
-
-        aStr = String(SVX_RES(RID_SVXFLOAT3D_FIX_Z));
-        aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((INT32)(aVector.Z()*1000.0));
-        aFtLightZ.SetText( aStr );
     }
 
     return( 0L );

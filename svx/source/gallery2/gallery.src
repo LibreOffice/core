@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:09:32 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 18:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,10 +792,10 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         TabStop = TRUE ;
     };
 
-    GroupBox GRP_TITLE
+    FixedLine FL_TITLE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 30 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "Titel" ;
         Text [ ENGLISH ] = "Title" ;
         Text [ english_us ] = "Title" ;
@@ -858,10 +858,10 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text = "Suchen" ;
     Text [ ENGLISH ] = "Searching" ;
     Moveable = TRUE ;
-    GroupBox GRP_SEARCH_DIR
+    FixedLine FL_SEARCH_DIR
     {
         Pos = MAP_APPFONT ( 6 , 33 ) ;
-        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text = "Verzeichnis" ;
         Text [ ENGLISH ] = "Directory" ;
         Text [ dutch ] = "Map" ;
@@ -899,10 +899,10 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GRP_SEARCH_TYPE
+    FixedLine FL_SEARCH_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text = "Dateityp" ;
         Text [ ENGLISH ] = "Type of file" ;
         Text [ english_us ] = "File type" ;
@@ -973,10 +973,10 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text = "Übernehmen" ;
     Text [ ENGLISH ] = "Apply" ;
     Moveable = TRUE ;
-    GroupBox GRP_TAKE_PROGRESS
+    FixedLine FL_TAKE_PROGRESS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text = "Datei" ;
         Text [ ENGLISH ] = "File" ;
         Text [ dutch ] = "Bestand" ;
@@ -1052,10 +1052,10 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
     Text [ ENGLISH ] = "Actualize" ;
     Text [ english_us ] = "Update" ;
     Moveable = TRUE ;
-    GroupBox GRP_ACTUALIZE_PROGRESS
+    FixedLine FL_ACTUALIZE_PROGRESS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text = "Datei" ;
         Text [ ENGLISH ] = "File" ;
         Text [ dutch ] = "Bestand" ;
@@ -1140,10 +1140,10 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GRP_ID
+    FixedLine FL_ID
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 54 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text = "ID" ;
         Text[ ENGLISH ] = "ID";
         Text[ english_us ] = "ID";

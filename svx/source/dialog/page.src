@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:55:57 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_PAPER_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60, 30 ) ;
+        Pos = MAP_APPFONT ( 50, 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -213,7 +213,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_PAPER_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 46 ) ;
+        Pos = MAP_APPFONT ( 50 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -253,7 +253,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     RadioButton RB_PORTRAIT
     {
-        Pos = MAP_APPFONT ( 48 , 62 ) ;
+        Pos = MAP_APPFONT ( 50 , 62 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Check = TRUE ;
         Text = "Ho~chformat" ;
@@ -283,7 +283,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     RadioButton RB_LANDSCAPE
     {
-        Pos = MAP_APPFONT ( 48 , 74 ) ;
+        Pos = MAP_APPFONT ( 50 , 74 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Text = "~Querformat" ;
         Text [ ENGLISH ] = "Lan~dscape" ;
@@ -408,7 +408,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_LEFT_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 101 ) ;
+        Pos = MAP_APPFONT ( 50 , 101 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -452,7 +452,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_RIGHT_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 117 ) ;
+        Pos = MAP_APPFONT ( 50 , 117 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -496,7 +496,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_TOP_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 133 ) ;
+        Pos = MAP_APPFONT ( 50 , 133 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -540,7 +540,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_BOTTOM_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 149 ) ;
+        Pos = MAP_APPFONT ( 50 , 149 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -561,7 +561,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 107, 90 ) ;
         Size = MAP_APPFONT ( 147 , 8 ) ;
-        Text = "Layout-Einstellungen" ;
+        Text = "Layouteinstellungen" ;
         Text [ ENGLISH ] = "Layout settings" ;
         Text[ english_us ] = "Layout settings";
         Text[ portuguese ] = "Layout settings";
@@ -1130,7 +1130,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Objekt ~an Seitenformat anpassen" ;
         Text [ ENGLISH ] = "~Fit objects to page format" ;
         Text[ english_us ] = "~Fit object to page format";
@@ -1186,7 +1186,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_REGISTER
     {
-        Pos = MAP_APPFONT ( 119 , 147 ) ;
+        Pos = MAP_APPFONT ( 122 , 147 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
         Text = "Referenzabsa~tzvorlage" ;
         Text [ ENGLISH ] = "Reference style sheet" ;
@@ -1215,8 +1215,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_REGISTER
     {
-        Pos = MAP_APPFONT ( 119 , 157 ) ;
-        Size = MAP_APPFONT ( 135, 50 ) ;
+        Pos = MAP_APPFONT ( 122 , 157 ) ;
+        Size = MAP_APPFONT ( 132, 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
         Sort = TRUE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 17:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     RadioButton RBT_TRANS_LINEAR
     {
         Pos = MAP_APPFONT ( 12 , 28  ) ;
-        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Transparenz" ;
         Text [ ENGLISH ] = "~Transparency" ;
         Text[ english_us ] = "~Transparency";
@@ -161,7 +161,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRANSPARENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 27 ) ;
+        Pos = MAP_APPFONT ( 72 , 27 ) ;
         Size = MAP_APPFONT ( 30, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -202,8 +202,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_TYPE
     {
-        Pos = MAP_APPFONT ( 22 , 56 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 56 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "Ty~p" ;
         Text [ ENGLISH ] = "Ty~pe" ;
         Text[ english_us ] = "Ty~pe";
@@ -231,8 +231,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     ListBox LB_TRGR_GRADIENT_TYPES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 54  ) ;
-        Size = MAP_APPFONT ( 59 , 63 ) ;
+        Pos = MAP_APPFONT ( 72 , 54  ) ;
+        Size = MAP_APPFONT ( 53 , 63 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -445,8 +445,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_CENTER_X
     {
-        Pos = MAP_APPFONT ( 22 , 72 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 72 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "Zentrum ~X" ;
         Text [ ENGLISH ] = "Center ~X" ;
         Text[ english_us ] = "Center ~X";
@@ -474,7 +474,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRGR_CENTER_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 70 ) ;
+        Pos = MAP_APPFONT ( 72 , 70 ) ;
         Size = MAP_APPFONT ( 30, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -488,8 +488,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_CENTER_Y
     {
-        Pos = MAP_APPFONT ( 22 , 88 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 88 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "Zentrum ~Y" ;
         Text [ ENGLISH ] = "Center ~Y" ;
         Text[ english_us ] = "Center ~Y";
@@ -517,7 +517,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRGR_CENTER_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 86 ) ;
+        Pos = MAP_APPFONT ( 72 , 86 ) ;
         Size = MAP_APPFONT ( 30, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -531,8 +531,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_ANGLE
     {
-        Pos = MAP_APPFONT ( 22 , 104 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 104 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "~Winkel" ;
         Text [ ENGLISH ] = "~Angle" ;
         Text[ english_us ] = "~Angle";
@@ -560,7 +560,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRGR_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 102 ) ;
+        Pos = MAP_APPFONT ( 72 , 102 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -594,8 +594,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_BORDER
     {
-        Pos = MAP_APPFONT ( 16 + TRANS_GRAD_OFFSET_X, 56 + TRANS_GRAD_OFFSET_Y) ;
-        Size = MAP_APPFONT ( 42, 8 ) ;
+        Pos = MAP_APPFONT ( 15 + TRANS_GRAD_OFFSET_X, 56 + TRANS_GRAD_OFFSET_Y) ;
+        Size = MAP_APPFONT ( 41, 8 ) ;
         Text = "~Rand" ;
         Text [ ENGLISH ] = "~Border" ;
         Text[ english_us ] = "~Border";
@@ -622,8 +622,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRGR_BORDER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 + TRANS_GRAD_OFFSET_X, 54 + TRANS_GRAD_OFFSET_Y) ;
-        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Pos = MAP_APPFONT ( 66 + TRANS_GRAD_OFFSET_X, 54 + TRANS_GRAD_OFFSET_Y) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -636,8 +636,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_START_VALUE
     {
-        Pos = MAP_APPFONT ( 22 , 136 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 136 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "~Startwert" ;
         Text [ ENGLISH ] = "~From value" ;
         Text[ english_us ] = "~Start value";
@@ -664,7 +664,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRGR_START_VALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 134 ) ;
+        Pos = MAP_APPFONT ( 72 , 134 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -678,8 +678,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_END_VALUE
     {
-        Pos = MAP_APPFONT ( 22 , 152 ) ;
-        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 152 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "~Endwert" ;
         Text [ ENGLISH ] = "~To value" ;
         Text[ english_us ] = "~End value";
@@ -706,7 +706,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     MetricField MTR_TRGR_END_VALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 150 ) ;
+        Pos = MAP_APPFONT ( 72 , 150 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;

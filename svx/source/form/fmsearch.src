@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:09:20 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 18:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     Closeable = TRUE;
     HelpId = HID_FM_DLG_SEARCH;
 
-    GroupBox GB_SEARCHFOR
+    FixedLine FL_SEARCHFOR
     {
         Pos = MAP_APPFONT( 6, 8 );
-        Size = MAP_APPFONT( 219, 54 );
+        Size = MAP_APPFONT( 232, 8 );
         Text = "Suchen nach";
         Text [ ENGLISH ] = "Search for";
         Text[ english_us ] = "Search for";
@@ -107,28 +107,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 12, 23 );
         Size = MAP_APPFONT( 50, 10 );
         Group = TRUE;
-        Text = "~Text :";
-        Text [ ENGLISH ] = "~Text :";
-        Text[ italian ] = "~Testo :";
-        Text[ portuguese_brazilian ] = "~Text :";
-        Text[ portuguese ] = "~Texto :";
-        Text[ danish ] = "Tekst :";
-        Text[ french ] = "~Texte :";
-        Text[ swedish ] = "~Text :";
-        Text[ dutch ] = "~Tekst :";
-        Text[ spanish ] = "~Texto :";
+        Text = "~Text";
         Text[ english_us ] = "~Text :";
-        Text[ chinese_simplified ] = "Œƒ◊÷(~T)£∫";
-        Text[ russian ] = "“ÂÍÒÚ :";
-        Text[ polish ] = "Tekst:";
-        Text[ japanese ] = "ï∂éöóÒ(~T)";
-        Text[ chinese_traditional ] = "§Â¶r(~T)";
-        Text[ arabic ] = "«·‰’ :";
-        Text[ greek ] = " ÂﬂÏÂÌÔ :";
-        Text[ korean ] = "≈ÿΩ∫∆Æ(~T):";
-        Text[ turkish ] = "Metin:";
-        Text[ catalan ] = "~Texto :";
-        Text[ finnish ] = "~Teksti:";
     };
     RadioButton RB_SEARCHFORNULL
     {
@@ -195,10 +175,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         HelpId = HID_SEARCH_TEXT;
     };
 
-    GroupBox GB_WHERE
+    FixedLine FL_WHERE
     {
         Pos = MAP_APPFONT( 6, 65 );
-        Size = MAP_APPFONT( 219, 58 );
+        Size = MAP_APPFONT( 232, 8 );
         Text = "Bereich";
         Text [ ENGLISH ] = "Bereich";
         Text[ italian ] = "Area";
@@ -227,29 +207,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 12, 77 );
         Size = MAP_APPFONT( 87, 10 );
-        Text = "~Formular :";
-        Text [ ENGLISH ] = "~Formular :";
+        Text = "~Formular";
         Text[ english_us ] = "Form:";
-        Text[ portuguese ] = "~Formul·rio:";
-        Text[ russian ] = "‘ÓÏÛÎˇ :";
-        Text[ dutch ] = "~Formulier :";
-        Text[ french ] = "~Formulaire :";
-        Text[ spanish ] = "~Formulario :";
-        Text[ italian ] = "Formulario :";
-        Text[ danish ] = "~Formular :";
-        Text[ swedish ] = "~Formul‰r :";
-        Text[ polish ] = "Formularz :";
-        Text[ portuguese_brazilian ] = "~Formular :";
-        Text[ japanese ] = "Ã´∞—:";
-        Text[ chinese_simplified ] = "±Ìµ•£∫";
-        Text[ chinese_traditional ] = "™Ì≥Ê°G";
-        Text[ arabic ] = "«·«” „«—…:";
-        Text[ greek ] = "÷¸ÒÏ·:";
-        Text[ korean ] = "æÁΩƒ:";
-        Text[ turkish ] = "Form:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formulario :";
-        Text[ finnish ] = "Lomake:";
     };
     ListBox LB_FORM
     {
@@ -293,31 +252,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 24, 106 );
         Size = MAP_APPFONT( 75, 10 );
-        Text = "Ein~zelnes Feld :";
-        Text [ ENGLISH ] = "Ein~zelnes Feld :";
-        TabStop = TRUE;
-        HelpId = HID_SEARCH_SINGLEFIELD;
-        Text[ italian ] = "Campo singolo:";
-        Text[ portuguese_brazilian ] = "ein~zelnes Feld :";
-        Text[ portuguese ] = "Campo ˙~nico:";
-        Text[ danish ] = "Enkelt felt :";
-        Text[ french ] = "Champ individuel :";
-        Text[ swedish ] = "Enstaka f‰lt:";
-        Text[ dutch ] = "~Een enkel veld :";
-        Text[ spanish ] = "~Campo individual :";
-        Text[ english_us ] = "Single field:";
-        Text[ chinese_simplified ] = "µ•∏ˆ◊÷∂Œ£∫";
-        Text[ russian ] = "¬ ÓÚ‰ÂÎ¸ÌÓÏ ÔÓÎÂ :";
-        Text[ polish ] = "Pojedyncze pole :";
-        Text[ japanese ] = "å¬ÅXÇÃÃ®∞Ÿƒﬁ:";
-        Text[ chinese_traditional ] = "≥Ê≠”ƒÊ¶Ï°G";
-        Text[ arabic ] = "Õﬁ· ›—œÌ :";
-        Text[ greek ] = "ÃÂÏÔÌ˘Ï›ÌÔ Â‰ﬂÔ:";
-        Text[ korean ] = "∞≥∫∞ « µÂ:";
-        Text[ turkish ] = "Tek alan:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Campo individual :";
-        Text[ finnish ] = "Yksitt‰inen kentt‰:";
+        Text = "Ein~zelnes Feld";
+        Text[ english_us ] = "Single field";
     };
     ListBox LB_FIELD
     {
@@ -328,10 +264,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         DropDown = TRUE;
         HelpId = HID_SEARCH_FIELDSELECTION;
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT( 6, 126 );
-        Size = MAP_APPFONT( 288, 93 );
+        Size = MAP_APPFONT( 288, 8 );
         Text = "Einstellungen";
         Text [ ENGLISH ] = "Einstellungen";
         Text[ italian ] = "Impostazioni";
@@ -359,30 +295,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     FixedText FT_POSITION
     {
         Pos = MAP_APPFONT( 12, 138 );
-        Size = MAP_APPFONT( 40, 10 );
-        Text = "~Position :";
-        Text [ ENGLISH ] = "~Position :";
-        Text[ italian ] = "~Posizione :";
-        Text[ portuguese_brazilian ] = "~Position :";
-        Text[ portuguese ] = "~PosiÁ„o:";
-        Text[ danish ] = "Placering :";
-        Text[ french ] = "~Position :";
-        Text[ swedish ] = "~Position:";
-        Text[ dutch ] = "~Positie :";
-        Text[ spanish ] = "~PosiciÛn :";
-        Text[ english_us ] = "Position :";
-        Text[ chinese_simplified ] = "Œª÷√£∫";
-        Text[ russian ] = "œÓÁËˆËˇ :";
-        Text[ polish ] = "Pozycja :";
-        Text[ japanese ] = "à íu:";
-        Text[ chinese_traditional ] = "¶Ï∏m°G";
-        Text[ arabic ] = "«·„Ê÷⁄:";
-        Text[ greek ] = "»›ÛÁ :";
-        Text[ korean ] = "¿ßƒ°:";
-        Text[ turkish ] = "Konum:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~PosiciÛn :";
-        Text[ finnish ] = "Sijainti:";
+        Size = MAP_APPFONT( 40, 8 );
+        Text = "~Position";
+        Text[ english_us ] = "Position";
     };
     ListBox LB_POSITION
     {
@@ -717,10 +632,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ catalan ] = "...";
         Text[ finnish ] = "...";
     };
-    GroupBox GB_STATE
+    FixedLine FL_STATE
     {
         Pos = MAP_APPFONT( 6, 222 );
-        Size = MAP_APPFONT( 288, 25 );
+        Size = MAP_APPFONT( 288, 8 );
         Text = "Status" ;
         Text [ ENGLISH ] = "State" ;
         Text[ italian ] = "Stato";
