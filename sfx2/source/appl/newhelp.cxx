@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-25 07:52:58 $
+ *  last change: $Author: pb $ $Date: 2001-10-29 07:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,17 +940,19 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         ::rtl::OUString aTemp;
         if ( aUserItem >>= aTemp )
-            aUserData = String( aTemp );
-        BOOL bChecked = ( 1 == aUserData.GetToken(0).ToInt32() ) ? TRUE : FALSE;
-        aFullWordsCB.Check( bChecked );
-        bChecked = ( 1 == aUserData.GetToken(1).ToInt32() ) ? TRUE : FALSE;
-        aScopeCB.Check( bChecked );
-
-        for ( USHORT i = 2; i < aUserData.GetTokenCount(); ++i )
         {
-            String aToken = aUserData.GetToken(i);
-            aSearchED.InsertEntry( INetURLObject::decode(
-                aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+            aUserData = String( aTemp );
+            BOOL bChecked = ( 1 == aUserData.GetToken(0).ToInt32() ) ? TRUE : FALSE;
+            aFullWordsCB.Check( bChecked );
+            bChecked = ( 1 == aUserData.GetToken(1).ToInt32() ) ? TRUE : FALSE;
+            aScopeCB.Check( bChecked );
+
+            for ( USHORT i = 2; i < aUserData.GetTokenCount(); ++i )
+            {
+                String aToken = aUserData.GetToken(i);
+                aSearchED.InsertEntry( INetURLObject::decode(
+                    aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+            }
         }
     }
 
@@ -1996,8 +1998,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ), Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
             aMenu.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
+            aMenu.EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
             aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ), Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
             aMenu.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
+            aMenu.EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
             aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ), Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
             aMenu.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
             aMenu.InsertSeparator();
@@ -2215,22 +2219,24 @@ void SfxHelpWindow_Impl::LoadConfig()
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         rtl::OUString aTemp;
         if ( aUserItem >>= aTemp )
+        {
             aUserData = String( aTemp );
-        DBG_ASSERT( aUserData.GetTokenCount() == 4, "invalid user data" );
-        USHORT nIdx = 0;
-        nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-        nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-        sal_Int32 nWidth = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-        nHeight = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-        if ( bIndex )
-        {
-            nExpandWidth = nWidth;
-            nCollapseWidth = nExpandWidth * nTextSize / 100;
-        }
-        else
-        {
-            nCollapseWidth = nWidth;
-            nExpandWidth = nCollapseWidth * 100 / nTextSize;
+            DBG_ASSERT( aUserData.GetTokenCount() == 4, "invalid user data" );
+            USHORT nIdx = 0;
+            nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            sal_Int32 nWidth = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            nHeight = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            if ( bIndex )
+            {
+                nExpandWidth = nWidth;
+                nCollapseWidth = nExpandWidth * nTextSize / 100;
+            }
+            else
+            {
+                nCollapseWidth = nWidth;
+                nExpandWidth = nCollapseWidth * 100 / nTextSize;
+            }
         }
 
         pTextWin->ToggleIndex( bIndex );
@@ -2624,6 +2630,20 @@ void SfxHelpWindow_Impl::AddURLListener( const URL& aURL, Reference < XDispatch 
 {
     if ( xDisp.is() )
         ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SfxHelpWindow_Impl::HasHistoryPredecessor() const
+{
+    return pHelpInterceptor->HasHistoryPred();
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SfxHelpWindow_Impl::HasHistorySuccessor() const
+{
+    return pHelpInterceptor->HasHistorySucc();
 }
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
