@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-10-16 08:56:41 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,14 @@ private:
     long            nMY;
     long            nTextHeight;
     BOOL            bInitialKeyInput;
+    BOOL            m_bMod1;
     ToolBox&        rTbx;
 
     void UpdateSize_Impl( long nNewCol, long nNewLine);
 
 public:
                             TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
+                            ~TableWindow();
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -131,6 +133,7 @@ TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) 
 
     SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
     bInitialKeyInput(TRUE),
+    m_bMod1(FALSE),
     rTbx(rParentTbx)
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
@@ -157,7 +160,10 @@ TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) 
     nMY = aLogicSize.Height();
     SetOutputSizePixel( Size( nMX*nWidth-1, nMY*nHeight-1+nTextHeight ) );
 }
-
+// -----------------------------------------------------------------------
+TableWindow::~TableWindow()
+{
+}
 // -----------------------------------------------------------------------
 
 SfxPopupWindow* TableWindow::Clone() const
@@ -292,9 +298,10 @@ void TableWindow::UpdateSize_Impl( long nNewCol, long nNewLine)
 void TableWindow::KeyInput( const KeyEvent& rKEvt )
 {
     BOOL bHandled = FALSE;
-    if(!rKEvt.GetKeyCode().GetModifier())
+    USHORT nModifier = rKEvt.GetKeyCode().GetModifier();
+    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    if(!nModifier)
     {
-        USHORT nKey = rKEvt.GetKeyCode().GetCode();
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey ||
             KEY_ESCAPE == nKey ||KEY_RETURN == nKey )
@@ -343,6 +350,14 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
             UpdateSize_Impl( nNewCol, nNewLine);
         }
     }
+    else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
+    {
+        m_bMod1 = TRUE;
+        if(IsMouseCaptured())
+            ReleaseMouse();
+        EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
+    }
+
     if(!bHandled)
         SfxPopupWindow::KeyInput(rKEvt);
 
@@ -438,8 +453,9 @@ void TableWindow::PopupModeEnd()
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
         SfxUInt16Item aCol( SID_ATTR_TABLE_COLUMN, (UINT16)nCol );
         SfxUInt16Item aRow( SID_ATTR_TABLE_ROW, (UINT16)nLine );
+        SfxUInt16Item aModifier(SID_MODIFIER, m_bMod1 ? KEY_MOD1 : 0);
         GetBindings().GetDispatcher()->Execute(
-            GetId(), SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, &aRow, 0L );
+            GetId(), SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, &aRow, &aModifier, 0L );
     }
     else if ( IsPopupModeCanceled() )
         ReleaseMouse();
@@ -460,6 +476,7 @@ private:
     long            nMX;
     long            nTextHeight;
     BOOL            bInitialKeyInput;
+    BOOL            m_bMod1;
     ToolBox&        rTbx;
 
     void UpdateSize_Impl( long nNewCol );
@@ -484,6 +501,7 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
 
     SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
     bInitialKeyInput(TRUE),
+    m_bMod1(FALSE),
     rTbx(rParentTbx)
 
 {
@@ -612,9 +630,10 @@ void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
 {
     BOOL bHandled = FALSE;
-    if(!rKEvt.GetKeyCode().GetModifier())
+    USHORT nModifier = rKEvt.GetKeyCode().GetModifier();
+    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    if(!nModifier)
     {
-        USHORT nKey = rKEvt.GetKeyCode().GetCode();
         if( KEY_LEFT == nKey || KEY_RIGHT == nKey ||
             KEY_RETURN == nKey ||KEY_ESCAPE == nKey ||
             KEY_UP == nKey)
@@ -649,6 +668,13 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
             }
             UpdateSize_Impl( nNewCol );
         }
+    }
+    else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
+    {
+        m_bMod1 = TRUE;
+        if(IsMouseCaptured())
+            ReleaseMouse();
+        EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
     }
     if(!bHandled)
         SfxPopupWindow::KeyInput(rKEvt);
@@ -731,8 +757,9 @@ void ColumnsWindow::PopupModeEnd()
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
 
         SfxUInt16Item aCol( SID_ATTR_COLUMNS, (UINT16)nCol );
+        SfxUInt16Item aModifier(SID_MODIFIER, m_bMod1 ? KEY_MOD1 : 0);
         GetBindings().GetDispatcher()->Execute(
-            nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, 0L );
+            nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, &aModifier, 0L );
     }
     else if ( IsPopupModeCanceled() )
         ReleaseMouse();
