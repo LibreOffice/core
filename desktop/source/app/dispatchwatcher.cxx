@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:13:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,17 +160,24 @@ Mutex& DispatchWatcher::GetMutex()
     return *pWatcherMutex;
 }
 
-// Create or get the dispatch watcher implementation
+// Create or get the dispatch watcher implementation. This implementation must be
+// a singleton to prevent access to the framework after it wants to terminate.
 DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 {
-    static DispatchWatcher* pDispatchWatcher = NULL;
+    static Reference< XInterface > xDispatchWatcher;
+    static DispatchWatcher*        pDispatchWatcher = NULL;
 
-    if ( !pDispatchWatcher )
+    if ( !xDispatchWatcher.is() )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        if ( !pDispatchWatcher )
+        if ( !xDispatchWatcher.is() )
+        {
             pDispatchWatcher = new DispatchWatcher();
+
+            // We have to hold a reference to ourself forever to prevent our own destruction.
+            xDispatchWatcher = static_cast< cppu::OWeakObject *>( pDispatchWatcher );
+        }
     }
 
     return pDispatchWatcher;
