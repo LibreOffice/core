@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 11:04:13 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 13:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1819,15 +1819,15 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 //-------------------------------------------------------------------------
 ODatasourceSelector::ODatasourceSelector(Window* _pParent, const ResId& _rResId)
     :Window(_pParent, _rResId)
-    ,m_aNewDatasource   (this, ResId(PB_NEW_DATASOURCE))
     ,m_aDatasourceList  (this, ResId(LB_DATASOURCES))
+    ,m_aNewDatasource   (this, ResId(PB_NEW_DATASOURCE))
 {
     FreeResource();
 
-    m_aDatasourceList.SetZOrder(NULL, WINDOW_ZORDER_FIRST);
     m_aDatasourceList.EnableClipSiblings(sal_True);
-
     m_aNewDatasource.SetClickHdl(LINK(this, ODatasourceSelector, OnButtonPressed));
+
+    SetStyle((GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL) & ~WB_NODIALOGCONTROL);
 }
 
 //-------------------------------------------------------------------------
@@ -2171,6 +2171,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2000/10/30 11:04:13  fs
+ *  #79868# disable the Reset button when selecting deleted data sources
+ *
  *  Revision 1.11  2000/10/30 08:01:04  fs
  *  getCurrentSettings: no password dialog if the current data source type does not need authentication
  *
