@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-02 14:53:54 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,6 @@ PRJNAME=sfx2
 TARGET=explorer
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
@@ -80,7 +79,8 @@ SLOFILES = \
         $(SLO)$/infodlgs.obj	\
         $(SLO)$/sfxdir.obj
 
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
         explorer.src
 
 # --- Targets ------------------------------------------------------
