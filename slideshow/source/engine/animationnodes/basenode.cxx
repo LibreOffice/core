@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:05:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,12 +343,12 @@ namespace presentation
         BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
                             const BaseContainerNodeSharedPtr&                   rParent,
                             const NodeContext&                                  rContext ) :
+            maContext( rContext.maContext ),
             maDeactivatingListeners(),
             mxNode( xNode ),
             mpParent( rParent ),
             mpSelf(),
             mpStateTransitionTable( NULL ),
-            maContext( rContext.maContext ),
             mnStartDelay( rContext.mnStartDelay ),
             meCurrState( UNRESOLVED ),
             mbIsMainSequenceRootNode( isMainSequenceRootNode( xNode ) )
@@ -585,17 +585,14 @@ namespace presentation
                 // schedule delayed activation event. Take iterate node
                 // timeout into account
                 maContext.mrEventQueue.addEvent(
-                    makeDelay( ::boost::bind(&BaseNode::activate,
-                                                ::boost::ref( mpSelf ) ),
-                                mnStartDelay ) );
+                    makeDelay( boost::bind( &BaseNode::activate, mpSelf ),
+                               mnStartDelay ) );
             }
             else
             {
                 generateEvent( mxNode->getBegin(),
-                                ::boost::bind(&BaseNode::activate,
-                                                ::boost::ref( mpSelf ) ),
-                                maContext,
-                                mnStartDelay );
+                               boost::bind( &BaseNode::activate, mpSelf ),
+                               maContext, mnStartDelay );
             }
         }
 
@@ -609,10 +606,8 @@ namespace presentation
 
             // TODO(F2): Handle end time attribute, too
             generateEvent( mxNode->getDuration(),
-                            ::boost::bind(&BaseNode::deactivate,
-                                            ::boost::ref( mpSelf ) ),
-                            maContext,
-                            0.0 );
+                           boost::bind( &BaseNode::deactivate, mpSelf ),
+                           maContext, 0.0 );
         }
 
         // Helper
