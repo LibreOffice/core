@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:10:18 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1655,10 +1655,10 @@ void E3dObject::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
     SdrAttrObj::ItemChange(nWhich, pNewItem);
 }
 
-void E3dObject::ItemSetChanged()
+void E3dObject::ItemSetChanged( const SfxItemSet& rSet )
 {
     // call parent
-    SdrAttrObj::ItemSetChanged();
+    SdrAttrObj::ItemSetChanged( rSet );
 
     // local changes
     StructureChanged(this);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:30 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3282,7 +3282,10 @@ void SdrObject::SetItem( const SfxPoolItem& rItem )
     {
         ItemChange(nWhichID, &rItem);
         PostItemChange(nWhichID);
-        ItemSetChanged();
+
+        SfxItemSet aSet( *GetItemPool(), nWhichID, nWhichID, 0 );
+        aSet.Put( rItem );
+        ItemSetChanged( aSet );
     }
 }
 
@@ -3292,7 +3295,9 @@ void SdrObject::ClearItem( const sal_uInt16 nWhich )
     {
         ItemChange(nWhich);
         PostItemChange(nWhich);
-        ItemSetChanged();
+
+        SfxItemSet aSet( *GetItemPool(), nWhich, nWhich, 0 );
+        ItemSetChanged( aSet );
     }
 }
 
@@ -3303,6 +3308,7 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
     const SfxPoolItem *pPoolItem;
     std::vector< sal_uInt16 > aPostItemChangeList;
     BOOL bDidChange(FALSE);
+    SfxItemSet aSet( *GetItemPool(), SDRATTR_START, SDRATTR_END );
 
     while(nWhich)
     {
@@ -3313,6 +3319,7 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
                 bDidChange = TRUE;
                 ItemChange(nWhich, pPoolItem);
                 aPostItemChangeList.push_back( nWhich );
+                aSet.Put( *pPoolItem );
             }
         }
         nWhich = aWhichIter.NextWhich();
@@ -3328,14 +3335,14 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
             aIter++;
         }
 
-        ItemSetChanged();
+        ItemSetChanged( aSet );
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // ItemSet was changed, maybe user wants to react
 
-void SdrObject::ItemSetChanged()
+void SdrObject::ItemSetChanged(const SfxItemSet& rSet)
 {
 }
 

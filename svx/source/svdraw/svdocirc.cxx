@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,13 +1364,13 @@ SfxItemSet* SdrCircObj::CreateNewItemSet(SfxItemPool& rPool)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
-void SdrCircObj::ItemSetChanged()
+void SdrCircObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // local changes
     SetXPolyDirty();
 
     // call parent
-    SdrRectObj::ItemSetChanged();
+    SdrRectObj::ItemSetChanged(rSet);
 
     // local changes
     ImpSetAttrToCircInfo();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1703,10 +1703,10 @@ SfxItemSet* SdrMeasureObj::CreateNewItemSet(SfxItemPool& rPool)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
-void SdrMeasureObj::ItemSetChanged()
+void SdrMeasureObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // call parent
-    SdrTextObj::ItemSetChanged();
+    SdrTextObj::ItemSetChanged(rSet);
 
     // local changes
     SetTextDirty();

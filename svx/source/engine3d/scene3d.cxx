@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:53:13 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1741,15 +1741,15 @@ void E3dScene::PostItemChange(const sal_uInt16 nWhich)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // ItemSet was changed, maybe user wants to react
 
-void E3dScene::ItemSetChanged()
+void E3dScene::ItemSetChanged( const SfxItemSet& rSet )
 {
     // call parent
-    E3dObject::ItemSetChanged();
+    E3dObject::ItemSetChanged( rSet );
 
     // set at all contained objects
     sal_uInt32 nCount(pSub->GetObjCount());
     for(sal_uInt32 a(0); a < nCount; a++)
-        pSub->GetObj(a)->ItemSetChanged();
+        pSub->GetObj(a)->ItemSetChanged( rSet );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,13 +840,13 @@ SfxItemSet* SdrCaptionObj::CreateNewItemSet(SfxItemPool& rPool)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
-void SdrCaptionObj::ItemSetChanged()
+void SdrCaptionObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // local changes
     ImpRecalcTail();
 
     // call parent
-    SdrRectObj::ItemSetChanged();
+    SdrRectObj::ItemSetChanged(rSet);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

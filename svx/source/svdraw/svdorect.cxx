@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,10 +809,10 @@ void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const Sf
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
-void SdrRectObj::ItemSetChanged()
+void SdrRectObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // call parent
-    SdrTextObj::ItemSetChanged();
+    SdrTextObj::ItemSetChanged(rSet);
 
     // local changes
     SetXPolyDirty();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-09 17:07:18 $
+ *  last change: $Author: dl $ $Date: 2001-03-28 08:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,10 +344,10 @@ SfxItemSet* SdrEdgeObj::CreateNewItemSet(SfxItemPool& rPool)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
-void SdrEdgeObj::ItemSetChanged()
+void SdrEdgeObj::ItemSetChanged(const SfxItemSet& rSet)
 {
     // call parent
-    SdrTextObj::ItemSetChanged();
+    SdrTextObj::ItemSetChanged(rSet);
 
     // local changes
     ImpSetAttrToEdgeInfo();
