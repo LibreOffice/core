@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:38:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
