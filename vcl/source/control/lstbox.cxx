@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:54:40 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
 
     if( nStyle & WB_DROPDOWN )
     {
-        long nLeft, nTop, nRight, nBottom;
+        sal_Int32 nLeft, nTop, nRight, nBottom;
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
@@ -1260,7 +1260,7 @@ Size ListBox::CalcMinimumSize() const
 Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
