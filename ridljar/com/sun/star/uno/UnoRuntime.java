@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoRuntime.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:37:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ import com.sun.star.lib.util.WeakMap;
  * @see com.sun.star.uno.IBridge
  * @see com.sun.star.uno.IEnvironment
  * @see com.sun.star.uno.IQueryInterface
- * @since UDK 1.0
  */
 public class UnoRuntime {
     /**
-     * @deprecated As of UDK 3.2, do not create instances of this class.  It is
-     * considered a historic mistake to have a <code>public</code> constructor
-     * for this class, which only has <code>static</code> members.  Also, this
-     * class might be changed to become <code>final</code> in a future version.
+     * @deprecated As of UDK&nbsp;3.2.0, do not create instances of this class.
+     * It is considered a historic mistake to have a <code>public</code>
+     * constructor for this class, which only has <code>static</code> members.
+     * Also, this class might be changed to become <code>final</code> in a
+     * future version.
      */
     public UnoRuntime() {}
 
@@ -279,8 +279,8 @@ public class UnoRuntime {
      * @param context the context of the environment
      * @see com.sun.star.uno.IEnvironment
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     public static IEnvironment getEnvironment(String name, Object context)
         throws java.lang.Exception
@@ -321,8 +321,8 @@ public class UnoRuntime {
      * @see com.sun.star.uno.IBridge
      * @see com.sun.star.uno.IEnvironment
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     public static IBridge getBridge(
         IEnvironment from, IEnvironment to, Object[] args)
@@ -378,8 +378,8 @@ public class UnoRuntime {
      * @see com.sun.star.uno.IBridge
      * @see com.sun.star.uno.IEnvironment
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     public static IBridge getBridgeByName(
         String from, Object fromContext, String to, Object toContext,
@@ -396,8 +396,8 @@ public class UnoRuntime {
      * @return an array of <code>IBridge</code> objects
      * @see com.sun.star.uno.IBridge
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     public static IBridge[] getBridges() {
         ArrayList l = new ArrayList();
@@ -426,8 +426,8 @@ public class UnoRuntime {
      * @see com.sun.star.uno.IEnvironment
      * @see com.sun.star.uno.IMapping
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     public static IMapping getMapping(IEnvironment from, IEnvironment to)
         throws java.lang.Exception
@@ -456,8 +456,8 @@ public class UnoRuntime {
      * @see #getMapping
      * @see com.sun.star.uno.IMapping
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     public static IMapping getMappingByName(String from, String to)
         throws java.lang.Exception
@@ -470,8 +470,8 @@ public class UnoRuntime {
      *
      * <p>Releases all references to bridges and environments.</p>
      *
-     * @deprecated As of UDK 3.2, this method is deprecated, without offering a
-     * replacement.
+     * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
+     * offering a replacement.
      */
     static public boolean reset() {
         synchronized (bridges) {
@@ -500,7 +500,7 @@ public class UnoRuntime {
     }
 
     /**
-     * @deprecated As of UDK 3.2, do not use this internal field.
+     * @deprecated As of UDK&nbsp;3.2.0, do not use this internal field.
      */
     static public final boolean DEBUG = false;
 
