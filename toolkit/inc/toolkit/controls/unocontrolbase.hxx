@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 14:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 class UnoControlBase : public UnoControl
 {
 protected:
+    sal_Bool                    ImplHasProperty( sal_uInt16 nProp );
     sal_Bool                    ImplHasProperty( const ::rtl::OUString& aPropertyName );
     void                        ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis );
     ::com::sun::star::uno::Any  ImplGetPropertyValue( const ::rtl::OUString& aPropertyName );

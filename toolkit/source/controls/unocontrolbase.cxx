@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 14:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,12 @@
 //  ----------------------------------------------------
 //  class UnoControlBase
 //  ----------------------------------------------------
+
+sal_Bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
+{
+    ::rtl::OUString aPropName( GetPropertyName( nPropId ) );
+    return ImplHasProperty( aPropName );
+}
 
 sal_Bool UnoControlBase::ImplHasProperty( const ::rtl::OUString& aPropertyName )
 {
