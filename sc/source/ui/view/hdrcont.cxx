@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:55:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
 
 //      nScrPos = GetScrPos( nEntryNo ) - 1;
 
-        if (nEntryNo >= nSize)
+        if (nEntryNo > nSize)
             nScrPos = nEndPos + nLayoutSign;
         else
             nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
@@ -587,7 +587,7 @@ USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
             bFound=TRUE;
             nHitNo=nEntryNo-1;
         }
-        else if (nDif * nLayoutSign >= 0)
+        else if (nDif * nLayoutSign >= 0 && nEntryNo < nSize)
             nHitNo = nEntryNo;
         ++nCount;
     }
