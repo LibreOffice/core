@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigExamples.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:18:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -63,6 +63,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.EventObject;
 
@@ -89,67 +90,51 @@ import com.sun.star.util.ChangesEvent;
     o Resetting data to their defaults
 
    Each example is in a separate method call.
-
-   It accepts one command line parameter in the form of a connection string,
-   if no connection string is specified it uses the default of
-   "socket,host=localhost,port=2083"
 */
 public class ConfigExamples
 {
-    // The MultiServiceFactory interface of the ServiceManager
-    private XMultiServiceFactory mxServiceManager = null;
+    // The ComponentContext interface of the remote component context
+    private XComponentContext mxContext = null;
+
+    // The MultiComponentFactory interface of the ServiceManager
+    private XMultiComponentFactory mxServiceManager = null;
 
     // The MultiServiceFactory interface of the ConfigurationProvider
     private XMultiServiceFactory mxProvider = null;
 
-    public static void main(String args[])
+    public static void main( String args[] )
     {
-        String sConnection;
-        // Get the connect string, defaulting to localhost, port 2083
-        // if non supplied as command line arguments
-        if( args.length == 0 )
-        {
-            sConnection = "socket,host=localhost,port=2083";
-            System.out.println( "Using default connect string: " + sConnection );
-        }
-        else
-        {
-            sConnection = args[0];
-            System.out.println( "Using connect string: " + sConnection );
-        }
+        try {
+            // get the remote office component context
+            com.sun.star.uno.XComponentContext xContext =
+                com.sun.star.comp.helper.Bootstrap.bootstrap();
 
-        // Call connect, to get the MultiServiceFactory
-        // of a running office and execute the examples.
-        // If something goes wrong, print a stack trace and exit.
-        try
-        {
-            XMultiServiceFactory xServiceManager = connect( sConnection );
-            if (xServiceManager == null)
-            {
-                System.out.println( "ERROR: Cannot connect - no service manager available." );
-                return;
-            }
+            if( xContext != null )
+                System.out.println("Connected to a running office ...");
+            else
+                System.out.println( "ERROR: Cannot connect - no remote component context available." );
+
             // Create an instance of the class and call it's run method
-            ConfigExamples aExample = new ConfigExamples(xServiceManager);
-            aExample.run ( );
+            ConfigExamples aExample = new ConfigExamples(xContext);
+            aExample.run( );
 
             // if you own the service manager dispose it here
             // to ensure that the default provider is properly disposed and flushed
-
             System.exit(0);
         }
         catch( Exception e )
         {
-            e.printStackTrace ( System.out );
+            e.printStackTrace();
             System.exit(-1);
         }
     }
 
     /** Create a ConfigExamples instance supplying a service factory
     */
-    public ConfigExamples(XMultiServiceFactory xServiceManager)
+    public ConfigExamples(XComponentContext xContext)
     {
-        mxServiceManager = xServiceManager;
+        mxContext = xContext;
+        mxServiceManager = xContext.getServiceManager();
     }
 
     /** Run the examples with a default ConfigurationProvider
@@ -237,44 +222,10 @@ public class ConfigExamples
         }
         catch (com.sun.star.uno.RuntimeException e)
         {
-            System.out.println("ERROR: Failure while checking the provider services.");
-            e.printStackTrace( System.out );
+            System.err.println("ERROR: Failure while checking the provider services.");
+            e.printStackTrace();
             return false;
         }
-    }
-
-    /** Connect to a specified host which is running office and accepting
-        connections on the requested port. Set up a ServiceManager of the office
-     */
-
-    public static XMultiServiceFactory connect( String sConnection )
-        throws com.sun.star.uno.Exception, Exception
-    {
-        XComponentContext xContext =
-            com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
-        XMultiComponentFactory xLocalServiceManager = xContext.getServiceManager();
-
-        Object  xUrlResolver  = xLocalServiceManager.createInstanceWithContext(
-            "com.sun.star.bridge.UnoUrlResolver", xContext );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface( XUnoUrlResolver.class, xUrlResolver );
-        Object rInitialObject = urlResolver.resolve( "uno:" + sConnection + ";urp;StarOffice.NamingService" );
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xFactory = null;
-        if( rName != null )
-        {
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-            xFactory = (XMultiServiceFactory)
-                UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-        }
-        return xFactory;
-    }
-
-    /** Get the service manager in use
-     */
-    public XMultiServiceFactory getServiceManager( )
-    {
-        return mxServiceManager;
     }
 
     /** Get the provider we have
@@ -289,14 +240,13 @@ public class ConfigExamples
     public XMultiServiceFactory createProvider( )
         throws com.sun.star.uno.Exception
     {
-        XMultiServiceFactory xServiceManager = getServiceManager();
-
         final String sProviderService = "com.sun.star.configuration.ConfigurationProvider";
 
         // create the provider and return it as a XMultiServiceFactory
         XMultiServiceFactory xProvider = (XMultiServiceFactory)
             UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                                      xServiceManager.createInstance(sProviderService));
+                mxServiceManager.createInstanceWithContext(sProviderService,
+                                                           mxContext));
 
         return xProvider;
     }
@@ -309,14 +259,13 @@ public class ConfigExamples
     public XMultiServiceFactory createAdminProvider(Object[] aAdminArguments)
         throws com.sun.star.uno.Exception
     {
-        XMultiServiceFactory xServiceManager = getServiceManager();
-
         final String sAdminService = "com.sun.star.configuration.AdministrationProvider";
 
         // create the provider and remember it as a XMultiServiceFactory
         XMultiServiceFactory xAdminProvider = (XMultiServiceFactory)
             UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                           xServiceManager.createInstanceWithArguments(sAdminService,aAdminArguments));
+                mxServiceManager.createInstanceWithArgumentsAndContext(
+                    sAdminService, aAdminArguments, mxContext));
 
         return xAdminProvider;
     }
@@ -412,7 +361,7 @@ public class ConfigExamples
         }
         catch ( Exception e )
         {
-            e.printStackTrace ( System.out );
+            e.printStackTrace();
         }
     }
 
@@ -427,7 +376,7 @@ public class ConfigExamples
         }
         catch ( Exception e )
         {
-            e.printStackTrace ( System.out );
+            e.printStackTrace();
         }
     }
 
@@ -442,7 +391,7 @@ public class ConfigExamples
         }
         catch ( Exception e )
         {
-            e.printStackTrace ( System.out );
+            e.printStackTrace();
         }
     }
 
@@ -461,7 +410,7 @@ public class ConfigExamples
         }
         catch ( Exception e )
         {
-            e.printStackTrace ( System.out );
+            e.printStackTrace();
         }
     }
 
@@ -476,7 +425,7 @@ public class ConfigExamples
         }
         catch ( Exception e )
         {
-            e.printStackTrace ( System.out );
+            e.printStackTrace();
         }
     }
 
@@ -578,6 +527,10 @@ public class ConfigExamples
         XHierarchicalName xElementPath =
             (XHierarchicalName) UnoRuntime.queryInterface(XHierarchicalName.class, xElement);
 
+        // temporary check, we have to check why XHierarchicalName isn't supported
+        if ( xElementPath == null )
+            return;
+
         String sPath = xElementPath.getHierarchicalName();
 
         aProcessor.processStructuralElement( sPath, xElement);
@@ -648,7 +601,7 @@ public class ConfigExamples
         throws com.sun.star.uno.Exception
     {
         final String sProviderService = "com.sun.star.configuration.ConfigurationProvider";
-        final String sFilterKey = "/org.openoffice.Office.TypeDetection/Filters";
+        final String sFilterKey = "/org.openoffice.TypeDetection.Filter/Filters";
 
        // browse the configuration, dumping filter information
         browseConfiguration( sFilterKey,
@@ -768,8 +721,8 @@ public class ConfigExamples
 
         /// this method is called to report an error during dialog execution to the zuser
         public void informUserOfError(Exception e) {
-            System.out.println("ERROR in GridEditor:");
-            e.printStackTrace(System.out);
+            System.err.println("ERROR in GridEditor:");
+            e.printStackTrace();
         }
 
         /// this method is called to allow the dialog to get feedback about changes occurring elsewhere
@@ -899,8 +852,8 @@ public class ConfigExamples
         }
         catch (Exception e)
         {
-            System.out.println("Could not change some data in a different view. An exception occurred:");
-            e.printStackTrace( System.out );
+            System.err.println("Could not change some data in a different view. An exception occurred:");
+            e.printStackTrace();
         }
     }
 
@@ -1105,7 +1058,7 @@ public class ConfigExamples
             catch (Exception e)
             {
               // something went wrong, we retry with a new element
-               System.out.println("WARNING: An exception occurred while creating a view for an existing data source: " + e);
+               System.err.println("WARNING: An exception occurred while creating a view for an existing data source: " + e);
                xDataSourceDescriptor  = null;
             }
         }
