@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRadioButton.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2003-10-06 13:34:13 $
+ *  last change:$Date: 2004-01-05 20:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -93,6 +82,18 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -127,7 +128,6 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility.XAccessibleText
  */
 public class AccessibleRadioButton extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
     XAccessibleAction accCloseButton = null;
@@ -136,24 +136,24 @@ public class AccessibleRadioButton extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+                                                                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
      * Closes a Hyperlink dialog, disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
             if (accCloseButton != null) {
                 log.println("closing HyperlinkDialog");
                 accCloseButton.doAccessibleAction(0);
             }
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
-        } catch(com.sun.star.lang.DisposedException de) {
+        } catch (com.sun.star.lang.DisposedException de) {
             log.println("Already disposed");
         }
 
@@ -193,19 +193,18 @@ public class AccessibleRadioButton extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
-
-        log.println( "creating a test environment" );
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
         try {
             if (accCloseButton != null) {
                 log.println("closing HyperlinkDialog");
                 accCloseButton.doAccessibleAction(0);
             }
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
-        } catch(com.sun.star.lang.DisposedException de) {
+        } catch (com.sun.star.lang.DisposedException de) {
             log.println("already disposed");
         }
 
@@ -216,126 +215,139 @@ public class AccessibleRadioButton extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a text document" );
+            log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
-            queryInterface(XDispatchProvider.class, secondController);
+        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                          XDispatchProvider.class,
+                                          secondController);
 
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface)( (XMultiServiceFactory) tParam.getMSF()).createInstance
-                ("com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer)UnoRuntime.queryInterface
-                (XURLTransformer.class, transf);
+            XInterface transf = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+                                        "com.sun.star.util.URLTransformer");
+            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+                                XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e );
+            throw new StatusException("Couldn't create URLTransformer", e);
         }
 
         XDispatch getting = null;
-        log.println( "opening HyperlinkDialog" );
+        log.println("opening HyperlinkDialog");
+
         URL[] url = new URL[1];
         url[0] = new URL();
         url[0].Complete = ".uno:HyperlinkDialog";
         urlTransf.parseStrict(url);
         getting = aProv.queryDispatch(url[0], "", 0);
+
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
         shortWait();
 
         XInterface oObj = null;
+
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         XAccessibleContext iconChoiceCtrl = at.getAccessibleObjectForRole(
-            xRoot, AccessibleRole.TREE, "IconChoiceControl");
+                                                    xRoot, AccessibleRole.TREE,
+                                                    "IconChoiceControl");
 
-        XAccessibleSelection sel = (XAccessibleSelection)UnoRuntime.
-            queryInterface(XAccessibleSelection.class, iconChoiceCtrl);
+        XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
+                                           XAccessibleSelection.class,
+                                           iconChoiceCtrl);
 
         try {
             sel.selectAccessibleChild(0);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Unexpected exception");
             e.printStackTrace(log);
         }
 
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.RADIO_BUTTON, "Web");
+                                             AccessibleRole.RADIO_BUTTON,
+                                             "Web");
 
         XAccessibleContext anotherButton = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.RADIO_BUTTON, "FTP");
+                                                                         AccessibleRole.RADIO_BUTTON,
+                                                                         "FTP");
 
         XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.PUSH_BUTTON, "Close");
+                                                                       AccessibleRole.PUSH_BUTTON,
+                                                                       "Close");
 
-        accCloseButton = (XAccessibleAction)
-            UnoRuntime.queryInterface(XAccessibleAction.class, closeButton);
+        accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
+                                 XAccessibleAction.class, closeButton);
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this component");
+                            "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,oObj);
+        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                   XAccessibleComponent.class,
+                                                   oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    acomp.grabFocus();
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                acomp.grabFocus();
+            }
+        });
 
         tEnv.addObjRelation("XAccessibleText.Text", "Web");
 
-        tEnv.addObjRelation("EditOnly","Can't change or select Text in AccessibleRadioButton");
+        tEnv.addObjRelation("EditOnly",
+                            "Can't change or select Text in AccessibleRadioButton");
 
-        XAccessibleValue anotherButtonValue = (XAccessibleValue)
-            UnoRuntime.queryInterface(XAccessibleValue.class, anotherButton);
+        XAccessibleValue anotherButtonValue = (XAccessibleValue) UnoRuntime.queryInterface(
+                                                      XAccessibleValue.class,
+                                                      anotherButton);
 
         tEnv.addObjRelation("XAccessibleValue.anotherFromGroup",
-            anotherButtonValue);
+                            anotherButtonValue);
 
         return tEnv;
     }
@@ -346,23 +358,13 @@ public class AccessibleRadioButton extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(2000) ;
+            Thread.currentThread().sleep(2000);
         } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e);
         }
     }
 
     protected void closeDoc() {
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                    XCloseable.class, xTextDoc);
-
-        try {
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("Couldn't close document " + e.getMessage());
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("Couldn't close document " + e.getMessage());
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
-
 }
