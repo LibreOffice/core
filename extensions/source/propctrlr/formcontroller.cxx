@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 12:49:51 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 13:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2074,9 +2074,10 @@ namespace pcr
                             }
 
                             // and allow empty values only for the default value and the value
-                            ((OFormattedNumericControl*)pProperty->pControl)->EnableEmptyField(PROPERTY_ID_DEFAULT_VALUE == nPropId);
-                            ((OFormattedNumericControl*)pProperty->pControl)->EnableEmptyField(PROPERTY_ID_VALUE == nPropId);
-                        }
+                            static_cast< OFormattedNumericControl* >( pProperty->pControl )
+                                ->EnableEmptyField( ( PROPERTY_ID_DEFAULT_VALUE == nPropId )
+                                                ||  ( PROPERTY_ID_VALUE == nPropId ) );
+}
                         else
                         {
                             if ( (nPropId== PROPERTY_ID_HEIGHT || nPropId== PROPERTY_ID_WIDTH || nPropId== PROPERTY_ID_ROWHEIGHT)
@@ -2740,6 +2741,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51  2002/10/25 12:49:51  fs
+ *  #104512# fixed some controls leaking
+ *
  *  Revision 1.50  2002/08/22 10:49:52  oj
  *  #96105# set the modified flag at the model
  *
