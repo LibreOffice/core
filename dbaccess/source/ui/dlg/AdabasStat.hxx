@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 13:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                 m_xConnection;  /// valid as long as the page is active
+        sal_Bool                m_bErrorShown; // true when we shown already the error
+
+        // check if the given table is accessable by the connected user
+        sal_Bool checkSystemTable(const ::rtl::OUString& _rsSystemTable, ::rtl::OUString& _rsSchemaName );
+        void showError();
 
     public:
         OAdabasStatistics(  Window* pParent,
