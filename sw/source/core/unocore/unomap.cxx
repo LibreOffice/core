@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 08:18:53 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,6 +691,14 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
                     { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         FN_UNO_TEXT_WRAP,   &::getCppuType((text::WrapTextMode*)0),                 PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
 
 
+#define     _PROP_DIFF_FONTHEIGHT \
+                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT),              RES_CHRATR_FONTSIZE ,           &::getCppuType((Float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_HEIGHT),              RES_CHRATR_FONTSIZE ,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT_ASIAN),        RES_CHRATR_CJK_FONTSIZE ,           &::getCppuType((Float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN),        RES_CHRATR_CJK_FONTSIZE ,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX),      RES_CHRATR_CTL_FONTSIZE ,           &::getCppuType((Float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX),      RES_CHRATR_CTL_FONTSIZE ,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},
+
 const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
 {
     DBG_ASSERT(nPropertyId < PROPERTY_MAP_END, "Id ?" )
@@ -773,6 +781,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
+                    _PROP_DIFF_FONTHEIGHT
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharStyleMap;
@@ -873,6 +882,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
+                    _PROP_DIFF_FONTHEIGHT
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;

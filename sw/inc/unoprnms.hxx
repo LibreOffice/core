@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 07:59:13 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,12 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_STRIKEOUT                   
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_CROSSED_OUT                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_NO_HYPHENATION                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_AUTO_ESCAPEMENT                 ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_FONT_HEIGHT              ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_FONT_HEIGHT              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_HEIGHT              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_HEIGHT              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_HEIGHT_ASIAN              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ESCAPEMENT_HEIGHT             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COLOR                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FLASH                           ;

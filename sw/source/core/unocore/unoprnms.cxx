@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 08:02:30 $
+ *  last change: $Author: os $ $Date: 2001-02-14 10:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,16 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_STRIKEOUT                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_CROSSED_OUT                       (MAP_CHAR_LEN("CharCrossedOut"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_NO_HYPHENATION                    (MAP_CHAR_LEN("CharNoHyphenation"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_AUTO_ESCAPEMENT                   (MAP_CHAR_LEN("CharAutoEscapement"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_PROP_FONT_HEIGHT                  (MAP_CHAR_LEN("CharPropFontHeight"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_DIFF_FONT_HEIGHT                  (MAP_CHAR_LEN("CharDiffFontHeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_PROP_HEIGHT                       (MAP_CHAR_LEN("CharPropHeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_DIFF_HEIGHT                       (MAP_CHAR_LEN("CharDiffHeight"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_HEIGHT_ASIAN                  (MAP_CHAR_LEN("CharPropHeightAsian"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN                  (MAP_CHAR_LEN("CharDiffHeightAsian"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX                (MAP_CHAR_LEN("CharPropHeightComplex"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX                (MAP_CHAR_LEN("CharDiffHeightComplex"));
+
+
+
+
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_ESCAPEMENT_HEIGHT                 (MAP_CHAR_LEN("CharEscapementHeight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COLOR                             (MAP_CHAR_LEN("CharColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FLASH                             (MAP_CHAR_LEN("CharFlash"));
