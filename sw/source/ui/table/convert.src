@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 20:19:33 $
+ *  last change: $Author: os $ $Date: 2002-01-10 14:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
 {
     HelpID = FN_CONVERT_TEXT_TABLE ;
     OUTPUTSIZE = TRUE ;
-    Size = MAP_APPFONT ( 193 , 144 ) ;
+    Size = MAP_APPFONT ( 203 , 144 ) ;
     TEXT = "Tabelle in Text umwandeln" ;
     TEXT [ ENGLISH ] = "Convert table to text" ;
     TEXT [ norwegian ] = "Omdann tabell til tekst" ;
@@ -86,7 +86,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     RadioButton CB_TAB
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         TEXT = "~Tabulator" ;
         TEXT [ ENGLISH ] = "~Tab" ;
         TEXT [ norwegian ] = "~Tab" ;
@@ -117,8 +117,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
     };
     RadioButton CB_SEMI
     {
-        Pos = MAP_APPFONT ( 70 , 17 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 75 , 17 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         TEXT = "~Semikolon" ;
         TEXT [ ENGLISH ] = "~Semicolon" ;
         TEXT [ norwegian ] = "~Semikolon" ;
@@ -148,7 +148,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     RadioButton CB_PARA
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         TEXT = "~Absatz" ;
         TEXT [ ENGLISH ] = "~Paragraph" ;
         TEXT [ norwegian ] = "~Paragraf" ;
@@ -177,8 +177,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
     };
     RadioButton RB_OTHER
     {
-        Pos = MAP_APPFONT ( 70 , 33 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 75 , 33 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
         TEXT = "An~dere: " ;
         TEXT [ ENGLISH ] = "~Other: " ;
         Text [ portuguese ] = "~Outros: " ;
@@ -207,7 +207,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     {
         Border = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 32 ) ;
+        Pos = MAP_APPFONT ( 123 , 32 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Text = "," ;
         MaxTextLength = 1 ;
@@ -215,7 +215,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     CheckBox CB_KEEPCOLUMN
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "Gleiche ~Breite aller Spalten" ;
         TEXT [ ENGLISH ] = "Equal width for all columns" ;
         Hide = TRUE ;
@@ -244,7 +244,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     FixedLine FL_DELIM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 125 , 8 ) ;
+        Size = MAP_APPFONT ( 135 , 8 ) ;
         TEXT = "Trennzeichen im Text" ;
         TEXT [ ENGLISH ] = "Delimiter" ;
         TEXT [ norwegian ] = "Skilletegn" ;
@@ -274,7 +274,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     CheckBox CB_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 84 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 123 , 10 ) ;
         Text = "Übe~rschrift" ;
         Text [ ENGLISH ] = "Header" ;
         TabStop = TRUE ;
@@ -303,7 +303,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     CheckBox CB_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 22 , 97 ) ;
-        Size = MAP_APPFONT ( 103 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "Auf jeder Seite ~wiederholen" ;
         Text [ ENGLISH ] = "Repeat on every page" ;
         TabStop = TRUE ;
@@ -332,7 +332,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     CheckBox CB_DONT_SPLIT
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 123 , 10 ) ;
         Text = "Tabelle ~nicht trennen" ;
         Text [ ENGLISH ] = "Don't split table" ;
         TabStop = TRUE ;
@@ -361,7 +361,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     CheckBox CB_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
-        Size = MAP_APPFONT ( 93 , 10 ) ;
+        Size = MAP_APPFONT ( 123 , 10 ) ;
         Text = "~Umrandung" ;
         Text [ ENGLISH ] = "Border" ;
         TabStop = TRUE ;
@@ -390,7 +390,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 71 ) ;
-        Size = MAP_APPFONT ( 125 , 8 ) ;
+        Size = MAP_APPFONT ( 135 , 8 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Options" ;
         Text[ italian ] = "Opzioni";
@@ -444,26 +444,26 @@ ModalDialog DLG_CONV_TEXT_TABLE
     };
     OkButton BT_OK
     {
-        Pos = MAP_APPFONT ( 137 , 6 ) ;
+        Pos = MAP_APPFONT ( 147 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT ( 137 , 23 ) ;
+        Pos = MAP_APPFONT ( 147 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };
     HelpButton BT_HELP
     {
-        Pos = MAP_APPFONT ( 137 , 43 ) ;
+        Pos = MAP_APPFONT ( 147 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };
     PushButton BT_AUTOFORMAT
     {
-        Pos = MAP_APPFONT ( 137 , 60 ) ;
+        Pos = MAP_APPFONT ( 147 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:06:38 $
+ *  last change: $Author: os $ $Date: 2002-01-10 14:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ TabPage TP_COLUMN
     CheckBox CB_BALANCECOLS
     {
         Pos = MAP_APPFONT ( 7 , 46 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 163 , 10 ) ;
         Text = "Inhalt über alle ~Spalten gleichmäßig verteilen" ;
         Text [ ENGLISH ] = "Balance columns" ;
         Hide = TRUE;

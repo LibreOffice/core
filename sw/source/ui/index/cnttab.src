@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:26:56 $
+ *  last change: $Author: os $ $Date: 2002-01-10 14:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3566,7 +3566,7 @@ TabPage TP_TOX_ENTRY
     FixedText FT_MAIN_ENTRY_STYLE
     {
         Pos = MAP_APPFONT ( 37 , 112 ) ;
-        Size = MAP_APPFONT ( 105, 8 ) ;
+        Size = MAP_APPFONT ( 116, 8 ) ;
         Text = "Zeichenvorla~ge für Haupteinträge" ;
         Text [ ENGLISH ] = "Character style of main entries" ;
         Text[ english_us ] = "Character Style for main entries";
@@ -3593,10 +3593,11 @@ TabPage TP_TOX_ENTRY
     };
     ListBox LB_MAIN_ENTRY_STYLE
     {
-        Pos = MAP_APPFONT ( 144 , 110 ) ;
-        Size = MAP_APPFONT ( 100, 80 ) ;
+        Pos = MAP_APPFONT ( 157 , 110 ) ;
+        Size = MAP_APPFONT ( 92, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+        AutoHScroll = TRUE;
     };
 
     CheckBox CB_ALPHADELIM
@@ -3686,7 +3687,7 @@ TabPage TP_TOX_ENTRY
     RadioButton RB_DOCPOS
     {
         Pos = MAP_APPFONT ( 40 , 113) ;
-        Size = MAP_APPFONT ( 80, 10  ) ;
+        Size = MAP_APPFONT ( 94, 10  ) ;
         Text = "Dokument~position " ;
         Text [ ENGLISH ] = "document position" ;
         Text[ english_us ] = "Document ~position ";
@@ -3712,8 +3713,8 @@ TabPage TP_TOX_ENTRY
     };
     RadioButton RB_SORTCONTENT
     {
-        Pos = MAP_APPFONT ( 134 , 113 ) ;
-        Size = MAP_APPFONT ( 80, 10  ) ;
+        Pos = MAP_APPFONT ( 136 , 113 ) ;
+        Size = MAP_APPFONT ( 90, 10  ) ;
         Text = "~Inhalt" ;
         Text [ ENGLISH ] = "content" ;
         Text[ english_us ] = "~Content";
