@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-12-06 10:26:12 $
+ *  last change: $Author: vg $ $Date: 2002-12-09 16:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,9 +375,11 @@ bool ImplInitAccessBridge()
             {
                 ResMgr *pResMgr = ImplGetResMgr();
 
+                String aMessage1(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
+                String aMessage2(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr));
                 ImplShowNativeMessageBox(
-                    ReplaceJavaErrorMessages(String(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr))),
-                    ReplaceJavaErrorMessages(String(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr))),
+                    ReplaceJavaErrorMessages(aMessage1),
+                    ReplaceJavaErrorMessages(aMessage2),
                     SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE,
                     SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE);
             }
@@ -395,13 +397,17 @@ bool ImplInitAccessBridge()
 
                 if( exception.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
                 {
-                    aTitle = ReplaceJavaErrorMessages(String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, pResMgr)));
-                    aMessage = ReplaceJavaErrorMessages(String(ResId(SV_ACCESSERROR_MISSING_BRIDGE_MSG, pResMgr)));
+                    String aTmp(ResId(SV_ACCESSERROR_MISSING_BRIDGE, pResMgr));
+                    aTitle = ReplaceJavaErrorMessages(aTmp);
+                    aTmp = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE_MSG, pResMgr));
+                    aMessage = ReplaceJavaErrorMessages(aTmp);
                 }
                 else if( exception.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
                 {
-                    aTitle = ReplaceJavaErrorMessages(String(ResId(SV_ACCESSERROR_WRONG_VERSION, pResMgr)));
-                    aMessage = ReplaceJavaErrorMessages(String(ResId(SV_ACCESSERROR_WRONG_VERSION_MSG, pResMgr)));
+                    String aTmp(ResId(SV_ACCESSERROR_WRONG_VERSION, pResMgr));
+                    aTitle = ReplaceJavaErrorMessages(aTmp);
+                    aTmp = String(ResId(SV_ACCESSERROR_WRONG_VERSION_MSG, pResMgr));
+                    aMessage = ReplaceJavaErrorMessages(aTmp);
                 }
 
                 if( aTitle.Len() != 0 )
