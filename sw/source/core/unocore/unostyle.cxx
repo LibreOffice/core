@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2306,13 +2306,14 @@ MakeObject:
                         const SwFrmFmt* pFrmFmt = 0;
                         sal_Bool bShare = bHeader && rDesc.IsHeaderShared()||
                                         !bHeader && rDesc.IsFooterShared();
-                        UseOnPage eUse = rDesc.GetUseOn();
-                        if((bShare && (PD_ALL == eUse || PD_MIRROR == eUse))  //Share wirkt nur fuer Mirror oder All
-                            || (PD_ALL == eUse || PD_MIRROR == eUse) && (bAll || bRight) || //
-                                    bRight && PD_RIGHT == eUse && PD_LEFT != eUse)
-                            pFrmFmt = &rDesc.GetMaster();
-                        else if(bLeft && PD_RIGHT != eUse)
+                        // TextLeft returns the left content if there is one,
+                        // Text and TextRight return the master content.
+                        // TextRight does the same as Text and is for
+                        // comptability only.
+                        if( bLeft && !bShare )
                             pFrmFmt = &rDesc.GetLeft();
+                        else
+                            pFrmFmt = &rDesc.GetMaster();
                         if(pFrmFmt)
                         {
                             const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
@@ -2560,6 +2561,9 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:29  hr
+    initial import
+
     Revision 1.96  2000/09/18 16:04:35  willem.vandorp
     OpenOffice header added.
 
