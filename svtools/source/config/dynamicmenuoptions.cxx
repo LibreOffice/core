@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-11-28 11:48:30 $
+ *  last change: $Author: as $ $Date: 2001-11-28 14:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,21 +174,34 @@ class Menu
         //---------------------------------------------------------------------------------------------------------
         // append setup written menu entry
         // Don't touch name of entry. It was defined by setup and must be the same everytime!
+        // Look for double menu entries here too ... may be some seperator items are supeflous ...
         void AppendSetupEntry( const MenuEntry& rEntry )
         {
-            lSetupEntries.push_back( rEntry );
+            if(
+                ( lSetupEntries.size()         <  1           )  ||
+                ( lSetupEntries.rbegin()->sURL != rEntry.sURL )
+              )
+            {
+                lSetupEntries.push_back( rEntry );
+            }
         }
 
         //---------------------------------------------------------------------------------------------------------
         // append user specific menu entry
         // We must find unique name for it by using special prefix
         // and next count of user setted entries!
-        void AppendUserEntry( MenuEntry& rNewEntry )
+        // Look for double menu entries here too ... may be some seperator items are supeflous ...
+        void AppendUserEntry( MenuEntry& rEntry )
         {
-            rNewEntry.sName  = PATHPREFIX_USER;
-            rNewEntry.sName += OUString::valueOf( (sal_Int32)impl_getNextUserEntryNr() );
-
-            lUserEntries.push_back( rNewEntry );
+            if(
+                ( lUserEntries.size()         <  1           )  ||
+                ( lUserEntries.rbegin()->sURL != rEntry.sURL )
+              )
+            {
+                rEntry.sName  = PATHPREFIX_USER;
+                rEntry.sName += OUString::valueOf( (sal_Int32)impl_getNextUserEntryNr() );
+                lUserEntries.push_back( rEntry );
+            }
         }
 
         //---------------------------------------------------------------------------------------------------------
