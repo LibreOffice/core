@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 08:41:05 $
+ *  last change: $Author: tra $ $Date: 2002-09-24 13:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,14 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     // but now we have a valid parent handle
     m_HelpPopupWindow.setParent(m_hwndFileOpenDlg);
 
+    // #99826
+    // Set the online filepicker state before initializing
+    // the control labels from the resource else we are
+    // overriding the offline settings
+    m_ExecuteFilePickerState->setHwnd(m_hwndFileOpenDlgChild);
+
+    m_FilePickerState = m_ExecuteFilePickerState;
+
     // initialize controls from cache
 
     EnumParam enumParam(INIT_CUSTOM_CONTROLS,this);
@@ -781,12 +789,8 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
         CWinFileOpenImpl::EnumChildWndProc,
         (LPARAM)&enumParam);
 
-    m_ExecuteFilePickerState->setHwnd(m_hwndFileOpenDlgChild);
-
     m_ExecuteFilePickerState->initFilePickerControls(
         m_NonExecuteFilePickerState->getControlCommand());
-
-    m_FilePickerState = m_ExecuteFilePickerState;
 
     SetDefaultExtension();
 
