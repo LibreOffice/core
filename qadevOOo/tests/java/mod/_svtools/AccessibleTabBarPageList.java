@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBarPageList.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2005-03-01 20:32:13 $
+ *  last change:$Date: 2005-03-29 12:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 package mod._svtools;
 
+import com.sun.star.drawing.XLayerManager;
+import com.sun.star.drawing.XLayerSupplier;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -73,7 +75,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -199,13 +200,16 @@ public class AccessibleTabBarPageList extends TestCase {
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
                             new Boolean(true));
 
-        final XDrawPagesSupplier dps = (XDrawPagesSupplier) UnoRuntime.queryInterface(
-                                               XDrawPagesSupplier.class, xDoc);
+        XLayerSupplier oLS = (XLayerSupplier)
+            UnoRuntime.queryInterface(XLayerSupplier.class, xDoc);
+        XInterface oLM = oLS.getLayerManager();
+        final XLayerManager xLM = (XLayerManager) UnoRuntime.queryInterface(XLayerManager.class, oLM);
+
 
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                dps.getDrawPages().insertNewByIndex(0);
+                xLM.insertNewByIndex(0);
             }
         });
 
