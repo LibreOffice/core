@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:27:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ String SCSTR_APPLICATION
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc 6.0";
     Text[ turkish ] = "StarCalc 5.0";
     Text[ arabic ] = "%PRODUCTNAME Calc 6.0";
+    Text[ catalan ] = "%PRODUCTNAME Calc 6.0";
 };
 String SCSTR_50_APPLICATION
 {
@@ -125,6 +126,7 @@ String SCSTR_50_APPLICATION
     Text[ korean ] = "StarCalc 5.0";
     Text[ turkish ] = "StarCalc 5.0";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "StarCalc 5.0";
 };
 String SCSTR_40_APPLICATION
 {
@@ -151,6 +153,7 @@ String SCSTR_40_APPLICATION
     Text[ korean ] = "StarCalc 4.0";
     Text[ turkish ] = "StarCalc 4.0";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "StarCalc 4.0";
 };
 String SCSTR_30_APPLICATION
 {
@@ -177,6 +180,7 @@ String SCSTR_30_APPLICATION
     Text[ korean ] = "StarCalc 3.0";
     Text[ turkish ] = "StarCalc 3.0";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "StarCalc 3.0";
 };
 String SCSTR_LONG_SCDOC_NAME
 {
@@ -200,6 +204,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §uß@™Ì";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ arabic ] = "ÃœÊ· %PRODUCTNAME 6.0";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Hoja de c·lculo";
 };
 String SCSTR_50_LONG_DOCNAME
 {
@@ -224,6 +229,7 @@ String SCSTR_50_LONG_DOCNAME
     Text[ korean ] = "%PRODUCTNAME Calc 5.0 Ω∫«¡∑πµÂ Ω√∆Æ";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME 5.0 Hoja de c·lculo";
 };
 String SCSTR_40_LONG_DOCNAME
 {
@@ -248,6 +254,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ korean ] = "PRODUCTNAME 4.0Ω∫«¡∑πµÂΩ√∆Æ";
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME 4.0 Hoja de c·lculo";
 };
 String SCSTR_30_LONG_DOCNAME
 {
@@ -272,6 +279,7 @@ String SCSTR_30_LONG_DOCNAME
     Text[ korean ] = "StarCalc 3.0 Ω∫«¡∑πµÂΩ√∆Æ";
     Text[ turkish ] = "StarCalc 3.0 tablosu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hoja de c·lculo de StarCalc 3.0";
 };
 String SCSTR_SHORT_SCDOC_NAME
 {
@@ -298,6 +306,7 @@ String SCSTR_SHORT_SCDOC_NAME
     Text[ korean ] = "Ω∫«¡∑πµÂΩ√∆Æ";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hoja de c·lculo";
 };
 String SCSTR_HUMAN_SCDOC_NAME
 {
@@ -324,6 +333,7 @@ String SCSTR_HUMAN_SCDOC_NAME
     Text[ korean ] = "Ω∫«¡∑πµÂΩ√∆Æ";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hoja de c·lculo";
 };
 
 String SCSTR_DOCSHELL
@@ -351,6 +361,7 @@ String SCSTR_DOCSHELL
     Text[ korean ] = "Ω√∆Æ";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hoja";
 };
 
 String SCSTR_TABVIEWSHELL
@@ -378,6 +389,7 @@ String SCSTR_TABVIEWSHELL
     Text[ korean ] = "ºø";
     Text[ turkish ] = "H¸cre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Celdas";
 };
 
 String SCSTR_CELLSHELL
@@ -403,6 +415,7 @@ String SCSTR_CELLSHELL
     Text[ arabic ] = "„Â«„ «·Œ·«Ì«";
     Text[ turkish ] = "H¸cre i˛levi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Funciones de celda";
 };
 
 String SCSTR_FORMATSHELL
@@ -428,6 +441,7 @@ String SCSTR_FORMATSHELL
     Text[ arabic ] = " ‰”Ìﬁ«  «·Œ·«Ì«";
     Text[ turkish ] = "H¸cre format˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formatos de celda";
 };
 
 
@@ -456,6 +470,7 @@ String SCSTR_DRAWSHELL
     Text[ korean ] = "±◊∑°«» ∞≥√º";
     Text[ turkish ] = "Grafik nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos gr·ficos";
 };
 
 String SCSTR_DRAWTEXTSHELL
@@ -483,6 +498,7 @@ String SCSTR_DRAWTEXTSHELL
     Text[ korean ] = "≈ÿΩ∫∆Æ ∞≥√º";
     Text[ turkish ] = "Metin nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de texto";
 };
 
 String SCSTR_DRAWFORMSHELL
@@ -508,6 +524,7 @@ String SCSTR_DRAWFORMSHELL
     Text[ korean ] = "æÁΩƒ ∞≥√º";
     Text[ turkish ] = "Form nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de formulario";
 };
 
 String SCSTR_CHARTSHELL
@@ -532,6 +549,7 @@ String SCSTR_CHARTSHELL
     Text[ chinese_traditional ] = "πœ™Ì™´•Û";
     Text[ arabic ] = "ﬂ«∆‰«  «·—”„ «·»Ì«‰Ì";
     Text[ turkish ] = "ﬁema nesnesi";
+    Text[ catalan ] = "Objetos de diagrama";
 };
 
 String SCSTR_OLEOBJECTSHELL
@@ -557,6 +575,7 @@ String SCSTR_OLEOBJECTSHELL
     Text[ arabic ] = "ﬂ«∆‰«  OLE";
     Text[ turkish ] = "OLE nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos OLE";
 };
 
 String SCSTR_GRAPHICSHELL
@@ -564,7 +583,7 @@ String SCSTR_GRAPHICSHELL
     Text = "Grafik" ;
     Text [ ENGLISH ] = "Graphic" ;
     Text[ english_us ] = "Graphics";
-    Text[ portuguese ] = "Gr·fico";
+    Text[ portuguese ] = "Imagem";
     Text[ russian ] = "–ËÒÛÌÓÍ";
     Text[ greek ] = "√Ò·ˆÈÍ¸";
     Text[ dutch ] = "Afbeeldingen";
@@ -581,6 +600,7 @@ String SCSTR_GRAPHICSHELL
     Text[ chinese_traditional ] = "πœßŒ";
     Text[ arabic ] = "’Ê—…";
     Text[ turkish ] = "Grafik";
+    Text[ catalan ] = "Imagen";
 };
 String SCSTR_PAGEBREAKSHELL
 {
@@ -605,6 +625,7 @@ String SCSTR_PAGEBREAKSHELL
     Text[ arabic ] = "›«’· ’›Õ« ";
     Text[ turkish ] = "Sayfa sonu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Salto de p·gina";
 };
 
 String SCSTR_EDITSHELL
@@ -632,6 +653,7 @@ String SCSTR_EDITSHELL
     Text[ korean ] = "≈ÿΩ∫∆Æ ∆Ì¡˝";
     Text[ turkish ] = "Metin d¸zenleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "EdiciÛn de texto";
 };
 
 String SCSTR_PREVIEWSHELL
@@ -659,6 +681,7 @@ String SCSTR_PREVIEWSHELL
     Text[ korean ] = "¿Œº‚ πÃ∏Æ∫∏±‚";
     Text[ turkish ] = "Bask˝ ˆnizleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "PresentaciÛn preliminar";
 };
 
 String SCSTR_PIVOTSHELL
@@ -686,6 +709,7 @@ String SCSTR_PIVOTSHELL
     Text[ korean ] = "µ•¿Ã≈Õ∆ƒ¿œ∑µ «•";
     Text[ turkish ] = "Veri pilotu tablosu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tablas del piloto de datos";
 };
 
 String SCSTR_AUDITSHELL
@@ -712,6 +736,7 @@ String SCSTR_AUDITSHELL
     Text[ korean ] = "√ﬂ¿˚ √§øÏ±‚ ∏µÂ";
     Text[ turkish ] = "Dedektif doldurma kipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modo Detective de relleno";
 };
 
  // -----------------------------------------------------------------------
@@ -742,6 +767,7 @@ String STR_ROWHEIGHT
     Text[ korean ] = "≥Ù¿Ã";
     Text[ turkish ] = "Y¸kseklik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura";
 };
 String STR_OPT_ROWHEIGHT
 {
@@ -768,6 +794,7 @@ String STR_OPT_ROWHEIGHT
     Text[ korean ] = "√ﬂ∞°";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AÒadir";
 };
 String STR_ROWHEIGHT_TITLE
 {
@@ -795,6 +822,7 @@ String STR_ROWHEIGHT_TITLE
     Text[ korean ] = "«‡ ≥Ù¿Ã";
     Text[ turkish ] = "Sat˝r y¸kseklii";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura de fila";
 };
 String STR_OPT_ROWHEIGHT_TITLE
 {
@@ -822,6 +850,7 @@ String STR_OPT_ROWHEIGHT_TITLE
     Text[ korean ] = "√÷¿˚¿« «‡ ≥Ù¿Ã";
     Text[ turkish ] = "Optimum sat˝r y¸kseklii";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura de fila Ûptima";
 };
 String STR_COLWIDTH
 {
@@ -848,6 +877,7 @@ String STR_COLWIDTH
     Text[ korean ] = "≥ ∫Ò";
     Text[ turkish ] = "Geni˛lik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho";
 };
 String STR_OPT_COLWIDTH
 {
@@ -874,6 +904,7 @@ String STR_OPT_COLWIDTH
     Text[ korean ] = "√ﬂ∞°";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AÒadir";
 };
 String STR_COLWIDTH_TITLE
 {
@@ -900,6 +931,7 @@ String STR_COLWIDTH_TITLE
     Text[ korean ] = "ø≠ ≥ ∫Ò";
     Text[ turkish ] = "S¸tun geni˛lii";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho de columna";
 };
 String STR_OPT_COLWIDTH_TITLE
 {
@@ -926,6 +958,7 @@ String STR_OPT_COLWIDTH_TITLE
     Text[ korean ] = "√÷¿˚¿« ø≠ ≥ ∫Ò";
     Text[ turkish ] = "Optimum s¸tun geni˛lii";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho de columna Ûptimo";
 };
 String SCSTR_UNDEFINED
 {
@@ -952,6 +985,7 @@ String SCSTR_UNDEFINED
     Text[ korean ] = "- ¡§¿«µ«¡ˆ æ æ“¿Ω -";
     Text[ turkish ] = "- tan˝mlanmam˝˛ -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- no definido -";
 };
 String SCSTR_NONE
 {
@@ -978,6 +1012,7 @@ String SCSTR_NONE
     Text[ korean ] = "- æ¯¿Ω  -";
     Text[ turkish ] = "- yok -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- ninguno -";
 };
 String SCSTR_EMPTY
 {
@@ -1004,6 +1039,7 @@ String SCSTR_EMPTY
     Text[ korean ] = "- ∫Òæ˙¿Ω -";
     Text[ turkish ] = "- bo˛ -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- vacÌo -";
 };
 String SCSTR_NOTEMPTY
 {
@@ -1030,6 +1066,7 @@ String SCSTR_NOTEMPTY
     Text[ korean ] = "- ∫ÒæÓ¿÷¡ˆ æ ¿Ω -";
     Text[ turkish ] = "- bo˛ deil -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- no vacÌo -";
 };
 String SCSTR_NEWTABLE
 {
@@ -1056,6 +1093,7 @@ String SCSTR_NEWTABLE
     Text[ korean ] = "- ªı Ω√∆Æ -";
     Text[ turkish ] = "- yeni tablo -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- nueva hoja -";
 };
 String SCSTR_ALL
 {
@@ -1082,6 +1120,7 @@ String SCSTR_ALL
     Text[ korean ] = "- ∏µŒ -";
     Text[ turkish ] = "- t¸m¸ -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- todo -";
 };
 String SCSTR_STDFILTER
 {
@@ -1106,6 +1145,7 @@ String SCSTR_STDFILTER
     Text[ korean ] = "- «•¡ÿ -";
     Text[ turkish ] = "- Standart -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- Est·ndar -";
 };
 String SCSTR_TOP10FILTER
 {
@@ -1130,6 +1170,7 @@ String SCSTR_TOP10FILTER
     Text[ korean ] = "- ªÛ¿ß 10 -";
     Text[ turkish ] = "- Top 10 -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- Los 10 primeros -";
 };
 String SCSTR_NONAME
 {
@@ -1156,6 +1197,7 @@ String SCSTR_NONAME
     Text[ korean ] = "¿Ã∏ßæ¯¿Ω";
     Text[ turkish ] = "bilinmeyen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sin nombre";
 };
 String SCSTR_COLUMN
 {
@@ -1182,6 +1224,7 @@ String SCSTR_COLUMN
     Text[ korean ] = "ø≠";
     Text[ turkish ] = "S¸tun";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Columna";
 };
 String SCSTR_ROW
 {
@@ -1208,6 +1251,7 @@ String SCSTR_ROW
     Text[ korean ] = "«‡";
     Text[ turkish ] = "Sat˝r";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fila";
 };
 String SCSTR_NEW
 {
@@ -1234,6 +1278,7 @@ String SCSTR_NEW
     Text[ korean ] = "ªı∑Œ(~N)";
     Text[ turkish ] = "~Yeni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Nuevo";
 };
 String SCSTR_ADD
 {
@@ -1261,6 +1306,7 @@ String SCSTR_ADD
     Text[ korean ] = "√ﬂ∞°(~A)";
     Text[ turkish ] = "~Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~AÒadir";
 };
 String SCSTR_REMOVE
 {
@@ -1288,6 +1334,7 @@ String SCSTR_REMOVE
     Text[ korean ] = "ªË¡¶(~D)";
     Text[ turkish ] = "~Sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Eliminar";
 };
 String SCSTR_CANCEL
 {
@@ -1314,6 +1361,7 @@ String SCSTR_CANCEL
     Text[ korean ] = "√Îº“(~L)";
     Text[ turkish ] = "~›ptal";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Can~celar";
 };
 String SCSTR_MODIFY
 {
@@ -1341,6 +1389,7 @@ String SCSTR_MODIFY
     Text[ korean ] = "ºˆ¡§(~Y)";
     Text[ turkish ] = "~Dei˛tir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Modificar";
 };
 
 
@@ -1369,6 +1418,7 @@ String SCSTR_SHOWTABLE
     Text[ korean ] = "Ω√∆Æ ∫∏¿Ã±‚";
     Text[ turkish ] = "Tabloyu gˆr¸nt¸le";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar hoja";
 };
 String SCSTR_HIDDENTABLES
 {
@@ -1395,6 +1445,7 @@ String SCSTR_HIDDENTABLES
     Text[ korean ] = "º˚∞‹¡¯ Ω√∆Æ";
     Text[ turkish ] = "Gizlenmi˛ tablolar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hojas ocultas";
 };
 String SCSTR_SELECTDB
 {
@@ -1422,6 +1473,7 @@ String SCSTR_SELECTDB
     Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ øµø™ º±≈√";
     Text[ turkish ] = "Veritaban˝ aral˝˝n˝ seÁ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar ·rea de base de datos";
 };
 String SCSTR_AREAS
 {
@@ -1448,6 +1500,7 @@ String SCSTR_AREAS
     Text[ korean ] = "±∏ø™";
     Text[ turkish ] = "Aral˝klar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡reas";
 };
 String SCSTR_TABLE
 {
@@ -1474,6 +1527,7 @@ String SCSTR_TABLE
     Text[ korean ] = "Ω√∆Æ";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hoja";
 };
 String SCSTR_NAME
 {
@@ -1500,6 +1554,7 @@ String SCSTR_NAME
     Text[ korean ] = "¿Ã∏ß";
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre";
 };
 String SCSTR_INSTABLE
 {
@@ -1527,6 +1582,7 @@ String SCSTR_INSTABLE
     Text[ korean ] = "Ω√∆Æ ª¿‘";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar hoja";
 };
 String SCSTR_APDTABLE
 {
@@ -1554,6 +1610,7 @@ String SCSTR_APDTABLE
     Text[ korean ] = "Ω√∆Æ°°√∑∫Œ";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Adjuntar hoja";
 };
 String SCSTR_RENAMETAB
 {
@@ -1578,6 +1635,7 @@ String SCSTR_RENAMETAB
     Text[ korean ] = "Ω√∆Æ ¿Ã∏ß πŸ≤Ÿ±‚";
     Text[ turkish ] = "Tabloyu yeniden adland˝r";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cambiar nombre a hoja";
 };
 String STR_INSERTGRAPHIC
 {
@@ -1605,6 +1663,7 @@ String STR_INSERTGRAPHIC
     Text[ korean ] = "±◊∑°«» ª¿‘";
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar imagen";
 };
 
  //      Attribute
@@ -1634,6 +1693,7 @@ String SCSTR_HOR_JUSTIFY_LEFT
     Text[ korean ] = "øﬁ¬  ∏¬√„";
     Text[ turkish ] = "Sola hizala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear a la izquierda";
 };
 String SCSTR_HOR_JUSTIFY_CENTER
 {
@@ -1660,6 +1720,7 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text[ korean ] = "ºˆ∆Ú¿∏∑Œ ∞°øÓµ•";
     Text[ turkish ] = "Yatay ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centrado horizontal";
 };
 String SCSTR_HOR_JUSTIFY_RIGHT
 {
@@ -1686,6 +1747,7 @@ String SCSTR_HOR_JUSTIFY_RIGHT
     Text[ korean ] = "ø¿∏•¬  ∏¬√„";
     Text[ turkish ] = "Saa hizala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear a la derecha";
 };
 String SCSTR_HOR_JUSTIFY_BLOCK
 {
@@ -1712,6 +1774,7 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text[ korean ] = "æÁ¬  ∏¬√„";
     Text[ turkish ] = "›ki yana yasla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Justificado";
 };
 String SCSTR_HOR_JUSTIFY_REPEAT
 {
@@ -1738,6 +1801,7 @@ String SCSTR_HOR_JUSTIFY_REPEAT
     Text[ korean ] = "∏¬√„ π›∫π";
     Text[ turkish ] = "Hizalamay˝ yinele";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Repetir alineaciÛn";
 };
 String SCSTR_HOR_JUSTIFY_STANDARD
 {
@@ -1764,6 +1828,7 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text[ greek ] = "–ÒÔÂÈÎÔ„ﬁ: œÒÈÊ¸ÌÙÈ· ÛÙÔﬂ˜ÈÛÁ";
     Text[ korean ] = "±‚∫ª ºˆ∆Ú ∏¬√„";
     Text[ turkish ] = "Standart yatay hizalama";
+    Text[ catalan ] = "AlineaciÛn horizontal preterminada";
 };
 String SCSTR_VER_JUSTIFY_TOP
 {
@@ -1790,6 +1855,7 @@ String SCSTR_VER_JUSTIFY_TOP
     Text[ korean ] = "¿ßø° ∏¬√„";
     Text[ turkish ] = "Yukar˝ hizala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AlineaciÛn hacia arriba";
 };
 String SCSTR_VER_JUSTIFY_CENTER
 {
@@ -1816,6 +1882,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text[ korean ] = "ºˆ¡˜¿∏∑Œ ∞°øÓµ•";
     Text[ turkish ] = "Dikey ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centrado vertical";
 };
 String SCSTR_VER_JUSTIFY_BOTTOM
 {
@@ -1842,6 +1909,7 @@ String SCSTR_VER_JUSTIFY_BOTTOM
     Text[ korean ] = "æ∆∑°ø° ∏¬√„";
     Text[ turkish ] = "A˛a˝ hizala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AlineaciÛn hacia abajo";
 };
 String SCSTR_VER_JUSTIFY_STANDARD
 {
@@ -1868,6 +1936,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text[ korean ] = "±‚∫ª ºˆ¡˜ ∏¬√„";
     Text[ turkish ] = "Standart dikey hizalama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AlineaciÛn vertical predeterminada";
 };
 String SCSTR_ORIENTATION_TOPBOTTOM
 {
@@ -1894,6 +1963,7 @@ String SCSTR_ORIENTATION_TOPBOTTOM
     Text[ korean ] = "¿ßø°º≠ æ∆∑°∑Œ";
     Text[ turkish ] = "Yukardan a˛a˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "De arriba hacia abajo";
 };
 String SCSTR_ORIENTATION_BOTTOMTOP
 {
@@ -1920,6 +1990,7 @@ String SCSTR_ORIENTATION_BOTTOMTOP
     Text[ korean ] = "æ∆∑°º≠ ¿ß∑Œ";
     Text[ turkish ] = "A˛a˝dan yukar˝ya";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desde abajo hacia arriba";
 };
 String SCSTR_ORIENTATION_STANDARD
 {
@@ -1946,6 +2017,7 @@ String SCSTR_ORIENTATION_STANDARD
     Text[ korean ] = "±‚∫ª æ≤±‚πÊ«‚";
     Text[ turkish ] = "Standart metin yˆn¸";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "OrientaciÛn predeterminada";
 };
 
 String SCSTR_CLIP_STRING
@@ -1973,6 +2045,7 @@ String SCSTR_CLIP_STRING
     Text[ korean ] = "∆˜∏Àµ«¡ˆæ ¿∫ ≈ÿΩ∫∆Æ";
     Text[ turkish ] = "Formatlanmam˝˛ metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto no formateado";
 };
 String SCSTR_CLIP_RTF
 {
@@ -1998,6 +2071,7 @@ String SCSTR_CLIP_RTF
     Text[ chinese_traditional ] = "§w∏gÆÊ¶°§∆™∫§Â¶r[RTF]";
     Text[ arabic ] = "‰’ „ı‰”¯Ûﬁ [RTF]";
     Text[ turkish ] = "Formatl˝ metin [RTF]";
+    Text[ catalan ] = "Texto formateado [RTF]";
 };
 String SCSTR_CLIP_DDE
 {
@@ -2025,6 +2099,7 @@ String SCSTR_CLIP_DDE
     Text[ korean ] = "DDE ø¨∞·";
     Text[ turkish ] = "DDE balant˝s˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "VÌnculo DDE";
 };
 String SCSTR_CLIP_DIF
 {
@@ -2049,6 +2124,7 @@ String SCSTR_CLIP_DIF
     Text[ korean ] = "DIF";
     Text[ turkish ] = "DIF";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "DIF";
 };
 
 String SCSTR_PROTECTDOC
@@ -2077,6 +2153,7 @@ String SCSTR_PROTECTDOC
     Text[ korean ] = "πÆº≠ ∫∏»£";
     Text[ turkish ] = "Belgeyi koru";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Proteger documento";
 };
 String SCSTR_UNPROTECTDOC
 {
@@ -2103,6 +2180,7 @@ String SCSTR_UNPROTECTDOC
     Text[ korean ] = "πÆº≠∫∏»£ «ÿ¡¶";
     Text[ turkish ] = "Belge korumas˝n˝ kald˝r";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desproteger documento";
 };
 String SCSTR_PROTECTTAB
 {
@@ -2128,6 +2206,7 @@ String SCSTR_PROTECTTAB
     Text[ korean ] = "Ω√∆Æ ∫∏»£";
     Text[ turkish ] = "Tabloyu koru";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Proteger hoja";
 };
 String SCSTR_UNPROTECTTAB
 {
@@ -2152,54 +2231,57 @@ String SCSTR_UNPROTECTTAB
     Text[ korean ] = "Ω√∆Æ ∫∏»£ «ÿ¡¶";
     Text[ turkish ] = "Tablo korumas˝n˝ kald˝r";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desproteger hoja";
 };
 String SCSTR_CHG_PROTECT
 {
     Text = "Aufzeichnung sch¸tzen" ;
     Text [ ENGLISH ] = "Protect trace" ;
     Text [ english_us ] = "Protect trace" ;
-    Text [ dutch ] = "Protect trace" ;
-    Text [ italian ] = "Protect trace" ;
-    Text [ spanish ] = "Protect trace" ;
-    Text [ french ] = "Protect trace" ;
-    Text [ swedish ] = "Protect trace" ;
+    Text [ dutch ] = "Registratie beveiligen" ;
+    Text [ italian ] = "Proteggi registrazione" ;
+    Text [ spanish ] = "Proteger grabaciÛn" ;
+    Text [ french ] = "ProtÈger l'historique" ;
+    Text [ swedish ] = "Skydda registrering" ;
     Text [ danish ] = "Protect trace" ;
-    Text [ portuguese ] = "Protect trace" ;
+    Text [ portuguese ] = "Proteger histÛrico" ;
     Text [ portuguese_brazilian ] = "Protect trace" ;
     Text[ chinese_simplified ] = "Protect trace";
     Text[ russian ] = "Protect trace";
-    Text[ polish ] = "Protect trace";
-    Text[ japanese ] = "Protect trace";
+    Text[ polish ] = "ChroÒ úlad";
+    Text[ japanese ] = "ãLò^ÇÃï€åÏ";
     Text[ chinese_traditional ] = "Protect trace";
     Text[ arabic ] = "Protect trace";
     Text[ greek ] = "Protect trace";
     Text[ korean ] = "Protect trace";
     Text[ turkish ] = "Protect trace";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Protect trace";
 };
 String SCSTR_CHG_UNPROTECT
 {
     Text = "Aufzeichnungsschutz aufheben" ;
     Text [ ENGLISH ] = "Unprotect trace" ;
     Text [ english_us ] = "Unprotect trace" ;
-    Text [ dutch ] = "Unprotect trace" ;
-    Text [ italian ] = "Unprotect trace" ;
-    Text [ spanish ] = "Unprotect trace" ;
-    Text [ french ] = "Unprotect trace" ;
-    Text [ swedish ] = "Unprotect trace" ;
+    Text [ dutch ] = "Beveiliging van registratie opheffen" ;
+    Text [ italian ] = "Elimina protezione registrazione" ;
+    Text [ spanish ] = "Desactivar protecciÛn de la grabaciÛn" ;
+    Text [ french ] = "DÈsactiver la protection de l'historique" ;
+    Text [ swedish ] = "Upph‰v registreringsskydd" ;
     Text [ danish ] = "Unprotect trace" ;
-    Text [ portuguese ] = "Unprotect trace" ;
+    Text [ portuguese ] = "Desactivar protecÁ„o do histÛrico" ;
     Text [ portuguese_brazilian ] = "Unprotect trace" ;
     Text[ chinese_simplified ] = "Unprotect trace";
     Text[ russian ] = "Unprotect trace";
-    Text[ polish ] = "Unprotect trace";
-    Text[ japanese ] = "Unprotect trace";
+    Text[ polish ] = "Anuluj ochronÍ úladu";
+    Text[ japanese ] = "ãLò^ÇÃï€åÏÇâèú";
     Text[ chinese_traditional ] = "Unprotect trace";
     Text[ arabic ] = "Unprotect trace";
     Text[ greek ] = "Unprotect trace";
     Text[ korean ] = "Unprotect trace";
     Text[ turkish ] = "Unprotect trace";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Unprotect trace";
 };
 String SCSTR_PASSWORD
 {
@@ -2226,6 +2308,7 @@ String SCSTR_PASSWORD
     Text[ korean ] = "∆–Ω∫øˆµÂ:";
     Text[ turkish ] = "ﬁifre:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "ContraseÒa:";
 };
 String SCSTR_PASSWORDOPT
 {
@@ -2252,6 +2335,7 @@ String SCSTR_PASSWORDOPT
     Text[ korean ] = "∆–Ω∫øˆµÂ (ø…º«):";
     Text[ turkish ] = "ﬁifre (istee bal˝):";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "ContraseÒa (opcional):";
 };
 
 String SCSTR_WRONGPASSWORD
@@ -2279,6 +2363,7 @@ String SCSTR_WRONGPASSWORD
     Text[ korean ] = "∆≤∏∞ ∆–Ω∫øˆµÂ";
     Text[ turkish ] = "ﬁifre yanl˝˛";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "ContraseÒa incorrecta";
 };
 
 String SCSTR_END
@@ -2306,6 +2391,7 @@ String SCSTR_END
     Text[ korean ] = "≥°(~E)";
     Text[ turkish ] = "~Son";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Fin";
 };
 
 String SCSTR_STAT_PRINT
@@ -2333,6 +2419,7 @@ String SCSTR_STAT_PRINT
     Text[ korean ] = "¿Œº‚...";
     Text[ turkish ] = "Yazd˝r...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimiendo...";
 };
 
 String SCSTR_UNKNOWN
@@ -2360,6 +2447,7 @@ String SCSTR_UNKNOWN
     Text[ korean ] = "æÀ∑¡¡Æ¿÷¡ˆ°°æ ¿Ω";
     Text[ turkish ] = "Bilinmiyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desconocido";
 };
 
 String SCSTR_CHAR_ATTRS
@@ -2387,6 +2475,7 @@ String SCSTR_CHAR_ATTRS
     Text[ korean ] = "±€≤√ º”º∫";
     Text[ turkish ] = "Yaz˝tipi ˆznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de caracteres";
 };
 
 
@@ -2416,6 +2505,7 @@ String SCSTR_CLPBRD_CLEAR
     Text[ korean ] = "ªÁøÎ¿⁄¥¬°°≈¨∏≥∫∏µÂø° ∏π¿∫ ∑Æ¿« µ•¿Ã≈Õ∏¶ ¿˙¿Â«œø¥Ω¿¥œ¥Ÿ .\n≈¨∏≥∫∏µÂ¿« ≥ªøÎ¿ª ¥Ÿ∏• ¿¿øÎ«¡∑Œ±◊∑•ø°º≠µµ ªÁøÎ∞°¥…«œ∞‘ «œ∞⁄Ω¿¥œ±Ó?";
     Text[ turkish ] = "Panoya b¸y¸k miktarda veri aktard˝n˝z.\nPano iÁeriini ba˛ka uygulamalarda kullanmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ha copiado una gran cantidad de datos en el portapapeles.\nøDesea que el contenido del portapapeles estÈ disponible para otras aplicaciones?";
 };
 
 String SCSTR_CFG_APP
@@ -2441,6 +2531,7 @@ String SCSTR_CFG_APP
     Text[ korean ] = "Ω√Ω∫≈€ ø…º«";
     Text[ turkish ] = "Sistem seÁenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones del sistema";
 };
 
 String SCSTR_CFG_DOC
@@ -2466,6 +2557,7 @@ String SCSTR_CFG_DOC
     Text[ korean ] = "πÆº≠ ø…º«";
     Text[ turkish ] = "Belge seÁenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones del documento";
 };
 
 String SCSTR_CFG_VIEW
@@ -2491,6 +2583,7 @@ String SCSTR_CFG_VIEW
     Text[ korean ] = "∫∏±‚ ø…º«";
     Text[ turkish ] = "Gˆr¸n¸m seÁenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de visualizaciÛn";
 };
 
 String SCSTR_CFG_INPUT
@@ -2516,6 +2609,7 @@ String SCSTR_CFG_INPUT
     Text[ korean ] = "¿‘∑¬ ø…º«";
     Text[ turkish ] = "Giri˛ seÁenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de entrada";
 };
 
 String SCSTR_CFG_SPELLCHECK
@@ -2541,6 +2635,7 @@ String SCSTR_CFG_SPELLCHECK
     Text[ korean ] = "∏¬√„π˝ ø…º«";
     Text[ turkish ] = "Yaz˝m seÁenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de ortografÌa";
 };
 
 String SCSTR_CFG_PRINT
@@ -2566,6 +2661,7 @@ String SCSTR_CFG_PRINT
     Text[ korean ] = "¿Œº‚ ø…º«";
     Text[ turkish ] = "Yazd˝rma seÁenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de impresiÛn";
 };
 
 String SCSTR_CFG_NAVIPI
@@ -2591,6 +2687,7 @@ String SCSTR_CFG_NAVIPI
     Text[ korean ] = "≥◊∫Ò∞‘¿Ã≈Õ º≥¡§";
     Text[ turkish ] = "Navigatˆr ayarlar˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "ConfiguraciÛn del Navegador";
 };
 
 String SCSTR_MINIMUM
@@ -2616,6 +2713,7 @@ String SCSTR_MINIMUM
     Text[ korean ] = "√÷º“(~M)";
     Text[ turkish ] = "A~sgari";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~MÌnimo";
 };
 String SCSTR_MAXIMUM
 {
@@ -2640,6 +2738,7 @@ String SCSTR_MAXIMUM
     Text[ korean ] = "√÷¥Î(~M)";
     Text[ turkish ] = "A~zami";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~M·ximo";
 };
 String SCSTR_VALUE
 {
@@ -2664,6 +2763,7 @@ String SCSTR_VALUE
     Text[ korean ] = "∞™(~V)";
     Text[ turkish ] = "~Deer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Valor";
 };
 
  // fuer Dialoge:
@@ -2691,6 +2791,7 @@ String SCSTR_CHARSET_USER
     Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ω√Ω∫≈€";
     Text[ turkish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sistema";
 };
 
 String SCSTR_COLUMN_USER
@@ -2717,6 +2818,7 @@ String SCSTR_COLUMN_USER
     Text[ korean ] = "«•¡ÿ;≈ÿΩ∫∆Æ;≥Ø¬• (DMY);≥Ø¬•(MDY);≥Ø¬• (YMD);US-English;º˚±‚±‚";
     Text[ turkish ] = "Standart;Metin;Tarih (GAY);Tarih (AGY);Tarih(YAG);›ngilizce (ABD);gizle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Est·ndar;Texto;Fecha (DMA);Fecha (MDA);Fecha (AMD);InglÈs (US);Ocultar";
 };
 
 String SCSTR_FIELDSEP
@@ -2744,6 +2846,7 @@ String SCSTR_FIELDSEP
     Text[ korean ] = ",\t44\t;\t59\t:\t58\t{≈«}\t9\t{∞¯πÈ}\t32";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Bo˛luk}\t32";
+    Text[ catalan ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{vacÌo}\t32";
 };
 
 String SCSTR_TEXTSEP
@@ -2774,6 +2877,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ korean ] = "%PRODUCTNAME Calc∞° ¿‘∑¬µ» ºˆΩƒø°º≠ ø¿∑˘∏¶ √£æ∆≥¬Ω¿¥œ¥Ÿ.\n¥Ÿ¿Ω∞˙∞∞¿∫ ¡¶æ»µ» ºˆ¡§¿ª πﬁæ∆µÈ¿ÃΩ√∞⁄Ω¿¥œ±Ó ?\n\n";
     Text[ turkish ] = "%PRODUCTNAME Calc, girilen form¸lde bir hata buldu.\nA˛a˝da ˆnerilen d¸zeltmeyi kabul etmek istiyor musunuz?\n\n";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME Calc encontrÛ un error en la fÛrmula dada.\nøDesea aceptar la correcciÛn sugerida abajo?\n\n";
 };
 
 //! the graphics filter error strings should be moved to svx or offapp!
@@ -2805,6 +2909,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ korean ] = "±◊∑°«» ∆ƒ¿œ¿ª ø≠ºˆ°°æ¯Ω¿¥œ¥Ÿ.";
     Text[ turkish ] = "Grafik dosyas˝ aÁ˝lam˝yor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No es posible abrir el archivo gr·fico";
 };
 String SCSTR_GRFILTER_IOERROR
 {
@@ -2833,6 +2938,7 @@ String SCSTR_GRFILTER_IOERROR
     Text[ korean ] = "±◊∑°«» ∆ƒ¿œ¿ª ¿–¿ªºˆ æ¯Ω¿¥œ¥Ÿ.";
     Text[ turkish ] = "Grafik dosyas˝ okunam˝yor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No es posible leer el archivo gr·fico";
 };
 String SCSTR_GRFILTER_FORMATERROR
 {
@@ -2861,6 +2967,7 @@ String SCSTR_GRFILTER_FORMATERROR
     Text[ korean ] = "æÀºˆæ¯¥¬ ±◊∑°«» º≠Ωƒ";
     Text[ turkish ] = "Bilinmeyen grafik dosyas˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato de imagen desconocido";
 };
 String SCSTR_GRFILTER_VERSIONERROR
 {
@@ -2889,6 +2996,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text[ korean ] = "¿Ã ±◊∑°«» ∆ƒ¿œ πˆ¿¸¿∫ ¡ˆø¯µ«¡ˆ æ Ω¿¥œ¥Ÿ.";
     Text[ turkish ] = "Bu grafik dosyas˝ s¸r¸m¸ desteklenmiyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se soporta la versiÛn del archivo gr·fico";
 };
 String SCSTR_GRFILTER_FILTERERROR
 {
@@ -2917,6 +3025,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ korean ] = "±◊∑°«» « ≈Õ∏¶ √£¡ˆ ∏¯«ﬂΩ¿¥œ¥Ÿ.";
     Text[ turkish ] = "Grafik filtresi bulunamad˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se encontrÛ el filtro de imagen";
 };
 String SCSTR_GRFILTER_TOOBIG
 {
@@ -2945,6 +3054,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ korean ] = "±◊∑°«»¿ª ª¿‘«œ±‚ ¿ß«—  ∏ﬁ∏∏Æ∞° ∫Œ¡∑«’¥œ¥Ÿ.";
     Text[ turkish ] = "Grafiin eklenmesi iÁin yeterli bellek yok";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No hay suficiente memoria para insertar la imagen";
 };
 String SCSTR_UNDO_GRAFFILTER
 {
@@ -2968,5 +3078,6 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ chinese_traditional ] = "πœßŒπL¬oæπ";
     Text[ arabic ] = "›· — «·—”Ê„« ";
     Text[ turkish ] = "Grafik filtresi";
+    Text[ catalan ] = "Filtro de imagen";
 };
 
