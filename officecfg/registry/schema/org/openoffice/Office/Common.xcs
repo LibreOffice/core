@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:01:18 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,6 +1977,15 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<label>Open windows</label>
 					</info>
 					<value>false</value>
+				</prop>
+                                <prop oor:name="WarnAlienFormat" oor:type="xs:boolean">
+                                        <!-- UIHints: Tools  Options - General  Save - -->
+					<info>
+						<author>MBA</author>
+                                                <desc>Specifies if a warning message is shown if a file is going to be saved to an alien format.</desc>
+						<label>Open windows</label>
+					</info>
+                                        <value>true</value>
 				</prop>
 			</group>
 			<group oor:name="Graphic">
