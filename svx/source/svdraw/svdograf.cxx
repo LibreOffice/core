@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:55:59 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,7 @@ void SdrGrafObj::PreSave()
     SdrRectObj::PreSave();
 
     // prepare SetItems for storage
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetUnmergedItemSet();
     const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
     SdrGrafSetItem aGrafAttr(rSet.GetPool());
     aGrafAttr.GetItemSet().Put(rSet);
@@ -1413,7 +1413,7 @@ void SdrGrafObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetUnmergedItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_GRAF));
 

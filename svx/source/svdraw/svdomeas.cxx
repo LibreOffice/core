@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 11:52:58 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1873,7 +1873,7 @@ void SdrMeasureObj::PreSave()
     SdrTextObj::PreSave();
 
     // prepare SetItems for storage
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetUnmergedItemSet();
     const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
     SdrMeasureSetItem aMeasAttr(rSet.GetPool());
     aMeasAttr.GetItemSet().Put(rSet);
@@ -1910,7 +1910,7 @@ void SdrMeasureObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetUnmergedItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MEASURE));
 

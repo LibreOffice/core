@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,7 @@ void SdrCaptionObj::PreSave()
     SdrRectObj::PreSave();
 
     // prepare SetItems for storage
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetUnmergedItemSet();
     const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
     SdrCaptionSetItem aCaptAttr(rSet.GetPool());
     aCaptAttr.GetItemSet().Put(rSet);
@@ -1022,7 +1022,7 @@ void SdrCaptionObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetUnmergedItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CAPTION));
 

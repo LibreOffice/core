@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 20:00:28 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2517,7 +2517,7 @@ void SdrEdgeObj::PreSave()
     SdrTextObj::PreSave();
 
     // prepare SetItems for storage
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetUnmergedItemSet();
     const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
     SdrEdgeSetItem aEdgeAttr(rSet.GetPool());
     aEdgeAttr.GetItemSet().Put(rSet);
@@ -2559,7 +2559,7 @@ void SdrEdgeObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetUnmergedItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_EDGE));
 

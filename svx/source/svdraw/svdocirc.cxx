@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 11:51:17 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1535,7 +1535,7 @@ void SdrCircObj::PreSave()
     SdrRectObj::PreSave();
 
     // prepare SetItems for storage
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetUnmergedItemSet();
     const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
     SdrCircSetItem aCircAttr(rSet.GetPool());
     aCircAttr.GetItemSet().Put(rSet);
@@ -1571,7 +1571,7 @@ void SdrCircObj::WriteData(SvStream& rOut) const
     SfxItemPool* pPool=GetItemPool();
     if(pPool)
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetUnmergedItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CIRC));
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-25 16:53:27 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1488,6 +1488,9 @@ SfxItemSet* SdrObjGroup::CreateNewItemSet(SfxItemPool& rPool)
 
 void SdrObjGroup::PreSave()
 {
+    // call parent
+    SdrObject::PreSave();
+
     if(!IsLinkedGroup())
     {
         sal_uInt32 nCount(pSub->GetObjCount());
@@ -1498,6 +1501,9 @@ void SdrObjGroup::PreSave()
 
 void SdrObjGroup::PostSave()
 {
+    // call parent
+    SdrObject::PostSave();
+
     if(!IsLinkedGroup())
     {
         sal_uInt32 nCount(pSub->GetObjCount());
