@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:10:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,7 +539,7 @@
         }
 
             HashMapString2Int &rMap = ServiceSpecifierMap::get();
-        HashMapString2Int::const_iterator aPropMapIdPos = rMap.find( m_sServiceSpecifier );
+        HashMapString2Int::iterator aPropMapIdPos = rMap.find( m_sServiceSpecifier );
         if ( rMap.end() == aPropMapIdPos )
         {
             PropSeqArray &rAggProperties = AggregateProperties::get();
