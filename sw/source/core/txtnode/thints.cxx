@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-08 11:00:54 $
+ *  last change: $Author: fme $ $Date: 2002-09-11 15:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@
 #include <swfont.hxx>
 #endif
 
+#include <algorithm>
 
 #ifndef PRODUCT
 #define CHECK    Check();
@@ -1603,20 +1604,27 @@ BOOL SwpHints::Merge( SwTxtNode &rNode, SwTxtAttr* pAttr )
  * identischen Bereich mit einem inneren Attribut bekaeme.
  */
 
-BOOL SwpHints::Forget( const USHORT i, const USHORT nWhich,
-                 const xub_StrLen nStrt, const xub_StrLen nEnd )
+BOOL SwpHints::Forget( const std::vector< const SwTxtAttr* >* pExcludes,
+                       const USHORT i, const USHORT nWhich,
+                       const xub_StrLen nStrt, const xub_StrLen nEnd )
 {
     BOOL bRet = FALSE;
-    for ( USHORT j = i+1; j < Count(); j++ )
+    for ( USHORT j = ( pExcludes ? i + 1 : 0 ); j < Count(); j++ )
     {
         SwTxtAttr *pHt = GetHt( j );
         if ( *pHt->GetStart() > nStrt )
             break;
         const USHORT nWhch = pHt->Which();
         const xub_StrLen *pEnd = pHt->GetEnd();
+
+        // Check if we already have an attribute of type nWhich with the
+        // same range as the new attribute. We only consider attributes
+        // which are not included in rExclude.
         if ( pEnd && *pEnd == nEnd &&
              ( nWhch == nWhich ||
-             ( pHt->IsCharFmtAttr() && lcl_Included( nWhich, pHt ) ) ) )
+             ( pHt->IsCharFmtAttr() && lcl_Included( nWhich, pHt ) ) ) &&
+             ( ! pExcludes ||
+               pExcludes->end() == std::find( pExcludes->begin(), pExcludes->end(), pHt ) ) )
         {
             bRet = TRUE;
             break;

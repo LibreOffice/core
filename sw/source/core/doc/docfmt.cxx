@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 11:57:39 $
+ *  last change: $Author: fme $ $Date: 2002-09-11 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,17 +498,26 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
             {
                 if( IsInRange( aCharFmtSetRange, pItem->Which() ))
                 {
-                    SwTxtAttr* pTAttr = pTNd->MakeTxtAttr( *pItem, 0,
-                                                    pTNd->GetTxt().Len() );
+
                     if( !pTNd->pSwpHints )
                         pTNd->pSwpHints = new SwpHints;
-                    pTNd->pSwpHints->SwpHintsArr::Insert( pTAttr );
+
+                    const SwTxtAttr* pTAttr = 0;
+                    if ( ! pTNd->pSwpHints->Forget( 0, 0, pItem->Which(),
+                                                    0, pTNd->GetTxt().Len() ) )
+                    {
+                        pTAttr = pTNd->MakeTxtAttr( *pItem, 0,
+                                     pTNd->GetTxt().Len() );
+
+                        pTNd->pSwpHints->SwpHintsArr::Insert( pTAttr );
+                    }
 
                     if( pHst )
                     {
                         SwRegHistory aRegH( pTNd, *pTNd, pHst );
                         pTNd->ResetAttr( pItem->Which() );
-                        pHst->Add( pTAttr, aTmpStt.GetIndex(), TRUE );
+                        if ( pTAttr )
+                            pHst->Add( pTAttr, aTmpStt.GetIndex(), TRUE );
                     }
                     else
                         pTNd->ResetAttr( pItem->Which() );

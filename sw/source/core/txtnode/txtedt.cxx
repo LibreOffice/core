@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-15 16:22:34 $
+ *  last change: $Author: fme $ $Date: 2002-09-11 15:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,11 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
     const BOOL bNoLen = !nMin;
 
+    // We have to remember the "new" attributes, which have
+    // been introduced by splitting surrounding attributes (case 4).
+    // They may not be forgotten inside the "Forget" function
+    std::vector< const SwTxtAttr* > aNewAttributes;
+
     // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
     // des Attributs hinter dem Bereich liegt
     while( (i < pSwpHints->Count()) &&
@@ -402,10 +407,16 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     pSwpHints->NoteInHistory( pHt, TRUE );
 
                     if( nEnd < nTmpEnd &&
-                        !pSwpHints->Forget( i, pHt->Which(), nEnd, nTmpEnd ) )
+                        ! pSwpHints->Forget( &aNewAttributes, i, pHt->Which(),
+                                             nEnd, nTmpEnd ) )
                     {
-                        Insert( pHt->GetAttr(), nEnd, nTmpEnd,
-                                SETATTR_NOHINTADJUST );
+                        const SwTxtAttr* pNewAttr =
+                                Insert( pHt->GetAttr(), nEnd, nTmpEnd,
+                                        SETATTR_NOHINTADJUST );
+
+                        aNewAttributes.push_back( pHt );
+                        aNewAttributes.push_back( pNewAttr );
+
                         // jetzt kein i+1, weil das eingefuegte Attribut
                         // ein anderes auf die Position geschoben hat !
                         continue;

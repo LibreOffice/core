@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-05 09:35:55 $
+ *  last change: $Author: fme $ $Date: 2002-09-11 15:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #endif
 
 #include "numrule.hxx"
+#include <vector>
 
 class SwTxtNode;
 class SwRegHistory;                 // steht im RolBck.hxx
@@ -167,10 +168,6 @@ private:
     BOOL Resort( const USHORT nPos );
     // loescht Hints, die keinen Zustaendigkeitsbereich mehr haben
     void ClearDummies( SwTxtNode &rNode );
-    // Forget signalisiert, dass es ueberfluessig ist, das Attribut einzu-
-    // fuegen, da es keinen Zustaendigkeitsbereich haette.
-    BOOL Forget( const USHORT i, const USHORT nWhich,
-                 const xub_StrLen nStrt, const xub_StrLen nEnd );
     // Merge verschmilzt aneinanderreichende Hints mit gleichen Attributen
     // und gleichen Werten, falls nichts dagegen spricht, d.h. wenn dadurch
     // keine Ueberlappungen mit gleichartigen Attr. entstehen,
@@ -201,6 +198,12 @@ public:
     void DeRegister() { Register(0); }
 
     void Insert( SwTxtAttr *pHt, SwTxtNode &rNode, USHORT nMode = 0 );
+
+    // Forget signalisiert, dass es ueberfluessig ist, das Attribut einzu-
+    // fuegen, da es keinen Zustaendigkeitsbereich haette.
+    BOOL Forget( const std::vector< const SwTxtAttr* >* pExclude,
+                 const USHORT i, const USHORT nWhich,
+                 const xub_StrLen nStrt, const xub_StrLen nEnd );
 
     inline void SetCalcVisible(){ bCalcVis = TRUE; }
     inline void SetVisible( const BOOL bNew )  { bVis = bNew; }
