@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 09:09:10 $
+ *  last change: $Author: jp $ $Date: 2000-12-09 15:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ TextSearch::~TextSearch()
  * Methoden fuer die normale Suche oder der Suche nach Regular-Expressions
  * ueber die MethodenPointer auf.
  */
-
+#pragma optimize("", off)
 int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
                             xub_StrLen* pEnde, SearchResult* pRes )
 {
@@ -240,15 +240,15 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
         {
             SearchResult aRet( xTextSearch->searchForward(
                                                     rStr, *pStart, *pEnde ));
-            if( aRet.subRegExpressions )
+            if( 1 == aRet.subRegExpressions )
             {
                 nRet = 1;
                 // the XTextsearch returns in startOffset the higher position
                 // and the endposition is allways exclusive.
                 // The caller of this function will have in startPos the
                 // lower pos. and end
-                *pStart = aRet.startOffset[ 0 ];
-                *pEnde = aRet.endOffset[ 0 ];
+                *pStart = (xub_StrLen)aRet.startOffset[ 0 ];
+                *pEnde = (xub_StrLen)aRet.endOffset[ 0 ];
                 if( pRes )
                     *pRes = aRet;
             }
@@ -278,8 +278,8 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
                 // and the endposition is allways exclusive.
                 // The caller of this function will have in startPos the
                 // lower pos. and end
-                *pEnde = aRet.startOffset[ 0 ];
-                *pStart = aRet.endOffset[ 0 ];
+                *pEnde = (xub_StrLen)aRet.startOffset[ 0 ];
+                *pStart = (xub_StrLen)aRet.endOffset[ 0 ];
                 if( pRes )
                     *pRes = aRet;
             }
@@ -291,6 +291,8 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     }
     return nRet;
 }
+
+#pragma optimize("", on)
 
 // ............................................................................
 }   // namespace utl
