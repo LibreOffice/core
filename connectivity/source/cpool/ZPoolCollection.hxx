@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:17 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,10 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop>                m_xDesktop;
 
     private:
+        OPoolCollection();                          // never implemented
+        OPoolCollection(const OPoolCollection&);    // never implemented
+        operator= (const OPoolCollection&);         // never implemented
+
         OPoolCollection(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
@@ -168,6 +172,7 @@ namespace connectivity
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
         void clearConnectionPools(sal_Bool _bDispose);
+        void clearDesktop();
     protected:
         virtual ~OPoolCollection();
     public:
