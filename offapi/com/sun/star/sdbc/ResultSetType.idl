@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSetType.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 // DocMerge from idl: constants com::sun::star::sdbc::ResultSetType
 /** describes the different scroll capabilities of a result set.
  */
-constants ResultSetType
+published constants ResultSetType
 {
 
     // DocMerge from idl: value com::sun::star::sdbc::ResultSetType::FORWARD_ONLY
