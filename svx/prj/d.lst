@@ -543,7 +543,6 @@ hedabu: ..\inc\hlnkitem.hxx %_DEST%\inc%_EXT%\svx\hlnkitem.hxx
 hedabu: ..\inc\unofdesc.hxx %_DEST%\inc%_EXT%\svx\unofdesc.hxx
 hedabu: ..\source\xmlfilt\xmlnumi.hxx %_DEST%\inc%_EXT%\svx\xmlnumi.hxx
 hedabu: ..\source\xmlfilt\xmlnume.hxx %_DEST%\inc%_EXT%\svx\xmlnume.hxx
-hedabu: ..\inc\ivctrl.hxx %_DEST%\inc%_EXT%\svx\ivctrl.hxx
 hedabu: ..\inc\iconcdlg.hxx %_DEST%\inc%_EXT%\svx\iconcdlg.hxx
 hedabu: ..\source\xmlfilt\xmltabe.hxx %_DEST%\inc%_EXT%\svx\xmltabe.hxx
 hedabu: ..\source\xmlfilt\xmltabi.hxx %_DEST%\inc%_EXT%\svx\xmltabi.hxx
