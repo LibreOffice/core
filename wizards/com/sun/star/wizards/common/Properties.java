@@ -3,7 +3,6 @@
  *
  * Created on 1. Oktober 2003, 17:16
  */
-
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.PropertyValue;
@@ -34,7 +33,6 @@ public class Properties extends Hashtable {
         }
         return false;
     }
-
 
 
     public PropertyValue[] getProperties() {
