@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-20 11:44:08 $
+ *  last change: $Author: os $ $Date: 2002-08-26 11:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRAMEDIR
 #endif
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_HEADER_FOOTER_EAT_SPACING
+    { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY9
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF

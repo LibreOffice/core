@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 13:48:54 $
+ *  last change: $Author: os $ $Date: 2002-08-26 11:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,14 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
         case  RID_SVXPAGE_PICK_BULLET :
             ((SvxBulletPickTabPage&)rPage).SetCharFmtName(sBulletCharFmt);
+        break;
+        case  TP_HEADER_PAGE:
+            if(0 == (nHtmlMode & HTMLMODE_ON ))
+                ((SvxHeaderPage&)rPage).EnableDynamicSpacing();
+        break;
+        case  TP_FOOTER_PAGE:
+            if(0 == (nHtmlMode & HTMLMODE_ON ))
+                ((SvxFooterPage&)rPage).EnableDynamicSpacing();
         break;
     }
 }
