@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:24:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,6 +1067,7 @@ sal_Bool SwTxtFrm::CalcPreps()
     return bRet;
 }
 
+
 /*************************************************************************
  *                      SwTxtFrm::FormatAdjust()
  *************************************************************************/
@@ -1428,6 +1429,8 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 #endif
 }
 
+
+
 /*************************************************************************
  *                      SwTxtFrm::_Format()
  *************************************************************************/
@@ -1626,7 +1629,12 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             if( !rLine.Next() )
             {
                 if( !bFormat )
-                    rLine.MakeRestPortion( rLine.GetCurr(), rLine.GetEnd() );
+                {
+                    SwLinePortion* pRest =
+                        rLine.MakeRestPortion( rLine.GetCurr(), rLine.GetEnd() );
+                    if( pRest )
+                        rInf.SetRest( pRest );
+                }
                 rLine.Insert( new SwLineLayout() );
                 rLine.Next();
                 bFormat = sal_True;
