@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpt3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,25 +487,25 @@ void Viewport3D::SetFarClipDist(double fNewFCD)
 |*
 \************************************************************************/
 
-void Viewport3D::WriteData31(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    rOut << aVRP;
-    rOut << aVPN;
-    rOut << aVUV;
-    rOut << aPRP;
-    rOut << fVPD;
-    rOut << fNearClipDist;
-    rOut << fFarClipDist;
-    rOut << UINT16(eProjection);
-    rOut << UINT16(eAspectMapping);
-    rOut << aDeviceRect;
-    rOut << aViewWin.X;
-    rOut << aViewWin.Y;
-    rOut << aViewWin.W;
-    rOut << aViewWin.H;
-#endif
-}
+//BFS01void Viewport3D::WriteData31(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 rOut << aVRP;
+//BFS01 rOut << aVPN;
+//BFS01 rOut << aVUV;
+//BFS01 rOut << aPRP;
+//BFS01 rOut << fVPD;
+//BFS01 rOut << fNearClipDist;
+//BFS01 rOut << fFarClipDist;
+//BFS01 rOut << UINT16(eProjection);
+//BFS01 rOut << UINT16(eAspectMapping);
+//BFS01 rOut << aDeviceRect;
+//BFS01 rOut << aViewWin.X;
+//BFS01 rOut << aViewWin.Y;
+//BFS01 rOut << aViewWin.W;
+//BFS01 rOut << aViewWin.H;
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -514,35 +514,35 @@ void Viewport3D::WriteData31(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void Viewport3D::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    if (rOut.GetVersion() < 3560)
-    {
-        Viewport3D::WriteData31(rOut);
-        return;
-    }
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-    aCompat.SetID("Viewport3D");
-#endif
-
-    rOut << aVRP;
-    rOut << aVPN;
-    rOut << aVUV;
-    rOut << aPRP;
-    rOut << fVPD;
-    rOut << fNearClipDist;
-    rOut << fFarClipDist;
-    rOut << UINT16(eProjection);
-    rOut << UINT16(eAspectMapping);
-    rOut << aDeviceRect;
-    rOut << aViewWin.X;
-    rOut << aViewWin.Y;
-    rOut << aViewWin.W;
-    rOut << aViewWin.H;
-#endif
-}
+//BFS01void Viewport3D::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 if (rOut.GetVersion() < 3560)
+//BFS01 {
+//BFS01     Viewport3D::WriteData31(rOut);
+//BFS01     return;
+//BFS01 }
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("Viewport3D");
+//BFS01#endif
+//BFS01
+//BFS01 rOut << aVRP;
+//BFS01 rOut << aVPN;
+//BFS01 rOut << aVUV;
+//BFS01 rOut << aPRP;
+//BFS01 rOut << fVPD;
+//BFS01 rOut << fNearClipDist;
+//BFS01 rOut << fFarClipDist;
+//BFS01 rOut << UINT16(eProjection);
+//BFS01 rOut << UINT16(eAspectMapping);
+//BFS01 rOut << aDeviceRect;
+//BFS01 rOut << aViewWin.X;
+//BFS01 rOut << aViewWin.Y;
+//BFS01 rOut << aViewWin.W;
+//BFS01 rOut << aViewWin.H;
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -550,34 +550,34 @@ void Viewport3D::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void Viewport3D::ReadData31(SvStream& rIn)
-{
-    UINT16  nTmp16;
-
-    rIn >> aVRP;
-    rIn >> aVPN;
-    rIn >> aVUV;
-    rIn >> aPRP;
-    rIn >> fVPD;
-    rIn >> fNearClipDist;
-    rIn >> fFarClipDist;
-    rIn >> nTmp16; eProjection = ProjectionType(nTmp16);
-    rIn >> nTmp16; eAspectMapping = AspectMapType(nTmp16);
-    rIn >> aDeviceRect;
-    rIn >> aViewWin.X;
-    rIn >> aViewWin.Y;
-    rIn >> aViewWin.W;
-    rIn >> aViewWin.H;
-
-    // es gibt einige Docs mit zweifelhaften werten, daher wird die Dist auf 0 gesetzt
-    if ((fNearClipDist <= 1e-100) || (fNearClipDist >= 1e100)) fNearClipDist = 0.0;
-    if ((fFarClipDist <= 1e-100) || (fFarClipDist >= 1e100)) fFarClipDist = 0.0;
-
-    fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
-    fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
-
-    bTfValid = FALSE;
-}
+//BFS01void Viewport3D::ReadData31(SvStream& rIn)
+//BFS01{
+//BFS01 UINT16  nTmp16;
+//BFS01
+//BFS01 rIn >> aVRP;
+//BFS01 rIn >> aVPN;
+//BFS01 rIn >> aVUV;
+//BFS01 rIn >> aPRP;
+//BFS01 rIn >> fVPD;
+//BFS01 rIn >> fNearClipDist;
+//BFS01 rIn >> fFarClipDist;
+//BFS01 rIn >> nTmp16; eProjection = ProjectionType(nTmp16);
+//BFS01 rIn >> nTmp16; eAspectMapping = AspectMapType(nTmp16);
+//BFS01 rIn >> aDeviceRect;
+//BFS01 rIn >> aViewWin.X;
+//BFS01 rIn >> aViewWin.Y;
+//BFS01 rIn >> aViewWin.W;
+//BFS01 rIn >> aViewWin.H;
+//BFS01
+//BFS01 // es gibt einige Docs mit zweifelhaften werten, daher wird die Dist auf 0 gesetzt
+//BFS01 if ((fNearClipDist <= 1e-100) || (fNearClipDist >= 1e100)) fNearClipDist = 0.0;
+//BFS01 if ((fFarClipDist <= 1e-100) || (fFarClipDist >= 1e100)) fFarClipDist = 0.0;
+//BFS01
+//BFS01 fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
+//BFS01 fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
+//BFS01
+//BFS01 bTfValid = FALSE;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -586,44 +586,44 @@ void Viewport3D::ReadData31(SvStream& rIn)
 |*
 \************************************************************************/
 
-void Viewport3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
-    {
-        Viewport3D::ReadData31 (rIn);
-        return;
-    }
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-    aCompat.SetID("Viewport3D");
-#endif
-
-    UINT16  nTmp16;
-
-    rIn >> aVRP;
-    rIn >> aVPN;
-    rIn >> aVUV;
-    rIn >> aPRP;
-    rIn >> fVPD;
-    rIn >> fNearClipDist;
-    rIn >> fFarClipDist;
-    rIn >> nTmp16; eProjection = ProjectionType(nTmp16);
-    rIn >> nTmp16; eAspectMapping = AspectMapType(nTmp16);
-    rIn >> aDeviceRect;
-    rIn >> aViewWin.X;
-    rIn >> aViewWin.Y;
-    rIn >> aViewWin.W;
-    rIn >> aViewWin.H;
-
-    // es gibt einige Docs mit zweifelhaften werten, daher wird die Dist auf 0 gesetzt
-    if ((fNearClipDist <= 1e-100) || (fNearClipDist >= 1e100)) fNearClipDist = 0.0;
-    if ((fFarClipDist <= 1e-100) || (fFarClipDist >= 1e100)) fFarClipDist = 0.0;
-
-    fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
-    fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
-
-    bTfValid = FALSE;
-}
+//BFS01void Viewport3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
+//BFS01 {
+//BFS01     Viewport3D::ReadData31 (rIn);
+//BFS01     return;
+//BFS01 }
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("Viewport3D");
+//BFS01#endif
+//BFS01
+//BFS01 UINT16  nTmp16;
+//BFS01
+//BFS01 rIn >> aVRP;
+//BFS01 rIn >> aVPN;
+//BFS01 rIn >> aVUV;
+//BFS01 rIn >> aPRP;
+//BFS01 rIn >> fVPD;
+//BFS01 rIn >> fNearClipDist;
+//BFS01 rIn >> fFarClipDist;
+//BFS01 rIn >> nTmp16; eProjection = ProjectionType(nTmp16);
+//BFS01 rIn >> nTmp16; eAspectMapping = AspectMapType(nTmp16);
+//BFS01 rIn >> aDeviceRect;
+//BFS01 rIn >> aViewWin.X;
+//BFS01 rIn >> aViewWin.Y;
+//BFS01 rIn >> aViewWin.W;
+//BFS01 rIn >> aViewWin.H;
+//BFS01
+//BFS01 // es gibt einige Docs mit zweifelhaften werten, daher wird die Dist auf 0 gesetzt
+//BFS01 if ((fNearClipDist <= 1e-100) || (fNearClipDist >= 1e100)) fNearClipDist = 0.0;
+//BFS01 if ((fFarClipDist <= 1e-100) || (fFarClipDist >= 1e100)) fFarClipDist = 0.0;
+//BFS01
+//BFS01 fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
+//BFS01 fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
+//BFS01
+//BFS01 bTfValid = FALSE;
+//BFS01}
 
 
 // FG: eigentlich sollten die Stream-Funktionen in der 3D-Engine nicht verwendet werden
@@ -636,13 +636,13 @@ void Viewport3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
-SvStream& operator<<(SvStream& rOStream, const Viewport3D& rViewpt)
-{
-    rViewpt.WriteData31(rOStream);
-    return rOStream;
-}
-#endif
+//BFS01#ifndef SVX_LIGHT
+//BFS01SvStream& operator<<(SvStream& rOStream, const Viewport3D& rViewpt)
+//BFS01{
+//BFS01 rViewpt.WriteData31(rOStream);
+//BFS01 return rOStream;
+//BFS01}
+//BFS01#endif
 
 /*************************************************************************
 |*
@@ -650,10 +650,11 @@ SvStream& operator<<(SvStream& rOStream, const Viewport3D& rViewpt)
 |*
 \************************************************************************/
 
-SvStream& operator>>(SvStream& rIStream, Viewport3D& rViewpt)
-{
-    rViewpt.ReadData31(rIStream);
-    return rIStream;
-}
+//BFS01SvStream& operator>>(SvStream& rIStream, Viewport3D& rViewpt)
+//BFS01{
+//BFS01 rViewpt.ReadData31(rIStream);
+//BFS01 return rIStream;
+//BFS01}
 
 
+// eof
