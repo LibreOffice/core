@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:49:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,133 +125,10 @@
 |*************************************************************************/
 
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFreeFrm( pFmt, pAnch ),
-    // OD 06.10.2003 #110978#
-    mpVertPosOrientFrm( 0 ),
-    // OD 11.11.2003 #i22341#
-    mnLastTopOfLine( 0 )
+    SwFlyFreeFrm( pFmt, pAnch )
 {
     bAtCnt = TRUE;
     bAutoPosition = FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId();
-}
-
-/** check anchor character rectangle and top of line
-
-    OD 11.11.2003 #i22341#
-    For to-character anchored Writer fly frames the members <maLastCharRect>
-    and <maLastTopOfLine> are updated. These are checked for change and
-    depending on the applied positioning, it's decided, if the Writer fly
-    frame has to be invalidated.
-
-    @author OD
-*/
-void SwFlyAtCntFrm::CheckCharRectAndTopOfLine()
-{
-    SwFlyFrmFmt *pFmt = static_cast<SwFlyFrmFmt*>(GetFmt());
-    if ( FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId() && GetAnchor() )
-    {
-        const SwFmtAnchor& rAnch = pFmt->GetAnchor();
-        if ( rAnch.GetCntntAnchor() )
-        {
-            _CheckCharRect( rAnch );
-            _CheckTopOfLine( rAnch );
-        }
-    }
-}
-
-/** check anchor character rectangle
-
-    OD 11.11.2003 #i22341#
-    helper method for method <CheckCharRectAndTopOfLine()>
-    For to-character anchored Writer fly frames the member <maLastCharRect>
-    is updated. This is checked for change and depending on the applied
-    positioning, it's decided, if the Writer fly frame has to be invalidated.
-
-    @author OD
-*/
-void SwFlyAtCntFrm::_CheckCharRect( const SwFmtAnchor& _rAnch )
-{
-    // determine rectangle of anchor character. If not exist, abort operation
-    SwRect aCharRect;
-    if ( !static_cast<SwTxtFrm*>(GetAnchor())->GetAutoPos( aCharRect,
-                                                *_rAnch.GetCntntAnchor() ) )
-    {
-        return;
-    }
-    // check, if anchor character rectangle has changed
-    if ( aCharRect != maLastCharRect )
-    {
-        // check positioning and alignment for invalidation of position
-        {
-            // determine frame the anchor character is in.
-            SwTxtFrm& aAnchorCharFrm =
-                static_cast<SwTxtFrm*>(GetAnchor())->GetFrmAtOfst(
-                    _rAnch.GetCntntAnchor()->nContent.GetIndex() );
-            SWRECTFN( (&aAnchorCharFrm) );
-            // determine positioning and alignment
-            SwFlyFrmFmt *pFmt = static_cast<SwFlyFrmFmt*>(GetFmt());
-            SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-            SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
-            // check for anchor character rectangle changes for certain
-            // positionings and alignments
-            // OD 07.10.2003 #110978# - add condition to invalidate position,
-            // if vertical aligned at frame/page area and vertical position
-            // of anchor character has changed.
-            const SwRelationOrient eVertRelOrient = aVert.GetRelationOrient();
-            if ( ( aHori.GetRelationOrient() == REL_CHAR &&
-                   (aCharRect.*fnRect->fnGetLeft)() !=
-                        (maLastCharRect.*fnRect->fnGetLeft)() ) ||
-                 ( eVertRelOrient == REL_CHAR &&
-                   ( (aCharRect.*fnRect->fnGetTop)() !=
-                        (maLastCharRect.*fnRect->fnGetTop)() ||
-                     (aCharRect.*fnRect->fnGetHeight)() !=
-                        (maLastCharRect.*fnRect->fnGetHeight)() ) ) ||
-                 ( ( ( eVertRelOrient == FRAME ) ||
-                     ( eVertRelOrient == PRTAREA ) ||
-                     ( eVertRelOrient == REL_PG_FRAME ) ||
-                     ( eVertRelOrient == REL_PG_PRTAREA ) ) &&
-                   ( (aCharRect.*fnRect->fnGetTop)() !=
-                        (maLastCharRect.*fnRect->fnGetTop)() ) ) )
-            {
-                InvalidatePos();
-            }
-        }
-        // keep new anchor character rectangle
-        maLastCharRect = aCharRect;
-    }
-}
-
-/** check top of line
-
-    OD 11.11.2003 #i22341#
-    helper method for method <CheckCharRectAndTopOfLine()>
-    For to-character anchored Writer fly frames the member <mnLastTopOfLine>
-    is updated. This is checked for change and depending on the applied
-    positioning, it's decided, if the Writer fly frame has to be invalidated.
-
-    @author OD
-*/
-void SwFlyAtCntFrm::_CheckTopOfLine( const SwFmtAnchor& _rAnch )
-{
-    SwTwips nTopOfLine = 0L;
-    if ( static_cast<SwTxtFrm*>(GetAnchor())->GetTopOfLine(
-                                        nTopOfLine, *_rAnch.GetCntntAnchor() ) )
-    {
-        if ( nTopOfLine != mnLastTopOfLine )
-        {
-            // check alignment for invalidation of position
-            {
-                // determine alignment
-                SwFlyFrmFmt *pFmt = static_cast<SwFlyFrmFmt*>(GetFmt());
-                if ( pFmt->GetVertOrient().GetRelationOrient() == REL_VERT_LINE )
-                {
-                    InvalidatePos();
-                }
-            }
-            // keep new top of line value
-            mnLastTopOfLine = nTopOfLine;
-        }
-    }
 }
 
 /*************************************************************************
@@ -288,9 +165,9 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         //Abmelden, neuen Anker besorgen und 'dranhaengen.
         SwRect aOld( AddSpacesToFrm() );
         SwPageFrm *pOldPage = FindPageFrm();
-        const SwFrm *pOldAnchor = GetAnchor();
-        SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchor();
-        GetAnchor()->RemoveFly( this );
+        const SwFrm *pOldAnchor = GetAnchorFrm();
+        SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchorFrm();
+        AnchorFrm()->RemoveFly( this );
 
         const BOOL bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
 
@@ -509,9 +386,9 @@ void SwFlyAtCntFrm::MakeAll()
 
     if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
     {
-        if( !GetPage() && GetAnchor() && GetAnchor()->IsInFly() )
+        if( !GetPage() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
         {
-            SwFlyFrm* pFly = GetAnchor()->FindFlyFrm();
+            SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
             SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
             if( pPage )
                 pPage->SwPageFrm::AppendFly( this );
@@ -531,7 +408,7 @@ void SwFlyAtCntFrm::MakeAll()
         //selbst.
             bSetCompletePaintOnInvalidate = TRUE;
             sal_Bool bLockedAnchor =
-                static_cast<const SwTxtFrm*>( GetAnchor() )->IsAnyJoinLocked();
+                static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked();
             {
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
@@ -554,11 +431,11 @@ void SwFlyAtCntFrm::MakeAll()
             {
                 // If the anchor is located inside a section, we better calculate
                 // the section first:
-                lcl_CalcUpperSection( *GetAnchor() );
-                GetAnchor()->Calc();
+                lcl_CalcUpperSection( *AnchorFrm() );
+                GetAnchorFrm()->Calc();
             }
 
-            SwFrm* pFooter = GetAnchor()->FindFooterOrHeader();
+            const SwFrm* pFooter = GetAnchorFrm()->FindFooterOrHeader();
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
             FASTBOOL bOsz = FALSE;
@@ -574,8 +451,8 @@ void SwFlyAtCntFrm::MakeAll()
                 {
                     // If the anchor is located inside a section, we better calculate
                     // the section first:
-                    lcl_CalcUpperSection( *GetAnchor() );
-                    GetAnchor()->Calc();
+                    lcl_CalcUpperSection( *AnchorFrm() );
+                    GetAnchorFrm()->Calc();
                 }
 
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() ||
@@ -625,12 +502,12 @@ void SwFlyAtCntFrm::MakeAll()
                 _InvalidatePos();
                 SwFlyFreeFrm::MakeAll();
                 if( !bLockedAnchor )
-                    GetAnchor()->Calc();
+                    GetAnchorFrm()->Calc();
                 if ( !GetValidPosFlag() )
                 {
                     SwFlyFreeFrm::MakeAll();
                     if( !bLockedAnchor )
-                        GetAnchor()->Calc();
+                        GetAnchorFrm()->Calc();
                 }
                 // validate fly frame
                 bValidPos = bValidSize = bValidPrtArea = TRUE;
@@ -1236,19 +1113,19 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     const SwRect aOld( AddSpacesToFrm() );
     Point aNew( rNew );
 
-    if( GetAnchor()->IsVertical() || GetAnchor()->IsRightToLeft() )
+    if( GetAnchorFrm()->IsVertical() || GetAnchorFrm()->IsRightToLeft() )
 
         aNew.X() += Frm().Width();
-    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), aNew );
+    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
     if( pCnt->IsProtected() )
-        pCnt = (SwCntntFrm*)GetAnchor();
+        pCnt = (SwCntntFrm*)GetAnchorFrm();
 
     SwPageFrm *pPage = 0;
     SWRECTFN( pCnt )
     const sal_Bool bRTL = pCnt->IsRightToLeft();
 
-    if( ( bVert != GetAnchor()->IsVertical() ) ||
-        ( bRTL != GetAnchor()->IsRightToLeft() ) )
+    if( ( bVert != GetAnchorFrm()->IsVertical() ) ||
+        ( bRTL != GetAnchorFrm()->IsRightToLeft() ) )
     {
         if( bVert || bRTL )
             aNew.X() += Frm().Width();
@@ -1364,7 +1241,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     }
     GetFmt()->GetDoc()->StartUndo( UNDO_START );
 
-    if( pCnt != GetAnchor() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
+    if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
                                   GetFmt()->GetDoc()->IsHTMLMode() ) )
     {
         //Das Ankerattribut auf den neuen Cnt setzen.
@@ -1377,7 +1254,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             if( pCnt->GetCrsrOfst( pPos, aPt, &eTmpState )
                 && pPos->nNode == *pCnt->GetNode() )
             {
-                maLastCharRect.Height( 0 );
+                ResetLastCharRectHeight();
                 if( REL_CHAR == pFmt->GetVertOrient().GetRelationOrient() )
                     nY = LONG_MAX;
                 if( REL_CHAR == pFmt->GetHoriOrient().GetRelationOrient() )
@@ -1518,37 +1395,37 @@ void DeepCalc( const SwFrm *pFrm )
 
 void SwFlyAtCntFrm::AssertPage()
 {
-    //Prueft ob der Fly an der Seite haengt, auf der er steht, falls nicht
-    //wird er umgehaengt. Zur Pruefung wird nur die vertikale Ausrichtung
-    //herangezogen.
+  //Prueft ob der Fly an der Seite haengt, auf der er steht, falls nicht
+  //wird er umgehaengt. Zur Pruefung wird nur die vertikale Ausrichtung
+  //herangezogen.
 
-    SwPageFrm *pNewPage = FindPageFrm();
-    SwPageFrm *pMyPage  = pNewPage;
-    BOOL bSuperfluous = FALSE;
+  SwPageFrm *pNewPage = FindPageFrm();
+  SwPageFrm *pMyPage  = pNewPage;
+  BOOL bSuperfluous = FALSE;
 
-    //#45516# Ausnahmebehandlung. Eine Tabelle ist zu gross und haengt aus der
-    //Seite heraus. Der Rahmen kann dann zwar richtig bei seinem Anker stehen,
-    //Positionsmaessig aber ueber der naechsten Seite haengen. Damit das dann
-    //noch halbwegs brauchbar gedruckt werden kann (HTML) und der Rahmen nicht
-    //wirr in der Gegend gepaintet wird, wird der Rahmen bei der Seite verankert,
-    //auf der auch sein Anker sitzt.
-    if ( GetAnchor()->GetValidSizeFlag() &&
-         Frm().Top() >= GetAnchor()->Frm().Top() &&
-         Frm().Top() < GetAnchor()->Frm().Bottom() )
-    {
-        pNewPage = GetAnchor()->FindPageFrm();
-    }
-    else
-    {
-        BOOL bFound = FALSE;
-        const BOOL bFtn = GetAnchor()->IsInFtn();
-        int nDir = INT_MAX; // 1 == Forward, 2 == Backward.
-        while ( !bFound )
-        {
-            pNewPage->Calc();
-            if ( Frm().Top() < pNewPage->Frm().Top() && pNewPage->GetPrev() )
-            {
-                pNewPage = (SwPageFrm*)pNewPage->GetPrev();
+  //#45516# Ausnahmebehandlung. Eine Tabelle ist zu gross und haengt aus der
+  //Seite heraus. Der Rahmen kann dann zwar richtig bei seinem Anker stehen,
+  //Positionsmaessig aber ueber der naechsten Seite haengen. Damit das dann
+  //noch halbwegs brauchbar gedruckt werden kann (HTML) und der Rahmen nicht
+  //wirr in der Gegend gepaintet wird, wird der Rahmen bei der Seite verankert,
+  //auf der auch sein Anker sitzt.
+  if ( GetAnchorFrm()->GetValidSizeFlag() &&
+       Frm().Top() >= GetAnchorFrm()->Frm().Top() &&
+       Frm().Top() < GetAnchorFrm()->Frm().Bottom() )
+  {
+      pNewPage = AnchorFrm()->FindPageFrm();
+  }
+  else
+  {
+      BOOL bFound = FALSE;
+      const BOOL bFtn = GetAnchorFrm()->IsInFtn();
+      int nDir = INT_MAX; // 1 == Forward, 2 == Backward.
+      while ( !bFound )
+      {
+          pNewPage->Calc();
+          if ( Frm().Top() < pNewPage->Frm().Top() && pNewPage->GetPrev() )
+          {
+              pNewPage = (SwPageFrm*)pNewPage->GetPrev();
                 // OD 19.02.2003 #105643# - skip empty page and consider empty
                 // page at the beginning of the document.
                 // Assumption about document layout:
@@ -1565,64 +1442,66 @@ void SwFlyAtCntFrm::AssertPage()
                         pNewPage = static_cast<SwPageFrm*>(pNewPage->GetNext());
                     }
                 }
-                if ( nDir == 2 )
-                {
-                    bFound = TRUE;
-                    pNewPage = GetAnchor()->FindPageFrm();
-                }
-                else
-                    nDir = 1;
-            }
-            else if ( Frm().Top() > pNewPage->Frm().Bottom() )
-            {
-                if ( nDir == 1 )
-                {
-                    bFound = TRUE;
-                    pNewPage = GetAnchor()->FindPageFrm();
-                }
-                else
-                {
-                    nDir = 2;
-                    if ( !pNewPage->GetNext() )
-                    {
-                        pNewPage->GetLeaf( bFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND,
-                                            TRUE, GetAnchor());
-                        bSuperfluous = TRUE;
-                    }
-                    if ( pNewPage->GetNext() )
-                    {
-                        pNewPage = (SwPageFrm*)pNewPage->GetNext();
-                        if( pNewPage->IsEmptyPage() )
-                        {
-                            if( pNewPage->GetNext() )
-                                pNewPage = (SwPageFrm*)pNewPage->GetNext();
-                            else
-                            {
-                                bFound = TRUE;
-                                pNewPage = (SwPageFrm*)pNewPage->GetPrev();
-                            }
-                        }
-                    }
-                    else
-                        bFound = TRUE;
-                }
-            }
-            else
-                bFound = TRUE;
-        }
-    }
+              if ( nDir == 2 )
+              {
+                  bFound = TRUE;
+                  pNewPage = AnchorFrm()->FindPageFrm();
+              }
+              else
+                  nDir = 1;
+          }
+          else if ( Frm().Top() > pNewPage->Frm().Bottom() )
+          {
+              if ( nDir == 1 )
+              {
+                  bFound = TRUE;
+                  pNewPage = AnchorFrm()->FindPageFrm();
+              }
+              else
+              {
+                  nDir = 2;
+                  if ( !pNewPage->GetNext() )
+                  {
+                      pNewPage->GetLeaf( bFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND,
+                                          TRUE, GetAnchorFrm());
+                      bSuperfluous = TRUE;
+                  }
+                  if ( pNewPage->GetNext() )
+                  {
+                      pNewPage = (SwPageFrm*)pNewPage->GetNext();
+                      if( pNewPage->IsEmptyPage() )
+                      {
+                          if( pNewPage->GetNext() )
+                              pNewPage = (SwPageFrm*)pNewPage->GetNext();
+                          else
+                          {
+                              bFound = TRUE;
+                              pNewPage = (SwPageFrm*)pNewPage->GetPrev();
+                          }
+                      }
+                  }
+                  else
+                      bFound = TRUE;
+              }
+          }
+          else
+              bFound = TRUE;
+      }
+  }
 
-    if ( pMyPage != pNewPage )
-    {
-        ASSERT( IsLocked(), "AssertPage: Unlocked Frame??" );
-        pMyPage->MoveFly( this, pNewPage );
-        if ( bSuperfluous && pMyPage->GetPhyPageNum() > pNewPage->GetPhyPageNum() )
-            ((SwRootFrm*)pNewPage->GetUpper())->SetSuperfluous();
-    }
+  if ( pMyPage != pNewPage )
+  {
+      ASSERT( IsLocked(), "AssertPage: Unlocked Frame??" );
+      pMyPage->MoveFly( this, pNewPage );
+      if ( bSuperfluous && pMyPage->GetPhyPageNum() > pNewPage->GetPhyPageNum() )
+          ((SwRootFrm*)pNewPage->GetUpper())->SetSuperfluous();
+  }
 
 }
 
-void SwFlyAtCntFrm::MakeFlyPos()
+// OD 2004-03-23 #i26791#
+//void SwFlyAtCntFrm::MakeFlyPos()
+void SwFlyAtCntFrm::MakeObjPos()
 {
     // OD 02.10.2002 #102646#
     // if fly frame position is valid, nothing is to do, Thus, return
@@ -1631,10 +1510,15 @@ void SwFlyAtCntFrm::MakeFlyPos()
         return;
     }
 
+    // OD 2004-03-24 #i26791# - validate position flag here.
+    bValidPos = TRUE;
+
     // OD 29.10.2003 #113049# - use new class to position object
     objectpositioning::SwToCntntAnchoredObjectPosition
             aObjPositioning( *GetVirtDrawObj() );
     aObjPositioning.CalcPosition();
 
-    mpVertPosOrientFrm = &(aObjPositioning.GetVertPosOrientFrm());
+    AssertPage();
+
+    SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
 }
