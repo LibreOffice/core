@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:47:57 $
+ *  last change: $Author: dvo $ $Date: 2002-05-22 09:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,8 +453,8 @@ String STR_ACCESS_ENDNOTE_DESC
 };
 String STR_ACCESS_REPLACEMENT_POSTIT
 {
-    Text = "[Post-It: $(ARG1)]" ;
-    Text [ english ] = "[Annotation: $(ARG1)]" ;
+    Text = "[Notiz: $(ARG1)]" ;
+    Text [ english ] = "[Note: $(ARG1)]" ;
     Text[ english_us ] = "[Note]";
     Text[ portuguese ] = "[Annotation]";
     Text[ russian ] = "[Annotation]";
@@ -479,7 +479,7 @@ String STR_ACCESS_REPLACEMENT_POSTIT
 };
 String STR_ACCESS_REPLACEMENT_FRAME
 {
-    Text = "[Frame: $(ARG1)]" ;
+    Text = "[Rahmen: $(ARG1)]" ;
     Text [ english ] = "[Frame: $(ARG1)]" ;
     Text[ english_us ] = "[Frame: $(ARG1)]";
     Text[ portuguese ] = "[Frame: $(ARG1)]";
@@ -505,7 +505,7 @@ String STR_ACCESS_REPLACEMENT_FRAME
 };
 String STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS
 {
-    Text = "[Bullet]" ;
+    Text = "[Aufzählungszeichen]" ;
     Text [ english ] = "[Bullet]" ;
     Text[ english_us ] = "[Bullet]";
     Text[ portuguese ] = "[Bullet]";
@@ -554,4 +554,14 @@ String STR_ACCESS_TABLE_DESC
     Text[ arabic ] = "$(ARG1) on page $(ARG2)";
     Text[ catalan ] = "$(ARG1) on page $(ARG2)";
     Text[ thai ] = "$(ARG1) on page $(ARG2)";
+};
+String STR_ACCESS_PAGE_NAME
+{
+    Text = "Seite $(ARG1)" ;
+    Text [ english ] = "Page $(ARG1)" ;
+};
+String STR_ACCESS_PAGE_DESC
+{
+    Text = "Seite: $(ARG1)" ;
+    Text [ english ] = "Page: $(ARG1)" ;
 };
