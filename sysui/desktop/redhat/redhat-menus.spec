@@ -5,8 +5,7 @@ Release: 1
 Group: Office
 License: LGPL, SISSL
 AutoReqProv: no
-Requires: openofficeorg-core01
-Conflicts: suse-release
+Requires: openofficeorg-core01, redhat-release
 %define _unpackaged_files_terminate_build 0
 %description 
 OpenOffice.org desktop integration
