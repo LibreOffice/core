@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,7 +1390,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
             }
             else
             {
-                aSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aSel.Min(), pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+                aSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aSel.Min(), bUseSpecial && pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
             }
 
             aPasteOrDropInfos.nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
