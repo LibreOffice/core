@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 //CHINA001 #include "dlgfield.hxx"
 #include "drawdoc.hxx"
 #include "sdattr.hxx"
+#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -198,7 +199,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         pFuActual = NULL;
     }
 
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
     USHORT nSId = rReq.GetSlot();
 
     switch( nSId )
@@ -238,7 +239,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             else
             {
                 // hier den Zoom-Dialog oeffnen
-                pFuActual = new FuScale( this, pWindow, pOlView, GetDoc(), rReq );
+                pFuActual = new FuScale( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             }
             Cancel();
         }
@@ -246,7 +247,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_ZOOM_OUT:
         {
-            pFuActual = new FuZoom(this, pWindow, pOlView, GetDoc(), rReq);
+            pFuActual = new FuZoom(this, GetActiveWindow(), pOlView, GetDoc(), rReq);
             // Beendet sich selbst, kein Cancel() notwendig!
             rReq.Done();
         }
@@ -255,8 +256,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_SIZE_REAL:
         {
             SetZoom( 100 );
-            Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0),
-                                             pWindow->GetOutputSizePixel()) );
+            Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
+                                             GetActiveWindow()->GetOutputSizePixel()) );
             pZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Cancel();
@@ -266,9 +267,9 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_ZOOM_IN:
         {
-            SetZoom( Max( (long) ( pWindow->GetZoom() / 2 ), (long) pWindow->GetMinZoom() ) );
-            Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0),
-                                             pWindow->GetOutputSizePixel()) );
+            SetZoom( Max( (long) ( GetActiveWindow()->GetZoom() / 2 ), (long) GetActiveWindow()->GetMinZoom() ) );
+            Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
+                                             GetActiveWindow()->GetOutputSizePixel()) );
             pZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ZOOM_OUT);
@@ -322,21 +323,21 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_BULLET:
         {
-            pFuActual = new FuBullet( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuBullet( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_OUTLINE_BULLET:
         {
-            pFuActual = new FuOutlineBullet( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuOutlineBullet( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_THESAURUS:
         {
-            pFuActual = new FuThesaurus( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuThesaurus( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -344,21 +345,21 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_CHAR_DLG:
         {
-            pFuActual = new FuChar( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuChar( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_INSERTFILE:
         {
-            pFuActual = new FuInsertFile(this, pWindow, pOlView, GetDoc(), rReq);
+            pFuActual = new FuInsertFile(this, GetActiveWindow(), pOlView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
         case SID_PRESENTATIONOBJECT:
         {
-            pFuActual = new FuPresentationObjects(this, pWindow, pOlView, GetDoc(), rReq);
+            pFuActual = new FuPresentationObjects(this, GetActiveWindow(), pOlView, GetDoc(), rReq);
             Cancel();
         }
         break;
@@ -398,8 +399,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                 // presentation in a window.  Switching to a presentation
                 // view shell is an error here, because this would not
                 // return to us (re-create us).
-                GetViewShellBase().GetSubShellManager()
-                    .RequestMainSubShellChange (ViewShell::ST_IMPRESS);
+                GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
+                    ViewShell::ST_IMPRESS);
             }
 
             rReq.Done();
@@ -605,10 +606,10 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
             {
                 // Dialog...
-                //CHINA001 SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOutlinerView->GetAttribs() );
+                //CHINA001 SdModifyFieldDlg aDlg( GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() );
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), pWindow, pFldItem->GetField(), pOutlinerView->GetAttribs() );
+                AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                 {
@@ -660,7 +661,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             if( rReq.GetArgs() )
             {
-                pFuActual = new FuTemplate( this, pWindow, pOlView, GetDoc(), rReq );
+                pFuActual = new FuTemplate( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
                 Cancel();
             }
 
@@ -670,14 +671,14 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_PRESENTATION_DLG:
         {
-            pFuActual = new FuSlideShowDlg( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuSlideShowDlg( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_CUSTOMSHOW_DLG:
         {
-            pFuActual = new FuCustomShowDlg( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuCustomShowDlg( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -685,7 +686,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_SUMMARY_PAGE:
         {
             pOlView->SetSelectedPages();
-            pFuActual = new FuSummaryPage( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuSummaryPage( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             pOlView->GetOutliner()->Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
@@ -696,7 +697,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_EXPAND_PAGE:
         {
             pOlView->SetSelectedPages();
-            pFuActual = new FuExpandPage( this, pWindow, pOlView, GetDoc(), rReq );
+            pFuActual = new FuExpandPage( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
             pOlView->GetOutliner()->Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
