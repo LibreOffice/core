@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:04:35 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@
 #ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XVALUEBINDING_HPP_
-#include <drafts/com/sun/star/form/XValueBinding.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSOURCE_HPP_
-#include <drafts/com/sun/star/form/XListEntrySource.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -127,7 +127,7 @@ namespace pcr
             @precond
                 isCellBindingAllowed returns <TRUE/>
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                         createCellBindingFromStringAddress(
                             const ::rtl::OUString& _rAddress,
                             bool _bSupportIntegerExchange = false
@@ -136,7 +136,7 @@ namespace pcr
         /** creates a cell binding (supporting integer exchange, if requested) for
             the given address object
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                         createCellBindingFromAddress(
                             const ::com::sun::star::table::CellAddress& _rAddress,
                             bool _bSupportIntegerExchange = false
@@ -144,7 +144,7 @@ namespace pcr
 
         /** gets a cell range list source binding for the given address
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
                         createCellListSourceFromStringAddress( const ::rtl::OUString& _rAddress ) const;
 
         /** creates a string representation for the given value binding's address
@@ -157,7 +157,7 @@ namespace pcr
             @see isCellBinding
         */
         ::rtl::OUString getStringAddressFromCellBinding(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                         ) const;
 
         /** creates an address object for the given value binding's address
@@ -169,7 +169,7 @@ namespace pcr
             @see isCellBinding
         */
         bool            getAddressFromCellBinding(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding,
                             ::com::sun::star::table::CellAddress& _rAddress
                         ) const;
 
@@ -184,17 +184,17 @@ namespace pcr
             @see isCellRangeListSource
         */
         ::rtl::OUString getStringAddressFromCellListSource(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >& _rxSource
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                         ) const;
 
         /** returns the current binding of our control model, if any.
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                         getCurrentBinding( ) const;
 
         /** returns the current external list source of the control model, if any
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
                         getCurrentListSource( ) const;
 
         /** sets a new binding for our control model
@@ -203,7 +203,7 @@ namespace pcr
                 returning <TRUE/>)
         */
         void            setBinding(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** sets a list source for our control model
@@ -212,7 +212,7 @@ namespace pcr
                 returning <TRUE/>)
         */
         void            setListSource(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >& _rxSource
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                         );
 
         /** checks whether it's possible to bind the control model to a spreadsheet cell
@@ -232,20 +232,20 @@ namespace pcr
         /** checks whether a given binding is a spreadsheet cell binding
         */
         bool            isCellBinding(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                         ) const;
 
         /** checks whether a given binding is a spreadsheet cell binding, exchanging
             integer values
         */
         bool            isCellIntegerBinding(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                         ) const;
 
         /** checks whether a given list source is a spreadsheet cell list source
         */
         bool            isCellRangeListSource(
-                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntrySource >& _rxSource
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                         ) const;
 
     protected:
