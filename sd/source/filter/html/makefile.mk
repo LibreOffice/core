@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2002-08-02 12:13:59 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:14:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,7 @@ TARGET=html
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -82,7 +80,8 @@ SLOFILES =	$(SLO)$/HtmlOptionsDialog.obj\
 EXCEPTIONSFILES = $(SLO)$/HtmlOptionsDialog.obj \
                   $(SLO)$/htmlex.obj
 
-SRCFILES =	pubdlg.src					
+SRS1NAME=$(TARGET)
+SRC1FILES =	pubdlg.src					
     
 
 # --- Targets --------------------------------------------------------------
