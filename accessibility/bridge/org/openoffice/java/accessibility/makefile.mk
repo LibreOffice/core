@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obr $ $Date: 2002-10-08 06:48:04 $
+#   last change: $Author: obr $ $Date: 2002-12-06 11:19:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,38 +75,44 @@ USE_JAVAVER:=TRUE
 JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
-    AccessibleButton.java \
-    AccessibleComboBox.java \
-    AccessibleContainer.java \
-    AccessibleDescendantManager.java \
-    AccessibleEditLine.java \
-    AccessibleEventListener.java \
-    AccessibleFixedText.java \
-    AccessibleFrame.java \
-    AccessibleImage.java \
+    AbstractButton.java \
+    AbstractContainer.java \
+    AccessibleActionImpl.java \
+    AccessibleComponentImpl.java \
+    AccessibleEditableTextImpl.java \
+    AccessibleExtendedState.java \
+    AccessibleIconImpl.java \
     AccessibleKeyBinding.java \
-    AccessibleLabel.java \
-    AccessibleList.java \
-    AccessibleListItem.java \
-    AccessibleMenu.java \
-    AccessibleMenuItem.java \
     AccessibleObjectFactory.java \
-    AccessibleObject.java \
-    AccessibleParagraph.java \
-    AccessibleRelationTypeMap.java \
-    AccessibleRoleMap.java \
-    AccessibleScrollBar.java \
-    AccessibleSeparator.java \
-    AccessibleSpreadsheet.java \
-    AccessibleStateTypeMap.java \
+    AccessibleRoleAdapter.java \
     AccessibleTextImpl.java \
-    AccessibleTextTable.java \
-    AccessibleTreeList.java \
-    AccessibleUNOComponent.java \
-    AccessibleWindow.java \
-    GenericAccessibleEditableText.java \
-    GenericAccessibleExtendedTable.java \
-    GenericAccessibleSelection.java
+    AccessibleValueImpl.java \
+    Application.java \
+    Button.java \
+    CheckBox.java \
+    ComboBox.java \
+    Component.java \
+    Container.java \
+    DescendantManager.java \
+    Dialog.java \
+    Frame.java \
+    Icon.java \
+    Label.java \
+    List.java \
+    Menu.java \
+    MenuBar.java \
+    MenuItem.java \
+    NativeFrame.java \
+    PageTabList.java \
+    PopupMenu.java \
+    RadioButton.java \
+    ScrollBar.java \
+    Separator.java \
+    Table.java \
+    TextComponent.java \
+    ToggleButton.java \
+    Tree.java \
+    Window.java
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class) $(CLASSDIR)$/$(PACKAGE)$/Build.class
 
