@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:06:06 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~R)";
         Text[ russian ] = "Ïåğâàÿ ñòğîêà êàê ïîäïèñü";
         Text[ polish ] = "Pierwszy wiersz jako etykieta";
-        Text[ japanese ] = "Œ©o‚µ‚Æ‚µ‚Ä‚ÌÅ‰‚Ìs(~Rj";
+        Text[ japanese ] = "Å‰‚Ìs‚ğ€–Ú–¼‚Éˆø—p(~Rj";
         Text[ chinese_traditional ] = "²Ä¤@¦æ§@¬°¼ĞÃD(~R)";
         Text[ arabic ] = "ÇáÕİ ÇáÃæá ßÚäæÇä";
         Text[ dutch ] = "Eerste ~rij als kop";
@@ -185,7 +185,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ chinese_simplified ] = "µÚÒ»ÁĞ×÷Îª±êÌâ(~C)";
         Text[ russian ] = "Ïåğâûé ñòîëáåö êàê ïîäïèñü";
         Text[ polish ] = "Pierwsza kolumna jako etykieta";
-        Text[ japanese ] = "Œ©o‚µ‚Æ‚µ‚Ä‚ÌÅ‰‚Ì—ñ(~C)";
+        Text[ japanese ] = "Å‰‚Ì—ñ‚ğ€–Ú–¼‚Éˆø—p(~C)";
         Text[ chinese_traditional ] = "²Ä¤@Äæ·í§@¼ĞÃD(~C)";
         Text[ arabic ] = "ÇáÚãæÏ ÇáÃæá ßÚäæÇä";
         Text[ dutch ] = "Eerste ~kolom als kop";
@@ -338,7 +338,7 @@ ModelessDialog DLG_INSERT_CHART
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½Í¼±í(1-4)";
     Text[ russian ] = "Àâòîôîğìàò äèàãğàììû (1-4)";
     Text[ polish ] = "Autoformatowanie wykresu (1-4)";
-    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä ¸Ş×Ì(1-4)";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä¸Ş×Ì(1-4)";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡¹Ïªí(1-4)";
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí áÑÓã ÈíÇäí (1Ü4)";
     Text[ dutch ] = "AutoOpmaak diagram (1-4)";
