@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:10 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 _OutlinePara::_OutlinePara( const SwNodes& rNodes, USHORT nSttPos,
                             BYTE nOld, BYTE nNew )
     : rNds( rNodes ),
-    aNum( NO_NUM > nNew ? nNew : 0 ),
+    aNum( IsShowNum(nNew) ? nNew : 0 ),
     nMin( Min( nOld, nNew )),
     nNewLevel( nNew )
 {
@@ -170,7 +170,7 @@ _OutlinePara::_OutlinePara( const SwNodes& rNodes, USHORT nSttPos,
     {
         const SwNodeNum* pNum = ((SwTxtNode*)pNd)->GetOutlineNum();
 #ifdef TASK_59308
-        if( pNum->GetLevel() & NO_NUMLEVEL )
+        if( ! pNum->IsNum() )
         {
             // dann suche den mit richtigem Level:
             BYTE nSrchLvl = aNum.GetLevel();
@@ -184,14 +184,14 @@ _OutlinePara::_OutlinePara( const SwNodes& rNodes, USHORT nSttPos,
                 if( 0 != ( pNum = ((SwTxtNode*)pNd)->GetOutlineNum() ))
                 {
                     // uebergeordnete Ebene
-                    if( nSrchLvl > (pNum->GetLevel() &~ NO_NUMLEVEL ))
+                    if( nSrchLvl > pNum->GetRealLevel())
                     {
                         pNum = 0;
                         break;
                     }
                     // gleiche Ebene und kein NO_NUMLEVEL
-                    if( nSrchLvl == (pNum->GetLevel() &~ NO_NUMLEVEL)
-                        && !( pNum->GetLevel() & NO_NUMLEVEL ))
+                    if( nSrchLvl == pNum->GetRealLevel()
+                        && pNum->IsNum())
                         break;
 
                     pNum = 0;
@@ -236,10 +236,10 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
     // alle die ausserhalb des Fliesstextes liegen, NO_NUM zuweisen.
     if( rTxtNd.GetIndex() < rNds.GetEndOfExtras().GetIndex() )
     {
-        BYTE nTmpLevel = aNum.GetLevel();
-        aNum.SetLevel( NO_NUM );
+        BOOL bTmpNoNum = ! aNum.IsNum();
+        aNum.SetNoNum( TRUE );
         rTxtNd.UpdateOutlineNum( aNum );
-        aNum.SetLevel( nTmpLevel );
+        aNum.SetNoNum( bTmpNoNum );
         return TRUE;
     }
 
@@ -254,8 +254,8 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
         const SwNodeNum* pOutlNum = rTxtNd.GetOutlineNum();
 
 #ifdef TASK_59308
-        if( pOutlNum && ( pOutlNum->GetLevel() & NO_NUMLEVEL ) &&
-            GetRealLevel( pOutlNum->GetLevel() ) == nLevel )
+        if( pOutlNum && ! pOutlNum->IsNum() &&
+            pOutlNum->GetRealLevel() == nLevel )
         {
             // diesen nicht mit numerieren
             BYTE nTmpLevel = aNum.GetLevel();
@@ -277,7 +277,14 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
             aStartLevel[ nLevel ] = false;
         }
         else
-            nSetValue = aNum.GetLevelVal()[ nLevel ] + 1;
+        {
+            const SwNodeNum * pNum = rTxtNd.GetNum();
+
+            nSetValue = aNum.GetLevelVal()[ nLevel ];
+
+            if (! pNum || ! (pNum->IsNum()))
+                nSetValue += 1;
+        }
 
          // alle unter dem neuen Level liegenden auf 0 setzen
         if( aNum.GetLevel() > nLevel && nLevel+1 < MAXLEVEL
@@ -316,7 +323,7 @@ BOOL lcl_UpdateOutline( const SwNodePtr& rpNd, void* pPara )
 
 
 void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
-                                BYTE nNewLevel )
+                                 BYTE nNewLevel )
 {
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
     USHORT nSttPos;
@@ -335,7 +342,7 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
         // jetzt noch alle nachfolgende Outline-Nodes updaten
         pOutlineNds->Insert( pSrch );
-        if( NO_NUM <= nNewLevel )
+        if( ! IsShowNum( nNewLevel ))
             return;     // keine Nummerierung dann kein Update
     }
     else if( NO_NUMBERING == nNewLevel )    // Level entfernen
@@ -345,33 +352,53 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
         // jetzt noch alle nachfolgende Outline-Nodes updaten
         pOutlineNds->Remove( nSttPos );
-        if( NO_NUM <= nOldLevel )
+        if( ! IsShowNum(nOldLevel) )
             return;     // keine Nummerierung dann kein Update
     }
     else if( !bSeekIdx )        // Update und Index nicht gefunden ??
         return ;
 
-    _OutlinePara aPara( *this, nSttPos, nOldLevel, nNewLevel );
-    pOutlineNds->ForEach( nSttPos, pOutlineNds->Count(),
-                        lcl_UpdateOutline, &aPara );
-
-//FEATURE::CONDCOLL
+    if (GetDoc()->IsOldNumbering())
     {
-        SwCntntNode* pCNd;
-        ULONG nSttNd = rNd.GetIndex();
-        if( NO_NUMBERING != nNewLevel )
-            ++nSttPos;
+        _OutlinePara aPara( *this, nSttPos, nOldLevel, nNewLevel );
+        pOutlineNds->ForEach( nSttPos, pOutlineNds->Count(),
+                              lcl_UpdateOutline, &aPara );
 
-        ULONG nChkCount = ( nSttPos < pOutlineNds->Count()
+        //FEATURE::CONDCOLL
+        {
+            SwCntntNode* pCNd;
+            ULONG nSttNd = rNd.GetIndex();
+            if( NO_NUMBERING != nNewLevel )
+                ++nSttPos;
+
+            ULONG nChkCount = ( nSttPos < pOutlineNds->Count()
                                 ? (*pOutlineNds)[ nSttPos ]->GetIndex()
                                 : GetEndOfContent().GetIndex()  )
-                            - nSttNd;
-        for( ; nChkCount--; ++nSttNd )
-            if( 0 != (pCNd = (*this)[ nSttNd ]->GetCntntNode() ) &&
-                RES_CONDTXTFMTCOLL == pCNd->GetFmtColl()->Which() )
-                pCNd->ChkCondColl();
+                - nSttNd;
+            for( ; nChkCount--; ++nSttNd )
+                if( 0 != (pCNd = (*this)[ nSttNd ]->GetCntntNode() ) &&
+                    RES_CONDTXTFMTCOLL == pCNd->GetFmtColl()->Which() )
+                    pCNd->ChkCondColl();
+        }
+        //FEATURE::CONDCOLL
+
     }
-//FEATURE::CONDCOLL
+    else // #111955#
+    {
+        SwTxtNode & rTxtNd = (SwTxtNode &) rNd;
+
+        const SwNodeNum * pNum = rTxtNd.GetOutlineNum();
+
+        SwNodeNum aNum(0);
+
+        if (0 != pNum)
+            aNum = *pNum;
+
+        aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
+        rTxtNd.UpdateOutlineNum(aNum);
+
+        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
+    }
 
     // die Gliederungs-Felder Updaten
     GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
