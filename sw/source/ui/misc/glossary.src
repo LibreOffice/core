@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:35:18 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,7 +820,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ japanese ] = "²ÝÎß°Ä(~I)...";
                 Text[ korean ] = "°¡Á®¿À±â(~I)...";
                 Text[ chinese_simplified ] = "ÊäÈë(~I)...";
-                Text[ chinese_traditional ] = "¿é¤J(~I)...";
+                Text[ chinese_traditional ] = "¶×¤J(~I)...";
                 Text[ arabic ] = "ÇÓÊíÑÇÏ...";
                 Text[ turkish ] = "~Ýçe aktar...";
             };
