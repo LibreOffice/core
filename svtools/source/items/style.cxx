@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:21:02 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSSORTDTOR
@@ -144,18 +145,28 @@ class SfxStyleSheetBasePool_Impl
 
 SfxStyleSheetBase::SfxStyleSheetBase
     ( const XubString& rName, SfxStyleSheetBasePool& r, SfxStyleFamily eFam, USHORT mask )
-    : aName( rName ), aParent(), aFollow( rName ),
-    nFamily( eFam ), nMask(mask), rPool( r ),
-    nHelpId( 0 ), pSet( NULL ), bMySet( FALSE )
+    : rPool( r )
+    , nFamily( eFam )
+    , aName( rName )
+    , aParent()
+    , aFollow( rName )
+    , pSet( NULL )
+    , nMask(mask)
+    , nHelpId( 0 )
+    , bMySet( FALSE )
 {
 }
 
 SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
-    : aName( r.aName ), aParent( r.aParent ), aFollow( r.aFollow ),
-      nFamily( r.nFamily ),
-      nMask( r.nMask ),
-      rPool( r.rPool ),
-      nHelpId( r.nHelpId ), aHelpFile( r.aHelpFile ), bMySet( r.bMySet )
+    : rPool( r.rPool )
+    , nFamily( r.nFamily )
+    , aName( r.aName )
+    , aParent( r.aParent )
+    , aFollow( r.aFollow )
+    , aHelpFile( r.aHelpFile )
+    , nMask( r.nMask )
+    , nHelpId( r.nHelpId )
+    , bMySet( r.bMySet )
 {
     if( r.pSet )
         pSet = bMySet ? new SfxItemSet( *r.pSet ) : r.pSet;
@@ -384,8 +395,6 @@ SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
     pBasePool=pBase;
     nSearchFamily=eFam;
     bSearchUsed=FALSE;
-        int nn=SFXSTYLEBIT_USED;
-        int nnn=SFXSTYLEBIT_ALL;
         if((n != SFXSTYLEBIT_ALL ) && ((n & SFXSTYLEBIT_USED) == SFXSTYLEBIT_USED))
     {
         bSearchUsed = TRUE;
@@ -548,15 +557,19 @@ SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
 
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r )
-:   rPool(r), aAppName(r.GetName()),
-    nMask(0xFFFF), nSearchFamily(SFX_STYLE_FAMILY_PARA)
+    : aAppName(r.GetName())
+    , rPool(r)
+    , nSearchFamily(SFX_STYLE_FAMILY_PARA)
+    , nMask(0xFFFF)
 {
     pImp = new SfxStyleSheetBasePool_Impl;
 }
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r )
-:   rPool(r.rPool),
-    nMask( r.nMask ), nSearchFamily(r.nSearchFamily),aAppName(r.aAppName)
+    : aAppName(r.aAppName)
+    , rPool(r.rPool)
+    , nSearchFamily(r.nSearchFamily)
+    , nMask( r.nMask )
 {
     pImp = new SfxStyleSheetBasePool_Impl;
     *this += r;
