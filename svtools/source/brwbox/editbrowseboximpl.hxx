@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowseboximpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef SVTOOLS_EDITBROWSEBOX_IMPL_HXX
 #define SVTOOLS_EDITBROWSEBOX_IMPL_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 namespace svt
@@ -73,7 +73,7 @@ namespace svt
     {
     public:
         EditBrowseBoxTableCell*                                                                  m_pFocusCell;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > m_xActiveCell;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xActiveCell;
         sal_Bool m_bHiContrast;
         void disposeCell();
     };
