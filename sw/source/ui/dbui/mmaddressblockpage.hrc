@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmaddressblockpage.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:14:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _MAILMERGEADDRESSBLOCKPAGE_HRC
+#define _MAILMERGEADDRESSBLOCKPAGE_HRC
+
+#define FI_ADDRESSLIST          1
+#define PB_ADDRESSLIST          2
+#define FI_SETTINGS             3
+#define WIN_SETTINGS            4
+#define PB_SETTINGS             5
+#define CB_ADDRESS              6
+#define FI_PREVIEW              7
+#define WIN_PREVIEW             8
+#define PB_ASSIGN               9
+#define FI_DOCINDEX             10
+#define IB_PREVSET              11
+#define IB_NEXTSET              12
+#define STR_DOCUMENT            13
+#define FI_HEADER               14
+#define FI_CURRENTADDRESS       15
+#define STR_CHANGEADDRESS       16
+
+#define FT_SELECT               20
+#define PB_NEW                  21
+#define PB_DELETE               22
+#define PB_CUSTOMIZE            23
+
+#define RB_NEVER                25
+#define RB_ALWAYS               26
+#define RB_DEPENDENT            27
+#define ED_COUNTRY              28
+#define FL_SEPARATOR            29
+#define PB_OK                   30
+#define PB_CANCEL               31
+#define PB_HELP                 32
+
+#define FT_ADDRESSELEMENTS      40
+#define LB_ADDRESSELEMENTS      41
+#define IB_INSERTFIELD          42
+#define IB_REMOVEFIELD          43
+#define FT_DRAG                 48
+#define ED_DRAG                 49
+#define IB_UP                   50
+#define IB_LEFT                 51
+#define IB_RIGHT                52
+#define IB_DOWN                 53
+#define FT_FIELD                54
+#define CB_FIELD                55
+#define ST_SALUTATION           56
+#define ST_PUNCTUATION          57
+#define ST_TEXT                 58
+#define RA_SALUTATION_MALE      59
+#define RA_SALUTATION_FEMALE    60
+#define RA_PUNCTUATION          61
+#define ST_TITLE_MALE           62
+#define ST_TITLE_FEMALE         63
+#define ST_SALUTATIONELEMENTS   64
+#define ST_INSERTSALUTATIONFIELD 65
+#define ST_REMOVESALUTATIONFIELD 66
+#define ST_DRAGSALUTATION       67
+
+
+#define FI_MATCHING             70
+#define CT_FIELDS               71
+#define ST_SALUTATIONPREVIEW    72
+#define ST_SALUTATIONMATCHING   73
+#define ST_SALUTATIONELEMENT   74
+
+#define SCR_1                   1
+#define ST_ADDRESSELEMENT       2
+#define ST_MATCHESTO            3
+#define ST_PREVIEW              4
+#define FT_FIELDS               5
+#define LB_FIELDS               6
+#define FT_PREVIEW              7
+#define ST_NONE                 8
+#define WIN_DATA                9
+
+#endif
+
+
