@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 12:00:53 $
+ *  last change: $Author: af $ $Date: 2002-06-13 14:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,20 +197,21 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
         ::Point (aBoundingBox.X, aBoundingBox.Y));
 
     // Clip the shape's bounding box with the bounding box of its parent.
-    Reference<XAccessibleComponent> xParentComponent (getAccessibleParent(), uno::UNO_QUERY);
+    Reference<XAccessibleComponent> xParentComponent (
+        getAccessibleParent(), uno::UNO_QUERY);
     if (xParentComponent.is())
     {
+        // Make the coordinates relative to the parent.
+        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
+        int x = aPixelPosition.getX() - aParentLocation.X;
+        int y = aPixelPosition.getY() - aParentLocation.Y;
+
+
+        // Clip with parent (with coordinates relative to itself).
         ::Rectangle aBBox (
-            aPixelPosition.getX(),
-            aPixelPosition.getY(),
-            aPixelPosition.getX() + aPixelSize.getWidth(),
-            aPixelPosition.getY() + aPixelSize.getHeight());
-        awt::Rectangle aParentBoundingBox (xParentComponent->getBounds());
-        ::Rectangle aParentBBox (
-            aParentBoundingBox.X,
-            aParentBoundingBox.Y,
-            aParentBoundingBox.X + aParentBoundingBox.Width,
-            aParentBoundingBox.Y + aParentBoundingBox.Height);
+            x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
+        awt::Size aParentSize (xParentComponent->getSize());
+        ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
         aBBox = aBBox.GetIntersection (aParentBBox);
         aBoundingBox = awt::Rectangle (
             aBBox.getX(),
