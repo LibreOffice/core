@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:27:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1908,7 +1908,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             aCur = XCreateFontCursor( pDisp_, XC_left_ptr );
             break;
         case POINTER_WAIT:
-            MAKE_CURSOR( wait_ );
+            aCur = XCreateFontCursor( pDisp_, XC_watch );
             break;
         case POINTER_TEXT:          // Mouse Pointer ist ein "I" Beam
             aCur = XCreateFontCursor( pDisp_, XC_xterm );
@@ -1944,16 +1944,16 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             aCur = XCreateFontCursor( pDisp_, XC_right_side );
             break;
         case POINTER_NWSIZE:
-            MAKE_CURSOR( nwsesize_ );
+            aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
             break;
         case POINTER_NESIZE:
-            MAKE_CURSOR( neswsize_ );
+            aCur = XCreateFontCursor( pDisp_, XC_top_right_corner );
             break;
         case POINTER_SWSIZE:
-            MAKE_CURSOR( neswsize_ );
+            aCur = XCreateFontCursor( pDisp_, XC_bottom_left_corner );
             break;
         case POINTER_SESIZE:
-            MAKE_CURSOR( nwsesize_ );
+            aCur = XCreateFontCursor( pDisp_, XC_bottom_right_corner );
             break;
         case POINTER_WINDOW_NWSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
@@ -1968,10 +1968,10 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             aCur = XCreateFontCursor( pDisp_, XC_bottom_right_corner );
             break;
         case POINTER_HSPLIT:
-            MAKE_CURSOR( hsplit_ );
+            aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
             break;
         case POINTER_VSPLIT:
-            MAKE_CURSOR( vsplit_ );
+            aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
             break;
         case POINTER_HSIZEBAR:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow ); // ???
@@ -1992,7 +1992,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             MAKE_CURSOR( fill_ );
             break;
         case POINTER_MOVE:
-            MAKE_CURSOR( move_ );
+            aCur = XCreateFontCursor( pDisp_, XC_fleur );
             break;
         case POINTER_MOVEDATA:
             MAKE_CURSOR( movedata_ );
