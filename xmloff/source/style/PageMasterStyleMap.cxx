@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: sab $ $Date: 2001-10-04 15:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     MAP( "TextColumns",             XML_NAMESPACE_STYLE,    XML_COLUMNS,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_PM_TEXTCOLUMNS ),
     MAP( "RegisterModeActive",      XML_NAMESPACE_STYLE,    XML_REGISTER_TRUE,  XML_TYPE_BOOL, 0 ),
     MAP( "RegisterParagraphStyle",  XML_NAMESPACE_STYLE,    XML_REGISTER_TRUTH_REF_STYLE_NAME,  XML_TYPE_STRING| MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_PM_REGISTER_STYLE ),
+    MAP( "UserDefinedAttributes",   XML_NAMESPACE_TEXT,     XML_XMLNS,                      XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
 // footnote
     MAP( "FootnoteHeight",          XML_NAMESPACE_STYLE,    XML_FOOTNOTE_MAX_HEIGHT, XML_TYPE_MEASURE, CTF_PM_FTN_HEIGTH ),
