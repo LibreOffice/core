@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-07 12:08:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,8 @@ class SvLBoxEntry;
 class Splitter;
 struct SvSortData;
 
-#define CONTAINER_QUERIES       sal_Int32(etQuery - etBookmark)
-#define CONTAINER_TABLES        sal_Int32(etTable - etBookmark)
-#define CONTAINER_BOOKMARKS     sal_Int32(etBookmark - etBookmark)
+#define CONTAINER_QUERIES       sal_Int32(etQuery - etQuery)
+#define CONTAINER_TABLES        sal_Int32(etTable - etQuery)
 
 namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
 // .........................................................................
@@ -172,10 +171,14 @@ namespace dbaui
         DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
 
-        sal_Int32               m_nAsyncDrop;
+        sal_Int16               m_nBorder;              // TRUE when border should be shown
 
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
         sal_Bool                m_bHiContrast;          // in which mode we are
+        sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
+        sal_Bool                m_bShowToolbox;         // if TRUE the toolbox should be visible otherwise not
+        sal_Bool                m_bPreview;             // if TRUE the grid will hide some features
+
 
     // attribute access
     public:
@@ -185,10 +188,8 @@ namespace dbaui
         enum EntryType
         {
             etDatasource,
-            etBookmarkContainer,
             etQueryContainer,
             etTableContainer,
-            etBookmark,
             etQuery,
             etTable,
             etView,
@@ -236,8 +237,6 @@ namespace dbaui
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-        // lang::XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XContainerListener
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
@@ -286,6 +285,8 @@ namespace dbaui
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
 
+        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+
         // SbaGridListener overridables
         virtual void RowChanged();
         virtual void ColumnChanged();
@@ -305,6 +306,8 @@ namespace dbaui
         void        select(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
         // select the path of the entry (which must be an entry without children)
         void        selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+
+        virtual void loadMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
 
     private:
         // check the state of the external slot given, update any UI elements if necessary
@@ -326,8 +329,7 @@ namespace dbaui
         */
         void implAddDatasource(const String& _rDbName, Image& _rDbImage,
                 String& _rQueryName, Image& _rQueryImage,
-                String& _rTableName, Image& _rTableImage,
-                String& _rBookmarkName, Image& _rBookmarkImage);
+                String& _rTableName, Image& _rTableImage);
 
         /** unloads the form, empties the grid model, cleans up anything related to the currently displayed object
             @param _bDisposeConnection
@@ -355,36 +357,16 @@ namespace dbaui
         sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
         sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
-        sal_Bool isTableFormat()  const;
         void    implAdministrate( SvLBoxEntry* _pApplyTo );
         void    implDirectSQL( SvLBoxEntry* _pApplyTo );
-        void    implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
-        void    implRemoveQuery( SvLBoxEntry* _pApplyTo );
-        void    implDropTable( SvLBoxEntry* _pApplyTo );
-        void    implRenameEntry( SvLBoxEntry* _pApplyTo );
-
-        /** copies a table, either if it is a common table or comes from html,rtf (opens a dialog)
-            @param  _pApplyTo   to which this opertion applies
-            @param  _rTransData the data to transfer
-        */
-        void    implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rTransData );
-        void    implPasteTable( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData );
-        void    implPasteQuery( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData );
-
-        /** copies a html or rtf table.
-            @param  _rDesc  information about the source to copy
-            @param  _bCheck when set to <TRUE/> only a check is performed, no dialog is shown, otherwise a dialog appears
-            @return <TRUE/> when the stream contains a table otherwise <FALSE/>
-        */
-        sal_Bool copyHtmlRtfTable(DropDescriptor& _rDesc, sal_Bool _bCheck);
 
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
         EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
         EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
-        sal_Bool    isObject( EntryType _eType ) const { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType) || (etBookmark == _eType); }
-        sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType) || (etBookmarkContainer == _eType); }
+        sal_Bool    isObject( EntryType _eType ) const { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType);}
+        sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
         sal_Bool    isContainer( SvLBoxEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
@@ -398,25 +380,20 @@ namespace dbaui
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
 
-        DECL_LINK( OnCutEntry, SvLBoxEntry* );
         DECL_LINK( OnCopyEntry, SvLBoxEntry* );
-        DECL_LINK( OnPasteEntry, SvLBoxEntry* );
-        DECL_LINK( OnDeleteEntry, SvLBoxEntry* );
-        DECL_LINK( OnEditingEntry, SvLBoxEntry* );
-        DECL_LINK( OnEditedEntry, DBTreeEditedEntry* );
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
-        DECL_LINK( OnAsyncDrop, void* );
 
         DECL_LINK( OnShowRefreshDropDown, void* );
 
         void implRemoveStatusListeners();
 
-        sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor);
+        sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect = sal_False);
 
         /// selects the entry given and loads the grid control with the object's data
         sal_Bool implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
-            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection=NULL);
+            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection=NULL
+            ,sal_Bool _bSelectDirect = sal_False);
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
         sal_Bool implLoadAnything(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
@@ -484,31 +461,14 @@ namespace dbaui
         sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry) const;
         sal_Bool isEntryPasteAllowed(SvLBoxEntry* _pEntry) const;
 
-        void cutEntry(SvLBoxEntry* _pEntry);
         void copyEntry(SvLBoxEntry* _pEntry);
-        void pasteEntry(SvLBoxEntry* _pEntry);
 
-        // check if the connection where this entry belongs to is writeable
-        // Entry must be table or view type
-        sal_Bool isConnectionWriteAble(SvLBoxEntry* _pEntry) const;
         void ensureObjectExists(SvLBoxEntry* _pApplyTo);
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnectionFromEntry(SvLBoxEntry* _pEntry) const;
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
 
         sal_Bool isHiContrast() const;
 
-        /** called to handle all entries in the context menu for bookmarks
-            @param  _nPos
-                The entry in the context menu.
-            @param  pEntry
-                The entry to wish the context menu should be handled.
-            @param  eType
-                The type of pEntry.
-            @param  pDSEntry
-                The root entry of pEntry.
-        */
-        void handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntry,EntryType eType,SvLBoxEntry* pDSEntry);
 
         /** checks if the currently displayed entry changed
             @param  _sName
