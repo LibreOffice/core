@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:01:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,6 @@ class SVX_DLLPRIVATE FmXUndoEnvironment
     , public SfxListener
                            //   public ::cppu::OWeakObject
 {
-    friend class FmFormModel;
     friend class FmXFormView;
     FmFormModel& rModel;
 
@@ -242,6 +241,17 @@ public:
     void UnLock() { osl_decrementInterlockedCount( &m_Locks ); }
     sal_Bool IsLocked() const { return m_Locks != 0; }
 
+    // access control
+    struct Accessor { friend class FmFormModel; private: Accessor() { } };
+
+    // addition and removal of form collections
+    void AddForms( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms );
+    void RemoveForms( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms );
+
+    // readonly-ness
+    void SetReadOnly( sal_Bool bRead, const Accessor& ) { bReadOnly = bRead; }
+    sal_Bool IsReadOnly() const {return bReadOnly;}
+
 protected:
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
@@ -260,13 +270,6 @@ protected:
 
     // XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-
-    // Einfuegen von Objekten
-    void AddForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms);
-    void RemoveForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms);
-
-    void SetReadOnly(sal_Bool bRead) {bReadOnly = bRead;}
-    sal_Bool IsReadOnly() const {return bReadOnly;}
 
     void ModeChanged();
     void Clear();
