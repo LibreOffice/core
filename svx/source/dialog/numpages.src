@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:08:38 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "½s¸¹(~N)";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "¹øÈ£¸Å±â±â(~N)";
+        Text[ korean ] = "¹øÈ£ ¸Å±â±â(~N)";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -1844,7 +1844,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
         Text[ portuguese_brazilian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ japanese ] = "·Ş¬×ØÃ°Ïu‰Óğ‘‚«¼İÎŞÙv‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
-        Text[ korean ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
+        Text[ korean ] = "°¶·¯¸®-ÁÖÁ¦  'Bullets'¿¡ ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "»­ÀÈÎÄ¼ş¡®¸÷Ê½Í¼±ê¡¯ÄÚ²»´æÔÚÍ¼ĞÎ¡£";
         Text[ chinese_traditional ] = "µe´Y¥DÃD¡§¶µ¥Ø²Å¸¹¡¨¤§¤¤¨S¦³¹Ï¤ù¡C";
         Text[ turkish ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
@@ -2065,7 +2065,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "½s¸¹©M¤º¤å¤§¶¡ªº³Ì¤Ö¶¡¹j";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
         Text[ greek ] = "ÅëÜ÷éóôç áğüóôáóç áñéè~ìïı <-> Êåßìåíï";
-        Text[ korean ] = "ÃÖ¼Ò °£°İ ¹øÈ£ ¸Å±â±â <-> ÅØ½ºÆ®";
+        Text[ korean ] = "ÃÖ¼Ò °£°İ  ¹øÈ£ ¸Å±â±â <-> ÅØ½ºÆ®";
         Text[ turkish ] = "Asgari aralık: Numara <-> Metin";
         Text[ language_user1 ] = " ";
     };
@@ -2110,7 +2110,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "½s¸¹¹ï»ô(~U)";
         Text[ arabic ] = "ãÍÇĞÇÉ ÇáÊÑŞíã";
         Text[ greek ] = "Óôïß÷éóç áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£¸Å±â±â ¸ÂÃã(~U)";
+        Text[ korean ] = "¹øÈ£ ¸Å±â±â ¸ÂÃã(~U)";
         Text[ turkish ] = "Numara hizalama";
         Text[ language_user1 ] = " ";
     };
