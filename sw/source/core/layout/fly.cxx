@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:11:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,6 +1321,12 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 //                          default value = false.
 // OD 14.03.2003 #i11760# - add new parameter <bNoCalcFollow> with
 //                          default value = false.
+// OD 11.04.2003 #108824# - new parameter <bNoCalcFollow> was used by method
+//                          <FormatWidthCols(..)> to avoid follow formatting
+//                          for text frames. But, unformatted follows causes
+//                          problems in method <SwCntntFrm::_WouldFit(..)>,
+//                          which assumes that the follows are formatted.
+//                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
 //void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
 void CalcCntnt( SwLayoutFrm *pLay,
                 bool bNoColl,
