@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:22:24 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,8 @@ void SwUndoRedline::_Redo( SwUndoIter& rIter )
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, USHORT nUsrId )
     : SwUndoRedline( nUsrId = (nUsrId ? nUsrId : UNDO_DELETE), rRange ),
-    bIsDelim( FALSE ), bIsBackspace( FALSE ), bCanGroup( FALSE )
+    bIsDelim( FALSE ), bIsBackspace( FALSE ),
+      bCanGroup( FALSE )
 {
     const SwTxtNode* pTNd;
     if( UNDO_DELETE == nUserId &&
@@ -229,6 +230,8 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, USHORT nUsrId )
             bIsBackspace = nSttCntnt == rRange.GetPoint()->nContent.GetIndex();
         }
     }
+
+    bCacheComment = false;
 }
 
 void SwUndoRedlineDelete::_Undo( SwUndoIter& rIter )
