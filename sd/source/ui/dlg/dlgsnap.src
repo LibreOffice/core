@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:18:04 $
+ *  last change: $Author: vg $ $Date: 2001-06-05 21:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ ModalDialog DLG_SNAPLINE
         Text[ chinese_simplified ] = "ÀàÐÍ";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "À²Ìß";
+        Text[ japanese ] = "Ží—Þ";
         Text[ chinese_traditional ] = "Ãþ«¬";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôýðïò";
