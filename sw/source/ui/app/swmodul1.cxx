@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:34:49 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,8 +595,8 @@ sal_uInt16 SwModule::GetRedlineAuthor()
 {
     if (!bAuthorInitialised)
     {
-        SvtUserOptions aOpt;
-        if( !(sActAuthor = aOpt.GetFullName()).Len() )
+        const SvtUserOptions& rOpt = GetUserOptions();
+        if( !(sActAuthor = rOpt.GetFullName()).Len() )
             sActAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
         bAuthorInitialised = sal_True;
     }
