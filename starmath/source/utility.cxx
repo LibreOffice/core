@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:56:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
+
+#include <tools/stream.hxx>
 
 #include "starmath.hrc"
 
