@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:34:33 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 18:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ String S_STARTING_APPLICATION
     Text[ catalan ] = "Iniciando la aplicación";
     Text[ finnish ] = "Aloitetaan sovellus";
 };
+
 
 
 
