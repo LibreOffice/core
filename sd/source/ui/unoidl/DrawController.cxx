@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 14:18:09 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ void SAL_CALL DrawController::dispose()
             // and ViewShellManager to clear the shell stack.
             if (mpViewShell != NULL)
             {
+                mrBase.DisconnectAllClients();
                 mrBase.GetPaneManager().Shutdown(true);
                 mrBase.GetViewShellManager().Shutdown();
             }
