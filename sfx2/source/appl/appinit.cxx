@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:18:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -200,6 +203,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
         xDesktop->removeTerminateListener( this );
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
     SfxApplication* pApp = SFX_APP();
     pApp->Get_Impl()->aLateInitTimer.Stop();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
