@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:39:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,11 @@ enum SwPropNameIds
 /* 0670 */  UNO_NAME_WRAP_INFLUENCE_ON_POSITION,
 /* 0671 */  UNO_NAME_DATA_BASE_URL,
 /* 0672 */  UNO_NAME_DATA_BASE_RESOURCE,
-/* 0673 */  SW_PROPNAME_END
+// --> OD 2004-08-06 #i28749#
+/* 0673 */  UNO_NAME_TRANSFORMATION_IN_HORI_L2R,
+/* 0674 */  UNO_NAME_POSITION_LAYOUT_DIR,
+// <--
+/* 0675 */  SW_PROPNAME_END
 };
 
 
