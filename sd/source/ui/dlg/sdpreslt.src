@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ModalDialog DLG_PRESLT
         Text [ danish ] = "Byt baggrundsside" ;
         Text [ italian ] = "Scambia pagina di sfondo" ;
         Text [ spanish ] = "~Intercambiar página de fondo" ;
-        Text [ french ] = "~Changer de page d'arrière-plan" ;
+        Text [ french ] = "É~changer la page d'arrière-plan" ;
         Text [ dutch ] = "Achtergrondpagina ~wisselen" ;
         Text [ portuguese_brazilian ] = "Hintergrundseite ~austauschen" ;
         Text[ chinese_simplified ] = "¸ü»»±³¾°Ò³Ãæ(~E)";
