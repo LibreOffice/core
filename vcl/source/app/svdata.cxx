@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: hr $ $Date: 2000-12-15 13:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,13 +200,19 @@ Window* ImplGetDefaultWindow()
 // -----------------------------------------------------------------------
 
 #define VCL_CREATERESMGR_NAME( Name )   #Name MAKE_NUMSTR( SUPD )
-#define VCL_CREATERESMGR( Name )        ResMgr::CreateResMgr( VCL_CREATERESMGR_NAME( Name ) )
 
 ResMgr* ImplGetResMgr()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpResMgr )
-        pSVData->mpResMgr = VCL_CREATERESMGR( vcl );
+    {
+        pSVData->mpResMgr = ResMgr::CreateResMgr( VCL_CREATERESMGR_NAME( vcl ) );
+        if ( !pSVData->mpResMgr )
+        {
+            LanguageType eLang = Application::GetAppInternational().GetLanguage();
+            pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), eLang );
+        }
+    }
     return pSVData->mpResMgr;
 }
 
