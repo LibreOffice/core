@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2002-08-01 12:34:56 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 11:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,15 @@
 #include "docfile.hxx"
 #endif
 #include "preview.hxx"
+#include "printer.hxx"
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+#ifndef _SV_JOBSET_HXX
+#include <vcl/jobset.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
@@ -269,9 +276,36 @@ SfxPreviewWin::SfxPreviewWin(
 
 void SfxPreviewWin::Paint( const Rectangle& rRect )
 {
-    GDIMetaFile* pFile = rDocShell->GetPreviewMetaFile();
-    SfxPreviewWin_Impl::ImpPaint( rRect, pFile, this );
-    delete pFile;
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &rDocShell );
+    if ( pFrame && pFrame->GetViewShell() &&
+         pFrame->GetViewShell()->GetPrinter() &&
+         pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
+    {
+        return;
+    }
+
+    SfxInPlaceObject* pObj = rDocShell->GetInPlaceObject();
+
+    DBG_ASSERT( pObj, "No Inplace object => no preview graphic" );
+
+    if( pObj )
+    {
+        Size            aTmpSize( rDocShell->GetFirstPageSize() );
+        GDIMetaFile     aMtf;
+        VirtualDevice   aDevice;
+
+        DBG_ASSERT( aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
+
+        aMtf.SetPrefSize( aTmpSize );
+        aDevice.EnableOutput( FALSE );
+        aDevice.SetMapMode( pObj->GetMapUnit() );
+        aDevice.SetDrawMode( GetDrawMode() );
+        aMtf.Record( &aDevice );
+        pObj->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), ASPECT_THUMBNAIL );
+        aMtf.Stop();
+        aMtf.WindStart();
+        SfxPreviewWin_Impl::ImpPaint( rRect, &aMtf, this );
+    }
 }
 
 void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
