@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:26:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,16 +95,16 @@ ScDPTableIteratorParam::ScDPTableIteratorParam(
                             long nRCount, const long* pR, ScDPItemData* pRDat,
                             long nPCount, const long* pP, ScDPItemData* pPDat,
                             long nDCount, const long* pD, ScDPValueData* pV ) :
-    nColCount( (USHORT)nCCount ),
+    nColCount( (SCSIZE)nCCount ),
     pCols    ( pC ),
     pColData ( pCDat ),
-    nRowCount( (USHORT)nRCount ),
+    nRowCount( (SCSIZE)nRCount ),
     pRows    ( pR ),
     pRowData ( pRDat ),
-    nPageCount( (USHORT)nPCount ),
+    nPageCount( (SCSIZE)nPCount ),
     pPages   ( pP ),
     pPageData( pPDat ),
-    nDatCount( (USHORT)nDCount ),
+    nDatCount( (SCSIZE)nDCount ),
     pDats    ( pD ),
     pValues  ( pV )
 {
