@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:24:50 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 09:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3419,7 +3419,7 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
 void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
 {
     // session save was done, inform dtwm
-    if( s_pSaveYourselfFrame )
+    if( s_pSaveYourselfFrame && pSaveFrame )
     {
         ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
         const char* argv[2];
@@ -3434,10 +3434,17 @@ void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
         if( pSaveFrame != s_pSaveYourselfFrame )
         {
             // check if it still exists
-            X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-            while( pFrame && pFrame != pSaveFrame )
-                pFrame = pFrame->mpNextFrame;
-            if( pFrame )
+            X11SalFrame* pFrame = NULL;
+            const std::list< SalFrame* >& rFrames = static_cast<X11SalFrame*>(pSaveFrame)->GetDisplay()->getFrames();
+            std::list< SalFrame* >::const_iterator it = rFrames.begin();
+            while( it != rFrames.end() )
+            {
+                pFrame = static_cast< X11SalFrame* >(*it);
+                if( pFrame == pSaveFrame )
+                    break;
+                ++it;
+            }
+            if( pFrame == pSaveFrame )
             {
                 const WMAdaptor& rWMAdaptor( *pFrame->pDisplay_->getWMAdaptor() );
                 XChangeProperty( pFrame->GetXDisplay(),
