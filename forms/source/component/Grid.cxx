@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:45:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,8 @@ void OGridControlModel::disposing()
     OControlModel::disposing();
     OErrorBroadcaster::disposing();
     OInterfaceContainer::disposing();
+
+    setParent(NULL);
 
     EventObject aEvt(static_cast<XWeak*>(this));
     m_aSelectListeners.disposeAndClear(aEvt);
