@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:14:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,13 +149,13 @@ Window DLG_NAVIGATION_PI
 
     ImageList IL_CONTENT
     {
-        ImageBitmap = Bitmap { File = "sc_nacon.bmp" ; };
+        Prefix = "sc";
         MaskColor = IMAGE_MASK_COLOR ;
         NAVI_IDLIST
     };
     ImageList ILH_CONTENT
     {
-        ImageBitmap = Bitmap { File = "sch_nacon.bmp" ; };
+        Prefix = "sch";
         MaskColor = IMAGE_MASK_COLOR ;
         NAVI_IDLIST
     };
@@ -2016,14 +2016,14 @@ Window DLG_NAVIGATION_PI
 
 ImageList IMG_NAVI_ENTRYBMP
 {
-    ImageBitmap = Bitmap { File = "nc_cntnt.bmp" ; };
+    Prefix = "nc";
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
 
 ImageList IMG_NAVI_ENTRYBMPH
 {
-    ImageBitmap = Bitmap { File = "nch_cntnt.bmp" ; };
+    Prefix = "nch";
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
