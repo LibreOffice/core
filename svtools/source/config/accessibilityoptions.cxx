@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-08-28 12:19:42 $
+ *  last change: $Author: fs $ $Date: 2002-11-26 15:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,16 @@ using namespace com::sun::star::uno;
 class SvtAccessibilityOptions_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
 private:
-    sal_Bool        m_bForDrawings;
-    sal_Bool        m_bForBorders;
+    sal_Int16       m_nHelpTipSeconds;
+
     sal_Bool        m_bForPagePreviews;
     sal_Bool        m_bHelpTipsDisappear;
     sal_Bool        m_bAllowAnimatedGraphics;
     sal_Bool        m_bAllowAnimatedText;
     sal_Bool        m_bAutomaticFontColor;
     sal_Bool        m_bSystemFont;
-    sal_Int16       m_nHelpTipSeconds;
     sal_Bool        m_bTextSelectionInReadonly;
+    sal_Bool        m_bAutoDetectSystemHC;
 
     typedef sal_Bool SvtAccessibilityOptions_Impl:: *BoolPtr;
 
@@ -108,9 +108,7 @@ private:
     void        Load();
 
     //this list needs exactly to mach the listet properties in GetPropertyNames
-    enum PropertyNameIndex { DRAWINGS=0
-                            , BORDERS
-                            , PAGEPREVIEWS
+    enum PropertyNameIndex {  PAGEPREVIEWS
                             , HELPTIPSDISAPPEAR
                             , HELPTIPSECONDS
                             , ALLOWANIMATEDGRAPHICS
@@ -118,6 +116,7 @@ private:
                             , AUTOMATICFONTCOLOR
                             , SYSTEMFONT
                             , TEXTSELECTION
+                            , AUTODETECTSYSTEMHC
                         };
 
     static Sequence< OUString > GetPropertyNames();
@@ -128,10 +127,8 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void    Commit();
 
-    sal_Bool    GetIsForDrawings() const
-                    {return GetToken( &SvtAccessibilityOptions_Impl::m_bForDrawings );}
-    sal_Bool    GetIsForBorders() const
-                    {return GetToken( &SvtAccessibilityOptions_Impl::m_bForBorders );}
+    sal_Bool    GetAutoDetectSystemHC( )
+                    {return GetToken( &SvtAccessibilityOptions_Impl::m_bAutoDetectSystemHC ); }
     sal_Bool    GetIsForPagePreviews() const
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bForPagePreviews );}
     sal_Bool    GetIsHelpTipsDisappear() const
@@ -149,10 +146,8 @@ public:
     sal_Bool    IsSelectionInReadonly() const
                     {return m_bTextSelectionInReadonly;}
 
-    void        SetIsForDrawings(sal_Bool bSet)
-                    { SetToken( &SvtAccessibilityOptions_Impl::m_bForDrawings, bSet ); }
-    void        SetIsForBorders(sal_Bool bSet)
-                    { SetToken( &SvtAccessibilityOptions_Impl::m_bForBorders, bSet ); }
+    void        SetAutoDetectSystemHC( sal_Bool bSet )
+                    { SetToken( &SvtAccessibilityOptions_Impl::m_bAutoDetectSystemHC, bSet ); }
     void        SetIsForPagePreviews(sal_Bool bSet)
                     { SetToken( &SvtAccessibilityOptions_Impl::m_bForPagePreviews, bSet ); }
     void        SetIsHelpTipsDisappear(sal_Bool bSet)
@@ -190,9 +185,7 @@ Sequence< OUString > SvtAccessibilityOptions_Impl::GetPropertyNames()
     //this list needs exactly to mach the enum PropertyNameIndex
     static const char* aPropNames[] =
     {
-        "IsForDrawings"             // DRAWINGS
-        ,"IsForBorders"             // BORDERS
-        ,"IsForPagePreviews"        // PAGEPREVIEWS
+         "IsForPagePreviews"        // PAGEPREVIEWS
         ,"IsHelpTipsDisappear"      // HELPTIPSDISAPPEAR
         ,"HelpTipSeconds"           // HELPTIPSECONDS
         ,"IsAllowAnimatedGraphics"  // ALLOWANIMATEDGRAPHICS
@@ -200,6 +193,7 @@ Sequence< OUString > SvtAccessibilityOptions_Impl::GetPropertyNames()
         ,"IsAutomaticFontColor"     // AUTOMATICFONTCOLOR
         ,"IsSystemFont"             // SYSTEMFONT
         ,"IsSelectionInReadonly"    // TEXTSELECTION
+        ,"AutoDetectSystemHC"       // AUTODETECTSYSTEMHC
     };
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< OUString > aNames( nCount );
@@ -238,8 +232,6 @@ void SvtAccessibilityOptions_Impl::Load()
                 {
                     switch ( PropertyNameIndex(nProp) )
                     {
-                        case DRAWINGS:              m_bForDrawings = bTemp;         break;
-                        case BORDERS:               m_bForBorders = bTemp;         break;
                         case PAGEPREVIEWS:          m_bForPagePreviews = bTemp;     break;
                         case HELPTIPSDISAPPEAR:     m_bHelpTipsDisappear = bTemp;   break;
                         case ALLOWANIMATEDGRAPHICS: m_bAllowAnimatedGraphics = bTemp; break;
@@ -247,6 +239,7 @@ void SvtAccessibilityOptions_Impl::Load()
                         case AUTOMATICFONTCOLOR:    m_bAutomaticFontColor = bTemp;  break;
                         case SYSTEMFONT:            m_bSystemFont = bTemp;          break;
                         case TEXTSELECTION:         m_bTextSelectionInReadonly = bTemp; break;
+                        case AUTODETECTSYSTEMHC:    m_bAutoDetectSystemHC = bTemp;  break;
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
                     }
@@ -286,8 +279,6 @@ void SvtAccessibilityOptions_Impl::Commit()
     {
         switch ( PropertyNameIndex(nProp) )
         {
-            case DRAWINGS:              bTemp = m_bForDrawings;         break;
-            case BORDERS:               bTemp = m_bForBorders;         break;
             case PAGEPREVIEWS:          bTemp = m_bForPagePreviews;     break;
             case HELPTIPSDISAPPEAR:     bTemp = m_bHelpTipsDisappear;   break;
             case HELPTIPSECONDS:        pValues[nProp] <<= m_nHelpTipSeconds; continue;//this is an integer and not a bool
@@ -296,6 +287,7 @@ void SvtAccessibilityOptions_Impl::Commit()
             case AUTOMATICFONTCOLOR:    bTemp = m_bAutomaticFontColor;  break;
             case SYSTEMFONT:            bTemp = m_bSystemFont;          break;
             case TEXTSELECTION:         bTemp = m_bTextSelectionInReadonly; break;
+            case AUTODETECTSYSTEMHC:    bTemp = m_bAutoDetectSystemHC;  break;
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
         }
@@ -383,11 +375,21 @@ void SvtAccessibilityOptions::Commit()
 
 sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
-    return sm_pSingleImplConfig->GetIsForDrawings();
+#if SUPD>644
+    DBG_ERROR( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
+#endif // SUPD>644
+    return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
-    return sm_pSingleImplConfig->GetIsForBorders();
+#if SUPD>644
+    DBG_ERROR( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
+#endif // SUPD>644
+    return sal_False;
+}
+sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
+{
+    return sm_pSingleImplConfig->GetAutoDetectSystemHC();
 }
 sal_Bool SvtAccessibilityOptions::GetIsForPagePreviews() const
 {
@@ -426,11 +428,19 @@ sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 
 void SvtAccessibilityOptions::SetIsForDrawings(sal_Bool bSet)
 {
-    sm_pSingleImplConfig->SetIsForDrawings(bSet);
+#if SUPD>644
+    DBG_ERROR( "SvtAccessibilityOptions::SetIsForDrawings: is obsolete!" );
+#endif // SUPD>644
 }
 void SvtAccessibilityOptions::SetIsForBorders(sal_Bool bSet)
 {
-    sm_pSingleImplConfig->SetIsForBorders(bSet);
+#if SUPD>644
+    DBG_ERROR( "SvtAccessibilityOptions::SetIsForBorders: is obsolete!" );
+#endif // SUPD>644
+}
+void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
+{
+    sm_pSingleImplConfig->SetAutoDetectSystemHC(bSet);
 }
 void SvtAccessibilityOptions::SetIsForPagePreviews(sal_Bool bSet)
 {
