@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:52:48 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,7 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         String aOptions = pLink->GetOptions();
         String aSource  = pLink->GetSource();
         ScRange aDest   = pLink->GetDestArea();
+        ULONG nRefresh  = pLink->GetRefreshDelay();
 
         //! Undo fuer Loeschen
         //! Undo zusammenfassen
@@ -678,8 +679,15 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         }
 
         ScDocFunc aFunc(*pDocShell);
-        aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource, aDest, bFitBlock, TRUE );
+        aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource, aDest, nRefresh, bFitBlock, TRUE );
     }
+}
+
+void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
+{
+    ScAreaLink* pLink = lcl_GetAreaLink( pDocShell, nPos );
+    if( pLink )
+        pLink->SetRefreshDelay( (ULONG) nRefresh );
 }
 
 // XRefreshable
@@ -689,7 +697,7 @@ void SAL_CALL ScAreaLinkObj::refresh() throw(uno::RuntimeException)
     ScUnoGuard aGuard;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
-        pLink->Refresh( pLink->GetFile(), pLink->GetFilter(), pLink->GetSource() );
+        pLink->Refresh( pLink->GetFile(), pLink->GetFilter(), pLink->GetSource(), pLink->GetRefreshDelay() );
 }
 
 void SAL_CALL ScAreaLinkObj::addRefreshListener(
@@ -768,6 +776,12 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+    {
+        sal_Int32 nRefresh;
+        if ( aValue >>= nRefresh )
+            setRefreshDelay( nRefresh );
+    }
 }
 
 uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -783,6 +797,8 @@ uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const rtl::OUString& aPropert
         aRet <<= getFilter();
     else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
         aRet <<= getFilterOptions();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+        aRet <<= getRefreshDelay();
     return aRet;
 }
 
@@ -836,6 +852,22 @@ void ScAreaLinkObj::setFilterOptions(const rtl::OUString& FilterOptions)
 {
     ScUnoGuard aGuard;
     Modify_Impl( NULL, NULL, &FilterOptions, NULL, NULL );
+}
+
+sal_Int32 ScAreaLinkObj::getRefreshDelay(void) const
+{
+    ScUnoGuard aGuard;
+    sal_Int32 nRet;
+    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
+    if (pLink)
+        nRet = (sal_Int32) pLink->GetRefreshDelay();
+    return nRet;
+}
+
+void ScAreaLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
+{
+    ScUnoGuard aGuard;
+    ModifyRefreshDelay_Impl( nRefreshDelay );
 }
 
 // XAreaLink
@@ -930,7 +962,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         ScDocFunc aFunc(*pDocShell);
         aFunc.InsertAreaLink( aFileStr, aFilterStr, aOptionStr,
                                 aSourceStr, ScRange(aDestAddr),
-                                FALSE, TRUE );                      // keine Inhalte verschieben
+                                0, FALSE, TRUE );                   // keine Inhalte verschieben
     }
 }
 
