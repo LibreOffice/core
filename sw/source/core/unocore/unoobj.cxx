@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-10 11:05:49 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 08:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,18 +777,21 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     if(aValue >>= uStyle)
                     {
                         SfxItemSet& rItemSet = rSet.GetItemSet( &rPam );
-                        SwFmtDrop* pDrop = 0;
-                        const SfxPoolItem* pItem;
-                        if(SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
-                            pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
-                        if(!pDrop)
-                            pDrop = new SwFmtDrop();
                         String sStyle;
                         SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_CHRFMT, sal_True );
                         SwDocStyleSheet* pStyle =
                             (SwDocStyleSheet*)rPam.GetDoc()->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
+                        SwFmtDrop* pDrop = 0;
                         if(pStyle)
-                            pDrop->SetCharFmt(pStyle->GetCharFmt());
+                        {
+                            const SfxPoolItem* pItem;
+                            if(SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
+                                pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
+                            if(!pDrop)
+                                pDrop = new SwFmtDrop();
+                            SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pStyle );
+                            pDrop->SetCharFmt(aStyle.GetCharFmt());
+                        }
                         else
                              throw lang::IllegalArgumentException();
                         rItemSet.Put(*pDrop);
