@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 15:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,7 @@ public:
     virtual WW8PLCFx& operator ++( int );
     const String* GetName() const
         { return ( !nIsEnd && ( (long)(pBook[0]->GetIdx()) < nIMax ) )
-                        ? aBookNames[ pBook[0]->GetIdx() ]
+                        ? aBookNames[ (USHORT)pBook[0]->GetIdx() ]
                         : 0;
         }
     WW8_CP GetStartPos() const
@@ -1544,12 +1544,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.6 2001-01-30 20:11:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.7 2001-03-14 15:53:12 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/01/30 20:11:06  cmc
+      #83362# CJK Forbidden Character {Im|Ex}port
+
       Revision 1.5  2000/12/04 14:08:08  khz
       #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
 
