@@ -41,7 +41,7 @@ class CollatorRessourceData
                             {}
 
         CollatorRessourceData&
-                        operator= (CollatorRessourceData& r_From)
+                        operator= (const CollatorRessourceData& r_From)
                             {
                                 ma_Name         = r_From.GetAlgorithm();
                                 ma_Translation  = r_From.GetTranslation();
@@ -63,6 +63,7 @@ CollatorRessource::CollatorRessource()
 
     #define ASCSTR(str) String(RTL_CONSTASCII_USTRINGPARAM(str))
     #define RESSTR(rid) String(SvtResId(rid))
+
 
     mp_Data[0] = CollatorRessourceData (ASCSTR("alphanumeric"),
                                              RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
