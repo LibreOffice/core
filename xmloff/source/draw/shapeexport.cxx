@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:09:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypeDrawMediaShape:
+        {
+            ImpExportMediaShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
         case XmlShapeTypePresOrgChartShape:
         case XmlShapeTypeUnknown:
         case XmlShapeTypeNotYetSet:
@@ -1034,6 +1040,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.EqualsAscii("Caption", 21, 7)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
                 else if(aType.EqualsAscii("Plugin", 21, 6)) { eShapeType = XmlShapeTypeDrawPluginShape; }
                 else if(aType.EqualsAscii("Applet", 21, 6)) { eShapeType = XmlShapeTypeDrawAppletShape; }
+                else if(aType.EqualsAscii("MediaShape", 21, 9)) { eShapeType = XmlShapeTypeDrawMediaShape; }
 
                 // 3D shapes
                 else if(aType.EqualsAscii("Scene", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
