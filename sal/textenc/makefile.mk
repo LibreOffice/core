@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2001-10-18 14:21:16 $
+#   last change: $Author: sb $ $Date: 2001-11-19 17:50:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ SLOFILES = \
     $(SLO)$/converter.obj \
     $(SLO)$/converteuctw.obj \
     $(SLO)$/convertgb18030.obj \
+    $(SLO)$/convertiso2022jp.obj \
     $(SLO)$/tcvtbyte.obj \
     $(SLO)$/tcvtmb.obj \
     $(SLO)$/tcvtutf7.obj \
@@ -87,6 +88,7 @@ OBJFILES = \
     $(OBJ)$/converter.obj \
     $(OBJ)$/converteuctw.obj \
     $(OBJ)$/convertgb18030.obj \
+    $(OBJ)$/convertiso2022jp.obj \
     $(OBJ)$/tcvtbyte.obj \
     $(OBJ)$/tcvtmb.obj \
     $(OBJ)$/tcvtutf7.obj \
