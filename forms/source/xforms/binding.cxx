@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binding.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:48:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include "evaluationcontext.hxx"
 #include "convert.hxx"
 #include "resourcehelper.hxx"
+#include "xmlhelper.hxx"
+#include "xformsevent.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -85,17 +87,18 @@
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
+#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <comphelper/propertysetinfo.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unotools/textsearch.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 using namespace com::sun::star::xml::xpath;
+using namespace com::sun::star::xml::dom::events;
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
@@ -109,7 +112,9 @@ using com::sun::star::beans::PropertyVetoException;
 using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XSet;
+using com::sun::star::container::XNameAccess;
 using com::sun::star::form::binding::IncompatibleTypesException;
+using com::sun::star::form::binding::InvalidBindingStateException;
 using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::lang::EventObject;
 using com::sun::star::lang::IllegalArgumentException;
@@ -142,12 +147,27 @@ using com::sun::star::xsd::XDataType;
 
 #define EXCEPT(msg) OUSTRING(msg),static_cast<XValueBinding*>(this)
 
+#define HANDLE_BindingID 0
+#define HANDLE_BindingExpression 1
+#define HANDLE_Model 2
+#define HANDLE_ModelID 3
+#define HANDLE_BindingNamespaces 4
+#define HANDLE_ReadonlyExpression 5
+#define HANDLE_RelevantExpression 6
+#define HANDLE_RequiredExpression 7
+#define HANDLE_ConstraintExpression 8
+#define HANDLE_CalculateExpression 9
+#define HANDLE_Type 10
+#define HANDLE_ReadOnly 11  // from com.sun.star.form.binding.ValueBinding, for interaction with a bound form control
+#define HANDLE_Relevant 12  // from com.sun.star.form.binding.ValueBinding, for interaction with a bound form control
+#define HANDLE_ModelNamespaces 13
 
 
 Binding::Binding() :
     mxModel(),
     msBindingID(),
     maBindingExpression(),
+    mxNamespaces( new NameContainer<OUString>() ),
     maReadonly(),
     mbInCalculate( false ),
     mnDeferModifyNotifications( 0 ),
@@ -155,14 +175,12 @@ Binding::Binding() :
     mbBindingModified( false )
 
 {
-    setInfo( _getPropertySetInfo() );
-
-    // use the same namespace container on all expressions
-    setBindingNamespaces( getBindingNamespaces() );
+    initializePropertySet();
 }
 
 Binding::~Binding() throw()
 {
+    _setModel(NULL);
 }
 
 
@@ -173,12 +191,22 @@ Binding::Model_t Binding::getModel() const
 
 void Binding::_setModel( const Model_t& xModel )
 {
-    clear();
+    PropertyChangeNotifier aNotifyModelChange( *this, HANDLE_Model );
+    PropertyChangeNotifier aNotifyModelIDChange( *this, HANDLE_ModelID );
+
+    // prepare binding for removal of old model
+    clear(); // remove all cached data (e.g. XPath evaluation results)
+    XNameContainer_t xNamespaces = getModelNamespaces(); // save namespaces
+
     mxModel = xModel;
+
+    // set namespaces (and move to model, if appropriate)
+    setBindingNamespaces( xNamespaces );
+    _checkBindingID();
 }
 
 
-Reference<XValueBinding> lcl_asXValueBinding( Binding* pThis )
+Reference< XValueBinding > lcl_asXValueBinding( Binding* pThis )
 {
     return Reference<XValueBinding>( static_cast<XValueBinding*>( pThis ) );
 }
@@ -216,6 +244,14 @@ bool Binding::isSimpleBindingExpression() const
 
 void Binding::update()
 {
+    // clear all expressions (to remove cached node references)
+    maBindingExpression.clear();
+    maReadonly.clear();
+    maRelevant.clear();
+    maRequired.clear();
+    maConstraint.clear();
+    maCalculate.clear();
+
     // let's just pretend the binding has been modified -> full rebind()
     bindingModified();
 }
@@ -247,6 +283,31 @@ bool Binding::isValid()
         ( ! maMIP.isRequired() ||
              ( maBindingExpression.hasValue() &&
                maBindingExpression.getString().getLength() > 0 ) );
+}
+
+bool Binding::isUseful()
+{
+    // we are useful, if
+    // 0) we don't have a model
+    //    (at least, in this case we shouldn't be removed from the model)
+    // 1) we have a proper name
+    // 2) we have some MIPs,
+    // 3) we are bound to some control
+    //    (this can be assumed if some listeners are set)
+    bool bUseful =
+        getModelImpl() == NULL
+//        || msBindingID.getLength() > 0
+        || msTypeName.getLength() > 0
+        || ! maReadonly.isEmptyExpression()
+        || ! maRelevant.isEmptyExpression()
+        || ! maRequired.isEmptyExpression()
+        || ! maConstraint.isEmptyExpression()
+        || ! maCalculate.isEmptyExpression()
+        || ! maModifyListeners.empty()
+        || ! maListEntryListeners.empty()
+        || ! maValidityListeners.empty();
+
+    return bUseful;
 }
 
 OUString Binding::explainInvalid()
@@ -290,7 +351,9 @@ OUString Binding::explainInvalid()
 EvaluationContext Binding::getEvaluationContext() const
 {
     OSL_ENSURE( getModelImpl() != NULL, "need model impl" );
-    return getModelImpl()->getEvaluationContext();
+    EvaluationContext aContext = getModelImpl()->getEvaluationContext();
+    aContext.mxNamespaces = getBindingNamespaces();
+    return aContext;
 }
 
 vector<EvaluationContext> Binding::getMIPEvaluationContexts()
@@ -309,7 +372,7 @@ Binding::IntSequence_t Binding::getUnoTunnelID()
     return aImplementationId.getImplementationId();
 }
 
-Binding* Binding::getBinding( const Reference<XPropertySet>& xPropertySet )
+Binding* SAL_CALL Binding::getBinding( const Reference<XPropertySet>& xPropertySet )
 {
     Reference<XUnoTunnel> xTunnel( xPropertySet, UNO_QUERY );
     return xTunnel.is()
@@ -402,12 +465,12 @@ void Binding::setCalculateExpression( const OUString& sCalculate )
     bindingModified();
 }
 
-OUString Binding::getTypeName() const
+OUString Binding::getType() const
 {
     return msTypeName;
 }
 
-void Binding::setTypeName( const OUString& sTypeName )
+void Binding::setType( const OUString& sTypeName )
 {
     msTypeName = sTypeName;
     bindingModified();
@@ -415,21 +478,23 @@ void Binding::setTypeName( const OUString& sTypeName )
 
 Binding::XNameContainer_t Binding::getBindingNamespaces() const
 {
-    return maBindingExpression.getNamespaces();
+    //    return _getNamespaces();
+    return mxNamespaces;
 }
 
-void Binding::setBindingNamespaces( const XNameContainer_t& xBindingNamespaces )
+void Binding::setBindingNamespaces( const XNameContainer_t& rNamespaces )
 {
-    maBindingExpression.setNamespaces( xBindingNamespaces );
+    _setNamespaces( rNamespaces, true );
+}
 
-    // also use namespaces on all other computed expressions
-    maReadonly.setNamespaces( xBindingNamespaces );
-    maRelevant.setNamespaces( xBindingNamespaces );
-    maRequired.setNamespaces( xBindingNamespaces );
-    maConstraint.setNamespaces( xBindingNamespaces );
-    maCalculate.setNamespaces( xBindingNamespaces );
+Binding::XNameContainer_t Binding::getModelNamespaces() const
+{
+    return _getNamespaces();
+}
 
-    bindingModified();
+void Binding::setModelNamespaces( const XNameContainer_t& rNamespaces )
+{
+    _setNamespaces( rNamespaces, false );
 }
 
 bool Binding::getReadOnly() const
@@ -437,7 +502,7 @@ bool Binding::getReadOnly() const
     return maMIP.isReadonly();
 }
 
-bool Binding::getEnabled() const
+bool Binding::getRelevant() const
 {
     return maMIP.isRelevant();
 }
@@ -492,6 +557,10 @@ void lcl_addListenerToNode( Reference<XNode> xNode,
                                    xListener, false );
         xTarget->addEventListener( OUSTRING("DOMAttrModified"),
                                    xListener, true );
+        xTarget->addEventListener( OUSTRING("DOMAttrModified"),
+                                   xListener, true );
+        xTarget->addEventListener( OUSTRING("xforms-generic"),
+                                   xListener, true );
     }
 }
 
@@ -508,6 +577,8 @@ void lcl_removeListenerFromNode( Reference<XNode> xNode,
         xTarget->removeEventListener( OUSTRING("DOMAttrModified"),
                                       xListener, false );
         xTarget->removeEventListener( OUSTRING("DOMAttrModified"),
+                                      xListener, true );
+        xTarget->removeEventListener( OUSTRING("xforms-generic"),
                                       xListener, true );
     }
 }
@@ -529,6 +600,7 @@ vector<EvaluationContext> Binding::_getMIPEvaluationContexts() const
 
         // create proper evaluation context for this MIP
         aVector.push_back( EvaluationContext( *aIter, getModel(),
+                                              getBindingNamespaces(),
                                               nCount, aNodes.size() ) );
     }
     return aVector;
@@ -556,7 +628,8 @@ void Binding::bind( bool bForceRebind )
     if( ! maBindingExpression.getNode().is() )
     {
         // 1b) create node (if valid element name)
-        if( maBindingExpression.isElementName() )
+        if( isValidQName( maBindingExpression.getExpression(),
+                          aContext.mxNamespaces ) )
         {
             aContext.mxContextNode->appendChild(
                 Reference<XNode>(
@@ -659,63 +732,6 @@ void lcl_validate( const Binding::XValidityConstraintListener_t xListener,
 }
 
 
-// helper for Binding::valueModified()
-// TODO: remove this methods once the attribute can be set properly
-void lcl_setBooleanMIP( Reference<XPropertySet>& xPropertySet,
-                        OUString sName,
-                        bool bNewValue )
-{
-    OSL_ENSURE( xPropertySet.is(), "no prop set?" );
-    OSL_ENSURE( sName.getLength() > 0, "no name?" );
-
-    if( xPropertySet->getPropertySetInfo()->hasPropertyByName( sName ) )
-    {
-        // force refresh if we can't get a value
-        bool bOldValue = !bNewValue;
-        xPropertySet->getPropertyValue( sName ) >>= bOldValue;
-
-        if( bNewValue != bOldValue )
-            xPropertySet->setPropertyValue( sName, makeAny( bNewValue ) );
-    }
-}
-
-// helper for Binding::valueModified()
-// TODO: remove this methods once the attribute can be set properly
-void lcl_setInt32MIP( Reference<XPropertySet>& xPropertySet,
-                      OUString sName,
-                      sal_Int32 nNewValue )
-{
-    if( xPropertySet->getPropertySetInfo()->hasPropertyByName( sName ) )
-    {
-        // force refresh if we can't get a value
-        sal_Int32 nOldValue = ~nNewValue;
-        xPropertySet->getPropertyValue( sName ) >>= nOldValue;
-
-        if( nNewValue != nOldValue )
-            xPropertySet->setPropertyValue( sName, makeAny( nNewValue ) );
-    }
-}
-
-
-// helper for Binding::valueModified()
-void lcl_setMIP( Binding::XModifyListener_t xListener,
-                 MIP aMIP )
-{
-    OSL_ENSURE( xListener.is(), "no listener?" );
-
-    // set readonly
-    Reference<XPropertySet> xPropSet( xListener, UNO_QUERY );
-    if( xPropSet.is() )
-    {
-        lcl_setBooleanMIP( xPropSet, OUSTRING("ReadOnly"), aMIP.isReadonly() );
-        lcl_setBooleanMIP( xPropSet, OUSTRING("Enabled"),  aMIP.isRelevant() );
-        //        lcl_setInt32MIP( xPropSet, OUSTRING("BackgroundColor"),
-        //                         aMIP.isConstraint() ? 0xffffff : 0xff0000 );
-        //        lcl_setInt32MIP( xPropSet, OUSTRING("TextColor"),
-        //                         aMIP.isRequired() ? 0xff0000 : 0x000000 );
-    }
-}
-
 void Binding::valueModified()
 {
     // defer notifications, if so desired
@@ -732,9 +748,10 @@ void Binding::valueModified()
 
     // distribute MIPs _used_ by this binding
     if( xNode.is() )
-        for_each( maModifyListeners.begin(),
-                  maModifyListeners.end(),
-                  bind2nd( ptr_fun( lcl_setMIP ), maMIP ));
+    {
+        notifyAndCachePropertyValue( HANDLE_ReadOnly );
+        notifyAndCachePropertyValue( HANDLE_Relevant );
+    }
 
     // iterate over _value_ listeners and send each a modified signal,
     // using this object as source (will also update validity, because
@@ -749,6 +766,39 @@ void Binding::valueModified()
     for_each( maValidityListeners.begin(),
               maValidityListeners.end(),
               bind2nd( ptr_fun( lcl_validate ), xSource ) );
+
+    // now distribute MIPs to childs
+    if( xNode.is() )
+        distributeMIP( xNode->getFirstChild() );
+}
+
+void Binding::distributeMIP( const XNode_t & rxNode ) {
+
+    typedef com::sun::star::xforms::XFormsEventConcrete XFormsEvent_t;
+    OUString sEventName( RTL_CONSTASCII_USTRINGPARAM("xforms-generic") );
+    XFormsEvent_t *pEvent = new XFormsEvent_t;
+    pEvent->initXFormsEvent(sEventName, sal_True, sal_False);
+    Reference<XEvent> xEvent(pEvent);
+
+    // naive depth-first traversal
+    XNode_t xNode( rxNode );
+    while(xNode.is()) {
+
+        // notifications should be triggered at the
+        // leaf nodes first, bubbling upwards the hierarchy.
+        XNode_t child(xNode->getFirstChild());
+        if(child.is())
+            distributeMIP(child);
+
+        // we're standing at a particular node somewhere
+        // below the one which changed a property (MIP).
+        // bindings which are listening at this node will receive
+        // a notification message about what exactly happened.
+        Reference< XEventTarget > target(xNode,UNO_QUERY);
+        target->dispatchEvent(xEvent);
+
+        xNode = xNode->getNextSibling();
+    };
 }
 
 void Binding::bindingModified()
@@ -852,6 +902,162 @@ void Binding::clear()
 }
 
 
+void lcl_removeOtherNamespaces( const Binding::XNameContainer_t& xFrom,
+                                Binding::XNameContainer_t& xTo )
+{
+    OSL_ENSURE( xFrom.is(), "no source" );
+    OSL_ENSURE( xTo.is(), "no target" );
+
+    // iterate over name in source
+    Sequence<OUString> aNames = xTo->getElementNames();
+    sal_Int32 nNames = aNames.getLength();
+    const OUString* pNames = aNames.getConstArray();
+    for( sal_Int32 i = 0; i < nNames; i++ )
+    {
+        const OUString& rName = pNames[i];
+
+        if( ! xFrom->hasByName( rName ) )
+            xTo->removeByName( rName );
+    }
+}
+
+/** copy namespaces from one namespace container into another
+ * @param bOverwrite true: overwrite namespaces in target
+ *                   false: do not overwrite namespaces in target
+ * @param bMove true: move namespaces (i.e., delete in source)
+ *              false: copy namespaces (do not modify source)
+ * @param bFromSource true: use elements from source
+ *                    false: use only elements from target
+ */
+void lcl_copyNamespaces( const Binding::XNameContainer_t& xFrom,
+                         Binding::XNameContainer_t& xTo,
+                         bool bOverwrite )
+{
+    OSL_ENSURE( xFrom.is(), "no source" );
+    OSL_ENSURE( xTo.is(), "no target" );
+
+    // iterate over name in source
+    Sequence<OUString> aNames = xFrom->getElementNames();
+    sal_Int32 nNames = aNames.getLength();
+    const OUString* pNames = aNames.getConstArray();
+    for( sal_Int32 i = 0; i < nNames; i++ )
+    {
+        const OUString& rName = pNames[i];
+
+        // determine whether to copy the value, and whether to delete
+        // it in the source:
+
+        bool bInTarget = xTo->hasByName( rName );
+
+        // we copy: if property is in target, and
+        //          if bOverwrite is set, or when the namespace prefix is free
+        bool bCopy = bOverwrite || ! bInTarget;
+
+        // and now... ACTION!
+        if( bCopy )
+        {
+            if( bInTarget )
+                xTo->replaceByName( rName, xFrom->getByName( rName ) );
+            else
+                xTo->insertByName( rName, xFrom->getByName( rName ) );
+        }
+    }
+}
+
+// implement get*Namespaces()
+// (identical for both variants)
+Binding::XNameContainer_t Binding::_getNamespaces() const
+{
+    XNameContainer_t xNamespaces = new NameContainer<OUString>();
+    lcl_copyNamespaces( mxNamespaces, xNamespaces, true );
+
+    // merge model's with binding's own namespaces
+    Model* pModel = getModelImpl();
+    if( pModel != NULL )
+        lcl_copyNamespaces( pModel->getNamespaces(), xNamespaces, false );
+
+    return xNamespaces;
+}
+
+// implement set*Namespaces()
+// bBinding = true: setBindingNamespaces, otherwise: setModelNamespaces
+void Binding::_setNamespaces( const XNameContainer_t& rNamespaces,
+                              bool bBinding )
+{
+    Model* pModel = getModelImpl();
+    XNameContainer_t xModelNamespaces = ( pModel != NULL )
+                                            ? pModel->getNamespaces()
+                                            : NULL;
+    OSL_ENSURE( ( pModel != NULL ) == xModelNamespaces.is(), "no model nmsp?");
+
+    // remove deleted namespaces
+    lcl_removeOtherNamespaces( rNamespaces, mxNamespaces );
+    if( !bBinding && xModelNamespaces.is() )
+        lcl_removeOtherNamespaces( rNamespaces, xModelNamespaces );
+
+    // copy namespaces as appropriate
+    Sequence<OUString> aNames = rNamespaces->getElementNames();
+    sal_Int32 nNames = aNames.getLength();
+    const OUString* pNames = aNames.getConstArray();
+    for( sal_Int32 i = 0; i < nNames; i++ )
+    {
+        const OUString& rName = pNames[i];
+        Any aValue = rNamespaces->getByName( rName );
+
+        // determine whether the namespace should go into model's or
+        // into binding's namespaces
+        bool bLocal =
+            ! xModelNamespaces.is()
+            || mxNamespaces->hasByName( rName )
+            || ( bBinding
+                 && xModelNamespaces.is()
+                 && xModelNamespaces->hasByName( rName ) );
+
+        // write namespace into the appropriate namespace container
+        XNameContainer_t& rWhich = bLocal ? mxNamespaces : xModelNamespaces;
+        OSL_ENSURE( rWhich.is(), "whoops" );
+        if( rWhich->hasByName( rName ) )
+            rWhich->replaceByName( rName, aValue );
+        else
+            rWhich->insertByName( rName, aValue );
+
+        // always 'promote' namespaces from binding to model, if equal
+        if( xModelNamespaces.is()
+            && xModelNamespaces->hasByName( rName )
+            && mxNamespaces->hasByName( rName )
+            && xModelNamespaces->getByName( rName ) == mxNamespaces->getByName( rName ) )
+        {
+            mxNamespaces->removeByName( rName );
+        }
+    }
+
+    // ... done. But we modified the binding!
+    bindingModified();
+}
+
+void Binding::_checkBindingID()
+{
+    if( getModel().is() )
+    {
+        Reference<XNameAccess> xBindings( getModel()->getBindings(), UNO_QUERY_THROW );
+        if( msBindingID.getLength() == 0 )
+        {
+            // no binding ID? then make one up!
+            OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME );
+            sIDPrefix += String::CreateFromAscii( " " );
+            sal_Int32 nNumber = 0;
+            OUString sName;
+            do
+            {
+                nNumber++;
+                sName = sIDPrefix + OUString::valueOf( nNumber );
+            }
+            while( xBindings->hasByName( sName ) );
+            setBindingID( sName );
+        }
+    }
+}
+
 
 
 
@@ -883,13 +1089,23 @@ Binding::Any_t Binding::getValue( const Type_t& rType )
         throw IncompatibleTypesException( EXCEPT( "type unsupported" ) );
 
     // return string value (if present; else return empty Any)
-    return maBindingExpression.hasValue()
-        ? Convert::get().toAny( maBindingExpression.getString(), rType )
-        : Any();
+        Binding::Any_t result = Any();
+        if(maBindingExpression.hasValue()) {
+            rtl::OUString pathExpr(maBindingExpression.getString());
+            Convert &rConvert = Convert::get();
+            result = rConvert.toAny(pathExpr,rType);
+        }
+
+//      return maBindingExpression.hasValue()
+  //      ? Convert::get().toAny( maBindingExpression.getString(), rType )
+    //    : Any();
+
+        return result;
 }
 
 void Binding::setValue( const Any_t& aValue )
     throw( IncompatibleTypesException,
+           InvalidBindingStateException,
            NoSupportException,
            RuntimeException )
 {
@@ -908,13 +1124,13 @@ void Binding::setValue( const Any_t& aValue )
             OUString sValue = Convert::get().toXSD( aValue );
             bool bSuccess = getModelImpl()->setSimpleContent( xNode, sValue );
             if( ! bSuccess )
-                throw NoSupportException( EXCEPT( "can't set value" ) );
+                throw InvalidBindingStateException( EXCEPT( "can't set value" ) );
         }
         else
-            throw NoSupportException( EXCEPT( "no suitable node found" ) );
+            throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
     }
     else
-        throw NoSupportException( EXCEPT( "no suitable node found" ) );
+        throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
 }
 
 
@@ -967,7 +1183,7 @@ OUString Binding::getListEntry( sal_Int32 nPosition )
     // check bounds and return proper item
     PathExpression::NodeVector_t aNodes = maBindingExpression.getNodeList();
     if( nPosition < 0 || nPosition >= static_cast<sal_Int32>( aNodes.size() ) )
-        throw EXCEPT("");
+        throw IndexOutOfBoundsException( EXCEPT("") );
     return lcl_getString( aNodes[ nPosition ] );
 }
 
@@ -1070,6 +1286,24 @@ void Binding::removeValidityConstraintListener(
 void Binding::handleEvent( const XEvent_t& xEvent )
     throw( RuntimeException )
 {
+    OUString sType(xEvent->getType());
+    //OUString sEventMIPChanged(RTL_CONSTASCII_USTRINGPARAM("xforms-generic"));
+    //if(sType.equals(sEventMIPChanged)) {
+    if(!sType.compareToAscii("xforms-generic")) {
+
+        // the modification of the 'mnDeferModifyNotifications'-member
+        // is necessary to prevent infinite notication looping.
+        // This can happend in case the binding which caused
+        // the notification chain is listening to those events
+        // as well...
+        bool bPreserveValueModified = mbValueModified;
+        mnDeferModifyNotifications++;
+        valueModified();
+        --mnDeferModifyNotifications;
+        mbValueModified = bPreserveValueModified;
+        return;
+    }
+
     // if we're a dynamic binding, we better re-bind, too!
     bind( false );
 
@@ -1088,176 +1322,58 @@ sal_Int64 Binding::getSomething( const IntSequence_t& xId )
     return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
 }
 
+//
+// XCloneable
+//
 
-
-#define HANDLE_BindingID 0
-#define HANDLE_BindingExpression 1
-#define HANDLE_Model 2
-#define HANDLE_ModelID 3
-#define HANDLE_BindingNamespaces 4
-#define HANDLE_ReadonlyExpression 5
-#define HANDLE_RelevantExpression 6
-#define HANDLE_RequiredExpression 7
-#define HANDLE_ConstraintExpression 8
-#define HANDLE_CalculateExpression 9
-#define HANDLE_Type 10
-#define HANDLE_ReadOnly 11  // for control data-source
-#define HANDLE_Enabled 12 // for control data-source
-
-#define ENTRY_FLAGS(NAME,TYPE,FLAG) { #NAME, sizeof(#NAME)-1, HANDLE_##NAME, &getCppuType(static_cast<TYPE*>(NULL)), FLAG, 0 }
-#define ENTRY(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,0)
-#define ENTRY_RO(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,com::sun::star::beans::PropertyAttribute::READONLY)
-#define ENTRY_END { NULL, 0, NULL, 0, 0}
-
-comphelper::PropertySetInfo* Binding::_getPropertySetInfo()
+Binding::XCloneable_t SAL_CALL Binding::createClone()
+    throw( RuntimeException )
 {
-    static comphelper::PropertySetInfo* pInfo = NULL;
+    Reference< XPropertySet > xClone;
 
-    static comphelper::PropertyMapEntry pEntries[] =
+    Model* pModel = getModelImpl();
+    if ( pModel )
+        xClone = pModel->cloneBinding( this );
+    else
     {
-        ENTRY( BindingID, OUString ),
-        ENTRY( BindingExpression, OUString ),
-        ENTRY_RO( Model, Model_t ),
-        ENTRY( BindingNamespaces, XNameContainer_t ),
-        ENTRY_RO( ModelID, OUString ),
-        ENTRY( ReadonlyExpression, OUString ),
-        ENTRY( RelevantExpression, OUString ),
-        ENTRY( RequiredExpression, OUString ),
-        ENTRY( ConstraintExpression, OUString ),
-        ENTRY( CalculateExpression, OUString ),
-        ENTRY( Type, OUString ),
-        ENTRY_RO( ReadOnly, bool ),
-        ENTRY_RO( Enabled, bool ),
-        ENTRY_END
-    };
-
-    if( pInfo == NULL )
-    {
-        pInfo = new comphelper::PropertySetInfo( pEntries );
-        pInfo->acquire();
+        xClone = new Binding;
+        copy( this, xClone );
     }
-
-    return pInfo;
+    return XCloneable_t( xClone, UNO_QUERY );
 }
 
+//
+// property set implementations
+//
 
+#define REGISTER_PROPERTY( property, type )   \
+    registerProperty( PROPERTY( property, type ), \
+    new DirectPropertyAccessor< Binding, type >( this, &Binding::set##property, &Binding::get##property ) );
 
-void Binding::_setPropertyValues(
-    const comphelper::PropertyMapEntry** ppEntries,
-    const Any_t* pValues )
-    throw( UnknownPropertyException,
-           PropertyVetoException,
-           IllegalArgumentException,
-           WrappedTargetException )
+#define REGISTER_PROPERTY_RO( property, type )   \
+    registerProperty( PROPERTY_RO( property, type ), \
+    new DirectPropertyAccessor< Binding, type >( this, NULL, &Binding::get##property ) );
+
+void Binding::initializePropertySet()
 {
-    // iterate over all PropertyMapEntry/Any pairs
-    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
-    {
-        // delegate each property to the suitable handler method
-        switch( (*ppEntries)->mnHandle )
-        {
-            case HANDLE_BindingID:
-                setAny( this, &Binding::setBindingID, *pValues );
-                break;
-            case HANDLE_BindingExpression:
-                setAny( this, &Binding::setBindingExpression, *pValues );
-                break;
-            case HANDLE_BindingNamespaces:
-                setAny( this, &Binding::setBindingNamespaces, *pValues );
-                break;
-            case HANDLE_ModelID:
-                OSL_ENSURE( false, "Read-Only properties!" );
-                break;
-            case HANDLE_ReadonlyExpression:
-                setAny( this, &Binding::setReadonlyExpression, *pValues );
-                break;
-            case HANDLE_RelevantExpression:
-                setAny( this, &Binding::setRelevantExpression, *pValues );
-                break;
-            case HANDLE_RequiredExpression:
-                setAny( this, &Binding::setRequiredExpression, *pValues );
-                break;
-            case HANDLE_ConstraintExpression:
-                setAny( this, &Binding::setConstraintExpression, *pValues );
-                break;
-            case HANDLE_CalculateExpression:
-                setAny( this, &Binding::setCalculateExpression, *pValues );
-                break;
-            case HANDLE_Type:
-                setAny( this, &Binding::setTypeName, *pValues );
-                break;
-            case HANDLE_Model:
-            case HANDLE_ReadOnly:
-            case HANDLE_Enabled:
-                OSL_ENSURE( false, "Read-Only properties!" );
-                break;
-            default:
-                OSL_ENSURE( false, "Unknown HANDLE" );
-                break;
-        }
-    }
+    REGISTER_PROPERTY   ( BindingID,            OUString );
+    REGISTER_PROPERTY   ( BindingExpression,    OUString );
+    REGISTER_PROPERTY_RO( Model,                Model_t );
+    REGISTER_PROPERTY   ( BindingNamespaces,    XNameContainer_t );
+    REGISTER_PROPERTY   ( ModelNamespaces,      XNameContainer_t );
+    REGISTER_PROPERTY_RO( ModelID,              OUString );
+    REGISTER_PROPERTY   ( ReadonlyExpression,   OUString );
+    REGISTER_PROPERTY   ( RelevantExpression,   OUString );
+    REGISTER_PROPERTY   ( RequiredExpression,   OUString );
+    REGISTER_PROPERTY   ( ConstraintExpression, OUString );
+    REGISTER_PROPERTY   ( CalculateExpression,  OUString );
+    REGISTER_PROPERTY   ( Type,                 OUString );
+    REGISTER_PROPERTY_RO( ReadOnly,             bool );
+    REGISTER_PROPERTY_RO( Relevant,             bool );
+
+    initializePropertyValueCache( HANDLE_ReadOnly );
+    initializePropertyValueCache( HANDLE_Relevant );
 }
-
-
-void Binding::_getPropertyValues(
-    const comphelper::PropertyMapEntry** ppEntries,
-    Any_t* pValues )
-    throw( UnknownPropertyException,
-           WrappedTargetException )
-{
-    // iterate over all PropertyMapEntry/Any pairs
-    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
-    {
-        // delegate each property to the suitable handler method
-        switch( (*ppEntries)->mnHandle )
-        {
-            case HANDLE_BindingID:
-                getAny( this, &Binding::getBindingID, *pValues );
-                break;
-            case HANDLE_BindingExpression:
-                getAny( this, &Binding::getBindingExpression, *pValues );
-                break;
-            case HANDLE_Model:
-                getAny( this, &Binding::getModel, *pValues );
-                break;
-            case HANDLE_BindingNamespaces:
-                getAny( this, &Binding::getBindingNamespaces, *pValues );
-                break;
-            case HANDLE_ModelID:
-                getAny( this, &Binding::getModelID, *pValues );
-                break;
-            case HANDLE_ReadonlyExpression:
-                getAny( this, &Binding::getReadonlyExpression, *pValues );
-                break;
-            case HANDLE_RelevantExpression:
-                getAny( this, &Binding::getRelevantExpression, *pValues );
-                break;
-            case HANDLE_RequiredExpression:
-                getAny( this, &Binding::getRequiredExpression, *pValues );
-                break;
-            case HANDLE_ConstraintExpression:
-                getAny( this, &Binding::getConstraintExpression, *pValues );
-                break;
-            case HANDLE_CalculateExpression:
-                getAny( this, &Binding::getCalculateExpression, *pValues );
-                break;
-            case HANDLE_Type:
-                getAny( this, &Binding::getTypeName, *pValues );
-                break;
-            case HANDLE_ReadOnly:
-                getAny( this, &Binding::getReadOnly, *pValues );
-                break;
-            case HANDLE_Enabled:
-                getAny( this, &Binding::getEnabled, *pValues );
-                break;
-            default:
-                OSL_ENSURE( false, "Unknown HANDLE" );
-                break;
-        }
-    }
-}
-
-
 
 void Binding::addModifyListener(
     const XModifyListener_t& xListener )
@@ -1296,5 +1412,7 @@ rtl::OUString Binding::getName()
 void SAL_CALL Binding::setName( const rtl::OUString& rName )
     throw( RuntimeException )
 {
-    setBindingID( rName );
+    // use the XPropertySet methods, so the change in the name is notified to the
+    // property listeners
+    setFastPropertyValue( HANDLE_BindingID, makeAny( rName ) );
 }
