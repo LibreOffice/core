@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:36:36 $
+ *  last change: $Author: dl $ $Date: 2001-03-27 11:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,47 +376,47 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         if (nSlotId == SID_INSERT_DIAGRAM)
         {
             aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SCH_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SCH_CLASSID_60), aStor);
         }
         else if (nSlotId == SID_ATTR_TABLE)
         {
             aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SC_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SC_CLASSID_60), aStor);
         }
 #ifdef STARIMAGE_AVAILABLE
         else if (nSlotId == SID_INSERT_IMAGE)
         {
             aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SIM_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SIM_CLASSID_60), aStor);
         }
 #endif
         else if (nSlotId == SID_INSERT_MATH)
         {
             aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SM_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SM_CLASSID_60), aStor);
         }
 #else
         if (nSlotId == SID_INSERT_DIAGRAM)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SCH_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SCH_CLASSID_60), aStor);
         }
         else if (nSlotId == SID_ATTR_TABLE)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SC_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SC_CLASSID_60), aStor);
         }
 #ifdef STARIMAGE_AVAILABLE
         else if (nSlotId == SID_INSERT_IMAGE)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SIM_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SIM_CLASSID_60), aStor);
         }
 #endif
         else if (nSlotId == SID_INSERT_MATH)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SM_CLASSID_50), aStor);
+                          SvGlobalName(SO3_SM_CLASSID_60), aStor);
         }
 #endif
 
