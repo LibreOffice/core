@@ -62,6 +62,9 @@ import org.w3c.dom.Element;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+
 
 
 
@@ -79,9 +82,10 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.dom.DOMResult;
+//import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.stream.StreamResult;
 
 //
 //import org.apache.xalan.serialize.Serializer;
@@ -132,46 +136,48 @@ public final class DocumentDeserializerImpl
     }
 
 
-    /**
-     *  Convert the given <code>DOMDocument</code> format object
-     *  into a <code>SxwDocument</code> object.
+
+     /*
+     * This method performs the xslt transformation on the supplied <code>
+     * Document</code> and returns a <code>ByteArrayOutputStream</code> object.
      *
-     *  @return  Resulting <code>SxwDocument</code> object.
+     *  Xslt transformation code
      *
-     *  @throws ConvertException   If any conversion error occurs.
-     *  @throws IOException        If any I/O error occurs.
+     * @returns baos A <code>ByteArrayOutputStream</code> object containing
+     *               the result of the Xslt transformation.
+     * @throws TransformerException,TransformerConfigurationException
+     *        , FileNotFoundException,IOException
+     *
      */
     public Document deserialize() throws ConvertException, IOException {
-
+    log("\nFound the XSLT deserializer");
     Enumeration enum = cd.getDocumentEnumeration();
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
-    DOMResult domTree=null;
     GenericOfficeDocument doc = null;
-
+    ByteArrayOutputStream baos =null;
+    GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
     while (enum.hasMoreElements()) {
          docOut = (DOMDocument) enum.nextElement();
     }
     domDoc = docOut.getContentDOM();
-
-
     try{
-        domTree=transform(domDoc);
+         baos = transform(domDoc);
+         sxwDoc.initContentDOM();
+         DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+         dFactory.setNamespaceAware(true);
+         DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
+         sxwDoc.setContentDOM(dBuilder.parse(new ByteArrayInputStream(baos.toByteArray())));
 
-     }
+    }
     catch(Exception e){
         System.out.println("The following error occurred:"+e);
     }
-    GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
-    sxwDoc.initContentDOM();
-    sxwDoc.setContentDOM(domTree.getNode());
-
     return sxwDoc;
-
     }
 
- /*
-     * This method performs the sxl transformation on the supplied Dom Tree.
+     /*
+     * This method performs the xslt transformation on the supplied Dom Tree.
      *
      *  Xslt transformation code
      *
@@ -179,16 +185,13 @@ public final class DocumentDeserializerImpl
      *        , FileNotFoundException,IOException
      *
      */
-
-
-    private DOMResult transform(org.w3c.dom.Document xmlDoc)
+    private ByteArrayOutputStream  transform(org.w3c.dom.Document xmlDoc)
        throws TransformerException,TransformerConfigurationException
           , FileNotFoundException,IOException{
 
-       //System.out.println("\nTransforming...");
-       DOMResult xmlDomResult = new DOMResult();
+       log("\nTransforming...");
        ConverterInfo ci = pluginFactory.getConverterInfo();
-
+       ByteArrayOutputStream baos= new ByteArrayOutputStream();
        try{
           DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
           dFactory.setNamespaceAware(true);
@@ -199,12 +202,12 @@ public final class DocumentDeserializerImpl
           org.w3c.dom.Document xslDoc=null;
               if ((teststr.equals("http:/"))||(teststr.equals("file:/"))
                                         ||(teststr.equals("jar://"))){
-              //System.out.println(ci.getXsltDeserial());
+              log(ci.getXsltDeserial());
               xslDoc= dBuilder.parse(ci.getXsltDeserial());
 
           }
           else{
-              //System.out.println(ci.getJarName()+"!/"+ci.getXsltDeserial());
+              log(ci.getJarName()+"!/"+ci.getXsltDeserial());
               xslDoc = dBuilder.parse(
                   "jar:"+ci.getJarName()+"!/"+ci.getXsltDeserial());
           }
@@ -215,9 +218,8 @@ public final class DocumentDeserializerImpl
 
            //call the tranformer using the XSL, Source and Result dom.
           TransformerFactory tFactory = TransformerFactory.newInstance();
-
-           Transformer transformer = tFactory.newTransformer(xslDomSource);
-          transformer.transform(xmlDomSource, xmlDomResult);
+          Transformer transformer = tFactory.newTransformer(xslDomSource);
+          transformer.transform(xmlDomSource,new StreamResult(baos));
           /*
           // Serialize for output to standard out
           Serializer serializer = SerializerFactory.getSerializer
@@ -226,7 +228,7 @@ public final class DocumentDeserializerImpl
           serializer.asDOMSerializer().serialize(xmlDomResult.getNode());
           */
 
-          //System.out.println("\n** Transform Complete ***");
+          log("\n** Transform Complete ***");
 
        }
        catch (StackOverflowError sOE){
@@ -236,8 +238,18 @@ public final class DocumentDeserializerImpl
        catch(Exception e){
               System.out.println("An error occured in the transformation : "+e);
        }
-       return xmlDomResult;
+        return baos;
      }
+
+     /**
+     *  Sends message to the log object.
+     *
+     *  @param  str  Debug message.
+     */
+    private void log(String str) {
+
+        Debug.log(Debug.TRACE, str);
+    }
 
 }
 
