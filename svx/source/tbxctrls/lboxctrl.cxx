@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-24 11:45:50 $
+ *  last change: $Author: tl $ $Date: 2001-09-26 08:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _SV_EVENT_HXX
+#include <vcl/event.hxx>
+#endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
@@ -79,6 +82,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
 #endif
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
@@ -117,12 +123,19 @@ class SvxPopupWindowListBox;
 
 /////////////////////////////////////////////////////////////////
 
+static void ReleaseTbxBtn_Impl( ToolBox &rBox, const Point &rPos )
+{
+    MouseEvent      aMEvt( rPos, 1, 0, 0, 0 );
+    rBox.Tracking( TrackingEvent( aMEvt, ENDTRACK_END ) );
+}
+
+/////////////////////////////////////////////////////////////////
+
 class SvxPopupWindowListBox : public SfxPopupWindow
 {
     FixedInfo       aInfo;
     ListBox *       pListBox;
     ToolBox &       rToolBox;
-    USHORT          nItemId;
     BOOL            bUserSel;
 
     // disallow copy-constructor and assignment-operator
@@ -135,7 +148,7 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 
 public:
     SvxPopupWindowListBox( USHORT nSlotId,
-                           ToolBox& rTbx, USHORT nTbxItemId,
+                           ToolBox& rTbx,
                            SfxBindings &rBindings );
     virtual ~SvxPopupWindowListBox();
 
@@ -157,13 +170,12 @@ public:
 
 SvxPopupWindowListBox::SvxPopupWindowListBox(
             USHORT nSlotId,
-            ToolBox& rTbx, USHORT nTbxItemId,
+            ToolBox& rTbx,
             SfxBindings &rBindings ) :
 
     SfxPopupWindow( nSlotId, SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ), rBindings ),
     aInfo       ( this, ResId( FT_NUM_OPERATIONS ) ),
     rToolBox    ( rTbx ),
-    nItemId     ( nTbxItemId ),
     bUserSel    ( FALSE )
 {
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
@@ -183,7 +195,7 @@ SvxPopupWindowListBox::~SvxPopupWindowListBox()
 
 SfxPopupWindow* SvxPopupWindowListBox::Clone() const
 {
-    return new SvxPopupWindowListBox( GetId(), rToolBox, nItemId,
+    return new SvxPopupWindowListBox( GetId(), rToolBox,
                                       (SfxBindings &) GetBindings() );
 }
 
@@ -193,8 +205,10 @@ void SvxPopupWindowListBox::PopupModeEnd()
     rToolBox.EndSelection();
     SfxPopupWindow::PopupModeEnd();
     //FloatingWindow::PopupModeEnd();
-    rToolBox.SetItemDown( nItemId, FALSE );
 
+    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+    if (pShellWnd)
+        pShellWnd->GrabFocus();
 }
 
 
@@ -318,6 +332,7 @@ SvxUndoControl::~SvxUndoControl()
 SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
 {
     DBG_ASSERT( SID_UNDO == GetId(), "mismatching ids" );
+    DBG_ASSERT( SID_UNDO == nItemId, "mismatching ids" );
 
     const SfxPoolItem* pState = 0;
     SfxBindings &rBindings = GetBindings();
@@ -328,7 +343,7 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
     {
         ToolBox& rBox = GetToolBox();
 
-        pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, nItemId, rBindings );
+        pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, rBindings );
         pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoControl, PopupModeEndHdl ) );
         ListBox &rListBox = pPopupWin->GetListBox();
         rListBox.SetSelectHdl( LINK( this, SvxUndoControl, SelectHdl ) );
@@ -342,11 +357,14 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
         rListBox.SelectEntryPos( 0 );
         Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
-        // position window at the bottom-left of the toolbox icon
-        Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
+        // position window at the bottom-left of the toolbox icon.
+        // The -2 offset takes the distance from the item-rect to
+        // the toolbox border into account (can't be obtained from
+        // the toolbox).
+        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
         aItemRect.Bottom() += aItemRect.GetHeight() - 2;
 
-        rBox.SetItemDown( nItemId, TRUE );
+        ReleaseTbxBtn_Impl( rBox, rBox.GetItemRect( GetId() ).TopLeft() );
         pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
     }
@@ -389,6 +407,7 @@ SvxRedoControl::~SvxRedoControl()
 SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
 {
     DBG_ASSERT( SID_REDO == GetId(), "mismatching ids" );
+    DBG_ASSERT( SID_REDO == nItemId, "mismatching ids" );
 
     const SfxPoolItem* pState = 0;
     SfxBindings &rBindings = GetBindings();
@@ -399,7 +418,7 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
     {
         ToolBox& rBox = GetToolBox();
 
-        pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, nItemId, rBindings );
+        pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, rBindings );
         pPopupWin->SetPopupModeEndHdl( LINK( this, SvxRedoControl, PopupModeEndHdl ) );
         ListBox &rListBox = pPopupWin->GetListBox();
         rListBox.SetSelectHdl( LINK( this, SvxRedoControl, SelectHdl ) );
@@ -413,11 +432,14 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
         rListBox.SelectEntryPos( 0 );
         Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
-        // position window at the bottom-left of the toolbox icon
-        Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
+        // position window at the bottom-left of the toolbox icon.
+        // The -2 offset takes the distance from the item-rect to
+        // the toolbox border into account (can't be obtained from
+        // the toolbox).
+        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
         aItemRect.Bottom() += aItemRect.GetHeight() - 2;
 
-        rBox.SetItemDown( nItemId, TRUE );
+        ReleaseTbxBtn_Impl( rBox, rBox.GetItemRect( GetId() ).TopLeft() );
         pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
     }
