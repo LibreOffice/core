@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:18:39 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,7 @@ void CacheController::closeModules(Cache::DisposeList & _aList, RequestOptions c
 }
 
 // -------------------------------------------------------------------------
+#if 0
 static
 std::auto_ptr<ISubtree> reduceSubtreeForLocale(std::auto_ptr<ISubtree> _pSubtree, RequestOptions const & _aOptions)
 {
@@ -403,6 +404,7 @@ std::auto_ptr<ISubtree> reduceSubtreeForLocale(std::auto_ptr<ISubtree> _pSubtree
 
     return aRet;
 }
+#endif
 // -------------------------------------------------------------------------
 
 static
@@ -509,7 +511,7 @@ AbsolutePath CacheController::encodeTemplateLocation(const Name& _rName, const N
     return AbsolutePath(aResult);
 }
 // -------------------------------------------------------------------------
-
+#if 0
 static
 AbsolutePath templateLoadLocation(const AbsolutePath &_rTemplateLocation)
 {
@@ -523,6 +525,7 @@ AbsolutePath templateLoadLocation(const AbsolutePath &_rTemplateLocation)
 
     return AbsolutePath(aResult);
 }
+#endif
 // -------------------------------------------------------------------------
 std::auto_ptr<ISubtree> CacheController::loadTemplateData(TemplateRequest const & _aTemplateRequest) CFG_UNO_THROW_ALL(  )
 {
