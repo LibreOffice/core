@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: th $ $Date: 2001-06-22 00:36:00 $
+ *  last change: $Author: th $ $Date: 2001-06-22 13:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4041,6 +4041,11 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
     if ( bNormalLines )
     {
+#ifdef REMOTE_APPSERVER
+        Color aOldLineColor = GetLineColor();
+        Color aOldFillColor = GetFillColor();
+#endif
+
         if ( eUnderline > UNDERLINE_LAST )
             eUnderline = UNDERLINE_SINGLE;
 
@@ -4121,8 +4126,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             mpGraphics->SetFillColor( ImplColorToSal( aUnderlineColor ) );
             mbInitFillColor = TRUE;
 #else
-            Color aOldLineColor = GetLineColor();
-            Color aOldFillColor = GetFillColor();
             SetLineColor();
             SetFillColor( aUnderlineColor );
             if ( mbInitLineColor )
@@ -4310,8 +4313,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             mpGraphics->SetFillColor( ImplColorToSal( aStrikeoutColor ) );
             mbInitFillColor = TRUE;
 #else
-            Color aOldLineColor = GetLineColor();
-            Color aOldFillColor = GetFillColor();
             SetLineColor();
             SetFillColor( aStrikeoutColor );
             if ( mbInitLineColor )
