@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nidd $ $Date: 2001-12-25 08:24:12 $
+ *  last change: $Author: nidd $ $Date: 2002-02-28 15:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,8 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                const ::com::sun::star::lang::Locale& aLocale,
                sal_Int16 nMaxLeading,
                const ::com::sun::star::beans::PropertyValues& aProperties )
+               throw (com::sun::star::uno::RuntimeException,
+               com::sun::star::lang::IllegalArgumentException)
 {
     SvtPathOptions aPathOpt;
     CharClass chclass( rSMgr, aLocale );
