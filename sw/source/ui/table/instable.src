@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:52:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,14 +136,14 @@ ModalDialog DLG_INSERT_TABLE
         Text [ spanish ] = "~Columnas" ;
         Text [ english_us ] = "~Columns" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "À¸(~C)";
+        Text[ chinese_simplified ] = "ÁĞ(~C)";
         Text[ russian ] = "Êîëîíêè";
         Text[ polish ] = "Kolumny";
         Text[ japanese ] = "‰¡(~C)";
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "´Ü";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -184,7 +184,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
         Text[ japanese ] = "c(~Rj";
-        Text[ chinese_traditional ] = "¦æ(~R)";
+        Text[ chinese_traditional ] = "¦C(~R)";
         Text[ arabic ] = "Õİæİ";
         Text[ greek ] = "Ãñáììİò";
         Text[ korean ] = "Çà(~R)";
@@ -258,7 +258,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¼ĞÃD";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ greek ] = "Åğéêåöáëßäá";
-        Text[ korean ] = "¸Ó¸®±Û";
+        Text[ korean ] = "Ç¥Á¦";
         Text[ turkish ] = "Başlık";
         Text[ language_user1 ] = " ";
     };
@@ -285,7 +285,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü";
         Text[ arabic ] = "ÊßÑÇÑ İí ßá ÕİÍÉ";
         Text[ greek ] = "ÅğáíÜëç~øç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸Ó¸®±Û ¹İº¹(~P)";
+        Text[ korean ] = "¸ğµç¡¡ÂÊ¿¡¼­¡¡¹İº¹";
         Text[ turkish ] = "İlk satırı her sayfada yi~nele";
         Text[ language_user1 ] = " ";
     };
@@ -312,7 +312,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "Íá ìç äéáéñåèåß ï ğßíáêáò";
-        Text[ korean ] = "Ç¥¸¦ ÂÉ°³Áö ¸¶½Ê½Ã¿À.";
+        Text[ korean ] = "Ç¥ ºĞ¸®ÇÏÁö¡¡¾Ê±â";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sığdır";
         Text[ language_user1 ] = " ";
     };
@@ -413,7 +413,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡(~F)...";
         Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí...";
         Text[ greek ] = "~ÁõôïÌïñöŞ...";
-        Text[ korean ] = "ÀÚµ¿ ¼­½Ä(~F)...";
+        Text[ korean ] = "ÀÚµ¿¼­½Ä(~F)...";
         Text[ turkish ] = "~Otom. formatlama...";
         Text[ language_user1 ] = " ";
     };
@@ -424,7 +424,7 @@ ModalDialog DLG_INSERT_TABLE
     Text[ chinese_traditional ] = "´¡¤Jªí®æ";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
     Text[ greek ] = "ÅéóáãùãŞ ğßíáêá";
-    Text[ korean ] = "»ğÀÔ Ç¥";
+    Text[ korean ] = "Ç¥¡¡»ğÀÔ";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
 };
