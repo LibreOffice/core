@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmslots.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:55:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 interface Form : Object
 [
@@ -341,11 +340,6 @@ interface Form : Object
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    /*SID_FM_FILTER_REMOVE
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]*/
      //--------------------------------------------------------------------------
     SID_FM_FMEXPLORER_CONTROL
     [
@@ -380,9 +374,301 @@ interface Form : Object
     ]
 }
 
+interface FormTextAttributeShell
+{
+    SID_CUT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_COPY
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_PASTE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_SELECTALL
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+
+    SID_ATTR_PARA_ADJUST
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_LEFT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_CENTER
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_RIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_BLOCK
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_SET_SUPER_SCRIPT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_SET_SUB_SCRIPT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_UNDERLINE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_STRIKEOUT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_SHADOWED
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_CHAR_DLG
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_PARA_DLG
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_10
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_15
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_20
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CONTOUR
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_CLIPBOARD_FORMAT_ITEMS
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_WORDLINEMODE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_COLOR
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_RELIEF
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_ESCAPEMENT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_SCALEWIDTH
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_KERNING
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_AUTOKERN
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LANGUAGE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_TABSTOP
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_ULSPACE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_LRSPACE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+/*  SID_TEXTDIRECTION_LEFT_TO_RIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_TEXTDIRECTION_TOP_TO_BOTTOM
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+*/
+    SID_ATTR_PARA_LEFT_TO_RIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+
+    /**** <HACK> ****/
+    // the following is a slight hack. Problem is that the form shell needs to translate
+    // slot names/args into URL dispatch names/args. For this, the SfxSlotPool is used
+    // - it provides convinient methods for this. However, the "pool" is not really a
+    // "pool" - it only knows slots, if there is a shell on the dispatcher stack which
+    // which is responsible for this slot.
+    // So, we declare the form shell as responsible for the following slots.
+    SID_ATTR_CHAR_CJK_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CJK_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CJK_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CJK_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_EMPHASISMARK
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_LANGUAGE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    /**** </HACK> ****/
+}
+
 shell FmFormShell
 {
-                                    import Form [Automation];
+    import FormTextAttributeShell;
+    import Form [Automation];
+
     SID_FM_CONFIG // ole : no, status : ?
     [
         ExecMethod = Execute ;
