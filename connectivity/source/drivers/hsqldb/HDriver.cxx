@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:50:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #include "TConnection.hxx"
 #endif
 #include "hsqldb/HStorageMap.hxx"
+#ifndef INCLUDED_JVMFWK_FRAMEWORK_H
+#include <jvmfwk/framework.h>
+#endif
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #endif
@@ -314,12 +317,10 @@ namespace connectivity
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
     {
-        { // initialize the java vm
-            ::rtl::Reference< jvmaccess::VirtualMachine > xTest = ::connectivity::getJavaVM(m_xFactory);
-            if ( !xTest.is() )
-                return sal_False;
-        }
-        return url.compareToAscii("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")) == 0;
+        sal_Bool bEnabled = sal_False;
+        javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
+        OSL_ENSURE( JFW_E_NONE == eErr,"error in jfw_getEnabled" );
+        return bEnabled  && url.compareToAscii("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")) == 0;
     }
 
     //--------------------------------------------------------------------
