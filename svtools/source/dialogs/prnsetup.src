@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:12:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 17:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,7 +925,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ russian ] = "Êîììåíòàğèé";
         Text[ polish ] = "Komentarz";
         Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "ª`¸Ñ";
+        Text[ chinese_traditional ] = "µù¸Ñ";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
         Text[ korean ] = "ÁÖ¼®";
@@ -957,7 +957,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ russian ] = "Íàñòğîèòü ïğèíòåğ";
     Text[ polish ] = "Ustaw drukarkê";
     Text[ japanese ] = "ÌßØİÀİ’è";
-    Text[ chinese_traditional ] = "³]©w¦Lªí¾÷";
+    Text[ chinese_traditional ] = "³]¸m¦Lªí¾÷";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáØÇÈÚÉ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "ÅãêáôÜóôáóç åêôõğùôŞ";
