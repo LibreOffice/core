@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-15 12:39:07 $
+ *  last change: $Author: aw $ $Date: 2002-09-27 10:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,10 @@ public:
     xub_StrLen                  mnTextLength;
     sal_uInt16                  mnPara;
     xub_StrLen                  mnIndex;
-    Font                        maFont;
+
+    // #102819# Here SvxFont needs to be used instead of Font
+    SvxFont                     maFont;
+
     sal_Int32*                  mpDXArray;
     sal_uInt8                   mnBiDiLevel;
 
