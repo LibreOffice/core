@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:05:41 $
+ *  last change: $Author: obo $ $Date: 2004-04-28 12:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     // get stream to be used
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
     SfxMedium aMedium( rMainURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
     SvStream *pStream = aMedium.GetInStream();
     DBG_ASSERT( pStream, "input stream missing" );
     if (!pStream || pStream->GetError())
