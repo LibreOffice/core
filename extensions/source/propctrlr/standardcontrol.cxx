@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 14:04:22 $
+ *  last change: $Author: oj $ $Date: 2002-08-06 08:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 #ifndef _OFF_APP_HXX
 #include <offmgr/app.hxx>
 #endif
-
+#include <memory>
 //............................................................................
 namespace pcr
 {
@@ -196,7 +196,11 @@ namespace pcr
 
         autoSizeWindow();
 
+#ifdef SUPD < 650
+        SetExtFormat(XTDATEF_SYSTEM_SHORT_YYYY);
+#else
         SetExtDateFormat(XTDATEF_SYSTEM_SHORT_YYYY);
+#endif
         EnableEmptyFieldValue(sal_True);
     }
 
@@ -913,9 +917,18 @@ namespace pcr
     //------------------------------------------------------------------
     OMultilineEditControl::~OMultilineEditControl()
     {
-        delete m_pFloatingEdit;
-        delete m_pImplEdit;
-        delete m_pDropdownButton;
+        {
+            ::std::auto_ptr<Window> aTemp(m_pFloatingEdit);
+            m_pFloatingEdit = NULL;
+        }
+        {
+            ::std::auto_ptr<Window> aTemp(m_pImplEdit);
+            m_pImplEdit = NULL;
+        }
+        {
+            ::std::auto_ptr<Window< aTemp(m_pDropdownButton);
+            m_pDropdownButton = NULL;
+        }
     }
 
     //------------------------------------------------------------------
@@ -1086,7 +1099,8 @@ namespace pcr
     //------------------------------------------------------------------
     void OMultilineEditControl::GetFocus()
     {
-        m_pImplEdit->GetFocus();
+        if ( m_pImplEdit )
+            m_pImplEdit->GetFocus();
     }
 
     //------------------------------------------------------------------
@@ -1244,6 +1258,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/02/19 14:04:22  hr
+ *  #65293#: SetExtFormar() -> SetExtDateFormat()
+ *
  *  Revision 1.5  2001/07/23 06:33:17  fs
  *  #90040# use LocaleDataWrapper instead of International class
  *
