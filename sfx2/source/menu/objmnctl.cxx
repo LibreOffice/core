@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmnctl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:18:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,18 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
+#include <com/sun/star/embed/VerbDescriptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_VERBATTRIBUTES_HPP_
+#include <com/sun/star/embed/VerbAttributes.hpp>
+#endif
+
 #include <tools/list.hxx>
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
 #endif
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
+#ifndef _SXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
 #ifndef GCC
@@ -78,11 +82,13 @@
 #include "dispatch.hxx"
 #include "viewsh.hxx"
 #include "viewfrm.hxx"
+#include "objsh.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
 SFX_IMPL_MENU_CONTROL(SfxObjectVerbsControl, SfxStringItem);
 
+using namespace com::sun::star;
 //--------------------------------------------------------------------
 
 /*
@@ -112,24 +118,30 @@ void SfxObjectVerbsControl::FillMenu()
     SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
     if (pView)
     {
-        const SvVerbList *pList = pView->GetVerbs();
-        if (pList)
+        SfxObjectShell* pDoc = pView->GetObjectShell();
+        const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs =  pView->GetVerbs();
+        if ( aVerbs.getLength() )
         {
             USHORT nId = SID_VERB_START;
-            for (USHORT n=0; n<pList->Count(); n++)
+            for (USHORT n=0; n<aVerbs.getLength(); n++)
             {
-                const SvVerb& rVerb = (*pList)[n];
-                if (!rVerb.IsOnMenu())
+                // check for ReadOnly verbs
+                if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
+                    continue;
+
+                // check for verbs that shouldn't appear in the menu
+                if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                     continue;
 
                 DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
                 if (nId > SID_VERB_END)
                     break;
 
-                pMenu->InsertItem(nId++, rVerb.GetName());
+                pMenu->InsertItem(nId++, aVerbs[n].VerbName);
             }
         }
     }
+
     rParent.EnableItem( GetId(), (BOOL)pMenu->GetItemCount() );
 }
 
