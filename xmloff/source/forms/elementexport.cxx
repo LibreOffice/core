@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 13:30:17 $
+ *  last change: $Author: fs $ $Date: 2001-06-14 13:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,7 +996,7 @@ namespace xmloff
 
             // the maximum element in both sets
             sal_Int16 nLastReferredEntry = max(nLastSelected, nLastDefaultSelected);
-            OSL_ENSURE(nLastReferredEntry < nMaxLen, "OControlExport::exportListSourceAsElements: inconsistence!");
+            OSL_ENSURE(nLastReferredEntry >= nMaxLen, "OControlExport::exportListSourceAsElements: inconsistence!");
                 // if the maximum (selected or default selected) entry number is less than the maximum item count
                 // in both lists, the entry number should have been removed from the set
 
@@ -1525,6 +1525,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/05/21 13:30:17  fs
+ *  #85388# when exporting the ListSource as attribs, store form:option elements as long as there are valid 'selected' or 'default-selected' entries
+ *
  *  Revision 1.15  2001/04/17 07:58:31  fs
  *  #85427# TabCycle has a void-default
  *
