@@ -72,11 +72,12 @@ fi
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core01-*" ! -name "*-menus-*" ! -name "adabas*" ! -name "jre*" ! -name "*-gnome*" -print`
-CORERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core01-*" -print`
-PREFIX=`rpm -qlp $CORERPM | head -n1`
+RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core*" ! -name "*-menus-*" ! -name "adabas*" ! -name "jre*" ! -name "*-gnome*" -print`
+CORERPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core*" -print`
+CORERPM01=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core01-*" -print`
+PREFIX=`rpm -qlp $CORERPM01 | head -n1`
 
-if [ -z "$CORERPM" ]
+if [ -z "$CORERPM01" ]
 then
     error "No core package found in directory $PACKAGE_PATH"
 fi
@@ -93,7 +94,7 @@ then
 fi
 
 echo "Packages found:"
-for i in $CORERPM $RPMLIST $GNOMERPM; do
+for i in $CORERPMLIST $RPMLIST $GNOMERPM; do
   echo `basename $i`
 done
 
@@ -143,7 +144,7 @@ echo "Installing the RPMs"
 
 # inject a second slash to the last path segment to avoid rpm 3 concatination bug
 NEWPREFIX=`echo $INSTALLDIR | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
-rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $CORERPM
+rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $CORERPMLIST
 rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
 
 #
