@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:51:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,8 +354,7 @@ Sequence<Type> OEditModel::_getTypes()
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT, sal_True, sal_True )
-                                    // use the old control name for compytibility reasons
+             :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_RICHTEXTCONTROL, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
     ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_aNullDate(DBTypeConversion::getStandardDate())
@@ -472,8 +471,10 @@ void OEditModel::fillProperties(
         Sequence< Property >& _rAggregateProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
-        // Text auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
+        RemoveProperty( _rAggregateProps, PROPERTY_TABINDEX );
+        RemoveProperty( _rAggregateProps, PROPERTY_CLASSID );
+        RemoveProperty( _rAggregateProps, PROPERTY_NAME );
+        RemoveProperty( _rAggregateProps, PROPERTY_TAG );
 
         DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
         DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
@@ -487,6 +488,117 @@ void OEditModel::fillProperties(
 ::cppu::IPropertyArrayHelper& OEditModel::getInfoHelper()
 {
     return *const_cast<OEditModel*>(this)->getArrayHelper();
+}
+
+//------------------------------------------------------------------------------
+bool OEditModel::implActsAsRichText( ) const
+{
+    sal_Bool bActAsRichText = sal_False;
+    if ( m_xAggregateSet.is() )
+    {
+        OSL_VERIFY( m_xAggregateSet->getPropertyValue( PROPERTY_RICH_TEXT ) >>= bActAsRichText );
+    }
+    return bActAsRichText;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OEditModel::reset(  ) throw(RuntimeException)
+{
+    // no reset if we currently act as rich text control
+    if ( implActsAsRichText() )
+        return;
+
+    OEditBaseModel::reset();
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    void lcl_transferProperties( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySet >& _rxDest )
+    {
+        try
+        {
+            Reference< XPropertySetInfo > xSourceInfo;
+            if ( _rxSource.is() )
+                xSourceInfo = _rxSource->getPropertySetInfo();
+
+            Reference< XPropertySetInfo > xDestInfo;
+            if ( _rxDest.is() )
+                xDestInfo = _rxDest->getPropertySetInfo();
+
+            if ( !xSourceInfo.is() || !xDestInfo.is() )
+            {
+                OSL_ENSURE( sal_False, "lcl_transferProperties: invalid property set(s)!" );
+                return;
+            }
+
+            Sequence< Property > aSourceProps( xSourceInfo->getProperties() );
+            const Property* pSourceProps = aSourceProps.getConstArray();
+            const Property* pSourcePropsEnd = aSourceProps.getConstArray() + aSourceProps.getLength();
+            while ( pSourceProps != pSourcePropsEnd )
+            {
+                if ( !xDestInfo->hasPropertyByName( pSourceProps->Name ) )
+                {
+                    ++pSourceProps;
+                    continue;
+                }
+
+                Property aDestProp( xDestInfo->getPropertyByName( pSourceProps->Name ) );
+                if ( 0 != ( aDestProp.Attributes & PropertyAttribute::READONLY ) )
+                {
+                    ++pSourceProps;
+                    continue;
+                }
+
+                _rxDest->setPropertyValue( pSourceProps->Name, _rxSource->getPropertyValue( pSourceProps->Name ) );
+
+                ++pSourceProps;
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_transferProperties: caught an exception!" );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
+{
+    // we need to fake the writing of our aggregate. Since #i24387#, we have another aggregate,
+    // but for compatibility, we need to use an "old" aggregate for writing and reading
+
+    Reference< XPropertySet > xFakedAggregate(
+        getORB()->createInstance( VCL_CONTROLMODEL_EDIT ), UNO_QUERY
+    );
+    OSL_ENSURE( xFakedAggregate.is(), "OEditModel::writeAggregate: could not create an old EditControlModel!" );
+    if ( !xFakedAggregate.is() )
+        return;
+
+    lcl_transferProperties( m_xAggregateSet, xFakedAggregate );
+
+    Reference< XPersistObject > xFakedPersist( xFakedAggregate, UNO_QUERY );
+    OSL_ENSURE( xFakedPersist.is(), "OEditModel::writeAggregate: no XPersistObject!" );
+    if ( xFakedPersist.is() )
+        xFakedPersist->write( _rxOutStream );
+}
+
+//------------------------------------------------------------------------------
+void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
+{
+    // we need to fake the reading of our aggregate. Since #i24387#, we have another aggregate,
+    // but for compatibility, we need to use an "old" aggregate for writing and reading
+
+    Reference< XPropertySet > xFakedAggregate(
+        getORB()->createInstance( VCL_CONTROLMODEL_EDIT ), UNO_QUERY
+    );
+    Reference< XPersistObject > xFakedPersist( xFakedAggregate, UNO_QUERY );
+    OSL_ENSURE( xFakedPersist.is(), "OEditModel::readAggregate: no XPersistObject, or no faked aggregate at all!" );
+    if ( xFakedPersist.is() )
+    {
+        xFakedPersist->read( _rxInStream );
+        lcl_transferProperties( xFakedAggregate, m_xAggregateSet );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -644,6 +756,16 @@ void OEditModel::onDisconnectedDbColumn()
         m_nKeyType   = NumberFormat::UNDEFINED;
         m_aNullDate  = DBTypeConversion::getStandardDate();
     }
+}
+
+//------------------------------------------------------------------------------
+sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
+{
+    // if we act as rich text curently, we do not allow binding to a database column
+    if ( implActsAsRichText() )
+        return sal_False;
+
+    return OEditBaseModel::approveDbColumnType( _nColumnType );
 }
 
 //------------------------------------------------------------------------------
