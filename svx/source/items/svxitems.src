@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-19 20:07:52 $
+ *  last change: $Author: kz $ $Date: 2002-05-06 07:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String RID_SVXITEMS_TRUE
     Text[ chinese_traditional ] = "çœŸ";
     Text[ arabic ] = "ÍŞíŞí";
     Text[ greek ] = "ÁëçèŞò";
-    Text[ korean ] = "ì°¸";
+    Text[ korean ] = "TRUE";
     Text[ turkish ] = "Doğru";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Verdadero";
@@ -112,7 +112,7 @@ String RID_SVXITEMS_FALSE
     Text[ chinese_traditional ] = "éŒ¯èª¤";
     Text[ arabic ] = "ÎØÃ";
     Text[ greek ] = "ËÜèïò";
-    Text[ korean ] = "ê±°ì§“";
+    Text[ korean ] = "FALSE";
     Text[ turkish ] = "Yanlış";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Falso";
@@ -359,7 +359,7 @@ String RID_SVXITEMS_SEARCHSTYL_PAGE
     Text[ chinese_traditional ] = "é é¢æ¨£å¼";
     Text[ arabic ] = "äãØ ÕİÍÉ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò";
-    Text[ korean ] = "í˜ì´ì§€ í…œí”Œë¦¿";
+    Text[ korean ] = "í˜ì´ì§€ ìŠ¤íƒ€ì¼";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "Estilo de página";
@@ -3299,7 +3299,7 @@ String RID_ATTR_CHAR
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Merkki" ;
     Text [ danish ] = "Tegn" ;
-    Text [ french ] = "Caractère" ;
+    Text [ french ] = "Caractères" ;
     Text [ swedish ] = "Tecken" ;
     Text [ dutch ] = "Teken" ;
     Text [ spanish ] = "Carácter" ;
@@ -3469,7 +3469,7 @@ String RID_ATTR_CHAR_CONTOUR
     Text[ chinese_simplified ] = "è½®å»“";
     Text[ russian ] = "Êîíòóğ";
     Text[ polish ] = "Kontur";
-    Text[ japanese ] = "è¼ªéƒ­";
+    Text[ japanese ] = "ä¸­æŠœã";
     Text[ chinese_traditional ] = "è¼ªå»“";
     Text[ arabic ] = "ÇáÎØ ÇáßöİÇİí";
     Text[ greek ] = "Ğåñßãñáììá";
@@ -4265,7 +4265,7 @@ String RID_ATTR_PARA_MODEL
     Text[ chinese_traditional ] = "é é¢æ¨£å¼";
     Text[ arabic ] = "äãØ ÕİÍÉ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò";
-    Text[ korean ] = "í˜ì´ì§€ í…œí”Œë¦¿";
+    Text[ korean ] = "í˜ì´ì§€ ìŠ¤íƒ€ì¼";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de página";
@@ -4288,7 +4288,7 @@ String RID_ATTR_PARA_KEEP
     Text[ chinese_simplified ] = "ä¸ä¸‹æ®µåŒé¡µ";
     Text[ russian ] = "Âìåñòå ñî ñëåäóşùèì àáçàöåì";
     Text[ polish ] = "Razem z nastêpnym";
-    Text[ japanese ] = "æ®µè½ã®æ¥åˆ";
+    Text[ japanese ] = "æ¬¡ã®æ®µè½ã‚’é›¢ã•ãªã„";
     Text[ chinese_traditional ] = "æ®µè½ä¸åˆ†é–‹";
     Text[ arabic ] = "ÊÑÇÈØ ÇáİŞÑÇÊ";
     Text[ greek ] = "ÄéáôŞñçóç ğáñáãñÜöùí ìáæß";
@@ -4620,7 +4620,7 @@ String RID_ATTR_CHAR_TWO_LINES
     Text[ french ] = "Deux lignes en une";
     Text[ spanish ] = "Líneas dobles";
     Text[ finnish ] = "Double lined";
-    Text[ italian ] = "Due linee in una";
+    Text[ italian ] = "Due righe";
     Text[ danish ] = "Double lined";
     Text[ swedish ] = "Dubbla rader";
     Text[ polish ] = "Double lined";
@@ -4690,7 +4690,7 @@ String RID_ATTR_PARA_HANGPUNCTUATION
     Text[ greek ] = "Hanging punctuation";
     Text[ dutch ] = "Hanging punctuation";
     Text[ french ] = "Ponctuation en retrait";
-    Text[ spanish ] = "Puntuación libre";
+    Text[ spanish ] = "Puntuación saliente";
     Text[ finnish ] = "Hanging punctuation";
     Text[ italian ] = "Punteggiatura sospesa";
     Text[ danish ] = "Hanging punctuation";
@@ -4770,7 +4770,7 @@ String RID_ATTR_CHAR_SCALEWIDTH
     Text[ polish ] = "Scaling";
     Text[ portuguese_brazilian ] = "Scaling";
     Text[ japanese ] = "å€ç‡";
-    Text[ korean ] = "Scaling";
+    Text[ korean ] = "ë°°ìœ¨";
     Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
     Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
     Text[ turkish ] = "Scaling";
@@ -7018,7 +7018,7 @@ String RID_SVXITEMS_BORDER_LEFT
     Text [ finnish ] = "vasen" ;
     Text [ danish ] = "til venstre " ;
     Text [ french ] = "À gauche " ;
-    Text [ swedish ] = "Vänster " ;
+    Text [ swedish ] = "till vänster " ;
     Text [ dutch ] = "links   " ;
     Text [ spanish ] = "izquierda " ;
     Text[ chinese_simplified ] = "å·¦ ";
@@ -7045,7 +7045,7 @@ String RID_SVXITEMS_BORDER_RIGHT
     Text [ finnish ] = "oikea" ;
     Text [ danish ] = "til højre " ;
     Text [ french ] = "À droite " ;
-    Text [ swedish ] = "Höger " ;
+    Text [ swedish ] = "till höger " ;
     Text [ dutch ] = "rechts   " ;
     Text [ spanish ] = "derecha " ;
     Text[ chinese_simplified ] = "å³ ";
@@ -7622,7 +7622,7 @@ String RID_SVXITEMS_HYPHEN_MINTRAIL
     Text[ chinese_traditional ] = "å­—å…ƒåœ¨è¡Œé¦–";
     Text[ arabic ] = "ÃÍÑİ ÚäÏ ÈÏÇíÉ ÇáÓØÑ";
     Text[ greek ] = "×áñáêôŞñåò óôçí áñ÷Ş ôçò ãñáììŞò";
-    Text[ korean ] = "ì¤„ ì‹œì‘ ë¶€ë¶„ì— ë¬¸ì";
+    Text[ korean ] = "ì¤„ ì‹œì‘ ë¶€ë¶„(~T)";
     Text[ turkish ] = "Satır başında karakterler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "caracteres al comienzo de la línea";
@@ -7676,7 +7676,7 @@ String RID_SVXITEMS_PAGEMODEL_COMPLETE
     Text[ chinese_traditional ] = "é é¢æ¨£å¼ï¼š ";
     Text[ arabic ] = "äãØ ÇáÕİÍÉ: ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò: ";
-    Text[ korean ] = "í˜ì´ì§€ í…œí”Œë¦¿: ";
+    Text[ korean ] = "í˜ì´ì§€ ìŠ¤íƒ€ì¼: ";
     Text[ turkish ] = "Sayfa biçimi: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de página:  ";
