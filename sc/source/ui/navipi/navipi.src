@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:26:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fila";
     };
     NumericField ED_ROW
     {
@@ -167,6 +168,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Zeile";
+        QuickHelpText[ catalan ] = "Fila";
     };
     FixedText FT_COL
     {
@@ -197,6 +199,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "¿­";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columna";
     };
     SpinField ED_COL
     {
@@ -236,6 +239,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Spalte";
+        QuickHelpText[ catalan ] = "Columna";
     };
     Control LB_ENTRIES
     {
@@ -281,6 +285,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokument";
+        QuickHelpText[ catalan ] = "Documento";
     };
     ToolBox TBX_CMD
     {
@@ -336,6 +341,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª";
                 Text[ turkish ] = "Veri alaný";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Área de datos";
             };
             ToolBoxItem
             {
@@ -366,6 +372,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "½ÃÀÛ";
                 Text[ turkish ] = "Baþlangýç";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Comienzo";
             };
             ToolBoxItem
             {
@@ -396,6 +403,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "³¡";
                 Text[ turkish ] = "Son";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fin";
             };
              //--------------------------------------------
              //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
@@ -430,6 +438,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "³»¿ë";
                 Text[ turkish ] = "Ýçerikler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Contenidos";
             };
             ToolBoxItem
             {
@@ -458,6 +467,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "Åä±Û";
                 Text[ turkish ] = "Deðiþtir";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Conmutar";
             };
             ToolBoxItem
             {
@@ -486,6 +496,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "½Ã³ª¸®¿À";
                 Text[ turkish ] = "Senaryo";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Escenarios";
             };
             ToolBoxItem
             {
@@ -515,6 +526,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ korean ] = "µå·¡±× ¸ðµå";
                 Text[ turkish ] = "Sürükleme kipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Modo Arrastrar";
             };
         };
     };
@@ -543,6 +555,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "µå·¡±× ¸ðµå";
         Text[ turkish ] = "Sürükleme kipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo Arrastrar";
     };
     String STR_DISPLAY
     {
@@ -569,6 +582,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "µð½ºÇÃ·¹ÀÌ";
         Text[ turkish ] = "Görüntü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Visualización";
     };
     String STR_ACTIVE
     {
@@ -595,6 +609,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "È°¼º";
         Text[ turkish ] = "Etkin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "activo";
     };
     String STR_NOTACTIVE
     {
@@ -621,6 +636,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "ºñ È°¼º";
         Text[ turkish ] = "Etkin deðil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "inactivo";
     };
     String STR_HIDDEN
     {
@@ -647,6 +663,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "¼û±è";
         Text[ turkish ] = "Gizli";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "oculto";
     };
     String STR_ACTIVEWIN
     {
@@ -673,6 +690,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "È°¼º Ã¢";
         Text[ turkish ] = "Etkin pencere";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ventana activa";
     };
 
     String STR_QHLP_SCEN_LISTBOX
@@ -700,6 +718,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "½Ã³ª¸®¿À ÀÌ¸§";
         Text[ turkish ] = "Senaryo adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del escenario";
     };
 
     String STR_QHLP_SCEN_COMMENT
@@ -727,6 +746,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "ÁÖ¼®";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comentario";
     };
 
     Text[ chinese_simplified ] = "ÖúÊÖ";
@@ -741,6 +761,7 @@ Window RID_SCDLG_NAVIGATOR
     Text[ korean ] = "³×ºñ°ÔÀÌÅÍ";
     Text[ turkish ] = "Navigatör";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegador";
 };
 ImageList RID_IMAGELIST_NAVCONT
 {
@@ -810,6 +831,7 @@ String SCSTR_CONTENT_ROOT
     Text[ korean ] = "³»¿ë";
     Text[ turkish ] = "Ýçerikler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Contenidos";
 };
 String SCSTR_CONTENT_TABLE
 {
@@ -836,6 +858,7 @@ String SCSTR_CONTENT_TABLE
     Text[ korean ] = "½ÃÆ®";
     Text[ turkish ] = "Tablolar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hojas";
 };
 String SCSTR_CONTENT_RANGENAME
 {
@@ -862,6 +885,7 @@ String SCSTR_CONTENT_RANGENAME
     Text[ korean ] = "¿µ¿ª ÀÌ¸§";
     Text[ turkish ] = "Alan adlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombres de las áreas";
 };
 String SCSTR_CONTENT_DBAREA
 {
@@ -888,6 +912,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¹üÀ§";
     Text[ turkish ] = "Veritabaný alanlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Áreas de base de datos";
 };
 String SCSTR_CONTENT_GRAPHIC
 {
@@ -914,6 +939,7 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafikler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imágenes";
 };
 String SCSTR_CONTENT_OLEOBJECT
 {
@@ -940,6 +966,7 @@ String SCSTR_CONTENT_OLEOBJECT
     Text[ korean ] = "OLE °³Ã¼";
     Text[ turkish ] = "OLE nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos OLE";
 };
 String SCSTR_CONTENT_NOTE
 {
@@ -966,6 +993,7 @@ String SCSTR_CONTENT_NOTE
     Text[ korean ] = "¸Þ¸ð";
     Text[ turkish ] = "Notlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Notas";
 };
 String SCSTR_CONTENT_AREALINK
 {
@@ -993,6 +1021,7 @@ String SCSTR_CONTENT_AREALINK
     Text[ korean ] = "¸µÅ©µÈ ¿µ¿ª";
     Text[ turkish ] = "Baðlantýlý alanlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Áreas vinculadas";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
@@ -1027,6 +1056,7 @@ Menu RID_POPUP_DROPMODE
             Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©·Î¼­ »ðÀÔ";
             Text[ turkish ] = "Hyperlink olarak ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Insertar como hiperenlace";
         };
         MenuItem
         {
@@ -1057,6 +1087,7 @@ Menu RID_POPUP_DROPMODE
             Text[ korean ] = "¿¬°á·Î »ðÀÔ";
             Text[ turkish ] = "Baðlantý olarak ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Insertar como vínculo";
         };
         MenuItem
         {
@@ -1086,6 +1117,7 @@ Menu RID_POPUP_DROPMODE
             Text[ korean ] = "º¹»çº»À¸·Î »ðÀÔ";
             Text[ turkish ] = "Kopya olarak ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Insertar como copia";
         };
     };
 };
@@ -1120,6 +1152,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ korean ] = "»èÁ¦";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar";
         };
         MenuItem
         {
@@ -1148,6 +1181,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ korean ] = "Æ¯¼º...";
             Text[ turkish ] = "Özellikler...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Propiedades...";
         };
     };
 };
