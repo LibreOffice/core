@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:38:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
         <value xml:lang="en-US">XHTML</value>
       </prop>
       <prop oor:name="Data">
-        <value>1,,,,xml,20002,</value>
+        <value>1,,,,xhtml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_Flat_XML_File" oor:op="replace">
@@ -118,6 +118,24 @@
       </prop>
       <prop oor:name="Data">
         <value>1,,doctype:-//OASIS//DTD DocBook XML V4.1.2//EN,,xml,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="writer_MS_Word_2003" oor:op="replace">
+      <prop oor:name="UIName">
+      <value xml:lang="de">Microsoft Word 2003 XML</value>
+        <value xml:lang="en-US">Microsoft Word 2003 XML</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>1,,doctype:w:wordDocument,,xml,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="calc_MS_Excel_2003" oor:op="replace">
+      <prop oor:name="UIName">
+      <value xml:lang="de">Microsoft Excel 2003 XML</value>
+        <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>1,,doctype:Workbook,,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_PocketWord_File" oor:op="replace">
@@ -2108,6 +2126,30 @@
       <prop oor:name="Data">
             <value>0,writer_DocBook_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;../share/xslt/docbook/docbooktosoffheadings.xsl;../share/xslt/docbook/sofftodocbookheadings.xsl,0,../share/xslt/docbook/DocBookTemplate.stw,</value>
        </prop>
+    </node>
+    <node oor:name="Microsoft Word 2003 XML" oor:op="replace">
+    <prop oor:name="Installed" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+      <value xml:lang="de">Microsoft Word 2003 XML</value>
+        <value xml:lang="en-US">Microsoft Word 2003 XML</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,writer_MS_Word_2003,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524353,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;../share/xslt/MicrosoftWord2003/MsWordXMLImport.xsl;;;,0,</value>
+      </prop>
+    </node>
+    <node oor:name="Microsoft Excel 2003 XML" oor:op="replace">
+    <prop oor:name="Installed" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+      <value xml:lang="de">Microsoft Excel 2003 XML</value>
+        <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,writer_MS_Excel_2003,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524353,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;;;;,0,</value>
+      </prop>
     </node>
     <node oor:name="PocketWord File" oor:op="replace">
       <prop oor:name="Installed">
@@ -7265,7 +7307,7 @@
   <node oor:name="DetectServices">
     <node oor:name="com.sun.star.comp.filters.XMLFilterDetect" oor:op="replace">
     <prop oor:name="Types">
-        <value>writer_DocBook_File writer_Flat_XML_File writer_XHTML_File</value>
+        <value>writer_DocBook_File writer_Flat_XML_File writer_XHTML_File writer_MS_Word_2003</value>
     </prop>
     </node>
   </node>
