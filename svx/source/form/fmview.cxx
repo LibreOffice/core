@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,10 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
     if ( !pFormShell->GetImpl()->GetWizardUsing() )
         return;
 
+    // #i31958# don't call wizards in XForms mode
+    if( pFormShell->GetImpl()->getDocumentType() == eEnhancedForm )
+        return;
+
     Reference< XChild >  xChild(xSet, UNO_QUERY);
     Reference< XRowSet >  xForm(xChild->getParent(), UNO_QUERY);
     String sWizardName;
@@ -639,6 +643,12 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
 SdrObject* FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
     return pImpl->implCreateFieldControl( _rColumnDescriptor );
+}
+
+//------------------------------------------------------------------------
+SdrObject* FmFormView::CreateXFormsControl()
+{
+    return pImpl->implCreateXFormsControl();
 }
 
 //------------------------------------------------------------------------
