@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 11:24:25 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2203,7 +2203,6 @@ IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
     m_aPreviewWin.Invalidate();
     return 0;
 }
-
 // -----------------------------------------------------------------------
 
 int SvxCharEffectsPage::DeactivatePage( SfxItemSet* pSet )
@@ -3194,6 +3193,27 @@ IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, pField )
     return 0;
 }
 
+/* -----------------28.08.2003 12:12-----------------
+
+ --------------------------------------------------*/
+void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
+{
+    //update the preview
+    SvxCharBasePage::ActivatePage( rSet );
+
+    //the only thing that has to be checked is the max. allowed value for the
+    //condense edit field
+    if ( m_aKerningLB.GetSelectEntryPos() == 2 )
+    {
+        // Condensed -> max value == 1/6 of the current font height
+        SvxFont& rFont = GetPreviewFont();
+        long nMax = rFont.GetSize().Height() / 6;
+        long nKern = (short)m_aKerningEdit.Denormalize( LogicToLogic( m_aKerningEdit.GetValue(), MAP_POINT, MAP_TWIP ) );
+        m_aKerningEdit.SetMax( m_aKerningEdit.Normalize( nKern > nMax ? nKern : nMax ), FUNIT_TWIP );
+        m_aKerningEdit.SetLast( m_aKerningEdit.GetMax( m_aKerningEdit.GetUnit() ) );
+    }
+}
+
 // -----------------------------------------------------------------------
 
 int SvxCharPositionPage::DeactivatePage( SfxItemSet* pSet )
@@ -3331,30 +3351,25 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
         if ( nKerning > 0 )
         {
-            m_aKerningFT.Enable();
-            m_aKerningEdit.Enable();
-            m_aKerningEdit.SetValue( nKerning );
             m_aKerningLB.SelectEntryPos( LW_GESPERRT );
         }
         else if ( nKerning < 0 )
         {
-            m_aKerningFT.Enable();
-            m_aKerningEdit.Enable();
-            m_aKerningEdit.SetValue( -nKerning );
             m_aKerningLB.SelectEntryPos( LW_SCHMAL );
-            long nMax = rFont.GetSize().Height() / 6;
-            m_aKerningEdit.SetMax( m_aKerningEdit.Normalize( nMax ), FUNIT_TWIP );
-            m_aKerningEdit.SetLast( m_aKerningEdit.GetMax( m_aKerningEdit.GetUnit() ) );
+            nKerning = -nKerning;
         }
         else
         {
-            m_aKerningFT.Disable();
-            m_aKerningEdit.Disable();
-            m_aKerningEdit.SetValue( 0 );
+            nKerning = 0;
             m_aKerningLB.SelectEntryPos( LW_NORMAL );
-            m_aKerningEdit.SetMax( 9999 );
-            m_aKerningEdit.SetLast( 9999 );
         }
+        //enable/disable and set min/max of the Edit
+        KerningSelectHdl_Impl(&m_aKerningLB);
+        //the attribute value must be displayed also if it's above the maximum allowed value
+        long nVal = m_aKerningEdit.GetMax();
+        if(nVal < nKerning)
+            m_aKerningEdit.SetMax( nKerning );
+        m_aKerningEdit.SetValue( nKerning );
     }
     else
         m_aKerningEdit.SetText( String() );
