@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJob.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,8 @@ module com {  module sun {  module star {  module task {
 
     <p>
     Instead of <type>XAsyncJob</type> the implementation of this interface
-    must be a real synchronous one. For example: UI relevant service MUST
-    do so. It's not allowed to make such things asynchronously - because
-    showing of any e.g. dialogs if may some other dialogs come up
-    can produce errors.
+    will be executed synchronously everytimes. That means: they can be shure that the
+    current stack context will be blocked till this job finish it's work.
     </p>
 
     @see XAsyncJob
