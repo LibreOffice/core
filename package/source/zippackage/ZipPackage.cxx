@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:00:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,8 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 return pRootFolder->getByName ( aName );
         }
         nOldIndex = 0;
-        ZipPackageFolder * pCurrent = pRootFolder, *pPrevious;
+        ZipPackageFolder * pCurrent = pRootFolder;
+        ZipPackageFolder * pPrevious = NULL;
         while ( ( nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
             sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
@@ -744,7 +745,8 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
             if ( pRootFolder->hasByName ( aName ) )
                 return sal_True;
         }
-        ZipPackageFolder * pCurrent = pRootFolder, *pPrevious;
+        ZipPackageFolder * pCurrent = pRootFolder;
+        ZipPackageFolder * pPrevious = NULL;
         nOldIndex = 0;
         while ( ( nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
