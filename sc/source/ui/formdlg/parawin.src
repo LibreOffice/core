@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:23:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-98 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   parawin.src  $
- //   $Author: kz $
- //     $Date: 2001-02-09 20:23:35 $
- // $Revision: 1.3 $
+ //   $Author: rt $
+ //     $Date: 2001-05-04 20:20:48 $
+ // $Revision: 1.4 $
  //  $Logfile:   T:/sc/source/ui/formdlg/parawin.srv  $
  //----------------------------------------------------------------------------
 
@@ -129,7 +129,8 @@
     QuickHelpText[ greek ] = "Óìßêñõíóç";   \
     QuickHelpText[ korean ] = "Ãà¼Ò!";  \
     QuickHelpText[ language_user1 ] = " ";  \
-    QuickHelpText[ turkish ] = "Verkleinern";
+    QuickHelpText[ turkish ] = "Verkleinern";   \
+    QuickHelpText[ catalan ] = "Reducir";
 
  //---------------------------------------------------------------------------
 
@@ -167,6 +168,7 @@ TabPage RID_SCTAB_PARAMETER
         Text[ chinese_traditional ] = "¤£©úªº¨ç¼Æ";
         Text[ arabic ] = "ÏÇáÉ ÛíÑ ãÚÑæÝÉ";
         Text[ turkish ] = "Bilinmeyen iþlev";
+        Text[ catalan ] = "Función desconocida";
     };
 
     FixedText FT_PARNAME
