@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:28:52 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,14 +341,14 @@ namespace connectivity
 
         class OOp_COMPARE : public OBoolOperator
         {
-            connectivity::OSQLPredicateType aPredicateType;
+            sal_Int32 aPredicateType;
 
         public:
             TYPEINFO();
-            OOp_COMPARE(connectivity::OSQLPredicateType aPType)
+            OOp_COMPARE(sal_Int32 aPType)
                          :aPredicateType(aPType) {}
 
-            inline connectivity::OSQLPredicateType getPredicateType() const { return aPredicateType; }
+            inline sal_Int32 getPredicateType() const { return aPredicateType; }
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
