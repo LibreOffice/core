@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 09:54:41 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 12:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,10 @@
 #define WID_DOC_AUTOMATIC_CONTROL_FOCUS         1019
 #define WID_DOC_APPLY_FORM_DESIGN_MODE          1020
 #define WID_DOC_APPLY_USER_DATA                 1021
+#define WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS      1022
+#define WID_DOC_CURRENT_DATABASE_DATA_SOURCE    1023
+#define WID_DOC_CURRENT_DATABASE_COMMAND        1024
+#define WID_DOC_CURRENT_DATABASE_COMMAND_TYPE   1025
 
 //AutoText
 #define WID_GROUP_PATH                          0

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 10:04:22 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 12:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 }
 #undef NUM_EXPORTED_VIEW_SETTINGS
 
-#define NUM_EXPORTED_CONFIGURATION_SETTINGS 10
+#define NUM_EXPORTED_CONFIGURATION_SETTINGS 14
 void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference < XPropertySet > xPropSet = Reference<XPropertySet>(GetModel(), UNO_QUERY);
@@ -580,6 +580,10 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         OUString sIsKernAsianPunctuation ( RTL_CONSTASCII_USTRINGPARAM ( "IsKernAsianPunctuation" ) );
         OUString sCharacterCompressionType ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterCompressionType" ) );
         OUString sApplyUserData ( RTL_CONSTASCII_USTRINGPARAM ( "ApplyUserData" ) );
+        OUString sSaveGlobalDocumentLinks ( RTL_CONSTASCII_USTRINGPARAM ( "SaveGlobalDocumentLinks" ) );
+        OUString sCurrentDatabaseDataSource ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseDataSource" ) );
+        OUString sCurrentDatabaseCommand ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommand" ) );
+        OUString sCurrentDatabaseCommandType ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommandType" ) );
 
         pValue[nIndex].Name = sLinkUpdateMode;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sLinkUpdateMode );
@@ -607,6 +611,18 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
 
         pValue[nIndex].Name = sApplyUserData;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sApplyUserData );
+
+        pValue[nIndex].Name = sSaveGlobalDocumentLinks;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sSaveGlobalDocumentLinks );
+
+        pValue[nIndex].Name = sCurrentDatabaseDataSource;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseDataSource );
+
+        pValue[nIndex].Name = sCurrentDatabaseCommand;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseCommand );
+
+        pValue[nIndex].Name = sCurrentDatabaseCommandType;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseCommandType );
 
         Reference < XText > xText;
         SwXText *pText = 0;

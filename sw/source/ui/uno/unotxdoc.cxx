@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 09:58:26 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 12:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2131,6 +2131,33 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             rInfo.SetUseUserData(bUseUserData);
         }
         break;
+        case WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS:
+        {
+            sal_Bool bSaveGlobal = *(sal_Bool*)aValue.getValue();
+            pDocShell->GetDoc()->SetGlblDocSaveLinks( bSaveGlobal );
+        }
+        break;
+        case WID_DOC_CURRENT_DATABASE_DATA_SOURCE:
+        {
+            SwDBData& rData = pDocShell->GetDoc()->GetDBData();
+            if ( aValue >>= rData.sDataSource )
+                pDocShell->GetDoc()->ChgDBData( rData );
+        }
+        break;
+        case WID_DOC_CURRENT_DATABASE_COMMAND:
+        {
+            SwDBData& rData = pDocShell->GetDoc()->GetDBData();
+            if ( aValue >>= rData.sCommand )
+                pDocShell->GetDoc()->ChgDBData( rData );
+        }
+        break;
+        case WID_DOC_CURRENT_DATABASE_COMMAND_TYPE:
+        {
+            SwDBData& rData = pDocShell->GetDoc()->GetDBData();
+            if ( aValue >>= rData.nCommandType )
+                pDocShell->GetDoc()->ChgDBData( rData );
+        }
+        break;
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -2311,6 +2338,30 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_TWO_DIGIT_YEAR:
         {
             aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ( TRUE )->GetYear2000());
+        }
+        break;
+        case WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS:
+        {
+            sal_Bool bSaveGlobal = pDocShell->GetDoc()->IsGlblDocSaveLinks();
+            aAny.setValue(&bSaveGlobal, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_CURRENT_DATABASE_DATA_SOURCE:
+        {
+            const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
+            aAny <<= rData.sDataSource;
+        }
+        break;
+        case WID_DOC_CURRENT_DATABASE_COMMAND:
+        {
+            const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
+            aAny <<= rData.sCommand;
+        }
+        break;
+        case WID_DOC_CURRENT_DATABASE_COMMAND_TYPE:
+        {
+            const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
+            aAny <<= rData.nCommandType;
         }
         break;
         default:

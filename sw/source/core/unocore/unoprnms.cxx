@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 09:57:02 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 12:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,3 +699,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR                      (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS             (MAP_CHAR_LEN("AutomaticControlFocus"));
 const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE              (MAP_CHAR_LEN("ApplyFormDesignMode"));
 const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_USER_DATA                     (MAP_CHAR_LEN("ApplyUserData"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SAVE_GLOBAL_DOCUMENT_LINKS          (MAP_CHAR_LEN("SaveGlobalDocumentLinks"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_DATA_SOURCE        (MAP_CHAR_LEN("CurrentDatabaseDataSource"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND            (MAP_CHAR_LEN("CurrentDatabaseCommand"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE       (MAP_CHAR_LEN("CurrentDatabaseCommandType"));
