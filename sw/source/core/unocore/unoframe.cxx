@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:32:58 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
+#endif
+#ifndef _UNOEVENT_HXX
+#include <unoevent.hxx>
 #endif
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
@@ -2026,6 +2029,7 @@ OUString SwXFrame::getShapeType(void) throw( RuntimeException )
     return C2U("FrameShape");
 }
 
+
 /******************************************************************
  *  SwXTextFrame
  ******************************************************************/
@@ -2311,6 +2315,13 @@ void SAL_CALL SwXTextFrame::operator delete( void * p) throw()
 {
     SwXTextFrameBaseClass::operator delete(p);
 }
+
+uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
+    throw(RuntimeException)
+{
+    return new SwFrameEventDescriptor( *this );
+}
+
 /******************************************************************
  *  SwXTextGraphicObject
  ******************************************************************/
@@ -2475,6 +2486,15 @@ void * SAL_CALL SwXTextGraphicObject::operator new( size_t t) throw()
 void SAL_CALL SwXTextGraphicObject::operator delete( void * p) throw()
 {
     SwXTextGraphicObjectBaseClass::operator delete(p);
+}
+/* -----------------------------15.12.00 12:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference<container::XNameReplace> SAL_CALL
+    SwXTextGraphicObject::getEvents()
+        throw(RuntimeException)
+{
+    return new SwFrameEventDescriptor( *this );
 }
 
 /******************************************************************
@@ -2692,6 +2712,15 @@ void * SAL_CALL SwXTextEmbeddedObject::operator new( size_t t) throw()
 void SAL_CALL SwXTextEmbeddedObject::operator delete( void * p) throw()
 {
     SwXTextEmbeddedObjectBaseClass::operator delete(p);
+}
+/* -----------------------------15.12.00 12:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference<container::XNameReplace> SAL_CALL
+    SwXTextEmbeddedObject::getEvents()
+        throw(RuntimeException)
+{
+    return new SwFrameEventDescriptor( *this );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 12:03:37 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP_
+#include <com/sun/star/document/XEventSupplier.hpp>
 #endif
 
 /*-----------------12.02.98 11:21-------------------
@@ -179,10 +182,11 @@ public:
 /*-----------------20.02.98 11:28-------------------
 
 --------------------------------------------------*/
-typedef cppu::WeakImplHelper2
+typedef cppu::WeakImplHelper3
 <
     ::com::sun::star::text::XTextFrame,
-    ::com::sun::star::container::XEnumerationAccess
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::document::XEventSupplier
 >
 SwXTextFrameBaseClass;
 
@@ -235,15 +239,19 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    // XEventSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
+
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
 /*-----------------20.02.98 11:28-------------------
 
 --------------------------------------------------*/
-typedef cppu::WeakImplHelper1
+typedef cppu::WeakImplHelper2
 <
-    ::com::sun::star::text::XTextContent
+    ::com::sun::star::text::XTextContent,
+    ::com::sun::star::document::XEventSupplier
 >
 SwXTextGraphicObjectBaseClass;
 class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass,
@@ -276,16 +284,19 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    // XEventSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
 /*-----------------20.02.98 11:28-------------------
 
 --------------------------------------------------*/
-typedef cppu::WeakImplHelper2
+typedef cppu::WeakImplHelper3
 <
     ::com::sun::star::text::XTextContent,
-    ::com::sun::star::document::XEmbeddedObjectSupplier
+    ::com::sun::star::document::XEmbeddedObjectSupplier,
+    ::com::sun::star::document::XEventSupplier
 >SwXTextEmbeddedObjectBaseClass;
 
 class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
@@ -321,6 +332,8 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    // XEventSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };

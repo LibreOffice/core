@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-06 06:36:02 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx> // helper for implementations
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP_
+#include <com/sun/star/document/XEventSupplier.hpp>
 #endif
 
 class SwDocShell;
@@ -301,7 +304,32 @@ public:
                             }
     const SwDoc*                GetDoc() const { return m_pDoc; }
 };
+/* -----------------------------15.12.00 14:25--------------------------------
 
+ ---------------------------------------------------------------------------*/
+class SwXFrameStyle : public SwXStyle,
+                        public com::sun::star::document::XEventSupplier
+{
+public:
+    SwXFrameStyle(SfxStyleSheetBasePool& rPool,
+                                SwDoc*  pDoc,
+                                const String& rStyleName) :
+        SwXStyle(rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
+    SwXFrameStyle() :
+        SwXStyle(SFX_STYLE_FAMILY_FRAME, FALSE){}
+
+    ~SwXFrameStyle();
+
+    virtual void SAL_CALL acquire(  ) throw(){SwXStyle::acquire();}
+    virtual void SAL_CALL release(  ) throw(){SwXStyle::release();}
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    friend class SwFrameStyleEventDescriptor;
+};
 /* -----------------24.08.98 16:04-------------------
  *
  * --------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 20:26:32 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,9 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             }
             SwXStyle* pNewStyle = SFX_STYLE_FAMILY_PAGE == eFamily ?
                 new SwXPageStyle(pDoc->GetDocShell()) :
-                new SwXStyle(eFamily, nObjectType == SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE);
+                    eFamily == SFX_STYLE_FAMILY_FRAME ?
+                        new SwXFrameStyle:
+                            new SwXStyle(eFamily, nObjectType == SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE);
             xRet = (cppu::OWeakObject*)pNewStyle;
         }
         break;

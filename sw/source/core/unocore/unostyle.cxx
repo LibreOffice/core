@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
+#ifndef _UNOEVENT_HXX
+#include "unoevent.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
@@ -200,6 +203,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::container;
 using namespace ::rtl;
 /******************************************************************************
  *
@@ -795,7 +800,9 @@ Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
                 xStyle =
                     eFamily == SFX_STYLE_FAMILY_PAGE ?
                     new SwXPageStyle(*pBasePool, pDocShell, eFamily, pBase->GetName()):
-                    new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), pBase->GetName());
+                        eFamily == SFX_STYLE_FAMILY_FRAME ?
+                        new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
+                            new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), pBase->GetName());
             }
             aRet.setValue(&xStyle, ::getCppuType((Reference<style::XStyle>*)0));
         }
@@ -828,8 +835,10 @@ Any SwXStyleFamily::getByName(const OUString& rName)
             if(!xStyle.is())
             {
                 xStyle = eFamily == SFX_STYLE_FAMILY_PAGE ?
-                    new SwXPageStyle(*pBasePool, pDocShell, eFamily, sStyleName) ://, _pPropMap) :
-                    new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);//, _pPropMap);
+                    new SwXPageStyle(*pBasePool, pDocShell, eFamily, sStyleName) :
+                        eFamily == SFX_STYLE_FAMILY_FRAME ?
+                        new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
+                            new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
             }
             aRet.setValue(&xStyle, ::getCppuType((Reference<style::XStyle>*)0));
         }
@@ -2636,5 +2645,41 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
         }
     }
     return pRet;
+}
+/* -----------------------------15.12.00 15:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXFrameStyle::~SwXFrameStyle()
+{
+}
+/* -----------------------------15.12.00 14:30--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(RuntimeException)
+{
+    Sequence< uno::Type > aTypes = SwXStyle::getTypes();
+    sal_Int32 nLen = aTypes.getLength();
+    aTypes.realloc(nLen + 1);
+    aTypes.getArray()[nLen] = ::getCppuType((Reference<XEventSupplier>*)0);
+    return aTypes;
+}
+/* -----------------------------15.12.00 14:30--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(RuntimeException)
+{
+    Any aRet;
+    if(rType == ::getCppuType((Reference<XEventSupplier>*)0))
+        aRet <<= Reference<XEventSupplier>(this);
+    else
+        aRet = SwXStyle::queryInterface(rType);
+    return aRet;
+}
+/* -----------------------------15.12.00 14:30--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XNameReplace > SwXFrameStyle::getEvents(  ) throw(RuntimeException)
+{
+    return new SwFrameStyleEventDescriptor( *this );
 }
 
