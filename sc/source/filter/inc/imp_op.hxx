@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:19:42 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 14:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ protected:
     void                    Externname34( void );           // 0x0223
     void                    Defrowheight345( void );        // 0x0225
     void                    Font34( void );                 // 0x0231
+    void                    TableOp( void );                // 0x0236
     void                    Window2_5( void );              // 0x023E
     void                    XF3( void );                    // 0x0243
     //void                  Rk( void );                     // 0x027E -> 0x7E

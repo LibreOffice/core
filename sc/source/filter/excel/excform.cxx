@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
+            case 0x02: // Data Table                            [325 277]
                 nUINT16 = 3;
 
                 if( pExcRoot->eHauptDateiTyp != Biff2 )
@@ -284,18 +285,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 aIn.Ignore( nUINT16 );
 
                 bArrayFormula = TRUE;
-                break;
-            case 0x02: // Data Table                            [325 277]
-            {
-                nUINT16 = 3;
-                if( pExcRoot->eHauptDateiTyp != Biff2 )
-                    nUINT16++;
-
-                aIn.Ignore( nUINT16 );
-
-                aPool << ocBad;
-                aPool >> aStack;
-            }
                 break;
             case 0x03: // Addition                              [312 264]
                 aStack >> nMerk0;
@@ -1021,7 +1010,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 break;
             case 0x02: // Data Table                            [325 277]
             {
-                nIgnore = 3;
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
                     nIgnore = 3;
                 else

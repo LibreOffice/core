@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 11:55:09 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4974,6 +4974,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 break;
             case 0x02: // Data Table                            [325 277]
                 IGNORE(4);
+                CLOSE("Multiple Operations")
                 break;
             case 0x03: // Addition                              [312 264]
                 CLOSE("ADD")

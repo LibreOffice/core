@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-07 15:15:49 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,6 +709,10 @@ FltError ImportExcel::Read( void )
                         Formula3();
                         eAkt = Z_Biff5T;
                         break;
+                    case 0x0236:                        // TABLE        [    5]
+                        TableOp();
+                        eAkt = Z_Biff5T;
+                        break;
                     case 0x027E:                        // RK           [  34 ]
                         Rk();
                         eAkt = Z_Biff5T;
@@ -775,6 +779,7 @@ FltError ImportExcel::Read( void )
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34 ]
                     case 0x0206: Formula3(); break;     // FORMULA      [  3  ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
+                    case 0x0236: TableOp(); break;      // TABLE        [    5]
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
                     case 0x0809:                        // BOF          [    5]

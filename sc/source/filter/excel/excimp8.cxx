@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 11:55:09 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2646,64 +2646,6 @@ void ImportExcel8::Name( void )
             // ohne hidden
             pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, bPrintArea );
     }
-}
-
-
-void ImportExcel8::TableOp( void )
-{
-    UINT16 nFirstRow, nLastRow;
-    UINT8 nFirstCol, nLastCol;
-    UINT16 nGrbit;
-    UINT16 nInpRow, nInpCol, nInpRow2, nInpCol2;
-
-    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol >> nGrbit
-        >> nInpRow >> nInpCol >> nInpRow2 >> nInpCol2;
-
-    if( (nLastRow <= MAXROW) && (nLastCol <= MAXCOL) )
-    {
-        if( nFirstCol && nFirstRow )
-        {
-            ScTabOpParam aTabOpParam;
-            aTabOpParam.nMode = (nGrbit & EXC_TABOP_BOTH) ? 2 : ((nGrbit & EXC_TABOP_ROW) ? 1 : 0 );
-            USHORT nCol = nFirstCol - 1;
-            USHORT nRow = nFirstRow - 1;
-            switch( aTabOpParam.nMode )
-            {
-                case 0:     // COL
-                    aTabOpParam.aRefFormulaCell.Put( nFirstCol, nFirstRow - 1, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefFormulaEnd.Put( nLastCol, nFirstRow - 1, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefColCell.Put( nInpCol, nInpRow, nTab, FALSE, FALSE, FALSE );
-                    nRow++;
-                break;
-                case 1:     // ROW
-                    aTabOpParam.aRefFormulaCell.Put( nFirstCol - 1, nFirstRow, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefFormulaEnd.Put( nFirstCol - 1, nLastRow, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefRowCell.Put( nInpCol, nInpRow, nTab, FALSE, FALSE, FALSE );
-                    nCol++;
-                break;
-                case 2:     // TWO-INPUT
-                    aTabOpParam.aRefFormulaCell.Put( nFirstCol - 1, nFirstRow - 1, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefRowCell.Put( nInpCol, nInpRow, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefColCell.Put( nInpCol2, nInpRow2, nTab, FALSE, FALSE, FALSE );
-                break;
-            }
-
-            ScMarkData aMarkData;
-            aMarkData.SelectOneTable( nTab );
-            pD->InsertTableOp( aTabOpParam, nCol, nRow, nLastCol, nLastRow, aMarkData );
-        }
-
-        for( UINT16 nColCnt = nFirstCol + 1; nColCnt <= nLastCol; nColCnt++ )
-            for( UINT16 nRowCnt = nFirstRow; nRowCnt <= nLastRow; nRowCnt++ )
-            {
-                pFltTab->SetXF( nColCnt, nRowCnt, nLastXF );
-                aColRowBuff.Used( nColCnt, nRowCnt );
-            }
-    }
-    else
-        bTabTruncated = TRUE;
-
-    pLastFormCell = NULL;
 }
 
 
