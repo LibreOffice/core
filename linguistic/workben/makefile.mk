@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-17 12:37:43 $
+#   last change: $Author: tl $ $Date: 2001-06-06 12:21:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,6 @@ UNOTYPES=\
     com.sun.star.linguistic2.XLinguServiceEventListener\
     com.sun.star.linguistic2.XLinguServiceManager\
     com.sun.star.linguistic2.XMeaning\
-    com.sun.star.linguistic2.XOtherLingu\
     com.sun.star.linguistic2.XPossibleHyphens\
     com.sun.star.linguistic2.XSearchableDictionaryList\
     com.sun.star.linguistic2.XSpellAlternatives\
