@@ -21,18 +21,54 @@ $(MISC)$/$(PWD:f).$(SRS1NAME).dprr: $(SRC1FILES) $(HIDSRS1PARTICLE) $(HID1FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS1NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS1NAME).srs -fo$@ $(SRC1FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS1NAME).srs} -fo$@ $(SRC1FILES)
 
-$(SRS)$/$(SRS1NAME).srs: $(SRC1FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC1FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC1FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS1NAME).srs: $(foreach,i,$(SRC1FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS1NAME).srs: $(foreach,i,$(SRC1FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC1FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC1FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS1NAME).srs: $(foreach,i,$(SRC1FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC1FILES) \
+        $(foreach,i,$(SRC1FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS1NAME)"!=""
 
@@ -59,18 +95,54 @@ $(MISC)$/$(PWD:f).$(SRS2NAME).dprr: $(SRC2FILES) $(HIDSRS2PARTICLE) $(HID2FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS2NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS2NAME).srs -fo$@ $(SRC2FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS2NAME).srs} -fo$@ $(SRC2FILES)
 
-$(SRS)$/$(SRS2NAME).srs: $(SRC2FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC2FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC2FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS2NAME).srs: $(foreach,i,$(SRC2FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS2NAME).srs: $(foreach,i,$(SRC2FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC2FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC2FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS2NAME).srs: $(foreach,i,$(SRC2FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC2FILES) \
+        $(foreach,i,$(SRC2FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS2NAME)"!=""
 
@@ -97,18 +169,54 @@ $(MISC)$/$(PWD:f).$(SRS3NAME).dprr: $(SRC3FILES) $(HIDSRS3PARTICLE) $(HID3FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS3NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS3NAME).srs -fo$@ $(SRC3FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS3NAME).srs} -fo$@ $(SRC3FILES)
 
-$(SRS)$/$(SRS3NAME).srs: $(SRC3FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC3FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC3FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS3NAME).srs: $(foreach,i,$(SRC3FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS3NAME).srs: $(foreach,i,$(SRC3FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC3FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC3FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS3NAME).srs: $(foreach,i,$(SRC3FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC3FILES) \
+        $(foreach,i,$(SRC3FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS3NAME)"!=""
 
@@ -135,18 +243,54 @@ $(MISC)$/$(PWD:f).$(SRS4NAME).dprr: $(SRC4FILES) $(HIDSRS4PARTICLE) $(HID4FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS4NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS4NAME).srs -fo$@ $(SRC4FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS4NAME).srs} -fo$@ $(SRC4FILES)
 
-$(SRS)$/$(SRS4NAME).srs: $(SRC4FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC4FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC4FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS4NAME).srs: $(foreach,i,$(SRC4FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS4NAME).srs: $(foreach,i,$(SRC4FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC4FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC4FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS4NAME).srs: $(foreach,i,$(SRC4FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC4FILES) \
+        $(foreach,i,$(SRC4FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS4NAME)"!=""
 
@@ -173,18 +317,54 @@ $(MISC)$/$(PWD:f).$(SRS5NAME).dprr: $(SRC5FILES) $(HIDSRS5PARTICLE) $(HID5FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS5NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS5NAME).srs -fo$@ $(SRC5FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS5NAME).srs} -fo$@ $(SRC5FILES)
 
-$(SRS)$/$(SRS5NAME).srs: $(SRC5FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC5FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC5FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS5NAME).srs: $(foreach,i,$(SRC5FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS5NAME).srs: $(foreach,i,$(SRC5FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC5FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC5FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS5NAME).srs: $(foreach,i,$(SRC5FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC5FILES) \
+        $(foreach,i,$(SRC5FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS5NAME)"!=""
 
@@ -211,18 +391,54 @@ $(MISC)$/$(PWD:f).$(SRS6NAME).dprr: $(SRC6FILES) $(HIDSRS6PARTICLE) $(HID6FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS6NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS6NAME).srs -fo$@ $(SRC6FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS6NAME).srs} -fo$@ $(SRC6FILES)
 
-$(SRS)$/$(SRS6NAME).srs: $(SRC6FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC6FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC6FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS6NAME).srs: $(foreach,i,$(SRC6FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS6NAME).srs: $(foreach,i,$(SRC6FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC6FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC6FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS6NAME).srs: $(foreach,i,$(SRC6FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC6FILES) \
+        $(foreach,i,$(SRC6FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS6NAME)"!=""
 
@@ -249,18 +465,54 @@ $(MISC)$/$(PWD:f).$(SRS7NAME).dprr: $(SRC7FILES) $(HIDSRS7PARTICLE) $(HID7FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS7NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS7NAME).srs -fo$@ $(SRC7FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS7NAME).srs} -fo$@ $(SRC7FILES)
 
-$(SRS)$/$(SRS7NAME).srs: $(SRC7FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC7FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC7FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS7NAME).srs: $(foreach,i,$(SRC7FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS7NAME).srs: $(foreach,i,$(SRC7FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC7FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC7FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS7NAME).srs: $(foreach,i,$(SRC7FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC7FILES) \
+        $(foreach,i,$(SRC7FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS7NAME)"!=""
 
@@ -287,18 +539,54 @@ $(MISC)$/$(PWD:f).$(SRS8NAME).dprr: $(SRC8FILES) $(HIDSRS8PARTICLE) $(HID8FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS8NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS8NAME).srs -fo$@ $(SRC8FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS8NAME).srs} -fo$@ $(SRC8FILES)
 
-$(SRS)$/$(SRS8NAME).srs: $(SRC8FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC8FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC8FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS8NAME).srs: $(foreach,i,$(SRC8FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS8NAME).srs: $(foreach,i,$(SRC8FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC8FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC8FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS8NAME).srs: $(foreach,i,$(SRC8FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC8FILES) \
+        $(foreach,i,$(SRC8FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS8NAME)"!=""
 
@@ -325,18 +613,54 @@ $(MISC)$/$(PWD:f).$(SRS9NAME).dprr: $(SRC9FILES) $(HIDSRS9PARTICLE) $(HID9FILES)
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS9NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS9NAME).srs -fo$@ $(SRC9FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS9NAME).srs} -fo$@ $(SRC9FILES)
 
-$(SRS)$/$(SRS9NAME).srs: $(SRC9FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC9FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC9FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS9NAME).srs: $(foreach,i,$(SRC9FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS9NAME).srs: $(foreach,i,$(SRC9FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC9FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC9FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS9NAME).srs: $(foreach,i,$(SRC9FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC9FILES) \
+        $(foreach,i,$(SRC9FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS9NAME)"!=""
 
@@ -363,18 +687,54 @@ $(MISC)$/$(PWD:f).$(SRS10NAME).dprr: $(SRC10FILES) $(HIDSRS10PARTICLE) $(HID10FI
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS10NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS10NAME).srs -fo$@ $(SRC10FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS10NAME).srs} -fo$@ $(SRC10FILES)
 
-$(SRS)$/$(SRS10NAME).srs: $(SRC10FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC10FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC10FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS10NAME).srs: $(foreach,i,$(SRC10FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS10NAME).srs: $(foreach,i,$(SRC10FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC10FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC10FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS10NAME).srs: $(foreach,i,$(SRC10FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC10FILES) \
+        $(foreach,i,$(SRC10FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS10NAME)"!=""
 
