@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:17:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ void SdDrawView::PresPaint(const Region& rRegion)
             // We know always display a black page only before the
             // presentation displays anything
             bool bAllowPaint = true;
-            if( pFuSlideShow && (pFuSlideShow->GetActualPage() == NULL) )
+            if( pFuSlideShow && (pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW) && (pFuSlideShow->GetActualPage() == NULL) )
                 bAllowPaint = false;
 
             if( bAllowPaint )
