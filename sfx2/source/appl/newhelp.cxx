@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-08 12:36:56 $
+ *  last change: $Author: pb $ $Date: 2001-10-10 10:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
+#include <hash_map>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -492,9 +496,7 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         aPos.Y() += ( rUDEvt.GetRect().GetHeight() - rUDEvt.GetDevice()->GetTextHeight() ) / 2;
         String aEntry( GetEntry( rUDEvt.GetItemId() ) );
         USHORT nPos = aEntry.Search( ';' );
-        if ( nPos != STRING_NOTFOUND )
-            aEntry.Erase( 0, nPos + 1 );
-        rUDEvt.GetDevice()->DrawText( aPos, aEntry );
+        rUDEvt.GetDevice()->DrawText( aPos, ( nPos != STRING_NOTFOUND ) ? aEntry.Copy( nPos + 1 ) : aEntry );
     }
     else
         DrawEntry( rUDEvt, FALSE, TRUE, TRUE );
@@ -566,10 +568,58 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 // -----------------------------------------------------------------------
 
+namespace {
+
+    struct equalOU
+    {
+        bool operator()( const ::rtl::OUString& rKey1, const ::rtl::OUString& rKey2 ) const
+        {
+            return !!( rKey1 == rKey2 );
+        }
+    };
+
+
+    struct hashOU
+    {
+        size_t operator()( const ::rtl::OUString& rName ) const
+        {
+            return rName.hashCode();
+        }
+    };
+
+    typedef ::std::hash_map< ::rtl::OUString, int, hashOU, equalOU > KeywordInfo;
+
+}
+
+#define UNIFY_AND_INSERT_TOKEN( aToken )                                                        \
+    it =                                                                                        \
+    aInfo.insert( KeywordInfo::value_type( aToken, 0 ) ).first;                                 \
+    if ( ( tmp = it->second++ ) != 0 )                                                          \
+       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append,tmp ) );                     \
+    else                                                                                        \
+       nPos = aIndexCB.InsertEntry( aToken )
+
+#define INSERT_DATA( j )                                                                        \
+    if ( aAnchorList[j].getLength() > 0 )                                                       \
+    {                                                                                           \
+        aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );        \
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(),insert ) );          \
+    }                                                                                           \
+    else                                                                                        \
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j],insert ) )
+
+// -----------------------------------------------------------------------
+
 void IndexTabPage_Impl::InitializeIndex()
 {
     WaitObject( this );
 
+    // By now more than 256 equal entries are not allowed
+    sal_Unicode append[256];
+    for( int k = 0; k < 256; ++k )
+        append[k] = sal_Unicode( ' ' );
+
+    KeywordInfo aInfo;
     aIndexCB.SetUpdateMode( FALSE );
 
     try
@@ -577,108 +627,85 @@ void IndexTabPage_Impl::InitializeIndex()
         ::rtl::OUString aURL = HELP_URL;
         ::rtl::OUString _aFactory( aFactory );
         aURL += _aFactory;
+
         String aTemp = aURL;
         AppendConfigToken_Impl( aTemp, sal_True );
         aURL = aTemp;
+
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
-            ::com::sun::star::uno::Any aAny1 = aCnt.getPropertyValue( PROPERTY_KEYWORDLIST );
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropSeq( 4 );
+            aPropSeq[0] = PROPERTY_KEYWORDLIST;
+            aPropSeq[1] = PROPERTY_KEYWORDREF;
+            aPropSeq[2] = PROPERTY_ANCHORREF;
+            aPropSeq[3] = PROPERTY_TITLEREF;
+
+            // abi: use one possibly remote call only
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aAnySeq =
+                  aCnt.getPropertyValues( aPropSeq );
+
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aKeywordList;
-            ::com::sun::star::uno::Any aAny2 = aCnt.getPropertyValue( PROPERTY_KEYWORDREF );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aKeywordRefList;
-            ::com::sun::star::uno::Any aAny3 = aCnt.getPropertyValue( PROPERTY_ANCHORREF );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aAnchorRefList;
-            ::com::sun::star::uno::Any aAny4 = aCnt.getPropertyValue( PROPERTY_TITLEREF );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aTitleRefList;
-            if ( ( aAny1 >>= aKeywordList ) && ( aAny2 >>= aKeywordRefList ) &&
-                 ( aAny3 >>= aAnchorRefList ) && ( aAny4 >>= aTitleRefList ) )
+
+            if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
+                 ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
             {
-                const ::rtl::OUString* pKeywords  = aKeywordList.getConstArray();
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pRefs = aKeywordRefList.getConstArray();
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pAnchorRefs = aAnchorRefList.getConstArray();
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pTitleRefs = aTitleRefList.getConstArray();
-                sal_Int32 i, nCount = aKeywordList.getLength();
-                DBG_ASSERT( aKeywordRefList.getLength() == nCount, "keywordlist and reflist with different length" );
-                DBG_ASSERT( aAnchorRefList.getLength() == nCount, "keywordlist and anchorlist with different length" );
+                sal_Bool insert;
                 USHORT nPos;
-                String aIndex, aSubIndex, aEmpty;
+                int ndx,tmp;
+                ::rtl::OUString aIndex,aToken,aTempString;
+                ::rtl::OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
+                KeywordInfo::iterator it;
 
-                for ( i = 0; i < nCount; ++i )
+                for ( int i = 0; i < aKeywordList.getLength(); ++i )
                 {
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRefList = pRefs[i];
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aAnchorList = pAnchorRefs[i];
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aTitleList = pTitleRefs[i];
-                    const ::rtl::OUString* pRef  = aRefList.getConstArray();
-                    const ::rtl::OUString* pAnchor  = aAnchorList.getConstArray();
-                    const ::rtl::OUString* pTitles  = aTitleList.getConstArray();
+                    // abi: Do not copy, but use references
+                    const ::rtl::OUString& aKeywordPair = aKeywordList[i];
+                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRefList = aKeywordRefList[i];
+                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAnchorList = aAnchorRefList[i];
+                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aTitleList = aTitleRefList[i];
 
-                    sal_Int32 j, nRefCount = aRefList.getLength(), nAnchorCount = aAnchorList.getLength();
-                    String aKeywordPair( pKeywords[i] );
-                    xub_StrLen nTokenCount = aKeywordPair.GetTokenCount();
+                    DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),
+                                "reference list and title list of different length" );
 
-                    if ( 1 == nTokenCount )
+                    insert = ( (ndx=aKeywordPair.indexOf( sal_Unicode( ';' ) )) == -1 ? sal_False : sal_True );
+
+                    if ( insert )
                     {
-                        for ( j = 0; j < nRefCount; ++j )
-                        {
-                            String aKeyword( TRIM( aKeywordPair ) );
-                            if ( j > 0 )
-                            {
-                                aKeyword += DEFINE_CONST_UNICODE(" - ");
-                                aKeyword += String( pTitles[j] );
-                            }
-                            while ( aIndexCB.GetEntryPos( aKeyword ) != LISTBOX_ENTRY_NOTFOUND )
-                                aKeyword += ' ';
-                            nPos = aIndexCB.InsertEntry( aKeyword );
-                            String aData( pRef[j] );
-                            String aAnchor = String( pAnchor[j] );
-                            if ( aAnchor.Len() > 0 )
-                            {
-                                aData += '#';
-                                aData += aAnchor;
-                            }
-                            aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData, sal_False ) );
-                        }
-
-                        aIndex.Erase();
-                    }
-                    else if ( 2 == nTokenCount )
-                    {
-                        xub_StrLen nIdx = 0;
-                        String aToken = TRIM( aKeywordPair.GetToken( 0, ';', nIdx ) );
+                        aToken = aKeywordPair.copy( 0,ndx );
                         if ( aIndex != aToken )
                         {
                             aIndex = aToken;
-                            while ( aIndexCB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
-                                aToken += ' ';
-                            aIndexCB.InsertEntry( aToken );
+                            UNIFY_AND_INSERT_TOKEN( aToken );
                         }
-                        for ( j = 0; j < nRefCount; ++j )
-                        {
-                            String aSubIndex( TRIM( aKeywordPair ) );
-                            if ( j > 0 )
-                            {
-                                aSubIndex += DEFINE_CONST_UNICODE(" - ");
-                                aSubIndex += String( pTitles[j] );
-                            }
 
-                            while ( aIndexCB.GetEntryPos( aSubIndex ) != LISTBOX_ENTRY_NOTFOUND )
-                                aSubIndex += ' ';
-                            nPos = aIndexCB.InsertEntry( aSubIndex );
-                            String aData( pRef[j] );
-                            String aAnchor = String( pAnchor[j] );
-                            if ( aAnchor.Len() > 0 )
-                            {
-                                aData += '#';
-                                aData += aAnchor;
-                            }
-                            aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData, sal_True ) );
-                        }
+                        aToken = aKeywordPair.trim();
                     }
                     else
                     {
-                        DBG_ERRORFILE( "unexpected token count of a keyword" );
+                        aIndex = ::rtl::OUString();
+                        aToken = aKeywordPair;
+                    }
+
+                    UNIFY_AND_INSERT_TOKEN( aToken );
+                    INSERT_DATA( 0 );
+
+                    for ( int j = 1; j < aRefList.getLength(); ++j )
+                    {
+                        aData = aToken;
+                        aData
+                            .append(sal_Unicode(' '))
+                            .append(sal_Unicode('-'))
+                            .append(sal_Unicode(' '))
+                            .append( aTitleList[j] );
+
+                        aTempString = aData.makeStringAndClear();
+                        UNIFY_AND_INSERT_TOKEN( aTempString );
+                        INSERT_DATA( j );
                     }
                 }
             }
@@ -692,6 +719,9 @@ void IndexTabPage_Impl::InitializeIndex()
     aIndexCB.SetUpdateMode( TRUE );
 }
 
+#undef INSERT_DATA
+#undef UNIFY_AND_INSERT_TOKEN
+
 // -----------------------------------------------------------------------
 
 void IndexTabPage_Impl::ClearIndex()
@@ -700,7 +730,6 @@ void IndexTabPage_Impl::ClearIndex()
     for ( USHORT i = 0; i < nCount; ++i )
         delete (IndexEntry_Impl*)(ULONG)aIndexCB.GetEntryData(i);
     aIndexCB.Clear();
-    aIndexCB.Update();
 }
 
 // -----------------------------------------------------------------------
