@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFrame.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 14:19:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,34 @@ service TextFrame
      */
     [optional, property] short WritingMode;
 
+    /** controls, if the frame follows the text flow or can leave its layout environment
+
+        <p>If set, the frame follows the text flow and doesn't leaves the layout
+        environment, which is given by its anchor, above and below.
+        E.g.: Anchor resides in the document body then the frame doesn't leave
+        the document body above and below and follows the text flow through
+        the document bodies of the different pages.
+
+        If not set, the frame doesn't follow the text flow and stays on the page,
+        on which its anchor is found, but it may leave the layout environment,
+        which is given by its anchor.
+        E.g.: Anchor resides in the document body then the frame stays on page,
+        where this document body is, but it could leave the document body above
+        and below, e.g. overlapping with the page header.
+
+        Note: The areas for the vertical orientation relation at page areas are
+        interpreted in dependence to this property (@see BaseFrameProperties.VertOrientRelation).
+        If property is set, the page area is interpreted as the layout environment,
+        given by its anchor. E.g.: Anchor resides in the page header then the
+        page header determines the page area. If property isn't set, the page area is
+        determined by the document page, the anchor is on. E.g.: Anchor resides
+        in the page header then the document page, the page header is on, determines
+        the page area.
+        An exception of this interpretation rule is applied, if the anchor resides
+        in a table cell. In this situation the page area is always detemined by
+        the table cell.</p>
+     */
+    [optional, property] boolean IsFollowingTextFlow;
 
 };
 
