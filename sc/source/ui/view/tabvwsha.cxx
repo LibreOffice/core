@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,13 @@
 #include "inputwin.hxx"
 #include "docsh.hxx"
 #include "viewdata.hxx"
-#include "attrdlg.hxx"
+//CHINA001 #include "attrdlg.hxx"
 #include "appoptio.hxx"
 #include "sc.hrc"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
 #include "dwfunctr.hxx"
-
+#include "scabstdlg.hxx" //CHINA001
 
 
 BOOL ScTabViewShell::GetFunction( String& rFuncStr )
@@ -416,7 +416,8 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 //------------------------------------------------------------------
 void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    ScAttrDlg*              pDlg    = NULL;
+    //CHINA001 ScAttrDlg*               pDlg    = NULL;
+    SfxAbstractTabDialog * pDlg = NULL; //CHINA001
     ScDocShell*             pDocSh  = GetViewData()->GetDocShell();
     ScDocument*             pDoc    = GetViewData()->GetDocument();
 
@@ -444,7 +445,12 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
     pOldSet->Put(*pNumberInfoItem );
 
     bInFormatDialog = TRUE;
-    pDlg = new ScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet );
+    //CHINA001 pDlg = new ScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet );
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+    pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet,ResId(RID_SCDLG_ATTR));
+    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
     short nResult = pDlg->Execute();
