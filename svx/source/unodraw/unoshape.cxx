@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-07 10:36:50 $
+ *  last change: $Author: cl $ $Date: 2001-02-08 14:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,17 +1526,17 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 pObj->TRGetBaseGeometry( aMatrix3D, aPolyPolygon );
 
                 drawing::HomogenMatrix3 aMatrix;
-                aMatrix.Line1.Column1 = aMatrix3D[0].X;
-                aMatrix.Line1.Column2 = aMatrix3D[0].Y;
-                aMatrix.Line1.Column3 = aMatrix3D[0].W;
+                aMatrix.Line1.Column1 = aMatrix3D[0].X();
+                aMatrix.Line1.Column2 = aMatrix3D[0].Y();
+                aMatrix.Line1.Column3 = aMatrix3D[0].W();
 
-                aMatrix.Line2.Column1 = aMatrix3D[1].X;
-                aMatrix.Line2.Column2 = aMatrix3D[1].Y;
-                aMatrix.Line2.Column3 = aMatrix3D[1].W;
+                aMatrix.Line2.Column1 = aMatrix3D[1].X();
+                aMatrix.Line2.Column2 = aMatrix3D[1].Y();
+                aMatrix.Line2.Column3 = aMatrix3D[1].W();
 
-                aMatrix.Line3.Column1 = aMatrix3D[2].X;
-                aMatrix.Line3.Column2 = aMatrix3D[2].Y;
-                aMatrix.Line3.Column3 = aMatrix3D[2].W;
+                aMatrix.Line3.Column1 = aMatrix3D[2].X();
+                aMatrix.Line3.Column2 = aMatrix3D[2].Y();
+                aMatrix.Line3.Column3 = aMatrix3D[2].W();
                 aAny <<= aMatrix;
                 break;
             }
