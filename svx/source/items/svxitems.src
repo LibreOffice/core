@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:28:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3686,7 +3686,7 @@ String RID_ATTR_PARA_ADJUST
     Text [ danish ] = "Justering" ;
     Text [ french ] = "Alignement" ;
     Text [ swedish ] = "Justering" ;
-    Text [ dutch ] = "Uitlijnen" ;
+    Text [ dutch ] = "Uitlijning" ;
     Text [ spanish ] = "Alineaciуn" ;
     Text [ english_us ] = "Alignment" ;
     Text[ chinese_simplified ] = "ґ‘∆л";
@@ -7511,7 +7511,7 @@ String RID_SVXITEMS_CHARROTATE_OFF
 {
     Text = "keine gedrehten Zeichen";
     Text [ English ] = "no rotated character";
-    Text[ english_us ] = "no rotated character";
+    Text[ english_us ] = "no rotated characters";
     Text[ portuguese ] = "no rotated character";
     Text[ russian ] = "без перевернутых знаков";
     Text[ greek ] = "чщсят ресйуфсецьменпхт чбсбкфёсет";
@@ -7557,9 +7557,9 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
 {
     Text = " an Zeile anpassen";
     Text [ English ] = " fit to line";
-    Text[ english_us ] = " fit to line";
+    Text[ english_us ] = "fit to line";
     Text[ portuguese ] = " fit to line";
-    Text[ russian ] = "ќтносительно строки";
+    Text[ russian ] = "—огласовать со строкой";
     Text[ greek ] = "рспубсмпгё уфз уейс№";
     Text[ dutch ] = " fit to line";
     Text[ french ] = " fit to line";
@@ -7567,7 +7567,7 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
     Text[ italian ] = " fit to line";
     Text[ danish ] = " fit to line";
     Text[ swedish ] = "anpassa till rad";
-    Text[ polish ] = " dopasuj do wiersza";
+    Text[ polish ] = "wyrуwnaj do wiersza";
     Text[ portuguese_brazilian ] = " fit to line";
     Text[ japanese ] = "НsВ…НЗВнВєВй";
     Text[ korean ] = " fit to line";
@@ -7580,9 +7580,9 @@ String RID_SVXITEMS_CHARSCALE
 {
     Text = "Zeichenskalierung $(ARG1)%";
     Text [ English ] = "Scaled characters $(ARG1)%";
-    Text[ english_us ] = "Scaled characters $(ARG1)%";
+    Text[ english_us ] = "Characters scaled $(ARG1)%";
     Text[ portuguese ] = "Scaled characters $(ARG1)%";
-    Text[ russian ] = "ћасштабирование знаков на $(ARG1)%";
+    Text[ russian ] = "ћасштабирование знаков $(ARG1)%";
     Text[ greek ] = " лйм№кщуз чбсбкфёсщн $(ARG1)%";
     Text[ dutch ] = "Scaled characters $(ARG1)%";
     Text[ french ] = "Scaled characters $(ARG1)%";
@@ -7627,7 +7627,7 @@ String RID_SVXITEMS_RELIEF_NONE
 {
     Text = "Kein Relief" ;
     Text [ English ] = "No Emboss" ;
-    Text[ english_us ] = "No Emboss";
+    Text[ english_us ] = "No relief";
     Text[ portuguese ] = "No Emboss";
     Text[ russian ] = "Ѕез рельефа";
     Text[ greek ] = "„щсят бн№глхцб";
@@ -7650,7 +7650,7 @@ String RID_SVXITEMS_RELIEF_EMBOSSED
 {
     Text = "Relief";
     Text [ English ] = "Emboss";
-    Text[ english_us ] = "Emboss";
+    Text[ english_us ] = "Relief";
     Text[ portuguese ] = "Emboss";
     Text[ russian ] = "–ельеф";
     Text[ greek ] = "Ѕн№глхцб";
@@ -7673,7 +7673,7 @@ String RID_SVXITEMS_RELIEF_ENGRAVED
 {
     Text = "Gravur";
     Text [ English ] = "Engrave";
-    Text[ english_us ] = "Engrave";
+    Text[ english_us ] = "Engraved";
     Text[ portuguese ] = "Engrave";
     Text[ russian ] = "√равировка";
     Text[ greek ] = "√ксбвпэсб";
