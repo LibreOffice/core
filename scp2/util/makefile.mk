@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 13:02:10 $
+#   last change: $Author: obo $ $Date: 2004-11-18 09:01:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ SCP1FILES  = installation_ooo.par          \
              scpaction_ooo.par             \
              helptext_ooo.par              \
              directory_ooo.par             \
-             starregistry_ooo.par          \
              datacarrier_ooo.par           \
              file_ooo.par                  \
              file_extra_ooo.par            \
@@ -140,6 +139,7 @@ SCP1FILES +=                                  \
 SCP1FILES +=                           \
              registryitem_ooo.par      \
              folder_ooo.par            \
+             folderitem_ooo.par        \
              registryitem_writer.par   \
              folderitem_writer.par     \
              registryitem_calc.par     \
