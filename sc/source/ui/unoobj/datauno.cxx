@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:54:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -265,8 +268,18 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
             eMode = sheet::DataImportMode_TABLE;        // Type ist immer ScDbQuery oder ScDbTable
     }
 
-    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_DBNAME );
-    pArray[0].Value <<= rtl::OUString( rParam.aDBName );
+    ::svx::ODataAccessDescriptor aDescriptor;
+    aDescriptor.setDataSource(rParam.aDBName);
+    if (aDescriptor.has( svx::daDataSource ))
+    {
+        pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_DBNAME );
+        pArray[0].Value <<= rtl::OUString( rParam.aDBName );
+    }
+    else if (aDescriptor.has( svx::daConnectionResource ))
+    {
+        pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_CONRES );
+        pArray[0].Value <<= rtl::OUString( rParam.aDBName );
+    }
 
     pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SRCTYPE );
     pArray[1].Value <<= eMode;
@@ -291,6 +304,11 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
         if (aPropName.EqualsAscii( SC_UNONAME_ISNATIVE ))
             rParam.bNative = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         else if (aPropName.EqualsAscii( SC_UNONAME_DBNAME ))
+        {
+            if ( rProp.Value >>= aStrVal )
+                rParam.aDBName = String( aStrVal );
+        }
+        else if (aPropName.EqualsAscii( SC_UNONAME_CONRES ))
         {
             if ( rProp.Value >>= aStrVal )
                 rParam.aDBName = String( aStrVal );
@@ -1989,6 +2007,9 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                 }
             }
         }
+        else if (aString.EqualsAscii( SC_UNONAME_CONRES ))
+        {
+        }
         else
             bDo = FALSE;
 
@@ -2059,6 +2080,9 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
         {
             sal_Int32 nRefresh(GetDBData_Impl()->GetRefreshDelay());
             aRet <<= nRefresh;
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_CONRES ))
+        {
         }
     }
     return aRet;
