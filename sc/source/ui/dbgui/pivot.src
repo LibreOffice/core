@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:54:19 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
 {
     OutputSize = TRUE ;
     HelpId = SID_OPENDLG_PIVOTTABLE ;
-    Size = MAP_APPFONT ( 336 , 164 ) ;
+    Size = MAP_APPFONT ( 336 , 190 ) ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -101,13 +101,26 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ catalan ] = "DataPilot";
     Text[ finnish ] = "Tietojen ohjaus";
 
+    FixedText FT_PAGE
+    {
+        Pos = MAP_APPFONT ( 194 , 168 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text = "Seitenfelder" ;
+        Text[ english_us ] = "Page Fields" ;
+    };
+    Control WND_PAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 182 , 24 ) ;
+        TabStop = TRUE ;
+    };
     FixedText FT_COL
     {
-        Pos = MAP_APPFONT ( 231 , 142 ) ;
+        Pos = MAP_APPFONT ( 231 , 168 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text = "Spalte" ;
-        Text[ ENGLISH ] = "Column" ;
-        Text[ english_us ] = "Column" ;
+        Text = "Spaltenfelder" ;
+        Text[ ENGLISH ] = "Column Fields" ;
+        Text[ english_us ] = "Column Fields" ;
         Text[ portuguese ] = "Coluna";
         Text[ russian ] = " ÓÎÓÌÍ‡";
         Text[ greek ] = "”ÙﬁÎÁ";
@@ -137,17 +150,17 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_COL
     {
-        Pos = MAP_APPFONT ( 44 , 14 ) ;
+        Pos = MAP_APPFONT ( 44 , 40 ) ;
         Size = MAP_APPFONT ( 144 , 24 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_ROW
     {
-        Pos = MAP_APPFONT ( 194 , 150 ) ;
+        Pos = MAP_APPFONT ( 194 , 176 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text = "Zeile" ;
-        Text[ ENGLISH ] = "Row" ;
-        Text[ english_us ] = "Row" ;
+        Text[ language_user1 ] = "Available width for this text is very limited, therefore please use \\n to force line breaks between words (i.e. English) or syllables (i.e. German).";
+        Text = "Zeilen-\nfelder" ;
+        Text[ english_us ] = "Row\nFields" ;
         Text[ portuguese ] = "Linha";
         Text[ russian ] = "—“–Œ ¿";
         Text[ greek ] = "√Ò·ÏÏﬁ";
@@ -177,17 +190,17 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_ROW
     {
-        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 36 , 96 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_DATA
     {
-        Pos = MAP_APPFONT ( 231, 150 ) ;
+        Pos = MAP_APPFONT ( 231, 176 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text = "Daten" ;
-        Text[ ENGLISH ] = "Data" ;
-        Text[ english_us ] = "Data" ;
+        Text = "Datenfelder" ;
+        Text[ ENGLISH ] = "Data Fields" ;
+        Text[ english_us ] = "Data Fields" ;
         Text[ portuguese ] = "DADOS";
         Text[ russian ] = "ƒ¿ÕÕ€≈";
         Text[ greek ] = "ƒÂ‰ÔÏ›Ì·";
@@ -217,14 +230,14 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_DATA
     {
-        Pos = MAP_APPFONT ( 44 , 40 ) ;
+        Pos = MAP_APPFONT ( 44 , 66 ) ;
         Size = MAP_APPFONT ( 144 , 96 ) ;
         TabStop = TRUE ;
     };
     Control WND_SELECT
     {
         Pos = MAP_APPFONT ( 194 , 14 ) ;
-        Size = MAP_APPFONT ( 70 , 100 ) ;
+        Size = MAP_APPFONT ( 70 , 126 ) ;
         TabStop = TRUE ;
     };
     String STR_SELECT
@@ -262,14 +275,14 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     ScrollBar WND_HSCROLL
     {
-        Pos = MAP_APPFONT ( 194 , 118 ) ;
+        Pos = MAP_APPFONT ( 194 , 144 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         HScroll = TRUE ;
         TabStop = FALSE ;
     };
     FixedText FT_INFO
     {
-        Pos = MAP_APPFONT ( 6 , 142 ) ;
+        Pos = MAP_APPFONT ( 6 , 168 ) ;
         Size = MAP_APPFONT ( 182 , 16 ) ;
         WordBreak = TRUE ;
         Text = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gew¸nschten Bereiche." ;
@@ -429,7 +442,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 280 , 144 ) ;
+        Pos = MAP_APPFONT ( 280 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
@@ -448,7 +461,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     FixedLine FL_OUTPUT
     {
-        Pos = MAP_APPFONT ( 6 , 164 ) ;
+        Pos = MAP_APPFONT ( 6 , 190 ) ;
         Size = MAP_APPFONT ( 268 , 8 ) ;
         Text = "Ergebnis" ;
         Text [ ENGLISH ] = "Result" ;
@@ -485,7 +498,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     FixedText FT_OUTAREA
     {
-        Pos = MAP_APPFONT ( 12 , 177 ) ;
+        Pos = MAP_APPFONT ( 12 , 203 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
         Hide = TRUE ;
         Text = "~Ausgabe ab" ;
@@ -523,7 +536,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     ListBox LB_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 73 , 175 ) ;
+        Pos = MAP_APPFONT ( 73 , 201 ) ;
         Size = MAP_APPFONT ( 75 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -532,14 +545,14 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Edit ED_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 175 ) ;
+        Pos = MAP_APPFONT ( 152 , 201 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
     ImageButton RB_OUTAREA
     {
-        Pos = MAP_APPFONT ( 256 , 175 ) ;
+        Pos = MAP_APPFONT ( 256 , 201 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -576,7 +589,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_IGNEMPTYROWS
     {
-        Pos = MAP_APPFONT ( 12 , 193 ) ;
+        Pos = MAP_APPFONT ( 12 , 219 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -614,7 +627,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_DETECTCAT
     {
-        Pos = MAP_APPFONT ( 142 , 193 ) ;
+        Pos = MAP_APPFONT ( 142 , 219 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -652,7 +665,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALCOL
     {
-        Pos = MAP_APPFONT ( 12 , 207 ) ;
+        Pos = MAP_APPFONT ( 12 , 233 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -689,7 +702,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALROW
     {
-        Pos = MAP_APPFONT ( 142 , 207 ) ;
+        Pos = MAP_APPFONT ( 142 , 233 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
