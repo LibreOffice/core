@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-22 08:26:18 $
+ *  last change: $Author: jb $ $Date: 2001-07-03 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,7 +1217,7 @@ namespace configmgr
 
         if (_rSettings.isServiceRequired())
         {
-            sConnect.append(sal_Unicode(":"));
+            sConnect.append(sal_Unicode(':'));
             sConnect.append(_rSettings.getService());
         }
 
@@ -1239,7 +1239,7 @@ namespace configmgr
         {
             if (_rSettings.hasServer() || _rSettings.hasPort())
             {
-                sConnect.append(sal_Unicode("@"));
+                sConnect.append(sal_Unicode('@'));
 
                 if ( _rSettings.hasServer())
                 {
@@ -1248,7 +1248,7 @@ namespace configmgr
 
                 if ( _rSettings.hasPort())
                 {
-                    sConnect.append(sal_Unicode(":"));
+                    sConnect.append(sal_Unicode(':'));
                     sConnect.append(_rSettings.getPort());
                 }
             }
@@ -1299,12 +1299,12 @@ namespace {
 
 // normalizeAndSubstitutePathVariables
 // ---------------------------------------------------------------------------------------
+    extern "C" typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
 
     bool normalizeAndSubstitutePathVariables(OUString& _rPath)
     {
         OSL_PRECOND(_rPath.getLength() != 0 , "Invalid parameter: Empty path in normalizeAndSubstitutePathVariables" );
 
-        typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
         // recognized variables and methods to retrieve their substitute pathes
         // Note: variables are expected to be a system path and thus must be at the beginning of _rPath
         struct
