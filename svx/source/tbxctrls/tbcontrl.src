@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-29 20:27:30 $
+ *  last change: $Author: rt $ $Date: 2001-09-26 20:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text [ dutch ] = "Tekenachtergrond" ;
     Text [ portuguese ] = "Destacar caracteres" ;
     Text[ chinese_simplified ] = "å­—ç¬¦èƒŒæ™¯";
-    Text[ russian ] = "Ôîí çíàêîâ";
+    Text[ russian ] = "Ôîí òåêñòà";
     Text[ polish ] = "T³o znaków";
     Text[ japanese ] = "æ–‡å­—ã®èƒŒæ™¯";
     Text[ chinese_traditional ] = "å­—å…ƒèƒŒæ™¯";
@@ -340,6 +340,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 };
 
 // ********************************************************************** EOF
+
 
 
 
