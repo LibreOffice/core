@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:47 $
+ *  last change: $Author: jb $ $Date: 2001-07-06 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,270 +59,313 @@
  *
  ************************************************************************/
 
+#include <anypair.hxx>
+
 #ifndef _UNO_ANY2_H_
 #include <uno/any2.h>
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_ANY_H_
-#include <com/sun/star/uno/Any.h>
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
 #endif
 
-#include <anypair.hxx>
-
-#include <rtl/alloc.h>
+#define CFG_PRECOND( expr )  OSL_PRECOND ( expr, "Violated Precondition:  " #expr)
+#define CFG_POSTCOND( expr ) OSL_POSTCOND( expr, "Violated Postcondition: " #expr)
 
 namespace configmgr
 {
     namespace css = com::sun::star;
     namespace uno = css::uno;
 
+// -----------------------------------------------------------------------------
+    static inline bool impl_Any_hasValue(uno_Any const * _pData)
+    { return (typelib_TypeClass_VOID != _pData->pType->eTypeClass); }
 
-
-// Dirty Hack
-    inline uno_Any * firstAny(cfgmgr_AnyPair* _pPair)
+// -----------------------------------------------------------------------------
+    static inline
+    void anypair_default_construct_Data( typelib_TypeDescriptionReference ** _ppType,
+                                         cfgmgr_AnyPair_Data* _pAnyPairData)
     {
-        return reinterpret_cast<uno_Any*>(_pPair);
+        uno_any_construct(_pAnyPairData, 0,0, uno::cpp_acquire);
+
+        *_ppType = _pAnyPairData->pType;
+        ::typelib_typedescriptionreference_acquire( *_ppType );
+
     }
 
 // -----------------------------------------------------------------------------
-    void anypair_construct_default(cfgmgr_AnyPair *_pAnyPair)
+    static inline
+    void anypair_type_construct_Data(cfgmgr_AnyPair_Data* _pAnyPairData,
+                                        typelib_TypeDescriptionReference * /*_pType*/)
     {
-        _pAnyPair->m_pFirst = _pAnyPair->m_pSecond = NULL;
-        uno_any_construct(firstAny(_pAnyPair),0,0, uno::cpp_acquire);
-        OSL_ASSERT(_pAnyPair->m_pFirst == NULL);
-        _pAnyPair->m_pSecond = NULL;
+        // type is currently unused
+        uno_any_construct(_pAnyPairData, 0,0, uno::cpp_acquire);
     }
 
 // -----------------------------------------------------------------------------
-    void anypair_construct_type(cfgmgr_AnyPair *_pAnyPair, typelib_TypeDescriptionReference* _pType)
+    static inline
+    void anypair_any_construct_Data(cfgmgr_AnyPair_Data* _pAnyPairData, uno_Any const *_pUnoAny)
     {
-        _pAnyPair->m_pFirst = _pAnyPair->m_pSecond = NULL;
-        _pAnyPair->m_pType = _pType;
-        ::typelib_typedescriptionreference_acquire( _pAnyPair->m_pType );
-    }
-// -----------------------------------------------------------------------------
-    void anypair_assign_type(cfgmgr_AnyPair *_pAnyPair, typelib_TypeDescriptionReference* _pType)
-    {
-        typelib_typedescriptionreference_assign( &_pAnyPair->m_pType, _pType );
+        uno_type_any_construct(_pAnyPairData, _pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire);
     }
 
 // -----------------------------------------------------------------------------
-    void anypair_construct_first(cfgmgr_AnyPair *_pAnyPair, const uno_Any *_pUnoAny)
+    static inline
+    void anypair_copy_construct_Data( cfgmgr_AnyPair_Data* _pAnyPairData,
+                                      cfgmgr_AnyPair_Data const * _pAnyPairDataFrom,
+                                      typelib_TypeDescriptionReference * /*_pType*/)
     {
-        _pAnyPair->m_pFirst = _pAnyPair->m_pSecond = NULL;
-
-        uno_type_any_construct(firstAny(_pAnyPair), _pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire);
-        _pAnyPair->m_pSecond = NULL;
+        // type is currently unused
+        uno_type_any_construct(_pAnyPairData, _pAnyPairDataFrom->pData, _pAnyPairDataFrom->pType, uno::cpp_acquire);
     }
 
 // -----------------------------------------------------------------------------
-    void anypair_construct_second(cfgmgr_AnyPair *_pAnyPair, const uno_Any *_pUnoAny)
+    static inline
+    void anypair_destruct_Data(cfgmgr_AnyPair_Data* _pAnyPairData,
+                               typelib_TypeDescriptionReference * /*_pType*/)
     {
-        _pAnyPair->m_pFirst = _pAnyPair->m_pSecond = NULL;
-
-        uno_Any aTmp;
-        uno_type_any_construct(&aTmp,_pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire);
-        _pAnyPair->m_pType = aTmp.pType;
-        _pAnyPair->m_pSecond = aTmp.pData;
-        _pAnyPair->m_pFirst = NULL;
+        // type is currently unused
+        ::uno_any_destruct(_pAnyPairData, uno::cpp_release );
     }
 
 // -----------------------------------------------------------------------------
-    // if type not equal, you got false and the struct contains {0,0,0}
-    sal_Bool anypair_construct(cfgmgr_AnyPair *_pAnyPair, const uno_Any* _pFirstAny, const uno_Any *_pSecondAny)
-    {
-        _pAnyPair->m_pFirst = _pAnyPair->m_pSecond = NULL;
-        bool bHasFirst  = (_pFirstAny ->pType->eTypeClass != typelib_TypeClass_VOID);
-        bool bHasSecond = (_pSecondAny->pType->eTypeClass != typelib_TypeClass_VOID);
 
-        if (bHasFirst)
+    static
+    sal_Bool anypair_assign_Data( typelib_TypeDescriptionReference** _ppType,
+                                  cfgmgr_AnyPair_Data* _pAnyPairData,
+                                  uno_Any const *_pUnoAny)
+    {
+        typelib_TypeDescriptionReference* pNewType = _pUnoAny->pType;
+
+        bool bCanAssign  = false;
+        bool bChangeType = false;
+
+        typelib_TypeClass eOldTC = (*_ppType)->eTypeClass;
+        if ( pNewType->eTypeClass == typelib_TypeClass_VOID)
+            bCanAssign = true;
+
+        else if (eOldTC == typelib_TypeClass_VOID || eOldTC == typelib_TypeClass_ANY )
+            bChangeType = bCanAssign = true;
+
+        else if ( typelib_typedescriptionreference_equals(*_ppType,pNewType)  )
+            bCanAssign = true;
+
+        else
+            bCanAssign = false;
+
+        if (bCanAssign)
         {
-            if (bHasSecond && ! typelib_typedescriptionreference_equals(_pFirstAny->pType,_pSecondAny->pType))
+            ::uno_type_any_assign(_pAnyPairData, _pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire, uno::cpp_release );
+            if (bChangeType)
+            {
+                ::typelib_typedescriptionreference_release( *_ppType );
+                *_ppType = pNewType; // *_ppType = _pAnyPairData->pType
+                ::typelib_typedescriptionreference_acquire( *_ppType );
+            }
+        }
+        else
+            OSL_ENSURE(false, "anypair_assign_XXX(): Cannot assign - Type mismatch");
+
+        return bCanAssign;
+    }
+
+// -----------------------------------------------------------------------------
+    static inline
+    void anypair_clear_Data(cfgmgr_AnyPair_Data* _pAnyPairData,
+                            typelib_TypeDescriptionReference * /*_pType*/)
+    {
+        // type is currently unused
+        uno_any_assign(_pAnyPairData, 0, 0, uno::cpp_acquire, uno::cpp_release);
+    }
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+    void anypair_construct_default(cfgmgr_AnyPair * _pAnyPair)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+
+        anypair_default_construct_Data(&_pAnyPair->pType, &_pAnyPair->m_first);
+        anypair_type_construct_Data   (&_pAnyPair->m_second,_pAnyPair->pType);
+
+        CFG_POSTCOND(  cfgmgr_AnyPair_isEmpty(_pAnyPair) );
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_first) );
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_second) );
+    }
+
+// -----------------------------------------------------------------------------
+    void anypair_construct_type(cfgmgr_AnyPair * _pAnyPair, typelib_TypeDescriptionReference* _pType)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+        CFG_PRECOND( _pType != NULL );
+
+        _pAnyPair->pType = _pType;
+        ::typelib_typedescriptionreference_acquire( _pAnyPair->pType );
+
+        anypair_type_construct_Data(&_pAnyPair->m_first ,_pAnyPair->pType);
+        anypair_type_construct_Data(&_pAnyPair->m_second,_pAnyPair->pType);
+
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_first) );
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_second) );
+    }
+
+// -----------------------------------------------------------------------------
+    void anypair_construct_first(cfgmgr_AnyPair * _pAnyPair, uno_Any const *_pUnoAny)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+        CFG_PRECOND( _pUnoAny != NULL );
+
+        _pAnyPair->pType = _pUnoAny->pType;
+        ::typelib_typedescriptionreference_acquire( _pAnyPair->pType );
+
+        anypair_any_construct_Data (&_pAnyPair->m_first, _pUnoAny);
+        anypair_type_construct_Data(&_pAnyPair->m_second,_pAnyPair->pType);
+
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_second) );
+    }
+
+// -----------------------------------------------------------------------------
+    void anypair_construct_second(cfgmgr_AnyPair * _pAnyPair, uno_Any const *_pUnoAny)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+        CFG_PRECOND( _pUnoAny != NULL );
+
+        _pAnyPair->pType = _pUnoAny->pType;
+        ::typelib_typedescriptionreference_acquire( _pAnyPair->pType );
+
+        anypair_type_construct_Data(&_pAnyPair->m_first, _pAnyPair->pType);
+        anypair_any_construct_Data (&_pAnyPair->m_second,_pUnoAny);
+
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_first) );
+    }
+
+// -----------------------------------------------------------------------------
+    // if type not equal, you got false and the struct contains undefined values
+    sal_Bool anypair_construct(cfgmgr_AnyPair * _pAnyPair, uno_Any const * _pFirstAny, uno_Any const *_pSecondAny)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+        CFG_PRECOND( _pFirstAny  != NULL );
+        CFG_PRECOND( _pSecondAny != NULL );
+
+        bool bHasFirst  = impl_Any_hasValue(_pFirstAny);
+        bool bHasSecond = impl_Any_hasValue(_pSecondAny);
+
+        if (bHasFirst && bHasSecond)
+        {
+            if ( ! typelib_typedescriptionreference_equals(_pFirstAny->pType,_pSecondAny->pType))
             {
                 OSL_ENSURE(false, "anypair_construct(): Cannot construct - Different types");
                 return false;
             }
-
-            // construct first value
-            uno_type_any_construct(firstAny(_pAnyPair), _pFirstAny->pData, _pFirstAny->pType, uno::cpp_acquire);
-
-            if (bHasSecond && _pSecondAny->pData != NULL)
-            {
-                // construct second value
-                uno_Any aTmp;
-                uno_type_any_construct(&aTmp,_pSecondAny->pData, _pSecondAny->pType, uno::cpp_acquire);
-                _pAnyPair->m_pSecond = aTmp.pData;
-
-                OSL_ASSERT(typelib_typedescriptionreference_equals(aTmp.pType,_pAnyPair->m_pType));
-                typelib_typedescriptionreference_release(aTmp.pType);
-            }
-            // else
-            //  _pAnyPair->m_pSecond = NULL;
         }
-        else
-        {
-            if (bHasSecond)
-            {
-                anypair_construct_second(_pAnyPair,_pSecondAny);
-            }
-            else
-            {
-                _pAnyPair->m_pType = _pFirstAny->pType;
-                typelib_typedescriptionreference_acquire(_pAnyPair->m_pType);
-            //  _pAnyPair->m_pFirst = NULL;
-            }
-        }
+
+        _pAnyPair->pType = bHasFirst ? _pFirstAny->pType : _pSecondAny->pType;
+        ::typelib_typedescriptionreference_acquire( _pAnyPair->pType );
+
+        anypair_any_construct_Data (&_pAnyPair->m_first ,_pFirstAny);
+        anypair_any_construct_Data (&_pAnyPair->m_second,_pSecondAny);
+
+        CFG_POSTCOND((bHasFirst || bHasSecond) == !cfgmgr_AnyPair_isEmpty(_pAnyPair) );
+        CFG_POSTCOND( bHasFirst  == cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_first) );
+        CFG_POSTCOND( bHasSecond == cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_second) );
 
         return true;
     }
-
 // -----------------------------------------------------------------------------
-    void anypair_clear_first(cfgmgr_AnyPair* _pAnyPair)
+
+    void anypair_copy_construct(cfgmgr_AnyPair* _pAnyPair, cfgmgr_AnyPair const * _pAnyPairFrom)
     {
-        if (_pAnyPair->m_pFirst)
-        {
-            uno_Any aTmp;
-            aTmp.pData = _pAnyPair->m_pFirst;
-            aTmp.pType = _pAnyPair->m_pType;
-            typelib_typedescriptionreference_acquire(aTmp.pType);
+        CFG_PRECOND( _pAnyPair     != NULL );
+        CFG_PRECOND( _pAnyPairFrom != NULL );
 
-            uno_any_destruct(&aTmp, uno::cpp_release);
+        _pAnyPair->pType = _pAnyPairFrom->pType;
+        ::typelib_typedescriptionreference_acquire( _pAnyPair->pType );
 
-            _pAnyPair->m_pFirst = NULL;
-        }
-    }
+        anypair_copy_construct_Data(&_pAnyPair->m_first,  &_pAnyPairFrom->m_first,  _pAnyPair->pType);
+        anypair_copy_construct_Data(&_pAnyPair->m_second, &_pAnyPairFrom->m_second, _pAnyPair->pType);
 
-// -----------------------------------------------------------------------------
-    void anypair_clear_second(cfgmgr_AnyPair* _pAnyPair)
-    {
-        if (_pAnyPair->m_pSecond)
-        {
-            uno_Any aTmp;
-            aTmp.pData = _pAnyPair->m_pSecond;
-            aTmp.pType = _pAnyPair->m_pType;
-            typelib_typedescriptionreference_acquire(aTmp.pType);
-
-            uno_any_destruct(&aTmp, uno::cpp_release);
-
-            _pAnyPair->m_pSecond = NULL;
-        }
     }
 
 // -----------------------------------------------------------------------------
     void anypair_destruct(cfgmgr_AnyPair* _pAnyPair)
     {
-        anypair_clear_first(_pAnyPair);
-        anypair_clear_second(_pAnyPair);
+        CFG_PRECOND( _pAnyPair != NULL );
 
-        ::typelib_typedescriptionreference_release( _pAnyPair->m_pType );
-        OSL_DEBUG_ONLY(_pAnyPair->m_pType = (typelib_TypeDescriptionReference*)0xdeadbeef);
+        anypair_destruct_Data(&_pAnyPair->m_first,  _pAnyPair->pType);
+        anypair_destruct_Data(&_pAnyPair->m_second, _pAnyPair->pType );
+
+        ::typelib_typedescriptionreference_release( _pAnyPair->pType );
+        OSL_DEBUG_ONLY(_pAnyPair->pType = (typelib_TypeDescriptionReference*)0xdeadbeef);
 
     }
 
 // -----------------------------------------------------------------------------
-    void anypair_copy_construct(cfgmgr_AnyPair* _pAnyPair, const cfgmgr_AnyPair* _pAnyPairFrom)
+    sal_Bool anypair_assign_first(cfgmgr_AnyPair* _pAnyPair, uno_Any const * _pUnoAny)
     {
-        _pAnyPair->m_pType = _pAnyPairFrom->m_pType;
-        _pAnyPair->m_pFirst = _pAnyPair->m_pSecond = NULL;
+        CFG_PRECOND( _pAnyPair     != NULL );
+        CFG_PRECOND( _pUnoAny != NULL );
 
-        typelib_typedescriptionreference_acquire(_pAnyPair->m_pType);
+        return anypair_assign_Data(&_pAnyPair->pType, &_pAnyPair->m_first, _pUnoAny);
+    }
 
-        if (_pAnyPairFrom->m_pFirst)
+// -----------------------------------------------------------------------------
+    sal_Bool anypair_assign_second(cfgmgr_AnyPair* _pAnyPair, uno_Any const * _pUnoAny)
+    {
+        return anypair_assign_Data(&_pAnyPair->pType, &_pAnyPair->m_second, _pUnoAny);
+    }
+
+// -----------------------------------------------------------------------------
+    void anypair_assign(cfgmgr_AnyPair* _pAnyPair, cfgmgr_AnyPair const * _pAnyPairFrom)
+    {
+        if (_pAnyPair != _pAnyPairFrom)
         {
-            uno_Any aTmp;
-            uno_type_any_construct(&aTmp,_pAnyPairFrom->m_pFirst, _pAnyPairFrom->m_pType, uno::cpp_acquire);
-            _pAnyPair->m_pFirst = aTmp.pData;
-            OSL_ASSERT(typelib_typedescriptionreference_equals(_pAnyPair->m_pType,aTmp.pType));
-            typelib_typedescriptionreference_release(aTmp.pType);
-        }
-        if (_pAnyPairFrom->m_pSecond)
-        {
-            uno_Any aTmp;
-            uno_type_any_construct(&aTmp,_pAnyPairFrom->m_pSecond, _pAnyPairFrom->m_pType, uno::cpp_acquire);
-            _pAnyPair->m_pSecond = aTmp.pData;
-            OSL_ASSERT(typelib_typedescriptionreference_equals(_pAnyPair->m_pType,aTmp.pType));
-            typelib_typedescriptionreference_release(aTmp.pType);
+            anypair_destruct(_pAnyPair);
+            anypair_copy_construct(_pAnyPair, _pAnyPairFrom);
         }
     }
 
+// -----------------------------------------------------------------------------
+    void anypair_clear_first(cfgmgr_AnyPair* _pAnyPair)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+
+        anypair_clear_Data(&_pAnyPair->m_first, _pAnyPair->pType);
+
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_first) );
+    }
+
+// -----------------------------------------------------------------------------
+    void anypair_clear_second(cfgmgr_AnyPair* _pAnyPair)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+
+        anypair_clear_Data(&_pAnyPair->m_second, _pAnyPair->pType );
+
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_second) );
+    }
+
+// -----------------------------------------------------------------------------
+    void anypair_clear_values(cfgmgr_AnyPair* _pAnyPair)
+    {
+        CFG_PRECOND( _pAnyPair != NULL );
+
+        anypair_clear_Data(&_pAnyPair->m_first, _pAnyPair->pType);
+        anypair_clear_Data(&_pAnyPair->m_second, _pAnyPair->pType );
+
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_first) );
+        CFG_POSTCOND( !cfgmgr_AnyPair_Data_hasValue(&_pAnyPair->m_second) );
+    }
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
     static
-    sal_Bool anypair_canassign(typelib_TypeDescriptionReference* _ppType, const uno_Any *_pUnoAny)
+    inline
+    uno::Any anypair_Data_toAny(cfgmgr_AnyPair_Data const * _pAnyPairData,
+                                typelib_TypeDescriptionReference * /*_pType*/)
     {
-        typelib_TypeClass eTC = _ppType->eTypeClass;
-        if  (eTC == typelib_TypeClass_VOID || eTC == typelib_TypeClass_ANY )
-            return true;
-
-        else if ( typelib_typedescriptionreference_equals(_ppType,_pUnoAny->pType)  )
-            return true;
-
-        else if (_pUnoAny->pType->eTypeClass == typelib_TypeClass_VOID)
-            return true;
-
-        else
-            return false;
-    }
-
-    static
-    sal_Bool anypair_assign_helper(typelib_TypeDescriptionReference** _ppType, void** _ppData , const uno_Any *_pUnoAny)
-    {
-        if (!anypair_canassign(*_ppType,_pUnoAny))
-            return false;
-
-        bool bOldNull = (*_ppData == NULL);
-        bool bNewNull = (_pUnoAny->pType->eTypeClass == typelib_TypeClass_VOID);
-
-        if (bOldNull)
-        {
-            if (!bNewNull)
-            {
-                uno_Any aTmp;
-                uno_type_any_construct(&aTmp,_pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire);
-
-                typelib_typedescriptionreference_release(*_ppType);
-
-                *_ppData = aTmp.pData;
-                *_ppType = aTmp.pType;
-            }
-        }
-        else
-        {
-            uno_Any aTmp;
-            aTmp.pData = *_ppData;
-            aTmp.pType = *_ppType;
-
-            if (bNewNull)
-                typelib_typedescriptionreference_acquire(*_ppType);
-
-            uno_type_any_assign(&aTmp,_pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire, uno::cpp_release);
-
-            if (bNewNull)
-            {
-                OSL_ASSERT(aTmp.pData == NULL);
-                *_ppData = NULL;
-                typelib_typedescriptionreference_release(aTmp.pType);
-            }
-            else
-            {
-                *_ppData = aTmp.pData;
-                *_ppType = aTmp.pType;
-            }
-        }
-
-        return true;
-    }
-// -----------------------------------------------------------------------------
-    sal_Bool anypair_assign_first(cfgmgr_AnyPair* _pAnyPair, const uno_Any* _pAny)
-    {
-        return anypair_assign_helper(&_pAnyPair->m_pType, &_pAnyPair->m_pFirst, _pAny);
+        return uno::Any( _pAnyPairData->pData, _pAnyPairData->pType );
     }
 
 // -----------------------------------------------------------------------------
-    sal_Bool anypair_assign_second(cfgmgr_AnyPair* _pAnyPair, const uno_Any* _pAny)
-    {
-        return anypair_assign_helper(&_pAnyPair->m_pType, &_pAnyPair->m_pSecond, _pAny);
-    }
-
-
 // -----------------------------------------------------------------------------
     // ctors
     AnyPair::AnyPair()
@@ -353,20 +396,16 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     // copy-ctor
-    AnyPair::AnyPair(AnyPair const& _aAny)
+    AnyPair::AnyPair(AnyPair const& _aOther)
     {
-        anypair_copy_construct(&m_aAnyPair, &_aAny.m_aAnyPair);
+        anypair_copy_construct(&m_aAnyPair, &_aOther.m_aAnyPair);
     }
 
 // -----------------------------------------------------------------------------
     // assign operator
-    AnyPair& AnyPair::operator=(AnyPair const& _aAny)
+    AnyPair& AnyPair::operator=(AnyPair const& _aOther)
     {
-        if (this != &_aAny)
-        {
-            anypair_destruct(&m_aAnyPair);
-            anypair_copy_construct(&m_aAnyPair, &_aAny.m_aAnyPair);
-        }
+        anypair_assign(&m_aAnyPair, &_aOther.m_aAnyPair);
         return *this;
     }
 
@@ -379,80 +418,35 @@ namespace configmgr
 
 
 // -----------------------------------------------------------------------------
-    void AnyPair::setFirst(uno::Any const& _aAny)
+    sal_Bool AnyPair::setFirst(uno::Any const& _aAny)
     {
-        OSL_VERIFY(anypair_assign_first(&m_aAnyPair,&_aAny));
+        return anypair_assign_first(&m_aAnyPair,&_aAny);
     }
 
 // -----------------------------------------------------------------------------
-    void AnyPair::setSecond(uno::Any const& _aAny)
+    sal_Bool AnyPair::setSecond(uno::Any const& _aAny)
     {
-        OSL_VERIFY(anypair_assign_second(&m_aAnyPair,&_aAny));
+        return anypair_assign_second(&m_aAnyPair,&_aAny);
     }
 
 // -----------------------------------------------------------------------------
     uno::Any AnyPair::getFirst() const
     {
-        // BACK: null any, if any not set.
-        if (m_aAnyPair.m_pFirst)
-        {
-            return uno::Any( m_aAnyPair.m_pFirst, m_aAnyPair.m_pType );
-        }
-        else
-            return uno::Any();
+        return anypair_Data_toAny( &m_aAnyPair.m_first, m_aAnyPair.pType );
     }
 // -----------------------------------------------------------------------------
     uno::Any AnyPair::getSecond() const
     {
-        // BACK: null any, if any not set.
-        if (m_aAnyPair.m_pSecond)
-        {
-            return uno::Any( m_aAnyPair.m_pSecond, m_aAnyPair.m_pType );
-        }
-        else
-            return uno::Any();
+        return anypair_Data_toAny( &m_aAnyPair.m_second, m_aAnyPair.pType );
     }
 
 // -----------------------------------------------------------------------------
     uno::Type AnyPair::getValueType() const
     {
-        return uno::Type(m_aAnyPair.m_pType);
+        return uno::Type(m_aAnyPair.pType);
     }
 
 // -----------------------------------------------------------------------------
-
-    // in Header
-    // bool hasFirst() const {return m_pFirst  ? true : false;}
-    // bool hasSecond() const {return m_pSecond ? true : false;}
-    // bool isNull() const   {return m_pFirst == NULL && m_pSecond == 0;}
-    void AnyPair::check_init()
-    {
-        if (this->hasFirst() || this->hasSecond())
-        {
-            OSL_ASSERT(this->getValueType() != ::getVoidCppuType());
-        }
-    }
-// -----------------------------------------------------------------------------
-    void AnyPair::init()
-    {
-        if (hasSecond())
-        {
-            OSL_ASSERT(this->getValueType() != ::getVoidCppuType());
-        }
-        else if (hasFirst())
-        {
-            OSL_ASSERT(this->getValueType() != ::getVoidCppuType());
-        }
-        else
-        {
-            // no type set, we must be void.
-            OSL_ASSERT(this->getValueType() == ::getVoidCppuType()); // at init time ValueType must be void
-        }
-    }
-
-
-
-
 
 } // namespace
 
