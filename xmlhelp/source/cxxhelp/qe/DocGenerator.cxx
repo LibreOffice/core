@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocGenerator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
+ *  last change: $Author: abi $ $Date: 2001-07-06 10:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,7 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
 
 RoleFiller::~RoleFiller()
 {
-    for( sal_uInt32 i = 0; i < fillers_.size(); ++i )
-        ;
-//          if( fillers_[i] != this )
-//              delete fillers_[i];
+
 }
 
 
@@ -197,7 +194,7 @@ sal_Int32 RoleFiller::getConcept()
 
 void RoleFiller::use( std::vector< RoleFiller*>& place,sal_Int32 query )
 {
-    RoleFiller* rf,*tmp;
+    RoleFiller* rf;
     if( rf = place[ query ] )
     {
         place[ query ] = this;  // put at the head of list

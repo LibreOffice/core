@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 10:12:51 $
+ *  last change: $Author: abi $ $Date: 2001-07-06 10:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,9 +425,11 @@ QueryHitData* XmlIndex::hitToData( QueryHit* hit )
     sal_Int32 *matches = hit->getMatches( matchesL );
     rtl::OUString *terms = new rtl::OUString[ termsL = matchesL >>/*>*/ 1 ];
     for( sal_Int32 i = 0; i < termsL; ++i )
-        if( matches[ i << 1 ] > 0 )
-            terms[i] = fetch( matches[i << 1] );
-
+    {
+        sal_Int32 aInt = ( i << 1 );
+        if( matches[ aInt ] > 0 )
+            terms[i] = fetch( matches[ aInt ] );
+    }
     sal_Int32 document = hit->getDocument();
     QueryHitData *res = new QueryHitData( hit->getPenalty(),
                                           documentName( document ),
