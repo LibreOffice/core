@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-28 13:26:36 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,9 +764,9 @@ void SwHTMLParser::DeleteFormImpl()
 static void lcl_html_setFixedFontProperty(
         const Reference< beans::XPropertySet >& rPropSet )
 {
-    Font aFixedFont( OutputDevice::GetDefaultFont(
+    Font aFixedFont; /*( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
-                                    DEFAULTFONT_FLAGS_ONLYONE )  );
+                                    DEFAULTFONT_FLAGS_ONLYONE )  );*/
     Any aTmp;
     aTmp <<= OUString( aFixedFont.GetName() );
     rPropSet->setPropertyValue( OUString::createFromAscii("FontName"), aTmp );
@@ -2800,11 +2800,14 @@ void SwHTMLParser::InsertSelectText()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlform.cxx,v 1.2 2001-06-28 13:26:36 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlform.cxx,v 1.3 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/06/28 13:26:36  jp
+      Bug #81329#: use OutputDevice::GetDefaultFont
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 

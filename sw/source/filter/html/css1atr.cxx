@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,9 +438,9 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         sOut.Erase();
         if( pVal )
             HTMLOutFuncs::Out_String( Strm(), String::CreateFromAscii(pVal),
-                                      eDestEnc );
+                                      eDestEnc, &aNonConvertableCharacters );
         else if( pSVal )
-            HTMLOutFuncs::Out_String( Strm(), *pSVal, eDestEnc );
+            HTMLOutFuncs::Out_String( Strm(), *pSVal, eDestEnc, &aNonConvertableCharacters );
     }
     else
     {
@@ -3495,6 +3495,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/21 16:21:48  jp
+      writegraphic optional in original format and not general as JPG
+
       Revision 1.5  2000/12/12 09:39:59  mib
       #70821#: Don't export empty frames as spacer if they have a background
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-29 10:37:29 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
                 // nur das Tag fuer die Section merken
                 ByteString aName;
                 HTMLOutFuncs::ConvertStringToHTML( pSNd->GetSection().GetName(),
-                                                   aName, eDestEnc );
+                                                   aName, eDestEnc, &aNonConvertableCharacters );
 
                 ByteString sOut( '<' );
                 (((((((sOut += sHTML_division)
@@ -534,6 +534,13 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_html, sal_False );
 
+    if( aNonConvertableCharacters.Len() )
+    {
+        nWarn = *new StringErrorInfo( WARN_UNCONVERTABLE_CHARS,
+                                      aNonConvertableCharacters,
+                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+    }
+
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
     ASSERT( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
@@ -586,6 +593,8 @@ sal_uInt32 SwHTMLWriter::WriteStream()
 
     for( i=0; i<MAXLEVEL; i++ )
         aBulletGrfs[i].Erase();
+
+    aNonConvertableCharacters.Erase();
 
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );
@@ -685,7 +694,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     {
         ((sOut += ' ') += sHTML_O_id) += "=\"";
         rHTMLWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -703,13 +712,13 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                   INetURLObject::AbsToRel(aURL,
                                           INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS),
-                                  rHTMLWrt.eDestEnc );
+                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         const sal_Char *pDelim = "&#255;";
         if( aFilter.Len() )
         {
             rHTMLWrt.Strm() << pDelim;
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter,
-                                      rHTMLWrt.eDestEnc );
+                                      rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         }
         if( aSection.Len() )
         {
@@ -717,7 +726,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                 rHTMLWrt.Strm() << pDelim;
             rHTMLWrt.Strm() << pDelim;
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,
-                                      rHTMLWrt.eDestEnc );
+                                      rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         }
         sOut = '\"';
     }
@@ -970,7 +979,7 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
         ByteString sOut( ' ' );
         (sOut += pTag) += '=';
         rHWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rHWrt.Strm(), pColorItem->GetValue() );
+        HTMLOutFuncs::Out_Color( rHWrt.Strm(), pColorItem->GetValue(), rHWrt.eDestEnc );
         if( RES_POOLCOLL_STANDARD==pFmt->GetPoolFmtId() )
             rHWrt.pDfltColor = new Color( pColorItem->GetValue() );
     }
@@ -1038,7 +1047,8 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     GetIndentString( sIndent );
 //  OutNewLine();
     SfxFrameHTMLWriter::Out_DocInfo( Strm(), pDoc->GetpInfo(),
-                                     sIndent.GetBuffer(), eDestEnc );
+                                     sIndent.GetBuffer(), eDestEnc,
+                                       &aNonConvertableCharacters );
 
     // Kommentare und Meta-Tags des ersten Absatzes
     rHeaderAttrs = OutHeaderAttrs();
@@ -1137,7 +1147,7 @@ void SwHTMLWriter::OutAnchor( const String& rName )
     ByteString sOut( '<' );
     (((sOut += sHTML_anchor) += ' ') += sHTML_O_name) += "=\"";
     Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( Strm(), rName, eDestEnc ) << "\">";
+    HTMLOutFuncs::Out_String( Strm(), rName, eDestEnc, &aNonConvertableCharacters ) << "\">";
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_anchor, sal_False );
 }
 
@@ -1204,7 +1214,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
         ByteString sOut( ' ' );
         (sOut += sHTML_O_bgcolor) += '=';
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( Strm(), rBackColor );
+        HTMLOutFuncs::Out_Color( Strm(), rBackColor, eDestEnc);
     }
 
     if( !bGraphic )
@@ -1254,7 +1264,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                                         INetURLObject::DECODE_UNAMBIGUOUS));
         (sOut += sHTML_O_background) += "=\"";
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( Strm(), s, eDestEnc ) << '\"';
+        HTMLOutFuncs::Out_String( Strm(), s, eDestEnc, &aNonConvertableCharacters ) << '\"';
     }
 }
 
@@ -1401,11 +1411,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.8 2001-06-29 10:37:29 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.9 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/06/29 10:37:29  mib
+      #88918#: Use UTF-8 for Clipboard, evaluate encoding in insert mode
+
       Revision 1.7  2001/02/19 19:34:29  jp
       use HTMLOption of TextEncoding
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:24 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,7 +1020,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             ((sOut += ' ') += sHTML_O_class) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), pFmtInfo->aClass,
-                                      rHWrt.eDestEnc );
+                                      rHWrt.eDestEnc, &rHWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
         rWrt.Strm() << sOut.GetBuffer();
@@ -2159,7 +2159,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
         if( aOutlineTxt.Len() )
             HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineTxt,
-                                         rHTMLWrt.eDestEnc );
+                                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters);
 
         if( rHTMLWrt.pFmtFtn )
         {
@@ -2358,7 +2358,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 if( 0x0a == c )
                     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_linebreak );
                 else
-                    HTMLOutFuncs::Out_Char( rWrt.Strm(), c, rHTMLWrt.eDestEnc );
+                    HTMLOutFuncs::Out_Char( rWrt.Strm(), c, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
                 // Wenn das letzte Zeichen eines Absatzed ein harter
                 // Zeilen-Umbruch ist brauchen wir noch ein <BR> mehr, weil
@@ -2502,7 +2502,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         ByteString sOut( '<' );
         (((sOut += sHTML_font) += ' ') += sHTML_O_color) += '=';
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), rColor ) << '>';
+        HTMLOutFuncs::Out_Color( rWrt.Strm(), rColor, rHTMLWrt.eDestEnc ) << '>';
     }
     else
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_font, FALSE );
@@ -2545,7 +2545,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
         ByteString sOut( '<' );
         (((sOut += sHTML_font) += ' ') += sHTML_O_face) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, rHTMLWrt.eDestEnc )
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters )
             << "\">";
     }
     else
@@ -2700,7 +2700,8 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutHTML_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt )
 {
     HTMLOutFuncs::Out_Char( rWrt.Strm(), ((SwFmtHardBlank&)rHt).GetChar(),
-                            ((SwHTMLWriter&)rWrt).eDestEnc );
+                            ((SwHTMLWriter&)rWrt).eDestEnc,
+                            &((SwHTMLWriter&)rWrt).aNonConvertableCharacters);
     return rWrt;
 }
 
@@ -2771,7 +2772,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
         rWrt.Strm() << sOut.GetBuffer();
         aURL = INetURLObject::AbsToRel( aURL, INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS);
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
     }
     else
@@ -2782,7 +2783,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
         ((sOut += ' ') += sHTML_O_name) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFmt.GetName(),
-                                  rHTMLWrt.eDestEnc );
+                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -2791,7 +2792,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
     {
         ((sOut += ' ') += sHTML_O_target) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, rHTMLWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -2804,7 +2805,8 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
 
     if( bEvents )
         HTMLOutFuncs::Out_Events( rWrt.Strm(), *pMacTable, aAnchorEventTable,
-                                  rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc );
+                                  rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc,
+                                     &rHTMLWrt.aNonConvertableCharacters    );
     rWrt.Strm() << ">";
 
     return rWrt;
@@ -2900,7 +2902,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
             ((sOut += ' ') += sHTML_O_class) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), pFmtInfo->aClass,
-                                          rHTMLWrt.eDestEnc );
+                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
         sOut += '>';
@@ -3096,11 +3098,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.6 2001-02-23 12:45:24 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.7 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/02/23 12:45:24  os
+      Complete use of DefaultNumbering component
+
       Revision 1.5  2000/11/20 09:41:15  jp
       new para attributes - expand para range
 

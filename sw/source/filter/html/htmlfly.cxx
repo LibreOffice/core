@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             (nFrmOpts & HTML_FRMOPT_ID) ? sHTML_O_id : sHTML_O_name;
         ((sOut += ' ') += pStr) += "=\"";
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( Strm(), rFrmFmt.GetName(), eDestEnc );
+        HTMLOutFuncs::Out_String( Strm(), rFrmFmt.GetName(), eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -644,7 +644,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     {
         ((sOut += ' ') += sHTML_O_alt) += "=\"";
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( Strm(), rAlternateTxt, eDestEnc );
+        HTMLOutFuncs::Out_String( Strm(), rAlternateTxt, eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -1031,7 +1031,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
                                         pLF, pIndArea, pIndMap,
-                                        rHTMLWrt.eDestEnc );
+                                        rHTMLWrt.eDestEnc,
+                                        &rHTMLWrt.aNonConvertableCharacters );
         }
         else
         {
@@ -1039,7 +1040,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
                                         pLF, pIndArea, pIndMap,
-                                         rHTMLWrt.eDestEnc );
+                                         rHTMLWrt.eDestEnc,
+                                        &rHTMLWrt.aNonConvertableCharacters );
         }
     }
 
@@ -1086,7 +1088,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                             INetURLObject::AbsToRel( aMapURL,
                                         INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS),
-                            rHTMLWrt.eDestEnc );
+                            rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut = '\"';
             }
 
@@ -1095,7 +1097,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 ((sOut += ' ') += sHTML_O_name) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aName,
-                                          rHTMLWrt.eDestEnc );
+                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut = '\"';
             }
 
@@ -1104,7 +1106,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 ((sOut += ' ') += sHTML_O_target) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aTarget,
-                                          rHTMLWrt.eDestEnc );
+                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut = '\"';
             }
             if( sOut.Len() )
@@ -1120,7 +1122,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                     HTMLOutFuncs::Out_Events( rWrt.Strm(), rMacTable,
                                               aAnchorEventTable,
                                               rHTMLWrt.bCfgStarBasic,
-                                                 rHTMLWrt.eDestEnc );
+                                                 rHTMLWrt.eDestEnc,
+                                        &rHTMLWrt.aNonConvertableCharacters );
             }
 
             rWrt.Strm() << ">";
@@ -1193,7 +1196,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             (((sOut += sHTML_font) += ' ') += sHTML_O_color) += '=';
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_Color( rWrt.Strm(),
-                                     pColBorderLine->GetColor() ) << '>';
+                                     pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ) << '>';
 
             (((sOut = "</" ) += sHTML_font) += '>') += aEndTags;
             aEndTags = sOut;
@@ -1203,7 +1206,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     sOut = '<';
     (((sOut += sHTML_image) += ' ') += sHTML_O_src) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rHTMLWrt.eDestEnc ) << '\"';
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
 
     // Events
     sOut.Erase();
@@ -1213,7 +1216,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             ((const SvxMacroItem *)pItem)->GetMacroTable();
         if( rMacTable.Count() )
             HTMLOutFuncs::Out_Events( rWrt.Strm(), rMacTable, aImageEventTable,
-                                      rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc );
+                                      rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc,
+                                        &rHTMLWrt.aNonConvertableCharacters );
     }
 
     // ALT, ALIGN, WIDTH, HEIGHT, HSPACE, VSPACE
@@ -1238,7 +1242,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     {
         ((sOut = ' ') += sHTML_O_usemap) += "=\"#";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc ) << '\"';
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
     }
 
     rHTMLWrt.Strm() << '>';
@@ -1325,7 +1329,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                                         INetURLObject::DECODE_UNAMBIGUOUS);
         (sOut += sHTML_O_src) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), s, rHTMLWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), s, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
 
         // Groesse des Objekts Twips ohne Raender
@@ -1964,11 +1968,14 @@ BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.5 2000-12-21 16:21:48 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.6 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/21 16:21:48  jp
+      writegraphic optional in original format and not general as JPG
+
       Revision 1.4  2000/12/12 09:39:59  mib
       #70821#: Don't export empty frames as spacer if they have a background
 

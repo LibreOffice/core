@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-17 12:50:56 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ void SwHTMLWriter::OutBasic()
             HTMLOutFuncs::OutScript( Strm(), pModule->GetSource(),
                                      sLang, eType, aEmptyStr,
                                      &rLibName, &rModName,
-                                     eDestEnc );
+                                     eDestEnc, &aNonConvertableCharacters );
         }
     }
 
@@ -387,7 +387,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
     SvxMacroTableDtor *pMacTable = pECfg->GetDocEventTable( pDocSh );
     if( pMacTable && pMacTable->Count() )
         HTMLOutFuncs::Out_Events( Strm(), *pMacTable, aBodyEventTable,
-                                  bCfgStarBasic, eDestEnc );
+                                  bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
 }
 
 
@@ -395,11 +395,14 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.3 2001-01-17 12:50:56 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.4 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/01/17 12:50:56  jp
+      remove compiler warning
+
       Revision 1.2  2000/11/13 10:46:28  jp
       remove IniManager
 

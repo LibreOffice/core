@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-12 13:11:13 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ public:
     SwHTMLTxtFtns *pFootEndNotes;
 
     String aCSS1Selector;           // der Selektor eines Styles
+    String aNonConvertableCharacters;
     String aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  *pxFormComps; // die aktuelle Form

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-22 16:14:17 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,7 +1072,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             ((sOut += ' ') += sHTML_O_src) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
 
@@ -1081,7 +1081,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             ((sOut += ' ') += sHTML_O_type) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.eDestEnc );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
 
@@ -1120,7 +1120,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             {
                 ((sOut += ' ') += sHTML_O_codebase) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.eDestEnc );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut = '\"';
             }
         }
@@ -1128,7 +1128,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // CODE
         ((sOut += ' ') += sHTML_O_code) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), pApplet->GetClass(), rHTMLWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), pApplet->GetClass(), rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
 
         // NAME
@@ -1137,7 +1137,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             ((sOut += ' ') += sHTML_O_name) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
 
@@ -1157,7 +1157,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(),
                                         pFrame->GetFrameDescriptor(),
-                                        FALSE, 0, rHTMLWrt.eDestEnc  );
+                                        FALSE, 0, rHTMLWrt.eDestEnc,
+                                        &rHTMLWrt.aNonConvertableCharacters );
         sOut.Erase();
 
         nFrmOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
@@ -1192,9 +1193,9 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             {
                 const String& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 rWrt.Strm() << "=\"";
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc ) << '\"';
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
             }
             else if( SWHTML_OPTTYPE_PARAM == nType )
             {
@@ -1216,10 +1217,10 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             ((((sOut = '<') += sHTML_param) += ' ') += sHTML_O_name)
                 += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             ((sOut = "\" ") += sHTML_O_value) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc ) << "\">";
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << "\">";
         }
 
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
@@ -1243,9 +1244,9 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             {
                 const String& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 rWrt.Strm() << "=\"";
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc ) << '\"';
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
             }
         }
         rHTMLWrt.Strm() << '>';
@@ -1316,11 +1317,14 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.5 2001-02-22 16:14:17 mtg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.6 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/02/22 16:14:17  mtg
+      Changed to use SwAppletImpl
+
       Revision 1.4  2000/12/21 16:21:48  jp
       writegraphic optional in original format and not general as JPG
 

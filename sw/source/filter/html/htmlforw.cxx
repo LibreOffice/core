@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-28 13:26:36 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,8 @@ SV_IMPL_OP_PTRARR_SORT( HTMLControls, HTMLControl* )
 void lcl_html_outEvents( SvStream& rStrm,
                          const Reference< form::XFormComponent > rFormComp,
                          sal_Bool bCfgStarBasic,
-                         rtl_TextEncoding eDestEnc )
+                         rtl_TextEncoding eDestEnc,
+                           String *pNonConvertableChars )
 {
     Reference< container::XChild > xChild( rFormComp, UNO_QUERY );
     Reference< XInterface > xParentIfc = xChild->getParent();
@@ -345,7 +346,7 @@ void lcl_html_outEvents( SvStream& rStrm,
                 += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US);
         sOut += "=\"";
         rStrm << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc );
+        HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc, pNonConvertableChars );
         rStrm << '\"';
         if( EXTENDED_STYPE == eScriptType &&
             pDescs[i].AddListenerParam.getLength() )
@@ -356,7 +357,7 @@ void lcl_html_outEvents( SvStream& rStrm,
                 += "=\"";
             rStrm << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rStrm, pDescs[i].AddListenerParam,
-                                      eDestEnc );
+                                      eDestEnc, pNonConvertableChars );
             rStrm << '\"';
         }
     }
@@ -642,7 +643,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         ((sOut += ' ') += sHTML_O_name) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
-                                  eDestEnc );
+                                  eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -656,7 +657,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         String aURL( *(OUString*)aTmp.getValue() );
         aURL = INetURLObject::AbsToRel( aURL, INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS);
-        HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc );
+        HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -706,13 +707,13 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         ((sOut += ' ') += sHTML_O_target) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
-                                  eDestEnc );
+                                  eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
 
     Strm() << sOut.GetBuffer();
     Reference< form::XFormComponent > xFormComp( rFormComps, UNO_QUERY );
-    lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc );
+    lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
     Strm() << '>';
 
     IncIndentLevel(); // Inhalt der Form einruecken
@@ -780,7 +781,7 @@ void SwHTMLWriter::OutHiddenControls(
                 (( sOut += ' ' ) += sHTML_O_name ) += "=\"";
                 Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
-                                          eDestEnc );
+                                          eDestEnc, &aNonConvertableCharacters );
                 sOut = '\"';
             }
             aTmp = xPropSet->getPropertyValue(
@@ -791,7 +792,7 @@ void SwHTMLWriter::OutHiddenControls(
                 ((sOut += ' ') += sHTML_O_value) += "=\"";
                 Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
-                                          eDestEnc );
+                                          eDestEnc, &aNonConvertableCharacters );
                 sOut = '\"';
             }
             sOut += '>';
@@ -1131,7 +1132,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         (( sOut += ' ' ) += sHTML_O_name ) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), *(OUString*)aTmp.getValue(),
-                                  rHTMLWrt.eDestEnc );
+                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -1146,7 +1147,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         ((sOut += ' ') += sHTML_O_value) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
     }
 
@@ -1166,7 +1167,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                         INetURLObject::AbsToRel( *(OUString*)aTmp.getValue(),
                                         INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS),
-                        rHTMLWrt.eDestEnc );
+                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
 
@@ -1275,9 +1276,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
                 ((OUString*)aTmp.getValue())->getLength() )
             {
-                Font aFixedFont( OutputDevice::GetDefaultFont(
+                Font aFixedFont; /*( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
-                                    DEFAULTFONT_FLAGS_ONLYONE ) );
+                                    DEFAULTFONT_FLAGS_ONLYONE ) );*/
                 String aFName( *(OUString*)aTmp.getValue() );
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
@@ -1350,7 +1351,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     Reference< form::XFormComponent >  xFormComp( xControlModel, UNO_QUERY );
     lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.bCfgStarBasic,
-                        rHTMLWrt.eDestEnc );
+                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
     rWrt.Strm() << '>';
 
@@ -1415,7 +1416,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     ((sOut += ' ') += sHTML_O_value) += "=\"";
                     rWrt.Strm() << sOut.GetBuffer();
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,
-                        rHTMLWrt.eDestEnc );
+                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                     sOut = '\"';
                 }
                 if( bSelected )
@@ -1425,7 +1426,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 rWrt.Strm() << sOut.GetBuffer();
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i],
-                                          rHTMLWrt.eDestEnc );
+                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_option, sal_False );
 
@@ -1456,7 +1457,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     rWrt.Strm() << SwHTMLWriter::sNewLine;
                 String aLine = sValue.GetToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
-                                        rHTMLWrt.eDestEnc );
+                                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
         }
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_textarea, sal_False );
@@ -1469,7 +1470,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         {
             sValue = *(OUString*)aTmp.getValue();
             HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,
-                rHTMLWrt.eDestEnc ) << ' ';
+                rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << ' ';
         }
     }
 
@@ -1585,11 +1586,14 @@ HTMLControl::~HTMLControl()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.5 2001-06-28 13:26:36 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.6 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/06/28 13:26:36  jp
+      Bug #81329#: use OutputDevice::GetDefaultFont
+
       Revision 1.4  2001/05/11 09:54:05  th
       rtl-string-changes
 

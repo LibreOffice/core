@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 12:05:31 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                      aOutliner.GetParagraphCount() ) );
 #endif
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText,
-                                rHTMLWrt.eDestEnc );
+                                rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_marquee, sal_False );
 
@@ -925,11 +925,16 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmldraw.cxx,v 1.2 2000-10-30 12:05:31 aw Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmldraw.cxx,v 1.3 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/30 12:05:31  aw
+      change SdrObjects to use SfxItemSet instead of SfxSetItems.
+      Removed TakeAttributes() and SetAttributes(), new ItemSet
+      modification methods (GetItem[Set], SetItem[Set], ClearItem,...)
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 

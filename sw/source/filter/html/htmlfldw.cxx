@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-08 15:14:18 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld )
         {
             ((sOut += ' ') += sHTML_O_value) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.eDestEnc );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
         if( bNumFmt )
@@ -425,7 +425,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld )
 
     // Inhalt des Feldes ausgeben
     HTMLOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
-                              rHTMLWrt.eDestEnc );
+                              rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
     // Off-Tag ausgeben
     if( pTypeStr )
@@ -532,7 +532,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         // sonst ist es der Script-Inhalt selbst. Da nur noh JavaScript
         // in Feldern landet, muss es sich um JavaSrript handeln ...:)
         HTMLOutFuncs::OutScript( rWrt.Strm(), aContents, rType, JAVASCRIPT,
-                                 aURL, 0, 0, rHTMLWrt.eDestEnc );
+                                 aURL, 0, 0, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
         if( rHTMLWrt.bLFPossible )
             rHTMLWrt.OutNewLine( TRUE );
@@ -549,11 +549,14 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.2 2000-12-08 15:14:18 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.3 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/12/08 15:14:18  mib
+      #75662#: Don't add blanks to comments
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 

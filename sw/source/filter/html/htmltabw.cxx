@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, SwHoriOrient eAlign,
     {
         ((sOut += ' ' ) += sHTML_O_bordercolor ) += '=';
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), nBorderColor );
+        HTMLOutFuncs::Out_Color( rWrt.Strm(), nBorderColor, rWrt.eDestEnc );
         sOut.Erase();
     }
 
@@ -928,7 +928,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, SwHoriOrient eAlign,
         (((sOut += ' ') += sHTML_O_align) += '=')
             += (bTopCaption ? sHTML_VA_top : sHTML_VA_bottom);
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.GetBuffer(), sal_True );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, rWrt.eDestEnc );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, rWrt.eDestEnc, &rWrt.aNonConvertableCharacters    );
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_caption, sal_False );
     }
 
@@ -1374,11 +1374,14 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmltabw.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmltabw.cxx,v 1.2 2001-07-03 07:49:47 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.60  2000/09/18 16:04:46  willem.vandorp
       OpenOffice header added.
 

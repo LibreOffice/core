@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlftn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 07:35:34 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,13 +375,13 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     ByteString sOut( '<' );
     (((sOut += sHTML_anchor) += ' ') += sHTML_O_class) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.eDestEnc );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     ((sOut += "\" ") += sHTML_O_name) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     (((sOut += sHTML_FTN_anchor) += "\" ") += sHTML_O_href) += "=\"#";
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     (sOut += sHTML_FTN_symbol)+= '\"';
     if( rFmtFtn.GetNumStr().Len() )
         (sOut += ' ') += sHTML_O_sdfixed;
@@ -390,7 +390,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_superscript, TRUE );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFmtFtn.GetViewNumStr(*rWrt.pDoc),
-                                 rHTMLWrt.eDestEnc );
+                                 rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_superscript, FALSE );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_anchor, FALSE );
 
@@ -433,7 +433,7 @@ void SwHTMLWriter::OutFootEndNotes()
         ByteString sOut( '<' );
         (((sOut += sHTML_division) += ' ') += sHTML_O_id) += "=\"";
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc );
+        HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
         Strm() << "\">";
 
         bLFPossible = TRUE;
@@ -521,13 +521,13 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn )
     ByteString sOut( '<' );
     (((sOut += sHTML_anchor) +=  ' ') += sHTML_O_class) += "=\"";
     Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( Strm(), sClass, eDestEnc );
+    HTMLOutFuncs::Out_String( Strm(), sClass, eDestEnc, &aNonConvertableCharacters );
     ((sOut += "\" ") += sHTML_O_name) += "=\"";
     Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc );
+    HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
     (((sOut += sHTML_FTN_symbol) +="\" ") += sHTML_O_href) += "=\"#";
     Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc );
+    HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
     (sOut += sHTML_FTN_anchor) += "\">";
     Strm() << sOut.GetBuffer();
 
@@ -538,7 +538,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn )
     sNum += rFmtFtn.GetViewNumStr(*pDoc);
     if( bAuto )
         sNum += pInfo->GetSuffix();
-    HTMLOutFuncs::Out_String( Strm(), sNum, eDestEnc );
+    HTMLOutFuncs::Out_String( Strm(), sNum, eDestEnc, &aNonConvertableCharacters );
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_anchor, FALSE );
 }
 
@@ -606,7 +606,7 @@ void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
         += sHTML_O_name) += "=\"") += pName) += "\" ")
         += sHTML_O_content) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.eDestEnc );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     rWrt.Strm() << "\">";
 }
 
