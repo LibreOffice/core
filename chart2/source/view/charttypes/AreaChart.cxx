@@ -157,11 +157,17 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bN
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel) )
         , m_eCurveStyle(CurveStyle_LINES)
+        , m_nCurveResolution(20)
+        , m_nSplineOrder(3)
 {
     try
     {
         if( m_xChartTypeModelProps.is() )
+        {
             m_xChartTypeModelProps->getPropertyValue( C2U( "CurveStyle" ) ) >>= m_eCurveStyle;
+            m_xChartTypeModelProps->getPropertyValue( C2U( "CurveResolution" ) ) >>= m_nCurveResolution;
+            m_xChartTypeModelProps->getPropertyValue( C2U( "SplineOrder" ) ) >>= m_nSplineOrder;
+        }
     }
     catch( uno::Exception& e )
     {
@@ -332,17 +338,14 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     drawing::PolyPolygonShape3D aPoly;
     if(CurveStyle_CUBIC_SPLINES==m_eCurveStyle)
     {
-        sal_Int32 nGranularity = 20;//@todo get from model
         drawing::PolyPolygonShape3D aSplinePoly;
-        SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, nGranularity );
+        SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
         Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
     }
     else if(CurveStyle_B_SPLINES==m_eCurveStyle)
     {
-        sal_Int32 nGranularity = 20;//@todo get from model
-        sal_Int32 nSplineDepth = 3;//@todo get from model
         drawing::PolyPolygonShape3D aSplinePoly;
-        SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, nGranularity, nSplineDepth );
+        SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
         Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
     }
     else

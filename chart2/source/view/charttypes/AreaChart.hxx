@@ -62,7 +62,11 @@ private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
     bool                                m_bSymbol;
-    ::drafts::com::sun::star::chart2::CurveStyle  m_eCurveStyle;
+
+    //Properties for splines:
+    ::drafts::com::sun::star::chart2::CurveStyle    m_eCurveStyle;
+    sal_Int32                                       m_nCurveResolution;
+    sal_Int32                                       m_nSplineOrder;
 };
 //.............................................................................
 } //namespace chart
