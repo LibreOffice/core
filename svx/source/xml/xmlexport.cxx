@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 14:57:46 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 16:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut )
+sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent )
 {
     sal_Bool bDocRet = xOut.is();
 
@@ -148,9 +148,11 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
 
     try
     {
-        Reference< lang::XComponent > xComponent( new SvxUnoDrawingModel( pModel ) );
-
-        pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+        if( !xComponent.is() )
+        {
+            xComponent = new SvxUnoDrawingModel( pModel );
+            pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+        }
 
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         if( !xServiceFactory.is() )
@@ -235,10 +237,15 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
     return bDocRet;
 }
 
+sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut )
+{
+    Reference< lang::XComponent > xComponent;
+    return SvxDrawingLayerExport( pModel, xOut, xComponent );
+}
 
 //-////////////////////////////////////////////////////////////////////
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream )
+sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent )
 {
     sal_uInt32  nRet = 0;
 
@@ -248,13 +255,16 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-    Reference< frame::XModel > xModel( new SvxUnoDrawingModel( pModel ) );
+    if( !xComponent.is() )
+    {
+        xComponent = new SvxUnoDrawingModel( pModel );
+        pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+    }
+
+    Reference< frame::XModel > xModel( xComponent, UNO_QUERY );
 
     try
     {
-        Reference< lang::XComponent > xComponent( xModel, uno::UNO_QUERY );
-        pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
-
         // Get service factory
         Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
         DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
@@ -368,4 +378,10 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
         xModel->unlockControllers();
 
     return nRet == 0;
+}
+
+sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream )
+{
+    Reference< lang::XComponent > xComponent;
+    return SvxDrawingLayerImport( pModel, xInputStream, xComponent );
 }
