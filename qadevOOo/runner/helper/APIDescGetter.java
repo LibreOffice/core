@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:35 $
+ *  last change:$Date: 2003-02-13 11:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ public class APIDescGetter implements DescGetter{
                                                                 boolean debug) {
         if (job.startsWith("-o")) {
             job = job.substring(3,job.length()).trim();
+            if (job.indexOf(".") < 0) {
+                return null;
+            }
             DescEntry entry = getDescriptionForSingleJob(job,descPath,debug);
             if (entry != null) {
                 return new DescEntry[]{entry};
