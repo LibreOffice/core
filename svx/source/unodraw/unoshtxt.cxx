@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:04:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -136,6 +140,8 @@ using namespace ::osl;
 using namespace ::vos;
 using namespace ::rtl;
 
+using ::com::sun::star::uno::XInterface;
+
 namespace css = ::com::sun::star;
 
 
@@ -186,6 +192,9 @@ private:
     BOOL                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
     BOOL                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
+    XInterface*                     mpOwner;
+    SvxUnoTextRangeBaseList         maTextRanges;
+
     SvxTextForwarder*               GetBackgroundTextForwarder();
     SvxTextForwarder*               GetEditModeTextForwarder();
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
@@ -201,7 +210,7 @@ private:
                                     }
 
 public:
-    SvxTextEditSourceImpl( SdrObject* pObject );
+    SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pOwner );
     SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow );
     ~SvxTextEditSourceImpl();
 
@@ -214,6 +223,10 @@ public:
     SvxTextForwarder*       GetTextForwarder();
     SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool );
     void                    UpdateData();
+
+    void addRange( SvxUnoTextRangeBase* pNewRange );
+    void removeRange( SvxUnoTextRangeBase* pOldRange );
+    const SvxUnoTextRangeBaseList& getRanges() const;
 
     SdrObject*              GetSdrObject() const { return mpObject; }
 
@@ -232,7 +245,7 @@ public:
 
 //------------------------------------------------------------------------
 
-SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pOwner )
   : maRefCount      ( 0 ),
     mpObject        ( pObject ),
     mpView          ( NULL ),
@@ -248,7 +261,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
     mbOldUndoMode   ( FALSE ),
     mbForwarderIsEditMode ( FALSE ),
     mbShapeIsEditMode     ( FALSE ),
-    mbNotificationsDisabled ( FALSE )
+    mbNotificationsDisabled ( FALSE ),
+    mpOwner( pOwner )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
@@ -274,7 +288,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
     mbOldUndoMode   ( FALSE ),
     mbForwarderIsEditMode ( FALSE ),
     mbShapeIsEditMode     ( TRUE ),
-    mbNotificationsDisabled ( FALSE )
+    mbNotificationsDisabled ( FALSE ),
+    mpOwner(0)
 {
     if( mpModel )
         StartListening( *mpModel );
@@ -312,6 +327,30 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
             delete mpOutliner;
         }
     }
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEditSourceImpl::addRange( SvxUnoTextRangeBase* pNewRange )
+{
+    if( pNewRange )
+        if( std::find( maTextRanges.begin(), maTextRanges.end(), pNewRange ) == maTextRanges.end() )
+            maTextRanges.push_back( pNewRange );
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
+{
+    if( pOldRange )
+        maTextRanges.remove( pOldRange );
+}
+
+//------------------------------------------------------------------------
+
+const SvxUnoTextRangeBaseList& SvxTextEditSourceImpl::getRanges() const
+{
+    return maTextRanges;
 }
 
 //------------------------------------------------------------------------
@@ -1000,9 +1039,9 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 // SvxTextEditSource
 // --------------------------------------------------------------------
 
-SvxTextEditSource::SvxTextEditSource( SdrObject* pObject )
+SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, XInterface* pOwner )
 {
-    mpImpl = new SvxTextEditSourceImpl( pObject );
+    mpImpl = new SvxTextEditSourceImpl( pObject, pOwner );
     mpImpl->acquire();
 }
 
@@ -1152,3 +1191,17 @@ sal_Bool SvxTextEditSource::hasLevels( const SdrObject* pObject )
     return sal_False;
 }
 
+void SvxTextEditSource::addRange( SvxUnoTextRangeBase* pNewRange )
+{
+    mpImpl->addRange( pNewRange );
+}
+
+void SvxTextEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
+{
+    mpImpl->removeRange( pOldRange );
+}
+
+const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
+{
+    return mpImpl->getRanges();
+}
