@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hdu $ $Date: 2002-02-15 15:52:27 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:00:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,9 @@ TARGET=glyphs
 SLOFILES=\
         $(SLO)$/glyphcache.obj		\
         $(SLO)$/gcach_rbmp.obj		\
+        $(SLO)$/gcach_layout.obj	\
         $(SLO)$/gcach_vdev.obj		\
         $(SLO)$/gcach_ftyp.obj
-.IF "$(ENABLE_CTL)" != ""
-SLOFILES+=$(SLO)$/gcach_layout.obj
-.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
