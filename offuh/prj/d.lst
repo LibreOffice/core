@@ -305,6 +305,9 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hdl
 
+..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hpp
+..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hdl
+
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hdl
 
