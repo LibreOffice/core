@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:07:51 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     RadioButton RB_BEFORE
     {
@@ -151,7 +152,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ portuguese_brazilian ] = "~Antes da planilha atual" ;
         Text [ swedish ] = "~F�re aktuell tabell" ;
         Text [ danish ] = "F�r aktuelt ark" ;
-        Text [ italian ] = "~Prima della tabella corrente" ;
+        Text [ italian ] = "~Prima della tabella attiva" ;
         Text [ spanish ] = "~Delante de la hoja actual" ;
         Text [ french ] = "A~vant la feuille courante" ;
         Text [ dutch ] = "~Voor huidige tabel" ;
@@ -171,6 +172,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Před aktivní list";
         Text[ hebrew ] = "~Vor aktueller Tabelle";
         Text[ hindi ] = "वर्तमान शीट् से प~हिले";
+        Text[ slovak ] = "Pr~ed aktuálny list";
     };
     RadioButton RB_BEHIND
     {
@@ -184,7 +186,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ portuguese_brazilian ] = "A~p�s a planilha selecionada" ;
         Text [ swedish ] = "~Efter aktuell tabell" ;
         Text [ danish ] = "Efter aktuelt ark" ;
-        Text [ italian ] = "~Dopo la tabella corrente" ;
+        Text [ italian ] = "~Dopo la tabella attiva" ;
         Text [ spanish ] = "Detr�s de la ~hoja actual" ;
         Text [ french ] = "~Apr�s la feuille courante" ;
         Text [ dutch ] = "~Na huidige tabel" ;
@@ -204,6 +206,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Za aktivní list";
         Text[ hebrew ] = "~Nach aktueller Tabelle";
         Text[ hindi ] = "वर्तमान शीट् ~के पश्चात्";
+        Text[ slovak ] = "Z~a aktuálny list";
     };
     FixedLine FL_TABLE
     {
@@ -236,6 +239,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "List";
         Text[ hebrew ] = "Tabelle";
         Text[ hindi ] = "शीट्";
+        Text[ slovak ] = "List";
     };
     RadioButton RB_NEW
     {
@@ -268,6 +272,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Nový list";
         Text[ hebrew ] = "Neu ~erstellen";
         Text[ hindi ] = "~नया शीट्";
+        Text[ slovak ] = "~Nový list";
     };
     FixedText FT_COUNT
     {
@@ -300,6 +305,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Počet listů";
         Text[ hebrew ] = "An~zahl";
         Text[ hindi ] = "शीटों की सं~ख्या";
+        Text[ slovak ] = "P~očet listov";
     };
     NumericField NF_COUNT
     {
@@ -343,6 +349,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "Náz~ov";
     };
     Edit ED_TABNAME
     {
@@ -381,6 +388,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Ze souboru";
         Text[ hebrew ] = "‮מקובץ‬";
         Text[ hindi ] = "फाइल ~से";
+        Text[ slovak ] = "Zo sú~boru";
     };
     MultiListBox LB_TABLES
     {
@@ -421,6 +429,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Procházet...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ slovak ] = "~Listovať...";
     };
     CheckBox CB_LINK
     {
@@ -454,6 +463,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ czech ] = "Odkaz";
         Text[ hebrew ] = "Ver~knüpfen";
         Text[ hindi ] = "लिं~क";
+        Text[ slovak ] = "Od~kaz";
     };
     FixedText FT_PATH
     {
@@ -464,7 +474,10 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text[ czech ] = "Vložit list";
     Text[ hebrew ] = "Tabelle einfügen";
     Text[ hindi ] = "Insert Sheet";
+    Text[ slovak ] = "Vložiť list";
 };
+
+
 
 
 
