@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-14 11:33:54 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,11 @@ Link MyBasic::GenWinInfoHdl()
 Link MyBasic::GenModuleWinExistsHdl()
 {
     return LINK( GetpApp()->GetAppWindow(), BasicFrame, ModuleWinExists );
+}
+
+Link MyBasic::GenWriteStringHdl()
+{
+    return LINK( GetpApp()->GetAppWindow(), BasicFrame, WriteString );
 }
 
 void MyBasic::StartListening( SfxBroadcaster &rBroadcaster )

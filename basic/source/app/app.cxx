@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-07 10:38:59 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,6 +1659,17 @@ AppWin* BasicFrame::IsWinValid( AppWin* pMaybeWin )
             return p;
     }
     return NULL;
+}
+
+IMPL_LINK( BasicFrame, WriteString, String*, pString )
+{
+    if ( pList->Last() )
+    {
+        pList->Last()->pDataEdit->ReplaceSelected( *pString );
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 class NewFileDialog : public FileDialog
