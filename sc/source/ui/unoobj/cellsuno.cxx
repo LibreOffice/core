@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-04 04:53:13 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 08:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2152,6 +2152,60 @@ void SAL_CALL ScCellRangesBase::removeVetoableChangeListener( const rtl::OUStrin
                             const uno::Reference<beans::XVetoableChangeListener>&)
                             throw(beans::UnknownPropertyException,
                                 lang::WrappedTargetException, uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+}
+
+// XMultiPropertySet
+void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames,
+                                    const uno::Sequence< uno::Any >& aValues )
+                                throw (beans::PropertyVetoException,
+                                    lang::IllegalArgumentException,
+                                    lang::WrappedTargetException,
+                                    uno::RuntimeException)
+{
+    sal_Int32 nCount(aPropertyNames.getLength());
+    sal_Int32 nValues(aValues.getLength());
+    if (nCount != nValues)
+        throw lang::IllegalArgumentException();
+    if (nCount)
+    {
+        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const uno::Any* pValues = aValues.getConstArray();
+        for(sal_Int32 i = 0; i < nCount; i++, pNames++, pValues++)
+            setPropertyValue(*pNames, *pValues);
+    }
+}
+
+uno::Sequence< uno::Any > SAL_CALL
+                            ScCellRangesBase::getPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames )
+                                throw (uno::RuntimeException)
+{
+    sal_Int32 nCount(aPropertyNames.getLength());
+    uno::Sequence< uno::Any > aProps(nCount);
+    uno::Any* pProps = aProps.getArray();
+    const rtl::OUString* pNames = aPropertyNames.getConstArray();
+    for (sal_Int32 i = 0; i < nCount; i++, pProps++, pNames++)
+        *pProps = getPropertyValue(*pNames);
+    return aProps;
+}
+
+void SAL_CALL ScCellRangesBase::addPropertiesChangeListener( const uno::Sequence< rtl::OUString >& aPropertyNames,
+                                    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+                                throw (uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+}
+
+void SAL_CALL ScCellRangesBase::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+                                throw (uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+}
+
+void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< rtl::OUString >& aPropertyNames,
+                                    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+                                throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
 }
