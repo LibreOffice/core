@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-22 10:51:58 $
+#   last change: $Author: hjs $ $Date: 2002-03-26 16:56:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -510,13 +510,17 @@ LIBMGR=lib_w $(NOLOGO)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 LIBFLAGS=
 
-IMPLIB=lib
+IMPLIB=lib_w
 IMPLIBFLAGS=-machine:IX86
 
 MAPSYM=
 MAPSYMFLAGS=
 
+.IF "$(USE_SHELL)"=="4nt"
 RC=rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+RC=rc_w
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
 RCLINK=rc
 RCLINKFLAGS=
