@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:54:59 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 12:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "³]©wΌΛ¦΅΅§¤Ί¤ε΅¨";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΜΣγ ΗαδΥ\"";
         Text[ greek ] = "Ορισμός προτύπου \"Σώμα κειμένου\"";
-        Text[ korean ] = "\"Ί»Ή®\" ΐ―Ηό Ό³Α¤";
+        Text[ korean ] = "ΐ―Ηό \"Ί»Ή®\" Ό³Α¤";
         Text[ turkish ] = "\"Metin gφvdesi\" biηimini uygula";
         Text[ language_user1 ] = " ";
     };
@@ -455,7 +455,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "³]©wΌΛ¦΅΅§¤Ί¤εΑY±Ζ΅¨";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΕÒΗΝΙ ΜΣγ ΗαδΥ\"";
         Text[ greek ] = "Ορισμός προτύπου \"Εσοχή πρώτης γραμμής\"";
-        Text[ korean ] = "\"Ί»Ή® µιΏ©Ύ²±β\" ΐ―Ηό Ό³Α¤";
+        Text[ korean ] = "ΐ―Ηό \"Ί»Ή® µιΏ©Ύ²±β\" Ό³Α¤";
         Text[ turkish ] = "\"Metin gφvdesi - girinti\" biηimini uygula";
         Text[ language_user1 ] = " ";
     };
@@ -479,7 +479,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "³]©wΌΛ¦΅΅§¤Ί¤ε­tΑY±Ζ΅¨";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΕÒΗΝΙ ΜΣγ δΥ ΣαΘνΙ\"";
         Text[ greek ] = "Ορισμός προτύπου \"Αρνητική εσοχή σώματος κειμένου\"";
-        Text[ korean ] = "\"Ί»Ή® ³»ΎξΎ²±β\" ΐ―Ηό Ό³Α¤";
+        Text[ korean ] = "ΐ―Ηό \"Ί»Ή® ³»ΎξΎ²±β\" Ό³Α¤";
         Text[ turkish ] = "\"Asύlύ girinti\" biηimini uygula";
         Text[ language_user1 ] = " ";
     };
@@ -1546,7 +1546,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ polish ] = "Interaktywne sprawdzanie pisowni\naktywne jest juΏ w innym dokumencie.";
     Text[ portuguese_brazilian ] = "The interactive spelling already active\\in a different document";
     Text[ japanese ] = "²έΐΧΈΓ¨Μή½ΝίΩΑª―Έ‚Ν‚·‚Ε‚Ι\n‚Ω‚©‚ΜΔή·­ÒέΔ‚Ε±ΈΓ¨Μή‚Ι‚Θ‚Α‚Δ‚Ά‚ά‚·";
-    Text[ korean ] = "΄λΘ­Ηό ΈΒΓγΉύΐΊ \nΐΜΉΜ ΄ΩΈ¥ Ή®Ό­Ώ΅Ό­ Θ°ΌΊΘ­µΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "΄λΘ­Ηό ΈΒΓγΉύ °Λ»η΄Β \nΐΜΉΜ ΄ΩΈ¥ Ή®Ό­Ώ΅Ό­ Θ°ΌΊΘ­µΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "½»»¥Κ½ΥύΧΦ·¨Όμ²ι\nÒΡΎ­ΚΉΣΓΤΪÒ»ΈφΖδΛόΞΔµµΦΠ";
     Text[ chinese_traditional ] = "¥t¤@­Σ¤ε¥σ¤wΈg¨Ο¥Ξ¤¬°Κ¦΅¥Ώ¦rªk¥\\―ΰ";
     Text[ arabic ] = "ΗαΚΟήνή ΗαΕγαΗΖν ΗαΚΘΗΟαν\nδΤΨ ΘΗαέΪα έν γΣΚδΟ ΒΞΡ";
