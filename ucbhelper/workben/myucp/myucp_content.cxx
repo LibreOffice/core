@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
+#include <com/sun/star/ucb/OpenMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -331,24 +334,71 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         aRet <<= getCommandInfo();
     }
 #if 0
-    else if ( isFolder() && ( aCommand.Name.compareToAscii( "open" ) == 0 ) )
+    else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
-        //////////////////////////////////////////////////////////////////
-        // open command for a folder content
-        //////////////////////////////////////////////////////////////////
-
-        OpenCommandArgument2 aOpenCommand;
-        if ( aCommand.Argument >>= aOpenCommand )
-        {
-            Reference< XDynamicResultSet > xSet
-                = new DynamicResultSet( m_xSMgr, this, aOpenCommand );
-            aRet <<= xSet;
-        }
-        else
+          OpenCommandArgument2 aOpenCommand;
+          if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             VOS_ENSURE( sal_False,
                         "Content::execute - invalid parameter!" );
             throw CommandAbortedException();
+        }
+
+          if ( isFolder() )
+        {
+            //////////////////////////////////////////////////////////////
+            // open command for a folder content
+            //////////////////////////////////////////////////////////////
+
+            Reference< XDynamicResultSet > xSet
+                            = new DynamicResultSet( m_xSMgr,
+                                                    this,
+                                                    aOpenCommand,
+                                                    Environment );
+            aRet <<= xSet;
+          }
+          else
+        {
+            //////////////////////////////////////////////////////////////
+            // open command for a document content
+            //////////////////////////////////////////////////////////////
+
+            if ( ( aOpenCommand.Mode
+                            == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+                 ( aOpenCommand.Mode
+                             == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+            {
+                // Currently(?) unsupported.
+                  throw CommandAbortedException();
+            }
+
+            OUString aURL = m_xIdentifier->getContentIdentifier();
+            Reference< XOutputStream > xOut
+                  = Reference< XOutputStream >( aOpenCommand.Sink, UNO_QUERY );
+            if ( xOut.is() )
+              {
+                // @@@ PUSH: write data into xOut
+              }
+            else
+              {
+                Reference< XActiveDataSink > xDataSink
+                      = Reference< XActiveDataSink >(
+                                            aOpenCommand.Sink, UNO_QUERY );
+                  if ( xDataSink.is() )
+                {
+                      // @@@ PULL: wait for client read
+
+                    Reference< XInputStream > xIn
+                        = new // @@@ your XInputStream + XSeekable impl. object
+                    xDataSink->setInputStream( xIn );
+                }
+                  else
+                {
+                      VOS_ENSURE( sal_False,
+                                  "Content::execute - invalid parameter!" );
+                      throw CommandAbortedException();
+                }
+              }
         }
     }
     else if ( aCommand.Name.compareToAscii( "insert" ) == 0 )
@@ -368,6 +418,9 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
         destroy( bDeletePhysical );
+
+        // Remove own and all children's Additional Core Properties.
+        removeAdditionalPropertySet( sal_True );
 
         // Remove own and all childrens(!) persistent data.
 //      removeData();
@@ -692,7 +745,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
 
 #if 0
 //=========================================================================
-void Content::queryChildren( ::myucp::ContentRefList& rChildren )
+void Content::queryChildren( ContentRefList& rChildren )
 {
     // @@@ Adapt method to your URL scheme...
 
@@ -734,9 +787,8 @@ void Content::queryChildren( ::myucp::ContentRefList& rChildren )
             {
                 // No further slashes / only a final slash. It's a child!
                 rChildren.push_back(
-                    HierarchyContentRef(
-                        static_cast< HierarchyContent * >(
-                            xChild.getBodyPtr() ) ) );
+                    ContentRef(
+                        static_cast< Content * >( xChild.getBodyPtr() ) ) );
             }
         }
         ++it;
@@ -789,7 +841,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
 
     // Process instanciated children...
 
-    ::myucp::ContentRefList aChildren;
+    ContentRefList aChildren;
     queryChildren( aChildren );
 
     ContentRefList::const_iterator it  = aChildren.begin();

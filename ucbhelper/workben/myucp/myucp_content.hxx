@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ struct ContentProperties
     // @@@ Add other properties supported by your content.
 
     ContentProperties()
-    : bIsDocument( sal_False ), bIsFolder( sal_True ) {}
+    : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
 };
 
 //=========================================================================
@@ -128,9 +128,9 @@ private:
             const ::com::sun::star::uno::Sequence<
                      ::com::sun::star::beans::PropertyValue >& rValues );
 
-//  typedef vos::ORef< HierarchyContent > HierarchyContentRef;
-//  typedef std::list< HierarchyContentRef > HierarchyContentRefList;
-//  void queryChildren( HierarchyContentRefList& rChildren );
+//  typedef vos::ORef< Content > ContentRef;
+//  typedef std::list< ContentRef > ContentRefList;
+//  void queryChildren( ContentRefList& rChildren );
 
 //  // Command "insert"
 //  void insert()
@@ -184,7 +184,7 @@ public:
     // Additional interfaces
     //////////////////////////////////////////////////////////////////////
 
-    // Add additional interfaces ( like com::sun:.star::ucb::XContentCreator ).
+    // @@@ Add additional interfaces ( like com::sun:.star::ucb::XContentCreator ).
 
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_datasupplier.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:38 $
+ *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,15 +137,17 @@ struct DataSupplier_Impl
     vos::ORef< Content >              m_xContent;
     Reference< XMultiServiceFactory > m_xSMgr;
 // @@@ The data source and an iterator for it
-//  HierarchyEntry                    m_aFolder;
-//  HierarchyEntry::iterator          m_aIterator;
+//  Entry                             m_aFolder;
+//  Entry::iterator                   m_aIterator;
+      sal_Int32                       m_nOpenMode;
       sal_Bool                        m_bCountFinal;
 
     DataSupplier_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
-                       const vos::ORef< Content >& rContent )
+                       const vos::ORef< Content >& rContent,
+                       sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
 //    m_aFolder( rxSMgr, rContent->getIdentifier()->getContentIdentifier() ),
-      m_bCountFinal( sal_False ) {}
+      m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();
 };
 
@@ -173,8 +175,9 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 DataSupplier::DataSupplier( const Reference< XMultiServiceFactory >& rxSMgr,
-                            const vos::ORef< Content >& rContent )
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent ) )
+                            const vos::ORef< Content >& rContent,
+                            sal_Int32 nOpenMode )
+: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
 {
 }
 

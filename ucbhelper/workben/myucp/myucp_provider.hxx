@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_provider.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:38 $
+ *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace myucp {
 // contents ) according to this scheme.
 #define MYUCP_URL_SCHEME \
                 "vnd.sun.star.myucp"
-#define MYUCP_URL_SCHEME_LENGTH 24
+#define MYUCP_URL_SCHEME_LENGTH 18
 
 // UCB Content Type.
 #define MYUCP_CONTENT_TYPE \

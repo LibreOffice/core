@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_resultset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:38 $
+ *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ namespace myucp {
 class DynamicResultSet : public ::ucb::ResultSetImplHelper
 {
       vos::ORef< Content > m_xContent;
+    com::sun::star::uno::Reference<
+        com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
 private:
     virtual void initStatic();
@@ -91,7 +93,9 @@ public:
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
               const vos::ORef< Content >& rxContent,
-            const com::sun::star::ucb::OpenCommandArgument2& rCommand );
+            const com::sun::star::ucb::OpenCommandArgument2& rCommand,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& rxEnv );
 };
 
 }
