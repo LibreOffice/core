@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-11-13 12:15:24 $
+#*    last change       $Author: abi $ $Date: 2000-11-20 12:08:42 $
 #*
-#*    $Revision: 1.5 $
+#*    $Revision: 1.6 $
 #*
 #*    $Logfile:$
 #*
@@ -49,14 +49,15 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpContentIdentifier.class        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpProvider.class                 \
     $(CLASSDIR)$/$(PACKAGE)$/HelpContent.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpOutputStream.class             \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpDatabases.class                \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class         \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class            \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnectionWithJars.class    \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLParameter.class             \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
-    $(CLASSDIR)$/$(PACKAGE)$/OutputStreamImpl.class             \
-    $(CLASSDIR)$/$(PACKAGE)$/ParameterImpl.class                \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
     $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class
 
