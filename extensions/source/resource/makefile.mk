@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:22:28 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:56:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,11 @@ UNOTYPES=\
     com.sun.star.script.XTypeConverter			\
     com.sun.star.beans.XExactName
 # END NEW
+
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1VERSIONMAP=exports.map
 
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
