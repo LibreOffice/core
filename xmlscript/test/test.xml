@@ -4,11 +4,10 @@
 <dialogs xmlns="http://openoffice.org/2000/dialog">
 
     <window xmlns:dlg="http://openoffice.org/2000/dialog"
-        label="Test-Dialog" height="800" width="800">
+        label="Test-Dialog" height="700" width="700">
 
         <dlg:styles>
             <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
-            <dlg:style style-id="bla2" background-color="0xff00ff" dlg:text-color="255193873"/>
             <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>
             <dlg:style style-id="no_border" border="none"/>
         </dlg:styles>
@@ -48,23 +47,24 @@
                 </menupopup>
             </combobox>
             <radiogroup>
-                <radio id="radio1" value="radio1" left="50" top="250" width="100" height="20"/>
+                <radio id="radio1" value="default radio" left="50" top="250" width="100" height="20"/>
                 <radio id="radio2" value="checked" left="50" top="270" width="100" height="20" checked="true"/>
                 <radio id="radio3" value="unchecked" left="50" top="290" width="100" height="20" checked="false"/>
+                <radio id="radio4" value="dont know" left="50" top="310" width="100" height="20" tristate="true"/>
             </radiogroup>
             <titledbox id="groupbox1" left="250" top="250" width="120" height="100">
                 <title value="grouped"/>
-                <radio id="radio4" value="default radio" left="5" top="15" width="100" height="20"/>
-                <radio id="radio5" value="dontknow" left="5" top="35" width="100" height="20" tristate="true"/>
-                <radio id="radio6" value="tristate_checked" left="5" top="55" width="100" height="20" tristate="true" checked="true"/>
-                <radio id="radio7" value="checked" left="5" top="75" width="100" height="20" checked="true"/>
+                <radio id="radio5" value="default radio" left="5" top="15" width="100" height="20"/>
+                <radio id="radio6" value="dont know" left="5" top="35" width="100" height="20" tristate="true"/>
+                <radio id="radio7" value="tristate checked" left="5" top="55" width="100" height="20" tristate="true" checked="true"/>
+                <radio id="radio8" value="checked" left="5" top="75" width="100" height="20" checked="true"/>
             </titledbox>
             <text id="fixed1" left="50" top="520" width="180" height="20" value="fixed text is here..." multiline="true" align="center"/>
-            <textfield id="field1" left="250" top="520" width="50" height="40" value="edit text here..." readonly="true" vscroll="true" multiline="true" align="right" style-id="no_border"/>
+            <textfield id="field1" left="250" top="520" width="50" height="40" value="edit no text here..." readonly="true" vscroll="true" multiline="true" align="right" style-id="no_border"/>
             <textfield id="field2" left="320" top="520" width="50" height="40" value="hidden text" hscroll="true" echochar="*" align="left"/>
             <img id="image1" left="50" top="600" width="80" height="50" src="../../test/w3c.jpg"/>
             <filecontrol id="file1" left="150" top="600" width="100" height="100" value="f:\script\xmlscript\test\w3c.jpg"/>
-            <currencyfield id="currency1" left="250" top="600" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" spin="true" thousands-separator="true" currency-symbol="$"/>
+<!--            <currencyfield id="currency1" left="250" top="600" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" spin="true" thousands-separator="true" currency-symbol="$"/> -->
                  <numericfield id="numeric1" left="400" top="100" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" thousands-separator="true"/>
 
         </dlg:bulletinboard>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:17 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,18 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
     xReg->registerImplementation(
         OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
         aDllName, Reference< registry::XSimpleRegistry > () );
+#ifdef SAL_W32
+    aDllName = OUString::createFromAscii( "int" );
+    aDllName += OUString::valueOf( (sal_Int32)SUPD );
+    aDllName += OUString::createFromAscii( "mi.dll" );
+#else
+    aDllName = OUString::createFromAscii( "libint" );
+    aDllName += OUString::valueOf( (sal_Int32)SUPD );
+    aDllName += OUString::createFromAscii( ".so" );
+#endif
+    xReg->registerImplementation(
+        OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+        aDllName, Reference< registry::XSimpleRegistry > () );
 
     }
 
@@ -283,15 +295,6 @@ void MyApp::Main()
         OString aParam1( OUStringToOString( OUString( GetCommandLineParam( 0 ) ), RTL_TEXTENCODING_ASCII_US ) );
         Sequence< Reference< container::XNameContainer > > models( importFile( aParam1.getStr() ) );
 
-        if (GetCommandLineParamCount() == 2)
-        {
-            // write and read again dialogs
-            OString aParam2( OUStringToOString( OUString( GetCommandLineParam( 1 ) ), RTL_TEXTENCODING_ASCII_US ) );
-            exportToFile( aParam2.getStr(), models );
-            // re-import
-            models = importFile( aParam2.getStr() );
-        }
-
         Reference< container::XNameContainer > const * pModels = models.getConstArray();
         for ( sal_Int32 nPos = 0; nPos < models.getLength(); ++nPos )
         {
@@ -301,6 +304,13 @@ void MyApp::Main()
             xDlg->createPeer( xToolkit, 0 );
             Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
             xD->execute();
+        }
+
+        if (GetCommandLineParamCount() == 2)
+        {
+            // write modified dialogs
+            OString aParam2( OUStringToOString( OUString( GetCommandLineParam( 1 ) ), RTL_TEXTENCODING_ASCII_US ) );
+            exportToFile( aParam2.getStr(), models );
         }
     }
     catch (uno::Exception & rExc)

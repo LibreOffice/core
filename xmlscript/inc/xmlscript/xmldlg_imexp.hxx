@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace xmlscript
 
 #define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
 #define XMLNS_DIALOGS_UID 1
-#define XMLNS_DIALOGS_PREFIX "dlg"
+#define XMLNS_DIALOGS_PREFIX "dialog"
 
 
 //==================================================================================================

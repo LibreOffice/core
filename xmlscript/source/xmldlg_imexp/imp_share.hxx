@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ public:
     vector< Reference< xml::sax2::XExtendedAttributes > > const * getEvents() throw ()
         { return &_events; }
 
-    inline ControlElement(
+    ControlElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )

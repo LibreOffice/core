@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,33 +333,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
     }
 
     // collect elements
-    // defaults \ tabstop
-    sal_Bool bEnabled;
-    if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ) ) >>= bEnabled)
-    {
-        if (! bEnabled)
-        {
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":disabled") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
-        }
-    }
-    else
-    {
-        OSL_ENSURE( 0, "unexpected property type for \"Enabled\": not bool!" );
-    }
-
-    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
-//      readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-//                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
+    readDefaults();
 
     OUString aTitle;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ) ) >>= aTitle)

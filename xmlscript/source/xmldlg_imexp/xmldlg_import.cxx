@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include "imp_share.hxx"
 
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -82,7 +81,6 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 
-using namespace ::osl;
 
 namespace xmlscript
 {
@@ -818,6 +816,17 @@ void ControlImportContext::importDefaults(
     sal_Int32 nBaseX, sal_Int32 nBaseY,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
+    _xControlModel->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
+        makeAny( _aId ) );
+
+    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ClassId") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("class-id") ),
+                          xAttributes );
+    importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("tab-index") ),
+                        xAttributes );
+
     sal_Bool bDisable;
     if (getBoolAttr( &bDisable, OUString( RTL_CONSTASCII_USTRINGPARAM("disabled") ), xAttributes ) &&
         bDisable)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,28 +760,7 @@ void TitledBoxElement::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                                     makeAny( _nBasePosX ) );
-    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                                     makeAny( _nBasePosY ) );
-    if (!ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("width") ),
-                                 _xAttributes ) ||
-        !ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("height") ),
-                                 _xAttributes ))
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("missing titlebox size attribute(s)!") ),
-            Reference< XInterface >(), Any() );
-    }
-
-    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("default") ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
-                               _xAttributes );
+    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
 
     if (_label.getLength())
     {
