@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:04:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,13 +280,13 @@ void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
         DBG_ASSERT( aPrev->mnChar <= mnLen, "XclExpString::SetFormats - invalid char index" );
     }
 #endif
-    LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_BIFF2 );
+    LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
 }
 
 void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
 {
     DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
-    if( maFormats.size() < static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_BIFF2 ) )
+    if( maFormats.size() < static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT ) )
         maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
 }
 
