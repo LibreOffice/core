@@ -2525,3 +2525,8 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?s_cd@?$WeakImplHelper1@VXResultSetMetaData@sdbc@star@sun@com@@@cppu@@0Uclass_data1@2@A
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXConnection@sdbc@star@sun@com@@@2345@@Z
 ?s_cd@?$WeakComponentImplHelper4@VXConnection@sdbc@star@sun@com@@VXWarningsSupplier@2345@VXServiceInfo@lang@345@VXUnoTunnel@8345@@cppu@@0Uclass_data4@2@A
+??_C@_0CD@CKJG@o?3?2SRC641?2wntmsci7?2inc?2vos?1ref?4i@
+??_C@_0DF@PCBN@o?3?2SRC641?2wntmsci7?2inc?2com?1sun?1s@
+??_C@_0DB@NCBC@o?3?2SRC641?2wntmsci7?2inc?2comphelpe@
+??_C@_0DG@OEO@o?3?2SRC641?2wntmsci7?2inc?2comphelpe@
+??0?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_S1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE@ABU?$less@J@1@ABV?$allocator@U?$pair@$$CBJJ@_STL@@@1@@Z
