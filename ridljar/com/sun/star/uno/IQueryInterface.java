@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IQueryInterface.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:37:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@ package com.sun.star.uno;
  * behaviour of <code>UnoRuntime.queryInterface</code>.</p>
  *
  * @see com.sun.star.uno.UnoRuntime
- * @since UDK 1.0
  */
 public interface IQueryInterface {
     /**
