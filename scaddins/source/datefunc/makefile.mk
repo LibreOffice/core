@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.1.1.1 2000-09-18 16:45:45 hr Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.2 2001-02-02 19:13:01 svesik Exp $
 #
-#     $Date: 2000-09-18 16:45:45 $
-#     $Author: hr $
-#     $Revision: 1.1.1.1 $
+#     $Date: 2001-02-02 19:13:01 $
+#     $Author: svesik $
+#     $Revision: 1.2 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -106,10 +106,8 @@ UNOTYPES=\
 
 SLOFILES=\
     $(SLO)$/datefunc.obj
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
