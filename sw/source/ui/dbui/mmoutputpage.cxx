@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:27:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ String lcl_GetExtensionForDocType(ULONG nDocType)
     String sExtension;
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : sExtension = String::CreateFromAscii( "oxt" ); break;
+        case MM_DOCTYPE_OOO : sExtension = String::CreateFromAscii( "odt" ); break;
         case MM_DOCTYPE_PDF : sExtension = String::CreateFromAscii( "pdf" ); break;
         case MM_DOCTYPE_WORD: sExtension = String::CreateFromAscii( "doc" ); break;
         case MM_DOCTYPE_HTML: sExtension = String::CreateFromAscii( "html" ); break;
@@ -1290,7 +1290,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         ::rtl::OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
         aDesc.sEMail = sEMail;
-        String sBody;
+        rtl::OUString sBody;
         if(bAsBody)
         {
             {
@@ -1308,8 +1308,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 sal_Bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {
-                    sBody += String(sLine, eEncoding);
-                    sBody += '\n';
+                    sBody += rtl::OUString(String(sLine, eEncoding));
+                    sBody += rtl::OUString('\n');
                     bDone = pInStream->ReadLine( sLine );
                 }
             }
@@ -1359,7 +1359,9 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
                 }
                 sGreeting += '\n';
-                sBody.Insert(sGreeting, 0);
+                ::rtl::OUString sTemp( sGreeting );
+                sTemp += sBody;
+                sBody = sTemp;
             }
         }
         aDesc.sBodyContent = sBody;
