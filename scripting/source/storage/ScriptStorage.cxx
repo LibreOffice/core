@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.7 $
-*  last change: $Author: jmrice $ $Date: 2002-10-01 07:00:57 $
+*  $Revision: 1.8 $
+*  last change: $Author: jmrice $ $Date: 2002-10-01 07:38:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -183,6 +183,7 @@ throw ( RuntimeException, Exception )
        // No Scripts directory - just return
        if ( ! m_xSimpleFileAccess->isFolder( xStringUri ) )
        {
+            OSL_TRACE( "ScriptStorage::initialize: no Scripts dir for this storage - install problem\n" );
            return;
        }
 
