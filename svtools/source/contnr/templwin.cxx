@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-07 10:17:29 $
+ *  last change: $Author: fs $ $Date: 2001-11-07 14:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #include "helpid.hrc"
 #endif
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include "pathoptions.hxx"
+#endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include "viewoptions.hxx"
 #endif
@@ -197,6 +200,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
+#include "templatefoldercache.hxx"
 #endif
 
 using namespace ::com::sun::star::beans;
@@ -1465,9 +1471,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     SelectHdl_Impl( NULL );
     NewFolderHdl_Impl( NULL );
 
-    pImpl->aUpdateTimer.SetTimeout( 500 );
-    pImpl->aUpdateTimer.SetTimeoutHdl( LINK( this, SvtDocumentTemplateDialog, UpdateHdl_Impl ) );
-    pImpl->aUpdateTimer.Start();
+    UpdateHdl_Impl( NULL );
 }
 
 // ------------------------------------------------------------------------
@@ -1594,29 +1598,41 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , UpdateHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 {
     pImpl->pWin->SetFocus( sal_False );
-    UpdateDocumentTemplates_Impl();
-    return 0;
-}
 
-// ------------------------------------------------------------------------
-
-void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
-{
     ::rtl::OUString aService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DocumentTemplates" ) );
-    Reference< XDocumentTemplates > xTemplates(
-        ::comphelper::getProcessServiceFactory()->createInstance( aService ), UNO_QUERY );
+    Reference< XDocumentTemplates > xTemplates( ::comphelper::getProcessServiceFactory()->createInstance( aService ), UNO_QUERY );
     if ( xTemplates.is() )
     {
-        WaitObject aWaitCursor( this );
-        xTemplates->update();
-        if ( pImpl->pWin->IsTemplateFolderOpen() )
+        if ( _pEventSource )
+        {   // it was no direct call, which means it was triggered by the timer, which means we alread checked the necessity
+            WaitObject aWaitCursor( this );
+            xTemplates->update();
+            if ( pImpl->pWin->IsTemplateFolderOpen() )
+            {
+                pImpl->pWin->ClearHistory();
+                pImpl->pWin->OpenTemplateRoot();
+            }
+        }
+        else
         {
-            pImpl->pWin->ClearHistory();
-            pImpl->pWin->OpenTemplateRoot();
+            // check if we really need to do the update
+            ::sfx2::TemplateFolderCache aCache;
+            if ( aCache.needsUpdate() )
+            {   // yes -> do it asynchronous (it will take a noticeable time)
+
+                // (but first store the current state)
+                aCache.storeState();
+
+                // start the timer for the async update
+                pImpl->aUpdateTimer.SetTimeout( 300 );
+                pImpl->aUpdateTimer.SetTimeoutHdl( LINK( this, SvtDocumentTemplateDialog, UpdateHdl_Impl ) );
+                pImpl->aUpdateTimer.Start();
+            }
         }
     }
+    return 0;
 }
 
