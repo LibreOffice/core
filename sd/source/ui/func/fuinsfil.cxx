@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:26:02 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,8 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         if( pStorage &&
             ( pStorage->IsContained( pStarDrawDoc )  && pStorage->IsStream( pStarDrawDoc ) ) ||
             ( pStorage->IsContained( pStarDrawDoc3 ) && pStorage->IsStream( pStarDrawDoc3 ) ) ||
-            ( pStorage->IsContained( pStarDrawXMLContent ) && pStorage->IsStream( pStarDrawXMLContent) ) )
+            ( pStorage->IsContained( pStarDrawXMLContent ) && pStorage->IsStream( pStarDrawXMLContent) ) ||
+            ( pStorage->IsContained( pStarDrawOldXMLContent ) && pStorage->IsStream( pStarDrawOldXMLContent) ) )
         {
             pMedium->Close();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:19:21 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,27 +582,39 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
     {
-        return SvxUnoDashTable_createInstance( pDoc );
+        if( !mxDashTable.is() )
+            mxDashTable = SvxUnoDashTable_createInstance( pDoc );
+        return mxDashTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
     {
-        return SvxUnoGradientTable_createInstance( pDoc );
+        if( !mxGradientTable.is() )
+            mxGradientTable = SvxUnoGradientTable_createInstance( pDoc );
+        return mxGradientTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
     {
-        return SvxUnoHatchTable_createInstance( pDoc );
+        if( !mxHatchTable.is() )
+            mxHatchTable = SvxUnoHatchTable_createInstance( pDoc );
+        return mxHatchTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
     {
-        return SvxUnoBitmapTable_createInstance( pDoc );
+        if( !mxBitmapTable.is() )
+            mxBitmapTable = SvxUnoBitmapTable_createInstance( pDoc );
+        return mxBitmapTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
     {
-        return SvxUnoTransGradientTable_createInstance( pDoc );
+        if( !mxTransGradientTable.is() )
+            mxTransGradientTable = SvxUnoTransGradientTable_createInstance( pDoc );
+        return mxTransGradientTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
     {
-        return SvxUnoMarkerTable_createInstance( pDoc );
+        if( !mxMarkerTable.is() )
+            mxMarkerTable = SvxUnoMarkerTable_createInstance( pDoc );
+        return mxMarkerTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
     {

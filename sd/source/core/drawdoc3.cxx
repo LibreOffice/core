@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-21 12:49:15 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
         if( !pStorage->IsStream( pStarDrawDoc ) &&
             !pStorage->IsStream( pStarDrawDoc3 ) &&
-            !pStorage->IsStream( pStarDrawXMLContent ) )
+            !pStorage->IsStream( pStarDrawXMLContent ) &&
+            !pStorage->IsStream( pStarDrawOldXMLContent ))
         {
             // Es ist nicht unser Storage
             DBG_ASSERT(bOK, "Nicht unser Storage");

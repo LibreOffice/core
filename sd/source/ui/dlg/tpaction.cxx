@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-21 13:04:27 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,8 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
 
             if( pStorage->IsStream( pStarDrawDoc ) ||
                 pStorage->IsStream( pStarDrawDoc3 ) ||
-                pStorage->IsStream( pStarDrawXMLContent ) )
+                pStorage->IsStream( pStarDrawXMLContent ) ||
+                pStorage->IsStream( pStarDrawOldXMLContent ) )
             {
                 SdDrawDocument* pBookmarkDoc = pDoc->OpenBookmarkDoc( aFile );
 

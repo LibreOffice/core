@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-21 12:58:27 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,8 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
         if( pStorage &&
             ( pStorage->IsStream( pStarDrawDoc ) ||
               pStorage->IsStream( pStarDrawDoc3 ) ||
-              pStorage->IsStream( pStarDrawXMLContent ) ) )
+              pStorage->IsStream( pStarDrawXMLContent ) ||
+              pStorage->IsStream( pStarDrawOldXMLContent ) ) )
         {
             if( pMed )
             {

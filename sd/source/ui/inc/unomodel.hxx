@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 13:14:11 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,13 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameContainer > mxCustomPresentationAccess;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::presentation::XPresentation > mxPresentation;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxStyleFamilies;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDashTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxGradientTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxHatchTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxBitmapTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxTransGradientTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxMarkerTable;
 
     SvxItemPropertySet  aPropSet;
 
