@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectmenucontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:38:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_VERB_HPP_
-#include <drafts/com/sun/star/frame/status/Verb.hpp>
+#ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
+#include <com/sun/star/embed/VerbDescriptor.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -160,7 +160,7 @@ namespace framework
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         private:
-            void fillPopupMenu( const com::sun::star::uno::Sequence< drafts::com::sun::star::frame::status::Verb >& rVerbCommandSeq, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( const com::sun::star::uno::Sequence< com::sun::star::embed::VerbDescriptor >& rVerbCommandSeq, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
 
             com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >  m_xObjectUpdateDispatch;
     };
