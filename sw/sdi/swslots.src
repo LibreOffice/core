@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:50:02 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11969,3 +11969,10 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ hungarian ] = "Szöveg kijelölése";
     SlotName[ slovenian ] = "Izberi besedilo";
 };
+
+SfxSlotInfo FN_TABLE_ROW_SPLIT
+{
+    SlotName = "Am Seiten- und Spaltenende aufbrechen";
+    SlotName[ english_us ] = "Break across page and columns";
+};
+
