@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 14:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
     xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "ButtonType" ), aAny );
+    // #105638# OJ
+    aAny <<= sal_True;
+    xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
 
     Point aPos;
     if (pInsPos)
