@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:15:08 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ chinese_simplified ] = "ÄúÒª¸ü¸Ä´Êµä '%1' µÄÓïÑÔÂğ£¿";
     Message[ russian ] = "Âû õîòèòå èçìåíèòü ÿçûê ñëîàâğÿ '%1'?";
     Message[ polish ] = "Czy chcesz zmieniæ jêzyk s³ownika '%1'?";
-    Message[ japanese ] = "«‘'%1' ‚ÌŒ¾Œê‚ğ•ÏX‚µ‚Ü‚·‚©H";
+    Message[ japanese ] = "«‘u%1v‚ÌŒ¾Œê‚ğ•ÏX‚µ‚Ü‚·‚©H";
     Message[ chinese_traditional ] = "±z­nªí®æµü¨å'%1'ªº»y¨¥¡H";
     Message[ arabic ] = "åá ÊÑíÏ ÊÛííÑ áÛÉ ÇáŞÇãæÓ '%1'¿";
     Message[ greek ] = "Èİëåôå íá áëëÜîåôå ôçí ãëşóóá ôïõ ëåîéêïı '%1';";
