@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documenttype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,12 @@ namespace DOM
     private:
         xmlDtdPtr m_aDtdPtr;
 
-    protected:        
+    protected:
         CDocumentType(const xmlDtdPtr aDtdPtr);
 
     public:
         /**
-        A NamedNodeMap containing the general entities, both external and 
+        A NamedNodeMap containing the general entities, both external and
         internal, declared in the DTD.
         */
         virtual Reference< XNamedNodeMap > SAL_CALL getEntities() throw (RuntimeException);
@@ -102,7 +102,7 @@ namespace DOM
         virtual OUString SAL_CALL getInternalSubset() throw (RuntimeException);
 
         /**
-        The name of DTD; i.e., the name immediately following the DOCTYPE 
+        The name of DTD; i.e., the name immediately following the DOCTYPE
         keyword.
         */
         virtual OUString SAL_CALL getName() throw (RuntimeException);
@@ -127,7 +127,7 @@ namespace DOM
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);        
+            throw (RuntimeException);
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
         throw (DOMException)
