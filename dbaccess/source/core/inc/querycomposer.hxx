@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ namespace dbaccess
         ::rtl::OUString                         m_aWorkSql;
         ::rtl::OUString                         m_aOrgFilter;
         ::rtl::OUString                         m_aOrgOrder;
+        ::rtl::OUString                         m_sDecimalSep;
         ::com::sun::star::lang::Locale          m_aLocale;
 
 

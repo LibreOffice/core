@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-17 07:50:35 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -103,6 +109,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 
@@ -125,11 +132,12 @@ public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< ::rtl::OUString>()){}
 };
 // -------------------------------------------------------------------------
-ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper)
+ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rMutex)
             : OPropertyContainer(_rBHelper)
+            , m_rMutex(_rMutex)
             , m_rBHelper(_rBHelper)
-            , m_aListeners(m_aMutex)
-            , m_aApproveListeners(m_aMutex)
+            , m_aListeners(m_rMutex)
+            , m_aApproveListeners(m_rMutex)
             , m_pCache(NULL)
             , m_pColumns(NULL)
             , m_nRowCount(0)
@@ -183,7 +191,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
 // OComponentHelper
 void SAL_CALL ORowSetBase::disposing(void)
 {
-    MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_rMutex);
 
     if(m_pColumns)
     {
@@ -627,7 +635,6 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
     sal_Bool bRet = m_pCache->next();
     if(bRet)
     {
-        OSL_ENSHURE(aOldValues->isValid(),"Iterator is no longer valid!");
         m_bBeforeFirst  = sal_False;
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
@@ -1096,5 +1103,48 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
         OSL_ENSHURE(0,"firePropertyChange: Exception");
     }
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+sal_Int32 ORowSetBase::assginFormatByType(sal_Bool _bCurrency,sal_Int32 _nType,const Locale& _rLocale)
+{
+    sal_Int32 nNumberType   = _bCurrency ? NumberFormat::CURRENCY : NumberFormat::NUMBER;
+    sal_Int32 nTextType     = NumberFormat::TEXT;
+    sal_Int32 nFormatkey    = 0;
+    switch (_nType)
+    {
+        case DataType::BIT:             nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::LOGICAL, _rLocale); break;
+        case DataType::TINYINT:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::SMALLINT:        nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::INTEGER:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::BIGINT:          nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::FLOAT:           nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::REAL:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::DOUBLE:          nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::NUMERIC:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::DECIMAL:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
+        case DataType::CHAR:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(nTextType, _rLocale); break;
+        case DataType::VARCHAR:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nTextType, _rLocale); break;
+        case DataType::LONGVARCHAR:     nFormatkey = m_xNumberFormatTypes->getStandardFormat(nTextType, _rLocale); break;
+        case DataType::DATE:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::DATE, _rLocale); break;
+        case DataType::TIME:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::TIME, _rLocale); break;
+        case DataType::TIMESTAMP:       nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::DATETIME, _rLocale); break;
+        case DataType::BINARY:          break;
+        case DataType::VARBINARY:       break;
+        case DataType::LONGVARBINARY:   break;
+        case DataType::SQLNULL:         break;
+        case DataType::OTHER:           break;
+        case DataType::OBJECT:          break;
+        case DataType::DISTINCT:        break;
+        case DataType::STRUCT:          break;
+        case DataType::ARRAY:           break;
+        case DataType::BLOB:            break;
+        case DataType::CLOB:            break;
+        case DataType::REF:             break;
+        default:
+            OSL_ENSHURE(0,"ORowSetBase::assginFormatByType: Unknown Type!");
+    }
+    return nFormatkey;
+}
+// -----------------------------------------------------------------------------
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ namespace dbaccess
                                                 >   ORowSet_BASE1;
 
     class OTableContainer;
-    class ORowSet : public ORowSet_BASE1
+    class ORowSet : public comphelper::OBaseMutex
+                    , public ORowSet_BASE1
                     , public ORowSetBase
                     , public ::comphelper::OPropertyArrayUsageHelper<ORowSet>
     {
@@ -373,8 +374,9 @@ namespace dbaccess
     //************************************************************
     //  ORowSetClone
     //************************************************************
-    class ORowSetClone : public ORowSetBase
+    class ORowSetClone : public comphelper::OBaseMutex
                          ,public OSubComponent
+                         ,public ORowSetBase
                          ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >
     {
     protected:
@@ -437,6 +439,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2000/11/15 15:57:40  oj
+    change for rowset
+
     Revision 1.8  2000/11/03 14:40:45  oj
     some problems with refcount resolved
 

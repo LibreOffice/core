@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_NUMBERFORMAT:
             OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(NUMBERFORMAT) : invalid value !");
-            m_aWidth = rValue;
+            m_aFormatKey = rValue;
             break;
         case PROPERTY_ID_RELATIVEPOSITION:
             OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
@@ -440,9 +440,9 @@ void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode)
     m_aWidth.clear();
     m_aAlignment.clear();
 
-    m_aAlignment = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
-    m_aWidth = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
-    m_aFormatKey = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT);
+    m_aAlignment        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
+    m_aWidth            = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
+    m_aFormatKey        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT);
     m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
     _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN) >>= m_bHidden;
 }

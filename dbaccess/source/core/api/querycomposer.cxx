@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,10 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
     m_aLocale.Language = ::comphelper::getString(aValue);
     m_xNumberFormatsSupplier = dbtools::getNumberFormats(m_xConnection,sal_True,m_xServiceFactory);
+    Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
+    LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
+    m_sDecimalSep = aData.decimalSeparator;
+    OSL_ENSHURE(m_sDecimalSep.getLength() == 1,"OQueryComposer::OQueryComposer decimal separator is not 1 length");
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
@@ -778,10 +782,9 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
             ::rtl::OUString aValue;
             ::rtl::OUString aColumnName;
 
-            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
-            LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
-            pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
-            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+
+            pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
             // don't display the column name
             aValue = aValue.copy(aColumnName.getLength());
@@ -879,10 +882,8 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
                 i++;
 
             // go forward
-            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
-            LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             for (;i < pCondition->count();i++)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
         }
         else if (SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
         {
@@ -923,10 +924,8 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
             }
 
             // go backward
-            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
-            LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             for (; i >= 0; i--)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
         }
         else
             return sal_False;
@@ -941,11 +940,9 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
         PropertyValue aItem;
         ::rtl::OUString aValue;
         ::rtl::OUString aColumnName;
-        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
-        LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
 
-        pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
-        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+        pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
         // don't display the column name
         aValue = aValue.copy(aColumnName.getLength());
@@ -966,16 +963,14 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
 
         // Feldnamen
         sal_uInt16 i;
-        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
-        LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
         for (i=0;i< pLhs->count();i++)
-             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
         // Kriterium
         aItem.Handle = pCondition->getChild(1)->getNodeType();
         aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
-            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
         aItem.Name = aName;
         aItem.Value <<= aValue;

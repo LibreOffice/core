@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
             m_pCacheSet = new OStaticSet(_xRs);
             if(bAllKeysFound)
-                m_nPrivileges |= Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
+                m_nPrivileges = Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
             else
                 m_nPrivileges = Privilege::SELECT;
         }
@@ -1496,6 +1496,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2000/11/15 15:57:40  oj
+    change for rowset
+
     Revision 1.13  2000/11/14 13:28:20  oj
     change for rowset when getRow returns 0
 

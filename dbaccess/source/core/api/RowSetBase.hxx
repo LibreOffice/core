@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
 #endif
@@ -111,7 +114,10 @@
 #endif
 
 
-namespace com { namespace sun { namespace star { namespace sdb { struct RowChangeEvent; } } } }
+namespace com { namespace sun { namespace star {
+    namespace sdb { struct RowChangeEvent; }
+    namespace lang { struct Locale; }
+} } }
 
 namespace dbaccess
 {
@@ -127,12 +133,12 @@ namespace dbaccess
     class ORowSetCache;
     class ORowSetDataColumns;
 
-    class ORowSetBase : public comphelper::OBaseMutex,
-                        public ORowSetBase_BASE,
+    class ORowSetBase : public ORowSetBase_BASE,
                         public ::comphelper::OPropertyContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
     protected:
+        ::osl::Mutex&                           m_rMutex;
         ::osl::Mutex                            m_aRowCountMutex, // mutex for rowcount changes
                                                 // we need a extra mutex for columns to prevend deadlock when setting new values
                                                 // for a row
@@ -148,6 +154,8 @@ namespace dbaccess
         ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
         ORowSetDataColumns*                     m_pColumns;         // represent the select columns
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
+        // is used when the formatkey for database types is set
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
 
         sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
@@ -157,7 +165,7 @@ namespace dbaccess
         sal_Bool                                m_bAfterLast    : 1;
 
     protected:
-        ORowSetBase(::cppu::OBroadcastHelper    &_rBHelper);
+        ORowSetBase(::cppu::OBroadcastHelper    &_rBHelper,::osl::Mutex& _rMutex);
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);
@@ -175,6 +183,8 @@ namespace dbaccess
         {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify all that rowset changed
         // check if the insert must be canceled
         virtual void checkInsert() = 0;
+        // determine the formatkey for a special type
+        sal_Int32 assginFormatByType(sal_Bool _bCurrency,sal_Int32 _nType,const ::com::sun::star::lang::Locale& _rLocale);
 
     // OPropertyContainer
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;

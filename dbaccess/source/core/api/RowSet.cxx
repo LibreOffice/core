@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 10:57:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,13 +166,23 @@
 #ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
+using namespace utl;
 using namespace dbaccess;
 using namespace connectivity;
 using namespace comphelper;
@@ -185,6 +195,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 
@@ -237,7 +248,7 @@ Reference< XInterface > ORowSet_CreateInstance(const Reference< XMultiServiceFac
 //--------------------------------------------------------------------------
 ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFac)
     : ORowSet_BASE1(m_aMutex)
-    , ORowSetBase(ORowSet_BASE1::rBHelper)
+    , ORowSetBase(ORowSet_BASE1::rBHelper,m_aMutex)
     , m_xServiceManager(_xFac)
     //  ,m_pParseTree(NULL)
     ,m_nFetchDirection(FetchDirection::FORWARD)
@@ -328,13 +339,29 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
     switch(nHandle)
     {
         case PROPERTY_ID_ACTIVECONNECTION:
-            m_bCreateStatement = sal_True;
+            m_bCreateStatement      = sal_True;
             m_bRebuildConnOnExecute = sal_False;
+            try
             {
                 Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
                 if (xComponent.is())
                     xComponent->removeEventListener(this);
             }
+            catch(Exception&) // doesn't matter here
+            {
+            }
+            // we have to dispose our querycomposer
+            try
+            {
+                Reference< XComponent > xComp(m_xComposer, UNO_QUERY);
+                if (xComp.is())
+                    xComp->dispose();
+                m_xComposer = NULL;
+            }
+            catch(Exception&) // doesn't matter here
+            {
+            }
+
             m_aActiveConnection >>= m_xActiveConnection;
             {
                 Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
@@ -1713,6 +1740,27 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     ::std::vector< ::rtl::OUString> aNames;
 
                     ::rtl::OUString aDescription;
+
+                    // set the numberformatTypes
+                    ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
+                    Locale aLocale;
+                    pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
+
+                    OSL_ENSHURE(m_xActiveConnection.is(),"No ActiveConnection");
+                    Reference< XNumberFormatTypes> xNumberFormatTypes;
+                    Reference< XChild> xChild(m_xActiveConnection,UNO_QUERY);
+                    if(xChild.is())
+                    {
+                        Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+                        if(xProp.is())
+                        {
+                            Reference< XNumberFormatsSupplier> xNumberFormat;
+                            xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER) >>= xNumberFormat;
+                            if(xNumberFormat.is())
+                                m_xNumberFormatTypes = Reference< XNumberFormatTypes>(xNumberFormat->getNumberFormats(),UNO_QUERY);
+                        }
+                    }
+
                     Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
                     const ::rtl::OUString* pBegin   = aSeq.getConstArray();
                     const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
@@ -1735,7 +1783,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         aNames.push_back(*pBegin);
 
                         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                        sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                        if(!nFormatKey)
+                            nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
+                                                            ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
+                                                            aLocale);
+
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
                         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
                         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
                         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
@@ -1957,7 +2011,7 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
             {
                 m_xComposer = xFactory->createQueryComposer();
             }
-            catch (...)
+            catch (Exception&)
             {
                 m_xComposer = NULL;
             }
@@ -2368,35 +2422,33 @@ DBG_NAME(ORowSetClone);
 //--------------------------------------------------------------------------
 ORowSetClone::ORowSetClone(ORowSet& rParent)
              :OSubComponent(m_aMutex, rParent)
-             ,ORowSetBase(OComponentHelper::rBHelper)
+             ,ORowSetBase(OComponentHelper::rBHelper,m_aMutex)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
              ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
              ,m_nResultSetType(rParent.m_nResultSetType)
-
              ,m_bDeleted(rParent.m_bDeleted)
              ,m_bRowObsolete(rParent.m_bRowObsolete)
-             ,m_nPosition(rParent.m_nPosition)
              ,m_bIsBookmarable(sal_True)
 {
     DBG_CTOR(ORowSetClone, NULL);
 
-    m_pMySelf       = this;
-    m_bClone        = sal_True;
-
-    m_bBeforeFirst  = rParent.m_bBeforeFirst;
-    m_bAfterLast    = rParent.m_bAfterLast;
-    //  m_pIterator     = rParent.m_pIterator;
-    m_pCache        = rParent.m_pCache;
-    m_aBookmark     = rParent.m_aBookmark;
-    m_aCurrentRow   = m_pCache->getEnd();
-
-    //  m_pCache = rParent.m_pCache->createClone();
+    m_pMySelf               = this;
+    m_bClone                = sal_True;
+    m_bBeforeFirst          = rParent.m_bBeforeFirst;
+    m_bAfterLast            = rParent.m_bAfterLast;
+    m_pCache                = rParent.m_pCache;
+    m_aBookmark             = rParent.m_aBookmark;
+    m_aCurrentRow           = m_pCache->getEnd();
+    m_xNumberFormatTypes    = rParent.m_xNumberFormatTypes;
 
     ORowSetDataColumns_COLLECTION aColumns;
     ::std::vector< ::rtl::OUString> aNames;
 
     ::rtl::OUString aDescription;
+    ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
+    Locale aLocale;
+    pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
 
     Sequence< ::rtl::OUString> aSeq = rParent.m_pColumns->getElementNames();
     const ::rtl::OUString* pBegin   = aSeq.getConstArray();
@@ -2419,7 +2471,12 @@ ORowSetClone::ORowSetClone(ORowSet& rParent)
         aNames.push_back(*pBegin);
 
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+        sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+        if(!nFormatKey)
+            nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
+                                            comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
+                                            aLocale);
+        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
