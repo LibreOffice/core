@@ -898,7 +898,7 @@ SfxVoidItem BasicStepInto SID_BASICSTEPINTO
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    GroupId = GID_MACRO;
 ]
 
 //--------------------------------------------------------------------------
@@ -923,7 +923,7 @@ SfxVoidItem BasicStepOut SID_BASICSTEPOUT
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    GroupId = GID_MACRO;
 ]
 
 //--------------------------------------------------------------------------
@@ -948,7 +948,7 @@ SfxVoidItem BasicStepOver SID_BASICSTEPOVER
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    GroupId = GID_MACRO;
 ]
 
 //--------------------------------------------------------------------------
@@ -6165,7 +6165,7 @@ SfxVoidItem RunBasic SID_BASICRUN
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    GroupId = GID_MACRO;
 ]
 
 //--------------------------------------------------------------------------
@@ -7722,7 +7722,7 @@ SfxVoidItem ToggleBreakPointEnabled SID_BASICIDE_TOGGLEBRKPNTENABLED
     Asynchron;
 
     /* config: */
-    AccelConfig = FALSE,
+    AccelConfig = TRUE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
