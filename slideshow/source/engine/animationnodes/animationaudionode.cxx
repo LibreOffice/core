@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:01:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,10 @@ namespace presentation
 
             try
             {
-                mpPlayer.reset( new SoundPlayer( aSoundURL,
-                                                 getContext().mxComponentContext ) );
+                mpPlayer = SoundPlayer::create(
+                    getContext().mrEventMultiplexer,
+                    aSoundURL,
+                    getContext().mxComponentContext );
             }
             catch( lang::NoSupportException& )
             {
@@ -108,7 +110,11 @@ namespace presentation
 
         void AnimationAudioNode::dispose()
         {
-            mpPlayer.reset();
+            if (mpPlayer.get() != 0) {
+                mpPlayer->stopPlayback();
+                mpPlayer->dispose();
+                mpPlayer.reset();
+            }
 
             mxAudioNode.clear();
 
