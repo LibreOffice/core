@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-18 15:07:45 $
+#   last change: $Author: rt $ $Date: 2004-07-12 12:59:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -426,6 +426,7 @@ REGCOMPARE=$(WRAPCMD) regcompare
 REGCOMP=$(WRAPCMD) regcomp
 CPPUMAKER=$(WRAPCMD) cppumaker
 JAVAMAKER=$(WRAPCMD) javamaker
+CLIMAKER=$(WRAPCMD) climaker
 RDBMAKER=$(WRAPCMD) rdbmaker
 STARDEP=$(WRAPCMD) javadep
 JAVAC=$(WRAPCMD) javac
