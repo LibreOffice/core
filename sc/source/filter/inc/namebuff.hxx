@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:52:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,6 @@ public:
     UINT16                  Find( const ScAddress aAdress );
 
     static String           CreateName( const ScRange& );
-    static BOOL             GetAddress( const String& rName, ScRange& rReturn );
     };
 
 
