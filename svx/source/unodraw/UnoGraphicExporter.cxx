@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-21 10:01:01 $
+ *  last change: $Author: cl $ $Date: 2002-03-04 12:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ namespace svx
 
         @return the returned VirtualDevice is owned by the caller
     */
-    VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel)
+    VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel )
     {
         SdrModel* pDoc = pPage->GetModel();
 
@@ -265,6 +265,18 @@ namespace svx
             const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
 
             aMM.SetScaleX( aFrac );
+
+            if( nHeightPixel == 0 )
+                aMM.SetScaleY( aFrac );
+        }
+
+        if( nHeightPixel )
+        {
+            const Fraction aFrac( (long) nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+
+            if( nWidthPixel == 0 )
+                aMM.SetScaleX( aFrac );
+
             aMM.SetScaleY( aFrac );
         }
 
@@ -461,7 +473,15 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         if ( !bVectorType && !bTranslucent )
         {
             const Size      aSizePix( Application::GetDefaultDevice()->LogicToPixel( aSize, aMap ) );
-            long        nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
+            long    nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
+            long    nHeightPix = 0;
+
+            if( (nWidth != -1) && (nWidth < MAX_EXT_PIX) )
+                nWidthPix = nWidth;
+
+            if( (nHeight != -1) && (nHeight < MAX_EXT_PIX) )
+                nHeightPix = nHeight;
+
             SdrView*        pView;
 
             if( (nWidth > 0) && (nWidth <= MAX_EXT_PIX)  )
@@ -477,7 +497,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             }
 
 
-            VirtualDevice*  pVDev = CreatePageVDev( pPage, nWidthPix );
+            VirtualDevice*  pVDev = CreatePageVDev( pPage, nWidthPix, nHeightPix );
 
             if( pVDev )
             {
