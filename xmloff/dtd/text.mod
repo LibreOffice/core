@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.55 2004-05-17 16:26:59 rt Exp $
+	$Id: text.mod,v 1.56 2004-08-02 14:09:49 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -425,32 +425,35 @@
 <!ELEMENT text:text-input (#PCDATA)>
 <!ATTLIST text:text-input text:description %string; #IMPLIED>
 
-<!ENTITY % database-table "text:database-name CDATA #REQUIRED 
+<!ENTITY % database-table "text:database-name CDATA #IMPLIED
 						   text:table-name CDATA #REQUIRED
 						   text:table-type (table|query|command) #IMPLIED">
 
-<!ELEMENT text:database-display (#PCDATA)>
+<!ELEMENT form:connection-resource EMPTY>
+<!ATTLIST form:connection-resource xlink:href %uriReference; #IMPLIED>
+
+<!ELEMENT text:database-display ( #PCDATA | form:connection-resource )* >
 <!ATTLIST text:database-display %database-table;>
 <!ATTLIST text:database-display text:column-name %string; #REQUIRED>
 <!ATTLIST text:database-display style:data-style-name %styleName; #IMPLIED>
 <!ATTLIST text:database-display text:display (none|value) #IMPLIED>
 
-<!ELEMENT text:database-next (#PCDATA)>
+<!ELEMENT text:database-next ( #PCDATA | form:connection-resource )*>
 <!ATTLIST text:database-next %database-table;>
 <!ATTLIST text:database-next text:condition %formula; #IMPLIED>
 
-<!ELEMENT text:database-select (#PCDATA)>
+<!ELEMENT text:database-select ( #PCDATA | form:connection-resource )*>
 <!ATTLIST text:database-select %database-table;>
 <!ATTLIST text:database-select text:condition %formula; #IMPLIED>
 <!ATTLIST text:database-select text:row-number %integer; #REQUIRED>
 
-<!ELEMENT text:database-row-number (#PCDATA)>
+<!ELEMENT text:database-row-number ( #PCDATA | form:connection-resource )*>
 <!ATTLIST text:database-row-number %database-table;>
 <!ATTLIST text:database-row-number %numFormat;>
 <!ATTLIST text:database-row-number text:value %integer; #IMPLIED>
 <!ATTLIST text:database-row-number text:display (none|value) #IMPLIED>
 
-<!ELEMENT text:database-name (#PCDATA)>
+<!ELEMENT text:database-name ( #PCDATA | form:connection-resource )*>
 <!ATTLIST text:database-name %database-table;>
 <!ATTLIST text:database-name text:display (none|value) #IMPLIED>
 
