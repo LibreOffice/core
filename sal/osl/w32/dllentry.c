@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-01-26 11:46:39 $
+ *  last change: $Author: tra $ $Date: 2001-02-14 08:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ extern CRITICAL_SECTION g_ThreadKeyListCS;
 #define ERR_GENERAL_WRONG_CPU       101
 #define ERR_WINSOCK_INIT_FAILED     102
 #define ERR_WINSOCK_WRONG_VERSION   103
+#define ERR_NO_DCOM_UPDATE          104
 
 //------------------------------------------------------------------------------
 // globales
@@ -123,6 +124,10 @@ static sal_Bool showMessage(int MessageId)
             pStr = "Wrong version of WINSOCK library!\nThe application may not run stable.";
             break;
 
+        case ERR_NO_DCOM_UPDATE:
+            pStr = "No DCOM update installed! The application may not run stable.\nPlease read the readme file for the necessary system requirements.";
+            break;
+
         default:
             pStr = "Unknown error while initialization!\nThe application may not run stable.";
     }
@@ -141,7 +146,7 @@ static sal_Bool showMessage(int MessageId)
 
 static void InitDCOM( )
 {
-    HINSTANCE hInstance = LoadLibrary( "ole32.dll" );
+    HINSTANCE hInstance = GetModuleHandle( "ole32.dll" );
 
     if( hInstance )
     {
@@ -149,8 +154,8 @@ static void InitDCOM( )
 
         if( pFunc )
             _CoInitializeEx = ( HRESULT ( WINAPI * ) ( LPVOID, DWORD ) ) pFunc;
-
-        FreeLibrary(hInstance);
+        else
+            showMessage( ERR_NO_DCOM_UPDATE );
     }
 }
 
@@ -229,7 +234,7 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 g_dwTLSTextEncodingIndex = TlsAlloc();
                 InitializeCriticalSection( &g_ThreadKeyListCS );
 
-    //          InitDCOM();
+                InitDCOM();
 
                 break;
             }
