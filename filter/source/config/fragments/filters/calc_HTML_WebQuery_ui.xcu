@@ -1,0 +1,7 @@
+    <node oor:name="calc_HTML_WebQuery" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Web Page Query (StarOffice Calc)</value>
+            <value xml:lang="de">Webseiten-Abfrage (StarOffice Calc)</value>
+            <value xml:lang="x-translate">Web Page Query (StarOffice Calc)</value>
+        </prop>
+    </node>
