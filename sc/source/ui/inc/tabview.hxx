@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:08:58 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,8 +393,8 @@ public:
 
     void            SetNewStartIfMarking();
 
-    void            SetTabNo( USHORT nTab, BOOL bNew = FALSE );
-    void            SelectNextTab( short nDir );
+    void            SetTabNo( USHORT nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );
     void            ActivatePart( ScSplitPos eWhich );
