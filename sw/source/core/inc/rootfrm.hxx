@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:17 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,8 +271,11 @@ public:
 
     //Der Crsr moechte die zu selektierenden Bereiche wissen.
     void CalcFrmRects( SwShellCrsr&, BOOL bIsTblSel );
-    //Ermitteln der von der Selection eingeschl. Zellen.
-    void MakeTblCrsrs( SwTableCursor& );
+
+    // Calculates the cells included from the current selection
+    // false: There was no result because of an invalid layout
+    // true: Everything worked fine.
+    bool MakeTblCrsrs( SwTableCursor& );
 
     void DisallowTurbo()  const { ((SwRootFrm*)this)->bTurboAllowed = FALSE; }
     void ResetTurboFlag() const { ((SwRootFrm*)this)->bTurboAllowed = TRUE; }
