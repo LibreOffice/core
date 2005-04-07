@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-06 10:09:10 $
+#   last change: $Author: hr $ $Date: 2005-04-07 15:06:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Common ----------------------------------------------------------
 
-# Disable optimization for SunCC (funny loops
+# Disable optimization for SunCC Sparc (funny loops
 # when parsing e.g. "x+width/2")
-.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+# Do not disable optimization for SunCC++ 5.5 Solaris x86,
+# this compiler has an ICE on smilfunctionparser.cxx *without*
+# optimization
+.IF "$(OS)"=="SOLARISS" && "$(COM)"!="GCC"
 NOOPTFILES= $(SLO)$/smilfunctionparser.obj
 .ENDIF
 # same issue for MACOSX
