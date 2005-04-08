@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:19:39 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,19 +361,23 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 {
     maTrustCertLB.Clear();
 
-    sal_uInt32      nCountEntries = maTrustedAuthors.getLength();
-    for( sal_uInt32 nEntry = 0 ; nEntry < nCountEntries ; ++nEntry )
+    sal_uInt32 nEntries = maTrustedAuthors.getLength();
+
+    if ( nEntries && mpDlg->mxSecurityEnvironment.is() )
     {
-        cssu::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
-        uno::Reference< css::security::XCertificate >   xCert;
+        for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
+        {
+            cssu::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
+            uno::Reference< css::security::XCertificate >   xCert;
 
-        // create from RawData
-        xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
+            // create from RawData
+            xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
-        SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
-        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
-        maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-        pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
+            SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
+            maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
+            maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
+            pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
+        }
     }
 }
 
