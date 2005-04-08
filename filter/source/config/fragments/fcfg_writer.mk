@@ -36,7 +36,8 @@ T4_WRITER = \
     writer_WPSSystem_WPS2000_10 \
     pdf_Portable_Document_Format\
     writer8_template\
-    writer8
+    writer8 \
+    writer_MS_Word_2003_XML
 
 # -----------------------------------------------
 # count = 33
@@ -74,7 +75,8 @@ F4_WRITER = \
     writer_WPSSystem_WPS2000_10 \
     writer_pdf_Export\
     writer8\
-    writer8_template
+    writer8_template \
+    MS_Word_2003_XML 
 
 # -----------------------------------------------
 # count = 13
@@ -91,7 +93,8 @@ F4_UI_WRITER = \
     writer_JustSystem_Ichitaro_10_template_ui \
     writer_StarOffice_XML_Writer_Template_ui \
     writer8_ui \
-    writer8_template_ui
+    writer8_template_ui \
+    MS_Word_2003_XML_ui 
     
 # -----------------------------------------------
 # count = 0

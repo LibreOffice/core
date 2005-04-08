@@ -13,14 +13,10 @@ T4_GLOBAL = \
     writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
     pdf_Portable_Document_Format \
     writerglobal8 \
-    writer_MS_Word_2003_XML \
-    calc_MS_Excel_2003_XML
 
 # -----------------------------------------------
 # count = 12
 F4_GLOBAL = \
-    MS_Excel_2003_XML \
-    MS_Word_2003_XML \
     StarWriter_3_0__StarWriter_GlobalDocument_ \
     StarWriter_4_0__StarWriter_GlobalDocument_ \
     StarWriter_4_0_GlobalDocument \
@@ -36,8 +32,6 @@ F4_GLOBAL = \
 # -----------------------------------------------
 # count = 12
 F4_UI_GLOBAL = \
-    MS_Excel_2003_XML_ui \
-    MS_Word_2003_XML_ui \
     StarWriter_3_0__StarWriter_GlobalDocument__ui \
     StarWriter_4_0__StarWriter_GlobalDocument__ui \
     StarWriter_4_0_GlobalDocument_ui \
