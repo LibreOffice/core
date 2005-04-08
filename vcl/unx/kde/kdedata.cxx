@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:13:40 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+#include <kstartupinfo.h>
 #include <qpaintdevice.h>
 #undef Region
 
@@ -173,8 +174,25 @@ void KDEXLib::Init()
 
     KCmdLineArgs::init( nFakeArgc, pFakeArgv, kAboutData );
 
+    // Do not let KApplication eat the DESKTOP_STARTUP_ID
+    char *pDesktopStartupId = NULL;
+    char *pEnv = getenv( "DESKTOP_STARTUP_ID" );
+    if ( pEnv )
+    {
+        pDesktopStartupId = strdup( pEnv );
+        unsetenv( "DESKTOP_STARTUP_ID" );
+    }
+
     KApplication::disableAutoDcopRegistration();
+    KStartupInfo::disableAutoAppStartedSending();
     new KApplication();
+
+    // Now set DESKTOP_STARTUP_ID for the VCL initialization
+    if ( pDesktopStartupId )
+    {
+        setenv( "DESKTOP_STARTUP_ID", pDesktopStartupId, 1 );
+        free( pDesktopStartupId );
+    }
 
     Display* pDisp = QPaintDevice::x11AppDisplay();
     XVisualInfo aVI;
