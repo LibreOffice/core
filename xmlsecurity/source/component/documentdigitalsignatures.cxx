@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:18:24 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
         {
             const SignatureInformation& rInfo = aSignInfos[n];
             aInfos[n].Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-            if ( !aInfos[n].Signer.is() )
+            if ( !aInfos[n].Signer.is() && rInfo.ouX509Certificate.getLength() )
                 aInfos[n].Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
 
             // --> PB 2004-12-14 #i38744# time support again
@@ -262,6 +262,13 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
             DBG_ASSERT( rInfo.nStatus != ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN, "Signature not processed!" );
 
             aInfos[n].SignatureIsValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
+
+            // HACK for #i46696#
+            // Should only happen because of author or issuer certificates are missing in keystore.
+            // We always have the key from authors certificate, because it's attached.
+            // This is a question of trust, not of a *broken* signature.
+            if ( ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_KEY_NOT_FOUND ) && rInfo.ouX509Certificate.getLength() )
+                aInfos[n].SignatureIsValid = sal_True;
 
             if ( aInfos[n].SignatureIsValid )
             {
@@ -285,17 +292,19 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
 
 void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException)
 {
+    // MT: i45295
+    // SecEnv is only needed to display certificate information from trusted sources.
+    // Macro Security also has some options where no security environment is needed, so raise dialog anyway.
+    // Later I should change the code so the Dialog creates the SecEnv on demand...
+
+    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
+
     XMLSignatureHelper aSignatureHelper( mxMSF );
+    if ( aSignatureHelper.Init( rtl::OUString() ) )
+        xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    bool bInit = aSignatureHelper.Init( rtl::OUString() );
-
-    DBG_ASSERT( bInit, "Error initializing security context!" );
-
-    if ( bInit )
-    {
-        MacroSecurity aDlg( NULL, aSignatureHelper.GetSecurityEnvironment() );
-        aDlg.Execute();
-    }
+    MacroSecurity aDlg( NULL, xSecEnv );
+    aDlg.Execute();
 }
 
 void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::star::security::XCertificate >& _Certificate ) throw (RuntimeException)
