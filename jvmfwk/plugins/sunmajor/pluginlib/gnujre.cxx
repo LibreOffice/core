@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:18:46 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,11 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 char const* const* GnuInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-        "/lib/libgcj.so",
-        "/lib/libgcj.so.6",
-        "/lib/libgcj.so.5",
-        "/lib/libgcj.so.4",
+          "/lib/libgcj.so.6"
+#if 0   //unreliable
+    , "/lib/libgcj.so.5"
+        , "/lib/libgcj.so.4"
+#endif
     };
     *size = sizeof(ar) / sizeof (char*);
     return ar;
