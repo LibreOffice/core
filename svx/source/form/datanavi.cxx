@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:49:27 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,12 @@
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
+#ifndef _SFX_DISPATCH_HXX
+#include <sfx2/dispatch.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -1421,7 +1427,7 @@ namespace svxform
     //========================================================================
     // class DataNavigatorWindow
     //========================================================================
-    DataNavigatorWindow::DataNavigatorWindow( Window* pParent ) :
+    DataNavigatorWindow::DataNavigatorWindow( Window* pParent, SfxBindings* pBindings ) :
 
         Window( pParent, SVX_RES( RID_SVXWIN_DATANAVIGATOR ) ),
 
@@ -1487,10 +1493,12 @@ namespace svxform
         m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nPageId ) );
         ActivatePageHdl( &m_aTabCtrl );
 
-        // get active frame
-        Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-        m_xFrame = xDesktop->getActiveFrame();
+        // get our frame
+        DBG_ASSERT( pBindings != NULL,
+                    "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
+        m_xFrame = Reference<XFrame>(
+            pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(),
+            UNO_QUERY );
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener
         Reference< XFrameActionListener > xListener(
@@ -2224,7 +2232,7 @@ namespace svxform
                           WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
         SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *pBindings ),
 
-        m_aDataWin( this )
+        m_aDataWin( this, pBindings )
 
     {
         DBG_CTOR(DataNavigator,NULL);
