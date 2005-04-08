@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 13:59:24 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,21 @@
 #include <qframe.h>
 #include <qlineedit.h>
 #include <qlistview.h>
+#include <qmainwindow.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qrangecontrol.h>
 #include <qtabbar.h>
 #include <qtabwidget.h>
+#include <qtoolbar.h>
+#include <qtoolbutton.h>
 #include <qwidget.h>
+
+// Ugly hack to be able to access QMenuItem::is_enabled
+#define private public
+#include <qmenudata.h>
+#undef private
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -120,6 +128,8 @@
 #include <plugins/kde/kdedata.hxx>
 #endif
 #include <iostream>
+
+#include <pspgraphics.h>
 
 using namespace ::rtl;
 
@@ -229,6 +239,36 @@ class WidgetPainter
     */
     QScrollBar   *m_pScrollBar;
 
+        /** Cached dock area. Needed for proper functionality of tool bars.
+
+          @see m_pPushButton
+          */
+        QMainWindow  *m_pMainWindow;
+
+        /** Cached tool bar.
+
+          @see m_pPushButton
+        */
+        QToolBar     *m_pToolBarHoriz, *m_pToolBarVert;
+
+        /** Cached tool button.
+
+          @see m_pPushButton
+        */
+        QToolButton  *m_pToolButton;
+
+        /** Cached menu bar.
+
+          @see m_pPushButton
+        */
+        QMenuBar     *m_pMenuBar;
+
+        /** Cached popup menu.
+
+          @see m_pPushButton
+        */
+        QPopupMenu   *m_pPopupMenu;
+
     // TODO other widgets
 
     public:
@@ -272,9 +312,10 @@ class WidgetPainter
         @param gc
         The graphics context.
     */
-    BOOL drawStyledWidget( QWidget *pWidget,
-        ControlState nState, const ImplControlValue& aValue,
-        Display *dpy, XLIB_Window drawable, GC gc );
+        BOOL drawStyledWidget( QWidget *pWidget,
+                ControlState nState, const ImplControlValue& aValue,
+                Display *dpy, XLIB_Window drawable, GC gc,
+                ControlPart nPart = PART_ENTIRE_CONTROL );
 
     /** 'Get' method for push button.
 
@@ -344,6 +385,30 @@ class WidgetPainter
     QScrollBar   *scrollBar( const Region& rControlRegion,
         BOOL bHorizontal, const ImplControlValue& aValue );
 
+        /** 'Get' method for tool bar.
+
+          @see pushButton()
+        */
+        QToolBar     *toolBar( const Region& rControlRegion, BOOL bHorizontal );
+
+        /** 'Get' method for tool button.
+
+          @see pushButton()
+        */
+        QToolButton  *toolButton( const Region& rControlRegion );
+
+        /** 'Get' method for menu bar.
+
+          @see pushButton()
+        */
+        QMenuBar     *menuBar( const Region& rControlRegion );
+
+        /** 'Get' method for popup menu.
+
+          @see pushButton()
+        */
+        QPopupMenu   *popupMenu( const Region& rControlRegion );
+
     // TODO other widgets
 
     protected:
@@ -390,7 +455,13 @@ WidgetPainter::WidgetPainter( void )
       m_pTabBar( NULL ),
       m_pTabWidget( NULL ),
       m_pListView( NULL ),
-      m_pScrollBar( NULL )
+      m_pScrollBar( NULL ),
+      m_pMainWindow( NULL ),
+      m_pToolBarHoriz( NULL ),
+      m_pToolBarVert( NULL ),
+      m_pToolButton( NULL ),
+      m_pMenuBar( NULL ),
+      m_pPopupMenu( NULL )
 {
 }
 
@@ -413,11 +484,18 @@ WidgetPainter::~WidgetPainter( void )
     delete m_pTabWidget, m_pTabWidget = NULL;
     delete m_pListView, m_pListView = NULL;
     delete m_pScrollBar, m_pScrollBar = NULL;
+    delete m_pToolBarHoriz, m_pToolBarHoriz = NULL;
+    delete m_pToolBarVert, m_pToolBarVert = NULL;
+    delete m_pMainWindow, m_pMainWindow = NULL;
+    delete m_pToolButton, m_pToolButton = NULL;
+    delete m_pMenuBar, m_pMenuBar = NULL;
+    delete m_pPopupMenu, m_pPopupMenu = NULL;
 }
 
 BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
-    Display *dpy, XLIB_Window drawable, GC gc )
+        Display *dpy, XLIB_Window drawable, GC gc,
+        ControlPart nPart )
 {
     if ( !pWidget )
     return FALSE;
@@ -658,6 +736,98 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle | eHoriz,
         QStyle::SC_All, eActive );
+    }
+    else if ( strcmp( "QToolBar", pClassName ) == 0 )
+    {
+        QToolBar *pToolBar = static_cast< QToolBar * >( pWidget->qt_cast( "QToolBar" ) );
+        bool bIsHorizontal = false;
+        if ( pToolBar && pToolBar->orientation() == Qt::Horizontal )
+        {
+            nStyle |= QStyle::Style_Horizontal;
+            bIsHorizontal = true;
+        }
+
+        kapp->style().drawControl( QStyle::CE_DockWindowEmptyArea,
+                &qPainter, pWidget, qRect,
+                pWidget->colorGroup(), nStyle );
+
+        kapp->style().drawPrimitive( QStyle::PE_PanelDockWindow,
+                &qPainter, qRect, pWidget->colorGroup(), nStyle );
+
+        if ( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
+        {
+            ToolbarValue *pValue = static_cast< ToolbarValue * >( aValue.getOptionalVal() );
+
+            QRect qThumbRect = region2QRect( pValue->maGripRect );
+            if ( bIsHorizontal )
+            {
+                qThumbRect.addCoords( 0, 2, 0, -3 );    // make the thumb a bit nicer
+                qRect.setWidth( qThumbRect.width() );   // draw just the thumb part
+            }
+            else
+            {
+                qThumbRect.addCoords( 2, 0, -3, 0 );    // make the thumb a bit nicer
+                qRect.setHeight( qThumbRect.height() ); // draw just the thumb part
+            }
+
+            if ( kapp->style().inherits( "HighColorStyle" ) ||
+                 kapp->style().inherits( "HighContrastStyle" ) ||
+                 kapp->style().inherits( "KeramikStyle" ) ||
+                 kapp->style().inherits( "KThemeStyle" ) ||
+                 kapp->style().inherits( "ThinKeramikStyle" ) )
+            {
+                // Workaround for the workaround in KStyle::drawPrimitive()
+                KStyle *pStyle = static_cast< KStyle * >( &kapp->style() );
+                pStyle->drawKStylePrimitive( KStyle::KPE_ToolBarHandle,
+                        &qPainter, pToolBar, qThumbRect,
+                        pWidget->colorGroup(), nStyle );
+            }
+            else
+                kapp->style().drawPrimitive( QStyle::PE_DockWindowHandle,
+                        &qPainter, qThumbRect, pWidget->colorGroup(), nStyle );
+        }
+    }
+    else if ( strcmp( "QToolButton", pClassName ) == 0 )
+    {
+        kapp->style().drawComplexControl( QStyle::CC_ToolButton,
+                &qPainter, pWidget, qRect,
+                pWidget->colorGroup(), nStyle,
+                QStyle::SC_ToolButton );
+    }
+    else if ( strcmp( "QMenuBar", pClassName ) == 0 )
+    {
+        if ( nPart == PART_ENTIRE_CONTROL )
+        {
+            kapp->style().drawControl( QStyle::CE_MenuBarEmptyArea,
+                    &qPainter, pWidget, qRect,
+                    pWidget->colorGroup(), nStyle );
+        }
+        else if ( nPart == PART_MENU_ITEM )
+        {
+            QMenuItem qMenuItem;
+            qMenuItem.is_enabled = bool( nStyle & QStyle::Style_Enabled );
+
+            if ( nStyle & QStyle::Style_Selected )
+                nStyle |= QStyle::Style_Active | QStyle::Style_Down | QStyle::Style_HasFocus;
+
+            kapp->style().drawControl( QStyle::CE_MenuBarItem,
+                    &qPainter, pWidget, qRect,
+                    pWidget->colorGroup(), nStyle,
+                    QStyleOption( &qMenuItem ) );
+        }
+    }
+    else if ( strcmp( "QPopupMenu", pClassName ) == 0 )
+    {
+        QMenuItem qMenuItem;
+        qMenuItem.is_enabled = bool( nStyle & QStyle::Style_Enabled );
+
+        if ( nStyle & QStyle::Style_Selected )
+            nStyle |= QStyle::Style_Active;
+
+        kapp->style().drawControl( QStyle::CE_PopupMenuItem,
+                &qPainter, pWidget, qRect,
+                pWidget->colorGroup(), nStyle,
+                QStyleOption( &qMenuItem, 0, 0 ) );
     }
     else
     return FALSE;
@@ -911,6 +1081,78 @@ QScrollBar *WidgetPainter::scrollBar( const Region& rControlRegion,
     return m_pScrollBar;
 }
 
+QToolBar *WidgetPainter::toolBar( const Region& rControlRegion, BOOL bHorizontal )
+{
+    if ( !m_pMainWindow )
+        m_pMainWindow = new QMainWindow( NULL, "main_window" );
+
+    QToolBar *pToolBar;
+    if ( bHorizontal )
+    {
+        if ( !m_pToolBarHoriz )
+        {
+            m_pToolBarHoriz = new QToolBar( m_pMainWindow, "tool_bar_horiz" );
+            m_pMainWindow->moveDockWindow( m_pToolBarHoriz, Qt::DockTop );
+        }
+        pToolBar = m_pToolBarHoriz;
+    }
+    else
+    {
+        if ( !m_pToolBarVert )
+        {
+            m_pToolBarVert = new QToolBar( m_pMainWindow, "tool_bar_horiz" );
+            m_pMainWindow->moveDockWindow( m_pToolBarVert, Qt::DockLeft );
+        }
+        pToolBar = m_pToolBarVert;
+    }
+
+    QRect qRect = region2QRect( rControlRegion );
+
+    pToolBar->move( qRect.topLeft() );
+    pToolBar->resize( qRect.size() );
+
+    return pToolBar;
+}
+
+QToolButton *WidgetPainter::toolButton( const Region& rControlRegion)
+{
+    if ( !m_pToolButton )
+    m_pToolButton = new QToolButton( NULL, "tool_button" );
+
+    QRect qRect = region2QRect( rControlRegion );
+
+    m_pToolButton->move( qRect.topLeft() );
+    m_pToolButton->resize( qRect.size() );
+
+    return m_pToolButton;
+}
+
+QMenuBar *WidgetPainter::menuBar( const Region& rControlRegion)
+{
+    if ( !m_pMenuBar )
+    m_pMenuBar = new QMenuBar( NULL, "menu_bar" );
+
+    QRect qRect = region2QRect( rControlRegion );
+
+    m_pMenuBar->move( qRect.topLeft() );
+    m_pMenuBar->resize( qRect.size() );
+
+    return m_pMenuBar;
+}
+
+QPopupMenu *WidgetPainter::popupMenu( const Region& rControlRegion)
+{
+    if ( !m_pPopupMenu )
+    m_pPopupMenu = new QPopupMenu( NULL, "popup_menu" );
+
+    QRect qRect = region2QRect( rControlRegion );
+
+    m_pPopupMenu->move( qRect.topLeft() );
+    m_pPopupMenu->resize( qRect.size() );
+
+    return m_pPopupMenu;
+}
+
 QStyle::SFlags WidgetPainter::vclStateValue2SFlags( ControlState nState,
     const ImplControlValue& aValue )
 {
@@ -997,10 +1239,16 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     ( (nType == CTRL_TAB_PANE)    && (nPart == PART_ENTIRE_CONTROL) ) ||
     // no CTRL_TAB_BODY for KDE
     ( (nType == CTRL_SCROLLBAR)   && (nPart == PART_ENTIRE_CONTROL || nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) ) ||
-    ( (nType == CTRL_SCROLLBAR)   && (nPart == HAS_THREE_BUTTONS) ); // TODO small optimization is possible here: return this only if the style really has 3 buttons
+    ( (nType == CTRL_SCROLLBAR)   && (nPart == HAS_THREE_BUTTONS) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
     // CTRL_GROUPBOX not supported
     // CTRL_FIXEDLINE not supported
     // CTRL_FIXEDBORDER not supported
+        ( (nType == CTRL_TOOLBAR)     && (nPart == PART_ENTIRE_CONTROL ||
+                                          nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
+                                          nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||
+                                          nPart == PART_BUTTON) ) ||
+        ( (nType == CTRL_MENUBAR)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
+        ( (nType == CTRL_MENU_POPUP)  && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) );
 }
 
 
@@ -1201,6 +1449,34 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
         pWidgetPainter->scrollBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ, aValue ),
         nState, aValue,
         dpy, drawable, gc );
+    }
+    else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT || nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
+    {
+        bReturn = pWidgetPainter->drawStyledWidget(
+                pWidgetPainter->toolBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_THUMB_VERT ),
+                nState, aValue,
+                dpy, drawable, gc, nPart );
+    }
+    else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_BUTTON) )
+    {
+        bReturn = pWidgetPainter->drawStyledWidget(
+                pWidgetPainter->toolButton( rControlRegion ),
+                nState, aValue,
+                dpy, drawable, gc, nPart );
+    }
+    else if ( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
+    {
+        bReturn = pWidgetPainter->drawStyledWidget(
+                pWidgetPainter->menuBar( rControlRegion ),
+                nState, aValue,
+                dpy, drawable, gc, nPart );
+    }
+    else if ( (nType == CTRL_MENU_POPUP) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
+    {
+        bReturn = pWidgetPainter->drawStyledWidget(
+                pWidgetPainter->popupMenu( rControlRegion ),
+                nState, aValue,
+                dpy, drawable, gc );
     }
 
     return bReturn;
@@ -1450,49 +1726,95 @@ static Color readColor( KConfig *pConfig, const char *pKey )
 }
 
 /** Helper function to add information to Font from QFont.
+
+    Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
 */
-static void modifyFont( Font &rFont, const QFont &rQFont )
+static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& rLocale )
 {
+    psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
 
-    // Prepend the KDE font, do not override
-    OUString aQFontName = String( rQFont.family().utf8(), RTL_TEXTENCODING_UTF8 );
-    OUString aFontName = rFont.GetName();
+    // set family name
+    aInfo.m_aFamilyName = String( rQFont.family().utf8(), RTL_TEXTENCODING_UTF8 );
 
-    if ( aQFontName.getLength() > 0 &&
-         aFontName.compareTo( aQFontName, aQFontName.getLength() ) != 0 )
-    {
-        OUStringBuffer aBuffer( 1024 );
-        aBuffer.append( aQFontName );
-        aBuffer.appendAscii( ";", 1 );
-        aBuffer.append( aFontName );
+    // set italic
+    aInfo.m_eItalic = ( qFontInfo.italic()? psp::italic::Italic: psp::italic::Upright );
 
-        rFont.SetName( aBuffer.makeStringAndClear() );
-    }
-
-    // QFontInfo should give the right point size, but sometimes it does not,
-    // it seems.
-    int nPointSize = qFontInfo.pointSize();
-    if ( nPointSize <= 0 )
-        nPointSize = rQFont.pointSize();
-    if ( nPointSize > 0 )
-        rFont.SetHeight( nPointSize );
-
-    rFont.SetItalic( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );
-
-    FontWeight eWeight = WEIGHT_DONTKNOW;
+    // set weight
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
-        eWeight = WEIGHT_LIGHT;
+        aInfo.m_eWeight = psp::weight::Light;
     else if ( nWeight <= QFont::Normal )
-        eWeight = WEIGHT_NORMAL;
+        aInfo.m_eWeight = psp::weight::Normal;
     else if ( nWeight <= QFont::DemiBold )
-        eWeight = WEIGHT_SEMIBOLD;
+        aInfo.m_eWeight = psp::weight::SemiBold;
     else if ( nWeight <= QFont::Bold )
-        eWeight = WEIGHT_BOLD;
+        aInfo.m_eWeight = psp::weight::Bold;
     else
-        eWeight = WEIGHT_BLACK;
-    rFont.SetWeight( eWeight );
+        aInfo.m_eWeight = psp::weight::UltraBold;
+
+    // set width
+    int nStretch = rQFont.stretch();
+    if ( nStretch <= QFont::UltraCondensed )
+        aInfo.m_eWidth = psp::width::UltraCondensed;
+    else if ( nStretch <= QFont::ExtraCondensed )
+        aInfo.m_eWidth = psp::width::ExtraCondensed;
+    else if ( nStretch <= QFont::Condensed )
+        aInfo.m_eWidth = psp::width::Condensed;
+    else if ( nStretch <= QFont::SemiCondensed )
+        aInfo.m_eWidth = psp::width::SemiCondensed;
+    else if ( nStretch <= QFont::Unstretched )
+        aInfo.m_eWidth = psp::width::Normal;
+    else if ( nStretch <= QFont::SemiExpanded )
+        aInfo.m_eWidth = psp::width::SemiExpanded;
+    else if ( nStretch <= QFont::Expanded )
+        aInfo.m_eWidth = psp::width::Expanded;
+    else if ( nStretch <= QFont::ExtraExpanded )
+        aInfo.m_eWidth = psp::width::ExtraExpanded;
+    else
+        aInfo.m_eWidth = psp::width::UltraExpanded;
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+
+    // match font to e.g. resolve "Sans"
+    psp::PrintFontManager::get().matchFont( aInfo, rLocale );
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
+             aInfo.m_nID != 0 ? "succeeded" : "failed",
+             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+
+    // font height
+    int nPointHeight = qFontInfo.pointSize();
+    if ( nPointHeight <= 0 )
+        nPointHeight = rQFont.pointSize();
+
+    sal_Int32 nDPIX, nDPIY;
+    sal_Int32 nDispDPIY = GetSalData()->GetDisplay()->GetResolution().B();
+    GetSalData()->GetDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
+
+    int nHeight = nPointHeight * nDispDPIY / nDPIY;
+    // allow for rounding in back conversion (at SetFont)
+    while( (nHeight * nDPIY / nDispDPIY) > nPointHeight )
+        nHeight--;
+    while( (nHeight * nDPIY / nDispDPIY) < nPointHeight )
+        nHeight++;
+
+    // Create the font
+    Font aFont( aInfo.m_aFamilyName, Size( 0, nHeight ) );
+    if( aInfo.m_eWeight != psp::weight::Unknown )
+        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
+    if( aInfo.m_eWidth != psp::width::Unknown )
+        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
+    if( aInfo.m_eItalic != psp::italic::Unknown )
+        aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
+    if( aInfo.m_ePitch != psp::pitch::Unknown )
+        aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
+
+    return aFont;
 }
 
 /** Implementation of KDE integration's main method.
@@ -1536,8 +1858,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "titleFont";
         if ( pConfig->hasKey( pKey ) )
         {
-            Font aFont= aStyleSettings.GetTitleFont();
-            modifyFont( aFont, pConfig->readFontEntry( pKey ) );
+            Font aFont = toFont( pConfig->readFontEntry( pKey ), rSettings.GetUILocale() );
             aStyleSettings.SetTitleFont( aFont );
             bSetTitleFont = true;
         }
@@ -1586,8 +1907,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor( toColor( qColorGroup.highlightedText() ) );
 
     // Font
-    Font aFont= aStyleSettings.GetAppFont();
-    modifyFont( aFont, kapp->font() );
+    Font aFont = toFont( kapp->font(), rSettings.GetUILocale() );
 
     aStyleSettings.SetAppFont( aFont );
     aStyleSettings.SetHelpFont( aFont );
@@ -1604,10 +1924,10 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetIconFont( aFont );
     aStyleSettings.SetGroupFont( aFont );
 
-    // Menu
     KMainWindow qMainWindow;
     qMainWindow.createGUI( "/dev/null" ); // hack
 
+    // Menu
     KMenuBar *pMenuBar = qMainWindow.menuBar();
     if ( pMenuBar )
     {
@@ -1620,8 +1940,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.highlightedText() ) );
 
         // Font
-        Font aFont= aStyleSettings.GetMenuFont();
-        modifyFont( aFont, pMenuBar->font() );
+        Font aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
         aStyleSettings.SetMenuFont( aFont );
     }
 
@@ -1629,8 +1948,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     KToolBar *pToolBar = qMainWindow.toolBar();
     if ( pToolBar )
     {
-        Font aFont= aStyleSettings.GetToolFont();
-        modifyFont( aFont, pToolBar->font() );
+        Font aFont = toFont( pToolBar->font(), rSettings.GetUILocale() );
         aStyleSettings.SetToolFont( aFont );
     }
 
@@ -1702,6 +2020,10 @@ KDESalInstance::CreateFrame( SalFrame *pParent, ULONG nStyle )
 
 void KDEData::initNWF()
 {
+    ImplSVData *pSVData = ImplGetSVData();
+    // draw toolbars on separate lines
+    pSVData->maNWFData.mbDockingAreaSeparateTB = true;
+
     pWidgetPainter = new WidgetPainter();
 }
 
@@ -1709,4 +2031,7 @@ void KDEData::deInitNWF()
 {
     delete pWidgetPainter;
     pWidgetPainter = NULL;
+
+    // We have to destroy the style early
+    kapp->setStyle( NULL );
 }
