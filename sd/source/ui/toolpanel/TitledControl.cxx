@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:14:26 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,10 @@ TitledControl::TitledControl (
     TitleBar::TitleBarType eType)
     : ::Window (pParent->GetWindow(), WB_TABSTOP),
       TreeNode(pParent),
-    mpControlFactory(NULL),
+      msTitle(rTitle),
+      mbVisible(true),
+      mpUserData(NULL),
+      mpControlFactory(NULL),
       mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
 {
     if (pControl.get() != NULL)
@@ -121,7 +124,8 @@ TitledControl::TitledControl (
       msTitle (rTitle),
       mbVisible (true),
       mpUserData (NULL),
-      mpControlFactory(pControlFactory)
+      mpControlFactory(pControlFactory),
+      mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
 {
     mpControlContainer->AddControl (::std::auto_ptr<TreeNode> (
         new TitleBar (this, rTitle, eType, true)));
