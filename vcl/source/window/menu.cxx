@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:08:05 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4113,7 +4113,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                         bDrawItemRect = false;
                         DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
                                            Region( aItemRect ),
-                                           CTRL_STATE_SELECTED | CTRL_STATE_ENABLED,
+                                           CTRL_STATE_SELECTED | ( pData->bEnabled? CTRL_STATE_ENABLED: 0 ),
                                            ImplControlValue(),
                                            OUString() );
                     }
