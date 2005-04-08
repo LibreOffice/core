@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:12:30 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,6 +1327,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
                         WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aTmp );
                 }
+                break;
 
                 case META_BMPEX_ACTION:
                 {
@@ -1382,6 +1383,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     else
                         WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aBmp );
                 }
+                break;
 
                 case META_GRADIENT_ACTION:
                 {
