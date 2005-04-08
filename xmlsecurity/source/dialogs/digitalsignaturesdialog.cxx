@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:19:21 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,9 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     catch ( uno::Exception& )
     {
         DBG_ERROR( "Exception while adding a signature!" );
+        // Don't keep invalid entries...
+        ImplGetSignatureInformations();
+        ImplFillSignaturesBox();
     }
 
     return 0;
@@ -380,6 +383,9 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         catch ( uno::Exception& )
         {
             DBG_ERROR( "Exception while removing a signature!" );
+            // Don't keep invalid entries...
+            ImplGetSignatureInformations();
+            ImplFillSignaturesBox();
         }
     }
 
@@ -411,7 +417,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
             // If we don't get it, create it from signature data:
-            if ( !xCert.is() )
+            // MT: Maybe after 2.0: Why not always use the attached certificate?
+            if ( !xCert.is() && rInfo.ouX509Certificate.getLength() )
                 xCert = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
 
             DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
@@ -428,8 +435,14 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             }
 
             // New signatures are not verified, must be valid. Status is INIT.
+            // HACK for #i46696#
+            // KEY_NOT_FOUND only happen because of author or issuer certificates are missing in keystore.
+            // We always have the key from authors certificate, because it's attached.
+            // This is a question of trust, not of a *broken* signature.
             bool bValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
-                || ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN );
+                || ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN )
+                || ( ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_KEY_NOT_FOUND) && rInfo.ouX509Certificate.getLength());
+
             if ( bValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
@@ -494,7 +507,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
 
         // Use Certificate from doc, not from key store
-        uno::Reference< dcss::security::XCertificate > xCert = maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+        uno::Reference< dcss::security::XCertificate > xCert = rInfo.ouX509Certificate.getLength() ? maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) : NULL;
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
@@ -518,14 +531,7 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream( sal_Int3
         {
             css::uno::Reference < css::io::XTruncate > xTruncate( mxSignatureStream, uno::UNO_QUERY );
             DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
-            try
-            {
-                xTruncate->truncate();
-            }
-            catch ( uno::RuntimeException& )
-            {
-                DBG_ERROR( "ImplOpenSignatureStream - Error while calling truncate!" );
-            }
+            xTruncate->truncate();
         }
         else
         {
