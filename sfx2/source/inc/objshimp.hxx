@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:25:42 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ struct SfxObjectShell_Impl
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
                         bOwnsStorage:1,
                         bNoBaseURL:1,
-                        bInitialized:1;
+                        bInitialized:1,
+                        bSignatureErrorIsShown:1;
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -251,6 +252,7 @@ struct SfxObjectShell_Impl
         , bOwnsStorage( sal_True )
         , bNoBaseURL( sal_False )
         , bInitialized( sal_False )
+        , bSignatureErrorIsShown( sal_False )
     {}
     ~SfxObjectShell_Impl();
 
