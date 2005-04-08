@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signaturetest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:02:16 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ IMPL_LINK( MyWin, DigitalSignaturesWithServiceHdl, Button*, EMPTYARG )
     uno::Reference< security::XDocumentDigitalSignatures > xD(
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
     if ( xD.is() )
-        xD->SignDocumentContent( xStore );
+        xD->signDocumentContent( xStore, NULL );
 
 
     return 0;
@@ -421,7 +421,7 @@ IMPL_LINK( MyWin, VerifyDigitalSignaturesHdl, Button*, EMPTYARG )
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
     if ( xD.is() )
     {
-        uno::Sequence< security::DocumentSignaturesInformation > aInfos = xD->VerifyDocumentContentSignatures( xStore );
+        uno::Sequence< security::DocumentSignaturesInformation > aInfos = xD->verifyDocumentContentSignatures( xStore, NULL );
         int nInfos = aInfos.getLength();
         for ( int n = 0; n < nInfos; n++ )
         {
