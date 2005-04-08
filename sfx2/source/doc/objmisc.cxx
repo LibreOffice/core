@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:05:19 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,7 +1066,6 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
     if ( GetError() != ERRCODE_NONE )
         return;
 
-    bool bShowBrokenSignatureWarningAlready = sal_False;
     if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage = pMedium->GetStorage();
@@ -1076,16 +1075,6 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
 
             if ( bHasMacros )
             {
-                // --> PB 2004-11-09 #i35190#
-                if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-                {
-                    // if the signature is broken, show here the warning before
-                    // the macro warning
-                    WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-                    aBox.Execute();
-                    bShowBrokenSignatureWarningAlready = true;
-                }
-                // <--
                 AdjustMacroMode( String() );
                 if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
                     && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
@@ -1129,11 +1118,12 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
     // xmlsec05, check with SFX team
     // Check if there is a broken signature...
     // After EA change to interaction handler...
-    if ( !bShowBrokenSignatureWarningAlready
+    if ( !pImp->bSignatureErrorIsShown
     && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
-        WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-        aBox.Execute();
+        WarningBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+        pImp->bSignatureErrorIsShown = sal_True;
     }
 }
 
@@ -1174,11 +1164,17 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !IsAbortingImport() )
             PositionView_Impl();
 
-        CheckMacrosOnLoading_Impl();
-
         // Salvage
         if ( pSalvageItem )
             bSetModifiedTRUE = sal_True;
+
+        if ( !IsEnableSetModified() )
+            EnableSetModified( sal_True );
+
+        if( !bSetModifiedTRUE && IsEnableSetModified() )
+            SetModified( sal_False );
+
+        CheckMacrosOnLoading_Impl();
     }
 
     if( ( nFlags & SFX_LOADED_IMAGES ) && !(pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
@@ -1863,6 +1859,19 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
         pImp->nMacroMode = pMacroModeItem ? pMacroModeItem->GetValue() : MacroExecMode::NEVER_EXECUTE;
     }
+
+    // --> PB 2004-11-09 #i35190#
+    // xmlsec05, check with SFX team
+    // After EA change to interaction handler...
+    if ( !pImp->bSignatureErrorIsShown && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+    {
+        // if the signature is broken, show here the warning before
+        // the macro warning
+        WarningBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+        pImp->bSignatureErrorIsShown = sal_True;
+    }
+    // <--
 
     // get setting from configuration if required
     sal_Int16 nAutoConformation = 0;
