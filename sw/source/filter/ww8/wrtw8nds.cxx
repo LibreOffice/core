@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:13:24 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,13 @@ void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
     {
         rWrt.InsUInt16(0x85a);
         rWrt.pO->Insert((BYTE)1, rWrt.pO->Count());
+    }
+
+    // #i46087# patch from james_clark; complex texts needs the undocumented SPRM 0x0882 with param 0x81.
+    if (rWrt.bWrtWW8 && GetScript() == ScriptType::COMPLEX)
+    {
+        rWrt.InsUInt16(0x882);
+        rWrt.pO->Insert((BYTE)0x81, rWrt.pO->Count());
     }
 
     /*
