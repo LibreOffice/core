@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:50:57 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ namespace svxform
         virtual void                Resize();
 
     public:
-        DataNavigatorWindow( Window* pParent );
+        DataNavigatorWindow( Window* pParent, SfxBindings* pBindings );
         ~DataNavigatorWindow();
 
         void                        SetDocModified();
