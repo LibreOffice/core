@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:21:02 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,10 +1352,10 @@ WarningBox RID_XMLSEC_WARNING_BROKENSIGNATURE
 //    HelpId = HID_XMLSEC_WARNING_BROKENSIGNATURE;
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Title [ de ] = "Ungültige Dokument Signatur" ;
+    Title [ de ] = "Ungültige Dokumentsignatur" ;
     Title [ en-US ] = "Invalid Document Signature" ;
-    Message [ de ] = "Der digital signierte Dokumentinhalt stimmt nicht mit der aktuellen Dokumentsignatur überein.\nDieses deutet auf eine Dokumentmanipulation oder einen Übertragungsfehler hin.\n\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen." ;
-    Message [ en-US ] = "The digitally signed document content does not match the current document signature.\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document." ;
+    Message [ de ] = "Der digital signierte Dokumentinhalt und/oder die Makros stimmen nicht mit der aktuellen Dokumentsignatur überein.\n\nDieses deutet auf eine Dokumentmanipulation oder einen Übertragungsfehler hin.\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen.\n\nDas Ausführen von Makros ist für dieses Dokument deaktiviert.\n " ;
+    Message [ en-US ] = "The digitally signed document content and/or macros do not match the current document signature.\n\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
 };
 
 WarningBox RID_WARNING_MACROSDISABLED
