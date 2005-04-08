@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:58:32 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,13 +320,15 @@ void SlideSorterController::Paint (
     {
         sbReentranceGuardActive = true;
 
+        Rectangle aBBox(rBBox);
         if (mbIsMakeSelectionVisiblePending)
         {
-            MakeSelectionVisible();
+            sal_Int32 nVerticalOffset = MakeSelectionVisible();
+            aBBox.Move(0,-nVerticalOffset);
             mbIsMakeSelectionVisiblePending = false;
+            GetView().GetWindow()->Invalidate();
         }
-
-        GetView().CompleteRedraw(pWindow, Region(rBBox));
+        GetView().CompleteRedraw(pWindow, Region(aBBox));
 
         sbReentranceGuardActive = false;
     }
@@ -930,7 +932,7 @@ void SlideSorterController::SelectionHasChanged (
     of a).
 
 */
-void SlideSorterController::MakeSelectionVisible (
+sal_Int32 SlideSorterController::MakeSelectionVisible (
     SelectionHint eSelectionHint)
 {
     // Determine the descriptors of the first, last, and most recently
@@ -997,14 +999,16 @@ void SlideSorterController::MakeSelectionVisible (
                     view::SlideSorterView::BBT_INFO);
         }
 
-        MakeRectangleVisible (aSelectionBox);
+        return MakeRectangleVisible (aSelectionBox);
     }
+    else
+        return 0;
 }
 
 
 
 
-void SlideSorterController::MakeRectangleVisible (const Rectangle& rBox)
+sal_Int32 SlideSorterController::MakeRectangleVisible (const Rectangle& rBox)
 {
     Rectangle aVisibleArea (GetViewShell().GetActiveWindow()->PixelToLogic(
         Rectangle(
@@ -1029,9 +1033,11 @@ void SlideSorterController::MakeRectangleVisible (const Rectangle& rBox)
     // Scroll.
     if (nNewTop != aVisibleArea.Top())
     {
-        GetScrollBarManager().SetTop (nNewTop);
         mrView.InvalidatePageObjectVisibilities ();
+        GetScrollBarManager().SetTop (nNewTop);
     }
+
+    return (aVisibleArea.Top() - nNewTop);
 }
 
 
