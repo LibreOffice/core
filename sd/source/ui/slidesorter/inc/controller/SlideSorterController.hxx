@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:51:51 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,11 @@ public:
             This is an advice on which selected page object to handle with
             the highest priority when the whole selection does not fit in to
             the visible area.
+        @return
+            Returns the vertical translation of the visible area.  It is 0
+            when no update of the visible area was done.
     */
-    void MakeSelectionVisible (
+    sal_Int32 MakeSelectionVisible (
         SelectionHint eSelectionHint = SH_RECENT);
 
     /** Modify the origin of the visible area so that the given rectangle
@@ -286,8 +289,11 @@ public:
         scrolling takes place when the given rectangle already lies in the
         visible area.  Otherwise either the top or the bottom of the given
         rectangle is aligned with the top or the bottom of the visible area.
+        @return
+            Returns the vertical translation of the visible area.  It is 0
+            when no update of the visible area was done.
     */
-    void MakeRectangleVisible (const Rectangle& rBox);
+    sal_Int32 MakeRectangleVisible (const Rectangle& rBox);
 
     /** Set the zoom factor.  The given value is clipped against an upper
         bound.
