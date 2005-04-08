@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-31 09:05:39 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,6 @@ void MigrationPage::ActivatePage()
     OWizardPage::ActivatePage();
     GrabFocus();
 }
-
 
 UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
