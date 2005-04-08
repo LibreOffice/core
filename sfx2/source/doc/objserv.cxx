@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:16:01 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
                 pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
+                pImp->bSignatureErrorIsShown = sal_False;
 
                 // merge aDispatchArgs to the request
                 SfxAllItemSet aResultParams( GetPool() );
@@ -1463,6 +1464,8 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
             pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
         else
             pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+
+        pImp->bSignatureErrorIsShown = sal_False;
 
         // Doc was not modified befor, and signature is already in the storage...
         SetModified( FALSE );
