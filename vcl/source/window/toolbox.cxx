@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:58:29 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,8 @@ static void ImplDrawGrip( ToolBox* pThis )
             ToolbarValue        aToolbarValue;
             aToolbarValue.maGripRect = pWrapper->GetDragArea();
             aControlValue.setOptionalVal( (void *)(&aToolbarValue) );
-            Region              aCtrlRegion( pWrapper->GetDragArea() );
+            Point aPt;
+            Region              aCtrlRegion( Rectangle( aPt, pThis->GetOutputSizePixel() ) );
             ControlState        nState = CTRL_STATE_ENABLED;
 
             bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
