@@ -29,7 +29,8 @@ T4_CALC = \
     pdf_Portable_Document_Format \
     calc_dBase\
     calc8\
-    calc8_template
+    calc8_template \
+    calc_MS_Excel_2003_XML
 
 # -----------------------------------------------
 # count = 28
@@ -61,8 +62,9 @@ F4_CALC = \
     calc_pdf_Export \
     dBase \
     calc8 \
-    calc8_template
-    
+    calc8_template \
+    MS_Excel_2003_XML 
+
 # -----------------------------------------------
 # count = 14
 F4_UI_CALC = \
@@ -79,7 +81,8 @@ F4_UI_CALC = \
     calc_HTML_WebQuery_ui \
     calc_StarOffice_XML_Calc_Template_ui \
     calc8_ui \
-    calc8_template_ui
+    calc8_template_ui \
+    MS_Excel_2003_XML_ui 
     
 # -----------------------------------------------
 # count = 0
