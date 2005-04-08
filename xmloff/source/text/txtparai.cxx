@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:14:30 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,7 +1176,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
                 nTmp, sValue, 0,
                GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
             {
-                rPropSet->setPropertyValue(sLevel, uno::makeAny((sal_Int16)nTmp));
+                rPropSet->setPropertyValue(sLevel, uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
         }
