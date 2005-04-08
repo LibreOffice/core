@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:24:38 $
+ *  last change: $Author: hr $ $Date: 2005-04-08 16:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,6 +842,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( nError != ERRCODE_NONE )
             SetError( nError );
     }
+
+    EnableSetModified( sal_False );
 
     bool bShowBrokenSignatureWarningAlready = false;
     if ( GetError() == ERRCODE_NONE && bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
