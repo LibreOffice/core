@@ -2,9 +2,9 @@
 #
 #   $RCSfile: exiter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:54:25 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:02:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,15 +95,12 @@ sub exit_program
     {
         $infoline = "\n***************************************************************\n";
         push(@installer::globals::logfileinfo, $infoline);
-        print("$infoline");
 
         $infoline = "$message\n";
         push(@installer::globals::logfileinfo, $infoline);
-        print("$infoline");
 
         $infoline = "in function: $function\n";
         push(@installer::globals::logfileinfo, $infoline);
-        print("$infoline");
 
         $infoline = "***************************************************************\n";
         push(@installer::globals::logfileinfo, $infoline);
@@ -114,24 +111,20 @@ sub exit_program
     {
         $infoline = "\n***************************************************************\n";
         push(@installer::globals::globallogfileinfo, $infoline);
-        print("$infoline");
 
         $infoline = "$message\n";
         push(@installer::globals::globallogfileinfo, $infoline);
-        print("$infoline");
 
         $infoline = "in function: $function\n";
         push(@installer::globals::globallogfileinfo, $infoline);
-        print("$infoline");
 
         $infoline = "***************************************************************\n";
         push(@installer::globals::globallogfileinfo, $infoline);
 
         installer::files::save_file($installer::globals::logfilename ,\@installer::globals::globallogfileinfo);
     }
-
-    print("Saved logfile: $installer::globals::logfilename\n");
-    print("$infoline");
+    installer::logger::print_error("$message\nin function: $function");
+    installer::logger::print_error("Saved logfile: $installer::globals::logfilename\n");
 
     # Saving the debug info
 
