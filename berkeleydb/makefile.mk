@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 08:33:28 $
+#   last change: $Author: hr $ $Date: 2005-04-11 08:42:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,10 @@ BUILD_ACTION=make
 .ENDIF
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
+.IF "$(OS)"=="MACOSX"
+OUT2LIB+=$(BUILD_DIR)$/.libs$/libdb_java*jnilib
+.ENDIF	# "$(OS)"=="MACOSX"
+
 .IF "$(SOLAR_JAVA)"!=""
 OUT2BIN=$(BUILD_DIR)$/db.jar
 OUT2CLASS=$(BUILD_DIR)$/db.jar
