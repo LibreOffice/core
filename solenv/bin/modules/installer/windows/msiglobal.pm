@@ -1275,7 +1275,7 @@ sub execute_packaging
 
         my $callscounter = $i + 1;
 
-        print "... makecab.exe ($callscounter) ... \n";
+        installer::logger::print_message( "... makecab.exe ($callscounter) ... \n" );
 
         # my $returnvalue = system($systemcall);
 
