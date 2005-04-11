@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-11 09:00:57 $
+#   last change: $Author: rt $ $Date: 2005-04-11 13:01:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.82 $ ';
+$id_str = ' $Revision: 1.83 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -123,6 +123,8 @@ $common_dest        = 0;            # common tree on solver
 @common_zip_list    = ();           # common files which have to be zipped
 @log_list           = ();           # LoL for logging all copy and link actions
 @common_log_list    = ();           # LoL for logging all copy and link actions in common_dest
+$logfiledate        = 0;            # Make log file as old as newest delivered file
+$commonlogfiledate  = 0;            # Make log file as old as newest delivered file
 
 $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
@@ -162,8 +164,8 @@ push_default_actions();
 parse_dlst();
 walk_action_data();
 walk_hedabu_list();
-zip_files() if $opt_zip;
 write_log() if $opt_log;
+zip_files() if $opt_zip;
 delete_output() if $opt_deloutput;
 print_stats();
 
@@ -853,6 +855,16 @@ sub is_newer
 
         $from_stat[9]-- if $from_stat[9] % 2;
 
+        if ( $to =~ /^$common_dest/ ) {
+            if ( $from_stat[9] > $commonlogfiledate ) {
+                $commonlogfiledate = $from_stat[9];
+            }
+        } elsif ( $to =~ /^$dest/ ) {
+            if ( $from_stat[9] > $logfiledate ) {
+                $logfiledate = $from_stat[9];
+            }
+        }
+
         @to_stat = stat($to);
         return \@from_stat unless -f _;
 
@@ -1248,9 +1260,11 @@ sub get_tempfilename
 sub write_log
 {
     return if $opt_delete;
-    my %log_file;
+    my (%log_file, %file_date);
     $log_file{\@log_list} = "%_DEST%/inc%_EXT%/$module/deliver.log";
     $log_file{\@common_log_list} = "%COMMON_DEST%/inc%_EXT%/$module/deliver.log";
+    $file_date{\@log_list} = $logfiledate;
+    $file_date{\@common_log_list} = $commonlogfiledate;
 
     my @logs = ( \@log_list );
     push @logs, ( \@common_log_list ) if ( $common_build );
@@ -1263,6 +1277,8 @@ sub write_log
             print LOGFILE "@$item\n";
         }
         close( LOGFILE );
+        utime($file_date{$log}, $file_date{$log}, $log_file{$log});
+        push_on_ziplist( $log_file{$log} ) if $opt_zip;
     }
     return;
 }
