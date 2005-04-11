@@ -175,6 +175,7 @@ sub getparameter
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
         elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
+        elsif ($param eq "-quiet") { $installer::globals::quiet = 1; }
         elsif ($param eq "-debug") { $installer::globals::debug = 1; }
         elsif ($param eq "-tab") { $installer::globals::tab = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
@@ -208,9 +209,7 @@ sub getparameter
         }
         else
         {
-            print("\n*************************************\n");
-            print("Sorry, unknown parameter: $param");
-            print("\n*************************************\n");
+            installer::logger::print_error( "unknown parameter: $param" );
             usage();
             exit(-1);
         }
@@ -235,9 +234,7 @@ sub control_fundamental_parameter
 
     if ($installer::globals::product eq "")
     {
-        print "\n******************************************\n";
-        print "ERROR: Product name not set!";
-        print "\n******************************************\n";
+        installer::logger::print_error( "Product name not set!" );
         usage();
         exit(-1);
     }
@@ -446,10 +443,8 @@ sub control_required_parameter
 
         if (($installer::globals::packagelist eq "") && (!($installer::globals::iswindowsbuild)))
         {
-            print "\n*********************************************************\n";
-            print "ERROR: Package list file not set (-packagelist)!\n";
-            print "This package list is required for non-Windows builds!\n";
-            print "*********************************************************\n";
+            installer::logger::print_error( "Package list file not set (-packagelist)!\n;
+                                             This package list is required for non-Windows builds!" );
             usage();
             exit(-1);
         }
@@ -475,9 +470,7 @@ sub control_required_parameter
 
         if (($installer::globals::idttemplatepath eq "") && ($installer::globals::iswindowsbuild))
         {
-            print "\n**************************************************\n";
-            print "ERROR: idt template path not set (-msitemplate)!";
-            print "\n**************************************************\n";
+            installer::logger::print_error( "idt template path not set (-msitemplate)!" );
             usage();
             exit(-1);
         }
@@ -489,9 +482,7 @@ sub control_required_parameter
 
         if (($installer::globals::idtlanguagepath eq "") && ($installer::globals::iswindowsbuild))
         {
-            print "\n**************************************************\n";
-            print "ERROR: idt language path not set (-msilanguage)!";
-            print "\n**************************************************\n";
+            installer::logger::print_error( "idt language path not set (-msilanguage)!" );
             usage();
             exit(-1);
         }
@@ -534,18 +525,14 @@ sub control_required_parameter
 
     if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ))
     {
-        print "\n*******************************************************************\n";
-        print "Sorry, Patch flag currently only available for Solaris pkg builds!";
-        print "\n*******************************************************************\n";
+        installer::logger::print_error( "Patch flag currently only available for Solaris pkg builds!" );
         usage();
         exit(-1);
     }
 
     if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::patchincludepath ))
     {
-        print "\n***********************************************************\n";
-        print "ERROR: Solaris patch requires parameter -patchinc !";
-        print "\n***********************************************************\n";
+        installer::logger::print_error( "Solaris patch requires parameter -patchinc !" );
         usage();
         exit(-1);
     }
@@ -652,7 +639,7 @@ sub outputparameter
 
     for ( my $i = 0; $i <= $#output; $i++ )
     {
-        print $output[$i];
+        installer::logger::print_message( $output[$i] );
         push(@installer::globals::globallogfileinfo, $output[$i]);
     }
 }
