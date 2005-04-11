@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 08:36:11 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:30:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.87 $$"
+LIBSMKREV!:="$$Revision: 1.88 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -208,8 +208,13 @@ JPEG3RDLIB=-ljpeg
 JPEG3RDLIB=-ljpeglib
 .ENDIF
 NEON3RDLIB=-lneon
+.IF "$(SYSTEM_DB)" == "YES"
+BERKELEYLIB=-ldb
+BERKELEYCPPLIB=-ldb_cxx
+.ELSE
 BERKELEYLIB=-ldb-4.2
 BERKELEYCPPLIB=-ldb_cxx-4.2
+.ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
