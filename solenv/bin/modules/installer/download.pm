@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 12:58:54 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:01:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ use installer::files;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::systemactions;
+use installer::logger;
 
 ##################################################################
 # Including the lowercase product name into the script template
@@ -821,7 +822,7 @@ sub call_nsis
 
     my $makensisexe = $nsispath . $installer::globals::separator . "makensis.exe";
 
-    print "... starting $makensisexe ... \n";
+    installer::logger::print_message( "... starting $makensisexe ... \n" );
 
     my $systemcall = "$makensisexe $nsifile |";
 
@@ -903,9 +904,9 @@ sub create_download_sets
 {
     my ($installationdir, $includepatharrayref, $allvariableshashref, $downloadname, $languagestringref, $languagesarrayref) = @_;
 
-    print "\n******************************************\n";
-    print "... creating download installation set ...\n";
-    print "******************************************\n";
+    installer::logger::print_message( "\n******************************************\n" );
+    installer::logger::print_message( "... creating download installation set ...\n" );
+    installer::logger::print_message( "******************************************\n" );
 
     installer::logger::include_header_into_logfile("Creating download installation sets:");
 
@@ -973,7 +974,7 @@ sub create_download_sets
         # saving the script file
         my $newscriptfilename = determine_scriptfile_name($downloadname);
 
-        print "... including installation set into $newscriptfilename ... \n";
+        installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
 
         $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
         include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary);
@@ -1014,7 +1015,7 @@ sub create_download_sets
 
         my $nsifilename = save_script_file($localnsisdir, $templatefilename, $templatefile);
 
-        print "... created NSIS file $nsifilename ... \n";
+        installer::logger::print_message( "... created NSIS file $nsifilename ... \n" );
 
         # starting the NSIS SDK to create the download file
         call_nsis($nsispath, $nsifilename);
