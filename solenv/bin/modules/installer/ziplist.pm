@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-04 10:01:24 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:03:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -668,7 +668,7 @@ sub set_manufacturer
     my $openofficeproductname = "OpenOffice.org";
     my $sunname = "Sun Microsystems";
 
-    if ( $allvariables->{'OPENSOURCE'} == 1 )
+    if ( $allvariables->{'OPENSOURCE'} && $allvariables->{'OPENSOURCE'} == 1 )
     {
         $installer::globals::isopensourceproduct = 1;
         $installer::globals::manufacturer = $openofficeproductname;
