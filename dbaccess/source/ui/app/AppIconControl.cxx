@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppIconControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:07:42 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 10:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace ::dbaui;
 //==================================================================
 OApplicationIconControl::OApplicationIconControl(Window* _pParent)
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
-                                WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL)
+                                WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
     ,DropTargetHelper(this)
     ,m_pActionListener(NULL)
 {
