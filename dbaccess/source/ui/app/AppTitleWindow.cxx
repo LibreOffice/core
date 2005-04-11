@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppTitleWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:39:59 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 10:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ void OTitleWindow::GetFocus()
 // -----------------------------------------------------------------------------
 long OTitleWindow::GetWidthPixel() const
 {
-    sal_Int32 nWidth = GetTextWidth(m_aTitle.GetText());
+    Size aTextSize = LogicToPixel( Size( 12, 0 ), MAP_APPFONT );
+    sal_Int32 nWidth = GetTextWidth(m_aTitle.GetText()) + 2*aTextSize.Width();
 
     return nWidth;
 }
