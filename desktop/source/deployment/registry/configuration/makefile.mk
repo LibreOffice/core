@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:49:38 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:35:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,8 +68,8 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_DB3)" == "YES"
-CFLAGS+=-DSYSTEM_DB3
+.IF "$(SYSTEM_DB)" == "YES"
+CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 .ENDIF
 
 SRS1NAME = $(TARGET)
