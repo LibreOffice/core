@@ -172,7 +172,7 @@ sub create_tar_gz_file
 
     my $targzname = $packagename . ".tar.gz";
     $systemcall = "cd $installdir; tar -cf - $packagename | gzip > $targzname";
-    print "... $systemcall ...\n";
+    installer::logger::print_message( "... $systemcall ...\n" );
 
     my $returnvalue = system($systemcall);
 
@@ -395,7 +395,7 @@ sub build_installer_for_languagepack
 {
     my ($installdir, $allvariableshashref, $includepatharrayref, $languagesarrayref) = @_;
 
-    print "... creating shell script installer ...\n";
+    installer::logger::print_message( "... creating shell script installer ...\n" );
 
     installer::logger::include_header_into_logfile("Creating shell script installer:");
 
