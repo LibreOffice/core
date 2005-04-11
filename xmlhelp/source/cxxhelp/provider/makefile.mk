@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 08:38:21 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:32:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,8 @@ NO_BSYMBOLIC=TRUE
 
 CFLAGS +=  -DHAVE_EXPAT_H
 
-.IF "$(SYSTEM_DB3)" == "YES"
-CFLAGS+=-DSYSTEM_DB3
+.IF "$(SYSTEM_DB)" == "YES"
+CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 .ENDIF
 
 .IF "$(SYSTEM_SABLOT)" == "YES"
