@@ -2,9 +2,9 @@
  *
  *  $RCSfile: db.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-11 08:42:09 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 09:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,11 @@
 #ifndef BERKELEYDBPROXY_DB_HXX_
 #define BERKELEYDBPROXY_DB_HXX_
 
+#ifdef SYSTEM_DB
+#include <db.h>
+#else
 #include <berkeleydb/db.h>
+#endif
 
 #include <rtl/string.hxx>
 
