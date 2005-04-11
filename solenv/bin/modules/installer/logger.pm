@@ -2,9 +2,9 @@
 #
 #   $RCSfile: logger.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:46:09 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:03:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,7 +188,7 @@ sub savedebug
     my ( $outputdir ) = @_;
 
     installer::files::save_file($outputdir . $installer::globals::debugfilename, \@installer::globals::functioncalls);
-    print "... writing debug file " . $outputdir . $installer::globals::debugfilename . "\n";
+    print_message( "... writing debug file " . $outputdir . $installer::globals::debugfilename . "\n" );
 }
 
 ###############################################################
@@ -261,7 +261,45 @@ sub get_time_string
 sub stoptime
 {
     my $infoline = get_time_string();
-    print "$infoline";
+    print_message( "$infoline" );
+}
+
+###############################################################
+# Console output: messages
+###############################################################
+
+sub print_message
+{
+    my $message = shift;
+    chomp $message;
+    print "$message\n" if ( ! $installer::globals::quiet );
+    return;
+}
+
+###############################################################
+# Console output: warnings
+###############################################################
+
+sub print_warning
+{
+    my $message = shift;
+    chomp $message;
+    print STDERR "WARNING: $message";
+    return;
+}
+
+###############################################################
+# Console output: errors
+###############################################################
+
+sub print_error
+{
+    my $message = shift;
+    chomp $message;
+    print STDERR "\n**************************************************\n";
+    print STDERR "ERROR: $message";
+    print STDERR "\n**************************************************\n";
+    return;
 }
 
 1;
