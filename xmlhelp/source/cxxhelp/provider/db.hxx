@@ -2,9 +2,9 @@
  *
  *  $RCSfile: db.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:38:07 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 08:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ namespace berkeleydbproxy {
         friend class Dbc;
 
     public:
-        Dbt(void *data, size_t size);
+        Dbt(void *data_arg, u_int32_t size_arg);
 
         Dbt();
         Dbt(const Dbt & other);
