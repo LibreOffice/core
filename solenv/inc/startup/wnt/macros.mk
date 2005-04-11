@@ -6,11 +6,15 @@
 #
 .IMPORT .IGNORE : COMSPEC
 
-# SHELL has to be set in OOo build environment
 .IF $(SHELL) == $(NULL)
-.ERROR : ; @echo Forced error: Environment variable SHELL has to be set for OOo build!
-SHELL_variable_needed
-.ENDIF
+   .IF $(COMSPEC) == $(NULL)
+# SHELL has to be set in OOo build environment
+        .ERROR : ; @echo Forced error: Environment variable SHELL has to be set for OOo build!
+        SHELL_variable_needed
+   .ELSE
+      SHELL *:= $(COMSPEC)
+   .END
+.END
 
 GROUPSHELL *:= $(SHELL)
 
