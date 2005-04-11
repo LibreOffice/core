@@ -123,18 +123,18 @@ sub check_system_path
 
     foreach $onefile ( @needed_files_in_path )
     {
-        print "...... searching $onefile ...";
+        installer::logger::print_message( "...... searching $onefile ..." );
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefile, $patharrayref , 0);
 
         if ( $$fileref eq "" )
         {
             $error = 1;
-            print "ERROR: Not found\n";
+            installer::logger::print_error( "$onefile not found\n" );
         }
         else
         {
-            print "\tFound: $$fileref\n";
+            installer::logger::print_message( "\tFound: $$fileref\n" );
         }
     }
 
@@ -182,16 +182,10 @@ sub check_system_environment
         if ( $ENV{$key} ) { $value = $ENV{$key}; }
         $variables{$key} = $value;
 
-        print "...... $key ...";
-
         if ( $value eq "" )
         {
-            print "\tERROR: Not set\n";
+            installer::logger::print_error( "$key not set in environment\n" );
             $error = 1;
-        }
-        else
-        {
-            print "\tSET\n";
         }
     }
 
@@ -280,9 +274,7 @@ sub check_packagelist
 
             if ( $value eq "" )
             {
-                print "\n*********************************************************************\n";
-                print "ERROR in package list: No value for $element !";
-                print "\n*********************************************************************\n";
+                installer::logger::print_error( "ERROR in package list: No value for $element !" );
                 usage();
                 exit(-1);
             }
@@ -365,7 +357,7 @@ sub check_logfile
     for ( my $i = 0; $i <= $#output; $i++ )
     {
         my $line = "$output[$i]";
-        print "$line";
+        installer::logger::print_message( "$line" );
         push( @installer::globals::logfileinfo, $line);
         push( @installer::globals::errorlogfileinfo, $line);
     }
