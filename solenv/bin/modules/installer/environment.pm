@@ -2,9 +2,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:54:01 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:02:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,8 @@ sub set_global_environment_variables
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjava = 1; }
     if ( $ENV{'JDKLIB'} ) { $installer::globals::jdklib = $ENV{'JDKLIB'}; }
     if ( $ENV{'JREPATH'} ) { $installer::globals::jrepath = $ENV{'JREPATH'}; }
+
+    if ( $ENV{'BSCLIENT'} && ( (lc $ENV{'BSCLIENT'}) eq "true" ) ) { $installer::globals::quiet = 1; }
 }
 
 1;
