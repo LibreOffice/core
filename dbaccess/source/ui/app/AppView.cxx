@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:08:01 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 10:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void OAppBorderWindow::Resize()
             if ( pSwap->GetEntryCount() != 0 )
                 nX = pSwap->GetBoundingBox( pSwap->GetEntry(0) ).GetWidth() + aFLSize.Height();
         }
-        nX = ::std::max(m_pPanel->GetWidthPixel(),nX);
+        nX = ::std::max(m_pPanel->GetWidthPixel() ,nX);
         m_pPanel->SetPosSizePixel(Point(0,0),Size(nX,nOutputHeight));
     }
 
