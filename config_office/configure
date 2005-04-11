@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK JAVACACHE XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS SYSTEM_NAS NAS_INCLUDES ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS MOC KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK JAVACACHE XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS SYSTEM_NAS NAS_INCLUDES ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS MOC KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1005,6 +1005,9 @@ Optional Packages:
 
   --with-system-python    Use python already on system
 
+  --with-system-db       Use berkeley db already on system
+
+  --with-db-jar=JARFILE          Specify path to jarfile manually
   --with-system-sablot    Use sablot already on system
 
   --with-system-odbc-headers     Use the odbc headers already on system
@@ -1892,9 +1895,19 @@ fi;
 #AC_ARG_WITH(system-icu,
 #[  --with-system-icu       Use icu already on system
 #],,)
-#AC_ARG_WITH(system-db3,
-#[  --with-system-db3       Use berkley ver 3 db already on system
-#],,)
+
+# Check whether --with-system-db or --without-system-db was given.
+if test "${with_system_db+set}" = set; then
+  withval="$with_system_db"
+
+fi;
+
+# Check whether --with-db-jar or --without-db-jar was given.
+if test "${with_db_jar+set}" = set; then
+  withval="$with_db_jar"
+   DB_JAR="$withval"
+
+fi;
 
 # Check whether --with-system-sablot or --without-system-sablot was given.
 if test "${with_system_sablot+set}" = set; then
@@ -9574,20 +9587,364 @@ fi
 
 
 
-# DISABLED; DOESN'T WORK, WE'LL NEED DB 4.1/4.2
-#AC_MSG_CHECKING([which db to use])
-#if test -n "$with_system_db3" -o -n "$with_system_libs" && \
-#	test "$with_system_db3" != "no"; then
-#    SYSTEM_DB3=YES
-#    AC_MSG_RESULT([external])
-#    AC_LANG(C++)
-#    AC_CHECK_HEADER(db3/db_cxx.h, [],
-#                    [AC_MSG_ERROR([db3/db_cxx.h could not be found. install devel db3 libraries])], [])
-#else
-#    AC_MSG_RESULT([internal])
-#    SYSTEM_DB3=NO
-#fi
-#AC_SUBST(SYSTEM_DB3)
+echo "$as_me:$LINENO: checking which db to use" >&5
+echo $ECHO_N "checking which db to use... $ECHO_C" >&6
+if test -n "$with_system_db" -o -n "$with_system_libs" && \
+	test "$with_system_db" != "no"; then
+    SYSTEM_DB=YES
+    echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+    echo "$as_me:$LINENO: checking for db.h" >&5
+echo $ECHO_N "checking for db.h... $ECHO_C" >&6
+if test "${ac_cv_header_db_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+
+#include <db.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_header_db_h=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_header_db_h=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_db_h" >&5
+echo "${ECHO_T}$ac_cv_header_db_h" >&6
+if test $ac_cv_header_db_h = yes; then
+   DB_INCLUDES=/usr/include
+else
+
+             CFLAGS=-I/usr/include/db4
+             echo "$as_me:$LINENO: checking for db4/db.h" >&5
+echo $ECHO_N "checking for db4/db.h... $ECHO_C" >&6
+if test "${ac_cv_header_db4_db_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
++
+
+#include <db4/db.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_header_db4_db_h=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_header_db4_db_h=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_db4_db_h" >&5
+echo "${ECHO_T}$ac_cv_header_db4_db_h" >&6
+if test $ac_cv_header_db4_db_h = yes; then
+   DB_INCLUDES=/usr/include/db4
+else
+   { { echo "$as_me:$LINENO: error: no. install the db4 libraries" >&5
+echo "$as_me: error: no. install the db4 libraries" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+fi
+
+
+    echo "$as_me:$LINENO: checking whether db is at least 4.1" >&5
+echo $ECHO_N "checking whether db is at least 4.1... $ECHO_C" >&6
+    # FIXME: Will db 4.3 work? Can't test it since the 4.3 java bindings are not packaged :/
+    for v in 1 2; do
+       if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <db.h>
+
+int main(int argc, char **argv) {
+       if(DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR == $v) return 0;
+       else return 1;
+}
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  DB_VERSION_MINOR=$v
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+    done
+    if test "$DB_VERSION_MINOR" -gt "1"; then
+       echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+       DB_VERSION=4.$DB_VERSION_MINOR
+    else
+       echo "$as_me:$LINENO: result: no. you need at least db 4.1" >&5
+echo "${ECHO_T}no. you need at least db 4.1" >&6
+    fi
+    # does not work :/
+    #AC_CHECK_LIB(db, db_create, [],
+    #  [AC_MSG_ERROR([db library not installed or functional])], [])
+
+echo "$as_me:$LINENO: checking for main in -ldb" >&5
+echo $ECHO_N "checking for main in -ldb... $ECHO_C" >&6
+if test "${ac_cv_lib_db_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldb  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_db_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_db_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_db_main" >&5
+echo "${ECHO_T}$ac_cv_lib_db_main" >&6
+if test $ac_cv_lib_db_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDB 1
+_ACEOF
+
+  LIBS="-ldb $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: db not installed or functional" >&5
+echo "$as_me: error: db not installed or functional" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+ac_cv_lib_db=ac_cv_lib_db_main
+
+     if test "$SOLAR_JAVA" = "TRUE"; then
+       if test -z $DB_JAR; then
+         # three different naming methods *grumble* Are there even more?
+         echo "$as_me:$LINENO: checking for /usr/share/java/db.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/db.jar... $ECHO_C" >&6
+if test "${ac_cv_file__usr_share_java_db_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/db.jar"; then
+  ac_cv_file__usr_share_java_db_jar=yes
+else
+  ac_cv_file__usr_share_java_db_jar=no
+fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_db_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_db_jar" >&6
+if test $ac_cv_file__usr_share_java_db_jar = yes; then
+   JARVER=0
+else
+
+             as_ac_File=`echo "ac_cv_file_/usr/share/java/db-$DB_VERSION.jar" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for /usr/share/java/db-$DB_VERSION.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/db-$DB_VERSION.jar... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/db-$DB_VERSION.jar"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+   JARVER=1
+else
+   as_ac_File=`echo "ac_cv_file_/usr/share/java/libdb$DB_VERSION-java.jar" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for /usr/share/java/libdb$DB_VERSION-java.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libdb$DB_VERSION-java.jar... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libdb$DB_VERSION-java.jar"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+   JARVER_LONGSTYLE=1
+else
+   { { echo "$as_me:$LINENO: error: db$DB_VERSION_MAJOR Java bindings not found" >&5
+echo "$as_me: error: db$DB_VERSION_MAJOR Java bindings not found" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+
+
+fi
+
+         if test "$JARVER" = "1"; then
+           DB_JAR=/usr/share/java/jar-$DB_VERSION.jar
+         else
+           DB_JAR=/usr/share/java/db.jar
+         fi
+         if test "$JARVER_LONGSTYLE" = "1"; then
+           DB_JAR=/usr/share/java/libdb$DB_VERSION-java.jar
+         fi
+	  if test -z "$DB_JAR"; then
+	    { { echo "$as_me:$LINENO: error: libdb $DB_VERSION jar not found. Install it or specify path with --with-db-jar=/path/to/jar" >&5
+echo "$as_me: error: libdb $DB_VERSION jar not found. Install it or specify path with --with-db-jar=/path/to/jar" >&2;}
+   { (exit 1); exit 1; }; }
+	  fi
+       fi
+    fi
+    SCPDEFS="$SCPDEFS -DSYSTEM_DB"
+else
+    echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+    SYSTEM_DB=NO
+fi
+
+
+
+
 
 echo "$as_me:$LINENO: checking which sablot to use" >&5
 echo $ECHO_N "checking which sablot to use... $ECHO_C" >&6
@@ -17642,6 +17999,10 @@ s,@pkgpyexecdir@,$pkgpyexecdir,;t t
 s,@SYSTEM_PYTHON@,$SYSTEM_PYTHON,;t t
 s,@PYTHON_CFLAGS@,$PYTHON_CFLAGS,;t t
 s,@PYTHON_LIBS@,$PYTHON_LIBS,;t t
+s,@SYSTEM_DB@,$SYSTEM_DB,;t t
+s,@DB_VERSION@,$DB_VERSION,;t t
+s,@DB_INCLUDES@,$DB_INCLUDES,;t t
+s,@DB_JAR@,$DB_JAR,;t t
 s,@SABLOTCONFIG@,$SABLOTCONFIG,;t t
 s,@SYSTEM_SABLOT@,$SYSTEM_SABLOT,;t t
 s,@SABLOT_LIBS@,$SABLOT_LIBS,;t t
