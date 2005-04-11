@@ -1,6 +1,4 @@
 mkdir: %_DEST%\inc%_EXT%\jvmfwk
-mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_unx
-mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_wnt
 ..\inc\jvmfwk\framework.h %_DEST%\inc%_EXT%\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc%_EXT%\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
