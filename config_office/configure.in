@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-04-11 08:52:24 $
+dnl * Date: $Date: 2005-04-11 09:31:15 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.115 $ )
+AC_REVISION( $Revision: 1.116 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -187,9 +187,13 @@ AC_ARG_WITH(system-python,
 #AC_ARG_WITH(system-icu,
 #[  --with-system-icu       Use icu already on system
 #],,)
-#AC_ARG_WITH(system-db3,
-#[  --with-system-db3       Use berkley ver 3 db already on system
-#],,)
+AC_ARG_WITH(system-db,
+[  --with-system-db       Use berkeley db already on system
+],,)
+AC_ARG_WITH(db-jar,
+[  --with-db-jar=JARFILE          Specify path to jarfile manually ],
+[ DB_JAR="$withval"
+])
 AC_ARG_WITH(system-sablot,
 [  --with-system-sablot    Use sablot already on system
 ],,)
@@ -2374,23 +2378,81 @@ AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 
-# DISABLED; DOESN'T WORK, WE'LL NEED DB 4.1/4.2
 dnl ===================================================================
 dnl Check for system berkley db
 dnl ===================================================================
-#AC_MSG_CHECKING([which db to use])
-#if test -n "$with_system_db3" -o -n "$with_system_libs" && \
-#	test "$with_system_db3" != "no"; then
-#    SYSTEM_DB3=YES
-#    AC_MSG_RESULT([external])
-#    AC_LANG(C++)
-#    AC_CHECK_HEADER(db3/db_cxx.h, [],
-#                    [AC_MSG_ERROR([db3/db_cxx.h could not be found. install devel db3 libraries])], [])
-#else
-#    AC_MSG_RESULT([internal])
-#    SYSTEM_DB3=NO
-#fi
-#AC_SUBST(SYSTEM_DB3)
+AC_MSG_CHECKING([which db to use])
+if test -n "$with_system_db" -o -n "$with_system_libs" && \
+	test "$with_system_db" != "no"; then
+    SYSTEM_DB=YES
+    AC_MSG_RESULT([external])
+    AC_CHECK_HEADER(db.h, [ DB_INCLUDES=/usr/include ],
+        [
+             CFLAGS=-I/usr/include/db4
+             AC_CHECK_HEADER(db4/db.h,
+             [ DB_INCLUDES=/usr/include/db4 ],
+             [ AC_MSG_ERROR(no. install the db4 libraries) ], []+             )
+        ], []
+    )
+    AC_MSG_CHECKING([whether db is at least 4.1])
+    # FIXME: Will db 4.3 work? Can't test it since the 4.3 java bindings are not packaged :/
+    for v in 1 2; do
+       AC_TRY_RUN([
+#include <db.h>
+
+int main(int argc, char **argv) {
+       if(DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR == $v) return 0;
+       else return 1;
+}
+       ], [DB_VERSION_MINOR=$v], [])
+    done
+    if test "$DB_VERSION_MINOR" -gt "1"; then
+       AC_MSG_RESULT([OK])
+       DB_VERSION=4.$DB_VERSION_MINOR
+    else
+       AC_MSG_RESULT([no. you need at least db 4.1])
+    fi
+    # does not work :/
+    #AC_CHECK_LIB(db, db_create, [],
+    #  [AC_MSG_ERROR([db library not installed or functional])], [])
+    AC_HAVE_LIBRARY(db, [],
+      [AC_MSG_ERROR([db not installed or functional])], [])
+     if test "$SOLAR_JAVA" = "TRUE"; then
+       if test -z $DB_JAR; then
+         # three different naming methods *grumble* Are there even more?
+         AC_CHECK_FILE(/usr/share/java/db.jar, [ JARVER=0 ],
+           [
+             AC_CHECK_FILE(/usr/share/java/db-$DB_VERSION.jar, [ JARVER=1 ],
+               [ AC_CHECK_FILE(/usr/share/java/libdb$DB_VERSION-java.jar,
+                   [ JARVER_LONGSTYLE=1 ],
+                   [ AC_MSG_ERROR(db$DB_VERSION_MAJOR Java bindings not found)]
+                 )
+               ]
+             )
+           ]
+         )
+         if test "$JARVER" = "1"; then
+           DB_JAR=/usr/share/java/jar-$DB_VERSION.jar
+         else
+           DB_JAR=/usr/share/java/db.jar
+         fi
+         if test "$JARVER_LONGSTYLE" = "1"; then
+           DB_JAR=/usr/share/java/libdb$DB_VERSION-java.jar
+         fi
+	  if test -z "$DB_JAR"; then
+	    AC_MSG_ERROR([libdb $DB_VERSION jar not found. Install it or specify path with --with-db-jar=/path/to/jar])
+	  fi
+       fi
+    fi
+    SCPDEFS="$SCPDEFS -DSYSTEM_DB"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_DB=NO
+fi
+AC_SUBST(SYSTEM_DB)
+AC_SUBST(DB_VERSION)
+AC_SUBST(DB_INCLUDES)
+AC_SUBST(DB_JAR)
 
 dnl ===================================================================
 dnl Check for system sablot
