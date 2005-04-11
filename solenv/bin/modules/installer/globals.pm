@@ -155,6 +155,7 @@ BEGIN
     @errorlogfileinfo = ();
     @globallogfileinfo = ();
     $exitlog = "";
+    $quiet = 0;
 
     $debug = 0;
     $debugfilename = "debug.txt";
