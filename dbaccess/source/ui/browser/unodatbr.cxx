@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:08:40 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 10:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3053,10 +3053,7 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMAND))
             aValue.Value >>= sInitialCommand;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
-        {
             xConnection.set(aValue.Value,UNO_QUERY);
-            m_bOwnConnection = !xConnection.is();
-        }
         else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_CATALOGNAME))
             aValue.Value >>= aCatalogName;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_SCHEMANAME))
@@ -3149,37 +3146,66 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         }
     }
 
-
-    Reference<XConnection> xEmbeddedConnection;
-    sal_Bool bEmbedded = sal_False;
+    // are we loaded into a (sub)frame of an embedded document (i.e. a form belonging to a database
+    // document)?
+    sal_Bool bSubFrameOfEmbeddedDocument = sal_False;
     if ( xFrame.is() )
     {
         Reference<XFramesSupplier> xSup = xFrame->getCreator();
         Reference<XController> xCont = xSup.is() ? xSup->getController() : Reference<XController>();
 
-        if ( xCont.is() && ::dbtools::isEmbeddedInDatabase(xCont->getModel(),xEmbeddedConnection) && xEmbeddedConnection.is() )
-        {
-            xConnection = xEmbeddedConnection;
-            bEmbedded = sal_True;
-        }
+        bSubFrameOfEmbeddedDocument = xCont.is() && ::dbtools::isEmbeddedInDatabase( xCont->getModel(), xConnection );
     }
 
+    // if we have a connection at this point, it was either passed from outside, our
+    // determined from a outer DB document. In both cases, do not dispose it later on.
     if ( xConnection.is() )
-        startConnectionListening(xConnection);
-    Reference<XChild> xChild(xConnection,UNO_QUERY);
-    if ( !sInitialDataSourceName.getLength() && xChild.is() )
-    {
-        Reference<XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-        if ( xProp.is() && (xProp->getPropertyValue(PROPERTY_NAME) >>= sInitialDataSourceName) && sInitialDataSourceName.getLength() && bEmbedded )
-        {
-            Image aDBImage, aQueriesImage, aTablesImage;
-            String sQueriesName, sTablesName;
+        m_bOwnConnection = sal_False;
 
-            implAddDatasource(sInitialDataSourceName, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage,xConnection);
-            m_pTreeView->getListBox()->Expand(m_pTreeView->getListBox()->First());
+    // should we display all registered databases in the left hand side tree?
+    // or only *one* special?
+    sal_Bool bLimitedTreeEntries = sal_False;
+    // if we're part of a frame which is a secondary frame of a database document, then only
+    // display the database for this document, not all registered ones
+    bLimitedTreeEntries |= bSubFrameOfEmbeddedDocument;
+    // if the tree view is not to be displayed at all, then only display the data source
+    // which was given as initial selection
+    bLimitedTreeEntries |= ( m_bEnableBrowser != sal_True );
+
+    if ( bLimitedTreeEntries )
+    {
+        if ( xConnection.is() )
+        {
+            startConnectionListening( xConnection );
+
+            // if no initial name was given, try to obtain one from the data source
+            if ( !sInitialDataSourceName.getLength() )
+            {
+                Reference< XChild > xChild( xConnection, UNO_QUERY );
+                Reference< XPropertySet > xDataSourceProperties;
+                if ( xChild.is() )
+                    xDataSourceProperties = xDataSourceProperties.query( xChild->getParent() );
+                if ( xDataSourceProperties.is() )
+                {
+                    try
+                    {
+                        OSL_VERIFY( xDataSourceProperties->getPropertyValue( PROPERTY_NAME ) >>= sInitialDataSourceName );
+                    }
+                    catch( const Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::impl_initialize: a connection parent which does not have a 'Name'!??" );
+                    }
+                }
+            }
         }
+
+        Image aDBImage, aQueriesImage, aTablesImage;
+        String sQueriesName, sTablesName;
+
+        implAddDatasource( sInitialDataSourceName, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage, xConnection );
+        m_pTreeView->getListBox()->Expand( m_pTreeView->getListBox()->First() );
     }
-    if ( !bEmbedded )
+    else
         initializeTreeModel();
 
     if ( implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing,xConnection,sal_True) )
