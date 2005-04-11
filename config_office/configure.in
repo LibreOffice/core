@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-04-06 10:53:18 $
+dnl * Date: $Date: 2005-04-11 08:52:24 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.114 $ )
+AC_REVISION( $Revision: 1.115 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -24,15 +24,15 @@ AC_ARG_WITH(gnu-cp,
 ],,)
 AC_ARG_WITH(gpc,
 [  --without-gpc           Use the internal polygon clipping code instead of
-			  the external GPC polygon clipping library.
+                          the external GPC polygon clipping library.
 ],,)
 AC_ARG_ENABLE(libart,
 [  --enable-libart         Enables the use of libart, instead of GPC for
-			  polygon clipping.
+                          polygon clipping.
 ],,)
 AC_ARG_ENABLE(openldap,
-[   --enable-openldap      Enables the use of the OpenLDAP LDAP SDK instead
-                           of the Netscape/Mozilla one
+[  --enable-openldap       Enables the use of the OpenLDAP LDAP SDK instead
+                          of the Netscape/Mozilla one
 ],,)
 AC_ARG_ENABLE(libsn,
 [  --enable-libsn          Enables the use of libstartup-notification
@@ -41,8 +41,6 @@ AC_ARG_ENABLE(mozilla,
 [  --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
                           version, use this option.
- 
-                          Usage: --disable-mozilla
 ],,enable_mozilla="yes")
 AC_ARG_WITH(fonts,
 [  --without-fonts         Removes Bitstream Vera fonts from
@@ -51,11 +49,9 @@ AC_ARG_WITH(fonts,
                           to be already available
 ],,)
 AC_ARG_ENABLE(epm,
-[  --disable-epm          OO.o includes self-packaging code, that requires
+[  --disable-epm           OO.o includes self-packaging code, that requires
                           epm, however epm is useless for large scale
                           package building.
-
-                          Usage: --disable-epm
 ],,enable_epm="yes")
 AC_ARG_ENABLE(fontooo,
 [  --disable-fontooo       disable FontOOo
@@ -68,29 +64,28 @@ AC_ARG_WITH(system-mspack,
 [  --with-system-mspack    use libmspack already installed on system
 ],,)
 AC_ARG_ENABLE(cups,
-[  --enable-cups           enable cups support in the psprint project
+[  --disable-cups          disable cups support in the psprint project
 ],,enable_cups=yes)
 AC_ARG_ENABLE(fontconfig,
-[  --enable-fontconfig     enable support for the fontconfig library
+[  --disable-fontconfig    disable support for the fontconfig library
 ],,enable_fontconfig=yes)
 AC_ARG_ENABLE(directx,
 [  --disable-directx       Remove DirectX implementation for the new XCanvas
-                          interface. This requires more installed on Windows to
-                          compile.  (DirectX SDK, GDI+ libs)
+                          interface. The DirectX support requires more stuff installed on
+                          Windows to compile.  (DirectX SDK, GDI+ libs)
 ],,enable_directx=yes)
-
 AC_ARG_ENABLE(atlmfc,
 [  --disable-atlmfc        Disable the use of ATL/MFC for windows build.
 ],,)
 
 AC_ARG_ENABLE(symbols,
-[  --enable-symbols        Include debugging symbols in output.  Warning -  
-                          a complete build needs 8 Gb of space and takes 
-                          much longer.  (enables -g compiler flag)
+[  --enable-symbols        Include debugging symbols in output.
+                          Implicitly activated by --enable-crashdump (see below)
+                          WARNING - a complete build needs 8 Gb of space and
+                          takes much longer. (enables -g compiler flag)
 
                           --enable-symbols=SMALL sets the gcc -g1 setting
                           which is smaller.
-
 ],,)
 AC_ARG_ENABLE(debug,
 [  --enable-debug:         Include debugging symbols from --enable-symbols
@@ -103,25 +98,28 @@ AC_ARG_ENABLE(dbgutil,
                           Independent from --enable-debug
 ],,)
 AC_ARG_ENABLE(crashdump,
-[  --enable-crashdump:     Enable the crashdump feature code. This option
-                          implicitly activates --enable-symbols.
-],,enable_crashdump=STATIC)
+[[  --enable-crashdump[=yes|TRUE|STATIC|no]
+                          Enable (disable) the crashdump feature code. [default=STATIC]
+                          When enabled, this option implicitly  
+                          activates --enable-symbols (see above).
+]],,enable_crashdump=STATIC)
 AC_ARG_ENABLE(cl-standard,
-[  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing standard compiler.
-                          ( This just disables optimization options and therefore removes a lot of
-                          warnings when using the cheaper standard compiler. )
+[  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
+                          standard compiler. ( This just disavles optimization
+                          options and therefore removes a lot of warnings when
+                          using the cheaper standard compiler. )
 ],,)
 AC_ARG_ENABLE(vctk,
 [  --enable-vctk           Tell configure to check for the MS VC Toolkit 2003.
                           ( This is experimental! )
 ],,)
 AC_ARG_ENABLE(gtk,
-[  --enable-gtk            Determines whether to use Gtk+ vclplug on platforms
+[  --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
                           where Gtk+ is available.
 ],,enable_gtk=yes)
 AC_ARG_ENABLE(gnome-vfs,
-[  --enable-gnome-vfs      Determines whether to use the Gnome Virtual Filing
-			  System on platforms where that VFS is available
+[  --disable-gnome-vfs     Determines whether to use the Gnome Virtual Filing
+                          System on platforms where that VFS is available
 ],,enable_gnome_vfs=yes)
 AC_ARG_ENABLE(static-gtk,
 [  --enable-static-gtk:    Modules that are linked against gtk libraries use
@@ -133,13 +131,13 @@ AC_ARG_ENABLE(build-mozilla,
                           components from the mozilla source code.
 ],,)
 AC_ARG_WITH(mozilla-version,
-[  --with-mozilla-version   Choose which version of mozilla to use while building
-                           mozilla. Default: 1.7.5.
-                           Note that not all versions are supported.
+[  --with-mozilla-version  Choose which version of mozilla to use while building
+                          mozilla. Default: 1.7.5.
+                          Note that not all versions are supported.
 ],,)
 AC_ARG_WITH(mozilla-toolkit,
-[  --with-mozilla-toolkit   Choose which GUI toolkit to use while building mozilla
-                           components. Default: gtk2
+[  --with-mozilla-toolkit  Choose which GUI toolkit to use while building mozilla
+                          components. Default: gtk2
 ],,)
 AC_ARG_ENABLE(kde,
 [  --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
@@ -152,18 +150,18 @@ AC_ARG_ENABLE(rpath,
 [  --disable-rpath:        Disable the use of relative paths in shared libraries
 ],,)
 AC_ARG_ENABLE(pasf,
-[  --enable-pasf           enable support for sound using portaudio/sndfile
+[  --disable-pasf          disable support for sound using portaudio/sndfile
 ],,enable_pasf=yes)
 AC_ARG_WITH(myspell-dicts,
-[  --without-myspell-dicts   Removes myspell dictionaries from openoffice.org
-                         installation set, for people building for specific
-                         distributions where the myspell dictionaries are
-                         installed from other sources
+[  --without-myspell-dicts Removes myspell dictionaries from openoffice.org
+                          installation set, for people building for specific
+                          distributions where the myspell dictionaries are
+                          installed from other sources
 ],,)
 AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
-			   --with-system-* flags except mozilla, python and
-			   odbc-headers
+                          --with-system-* flags except mozilla, python and
+                          odbc/sane/xrender-header(s)
 ],,)
 AC_ARG_WITH(system-zlib,
 [  --with-system-zlib      Use zlib already on system
@@ -178,7 +176,7 @@ AC_ARG_WITH(system-freetype,
 [  --with-system-freetype  Use freetype already on system
 ],,)
 AC_ARG_WITH(system-libwpd,
-[  --with-system-libwpd   Use libwpd already on system
+[  --with-system-libwpd    Use libwpd already on system
 ],,)
 AC_ARG_WITH(system-libxml,
 [  --with-system-libxml    Use libxml already on system
@@ -196,13 +194,13 @@ AC_ARG_WITH(system-sablot,
 [  --with-system-sablot    Use sablot already on system
 ],,)
 AC_ARG_WITH(system-odbc,
-[  --with-system-odbc-headers      Use the odbc headers already on system
+[  --with-system-odbc-headers     Use the odbc headers already on system
 ],,)
 AC_ARG_WITH(system-sane,
-[  --with-system-sane-header       Use sane.h already on system
+[  --with-system-sane-header      Use sane.h already on system
 ],,)
 AC_ARG_WITH(system-xrender,
-[  --with-system-xrender-headers   Use XRender headers already on system
+[  --with-system-xrender-headers  Use XRender headers already on system
 ],,)
 AC_ARG_WITH(system-curl,
 [  --with-system-curl      Use curl already on system
@@ -211,49 +209,52 @@ AC_ARG_WITH(system-boost,
 [  --with-system-boost     Use boost already on system
 ],,)
 AC_ARG_WITH(system-nas,
-[  --with-system-nas      Use nas already on system
+[  --with-system-nas       Use nas already on system
 ],,)
 AC_ARG_WITH(system-sndfile,
-[  --with-system-sndfile  Use sndfile already on system
+[  --with-system-sndfile   Use sndfile already on system
 ],,)
 AC_ARG_WITH(system-portaudio,
 [  --with-system-portaudio Use portaudio already on system
 ],,)
 AC_ARG_WITH(system-neon,
-[  --with-system-neon     Use neon already on system
+[  --with-system-neon      Use neon already on system
 ],,)
 AC_ARG_WITH(system-mozilla,
 [  --with-system-mozilla   Use mozilla already on system. Note that some
-                           components cannot be built against a contemporary
-                           mozilla
+                          components cannot be built against a contemporary
+                          mozilla
 ],,)
 AC_ARG_WITH(stlport4,
 [  --with-stlport4         The location that STLport4 is installed in. The STL
-                          header files are assumed to be in stlport4-home/stlport
-                          and the STLport4 library in stlport4-home/lib.
+                          header files are assumed to be in
+                          stlport4-home/stlport and the STLPort4 library in
+                          stlport4-home/lib.
 
                           Usage: --with-stlport4=<absolute path to stlport4 home>
 
-                          Warning!!, --without-stlport4 is possible with gcc >= 3.3.3, 
-                          but will break ABI compatability
+                          Warning!!, --without-stlport4 is possible with
+                          gcc >= 3.3.3, but will break ABI compatability
 ], WITH_STLPORT=$withval , WITH_STLPORT=yes)
 AC_ARG_WITH(jdk-home,
 [  --with-jdk-home         if you have installed JDK 1.3, on your system,
                           please supply the path here.
-                          Note that this is not the location of the Java binary but the
-                          location of the entire distribution.
+                          Note that this is not the location of the Java binary
+                          but the location of the entire distribution.
  
                           Usage: --with-jdk-home=<absolute path to JDK 1.3 home>
 ],,)
 AC_ARG_WITH(gxx_include_path,
-[  --with-gxx-include-path if you want to override the autodetected g++ include path.
+[  --with-gxx-include-path if you want to override the autodetected g++ include
+                          path.
  
                           Usage: --with-gxx-include-path=<absolute path to g++ include dir>
 ],,)
 AC_ARG_WITH(java,
-[  --with-java             Build with[[out]] Java support.  If you use --without-java/--with-java=no then
-                          the build will have no support for Java components, applets, 
-                          accessibility or XML filters. Use --with-java=gij to enable gij/gcj
+[  --with-java             Build with[[out]] Java support.  If you use
+                          --without-java/--with-java=no then the build will have
+                          no support for Java components, applets, accessibility
+                          or XML filters. Use --with-java=gij to enable gij/gcj
                           as java/javac replacements
 ], WITH_JAVA=$withval, WITH_JAVA=java)
 AC_ARG_WITH(ant-home,
@@ -281,42 +282,43 @@ AC_ARG_WITH(cl-home,
                           Usage: --with-cl-home=<absolute path to Microsoft C/C++ compiler home>
 ],,)
 AC_ARG_WITH(mspdb-path,
-[  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the path
-                          pointing to the mspdb71.dll (.NET 2003). 
+[  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the
+                          path pointing to the mspdb71.dll (.NET 2003).
  
                           Usage: --with-mspdb-path=<absolute path to mspdb71.dll>
 ],,)
 AC_ARG_WITH(midl-path,
-[  --with-midl-path        For Microsoft C/C++ .NET compiler users, please supply the path
-                          pointing to the midl.exe. 
+[  --with-midl-path        For Microsoft C/C++ .NET compiler users, please supply
+                          the path pointing to the midl.exe.
  
                           Usage: --with-midl-path=<absolute path to midl.exe>
 ],,)
 AC_ARG_WITH(csc-path,
-[  --with-csc-path         For Microsoft C/C++ .NET compiler users, please supply the path
-                          pointing to the csc.exe. 
+[  --with-csc-path         For Microsoft C/C++ .NET compiler users, please supply
+                          the path pointing to the csc.exe.
  
                           Usage: --with-csc-path=<absolute path to csc.exe>
 ],,)
 AC_ARG_WITH(nmake-path,
-[  --with-nmake-path         For MS Visual Toolkit compiler users, please supply the path
-                          pointing to the nmake.exe. The Platform SDK provides one in the
-                          Win64 directory, usually something like:
-                          "/cygdrive/c/Programme/Microsoft SDK/Bin/Win64"
+[  --with-nmake-path       For MS Visual Toolkit compiler users, please supply
+                          the path pointing to the nmake.exe. The Platform SDK
+                          provides one in the Win64 directory, usually something
+                          like: /cygdrive/c/Programme/Microsoft SDK/Bin/Win64"
  
                           Usage: --with-nmake-path=<absolute path to nmake.exe>
 ],,)
 AC_ARG_WITH(frame-home,
-[  --with-frame-home     For Microsoft C/C++ .NET compiler users, please supply
-                        the path pointing to lib/mscoree.lib, usually something
-                        like:
-                        "/cygdrive/c/Program Files/Microsoft Visual Studio .NET/FrameworkSDK"
+[  --with-frame-home       For Microsoft C/C++ .NET compiler users, please supply
+                          the path pointing to lib/mscoree.lib, usually
+                          something like:
+                          "/cygdrive/c/Program Files/Microsoft Visual Studio .NET/FrameworkSDK"
 
-                        MS Visual Toolkit compiler users, please supply the path
-                        pointing to lib/msvcrt.lib, usually something like:
-                        "/cygdrive/c/Program Files/Microsoft Visual Studio .NET 2003/Vc7"
+                          MS Visual Toolkit compiler users, please supply the
+                          path pointing to lib/msvcrt.lib, usually something
+                          like:
+                          "/cygdrive/c/Program Files/Microsoft Visual Studio .NET 2003/Vc7"
 
-                        Usage: --with-frame-home=<absolute path to Framework SDK [[home]]>
+                          Usage: --with-frame-home=<absolute path to Framework SDK [[home]]>
 ],,)
 AC_ARG_WITH(psdk-home,
 [  --with-psdk-home        For Windows users, please supply the path to the
@@ -331,10 +333,11 @@ AC_ARG_WITH(directx-home,
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 ],,)
 AC_ARG_WITH(extra-dotnet-files,
-[  --with-extra-dotnet-files   For MS Visual Toolkit compiler, please supply the path
-                          to additional library/include files that are otherwise missing.
-                          (This is a cludge until MS Visual Toolkit is usable without
-                          extra files.)
+[  --with-extra-dotnet-files  For MS Visual Toolkit compiler, please supply the
+                          path to additional library/include files that are
+                          otherwise missing. 
+                          (This is a cludge until MS Visual Toolkit is usable
+                          without extra files.)
  
                           Usage: --with-extra-dotnet-files=<absolute path to extra files>
 ],,)
@@ -360,12 +363,10 @@ AC_ARG_ENABLE(check-only,
 AC_ARG_ENABLE(macos9,
 [  --enable-macos9         Use this option option if you want to generate a
                           macos9 environment on macosx.
-                          
-                          Usage: --enable-macos9
 ],,)
 AC_ARG_WITH(images,
-[  --with-images          Select different image sets to build & install in
-			  addition to the default set.
+[  --with-images           Select different image sets to build & install in
+                          addition to the default set.
 
                           Usage: --with-images="industrial crystal"
 ],with_images=$withval,with_images=)
@@ -420,7 +421,7 @@ AC_ARG_WITH(use-shell,
                           Usage: --with-use-shell=tcsh|4nt
 ],with_use_shell=$withval,with_use_shell="tcsh")
 AC_ARG_WITH(build-version,
-[  --with-build-version   Allows the builder to add a custom version tag
+[  --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
                           purposes.
 
@@ -575,6 +576,7 @@ case "$build_os" in
 	darwin*) # Mac OS X
 		test_x=no
 		test_cups=no
+		test_gtk=no
 		_os=Darwin
 		;;
 	freebsd*)
@@ -654,13 +656,13 @@ else
       if test -z "$enable_symbols"; then
          enable_symbols="yes"
       fi
-      AC_MSG_RESULT([no])
+      AC_MSG_RESULT([yes, STATIC])
    else
       if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
          ENABLE_CRASHDUMP=""
 	 AC_MSG_RESULT([no])
       else
-         AC_MSG_ERROR([--enable-crashdump only accepts yes, TRUE or STATIC as parameter.])
+         AC_MSG_ERROR([--enable-crashdump only accepts yes, no, TRUE or STATIC as parameter.])
       fi
    fi
 fi
@@ -698,7 +700,7 @@ dnl ===================================================================
 dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
-if test -n "$enable_debug"; then
+if test -n "$enable_debug" && test "$enable_debug" != "no"; then
    ENABLE_DEBUG="TRUE"
    if test -z "$enable_symbols"; then
       enable_symbols="yes"
@@ -714,7 +716,7 @@ dnl ===================================================================
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with additional debug utilities])
-if test -n "$enable_dbgutil"; then
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
    PROEXT=""
    PRODUCT=""
    PROFULLSWITCH=""
@@ -733,7 +735,7 @@ dnl ===================================================================
 dnl First setting is whether to include symbols into final build.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include symbols into final build])
-if test -n "$enable_symbols" ; then
+if test -n "$enable_symbols" && test "$enable_symbols" != "no"; then
 	if test "$enable_symbols" = "yes" -o "$enable_symbols" = "TRUE"; then
 		ENABLE_SYMBOLS="TRUE"
 		AC_MSG_RESULT([yes])
@@ -1569,7 +1571,7 @@ fi
 dnl ===================================================================
 dnl Checks for SGI STL
 dnl ===================================================================
-if test -n "$enable_sgistl"; then
+if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
 	if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
 		AC_MSG_CHECKING([for SGI STL])
 		if test -d /usr/include/CC ; then
@@ -1714,6 +1716,13 @@ if test "$SOLAR_JAVA" != ""; then
          AC_MSG_ERROR([$_java_path not found set with_jdk_home])
       fi
    fi
+   if test "$_os" = "WINNT"; then
+      if test x`echo "$JAVAINTERPRETER" | grep -i '\.exe$'` = x; then
+          JAVAINTERPRETER="${JAVAINTERPRETER}.exe"
+      fi
+      JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
+      JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
+   fi
 fi
 
 dnl ===================================================================
@@ -1758,6 +1767,9 @@ if test "$SOLAR_JAVA" != ""; then
         fi
         AC_MSG_RESULT([checked (JDK $_jdk)])
         JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
+        if test "$_os" = "WINNT"; then
+          JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
+        fi
       fi
    else
       AC_MSG_ERROR([JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj-4])
@@ -1788,6 +1800,13 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVACOMPILER"; then
       AC_MSG_ERROR([$javacompiler not found set with_jdk_home])
     fi
+    if test "$_os" = "WINNT"; then
+       if test x`echo "$JAVACOMPILER" | grep -i '\.exe$'` = x; then
+          JAVACOMPILER="${JAVACOMPILER}.exe"
+       fi
+       JAVACOMPILER=`cygpath -d "$JAVACOMPILER"`
+       JAVACOMPILER=`cygpath -u "$JAVACOMPILER"`
+    fi
 fi
 
 dnl ===================================================================
@@ -1807,6 +1826,13 @@ if test "$SOLAR_JAVA" != ""; then
     fi
     if test -z "$JAVADOC"; then
       AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
+    fi
+    if test "$_os" = "WINNT"; then
+        if test x`echo "$JAVADOC" | grep -i '\.exe$'` = x; then
+            JAVADOC="${JAVADOC}.exe"
+        fi
+        JAVADOC=`cygpath -d "$JAVADOC"`
+        JAVADOC=`cygpath -u "$JAVADOC"`
     fi
 fi
 
@@ -2139,6 +2165,7 @@ portable - Portable software distribution
           RPM=
       ;;
       rpm | pkg)
+      	if test "$EPM" != "no" && test "$EPM" != "internal"; then
            if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
                AC_MSG_CHECKING([whether epm is patched for OOos needs])
                if grep "Patched for OpenOffice.org" $EPM >/dev/null 2>/dev/null; then
@@ -2160,7 +2187,8 @@ portable - Portable software distribution
                   --with-epm=internal which will build a suitable epm])
                fi
            fi
-	   if test "$PKGFORMAT" = "rpm"; then
+        fi
+	     if test "$PKGFORMAT" = "rpm"; then
                AC_MSG_CHECKING([for rpm])
                for a in "$RPM" rpmbuild rpm; do
                   $a --usage >/dev/null 2> /dev/null
@@ -2174,14 +2202,14 @@ portable - Portable software distribution
                else
 	               AC_MSG_RESULT([$RPM])
                fi
-	   fi
-	   if test "$PKGFORMAT" = "pkg"; then
+	     fi
+	     if test "$PKGFORMAT" = "pkg"; then
                AC_PATH_PROG(PKGMK, pkgmk, no)
                if test "$PKGMK" = "no"; then
                   AC_MSG_ERROR([pkgmk needed for Solaris pkg creation. Install it.])
                fi
                RPM=
-	   fi
+	     fi
       ;;
    esac
    AC_SUBST(EPM)
@@ -2425,7 +2453,7 @@ dnl ===================================================================
 dnl Check for system boost
 dnl ===================================================================
 AC_MSG_CHECKING([which boost to use])
-if test -n "$with_system_boost"; then
+if test -n "$with_system_boost" && test "$with_system_boost" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_BOOST=YES
    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
@@ -2442,7 +2470,7 @@ dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
-if test -n "$with_system_odbc_headers"; then
+if test -n "$with_system_odbc_headers" && test "$with_system_odbc_headers" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_ODBC_HEADERS=YES
 
@@ -2662,7 +2690,7 @@ dnl ===================================================================
 dnl Check for system sane
 dnl ===================================================================
 AC_MSG_CHECKING([which sane header to use])
-if test -n "$with_system_sane_header"; then
+if test -n "$with_system_sane_header" && test "$with_system_sane_header" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_SANE_HEADER=YES
    AC_CHECK_HEADER(sane/sane.h, [],
@@ -2772,13 +2800,22 @@ dnl ===================================================================
 if test "$ENABLE_FONTCONFIG" = "TRUE" ; then
     AC_CHECK_HEADER(fontconfig/fontconfig.h, [],
                     [AC_MSG_ERROR([fontconfig/fontconfig.h could not be found. libfontconfig1-dev or fontconfig???-devel missing?])], [])
+    AC_MSG_CHECKING([whether fontconfig is >= 2.2.0])
+    AC_TRY_RUN([
+#include <fontconfig/fontconfig.h>
+
+int main(int argc, char **argv) {
+	if(FC_MAJOR > 2 || (FC_MAJOR == 2 && FC_MINOR >= 2)) return 0;
+	else return 1;
+}
+], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, fontconfig >= 2.2.0 needed])])
 fi
 
 dnl ===================================================================
 dnl Check for system Xrender
 dnl ===================================================================
 AC_MSG_CHECKING([which XRender headers to use])
-if test -n "$with_system_xrender_headers"; then
+if test -n "$with_system_xrender_headers" && test -n "$with_system_xrender_headers" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_XRENDER_HEADERS=YES
    AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
@@ -2818,7 +2855,8 @@ AC_SUBST(SYSTEM_NAS)
 AC_SUBST(NAS_INCLUDES)
 
 AC_MSG_CHECKING([whether to enable portaudio/sndfile support])
-if test "$_os" != "WINNT" -a -n "$enable_pasf"; then
+if test "$_os" != "WINNT" && \
+  test -n "$enable_pasf" && test "$enable_pasf" != "no"; then
 	AC_MSG_RESULT([yes])
    ENABLE_PASF=YES
   	AC_MSG_CHECKING([which sndfile to use])
@@ -3273,7 +3311,7 @@ AC_MSG_CHECKING([which polygon clipping code to use])
 WITH_GPC=NO
 WITH_LIBART=NO
 
-if test -n "$enable_libart"; then
+if test -n "$enable_libart" && test "$enable_libart" != "no"; then
   AC_MSG_RESULT([libart])
   PKG_CHECK_MODULES( LIBART, libart-2.0 >= 2.3.13 )
   WITH_LIBART=YES
@@ -3339,7 +3377,7 @@ dnl ===================================================================
 
 ENABLE_GNOMEVFS=""
 AC_MSG_CHECKING([whether to enable GNOME VFS support])
-if test "$_os" != "WINNT" -a "$enable_gnome_vfs" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes"; then
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 )
@@ -3374,16 +3412,17 @@ dnl ===================================================================
 
 KDE_CFLAGS=""
 KDE_LIBS=""
+MOC="moc"
 if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     dnl Search paths for Qt and KDE
     qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include $x_includes"
-    qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/include /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_includes"
+    qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
         qt_libdirs="$QTDIR/lib $qt_libdirs"
     fi
     kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /usr/include /opt/kde3/include /opt/kde/include $x_includes"
-    kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib"
+    kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib $x_libraries"
     if test -n "$KDEDIR" ; then
         kde_incdirs="$KDEDIR/include $kde_incdirs"
         kde_libdirs="$KDEDIR/lib $kde_libdirs"
@@ -3425,6 +3464,12 @@ your Qt installation by exporting QTDIR before running "configure".])
 your Qt installation by exporting QTDIR before running "configure".])
     fi
 
+    AC_PATH_PROG( MOC, moc, no, [$QTDIR/bin:$PATH] )
+    if test "$MOC" = "no" ; then
+        AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
+the root of your Qt installation by exporting QTDIR before running "configure".])
+     fi
+     
     dnl Check for KDE headers
     AC_MSG_CHECKING([for KDE headers])
     kde_incdir="no"
@@ -3461,13 +3506,14 @@ your KDE installation by exporting KDEDIR before running "configure".])
 fi
 AC_SUBST(KDE_CFLAGS)
 AC_SUBST(KDE_LIBS)
+AC_SUBST(MOC)
 
 dnl ===================================================================
 dnl Test for the presence of libstartup-notification
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use libstartup-notification])
 WITH_LIBSN=NO
-if test -n "$enable_libsn"; then
+if test -n "$enable_libsn" && test "$enable_libsn" != "no"; then
   PKG_CHECK_MODULES( LIBSN, libstartup-notification-1.0 >= 0.5 )
   WITH_LIBSN=YES
   AC_MSG_RESULT([yes])
@@ -3702,7 +3748,7 @@ fi
 AC_SUBST(WITH_DICT)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
-if test -n "$enable_static_gtk"; then
+if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
    ENABLE_STATIC_GTK="TRUE"
    AC_MSG_RESULT([yes])
 else
