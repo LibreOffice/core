@@ -81,7 +81,7 @@ sub unpack_all_targzfiles_in_directory
 
     installer::logger::include_header_into_logfile("Unpacking tar.gz files:");
 
-    print "... unpacking tar.gz files ... \n";
+    installer::logger::print_message( "... unpacking tar.gz files ... \n" );
 
     my $localdirectory = $directory . $installer::globals::separator . "packages";
     my $alltargzfiles = installer::systemactions::find_file_with_file_extension("tar.gz", $localdirectory);
@@ -126,7 +126,7 @@ sub copy_install_sets_to_ship
     if ( ! -d $localshipinstalldir ) { installer::systemactions::create_directory_structure($localshipinstalldir); }
 
     # copy installation set to /ship ($localshipinstalldir)
-    print "... copy installation set from " . $destdir . " to " . $localshipinstalldir . "\n";
+    installer::logger::print_message( "... copy installation set from " . $destdir . " to " . $localshipinstalldir . "\n" );
     installer::systemactions::copy_complete_directory($destdir, $localshipinstalldir);
 
     if (( ! $installer::globals::iswindowsbuild ) && ( $installer::globals::addjavainstaller ))
@@ -155,7 +155,7 @@ sub link_install_sets_to_ship
     installer::logger::include_header_into_logfile("Linking installation set to ship:");
 
     my $infoline = "... destination directory: $shipinstalldir ...\n";
-    print $infoline;
+    installer::logger::print_message( $infoline );
     push( @installer::globals::logfileinfo, $infoline);
 
     if ( ! -d $shipinstalldir)
@@ -173,7 +173,7 @@ sub link_install_sets_to_ship
     my $localshipinstalldir = $shipinstalldir . $installer::globals::separator . $dirname;
 
     # link installation set to /ship ($localshipinstalldir)
-    print "... linking installation set from " . $destdir . " to " . $localshipinstalldir . "\n";
+    installer::logger::print_message( "... linking installation set from " . $destdir . " to " . $localshipinstalldir . "\n" );
 
     my $systemcall = "ln -s $destdir $localshipinstalldir";
 
@@ -267,7 +267,7 @@ sub remove_old_installation_sets
 {
     my ($basedir) = @_;
 
-    print "... removing old installation directories ...\n";
+    installer::logger::print_message( "... removing old installation directories ...\n" );
 
     my $removedir = $basedir;
 
@@ -294,7 +294,7 @@ sub remove_old_ship_installation_sets
 {
     my ($fulldir, $counter) = @_;
 
-    print "... removing old installation directories ...\n";
+    installer::logger::print_message( "... removing old installation directories ...\n" );
 
     my $basedir = $fulldir;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$basedir);
@@ -351,7 +351,7 @@ sub create_installation_directory
     else
     {
         $installdir = installer::systemactions::create_directories("install", $languageref);
-        print "... creating installation set in $installdir ...\n";
+        installer::logger::print_message( "... creating installation set in $installdir ...\n" );
         remove_old_installation_sets($installdir);
         my $inprogressinstalldir = $installdir . "_inprogress";
         installer::systemactions::rename_directory($installdir, $inprogressinstalldir);
@@ -374,7 +374,7 @@ sub analyze_and_save_logfile
     my $is_success = 1;
     my $finalinstalldir = "";
 
-    print "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n";
+    installer::logger::print_message( "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n" );
 
     my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
 
@@ -410,7 +410,7 @@ sub analyze_and_save_logfile
 
     my $numberedlogfilename = $installer::globals::logfilename;
     if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /log_/log_$current_install_number\_/; }
-    print "... creating log file $numberedlogfilename \n";
+    installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 
@@ -427,13 +427,13 @@ sub analyze_and_save_logfile
 
 sub clean_output_tree
 {
-    print "... cleaning the output tree ...\n";
+    installer::logger::print_message( "... cleaning the output tree ...\n" );
 
     for ( my $i = 0; $i <= $#installer::globals::removedirs; $i++ )
     {
         if ( -d $installer::globals::removedirs[$i] )
         {
-            print "... removing directory $installer::globals::removedirs[$i] ...\n";
+            installer::logger::print_message( "... removing directory $installer::globals::removedirs[$i] ...\n" );
             installer::systemactions::remove_complete_directory($installer::globals::removedirs[$i], 1);
         }
     }
@@ -564,13 +564,13 @@ sub install_simple ($$$$$)
 {
     my ($packagename, $languagestring, $directoriesarray, $filesarray, $linksarray) = @_;
 
-    print "... installing module $packagename ...\n";
+    installer::logger::print_message( "... installing module $packagename ...\n" );
 
     my $destdir = $installer::globals::destdir;
     my @lines = ();
 
-    print "DestDir: $destdir \n";
-    print "Rootpath: $installer::globals::rootpath \n";
+    installer::logger::print_message( "DestDir: $destdir \n" );
+    installer::logger::print_message( "Rootpath: $installer::globals::rootpath \n" );
 
     `mkdir -p $destdir` if $destdir ne "";
     `mkdir -p $destdir$installer::globals::rootpath`;
