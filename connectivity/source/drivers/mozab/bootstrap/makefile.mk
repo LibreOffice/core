@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:34:59 $
+#   last change: $Author: hr $ $Date: 2005-04-11 08:41:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE : settings.mk
 
-.IF  "$(OS)"=="MACOSX" || ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
-
+.IF ("$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
 dummy:
     @echo "		Not building the mozillasrc stuff in OpenOffice.org build"
     @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
@@ -165,7 +164,7 @@ CFLAGSCXX += \
             -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
             -Wno-long-long -pthread
 CDEFS     += -DTRACING
-.ELIF "$(OS)" == "NETBSD"
+.ELIF "$(OS)" == "NETBSD" || "$(OS)" == "MACOSX"
 CFLAGS +=   -fPIC
 CFLAGSCXX += \
             -fno-rtti -Wall -Wconversion -Wpointer-arith \
