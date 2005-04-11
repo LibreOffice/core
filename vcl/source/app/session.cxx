@@ -2,9 +2,9 @@
  *
  *  $RCSfile: session.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:52:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-11 14:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
@@ -201,6 +200,15 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         // without session we assume UI is always possible,
         // so it was reqeusted and granted
         m_bInteractionRequested = m_bInteractionGranted = m_pSession ? false : true;
+
+        // answer the session manager even if no listeners available anymore
+        DBG_ASSERT( ! aListeners.empty(), "saveRequested but no listeners !" );
+        if( aListeners.empty() )
+        {
+            if( m_pSession )
+                m_pSession->saveDone();
+            return;
+        }
     }
 
     ULONG nAcquireCount = Application::ReleaseSolarMutex();
@@ -215,17 +223,26 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
     {
         osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
-        aListeners = m_aListeners;
+        for( std::list< Listener >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+            if( it->m_bInteractionRequested )
+                aListeners.push_back( *it );
 
         m_bInteractionGranted = bInteractionGranted;
+
+        // answer the session manager even if no listeners available anymore
+        DBG_ASSERT( ! aListeners.empty(), "interactionGranted but no listeners !" );
+        if( aListeners.empty() )
+        {
+            if( m_pSession )
+                m_pSession->interactionDone();
+            return;
+        }
     }
 
     ULONG nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
-    {
-        if( it->m_bInteractionRequested )
-            it->m_xListener->approveInteraction( bInteractionGranted );
-    }
+        it->m_xListener->approveInteraction( bInteractionGranted );
+
     Application::AcquireSolarMutex( nAcquireCount );
 }
 
