@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sessionlistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:55:20 $
+ *  last change: $Author: obo $ $Date: 2005-04-11 14:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //_______________________________________________
 // my own includes
 
@@ -319,6 +318,9 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool bCancelable 
                 m_rSessionManager->saveDone(this);
         }
     }
+    // we don't have anything to do so tell the session manager we're done
+    else if( m_rSessionManager.is() )
+        m_rSessionManager->saveDone( this );
 }
 
 
