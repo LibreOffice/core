@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: obo $ $Date: 2005-01-25 15:29:28 $
+#*    last change       $Author: hr $ $Date: 2005-04-11 09:31:48 $
 #*
-#*    $Revision: 1.19 $
+#*    $Revision: 1.20 $
 #*
 #*    $Logfile:$
 #*
@@ -22,8 +22,14 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar db.jar
+JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
 EXTRAJARFILES 	= 
+
+.IF "$(SYSTEM_DB)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(DB_JAR)
+.ELSE
+JARFILES+= db.jar
+.ENDIF
 
 CLASSGENDIR		= $(OUT)$/classgen
 RDB		 		= $(SOLARBINDIR)$/types.rdb
