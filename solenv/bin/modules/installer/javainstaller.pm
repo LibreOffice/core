@@ -67,6 +67,7 @@ use installer::pathanalyzer;
 use installer::scriptitems;
 use installer::systemactions;
 use installer::worker;
+use installer::logger;
 
 ##############################################################
 # Returning a specific language string from the block
@@ -457,7 +458,7 @@ sub make_systemcall
 
     my @returns = ();
 
-    print "... $systemcall ...\n";
+    installer::logger::print_message( "... $systemcall ...\n" );
 
     open (REG, "$systemcall");
     while (<REG>) {push(@returns, $_); }
