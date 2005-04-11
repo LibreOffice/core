@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.96 $
+*  $Revision: 1.97 $
 *
-*  last change: $Author: rt $ $Date: 2005-03-30 11:40:14 $
+*  last change: $Author: hr $ $Date: 2005-04-11 08:42:58 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -468,8 +468,12 @@ File gid_File_Lib_Dbjava31
     Styles = (PACKED);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT2(libdb_java-4.2,UNXSUFFIX));
-  #else
+    #ifdef MACOSX
+        Name = "libdb_java-4.2.jnilib";
+    #else
+    	Name = STRING(CONCAT2(libdb_java-4.2,UNXSUFFIX));
+    #endif 
+ #else
     Name = "libdb_java42.dll";
   #endif
 End
