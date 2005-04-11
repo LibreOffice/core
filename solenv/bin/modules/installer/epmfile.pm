@@ -595,7 +595,7 @@ sub call_epm
 
     my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename . $outdirstring . " 2\>\&1 |";
 
-    print "... $systemcall ...\n";
+    installer::logger::print_message( "... $systemcall ...\n" );
 
     my $maxepmcalls = 3;
 
@@ -626,7 +626,7 @@ sub call_epm
         }
         else
         {
-            print "Success (Try $i): \"$systemcall\"\n";
+            installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
             $infoline = "Success: Executed \"$systemcall\" successfully!\n";
             push( @installer::globals::logfileinfo, $infoline);
             last;
@@ -1403,7 +1403,7 @@ sub create_packages_without_epm
 
         # my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
         my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir 2\>\&1 |";
-        print "... $systemcall ...\n";
+        installer::logger::print_message( "... $systemcall ...\n" );
 
         my $maxpkgmkcalls = 3;
 
@@ -1434,7 +1434,7 @@ sub create_packages_without_epm
             }
             else
             {
-                print "Success (Try $i): \"$systemcall\"\n";
+                installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
                 $infoline = "Success: Executed \"$systemcall\" successfully!\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
@@ -1452,10 +1452,10 @@ sub create_packages_without_epm
             $infoline = "Found compressor: $faspac\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            print "... $faspac ...\n";
+            installer::logger::print_message( "... $faspac ...\n" );
             installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
-             $systemcall = "/bin/sh $faspac -a -d $destinationdir $packagename";     # $faspac has to be the absolute path!
+             $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
              make_systemcall($systemcall);
 
             installer::logger::include_timestamp_into_logfile("End of $faspac");
@@ -1469,7 +1469,7 @@ sub create_packages_without_epm
         # Setting unix rights to "775" for all created directories inside the package
 
         $systemcall = "cd $destinationdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
-        print "... $systemcall ...\n";
+        installer::logger::print_message( "... $systemcall ...\n" );
 
         $returnvalue = system($systemcall);
 
@@ -1558,7 +1558,7 @@ sub create_packages_without_epm
 
         my $systemcall = "$rpmcommand -bb $specfilename --target $target 2\>\&1 |";
 
-        print "... $systemcall ...\n";
+        installer::logger::print_message( "... $systemcall ...\n" );
 
         my $maxrpmcalls = 3;
 
@@ -1589,7 +1589,7 @@ sub create_packages_without_epm
             }
             else
             {
-                print "Success (Try $i): \"$systemcall\"\n";
+                installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
                 $infoline = "Success: Executed \"$systemcall\" successfully!\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
@@ -1675,7 +1675,7 @@ sub remove_temporary_epm_files
 
         $systemcall = "rm -rf $removedir";
 
-        print "... $systemcall ...\n";
+        installer::logger::print_message( "... $systemcall ...\n" );
 
         my $returnvalue = system($systemcall);
 
@@ -1933,13 +1933,13 @@ sub put_systemintegration_into_installset
                 $infoline = "Found compressor: $faspac\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
-                print "... $faspac ...\n";
+                installer::logger::print_message( "... $faspac ...\n" );
                 installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
                 my $package = $systemfiles[$i];
                 $package =~ s/\.tar\.gz$//;
 
-                 $systemcall = "/bin/sh $faspac -a -d $destdir $package";    # $faspac has to be the absolute path!
+                 $systemcall = "/bin/sh $faspac -a -q -d $destdir $package";     # $faspac has to be the absolute path!
                  make_systemcall($systemcall);
 
                 installer::logger::include_timestamp_into_logfile("End of $faspac");
