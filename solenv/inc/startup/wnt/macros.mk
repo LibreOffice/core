@@ -6,62 +6,51 @@
 #
 .IMPORT .IGNORE : COMSPEC
 
-# First check if SHELL is defined to be something other than COMSPEC.
-# If it is, then assume that SHELL is a Korn compatible shell like MKS's
+# SHELL has to be set in OOo build environment
 .IF $(SHELL) == $(NULL)
-   .IF $(COMSPEC) == $(NULL)
-      SHELL *:= $(ROOTDIR)$/bin$/sh$E
-   .ELSE
-      SHELL *:= $(COMSPEC)
-   .END
-.END
+.ERROR : ; @echo Forced error: Environment variable SHELL has to be set for OOo build!
+SHELL_variable_needed
+.ENDIF
+
 GROUPSHELL *:= $(SHELL)
 
-# Process release-specific refinements, if any.
-.INCLUDE .NOINFER .IGNORE : $(INCFILENAME:d)$(OSRELEASE)$/macros.mk
+# Standard C-language command names and flags
+CC         *:= cl		# C   compiler 
+
+# Directory cache configuration.
+.DIRCACHE  *:= no
 
 # Applicable suffix definitions
-A *:= .lib	# Libraries
 E *:= .exe	# Executables
-F *:= .for	# Fortran
-O *:= .obj	# Objects
-P *:= .pas	# Pascal
-S *:= .asm	# Assembler sources
-V *:= 		# RCS suffix
 
 # Now set the remaining arguments depending on which SHELL we
-# are going to use.  COMSPEC (assumed to be command.com) or
-# MKS Korn shell.
+# are going to use.
 .IF $(SHELL) == $(COMSPEC)
    SHELLFLAGS       *:= $(SWITCHAR)c
    GROUPFLAGS       *:= $(SHELLFLAGS)
    SHELLMETAS       *:= "<>|
-#   GROUPSUFFIX      *:= .cmd
    GROUPSUFFIX      *:= .bat
    DIVFILE          *=  $(TMPFILE:s,/,\,)
    RM               *=  del
-#   RM               *=  +-del
    RMFLAGS          *= /y
    MV	            *=  rename
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR        := \\
-#	/ 				*=  $(DIRSEPSTR)$(DIRSEPSTR)
    PWD:=$(shell +echo %_cwd)
 .EXPORT : PWD
    
-.ELSE
-   SHELL	    !:= $(SHELL)
-   COMMAND          *=  $(CMNDNAME) $(CMNDARGS)
+.ELSE	# Non 4nt case
    SHELLFLAGS       *:= -c
    GROUPFLAGS       *:=
    SHELLMETAS       *:= *";?<>|()&][$$\#`'
-   GROUPSUFFIX      *:= .ksh
-   .MKSARGS         *:= yes
+   GROUPSUFFIX      *:= .csh
+# This is hopefully not used. Only in: dmake/msdos/spawn.c  
+#  .MKSARGS         *:= yes
+   DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}})
    RM               *=  $(ROOTDIR)$/bin$/rm
    RMFLAGS          *=  -f
    MV	            *=  $(ROOTDIR)$/bin$/mv
-   DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}})
    __.DIVSEP-sh-yes *:= \\\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR :=/
