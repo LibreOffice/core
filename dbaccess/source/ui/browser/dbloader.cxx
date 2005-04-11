@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:45:19 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 10:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,8 +351,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 bSuccess = sal_False;
                 try
                 {
-                    xController->attachModel(NULL);
-                    xModel->disconnectController( xController );
+                    if ( xController.is() )
+                        xController->attachModel(NULL);
+                    if ( xModel.is() )
+                        xModel->disconnectController( xController );
                 }
                 catch( const Exception& )
                 {
