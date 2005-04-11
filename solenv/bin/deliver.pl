@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-07 09:09:19 $
+#   last change: $Author: hr $ $Date: 2005-04-11 09:00:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.81 $ ';
+$id_str = ' $Revision: 1.82 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -883,11 +883,11 @@ sub fix_file_permissions
     my $mode = shift;
     my $file = shift;
 
-    if ( $mode%2 == 1 ) {
-        $mode = 0777 - $umask;
+    if ( ($mode >> 6) % 2 == 1 ) {
+        $mode = 0777 & ~$umask;
     }
     else {
-        $mode = 0666 - $umask;
+        $mode = 0666 & ~$umask;
     }
     chmod($mode, $file);
 }
