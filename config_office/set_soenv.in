@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.56 $
-# Date:        $Date: 2005-04-06 10:53:34 $
+# Version:     $Revision: 1.57 $
+# Date:        $Date: 2005-04-11 08:52:38 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1006,7 +1006,7 @@ if ($platform =~ m/cygwin/)
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $ILIB       .= $ps.'$COMPATH'.$LIB;
-      if ( '@ENABLE_DIRECTX@' ) {
+      if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $ps.PosixFormat('@DIRECTXSDK_LIB@');
       }
       if ( "$EXTRA_DOTNET_FILES" ) {
@@ -1094,7 +1094,7 @@ elsif ($platform =~ m/cygwin/)
 			   $PATH .= $ps.$CSC_PATH;
 		   }
 		   # VC toolkit needs nmake.exe
-		   if ( "@ENABLE_VCTK@" and $PATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
+		   if ( "@ENABLE_VCTK@" ne "" and $PATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$NMAKE_PATH;
 		   }
 		   # Native installer needs some files if the Windows Installer SDK
@@ -1312,7 +1312,7 @@ elsif ($platform =~ m/cygwin/)
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $SOLARINC       .= $I.'$COMPATH'.$ds."include";
-      if ( '@ENABLE_DIRECTX@' ) {
+      if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
       }
       if ( "$EXTRA_DOTNET_FILES" ) {
@@ -1481,6 +1481,7 @@ ToFile( "ENABLE_GNOMEVFS",   "@ENABLE_GNOMEVFS@",  "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
 ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );
 ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
+ToFile( "MOC",               "@MOC@",              "e" );
 ToFile( "CUSTOM_IMAGE_SETS", "@CUSTOM_IMAGE_SETS@","e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 # [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
