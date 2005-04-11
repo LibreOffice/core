@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:05 $
+ *  last change: $Author: hr $ $Date: 2005-04-11 10:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,14 @@ OApplicationSwapWindow::~OApplicationSwapWindow()
 // -----------------------------------------------------------------------------
 void OApplicationSwapWindow::Resize()
 {
-    m_aIconControl.SetPosSizePixel( Point(0, 0  ),
-                                    GetOutputSize() );
+    Size aFLSize = LogicToPixel( Size( 8, 0 ), MAP_APPFONT );
+    long nX = 0;
+    if ( m_aIconControl.GetEntryCount() != 0 )
+        nX = m_aIconControl.GetBoundingBox( m_aIconControl.GetEntry(0) ).GetWidth() + aFLSize.Width();
+
+    Size aOutputSize = GetOutputSize();
+
+    m_aIconControl.SetPosSizePixel( Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
     m_aIconControl.ArrangeIcons();
 }
 // -----------------------------------------------------------------------------
@@ -148,13 +154,7 @@ void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
         SetTextColor( aTextColor );
     }
 
-    if ( bBackground )
-    {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( rStyleSettings.GetFaceColor() );
-    }
+    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetWindowColor() ) );
 }
 // -----------------------------------------------------------------------
 void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
