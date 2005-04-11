@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.97 $
+*  $Revision: 1.98 $
 *
-*  last change: $Author: hr $ $Date: 2005-04-11 08:42:58 $
+*  last change: $Author: hr $ $Date: 2005-04-11 09:33:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -429,9 +429,9 @@ End
 
 #endif
 
-#ifndef SYSTEM_DB3
+#ifndef SYSTEM_DB
 
-File gid_File_Lib_Db31
+File gid_File_Lib_Db
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
@@ -462,8 +462,9 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 
 #ifdef SOLAR_JAVA
+#ifndef SYSTEM_DB
 
-File gid_File_Lib_Dbjava31
+File gid_File_Lib_Dbjava
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
@@ -478,6 +479,7 @@ File gid_File_Lib_Dbjava31
   #endif
 End
 
+#endif
 #endif
 
 File gid_File_Lib_Dbodbcbase
