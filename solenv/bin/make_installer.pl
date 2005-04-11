@@ -134,7 +134,7 @@ installer::logger::starttime();
 # most important variables
 #########################################
 
-print "... checking environment variables ...\n";
+installer::logger::print_message( "... checking environment variables ...\n" );
 my $environmentvariableshashref = installer::control::check_system_environment();
 
 installer::environment::set_global_environment_variables($environmentvariableshashref);
@@ -191,7 +191,7 @@ if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::is_copy_
 # Checking the system requirements
 ######################################
 
-print "... checking required files ...\n";
+installer::logger::print_message( "... checking required files ...\n" );
 installer::control::check_system_path();
 
 my $pathvariableshashref = installer::environment::create_pathvariables($environmentvariableshashref);
@@ -208,7 +208,7 @@ installer::logger::globallog("zip list file: $installer::globals::ziplistname");
 
 my $ziplistref = installer::files::read_file($installer::globals::ziplistname);
 
-print "... analyzing $installer::globals::ziplistname ... \n";
+installer::logger::print_message( "... analyzing $installer::globals::ziplistname ... \n" );
 
 my $productblockref = installer::ziplist::getproductblock($ziplistref, $installer::globals::product);       # product block from zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "productblock.log" ,$productblockref); }
@@ -294,7 +294,7 @@ if ($installer::globals::setupscript_defined_in_productlist) { installer::setups
 
 installer::logger::globallog("setup script file: $installer::globals::setupscriptname");
 
-print "... analyzing script: $installer::globals::setupscriptname ... \n";
+installer::logger::print_message( "... analyzing script: $installer::globals::setupscriptname ... \n" );
 
 my $setupscriptref = installer::files::read_file($installer::globals::setupscriptname); # Reading the setup script file
 
@@ -324,7 +324,7 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 
 installer::logger::log_hashref($allvariableshashref);
 
-print "... analyzing directories ... \n";
+installer::logger::print_message( "... analyzing directories ... \n" );
 
 # Collect all directories in the script to get the destination dirs
 
@@ -334,7 +334,7 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 installer::scriptitems::resolve_all_directory_names($dirsinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2.log", $dirsinproductarrayref); }
 
-print "... analyzing files ... \n";
+installer::logger::print_message( "... analyzing files ... \n" );
 
 my $filesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "File");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles1.log", $filesinproductarrayref); }
@@ -351,7 +351,7 @@ if (! $installer::globals::languagepack)
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2b.log", $filesinproductarrayref); }
 }
 
-print "... analyzing scpactions ... \n";
+installer::logger::print_message( "... analyzing scpactions ... \n" );
 
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1.log", $scpactionsinproductarrayref); }
@@ -362,17 +362,17 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 installer::scriptitems::change_keys_of_scpactions($scpactionsinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2a.log", $scpactionsinproductarrayref); }
 
-print "... analyzing shortcuts ... \n";
+installer::logger::print_message( "... analyzing shortcuts ... \n" );
 
 my $linksinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Shortcut");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks1.log", $linksinproductarrayref); }
 
-print "... analyzing profile ... \n";
+installer::logger::print_message( "... analyzing profile ... \n" );
 
 my $profilesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Profile");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profiles1.log", $profilesinproductarrayref); }
 
-print "... analyzing profileitems ... \n";
+installer::logger::print_message( "... analyzing profileitems ... \n" );
 
 my $profileitemsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ProfileItem");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profileitems1.log", $profileitemsinproductarrayref); }
@@ -383,12 +383,12 @@ my $registryitemsinproductarrayref;
 
 if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, FolderItem, RegistryItem
 {
-    print "... analyzing folders ... \n";
+    installer::logger::print_message( "... analyzing folders ... \n" );
 
     $folderinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Folder");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folder1.log", $folderinproductarrayref); }
 
-    print "... analyzing folderitems ... \n";
+    installer::logger::print_message( "... analyzing folderitems ... \n" );
 
     $folderitemsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "FolderItem");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folderitems1.log", $folderitemsinproductarrayref); }
@@ -396,7 +396,7 @@ if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, Fo
     installer::setupscript::add_predefined_folder($folderitemsinproductarrayref, $folderinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folder1b.log", $folderinproductarrayref); }
 
-    print "... analyzing registryitems ... \n";
+    installer::logger::print_message( "... analyzing registryitems ... \n" );
 
     $registryitemsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "RegistryItem");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems1.log", $registryitemsinproductarrayref); }
@@ -409,7 +409,7 @@ my $modulesinproductarrayref;
 
 if (!($installer::globals::is_copy_only_project))
 {
-    print "... analyzing modules ... \n";
+    installer::logger::print_message( "... analyzing modules ... \n" );
 
     $modulesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Module");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules1.log", $modulesinproductarrayref); }
@@ -449,8 +449,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "languages.log" ,$languagesarrayref); }
 
     my $languagestringref = installer::languages::get_language_string($languagesarrayref);
-    print "------------------------------------\n";
-    print "... languages $$languagestringref ... \n";
+    installer::logger::print_message( "------------------------------------\n" );
+    installer::logger::print_message( "... languages $$languagestringref ... \n" );
 
     ############################################################
     # Special handling for Unix multi installation sets.
@@ -473,7 +473,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             my $infoline = "... creating language pack: $$languagestringref !\n";
             installer::logger::include_header_into_logfile("$infoline");
-            print "$infoline";
+            installer::logger::print_message( "$infoline" );
 
             $packages = installer::control::read_packagelist($installer::globals::addpackagelist); # reading the addon packagelist (which should be the languagepack package list)
             installer::control::check_packagelist($packages);
@@ -590,7 +590,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # files part, language dependent
     #####################################
 
-    print "... analyzing files ...\n";
+    installer::logger::print_message( "... analyzing files ...\n" );
 
     my $filesinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($filesinproductarrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles4.log", $filesinproductlanguageresolvedarrayref); }
@@ -639,7 +639,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # Unzipping files with flag ARCHIVE and putting all included files into the file list
     ######################################################################################
 
-    print "... analyzing files with flag ARCHIVE ...\n";
+    installer::logger::print_message( "... analyzing files with flag ARCHIVE ...\n" );
 
     my @additional_paths_from_zipfiles = ();
 
@@ -660,7 +660,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # Files with flag SCPZIP_REPLACE
     #####################################
 
-    print "... analyzing files with flag SCPZIP_REPLACE ...\n";
+    installer::logger::print_message( "... analyzing files with flag SCPZIP_REPLACE ...\n" );
 
     # Editing files with flag SCPZIP_REPLACE.
 
@@ -671,7 +671,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # Files with flag PATCH_SO_NAME
     #####################################
 
-    print "... analyzing files with flag PATCH_SO_NAME ...\n";
+    installer::logger::print_message( "... analyzing files with flag PATCH_SO_NAME ...\n" );
 
     # Editing files with flag PATCH_SO_NAME.
 
@@ -692,7 +692,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $installer::globals::servicesrdb_can_be_created )
             {
-                print "... creating preregistered services.rdb ...\n";
+                installer::logger::print_message( "... creating preregistered services.rdb ...\n" );
 
                 installer::servicesfile::create_services_rdb($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
                 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14.log", $filesinproductlanguageresolvedarrayref); }
@@ -708,7 +708,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     {
         if (! $installer::globals::languagepack)
         {
-            print "... merging files into registry database ...\n";
+            installer::logger::print_message( "... merging files into registry database ...\n" );
 
             installer::regmerge::merge_registration_files($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14b.log", $filesinproductlanguageresolvedarrayref); }
@@ -719,7 +719,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # Collecting directories for epm list file
     ############################################
 
-    print "... analyzing all directories for this product ...\n";
+    installer::logger::print_message( "... analyzing all directories for this product ...\n" );
 
     # There are two ways for a directory to be included into the epm directory list:
     # 1. Looking for all destination paths in the files array
@@ -759,7 +759,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # language dependent links part
     #########################################################
 
-    print "... analyzing links ...\n";
+    installer::logger::print_message( "... analyzing links ...\n" );
 
     my $linksinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($linksinproductarrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks2.log", $linksinproductlanguageresolvedarrayref); }
@@ -793,7 +793,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )))
     {
-        print "... creating profiles ...\n";
+        installer::logger::print_message( "... creating profiles ...\n" );
 
         $profilesinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($profilesinproductarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profiles2.log", $profilesinproductlanguageresolvedarrayref); }
@@ -829,7 +829,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # language dependent part for folder
         #########################################################
 
-        print "... analyzing folder ...\n";
+        installer::logger::print_message( "... analyzing folder ...\n" );
 
         $folderinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($folderinproductarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folder2.log", $folderinproductlanguageresolvedarrayref); }
@@ -841,7 +841,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # language dependent part for folderitems
         #########################################################
 
-        print "... analyzing folderitems ...\n";
+        installer::logger::print_message( "... analyzing folderitems ...\n" );
 
         $folderitemsinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($folderitemsinproductarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folderitems2.log", $folderitemsinproductlanguageresolvedarrayref); }
@@ -853,7 +853,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # language dependent part for registryitems
         #########################################################
 
-        print "... analyzing registryitems ...\n";
+        installer::logger::print_message( "... analyzing registryitems ...\n" );
 
         $registryitemsinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($registryitemsinproductarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems2.log", $registryitemsinproductlanguageresolvedarrayref); }
@@ -870,7 +870,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if (!($installer::globals::is_copy_only_project))
     {
-        print "... analyzing modules ...\n";
+        installer::logger::print_message( "... analyzing modules ...\n" );
 
         $modulesinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($modulesinproductarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules2.log", $modulesinproductlanguageresolvedarrayref); }
@@ -912,7 +912,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, FolderItem, RegistryItem
     {
-        print "... creating inf files ...\n";
+        installer::logger::print_message( "... creating inf files ...\n" );
         installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16c.log", $filesinproductlanguageresolvedarrayref); }
     }
@@ -945,7 +945,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Writing log file before packages are packed
         ####################################################
 
-        print "... creating log file " . $loggingdir . $installer::globals::logfilename . "\n";
+        installer::logger::print_message( "... creating log file " . $loggingdir . $installer::globals::logfilename . "\n" );
         installer::files::save_file($loggingdir . $installer::globals::logfilename, \@installer::globals::logfileinfo);
 
         ####################################################
@@ -967,7 +967,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Only for non-Windows platforms
         ############################################################################
 
-        print "... analyzing package list ...\n";
+        installer::logger::print_message( "... analyzing package list ...\n" );
 
         $packages = installer::packagelist::analyze_list($packages, $modulesinproductlanguageresolvedarrayref);
 
@@ -1153,7 +1153,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 my $epmfilename = "epm_" . $installer::globals::product . "_" . $onepackagename . $linkaddon . "_" . $installer::globals::compiler . "_" . $installer::globals::build . "_" . $installer::globals::minor . "_" . $$languagestringref . ".lst";
 
-                print "... creating epm list file $epmfilename ... \n";
+                installer::logger::print_message( "... creating epm list file $epmfilename ... \n" );
 
                 my $completeepmfilename = $listfiledir . $installer::globals::separator . $epmfilename;
 
@@ -1228,7 +1228,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                     {
                         # ... now epm can be started, to create the installation sets
 
-                        print "... starting patched epm ... \n";
+                        installer::logger::print_message( "... starting patched epm ... \n" );
 
                         installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename);
 
@@ -1258,7 +1258,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                     {
                         # ... now epm can be started, to create the installation sets
 
-                        print "... starting unpatched epm ... \n";
+                        installer::logger::print_message( "... starting unpatched epm ... \n" );
 
                         if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename); }
 
@@ -1408,7 +1408,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # All other tables are static!
         ############################################################################
 
-        print "... creating idt files ...\n";
+        installer::logger::print_message( "... creating idt files ...\n" );
 
         installer::logger::include_header_into_logfile("Creating idt files:");
 
@@ -1501,7 +1501,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # Copy the template idt files and the new created idt files into this language directory
 
-            print "... copying idt files ...\n";
+            installer::logger::print_message( "... copying idt files ...\n" );
 
             installer::logger::include_header_into_logfile("Copying idt files to $languageidtdir:");
 
@@ -1510,7 +1510,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Now all files are copied into a language specific directory
             # The template idt files can be translated
 
-            print "... localizing idt files (language: $onelanguage) ...\n";
+            installer::logger::print_message( "... localizing idt files (language: $onelanguage) ...\n" );
 
             installer::logger::include_header_into_logfile("Localizing idt files (Language: $onelanguage):");
 
@@ -1732,7 +1732,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 my $msidatabasename = installer::windows::msiglobal::get_msidatabasename($allvariableshashref, $onelanguage);
                 my $msifilename = $languageidtdir . $installer::globals::separator . $msidatabasename;
 
-                print "... creating msi database (language $onelanguage) ... \n";
+                installer::logger::print_message( "... creating msi database (language $onelanguage) ... \n" );
 
                 installer::windows::msiglobal::set_uuid_into_component_table($languageidtdir);  # setting new GUID for the components using the tool uuidgen.exe
                 installer::windows::msiglobal::create_msi_database($languageidtdir ,$msifilename);
@@ -1765,7 +1765,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
 
-            print "... generating setup.ini ...\n";
+            installer::logger::print_message( "... generating setup.ini ...\n" );
 
             installer::windows::msiglobal::create_setup_ini($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref);
         }
@@ -1773,7 +1773,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Analyzing the ScpActions and copying the files into the installation set
         # At least the loader, instmsia.exe and instmsiw.exe
 
-        print "... copying files into installation set ...\n";
+        installer::logger::print_message( "... copying files into installation set ...\n" );
 
         installer::windows::msiglobal::copy_scpactions_into_installset($defaultlanguage, $installdir, $scpactionsinproductlanguageresolvedarrayref);
 
@@ -1788,7 +1788,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::windows::msiglobal::copy_child_projects_into_installset($installdir, $allvariableshashref);
         }
 
-        print "... creating ddf files ...\n";
+        installer::logger::print_message( "... creating ddf files ...\n" );
 
         # Creating all needed ddf files and generating a list
         # for the package process containing all system calls
@@ -1808,7 +1808,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # before cab files are packed
         ####################################
 
-        print "... creating log file $installer::globals::logfilename \n";
+        installer::logger::print_message( "... creating log file $installer::globals::logfilename \n" );
 
         installer::files::save_file($loggingdir . $installer::globals::logfilename, \@installer::globals::logfileinfo);
 
@@ -1819,7 +1819,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         if ( $installer::globals::iswin )   # only possible on a Windows platform
         {
-            print "... packaging installation set ... \n";
+            installer::logger::print_message( "... packaging installation set ... \n" );
             installer::windows::msiglobal::execute_packaging($installer::globals::packjobref, $loggingdir);
             if ( $installer::globals::include_cab_in_msi ) { installer::windows::msiglobal::include_cabs_into_msi($installdir); }
 
@@ -1828,7 +1828,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # after cab files are packed
             ####################################
 
-            print "\n... creating log file $installer::globals::logfilename \n";
+            installer::logger::print_message( "\n... creating log file $installer::globals::logfilename \n" );
             installer::files::save_file($loggingdir . $installer::globals::logfilename, \@installer::globals::logfileinfo);
         }
 
