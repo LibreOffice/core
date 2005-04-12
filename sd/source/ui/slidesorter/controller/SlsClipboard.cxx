@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:11:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_CUT:
-        case SID_DELETE:
             if (pCurrentFunction != NULL)
                 pCurrentFunction->DoCut();
             else
@@ -163,6 +162,11 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             mrController.GetView().LockRedraw (FALSE);
             rRequest.Done();
             break;
+
+        case SID_DELETE:
+            DoDelete();
+            rRequest.Done();
+            break;
     }
 }
 
@@ -173,7 +177,18 @@ void Clipboard::DoCut (::Window* pWindow)
 {
     if (mrController.GetModel().GetPageCount() > 1)
     {
-        DoCopy (pWindow);
+        DoCopy(pWindow);
+        DoDelete(pWindow);
+    }
+}
+
+
+
+
+void Clipboard::DoDelete (::Window* pWindow)
+{
+    if (mrController.GetModel().GetPageCount() > 1)
+    {
         mrController.DeleteSelectedPages();
     }
 }
