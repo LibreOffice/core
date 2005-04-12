@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:06:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,12 +370,15 @@ void Edit::ImplInitData()
 
 bool Edit::ImplUseNativeBorder( WinBits nStyle )
 {
-    bool bRet = IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
-                && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
-    if( bRet && mbIsSubEdit )
+    bool bRet =
+        IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
+                                 && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
+    if( ! bRet && mbIsSubEdit )
     {
-        nStyle = GetParent()->GetStyle();
-        bRet = ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
+        Window* pWindow = GetParent();
+        nStyle = pWindow->GetStyle();
+        bRet = pWindow->IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
+               && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
     }
     return bRet;
 }
@@ -947,7 +950,7 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
     if ( pCursor )
         pCursor->Hide();
 
-    if ( ImplUseNativeBorder( GetStyle() ) )
+    if( ImplUseNativeBorder( GetStyle() ) )
     {
         // draw the inner part by painting the whole control using its border window
         Window *pControl = this;
