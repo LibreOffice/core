@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:13:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 15:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,7 +1038,10 @@ void LoadEnv::impl_detectTypeAndFilter()
     {
         // SAFE ->
         aWriteLock.lock();
-        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
+        // Dont overwrite external decisions! See comments before ...
+        ::comphelper::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_ASTEMPLATE());
+        if (pAsTemplateItem == m_lMediaDescriptor.end())
+            m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
         aWriteLock.unlock();
         // <- SAFE
     }
