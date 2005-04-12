@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:12:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@ class Paragraph;
 class SdrTextObj;
 class Outliner;
 class SfxProgress;
+
+namespace sd { namespace tools {
+class EventMultiplexerEvent;
+} }
 
 namespace sd {
 
@@ -172,6 +176,14 @@ public:
     // #97766# Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const;
 
+    /** After this method has been called with <TRUE/> following changes of
+        the current page are ignored in that the corresponding text is not
+        selected.
+        This is used to supress unwanted side effects between selection and
+        cursor position.
+    */
+    void IgnoreCurrentPageChanges (bool bIgnore);
+
 private:
     OutlineViewShell* pOutlineViewShell;
     SdrOutliner*        pOutliner;
@@ -206,6 +218,11 @@ private:
     */
     Color maDocColor;
 
+    /** While the value of this flag is <TRUE/> changes of the current page
+        do not lead to selecting the corresponding text in the outliner.
+    */
+    bool mbIgnoreCurrentPageChanges;
+
     /** updates the high contrast settings and document color if they changed.
         @param bForceUpdate forces the method to set all style settings
     */
@@ -215,6 +232,8 @@ private:
         change. Its only purpose is to call onUpdateStyleSettings() then.
     */
     DECL_LINK( AppEventListenerHdl, void * );
+
+    DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent*);
 };
 
 } // end of namespace sd
