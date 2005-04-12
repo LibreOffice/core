@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:17:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,7 +1059,7 @@ Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
 
 
 
-Rectangle  SlideSorterController::Rearrange (void)
+Rectangle  SlideSorterController::Rearrange (bool bForce)
 {
     Rectangle aNewContentArea (maTotalWindowArea);
 
@@ -1069,10 +1069,17 @@ Rectangle  SlideSorterController::Rearrange (void)
         // Place the scroll bars.
         aNewContentArea = GetScrollBarManager().PlaceScrollBars(maTotalWindowArea);
 
-        Rectangle aCurrentContentArea (
-            pWindow->GetPosPixel(),
-            pWindow->GetOutputSizePixel());
-        if (aNewContentArea != aCurrentContentArea)
+        bool bSizeHasChanged (false);
+        // Only when bForce is not true we have to test for a size change in
+        // order to determine whether the window and the view have to be resized.
+        if ( ! bForce)
+        {
+            Rectangle aCurrentContentArea (
+                pWindow->GetPosPixel(),
+                pWindow->GetOutputSizePixel());
+            bSizeHasChanged = (aNewContentArea != aCurrentContentArea);
+        }
+        if (bForce || bSizeHasChanged)
         {
             // The browser window gets the remaining space.
             pWindow->SetPosSizePixel (aNewContentArea.TopLeft(), aNewContentArea.GetSize());
@@ -1081,7 +1088,7 @@ Rectangle  SlideSorterController::Rearrange (void)
 
         // Adapt the scroll bars to the new zoom factor of the browser
         // window and the arrangement of the page objects.
-        GetScrollBarManager().UpdateScrollBars();
+        GetScrollBarManager().UpdateScrollBars(false, !bForce);
     }
 
     return aNewContentArea;
