@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:20:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,9 +155,9 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 |*
 \************************************************************************/
 
-SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact)
+SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 :   SfxModule( SfxApplication::CreateResManager("sd"), FALSE,
-                  pDrawObjFact, pGraphicObjFact, NULL ),
+                  pFact1, pFact2, NULL ),
     bWaterCan(FALSE),
     pTransferClip(NULL),
     pTransferDrag(NULL),
