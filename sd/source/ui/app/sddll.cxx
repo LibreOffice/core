@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:32:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,18 @@ void SdDLL::Init()
 
     // the SdModule must be created
      SdModule** ppShlPtr = (SdModule**) GetAppData(SHL_DRAW);
-    (*ppShlPtr) = new SdModule( pImpressFact, pDrawFact);
+
+     // #i46427#
+     // The SfxModule::SfxModule stops when the first given factory
+     // is 0, so we must not give a 0 as first factory
+     if( pImpressFact )
+     {
+        (*ppShlPtr) = new SdModule( pImpressFact, pDrawFact );
+     }
+     else
+     {
+        (*ppShlPtr) = new SdModule( pDrawFact, pImpressFact );
+     }
 
     if (SvtModuleOptions().IsImpress())
     {
