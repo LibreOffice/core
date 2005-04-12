@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:05:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,8 @@ void HelpTextWindow::Paint( const Rectangle& )
     bool bNativeOK = false;
     if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
     {
-        Region aCtrlRegion( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        // #i46472# workaround gcc3.3 temporary problem
+        Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
         ImplControlValue    aControlValue;
         bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
                                        0, aControlValue, rtl::OUString() );
