@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:26:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,8 +457,9 @@ void SelectionRectangleOverlay::Show (void)
 {
     if ( ! mbIsShowing)
     {
-        Start (maAnchor);
-        Update (maSecondCorner);
+        SlideSorterView& rView (mrViewOverlay.GetViewShell().GetSlideSorterController().GetView());
+        rView.BegEncirclement(maAnchor);
+        rView.MovEncirclement(maSecondCorner);
         OverlayBase::Show();
     }
 }
