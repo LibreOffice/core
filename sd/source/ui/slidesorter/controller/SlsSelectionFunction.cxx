@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:59:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,11 +291,10 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
     Point aMousePosition (rEvent.GetPosPixel());
 
     // Determine page under mouse and show the mouse over effect.
-    model::PageDescriptor* pHitDescriptor
-        = mrController.GetPageAt (aMousePosition);
+    model::PageDescriptor* pHitDescriptor = mrController.GetPageAt (aMousePosition);
     view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
-    rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse (
-        pHitDescriptor==NULL ? NULL : pHitDescriptor);
+    rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse(
+        rEvent.IsLeaveWindow() ? NULL : pHitDescriptor);
     if (pHitDescriptor != NULL)
         rOverlay.GetMouseOverIndicatorOverlay().Show();
     else
@@ -662,7 +661,7 @@ void SelectionFunction::ProcessRectangleSelection (bool bToggleSelection)
                 rDescriptor,
                 view::SlideSorterView::CS_MODEL,
                 view::SlideSorterView::BBT_SHAPE));
-            if (rSelectionRectangle.IsInside (aPageBox))
+            if (rSelectionRectangle.IsOver(aPageBox))
             {
                 // When we are extending the selection (shift key is
                 // pressed) then toggle the selection state of the page.
