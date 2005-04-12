@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:13:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1723,7 +1723,8 @@ SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )
     //  first try the current view
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nId );
+    // #i46999# current view frame can be null (for example, when closing help)
+    SfxChildWindow* pChildWnd = pViewFrm ? pViewFrm->GetChildWindow( nId ) : NULL;
     if ( pChildWnd )
         return pChildWnd;           // found in the current view
 
