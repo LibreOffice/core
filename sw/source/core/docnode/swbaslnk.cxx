@@ -2,9 +2,9 @@
  *
  *  $rcsfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 10:06:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,6 +627,10 @@ long GrfNodeChanged( void* pLink, void* pCaller ) {
                 xInputStream,bIsReadOnly);
             pSwBaseLink->Update();
         }
+        else
+        {
+            ASSERT( false, "<GrfNodeChanged()> - no input stream" );
+        }
         pSwBaseLink->m_pReReadThread = 0;
     }
 
@@ -697,15 +701,24 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
     }
 #endif
 
-    TestBalloonInputStream* pTBIS = 0;
-    if(!m_xInputStreamToLoadFrom.is()) {
-        pTBIS = new TestBalloonInputStream();
-        m_xInputStreamToLoadFrom = pTBIS;
-    }
+    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
+//    TestBalloonInputStream* pTBIS = 0;
+//    if(!m_xInputStreamToLoadFrom.is()) {
+//        if ( !pCntntNode->IsGrfNode() ||
+//             static_cast<SwGrfNode*>(pCntntNode)->GetGrfObj().GetType()
+//                    != GRAPHIC_DEFAULT )
+//        {
+//            pTBIS = new TestBalloonInputStream();
+//            m_xInputStreamToLoadFrom = pTBIS;
+//        }
+//    }
+    // <--
 
     if( GetObj() )
     {
-        GetObj()->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
+        // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
+//        GetObj()->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
+        // <--
         String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
 
 //!! ??? what have we here to do ????
@@ -740,10 +753,17 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 
     bSwapIn = FALSE;
 
-    if(pTBIS && pTBIS->isTouched()) {
-        (m_pReReadThread = new ReReadThread(
-            this,GetName(),bWaitForData,bNativFormat))->create();
-    }
+    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
+//    if ( pTBIS && pTBIS->isTouched() )
+//    {
+//        // --> OD 2005-04-11 #i46300# - determine correct URL for the graphic
+//        String sGrfNm;
+//        GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
+//        (m_pReReadThread = new ReReadThread(
+//                this, sGrfNm, bWaitForData, bNativFormat))->create();
+//        // <--
+//    }
+    // <--
     return bRes;
 }
 
