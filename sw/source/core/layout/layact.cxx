@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:12:02 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,6 +1114,13 @@ void SwLayAction::InternalAction()
                         pPg->InvalidateFlyCntnt();
                         // <--
                     }
+                    // --> OD 2005-04-06 #i46807# - we are statisfied, if the
+                    // content is formatted once complete.
+                    else
+                    {
+                        break;
+                    }
+                    // <--
                 }
             }
             // <--
