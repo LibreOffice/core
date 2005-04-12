@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:19:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3408,7 +3408,7 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
         {
             uno::Reference< beans::XPropertySet > xPropSet( mxShape,uno::UNO_QUERY );
             if ( xPropSet.is() )
-                pContext = new XMLEnhancedCustomShapeContext( GetImport(), nPrefix, rLocalName, maCustomShapeGeometry );
+                pContext = new XMLEnhancedCustomShapeContext( GetImport(), mxShape, nPrefix, rLocalName, maCustomShapeGeometry );
         }
     }
     // delegate to parent class if no context could be created
