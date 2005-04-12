@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:46:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3119,18 +3119,18 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
 
 // -------------------------------------------------------------------------
 
-static bool createPath( const ByteString& rPath )
+static bool createWriteablePath( const ByteString& rPath )
 {
     bool bSuccess = false;
 
-    if( access( rPath.GetBuffer(), F_OK ) )
+    if( access( rPath.GetBuffer(), W_OK ) )
     {
         int nPos = rPath.SearchBackward( '/' );
         if( nPos != STRING_NOTFOUND )
             while( nPos > 0 && rPath.GetChar( nPos ) == '/' )
                 nPos--;
 
-        if( nPos != STRING_NOTFOUND && nPos != 0 && createPath( rPath.Copy( 0, nPos+1 ) ) )
+        if( nPos != STRING_NOTFOUND && nPos != 0 && createWriteablePath( rPath.Copy( 0, nPos+1 ) ) )
         {
             bSuccess = mkdir( rPath.GetBuffer(), 0777 ) ? false : true;
         }
@@ -3158,7 +3158,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
     {
         // check if we can create files in that directory
         ByteString aDirPath = getDirectory( *dir_it );
-        if( ! access( aDirPath.GetBuffer(), W_OK ) || createPath( aDirPath ) )
+        if( createWriteablePath( aDirPath ) )
         {
             aDir = INetURLObject( OStringToOUString( aDirPath, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             nDirID = *dir_it;
@@ -3326,7 +3326,7 @@ bool PrintFontManager::checkImportPossible() const
          dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
     {
         aDir = getDirectory( *dir_it );
-        if( ! access( aDir.GetBuffer(), W_OK ) || createPath( aDir ) )
+        if( createWriteablePath( aDir ) )
         {
             bSuccess = true;
             break;
