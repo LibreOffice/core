@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:17:48 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,15 @@ public:
     /** Determine which of the UI elements--the scroll bars, the scroll bar
         filler, the actual slide sorter view--are visible and place them in
         the area last passed to Resize().
+        @param bForce
+            When <TRUE/> is given (<FALSE/> is the default) then the content
+            window and with it the SlideSorterView is resized event when its
+            size does not change (the size does change when the visibility
+            of scroll bars changes.)
         @return
             Returns the space occupied by the browser window.
     */
-    Rectangle Rearrange (void);
+    Rectangle Rearrange (bool bForce = false);
 
     SlideSorterViewShell& GetViewShell (void) const;
     model::SlideSorterModel& GetModel (void) const;
