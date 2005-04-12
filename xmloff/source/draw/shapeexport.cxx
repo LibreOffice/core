@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:14:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,14 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 
+#include <comphelper/processfactory.hxx>
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XCUSTOMSHAPEENGINE_HPP_
+#include <com/sun/star/drawing/XCustomShapeEngine.hpp>
+#endif
+
 #include "xmlnmspe.hxx"
 
 using namespace ::rtl;
@@ -228,15 +236,63 @@ XMLShapeExport::~XMLShapeExport()
 
 ///////////////////////////////////////////////////////////////////////
 
+// sj: replacing CustomShapes with standard objects that are also supported in OpenOffice.org format
+uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement( const uno::Reference< drawing::XShape >& xShape )
+{
+    uno::Reference< drawing::XShape > xCustomShapeReplacement;
+
+    if( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
+    {
+        String aType( (OUString)xShape->getShapeType() );
+        if( aType.EqualsAscii( (const sal_Char*)"com.sun.star.drawing.CustomShape" ) )
+        {
+            uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+            if( xSet.is() )
+            {
+                rtl::OUString aEngine;
+                xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeEngine" ) ) ) >>= aEngine;
+                if ( !aEngine.getLength() )
+                    aEngine = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
+
+                uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        /*
+                uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pCustomShape );
+                if ( !aXShape.is() )
+                    aXShape = new SvxCustomShape( (SdrObjCustomShape*)pCustomShape );
+        */
+                if ( aEngine.getLength() && xFactory.is() )
+                {
+                    uno::Sequence< uno::Any > aArgument( 1 );
+                    uno::Sequence< beans::PropertyValue > aPropValues( 2 );
+                    aPropValues[ 0 ].Name = rtl::OUString::createFromAscii( "CustomShape" );
+                    aPropValues[ 0 ].Value <<= xShape;
+                    sal_Bool bForceGroupWithText = sal_True;
+                    aPropValues[ 1 ].Name = rtl::OUString::createFromAscii( "ForceGroupWithText" );
+                    aPropValues[ 1 ].Value <<= bForceGroupWithText;
+                    aArgument[ 0 ] <<= aPropValues;
+                    uno::Reference< uno::XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
+                    if ( xInterface.is() )
+                    {
+                        uno::Reference< drawing::XCustomShapeEngine > xCustomShapeEngine(
+                            uno::Reference< drawing::XCustomShapeEngine >( xInterface, uno::UNO_QUERY ) );
+                        if ( xCustomShapeEngine.is() )
+                            xCustomShapeReplacement = xCustomShapeEngine->render();
+                    }
+                }
+            }
+        }
+    }
+    return xCustomShapeReplacement;
+}
+
 // This method collects all automatic styles for the given XShape
-void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape)
+void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape )
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
         DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): no call to seekShapes()!" );
         return;
     }
-
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
     if( xSet.is() )
@@ -251,6 +307,10 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     }
 
     ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
+
+    uno::Reference< drawing::XShape > xCustomShapeReplacement = checkForCustomShapeReplacement( xShape );
+    if ( xCustomShapeReplacement.is() )
+        aShapeInfo.xCustomShapeReplacement = xCustomShapeReplacement;
 
     // -----------------------------
     // first compute the shapes type
@@ -278,6 +338,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     sal_Bool bIsEmptyPresObj = sal_False;
 
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if ( aShapeInfo.xCustomShapeReplacement.is() )
+        xPropSet.clear();
 
     // ----------------
     // prep text styles
@@ -493,8 +555,10 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // check for shape collections (group shape or 3d scene)
     // and collect contained shapes style infos
     // -----------------------------------------------------
+    const uno::Reference< drawing::XShape >& xCollection = aShapeInfo.xCustomShapeReplacement.is()
+                                                ? aShapeInfo.xCustomShapeReplacement : xShape;
     {
-        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
+        uno::Reference< drawing::XShapes > xShapes( xCollection, uno::UNO_QUERY );
         if( xShapes.is() )
         {
             collectShapesAutoStyles( xShapes );
@@ -515,7 +579,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         DBG_ERROR( "XMLShapeExport::exportShape(): no auto styles where collected before export" );
         return;
     }
-
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
     if( xSet.is() )
@@ -530,6 +593,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
 
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
+
 
 #ifndef PRODUCT
     // ---------------------------------------
@@ -779,7 +843,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawCustomShape:
         {
-            ImpExportCustomShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            if ( aShapeInfo.xCustomShapeReplacement.is() )
+                ImpExportGroupShape( aShapeInfo.xCustomShapeReplacement, XmlShapeTypeDrawGroupShape, nFeatures, pRefPoint );
+            else
+                ImpExportCustomShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
         }
 
