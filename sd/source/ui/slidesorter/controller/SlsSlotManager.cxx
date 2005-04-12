@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:00:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,9 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                         nColumnCount, nColumnCount);
                     // Force a repaint and re-layout.
                     rShell.ArrangeGUIElements ();
-                    mrController.GetView().RequestRepaint ();
+                    // Rearrange the UI-elements controlled by the
+                    // controller and force a rearrangement of the view.
+                    mrController.Rearrange(true);
                 }
             }
             rShell.Cancel();
