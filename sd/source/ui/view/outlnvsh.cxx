@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:28:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 17:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2040,7 +2040,11 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
         ViewShell::UpdatePreview( pPage, TRUE );
     }
     if (bNewPage)
+    {
+        pOlView->IgnoreCurrentPageChanges(true);
         SetCurrentPage (pPage);
+        pOlView->IgnoreCurrentPageChanges(false);
+    }
 }
 
 
