@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:08:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,11 @@ using namespace ::xmloff::EnhancedCustomShapeToken;
 
 TYPEINIT1( XMLEnhancedCustomShapeContext, SvXMLImportContext );
 
-XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
-                                                            std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry ) :
+XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
+            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+                    std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry ) :
+        mrxShape( rxShape ),
         mrCustomShapeGeometry( rCustomShapeGeometry ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
         SvXMLImportContext( rImport, nPrefix, rLocalName )
@@ -605,7 +608,7 @@ void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue
     }
 }
 
-void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:glue-points
+sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > vParameter;
@@ -632,6 +635,7 @@ void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::Prope
         aProp.Value <<= aParameterSeq;
         rDest.push_back( aProp );
     }
+    return vParameter.size();
 }
 
 void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
@@ -1123,7 +1127,11 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     GetEnhancedRectangleSequence( maPath, rValue, EAS_TextFrames );
                 break;
                 case EAS_glue_points :
-                    GetEnhancedParameterPairSequence( maPath, rValue, EAS_GluePoints );
+                {
+                    sal_Int32 i, nPairs = GetEnhancedParameterPairSequence( maPath, rValue, EAS_GluePoints );
+                    for ( i = 0; i < nPairs; i++ )
+                        GetImport().GetShapeImport()->addGluePointMapping( mrxShape, i + 4, i + 4 );
+                }
                 break;
                 case EAS_glue_point_type :
                     GetEnum( maPath, rValue, EAS_GluePointType, *aXML_GluePointEnumMap );
