@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:08:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,9 @@
 
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
+#endif
+#ifndef _SVX_UNOSHAPE_HXX
+#include "unoshape.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -3784,19 +3787,27 @@ sal_Bool SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
 {
     // try weak reference first
     uno::Reference< uno::XInterface > xShape( mxUnoShape );
-
-    if( !xShape.is() && pPage )
+    if( !xShape.is() )
     {
-        uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
-        if( xPage.is() )
+        if ( pPage )
         {
-            SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation(xPage);
-            if( pDrawPage )
+            uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
+            if( xPage.is() )
             {
-                // create one
-                xShape = pDrawPage->_CreateShape( this );
-                mxUnoShape = xShape;
+                SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation(xPage);
+                if( pDrawPage )
+                {
+                    // create one
+                    xShape = pDrawPage->_CreateShape( this );
+                    mxUnoShape = xShape;
+                }
             }
+        }
+        else
+        {
+            uno::Reference< drawing::XShape > xS( SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this, NULL ) );
+            xShape = xS;
+            mxUnoShape = xShape;
         }
     }
 
