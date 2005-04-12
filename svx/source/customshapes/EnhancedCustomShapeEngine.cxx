@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:08:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,31 @@
 #ifndef _SVDOBJ_HXX
 #include "svdobj.hxx"
 #endif
+#ifndef _SVDOASHP_HXX
+#include "svdoashp.hxx"
+#endif
+#ifndef _SVDOGRP_HXX
+#include "svdogrp.hxx"
+#endif
+#ifndef _SVDORECT_HXX
+#include "svdorect.hxx"
+#endif
+#ifndef _OUTLOBJ_HXX
+#include "outlobj.hxx"
+#endif
+#ifndef _OUTLINER_HXX
+#include "outliner.hxx"
+#endif
+#ifndef _SVDOUTL_HXX
+#include "svdoutl.hxx"
+#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
 #include "svdopath.hxx"
 #endif
+#include "svdpage.hxx"
 #ifndef _XOUTX_HXX
 #include "xoutx.hxx"
 #endif
@@ -132,7 +151,8 @@ SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames
 // -----------------------------------------------------------------------------
 
 EnhancedCustomShapeEngine::EnhancedCustomShapeEngine( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) :
-    mxFact      ( rxMgr )
+    mxFact                  ( rxMgr ),
+    mbForceGroupWithText    ( sal_False )
 {
 }
 EnhancedCustomShapeEngine::~EnhancedCustomShapeEngine()
@@ -167,6 +187,8 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const SEQ( NMSP_UNO::Any )&
         const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
         if ( rProp.Name.equalsAscii( "CustomShape" ) )
             rProp.Value >>= mxShape;
+        else if ( rProp.Name.equalsAscii( "ForceGroupWithText" ) )
+            rProp.Value >>= mbForceGroupWithText;
     }
 }
 
@@ -189,6 +211,121 @@ SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
 }
 
 // XCustomShapeEngine -----------------------------------------------------------
+
+SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape )
+{
+    sal_Bool bHasText = pCustoObj->HasText();
+    if ( pRenderedShape || bHasText )
+    {
+        // applying shadow
+        const SdrObject* pShadowGeometry = pCustoObj->GetSdrObjectShadowFromCustomShape();
+        if ( pShadowGeometry )
+        {
+            if ( pRenderedShape )
+            {
+                if ( !pRenderedShape->ISA( SdrObjGroup ) )
+                {
+                    SdrObject* pTmp = pRenderedShape;
+                    pRenderedShape = new SdrObjGroup();
+                    ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                }
+                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pShadowGeometry->Clone(), 0 );
+            }
+            else
+                pRenderedShape = pShadowGeometry->Clone();
+        }
+
+        // apply text
+        if ( bHasText )
+        {
+            // #i37011# also create a text object and add at rPos + 1
+            SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(
+                pCustoObj->GetObjInventor(), OBJ_TEXT, 0L, pCustoObj->GetModel());
+
+            // Copy text content
+            OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
+            if( pParaObj )
+                pTextObj->NbcSetOutlinerParaObject( pParaObj->Clone() );
+
+            // copy all attributes
+            SfxItemSet aTargetItemSet( pCustoObj->GetMergedItemSet() );
+
+            // clear fill and line style
+            aTargetItemSet.Put(XLineStyleItem(XLINE_NONE));
+            aTargetItemSet.Put(XFillStyleItem(XFILL_NONE));
+
+            // get the text bounds and set at text object
+            Rectangle aTextBounds = pCustoObj->GetSnapRect();
+            if( pCustoObj->GetTextBounds( aTextBounds ) )
+                pTextObj->SetSnapRect( aTextBounds );
+
+            // if rotated, copy GeoStat, too.
+            const GeoStat& rSourceGeo = pCustoObj->GetGeoStat();
+            if ( rSourceGeo.nDrehWink )
+            {
+                pTextObj->NbcRotate(
+                    pCustoObj->GetSnapRect().Center(), rSourceGeo.nDrehWink,
+                    rSourceGeo.nSin, rSourceGeo.nCos);
+            }
+
+            // set modified ItemSet at text object
+            pTextObj->SetMergedItemSet(aTargetItemSet);
+
+            if ( pRenderedShape )
+            {
+                if ( !pRenderedShape->ISA( SdrObjGroup ) )
+                {
+                    SdrObject* pTmp = pRenderedShape;
+                    pRenderedShape = new SdrObjGroup();
+                    ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                }
+                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj, LIST_APPEND );
+            }
+            else
+                pRenderedShape = pTextObj;
+
+            pTextObj->SetPage( pCustoObj->GetPage() );
+        }
+
+        // force group
+        if ( pRenderedShape )
+        {
+            if ( !pRenderedShape->ISA( SdrObjGroup ) )
+            {
+                SdrObject* pTmp = pRenderedShape;
+                pRenderedShape = new SdrObjGroup();
+                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+            }
+            pRenderedShape->SetModel( pCustoObj->GetModel() );
+        }
+    }
+    return pRenderedShape;
+}
+
+void SetTemporary( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
+{
+    if ( xShape.is() )
+    {
+        SvxShape* pShape = SvxShape::getImplementation( xShape );
+        if ( pShape )
+            pShape->SetTemporaryShape( sal_True );
+/*
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes > xShapes( xShape, ::com::sun::star::uno::UNO_QUERY );
+        if ( xShapes.is() )
+        {
+            sal_Int32 i;
+            for ( i = 0; i < xShapes->getCount(); i++ )
+            {
+                ::com::sun::star::uno::Any aAny( xShapes->getByIndex( i ) );
+                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+                if ( aAny >>= xShape )
+                    SetTemporary( xShape );
+            }
+        }
+*/
+    }
+}
 
 REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::render()
     throw ( NMSP_UNO::RuntimeException )
@@ -250,9 +387,17 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
             }
             pRenderedShape->NbcSetStyleSheet( pSdrObjCustomShape->GetStyleSheet(), sal_True );
             pRenderedShape->RecalcSnapRect();
+        }
+
+        if ( mbForceGroupWithText )
+            pRenderedShape = ImplForceGroupWithText( (SdrObjCustomShape*)pSdrObjCustomShape, pRenderedShape );
+
+        if ( pRenderedShape )
+        {
             xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
                 pRenderedShape->GetObjInventor(), pRenderedShape, NULL );
         }
+        SetTemporary( xShape );
     }
     return xShape;
 }
