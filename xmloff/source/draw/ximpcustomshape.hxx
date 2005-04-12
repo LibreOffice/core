@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:08:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #endif
@@ -95,6 +98,7 @@ class SdXMLCustomShapeContext;
 class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 {
     SvXMLUnitConverter& mrUnitConverter;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& mrxShape;
     std::vector< com::sun::star::beans::PropertyValue >& mrCustomShapeGeometry;
 
     std::vector< com::sun::star::beans::PropertyValue > maExtrusion;
@@ -108,7 +112,7 @@ public:
 
     TYPEINFO();
 
-    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrefix,
+    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName, std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
