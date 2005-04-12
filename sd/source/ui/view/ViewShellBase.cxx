@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:27:27 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,8 @@ void ViewShellBase::LateInit (void)
     mpFormShellManager = ::std::auto_ptr<FormShellManager>(
         new FormShellManager (*this));
 
+    mpEventMultiplexer.reset (new tools::EventMultiplexer (*this));
+
     // Initialize the pane manager.  This switches synchronously to the
     // default main view shell.
     mpPaneManager->LateInit();
@@ -350,7 +352,6 @@ void ViewShellBase::LateInit (void)
         GetMainViewShell()->GetController();
 
     //    GetMainViewShell()->GetController();
-    mpEventMultiplexer.reset (new tools::EventMultiplexer (*this));
 }
 
 
