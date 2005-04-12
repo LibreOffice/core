@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:11:25 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,9 +441,8 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         }
 
         // set attributes and paint shadow object
-        pRetval->SetMergedItemSet(aTempSet);
+        pRetval->SetMergedItemSet( aTempSet );
     }
-
     return pRetval;
 }
 
@@ -459,19 +458,19 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
     Reference< XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pCustomShape );
-    if ( !aXShape.is() )
-        aXShape = new SvxCustomShape( (SdrObjCustomShape*)pCustomShape );
-
-    if ( aEngine.Len() && xFactory.is() && aXShape.is() )
+    if ( aXShape.is() )
     {
-        Sequence< Any > aArgument( 1 );
-        Sequence< PropertyValue > aPropValues( 1 );
-        aPropValues[ 0 ].Name = rtl::OUString::createFromAscii( "CustomShape" );
-        aPropValues[ 0 ].Value <<= aXShape;
-        aArgument[ 0 ] <<= aPropValues;
-        Reference< XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
-        if ( xInterface.is() )
-            xCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
+        if ( aEngine.Len() && xFactory.is() )
+        {
+            Sequence< Any > aArgument( 1 );
+            Sequence< PropertyValue > aPropValues( 1 );
+            aPropValues[ 0 ].Name = rtl::OUString::createFromAscii( "CustomShape" );
+            aPropValues[ 0 ].Value <<= aXShape;
+            aArgument[ 0 ] <<= aPropValues;
+            Reference< XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
+            if ( xInterface.is() )
+                xCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
+        }
     }
     return xCustomShapeEngine;
 }
@@ -3290,21 +3289,7 @@ bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
 // #i37011# centralize throw-away of render geometry
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
-    if ( mXRenderedCustomShape.is() )
-    {
-        // #i40944#
-        // The XShape will not delete the display graphic of the CustomShape, this
-        // needs to be done here. This was not only a memory leak but also dangerous.
-        const SdrObject* pObj = GetSdrObjectFromCustomShape();
-
-        if(pObj)
-        {
-            delete pObj;
-        }
-
-        mXRenderedCustomShape = 0L;
-    }
-
+    mXRenderedCustomShape = 0L;
     delete mpLastShadowGeometry;
     mpLastShadowGeometry = 0L;
 }
