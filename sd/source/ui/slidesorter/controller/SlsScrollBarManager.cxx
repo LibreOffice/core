@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:51:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "Window.hxx"
 #include "sdpage.hxx"
 
+#include <boost/limits.hpp>
 
 #include <vcl/scrbar.hxx>
 
@@ -255,14 +256,11 @@ void ScrollBarManager::AdaptWindowSize (const Rectangle& rArea)
 
 
 
-void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition)
+void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScrolling)
 {
     Rectangle aModelArea (mrController.GetView().GetModelArea());
     ::sd::Window* pWindow = mrController.GetView().GetWindow();
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
-
-    double nOldHorizontalPosition = mnHorizontalPosition;
-    double nOldVerticalPosition = mnVerticalPosition;
 
     // The horizontal scroll bar is only shown when the window is
     // horizontally smaller than the view.
@@ -289,6 +287,10 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition)
             mpContentWindow->PixelToLogic(
                 mpContentWindow->GetSizePixel()).Width() * 9 / 10);
     }
+    else
+    {
+        mnHorizontalPosition = 0;
+    }
 
     // The vertical scroll bar is always shown.
     if (mpVerticalScrollBar != NULL && mpVerticalScrollBar->IsVisible())
@@ -313,12 +315,21 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition)
             (mpContentWindow->PixelToLogic(
                 mpContentWindow->GetSizePixel()).Height() * 9) / 10);
     }
-
-    mrController.GetView().InvalidatePageObjectVisibilities();
-    if (nOldHorizontalPosition != mnHorizontalPosition
-        || nOldVerticalPosition != mnVerticalPosition)
+    else
     {
-        pWindow->SetVisibleXY (mnHorizontalPosition, mnVerticalPosition);
+        mnVerticalPosition = 0;
+    }
+
+
+    double nEps (::std::numeric_limits<double>::epsilon());
+    if (fabs(mnHorizontalPosition-pWindow->GetVisibleX()) > nEps
+        || fabs(mnVerticalPosition-pWindow->GetVisibleY()) > nEps)
+    {
+        mrController.GetView().InvalidatePageObjectVisibilities();
+        if (bUseScrolling)
+            pWindow->SetVisibleXY(mnHorizontalPosition, mnVerticalPosition);
+        else
+            SetWindowOrigin(mnHorizontalPosition, mnVerticalPosition);
     }
 }
 
@@ -327,7 +338,10 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition)
 
 IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
 {
-    if (pScrollBar!=NULL && mrController.GetView().GetWindow()!=NULL)
+    if (pScrollBar!=NULL
+        && pScrollBar==mpVerticalScrollBar
+        && pScrollBar->IsVisible()
+        && mrController.GetView().GetWindow()!=NULL)
     {
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
@@ -344,7 +358,10 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
 
 IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
 {
-    if (pScrollBar!=NULL && mrController.GetView().GetWindow()!=NULL)
+    if (pScrollBar!=NULL
+        && pScrollBar==mpHorizontalScrollBar
+        && pScrollBar->IsVisible()
+        && mrController.GetView().GetWindow()!=NULL)
     {
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
@@ -516,6 +533,7 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
     int nDy = 0;
 
     Size aWindowSize = pWindow->GetOutputSizePixel();
+    Rectangle aWindowArea (pWindow->GetPosPixel(), aWindowSize);
     Rectangle aViewPixelArea (
         pWindow->LogicToPixel(mrController.GetView().GetModelArea()));
 
@@ -523,14 +541,15 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
         && mpHorizontalScrollBar != NULL
         && mpHorizontalScrollBar->IsVisible())
     {
-        if (rMouseWindowPosition.X() < maScrollBorder.Width())
+        if (rMouseWindowPosition.X() < maScrollBorder.Width()
+            && aWindowArea.Left() > aViewPixelArea.Left())
         {
             nDx = -1 + (int)(mnHorizontalScrollFactor
                 * (rMouseWindowPosition.X() - maScrollBorder.Width()));
         }
 
-        if (rMouseWindowPosition.X()
-            >= aWindowSize.Width() - maScrollBorder.Width())
+        if (rMouseWindowPosition.X() >= (aWindowSize.Width() - maScrollBorder.Width())
+            && aWindowArea.Right() < aViewPixelArea.Right())
         {
             nDx = 1 + (int)(mnHorizontalScrollFactor
                 * (rMouseWindowPosition.X() - aWindowSize.Width()
@@ -541,14 +560,15 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
     if (aWindowSize.Height() > maScrollBorder.Height() * 3
         && aWindowSize.Height() < aViewPixelArea.GetHeight())
     {
-        if (rMouseWindowPosition.Y() < maScrollBorder.Height())
+        if (rMouseWindowPosition.Y() < maScrollBorder.Height()
+            && aWindowArea.Top() > aViewPixelArea.Top())
         {
             nDy = -1 + (int)(mnVerticalScrollFactor
                 * (rMouseWindowPosition.Y() - maScrollBorder.Height()));
         }
 
-        if (rMouseWindowPosition.Y()
-            >= aWindowSize.Height() - maScrollBorder.Height())
+        if (rMouseWindowPosition.Y() >= (aWindowSize.Height() - maScrollBorder.Height())
+            && aWindowArea.Bottom() < aViewPixelArea.Bottom())
         {
             nDy = 1 + (int)(mnVerticalScrollFactor
                 * (rMouseWindowPosition.Y() - aWindowSize.Height()
