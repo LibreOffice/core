@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:10:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,30 @@ static USHORT GetKeyCode( guint keyval )
     return nCode;
 }
 
+// F10 means either KEY_F10 or KEY_MENU, which has to be decided
+// in the independent part.
+struct KeyAlternate
+{
+    USHORT          nKeyCode;
+    sal_Unicode     nCharCode;
+    KeyAlternate() : nKeyCode( 0 ), nCharCode( 0 ) {}
+    KeyAlternate( USHORT nKey, sal_Unicode nChar = 0 ) : nKeyCode( nKey ), nCharCode( nChar ) {}
+};
+
+inline KeyAlternate
+GetAlternateKeyCode( const USHORT nKeyCode )
+{
+    KeyAlternate aAlternate;
+
+    switch( nKeyCode )
+    {
+        case KEY_F10: aAlternate = KeyAlternate( KEY_MENU );break;
+        case KEY_F24: aAlternate = KeyAlternate( KEY_SUBTRACT, '-' );break;
+    }
+
+    return aAlternate;
+}
+
 void GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
@@ -207,8 +231,9 @@ void GtkSalFrame::doKeyCallback( guint state,
         *  else shortcuts (e.g. Ctrl-o) will not work but be inserted by
         *  the application
         */
+        bool bHandled = false;
         if( (aEvent.mnCode & (KEY_MOD1|KEY_MOD2)) == 0 || group == 0 )
-            CallCallback( SALEVENT_KEYINPUT, &aEvent );
+            bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
         else
         {
             // check other mapping
@@ -226,7 +251,19 @@ void GtkSalFrame::doKeyCallback( guint state,
             {
                 aEvent.mnCode   = GetKeyCode( updated_keyval ) | GetModCode( state );
                 aEvent.mnCharCode = (USHORT)gdk_keyval_to_unicode( updated_keyval );
-                CallCallback( SALEVENT_KEYINPUT, &aEvent );
+                bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
+            }
+        }
+        // #i46889# copy AlternatKeyCode handling from generic plugin
+        if( ! bHandled )
+        {
+            KeyAlternate aAlternate = GetAlternateKeyCode( aEvent.mnCode );
+            if( aAlternate.nKeyCode )
+            {
+                aEvent.mnCode = aAlternate.nKeyCode;
+                if( aAlternate.nCharCode )
+                    aEvent.mnCharCode = aAlternate.nCharCode;
+                bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
             }
         }
         if( bSendRelease && ! aDel.isDeleted() )
