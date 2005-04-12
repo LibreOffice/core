@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:51:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _SV_NATIVEWIDGET_HXX
 #include <salnativewidgets.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <edit.hxx>
 #endif
 
 #ifndef _SV_RC_H
@@ -1226,14 +1229,14 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     }
     else
     {
-        Rectangle *pSymbolRect = IsSymbol() ? new Rectangle : NULL;
+        Rectangle aSymbolRect;
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1, nDrawFlags,
-                              nTextStyle, pSymbolRect );
+                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL );
 
         if ( IsSymbol() && ! bLayout )
         {
             DecorationView aDecoView( pDev );
-            aDecoView.DrawSymbol( *pSymbolRect, meSymbol, aColor, nStyle );
+            aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
         }
 
         if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX && !bLayout )
@@ -1318,10 +1321,18 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     {
         if( GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) )
         {
-            if( !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
-                // skip painting if the button was already drawn by the theme
+            // skip painting if the button was already drawn by the theme
+            if( aCtrlType == CTRL_COMBOBOX )
+            {
+                Edit* pEdit = static_cast<Edit*>(GetParent());
+                if( pEdit->ImplUseNativeBorder( pEdit->GetStyle() ) )
+                    bNativeOK = TRUE;
+            }
+            else if( GetParent()->IsNativeControlSupported( aCtrlType, HAS_BACKGROUND_TEXTURE) )
+            {
                 bNativeOK = TRUE;
-            else
+            }
+            if( !bNativeOK && GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN ) )
             {
                 // let the theme draw it, note we then need support
                 // for CTRL_LISTBOX/PART_BUTTON_DOWN and CTRL_COMBOBOX/PART_BUTTON_DOWN
@@ -2900,12 +2911,7 @@ void RadioButton::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_STATE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-        {
-            if ( HasPaintEvent() )
-                Invalidate( maStateRect );
-            else
-                ImplDrawRadioButtonState();
-        }
+            Invalidate( maStateRect );
     }
     else if ( (nType == STATE_CHANGE_ENABLE) ||
               (nType == STATE_CHANGE_TEXT) ||
@@ -3089,7 +3095,8 @@ Size RadioButton::ImplGetRadioImageSize() const
     if( pThis->IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aControlValue;
-        Region           aCtrlRegion( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+        // #i45896# workaround gcc3.3 temporary problem
+        Region           aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
         ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
         Region aBoundingRgn, aContentRgn;
 
@@ -3771,12 +3778,7 @@ void CheckBox::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_STATE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-        {
-            if ( HasPaintEvent() )
-                Invalidate( maStateRect );
-            else
-                ImplDrawCheckBoxState();
-        }
+            Invalidate( maStateRect );
     }
     else if ( (nType == STATE_CHANGE_ENABLE) ||
               (nType == STATE_CHANGE_TEXT) ||
@@ -3907,7 +3909,8 @@ Size CheckBox::ImplGetCheckImageSize() const
     if( pThis->IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aControlValue;
-        Region           aCtrlRegion( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+        // #i45896# workaround gcc3.3 temporary problem
+        Region           aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
         ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
         Region aBoundingRgn, aContentRgn;
 
