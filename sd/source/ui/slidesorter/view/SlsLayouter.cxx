@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsLayouter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:08:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,6 +644,10 @@ sal_Int32 Layouter::GetColumnAtPosition (
 
         // Calculate row consisting of page objects and gap below.
         nColumn = nX / nColumnOffset;
+        if (nColumn < 0)
+            nColumn = 0;
+        else if (nColumn >= mnColumnCount)
+            nColumn = mnColumnCount-1;
 
         const sal_Int32 nDistanceIntoGap (
             (nX - nColumn*nColumnOffset) - maPageObjectModelSize.Width());
