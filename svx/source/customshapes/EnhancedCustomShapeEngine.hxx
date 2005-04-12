@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:05:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@
 // ---------------------------
 //
 
+class SdrObject;
+class SdrObjCustomShape;
 class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
 <
     com::sun::star::lang::XInitialization,
@@ -134,6 +136,9 @@ class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
 {
     REF( NMSP_LANG::XMultiServiceFactory )      mxFact;
     REF( com::sun::star::drawing::XShape )      mxShape;
+    sal_Bool                                    mbForceGroupWithText;
+
+    SdrObject* ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape );
 
 public:
                             EnhancedCustomShapeEngine( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
