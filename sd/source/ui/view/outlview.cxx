@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:55:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 17:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,8 @@
 #include "Outliner.hxx"
 #endif
 #include "strings.hrc"
-
+#include "EventMultiplexer.hxx"
+#include "ViewShellBase.hxx"
 
 namespace sd {
 
@@ -209,7 +210,8 @@ OutlineView::OutlineView (
       nPagesProcessed(0),
       mbHighContrastMode( false ),
       maDocColor( COL_WHITE ),
-      mpProgress(NULL)
+      mpProgress(NULL),
+      mbIgnoreCurrentPageChanges(false)
 {
     BOOL bInitOutliner = FALSE;
 
@@ -273,7 +275,9 @@ OutlineView::OutlineView (
         // Outliner mit Inhalt fuellen
         FillOutliner();
     }
-
+    Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
+    pOutlineViewShell->GetViewShellBase().GetEventMultiplexer().AddEventListener(
+        aLink, tools::EventMultiplexer::ET_CURRENT_PAGE);
 }
 
 /*************************************************************************
@@ -284,6 +288,8 @@ OutlineView::OutlineView (
 
 OutlineView::~OutlineView()
 {
+    Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
+    pOutlineViewShell->GetViewShellBase().GetEventMultiplexer().RemoveEventListener( aLink );
     DisconnectFromApplication();
 
     if( mpProgress )
@@ -1846,7 +1852,7 @@ SdPage* OutlineView::GetActualPage()
 /** selects the paragraph for the given page at the outliner view*/
 void OutlineView::SetActualPage( SdPage* pActual )
 {
-    if( pActual )
+    if( pActual && !mbIgnoreCurrentPageChanges)
     {
         // get the number of paragraphs with ident 0 we need to skip before
         // we finde the actual page
@@ -2082,6 +2088,31 @@ IMPL_LINK( OutlineView, AppEventListenerHdl, void *, EMPTYARG )
 {
     onUpdateStyleSettings();
     return 0;
+}
+
+
+
+
+IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
+{
+    if (pEvent != NULL)
+    {
+        switch (pEvent->meEventId)
+        {
+            case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+                SetActualPage(pOutlineViewShell->GetActualPage());
+                break;
+        }
+    }
+    return 0;
+}
+
+
+
+
+void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
+{
+    mbIgnoreCurrentPageChanges = bIgnoreChanges;
 }
 
 } // end of namespace sd
