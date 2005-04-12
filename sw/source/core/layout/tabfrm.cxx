@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 09:38:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2426,6 +2426,10 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                 //       FindFooterOrHeader() ) )
                 const SwTxtFrm* pAnchorCharFrm = pFly->FindAnchorCharFrm();
                 const bool bConsiderFly =
+                    // --> OD 2005-04-06 #i46807# - do not consider invalid
+                    // Writer fly frames.
+                    pFly->IsValid() &&
+                    // <--
                     // fly anchored at character
                     pFly->IsFlyAtCntFrm() &&
                     // fly overlaps with corresponding table rectangle
