@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:01:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ public:
     void DoCut (::Window* pWindow = 0);
     void DoCopy (::Window* pWindow = 0);
     void DoPaste (::Window* pWindow = 0);
+    void DoDelete (::Window* pWindow = 0);
 
     void StartDrag (
         const Point& rDragPt,
