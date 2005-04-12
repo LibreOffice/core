@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:52:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,14 @@ public:
         @param bResetThumbPosition
             When <TRUE/> then set the thumb position to position 0.  This is
             done when e.g. switching between master page mode and draw mode.
+        @param bScrollToCurrentPosition
+            When <TRUE/> then scroll the window to the new offset that is
+            defined by the scroll bars.  Otherwise the new offset is simply
+            set and the whole window is repainted.
     */
-    void UpdateScrollBars (bool bResetThumbPosition = false);
+    void UpdateScrollBars (
+        bool bResetThumbPosition = false,
+        bool bScrollToCurrentPosition = true);
 
     /** Place the scroll bars inside the given area.  When the available
         area is not large enough for the content to display the resulting
