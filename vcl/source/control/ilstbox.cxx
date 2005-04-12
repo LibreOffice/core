@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:41:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2645,7 +2645,7 @@ void ImplWin::ImplDraw( bool bLayout )
     if( ! bLayout )
     {
         if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
-            && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
+            && IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )
         {
             // Repaint the (focused) area similarly to
             // ImplSmallBorderWindowView::DrawWindow() in
@@ -2677,6 +2677,17 @@ void ImplWin::ImplDraw( bool bLayout )
 
             if( bMouseOver )
                 nState |= CTRL_STATE_ROLLOVER;
+
+            // if parent has no border, then nobody has drawn the background
+            // since no border window exists. so draw it here.
+            WinBits nParentStyle = pWin->GetStyle();
+            if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
+            {
+                Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
+                Region aParentReg( aParentRect );
+                pWin->DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aParentReg,
+                                         nState, aControlValue, rtl::OUString() );
+            }
 
             bNativeOK = DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                 aControlValue, rtl::OUString() );
