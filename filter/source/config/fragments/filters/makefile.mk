@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2005-03-21 13:13:23 $
+#   last change: $Date: 2005-04-12 16:30:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,9 +81,7 @@ PRJNAME = filter
 
 .INCLUDE: target.mk
 
-.IF "$(SOLAR_JAVA)"!=""
 ALLTAR: $(ALL_UI_FILTERS) 
-.ENDIF
 
 $(DIR_LOCFRAG)$/filters$/%.xcu : %.xcu
     +$(MKDIRHIER) $(@:d)
