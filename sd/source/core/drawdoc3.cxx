@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:55:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,6 +976,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             // update layout and referred master page
             pPage->SetPresentationLayout(aLayout);
+            AddUndo( new SdrUndoPageChangeMasterPage( *pPage ) );
 
             if (bScaleObjects)
             {
@@ -990,6 +991,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             // update layout and referred master page
             pPage->SetPresentationLayout(aLayout);
+            AddUndo( new SdrUndoPageChangeMasterPage( *pPage ) );
 
             if (bScaleObjects)
             {
