@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:09:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2210,8 +2210,6 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
 void WMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
 {
 }
-
-extern "C" int sleep( int );
 
 /*
  * NetWMAdaptor::frameIsMapping
