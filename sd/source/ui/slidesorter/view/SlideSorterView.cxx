@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:26:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,9 +302,7 @@ void SlideSorterView::Resize (void)
             pWindow))
         {
             Layout();
-
-            // Tell the cache to re-fill its request queues.
-            GetPreviewCache().InvalidateCache();
+            pWindow->Invalidate();
         }
     }
 }
