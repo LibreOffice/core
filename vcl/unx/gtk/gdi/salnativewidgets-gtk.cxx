@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:12:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,6 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 || (nPart==PART_ALL_BUTTONS)    )               )   ||
         ((nType==CTRL_COMBOBOX) &&
                 (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==PART_BUTTON_DOWN)
                 || (nPart==HAS_BACKGROUND_TEXTURE)  )           )   ||
         (((nType==CTRL_TAB_ITEM) || (nType==CTRL_TAB_PANE) ||
           (nType==CTRL_TAB_BODY) || (nType==CTRL_FIXEDBORDER)) &&
