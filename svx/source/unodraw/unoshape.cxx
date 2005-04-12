@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:21:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 16:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ struct SvxShapeImpl
     SfxItemSet*     mpItemSet;
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
+    bool            mbTemporaryShape; // this is true if we own the SdrObject
 };
 
 //UNO3_GETIMPLEMENTATION_IMPL( SvxShape );
@@ -357,8 +358,19 @@ SvxShape::~SvxShape() throw()
         if(mpImpl->mpMaster)
             mpImpl->mpMaster->dispose();
 
+        if( mpImpl->mbTemporaryShape && pObj )
+            delete pObj;
+
         delete mpImpl;
     }
+}
+
+//----------------------------------------------------------------------
+
+void SvxShape::SetTemporaryShape( sal_Bool bTemporary )
+{
+    if ( mpImpl )
+        mpImpl->mbTemporaryShape = bTemporary;
 }
 
 //----------------------------------------------------------------------
@@ -461,6 +473,7 @@ void SvxShape::Init() throw()
         mpImpl->mpItemSet = NULL;
         mpImpl->mpMaster = NULL;
         mpImpl->mnObjId = 0;
+        mpImpl->mbTemporaryShape = sal_False;
     }
 
     mbIsMultiPropertyCall = sal_False;
@@ -547,6 +560,16 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
             pObj->SetName( aShapeName );
             aShapeName = OUString();
         }
+#ifdef DBG_UTIL
+        if( pNewPage )
+        {
+            DBG_ASSERT( !mpImpl->mbTemporaryShape, "SvxShape::~SvxShape(), mbTemporaryShape not correctly set!" );
+        }
+        else
+        {
+            DBG_ASSERT( mpImpl->mbTemporaryShape, "SvxShape::~SvxShape(), mbTemporaryShape not correctly set!" );
+        }
+#endif
     }
 }
 
