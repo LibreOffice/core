@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:18:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-12 12:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,7 +1083,6 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
                                  nPaperWidth,
                                  nPaperHeight ) )
         {
-            pSetupData->meOrientation = ORIENTATION_PORTRAIT;
             pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
                                                             rPaperInfo.m_nPaperHeight*100 );
             break;
@@ -1106,7 +1105,6 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
                                      nPaperHeight,
                                      nPaperWidth ))
             {
-                pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
                 pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
                                                                 rPaperInfo.m_nPaperHeight*100 );
                 break;
