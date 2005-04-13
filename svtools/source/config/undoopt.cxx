@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:27:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,10 @@
  *
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
 #endif
+#define SVT_DLLIMPLEMENTATION
 
 #include "undoopt.hxx"
 
