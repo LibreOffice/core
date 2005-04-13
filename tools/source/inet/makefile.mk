@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:04:28 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:11:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TARGET = inet
 .INCLUDE: svpre.mk
 .INCLUDE: settings.mk
 .INCLUDE: sv.mk
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 SLOFILES=\
     $(SLO)$/inetmime.obj \
