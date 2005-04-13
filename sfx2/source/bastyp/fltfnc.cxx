@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:18:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@
 #include <basic/sbstar.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX //autogen
-#include <svtools/sbxmeth.hxx>
+#include <basic/sbxmeth.hxx>
 #endif
 #ifndef _SBXCORE_HXX //autogen
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
