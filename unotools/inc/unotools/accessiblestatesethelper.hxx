@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:47:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,12 @@
  *
  *
  ************************************************************************/
-
-
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #define _UTL_ACCESSIBLESTATESETHELPER_HXX_
+
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
@@ -104,7 +106,7 @@ namespace utl
         This base class provides an implementation of the
         <code>AccessibleStateSet</code> service.
 */
-class AccessibleStateSetHelper
+class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper
     :   public cppu::WeakImplHelper1<
         ::com::sun::star::accessibility::XAccessibleStateSet
         >
