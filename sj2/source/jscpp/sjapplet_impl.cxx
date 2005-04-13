@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:17:27 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ void SjApplet2_Impl::init(Window * pParentWin,
         //WorkAround, weil Java mit dem | nicht zurecht kommt
         if(rDocBase.GetProtocol() == INET_PROT_FILE && url.pData->buffer[9] == INET_ENC_DELIM_TOKEN) {
             rtl::OUString tmp = url.copy(0, 9);
-            tmp += rtl::OUString(INET_DELIM_TOKEN);
+            tmp += String(INET_DELIM_TOKEN);
             tmp += url.copy(10);
 
             url = tmp;
