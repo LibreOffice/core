@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:02:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,7 +912,7 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
 
     if (nResId)
     {
-        aDefaultName = ::rtl::OUString( IDEResId(nResId) );
+        aDefaultName = ::rtl::OUString( String(IDEResId(nResId)) );
     }
 
     return aDefaultName;
