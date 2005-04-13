@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:16:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,11 @@
 
 class SfxItemSet;
 
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_hidden, "HIDDEN" );
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_HIDDEN_false, "FALSE" );
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_archive, "ARCHIVE" );
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_archives, "ARCHIVES" );
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_object, "OBJECT" );
+extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_hidden, "HIDDEN" );
+extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_HIDDEN_false, "FALSE" );
+extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_archive, "ARCHIVE" );
+extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_archives, "ARCHIVES" );
+extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_object, "OBJECT" );
 
 class SwApplet_Impl
 {
