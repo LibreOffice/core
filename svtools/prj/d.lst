@@ -5,30 +5,16 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\srs\ehdl.srs %_DEST%\res%_EXT%\svtools.srs
 ..\%COMMON_OUTDIR%\srs\ehdl_srs.hid %COMMON_DEST%\res%_EXT%\svtools_srs.hid
-..\%__SRC%\lib\_notify.lib %_DEST%\lib%_EXT%\_notify.lib
-..\%__SRC%\lib\_ctrl.lib %_DEST%\lib%_EXT%\_ctrl.lib
-..\%__SRC%\lib\ctrl.lib %_DEST%\lib%_EXT%\ctrl.lib
 ..\%__SRC%\lib\isvl.lib %_DEST%\lib%_EXT%\isvl.lib
-..\%__SRC%\lib\undo.lib %_DEST%\lib%_EXT%\undo.lib
-..\%__SRC%\lib\misc.lib %_DEST%\lib%_EXT%\misc.lib
-..\%__SRC%\lib\dialogs.lib %_DEST%\lib%_EXT%\dialogs.lib
-..\%__SRC%\lib\edit.lib %_DEST%\lib%_EXT%\edit.lib
-..\%__SRC%\lib\eaimp.lib %_DEST%\lib%_EXT%\eaimp.lib
-..\%__SRC%\lib\svcontnr.lib %_DEST%\lib%_EXT%\svcontnr.lib
-..\%__SRC%\lib\svmem.lib %_DEST%\lib%_EXT%\svmem.lib
-..\%__SRC%\lib\ssvmem.lib %_DEST%\lib%_EXT%\ssvmem.lib
-..\%__SRC%\lib\svdde.lib %_DEST%\lib%_EXT%\svdde.lib
 ..\%__SRC%\lib\svtool.lib %_DEST%\lib%_EXT%\svtool.lib
 ..\%__SRC%\slb\svt.lib %_DEST%\lib%_EXT%\xsvtool.lib
 ..\%__SRC%\bin\dllver.exe %_DEST%\bin%_EXT%\dllver.exe
 ..\%__SRC%\bin\dllver %_DEST%\bin%_EXT%\dllver
-..\%__SRC%\bin\svt?????.dll %_DEST%\bin%_EXT%\svt?????.dll
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\svt*.res %_DEST%\bin%_EXT%\svt*.res
 ..\%__SRC%\bin\svs*.res %_DEST%\bin%_EXT%\svs*.res
 ..\%__SRC%\bin\bmp*.res %_DEST%\bin%_EXT%\bmp*.res
 ..\%__SRC%\bin\san*.res %_DEST%\bin%_EXT%\san*.res
-..\%__SRC%\bin\svt?????.sym %_DEST%\bin%_EXT%\svt?????.sym
-..\%__SRC%\bin\svl?????.dll %_DEST%\bin%_EXT%\svl?????.dll
 ..\%__SRC%\bin\bmp.* %_DEST%\bin%_EXT%\bmp.*
 ..\%__SRC%\bin\bmpsum.* %_DEST%\bin%_EXT%\bmpsum.*
 ..\%__SRC%\bin\bmpgui.* %_DEST%\bin%_EXT%\bmpgui.*
@@ -39,10 +25,11 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\bin\g2g %_DEST%\bin%_EXT%\g2g
 ..\%__SRC%\res\bmp.* %_DEST%\bin%_EXT%\bmp.*
 ..\%__SRC%\res\bmpgui.* %_DEST%\bin%_EXT%\bmpgui.*
-..\%__SRC%\misc\svt?????.map %_DEST%\bin%_EXT%\svt?????.map
-..\%__SRC%\lib\libsv*.so %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libsv*.dylib %_DEST%\lib%_EXT%\*
-..\%__SRC%\inc\svtools\proped.hxx %_DEST%\inc%_EXT%\svtools\proped.hxx
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
+
+..\inc\svtools\svldllapi.h %_DEST%\inc%_EXT%\svtools\svldllapi.h
+..\inc\svtools\svtdllapi.h %_DEST%\inc%_EXT%\svtools\svtdllapi.h
 
 hedabu: ..\inc\globalnameitem.hxx %_DEST%\inc%_EXT%\svtools\globalnameitem.hxx
 hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\svtools\imagemgr.hxx
@@ -166,17 +153,6 @@ hedabu: ..\inc\ttglobal.hrc %_DEST%\inc%_EXT%\svtools\ttglobal.hrc
 hedabu: ..\inc\svtmsg.hrc %_DEST%\inc%_EXT%\svtools\svtmsg.hrc
 hedabu: ..\source\memtools\hashtab.hxx %_DEST%\inc%_EXT%\svtools\hashtab.hxx
 hedabu: ..\source\memtools\hashcont.hxx %_DEST%\inc%_EXT%\svtools\hashcont.hxx
-hedabu: ..\inc\sbx.hxx %_DEST%\inc%_EXT%\svtools\sbx.hxx
-hedabu: ..\source\sbx\sbxbase.hxx %_DEST%\inc%_EXT%\svtools\sbxbase.hxx
-hedabu: ..\inc\sbxcore.hxx %_DEST%\inc%_EXT%\svtools\sbxcore.hxx
-hedabu: ..\inc\sbxdef.hxx %_DEST%\inc%_EXT%\svtools\sbxdef.hxx
-hedabu: ..\source\sbx\sbxfac.hxx %_DEST%\inc%_EXT%\svtools\sbxfac.hxx
-hedabu: ..\inc\sbxform.hxx %_DEST%\inc%_EXT%\svtools\sbxform.hxx
-hedabu: ..\inc\sbxmeth.hxx %_DEST%\inc%_EXT%\svtools\sbxmeth.hxx
-hedabu: ..\source\sbx\sbxmstrm.hxx %_DEST%\inc%_EXT%\svtools\sbxmstrm.hxx
-hedabu: ..\inc\sbxobj.hxx %_DEST%\inc%_EXT%\svtools\sbxobj.hxx
-hedabu: ..\inc\sbxprop.hxx %_DEST%\inc%_EXT%\svtools\sbxprop.hxx
-hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\svtools\sbxvar.hxx
 hedabu: ..\source\search\levdis.hxx %_DEST%\inc%_EXT%\svtools\levdis.hxx
 hedabu: ..\inc\transfer.hxx %_DEST%\inc%_EXT%\svtools\transfer.hxx
 hedabu: ..\inc\embedtransfer.hxx %_DEST%\inc%_EXT%\svtools\embedtransfer.hxx
@@ -202,7 +178,6 @@ hedabu: ..\inc\loginerr.hxx %_DEST%\inc%_EXT%\svtools\loginerr.hxx
 hedabu: ..\inc\logindlg.hxx %_DEST%\inc%_EXT%\svtools\logindlg.hxx
 hedabu: ..\inc\httpcook.hxx %_DEST%\inc%_EXT%\svtools\httpcook.hxx
 hedabu: ..\source\uno\unoiface.hxx %_DEST%\inc%_EXT%\svtools\unoiface.hxx
-hedabu: ..\source\uno\imgprod.hxx %_DEST%\inc%_EXT%\svtools\imgprod.hxx
 hedabu: ..\inc\imageresourceaccess.hxx %_DEST%\inc%_EXT%\svtools\imageresourceaccess.hxx
 hedabu: ..\inc\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
 hedabu: ..\inc\itempro3.hxx %_DEST%\inc%_EXT%\svtools\itempro3.hxx
@@ -276,24 +251,8 @@ hedabu: ..\source\dialogs\filedlg2.hrc %_DEST%\inc%_EXT%\svtools\filedlg2.hrc
 hedabu: ..\source\xmlfilt\attrlist.hxx %_DEST%\inc%_EXT%\svtools\attrlist.hxx
 hedabu: ..\source\xmlfilt\i18nmap.hxx %_DEST%\inc%_EXT%\svtools\i18nmap.hxx
 hedabu: ..\inc\nmspmap.hxx %_DEST%\inc%_EXT%\svtools\nmspmap.hxx
-hedabu: ..\source\xmlfilt\xmltkmap.hxx %_DEST%\inc%_EXT%\svtools\xmltkmap.hxx
-hedabu: ..\source\xmlfilt\xmlkywd.hxx %_DEST%\inc%_EXT%\svtools\xmlkywd.hxx
-hedabu: ..\source\xmlfilt\xmlexp.hxx %_DEST%\inc%_EXT%\svtools\xmlexp.hxx
-hedabu: ..\source\xmlfilt\xmlehelp.hxx %_DEST%\inc%_EXT%\svtools\xmlehelp.hxx
-hedabu: ..\source\xmlfilt\xmlimp.hxx %_DEST%\inc%_EXT%\svtools\xmlimp.hxx
-hedabu: ..\source\xmlfilt\xmlictxt.hxx %_DEST%\inc%_EXT%\svtools\xmlictxt.hxx
-hedabu: ..\source\xmlfilt\xmlitem.hxx %_DEST%\inc%_EXT%\svtools\xmlitem.hxx
-hedabu: ..\source\xmlfilt\xmlstyle.hxx %_DEST%\inc%_EXT%\svtools\xmlstyle.hxx
-hedabu: ..\source\xmlfilt\xmlastpl.hxx %_DEST%\inc%_EXT%\svtools\xmlastpl.hxx
-hedabu: ..\source\xmlfilt\wstrhelp.hxx %_DEST%\inc%_EXT%\svtools\wstrhelp.hxx
 hedabu: ..\inc\xmluconv.hxx %_DEST%\inc%_EXT%\svtools\xmluconv.hxx
-hedabu: ..\source\xmlfilt\xmlitmpr.hxx %_DEST%\inc%_EXT%\svtools\xmlitmpr.hxx
 hedabu: ..\inc\xmlement.hxx %_DEST%\inc%_EXT%\svtools\xmlement.hxx
-hedabu: ..\source\xmlfilt\xmlnmspe.hxx %_DEST%\inc%_EXT%\svtools\xmlnmspe.hxx
-hedabu: ..\source\xmlfilt\xmlimpit.hxx %_DEST%\inc%_EXT%\svtools\xmlimpit.hxx
-hedabu: ..\source\xmlfilt\xmlexpit.hxx %_DEST%\inc%_EXT%\svtools\xmlexpit.hxx
-hedabu: ..\source\xmlfilt\xmlitmap.hxx %_DEST%\inc%_EXT%\svtools\xmlitmap.hxx
-hedabu: ..\source\xmlfilt\xmlnumfe.hxx %_DEST%\inc%_EXT%\svtools\xmlnumfe.hxx
 hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svtools\xmlcnitm.hxx
 hedabu: ..\inc\tresitem.hxx %_DEST%\inc%_EXT%\svtools\tresitem.hxx
 hedabu: ..\inc\urihelper.hxx %_DEST%\inc%_EXT%\svtools\urihelper.hxx
@@ -334,6 +293,7 @@ hedabu: ..\inc\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx
 hedabu: ..\inc\roadmapwizard.hxx %_DEST%\inc%_EXT%\svtools\roadmapwizard.hxx
 hedabu: ..\inc\helpagentwindow.hxx %_DEST%\inc%_EXT%\svtools\helpagentwindow.hxx
 hedabu: ..\inc\pickerhistory.hxx %_DEST%\inc%_EXT%\svtools\pickerhistory.hxx
+hedabu: ..\inc\pickerhistoryaccess.hxx %_DEST%\inc%_EXT%\svtools\pickerhistoryaccess.hxx
 hedabu: ..\inc\pickerhelper.hxx %_DEST%\inc%_EXT%\svtools\pickerhelper.hxx
 hedabu: ..\inc\regoptions.hxx %_DEST%\inc%_EXT%\svtools\regoptions.hxx
 hedabu: ..\inc\accessibilityoptions.hxx %_DEST%\inc%_EXT%\svtools\accessibilityoptions.hxx
@@ -364,6 +324,7 @@ hedabu: ..\inc\fileview.hxx %_DEST%\inc%_EXT%\svtools\fileview.hxx
 hedabu: ..\inc\templdlg.hxx %_DEST%\inc%_EXT%\svtools\templdlg.hxx
 hedabu: ..\inc\asynclink.hxx %_DEST%\inc%_EXT%\svtools\asynclink.hxx
 hedabu: ..\inc\inettbc.hxx %_DEST%\inc%_EXT%\svtools\inettbc.hxx
+hedabu: ..\inc\urlfilter.hxx %_DEST%\inc%_EXT%\svtools\urlfilter.hxx
 
 hedabu: ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
 
