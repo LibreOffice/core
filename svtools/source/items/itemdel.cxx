@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemdel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "itemdel.hxx"
+
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -67,13 +69,9 @@
 #endif
 #include <limits.h>
 
-#include <sbx.hxx>
-
 #include "svtdata.hxx"
 #include "svarray.hxx"
-#include "args.hxx"
 #include "itempool.hxx"
-#include "itemdel.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
