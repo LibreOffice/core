@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:36:47 $
+#   last change: $Author: obo $ $Date: 2005-04-13 10:51:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,12 +64,11 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=ctrl
-TARGETSTAT=_ctrl
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -80,10 +79,12 @@ SRC1FILES=	ctrltool.src		\
             filectrl.src
 
 EXCEPTIONSFILES=\
-            $(SLO)$/filectrl2.obj	\
+            $(SLO)$/filectrl2.obj \
+            $(SLO)$/inettbc.obj \
             $(SLO)$/valueacc.obj
 
 SLOFILES=	$(EXCEPTIONSFILES) \
+            $(SLO)$/asynclink.obj \
             $(SLO)$/urlcontrol.obj \
             $(SLO)$/fileurlbox.obj \
             $(SLO)$/roadmap.obj \
@@ -110,20 +111,6 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/fmtfield.obj \
             $(SLO)$/scriptedtext.obj\
             $(SLO)$/hyperlabel.obj			
-
-# statisch fuer setup
-
-OBJFILES=	$(OBJ)$/prgsbar.obj \
-            $(OBJ)$/stdctrl.obj  \
-            $(OBJ)$/reginfo.obj  \
-            $(OBJ)$/tabbar.obj
-
-
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1OBJFILES=  $(SLOFILES)
-
-LIB2TARGET= $(LB)$/$(TARGETSTAT).lib
-LIB2OBJFILES=  $(OBJFILES)
 
 # --- Targets ------------------------------------------------------
 
