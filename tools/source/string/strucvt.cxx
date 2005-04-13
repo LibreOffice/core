@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:09:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,6 @@ UniString::UniString( const rtl::OUString& rStr )
             const_cast< rtl::OUString & >(rStr).pData)
         : &aImplEmptyStrData;
     ImplIncRefCount( mpData );
-}
-
-// -----------------------------------------------------------------------
-
-rtl::OUString::OUString( const UniString& rStr )
-{
-    pData = (rtl_uString*)rStr.mpData;
-    rtl_uString_acquire( pData );
 }
 
 // -----------------------------------------------------------------------
