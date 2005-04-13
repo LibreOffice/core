@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:00:02 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@
 #include <svtools/macitem.hxx>
 #endif
 #ifndef __SBX_SBX_FACTORY_HXX //autogen
-#include <svtools/sbxfac.hxx>
+#include <basic/sbxfac.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
