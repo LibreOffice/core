@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:14:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #if defined UNX && !defined LINUX
 #include <wchar.h>
