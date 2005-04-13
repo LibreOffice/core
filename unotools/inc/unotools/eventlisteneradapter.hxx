@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventlisteneradapter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:40:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
 #define _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
@@ -77,13 +80,13 @@ namespace utl
     //=====================================================================
     /** base class for non-UNO dispose listeners
     */
-    class OEventListenerAdapter
+    class UNOTOOLS_DLLPUBLIC OEventListenerAdapter
     {
         friend class OEventListenerImpl;
 
     private:
-        OEventListenerAdapter( const OEventListenerAdapter& _rSource ); // never implemented
-        const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource );    // never implemented
+        UNOTOOLS_DLLPRIVATE OEventListenerAdapter( const OEventListenerAdapter& _rSource ); // never implemented
+        UNOTOOLS_DLLPRIVATE const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource );    // never implemented
 
     protected:
         OEventListenerAdapterImpl*  m_pImpl;
@@ -108,6 +111,14 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2.74.1  2005/02/28 04:33:53  mnicel
+ *  Issue number:  40092
+ *  Part of visibility work
+ *
+ *  Revision 1.2  2004/01/06 18:40:05  vg
+ *  INTEGRATION: CWS vclcleanup02 (1.1.120); FILE MERGED
+ *  2003/12/04 15:38:35 mt 1.1.120.1: #i23061# DTOR now virtual to avoid gcc WAll warnings
+ *
  *  Revision 1.1.120.1  2003/12/04 15:38:35  mt
  *  #i23061# DTOR now virtual to avoid gcc WAll warnings
  *
