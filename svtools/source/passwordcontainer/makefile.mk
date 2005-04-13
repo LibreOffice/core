@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:43:13 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:31:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,26 +61,34 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJINC=..$/..$/inc
 PRJNAME=svtools
-TARGET=passwordcontainer
-
+TARGET=passwordcontainer.uno
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings common for the whole project -----
-
 
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
-# --- Types -------------------------------------
+DLLPRE=
 
 # --- Files -------------------------------------
 
 SLOFILES=	\
-    $(SLO)$/passwordcontainer.obj\
-    $(SLO)$/docpasswdrequest.obj
+    $(SLO)$/passwordcontainer.obj
+
+SHL1TARGET=	$(TARGET)
+SHL1IMPLIB=	i$(TARGET)
+SHL1OBJS=	$(SLOFILES)
+SHL1STDLIBS=\
+    $(UNOTOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB)
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ----------------------------------
 
