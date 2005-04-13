@@ -10,6 +10,9 @@
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #include <tools/stream.hxx>
 
@@ -41,7 +44,7 @@ namespace utl
 {
     class UcbLockBytesHandler;
 
-    class UcbStreamHelper : public SvStream
+    class UNOTOOLS_DLLPUBLIC UcbStreamHelper : public SvStream
     {
     public:
         static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
