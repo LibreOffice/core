@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:47:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,12 @@
  *
  ************************************************************************/
 
-
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #define _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
@@ -104,7 +107,7 @@ namespace utl
         This base class provides an implementation of the
         <code>AccessibleRelationSet</code> service.
 */
-class AccessibleRelationSetHelper
+class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper
     :   public cppu::WeakImplHelper1<
         ::com::sun::star::accessibility::XAccessibleRelationSet
         >
