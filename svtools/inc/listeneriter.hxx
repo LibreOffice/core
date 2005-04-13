@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listeneriter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:53:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVT_LISTENERITER_HXX
 #define _SVT_LISTENERITER_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif
@@ -71,7 +75,7 @@ class SvtBroadcaster;
 
 //-------------------------------------------------------------------------
 
-class SvtListenerIter
+class SVL_DLLPUBLIC SvtListenerIter
 {
     friend class SvtListenerBase;
 
@@ -84,8 +88,8 @@ class SvtListenerIter
     SvtListenerIter *pNxtIter;
     TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
-    static void RemoveListener( SvtListenerBase& rDel,
-                                SvtListenerBase* pNext );
+    SVL_DLLPRIVATE static void RemoveListener( SvtListenerBase& rDel,
+                                               SvtListenerBase* pNext );
 
 public:
     SvtListenerIter( SvtBroadcaster& );
