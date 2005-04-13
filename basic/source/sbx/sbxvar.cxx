@@ -1,0 +1,608 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sbxvar.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:27:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#ifndef _STREAM_HXX //autogen
+#include <tools/stream.hxx>
+#endif
+#include "svtools/brdcst.hxx"
+
+#include "sbx.hxx"
+#include "sbxbase.hxx"
+#include "sbxres.hxx"
+#include "sbxconv.hxx"
+#include <math.h>
+#include <ctype.h>
+
+///////////////////////////// SbxVariable //////////////////////////////
+
+TYPEINIT1(SbxVariable,SbxValue)
+TYPEINIT1(SbxHint,SfxSimpleHint)
+
+extern UINT32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
+#ifdef DBG_UTIL
+static ULONG nVar = 0;
+#endif
+
+///////////////////////////// Konstruktoren //////////////////////////////
+
+SbxVariable::SbxVariable() : SbxValue()
+{
+    pCst = NULL;
+    pParent = NULL;
+    nUserData = 0;
+    nHash = 0;
+#ifdef DBG_UTIL
+    DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
+    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
+#endif
+}
+
+SbxVariable::SbxVariable( const SbxVariable& r )
+           : SbxValue( r ), pPar( r.pPar ), pInfo( r.pInfo )
+{
+    pCst = NULL;
+    if( r.CanRead() )
+    {
+        pParent = r.pParent;
+        nUserData = r.nUserData;
+        aName = r.aName;
+        nHash = r.nHash;
+    }
+    else
+    {
+        pParent = NULL;
+        nUserData = 0;
+        nHash = 0;
+    }
+#ifdef DBG_UTIL
+    static sal_Char const aCellsStr[] = "Cells";
+    if ( aName.EqualsAscii( aCellsStr ) )
+        aName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
+    DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
+    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
+#endif
+}
+
+SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
+{
+    pCst = NULL;
+    pParent = NULL;
+    nUserData = 0;
+    nHash = 0;
+#ifdef DBG_UTIL
+    DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
+    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
+#endif
+}
+
+SbxVariable::~SbxVariable()
+{
+#ifdef DBG_UTIL
+    ByteString aBStr( (const UniString&)aName, RTL_TEXTENCODING_ASCII_US );
+    DbgOutf( "SbxVariable::Dtor %lx (%s)", (void*)this, aBStr.GetBuffer() );
+    static sal_Char const aCellsStr[] = "Cells";
+    if ( aName.EqualsAscii( aCellsStr ) )
+        aName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
+    GetSbxData_Impl()->aVars.Remove( this );
+#endif
+    delete pCst;
+}
+
+////////////////////////////// Broadcasting //////////////////////////////
+
+SfxBroadcaster& SbxVariable::GetBroadcaster()
+{
+    if( !pCst )
+        pCst = new SfxBroadcaster;
+    return *pCst;
+}
+
+// Eines Tages kann man vielleicht den Parameter 0 schleifen,
+// dann entfaellt die Kopiererei...
+
+void SbxVariable::Broadcast( ULONG nHintId )
+{
+#if SUPD >= 507
+    if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
+#else
+    if( pCst && !IsSet( SBX_NO_BROADCAST ) )
+#endif
+    {
+        // Da die Methode von aussen aufrufbar ist, hier noch einmal
+        // die Berechtigung testen
+        if( nHintId & SBX_HINT_DATAWANTED )
+            if( !CanRead() )
+                return;
+        if( nHintId & SBX_HINT_DATACHANGED )
+            if( !CanWrite() )
+                return;
+        // Weitere Broadcasts verhindern
+        SfxBroadcaster* pSave = pCst;
+        pCst = NULL;
+        USHORT nSaveFlags = GetFlags();
+        SetFlag( SBX_READWRITE );
+        if( pPar.Is() )
+            // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
+            pPar->GetRef( 0 ) = this;
+        pSave->Broadcast( SbxHint( nHintId, this ) );
+        delete pCst; // wer weiss schon, auf welche Gedanken mancher kommt?
+        pCst = pSave;
+        SetFlags( nSaveFlags );
+    }
+}
+
+SbxInfo* SbxVariable::GetInfo()
+{
+    if( !pInfo )
+    {
+        Broadcast( SBX_HINT_INFOWANTED );
+        if( pInfo.Is() )
+            SetModified( TRUE );
+    }
+    return pInfo;
+}
+
+/////////////////////////// Name der Variablen ///////////////////////////
+
+void SbxVariable::SetName( const XubString& rName )
+{
+    aName = rName;
+    nHash = MakeHashCode( rName );
+}
+
+const XubString& SbxVariable::GetName( SbxNameType t ) const
+{
+    static char cSuffixes[] = "  %&!#@ $";
+    if( t == SbxNAME_NONE )
+        return aName;
+    // Parameter-Infos anfordern (nicht fuer Objekte)
+    ((SbxVariable*)this)->GetInfo();
+    // Nix anfuegen, wenn einfache Property (keine leeren Klammern)
+    if( !pInfo
+     || ( !pInfo->aParams.Count() && GetClass() == SbxCLASS_PROPERTY ) )
+        return aName;
+    xub_Unicode cType = ' ';
+    XubString aTmp( aName );
+    // Kurzer Typ? Dann holen, evtl. ist dieser 0.
+    short et = GetType();
+    if( t == SbxNAME_SHORT_TYPES )
+    {
+        if( et <= SbxSTRING )
+            cType = cSuffixes[ et ];
+        if( cType != ' ' )
+            aTmp += cType;
+    }
+    aTmp += '(';
+    for( USHORT i = 0; i < pInfo->aParams.Count(); i++ )
+    {
+        const SbxParamInfo* q = pInfo->aParams.GetObject( i );
+        short nt = q->eType & 0x0FFF;
+        if( i )
+            aTmp += ',';
+        if( q->nFlags & SBX_OPTIONAL )
+            aTmp += SbxRes( STRING_OPTIONAL );
+        if( q->eType & SbxBYREF )
+            aTmp += SbxRes( STRING_BYREF );
+        aTmp += q->aName;
+        cType = ' ';
+        // Kurzer Typ? Dann holen, evtl. ist dieser 0.
+        if( t == SbxNAME_SHORT_TYPES )
+        {
+            if( nt <= SbxSTRING )
+                cType = cSuffixes[ nt ];
+        }
+        if( cType != ' ' )
+        {
+            aTmp += cType;
+            if( q->eType & SbxARRAY )
+                aTmp.AppendAscii( "()" );
+        }
+        else
+        {
+            if( q->eType & SbxARRAY )
+                aTmp.AppendAscii( "()" );
+            // langer Typ?
+            if( t != SbxNAME_SHORT )
+            {
+                aTmp += SbxRes( STRING_AS );
+                if( nt < 32 )
+                    aTmp += SbxRes( STRING_TYPES + nt );
+                else
+                    aTmp += SbxRes( STRING_ANY );
+            }
+        }
+    }
+    aTmp += ')';
+    // Langer Typ? Dann holen
+    if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
+    {
+        aTmp += SbxRes( STRING_AS );
+        if( et < 32 )
+            aTmp += SbxRes( STRING_TYPES + et );
+        else
+            aTmp += SbxRes( STRING_ANY );
+    }
+    ((SbxVariable*) this)->aPic = aTmp;
+    return aPic;
+}
+
+// Einen simplen Hashcode erzeugen: Es werden die ersten 6 Zeichen gewertet.
+
+USHORT SbxVariable::MakeHashCode( const XubString& rName )
+{
+    USHORT n = 0;
+    USHORT nLen = rName.Len();
+    if( nLen > 6 )
+        nLen = 6;
+    const xub_Unicode* p = rName.GetBuffer();
+    while( nLen-- )
+    {
+        BYTE c = (BYTE)*p;
+        p++;
+        // Falls wir ein Schweinezeichen haben, abbrechen!!
+        if( c >= 0x80 )
+            return 0;
+        n = ( n << 3 ) + toupper( c );
+    }
+    return n;
+}
+
+////////////////////////////// Operatoren ////////////////////////////////
+
+SbxVariable& SbxVariable::operator=( const SbxVariable& r )
+{
+    SbxValue::operator=( r );
+    return *this;
+}
+
+//////////////////////////////// Konversion ////////////////////////////////
+
+SbxDataType SbxVariable::GetType() const
+{
+    if( aData.eType == SbxOBJECT )
+        return aData.pObj ? aData.pObj->GetType() : SbxOBJECT;
+    else if( aData.eType == SbxVARIANT )
+        return aData.pObj ? aData.pObj->GetType() : SbxVARIANT;
+    else
+        return aData.eType;
+}
+
+SbxClassType SbxVariable::GetClass() const
+{
+    return SbxCLASS_VARIABLE;
+}
+
+void SbxVariable::SetModified( BOOL b )
+{
+    if( IsSet( SBX_NO_MODIFY ) )
+        return;
+    SbxBase::SetModified( b );
+    if( pParent && pParent != this ) //??? HotFix: Rekursion raus MM
+        pParent->SetModified( b );
+}
+
+void SbxVariable::SetParent( SbxObject* p )
+{
+#ifdef DBG_UTIL
+    // wird der Parent eines SbxObjects gesetzt?
+    if ( p && ISA(SbxObject) )
+    {
+        // dann mu\s dieses auch Child vom neuen Parent sein
+        BOOL bFound = FALSE;
+        SbxArray *pChilds = p->GetObjects();
+        if ( pChilds )
+        {
+            for ( USHORT nIdx = 0; !bFound && nIdx < pChilds->Count(); ++nIdx )
+                bFound = ( this == pChilds->Get(nIdx) );
+        }
+        if ( !bFound )
+        {
+            String aMsg = String::CreateFromAscii( "dangling: [" );
+            aMsg += GetName();
+            aMsg.AppendAscii( "].SetParent([" );
+            aMsg += p->GetName();
+            aMsg.AppendAscii( "])" );
+            ByteString aBStr( (const UniString&)aMsg, RTL_TEXTENCODING_ASCII_US );
+            DbgOut( aBStr.GetBuffer(), DBG_OUT_WARNING, __FILE__, __LINE__);
+        }
+    }
+#endif
+
+    pParent = p;
+}
+
+////////////////////////////// Laden/Speichern /////////////////////////////
+
+BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
+{
+    UINT16 nType;
+    BYTE cMark;
+    rStrm >> cMark;
+    if( cMark == 0xFF )
+    {
+        if( !SbxValue::LoadData( rStrm, nVer ) )
+            return FALSE;
+        rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
+        rStrm >> nUserData;
+    }
+    else
+    {
+        rStrm.SeekRel( -1L );
+        rStrm >> nType;
+        rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
+        rStrm >> nUserData;
+        // Korrektur: Alte Methoden haben statt SbxNULL jetzt SbxEMPTY
+        if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
+            nType = SbxEMPTY;
+        SbxValues aTmp;
+        XubString aVal;
+        aTmp.eType = aData.eType = (SbxDataType) nType;
+        aTmp.pString = &aVal;
+        switch( nType )
+        {
+            case SbxBOOL:
+            case SbxERROR:
+            case SbxINTEGER:
+                rStrm >> aTmp.nInteger; break;
+            case SbxLONG:
+                rStrm >> aTmp.nLong; break;
+            case SbxSINGLE:
+            {
+                // Floats als ASCII
+                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                double d;
+                SbxDataType t;
+                if( ImpScan( aVal, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
+                {
+                    aTmp.nSingle = 0;
+                    return FALSE;
+                }
+                aTmp.nSingle = (float) d;
+                break;
+            }
+            case SbxDATE:
+            case SbxDOUBLE:
+            {
+                // Floats als ASCII
+                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                SbxDataType t;
+                if( ImpScan( aVal, aTmp.nDouble, t, NULL ) != SbxERR_OK )
+                {
+                    aTmp.nDouble = 0;
+                    return FALSE;
+                }
+                break;
+            }
+            case SbxSTRING:
+                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                break;
+            case SbxEMPTY:
+            case SbxNULL:
+                break;
+            default:
+                aData.eType = SbxNULL;
+                DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
+                return FALSE;
+        }
+        // Wert putten
+        if( nType != SbxNULL && nType != SbxEMPTY && !Put( aTmp ) )
+            return FALSE;
+    }
+    rStrm >> cMark;
+    // cMark ist auch eine Versionsnummer!
+    // 1: initial version
+    // 2: mit nUserData
+    if( cMark )
+    {
+        if( cMark > 2 )
+            return FALSE;
+        pInfo = new SbxInfo;
+        pInfo->LoadData( rStrm, (USHORT) cMark );
+    }
+    // Privatdaten nur laden, wenn es eine SbxVariable ist
+    if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
+        return FALSE;
+    ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
+    nHash =  MakeHashCode( aName );
+    SetModified( TRUE );
+    return TRUE;
+}
+
+BOOL SbxVariable::StoreData( SvStream& rStrm ) const
+{
+    rStrm << (BYTE) 0xFF;       // Marker
+    BOOL bValStore;
+    if( this->IsA( TYPE(SbxMethod) ) )
+    {
+        // #50200 Verhindern, dass Objekte, die zur Laufzeit als Return-Wert
+        // in der Methode als Value gespeichert sind, mit gespeichert werden
+        SbxVariable* pThis = (SbxVariable*)this;
+        USHORT nSaveFlags = GetFlags();
+        pThis->SetFlag( SBX_WRITE );
+        pThis->SbxValue::Clear();
+        pThis->SetFlags( nSaveFlags );
+
+        // Damit die Methode in keinem Fall ausgefuehrt wird!
+        // CAST, um const zu umgehen!
+        pThis->SetFlag( SBX_NO_BROADCAST );
+        bValStore = SbxValue::StoreData( rStrm );
+        pThis->ResetFlag( SBX_NO_BROADCAST );
+    }
+    else
+        bValStore = SbxValue::StoreData( rStrm );
+    if( !bValStore )
+        return FALSE;
+    // if( !SbxValue::StoreData( rStrm ) )
+        // return FALSE;
+    rStrm.WriteByteString( aName, RTL_TEXTENCODING_ASCII_US );
+    rStrm << nUserData;
+    if( pInfo.Is() )
+    {
+        rStrm << (BYTE) 2;      // Version 2: mit UserData!
+        pInfo->StoreData( rStrm );
+    }
+    else
+        rStrm << (BYTE) 0;
+    // Privatdaten nur speichern, wenn es eine SbxVariable ist
+    if( GetClass() == SbxCLASS_VARIABLE )
+        return StorePrivateData( rStrm );
+    else
+        return TRUE;
+}
+
+////////////////////////////// SbxInfo ///////////////////////////////////
+
+SbxInfo::SbxInfo() : aHelpFile(), nHelpId( 0 ), aParams()
+{}
+
+SbxInfo::SbxInfo( const String& r, UINT32 n )
+       : aHelpFile( r ), nHelpId( n ), aParams()
+{}
+
+////////////////////////////// SbxAlias //////////////////////////////////
+
+SbxAlias::SbxAlias( const XubString& rName, SbxVariable* p )
+        : SbxVariable(), xAlias( p )
+{
+    SetName( rName );
+    SetFlags( p->GetFlags() );
+    SetFlag( SBX_DONTSTORE );
+    aData.eType = p->GetType();
+    StartListening( p->GetBroadcaster() );
+}
+
+SbxAlias::SbxAlias( const SbxAlias& r )
+        : SbxVariable( r ), xAlias( r.xAlias )
+{}
+
+SbxAlias& SbxAlias::operator=( const SbxAlias& r )
+{
+    xAlias = r.xAlias;
+    return *this;
+}
+
+SbxAlias::~SbxAlias()
+{
+    if( xAlias.Is() )
+        EndListening( xAlias->GetBroadcaster() );
+}
+
+void SbxAlias::Broadcast( ULONG nHt )
+{
+#if SUPD >= 507
+    if( xAlias.Is() && StaticIsEnabledBroadcasting() )
+#else
+    if( xAlias.Is() )
+#endif
+    {
+        xAlias->SetParameters( GetParameters() );
+        if( nHt == SBX_HINT_DATAWANTED )
+            SbxVariable::operator=( *xAlias );
+        else if( nHt == SBX_HINT_DATACHANGED || nHt == SBX_HINT_CONVERTED )
+            *xAlias = *this;
+        else if( nHt == SBX_HINT_INFOWANTED )
+        {
+            xAlias->Broadcast( nHt );
+            pInfo = xAlias->GetInfo();
+        }
+    }
+}
+
+void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
+                           const SfxHint& rHint, const TypeId& )
+{
+    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    if( p && p->GetId() == SBX_HINT_DYING )
+    {
+        xAlias.Clear();
+        // Alias loeschen?
+        if( pParent )
+            pParent->Remove( this );
+    }
+}
+
+void SbxVariable::Dump( SvStream& rStrm, BOOL bFill )
+{
+    ByteString aBNameStr( (const UniString&)GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US );
+    rStrm << "Variable( "
+          << ByteString::CreateFromInt64( (ULONG) this ).GetBuffer() << "=="
+          << aBNameStr.GetBuffer();
+    ByteString aBParentNameStr( (const UniString&)GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US );
+    if ( GetParent() )
+        rStrm << " in parent '" << aBParentNameStr.GetBuffer() << "'";
+    else
+        rStrm << " no parent";
+    rStrm << " ) ";
+
+    // bei Object-Vars auch das Object ausgeben
+    if ( GetValues_Impl().eType == SbxOBJECT &&
+            GetValues_Impl().pObj &&
+            GetValues_Impl().pObj != this &&
+            GetValues_Impl().pObj != GetParent() )
+    {
+        rStrm << " contains ";
+        ((SbxObject*) GetValues_Impl().pObj)->Dump( rStrm, bFill );
+    }
+    else
+        rStrm << endl;
+}
+
