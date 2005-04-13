@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:52:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #define _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
@@ -81,7 +84,7 @@ namespace com { namespace sun { namespace star {
 namespace utl
 {
 
-class TransliterationWrapper
+class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
