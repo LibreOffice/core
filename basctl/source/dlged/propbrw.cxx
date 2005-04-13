@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:41:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     if (xServiceInfo.is())    // single selection
     {
         sal_uInt16 nResId = 0;
-        aName = ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_PROPERTIES));
+        aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
 
         if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ) )
         {
@@ -519,17 +519,17 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 
         if (nResId)
         {
-            aName += ::rtl::OUString( IDEResId(nResId) );
+            aName += ::rtl::OUString( String(IDEResId(nResId)) );
         }
     }
     else if (!_rxObject.is())    // no properties
     {
-        aName = ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES));
+        aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES)));
     }
     else    // multiselection
     {
-        aName = ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_PROPERTIES));
-        aName += ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_MULTISELECT));
+        aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
+        aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
     }
 
     return aName;
