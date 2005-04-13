@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:24:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _RTFOUT_HXX
 #define _RTFOUT_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -69,7 +73,7 @@
 class String;
 class SvStream;
 
-class RTFOutFuncs
+class SVT_DLLPUBLIC RTFOutFuncs
 {
 public:
 #if defined(MAC) || defined(UNX)
