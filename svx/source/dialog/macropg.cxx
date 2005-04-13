@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:35:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,58 +276,58 @@ _SvxMacroTabPage::~_SvxMacroTabPage()
 void _SvxMacroTabPage::InitResources()
 {
     // the event name to UI string mappings for App Events
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_STARTAPP ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCloseApp")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CLOSEAPP ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CREATEDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CLOSEDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnPrepareUnload")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_PREPARECLOSEDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_OPENDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSave")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_SAVEDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAs")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_SAVEASDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_SAVEDOCDONE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_SAVEASDOCDONE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnFocus")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ACTIVATEDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnfocus")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_DEACTIVATEDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnPrint")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_PRINTDOC ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MODIFYCHANGED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnMailMerge")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MAILMERGE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnPageCountChange")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_PAGECOUNTCHANGE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp")),String( SVX_RES( RID_SVXSTR_EVENT_STARTAPP ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCloseApp")),String( SVX_RES( RID_SVXSTR_EVENT_CLOSEAPP ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")),String( SVX_RES( RID_SVXSTR_EVENT_CREATEDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")),String( SVX_RES( RID_SVXSTR_EVENT_CLOSEDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnPrepareUnload")),String( SVX_RES( RID_SVXSTR_EVENT_PREPARECLOSEDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad")),String( SVX_RES( RID_SVXSTR_EVENT_OPENDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSave")),String( SVX_RES( RID_SVXSTR_EVENT_SAVEDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAs")),String( SVX_RES( RID_SVXSTR_EVENT_SAVEASDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone")),String( SVX_RES( RID_SVXSTR_EVENT_SAVEDOCDONE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone")),String( SVX_RES( RID_SVXSTR_EVENT_SAVEASDOCDONE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnFocus")),String( SVX_RES( RID_SVXSTR_EVENT_ACTIVATEDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnfocus")),String( SVX_RES( RID_SVXSTR_EVENT_DEACTIVATEDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnPrint")),String( SVX_RES( RID_SVXSTR_EVENT_PRINTDOC ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")),String( SVX_RES( RID_SVXSTR_EVENT_MODIFYCHANGED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnMailMerge")),String( SVX_RES( RID_SVXSTR_EVENT_MAILMERGE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnPageCountChange")),String( SVX_RES( RID_SVXSTR_EVENT_PAGECOUNTCHANGE ))));
 
     // the event name to UI string mappings for forms & dialogs
     //
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveAction")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("actionPerformed")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ACTIONPERFORMED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("changed")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CHANGED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("textChanged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_TEXTCHANGED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("itemStateChanged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ITEMSTATECHANGED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("focusGained")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_FOCUSGAINED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("focusLost")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_FOCUSLOST ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("keyPressed")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_KEYTYPED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("keyReleased")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_KEYUP ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseEntered")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEENTERED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseDragged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEDRAGGED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseMoved")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEMOVED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mousePressed")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEPRESSED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseReleased")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSERELEASED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseExited")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEEXITED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveReset")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVERESETTED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("resetted")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_RESETTED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveSubmit")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_SUBMITTED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveUpdate")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_BEFOREUPDATE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("updated")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_AFTERUPDATE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("loaded")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_LOADED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reloading")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_RELOADING ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reloaded")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_RELOADED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unloading")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_UNLOADING ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unloaded")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_UNLOADED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("confirmDelete")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CONFIRMDELETE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveRowChange")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEROWCHANGE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rowChanged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ROWCHANGE ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveCursorMove")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_POSITIONING ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cursorMoved")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_POSITIONED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveParameter")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEPARAMETER ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("errorOccured")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ERROROCCURED ))));
-    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("adjustmentValueChanged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveAction")),String( SVX_RES( RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("actionPerformed")),String( SVX_RES( RID_SVXSTR_EVENT_ACTIONPERFORMED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("changed")),String( SVX_RES( RID_SVXSTR_EVENT_CHANGED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("textChanged")),String( SVX_RES( RID_SVXSTR_EVENT_TEXTCHANGED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("itemStateChanged")),String( SVX_RES( RID_SVXSTR_EVENT_ITEMSTATECHANGED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("focusGained")),String( SVX_RES( RID_SVXSTR_EVENT_FOCUSGAINED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("focusLost")),String( SVX_RES( RID_SVXSTR_EVENT_FOCUSLOST ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("keyPressed")),String( SVX_RES( RID_SVXSTR_EVENT_KEYTYPED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("keyReleased")),String( SVX_RES( RID_SVXSTR_EVENT_KEYUP ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseEntered")),String( SVX_RES( RID_SVXSTR_EVENT_MOUSEENTERED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseDragged")),String( SVX_RES( RID_SVXSTR_EVENT_MOUSEDRAGGED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseMoved")),String( SVX_RES( RID_SVXSTR_EVENT_MOUSEMOVED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mousePressed")),String( SVX_RES( RID_SVXSTR_EVENT_MOUSEPRESSED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseReleased")),String( SVX_RES( RID_SVXSTR_EVENT_MOUSERELEASED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mouseExited")),String( SVX_RES( RID_SVXSTR_EVENT_MOUSEEXITED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveReset")),String( SVX_RES( RID_SVXSTR_EVENT_APPROVERESETTED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("resetted")),String( SVX_RES( RID_SVXSTR_EVENT_RESETTED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveSubmit")),String( SVX_RES( RID_SVXSTR_EVENT_SUBMITTED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveUpdate")),String( SVX_RES( RID_SVXSTR_EVENT_BEFOREUPDATE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("updated")),String( SVX_RES( RID_SVXSTR_EVENT_AFTERUPDATE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("loaded")),String( SVX_RES( RID_SVXSTR_EVENT_LOADED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reloading")),String( SVX_RES( RID_SVXSTR_EVENT_RELOADING ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reloaded")),String( SVX_RES( RID_SVXSTR_EVENT_RELOADED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unloading")),String( SVX_RES( RID_SVXSTR_EVENT_UNLOADING ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unloaded")),String( SVX_RES( RID_SVXSTR_EVENT_UNLOADED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("confirmDelete")),String( SVX_RES( RID_SVXSTR_EVENT_CONFIRMDELETE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveRowChange")),String( SVX_RES( RID_SVXSTR_EVENT_APPROVEROWCHANGE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rowChanged")),String( SVX_RES( RID_SVXSTR_EVENT_ROWCHANGE ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveCursorMove")),String( SVX_RES( RID_SVXSTR_EVENT_POSITIONING ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cursorMoved")),String( SVX_RES( RID_SVXSTR_EVENT_POSITIONED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveParameter")),String( SVX_RES( RID_SVXSTR_EVENT_APPROVEPARAMETER ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("errorOccured")),String( SVX_RES( RID_SVXSTR_EVENT_ERROROCCURED ))));
+    aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("adjustmentValueChanged")),String( SVX_RES( RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ))));
 }
 
 // the following method is called when the user clicks OK
