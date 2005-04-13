@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:20:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,17 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
+#endif
+#define SVT_DLLIMPLEMENTATION
+
+#include "ctloptions.hxx"
 
 #include "languageoptions.hxx"
+
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
-#endif
-
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
-#include "ctloptions.hxx"
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
