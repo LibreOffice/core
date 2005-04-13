@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:28:53 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <tools/list.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #ifndef _SB_SBMOD_HXX //autogen
 #include <sbmod.hxx>
