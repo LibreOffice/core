@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testbasi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:52:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 
 #ifndef _BASIC_TTRESHLP_HXX
