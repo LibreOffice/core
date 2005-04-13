@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #define _UNOTOOLS_UCBHELPER_HXX
 
@@ -79,7 +83,7 @@ namespace ucb
 
 namespace utl
 {
-    class UCBContentHelper
+    class UNOTOOLS_DLLPUBLIC UCBContentHelper
     {
     private:
         static sal_Bool             Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData,
