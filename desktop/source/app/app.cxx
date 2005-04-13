@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:59:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
     if ( !pResMgr )
         return aFaultBackMsg;
     else
-        return OUString( ResId( nId, pResMgr ));
+        return OUString( String( ResId( nId, pResMgr )));
 }
 
 OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
@@ -429,7 +429,7 @@ OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( OUString(ResId(STR_BOOTSTRAP_ERR_CANNOT_START, pResMgr)) );
+        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CANNOT_START, pResMgr))) );
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
@@ -446,7 +446,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( OUString(ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, pResMgr )) );
+        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, pResMgr ))) );
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
@@ -454,7 +454,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     {
         aDiagnosticMessage.appendAscii( "\n\n" );
         if ( pResMgr )
-            aDiagnosticMessage.append( OUString(ResId(STR_INTERNAL_ERRMSG, pResMgr )) );
+            aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, pResMgr ))) );
         else
             aDiagnosticMessage.appendAscii( "The following internal error has occured:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
