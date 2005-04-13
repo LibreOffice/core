@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:30:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,26 +459,26 @@ void SAL_CALL
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-                sName = OUString( SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
+                sName = String( SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
             }
             else
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-                sName = OUString( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
+                sName = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
             }
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesView")))
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-            sName = OUString( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
+            sName = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutView")))
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-            sName = OUString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
+            sName = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
         }
         else
         {
@@ -516,26 +516,26 @@ void SAL_CALL
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-                sDescription = OUString( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
+                sDescription = String( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
             }
             else
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-                sDescription = OUString( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
+                sDescription = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
             }
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesView")))
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-            sDescription = OUString( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
+            sDescription = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutView")))
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-            sDescription = OUString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
+            sDescription = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
         }
         else
         {
