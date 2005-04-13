@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:08:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,8 +349,8 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     ULONG nConfigMode, const Reference< frame::XFrame >& xFrame )
         : SvTreeListBox( pParent, rResId )
         , nMode( nConfigMode ), bShowSF( TRUE ),
-    m_sMyMacros(ResId(STR_MYMACROS)),
-    m_sProdMacros(ResId(STR_PRODMACROS)),
+    m_sMyMacros(String(ResId(STR_MYMACROS))),
+    m_sProdMacros(String(ResId(STR_PRODMACROS))),
     m_hdImage(ResId(IMG_HARDDISK)),
     m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
     m_libImage(ResId(IMG_LIB)),
