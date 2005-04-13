@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:25:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svtools/svstdarr.hxx>
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
