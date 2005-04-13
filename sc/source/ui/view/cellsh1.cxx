@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:53:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 #include <svx/clipfmtitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #include <svtools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
