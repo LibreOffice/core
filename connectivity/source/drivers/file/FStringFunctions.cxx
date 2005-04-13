@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStringFunctions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:25:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 07:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ ORowSetValue OOp_LTrim::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet(lhs);
+    ::rtl::OUString sRet = lhs;
     ::rtl::OUString sNew = sRet.trim();
     return sRet.copy(sRet.indexOf(sNew));
 }
@@ -188,7 +188,7 @@ ORowSetValue OOp_RTrim::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet(lhs);
+    ::rtl::OUString sRet = lhs;
     ::rtl::OUString sNew = sRet.trim();
     return sRet.copy(0,sRet.lastIndexOf(sNew.getStr()[sNew.getLength()-1])+1);
 }
@@ -213,9 +213,9 @@ ORowSetValue OOp_Replace::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.size() != 3 )
         return ORowSetValue();
 
-    ::rtl::OUString sStr(lhs[2]);
-    ::rtl::OUString sFrom(lhs[1]);
-    ::rtl::OUString sTo(lhs[0]);
+    ::rtl::OUString sStr  = lhs[2];
+    ::rtl::OUString sFrom = lhs[1];
+    ::rtl::OUString sTo   = lhs[0];
     sal_Int32 nIndexOf = sStr.indexOf(sFrom);
     while( nIndexOf != -1 )
     {
@@ -245,7 +245,7 @@ ORowSetValue OOp_Insert::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.size() != 4 )
         return ORowSetValue();
 
-    ::rtl::OUString sStr(lhs[3]);
+    ::rtl::OUString sStr = lhs[3];
 
     sal_Int32 nStart = static_cast<sal_Int32>(lhs[2]);
     if ( nStart < 1 )
@@ -258,7 +258,7 @@ ORowSetValue OOp_Left::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) 
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet(lhs);
+    ::rtl::OUString sRet = lhs;
     sal_Int32 nCount = rhs;
     if ( nCount < 0 )
         return ORowSetValue();
@@ -271,7 +271,7 @@ ORowSetValue OOp_Right::operate(const ORowSetValue& lhs,const ORowSetValue& rhs)
         return lhs;
 
     sal_Int32 nCount = rhs;
-    ::rtl::OUString sRet(lhs);
+    ::rtl::OUString sRet = lhs;
     if ( nCount < 0 || nCount >= sRet.getLength() )
         return ORowSetValue();
 
