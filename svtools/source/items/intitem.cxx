@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:25:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "intitem.hxx"
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -70,14 +72,8 @@
 #include <tools/stream.hxx>
 #endif
 
-#ifndef _SFXINTITEM_HXX
-#include <intitem.hxx>
-#endif
 #ifndef _SFXMETRICITEM_HXX
 #include <metitem.hxx>
-#endif
-#ifndef _SBXVAR_HXX
-#include <sbxvar.hxx>
 #endif
 
 //============================================================================
