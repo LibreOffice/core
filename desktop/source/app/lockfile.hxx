@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:45:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,15 @@
  *
  */
 
-using namespace ::rtl;
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include "rtl/ustring.hxx"
+#endif
+
+class ByteString;
+
 namespace desktop {
 
     class Lockfile
@@ -106,16 +114,16 @@ namespace desktop {
         static const ByteString Timekey();
         static const ByteString IPCkey();
         // lockfilename
-        static const OUString Suffix();
+        static const rtl::OUString Suffix();
         bool m_bIPCserver;
         // full qualified name (file://-url) of the lockfile
-        OUString m_aLockname;
+        rtl::OUString m_aLockname;
         // flag whether the d'tor should delete the lock
         sal_Bool m_bRemove;
         sal_Bool m_bIsLocked;
         // ID
-        OUString m_aId;
-        OUString m_aDate;
+        rtl::OUString m_aId;
+        rtl::OUString m_aDate;
         // access to data in file
         void syncToFile(void) const;
         sal_Bool isStale(void) const;
