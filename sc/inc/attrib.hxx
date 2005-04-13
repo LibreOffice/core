@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:22:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,8 +230,6 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
-    virtual void                Record( SfxArguments &rArgs ) const;
-    virtual SfxArgumentError    Construct( USHORT nId, const SfxArguments &rArgs );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
@@ -292,8 +290,6 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
-    virtual void                Record( SfxArguments &rArgs ) const;
-    virtual SfxArgumentError    Construct( USHORT nId, const SfxArguments &rArgs );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
