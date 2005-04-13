@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outstrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_OUTSTRM_HXX
 #define SVTOOLS_OUTSTRM_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -74,20 +78,20 @@ namespace com { namespace sun { namespace star { namespace io {
 } } } }
 
 //============================================================================
-class SvOutputStream: public SvStream
+class SVL_DLLPUBLIC SvOutputStream: public SvStream
 {
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         m_xStream;
 
-    virtual ULONG GetData(void *, ULONG);
+    SVL_DLLPRIVATE virtual ULONG GetData(void *, ULONG);
 
-    virtual ULONG PutData(void const * pData, ULONG nSize);
+    SVL_DLLPRIVATE virtual ULONG PutData(void const * pData, ULONG nSize);
 
-    virtual ULONG SeekPos(ULONG);
+    SVL_DLLPRIVATE virtual ULONG SeekPos(ULONG);
 
-    virtual void FlushData();
+    SVL_DLLPRIVATE virtual void FlushData();
 
-    virtual void SetSize(ULONG);
+    SVL_DLLPRIVATE virtual void SetSize(ULONG);
 
 public:
     SvOutputStream(com::sun::star::uno::Reference<
