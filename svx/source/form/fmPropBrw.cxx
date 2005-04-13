@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:22:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ using namespace ::svxform;
     if ( !nClassNameResourceId )
         return ::rtl::OUString();
 
-    return ::rtl::OUString( SVX_RES( nClassNameResourceId ) );
+    return ::rtl::OUString( String( SVX_RES( nClassNameResourceId ) ) );
 }
 
 //========================================================================
