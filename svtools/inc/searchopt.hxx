@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-21 13:01:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,17 @@
 #ifndef _SVT_SEARCHOPT_HXX_
 #define _SVT_SEARCHOPT_HXX_
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
+#ifndef _SOLAR_H
+#include "tools/solar.h"
+#endif
 
 class SvtSearchOptions_Impl;
 
-class SvtSearchOptions
+class SVL_DLLPUBLIC SvtSearchOptions
 {
     SvtSearchOptions_Impl   *pImpl;
 
