@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:23:20 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ void FmXAutoControl::createPeer( const Reference< XToolkit > & rxToolkit, const 
     Reference< XTextComponent >  xText(getPeer() , UNO_QUERY);
     if (xText.is())
     {
-        xText->setText(::rtl::OUString(SVX_RES(RID_STR_AUTOFIELD)));
+        xText->setText(::rtl::OUString(String(SVX_RES(RID_STR_AUTOFIELD))));
         xText->setEditable(sal_False);
     }
 }
