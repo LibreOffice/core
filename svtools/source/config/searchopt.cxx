@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-12 13:43:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "searchopt.hxx"
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -79,9 +81,6 @@
 #include <com/sun/star/uno/Any.h>
 #endif
 
-#ifndef _SVT_SEARCHOPT_HXX_
-#include <searchopt.hxx>
-#endif
 
 using namespace rtl;
 using namespace utl;
