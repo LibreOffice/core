@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: hr $ $Date: 2005-04-11 09:33:49 $
+*  last change: $Author: obo $ $Date: 2005-04-13 08:44:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -129,8 +129,11 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Fop,
 	gid_File_Lib_Fps,
 	gid_File_Lib_Fps_Gnome,
+	gid_File_Lib_Fps_Office,
+	gid_File_Lib_Fpicker,
 	gid_File_Lib_Freetype,
 	gid_File_Lib_Frm,
+	gid_File_Lib_Fsstorage,
 	gid_File_Lib_Ftransl,
 	gid_File_Lib_Fwe,
 	gid_File_Lib_Fwi,
@@ -139,7 +142,8 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Gcc,
 	gid_File_Lib_Stdc,
 	gid_File_Lib_Gcc2_Uno,
-	gid_File_Lib_Go);
+	gid_File_Lib_Go,
+	gid_File_Lib_Hatchwindowfactory);
 End
 
 Module gid_Module_Root_Files_3
@@ -193,7 +197,8 @@ Module gid_Module_Root_Files_3
 	gid_File_Lib_Officebean,
 	gid_File_Lib_Ole,
 	gid_File_Lib_Opc,
-	gid_File_Lib_Package2);
+	gid_File_Lib_Package2,
+	gid_File_Lib_Passwordcontainer);
 End
 
 Module gid_Module_Root_Files_4
@@ -270,6 +275,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Sunpro5_Uno,
 	gid_File_Lib_Svl,
 	gid_File_Lib_Svtools,
+	gid_File_Lib_Svtmisc,
 	gid_File_Lib_Svx);
 End
 
