@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
 class ScChangeActionTable;
+class String;
 class DateTime;
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
