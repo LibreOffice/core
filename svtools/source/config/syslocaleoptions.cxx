@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:23:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef GCC
-#pragma hdrstop
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
 #endif
+#define SVT_DLLIMPLEMENTATION
 
 #include "syslocaleoptions.hxx"
-
-#ifndef _ZFORLIST_HXX
-#include "zforlist.hxx"
-#endif
 
 #ifndef _SVT_BROADCAST_HXX
 #include <broadcast.hxx>
@@ -105,13 +102,16 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
 #ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+
 #include <rtl/logfile.hxx>
+
 #include "itemholder2.hxx"
 
 
