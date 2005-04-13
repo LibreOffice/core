@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:08:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,11 @@
  *
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
+
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
 #endif
+#define SVT_DLLIMPLEMENTATION
 
 //_________________________________________________________________________________________________________________
 //  includes
