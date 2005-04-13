@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:50:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,14 @@
 //===============================================
 // includes
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 #ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -145,7 +152,7 @@ struct TMutexInit
             Of course this queue will be stopped if the environment
             will be destructed ...
  */
-class AcceleratorExecute : private TMutexInit
+class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 {
     //-------------------------------------------
     // const, types
@@ -284,21 +291,22 @@ class AcceleratorExecute : private TMutexInit
         /** @short  allow creation of instances of this class
                     by using our factory only!
          */
-        AcceleratorExecute();
+        SVT_DLLPRIVATE AcceleratorExecute();
+
         AcceleratorExecute(const AcceleratorExecute& rCopy);
         void operator=(const AcceleratorExecute& rCopy) {};
 
         //---------------------------------------
         /** TODO document me */
-        ::rtl::OUString impl_ts_findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
+        SVT_DLLPRIVATE ::rtl::OUString impl_ts_findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
 
         //---------------------------------------
         /** TODO document me */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > impl_ts_getURLParser();
+        SVT_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > impl_ts_getURLParser();
 
         //---------------------------------------
         /** TODO document me */
-        DECL_LINK(impl_ts_asyncCallback, void*);
+        DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
 };
 
 } // namespace svt
