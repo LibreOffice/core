@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:44:50 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:47:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TARGET=syslocale
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 

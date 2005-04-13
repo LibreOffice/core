@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:45:07 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:48:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,14 +68,12 @@ TARGET=undo
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
         $(SLO)$/undo.obj
-
-OBJFILES =	\
-        $(OBJ)$/undo.obj
 
 # --- Tagets -------------------------------------------------------
 
