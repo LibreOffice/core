@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:18:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,13 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX //autogen
-#include <svtools/sbxmeth.hxx>
+#include <basic/sbxmeth.hxx>
 #endif
 #ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
@@ -688,8 +688,8 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
         , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ),
-    m_sMyMacros(ResId(STR_MYMACROS)),
-    m_sProdMacros(ResId(STR_PRODMACROS)),
+    m_sMyMacros(String(ResId(STR_MYMACROS))),
+    m_sProdMacros(String(ResId(STR_PRODMACROS))),
     m_hdImage(ResId(IMG_HARDDISK)),
     m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
     m_libImage(ResId(IMG_LIB)),
