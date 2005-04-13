@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:28:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@
 //==================================================================================================
 
 #include <xmlscript/dynload.hxx>
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include <sbunoobj.hxx>
 #include <sbstar.hxx>
 #include <sbmeth.hxx>
