@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progresshandlerwrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _UTL_PROGRESSHANDLERWRAP_HXX_
 #define _UTL_PROGRESSHANDLERWRAP_HXX_
 
@@ -76,7 +80,7 @@
 namespace utl
 {
 
-class ProgressHandlerWrap : public ::cppu::WeakImplHelper1< ::com::sun::star::ucb::XProgressHandler >
+class UNOTOOLS_DLLPUBLIC ProgressHandlerWrap : public ::cppu::WeakImplHelper1< ::com::sun::star::ucb::XProgressHandler >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > m_xStatusIndicator;
 
