@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskbar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-02 15:58:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _TASKBAR_HXX
 #define _TASKBAR_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
@@ -213,7 +217,7 @@ public:
 // - TaskToolBox -
 // ---------------
 
-class TaskToolBox : public ToolBox
+class SVT_DLLPUBLIC TaskToolBox : public ToolBox
 {
     friend class TaskBar;
 
@@ -237,8 +241,12 @@ private:
     Link                maContextMenuHdl;
 
 #ifdef _TASKBAR_CXX
-    void                ImplFormat();
+    SVT_DLLPRIVATE void                ImplFormat();
 #endif
+
+    // Forbidden and not implemented.
+    TaskToolBox (const TaskToolBox &);
+    TaskToolBox & operator= (const TaskToolBox &);
 
 public:
                         TaskToolBox( Window* pParent, WinBits nWinStyle = 0 );
@@ -347,7 +355,7 @@ public:
 #define TASKSTATUSBAR_CLOCKID               ((USHORT)61000)
 #define TASKSTATUSFIELD_CLOCK               ((USHORT)0x0001)
 
-class TaskStatusBar : public StatusBar
+class SVT_DLLPUBLIC TaskStatusBar : public StatusBar
 {
     friend class TaskBar;
 
@@ -370,12 +378,12 @@ private:
     BOOL                mbDummy2;
 
 #ifdef _TASKBAR_CXX
-    ImplTaskSBFldItem*  ImplGetFieldItem( USHORT nItemId ) const;
-    ImplTaskSBFldItem*  ImplGetFieldItem( const Point& rPos, BOOL& rFieldRect ) const;
-    BOOL                ImplUpdateClock();
-    BOOL                ImplUpdateFlashItems();
-    void                ImplUpdateField( BOOL bItems );
-                        DECL_LINK( ImplTimerHdl, Timer* );
+    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( USHORT nItemId ) const;
+    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( const Point& rPos, BOOL& rFieldRect ) const;
+    SVT_DLLPRIVATE BOOL                ImplUpdateClock();
+    SVT_DLLPRIVATE BOOL                ImplUpdateFlashItems();
+    SVT_DLLPRIVATE void                ImplUpdateField( BOOL bItems );
+                        DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
 #endif
 
 public:
@@ -410,7 +418,7 @@ public:
 // - TaskBar -
 // -----------
 
-class TaskBar : public Window
+class SVT_DLLPUBLIC TaskBar : public Window
 {
 private:
     ImplTaskBarFloat*       mpAutoHideBar;
@@ -442,8 +450,8 @@ private:
     Link                    maTaskResizeHdl;
 
 #ifdef _TASKBAR_CXX
-    void                    ImplInitSettings();
-    void                    ImplNewHeight( long nNewHeight );
+    SVT_DLLPRIVATE void                    ImplInitSettings();
+    SVT_DLLPRIVATE void                    ImplNewHeight( long nNewHeight );
 #endif
 
 public:
@@ -503,7 +511,7 @@ class ImplWindowArrangeList;
 // - class WindowArrange -
 // -----------------------
 
-class WindowArrange
+class SVT_DLLPUBLIC WindowArrange
 {
 private:
     List*                   mpWinList;
@@ -511,10 +519,10 @@ private:
     ULONG                   mnDummy;
 
 #ifdef _TASKBAR_CXX
-    void                    ImplTile( const Rectangle& rRect );
-    void                    ImplHorz( const Rectangle& rRect );
-    void                    ImplVert( const Rectangle& rRect );
-    void                    ImplCascade( const Rectangle& rRect );
+    SVT_DLLPRIVATE void                    ImplTile( const Rectangle& rRect );
+    SVT_DLLPRIVATE void                    ImplHorz( const Rectangle& rRect );
+    SVT_DLLPRIVATE void                    ImplVert( const Rectangle& rRect );
+    SVT_DLLPRIVATE void                    ImplCascade( const Rectangle& rRect );
 #endif
 
 public:
