@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:03:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ using namespace ::com::sun::star;
 #define ITEMID_PARAGRID 0
 
 #include <tools/rtti.hxx>
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
 
 #define _SVX_PARAITEM_CXX
@@ -109,9 +109,6 @@ using namespace ::com::sun::star;
 #include <svtools/itempool.hxx>
 #endif
 
-#ifndef _ARGS_HXX //autogen
-#include <svtools/args.hxx>
-#endif
 #include <svtools/memberid.hrc>
 #include "svxitems.hrc"
 
