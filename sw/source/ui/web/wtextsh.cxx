@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wtextsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:12:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <svx/srchitem.hxx> //***
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
