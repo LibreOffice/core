@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flagitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:20:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,15 @@
  *
  ************************************************************************/
 
+#include "flagitem.hxx"
+
+#ifndef _SFXPOOLITEM_HXX
+#include "poolitem.hxx"
+#endif
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#ifndef GCC
-#pragma hdrstop
-#endif
-
-#include "args.hxx"
-#include "poolitem.hxx"
-#include "flagitem.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
