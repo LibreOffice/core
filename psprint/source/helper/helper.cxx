@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:58:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ static OUString getEnvironmentPath( const char* pKey, sal_Unicode cPrefix )
     const char* pValue = getenv( pKey );
     if( pValue && *pValue )
     {
-        aPath  = OUString( cPrefix );
+        aPath  = OUString( String( cPrefix ) );
         aPath += OUString( pValue, strlen( pValue ), gsl_getSystemTextEncoding() );
     }
     return aPath;
