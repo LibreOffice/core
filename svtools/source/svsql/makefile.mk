@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:44:40 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:47:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ TARGET=svsql
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 
