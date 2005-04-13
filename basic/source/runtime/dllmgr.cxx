@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 11:01:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@
 #include <tools/errcode.hxx>
 #endif
 #ifndef _SBXVAR_HXX //autogen
-#include <svtools/sbxvar.hxx>
+#include <sbxvar.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 
 #if defined(WIN)
