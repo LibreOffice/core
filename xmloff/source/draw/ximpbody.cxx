@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:10:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 OUString aBookmarkName( maHREF.copy( nIndex+1 ) );
 
                 maHREF = GetImport().GetAbsoluteReference( aFileName );
-                maHREF += OUString( (sal_Unicode)'#' );
+                maHREF += String( (sal_Unicode)'#' );
                 maHREF += aBookmarkName;
             }
 
