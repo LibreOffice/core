@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:46:31 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:03:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,28 +61,37 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJINC=..$/..$/inc
 PRJNAME=svtools
-TARGET=hatchwindow
-
+TARGET=hatchwindowfactory.uno
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings common for the whole project -----
-
 
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
-# --- Types -------------------------------------
+DLLPRE=
 
 # --- Files -------------------------------------
 
 SLOFILES=	\
     $(SLO)$/hatchwindow.obj\
     $(SLO)$/hatchwindowfactory.obj\
-    $(SLO)$/svborder.obj\
     $(SLO)$/ipwin.obj
+
+SHL1TARGET=	$(TARGET)
+SHL1IMPLIB=	i$(TARGET)
+SHL1OBJS=	$(SLOFILES)
+SHL1STDLIBS=\
+    $(TKLIB) \
+    $(VCLLIB) \
+    $(TOOLSLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB)
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ----------------------------------
 

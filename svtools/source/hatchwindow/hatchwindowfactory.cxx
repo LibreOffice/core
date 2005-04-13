@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hatchwindowfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:46:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,12 @@
  *
  ************************************************************************/
 
-#include <hatchwindowfactory.hxx>
+#include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
+
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include "cppuhelper/factory.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
@@ -129,3 +133,63 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OHatchWindowFactory::getSupportedServi
     return impl_staticGetSupportedServiceNames();
 }
 
+//-------------------------------------------------------------------------
+
+extern "C"
+{
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
+    void * /* pServiceManager */, void * pRegistryKey)
+{
+    if (pRegistryKey)
+    {
+        uno::Reference< registry::XRegistryKey> xRegistryKey (
+            reinterpret_cast< registry::XRegistryKey* >(pRegistryKey));
+        uno::Reference< registry::XRegistryKey> xNewKey;
+
+        xNewKey = xRegistryKey->createKey (
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            OHatchWindowFactory::impl_staticGetImplementationName() +
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
+
+        const uno::Sequence< ::rtl::OUString > aServices (
+            OHatchWindowFactory::impl_staticGetSupportedServiceNames());
+        for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
+            xNewKey->createKey( aServices.getConstArray()[i] );
+
+        return sal_True;
+    }
+    return sal_False;
+}
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
+    const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
+{
+    void * pResult = 0;
+    if (pServiceManager)
+    {
+        uno::Reference< lang::XSingleServiceFactory > xFactory;
+        if (OHatchWindowFactory::impl_staticGetImplementationName().compareToAscii (pImplementationName ) == 0)
+        {
+            xFactory = cppu::createOneInstanceFactory(
+                reinterpret_cast< lang::XMultiServiceFactory* >(pServiceManager),
+                OHatchWindowFactory::impl_staticGetImplementationName(),
+                OHatchWindowFactory::impl_staticCreateSelfInstance,
+                OHatchWindowFactory::impl_staticGetSupportedServiceNames());
+        }
+        if (xFactory.is())
+        {
+            xFactory->acquire();
+            pResult = xFactory.get();
+        }
+    }
+    return pResult;
+}
+
+} // extern "C"

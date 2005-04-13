@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:46:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #include <vcl/window.hxx>
 #endif
 
-#include <svborder.hxx>
+#ifndef _SVBORDER_HXX
+#include <tools/svborder.hxx>
+#endif
 
 /********************** SvResizeHelper ***********************************
 *************************************************************************/
