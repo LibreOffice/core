@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PasswordHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-24 07:17:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,23 +62,34 @@
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #define _SVTOOLS_PASSWORDHELPER_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
 #endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include "com/sun/star/uno/Sequence.hxx"
+#endif
+
+class String;
 
 class SvPasswordHelper
 {
     static void     GetHashPassword(com::sun::star::uno::Sequence <sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen);
     static void     GetHashPasswordLittleEndian(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
     static void     GetHashPasswordBigEndian(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
+
 public:
-    static void     GetHashPassword(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
+    SVL_DLLPUBLIC static void     GetHashPassword(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
     /**
     Use this method to compare a given string with another given Hash value.
     This is necessary, because in older versions exists different hashs of the same string. They were endian dependent.
     We need this to handle old files. This method will compare against big and little endian. See #101326#
     */
-    static bool     CompareHashPassword(const com::sun::star::uno::Sequence<sal_Int8>& rOldPassHash, const String& sNewPass);
+    SVL_DLLPUBLIC static bool     CompareHashPassword(const com::sun::star::uno::Sequence<sal_Int8>& rOldPassHash, const String& sNewPass);
 };
 
 #endif
