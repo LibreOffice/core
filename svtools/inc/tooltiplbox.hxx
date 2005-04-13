@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tooltiplbox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-02 14:35:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_TOOLTIPLBOX_HXX
 #define SVTOOLS_TOOLTIPLBOX_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
@@ -84,7 +88,7 @@ protected:
 // ----------------------------------------------------------------------------
 
 /** MultiListBox with tool tips for long entries. */
-class ToolTipMultiListBox : public MultiListBox
+class SVT_DLLPUBLIC ToolTipMultiListBox : public MultiListBox
 {
 public:
                                 ToolTipMultiListBox( Window* pParent, WinBits nStyle = WB_BORDER );
