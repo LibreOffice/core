@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:04:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 
 #ifdef IRIX
 #ifndef _SBXCLASS_HXX
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #endif
 #include <svx/svxdlg.hxx> //CHINA001
