@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 //-----------------------------------------------------------------------------
 namespace com{ namespace sun{ namespace star{
     namespace uno{
@@ -113,7 +117,7 @@ namespace utl
     class ConfigManager;
     struct ConfigItem_Impl;
 
-    class ConfigItem
+    class UNOTOOLS_DLLPUBLIC ConfigItem
     {
             friend class ConfigChangeListener_Impl;
             friend class ConfigManager;
