@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:28:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,12 @@ SotData_Impl::SotData_Impl()
     , pDataFlavorList( NULL )
 {
 }
-
 /*************************************************************************
 |*    SOTDATA()
 |*
 |*    Beschreibung
 *************************************************************************/
 namespace { struct ImplData : public rtl::Static<SotData_Impl, ImplData> {}; }
-
 SotData_Impl * SOTDATA()
 {
     return &ImplData::get();
