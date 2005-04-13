@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:48:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@
 #include <vcl/ctrl.hxx>
 #include <svtools/hint.hxx>
 #include <svtools/poolitem.hxx>
-#include <svtools/args.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
 #include <tools/unqidx.hxx>
@@ -144,7 +143,7 @@
 #include <sc.hrc>
 #include <stdarg.h>
 #include <svx/dialogs.hrc>
-#include <svtools/sbxdef.hxx>
+#include <basic/sbxdef.hxx>
 #include <svtools/lstner.hxx>
 #include <sfx2/shell.hxx>
 #include <vcl/window.hxx>
@@ -302,14 +301,14 @@
 #include <svx/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <anyrefdg.hxx>
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #include <vcl/ctrl.hxx>
 #include <svx/xenum.hxx>
 #include <dbcolect.hxx>
 #include <sot/exchange.hxx>
 #include <math.h>
 #include <vcl/wrkwin.hxx>
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #include <vcl/image.hxx>
 #include <svx/xdef.hxx>
 #include <drwlayer.hxx>
@@ -360,7 +359,7 @@
 #include <svx/def3d.hxx>
 #include <goodies/vector3d.hxx>
 #include <vcl/floatwin.hxx>
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtrans.hxx>
