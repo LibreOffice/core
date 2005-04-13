@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 17:13:54 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:49:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,14 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=unoiface
-LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -78,32 +77,15 @@ SRS1NAME=	uno
 SRC1FILES=  unoifac2.src
 
 SLOFILES= \
-            $(SLO)$/unoevent.obj\
-            $(SLO)$/unoimap.obj\
-            $(SLO)$/addrtempuno.obj	\
-            $(SLO)$/genericunodialog.obj \
-            $(SLO)$/registerservices.obj \
-            $(SLO)$/registerlight.obj \
-            $(SLO)$/unoiface.obj	\
-            $(SLO)$/imgprod.obj \
-            $(SLO)$/toolboxcontroller.obj \
-            $(SLO)$/framestatuslistener.obj \
-            $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/generictoolboxcontroller.obj
-
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1OBJFILES=  \
+            $(SLO)$/unoiface.obj \
             $(SLO)$/unoevent.obj \
             $(SLO)$/unoimap.obj \
-            $(SLO)$/addrtempuno.obj	\
-            $(SLO)$/genericunodialog.obj \
-            $(SLO)$/registerservices.obj \
-            $(SLO)$/unoiface.obj	\
-            $(SLO)$/imgprod.obj     \
             $(SLO)$/toolboxcontroller.obj \
             $(SLO)$/framestatuslistener.obj \
             $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/generictoolboxcontroller.obj
+            $(SLO)$/genericunodialog.obj \
+            $(SLO)$/generictoolboxcontroller.obj \
+            $(SLO)$/registerservices.obj
 
 # --- Targets ------------------------------------------------------
 
