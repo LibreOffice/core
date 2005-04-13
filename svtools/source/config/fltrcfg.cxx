@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltrcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:46:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,11 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#include "fltrcfg.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#include "fltrcfg.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -76,6 +75,7 @@
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 // -----------------------------------------------------------------------
@@ -288,7 +288,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     return aNames;
 }
 //-----------------------------------------------------------------------
-ULONG lcl_GetFlag(sal_Int32 nProp)
+static ULONG lcl_GetFlag(sal_Int32 nProp)
 {
     ULONG nFlag = 0;
     switch(nProp)
