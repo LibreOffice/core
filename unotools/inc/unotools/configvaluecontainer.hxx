@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configvaluecontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 12:53:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef UNOTOOLS_CONFIGVALUECONTAINER_HXX
 #define UNOTOOLS_CONFIGVALUECONTAINER_HXX
@@ -103,7 +106,7 @@ namespace utl
         before your base class' dtor is called, so accessing the memory during such a theoretical auto-commit would
         yield undefined behaviour.</p>
     */
-    class OConfigurationValueContainer
+    class UNOTOOLS_DLLPUBLIC OConfigurationValueContainer
     {
     private:
         OConfigurationValueContainerImpl*
@@ -275,6 +278,13 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.206.1  2005/02/28 04:33:53  mnicel
+ *  Issue number:  40092
+ *  Part of visibility work
+ *
+ *  Revision 1.1  2001/08/21 12:53:11  fs
+ *  initial checkin - helper class for accesing config data in fixed memmory locations (aka class members)
+ *
  *
  *  Revision 1.0 20.08.01 15:44:28  fs
  ************************************************************************/
