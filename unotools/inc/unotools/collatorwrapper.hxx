@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorwrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:14:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #define _UNOTOOLS_COLLATORWRAPPER_HXX
@@ -70,7 +73,7 @@ namespace com { namespace sun { namespace star { namespace lang {
         class XMultiServiceFactory;
 }}}}
 
-class CollatorWrapper
+class UNOTOOLS_DLLPUBLIC CollatorWrapper
 {
     private:
 
