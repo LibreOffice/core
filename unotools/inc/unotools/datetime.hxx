@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datetime.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 10:30:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 //= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_DATETIME_HXX_
 #define _UNOTOOLS_DATETIME_HXX_
@@ -79,14 +82,14 @@ namespace utl
 
     namespace starutil = ::com::sun::star::util;
 
-    void typeConvert(const Time& _rTime, starutil::Time& _rOut);
-    void typeConvert(const starutil::Time& _rTime, Time& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const Time& _rTime, starutil::Time& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::Time& _rTime, Time& _rOut);
 
-    void typeConvert(const Date& _rDate, starutil::Date& _rOut);
-    void typeConvert(const starutil::Date& _rDate, Date& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const Date& _rDate, starutil::Date& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::Date& _rDate, Date& _rOut);
 
-    void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut);
-    void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut);
 
 //.........................................................................
 }   // namespace utl
