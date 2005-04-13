@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktopterminationobserver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:13:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 #define UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
@@ -88,7 +91,7 @@ namespace utl
     /** a class which allows non-UNO components to observe the desktop (aka application)
         for it's shutdown
     */
-    class DesktopTerminationObserver
+    class UNOTOOLS_DLLPUBLIC DesktopTerminationObserver
     {
     public:
         /** registers a listener which should be notified when the desktop terminates
