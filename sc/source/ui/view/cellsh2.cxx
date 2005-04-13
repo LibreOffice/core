@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:22:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/aeitem.hxx>
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
