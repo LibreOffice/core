@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 13:26:32 $
+#   last change: $Author: obo $ $Date: 2005-04-13 08:57:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,18 +72,7 @@ USE_LDUMP2=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(GUI)"!="WNT"
-.IF "$(ENABLE_GTK)" == "TRUE"
-PKGCONFIG_MODULES=gtk+-2.0
-.INCLUDE: pkg_config.mk
-#check gtk version
-GTK_TWO_FOUR:=$(shell +-$(PKGCONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
-.ENDIF         # "$(ENABLE_GTK)" == "TRUE"
-.ENDIF         #.IF "$(GUI)"!="WNT"
-
 # --- fps dynlib ----------------------------------------------
-
-.IF "$(GUI)"=="WNT" || "$(GUIBASE)" == "unx"
 
 COMMON_LIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
@@ -92,6 +81,7 @@ COMMON_LIBS=$(CPPULIB)\
             $(TOOLSLIB)
 
 .IF "$(GUI)"=="WNT"
+
 SHL1TARGET=$(TARGET1)
 SHL1STDLIBS=		$(COMMON_LIBS) \
             uwinapi.lib \
@@ -104,32 +94,17 @@ SHL1STDLIBS=		$(COMMON_LIBS) \
             kernel32.lib\
             oleaut32.lib
 
+SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1LIBS=$(SLB)$/fps.lib\
          $(SLB)$/utils.lib
 SHL1RES=$(RES)$/$(TARGET1).res
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-.ELSE
-.IF "$(ENABLE_GTK)" == "TRUE"
-.IF "$(GTK_TWO_FOUR)" == "ok"
-SHL1NOCHECK=TRUE
-SHL1TARGET=fps_gnome
-SHL1LIBS=$(SLB)$/fps_gnome.lib
-SHL1STDLIBS= $(COMMON_LIBS) $(PKGCONFIG_LIBS)
-
-.IF "$(OS)"=="SOLARIS"
-LINKFLAGS!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
-.ENDIF          # "$(OS)"=="SOLARIS"
 
 DEF1NAME=$(SHL1TARGET)
-.ENDIF
-.ENDIF         # "$(ENABLE_GTK)" == "TRUE"
-.ENDIF         # ELSE "$(GUI)"=="WNT"
-
-SHL1DEPN=
-
 DEF1EXPORTFILE=	exports.dxp
+
+.ENDIF # "$(GUI)"=="WNT"
 
 # --- fop dynlib --------------------------------------------------
 
@@ -155,10 +130,6 @@ DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=	exports.dxp
 
 .ENDIF          # "$(GUI)"=="WNT"
-.ELSE			# "$(GUI)"=="WNT" || "$(GUIBASE)"=="unx"
-dummy:
-    @echo "Nothing to build for OS $(OS)"
-.ENDIF
 
 
 .INCLUDE :  target.mk
