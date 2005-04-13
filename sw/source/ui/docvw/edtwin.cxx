@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:27:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,20 +101,17 @@
 #include <vcl/cmdevt.h>
 #endif
 #include <sot/storage.hxx>
-#ifndef _ARGS_HXX //autogen
-#include <svtools/args.hxx>
-#endif
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
