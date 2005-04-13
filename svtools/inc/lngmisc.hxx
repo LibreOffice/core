@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmisc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:04:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVTOOLS_LNGMISC_HXX_
 #define _SVTOOLS_LNGMISC_HXX_
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -102,13 +106,11 @@ inline BOOL HasHyphens( const rtl::OUString &rTxt )
             rTxt.indexOf( SVT_HARD_HYPHEN ) != -1;
 }
 
+SVL_DLLPUBLIC INT32 GetNumControlChars( const rtl::OUString &rTxt );
+SVL_DLLPUBLIC BOOL  RemoveHyphens( rtl::OUString &rTxt );
+SVL_DLLPUBLIC BOOL  RemoveControlChars( rtl::OUString &rTxt );
 
-BOOL    HasHyphens( const rtl::OUString &rTxt );
-INT32   GetNumControlChars( const rtl::OUString &rTxt );
-BOOL    RemoveHyphens( rtl::OUString &rTxt );
-BOOL    RemoveControlChars( rtl::OUString &rTxt );
-
-BOOL    ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
+SVL_DLLPUBLIC BOOL  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
 
 } // namespace linguistic
 
