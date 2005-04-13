@@ -2,9 +2,9 @@
  *
  *  $RCSfile: whiter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,14 @@
 #ifndef _SFX_WHITER_HXX
 #define _SFX_WHITER_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
+#ifndef INCLUDED_LIMITS_H
 #include <limits.h>
+#define INCLUDED_LIMITS_H
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -72,10 +79,11 @@ class SfxItemSet;
 
 // INCLUDE ---------------------------------------------------------------
 
-class SfxWhichIter
+class SVL_DLLPUBLIC SfxWhichIter
 {
     const USHORT *pRanges, *pStart;
     USHORT nOfst, nFrom, nTo;
+
 public:
     SfxWhichIter( const SfxItemSet& rSet, USHORT nFrom = 0, USHORT nTo = USHRT_MAX );
     ~SfxWhichIter();
