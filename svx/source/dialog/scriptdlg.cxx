@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:08:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vector>
@@ -128,8 +128,8 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes ) :
     m_macImage_hc(ResId(IMG_MACRO_HC)),
     m_docImage(ResId(IMG_DOCUMENT)),
     m_docImage_hc(ResId(IMG_DOCUMENT_HC)),
-    m_sMyMacros(ResId(STR_MYMACROS)),
-    m_sProdMacros(ResId(STR_PRODMACROS))
+    m_sMyMacros(String(ResId(STR_MYMACROS))),
+    m_sProdMacros(String(ResId(STR_PRODMACROS)))
 {
     FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
@@ -1392,7 +1392,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( type.getLength() != 0 )
     {
         result += ::rtl::OUString::createFromAscii( "\n\n" );
-        result += ::rtl::OUString(ResId(RID_SVXSTR_ERROR_TYPE_LABEL, DIALOG_MGR()));
+        result += ::rtl::OUString(String(ResId(RID_SVXSTR_ERROR_TYPE_LABEL, DIALOG_MGR())));
         result += ::rtl::OUString::createFromAscii( " " );
         result += type;
     }
@@ -1400,7 +1400,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( message.getLength() != 0 )
     {
         result += ::rtl::OUString::createFromAscii( "\n\n" );
-        result += ::rtl::OUString(ResId(RID_SVXSTR_ERROR_MESSAGE_LABEL, DIALOG_MGR()));
+        result += ::rtl::OUString(String(ResId(RID_SVXSTR_ERROR_MESSAGE_LABEL, DIALOG_MGR())));
         result += ::rtl::OUString::createFromAscii( " " );
         result += message;
     }
@@ -1411,8 +1411,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 ::rtl::OUString GetErrorMessage(
     const provider::ScriptErrorRaisedException& eScriptError )
 {
-    ::rtl::OUString unformatted =
-        ::rtl::OUString( ResId( RID_SVXSTR_ERROR_AT_LINE, DIALOG_MGR() ) );
+    ::rtl::OUString unformatted = String( ResId( RID_SVXSTR_ERROR_AT_LINE, DIALOG_MGR() ) );
 
     ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
@@ -1438,13 +1437,13 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         if ( eScriptError.lineNum != -1 )
         {
             line = ::rtl::OUString::valueOf( eScriptError.lineNum );
-            unformatted = ::rtl::OUString(
+            unformatted = String(
                 ResId( RID_SVXSTR_ERROR_AT_LINE, DIALOG_MGR() ) );
         }
         else
         {
-            unformatted = ::rtl::OUString(
-            ResId( RID_SVXSTR_ERROR_RUNNING, DIALOG_MGR() ) );
+            unformatted = String(
+                ResId( RID_SVXSTR_ERROR_RUNNING, DIALOG_MGR() ) );
         }
 
     return FormatErrorString(
@@ -1455,7 +1454,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     const provider::ScriptExceptionRaisedException& eScriptException )
 {
     ::rtl::OUString unformatted =
-    ::rtl::OUString( ResId( RID_SVXSTR_EXCEPTION_AT_LINE, DIALOG_MGR() ) );
+          String( ResId( RID_SVXSTR_EXCEPTION_AT_LINE, DIALOG_MGR() ) );
 
     ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
@@ -1481,12 +1480,12 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( eScriptException.lineNum != -1 )
     {
         line = ::rtl::OUString::valueOf( eScriptException.lineNum );
-        unformatted = ::rtl::OUString(
+        unformatted = String(
             ResId( RID_SVXSTR_EXCEPTION_AT_LINE, DIALOG_MGR() ) );
     }
     else
     {
-        unformatted = ::rtl::OUString(
+        unformatted = String(
             ResId( RID_SVXSTR_EXCEPTION_RUNNING, DIALOG_MGR() ) );
     }
 
@@ -1502,7 +1501,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 ::rtl::OUString GetErrorMessage(
     const provider::ScriptFrameworkErrorException& sError )
 {
-    ::rtl::OUString unformatted = ::rtl::OUString(
+    ::rtl::OUString unformatted = String(
         ResId( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING, DIALOG_MGR() ) );
 
     ::rtl::OUString language =
@@ -1523,10 +1522,10 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     }
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
-        message = ::rtl::OUString(
+        message = String(
             ResId(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED, DIALOG_MGR() ) );
         message =  ReplaceString(
-        message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
+            message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
 
     }
     else
@@ -1640,7 +1639,7 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
     }
     else
     {
-        message = ::rtl::OUString( ResId( RID_SVXSTR_ERROR_TITLE, DIALOG_MGR() ) );
+        message = String( ResId( RID_SVXSTR_ERROR_TITLE, DIALOG_MGR() ) );
     }
 
     MessBox* pBox = new WarningBox( NULL, WB_OK, message );
