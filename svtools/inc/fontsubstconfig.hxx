@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontsubstconfig.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:45:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVT_FONTSUBSTCONFIG_HXX
 #define _SVT_FONTSUBSTCONFIG_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
@@ -76,7 +80,7 @@ struct SubstitutionStruct
     sal_Bool        bReplaceOnScreenOnly;
 };
 //-----------------------------------------------------------------------------
-class SvtFontSubstConfig : public utl::ConfigItem
+class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
 {
     sal_Bool                    bIsEnabled;
     SvtFontSubstConfig_Impl*    pImpl;
