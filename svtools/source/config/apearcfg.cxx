@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apearcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:46:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,20 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
+#endif
+#define SVT_DLLIMPLEMENTATION
 
 #include "apearcfg.hxx"
-#include <tools/debug.hxx>
-#include <vcl/settings.hxx>
+
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include "com/sun/star/uno/Any.hxx"
+#endif
+
+#include "tools/debug.hxx"
+#include "vcl/settings.hxx"
+#include "vcl/svapp.hxx"
 
 #define DEFAULT_LOOKNFEEL   0
 #define DEFAULT_DRAGMODE    2
