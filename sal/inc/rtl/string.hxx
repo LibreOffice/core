@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 08:42:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 #include <new>
 #endif
 
-class ByteString;
-
 namespace rtl
 {
 
@@ -115,8 +113,6 @@ namespace rtl
 
 class OString
 {
-    friend class ::ByteString;
-
 public:
     /** @internal */
     rtl_String * pData;
@@ -161,6 +157,17 @@ public:
     {
         pData = str;
         rtl_string_acquire( pData );
+    }
+
+    /**
+      New string from a single character.
+
+      @param    value       a character.
+    */
+    explicit OString( sal_Char value ) SAL_THROW(())
+        : pData (0)
+    {
+        rtl_string_newFromStr_WithLength( &pData, &value, 1 );
     }
 
     /**
@@ -216,13 +223,6 @@ public:
         }
 #endif
     }
-
-    /** Convert a ByteString (from the tools module) into an OString.
-
-        Since both ByteString and OString internally use the same data
-        structure, this is a very cheap operation.
-     */
-    OString( const ByteString & value ) SAL_THROW(());
 
     /**
       Release the string data.
