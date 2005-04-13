@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-13 13:26:57 $
+#   last change: $Author: rt $ $Date: 2005-04-13 15:15:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.85 $ ';
+$id_str = ' $Revision: 1.86 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1139,13 +1139,14 @@ sub zip_files
     my $zipexe = 'zip';
     $zipexe .= ' -y' unless  $^O eq 'MSWin32';
 
-    my $platform_zip_file = "%_DEST%/zip%_EXT%/$module.zip";
+    my ($platform_zip_file, $common_zip_file);
+    $platform_zip_file = "%_DEST%/zip%_EXT%/$module.zip";
     $platform_zip_file = expand_macros($platform_zip_file);
     my (%dest_dir, %list_ref);
     $dest_dir{$platform_zip_file} = $dest;
     $list_ref{$platform_zip_file} = \@zip_list;
     if ( $common_build ) {
-        my $common_zip_file = "%COMMON_DEST%/zip%_EXT%/$module.zip";
+        $common_zip_file = "%COMMON_DEST%/zip%_EXT%/$module.zip";
         $common_zip_file = expand_macros($common_zip_file);
         $dest_dir{$common_zip_file}   = $common_dest;
         $list_ref{$common_zip_file}   = \@common_zip_list;
