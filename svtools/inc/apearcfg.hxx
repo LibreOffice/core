@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apearcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:44:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,18 @@
 #ifndef _SVT_APEARCFG_HXX
 #define _SVT_APEARCFG_HXX
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef _SOLAR_H
+#include "tools/solar.h"
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
+
+class Application;
 
 /*--------------------------------------------------------------------
      Beschreibung:
@@ -92,7 +98,7 @@ typedef enum { // MUST match the order chosen in ListBox LB_DRAG_MODE in optgdlg
 } DragMode;
 
 
-class SvtTabAppearanceCfg : public utl::ConfigItem
+class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 {
     short           nLookNFeel          ;
     short           nDragMode           ;
@@ -112,7 +118,7 @@ class SvtTabAppearanceCfg : public utl::ConfigItem
 
     static sal_Bool  bInitialized ;
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    SVT_DLLPRIVATE const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
 
 public:
     SvtTabAppearanceCfg( );
