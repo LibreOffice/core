@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nf $ $Date: 2002-01-15 14:20:53 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:00:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,23 +64,16 @@ PRJ=..$/..$/..
 
 PRJNAME=svtools
 TARGET=ixpm
-DEPTARGET=vixpm
-VERSION=$(UPD)
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
 
 CXXFILES= xpmread.cxx
 
 SLOFILES= $(SLO)$/xpmread.obj
-
 
 .INCLUDE :  target.mk
