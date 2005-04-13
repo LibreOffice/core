@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVT_FILEDLG_HXX
 #define _SVT_FILEDLG_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
@@ -73,7 +77,7 @@ class ImpSvFileDlg;
 // - SvPathDialog -
 // --------------
 
-class PathDialog : public ModalDialog
+class SVT_DLLPUBLIC PathDialog : public ModalDialog
 {
 private:
     friend class FileDialog;    // Imp...
@@ -104,7 +108,7 @@ public:
 // - SvFileDialog -
 // --------------
 
-class FileDialog : public PathDialog
+class SVT_DLLPUBLIC FileDialog : public PathDialog
 {
 private:
     Link                aFileHdlLink;   // Link zum FileSelect-Handler
