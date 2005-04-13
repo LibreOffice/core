@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:34:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef __SBX_SBXOBJ_HXX
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 #include "viewsh.hxx"
 #include "viewfrm.hxx"                  // SvBorder
