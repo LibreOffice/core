@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVTOOLS_JAVAPTIONS_HXX
 #define _SVTOOLS_JAVAOPTIONS_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -70,10 +74,11 @@
 #endif
 
 
-// class SvtCJKOptions --------------------------------------------------
+// class SvtJavaOptions --------------------------------------------------
 
 struct SvtJavaOptions_Impl;
-class SvtJavaOptions : utl::ConfigItem
+
+class SVL_DLLPUBLIC SvtJavaOptions : public utl::ConfigItem
 {
     SvtJavaOptions_Impl* pImpl;
 public:
