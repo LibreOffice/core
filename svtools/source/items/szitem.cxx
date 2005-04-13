@@ -2,9 +2,9 @@
  *
  *  $RCSfile: szitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-28 11:37:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "szitem.hxx"
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -74,9 +76,7 @@
 #include <tools/gen.hxx>
 #endif
 
-#include "args.hxx"
 #include "poolitem.hxx"
-#include "szitem.hxx"
 #include "memberid.hrc"
 
 // STATIC DATA -----------------------------------------------------------
