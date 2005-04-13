@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 13:14:08 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:30:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ UNOTYPES+= com.sun.star.util.XAtomServer
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 # --- Files -------------------------------------
 
