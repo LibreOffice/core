@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:05:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/flditem.hxx>
-#include <svtools/args.hxx>
 
 #include "attrib.hxx"
 #include "global.hxx"
@@ -513,46 +512,6 @@ BOOL ScProtectionAttr::SetHidePrint( BOOL bHPrint)
 //      ScRangeItem - Tabellenbereich
 // -----------------------------------------------------------------------
 
-void ScRangeItem::Record( SfxArguments& rArgs ) const
-{
-    const ScAddress& rStart = aRange.aStart;
-    const ScAddress& rEnd   = aRange.aEnd;
-
-    rArgs.AppendInteger( rStart.Col() );
-    rArgs.AppendLong(    rStart.Row() );
-    rArgs.AppendInteger( rStart.Tab() );
-    rArgs.AppendInteger( rEnd  .Col() );
-    rArgs.AppendLong(    rEnd  .Row() );
-    rArgs.AppendInteger( rEnd  .Tab() );
-    rArgs.AppendInteger( nFlags );
-}
-
-// -----------------------------------------------------------------------
-
-SfxArgumentError ScRangeItem::Construct( USHORT nId, const SfxArguments& rArgs )
-{
-    if ( rArgs.Count() < 7 )
-        return SFX_ARGUMENT_ERROR( rArgs.Count(), SFX_ERR_ARGUMENT_EXPECTED );
-    if ( rArgs.Count() > 7 )
-        return SFX_ARGUMENT_ERROR( rArgs.Count()-1, SFX_ERR_TOO_MANY_ARGUMENTS );
-
-    ScAddress& rStart = aRange.aStart;
-    ScAddress& rEnd   = aRange.aEnd;
-
-    SetWhich( nId );
-    rStart.SetCol( rArgs.Get( 0 ).GetInteger() );
-    rStart.SetRow( rArgs.Get( 1 ).GetLong() );
-    rStart.SetTab( rArgs.Get( 2 ).GetInteger() );
-    rEnd  .SetCol( rArgs.Get( 3 ).GetInteger() );
-    rEnd  .SetRow( rArgs.Get( 4 ).GetLong() );
-    rEnd  .SetTab( rArgs.Get( 5 ).GetInteger() );
-    nFlags = (USHORT)rArgs.Get( 6 ).GetInteger();
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 int ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -714,6 +673,7 @@ ScTableListItem::~ScTableListItem()
 
 // -----------------------------------------------------------------------
 
+#if 0 /* OBSOLETE */
 void ScTableListItem::Record( SfxArguments& rArgs ) const
 {
     rArgs.AppendInteger( nCount );
@@ -748,6 +708,7 @@ SfxArgumentError ScTableListItem::Construct( USHORT nId, const SfxArguments& rAr
 
     return 0;
 }
+#endif /* OBSOLETE */
 
 // -----------------------------------------------------------------------
 
