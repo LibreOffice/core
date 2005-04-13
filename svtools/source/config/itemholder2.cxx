@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 15:49:53 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
+#endif
+#define SVT_DLLIMPLEMENTATION
 
 #include "itemholder2.hxx"
 
