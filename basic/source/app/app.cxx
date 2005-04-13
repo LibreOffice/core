@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 15:44:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #endif
 
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #include <svtools/filedlg.hxx>
 
