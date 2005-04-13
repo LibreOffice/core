@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:52:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <stdlib.h>
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include <rtl/math.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
