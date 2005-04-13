@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:30:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,19 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#include "rtfkeywd.hxx"
+
+#ifndef _RTFTOKEN_H
+#include "rtftoken.h"
+#endif
+
+#ifndef _STRING_HXX
+#include "tools/string.hxx"
+#endif
+
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-
-#include "rtfkeywd.hxx"
-#include "rtftoken.h"
 
 // die Tabelle muss noch sortiert werden
 struct RTF_TokenEntry
