@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:37:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "embedhlp.hxx"
+
 #include "filter.hxx"
 #include "svtools.hrc"
 #include "svtdata.hxx"
@@ -91,6 +92,10 @@
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include "vcl/svapp.hxx"
 #endif
 
 using namespace com::sun::star;
