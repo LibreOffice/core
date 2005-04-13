@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmodnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:42:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SBXCLASS_HXX
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SB_SBSTAR_HXX
 #include <basic/sbstar.hxx>
