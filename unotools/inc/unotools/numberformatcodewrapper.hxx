@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:25:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_I18N_XNUMBERFORMATCODE_HPP_
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -73,7 +76,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 
-class NumberFormatCodeWrapper
+class UNOTOOLS_DLLPUBLIC NumberFormatCodeWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >   xNFC;
