@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fract.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,13 @@
 #include <fract.hxx>
 #endif
 
+#ifndef _STREAM_HXX
+#include <stream.hxx>
+#endif
+
 #define private public
 #define bIsLong bIsBig
 #include <bigint.hxx>
-#include <stream.hxx>
 
 /*************************************************************************
 |*
