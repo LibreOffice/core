@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.98 $
+*  $Revision: 1.99 $
 *
-*  last change: $Author: hr $ $Date: 2005-04-11 09:33:24 $
+*  last change: $Author: obo $ $Date: 2005-04-13 08:43:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -654,7 +654,7 @@ File gid_File_Lib_Fps_Gnome
     Styles = (PACKED);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libfps_gnome,UNXSUFFIX));
+    Name = SPECIAL_COMPONENT_LIB_NAME(fps_gnome.uno);
     Regmergefile = "fps-gnome-ucd.txt";
 End
 #endif
@@ -662,6 +662,8 @@ End
 #endif
 #endif
 
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 #ifdef UNX
 
@@ -687,6 +689,8 @@ End
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Frm , frm)
+
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fsstorage, fsstorage.uno )
 
 #ifdef WNT
 
@@ -750,6 +754,8 @@ End
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Go , go)
+
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
@@ -1297,6 +1303,8 @@ STD_UNO_LIB_FILE( gid_File_Lib_Opc , opc)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Package2,package2)
 
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer.uno )
+
 STD_UNO_LIB_FILE( gid_File_Lib_Pcr, pcr)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
@@ -1729,9 +1737,9 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Svl, svl )
-
+STD_LIB_FILE( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE( gid_File_Lib_Svtools, svt )
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
