@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:29:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <svtools/txtattr.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX //autogen
-#include <svtools/sbxmeth.hxx>
+#include <sbxmeth.hxx>
 #endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include "ttstrhlp.hxx"
