@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:50:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
 #define _SVTOOLS_STATUSBARCONTROLLER_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -110,12 +114,15 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 
+#ifndef INCLUDED_HASH_MAP
 #include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
 
 namespace svt
 {
 
-class StatusbarController : public ::com::sun::star::frame::XStatusListener,
+class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatusListener,
                             public ::com::sun::star::frame::XStatusbarController,
                             public ::com::sun::star::lang::XInitialization,
                             public ::com::sun::star::util::XUpdatable,
