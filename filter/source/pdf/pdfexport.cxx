@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:33:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,23 @@
  *
  *
  ************************************************************************/
-#include "pdf.hrc"
+
 #include "pdfexport.hxx"
+
+#include "pdf.hrc"
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <tools/poly.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/jobset.hxx>
-#include <tools/poly.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
+#ifndef _SV_SVAPP_HXX
+#include "vcl/svapp.hxx"
+#endif
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/processfactory.hxx>
