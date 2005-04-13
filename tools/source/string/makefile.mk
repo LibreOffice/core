@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 12:43:10 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:14:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,8 +70,10 @@ TARGET=str
 .INCLUDE : svpre.mk
 .INCLUDE : settings.mk
 .INCLUDE : sv.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+
 ALWAYSDBGFILES = $(SLO)$/debugprint.obj
 
 .IF "$(ALWAYSDBGFILES)" != ""
@@ -80,13 +82,11 @@ ALWAYSDBGTARGET=do_it_alwaysdebug
 
 SLOFILES=   $(SLO)$/tstring.obj     \
             $(SLO)$/tustring.obj    \
-            $(SLO)$/charset.obj     \
             $(SLO)$/tenccvt.obj     \
             $(SLO)$/debugprint.obj
 
 OBJFILES=   $(OBJ)$/tstring.obj     \
             $(OBJ)$/tustring.obj    \
-            $(OBJ)$/charset.obj     \
             $(OBJ)$/tenccvt.obj     \
             $(OBJ)$/debugprint.obj
 
