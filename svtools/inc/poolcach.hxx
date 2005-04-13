@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolcach.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,13 @@
 #ifndef _SFXPOOLCACH_HXX
 #define _SFXPOOLCACH_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
 
 class SfxItemModifyArr_Impl;
 class SfxItemPool;
@@ -69,7 +75,7 @@ class SfxItemSet;
 class SfxPoolItem;
 class SfxSetItem;
 
-class SfxItemPoolCache
+class SVT_DLLPUBLIC SfxItemPoolCache
 {
     SfxItemPool             *pPool;
     SfxItemModifyArr_Impl   *pCache;
