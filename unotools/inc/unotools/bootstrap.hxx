@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:42:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UTL_BOOTSTRAP_HXX
 #define _UTL_BOOTSTRAP_HXX
@@ -76,7 +79,7 @@ namespace utl
            to diagnose failures to retriev required data.
         </p>
     */
-    class Bootstrap
+    class UNOTOOLS_DLLPUBLIC Bootstrap
     {
     // the static interface
     public: // some common information items
