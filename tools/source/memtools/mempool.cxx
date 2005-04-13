@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mempool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:12:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,10 @@
  *
  ************************************************************************/
 
-#define private public
+#include "mempool.hxx"
 
+#include "debug.hxx"
 #include <limits.h>
-
-#include <debug.hxx>
-#include <mempool.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -125,6 +123,65 @@ FixedMemBlock::FixedMemBlock (USHORT nTypes, USHORT nTypeSize)
 
 /*************************************************************************
 |*
+|*    FixedMemPool_Impl.
+|*
+*************************************************************************/
+struct FixedMemPool_Impl
+{
+    /** Representation.
+     */
+    FixedMemBlock*  m_pFirst;
+    USHORT          m_nTypeSize;
+    USHORT          m_nInitSize;
+    USHORT          m_nGrowSize;
+
+    /** Construction.
+     */
+    FixedMemPool_Impl (USHORT nTypeSize, USHORT nInitSize, USHORT nGrowSize);
+    ~FixedMemPool_Impl();
+
+    /** Operation.
+     */
+    FixedMemBlock * newInitBlock() const
+    {
+        return new(m_nInitSize, m_nTypeSize) FixedMemBlock(m_nInitSize, m_nTypeSize);
+    }
+    FixedMemBlock * newGrowBlock() const
+    {
+        return new(m_nGrowSize, m_nTypeSize) FixedMemBlock(m_nGrowSize, m_nTypeSize);
+    }
+};
+
+FixedMemPool_Impl::FixedMemPool_Impl (
+    USHORT nTypeSize, USHORT nInitSize, USHORT nGrowSize)
+    : m_pFirst (0), m_nInitSize (nInitSize), m_nGrowSize (nGrowSize)
+{
+    if ( nTypeSize > 4 )
+        m_nTypeSize = (nTypeSize + (MEMPOOL_ALIGNMENT-1)) & ~(MEMPOOL_ALIGNMENT-1);
+    else if ( nTypeSize <= 2 )
+        m_nTypeSize = 2;
+    else
+        m_nTypeSize = 4;
+
+    DBG_ASSERT( (ULONG)nTypeSize*nInitSize <= USHRT_MAX,
+                "FixedMemPool: TypeSize*nInitSize > USHRT_MAX" );
+    DBG_ASSERT( (ULONG)nTypeSize*nGrowSize <= USHRT_MAX,
+                "FixedMemPool: TypeSize*GrowSize > USHRT_MAX" );
+}
+
+FixedMemPool_Impl::~FixedMemPool_Impl()
+{
+    FixedMemBlock* pBlock = m_pFirst;
+    while ( pBlock )
+    {
+        FixedMemBlock* pTemp = pBlock;
+        pBlock = pBlock->pNext;
+        delete pTemp;
+    }
+}
+
+/*************************************************************************
+|*
 |*    ImpDbgPoolTest()
 |*
 |*    Beschreibung      MEMPOOL.SDW
@@ -135,7 +192,7 @@ FixedMemBlock::FixedMemBlock (USHORT nTypes, USHORT nTypeSize)
 
 #ifdef DBG_UTIL
 
-static void ImpDbgPoolTest( FixedMemPool* pMemPool )
+static void ImpDbgPoolTest( FixedMemPool_Impl * pMemPool )
 {
     DbgData* pData = DbgGetData();
 
@@ -145,7 +202,7 @@ static void ImpDbgPoolTest( FixedMemPool* pMemPool )
     if ( !(pData->nTestFlags & (DBG_TEST_MEM_OVERWRITE | DBG_TEST_MEM_OVERWRITEFREE)) )
         return;
 
-    FixedMemBlock* pFirst = pMemPool->pFirst;
+    FixedMemBlock* pFirst = pMemPool->m_pFirst;
     FixedMemBlock* pBlock = pFirst;
     while ( pBlock )
     {
@@ -156,10 +213,10 @@ static void ImpDbgPoolTest( FixedMemPool* pMemPool )
             char*  pData = pBlock->aData;
             while ( i )
             {
-                if ( !(n < (pBlock->nSize/pMemPool->nTypeSize)) )
+                if ( !(n < (pBlock->nSize/pMemPool->m_nTypeSize)) )
                     DbgError( "MemPool: Memory Overwrite" );
 
-                char* pNext = pData+(n*pMemPool->nTypeSize);
+                char* pNext = pData+(n*pMemPool->m_nTypeSize);
                 n = *((USHORT*)pNext);
                 i--;
             }
@@ -181,24 +238,10 @@ static void ImpDbgPoolTest( FixedMemPool* pMemPool )
 |*
 *************************************************************************/
 
-FixedMemPool::FixedMemPool( USHORT _nTypeSize,
-                            USHORT _nInitSize, USHORT _nGrowSize )
+FixedMemPool::FixedMemPool (
+    USHORT _nTypeSize, USHORT _nInitSize, USHORT _nGrowSize )
+    : m_pImpl (new FixedMemPool_Impl (_nTypeSize, _nInitSize, _nGrowSize))
 {
-    pFirst      = NULL;
-    nInitSize   = _nInitSize;
-    nGrowSize   = _nGrowSize;
-
-    if ( _nTypeSize > 4 )
-        nTypeSize = (_nTypeSize + (MEMPOOL_ALIGNMENT-1)) & ~(MEMPOOL_ALIGNMENT-1);
-    else if ( _nTypeSize <= 2 )
-        nTypeSize = 2;
-    else
-        nTypeSize = 4;
-
-    DBG_ASSERT( (ULONG)nTypeSize*nInitSize <= USHRT_MAX,
-                "FixedMemPool: TypeSize*nInitSize > USHRT_MAX" );
-    DBG_ASSERT( (ULONG)nTypeSize*nGrowSize <= USHRT_MAX,
-                "FixedMemPool: TypeSize*GrowSize > USHRT_MAX" );
 }
 
 /*************************************************************************
@@ -213,13 +256,7 @@ FixedMemPool::FixedMemPool( USHORT _nTypeSize,
 
 FixedMemPool::~FixedMemPool()
 {
-    FixedMemBlock* pBlock = pFirst;
-    while ( pBlock )
-    {
-        FixedMemBlock* pTemp = pBlock;
-        pBlock = pBlock->pNext;
-        delete pTemp;
-    }
+    delete m_pImpl;
 }
 
 /*************************************************************************
@@ -235,40 +272,40 @@ FixedMemPool::~FixedMemPool()
 void* FixedMemPool::Alloc()
 {
 #ifdef DBG_UTIL
-    ImpDbgPoolTest( this );
+    ImpDbgPoolTest( m_pImpl );
 #endif
 
-    if ( !pFirst )
+    if ( !m_pImpl->m_pFirst )
     {
-        pFirst = new(nInitSize, nTypeSize) FixedMemBlock(nInitSize, nTypeSize);
-        if ( !pFirst )
+        m_pImpl->m_pFirst = m_pImpl->newInitBlock();
+        if ( !m_pImpl->m_pFirst )
             return NULL;
 
-        return (void*)(pFirst->aData);
+        return (void*)(m_pImpl->m_pFirst->aData);
     }
 
-    FixedMemBlock* pBlock = pFirst;
+    FixedMemBlock* pBlock = m_pImpl->m_pFirst;
     while ( pBlock && !pBlock->nFree )
         pBlock = pBlock->pNext;
 
     if ( pBlock )
     {
-        char* pFree = pBlock->aData+(pBlock->nFirst*nTypeSize);
+        char* pFree = pBlock->aData+(pBlock->nFirst*m_pImpl->m_nTypeSize);
         pBlock->nFirst = *((USHORT*)pFree); // UMR, wenn letzter freier Block, ist OK
         pBlock->nFree--;
         return (void*)pFree;
     }
     else
     {
-        if ( !nGrowSize )
+        if ( !m_pImpl->m_nGrowSize )
             return NULL;
 
-        pBlock = new(nGrowSize, nTypeSize) FixedMemBlock(nGrowSize, nTypeSize);
+        pBlock = m_pImpl->newGrowBlock();
         if ( !pBlock )
             return NULL;
 
-        pBlock->pNext = pFirst->pNext;
-        pFirst->pNext = pBlock;
+        pBlock->pNext = m_pImpl->m_pFirst->pNext;
+        m_pImpl->m_pFirst->pNext = pBlock;
 
         return (void*)(pBlock->aData);
     }
@@ -290,10 +327,10 @@ void FixedMemPool::Free( void* pFree )
         return;
 
 #ifdef DBG_UTIL
-    ImpDbgPoolTest( this );
+    ImpDbgPoolTest( m_pImpl );
 #endif
 
-    FixedMemBlock* pBlock = pFirst;
+    FixedMemBlock* pBlock = m_pImpl->m_pFirst;
     FixedMemBlock* pPrev  = NULL;
     while ( ((ULONG)pBlock->aData > (ULONG)pFree) ||
             ((ULONG)pFree >= ((ULONG)pBlock->aData+pBlock->nSize)) )
@@ -308,9 +345,9 @@ void FixedMemPool::Free( void* pFree )
 
     pBlock->nFree++;
     *((USHORT*)pFree) = pBlock->nFirst;
-    pBlock->nFirst = (USHORT)(((ULONG)pFree-(ULONG)(pBlock->aData)) / nTypeSize);
+    pBlock->nFirst = (USHORT)(((ULONG)pFree-(ULONG)(pBlock->aData)) / m_pImpl->m_nTypeSize);
 
-    if ( pPrev && (pBlock->nFree*nTypeSize == pBlock->nSize) )
+    if ( pPrev && (pBlock->nFree*m_pImpl->m_nTypeSize == pBlock->nSize) )
     {
         pPrev->pNext = pBlock->pNext;
         delete pBlock;
@@ -320,8 +357,8 @@ void FixedMemPool::Free( void* pFree )
         if ( pPrev )
         {
             pPrev->pNext  = pBlock->pNext;
-            pBlock->pNext = pFirst->pNext;
-            pFirst->pNext = pBlock;
+            pBlock->pNext = m_pImpl->m_pFirst->pNext;
+            m_pImpl->m_pFirst->pNext = pBlock;
         }
     }
 }
