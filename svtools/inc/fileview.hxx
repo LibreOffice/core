@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:31:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVT_FILEVIEW_HXX
 #define _SVT_FILEVIEW_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -68,11 +72,21 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
 
+#ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
+#endif
+#ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
+#endif
 
 // class SvtFileView -----------------------------------------------------
 
@@ -112,15 +126,15 @@ struct FileViewAsyncAction
     }
 };
 
-class SvtFileView : public Control
+class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
     SvtFileView_Impl*       mpImp;
 
-    void                    OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
+    SVT_DLLPRIVATE void                 OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
-    DECL_LINK(              HeaderSelect_Impl, HeaderBar * );
-    DECL_LINK(              HeaderEndDrag_Impl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK(               HeaderSelect_Impl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK(               HeaderEndDrag_Impl, HeaderBar * );
 
 protected:
     virtual void GetFocus();
@@ -263,7 +277,7 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_CANCEL
 };
 
-class QueryDeleteDlg_Impl : public ModalDialog
+class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public ModalDialog
 {
     FixedText               _aEntryLabel;
     FixedText               _aEntry;
@@ -278,7 +292,7 @@ class QueryDeleteDlg_Impl : public ModalDialog
 
 private:
 
-    DECL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton* );
+    DECL_DLLPRIVATE_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton* );
 
 public:
 
