@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:39:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,49 +898,3 @@ USHORT LongCurrencyBox::GetValuePos( BigInt nValue ) const
 }
 
 // =======================================================================
-
-XubString International::GetCurr( const BigInt &rNumber, USHORT nDigits ) const
-{
-    DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
-
-    if ( rNumber.IsZero() || (long)rNumber )
-        return GetCurr( (long)rNumber, nDigits );
-
-    BigInt aTmp( ImplPower10( nDigits ) );
-    BigInt aInteger( rNumber );
-    aInteger.Abs();
-    aInteger  /= aTmp;
-    BigInt aFraction( rNumber );
-    aFraction.Abs();
-    aFraction %= aTmp;
-    if ( !aInteger.IsZero() )
-    {
-        aFraction += aTmp;
-        aTmp       = 1000000000L;
-    }
-    if ( rNumber.IsNeg() )
-        aFraction *= -1;
-
-    XubString aTemplate = GetCurr( (long)aFraction, nDigits );
-    while( !aInteger.IsZero() )
-    {
-        aFraction  = aInteger;
-        aFraction %= aTmp;
-        aInteger  /= aTmp;
-        if( !aInteger.IsZero() )
-            aFraction += aTmp;
-
-        XubString aFractionStr = GetNum( (long)aFraction, 0 );
-
-        xub_StrLen nSPos = aTemplate.Search( '1' );
-        if ( aFractionStr.Len() == 1 )
-            aTemplate.SetChar( nSPos, aFractionStr.GetChar( 0 ) );
-        else
-        {
-            aTemplate.Erase( nSPos, 1 );
-            aTemplate.Insert( aFractionStr, nSPos );
-        }
-    }
-
-    return aTemplate;
-}
