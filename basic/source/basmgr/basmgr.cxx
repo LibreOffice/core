@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:04:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #ifndef _SOT_STORINFO_HXX //autogen
 #include <sot/storinfo.hxx>
@@ -115,6 +115,9 @@
 #include <com/sun/star/script/XStarBasicModuleInfo.hpp>
 #include <com/sun/star/script/XStarBasicDialogInfo.hpp>
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
+
+#include <cppuhelper/implbase1.hxx>
+
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -122,7 +125,6 @@ using namespace com::sun::star::script;
 using namespace cppu;
 using namespace rtl;
 
-#include <cppuhelper/implbase1.hxx>
 typedef WeakImplHelper1< XNameContainer > NameContainerHelper;
 typedef WeakImplHelper1< XStarBasicModuleInfo > ModuleInfoHelper;
 typedef WeakImplHelper1< XStarBasicDialogInfo > DialogInfoHelper;
