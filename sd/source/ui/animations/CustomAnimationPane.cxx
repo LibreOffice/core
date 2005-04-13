@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 09:43:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,55 +749,55 @@ OUString getPropertyName( sal_Int32 nPropertyType )
     switch( nPropertyType )
     {
     case nPropertyTypeDirection:
-        return OUString( SdResId( STR_CUSTOMANIMATION_DIRECTION_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_DIRECTION_PROPERTY ) ) );
 
     case nPropertyTypeSpokes:
-        return OUString( SdResId( STR_CUSTOMANIMATION_SPOKES_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_SPOKES_PROPERTY ) ) );
 
     case nPropertyTypeFirstColor:
-        return OUString( SdResId( STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY ) ) );
 
     case nPropertyTypeSecondColor:
-        return OUString( SdResId( STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY ) ) );
 
     case nPropertyTypeZoom:
-        return OUString( SdResId( STR_CUSTOMANIMATION_ZOOM_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_ZOOM_PROPERTY ) ) );
 
     case nPropertyTypeFillColor:
-        return OUString( SdResId( STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY ) ) );
 
     case nPropertyTypeColorStyle:
-        return OUString( SdResId( STR_CUSTOMANIMATION_STYLE_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_STYLE_PROPERTY ) ) );
 
     case nPropertyTypeFont:
-        return OUString( SdResId( STR_CUSTOMANIMATION_FONT_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_PROPERTY ) ) );
 
     case nPropertyTypeCharHeight:
-        return OUString( SdResId( STR_CUSTOMANIMATION_SIZE_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_SIZE_PROPERTY ) ) );
 
     case nPropertyTypeCharColor:
-        return OUString( SdResId( STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY ) ) );
 
     case nPropertyTypeCharHeightStyle:
-        return OUString( SdResId( STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY ) ) );
 
     case nPropertyTypeCharDecoration:
-        return OUString( SdResId( STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY ) ) );
 
     case nPropertyTypeLineColor:
-        return OUString( SdResId( STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY ) ) );
 
     case nPropertyTypeRotate:
-        return OUString( SdResId( STR_CUSTOMANIMATION_AMOUNT_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_AMOUNT_PROPERTY ) ) );
 
     case nPropertyTypeColor:
-        return OUString( SdResId( STR_CUSTOMANIMATION_COLOR_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_COLOR_PROPERTY ) ) );
 
     case nPropertyTypeTransparency:
-        return OUString( SdResId( STR_CUSTOMANIMATION_AMOUNT_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_AMOUNT_PROPERTY ) ) );
 
     case nPropertyTypeScale:
-        return OUString( SdResId( STR_CUSTOMANIMATION_SCALE_PROPERTY ) );
+        return OUString( String( SdResId( STR_CUSTOMANIMATION_SCALE_PROPERTY ) ) );
     }
 
     OUString aStr;
