@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:15:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,13 @@
 #include <svtools/imapobj.hxx>
 #endif
 #ifndef _SBXCLASS_HXX
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SBXCORE_HXX
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #endif
 #ifndef __SBX_SBXVALUE
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 
 #ifndef _FRMFMT_HXX //autogen
