@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:41:53 $
+#   last change: $Author: obo $ $Date: 2005-04-13 10:52:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,11 +64,11 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=edit
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -85,30 +85,11 @@ SLOFILES=   \
             $(SLO)$/svmedit2.obj \
             $(SLO)$/textwindowaccessibility.obj
 
-OBJFILES=   \
-            $(OBJ)$/textdata.obj	\
-            $(OBJ)$/textdoc.obj		\
-            $(OBJ)$/texteng.obj		\
-            $(OBJ)$/textundo.obj	\
-            $(OBJ)$/textview.obj	\
-            $(OBJ)$/txtattr.obj		\
-            $(OBJ)$/xtextedt.obj	\
-            $(OBJ)$/sychconv.obj	\
-            $(OBJ)$/svmedit.obj		\
-            $(OBJ)$/svmedit2.obj \
-            $(OBJ)$/textwindowaccessibility.obj
-
 EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\
             $(OBJ)$/textview.obj \
             $(SLO)$/textwindowaccessibility.obj \
             $(OBJ)$/textwindowaccessibility.obj
-
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1OBJFILES=  $(SLOFILES)
-
-LIB2TARGET= $(LB)$/$(TARGET).lib
-LIB2OBJFILES=  $(OBJFILES)
 
 # --- Targets ------------------------------------------------------
 
