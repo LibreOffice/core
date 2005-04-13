@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:42:43 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:21:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,25 +68,14 @@ TARGET=svarray
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-    $(SLO)$/hashtab.obj \
-    $(SLO)$/hashcont.obj \
     $(SLO)$/svarray.obj
 
-OBJFILES=\
-    $(OBJ)$/memempty.obj
-
-LIB2TARGET=$(LB)$/ssvmem.lib
-LIB2OBJFILES=\
-    $(OBJ)$/hashtab.obj \
-    $(OBJ)$/hashcont.obj \
-    $(OBJ)$/svarray.obj
-
 # --- Targets -------------------------------------------------------
-
 
 .INCLUDE :  target.mk
 
