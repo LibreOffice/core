@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:42:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2155,9 +2155,9 @@ sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 //-----------------------------------------------------------------------------
 
-Complex::Complex( const STRING& r ) THROWDEF_RTE_IAE
+Complex::Complex( const STRING& rStr ) THROWDEF_RTE_IAE
 {
-    if( !ParseString( r, *this ) )
+    if( !ParseString( rStr, *this ) )
         THROW_IAE;
 }
 
@@ -2238,10 +2238,10 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 
 STRING Complex::GetString() const THROWDEF_RTE_IAE
 {
-    static const STRING aI( 'i' );
-    static const STRING aJ( 'j' );
-    static const STRING aPlus( '+' );
-    static const STRING aMinus( '-' );
+    static const String aI( 'i' );
+    static const String aJ( 'j' );
+    static const String aPlus( '+' );
+    static const String aMinus( '-' );
 
     CHK_FINITE(r);
     CHK_FINITE(i);
