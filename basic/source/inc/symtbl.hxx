@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:08:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,10 @@
 #include <tools/string.hxx>
 #endif
 #ifndef _SBXDEF_HXX //autogen
-#include <svtools/sbxdef.hxx>
+#include <sbxdef.hxx>
 #endif
 #ifndef _SB_SBDEF_HXX
-#include <sbxdef.hxx>
+#include <sbdef.hxx>
 #endif
 
 class SbiSymDef;                    // Basisklasse
