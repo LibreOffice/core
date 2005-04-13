@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:56:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
             if (xForms->hasElements())
             {
                 // suche die Standardform
-                ::rtl::OUString ustrStdFormName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
+                ::rtl::OUString ustrStdFormName = ::rtl::OUString(String(SVX_RES(RID_STR_STDFORMNAME)));
 
                 if (xForms->hasByName(ustrStdFormName))
                 {
@@ -364,7 +364,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
             {
             }
 
-            ::rtl::OUString aName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
+            ::rtl::OUString aName (String(SVX_RES(RID_STR_STDFORMNAME)));
             xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
 
@@ -456,7 +456,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
             }
             else
                 // ansonsten StandardformName verwenden
-                aName = getUniqueName(::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME)), xNamedSet);
+                aName = getUniqueName(::rtl::OUString(String(SVX_RES(RID_STR_STDFORMNAME))), xNamedSet);
 
             xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
@@ -609,7 +609,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
                 aValue >>= aText;
                 if (!aText.getLength())
                 {
-                    aLabel.SearchAndReplace( getDefaultName( nClassId, xSI ), ::rtl::OUString(SVX_RES(nResId)) );
+                    aLabel.SearchAndReplace( getDefaultName( nClassId, xSI ), ::rtl::OUString(String(SVX_RES(nResId)) ));
                     xSet->setPropertyValue( FM_PROP_LABEL, makeAny(::rtl::OUString(aLabel)) );
                 }
             }
