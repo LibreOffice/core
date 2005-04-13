@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:47:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #endif
 #include <tools/tenccvt.hxx>
 #pragma hdrstop
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "sb.hxx"
 #include <string.h>     // memset() etc
 #include "image.hxx"
