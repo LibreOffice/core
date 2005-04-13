@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SBSTDOBJ_HXX
 
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <svtools/sbxobj.hxx>
+#include <sbxobj.hxx>
 #endif
 
 class StarBASIC;
