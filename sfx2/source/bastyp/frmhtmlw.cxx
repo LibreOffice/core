@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:28:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 
 using namespace com::sun::star;
 
-extern sal_Char __FAR_DATA sHTML_META_classification[];
+extern sal_Char const sHTML_META_classification[];
 
 static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
 static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
