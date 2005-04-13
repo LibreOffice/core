@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:26:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 07:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,12 +371,13 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
             static rtl::OLocale aLocale = rtl::OLocale::registerLocale(sLanguage, sCountry);
             INT32 nRes = compareIgnoreCase(aLH, aRH, aLocale);
 #else
+            rtl::OUString sLH = aLH, sRH = aRH;
             INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
                 (
-                 static_cast<rtl::OUString>(aLH).pData->buffer,
-                 static_cast<rtl::OUString>(aLH).pData->length,
-                 static_cast<rtl::OUString>(aRH).pData->buffer,
-                 static_cast<rtl::OUString>(aRH).pData->length );
+                 sLH.pData->buffer,
+                 sLH.pData->length,
+                 sRH.pData->buffer,
+                 sRH.pData->length );
 #endif
             switch(aPredicateType)
             {
