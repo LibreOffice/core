@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:43:02 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:30:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=numbers
+LIBTARGET=NO
 
 PROJECTPCH=
 PROJECTPCHSOURCE=
@@ -71,46 +72,36 @@ PROJECTPCHSOURCE=
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
-# Every source directory generates headers in a own output directory to
-# enable parallel building of the source directories within a project!
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES =	com.sun.star.util.XNumberFormatsSupplier \
-            com.sun.star.util.XNumberFormatter \
-            com.sun.star.util.XNumberFormatPreviewer \
-            com.sun.star.util.XNumberFormatTypes \
-            com.sun.star.util.Date \
-            com.sun.star.lang.XMultiServiceFactory \
-            com.sun.star.lang.XTypeProvider \
-            com.sun.star.lang.XServiceInfo \
-            com.sun.star.lang.XUnoTunnel \
-            com.sun.star.beans.XPropertyAccess \
-            com.sun.star.beans.PropertyAttribute \
-            com.sun.star.uno.XAggregation \
-            com.sun.star.uno.XWeak \
-            com.sun.star.uno.TypeClass \
-            com.sun.star.lang.XInitialization \
-            com.sun.star.lang.Locale \
-            com.sun.star.io.XPersistObject \
-
-SLOFILES =  \
-        $(SLO)$/zforfind.obj	\
-        $(SLO)$/zforlist.obj \
-        $(SLO)$/zformat.obj 	\
-        $(SLO)$/zforscan.obj \
-        $(SLO)$/numhead.obj \
-        $(SLO)$/numuno.obj \
-        $(SLO)$/numfmuno.obj \
-        $(SLO)$/supservs.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/numuno.obj \
         $(SLO)$/numfmuno.obj \
         $(SLO)$/supservs.obj
+
+SLOFILES =  \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/zforfind.obj	\
+        $(SLO)$/zforlist.obj \
+        $(SLO)$/zformat.obj 	\
+        $(SLO)$/zforscan.obj \
+        $(SLO)$/numhead.obj
+
+LIB1TARGET=	$(SLB)$/$(TARGET).uno.lib
+LIB1OBJFILES=	\
+        $(SLO)$/numfmuno.obj \
+        $(SLO)$/supservs.obj
+
+LIB2TARGET=	$(SLB)$/$(TARGET).lib
+LIB2OBJFILES=	\
+        $(SLO)$/zforfind.obj	\
+        $(SLO)$/zforlist.obj \
+        $(SLO)$/zformat.obj 	\
+        $(SLO)$/zforscan.obj \
+        $(SLO)$/numuno.obj \
+        $(SLO)$/numhead.obj
 
 # --- Targets -------------------------------------------------------
 
