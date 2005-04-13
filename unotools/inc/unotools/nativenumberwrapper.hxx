@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumberwrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:01:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 #define _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
@@ -73,7 +76,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 
-class NativeNumberWrapper
+class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;
