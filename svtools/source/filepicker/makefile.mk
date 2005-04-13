@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.9 $
+#	$Revision: 1.10 $
 #
-#	last change: $Author: pjunck $ $Date: 2004-10-22 12:37:03 $
+#	last change: $Author: obo $ $Date: 2005-04-13 10:58:38 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -64,34 +64,17 @@ PRJ=..$/..
 PRJNAME=svtools
 TARGET=filepicker
 ENABLE_EXCEPTIONS=TRUE
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------------
 
-EXCEPTIONSFILES=\
-        $(SLO)$/filepicker.obj		\
-        $(SLO)$/folderpicker.obj	\
-        $(SLO)$/inettbc.obj
-
 SLOFILES =\
-        $(EXCEPTIONSFILES)			\
-        $(SLO)$/pickerhistory.obj	\
-        $(SLO)$/iodlg.obj			\
-        $(SLO)$/iodlgimp.obj		\
-        $(SLO)$/asynclink.obj		\
-        $(SLO)$/controlaccess.obj	\
-        $(SLO)$/commonpicker.obj	\
-        $(SLO)$/fpinteraction.obj   \
-        $(SLO)$/asyncfilepicker.obj \
-        $(SLO)$/fpsmartcontent.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES =	iodlg.src	 \
-            filepicker.src
+        $(SLO)$/pickerhelper.obj \
+        $(SLO)$/pickerhistory.obj
 
 # --- Targets -------------------------------------------------------
 
