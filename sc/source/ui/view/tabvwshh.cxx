@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:27:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #include <svtools/whiter.hxx>
 
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
