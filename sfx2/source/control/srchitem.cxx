@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef __SBX_SBXVARIABLE_HXX
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SVT_SEARCHOPT_HXX_
 #include <svtools/searchopt.hxx>
