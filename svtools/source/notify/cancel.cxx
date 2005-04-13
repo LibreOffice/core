@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,21 +58,15 @@
  *
  *
  ************************************************************************/
-#ifndef GCC
-#pragma hdrstop
-#endif
-
 #define _SFX_CANCEL_CXX
-#include <tools/debug.hxx>
 #include "cancel.hxx"
+
+#include <vos/mutex.hxx>
+#include <tools/debug.hxx>
+
 #include "smplhint.hxx"
 #include "cnclhint.hxx"
 
-#ifndef _SV_SOUND_HXX //autogen
-#include <vcl/sound.hxx>
-#endif
-
-#include <vos/mutex.hxx>
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
@@ -132,7 +126,7 @@ void SfxCancelManager::Cancel( BOOL bDeep )
 
 //-------------------------------------------------------------------------
 
-void SfxCancelManager::SFX_INSERT_CANCELLABLE( SfxCancellable *pJob )
+void SfxCancelManager::InsertCancellable( SfxCancellable *pJob )
 
 /*  [Beschreibung]
 
@@ -160,7 +154,7 @@ void SfxCancelManager::SFX_INSERT_CANCELLABLE( SfxCancellable *pJob )
 //-------------------------------------------------------------------------
 
 
-void SfxCancelManager::SFX_REMOVE_CANCELLABLE( SfxCancellable *pJob )
+void SfxCancelManager::RemoveCancellable( SfxCancellable *pJob )
 
 /*  [Beschreibung]
 
@@ -189,7 +183,7 @@ SfxCancellable::~SfxCancellable()
 {
     SfxCancelManager* pMgr = _pMgr;
     if ( pMgr )
-        pMgr->SFX_REMOVE_CANCELLABLE( this );
+        pMgr->RemoveCancellable( this );
 }
 
 //-------------------------------------------------------------------------
@@ -209,7 +203,6 @@ void SfxCancellable::Cancel()
         ++_bCancelled;
     else
     {
-        Sound::Beep();
         delete this;
     }
 #else
@@ -223,10 +216,10 @@ void SfxCancellable::SetManager( SfxCancelManager *pMgr )
 {
     SfxCancelManager* pTmp = _pMgr;
     if ( pTmp )
-        pTmp->SFX_REMOVE_CANCELLABLE( this );
+        pTmp->RemoveCancellable( this );
     _pMgr = pMgr;
     if ( pMgr )
-        pMgr->SFX_INSERT_CANCELLABLE( this );
+        pMgr->InsertCancellable( this );
 }
 
 //-------------------------------------------------------------------------
