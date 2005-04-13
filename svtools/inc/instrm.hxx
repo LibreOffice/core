@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_INSTRM_HXX
 #define SVTOOLS_INSTRM_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -77,7 +81,7 @@ namespace com { namespace sun { namespace star { namespace io {
 class SvDataPipe_Impl;
 
 //============================================================================
-class SvInputStream: public SvStream
+class SVL_DLLPUBLIC SvInputStream: public SvStream
 {
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
         m_xStream;
@@ -86,17 +90,17 @@ class SvInputStream: public SvStream
     SvDataPipe_Impl * m_pPipe;
     ULONG m_nSeekedFrom;
 
-    bool open();
+    SVL_DLLPRIVATE bool open();
 
-    virtual ULONG GetData(void * pData, ULONG nSize);
+    SVL_DLLPRIVATE virtual ULONG GetData(void * pData, ULONG nSize);
 
-    virtual ULONG PutData(void const *, ULONG);
+    SVL_DLLPRIVATE virtual ULONG PutData(void const *, ULONG);
 
-    virtual ULONG SeekPos(ULONG nPos);
+    SVL_DLLPRIVATE virtual ULONG SeekPos(ULONG nPos);
 
-    virtual void FlushData();
+    SVL_DLLPRIVATE virtual void FlushData();
 
-    virtual void SetSize(ULONG);
+    SVL_DLLPRIVATE virtual void SetSize(ULONG);
 
 public:
     SvInputStream(
