@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:06:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,7 +870,7 @@ void OHTMLImportExport::WriteTables()
     {
         sal_Int32* pFormat = new sal_Int32[aNames.getLength()];
 
-        char **pHorJustify = new char*[aNames.getLength()];
+        const char **pHorJustify = new const char*[aNames.getLength()];
         sal_Int32 *pColWidth = new sal_Int32[aNames.getLength()];
 
 
