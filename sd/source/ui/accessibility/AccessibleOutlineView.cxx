@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:34:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ void SAL_CALL
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    return ::rtl::OUString( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N) );
+    return String( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N) );
 }
 
 
@@ -336,7 +336,7 @@ void SAL_CALL
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    return ::rtl::OUString( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_D) );
+    return String( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_D) );
 }
 
 void AccessibleOutlineView::UpdateChildren()
