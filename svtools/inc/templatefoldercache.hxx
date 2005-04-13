@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
 #define SFX2_TEMPLATEFOLDERCACHE_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -100,7 +104,7 @@ namespace svt
         // do anything which relies on a up-to-date template configuration
     </listing>
     */
-    class TemplateFolderCache
+    class SVT_DLLPUBLIC TemplateFolderCache
     {
     private:
         TemplateFolderCacheImpl*        m_pImpl;
@@ -137,8 +141,7 @@ namespace svt
     };
 
 //.........................................................................
-}   // namespace sfx2
+}   // namespace svt
 //.........................................................................
 
 #endif // SFX2_TEMPLATEFOLDERCACHE_HXX
-
