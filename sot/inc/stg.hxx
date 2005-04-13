@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:52:03 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _TOOLS_GLOBNAME_HXX //autogen
 #include <tools/globname.hxx>
 #endif
+#ifndef INCLUDED_SOTDLLAPI_H
+#include "sot/sotdllapi.h"
+#endif
 
 #include <list>
 class UNOStorageHolder;
@@ -110,7 +113,7 @@ struct ClsId
     UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
 };
 
-class StorageBase : public SvRefBase
+class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {
 protected:
     ULONG           nError;                   // error code
@@ -236,7 +239,7 @@ public:
 
 class UCBStorageStream;
 
-class Storage : public BaseStorage, public OLEStorageBase
+class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
 {
     String                      aName;
     BOOL                        bIsRoot;
@@ -342,7 +345,7 @@ namespace ucb
 
 class UCBStorage_Impl;
 struct UCBStorageElement_Impl;
-class UCBStorage : public BaseStorage
+class SOT_DLLPUBLIC UCBStorage : public BaseStorage
 {
     UCBStorage_Impl*            pImp;
 
