@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-19 13:51:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #endif
 
 #ifndef __SBX_SBXVARIABLE_HXX
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 
 #include "hlnkitem.hxx"
