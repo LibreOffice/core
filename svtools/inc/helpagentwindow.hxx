@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVTOOLS_HELPAGENTWIDNOW_HXX_
 #define _SVTOOLS_HELPAGENTWIDNOW_HXX_
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
 #endif
@@ -87,7 +91,7 @@ namespace svt
     //====================================================================
     //= HelpAgentWindow
     //====================================================================
-    class HelpAgentWindow : public FloatingWindow
+    class SVT_DLLPUBLIC HelpAgentWindow : public FloatingWindow
     {
     protected:
         Window*                 m_pCloser;
@@ -114,7 +118,7 @@ namespace svt
         DECL_LINK( OnButtonClicked, Window* );
 
     private:
-        Size    implOptimalButtonSize( const Image& _rButtonImage );
+        SVT_DLLPRIVATE Size implOptimalButtonSize( const Image& _rButtonImage );
     };
 
 //........................................................................
