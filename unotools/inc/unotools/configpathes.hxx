@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpathes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-10 11:12:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #define UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
@@ -100,7 +103,7 @@ namespace utl
             <FALSE/>, if the path was a one-level path or an invalid path
 
     */
-    sal_Bool splitLastFromConfigurationPath(::rtl::OUString const& _sInPath,
+    UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(::rtl::OUString const& _sInPath,
                                             ::rtl::OUString& _rsOutPath,
                                             ::rtl::OUString& _rsLocalName);
 
@@ -119,7 +122,7 @@ namespace utl
             configuration path, it is returned unaltered.
 
     */
-    ::rtl::OUString extractFirstFromConfigurationPath(::rtl::OUString const& _sInPath);
+    UNOTOOLS_DLLPUBLIC ::rtl::OUString extractFirstFromConfigurationPath(::rtl::OUString const& _sInPath);
 
 //----------------------------------------------------------------------------
     /** check whether a path is to a nested node with respect to a parent path.
@@ -183,7 +186,7 @@ namespace utl
             "*['<Name>']", where <Name> is properly escaped.
 
     */
-    ::rtl::OUString wrapConfigurationElementName(::rtl::OUString const& _sElementName);
+    UNOTOOLS_DLLPUBLIC ::rtl::OUString wrapConfigurationElementName(::rtl::OUString const& _sElementName);
 
 //----------------------------------------------------------------------------
     /** Create a one-level relative configuration path from a set element name
@@ -214,6 +217,13 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.212.1  2005/02/28 04:33:52  mnicel
+ *  Issue number:  40092
+ *  Part of visibility work
+ *
+ *  Revision 1.1  2001/07/10 11:12:16  jb
+ *  #87904# Add support for handling configuration pathes correctly
+ *
  *
  ************************************************************************/
 
