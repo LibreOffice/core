@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 12:53:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _TOOLS_OWNLIST_HXX
 #include <tools/ownlist.hxx>
 #endif
+#ifndef INCLUDED_SOTDLLAPI_H
+#include "sot/sotdllapi.h"
+#endif
 
 class StgDirEntry;
 class SvStorageInfo
@@ -95,13 +98,13 @@ public:
     ULONG                   GetSize() const { return nSize;      }
 };
 
-class SvStorageInfoList
+class SOT_DLLPUBLIC SvStorageInfoList
 {
     PRV_SV_DECL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
     const SvStorageInfo * Get( const String & rName );
 };
 
-ULONG ReadClipboardFormat( SvStream & rStm );
-void WriteClipboardFormat( SvStream & rStm, ULONG nFormat );
+SOT_DLLPUBLIC ULONG ReadClipboardFormat( SvStream & rStm );
+SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, ULONG nFormat );
 
 #endif // _STORINFO_HXX
