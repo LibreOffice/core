@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:06:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,7 @@
 #include <svtools/eitem.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <svtools/sbxvar.hxx>
-#endif
-#ifndef _ARGS_HXX //autogen
-#include <svtools/args.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
