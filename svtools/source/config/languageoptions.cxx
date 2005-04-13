@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:12:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,13 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include "languageoptions.hxx"
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
 #endif
+#define SVT_DLLIMPLEMENTATION
+
+#include "languageoptions.hxx"
+
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <cjkoptions.hxx>
 #endif
