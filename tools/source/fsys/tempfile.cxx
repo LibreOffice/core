@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:11:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,8 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
     FileBase::RC err= Directory::create( aName );
     if ( err == FileBase::E_None || err == FileBase::E_EXIST )
     {
-        rTempNameBase_Impl = aName;
-        rTempNameBase_Impl += ::rtl::OUString( '/' );
+        rTempNameBase_Impl  = aName;
+        rTempNameBase_Impl += String( '/' );
 
         TempFile aBase( NULL, sal_True );
         if ( aBase.IsValid() )
