@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 11:49:35 $
+#   last change: $Author: obo $ $Date: 2005-04-13 09:27:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,11 @@ GEN_HID=TRUE
 
 LIB1TARGET=$(SLB)$/sb.lib
 LIB1FILES=		\
-    $(SLB)$/basicmgr.lib   \
-    $(SLB)$/classes.lib	 \
-    $(SLB)$/comp.lib 	 \
-    $(SLB)$/runtime.lib
+    $(SLB)$/basicmgr.lib \
+    $(SLB)$/classes.lib \
+    $(SLB)$/comp.lib \
+    $(SLB)$/runtime.lib \
+    $(SLB)$/sbx.lib
 
 SHL1TARGET= sb$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= basic
@@ -103,8 +104,10 @@ SHL1STDLIBS+=$(SJLIB)
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
-#SHL1STDLIBS+=$(LIBCIMT)
-.ENDIF
+SHL1STDLIBS+=	\
+    uwinapi.lib	\
+    oleaut32.lib
+.ENDIF # WNT
 
 .IF "$(GUI)" != "UNX"
 SHL1OBJS=	\
@@ -124,7 +127,8 @@ DEF1DES		=StarBasic
 
 RES1TARGET=$(PRJNAME)
 SRS1FILES= \
-        $(SRS)$/classes.srs
+        $(SRS)$/classes.srs \
+        $(SRS)$/sbx.srs
 
 # --- TESTTOOL IDE ------------------------------------------------------
 # die ressourcen werden hier gelinkt
@@ -133,7 +137,8 @@ RESLIB1NAME=stt
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= \
         $(SRS)$/app.srs \
-        $(SRS)$/classes.srs
+        $(SRS)$/classes.srs \
+        $(SRS)$/sbx.srs
 
 # --- Targets -----------------------------------------------------------
 
@@ -162,6 +167,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo __CT >> $@
 
 $(SRS)$/basic.srs:
-    +$(TYPE) $(SRS)$/classes.srs + $(SRS)$/runtime.srs > $@
+    +$(TYPE) $(SRS)$/classes.srs + $(SRS)$/runtime.srs + $(SRS)$/sbx.srs > $@
 
 
