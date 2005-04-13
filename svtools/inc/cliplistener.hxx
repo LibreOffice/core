@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cliplistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-08 07:59:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _CLIPLISTENER_HXX
 #define _CLIPLISTENER_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -77,7 +81,7 @@
 class Window;
 
 
-class TransferableClipboardListener : public ::cppu::WeakImplHelper1<
+class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelper1<
                             ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {
     Link    aLink;
