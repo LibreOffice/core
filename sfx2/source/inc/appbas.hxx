@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 
 #ifndef _SBXDEF_HXX //autogen
-#include <svtools/sbxdef.hxx>
+#include <basic/sbxdef.hxx>
 #endif
 
 class StarBASIC;
