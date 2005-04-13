@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:01:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <vector>
 #include <algorithm>
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
