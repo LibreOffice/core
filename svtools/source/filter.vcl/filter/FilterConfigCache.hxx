@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-17 12:10:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,11 @@
 
 #ifndef _FILTER_CONFIG_CACHE_HXX_
 #define _FILTER_CONFIG_CACHE_HXX_
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -79,9 +84,12 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
-class FilterConfigCache
+class SVT_DLLPUBLIC FilterConfigCache
 {
         struct FilterConfigCacheEntry
         {
@@ -121,9 +129,9 @@ class FilterConfigCache
         CacheVector         aExport;
         sal_Bool            bUseConfig;
 
-        sal_Bool            ImplIsOwnFilter( const ::com::sun::star::uno::Sequence<
+        SVT_DLLPRIVATE sal_Bool         ImplIsOwnFilter( const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties );
-        sal_Bool            ImplAddFilterEntry( sal_Int32& nFlags,
+        SVT_DLLPRIVATE sal_Bool         ImplAddFilterEntry( sal_Int32& nFlags,
                                                 const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties,
                                                     const ::com::sun::star::uno::Reference<
@@ -142,8 +150,8 @@ class FilterConfigCache
 
         static const char*  InternalFilterListForSvxLight[];
 
-        void                ImplInit();
-        void                ImplInitSmart();
+        SVT_DLLPRIVATE void             ImplInit();
+        SVT_DLLPRIVATE void             ImplInitSmart();
 
     public :
 
