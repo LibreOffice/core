@@ -18,6 +18,7 @@ hedabu: ..\source\sdstor\stgelem.hxx %_DEST%\inc%_EXT%\sot\stgelem.hxx
 hedabu: ..\source\sdstor\stgavl.hxx %_DEST%\inc%_EXT%\sot\stgavl.hxx
 hedabu: ..\source\sdstor\stgstrms.hxx %_DEST%\inc%_EXT%\sot\stgstrms.hxx
 hedabu: ..\source\sdstor\stgdir.hxx %_DEST%\inc%_EXT%\sot\stgdir.hxx
+hedabu: ..\inc\sot\sotdllapi.h %_DEST%\inc%_EXT%\sot\sotdllapi.h
 
 ..\%__SRC%\inc\sdintern.hxx %_DEST%\inc%_EXT%\sot\sdintern.hxx
 ..\%__SRC%\lib\sot.lib %_DEST%\lib%_EXT%\sot.lib
