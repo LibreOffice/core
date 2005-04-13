@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemdel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,15 @@
 #ifndef _SVTOOLS_ITEMDEL_HXX
 #define _SVTOOLS_ITEMDEL_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 class SfxPoolItem;
 
-SfxPoolItem*        DeleteItemOnIdle( SfxPoolItem* pItem );
-void                DeleteOnIdleItems();
+SVT_DLLPUBLIC SfxPoolItem* DeleteItemOnIdle( SfxPoolItem* pItem );
 
-
+void DeleteOnIdleItems();
 
 #endif
 
