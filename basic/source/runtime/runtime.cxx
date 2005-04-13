@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:52:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include <svtools/syslocale.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
