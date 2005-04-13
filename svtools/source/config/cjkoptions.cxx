@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:20:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,15 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include "cjkoptions.hxx"
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
 #endif
+#define SVT_DLLIMPLEMENTATION
+
+#include "cjkoptions.hxx"
+
 #include "languageoptions.hxx"
+
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
