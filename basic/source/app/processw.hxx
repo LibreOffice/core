@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 14:47:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,13 @@
 #define _PROCESSW_HXX
 
 #ifndef __SBX_SBX_FACTORY_HXX //autogen
-#include <svtools/sbxfac.hxx>
+#include <sbxfac.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <svtools/sbxvar.hxx>
+#include <sbxvar.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <svtools/sbxobj.hxx>
+#include <sbxobj.hxx>
 #endif
 #include "process.hxx"
 
