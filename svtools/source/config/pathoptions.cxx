@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-30 10:40:48 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,6 +1107,30 @@ void SvtPathOptions::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPa
 {
     pImp->SetPath(ePath, rNewPath);
 }
+
+// class PathService -----------------------------------------------------
+
+#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
+#include <com/sun/star/frame/XConfigManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
+class PathService : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XConfigManager, ::com::sun::star::lang::XServiceInfo >
+{
+    virtual ::rtl::OUString SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+                                        getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               flush(  ) throw(::com::sun::star::uno::RuntimeException);
+};
 
 // class PathService -----------------------------------------------------
 
