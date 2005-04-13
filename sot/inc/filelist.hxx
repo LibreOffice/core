@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelist.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,13 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
+#ifndef INCLUDED_SOTDLLAPI_H
+#include "sot/sotdllapi.h"
+#endif
 
 class FileStringList;
 
-class FileList : public SvDataCopyStream
+class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {
     FileStringList*     pStrList;
 
@@ -93,8 +96,8 @@ public:
 
 
     // Im-/Export
-    friend SvStream&    operator<<( SvStream& rOStm, const FileList& rFileList );
-    friend SvStream&    operator>>( SvStream& rIStm, FileList& rFileList );
+    SOT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const FileList& rFileList );
+    SOT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, FileList& rFileList );
 
     // Clipboard, D&D usw.
     static ULONG        GetFormat();
