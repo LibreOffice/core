@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pickerhistory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:25 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_PICKERHISTORY_HXX
 #define SVTOOLS_PICKERHISTORY_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
 #endif
@@ -72,10 +76,10 @@ namespace svt
 //.........................................................................
 
     // --------------------------------------------------------------------
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SVL_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 GetTopMostFolderPicker( );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SVL_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 GetTopMostFilePicker( );
 
 //.........................................................................
