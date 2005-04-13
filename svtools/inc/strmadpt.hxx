@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmadpt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 13:02:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_STRMADPT_HXX
 #define SVTOOLS_STRMADPT_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -79,7 +83,7 @@
 #endif
 
 //============================================================================
-class SvOutputStreamOpenLockBytes: public SvOpenLockBytes
+class SVL_DLLPUBLIC SvOutputStreamOpenLockBytes: public SvOpenLockBytes
 {
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         m_xOutputStream;
@@ -116,7 +120,7 @@ public:
 };
 
 //============================================================================
-class SvLockBytesInputStream: public cppu::OWeakObject,
+class SVL_DLLPUBLIC SvLockBytesInputStream: public cppu::OWeakObject,
                               public com::sun::star::io::XInputStream,
                               public com::sun::star::io::XSeekable
 {
