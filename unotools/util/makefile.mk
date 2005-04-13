@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 12:29:26 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1IMPLIB=iutl
+SHL1USE_EXPORTS=ordinal
 
 SHL1STDLIBS= \
         $(SALHELPERLIB) \
