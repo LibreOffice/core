@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:41:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,10 @@ using namespace com::sun::star;
 
 /* Some MIB magic...*/
 
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_hidden, "HIDDEN" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_HIDDEN_false, "FALSE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_archives, "ARCHIVES" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_object, "OBJECT" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_hidden, "HIDDEN" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_HIDDEN_false, "FALSE" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_archives, "ARCHIVES" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_object, "OBJECT" );
 
 USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
 {
