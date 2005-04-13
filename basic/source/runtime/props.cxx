@@ -2,9 +2,9 @@
  *
  *  $RCSfile: props.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
 #include "stdobj.hxx"
