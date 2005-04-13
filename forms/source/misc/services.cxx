@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:51:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ namespace frm { \
 }
 
 DECLARE_SERVICE_INFO(OFormsCollection)
+DECLARE_SERVICE_INFO(ImageProducer)
 
 //---------------------------------------------------------------------------------------
 
@@ -313,6 +314,7 @@ void ensureClassInfos()
     // ========================================================================
     // = various
     REGISTER_CLASS1(OFormsCollection, FRM_SUN_FORMS_COLLECTION);
+    REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
 
     // ========================================================================
     // = XForms core
