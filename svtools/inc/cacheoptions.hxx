@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-08 09:05:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -103,7 +107,7 @@ class SvtCacheOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SvtCacheOptions
+class SVL_DLLPUBLIC SvtCacheOptions
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -173,6 +177,8 @@ class SvtCacheOptions
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
+    private:
+
         /*-****************************************************************************************************//**
             @short      return a reference to a static mutex
             @descr      These class use his own static mutex to be threadsafe.
@@ -186,7 +192,7 @@ class SvtCacheOptions
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static ::osl::Mutex& GetOwnStaticMutex();
+        SVL_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
