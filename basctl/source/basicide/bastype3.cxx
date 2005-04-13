@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:50:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #pragma hdrstop
 #define _SI_NOSBXCONTROLS
 
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #include <bastype2.hxx>
 #include <basobj.hxx>
 #include <baside2.hrc>
