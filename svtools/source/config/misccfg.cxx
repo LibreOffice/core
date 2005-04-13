@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misccfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:47:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,12 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
+#endif
+#define SVT_DLLIMPLEMENTATION
+
+#include "misccfg.hxx"
 
 #ifndef _ZFORLIST_HXX //autogen
 #include "zforlist.hxx"
@@ -68,7 +73,6 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#include "misccfg.hxx"
 
 #define DEFAULT_TAB 2000
 
