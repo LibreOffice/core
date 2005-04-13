@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formbrowsertools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace pcr
                 {   // we have a chance to check if it's a formatted field model
                     Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                     if (xInfo.is() && (xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD)))
-                        sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_FORMATTED));
+                        sClassName = String(ModuleRes(RID_STR_PROPTITLE_FORMATTED));
                     else if (!xInfo.is())
                     {
                         // couldn't distinguish between formatted and edit with the service name, so try with the properties
@@ -120,7 +120,7 @@ namespace pcr
                         {
                             Reference< XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
                             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(PROPERTY_FORMATSSUPPLIER))
-                                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_FORMATTED));
+                                sClassName = String(ModuleRes(RID_STR_PROPTITLE_FORMATTED));
                         }
                     }
                 }
@@ -128,44 +128,44 @@ namespace pcr
             break;
 
             case FormComponentType::COMMANDBUTTON:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_PUSHBUTTON)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_PUSHBUTTON)); break;
             case FormComponentType::RADIOBUTTON:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_RADIOBUTTON)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_RADIOBUTTON)); break;
             case FormComponentType::CHECKBOX:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_CHECKBOX)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_CHECKBOX)); break;
             case FormComponentType::LISTBOX:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_LISTBOX)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_LISTBOX)); break;
             case FormComponentType::COMBOBOX:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_COMBOBOX)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_COMBOBOX)); break;
             case FormComponentType::GROUPBOX:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_GROUPBOX)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_GROUPBOX)); break;
             case FormComponentType::IMAGEBUTTON:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
             case FormComponentType::FIXEDTEXT:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_FIXEDTEXT)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_FIXEDTEXT)); break;
             case FormComponentType::GRIDCONTROL:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_DBGRID)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_DBGRID)); break;
             case FormComponentType::FILECONTROL:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_FILECONTROL)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_FILECONTROL)); break;
 
             case FormComponentType::DATEFIELD:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_DATEFIELD)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_DATEFIELD)); break;
             case FormComponentType::TIMEFIELD:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_TIMEFIELD)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_TIMEFIELD)); break;
             case FormComponentType::NUMERICFIELD:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_NUMERICFIELD)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_NUMERICFIELD)); break;
             case FormComponentType::CURRENCYFIELD:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
             case FormComponentType::PATTERNFIELD:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_PATTERNFIELD)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_PATTERNFIELD)); break;
             case FormComponentType::IMAGECONTROL:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_IMAGECONTROL)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_IMAGECONTROL)); break;
             case FormComponentType::HIDDENCONTROL:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_HIDDENCONTROL)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_HIDDENCONTROL)); break;
 
             case FormComponentType::CONTROL:
             default:
-                sClassName = ::rtl::OUString(ModuleRes(RID_STR_PROPTITLE_UNKNOWNCONTROL)); break;
+                sClassName = String(ModuleRes(RID_STR_PROPTITLE_UNKNOWNCONTROL)); break;
         }
 
         return sClassName;
