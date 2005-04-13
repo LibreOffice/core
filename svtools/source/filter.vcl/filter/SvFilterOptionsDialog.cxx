@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:11:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SV_FILTER_OPTIONS_DIALOG_HXX_
 #include "SvFilterOptionsDialog.hxx"
-#endif
+
 #ifndef _FILTER_CONFIG_ITEM_HXX_
 #include "FilterConfigItem.hxx"
 #endif
@@ -105,6 +104,9 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <syslocale.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include "vcl/svapp.hxx"
+#endif
 
 #if defined WIN || (defined OS2 && !defined ICC)
 #define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
@@ -129,7 +131,7 @@ uno::Reference< uno::XInterface >
 OUString SvFilterOptionsDialog_getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.SvFilterOptionsDialog" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.SvFilterOptionsDialog" ) );
 }
 #define SERVICE_NAME "com.sun.star.ui.dialog.FilterOptionsDialog"
 sal_Bool SAL_CALL SvFilterOptionsDialog_supportsService( const OUString& ServiceName )
@@ -332,7 +334,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     OUString aPathURL;
 
                     ::osl::FileBase::getFileURLFromSystemPath( aGraphicFilter.aFilterPath.GetToken( i ), aPathURL );
-                    aPathURL += OUString( sal_Unicode( '/' ) );
+                    aPathURL += String( '/' );
 
                     OUString aSystemPath;
                     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
