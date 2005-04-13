@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-12-10 19:56:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #define _UNOTOOLS_CHARCLASS_HXX
@@ -125,7 +128,7 @@ const sal_Int32 nCharClassNumericTypeMask =
     ::com::sun::star::i18n::KCharacterType::BASE_FORM;
 
 
-class CharClass
+class UNOTOOLS_DLLPUBLIC CharClass
 {
     ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
