@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:06:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
+#ifndef _SV_IMAGE_HXX
+#include "vcl/image.hxx"
+#endif
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
@@ -136,7 +139,7 @@
 
 struct SvtExtensionResIdMapping_Impl
 {
-    char*   _pExt;
+    const char*   _pExt;
     BOOL    _bExt;
     USHORT  _nStrId;
     USHORT  _nImgId;
@@ -315,8 +318,8 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 
 struct SvtFactory2ExtensionMapping_Impl
 {
-    char*   _pFactory;
-    char*   _pExtension;
+    const char*   _pFactory;
+    const char*   _pExtension;
 };
 
 // mapping from "private:factory" url to extension
@@ -335,7 +338,7 @@ static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
 
 //****************************************************************************
 
-String GetImageExtensionByFactory_Impl( const String& rURL )
+static String GetImageExtensionByFactory_Impl( const String& rURL )
 {
     INetURLObject aObj( rURL );
     String aPath = aObj.GetURLPath( INetURLObject::NO_DECODE );
@@ -401,7 +404,7 @@ String GetImageExtensionByFactory_Impl( const String& rURL )
     return aExtension;
 }
 
-USHORT GetIndexOfExtension_Impl( const String& rExtension )
+static USHORT GetIndexOfExtension_Impl( const String& rExtension )
 {
     USHORT nRet = NO_INDEX;
     if ( rExtension.Len() )
@@ -423,7 +426,7 @@ USHORT GetIndexOfExtension_Impl( const String& rExtension )
     return nRet;
 }
 
-USHORT GetImageId_Impl( const String& rExtension )
+static USHORT GetImageId_Impl( const String& rExtension )
 {
     USHORT nImage = IMG_FILE;
     if ( rExtension.Len()  != NO_INDEX )
@@ -440,7 +443,7 @@ USHORT GetImageId_Impl( const String& rExtension )
     return nImage;
 }
 
-sal_Bool GetVolumeProperties_Impl( ::ucb::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
+static sal_Bool GetVolumeProperties_Impl( ::ucb::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
 {
     sal_Bool bRet = sal_False;
 
@@ -464,7 +467,7 @@ sal_Bool GetVolumeProperties_Impl( ::ucb::Content& rContent, svtools::VolumeInfo
     return bRet;
 }
 
-USHORT GetFolderImageId_Impl( const String& rURL )
+static USHORT GetFolderImageId_Impl( const String& rURL )
 {
     USHORT nRet = IMG_FOLDER;
     ::svtools::VolumeInfo aVolumeInfo;
@@ -494,7 +497,7 @@ USHORT GetFolderImageId_Impl( const String& rURL )
     return nRet;
 }
 
-USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
+static USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetImageId_Impl()" );
 
@@ -565,7 +568,7 @@ USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
     return nImage;
 }
 
-USHORT GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
+static USHORT GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
 {
     USHORT nId = 0;
 
@@ -582,7 +585,7 @@ USHORT GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
     return nId;
 }
 
-String GetDescriptionByFactory_Impl( const String& rFactory )
+static String GetDescriptionByFactory_Impl( const String& rFactory )
 {
     USHORT nResId = 0;
     if ( rFactory.EqualsIgnoreCaseAscii( "swriter", 0, 7 ) )
@@ -609,7 +612,7 @@ String GetDescriptionByFactory_Impl( const String& rFactory )
     return aRet;
 }
 
-USHORT GetFolderDescriptionId_Impl( const String& rURL )
+static USHORT GetFolderDescriptionId_Impl( const String& rURL )
 {
     USHORT nRet = STR_DESCRIPTION_FOLDER;
     svtools::VolumeInfo aVolumeInfo;
@@ -639,7 +642,7 @@ USHORT GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
-ResMgr* GetIsoResMgr_Impl()
+static ResMgr* GetIsoResMgr_Impl()
 {
     static ResMgr* pIsoResMgr = NULL;
 
@@ -662,7 +665,7 @@ ResMgr* GetIsoResMgr_Impl()
     return pIsoResMgr;
 }
 
-ImageList* CreateImageList_Impl( USHORT nResId )
+static ImageList* CreateImageList_Impl( USHORT nResId )
 {
     ImageList* pList = NULL;
     ResMgr* pResMgr = GetIsoResMgr_Impl();
@@ -676,7 +679,7 @@ ImageList* CreateImageList_Impl( USHORT nResId )
     return pList;
 }
 
-Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 {
     ImageList* pList = NULL;
 
@@ -738,7 +741,7 @@ Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContras
     return pList->GetImage( nImageId );
 }
 
-Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 {
     if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
         // return our new small folder image (256 colors)
@@ -876,41 +879,41 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
     return sDescription;
 }
 
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig )
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig )
 {
     return GetImage( rObject, bBig, FALSE );
 }
 
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, BOOL bBig )
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig )
 {
     return GetFileImage( rObject, bBig, FALSE );
 }
 
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig )
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig )
 {
     return GetImageNoDefault( rObject, bBig, FALSE );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
 {
     return GetFolderImage( rInfo, bBig, FALSE );
 }
 
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig, BOOL bHighContrast )
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
 {
     USHORT nImage = GetImageId_Impl( rObject, sal_True );
     DBG_ASSERT( nImage, "invalid ImageId" );
     return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, BOOL bBig, BOOL bHighContrast )
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
 {
     USHORT nImage = GetImageId_Impl( rObject, sal_False );
     DBG_ASSERT( nImage, "invalid ImageId" );
     return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig, BOOL bHighContrast )
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
 {
     USHORT nImage = GetImageId_Impl( rObject, sal_True );
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -921,7 +924,7 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
     return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig, BOOL bHighContrast )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast )
 {
     USHORT nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
