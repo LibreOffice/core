@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-22 11:29:03 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
 
+class String;
 class ScXMLExport;
 
 class ScXMLExportDDELinks
