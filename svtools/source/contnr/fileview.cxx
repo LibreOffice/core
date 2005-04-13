@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:45:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,12 +1100,12 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
     sal_uInt32  aLastPos = mnSearchIndex;
     sal_Bool    bFound = sal_False;
 
-    maQuickSearchText += OUString( rChar ).toAsciiLowerCase();
+    maQuickSearchText += OUString( String( rChar ) ).toAsciiLowerCase();
 
     bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, sal_False );
 
     if ( !bFound && ( aLastText.getLength() == 1 ) &&
-         ( aLastText == OUString( rChar ) ) )
+         ( aLastText == OUString( String( rChar ) ) ) )
     {
         mnSearchIndex = aLastPos + 1;
         maQuickSearchText = aLastText;
