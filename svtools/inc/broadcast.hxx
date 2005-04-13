@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcast.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:53:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _SVT_BROADCAST_HXX
 #define _SVT_BROADCAST_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
 
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
@@ -72,7 +75,7 @@ class SvtListenerBase;
 
 //-------------------------------------------------------------------------
 
-class SvtBroadcaster
+class SVL_DLLPUBLIC SvtBroadcaster
 {
 friend class SvtListener;
 friend class SvtListenerBase;
