@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:53:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,9 +338,9 @@ namespace
                         if(xMetaData.is())
                         {
                             ::comphelper::UStringMixEqual bCase(xMetaData->storesMixedCaseQuotedIdentifiers());
-                            if (bCase(rValue, ::rtl::OUString(ModuleRes(STR_QUERY_TRUE))))
+                            if (bCase(rValue, String(ModuleRes(STR_QUERY_TRUE))))
                                 rNewValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TRUE"));
-                            else if (bCase(rValue, ::rtl::OUString(ModuleRes(STR_QUERY_FALSE))))
+                            else if (bCase(rValue, String(ModuleRes(STR_QUERY_FALSE))))
                                 rNewValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FALSE"));
                             else
                                 rNewValue = rValue;
