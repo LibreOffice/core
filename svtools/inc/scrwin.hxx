@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SCRWIN_HXX
 #define _SCRWIN_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
@@ -83,7 +87,7 @@ typedef USHORT ScrollableWindowFlags;
 // - ScrollableWindow -
 // --------------------
 
-class ScrollableWindow: public Window
+class SVT_DLLPUBLIC ScrollableWindow: public Window
 {
 private:
     Point           aPixOffset;         // offset to virtual window (pixel)
@@ -100,9 +104,9 @@ private:
                     bVCenter:1;
 
 #ifdef _SVT_SCRWIN_CXX
-    void            ImpInitialize( ScrollableWindowFlags nFlags );
-    DECL_LINK( ScrollHdl, ScrollBar * );
-    DECL_LINK( EndScrollHdl, ScrollBar * );
+    SVT_DLLPRIVATE void         ImpInitialize( ScrollableWindowFlags nFlags );
+    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar * );
 #endif
 
 public:
@@ -137,9 +141,9 @@ public:
                                  long nPagesY, ULONG nOverlapY );
 
 private:
-    void            SetOutputSizePixel( const Size& rSize );
-    Size            GetOutputSizePixel() const;
-    Size            GetOutputSize() const;
+    SVT_DLLPRIVATE void         SetOutputSizePixel( const Size& rSize );
+    SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
+    SVT_DLLPRIVATE Size         GetOutputSize() const;
 };
 
 #endif
