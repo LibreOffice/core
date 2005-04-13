@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 11:40:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@
 #include <sfx2/app.hxx>
 #endif
 #ifndef _SBXCLASS_HXX
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
