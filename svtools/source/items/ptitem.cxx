@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ptitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:53:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "ptitem.hxx"
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -71,10 +73,7 @@
 #include <tools/stream.hxx>
 #endif
 
-#include "sbx.hxx"
-#include "args.hxx"
 #include "poolitem.hxx"
-#include "ptitem.hxx"
 #include "memberid.hrc"
 
 using namespace ::com::sun::star;
