@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-28 16:12:24 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:00:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,42 +64,42 @@ PRJ=..$/..$/..
 
 PRJNAME=svtools
 TARGET=filter
-DEPTARGET=vfilter
-VERSION=$(UPD)
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- UNOTypes -----------------------------------------------------
 
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
-UNOTYPES=	com.sun.star.beans.PropertyValue					\
-            com.sun.star.beans.XPropertyAccess					\
-            com.sun.star.beans.XPropertySetInfo					\
-            com.sun.star.container.XHierarchicalNameAccess		\
-            com.sun.star.container.XIndexAccess					\
-            com.sun.star.container.XNameAccess					\
-            com.sun.star.document.XViewDataSupplier				\
-            com.sun.star.document.XExporter						\
-            com.sun.star.frame.XModel							\
-            com.sun.star.io.XActiveDataSource					\
-            com.sun.star.io.XOutputStream						\
-            com.sun.star.lang.XInitialization					\
-            com.sun.star.lang.XMultiServiceFactory				\
-            com.sun.star.lang.XServiceInfo						\
-            com.sun.star.lang.XTypeProvider						\
-            com.sun.star.svg.XSVGWriter							\
-            com.sun.star.ui.dialogs.XExecutableDialog			\
-            com.sun.star.ui.dialogs.ExecutableDialogResults		\
-            com.sun.star.uno.XAggregation						\
-            com.sun.star.uno.XInterface							\
-            com.sun.star.uno.XWeak								\
-            com.sun.star.util.XChangesBatch						\
-            com.sun.star.xml.sax.XDocumentHandler
+UNOTYPES=	\
+            com.sun.star.svg.XSVGWriter							
 
-
+#			com.sun.star.beans.PropertyValue					\
+#			com.sun.star.beans.XPropertyAccess					\
+#			com.sun.star.beans.XPropertySetInfo					\
+#			com.sun.star.container.XHierarchicalNameAccess		\
+#			com.sun.star.container.XIndexAccess					\
+#			com.sun.star.container.XNameAccess					\
+#			com.sun.star.document.XViewDataSupplier				\
+#			com.sun.star.document.XExporter						\
+#			com.sun.star.frame.XModel							\
+#			com.sun.star.io.XActiveDataSource					\
+#			com.sun.star.io.XOutputStream						\
+#			com.sun.star.lang.XInitialization					\
+#			com.sun.star.lang.XMultiServiceFactory				\
+#			com.sun.star.lang.XServiceInfo						\
+#			com.sun.star.lang.XTypeProvider						\
+#			com.sun.star.ui.dialogs.XExecutableDialog			\
+#			com.sun.star.ui.dialogs.ExecutableDialogResults		\
+#			com.sun.star.uno.XAggregation						\
+#			com.sun.star.uno.XInterface							\
+#			com.sun.star.uno.XWeak								\
+#			com.sun.star.util.XChangesBatch						\
+#			com.sun.star.xml.sax.XDocumentHandler
 
 # --- Files --------------------------------------------------------
 
@@ -126,6 +126,24 @@ EXCEPTIONSNOOPTFILES=	$(SLO)$/filter.obj				\
                         $(SLO)$/FilterConfigItem.obj	\
                         $(SLO)$/FilterConfigCache.obj	\
                         $(SLO)$/SvFilterOptionsDialog.obj
+
+LIB1TARGET=		$(SLB)$/$(TARGET).uno.lib
+LIB1OBJFILES=	\
+          $(SLO)$/dlgexpor.obj				\
+          $(SLO)$/dlgejpg.obj				\
+          $(SLO)$/dlgepng.obj				\
+    $(SLO)$/SvFilterOptionsDialog.obj
+
+LIB2TARGET=		$(SLB)$/$(TARGET).lib
+LIB2OBJFILES=	\
+    $(SLO)$/filter.obj				\
+    $(SLO)$/filter2.obj				\
+          $(SLO)$/sgfbram.obj				\
+          $(SLO)$/sgvmain.obj				\
+          $(SLO)$/sgvtext.obj				\
+          $(SLO)$/sgvspln.obj				\
+          $(SLO)$/FilterConfigItem.obj		\
+          $(SLO)$/FilterConfigCache.obj
 
 # --- Targets -------------------------------------------------------
 
