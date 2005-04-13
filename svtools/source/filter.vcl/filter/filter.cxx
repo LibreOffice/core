@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:41:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,7 +959,7 @@ static String ImpCreateFullFilterPath( const String& rPath, const String& rFilte
     ::rtl::OUString aPathURL;
 
     ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
-    aPathURL += ::rtl::OUString( sal_Unicode( '/' ) );
+    aPathURL += String( '/' );
 
     ::rtl::OUString aSystemPath;
     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
