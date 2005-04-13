@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:45:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #ifndef _TEXTENG_HXX //autogen
 #include <svtools/texteng.hxx>
