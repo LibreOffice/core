@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-11 10:41:23 $
+#   last change: $Author: obo $ $Date: 2005-04-13 10:48:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ LIBTARGET=NO
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -132,11 +133,12 @@ EXCEPTIONSFILES = \
     $(SLO)$/itemholder2.obj
     
 
-# --- heavyconfig.lib Files --------------------------------------------------------
+# --- config.lib Files --------------------------------------------------------
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES=  \
     $(SLO)$/accelcfg.obj				\
+    $(SLO)$/fltrcfg.obj				\
     $(SLO)$/xmlaccelcfg.obj				\
     $(SLO)$/moduleoptions.obj           \
     $(SLO)$/pathoptions.obj             \
@@ -159,7 +161,6 @@ LIB1OBJFILES=  \
     $(SLO)$/defaultoptions.obj			\
     $(SLO)$/searchopt.obj				\
     $(SLO)$/printwarningoptions.obj		\
-    $(SLO)$/printoptions.obj			\
     $(SLO)$/cacheoptions.obj            \
     $(SLO)$/regoptions.obj				\
     $(SLO)$/cmdoptions.obj				\
@@ -177,8 +178,8 @@ LIB2OBJFILES=  \
     $(SLO)$/fontsubstconfig.obj				\
     $(SLO)$/misccfg.obj				\
     $(SLO)$/apearcfg.obj				\
-    $(SLO)$/fltrcfg.obj				\
     $(SLO)$/helpopt.obj                 \
+    $(SLO)$/printoptions.obj			\
         $(SLO)$/languageoptions.obj     \
         $(SLO)$/ctloptions.obj          \
         $(SLO)$/cjkoptions.obj          \
