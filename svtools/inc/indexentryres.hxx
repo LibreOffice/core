@@ -2,9 +2,13 @@
 #ifndef SVTOOLS_INDEXENTRYRESSOURCE_HXX
 #define SVTOOLS_INDEXENTRYRESSOURCE_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 class IndexEntryRessourceData;
 
-class IndexEntryRessource
+class SVT_DLLPUBLIC IndexEntryRessource
 {
     private:
         IndexEntryRessourceData  *mp_Data;
