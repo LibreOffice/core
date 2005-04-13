@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:49:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <basic/basmgr.hxx>
 #endif
 #ifndef _SBX_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
