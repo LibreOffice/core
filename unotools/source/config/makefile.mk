@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 13:22:05 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:30:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ UNOTYPES+= com.sun.star.configuration.XTemplateContainer \
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 
 # --- Files -------------------------------------
