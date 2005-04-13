@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-17 14:24:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #include <vcl/sound.hxx>
 #include <svtools/xtextedt.hxx>
