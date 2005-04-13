@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentInfoPreview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:31:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #define SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -75,7 +79,7 @@ class SvtExtendedMultiLineEdit_Impl;
 class SvtDocInfoTable_Impl;
 namespace svtools
 {
-    class ODocumentInfoPreview : public Window
+    class SVT_DLLPUBLIC ODocumentInfoPreview : public Window
     {
         SvtExtendedMultiLineEdit_Impl*  m_pEditWin;
         SvtDocInfoTable_Impl*           m_pInfoTable;
