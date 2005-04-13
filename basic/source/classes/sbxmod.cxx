@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:48:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <tools/shl.hxx>
 #endif
 #pragma hdrstop
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "sb.hxx"
 #include <sbjsmeth.hxx>
 #include "sbjsmod.hxx"
