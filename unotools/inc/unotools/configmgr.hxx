@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:47:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 //-----------------------------------------------------------------------------
 namespace com{ namespace sun{ namespace star{
@@ -87,7 +90,7 @@ namespace utl
 {
     struct ConfigMgr_Impl;
     class ConfigItem;
-    class ConfigManager
+    class UNOTOOLS_DLLPUBLIC ConfigManager
     {
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 xConfigurationProvider;
