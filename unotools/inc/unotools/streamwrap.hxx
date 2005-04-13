@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:29:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #define _UTL_STREAM_WRAPPER_HXX_
 
@@ -106,7 +110,7 @@ typedef ::cppu::WeakImplHelper1 <   stario::XInputStream
                                 > InputStreamWrapper_Base;
     // needed for some compilers
 /// helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XInputStream</type>
-class OInputStreamWrapper : public InputStreamWrapper_Base
+class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public InputStreamWrapper_Base
 {
 protected:
     ::osl::Mutex    m_aMutex;
@@ -147,7 +151,7 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
 /** helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XInputStream</type>
     which is seekable (i.e. supports the <type scope="com.sun.star.io">XSeekable</type> interface).
 */
-class OSeekableInputStreamWrapper : public ::cppu::ImplInheritanceHelper1 < OInputStreamWrapper, com::sun::star::io::XSeekable >
+class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper : public ::cppu::ImplInheritanceHelper1 < OInputStreamWrapper, com::sun::star::io::XSeekable >
 {
 protected:
     OSeekableInputStreamWrapper() {}
@@ -166,7 +170,7 @@ public:
 //==================================================================
 typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
-class OOutputStreamWrapper : public OutputStreamWrapper_Base
+class UNOTOOLS_DLLPUBLIC OOutputStreamWrapper : public OutputStreamWrapper_Base
 {
 protected:
     // TODO: thread safety!
@@ -196,7 +200,7 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
 /** helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XOutputStream</type>
     which is seekable (i.e. supports the <type scope="com.sun.star.io">XSeekable</type> interface).
 */
-class OSeekableOutputStreamWrapper
+class UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper
                 :public OOutputStreamWrapper
                 ,public OSeekableOutputStreamWrapper_Base
 {
@@ -214,7 +218,7 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 
-class OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, com::sun::star::io::XStream, com::sun::star::io::XOutputStream, com::sun::star::io::XTruncate >
+class UNOTOOLS_DLLPUBLIC OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, com::sun::star::io::XStream, com::sun::star::io::XOutputStream, com::sun::star::io::XTruncate >
 {
 public:
     OStreamWrapper(SvStream& _rStream);
