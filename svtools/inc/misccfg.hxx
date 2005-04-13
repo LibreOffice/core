@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misccfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:45:27 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,23 @@
 #ifndef _SFX_MISCCFG_HXX
 #define _SFX_MISCCFG_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef _SOLAR_H
+#include "tools/solar.h"
+#endif
 
 #ifndef _UTL_CONFIGITEM_HXX_
-#include <unotools/configitem.hxx>
+#include "unotools/configitem.hxx"
 #endif
 
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/
 
-class SfxMiscCfg : public utl::ConfigItem
+class SVT_DLLPUBLIC SfxMiscCfg : public utl::ConfigItem
 {
     BOOL            bPaperSize;     // printer warnings
     BOOL            bPaperOrientation;
