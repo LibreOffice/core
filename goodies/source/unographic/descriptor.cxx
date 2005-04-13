@@ -2,9 +2,9 @@
  *
  *  $RCSfile: descriptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:49:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "descriptor.hxx"
+
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -78,8 +80,12 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #endif
 
-#include <vcl/graph.hxx>
-#include "descriptor.hxx"
+#ifndef _SV_GRAPH_HXX
+#include "vcl/graph.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include "vcl/svapp.hxx"
+#endif
 
 #define UNOGRAPHIC_GRAPHICTYPE  1
 #define UNOGRAPHIC_MIMETYPE     2
