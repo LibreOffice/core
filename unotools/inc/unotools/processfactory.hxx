@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-07 22:17:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #define _UNOTOOLS_PROCESSFACTORY_HXX_
 
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -81,7 +85,7 @@ namespace utl
  *
  * @author Juergen Schmidt
  */
-void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr);
+UNOTOOLS_DLLPUBLIC void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr);
 
 /**
  * This function get the process service factory. If no service factory is set the function returns
@@ -89,7 +93,7 @@ void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun
  *
  * @author Juergen Schmidt
  */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
+UNOTOOLS_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
 
 }
 
