@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:59:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,7 @@ void LibPage::InsertLib()
     xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
 
     // filter
-    ::rtl::OUString aTitle = ::rtl::OUString( IDEResId( RID_STR_BASIC ) );
+    ::rtl::OUString aTitle = String( IDEResId( RID_STR_BASIC ) );
     ::rtl::OUString aFilter;
     aFilter =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.sbl;*.xlc;*.xlb" ) );       // library files
     aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sdw;*.sxw;*.odt" ) );      // text
