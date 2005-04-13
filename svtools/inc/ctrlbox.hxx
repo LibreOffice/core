@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-07 13:03:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _CTRLBOX_HXX
 #define _CTRLBOX_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _INTN_HXX
 #include <tools/intn.hxx>
@@ -197,14 +201,14 @@ FontList; FontNameBox; FontStyleBox; FontSizeMenu
 // - ColorListBox -
 // ----------------
 
-class ColorListBox : public ListBox
+class SVT_DLLPUBLIC ColorListBox : public ListBox
 {
     ImpColorList*   pColorList; // Separate Liste, falls UserDaten von aussen verwendet werden.
     Size            aImageSize;
 
 #ifdef _CTRLBOX_CXX
-    void            ImplInit();
-    void            ImplDestroyColorEntries();
+    SVT_DLLPRIVATE void         ImplInit();
+    SVT_DLLPRIVATE void         ImplDestroyColorEntries();
 #endif
 
 public:
@@ -246,6 +250,7 @@ private:
     // declared as private because some compilers would generate the default functions
                     ColorListBox( const ColorListBox& );
     ColorListBox&   operator =( const ColorListBox& );
+
     USHORT          GetEntryPos( const void* pData ) const;
     void            SetEntryData( USHORT nPos, void* pNewData );
     void*           GetEntryData( USHORT nPos ) const;
@@ -280,7 +285,7 @@ inline Color ColorListBox::GetSelectEntryColor( USHORT nSelIndex ) const
 // - LineListBox -
 // ---------------
 
-class LineListBox : public ListBox
+class SVT_DLLPUBLIC LineListBox : public ListBox
 {
     ImpLineList*    pLineList;
     VirtualDevice   aVirDev;
@@ -291,8 +296,8 @@ class LineListBox : public ListBox
     FieldUnit       eUnit;
     FieldUnit       eSourceUnit;
 
-    void            ImpGetLine( long nLine1, long nLine2, long nDistance, Bitmap& rBmp, XubString& rStr );
-    void            ImplInit();
+    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance, Bitmap& rBmp, XubString& rStr );
+    SVT_DLLPRIVATE void         ImplInit();
     void            UpdateLineColors( void );
     BOOL            UpdatePaintLineColor( void );       // returns TRUE if maPaintCol has changed
     inline const Color& GetPaintColor( void ) const;
@@ -399,7 +404,7 @@ inline Color LineListBox::GetColor( void ) const
 // - FontNameBox -
 // ---------------
 
-class FontNameBox : public ComboBox
+class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {
 private:
     ImplFontList*   mpFontList;
@@ -410,8 +415,8 @@ private:
     BOOL            mbSymbols;
 
 #ifdef _CTRLBOX_CXX
-    void            ImplCalcUserItemSize();
-    void            ImplDestroyFontList();
+    SVT_DLLPRIVATE void         ImplCalcUserItemSize();
+    SVT_DLLPRIVATE void         ImplDestroyFontList();
 #endif
 
     void            InitBitmaps( void );
@@ -443,7 +448,7 @@ private:
 // - FontStyleBox -
 // ----------------
 
-class FontStyleBox : public ComboBox
+class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
     XubString       aLastStyle;
 
@@ -475,7 +480,7 @@ inline void FontStyleBox::SetText( const XubString& rText )
 // - FontSizeBox -
 // ---------------
 
-class FontSizeBox : public MetricBox
+class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
     FontInfo        aFontInfo;
     const FontList* pFontList;
@@ -491,7 +496,7 @@ class FontSizeBox : public MetricBox
                     bStdSize:1;
 
 #ifdef _CTRLBOX_CXX
-    void            ImplInit();
+    SVT_DLLPRIVATE void         ImplInit();
 #endif
 
 protected:
