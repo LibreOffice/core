@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptedtext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:20:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVTOOLS_SCRIPTEDTEXT_HXX
 #define _SVTOOLS_SCRIPTEDTEXT_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
@@ -81,7 +85,7 @@ class SvtScriptedTextHelper_Impl;
 /**
 This class provides drawing text with different script types on any output devices.
 */
-class SvtScriptedTextHelper
+class SVT_DLLPUBLIC SvtScriptedTextHelper
 {
 private:
     SvtScriptedTextHelper_Impl* mpImpl;             /// Implementation of class functionality.
