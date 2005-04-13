@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:57:02 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,14 +614,6 @@ ByteString::ByteString( const rtl::OString& rStr )
             const_cast< rtl::OString & >(rStr).pData)
         : &aImplEmptyStrData;
     ImplIncRefCount( mpData );
-}
-
-// -----------------------------------------------------------------------
-
-rtl::OString::OString( const ByteString& rStr )
-{
-    pData = (rtl_String*)rStr.mpData;
-    rtl_string_acquire( pData );
 }
 
 // -----------------------------------------------------------------------
