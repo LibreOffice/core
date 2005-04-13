@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 13:16:44 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:01:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,29 +62,19 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=jpeg
-DEPTARGET=vjpeg
-TARGET2=jpg
-
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-
-.IF "$(GUI)$(CPU)"=="WNTP"
-CFLAGS=$(CFLAGS) -Od
-.ENDIF
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 .IF "$(SYSTEM_JPEG)" == "YES"
 CFLAGS+=-DSYSTEM_JPEG
 .ENDIF
 
 # --- Files --------------------------------------------------------
-
 
 SLOFILES=	$(SLO)$/jpegc.obj \
             $(SLO)$/jpeg.obj
