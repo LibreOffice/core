@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:18:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #include <vcl/inputctx.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
