@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:33:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #include <svtools/unoevent.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _IMAP_HXX //autogen
 #include <svtools/imap.hxx>
