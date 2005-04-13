@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framestatuslistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:11:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVTOOLS_FRAMESTATUSLISTENER_HXX
 #define _SVTOOLS_FRAMESTATUSLISTENER_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -98,12 +102,15 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 
+#ifndef INCLUDED_HASH_MAP
 #include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
 
 namespace svt
 {
 
-class FrameStatusListener : public ::com::sun::star::frame::XStatusListener,
+class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatusListener,
                             public ::com::sun::star::frame::XFrameActionListener,
                             public ::com::sun::star::lang::XComponent,
                             public ::comphelper::OBaseMutex,
