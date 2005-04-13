@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.51 $
+#*  $Revision: 1.52 $
 #*
-#*  last change: $Author: hr $ $Date: 2004-11-26 20:40:16 $
+#*  last change: $Author: obo $ $Date: 2005-04-13 11:55:13 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -78,28 +78,20 @@ USE_LDUMP2=TRUE
 
 # --- general section ----------------------------------------------------
 
-LIB1TARGET= $(LB)$/svmem.lib
-LIB1ARCHIV=  $(LB)$/libsvarray.a
-LIB1FILES=	$(LB)$/svarray.lib
-
 .IF "$(GUI)"!="UNX"
 LIB3TARGET= $(LB)$/svtool.lib
 LIB3FILES=	$(LB)$/_svt.lib
-LIB3OBJFILES=\
-    $(OBJ)$/rtfkey2.obj
 .ENDIF
 
 .IF "$(GUI)"!="UNX"
 LIB4TARGET= $(LB)$/isvl.lib
 LIB4FILES=	$(LB)$/_isvl.lib
-LIB4OBJFILES=\
-    $(OBJ)$/htmlkey2.obj
 .ENDIF
 
 LIB7TARGET= $(SLB)$/svt.lib
 LIB7FILES=	\
-        $(SLB)$/misc2.lib		\
-        $(SLB)$/items2.lib		\
+        $(SLB)$/misc.lib		\
+        $(SLB)$/items.lib		\
         $(SLB)$/accessibility.lib	\
         $(SLB)$/browse.lib		\
         $(SLB)$/ctrl.lib		\
@@ -111,71 +103,59 @@ LIB7FILES=	\
         $(SLB)$/jpeg.lib		\
         $(SLB)$/ixpm.lib		\
         $(SLB)$/ixbm.lib		\
-        $(SLB)$/sbx.lib 		\
         $(SLB)$/numbers.lib 	\
+        $(SLB)$/numbers.uno.lib 	\
         $(SLB)$/wmf.lib 		\
         $(SLB)$/undo.lib		\
         $(SLB)$/urlobj.lib		\
         $(SLB)$/plugapp.lib 	\
         $(SLB)$/svcontnr.lib	\
         $(SLB)$/syslocale.lib   \
-        $(SLB)$/svhtml2.lib     \
-        $(SLB)$/filepicker.lib  \
-        $(SLB)$/heavyconfig.lib	\
-        $(SLB)$/hatchwindow.lib
-
+        $(SLB)$/svdde.lib \
+        $(SLB)$/svhtml.lib     \
+        $(SLB)$/svrtf.lib	\
+        $(SLB)$/heavyconfig.lib
 
 .IF "$(GUI)" == "UNX"
 LIB7FILES+= 	$(SLB)$/eaimp.lib
 .ENDIF
 
-LIB7FILES+= \
-            $(SLB)$/svdde.lib
-
 LIB8TARGET= $(SLB)$/svl.lib
-LIB8OBJFILES= \
-            $(SLO)$/svtdata.obj \
-            $(SLO)$/registerlight.obj
-
 LIB8FILES=	\
         $(SLB)$/config.lib	\
         $(SLB)$/filerec.lib \
+        $(SLB)$/filepicker.lib \
         $(SLB)$/items1.lib	\
         $(SLB)$/misc1.lib	\
         $(SLB)$/notify.lib	\
-        $(SLB)$/passwordcontainer.lib	\
-        $(SLB)$/fsstor.lib	\
         $(SLB)$/svarray.lib \
-        $(SLB)$/svhtml1.lib \
-        $(SLB)$/svrtf.lib	\
-        $(SLB)$/svsql.lib	\
-        $(SLB)$/cmdparse.lib
+        $(SLB)$/svsql.lib
 
 # generation of resourcen-lib ----------------------------------------
 
 RESLIB1NAME=	$(RESTARGET)
 RESLIB1IMAGES=$(PRJ)$/res
-RESLIB1SRSFILES=$(SRS)$/filter.srs  \
+RESLIB1SRSFILES= \
+        $(SRS)$/filter.srs  \
         $(SRS)$/misc.srs        \
-        $(SRS)$/sbx.srs         \
         $(SRS)$/ctrl.srs        \
-        $(SRS)$/items.srs       \
         $(SRS)$/dialogs.srs     \
         $(SRS)$/plugapp.srs     \
         $(SRS)$/svcontnr.srs    \
-        $(SRS)$/filepicker.srs  \
         $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
         $(SRS)$/accessibility.srs
 
 RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
-    $(SRS)$/mediatyp.srs
+        $(SRS)$/items1.srs \
+        $(SRS)$/misc1.srs
 
 # build the shared library  --------------------------------------------------
 
 SHL1TARGET= svt$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= _svt
+SHL1USE_EXPORTS=ordinal
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
@@ -214,9 +194,11 @@ SHL1STDLIBS+= \
         oleaut32.lib
 .ENDIF # WNT
 
+SHL1OBJS= \
+    $(SLO)$/svtdata.obj
+
 SHL1LIBS= \
-        $(SLB)$/svt.lib 	\
-        $(LB)$/svmem.lib
+    $(SLB)$/svt.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN=$(SHL2TARGETN)
@@ -225,14 +207,13 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =svt
 DEF1DES 	=SvTools
-DEF1EXPORTFILE=	svt.dxp
 
 
 # --- svtools lite --------------------------------------------------
 
 SHL2TARGET= svl$(VERSION)$(DLLPOSTFIX)
 SHL2IMPLIB= _isvl
-SHL1OBJS=$(SLO)$/svtdata.obj
+SHL2USE_EXPORTS=ordinal
 
 SHL2STDLIBS= \
         $(UNOTOOLSLIB)		\
