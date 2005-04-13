@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:08:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,19 @@
 #define SB_UNO_OBJ
 
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <svtools/sbxobj.hxx>
+#include <sbxobj.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX //autogen
-#include <svtools/sbxmeth.hxx>
+#include <sbxmeth.hxx>
 #endif
 #ifndef __SBX_SBXPROPERTY_HXX //autogen
-#include <svtools/sbxprop.hxx>
+#include <sbxprop.hxx>
 #endif
 #ifndef __SBX_SBX_FACTORY_HXX //autogen
-#include <svtools/sbxfac.hxx>
+#include <sbxfac.hxx>
 #endif
 #ifndef __SBX_SBX_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
