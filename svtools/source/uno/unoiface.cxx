@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:06:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XIMAGEPRODUCER_HPP_
+#include <com/sun/star/awt/XImageProducer.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -96,10 +99,6 @@
 #endif
 #ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
-#endif
-
-#ifndef _PRODUCE_HXX
-#include <imgprod.hxx>
 #endif
 
 #ifndef _FMTFIELD_HXX_
@@ -137,7 +136,7 @@ namespace
 
 extern "C" {
 
-Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits )
+SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits )
 {
     Window* pWindow = NULL;
     String aServiceName( pDescriptor->WindowServiceName );
