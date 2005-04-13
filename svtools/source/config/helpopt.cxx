@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:40:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,10 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
+#endif
+#define SVT_DLLIMPLEMENTATION
 
 #include "helpopt.hxx"
 
