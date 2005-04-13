@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:44:20 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:45:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,35 +64,20 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=svhtml
-AUTOSEG=true
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
-OBJFILES =  $(OBJ)$/htmlkey2.obj
-
 SLOFILES=\
-        $(LIB3OBJFILES) \
-        $(LIB4OBJFILES)
-
-# nur damit's was zum builden gibt
-LIB2TARGET =$(LB)$/svhtmlk2.lib
-LIB2OBJFILES  =$(OBJFILES)
-
-LIB3TARGET=$(SLB)$/svhtml1.lib
-LIB3OBJFILES=\
     $(SLO)$/htmlkey2.obj	\
     $(SLO)$/htmlkywd.obj	\
     $(SLO)$/htmlsupp.obj	\
+    $(SLO)$/htmlout.obj		\
     $(SLO)$/parhtml.obj
-
-LIB4TARGET=$(SLB)$/svhtml2.lib
-LIB4OBJFILES=\
-    $(SLO)$/htmlout.obj
 
 # ==========================================================================
 
