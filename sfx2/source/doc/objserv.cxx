@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:22:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@
 #include <svtools/ehdl.hxx>
 #endif
 
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/asynclink.hxx>
