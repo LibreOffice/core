@@ -13,6 +13,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #include <vos/thread.hxx>
 #include <vos/conditn.hxx>
@@ -83,7 +86,7 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 #define NS_BEANS ::com::sun::star::beans
 #define NS_TASK ::com::sun::star::task
 
-class UcbLockBytes : public virtual SvLockBytes
+class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
 {
     vos::OCondition         m_aInitialized;
     vos::OCondition         m_aTerminated;
