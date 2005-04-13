@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:05:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
         if (xProps.is())
             xProps->setPropertyValue(
                 DEFINE_CONST_UNICODE("Title"),
-                makeAny(::rtl::OUString(SfxResId(STR_HELP_WINDOW_TITLE))));
+                makeAny(::rtl::OUString(String(SfxResId(STR_HELP_WINDOW_TITLE)))));
 
         pHelpWindow->setContainerWindow( xParentWindow );
         xParentWindow->setVisible(sal_True);
