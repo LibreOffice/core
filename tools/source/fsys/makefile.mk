@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-30 08:25:46 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:10:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ ENABLE_EXCEPTIONS=true
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-GX
