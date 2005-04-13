@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adrparse.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _ADRPARSE_HXX
 #define _ADRPARSE_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -85,7 +89,7 @@ struct SvAddressEntry_Impl
 DECLARE_LIST(SvAddressList_Impl, SvAddressEntry_Impl *);
 
 //============================================================================
-class SvAddressParser
+class SVL_DLLPUBLIC SvAddressParser
 {
     friend class SvAddressParser_Impl;
 
