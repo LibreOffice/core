@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filenotation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:26:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_FILENOTATION_HXX
 #define SVTOOLS_FILENOTATION_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -74,7 +78,7 @@ namespace svt
     //=====================================================================
     //= OFileNotation
     //=====================================================================
-    class OFileNotation
+    class SVL_DLLPUBLIC OFileNotation
     {
     protected:
         ::rtl::OUString     m_sSystem;
@@ -93,9 +97,9 @@ namespace svt
         ::rtl::OUString get(NOTATION _eOutputNotation);
 
     private:
-        void    construct( const ::rtl::OUString& _rUrlOrPath );
-        bool    implInitWithSystemNotation( const ::rtl::OUString& _rSystemPath );
-        bool    implInitWithURLNotation( const ::rtl::OUString& _rURL );
+        SVL_DLLPRIVATE void construct( const ::rtl::OUString& _rUrlOrPath );
+        SVL_DLLPRIVATE bool    implInitWithSystemNotation( const ::rtl::OUString& _rSystemPath );
+        SVL_DLLPRIVATE bool    implInitWithURLNotation( const ::rtl::OUString& _rURL );
     };
 
 //.........................................................................
