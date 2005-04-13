@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:08:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< rtl::OUStrin
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
     {
-        rtl::OUString aStr( (sal_Unicode)'f' );
+        rtl::OUString aStr( String( 'f' ) );
         aStr += rtl::OUString::valueOf( i );
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
@@ -257,7 +257,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< rtl::OUStrin
             if ( nIndex != -1 )
             {
                 rtl::OUString aNew( aStr.copy( 0, nIndex + 1 ) );
-                aNew += rtl::OUString( (sal_Unicode)'f' );
+                aNew += String( 'f' );
                 aNew += aStr.copy( nIndex + 1, ( aStr.getLength() - nIndex ) - 1 );
                 aStr = aNew;
                 nIndex++;
