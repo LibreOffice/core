@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 14:02:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _TXTATTR_HXX
 #define _TXTATTR_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -89,7 +93,7 @@ class Font;
 #define TEXTATTR_PROTECTED  4
 
 
-class TextAttrib
+class SVT_DLLPUBLIC TextAttrib
 {
 private:
     USHORT                  mnWhich;
@@ -113,7 +117,7 @@ public:
 
 
 
-class TextAttribFontColor : public TextAttrib
+class SVT_DLLPUBLIC TextAttribFontColor : public TextAttrib
 {
 private:
     Color   maColor;
@@ -131,7 +135,7 @@ public:
 
 };
 
-class TextAttribFontWeight : public TextAttrib
+class SVT_DLLPUBLIC TextAttribFontWeight : public TextAttrib
 {
 private:
     FontWeight  meWeight;
@@ -176,7 +180,7 @@ public:
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
-class TextAttribProtect : public TextAttrib
+class SVT_DLLPUBLIC TextAttribProtect : public TextAttrib
 {
 public:
                             TextAttribProtect();
