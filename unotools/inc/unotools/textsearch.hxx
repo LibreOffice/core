@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-02 09:57:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _UNOTOOLS_TEXTSEARCH_HXX
 #define _UNOTOOLS_TEXTSEARCH_HXX
 
@@ -94,7 +98,7 @@ namespace utl
 // ............................................................................
 
 // SS - Klasse fuers Suchen
-class SearchParam
+class UNOTOOLS_DLLPUBLIC SearchParam
 {
 public:
     enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST };
@@ -165,7 +169,7 @@ public:
 //
 //  Es kann Vorwaerts und Rueckwaerts gesucht werden!
 
-class TextSearch
+class UNOTOOLS_DLLPUBLIC TextSearch
 {
     com::sun::star::uno::Reference < com::sun::star::util::XTextSearch >
             xTextSearch;
