@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:04:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #define _SVTOOLS_UNOEVENT_HXX_
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
 #endif
@@ -106,7 +110,7 @@ struct SvEventDescription
  * All details of how to actually get and set SvxMacroItem(s) have to
  * be supplied by the base class.
  */
-class SvBaseEventDescriptor : public cppu::WeakImplHelper2
+class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper2
 <
     ::com::sun::star::container::XNameReplace,
     ::com::sun::star::lang::XServiceInfo
@@ -250,7 +254,7 @@ protected:
  * If no object is available to which the SvEventDescriptor can attach itself,
  * the class SvDetachedEventDescriptor should be used.
  */
-class SvEventDescriptor : public SvBaseEventDescriptor
+class SVT_DLLPUBLIC SvEventDescriptor : public SvBaseEventDescriptor
 {
     /// keep reference to parent to prevent it from being destroyed
     ::com::sun::star::uno::Reference<
@@ -302,7 +306,7 @@ protected:
 /**
  * SvDetachedEventDescriptor:
  */
-class SvDetachedEventDescriptor : public SvBaseEventDescriptor
+class SVT_DLLPUBLIC SvDetachedEventDescriptor : public SvBaseEventDescriptor
 {
     // the macros; aMacros[i] is the value for aSupportedMacroItemIDs[i]
     SvxMacro** aMacros;
@@ -351,7 +355,7 @@ protected:
 
 };
 
-class SvMacroTableEventDescriptor : public SvDetachedEventDescriptor
+class SVT_DLLPUBLIC SvMacroTableEventDescriptor : public SvDetachedEventDescriptor
 {
 public:
 
