@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:05:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "sbcomp.hxx"
 #pragma hdrstop
 
