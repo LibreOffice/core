@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:57:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 #include "sfx2/dllapi.h"
 
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #include <svtools/itempool.hxx>
 
 #ifndef _SFXRECTITEM_HXX //autogen
@@ -91,13 +91,13 @@
 #include <tools/config.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX
-#include <svtools/sbxmeth.hxx>
+#include <basic/sbxmeth.hxx>
 #endif
 #ifndef _SB_SBMETH_HXX
 #include <basic/sbmeth.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 #ifndef _SB_SBERRORS_HXX
 #include <basic/sberrors.hxx>
@@ -109,7 +109,7 @@
 #include <basic/sbuno.hxx>
 #endif
 
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #include <svtools/ownlist.hxx>
 #include <svtools/lckbitem.hxx>
 #include <svtools/stritem.hxx>
