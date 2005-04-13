@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:09:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #define ITEMID_FRAMEDIR 0
 
 
-#ifndef _ARGS_HXX //autogen
-#include <svtools/args.hxx>
-#endif
 #ifndef _GRFMGR_HXX //autogen
 #include <goodies/grfmgr.hxx>
 #endif
@@ -108,7 +105,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 #endif // !SVX_LIGHT
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
 
 #define _SVX_FRMITEMS_CXX
