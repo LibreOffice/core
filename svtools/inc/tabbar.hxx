@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:05:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _TABBAR_HXX
 #define _TABBAR_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
@@ -368,7 +372,7 @@ typedef USHORT TabBarPageBits;
 // - TabBar -
 // ----------
 
-class TabBar : public Window
+class SVT_DLLPUBLIC TabBar : public Window
 {
     friend class    ImplTabButton;
     friend class    ImplTabSizer;
@@ -419,20 +423,20 @@ private:
     Link            maAllowRenamingHdl;
     Link            maEndRenamingHdl;
 
-    void            ImplInit( WinBits nWinStyle );
-    void            ImplInitSettings( BOOL bFont, BOOL bBackground );
-    void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
+    SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
+    SVT_DLLPRIVATE void            ImplInitSettings( BOOL bFont, BOOL bBackground );
+    SVT_DLLPRIVATE void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
                                    Color& rSelectColor, Color& rSelectTextColor );
-    void            ImplShowPage( USHORT nPos );
-    BOOL            ImplCalcWidth();
-    void            ImplFormat();
-    USHORT          ImplGetLastFirstPos();
-    void            ImplInitControls();
-    void            ImplEnableControls();
-    void            ImplSelect();
-    void            ImplActivatePage();
-    long            ImplDeactivatePage();
-                    DECL_LINK( ImplClickHdl, ImplTabButton* );
+    SVT_DLLPRIVATE void            ImplShowPage( USHORT nPos );
+    SVT_DLLPRIVATE BOOL            ImplCalcWidth();
+    SVT_DLLPRIVATE void            ImplFormat();
+    SVT_DLLPRIVATE USHORT          ImplGetLastFirstPos();
+    SVT_DLLPRIVATE void            ImplInitControls();
+    SVT_DLLPRIVATE void            ImplEnableControls();
+    SVT_DLLPRIVATE void         ImplSelect();
+    SVT_DLLPRIVATE void         ImplActivatePage();
+    SVT_DLLPRIVATE long         ImplDeactivatePage();
+                    DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
 
 public:
                     TabBar( Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
