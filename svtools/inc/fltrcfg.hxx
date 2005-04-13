@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltrcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:44:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,16 @@
 
 // -----------------------------------------------------------------------
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
 
 struct SvtFilterOptions_Impl;
-class SvtFilterOptions : public utl::ConfigItem
+class SVL_DLLPUBLIC SvtFilterOptions : public utl::ConfigItem
 {
     SvtFilterOptions_Impl* pImp;
 
