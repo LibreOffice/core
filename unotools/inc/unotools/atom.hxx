@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:33:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,12 @@
  *
  *
  ************************************************************************/
-
 #ifndef _UTL_ATOM_HXX_
 #define _UTL_ATOM_HXX_
+
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -114,7 +117,7 @@ namespace utl {
     };
 
 
-    class MultiAtomProvider
+    class UNOTOOLS_DLLPUBLIC MultiAtomProvider
     {
         ::std::hash_map< int, AtomProvider*, ::std::hash< int > > m_aAtomLists;
     public:
