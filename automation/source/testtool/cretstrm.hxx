@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cretstrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:07:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _SBXVAR_HXX //autogen
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 
 #include "cmdbasestream.hxx"
