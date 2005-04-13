@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rngitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:22:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,8 @@
 #include <tools/stream.hxx>
 #endif
 
-#ifndef GCC
-#pragma hdrstop
-#endif
 
 #ifndef NUMTYPE
-
-#include "sbx.hxx"
-#include "args.hxx"
 
 #if SUPD<355
 DBG_NAME(SfxRangeItem);
