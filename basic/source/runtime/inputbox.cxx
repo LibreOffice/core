@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:42:03 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
 #include "stdobj.hxx"
