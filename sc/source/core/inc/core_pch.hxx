@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:47:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@
 #include <column.hxx>
 #include <svtools/hint.hxx>
 #include <svtools/lstner.hxx>
-#include <svtools/args.hxx>
 #include <svtools/poolitem.hxx>
 #include <tools/time.hxx>
 #include <svtools/solar.hrc>
@@ -120,7 +119,7 @@
 #include <tools/resmgr.hxx>
 #include <tools/unqidx.hxx>
 #include <rsc/rscsfx.hxx>
-#include <svtools/sbxdef.hxx>
+#include <basic/sbxdef.hxx>
 #include <svtools/itemset.hxx>
 #include <stddef.h>
 #include <collect.hxx>
@@ -250,8 +249,8 @@
 #include <dbcolect.hxx>
 #include <userlist.hxx>
 #include <svx/editdata.hxx>
-#include <svtools/sbxvar.hxx>
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxvar.hxx>
+#include <basic/sbxcore.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdglue.hxx>
@@ -288,7 +287,7 @@
 #include <sfx2/minarray.hxx>
 #include <svtools/txtcmp.hxx>
 #include <olinetab.hxx>
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #include <cfgids.hxx>
 
 
