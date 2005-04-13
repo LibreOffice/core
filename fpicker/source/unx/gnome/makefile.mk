@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-16 11:13:46 $
+#   last change: $Author: obo $ $Date: 2005-04-13 08:57:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,13 +63,14 @@
 PRJ=..$/..$/..
 
 PRJNAME=fpicker
-TARGET=fps_gnome
-#LIBTARGET=NO
+TARGET=fps_gnome.uno
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE=
 
 # ------------------------------------------------------------------
 
@@ -83,8 +84,8 @@ dummy:
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE : pkg_config.mk
 
+# check gtk version
 GTK_TWO_FOUR:=$(shell +-$(PKGCONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
-
 .IF "$(GTK_TWO_FOUR)" != "ok"
 
 dummy:
@@ -107,7 +108,25 @@ SLOFILES =\
         $(SLO)$/filepickereventnotification.obj \
         $(SLO)$/FPentry.obj
 
-.ENDIF #NOT_GTK_TWO_FOUR
+SHL1NOCHECK=TRUE
+SHL1TARGET=	$(TARGET)
+SHL1OBJS=	$(SLOFILES)
+SHL1STDLIBS=\
+    $(VCLLIB) \
+    $(TOOLSLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB) \
+    $(PKGCONFIG_LIBS)
+
+.IF "$(OS)"=="SOLARIS"
+LINKFLAGS!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
+.ENDIF          # "$(OS)"=="SOLARIS"
+
+SHL1VERSIONMAP=exports.map
+DEF1NAME=$(SHL1TARGET)
+
+.ENDIF # GTK_TWO_FOUR
 .ENDIF # "$(GUIBASE)" != "unx" || "$(WITH_WIDGETSET)" != "gnome"
 
 # --- Targets ------------------------------------------------------
