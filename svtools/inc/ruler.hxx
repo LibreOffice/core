@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:47:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _RULER_HXX
 #define _RULER_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
@@ -700,7 +704,7 @@ class ImplRulerData;
 // - Ruler -
 // ---------
 
-class Ruler : public Window
+class SVT_DLLPUBLIC Ruler : public Window
 {
 private:
     VirtualDevice       maVirDev;
@@ -751,36 +755,40 @@ private:
     Link                maExtraDownHdl;
 
 #ifdef _SV_RULER_CXX
-    void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
-    void                ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
-    void                ImplVDrawText( long nX, long nY, const String& rText );
+    SVT_DLLPRIVATE void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
+    SVT_DLLPRIVATE void                ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
+    SVT_DLLPRIVATE void                ImplVDrawText( long nX, long nY, const String& rText );
 
-    void                ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
-    void                ImplDrawArrows( long nCenter );
-    void                ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
-    void                ImplDrawIndent( const Polygon& rPoly, USHORT nStyle );
-    void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
-    void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle );
-    void                ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
-    void                ImplInit( WinBits nWinBits );
-    void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    void                ImplCalc();
-    void                ImplFormat();
-    void                ImplInitExtraField( BOOL bUpdate );
-    void                ImplInvertLines( BOOL bErase = FALSE );
-    void                ImplDraw();
-    void                ImplDrawExtra( BOOL bPaint = FALSE );
-    void                ImplUpdate( BOOL bMustCalc = FALSE );
-    BOOL                ImplHitTest( const Point& rPos,
+    SVT_DLLPRIVATE void                ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
+    SVT_DLLPRIVATE void                ImplDrawArrows( long nCenter );
+    SVT_DLLPRIVATE void                ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void                ImplDrawIndent( const Polygon& rPoly, USHORT nStyle );
+    SVT_DLLPRIVATE void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle );
+    SVT_DLLPRIVATE void                ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void                ImplInit( WinBits nWinBits );
+    SVT_DLLPRIVATE void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SVT_DLLPRIVATE void                ImplCalc();
+    SVT_DLLPRIVATE void                ImplFormat();
+    SVT_DLLPRIVATE void                ImplInitExtraField( BOOL bUpdate );
+    SVT_DLLPRIVATE void                ImplInvertLines( BOOL bErase = FALSE );
+    SVT_DLLPRIVATE void                ImplDraw();
+    SVT_DLLPRIVATE void                ImplDrawExtra( BOOL bPaint = FALSE );
+    SVT_DLLPRIVATE void                ImplUpdate( BOOL bMustCalc = FALSE );
+    SVT_DLLPRIVATE BOOL                ImplHitTest( const Point& rPos,
                                      ImplRulerHitTest* pHitTest,
                                      BOOL bRequiredStyle = FALSE,
                                      USHORT nRequiredStyle = 0 ) const;
-    BOOL                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
-    BOOL                ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier );
-    void                ImplDrag( const Point& rPos );
-    void                ImplEndDrag();
-                        DECL_LINK( ImplUpdateHdl, void* );
+    SVT_DLLPRIVATE BOOL                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
+    SVT_DLLPRIVATE BOOL                ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier );
+    SVT_DLLPRIVATE void                ImplDrag( const Point& rPos );
+    SVT_DLLPRIVATE void                ImplEndDrag();
+                        DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
 #endif
+
+    // Forbidden and not implemented.
+    Ruler (const Ruler &);
+    Ruler & operator= (const Ruler &);
 
 public:
                         Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
