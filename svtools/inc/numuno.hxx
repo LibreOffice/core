@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _NUMUNO_HXX
 #define _NUMUNO_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
@@ -89,7 +93,7 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
 //  SvNumberFormatsSupplierObj: aggregate to document,
 //  construct with SvNumberFormatter
 
-class SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
+class SVT_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
                                     com::sun::star::util::XNumberFormatsSupplier,
                                     com::sun::star::lang::XUnoTunnel>
 {
