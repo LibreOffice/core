@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:10:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 #define ITEMID_CHARRELIEF       0
 
 
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
 
 
