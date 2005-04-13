@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:53:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _CTRLTOOL_HXX
 #define _CTRLTOOL_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _SAL_TYPES_H
 #include <sal/types.h>
@@ -186,7 +190,7 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 #define FONTLIST_FONTNAMETYPE_SCREEN            ((USHORT)0x0002)
 #define FONTLIST_FONTNAMETYPE_SCALABLE          ((USHORT)0x0004)
 
-class FontList : private List
+class SVT_DLLPUBLIC FontList : private List
 {
 private:
     XubString               maMapBoth;
@@ -208,9 +212,9 @@ private:
     OutputDevice*           mpDev2;
 
 #ifdef CTRLTOOL_CXX
-    ImplFontListNameInfo*   ImplFind( const XubString& rSearchName, ULONG* pIndex ) const;
-    ImplFontListNameInfo*   ImplFindByName( const XubString& rStr ) const;
-    void                    ImplInsertFonts( OutputDevice* pDev, BOOL bAll,
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, ULONG* pIndex ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const XubString& rStr ) const;
+    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, BOOL bAll,
                                              BOOL bInsertData );
 #endif
 
@@ -262,7 +266,7 @@ private:
 // - FontSizeNames -
 // -----------------
 
-class FontSizeNames
+class SVT_DLLPUBLIC FontSizeNames
 {
 private:
     struct ImplFSNameItem*  mpArray;
