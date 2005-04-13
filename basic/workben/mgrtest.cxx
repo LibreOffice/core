@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgrtest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:43:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #include <so3/svstor.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
