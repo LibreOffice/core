@@ -1,0 +1,375 @@
+/*************************************************************************
+ *
+ *  $RCSfile: iodlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:55:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // includes ******************************************************************
+#include "svtools/svtools.hrc"
+#include "svtools/helpid.hrc"
+#include "iodlg.hrc"
+
+#define FILEPICKER_IL_IDLIST \
+    IdList = \
+    { \
+        IMG_FILEDLG_BTN_UP; \
+        IMG_FILEDLG_BTN_STD; \
+        IMG_FILEDLG_CREATEFOLDER; \
+    }; \
+    IdCount = \
+    { \
+        3; \
+    };
+
+#define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+
+ // image lists ***************************************************************
+
+ImageList RID_FILEPICKER_IMAGES
+{
+    Prefix = "fp";
+    MASKCOLOR
+    FILEPICKER_IL_IDLIST
+};
+
+ImageList RID_FILEPICKER_IMAGES_HC
+{
+    Prefix = "fph";
+    MASKCOLOR
+    FILEPICKER_IL_IDLIST
+};
+
+ // dialogs *******************************************************************
+
+ModalDialog DLG_SVT_EXPLORERFILE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = TRUE;
+    HelpId = HID_EXPLORERDLG_FILE ;
+    Size = MAP_APPFONT ( 280 , 174 ) ;
+    FixedText FT_EXPLORERFILE_CURRENTPATH
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        NoLabel = TRUE ;
+    };
+    ImageButton BTN_EXPLORERFILE_NEWFOLDER
+    {
+        TabStop = FALSE ;
+        Pos = MAP_APPFONT ( 59 , 6 ) ;
+        QuickHelpText [ de ] = "Neues Verzeichnis anlegen" ;
+        QuickHelpText [ en-US ] = "Create New Directory" ;
+    };
+    ImageButton BTN_EXPLORERFILE_LISTVIEW
+    {
+        TabStop = FALSE ;
+        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        QuickHelpText [ de ] = "Liste";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "list.bmp" ;
+            };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "List";
+    };
+    ImageButton BTN_EXPLORERFILE_DETAILSVIEW
+    {
+        TabStop = FALSE ;
+        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        QuickHelpText [ de ] = "Details";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc06356.bmp" ;
+            };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Details";
+    };
+    MenuButton BTN_EXPLORERFILE_UP
+    {
+        TabStop = FALSE ;
+        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        QuickHelpText [ de ] = "Ein Verzeichnis hoch" ;
+        QuickHelpText [ en-US ] = "Up One Level" ;
+    };
+
+    MenuButton BTN_EXPLORERFILE_STANDARD
+    {
+        TabStop = FALSE ;
+        Pos = MAP_APPFONT ( 59 , 6 ) ;
+        QuickHelpText [ de ] = "Zum Standard-Verzeichnis" ;
+        QuickHelpText [ en-US ] = "Default Directory" ;
+    };
+    Control CTL_EXPLORERFILE_FILELIST
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Size = MAP_APPFONT ( 268 , 85 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_EXPLORERFILE_FILENAME
+    {
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ de ] = "Datei~name:" ;
+        Text [ en-US ] = "File ~name:" ;
+    };
+    Edit ED_EXPLORERFILE_FILENAME
+    {
+        Pos = MAP_APPFONT ( 59 , 117 ) ;
+        Size = MAP_APPFONT ( 159 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_EXPLORERFILE_SHARED_LISTBOX
+    {
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        // Note: this control does not have a text. The text is filled at runtime from the STR_SVT_FILEPICKER_VERSION,
+        // STR_SVT_FILEPICKER_TEMPLATES, or STR_SVT_FILEPICKER_IMAGE_TEMPLATE resource
+    };
+    ListBox LB_EXPLORERFILE_SHARED_LISTBOX
+    {
+        Pos = MAP_APPFONT ( 59 , 132 ) ;
+        Size = MAP_APPFONT ( 159 , 40 ) ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_EXPLORERFILE_FILETYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 148 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ de ] = "Datei~typ:" ;
+        Text [ en-US ] = "File ~type:" ;
+    };
+    ListBox LB_EXPLORERFILE_FILETYPE
+    {
+        Pos = MAP_APPFONT ( 59 , 147 ) ;
+        Size = MAP_APPFONT ( 159 , 80 ) ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE ;
+    };
+    CheckBox CB_EXPLORERFILE_READONLY
+    {
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text [ de ] = "N~ur lesen" ;
+        Text [ en-US ] = "~Read-only" ;
+    };
+    CheckBox CB_EXPLORERFILE_PASSWORD
+    {
+        Size = MAP_APPFONT ( 100, 10 ) ;
+        Text [ de ] = "Mit Kennwort speichern" ;
+        Text [ en-US ] = "Save with password" ;
+    };
+    CheckBox CB_AUTO_EXTENSION
+    {
+        Size = MAP_APPFONT ( 160 , 10 ) ;
+        Text [ de ] = "automatische Dateinamens~erweiterung" ;
+        Text [ en-US ] = "~Automatic file name extension" ;
+    };
+    CheckBox CB_OPTIONS
+    {
+        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Text [ de ] = "Filtereinstellungen ~bearbeiten" ;
+        Text [ en-US ] = "Edit ~filter settings";
+    };
+    PushButton BTN_EXPLORERFILE_OPEN
+    {
+        Pos = MAP_APPFONT ( 224 , 117 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        Text [ de ] = "Ö~ffnen" ;
+        Text [ en-US ] = "~Open" ;
+    };
+    CancelButton BTN_EXPLORERFILE_CANCEL
+    {
+        Pos = MAP_APPFONT ( 224 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_EXPLORERFILE_HELP
+    {
+        Pos = MAP_APPFONT ( 224 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_EXPLORERFILE_OPEN
+    {
+        Text [ de ] = "Öffnen" ;
+        Text [ en-US ] = "Open" ;
+    };
+    String STR_EXPLORERFILE_SAVE
+    {
+        Text [ de ] = "Speichern unter" ;
+        Text [ en-US ] = "Save as" ;
+    };
+    String STR_EXPLORERFILE_BUTTONSAVE
+    {
+        Text [ de ] = "~Speichern" ;
+        Text [ en-US ] = "~Save" ;
+    };
+    String STR_PATHNAME
+    {
+        Text [ de ] = "~Pfad:" ;
+        Text [ en-US ] = "~Path:" ;
+    };
+    String STR_PATHSELECT
+    {
+        Text [ de ] = "Pfad auswählen" ;
+        Text [ en-US ] = "Select path" ;
+    };
+    String STR_BUTTONSELECT
+    {
+        Text [ de ] = "Au~swählen" ;
+        Text [ en-US ] = "~Select";
+    };
+    String STR_ACTUALVERSION
+    {
+        Text [ de ] = "Aktuelle Version" ;
+        Text [ en-US ] = "Current version";
+    };
+};
+
+// QueryFolderNameDialog ----------------------------------------------------------
+ModalDialog DLG_SVT_QUERYFOLDERNAME
+{
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Ordner" ;
+    Size = MAP_APPFONT ( 218 , 45 ) ;
+    FixedText FT_SVT_QUERYFOLDERNAME_DLG_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 138 , 10 ) ;
+        Text [ de ] = "~Name" ;
+        Text [ en-US ] = "Na~me" ;
+        Text [ x-comment ] = " ";
+    };
+    Edit ED_SVT_QUERYFOLDERNAME_DLG_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 138 , 12 ) ;
+        Border = TRUE ;
+        Left = TRUE ;
+    };
+    FixedLine FL_SVT_QUERYFOLDERNAME_DLG_NAME
+    {
+        Group = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Text [ de ] = "Neuen Ordner anlegen" ;
+        Text [ en-US ] = "Create new folder" ;
+        Text [ x-comment ] = " ";
+    };
+    OKButton BT_SVT_QUERYFOLDERNAME_DLG_OK
+    {
+        Pos = MAP_APPFONT ( 162 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_SVT_QUERYFOLDERNAME_DLG_CANCEL
+    {
+        Pos = MAP_APPFONT ( 162 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+// strings *******************************************************************
+
+String RID_FILEOPEN_INVALIDFOLDER
+{
+    Text [ de ] = "$name$ existiert nicht.";
+    Text [ en-US ] = "$name$ does not exist.";
+};
+
+String RID_FILEOPEN_NOTEXISTENTFILE
+{
+    Text [ de ] = "Die Datei $name$ existiert nicht.\nBitte überprüfen Sie, ob Sie den korrekten Namen angegeben haben.";
+    Text [ en-US ] = "The file $name$ does not exist.\nMake sure you have entered the correct file name.";
+};
+
+String STR_FILTERNAME_ALL
+{
+    Text [ de ] = "Alle Dateien (*.*)" ;
+    Text [ en-US ] = "All files (*.*)" ;
+};
+
+String STR_SVT_ALREADYEXISTOVERWRITE
+{
+    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
+    Text [ en-US ] = "The file already exists. Overwrite?" ;
+};
+
+String STR_SVT_NEW_FOLDER
+{
+    Text [ de ] = "Ordner" ;
+    Text [ en-US ] = "Folder" ;
+};
+
+//******************************************************************** EOF
+
