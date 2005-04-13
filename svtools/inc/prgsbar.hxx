@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prgsbar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:19:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _PRGSBAR_HXX
 #define _PRGSBAR_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -101,7 +105,7 @@ groesser 100 gesetzt werden, faengt das letzte Rechteck an zu blinken.
 // - ProgressBar -
 // ---------------
 
-class ProgressBar : public Window
+class SVT_DLLPUBLIC ProgressBar : public Window
 {
 private:
     Point               maPos;
@@ -112,9 +116,9 @@ private:
     BOOL                mbCalcNew;
 
 #ifdef _SV_PRGSBAR_CXX
-    void                ImplInit();
-    void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    void                ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc );
+    SVT_DLLPRIVATE void             ImplInit();
+    SVT_DLLPRIVATE void             ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SVT_DLLPRIVATE void             ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc );
 #endif
 
 public:
