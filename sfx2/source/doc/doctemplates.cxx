@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:36:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,14 +444,14 @@ void SfxDocTplService_Impl::init_Impl()
 
     // convert locale to string
     OUString aLang = maLocale.Language;
-    aLang += OUString( '-' );
+    aLang += String( '-' );
     aLang += maLocale.Country;
 
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
     maRootURL = OUString( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
-    maRootURL += OUString( '/' );
+    maRootURL += String( '/' );
     maRootURL += aLang;
 
     if ( Content::create( maRootURL, maCmdEnv, maRootContent ) )
