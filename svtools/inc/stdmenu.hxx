@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 10:25:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _STDMENU_HXX
 #define _STDMENU_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
@@ -188,7 +192,7 @@ FontList; FontNameMenu; FontStyleMenu; FontSizeBox
 // - FontNameMenu -
 // ----------------
 
-class FontNameMenu : public PopupMenu
+class SVT_DLLPUBLIC FontNameMenu : public PopupMenu
 {
 private:
     XubString       maCurName;
@@ -250,7 +254,7 @@ public:
 // - FontSizeMenu -
 // ----------------
 
-class FontSizeMenu : public PopupMenu
+class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
 {
 private:
     International   OLDMEMBER_TO_BE_REMOVED;
