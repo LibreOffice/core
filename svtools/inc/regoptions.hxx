@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_REGOPTIONS_HXX
 #define SVTOOLS_REGOPTIONS_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -77,13 +81,13 @@ namespace svt
     class RegOptionsImpl;
     /** encapsulates access to the configuration settings for registering the product
     */
-    class RegOptions
+    class SVL_DLLPUBLIC RegOptions
     {
     private:
         RegOptionsImpl*     m_pImpl;
 
         // the impl class is constructed upon need only (as this is expensive)
-        void ensureImpl( );
+        SVL_DLLPRIVATE void ensureImpl( );
 
     public:
         RegOptions( );
