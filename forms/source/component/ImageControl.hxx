@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:01:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 
 #include "FormComponent.hxx"
 
-#ifndef _PRODUCE_HXX //autogen
-#include <svtools/imgprod.hxx>
+#ifndef _PRODUCE_HXX
+#include "imgprod.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XIMAGEPRODUCERSUPPLIER_HPP_
