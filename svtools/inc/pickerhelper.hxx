@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pickerhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 10:30:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,16 @@
 #ifndef _PICKERHELPER_HXX
 #define _PICKERHELPER_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
 #ifndef  _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
+#include "com/sun/star/uno/Reference.hxx"
 #endif
 
 namespace com
@@ -88,10 +96,13 @@ namespace com
 namespace svt
 {
 
-    void SetDialogHelpId( ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > _mxFileDlg,
-                            const sal_Int32 _nHelpId );
-    void SetDialogHelpId( ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFolderPicker > _mxFileDlg,
-                            const sal_Int32 _nHelpId );
+    SVL_DLLPUBLIC void SetDialogHelpId(
+        ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > _mxFileDlg,
+        sal_Int32 _nHelpId );
+
+    SVL_DLLPUBLIC void SetDialogHelpId(
+        ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFolderPicker > _mxFileDlg,
+        sal_Int32 _nHelpId );
 
 }
 
