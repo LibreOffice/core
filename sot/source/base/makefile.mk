@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jl $ $Date: 2001-07-30 10:22:08 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:35:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,34 +64,32 @@ PRJ=..$/..
 
 PRJNAME=sot
 TARGET=base
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-.IF "$(COM)"=="GCC"
-NOOPTFILES=\
-    $(SLO)$/exchange.obj
-
-.ENDIF
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
-
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=                                                           \
-                        $(SLO)$/factory.obj                          \
-                        $(SLO)$/object.obj							\
-                        $(SLO)$/exchange.obj                		\
-                        $(SLO)$/filelist.obj                		\
-                        $(SLO)$/formats.obj
+.IF "$(COM)"=="GCC"
+NOOPTFILES=	\
+    $(SLO)$/exchange.obj
+.ENDIF # GCC
 
+SLOFILES=	\
+    $(SLO)$/factory.obj		\
+    $(SLO)$/object.obj		\
+    $(SLO)$/exchange.obj	\
+    $(SLO)$/filelist.obj	\
+    $(SLO)$/formats.obj
 
-EXCEPTIONSFILES=	$(SLO)$/formats.obj							
+EXCEPTIONSFILES=	\
+    $(SLO)$/formats.obj							
 
 # --- Targets -------------------------------------------------------
-
 
 .INCLUDE :  target.mk
 
