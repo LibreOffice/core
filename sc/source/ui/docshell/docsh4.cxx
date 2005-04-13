@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:44:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ using namespace ::com::sun::star;
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
