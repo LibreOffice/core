@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 16:40:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVT_ADDRESSTEMPLATE_HXX_
 #define _SVT_ADDRESSTEMPLATE_HXX_
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
@@ -105,7 +109,7 @@ namespace svt
     // = AddressBookSourceDialog
     // ===================================================================
     struct AddressBookSourceDialogData;
-    class AddressBookSourceDialog : public ModalDialog
+    class SVT_DLLPUBLIC AddressBookSourceDialog : public ModalDialog
     {
     protected:
         // Controls
