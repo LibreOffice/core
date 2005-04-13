@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:47:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <tools/stream.hxx>
 #endif
 #pragma hdrstop
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
