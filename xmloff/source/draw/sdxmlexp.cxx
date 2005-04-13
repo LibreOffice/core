@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:31:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2036,7 +2036,7 @@ void SdXMLExport::_ExportContent()
                             OUString aBookmarkName( aBookmarkURL.copy( nIndex+1 ) );
 
                             aBookmarkURL = GetRelativeReference( aFileName );
-                            aBookmarkURL += OUString( (sal_Unicode)'#' );
+                            aBookmarkURL += String( '#' );
                             aBookmarkURL += aBookmarkName;
                         }
 
