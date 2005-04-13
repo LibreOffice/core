@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:10:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _EVENTCFG_HXX
 #define _EVENTCFG_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
 
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
@@ -89,8 +92,8 @@ class GlobalEventConfig_Impl : public utl::ConfigItem
     EventBindingHash m_eventBindingHash;
     FrameVector m_lFrames;
     SupportedEventsVector m_supportedEvents;
-    void initBindingInfo();
 
+    void initBindingInfo();
 
 public:
     GlobalEventConfig_Impl( );
@@ -109,7 +112,8 @@ public:
     ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
 };
-class GlobalEventConfig:
+
+class SVL_DLLPUBLIC GlobalEventConfig:
         public ::cppu::WeakImplHelper2 < ::com::sun::star::document::XEventsSupplier, ::com::sun::star::container::XNameReplace >
 {
     public:
