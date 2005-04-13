@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:29:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <vos/process.hxx>
 #endif
 #ifndef _SBXCORE_HXX
-#include <svtools/sbxcore.hxx>
+#include <sbxcore.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
