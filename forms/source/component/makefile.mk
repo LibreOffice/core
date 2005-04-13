@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 10:41:59 $
+#   last change: $Author: obo $ $Date: 2005-04-13 09:46:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/navigationbar.obj \
             $(SLO)$/formcontrolfont.obj \
             $(SLO)$/refvaluecomponent.obj \
+            $(SLO)$/imgprod.obj
 
 # --- Targets ----------------------------------
 
