@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:05:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
 #include <vcl/sv.h>
-#include <svtools/sbxdef.hxx>
+#include <basic/sbxdef.hxx>
 #include <tools/time.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
@@ -163,13 +163,13 @@
 #include <svtools/solar.hrc>
 #include <svtools/lstner.hxx>
 #include <starmath.hrc>
-#include <svtools/sbx.hxx>
-#include <svtools/sbxform.hxx>
-#include <svtools/sbxobj.hxx>
-#include <svtools/sbxvar.hxx>
-#include <svtools/sbxcore.hxx>
-#include <svtools/sbxprop.hxx>
-#include <svtools/sbxmeth.hxx>
+#include <basic/sbx.hxx>
+#include <basic/sbxform.hxx>
+#include <basic/sbxobj.hxx>
+#include <basic/sbxvar.hxx>
+#include <basic/sbxcore.hxx>
+#include <basic/sbxprop.hxx>
+#include <basic/sbxmeth.hxx>
 #include <tools/unqid.hxx>
 #include <tools/unqidx.hxx>
 #include <svtools/poolitem.hxx>
