@@ -68,7 +68,7 @@ OUString getMsgString( USHORT nId, char const * aFallBackMsg )
     if ( !pResMgr || !nId )
         return OUString::createFromAscii(aFallBackMsg);
     else
-        return OUString( ResId( nId, pResMgr ));
+        return OUString( String(ResId( nId, pResMgr )));
 }
 // ----------------------------------------------------------------------------
 /** Creates the normal configuration provider.
