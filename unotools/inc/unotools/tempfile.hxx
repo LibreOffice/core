@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-02 10:22:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #define _UNOTOOLS_TEMPFILE_HXX
 
@@ -85,7 +89,7 @@ struct TempFile_Impl;
     outside this class.
 */
 
-class TempFile
+class UNOTOOLS_DLLPUBLIC TempFile
 {
     TempFile_Impl*  pImp;
     sal_Bool        bKillingFileEnabled;
