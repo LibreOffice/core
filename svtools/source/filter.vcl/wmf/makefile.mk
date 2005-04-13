@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:01:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,28 +62,15 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=wmf
-VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
-
-.IF "$(GUI)"=="WIN"
-LINKFLAGS=$(LINKFLAGS) /PACKC:32768
-.ENDIF
+.INCLUDE :	$(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES= wmf.cxx				\
-          winmtf.cxx			\
-          winwmf.cxx			\
-          enhwmf.cxx			\
-          emfwr.cxx				\
-          wmfwr.cxx
 
 SLOFILES= $(SLO)$/wmf.obj		\
           $(SLO)$/winmtf.obj	\
