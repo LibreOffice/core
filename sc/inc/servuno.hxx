@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:05:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-//#ifndef _USR_USTRING_HXX
-//#include <usr/ustring.hxx>
-//#endif
 
+class String;
 class ScDocShell;
 
 
