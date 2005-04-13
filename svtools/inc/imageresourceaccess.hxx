@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imageresourceaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:47:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
 #define SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -91,7 +95,7 @@ namespace svt
     public:
         /** determines whether the given URL denotes an image within a resource
         */
-        static  bool        isImageResourceURL( const ::rtl::OUString& _rURL );
+        SVT_DLLPUBLIC static  bool        isImageResourceURL( const ::rtl::OUString& _rURL );
 
         /** for a given URL of an image within a resource, this method retrieves
             an SvStream for this image.
@@ -102,7 +106,7 @@ namespace svt
             the image must be copied), so you are strongly encouraged to only use it
             when you know that the image is small enough.
         */
-        static  SvStream*   getImageStream(
+        SVT_DLLPUBLIC static  SvStream*   getImageStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                     const ::rtl::OUString& _rImageResourceURL
                 );
@@ -110,7 +114,7 @@ namespace svt
         /** for a given URL of an image within a resource, this method retrieves
             an <type scope="com::sun::star::io">XInputStream</type> for this image.
         */
-        static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+        SVT_DLLPUBLIC static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                 getImageXStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                     const ::rtl::OUString& _rImageResourceURL
