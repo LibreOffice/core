@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:26:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #include "pathoptions.hxx"
 
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include "cppuhelper/factory.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #endif
@@ -84,7 +88,7 @@
 #include <rtl/byteseq.hxx>
 
 #ifndef _TOOLS_INETSTRM_HXX
-#include <inetstrm.hxx>
+// @@@ #include <inetstrm.hxx>
 #endif
 
 using namespace std;
@@ -97,8 +101,9 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 
 //-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
-::rtl::OUString createIndex( vector< ::rtl::OUString > lines )
+static ::rtl::OUString createIndex( vector< ::rtl::OUString > lines )
 {
     ::rtl::OString aResult;
     const sal_Char* pLine;
@@ -131,7 +136,9 @@ using namespace com::sun::star::ucb;
     return ::rtl::OUString::createFromAscii( aResult.getStr() );
 }
 
-vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
+//-------------------------------------------------------------------------
+
+static vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
 {
     vector< ::rtl::OUString > aResult;
     sal_Bool aStart = sal_True;
@@ -184,7 +191,7 @@ vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
 
 //-------------------------------------------------------------------------
 
-sal_Bool shorterUrl( ::rtl::OUString& url )
+static sal_Bool shorterUrl( ::rtl::OUString& url )
 {
     sal_Int32 aInd = url.lastIndexOf( sal_Unicode( '/' ) );
     if( aInd > 0  && url.indexOf( ::rtl::OUString::createFromAscii( "://" ) ) != aInd-2 )
@@ -198,7 +205,7 @@ sal_Bool shorterUrl( ::rtl::OUString& url )
 
 //-------------------------------------------------------------------------
 
-::rtl::OUString getAsciiLine( const ::rtl::ByteSequence& buf )
+static ::rtl::OUString getAsciiLine( const ::rtl::ByteSequence& buf )
 {
     ::rtl::OUString aResult;
 
@@ -218,7 +225,7 @@ sal_Bool shorterUrl( ::rtl::OUString& url )
 
 //-------------------------------------------------------------------------
 
-::rtl::ByteSequence getBufFromAsciiLine( ::rtl::OUString line )
+static ::rtl::ByteSequence getBufFromAsciiLine( ::rtl::OUString line )
 {
     OSL_ENSURE( line.getLength() % 2 == 0, "Wrong syntax!\n" );
     ::rtl::OString tmpLine = ::rtl::OUStringToOString( line, RTL_TEXTENCODING_ASCII_US );
@@ -234,6 +241,26 @@ sal_Bool shorterUrl( ::rtl::OUString& url )
 
 //-------------------------------------------------------------------------
 
+static Sequence< ::rtl::OUString > copyVectorToSequence( const vector< ::rtl::OUString >& original )
+{
+    Sequence< ::rtl::OUString > newOne ( original.size() );
+    for( unsigned int i = 0; i < original.size() ; i++ )
+        newOne[i] = original[i];
+
+    return newOne;
+}
+
+static vector< ::rtl::OUString > copySequenceToVector( const Sequence< ::rtl::OUString >& original )
+{
+    vector< ::rtl::OUString > newOne ( original.getLength() );
+    for( int i = 0; i < original.getLength() ; i++ )
+        newOne[i] = original[i];
+
+    return newOne;
+}
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 PassMap StorageItem::getInfo()
 {
@@ -415,9 +442,26 @@ void StorageItem::update( const ::rtl::OUString& url, const NamePassRecord& rec 
 
 //-------------------------------------------------------------------------
 
+void StorageItem::Notify( const Sequence< ::rtl::OUString >& aPropertyNames )
+{
+    // this feature still should not be used
+    if( mainCont )
+        mainCont->Notify();
+}
+
+//-------------------------------------------------------------------------
+
+void StorageItem::Commit()
+{
+    // Do nothing, we stored everything we want already
+}
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
 PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory ):
-storageFile( NULL ),
-hasMasterPasswd( sal_False )
+    storageFile( NULL ),
+    hasMasterPasswd( sal_False )
 {
     // storageFile->Notify() can be called
     ::osl::MutexGuard aGuard( mMutex );
@@ -642,26 +686,6 @@ void PasswordContainer::updateVector( const ::rtl::OUString& url, vector< NamePa
     }
 
     toUpdate.insert( toUpdate.begin(), rec );
-}
-
-//-------------------------------------------------------------------------
-
-Sequence< ::rtl::OUString > copyVectorToSequence( const vector< ::rtl::OUString >& original )
-{
-    Sequence< ::rtl::OUString > newOne ( original.size() );
-    for( unsigned int i = 0; i < original.size() ; i++ )
-        newOne[i] = original[i];
-
-    return newOne;
-}
-
-vector< ::rtl::OUString > copySequenceToVector( const Sequence< ::rtl::OUString >& original )
-{
-    vector< ::rtl::OUString > newOne ( original.getLength() );
-    for( int i = 0; i < original.getLength() ; i++ )
-        newOne[i] = original[i];
-
-    return newOne;
 }
 
 //-------------------------------------------------------------------------
@@ -1131,21 +1155,6 @@ Reference< XSingleServiceFactory > SAL_CALL PasswordContainer::impl_createFactor
 }
 
 //-------------------------------------------------------------------------
-
-void StorageItem::Notify( const Sequence< ::rtl::OUString >& aPropertyNames )
-{
-    // this feature still should not be used
-    if( mainCont )
-        mainCont->Notify();
-}
-
-//-------------------------------------------------------------------------
-
-void StorageItem::Commit()
-{
-    // Do nothing, we stored everything we want already
-}
-
 //-------------------------------------------------------------------------
 
 MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode )
@@ -1183,3 +1192,54 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
     setContinuations( aContinuations );
 }
 
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+extern "C"
+{
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
+    void * /* pServiceManager */, void * pRegistryKey)
+{
+    if (pRegistryKey)
+    {
+        Reference< XRegistryKey > xRegistryKey (
+            reinterpret_cast< XRegistryKey* >( pRegistryKey ));
+        Reference< XRegistryKey > xNewKey;
+
+        xNewKey = xRegistryKey->createKey(
+            ::rtl::OUString::createFromAscii( "/stardiv.svtools.PasswordContainer/UNO/SERVICES" ));
+        xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.task.PasswordContainer"));
+
+        return sal_True;
+    }
+    return sal_False;
+}
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
+    const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
+{
+    void * pResult = 0;
+    if (pServiceManager)
+    {
+        Reference< XSingleServiceFactory > xFactory;
+        if (PasswordContainer::impl_getStaticImplementationName().compareToAscii (pImplementationName) == 0)
+        {
+            xFactory = PasswordContainer::impl_createFactory (
+                reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
+        }
+        if (xFactory.is())
+        {
+            xFactory->acquire();
+            pResult = xFactory.get();
+        }
+    }
+    return pResult;
+}
+
+} // extern "C"
