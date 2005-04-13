@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 15:48:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ using namespace com::sun::star::devtools;
 #include <svtools/brdcst.hxx>
 #endif
 //#ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 //#endif
 #include <com/sun/star/uno/Any.hxx>
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HXX_
@@ -2846,7 +2846,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.16 $
+    // search $Revision: 1.17 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
