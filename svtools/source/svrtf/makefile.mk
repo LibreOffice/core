@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:44:31 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:45:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,15 +64,13 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=svrtf
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
-OBJFILES =	$(OBJ)$/rtfkey2.obj
 
 SLOFILES =	\
         $(SLO)$/svparser.obj \
@@ -80,10 +78,6 @@ SLOFILES =	\
         $(SLO)$/rtfout.obj \
         $(SLO)$/rtfkeywd.obj \
         $(SLO)$/rtfkey2.obj
-
-# nur damit's was zum builden gibt
-LIB2TARGET =$(LB)$/svrtfk2.lib
-LIB2OBJFILES  =$(OBJFILES)
 
 # ==========================================================================
 
