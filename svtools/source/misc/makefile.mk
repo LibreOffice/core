@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:47:34 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:24:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,15 +61,13 @@
 #*************************************************************************
 
 PRJ=..$/..
-
-PRJNAME=			svtools
-TARGET=				misc
-LIBTARGET=			NO
-ENABLE_EXCEPTIONS=	TRUE
+PRJNAME=svtools
+TARGET=misc
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -87,69 +85,32 @@ SRS2NAME=ehdl
 SRC2FILES=\
     errtxt.src
 
-SRS3NAME=mediatyp
-SRC3FILES=\
-        mediatyp.src
+EXCEPTIONSFILES=\
+    $(SLO)$/acceleratorexecute.obj \
+    $(SLO)$/cliplistener.obj \
+    $(SLO)$/embedhlp.obj \
+    $(SLO)$/embedtransfer.obj \
+    $(SLO)$/graphictools.obj \
+    $(SLO)$/imagemgr.obj \
+    $(SLO)$/imageresourceaccess.obj \
+    $(SLO)$/templatefoldercache.obj	\
+    $(SLO)$/transfer.obj			\
+    $(SLO)$/transfer2.obj			\
+    $(SLO)$/stringtransfer.obj		\
+    $(SLO)$/urihelper.obj
 
 SLOFILES=\
-    $(LIB2OBJFILES)	\
-    $(LIB3OBJFILES) \
-    $(SLO)$/svtdata.obj
-
-OBJFILES=\
-    $(OBJ)$/svtdata.obj
-
-LIB2TARGET=$(SLB)$/misc1.lib
-LIB2OBJFILES=\
-    $(SLO)$/adrparse.obj \
-    $(SLO)$/inethist.obj \
-    $(SLO)$/inettype.obj \
-    $(SLO)$/iniadrtk.obj \
-    $(SLO)$/loginerr.obj \
-    $(SLO)$/strcrypt.obj \
-    $(SLO)$/strmadpt.obj \
-    $(SLO)$/PasswordHelper.obj
-
-LIB3TARGET=$(SLB)$/misc2.lib
-LIB3OBJFILES=\
-    $(SLO)$/filenotation.obj    \
-    $(SLO)$/productregistration.obj	\
-    $(SLO)$/templatefoldercache.obj	\
-    $(SLO)$/helpagentwindow.obj		\
-    $(SLO)$/imagemgr.obj			\
-    $(SLO)$/ehdl.obj		\
-    $(SLO)$/flbytes.obj		\
-    $(SLO)$/fstathelper.obj \
+    $(EXCEPTIONSFILES) \
+    $(SLO)$/ehdl.obj \
+    $(SLO)$/flbytes.obj \
+    $(SLO)$/helpagentwindow.obj \
     $(SLO)$/imap.obj		\
     $(SLO)$/imap2.obj		\
     $(SLO)$/imap3.obj		\
     $(SLO)$/lingucfg.obj	\
-    $(SLO)$/lngmisc.obj		\
     $(SLO)$/ownlist.obj		\
     $(SLO)$/pver.obj		\
-    $(SLO)$/urihelper.obj	\
-    $(SLO)$/vcldata.obj		\
-        $(SLO)$/embedtransfer.obj    \
-        $(SLO)$/embedhlp.obj    \
-    $(SLO)$/transfer.obj	\
-    $(SLO)$/transfer2.obj	\
-    $(SLO)$/cliplistener.obj \
-    $(SLO)$/stringtransfer.obj \
-    $(SLO)$/graphictools.obj \
-    $(SLO)$/imageresourceaccess.obj \
-    $(SLO)$/acceleratorexecute.obj
-
-EXCEPTIONSFILES=\
-        $(SLO)$/embedhlp.obj    \
-    $(SLO)$/productregistration.obj	\
-    $(SLO)$/templatefoldercache.obj	\
-    $(SLO)$/strmadpt.obj			\
-    $(SLO)$/transfer.obj			\
-    $(SLO)$/transfer2.obj			\
-    $(SLO)$/cliplistener.obj		\
-    $(SLO)$/stringtransfer.obj		\
-    $(SLO)$/imagemgr.obj            \
-    $(SLO)$/acceleratorexecute.obj
+    $(SLO)$/vcldata.obj
 
 # --- Targets -------------------------------------------------------
 
