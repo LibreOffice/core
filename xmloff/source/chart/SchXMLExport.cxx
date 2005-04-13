@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:26:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,13 +261,13 @@ SchXMLExportHelper::SchXMLExportHelper(
         XML_STYLE_FAMILY_TEXT_PARAGRAPH,
         GetXMLToken( XML_PARAGRAPH ),
         mxExpPropMapper.get(),
-        rtl::OUString( sal_Unicode( 'P' )));
+        String( 'P' ));
     // register text family also for shapes
     mrAutoStylePool.AddFamily(
         XML_STYLE_FAMILY_TEXT_TEXT,
         GetXMLToken( XML_TEXT ),
         mxExpPropMapper.get(),
-        rtl::OUString( sal_Unicode( 'T' )));
+        String( 'T' ));
 }
 
 SchXMLExportHelper::~SchXMLExportHelper() {}
