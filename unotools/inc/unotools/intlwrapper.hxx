@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intlwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:11:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #define _UNOTOOLS_INTLWRAPPER_HXX
@@ -96,7 +99,7 @@
     reset the calendar to the previous value if it isn't sure where the
     IntlWrapper did come from. <p>
  */
-class IntlWrapper
+class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
 
