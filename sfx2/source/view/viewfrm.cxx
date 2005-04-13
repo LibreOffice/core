@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:26:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #include <comphelper/storagehelper.hxx>
 
 
