@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:40:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _ARGS_HXX //autogen
-#include <svtools/args.hxx>
-#endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX
-#include <svtools/sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #pragma hdrstop
 
