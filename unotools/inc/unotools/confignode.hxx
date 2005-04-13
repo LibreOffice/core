@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:02:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #define _UNOTOOLS_CONFIGNODE_HXX_
@@ -94,7 +97,7 @@ namespace utl
         Nodes in the terminology used herein are <em>inner</em> nodes of a configuration
         tree, which means <em>no leafs</em>.
     */
-    class OConfigurationNode : public ::utl::OEventListenerAdapter
+    class UNOTOOLS_DLLPUBLIC OConfigurationNode : public ::utl::OEventListenerAdapter
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
@@ -238,7 +241,7 @@ namespace utl
         Only this class is able to commit any changes made any any OConfigurationNode
         objects.
     */
-    class OConfigurationTreeRoot : public OConfigurationNode
+    class UNOTOOLS_DLLPUBLIC OConfigurationTreeRoot : public OConfigurationNode
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >
                                 m_xCommitter;
@@ -333,6 +336,13 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4.182.1  2005/02/28 04:33:52  mnicel
+ *  Issue number:  40092
+ *  Part of visibility work
+ *
+ *  Revision 1.4  2002/12/05 09:02:46  fs
+ *  #104427# +tryCreateWithServiceFactory
+ *
  *  Revision 1.3  2001/08/21 12:40:00  fs
  *  #87721# +hasByHierarchicalName
  *
