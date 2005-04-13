@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:22:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@
 #endif
 
 #include <svtools/ehdl.hxx>
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
 
