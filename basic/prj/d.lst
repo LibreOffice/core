@@ -39,3 +39,15 @@ hedabu: ..\inc\testtool.hxx %_DEST%\inc%_EXT%\basic\testtool.hxx
 hedabu: ..\inc\basicrt.hxx %_DEST%\inc%_EXT%\basic\basicrt.hxx
 hedabu: ..\inc\dispdefs.hxx %_DEST%\inc%_EXT%\basic\dispdefs.hxx
 hedabu: ..\inc\ttstrhlp.hxx %_DEST%\inc%_EXT%\basic\ttstrhlp.hxx
+
+hedabu: ..\inc\sbx.hxx %_DEST%\inc%_EXT%\basic\sbx.hxx
+hedabu: ..\inc\sbxcore.hxx %_DEST%\inc%_EXT%\basic\sbxcore.hxx
+hedabu: ..\inc\sbxdef.hxx %_DEST%\inc%_EXT%\basic\sbxdef.hxx
+hedabu: ..\inc\sbxform.hxx %_DEST%\inc%_EXT%\basic\sbxform.hxx
+hedabu: ..\inc\sbxmeth.hxx %_DEST%\inc%_EXT%\basic\sbxmeth.hxx
+hedabu: ..\inc\sbxobj.hxx %_DEST%\inc%_EXT%\basic\sbxobj.hxx
+hedabu: ..\inc\sbxprop.hxx %_DEST%\inc%_EXT%\basic\sbxprop.hxx
+hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\basic\sbxvar.hxx
+hedabu: ..\inc\sbxbase.hxx %_DEST%\inc%_EXT%\basic\sbxbase.hxx
+hedabu: ..\inc\sbxfac.hxx %_DEST%\inc%_EXT%\basic\sbxfac.hxx
+hedabu: ..\inc\sbxmstrm.hxx %_DEST%\inc%_EXT%\basic\sbxmstrm.hxx
