@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:30:20 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #define SVTOOLS_URIHELPER_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include "com/sun/star/uno/Reference.hxx"
 #endif
@@ -107,7 +111,7 @@ namespace URIHelper {
    existence (see URIHelper::GetMaybeFileHdl), or use bCheckFileExists = false
    if you want to generate file URLs without checking for their existence.
 */
-UniString
+SVT_DLLPUBLIC UniString
 SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
              ByteString const & rTheRelURIRef,
              Link const & rMaybeFileHdl = Link(),
@@ -134,7 +138,7 @@ SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
    existence (see URIHelper::GetMaybeFileHdl), or use bCheckFileExists = false
    if you want to generate file URLs without checking for their existence.
 */
-UniString
+SVT_DLLPUBLIC UniString
 SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
              UniString const & rTheRelURIRef,
              Link const & rMaybeFileHdl = Link(),
@@ -149,10 +153,10 @@ SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
              INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
 
 //============================================================================
-void SetMaybeFileHdl(Link const & rTheMaybeFileHdl);
+SVT_DLLPUBLIC void SetMaybeFileHdl(Link const & rTheMaybeFileHdl);
 
 //============================================================================
-Link GetMaybeFileHdl();
+SVT_DLLPUBLIC Link GetMaybeFileHdl();
 
 /**
    Converts a URI reference to a relative one, ignoring certain differences (for
@@ -174,7 +178,7 @@ Link GetMaybeFileHdl();
 
    @exception com::sun::star::uno::RuntimeException if any error occurs
  */
-com::sun::star::uno::Reference< com::sun::star::uri::XUriReference >
+SVT_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uri::XUriReference >
 normalizedMakeRelative(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
     const & context,
@@ -202,11 +206,11 @@ normalizedMakeRelative(
    @deprecated
    No code should rely on the default component context.
 */
-rtl::OUString simpleNormalizedMakeRelative(
+SVT_DLLPUBLIC rtl::OUString simpleNormalizedMakeRelative(
     rtl::OUString const & baseUriReference, rtl::OUString const & uriReference);
 
 //============================================================================
-UniString
+SVT_DLLPUBLIC UniString
 FindFirstURLInText(UniString const & rText,
                    xub_StrLen & rBegin,
                    xub_StrLen & rEnd,
@@ -243,7 +247,7 @@ FindFirstURLInText(UniString const & rText,
 
     @return  The input URI with any password component removed.
  */
-UniString
+SVT_DLLPUBLIC UniString
 removePassword(UniString const & rURI,
                INetURLObject::EncodeMechanism eEncodeMechanism
                    = INetURLObject::WAS_ENCODED,
@@ -272,7 +276,7 @@ removePassword(UniString const & rURI,
     @return  The style bit corresponding to the queried content provider's
     conventions, or FSysStyle(0) if these cannot be determined.
  */
-INetURLObject::FSysStyle queryFSysStyle(UniString const & rFileUrl,
+SVT_DLLPUBLIC INetURLObject::FSysStyle queryFSysStyle(UniString const & rFileUrl,
                                         bool bAddConvenienceStyles = true)
     throw (com::sun::star::uno::RuntimeException);
 
