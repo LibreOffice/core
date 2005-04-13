@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:45:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,6 @@
 #include <new>
 #endif
 
-class String;
-
 namespace rtl
 {
 /* ======================================================================= */
@@ -113,8 +111,6 @@ namespace rtl
 
 class OUString
 {
-    friend class ::String;
-
 public:
     /** @internal */
     rtl_uString * pData;
@@ -170,6 +166,18 @@ public:
     inline OUString( rtl_uString * str, __sal_NoAcquire ) SAL_THROW( () )
         { pData = str; }
 
+
+    /**
+      New string from a single Unicode character.
+
+      @param    value       a Unicode character.
+    */
+    explicit OUString( sal_Unicode value ) SAL_THROW(())
+        : pData (0)
+    {
+        rtl_uString_newFromStr_WithLength( &pData, &value, 1 );
+    }
+
     /**
       New string from a Unicode character buffer array.
 
@@ -223,13 +231,6 @@ public:
         }
 #endif
     }
-
-    /** Convert a String (from the tools module) into an OUString.
-
-        Since both String and OUString internally use the same data structure,
-        this is a very cheap operation.
-     */
-    OUString( const String & value ) SAL_THROW(());
 
     /**
       Release the string data.
