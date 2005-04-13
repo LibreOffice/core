@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:31:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _ICNVW_HXX
 #define _ICNVW_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -77,8 +81,6 @@
 #ifndef _SV_SELENG_HXX
 #include <vcl/seleng.hxx>
 #endif
-
-#pragma hdrstop
 
 class SvPtrarr;
 class ResId;
@@ -281,7 +283,8 @@ public:
 #define WB_NOASYNCSELECTHDL     WB_NOLABEL
 
 class MnemonicGenerator;
-class SvtIconChoiceCtrl : public Control
+
+class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 
