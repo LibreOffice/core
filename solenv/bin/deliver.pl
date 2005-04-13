@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-11 13:01:45 $
+#   last change: $Author: rt $ $Date: 2005-04-13 12:50:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.83 $ ';
+$id_str = ' $Revision: 1.84 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -855,13 +855,13 @@ sub is_newer
 
         $from_stat[9]-- if $from_stat[9] % 2;
 
-        if ( $to =~ /^$common_dest/ ) {
-            if ( $from_stat[9] > $commonlogfiledate ) {
-                $commonlogfiledate = $from_stat[9];
-            }
-        } elsif ( $to =~ /^$dest/ ) {
+        if ( $to =~ /^$dest/ ) {
             if ( $from_stat[9] > $logfiledate ) {
                 $logfiledate = $from_stat[9];
+            }
+        } elsif ( $common_build && ( $to =~ /^$common_dest/ ) ) {
+            if ( $from_stat[9] > $commonlogfiledate ) {
+                $commonlogfiledate = $from_stat[9];
             }
         }
 
@@ -1109,10 +1109,10 @@ sub push_on_loglist
     }
     # platform or common tree?
     my $common;
-    if ( $entry[2] =~ /^$common_dest/ ) {
-        $common = 1;
-    } elsif ( $entry[2] =~ /^$dest/ ) {
+    if ( $entry[2] =~ /^$dest/ ) {
         $common = 0;
+    } elsif ( $common_build && ( $entry[2] =~ /^$common_dest/ )) {
+        $common = 1;
     } else {
         warn "Neither common nor platform tree?";
         return;
