@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-14 13:49:41 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:00:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,27 +62,21 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=VCL
+PRJNAME=svtools
 TARGET=igif
-DEPTARGET=vigif
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
 
 CXXFILES= gifread.cxx   \
           decode.cxx
 
 SLOFILES= $(SLO)$/gifread.obj   \
           $(SLO)$/decode.obj
-
 
 .INCLUDE :  target.mk
 
