@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:08:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@
 #include <vcl/timer.hxx>
 #endif
 #ifndef _SBXVAR_HXX
-#include <svtools/sbxvar.hxx>
+#include <sbxvar.hxx>
 #endif
 #ifndef _SBX_HXX
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
