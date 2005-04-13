@@ -1,0 +1,492 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sbxbase.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:19:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#ifndef _SHL_HXX //autogen
+#include <tools/shl.hxx>
+#endif
+
+#ifndef _STREAM_HXX //autogen
+#include <tools/stream.hxx>
+#endif
+
+#include "sbx.hxx"
+#include "sbxfac.hxx"
+#include "sbxbase.hxx"
+
+// AppData-Struktur fuer SBX:
+
+SV_IMPL_PTRARR(SbxParams,SbxParamInfo*);
+SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
+
+TYPEINIT0(SbxBase)
+
+// SBX-Daten anfordern oder ggf. anlegen
+// wir legen den Bereich einfach an und verzichten auf die Freigabe!
+
+SbxAppData* GetSbxData_Impl()
+{
+#ifndef DOS
+    SbxAppData** ppData = (SbxAppData**) ::GetAppData( SHL_SBX );
+    SbxAppData* p = *ppData;
+    if( !p )
+        p = *ppData  = new SbxAppData;
+    return p;
+#else
+    SbxAppData** ppData;
+    SbxAppData* p;
+    p = *ppData  = new SbxAppData;
+    return p;
+#endif
+}
+
+//////////////////////////////// SbxBase /////////////////////////////////
+
+DBG_NAME(SbxBase);
+
+SbxBase::SbxBase()
+{
+    DBG_CTOR( SbxBase, 0 );
+    nFlags  = SBX_READWRITE;
+}
+
+SbxBase::SbxBase( const SbxBase& r )
+{
+    DBG_CTOR( SbxBase, 0 );
+    nFlags  = r.nFlags;
+}
+
+SbxBase::~SbxBase()
+{
+    DBG_DTOR(SbxBase,0);
+}
+
+SbxBase& SbxBase::operator=( const SbxBase& r )
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    nFlags = r.nFlags;
+    return *this;
+}
+
+SbxDataType SbxBase::GetType() const
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return SbxEMPTY;
+}
+
+SbxClassType SbxBase::GetClass() const
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return SbxCLASS_DONTCARE;
+}
+
+void SbxBase::Clear()
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+}
+
+BOOL SbxBase::IsFixed() const
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return IsSet( SBX_FIXED );
+}
+
+void SbxBase::SetModified( BOOL b )
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    if( IsSet( SBX_NO_MODIFY ) )
+        return;
+    if( b )
+        SetFlag( SBX_MODIFIED );
+    else
+        ResetFlag( SBX_MODIFIED );
+}
+
+SbxError SbxBase::GetError()
+{
+    return GetSbxData_Impl()->eSbxError;
+}
+
+void SbxBase::SetError( SbxError e )
+{
+    SbxAppData* p = GetSbxData_Impl();
+    if( e && p->eSbxError == SbxERR_OK )
+        p->eSbxError = e;
+}
+
+BOOL SbxBase::IsError()
+{
+    return BOOL( GetSbxData_Impl()->eSbxError != SbxERR_OK );
+}
+
+void SbxBase::ResetError()
+{
+    GetSbxData_Impl()->eSbxError = SbxERR_OK;
+}
+
+void SbxBase::AddFactory( SbxFactory* pFac )
+{
+    SbxAppData* p = GetSbxData_Impl();
+    const SbxFactory* pTemp = pFac;
+
+    // AB, 6.3.96: HandleLast-Flag beruecksichtigen
+    USHORT nPos = p->aFacs.Count();     // Einfuege-Position
+    if( !pFac->IsHandleLast() )         // Nur, wenn nicht selbst HandleLast
+    {
+        // Neue Factory vor Factories mit HandleLast einordnen
+        while( nPos > 0 &&
+                (SbxFactory*)(p->aFacs.GetObject( nPos-1 ))->IsHandleLast() )
+            nPos--;
+    }
+    p->aFacs.Insert( pTemp, nPos );
+}
+
+void SbxBase::RemoveFactory( SbxFactory* pFac )
+{
+    SbxAppData* p = GetSbxData_Impl();
+    for( USHORT i = 0; i < p->aFacs.Count(); i++ )
+    {
+        if( p->aFacs.GetObject( i ) == pFac )
+        {
+            p->aFacs.Remove( i, 1 ); break;
+        }
+    }
+}
+
+
+SbxBase* SbxBase::Create( UINT16 nSbxId, UINT32 nCreator )
+{
+    // #91626: Hack to skip old Basic dialogs
+    // Problem: There does not exist a factory any more,
+    // so we have to create a dummy SbxVariable instead
+    if( nSbxId == 0x65 )    // Dialog Id
+        return new SbxVariable;
+
+    XubString aEmptyStr;
+    if( nCreator == SBXCR_SBX )
+      switch( nSbxId )
+    {
+        case SBXID_VALUE:       return new SbxValue;
+        case SBXID_VARIABLE:    return new SbxVariable;
+        case SBXID_ARRAY:       return new SbxArray;
+        case SBXID_DIMARRAY:    return new SbxDimArray;
+        case SBXID_OBJECT:      return new SbxObject( aEmptyStr );
+        case SBXID_COLLECTION:  return new SbxCollection( aEmptyStr );
+        case SBXID_FIXCOLLECTION:
+                                return new SbxStdCollection( aEmptyStr, aEmptyStr );
+        case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
+        case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
+    }
+    // Unbekanter Typ: Åber die Factories gehen!
+    SbxAppData* p = GetSbxData_Impl();
+    SbxBase* pNew = NULL;
+    for( USHORT i = 0; i < p->aFacs.Count(); i++ )
+    {
+        SbxFactory* pFac = p->aFacs.GetObject( i );
+        pNew = pFac->Create( nSbxId, nCreator );
+        if( pNew )
+            break;
+    }
+#ifdef DBG_UTIL
+    if( !pNew )
+    {
+        ByteString aMsg( "SBX: Keine Factory fuer SBX-ID " );
+        aMsg += ByteString::CreateFromInt32(nSbxId);
+        DbgError( aMsg.GetBuffer() );
+    }
+#endif
+    return pNew;
+}
+
+SbxObject* SbxBase::CreateObject( const XubString& rClass )
+{
+    SbxAppData* p = GetSbxData_Impl();
+    SbxObject* pNew = NULL;
+    for( USHORT i = 0; i < p->aFacs.Count(); i++ )
+    {
+        pNew = p->aFacs.GetObject( i )->CreateObject( rClass );
+        if( pNew )
+            break;
+    }
+#ifdef DBG_UTIL
+    if( !pNew )
+    {
+        ByteString aMsg( "SBX: Keine Factory fuer Objektklasse " );
+        ByteString aClassStr( (const UniString&)rClass, RTL_TEXTENCODING_ASCII_US );
+        aMsg += aClassStr;
+        DbgError( (const char*)aMsg.GetBuffer() );
+    }
+#endif
+    return pNew;
+}
+
+#if SUPD >= 507
+static BOOL bStaticEnableBroadcasting = TRUE;
+
+// Sbx-Loesung als Ersatz fuer SfxBroadcaster::Enable()
+void SbxBase::StaticEnableBroadcasting( BOOL bEnable )
+{
+    bStaticEnableBroadcasting = bEnable;
+}
+
+BOOL SbxBase::StaticIsEnabledBroadcasting( void )
+{
+    return bStaticEnableBroadcasting;
+}
+#endif
+
+
+SbxBase* SbxBase::Load( SvStream& rStrm )
+{
+    UINT16 nSbxId, nFlags, nVer;
+    UINT32 nCreator, nSize;
+    rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
+
+    // Eine Dummheit meinerseits korrigieren:
+    if( nFlags & SBX_RESERVED )
+        nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
+
+    ULONG nOldPos = rStrm.Tell();
+    rStrm >> nSize;
+    SbxBase* p = Create( nSbxId, nCreator );
+    if( p )
+    {
+        p->nFlags = nFlags;
+        if( p->LoadData( rStrm, nVer ) )
+        {
+            ULONG nNewPos = rStrm.Tell();
+            nOldPos += nSize;
+            DBG_ASSERT( nOldPos >= nNewPos, "SBX: Zu viele Daten eingelesen" );
+            if( nOldPos != nNewPos )
+                rStrm.Seek( nOldPos );
+            if( !p->LoadCompleted() )
+            {
+                // Loeschen des Objekts
+                SbxBaseRef aRef( p );
+                p = NULL;
+            }
+        }
+        else
+        {
+            rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
+            // Loeschen des Objekts
+            SbxBaseRef aRef( p );
+            p = NULL;
+        }
+    }
+    else
+        rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
+    return p;
+}
+
+// Sbx-Objekt im Stream ueberspringen
+void SbxBase::Skip( SvStream& rStrm )
+{
+    UINT16 nSbxId, nFlags, nVer;
+    UINT32 nCreator, nSize;
+    rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
+
+    ULONG nStartPos = rStrm.Tell();
+    rStrm >> nSize;
+
+    rStrm.Seek( nStartPos + nSize );
+}
+
+BOOL SbxBase::Store( SvStream& rStrm )
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    if( !( nFlags & SBX_DONTSTORE ) )
+    {
+        rStrm << (UINT32) GetCreator()
+              << (UINT16) GetSbxId()
+              << (UINT16) GetFlags()
+              << (UINT16) GetVersion();
+        ULONG nOldPos = rStrm.Tell();
+        rStrm << (UINT32) 0L;
+        BOOL bRes = StoreData( rStrm );
+        ULONG nNewPos = rStrm.Tell();
+        rStrm.Seek( nOldPos );
+        rStrm << (UINT32) ( nNewPos - nOldPos );
+        rStrm.Seek( nNewPos );
+        if( rStrm.GetError() != SVSTREAM_OK )
+            bRes = FALSE;
+        if( bRes )
+            bRes = StoreCompleted();
+        return bRes;
+    }
+    else
+        return TRUE;
+}
+
+BOOL SbxBase::LoadData( SvStream&, USHORT )
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return FALSE;
+}
+
+BOOL SbxBase::StoreData( SvStream& ) const
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return FALSE;
+}
+
+BOOL SbxBase::LoadPrivateData( SvStream&, USHORT )
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return TRUE;
+}
+
+BOOL SbxBase::StorePrivateData( SvStream& ) const
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return TRUE;
+}
+
+BOOL SbxBase::LoadCompleted()
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return TRUE;
+}
+
+BOOL SbxBase::StoreCompleted()
+{
+    DBG_CHKTHIS( SbxBase, 0 );
+    return TRUE;
+}
+
+//////////////////////////////// SbxFactory ////////////////////////////////
+
+SbxBase* SbxFactory::Create( UINT16, UINT32 )
+{
+    return NULL;
+}
+
+SbxObject* SbxFactory::CreateObject( const XubString& )
+{
+    return NULL;
+}
+
+///////////////////////////////// SbxInfo //////////////////////////////////
+
+SbxInfo::~SbxInfo()
+{}
+
+void SbxInfo::AddParam
+        ( const XubString& rName, SbxDataType eType, USHORT nFlags )
+{
+    const SbxParamInfo* p = new SbxParamInfo( rName, eType, nFlags );
+    aParams.Insert( p, aParams.Count() );
+}
+
+void SbxInfo::AddParam( const SbxParamInfo& r )
+{
+    const SbxParamInfo* p = new SbxParamInfo
+        ( r.aName, r.eType, r.nFlags, r.aTypeRef );
+    aParams.Insert( p, aParams.Count() );
+}
+
+const SbxParamInfo* SbxInfo::GetParam( USHORT n ) const
+{
+    if( n < 1 || n > aParams.Count() )
+        return NULL;
+    else
+        return aParams.GetObject( n-1 );
+}
+
+BOOL SbxInfo::LoadData( SvStream& rStrm, USHORT nVer )
+{
+    aParams.Remove( 0, aParams.Count() );
+    UINT16 nParam;
+    rStrm.ReadByteString( aComment, RTL_TEXTENCODING_ASCII_US );
+    rStrm.ReadByteString( aHelpFile, RTL_TEXTENCODING_ASCII_US );
+    rStrm >> nHelpId >> nParam;
+    while( nParam-- )
+    {
+        XubString aName;
+        UINT16 nType, nFlags;
+        UINT32 nUserData = 0;
+        rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
+        rStrm >> nType >> nFlags;
+        if( nVer > 1 )
+            rStrm >> nUserData;
+        AddParam( aName, (SbxDataType) nType, nFlags );
+        SbxParamInfo* p = aParams.GetObject( aParams.Count() - 1 );
+        p->nUserData = nUserData;
+    }
+    return TRUE;
+}
+
+BOOL SbxInfo::StoreData( SvStream& rStrm ) const
+{
+    rStrm.WriteByteString( aComment, RTL_TEXTENCODING_ASCII_US );
+    rStrm.WriteByteString( aHelpFile, RTL_TEXTENCODING_ASCII_US );
+    rStrm << nHelpId << aParams.Count();
+    for( USHORT i = 0; i < aParams.Count(); i++ )
+    {
+        SbxParamInfo* p = aParams.GetObject( i );
+        rStrm.WriteByteString( p->aName, RTL_TEXTENCODING_ASCII_US );
+        rStrm << (UINT16) p->eType
+              << (UINT16) p->nFlags
+              << (UINT32) p->nUserData;
+    }
+    return TRUE;
+}
+
