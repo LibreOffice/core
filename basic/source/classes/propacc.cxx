@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/errcode.hxx>
 #include <svtools/svarray.hxx>
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include <sbstar.hxx>
 #include <sbunoobj.hxx>
 
