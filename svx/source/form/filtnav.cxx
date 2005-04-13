@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:40:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 08:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
 {
     DBG_ASSERT(pFormItem, "AppendFilterItems(): no form item present");
 
-    FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, ::rtl::OUString(SVX_RES(RID_STR_FILTER_FILTER_OR)));
+    FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, ::rtl::OUString(String(SVX_RES(RID_STR_FILTER_FILTER_OR))));
     // insert the condition behind the last filter items
     ::std::vector<FmFilterData*>::reverse_iterator iter;
     for (iter = pFormItem->GetChilds().rbegin();
