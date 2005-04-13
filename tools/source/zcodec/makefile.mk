@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 19:25:35 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:15:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ TARGET=zcodec
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
