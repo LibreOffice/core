@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:04:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #endif
 
 #ifndef _SBX_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #pragma hdrstop
 
