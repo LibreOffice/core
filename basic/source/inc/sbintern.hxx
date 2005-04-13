@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:51:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _SB_INTERN_HXX
 #define _SB_INTERN_HXX
 
-#include <svtools/sbxfac.hxx>
+#include <sbxfac.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
