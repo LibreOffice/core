@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 13:22:52 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:09:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,89 +61,24 @@
 #*************************************************************************
 
 PRJ=..$/..
-
-PROJECTPCH=items
-PROJECTPCHSOURCE=items
-
 PRJNAME=svtools
 TARGET=items
-LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-# Every source directory generates headers in a own output directory to
-# enable parallel building of the source directories within a project!
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.awt.Point \
-    com.sun.star.awt.Rectangle \
-    com.sun.star.awt.Size \
-    com.sun.star.beans.PropertyAttribute \
-    com.sun.star.beans.PropertyState \
-    com.sun.star.beans.XPropertySetInfo \
-    com.sun.star.container.XNameAccess \
-    com.sun.star.container.XNameContainer \
-    com.sun.star.io.XActiveDataControl \
-    com.sun.star.io.XActiveDataSource \
-    com.sun.star.io.XOutputStream \
-    com.sun.star.lang.IllegalArgumentException \
-    com.sun.star.lang.XMultiServiceFactory\
-    com.sun.star.lang.XTypeProvider\
-    com.sun.star.lang.XServiceInfo\
-    com.sun.star.lang.XUnoTunnel\
-    com.sun.star.ucb.TransferResult \
-    com.sun.star.uno.TypeClass \
-    com.sun.star.uno.XAggregation \
-    com.sun.star.uno.XInterface \
-    com.sun.star.uno.XWeak \
-    com.sun.star.util.DateTime \
-    com.sun.star.util.DateTimeRange
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
-.IF "$(header)" == ""
-
-LIB2TARGET=$(SLB)$/items1.lib
-LIB2OBJFILES=\
-    $(SLO)$/bintitem.obj	\
-    $(SLO)$/cenumitm.obj	\
-    $(SLO)$/cintitem.obj	\
-    $(SLO)$/cntwall.obj	\
-    $(SLO)$/cstitem.obj	\
-    $(SLO)$/ctypeitm.obj	\
-    $(SLO)$/custritm.obj	\
-    $(SLO)$/dateitem.obj	\
-    $(SLO)$/dtritem.obj	\
-    $(SLO)$/frqitem.obj	\
-    $(SLO)$/itemiter.obj	\
-    $(SLO)$/itempool.obj	\
-    $(SLO)$/itemprop.obj	\
-    $(SLO)$/itemset.obj	\
-    $(SLO)$/lckbitem.obj	\
-    $(SLO)$/poolio.obj	\
-    $(SLO)$/poolitem.obj	\
-    $(SLO)$/sfontitm.obj	\
-    $(SLO)$/sitem.obj	    \
-    $(SLO)$/slstitm.obj	\
-    $(SLO)$/tfrmitem.obj	\
-    $(SLO)$/tresitem.obj	\
-        $(SLO)$/whiter.obj              \
-        $(SLO)$/ilstitem.obj    \
-        $(SLO)$/visitem.obj
-
-LIB3TARGET=$(SLB)$/items2.lib
-LIB3OBJFILES=\
-    $(SLO)$/globalnameitem.obj	\
+SLOFILES=\
     $(SLO)$/aeitem.obj	\
-    $(SLO)$/args.obj	\
     $(SLO)$/compat.obj	\
     $(SLO)$/eitem.obj	\
     $(SLO)$/flagitem.obj	\
+    $(SLO)$/globalnameitem.obj	\
+    $(SLO)$/imageitm.obj    \
     $(SLO)$/intitem.obj	\
     $(SLO)$/itemdel.obj	\
     $(SLO)$/macitem.obj	\
@@ -154,18 +89,7 @@ LIB3OBJFILES=\
     $(SLO)$/stritem.obj	\
     $(SLO)$/style.obj	\
     $(SLO)$/szitem.obj	\
-        $(SLO)$/imageitm.obj    \
     $(SLO)$/wallitem.obj
-
-SLOFILES=\
-    $(LIB2OBJFILES)	\
-    $(LIB3OBJFILES)
-
-.ENDIF
-
-SRS1NAME=$(TARGET)
-SRC1FILES=\
-    cstitem.src
 
 # --- Targets -------------------------------------------------------
 
