@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltokn.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-01 13:24:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _HTMLTOKN_H
 #define _HTMLTOKN_H
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -75,13 +79,13 @@ class String;
 sal_Unicode GetHTMLCharName( const String& rName );
 
 // suche die TokenID zu dem Token
-int GetHTMLToken( const String& rName );
+SVT_DLLPUBLIC int GetHTMLToken( const String& rName );
 
 // suche die TokenId zu einemm Attribut-Token
 int GetHTMLOption( const String& rName );
 
 // suche die 24-bit-Farbe zu einem Farbnamen (nicht gefunden = ULONG_MAX)
-ULONG GetHTMLColor( const String& rName );
+SVT_DLLPUBLIC ULONG GetHTMLColor( const String& rName );
 
 // beginnen immer ab 256, groesser als ein char
 const int HTML_TOKEN_START      = 0x100;
@@ -601,155 +605,4 @@ HTML_O_UNKNOWN                  = HTML_OPTION_CONTEXT_END,
 HTML_OPTION_END
 };
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/inc/htmltokn.h,v 1.2 2002-08-01 13:24:45 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 16:58:51  hr
-      initial import
-
-      Revision 1.44  2000/09/18 14:13:11  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.43  2000/08/31 13:41:09  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.42  2000/03/20 14:19:38  mib
-      unicode
-
-      Revision 1.41  1999/09/24 07:36:05  mib
-      SUPD < 550 => SUPD < 552
-
-      Revision 1.40  1999/09/17 12:37:47  mib
-      support of multiple and non system text encodings
-
-      Revision 1.39  1998/12/17 10:23:12  MIB
-      #60137#: UTF-8-/UCS-2-Unterstuetzung fuer HTML
-
-
-      Rev 1.38   17 Dec 1998 11:23:12   MIB
-   #60137#: UTF-8-/UCS-2-Unterstuetzung fuer HTML
-
-      Rev 1.37   08 Jul 1998 16:05:40   MIB
-   StarScript
-
-      Rev 1.36   26 May 1998 18:05:52   MIB
-   TABINDEX/ACCESSKEY
-
-      Rev 1.35   02 Mar 1998 08:48:20   MIB
-   SDFIXED-Option
-
-      Rev 1.34   03 Jun 1997 15:33:40   MIB
-   NOEMBED
-
-      Rev 1.33   30 May 1997 14:19:30   MIB
-   <NOBR> nun On/Off-Token
-
-      Rev 1.32   21 May 1997 10:41:16   MIB
-   Netscape 4.0-Token
-
-      Rev 1.31   10 Apr 1997 12:34:26   TRI
-   Kommar bei letzten Enumelement entfernt
-
-      Rev 1.30   02 Apr 1997 12:34:30   MIB
-   MAYSCRIPT
-
-      Rev 1.29   10 Feb 1997 18:38:52   ER
-   TableData Options SDVAL= und SDNUM=
-
-      Rev 1.28   05 Feb 1997 12:59:40   MIB
-   Erweiterungen fuer SW-Felder
-
-      Rev 1.27   29 Jan 1997 12:47:00   MIB
-   SDONRESET
-
-      Rev 1.26   23 Jan 1997 09:11:56   MIB
-   nur Kommentare (zu fix #35163#)
-
-      Rev 1.25   22 Jan 1997 09:16:22   MIB
-   onReset-Option
-
-      Rev 1.24   15 Jan 1997 11:38:08   MIB
-   NOSCRIPT-Tag
-
-      Rev 1.23   28 Nov 1996 11:10:32   JP
-   Tokens StarBasicEvents
-
-      Rev 1.22   18 Nov 1996 12:42:42   JP
-   neue Events am Image/Link
-
-      Rev 1.21   06 Nov 1996 10:32:14   MIB
-   BEHAVIOUR -> BEHAVIOR
-
-      Rev 1.20   14 Oct 1996 16:04:30   RG
-   Kein letztes Komma in enums
-
-      Rev 1.19   17 Jul 1996 12:56:36   MIB
-   neue Tags und Optionen
-
-      Rev 1.18   12 Jun 1996 11:37:36   MIB
-   ein par neue Token und Optionen
-
-      Rev 1.17   05 Jun 1996 12:37:40   MIB
-   ein par neue Strings, <TEXTFLOW>
-
-      Rev 1.16   22 May 1996 10:01:28   MIB
-   Unterstuetzung von SCRIPT
-
-      Rev 1.15   10 May 1996 12:50:24   MIB
-   FRAMESPACING und FRAMEBORDER
-
-      Rev 1.14   25 Apr 1996 09:56:10   MIB
-   neue MS-IExplorer 2.0 Schluesselwoerter und Token
-
-      Rev 1.13   18 Apr 1996 13:27:54   MIB
-   eine par neue Schluesselwoerter (BLINK, Netscape internal, erste des Explorer
-
-      Rev 1.12   27 Mar 1996 10:08:40   MIB
-   zweiten Paramter von GetHTMLCharName() entfernt
-
-      Rev 1.11   21 Mar 1996 10:43:30   MIB
-   Netscape 2.0 Elemente, Font-Farben, Verbesserungen bei PRE
-
-      Rev 1.10   06 Mar 1996 12:45:16   MIB
-   End-Tags fuer DD und DT
-
-      Rev 1.9   29 Feb 1996 12:51:24   MIB
-   Unterstuetzung von Farb-Optionen und anderes
-
-      Rev 1.8   05 Feb 1996 13:55:52   MIB
-   neue Token des HTML3 Table Model Drafts vom 23.1.96
-
-      Rev 1.7   29 Jan 1996 18:58:32   MIB
-   TR, TH und TD sind nun ON/OFF-Token
-
-      Rev 1.6   19 Jan 1996 18:39:12   MIB
-   Optionen werden im HTMLParser geparst
-
-      Rev 1.5   17 Jan 1996 18:18:22   MIB
-   HTML 3.0 Element-Tokens
-
-      Rev 1.4   06 Jul 1995 20:55:24   JP
-   neue Tags: HR, ADDRESS, SoftHyp, HardBlank
-
-      Rev 1.3   05 May 1995 19:40:58   JP
-   neue Token fuer Netscape Unterstuetzung
-
-      Rev 1.2   07 Apr 1995 00:31:18   JP
-   neue Funktionalitaet
-
-      Rev 1.1   03 Apr 1995 12:43:12   JP
-   weitere Funktionalietaet implementiert
-
-      Rev 1.0   31 Mar 1995 16:33:32   JP
-   Initial revision.
-
-*************************************************************************/
-
-#endif
-    // _HTMLTOKN_H
+#endif  // _HTMLTOKN_H
