@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:27:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #include <svx/srchdlg.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <svtools/sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 #ifndef _UIVWIMP_HXX
 #include <uivwimp.hxx>
