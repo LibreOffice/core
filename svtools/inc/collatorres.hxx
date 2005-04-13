@@ -2,9 +2,13 @@
 #ifndef SVTOOLS_COLLATORRESSOURCE_HXX
 #define SVTOOLS_COLLATORRESSOURCE_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 class CollatorRessourceData;
 
-class CollatorRessource
+class SVT_DLLPUBLIC CollatorRessource
 {
     private:
 
