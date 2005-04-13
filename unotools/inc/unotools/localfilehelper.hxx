@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-21 09:00:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 #include <rtl/ustring.hxx>
 
@@ -74,7 +77,7 @@
 namespace utl
 {
 
-class LocalFileHelper
+class UNOTOOLS_DLLPUBLIC LocalFileHelper
 {
 public:
                     /**
