@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 15:03:32 $
+#   last change: $Author: obo $ $Date: 2005-04-13 12:11:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ TARGET=gen
 .INCLUDE : svpre.mk
 .INCLUDE : settings.mk
 .INCLUDE : sv.mk
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 .IF "$(WITH_GPC)"!="NO"
 CDEFS+=-DHAVE_GPC_H
@@ -92,6 +93,7 @@ SLOFILES=       $(SLO)$/toolsin.obj     \
             $(SLO)$/config.obj		\
             $(SLO)$/poly.obj		\
             $(SLO)$/poly2.obj		\
+            $(SLO)$/svborder.obj \
             $(SLO)$/line.obj
 
 OBJFILES=       $(OBJ)$/toolsin.obj     \
@@ -103,6 +105,7 @@ OBJFILES=       $(OBJ)$/toolsin.obj     \
             $(OBJ)$/config.obj		\
             $(OBJ)$/poly.obj		\
             $(OBJ)$/poly2.obj		\
+            $(OBJ)$/svborder.obj \
             $(OBJ)$/line.obj
 
 # --- Targets ------------------------------------------------------
