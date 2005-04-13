@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 17:21:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,19 @@
 #ifndef _SVTOOLS_TEMPLDLG_HXX
 #define _SVTOOLS_TEMPLDLG_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
+#endif
 
 struct SvtTmplDlg_Impl;
 
@@ -71,7 +81,7 @@ struct SvtTmplDlg_Impl;
 
 class SvtTemplateWindow;
 
-class SvtDocumentTemplateDialog : public ModalDialog
+class SVT_DLLPUBLIC SvtDocumentTemplateDialog : public ModalDialog
 {
 private:
     FixedLine           aLine;
@@ -83,13 +93,13 @@ private:
 
     SvtTmplDlg_Impl*    pImpl;
 
-    DECL_LINK(          SelectHdl_Impl, SvtTemplateWindow* );
-    DECL_LINK(          DoubleClickHdl_Impl, SvtTemplateWindow* );
-    DECL_LINK(          NewFolderHdl_Impl, SvtTemplateWindow* );
-    DECL_LINK(          SendFocusHdl_Impl, SvtTemplateWindow* );
-    DECL_LINK(          OKHdl_Impl, PushButton* );
-    DECL_LINK(          OrganizerHdl_Impl, PushButton* );
-    DECL_LINK(          UpdateHdl_Impl, Timer* );
+    DECL_DLLPRIVATE_LINK(           SelectHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(           DoubleClickHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(           NewFolderHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(           SendFocusHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(           OKHdl_Impl, PushButton* );
+    DECL_DLLPRIVATE_LINK(           OrganizerHdl_Impl, PushButton* );
+    DECL_DLLPRIVATE_LINK(           UpdateHdl_Impl, Timer* );
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );
@@ -113,7 +123,7 @@ public:
     void        SelectTemplateFolder();
 
 private:
-    void InitImpl( );
+    SVT_DLLPRIVATE void InitImpl( );
 };
 
 #endif // _SVTOOLS_TEMPLDLG_HXX
