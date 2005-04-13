@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:23:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,12 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
-#include "accessibilityoptions.hxx"
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
 #endif
+#define SVT_DLLIMPLEMENTATION
+
+#include "accessibilityoptions.hxx"
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
