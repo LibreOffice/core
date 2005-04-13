@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _CALENDAR_HXX
 #define _CALENDAR_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _INTN_HXX
 #include <tools/intn.hxx>
@@ -473,7 +477,7 @@ dort ein eigener Calendar erzeugt werden.
 // - CalendarField -
 // -----------------
 
-class CalendarField : public DateField
+class SVT_DLLPUBLIC CalendarField : public DateField
 {
 private:
     ImplCFieldFloatWin* mpFloatWin;
@@ -487,9 +491,9 @@ private:
     Link                maSelectHdl;
 
 #ifdef _SV_CALENDAR_CXX
-                        DECL_LINK( ImplSelectHdl, Calendar* );
-                        DECL_LINK( ImplClickHdl, PushButton* );
-                        DECL_LINK( ImplPopupModeEndHdl, FloatingWindow* );
+                        DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar* );
+                        DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
+                        DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow* );
 #endif
 
 public:
