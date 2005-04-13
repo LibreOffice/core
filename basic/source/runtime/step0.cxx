@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:52:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <tools/fsys.hxx>
 #endif
 
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
 #include "sbintern.hxx"
