@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-11 09:59:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,16 @@
 
 // includes ******************************************************************
 
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#ifndef _IMAGE_HXX
-#include <vcl/image.hxx>
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
 #endif
 
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+class Image;
+class String;
 class INetURLObject;
 
 namespace svtools {
@@ -107,24 +110,24 @@ struct VolumeInfo
 class SvFileInformationManager
 {
 private:
-    static String   GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
+    SVT_DLLPRIVATE static String    GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
 
 public:
     // depricated, because no high contrast mode
-    static Image    GetImage( const INetURLObject& rURL, BOOL bBig = FALSE );
-    static Image    GetFileImage( const INetURLObject& rURL, BOOL bBig = FALSE );
-    static Image    GetImageNoDefault( const INetURLObject& rURL, BOOL bBig = FALSE );
-    static Image    GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig = FALSE );
+    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    static Image    GetFileImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    static Image    GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig = sal_False );
 
     // now with high contrast mode
-    static Image    GetImage( const INetURLObject& rURL, BOOL bBig, BOOL bHighContrast );
-    static Image    GetFileImage( const INetURLObject& rURL, BOOL bBig, BOOL bHighContrast );
-    static Image    GetImageNoDefault( const INetURLObject& rURL, BOOL bBig, BOOL bHighContrast );
-    static Image    GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig, BOOL bHighContrast );
+    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast );
 
-    static String   GetDescription( const INetURLObject& rObject );
-    static String   GetFileDescription( const INetURLObject& rObject );
-    static String   GetFolderDescription( const svtools::VolumeInfo& rInfo );
+    SVT_DLLPUBLIC static String GetDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static String GetFileDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static String GetFolderDescription( const svtools::VolumeInfo& rInfo );
 };
 
 #endif
