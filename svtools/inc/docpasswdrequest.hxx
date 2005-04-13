@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpasswdrequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:23:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,18 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_SVTOOLS_DOCPASSWDREQUEST_HXX
+#define INCLUDED_SVTOOLS_DOCPASSWDREQUEST_HXX
+
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_TASK_DOCUMENTPASSWORDREQUEST_HPP_
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONPASSWORD_HPP_
-#include <com/sun/star/task/XInteractionPassword.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
-#include <com/sun/star/task/XInteractionAbort.hpp>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -80,39 +81,10 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+class AbortContinuation;
+class PasswordContinuation;
 
-class AbortContinuation : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionAbort >
-{
-    sal_Bool mbSelected;
-
-public:
-    AbortContinuation() : mbSelected( sal_False ) {}
-
-    sal_Bool isSelected() { return mbSelected; }
-
-    void reset() { mbSelected = sal_False; }
-
-    virtual void SAL_CALL select() throw(::com::sun::star::uno::RuntimeException) { mbSelected = sal_True; }
-};
-
-class PasswordContinuation : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionPassword >
-{
-    sal_Bool mbSelected;
-    ::rtl::OUString maPassword;
-
-public:
-    PasswordContinuation() : mbSelected( sal_False ) {}
-
-    sal_Bool isSelected() { return mbSelected; }
-
-    void reset() { mbSelected = sal_False; }
-
-    virtual void SAL_CALL select() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPassword( const ::rtl::OUString& aPass ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
-};
-
-class RequestDocumentPassword : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class SVL_DLLPUBLIC RequestDocumentPassword : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     ::com::sun::star::uno::Any m_aRequest;
 
@@ -120,20 +92,16 @@ class RequestDocumentPassword : public ::cppu::WeakImplHelper1< ::com::sun::star
                     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
                 > m_lContinuations;
 
-    AbortContinuation*  m_pAbort;
-
+    AbortContinuation*      m_pAbort;
     PasswordContinuation*   m_pPassword;
 
 public:
     RequestDocumentPassword( ::com::sun::star::task::PasswordRequestMode nMode, ::rtl::OUString aName );
 
-    sal_Bool    isAbort() { return m_pAbort->isSelected(); }
-    sal_Bool    isPassword() { return m_pPassword->isSelected(); }
+    sal_Bool isAbort();
+    sal_Bool isPassword();
 
-    ::rtl::OUString getPassword()
-    {
-        return m_pPassword->getPassword();
-    }
+    ::rtl::OUString getPassword();
 
     virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -144,3 +112,4 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
+#endif /* INCLUDED_SVTOOLS_DOCPASSWDREQUEST_HXX */
