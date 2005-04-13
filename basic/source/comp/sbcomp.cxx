@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbcomp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:47:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #pragma hdrstop
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #include "sbcomp.hxx"
 #include "image.hxx"
 
