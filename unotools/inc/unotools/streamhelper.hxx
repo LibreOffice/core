@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 11:16:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
+
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #define _UNOTOOLS_STREAMHELPER_HXX_
 
@@ -96,7 +100,7 @@ namespace utl
  */
     typedef ::cppu::WeakImplHelper2<stario::XInputStream, stario::XSeekable> InputStreamHelper_Base;
     // needed for some compilers
-class OInputStreamHelper : public InputStreamHelper_Base
+class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public InputStreamHelper_Base
 {
     ::osl::Mutex    m_aMutex;
     SvLockBytesRef  m_xLockBytes;
