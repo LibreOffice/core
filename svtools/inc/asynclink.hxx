@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynclink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:03:20 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SVTOOLS_ASYNCLINK_HXX
 #define  SVTOOLS_ASYNCLINK_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -78,7 +82,7 @@ namespace vos
 
 namespace svtools {
 
-class AsynchronLink
+class SVT_DLLPUBLIC AsynchronLink
 {
     Link   _aLink;
     ULONG  _nEventId;
@@ -88,8 +92,9 @@ class AsynchronLink
     void*  _pArg;
     vos::OMutex* _pMutex;
 
-    DECL_STATIC_LINK( AsynchronLink, HandleCall, void* );
-    void Call_Impl( void* pArg );
+    DECL_DLLPRIVATE_STATIC_LINK( AsynchronLink, HandleCall, void* );
+    SVT_DLLPRIVATE void Call_Impl( void* pArg );
+
 public:
     AsynchronLink( const Link& rLink ) :
         _aLink( rLink ), _nEventId( 0 ), _pTimer( 0 ), _bInCall( FALSE ),
