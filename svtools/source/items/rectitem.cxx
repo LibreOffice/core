@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rectitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-28 14:17:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 11:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "rectitem.hxx"
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -71,10 +73,7 @@
 #include <tools/stream.hxx>
 #endif
 
-#include "sbx.hxx"
-#include "args.hxx"
 #include "poolitem.hxx"
-#include "rectitem.hxx"
 #include "memberid.hrc"
 
 // STATIC DATA -----------------------------------------------------------
