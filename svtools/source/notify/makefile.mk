@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:42:52 $
+#   last change: $Author: obo $ $Date: 2005-04-13 11:30:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,12 +64,11 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=notify
-TARGETSTAT=_notify
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -85,18 +84,6 @@ SLOFILES =	\
         $(SLO)$/listeneriter.obj \
         $(SLO)$/broadcast.obj
 
-OBJFILES =	\
-        $(OBJ)$/smplhint.obj \
-        $(OBJ)$/hint.obj \
-        $(OBJ)$/lstner.obj \
-        $(OBJ)$/isethint.obj \
-        $(OBJ)$/cancel.obj \
-        $(OBJ)$/brdcst.obj \
-        $(OBJ)$/listener.obj \
-        $(OBJ)$/listenerbase.obj \
-        $(OBJ)$/listeneriter.obj \
-        $(OBJ)$/broadcast.obj
-
 HXX1TARGET= notify
 HXX1EXT=    hxx
 HXX1FILES=  $(INC)$/hint.hxx                \
@@ -104,12 +91,6 @@ HXX1FILES=  $(INC)$/hint.hxx                \
              $(INC)$/lstner.hxx              \
              $(INC)$/brdcst.hxx
 HXX1EXCL=   -E:*include*
-
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1OBJFILES=  $(SLOFILES)
-
-LIB2TARGET= $(LB)$/$(TARGETSTAT).lib
-LIB2OBJFILES=  $(OBJFILES)
 
 # --- Targets -------------------------------------------------------
 
