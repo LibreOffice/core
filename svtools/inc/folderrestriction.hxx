@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderrestriction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:00:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,18 @@
 #ifndef SVTOOLS_FOLDER_RESTRICTION_HXX
 #define SVTOOLS_FOLDER_RESTRICTION_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 //........................................................................
 namespace svt
@@ -78,7 +86,7 @@ namespace svt
         method to restrict some UI presentation, such as browsing
         in the file open dialog.</p>
     */
-    void    getUnrestrictedFolders( ::std::vector< String >& _rFolders );
+    SVL_DLLPUBLIC void getUnrestrictedFolders( ::std::vector< String >& _rFolders );
 
 //........................................................................
 }   // namespace svt
