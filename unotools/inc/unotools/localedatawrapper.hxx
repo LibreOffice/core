@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 12:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef INCLUDED_UNOTOOLS_READWRITEMUTEXGUARD_HXX
 #include <unotools/readwritemutexguard.hxx>
 #endif
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotools/unotoolsdllapi.h"
+#endif
 
 
 namespace com { namespace sun { namespace star {
@@ -93,7 +96,7 @@ class Date;
 class Time;
 class CalendarWrapper;
 
-class LocaleDataWrapper
+class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
