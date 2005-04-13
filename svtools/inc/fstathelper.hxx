@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fstathelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 13:28:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 10:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVTOOLS_FSTATHELPER_HXX
 #define _SVTOOLS_FSTATHELPER_HXX
 
+#ifndef INCLUDED_SVLDLLAPI_H
+#include "svtools/svldllapi.h"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -82,18 +86,18 @@ namespace FStatHelper {
 
     @return     it was be able to get the date/time stamp
 */
-sal_Bool GetModifiedDateTimeOfFile( const UniString& rURL,
+SVL_DLLPUBLIC sal_Bool GetModifiedDateTimeOfFile( const UniString& rURL,
                                     Date* pDate, Time* pTime );
 
 /** Return if under the URL a document exist. This is only a wrapper for the
     UCB.IsContent.
 */
-sal_Bool IsDocument( const UniString& rURL );
+SVL_DLLPUBLIC sal_Bool IsDocument( const UniString& rURL );
 
 /** Return if under the URL a folder exist. This is only a wrapper for the
     UCB.isFolder.
 */
-sal_Bool IsFolder( const UniString& rURL );
+SVL_DLLPUBLIC sal_Bool IsFolder( const UniString& rURL );
 
 };
 
