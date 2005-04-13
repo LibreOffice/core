@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:52:02 $
+ *  last change: $Author: obo $ $Date: 2005-04-13 09:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <tools/date.hxx>
 #endif
 #ifndef _SBXVAR_HXX
-#include <svtools/sbxvar.hxx>
+#include <sbxvar.hxx>
 #endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
@@ -88,7 +88,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
+#include <sbx.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
