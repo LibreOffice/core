@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemdel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 11:07:29 $
+ *  last change: $Author: vg $ $Date: 2005-04-14 13:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount( 0 );
-    DBG_CHKOBJ( pItem, SfxPoolItem, 0 );
+    //DBG_CHKOBJ( pItem, SfxPoolItem, 0 );
     delete pItem;
 }
 
