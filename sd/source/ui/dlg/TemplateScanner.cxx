@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 22:30:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-15 10:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,8 @@ void TemplateScanner::ScanEntries (Content& rRoot, TemplateDir* pDir)
             //  Check wether the entry is an impress template.  If so add a
             //  new entry to the resulting list (which is created first if
             //  necessary).
-            if (    (aContentType == IMPRESS_XML_TEMPLATE_OASIS)
+            if (    (aContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
+                ||  (aContentType == IMPRESS_XML_TEMPLATE_OASIS)
                 ||  (aContentType == IMPRESS_BIN_TEMPLATE)
                 ||  (aContentType == IMPRESS_XML_TEMPLATE)
                 ||  (aContentType == IMPRESS_XML_TEMPLATE_B))
