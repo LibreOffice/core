@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicmdstohtml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:00:02 $
+ *  last change: $Author: cd $ $Date: 2005-04-15 07:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,35 @@ enum MODULES
     MODULE_COUNT
 };
 
+enum APPMODULES
+{
+    APPMODULE_BACKINGCOMP,
+    APPMODULE_WRITER,
+    APPMODULE_WRITERWEB,
+    APPMODULE_WRITERGLOBAL,
+    APPMODULE_CALC,
+    APPMODULE_DRAW,
+    APPMODULE_IMPRESS,
+    APPMODULE_CHART,
+    APPMODULE_BIBLIOGRAPHY,
+    APPMODULE_BASICIDE,
+    APPMODULE_DBAPP,
+    APPMODULE_DBBROWSER,
+    APPMODULE_DBQUERY,
+    APPMODULE_DBRELATION,
+    APPMODULE_DBTABLE,
+    APPMODULE_COUNT
+};
+
+enum UIELEMENTTYPE
+{
+    UITYPE_TOOLBAR,
+    UITYPE_MENUBAR,
+    UITYPE_STATUSBAR,
+    UITYPE_ACCELERATOR,
+    UITYPE_COUNT
+};
+
 struct Projects
 {
     const char* pProjectFolder;
@@ -96,6 +125,20 @@ struct Projects
     const char* pCSVPrefix;
     bool        bSlotCommands;
     MODULES     eBelongsTo;
+};
+
+struct AppModules
+{
+    const char* pModuleName;
+    const char* pModuleIdentifier;
+    const char* pProjectFolder;
+    const char* pSubFolder;
+};
+
+struct UIElementTypeName
+{
+    const char* Name;
+    const char* ShortName;
 };
 
 Projects ProjectModule_Mapping[] =
@@ -110,10 +153,41 @@ Projects ProjectModule_Mapping[] =
     { "starmath"    , "sm",     "starmath", true,   MODULE_MATH           },
     { "basctl"      , "basctl", "bastctl",  true,   MODULE_BASIC          },
     { "extensions"  , "bib",    "",         false,  MODULE_BIBLIO         },
-    { "offmgr"      , "ofa",    "",         false,  MODULE_BACKINGCOMP    },
+    { "framework"   , "fwk",    "",         false,  MODULE_BACKINGCOMP    },
     { "dbaccess"    , "dbu",    "",         false,  MODULE_DBACCESS       },
     { 0             , 0,        "",         false,  MODULE_BASIC          }
 };
+
+AppModules AppModules_Mapping[] =
+{
+    { "Backing Component"       , "startmodule"     ,"framework" , 0                      },
+    { "Writer"                  , "swriter"         ,"sw"        , 0                      },
+    { "Writer Web"              , "sweb"            ,"sw"        , 0                      },
+    { "Writer Global"           , "sglobal"         ,"sw"        , 0                      },
+    { "Calc"                    , "scalc"           ,"sc"        , 0                      },
+    { "Draw"                    , "sdraw"           ,"sd"        , 0                      },
+    { "Impress"                 , "simpress"        ,"sd"        , 0                      },
+    { "Chart"                   , "schart"          ,"sch"       , 0                      },
+    { "Bibliography"            , "sbibliography"   ,"extensions", "source/bibliography"  },
+    { "Basic IDE"               , "basicide"        ,"basctl"    , 0                      },
+    { "Database Application"    , "dbapp"           ,"dbaccess"  , 0                      },
+    { "Database Browser"        , "dbbrowser"       ,"dbaccess"  , 0                      },
+    { "Database Query"          , "dbquery"         ,"dbaccess"  , 0                      },
+    { "Database Relation"       , "dbrelation"      ,"dbaccess"  , 0                      },
+    { "Database Table"          , "dbtable"         ,"dbaccess"  , 0                      },
+    { 0                         , 0                 ,0           , 0                      }
+};
+
+UIElementTypeName UIElementTypeFolderName[] =
+{
+    { "toolbar",    "T"  },
+    { "menubar",    "M"  },
+    { "statusbar",  "S"  },
+    { "accelerator","A"  },
+    { 0                  }
+};
+
+const char UICONFIGFOLDER[] = "uiconfig";
 
 const char XMLFileExtension[] = ".xcu";
 const char* ModuleName[] =
@@ -169,6 +243,17 @@ struct CommandLabels
     }
 };
 
+struct CommandInfo
+{
+    rtl::OUString   aCommand;
+    unsigned long   nAppModules; // bit field for every app module
+    unsigned long   nUIElements; // bit field for every ui element type
+
+    bool CommandInfo::operator< ( const CommandInfo& aCmdInfo ) const
+    {
+        return ( aCommand.compareTo( aCmdInfo.aCommand ) <= 0 );
+    }
+};
 
 struct OUStringHashCode
 {
@@ -178,13 +263,15 @@ struct OUStringHashCode
     }
 };
 
+typedef std::hash_map< rtl::OUString, CommandInfo, OUStringHashCode, ::std::equal_to< OUString > > CommandToCommandInfoMap;
 typedef std::hash_map< int, CommandLabels > CommandIDToLabelsMap;
 typedef std::vector< CommandLabels > CommandLabelsVector;
-
-//typedef std::hash_map< OUString, CommandLabels, OUStringHashCode, ::std::equal_to< OUString > > CommandToLabelsMap;
+typedef std::vector< CommandInfo > CommandInfoVector;
 
 static CommandIDToLabelsMap moduleMapFiles[MODULE_COUNT];
 static CommandLabelsVector moduleCmdVector[MODULE_COUNT];
+static CommandToCommandInfoMap commandInfoMap;
+static CommandInfoVector commandInfoVector;
 
 bool ExtractVersionNumber( const OUString& rVersion, OUString& rVersionNumber )
 {
@@ -292,6 +379,171 @@ bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& 
     return true;
 }
 
+bool ReadXMLFile( const OUString& aFileURL, APPMODULES eAppModule, UIELEMENTTYPE eUIType, const char* pItemTag, const char* pAttributeTag, sal_Int32 nAttributeTagSize )
+{
+    osl::File  aXMLFile( aFileURL );
+    if ( aXMLFile.open( OpenFlag_Read ) != osl::FileBase::E_None )
+    {
+        fprintf(stdout, "failed!\n");
+        return false;
+    }
+
+    sal_Bool            bEOF;
+    ::rtl::ByteSequence aXMLLine;
+
+    while ( aXMLFile.isEndOfFile( &bEOF ) == osl::FileBase::E_None && !bEOF )
+    {
+        aXMLFile.readLine( aXMLLine );
+
+        OString aLine( (const char *)aXMLLine.getConstArray(), aXMLLine.getLength() );
+
+        if ( aLine.indexOf( pItemTag ) >= 0 )
+        {
+            sal_Int32 nIndex = aLine.indexOf( pAttributeTag );
+            if (( nIndex >= 0 ) && (( nIndex+nAttributeTagSize+1 ) < aLine.getLength() ))
+            {
+                sal_Int32 nIndex2 = aLine.indexOf( "\"", nIndex+nAttributeTagSize );
+                OString aCmd = aLine.copy( nIndex+nAttributeTagSize, (nIndex2-(nIndex+nAttributeTagSize)) );
+
+                OUString aCmdString = OStringToOUString( aCmd, RTL_TEXTENCODING_ASCII_US );
+
+                CommandToCommandInfoMap::iterator pIter = commandInfoMap.find( aCmdString );
+                if ( pIter != commandInfoMap.end() )
+                {
+                    pIter->second.nAppModules |= ( 1 << eAppModule );
+                    pIter->second.nUIElements |= ( 1 << eUIType );
+                }
+                else
+                {
+                    CommandInfo aCmdInfo;
+                    aCmdInfo.aCommand = aCmdString;
+                    aCmdInfo.nAppModules = ( 1 << eAppModule );
+                    aCmdInfo.nUIElements = ( 1 << eUIType );
+                    commandInfoMap.insert( CommandToCommandInfoMap::value_type( aCmdString, aCmdInfo ));
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool ReadMenuBarXML( const OUString& aFileURL, APPMODULES eAppModule )
+{
+    static char MENUITEM_TAG[]      = "<menu:menuitem";
+    static char MENUITEM_ID[]       = "menu:id=\"";
+    static int  MENUITEM_ID_SIZE    = strlen( MENUITEM_ID );
+
+    return ReadXMLFile( aFileURL, eAppModule, UITYPE_MENUBAR, MENUITEM_TAG, MENUITEM_ID, MENUITEM_ID_SIZE );
+}
+
+bool ReadToolBarXML( const OUString& aFileURL, APPMODULES eAppModule )
+{
+    static char TOOLBARITEM_TAG[]      = "<toolbar:toolbaritem";
+    static char TOOLBARITEM_ID[]       = "xlink:href=\"";
+    static int  TOOLBARITEM_ID_SIZE    = strlen( TOOLBARITEM_ID );
+
+    return ReadXMLFile( aFileURL, eAppModule, UITYPE_TOOLBAR, TOOLBARITEM_TAG, TOOLBARITEM_ID, TOOLBARITEM_ID_SIZE );
+}
+
+bool ReadStatusBarXML( const rtl::OUString& aFileURL, APPMODULES eAppModule )
+{
+    static char STATUSBARITEM_TAG[]      = "<statusbar:statusbaritem";
+    static char STATUSBARITEM_ID[]       = "xlink:href=\"";
+    static int  STATUSBARITEM_ID_SIZE    = strlen( STATUSBARITEM_ID );
+
+    return ReadXMLFile( aFileURL, eAppModule, UITYPE_STATUSBAR, STATUSBARITEM_TAG, STATUSBARITEM_ID, STATUSBARITEM_ID_SIZE );
+}
+
+bool ReadAcceleratorXML( const rtl::OUString& aFileURL, APPMODULES eAppModule )
+{
+    static char ACCELERATORITEM_TAG[]      = "<accel:item";
+    static char ACCELERATORITEM_ID[]       = "xlink:href=\"";
+    static int  ACCELERATORITEM_ID_SIZE    = strlen( ACCELERATORITEM_ID );
+
+    return ReadXMLFile( aFileURL, eAppModule, UITYPE_ACCELERATOR, ACCELERATORITEM_TAG, ACCELERATORITEM_ID, ACCELERATORITEM_ID_SIZE );
+}
+
+bool ReadXMLFile( const rtl::OUString& aFileURL, APPMODULES eAppModule, UIELEMENTTYPE eUIElementType )
+{
+    switch ( eUIElementType )
+    {
+        case UITYPE_TOOLBAR:
+            return ReadToolBarXML( aFileURL, eAppModule );
+        case UITYPE_MENUBAR:
+            return ReadMenuBarXML( aFileURL, eAppModule );
+        case UITYPE_STATUSBAR:
+            return ReadStatusBarXML( aFileURL, eAppModule );
+        case UITYPE_ACCELERATOR:
+            return ReadAcceleratorXML( aFileURL, eAppModule );
+        default:
+            return false;
+    }
+}
+
+bool ReadXMLFilesForAppModule( const rtl::OUString& aFolderURL, APPMODULES eAppModule )
+{
+    osl::Directory aDir( aFolderURL );
+    if ( aDir.open() == osl::FileBase::E_None )
+    {
+        osl::DirectoryItem aFolderItem;
+        while ( aDir.getNextItem( aFolderItem ) == osl::FileBase::E_None )
+        {
+            osl::FileStatus aFileStatus( FileStatusMask_FileName );
+
+            aFolderItem.getFileStatus( aFileStatus );
+
+            OUString aFolderName = aFileStatus.getFileName();
+            int i=0;
+            while ( i < UITYPE_COUNT )
+            {
+                if ( aFolderName.equalsAscii( UIElementTypeFolderName[i].Name ))
+                {
+                    OUStringBuffer aBuf( aFolderURL );
+                    aBuf.appendAscii( "/" );
+                    aBuf.append( aFolderName );
+
+                    OUString aUIElementFolderURL( aBuf.makeStringAndClear() );
+                    osl::Directory aUIElementTypeDir( aUIElementFolderURL );
+                    if ( aUIElementTypeDir.open() == osl::FileBase::E_None )
+                    {
+                        osl::DirectoryItem aItem;
+                        while ( aUIElementTypeDir.getNextItem( aItem ) == osl::FileBase::E_None )
+                        {
+                            osl::FileStatus aFileStatus( FileStatusMask_FileName );
+
+                            aItem.getFileStatus( aFileStatus );
+                            if ( aFileStatus.getFileType() == osl_File_Type_Regular )
+                            {
+                                OUStringBuffer aBuf( aUIElementFolderURL );
+                                aBuf.appendAscii( "/" );
+                                aBuf.append( aFileStatus.getFileName() );
+
+                                ReadXMLFile( aBuf.makeStringAndClear(), eAppModule, (UIELEMENTTYPE)i );
+                            }
+                            else if (( aFileStatus.getFileType() == osl_File_Type_Directory ) &&
+                                     ( aFileStatus.getFileName().equalsAscii( "en-US" )))
+                            {
+                                // Accelerators are language-dependent
+                                OUStringBuffer aBuf( aUIElementFolderURL );
+                                aBuf.appendAscii( "/" );
+                                aBuf.append( aFileStatus.getFileName() );
+                                aBuf.appendAscii( "/default.xml" );
+
+                                ReadXMLFile( aBuf.makeStringAndClear(), eAppModule, (UIELEMENTTYPE)i );
+                            }
+                        }
+                    }
+                    break;
+                }
+                ++i;
+            }
+        }
+    }
+
+    return true;
+}
+
 void SortCommandTable( MODULES eModule )
 {
     // copy entries from hash_map to vector
@@ -305,6 +557,23 @@ void SortCommandTable( MODULES eModule )
 
     CommandLabelsVector::iterator pIterStart = moduleCmdVector[int(eModule)].begin();
     CommandLabelsVector::iterator pIterEnd   = moduleCmdVector[int(eModule)].end();
+
+    std::sort( pIterStart, pIterEnd );
+}
+
+void SortCommandInfoVector()
+{
+    // copy entries from hash_map to vector
+    CommandToCommandInfoMap::iterator pIter = commandInfoMap.begin();
+    while ( pIter != commandInfoMap.end() )
+    {
+        CommandInfo& rCmdInfo = pIter->second;
+        commandInfoVector.push_back( rCmdInfo );
+        ++pIter;
+    }
+
+    CommandInfoVector::iterator pIterStart = commandInfoVector.begin();
+    CommandInfoVector::iterator pIterEnd   = commandInfoVector.end();
 
     std::sort( pIterStart, pIterEnd );
 }
@@ -429,6 +698,17 @@ T = toolbox<br/>\n \
 S = status bar<br/>\n \
 </p>\n \
 <br/>\n";
+
+bool WriteLevel( osl::File& rFile, int nLevel )
+{
+    const char cTab[] = "\t";
+
+    sal_uInt64 nWritten;
+    for ( int i = 0; i < nLevel; i++ )
+        rFile.write( cTab, strlen( cTab ), nWritten );
+
+    return true;
+}
 
 bool WriteJumpTable( osl::File& rFile )
 {
@@ -618,24 +898,84 @@ bool WriteHTMLFile( const OUString& aOutputDirURL)
     return true;
 }
 
-bool WriteLevel( osl::File& rFile, int nLevel )
+bool WriteUICommand( osl::File& rFile, const CommandInfo& rCmdInfo )
 {
-    const char cTab[] = "\t";
+    static const char MODULE_HAS_COMMAND[] = ",1";
+    static const char MODULE_NOT_COMMAND[] = ",0";
+    static const char NEWLINE[]            = "\n";
+    static const char COMMA[]              = ",";
 
     sal_uInt64 nWritten;
-    for ( int i = 0; i < nLevel; i++ )
-        rFile.write( cTab, strlen( cTab ), nWritten );
+
+    OString aCommand = OUStringToOString( rCmdInfo.aCommand, RTL_TEXTENCODING_ASCII_US );
+
+    rFile.write( aCommand, aCommand.getLength(), nWritten );
+    rFile.write( COMMA, strlen( COMMA ), nWritten );
+
+    if ( rCmdInfo.nUIElements & ( 1<<UITYPE_ACCELERATOR ))
+        rFile.write( UIElementTypeFolderName[UITYPE_ACCELERATOR].ShortName, strlen( UIElementTypeFolderName[UITYPE_ACCELERATOR].ShortName ), nWritten );
+    if ( rCmdInfo.nUIElements & ( 1<<UITYPE_TOOLBAR))
+        rFile.write( UIElementTypeFolderName[UITYPE_TOOLBAR].ShortName, strlen( UIElementTypeFolderName[UITYPE_TOOLBAR].ShortName ), nWritten );
+    if ( rCmdInfo.nUIElements & ( 1<<UITYPE_MENUBAR ))
+        rFile.write( UIElementTypeFolderName[UITYPE_MENUBAR].ShortName, strlen( UIElementTypeFolderName[UITYPE_MENUBAR].ShortName ), nWritten );
+    if ( rCmdInfo.nUIElements & ( 1<<UITYPE_STATUSBAR ))
+        rFile.write( UIElementTypeFolderName[UITYPE_STATUSBAR].ShortName, strlen( UIElementTypeFolderName[UITYPE_STATUSBAR].ShortName ), nWritten );
+
+    sal_Int32 nApps = rCmdInfo.nAppModules;
+    for ( sal_Int32 i = 0; i < APPMODULE_COUNT; i++ )
+    {
+        if ( nApps & ( 1 << i ))
+            rFile.write( MODULE_HAS_COMMAND, strlen( MODULE_HAS_COMMAND ), nWritten );
+        else
+            rFile.write( MODULE_NOT_COMMAND, strlen( MODULE_NOT_COMMAND ), nWritten );
+    }
+    rFile.write( NEWLINE, strlen( NEWLINE ), nWritten );
 
     return true;
 }
 
-bool WriteSeparator( osl::File& rFile, int nLevel )
+bool WriteUICommands( const OUString& aOutputDirURL )
 {
-    static const char MenuSeparator[] = "<menu:menuseparator/>\n";
+    static const char COMMA[]   = ",";
+    static const char HEADER[]  = "User interface command, GUI Element";
+    static const char NEWLINE[] = "\n";
 
-    sal_uInt64 nWritten;
-    WriteLevel( rFile, nLevel );
-    rFile.write( MenuSeparator, strlen( MenuSeparator ), nWritten );
+    OUString aOutputDirectoryURL( aOutputDirURL );
+    if ( aOutputDirectoryURL.getLength() > 0 && aOutputDirectoryURL[aOutputDirectoryURL.getLength()-1] != '/' )
+        aOutputDirectoryURL += OUString::createFromAscii( "/" );
+
+    OUString aOutputFileURL( aOutputDirectoryURL );
+    aOutputFileURL += OUString::createFromAscii( "UsedCommands.csv" );
+
+    osl::File aCSVFile( aOutputFileURL );
+    osl::File::RC nRet = aCSVFile.open( OpenFlag_Create|OpenFlag_Write );
+    if ( nRet == osl::File::E_EXIST )
+    {
+        nRet = aCSVFile.open( OpenFlag_Write );
+        if ( nRet == osl::File::E_None )
+            nRet = aCSVFile.setSize( 0 );
+    }
+
+    if ( nRet == osl::FileBase::E_None )
+    {
+        sal_uInt64 nWritten;
+
+        aCSVFile.write( HEADER, strlen( HEADER ), nWritten );
+        for ( sal_Int32 i = 0; i < APPMODULE_COUNT; i++ )
+        {
+            aCSVFile.write( COMMA, strlen( COMMA ), nWritten );
+            aCSVFile.write( AppModules_Mapping[i].pModuleName, strlen( AppModules_Mapping[i].pModuleName ), nWritten );
+        }
+        aCSVFile.write( NEWLINE, strlen( NEWLINE ), nWritten );
+
+        for ( sal_uInt32 j = 0; j < commandInfoVector.size(); j++ )
+        {
+            const CommandInfo& rCmdInfo = commandInfoVector[j];
+            WriteUICommand( aCSVFile, rCmdInfo );
+        }
+
+        aCSVFile.close();
+    }
 
     return true;
 }
@@ -695,7 +1035,32 @@ bool Convert( sal_Bool        bUseProduct,
                         ReadCSVFile( aCSVFileURL, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
                         break;
                     }
-                    j++;
+                    ++j;
+                }
+
+                j = 0;
+                while ( AppModules_Mapping[j].pModuleIdentifier != 0 )
+                {
+                    if ( aFileName.equalsAscii( AppModules_Mapping[j].pProjectFolder ))
+                    {
+                        OUStringBuffer aBuf( aAbsInDirURL );
+
+                        aBuf.appendAscii( "/" );
+                        aBuf.append( aFileName );
+                        aBuf.appendAscii( "/" );
+                        if ( AppModules_Mapping[j].pSubFolder != 0 )
+                        {
+                            aBuf.appendAscii( AppModules_Mapping[j].pSubFolder );
+                            aBuf.appendAscii( "/" );
+                        }
+                        aBuf.appendAscii( UICONFIGFOLDER );
+                        aBuf.appendAscii( "/" );
+                        aBuf.appendAscii( AppModules_Mapping[j].pModuleIdentifier );
+
+                        OUString aXMLAppModuleFolder( aBuf.makeStringAndClear() );
+                        ReadXMLFilesForAppModule( aXMLAppModuleFolder, (APPMODULES)j );
+                    }
+                    ++j;
                 }
             }
 
@@ -708,6 +1073,9 @@ bool Convert( sal_Bool        bUseProduct,
     osl::FileBase::getAbsoluteFileURL( aWorkDir, aOutDirURL, aOutDirURL );
 
     WriteHTMLFile( aOutDirURL );
+
+    SortCommandInfoVector();
+    WriteUICommands( aOutDirURL );
 
     return true;
 }
