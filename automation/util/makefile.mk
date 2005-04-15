@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 15:48:46 $
+#   last change: $Author: obo $ $Date: 2005-04-15 11:10:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ SHL1STDLIBS= \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(COMPHELPERLIB) \
-            $(SVMEMLIB) \
             $(SOTLIB) \
             $(VOSLIB)
 
@@ -132,7 +131,6 @@ APP1STDLIBS+= \
             $(SVTOOLLIB) \
             $(SVLLIB) \
             $(SVLIB) \
-            $(SVMEMLIB) \
             $(SALLIB) \
             $(SJLIB) \
             $(VOSLIB) \
@@ -203,7 +201,6 @@ APP3STDLIBS= \
             $(TOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLIB) \
-            $(SVMEMLIB) \
             $(SJLIB) \
             $(SO2LIB)
 .IF "$(GUI)"=="UNX"
