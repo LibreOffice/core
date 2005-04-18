@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:59:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1696,8 +1696,10 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             {
                 bool bStartTimer = true;
                 // use resize buffering for user resizes
-                // ownerdraw decorated windows can be resized immediately
-                if( pWindow->mpWindowImpl->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE) && !(pWindow->GetStyle() & WB_OWNERDRAWDECORATION) )
+                // ownerdraw decorated windows and floating windows can be resized immediately (i.e. synchronously)
+                if( pWindow->mpWindowImpl->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE)
+                    && !(pWindow->GetStyle() & WB_OWNERDRAWDECORATION)  // synchronous resize for ownerdraw decorated windows (toolbars)
+                    && !pWindow->mpWindowImpl->mbFloatWin )             // synchronous resize for floating windows, #i43799#
                 {
                     if( pWindow->mpWindowImpl->mpClientWindow )
                     {
