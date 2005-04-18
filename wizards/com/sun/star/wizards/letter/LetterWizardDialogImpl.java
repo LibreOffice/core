@@ -129,8 +129,30 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             initConfiguration();
 
             //set the language according to the Linguistic
-            getCurrentLetter().cp_Norm = getOfficeLinguistic();
+            int oL = getOfficeLinguistic();
+            myConfig.cp_BusinessLetter.cp_Norm = oL;
+            myConfig.cp_PrivateOfficialLetter.cp_Norm = oL;
+            myConfig.cp_PrivateLetter.cp_Norm = oL;
             initializeTemplates(xMSF);
+
+            if (myConfig.cp_BusinessLetter.cp_Greeting.equals("")){
+                myConfig.cp_BusinessLetter.cp_Greeting = resources.GreetingLabels[0];
+            }
+            if (myConfig.cp_BusinessLetter.cp_Salutation.equals("")){
+                myConfig.cp_BusinessLetter.cp_Salutation = resources.SalutationLabels[0];
+            }
+            if (myConfig.cp_PrivateOfficialLetter.cp_Greeting.equals("")){
+                myConfig.cp_PrivateOfficialLetter.cp_Greeting = resources.GreetingLabels[1];
+            }
+            if (myConfig.cp_PrivateOfficialLetter.cp_Salutation.equals("")){
+                myConfig.cp_PrivateOfficialLetter.cp_Salutation = resources.SalutationLabels[1];
+            }
+            if (myConfig.cp_PrivateLetter.cp_Greeting.equals("")){
+                myConfig.cp_PrivateLetter.cp_Greeting = resources.GreetingLabels[2];
+            }
+            if (myConfig.cp_PrivateLetter.cp_Salutation.equals("")){
+                myConfig.cp_PrivateLetter.cp_Salutation = resources.SalutationLabels[2];
+            }
 
             //update the dialog UI according to the loaded Configuration
             updateUI();
