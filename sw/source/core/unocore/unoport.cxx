@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 12:38:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,15 +118,15 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_SETPROPERTYTOLERANTFAILED_HPP_
-#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_GETPROPERTYTOLERANTRESULT_HPP_
-#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
-#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
-#endif
+//#ifndef _COM_SUN_STAR_BEANS_SETPROPERTYTOLERANTFAILED_HPP_
+//#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_BEANS_GETPROPERTYTOLERANTRESULT_HPP_
+//#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
+//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+//#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -622,6 +622,9 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
 /* -----------------------------29.09.03 11:44--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+/* disabled for #i46921#
+
 uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
         const uno::Sequence< Any >& rValues )
@@ -826,6 +829,10 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
 
     return aResult;
 }
+
+
+*/
+
 
 /* -----------------------------02.04.01 11:44--------------------------------
 
