@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:37:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,36 +336,23 @@ void SetTemplate_Impl( const String &rFileName,
                         const String &rLongName,
                         SfxObjectShell *pDoc)
 {
-    // DocInfo von pDoc 'plattmachen'
     SfxDocumentInfo &rInfo = pDoc->GetDocInfo();
     rInfo.Clear();
 
-    // DocInfo vom Template laden
-    INetURLObject aObj( rFileName );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
-
-    // TODO/LATER: the template date must be retrieved from document ( was not really implemented for XML format in SO7 )
-    SfxDocumentInfo aTemplInfo;
-    rInfo.SetTemplateDate( aTemplInfo.GetChanged().GetTime() );
-
-    // Template in DocInfo von pDoc eintragen
+    // write TemplateName to DocumentInfo of document
+    // TemplateDate stays as default (=current date)
     if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
     {
         String aFoundName;
         if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rLongName, aFoundName ) )
         {
+            INetURLObject aObj( rFileName );
             rInfo.SetTemplateFileName( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
             rInfo.SetTemplateName( rLongName );
-
-            // wenn schon eine Config da ist, mu\s sie aus dem Template sein
-//REMOVE                BOOL bHasConfig = (pDoc->GetConfigManager() != 0);
-//REMOVE                rInfo.SetTemplateConfig( bHasConfig );
-//REMOVE                pDoc->SetTemplateConfig( bHasConfig );
             rInfo.SetTemplateConfig( sal_False );
         }
     }
 
-    // DocInfo in Stream schreiben
     pDoc->FlushDocInfo();
 }
 
