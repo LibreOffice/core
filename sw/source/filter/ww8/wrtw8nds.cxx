@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:28:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,10 +543,11 @@ void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
     }
 
     // #i46087# patch from james_clark; complex texts needs the undocumented SPRM 0x0882 with param 0x81.
-    if (rWrt.bWrtWW8 && GetScript() == ScriptType::COMPLEX)
+    if (rWrt.bWrtWW8 && GetScript() == ScriptType::COMPLEX && !IsCharRTL())
     {
         rWrt.InsUInt16(0x882);
         rWrt.pO->Insert((BYTE)0x81, rWrt.pO->Count());
+        rWrt.pDop->bUseThaiLineBreakingRules=true;
     }
 
     /*
@@ -1906,7 +1907,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             // #i44815# adjust numbering/indents for numbered paragraphs
             //          without number (NO_NUMLEVEL)
-            if( pNd->GetNum() != NULL  &&  ! pNd->IsNumbered() )
+            // #i47013# need to check pNd->GetNumRule()!=NULL as well.
+            if( pNd->GetNum() != NULL  &&  ! pNd->IsNumbered() && pNd->GetNumRule()!=NULL )
             {
                 // WW8 does not know numbered paragraphs without number
                 // (NO_NUMLEVEL). In OutWW8_SwNumRuleItem, we will export
