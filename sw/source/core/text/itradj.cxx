@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:50:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,6 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
     ASSERT( pCurr->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
     pCurr->InitSpaceAdd();
-    MSHORT nNull = 0;
     xub_StrLen nGluePortion = 0;
     xub_StrLen nCharCnt = 0;
     MSHORT nSpaceIdx = 0;
@@ -209,8 +208,9 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
             // in the wider line
             if( pMulti->HasTabulator() )
             {
-                if ( nSpaceIdx == pCurr->GetSpaceAdd().Count() )
-                    pCurr->GetSpaceAdd().Insert( nNull, nSpaceIdx );
+                if ( nSpaceIdx == pCurr->GetLLSpaceAddCount() )
+                    pCurr->SetLLSpaceAdd( 0, nSpaceIdx );
+
                 nSpaceIdx++;
                 nGluePortion = 0;
                 nCharCnt = 0;
@@ -227,20 +227,25 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
         {
             if( pPos->InFixMargGrp() )
             {
-                if ( nSpaceIdx == pCurr->GetSpaceAdd().Count() )
-                    pCurr->GetSpaceAdd().Insert( nNull, nSpaceIdx );
+                if ( nSpaceIdx == pCurr->GetLLSpaceAddCount() )
+                    pCurr->SetLLSpaceAdd( 0, nSpaceIdx );
+
+                const long nGluePortionWidth = static_cast<SwGluePortion*>(pPos)->GetPrtGlue() *
+                                               SPACING_PRECISION_FACTOR;
+
                 if( nGluePortion )
                 {
-                    ( pCurr->GetSpaceAdd() )[nSpaceIdx] =
-                         ( (SwGluePortion*)pPos )->GetPrtGlue() / nGluePortion;
+                    const long nSpaceAdd = nGluePortionWidth / nGluePortion;
+                    pCurr->SetLLSpaceAdd( nSpaceAdd , nSpaceIdx );
                     pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
                 }
                 else if ( IsOneBlock() && nCharCnt > 1 )
                 {
-                    ( pCurr->GetSpaceAdd() )[nSpaceIdx] =
-                        - ( (SwGluePortion*)pPos )->GetPrtGlue() / (nCharCnt-1);
+                    const long nSpaceAdd = nGluePortionWidth / ( nCharCnt - 1 );
+                    pCurr->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
                     pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
                 }
+
                 nSpaceIdx++;
                 nGluePortion = 0;
                 nCharCnt = 0;
@@ -251,10 +256,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
         GetInfo().SetIdx( GetInfo().GetIdx() + pPos->GetLen() );
         if ( pPos == pStopAt )
         {
-            if ( nSpaceIdx == pCurr->GetSpaceAdd().Count() )
-                pCurr->GetSpaceAdd().Insert( nNull, nSpaceIdx );
-            else
-                pCurr->GetSpaceAdd()[nSpaceIdx] = 0;
+            pCurr->SetLLSpaceAdd( 0, nSpaceIdx );
             break;
         }
         pPos = pPos->GetPortion();
@@ -265,7 +267,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
  *                    SwTxtAdjuster::CalcKanaAdj()
  *************************************************************************/
 
-USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
+SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
 {
     ASSERT( pCurr->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
     ASSERT( !pCurr->GetpKanaComp(), "pKanaComp already exists!!" );
@@ -276,8 +278,8 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
     const USHORT nNull = 0;
     MSHORT nKanaIdx = 0;
     long nKanaDiffSum = 0;
-    USHORT nRepaintOfst = 0;
-    USHORT nX = 0;
+    SwTwips nRepaintOfst = 0;
+    SwTwips nX = 0;
     sal_Bool bNoCompression = sal_False;
 
     // Nicht vergessen:
@@ -390,7 +392,7 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
                 nKanaDiffSum /= 10000;
             }
 
-            pPos->Width( pPos->Width() - nDecompress );
+            pPos->Width( static_cast<USHORT>(pPos->Width() - nDecompress) );
 
             if ( pPos->InTabGrp() )
                 // set fix width to width
