@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:56:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,7 +1050,7 @@ Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
     if (maTotalWindowArea != rAvailableSpace)
     {
         maTotalWindowArea = rAvailableSpace;
-        aContentArea = Rearrange();
+        aContentArea = Rearrange(true);
     }
 
     return aContentArea;
