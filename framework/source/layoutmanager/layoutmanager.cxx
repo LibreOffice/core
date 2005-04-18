@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:13:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bDoLayout( sal_False )
         ,   m_bVisible( sal_True )
         ,   m_bParentWindowVisible( sal_False )
+        ,   m_bMustDoLayout( sal_True )
         ,   m_xModuleManager( Reference< XModuleManager >(
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::com::sun::star::ui::XUIElementFactory >(
@@ -827,14 +828,20 @@ void LayoutManager::implts_createCustomToolBars()
     ReadGuard aReadLock( m_aLock );
     if ( !m_bComponentAttached )
         return;
+
     Reference< XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     Reference< XFrame > xFrame( m_xFrame );
+    Reference< XModel > xModel;
     Reference< XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr, UNO_QUERY );
     Reference< XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr, UNO_QUERY );
     aReadLock.unlock();
 
     if ( xFrame.is() )
     {
+        xModel = impl_getModelFromFrame( xFrame );
+        if ( implts_isPreviewModel( xModel ))
+            return; // no custom toolbars for preview frame!
+
         sal_Int32 i( 0 );
         Sequence< Sequence< PropertyValue > > aTbxSeq;
         if ( xDocCfgMgr.is() )
@@ -868,11 +875,21 @@ void LayoutManager::implts_createAddonsToolBars()
     WriteGuard aWriteLock( m_aLock );
     if ( !m_bComponentAttached )
         return;
+
+    Reference< XModel > xModel;
+    Reference< XFrame > xFrame( m_xFrame );
+    if ( !xFrame.is() )
+        return;
+
     if ( !m_pAddonOptions )
         m_pAddonOptions = new AddonsOptions;
+
     Reference< XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
-    Reference< XFrame > xFrame( m_xFrame );
     aWriteLock.unlock();
+
+    xModel = impl_getModelFromFrame( xFrame );
+    if ( implts_isPreviewModel( xModel ))
+        return; // no addon toolbars for preview frame!
 
     UIElementVector aUIElementVector;
     Sequence< Sequence< PropertyValue > > aAddonToolBarData;
@@ -4944,13 +4961,15 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::implts_doLayout" );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     sal_Bool bNoLock( sal_False );
     css::awt::Rectangle aCurrBorderSpace;
     Reference< css::awt::XWindow > xContainerWindow;
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor;
 
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
+
+    sal_Bool bMustDoLayout( m_bMustDoLayout );
     if ( !m_bParentWindowVisible )
         return sal_False;
 
@@ -4979,7 +4998,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
         sal_Bool                bGotRequestedBorderSpace( sal_True );
         sal_Bool                bEqual = implts_compareRectangles( aBorderSpace, aCurrBorderSpace );
 
-        if ( !bEqual || bForceRequestBorderSpace )
+        if ( !bEqual || bForceRequestBorderSpace || bMustDoLayout )
         {
             if ( bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace ))
             {
@@ -4988,6 +5007,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
                 /* SAFE AREA ----------------------------------------------------------------------------------------------- */
                 aWriteGuard.lock();
                 m_aDockingArea = aBorderSpace;
+                m_bMustDoLayout = sal_False;
                 aWriteGuard.unlock();
                 /* SAFE AREA ----------------------------------------------------------------------------------------------- */
             }
@@ -6325,7 +6345,7 @@ void SAL_CALL LayoutManager::windowResized( const css::awt::WindowEvent& aEvent 
 throw( css::uno::RuntimeException )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
 
     // Request to set docking area space again.
     css::awt::Rectangle               aDockingArea( m_aDockingArea );
@@ -6338,6 +6358,7 @@ throw( css::uno::RuntimeException )
         // We have to call our resize handler at least once synchronously, as some
         // application modules need this. So we have to check if this is the first
         // call after the async layout time expired.
+        m_bMustDoLayout = sal_True;
         if ( !m_aAsyncLayoutTimer.IsActive() )
         {
             const Link& aLink = m_aAsyncLayoutTimer.GetTimeoutHdl();
@@ -6368,7 +6389,7 @@ throw( css::uno::RuntimeException )
     {
         sal_Bool bLocked( m_bDockingInProgress );
         sal_Bool bDoLayout( m_bDoLayout );
-        aReadLock.unlock();
+        aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
         if ( !bLocked && !bDoLayout )
@@ -6491,6 +6512,7 @@ throw ( RuntimeException )
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         WriteGuard aWriteLock( m_aLock );
         m_bComponentAttached = sal_True;
+        m_bMustDoLayout = sal_True;
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -6515,13 +6537,14 @@ throw ( RuntimeException )
     {
         RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
 
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        // SAFE AREA -----------------------------------------------------------------------------------------------
         WriteGuard aWriteLock( m_aLock );
-        m_bComponentAttached = sal_True;
+        m_bComponentAttached = sal_False;
         aWriteLock.unlock();
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        // SAFE AREA -----------------------------------------------------------------------------------------------
 
         implts_reset( sal_False );
+
     }
 }
 
