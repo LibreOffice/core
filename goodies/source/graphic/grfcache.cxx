@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-09 11:35:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,8 @@ private:
     GraphicAttr                 maAttr;
     Size                        maOutSizePix;
     ULONG                       mnCacheSize;
+    ULONG                       mnOutDevDrawMode;
+    USHORT                      mnOutDevBitCount;
 
 public:
 
@@ -460,7 +462,9 @@ public:
                                     mpRefCacheEntry( pRefCacheEntry ),
                                     mpMtf( NULL ), mpBmpEx( new BitmapEx( rBmpEx ) ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
-                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) )
+                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
+                                    mnOutDevDrawMode( pOut->GetDrawMode() ),
+                                    mnOutDevBitCount( pOut->GetBitCount() )
                                     {
                                     }
 
@@ -471,7 +475,9 @@ public:
                                     mpRefCacheEntry( pRefCacheEntry ),
                                     mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( NULL ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
-                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) )
+                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
+                                    mnOutDevDrawMode( pOut->GetDrawMode() ),
+                                    mnOutDevBitCount( pOut->GetBitCount() )
                                     {
                                     }
 
@@ -482,6 +488,8 @@ public:
     const Size&                 GetOutputSizePixel() const { return maOutSizePix; }
     const ULONG                 GetCacheSize() const { return mnCacheSize; }
     const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
+    const ULONG                 GetOutDevDrawMode() const { return mnOutDevDrawMode; }
+    const USHORT                GetOutDevBitCount() const { return mnOutDevBitCount; }
 
     void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
     const ::vos::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
@@ -489,9 +497,17 @@ public:
     BOOL                        Matches( OutputDevice* pOut, const Point& rPtPixel, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
                                 {
+                                    // #i46805# Additional match
+                                    // criteria: outdev draw mode and
+                                    // bit count. One cannot reuse
+                                    // this cache object, if it's
+                                    // e.g. generated for
+                                    // DRAWMODE_GRAYBITMAP.
                                     return( ( pCacheEntry == mpRefCacheEntry ) &&
                                             ( maAttr == rAttr ) &&
-                                            ( ( maOutSizePix == rSzPixel ) || ( !maOutSizePix.Width() && !maOutSizePix.Height() ) ) );
+                                            ( ( maOutSizePix == rSzPixel ) || ( !maOutSizePix.Width() && !maOutSizePix.Height() ) ) &&
+                                            ( pOut->GetBitCount() == mnOutDevBitCount ) &&
+                                            ( pOut->GetDrawMode() == mnOutDevDrawMode ) );
                                 }
 
     void                        Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const;
