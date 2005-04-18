@@ -2,9 +2,9 @@
  *
  *  $RCSfile: com_sun_star_lib_connections_pipe_PipeConnection.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 11:04:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,20 @@
 /*****************************************************************************/
 /* exception macros */
 
-#define ThrowException(env, type, msg) { \
-    (*env)->ThrowNew(env, (*env)->FindClass(env, type), msg); }
+static void ThrowException(JNIEnv * env, char const * type, char const * msg) {
+    jclass c;
+    (*env)->ExceptionClear(env);
+    c = (*env)->FindClass(env, "java/lang/RuntimeException");
+    if (c == NULL) {
+        (*env)->ExceptionClear(env);
+        (*env)->FatalError(
+            env, "JNI FindClass(\"java/lang/RuntimeException\") failed");
+    }
+    if ((*env)->ThrowNew(env, c, msg) != 0) {
+        (*env)->ExceptionClear(env);
+        (*env)->FatalError(env, "JNI ThrowNew failed");
+    }
+}
 
 /*****************************************************************************/
 /* helper functions prototypes */
