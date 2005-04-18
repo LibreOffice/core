@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:26:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,12 +240,12 @@ ModalDialog RID_DLG_NEWLIB
     };
     String STR_NEWMACRO
     {
-        Text [ de ] = "Macro erstellen" ;
+        Text [ de ] = "Makro erstellen" ;
         Text [ en-US ] = "Create Macro" ;
     };
     String STR_FT_NEWMACRO
     {
-        Text [ de ] = "Geben Sie den Namen für das neue Macro ein." ;
+        Text [ de ] = "Geben Sie den Namen für das neue Makro ein." ;
         Text [ en-US ] = "Enter the name for the new macro." ;
     };
     String STR_RENAME
