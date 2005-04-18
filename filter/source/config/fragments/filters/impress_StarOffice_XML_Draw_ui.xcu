@@ -1,7 +1,7 @@
     <node oor:name="impress_StarOffice_XML_Draw" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarOffice 6.0/7 Drawing (StarOffice Impress)</value>
-            <value xml:lang="de">StarOffice 6.0/7 Zeichnung (StarOffice Impress)</value>
-            <value xml:lang="x-translate">StarOffice 6.0/7 Drawing (StarOffice Impress)</value>
+            <value xml:lang="en-US">%productname% %formatversion% Drawing (%productname% Impress)</value>
+            <value xml:lang="de">%productname% %formatversion% Zeichnung (%productname% Impress)</value>
+            <value xml:lang="x-translate">%productname% %formatversion% Drawing (%productname% Impress)</value>
         </prop>
     </node>
