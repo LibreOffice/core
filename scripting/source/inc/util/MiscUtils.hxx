@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:47:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #define _SCRIPT_FRAMEWORK_MISCUTILS_HXX_
 
 #include <rtl/ustring>
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -273,12 +277,9 @@ static ::rtl::OUString parseLocationName( const ::rtl::OUString& location )
     // strip out the last leaf of location name
     // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
     ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
-
-    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
-    {
-        temp = temp.copy( lastSlashIndex + 1 );
-    }
+    INetURLObject aURLObj( temp );
+    if ( !aURLObj.HasError() )
+        temp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     return temp;
 }
 
