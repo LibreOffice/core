@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:55:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ static const ::rtl::OUString CFG_PACKAGE_RECOVERY             = ::rtl::OUString:
 static const ::rtl::OUString CFG_ENTRY_RECOVERYLIST           = ::rtl::OUString::createFromAscii("RecoveryList"                   );
 static const ::rtl::OUString CFG_PATH_RECOVERYINFO            = ::rtl::OUString::createFromAscii("RecoveryInfo"                   );
 static const ::rtl::OUString CFG_ENTRY_CRASHED                = ::rtl::OUString::createFromAscii("Crashed"                        );
-static const ::rtl::OUString CFG_ENTRY_EXISTSRECOVERYIDATA    = ::rtl::OUString::createFromAscii("ExistsRecoveryData"             );
+static const ::rtl::OUString CFG_ENTRY_SESSIONDATA            = ::rtl::OUString::createFromAscii("SessionData"                    );
 static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_ENABLED       = ::rtl::OUString::createFromAscii("AutoSave/Enabled"               );
 static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_TIMEINTERVALL = ::rtl::OUString::createFromAscii("AutoSave/TimeIntervall"         );
 
@@ -309,6 +309,22 @@ static const ::rtl::OUString OPERATION_STOP                  = ::rtl::OUString::
 static const ::rtl::OUString OPERATION_UPDATE                = ::rtl::OUString::createFromAscii("update");
 
 #define MIN_TIME_FOR_USER_IDLE 10000 // 10s user idle
+
+//-----------------------------------------------
+// #define ENABLE_RECOVERY_LOGGING
+#undef ENABLE_RECOVERY_LOGGING
+#ifdef ENABLE_RECOVERY_LOGGING
+    #define LOGFILE_RECOVERY "recovery.log"
+
+    #define LOG_RECOVERY(MSG)                       \
+        {                                           \
+            WRITE_LOGFILE(LOGFILE_RECOVERY, MSG)    \
+            WRITE_LOGFILE(LOGFILE_RECOVERY, "\n")   \
+        }
+#else
+    #undef LOGFILE_RECOVERY
+    #define LOG_RECOVERY(MSG)
+#endif
 
 //-----------------------------------------------
 // TODO debug - remove it!
@@ -496,6 +512,9 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
     throw(css::uno::RuntimeException)
 {
+    LOG_RECOVERY("AutoRecovery::dispatch() starts ...")
+    LOG_RECOVERY(U2B(aURL.Complete).getStr())
+
     // valid request ?
     sal_Int32 eNewJob = AutoRecovery::implst_classifyJob(aURL);
     if (eNewJob == AutoRecovery::E_NO_JOB)
@@ -571,27 +590,36 @@ void AutoRecovery::implts_dispatch()
         // else
         if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
         {
+            LOG_RECOVERY("... prepare emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_prepareEmergencySave();
         }
         else
         if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
         {
+            LOG_RECOVERY("... do emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_doEmergencySave();
         }
         else
         if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
+        {
+            LOG_RECOVERY("... do recovery ...")
             implts_doRecovery();
+        }
         else
         if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
         {
+            LOG_RECOVERY("... do session save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_doSessionSave();
         }
         else
         if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
+        {
+            LOG_RECOVERY("... do session restore ...")
             implts_doSessionRestore();
+        }
         else
         if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
             implts_backupWorkingEntry();
@@ -1488,6 +1516,8 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 //-----------------------------------------------
 void AutoRecovery::implts_prepareSessionShutdown()
 {
+    LOG_RECOVERY("AutoRecovery::implts_prepareSessionShutdown() starts ...")
+
     // a) reset modified documents (of course the must be saved before this method is called!)
     // b) close it without showing any UI!
 
@@ -2356,6 +2386,8 @@ void AutoRecovery::implts_doRecovery()
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionSave()
 {
+    LOG_RECOVERY("AutoRecovery::implts_doSessionSave()")
+
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
@@ -2385,11 +2417,23 @@ void AutoRecovery::implts_doSessionSave()
     // reset all modified documents, so the dont show any UI on closing ...
     // and close all documents, so we can shutdown the OS!
     implts_prepareSessionShutdown();
+
+    // Write a hint for "stored session data" into the configuration, so
+    // the on next startup we know what's happen last time
+    ::comphelper::ConfigurationHelper::writeDirectKey(
+        m_xSMGR,
+        CFG_PACKAGE_RECOVERY,
+        CFG_PATH_RECOVERYINFO,
+        CFG_ENTRY_SESSIONDATA,
+        css::uno::makeAny(sal_True),
+        ::comphelper::ConfigurationHelper::E_STANDARD);
 }
 
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionRestore()
 {
+    LOG_RECOVERY("AutoRecovery::implts_doSessionRestore() ...")
+
     AutoRecovery::ETimerType eSuggestedTimer = AutoRecovery::E_DONT_START_TIMER;
     do
     {
@@ -2406,6 +2450,18 @@ void AutoRecovery::implts_doSessionRestore()
 
     // make all opened documents visible
     implts_changeAllDocVisibility(sal_True);
+
+    // Reset the configuration hint for "session save"!
+    LOG_RECOVERY("... reset config key 'SessionData'")
+    ::comphelper::ConfigurationHelper::writeDirectKey(
+        m_xSMGR,
+        CFG_PACKAGE_RECOVERY,
+        CFG_PATH_RECOVERYINFO,
+        CFG_ENTRY_SESSIONDATA,
+        css::uno::makeAny(sal_False),
+        ::comphelper::ConfigurationHelper::E_STANDARD);
+
+    LOG_RECOVERY("... AutoRecovery::implts_doSessionRestore()")
 }
 
 //-----------------------------------------------
@@ -2547,8 +2603,26 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
     switch(nHandle)
     {
         case AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA :
-//                aValue = fpc::getDirectValue(m_xSMGR, CFG_PACKAGE_RECOVERY, CFG_PATH_RECOVERYINFO, CFG_ENTRY_EXISTSRECOVERYIDATA);
-                aValue <<= ((sal_Bool)(m_lDocCache.size()>0));
+                {
+                    css::uno::Any aSessionVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                                    m_xSMGR,
+                                                    CFG_PACKAGE_RECOVERY,
+                                                    CFG_PATH_RECOVERYINFO,
+                                                    CFG_ENTRY_SESSIONDATA,
+                                                    ::comphelper::ConfigurationHelper::E_READONLY);
+
+                    sal_Bool bSessionData  = sal_False;
+                    aSessionVal >>= bSessionData;
+
+                    sal_Bool bRecoveryData = ((sal_Bool)(m_lDocCache.size()>0));
+
+                    // exists session data ... => then we cant say, that these
+                    // data are valid for recovery. So we have to return FALSE then!
+                    if (bSessionData)
+                        bRecoveryData = sal_False;
+
+                    aValue <<= bRecoveryData;
+                }
                 break;
 
         case AUTORECOVERY_PROPHANDLE_CRASHED :
@@ -2557,6 +2631,15 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                             CFG_PACKAGE_RECOVERY,
                             CFG_PATH_RECOVERYINFO,
                             CFG_ENTRY_CRASHED,
+                            ::comphelper::ConfigurationHelper::E_READONLY);
+                break;
+
+        case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
+                aValue = ::comphelper::ConfigurationHelper::readDirectKey(
+                            m_xSMGR,
+                            CFG_PACKAGE_RECOVERY,
+                            CFG_PATH_RECOVERYINFO,
+                            CFG_ENTRY_SESSIONDATA,
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
     }
@@ -2569,6 +2652,7 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
     {
         css::beans::Property( AUTORECOVERY_PROPNAME_CRASHED            , AUTORECOVERY_PROPHANDLE_CRASHED            , ::getBooleanCppuType() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA, AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA, ::getBooleanCppuType() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA , AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA , ::getBooleanCppuType() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
     };
     static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor(pPropertys, AUTORECOVERY_PROPCOUNT);
     return lPropertyDescriptor;
@@ -2639,6 +2723,8 @@ void AutoRecovery::implts_unlockDocCache()
 //-----------------------------------------------
 void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 {
+    LOG_RECOVERY("AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList() ...")
+
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
@@ -2707,6 +2793,8 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
         { throw exRun; }
     catch(const css::uno::Exception&)
         {}
+
+    LOG_RECOVERY("... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()")
 }
 
 } // namespace framework
