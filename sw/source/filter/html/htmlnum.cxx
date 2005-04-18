@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:26:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             {
                 aBulletSrc = pOption->GetString();
                 if( !InternalImgToPrivateURL(aBulletSrc) )
-                    aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), aBulletSrc );
+                    aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), aBulletSrc, Link(), false );
             }
             break;
         case HTML_O_WIDTH:
