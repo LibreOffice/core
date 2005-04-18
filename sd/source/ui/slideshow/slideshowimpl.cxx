@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:10:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,11 +1652,16 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
                  fUpdate = -1.0;
                  break;
              }
-            Application::Reschedule();
+
+             // if UI input pending: quit busy loop (and setup timer
+             // below)
+             if( Application::AnyInput(INPUT_MOUSE|INPUT_KEYBOARD|INPUT_PAINT) )
+                 break;
         }
-        if( mxShow.is() && ( fUpdate > 0.0 ) )
+        if( mxShow.is() && ( fUpdate >= 0.0 ) )
         {
-            maUpdateTimer.SetTimeout( static_cast<ULONG>(fUpdate * 1000.0) );
+            maUpdateTimer.SetTimeout(
+                ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
             maUpdateTimer.Start();
         }
     }
