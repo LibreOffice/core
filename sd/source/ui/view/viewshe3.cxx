@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:04:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,8 +1201,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
     String aStandardPageName;
     String aNotesPageName;
-    AutoLayout eStandardLayout;
-    AutoLayout eNotesLayout;
+    AutoLayout eStandardLayout (AUTOLAYOUT_NONE);
+    AutoLayout eNotesLayout (AUTOLAYOUT_NOTES);
     BOOL bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
     BOOL bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
 
@@ -1223,6 +1223,15 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
+
+        // Use the layouts of the previous page and notes page as template.
+        if (pTemplatePage != NULL)
+        {
+            eStandardLayout = pTemplatePage->GetAutoLayout();
+            SdPage* pNotesTemplatePage = static_cast<SdPage*>(pDocument->GetPage(pTemplatePage->GetPageNum()+1));
+            if (pNotesTemplatePage != NULL)
+                eNotesLayout = pNotesTemplatePage->GetAutoLayout();
+        }
     }
     else if (pArgs->Count () != 4)
     {
