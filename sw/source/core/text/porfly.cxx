@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:11:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 
     // Der Glue wird aufgespannt.
     rInf.GetLast()->FormatEOL( rInf );
-    PrtWidth( (Fix() - rInf.X()) + PrtWidth() );
+    PrtWidth( static_cast<USHORT>(Fix() - rInf.X() + PrtWidth()) );
     if( !Width() )
     {
         ASSERT( Width(), "+SwFlyPortion::Format: a fly is a fly is a fly" );
@@ -154,7 +154,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 1 );
     }
 
-    const USHORT nNewWidth = rInf.X() + PrtWidth();
+    const USHORT nNewWidth = static_cast<USHORT>(rInf.X() + PrtWidth());
     if( rInf.Width() <= nNewWidth )
     {
         Truncate();
