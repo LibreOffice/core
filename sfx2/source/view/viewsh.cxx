@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:23:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,22 +346,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 BOOL bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
                 if ( !bEnable )
                     rSet.DisableItem( nSID );
-                else if ( nSID == SID_MAIL_SENDDOCASPDF )
-                {
-                    SfxObjectShellRef xDocShell = GetViewFrame()->GetObjectShell();
-                    if ( xDocShell.Is() )
-                    {
-                        // Get PDF Filter
-                        String aPDFExtension = String::CreateFromAscii( "pdf" );
-                        const SfxFilter* pFilter =
-                            SfxFilterMatcher( String::CreateFromAscii( xDocShell->GetFactory().GetShortName()) ).GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
-                        if ( pFilter != NULL )
-                            break;
-                    }
-
-                    rSet.DisableItem( nSID );
-                }
-
                 break;
             }
 
@@ -904,6 +888,9 @@ USHORT SfxViewShell::PrepareClose
     }
 
     if( GetViewFrame()->IsInModalMode() )
+        return FALSE;
+
+    if( bUI && GetViewFrame()->GetDispatcher()->IsLocked() )
         return FALSE;
 
     return TRUE;
@@ -1683,22 +1670,7 @@ void SfxViewShell::TakeFrameOwnerShip_Impl()
 
 void SfxViewShell::CheckOwnerShip_Impl()
 {
-    if( pImp->bGotFrameOwnerShip )
-    {
-        com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xFrame(
-                GetViewFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
-        if ( xFrame.is() )
-        {
-            try
-            {
-                xFrame->close( sal_True );
-            }
-            catch ( com::sun::star::util::CloseVetoException& )
-            {
-            }
-        }
-    }
-
+    BOOL bSuccess = FALSE;
     if( pImp->bGotOwnerShip )
     {
         com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xModel(
@@ -1707,7 +1679,26 @@ void SfxViewShell::CheckOwnerShip_Impl()
         {
             try
             {
+                // this call will destroy this object in case of success!
                 xModel->close( sal_True );
+                bSuccess = TRUE;
+            }
+            catch ( com::sun::star::util::CloseVetoException& )
+            {
+            }
+        }
+    }
+
+    if( !bSuccess && pImp->bGotFrameOwnerShip )
+    {
+        // document couldn't be closed or it shouldn't, now try at least to close the frame
+        com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xFrame(
+                GetViewFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+        if ( xFrame.is() )
+        {
+            try
+            {
+                xFrame->close( sal_True );
             }
             catch ( com::sun::star::util::CloseVetoException& )
             {
