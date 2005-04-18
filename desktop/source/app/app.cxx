@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:45:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,20 +1103,30 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
     @param  bCrashed [boolean ... out!]
             the office crashed last times.
-            But may be there are not recovery data.
+            But may be there are no recovery data.
+            Usefull to trigger the error report tool without
+            showing the recovery UI.
 
-    @param  bDataExists [boolean ... out!]
+    @param  bRecoveryDataExists [boolean ... out!]
             there exists some recovery data.
+
+    @param  bSessionDataExists [boolean ... out!]
+            there exists some session data.
+            Because the user may be logged out last time from it's
+            unix session...
 */
-void impl_checkRecoveryState(sal_Bool& bCrashed   ,
-                             sal_Bool& bDataExists)
+void impl_checkRecoveryState(sal_Bool& bCrashed           ,
+                             sal_Bool& bRecoveryDataExists,
+                             sal_Bool& bSessionDataExists )
 {
     static ::rtl::OUString SERVICENAME_RECOVERYCORE = ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery");
     static ::rtl::OUString PROP_CRASHED             = ::rtl::OUString::createFromAscii("Crashed"                        );
     static ::rtl::OUString PROP_EXISTSRECOVERY      = ::rtl::OUString::createFromAscii("ExistsRecoveryData"             );
+    static ::rtl::OUString PROP_EXISTSSESSION       = ::rtl::OUString::createFromAscii("ExistsSessionData"              );
 
-    bCrashed    = sal_False;
-    bDataExists = sal_False;
+    bCrashed            = sal_False;
+    bRecoveryDataExists = sal_False;
+    bSessionDataExists  = sal_False;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     try
@@ -1125,8 +1135,9 @@ void impl_checkRecoveryState(sal_Bool& bCrashed   ,
             xSMGR->createInstance(SERVICENAME_RECOVERYCORE),
             css::uno::UNO_QUERY_THROW);
 
-        xRecovery->getPropertyValue(PROP_CRASHED       ) >>= bCrashed   ;
-        xRecovery->getPropertyValue(PROP_EXISTSRECOVERY) >>= bDataExists;
+        xRecovery->getPropertyValue(PROP_CRASHED       ) >>= bCrashed           ;
+        xRecovery->getPropertyValue(PROP_EXISTSRECOVERY) >>= bRecoveryDataExists;
+        xRecovery->getPropertyValue(PROP_EXISTSSESSION ) >>= bSessionDataExists ;
     }
     catch(const css::uno::Exception&) {}
 }
@@ -1516,15 +1527,17 @@ void Desktop::Main()
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
+        sal_Bool bExistsSessionData  = sal_False;
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ impl_checkRecoveryState" );
-        impl_checkRecoveryState(bCrashed, bExistsRecoveryData);
+        impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
 
         if (
             (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
             (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
-            (!bExistsRecoveryData                                                  )
+            (!bExistsRecoveryData                                                  ) &&
+            (!bExistsSessionData                                                   )
            )
         {
             ::desktop::Desktop::bSuppressOpenDefault = sal_True;
@@ -2025,47 +2038,77 @@ void Desktop::OpenClients()
     {
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
-        impl_checkRecoveryState(bCrashed, bExistsRecoveryData);
-        if (bCrashed || (bCrashed && bExistsRecoveryData))
+        sal_Bool bExistsSessionData  = sal_False;
+
+        impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
+
+        if (
+            ( ! bLoaded ) &&
+            (
+                ( bExistsRecoveryData ) || // => crash with files    => recovery
+                ( bCrashed            )    // => crash without files => error report
+            )
+           )
         {
-            impl_callRecoveryUI(
-                sal_False          , // false => force recovery instead of emergency save
-                bCrashed           ,
-                bExistsRecoveryData);
-            /* TODO we cant be shure, that at least one document could be recovered here successfully
-                So we set bLoaded=TRUE to supress opening of the default document.
-                But we should make it more safe. Otherwhise we have an office without an UI ...
-                ...
-                May be we can check the desktop if some documents are existing there.
-             */
-            Reference< XFramesSupplier > xTasksSupplier(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                    ::com::sun::star::uno::UNO_QUERY );
-            Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
-            if ( xList->hasElements() )
-                bLoaded = sal_True;
-        }
-        // session management
-        try
-        {
-            Reference< XInitialization > aListener(::comphelper::getProcessServiceFactory()->createInstance(
-                    OUString::createFromAscii("com.sun.star.frame.SessionListener")), UNO_QUERY);
-            if (aListener.is())
+            try
             {
-                aListener->initialize(Sequence< Any >(0));
-                    Reference< XSessionManagerListener > r(aListener, UNO_QUERY);
-                if (r.is() && !bLoaded)
-                    bLoaded = r->doRestore();
+                impl_callRecoveryUI(
+                    sal_False          , // false => force recovery instead of emergency save
+                    bCrashed           ,
+                    bExistsRecoveryData);
+                /* TODO we cant be shure, that at least one document could be recovered here successfully
+                    So we set bLoaded=TRUE to supress opening of the default document.
+                    But we should make it more safe. Otherwhise we have an office without an UI ...
+                    ...
+                    May be we can check the desktop if some documents are existing there.
+                 */
+                Reference< XFramesSupplier > xTasksSupplier(
+                        ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                        ::com::sun::star::uno::UNO_QUERY_THROW );
+                Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
+                if ( xList->hasElements() )
+                    bLoaded = sal_True;
+            }
+            catch(const css::uno::Exception& e)
+            {
+                OUString aMessage = OUString::createFromAscii("Error during recovery\n")
+                    + e.Message;
+                OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
-        catch (com::sun::star::uno::Exception& e)
+
+        Reference< XInitialization > xSessionListener;
+        try
         {
-            OUString aMessage = OUString::createFromAscii("Error in session management\n")
+            xSessionListener = Reference< XInitialization >(::comphelper::getProcessServiceFactory()->createInstance(
+                        OUString::createFromAscii("com.sun.star.frame.SessionListener")), UNO_QUERY_THROW);
+            xSessionListener->initialize(Sequence< Any >(0));
+        }
+        catch(const com::sun::star::uno::Exception& e)
+        {
+            OUString aMessage = OUString::createFromAscii("Registration of session listener failed\n")
                 + e.Message;
             OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
 
-
+        if (
+            ( ! bLoaded            ) &&
+            (   bExistsSessionData )
+           )
+        {
+            // session management
+            try
+            {
+                Reference< XSessionManagerListener > r(xSessionListener, UNO_QUERY_THROW);
+                bLoaded = r->doRestore();
+            }
+            catch(const com::sun::star::uno::Exception& e)
+            {
+                OUString aMessage = OUString::createFromAscii("Error in session management\n")
+                    + e.Message;
+                OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            }
+        }
     }
 
     if ( !pArgs->IsServer() )
