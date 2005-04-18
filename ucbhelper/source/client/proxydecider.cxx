@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxydecider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-10 18:07:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 08:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,7 @@
                                 TODO
  **************************************************************************
 
-- remove resolveHostName function once OSL supports IPv6
-
  *************************************************************************/
-
-#define OSL_DOES_NOT_SUPPORT_IPV6 1
 
 #include <utility>
 #include <vector>
@@ -78,10 +74,8 @@
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-#ifndef OSL_DOES_NOT_SUPPORT_IPV6
 #ifndef _OSL_SOCKET_HXX_
 #include <osl/socket.hxx>
-#endif
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -115,125 +109,6 @@ using namespace ucbhelper;
 #define HTTP_PROXY_PORT_KEY "ooInetHTTPProxyPort"
 #define FTP_PROXY_NAME_KEY  "ooInetFTPProxyName"
 #define FTP_PROXY_PORT_KEY  "ooInetFTPProxyPort"
-
-#ifdef OSL_DOES_NOT_SUPPORT_IPV6
-
-//=========================================================================
-
-#ifdef WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#else
-#include <sys/socket.h>
-#include <netdb.h>
-#include <unistd.h>
-#endif
-
-namespace
-{
-
-rtl::OUString queryCanonicalHostName( const rtl::OUString & rHostName )
-{
-    rtl::OUString aResult;
-
-    struct addrinfo hints  = { 0 };
-    hints.ai_socktype = SOCK_STREAM;
-
-    /*
-    AI_CANONNAME
-      If the nodename parameter is not a NULL pointer, the function searches
-      for the specified node's canonical name.
-
-      Upon successful completion, the ai_canonname member of the first
-      addrinfo structure in the linked list points to a null-terminated
-      string containing the canonical name of the specified nodename.
-
-      If the canonical name is not available or if AI_CANONNAME is not set,
-      the ai_canonname member refers to the nodename parameter or a string
-      with the same contents.  The ai_flags field contents are undefined.
-    */
-    hints.ai_flags = AI_CANONNAME;
-
-    struct addrinfo * result = 0;
-
-    if ( rHostName.indexOf( ':' ) != -1 )
-    {
-#ifdef AI_NUMERICHOST /* added in the RFC2553 API */
-        hints.ai_flags |= AI_NUMERICHOST;
-#endif
-        hints.ai_family = AF_INET6;
-    }
-    else
-    {
-/* To avoid doing AAAA queries unless absolutely necessary, either use
- * AI_ADDRCONFIG where available, or a run-time check for working IPv6
- * support; the latter is only known to work on Linux. */
-
-#ifdef AI_ADDRCONFIG /* added in the RFC3493 API */
-        hints.ai_flags |= AI_ADDRCONFIG;
-        hints.ai_family = AF_UNSPEC;
-#else
-
-/* On Linux kernels, IPv6 is typically built as a loadable module, and
- * socket(AF_INET6, ...) will fail if this module is not loaded, so
- * the slow AAAA lookups can be avoided for this common case. */
-
-#ifdef LINUX
-        enum ipv6_state { unknown, disabled, enabled };
-        static ipv6_state ipv6 = unknown;
-        if ( ipv6 == unknown )
-        {
-            osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-            if ( ipv6 == unknown )
-            {
-                int fd = socket( AF_INET6, SOCK_STREAM, 0 );
-                if ( fd < 0 )
-                {
-                    ipv6 = disabled;
-                }
-                else
-                {
-                    ipv6 = enabled;
-                    close( fd );
-                }
-            }
-        }
-
-        OSL_ENSURE( ipv6 != unknown, "ipv6 state unknown!" );
-        hints.ai_family = ( ipv6 == disabled ) ? AF_INET : AF_UNSPEC;
-#else
-        hints.ai_family = AF_UNSPEC;
-#endif /* LINUX */
-
-#endif /* AI_ADDRCONFIG */
-    }
-
-    rtl::OString aHostName(
-        rtl::OUStringToOString( rHostName, RTL_TEXTENCODING_UTF8 ) );
-    int err = getaddrinfo( aHostName.getStr(), NULL, &hints, &result );
-
-    if ( err == 0 )
-    {
-        // We're only interested in the canonical name, which is always
-        // returned in the ai_canonname field of the first addrinfo in
-        // the linked list of results.
-        aResult = rtl::OStringToOUString(
-            rtl::OString( result->ai_canonname ), RTL_TEXTENCODING_UTF8 );
-    }
-    else
-    {
-        aResult = rHostName;
-    }
-
-    if ( result != 0 )
-        freeaddrinfo( result );
-
-    return aResult;
-}
-
-} // namespace
-
-#endif /* OSL_DOES_NOT_SUPPORT_IPV6 */
 
 //=========================================================================
 namespace ucbhelper
@@ -683,14 +558,10 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         }
 
         // This might be quite expensive (DNS lookup).
-#ifdef OSL_DOES_NOT_SUPPORT_IPV6
-        rtl::OUString aFullyQualifiedHost(
-            queryCanonicalHostName( aHost ).toAsciiLowerCase() );
-#else
         const osl::SocketAddr aAddr( aHost, nPort );
         rtl::OUString aFullyQualifiedHost(
             aAddr.getHostname().toAsciiLowerCase() );
-#endif
+
         // Error resolving name? -> fallback.
         if ( !aFullyQualifiedHost.getLength() )
             aFullyQualifiedHost = aHost;
@@ -909,13 +780,9 @@ void InternetProxyDecider_Impl::setNoProxyList(
                         aServer = aServer.copy( 1, aServer.getLength() - 2 );
 
                     // This might be quite expensive (DNS lookup).
-#ifdef OSL_DOES_NOT_SUPPORT_IPV6
-                    rtl::OUString aTmp
-                        = queryCanonicalHostName( aServer ).toAsciiLowerCase();
-#else
                     const osl::SocketAddr aAddr( aServer, 0 );
                     rtl::OUString aTmp = aAddr.getHostname().toAsciiLowerCase();
-#endif
+
                     if ( aTmp != aServer.toAsciiLowerCase() )
                     {
                         if ( bIPv6Address )
