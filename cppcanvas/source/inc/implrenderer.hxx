@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:24:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,12 @@ namespace cppcanvas
 
             virtual ~ImplRenderer();
 
-            virtual bool draw() const;
-            virtual bool drawSubset( sal_Int32  nStartIndex,
-                                     sal_Int32  nEndIndex ) const;
+            virtual bool                draw() const;
+            virtual bool                drawSubset( sal_Int32   nStartIndex,
+                                                    sal_Int32   nEndIndex ) const;
+            virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
+                                                       sal_Int32    nEndIndex ) const;
+
 
             // element of the Renderer's action vector. Need to be
             // public, since some functors need it, too.
@@ -128,6 +131,11 @@ namespace cppcanvas
                 ActionSharedPtr mpAction;
                 sal_Int32       mnOrigIndex;
             };
+
+            // prefetched and prepared canvas actions
+            // (externally not visible)
+            typedef ::std::vector< MtfAction >      ActionVector;
+
 
         private:
             // default: disabled copy/assignment
@@ -191,9 +199,12 @@ namespace cppcanvas
                                               bool                          bSubsettable,
                                               sal_Int32&                    io_rCurrActionIndex );
 
-            // prefetched and prepared canvas actions
-            // (externally not visible)
-            typedef ::std::vector< MtfAction >      ActionVector;
+            bool            getSubsetIndices( sal_Int32&                        io_rStartIndex,
+                                              sal_Int32&                        io_rEndIndex,
+                                              ActionVector::const_iterator&     o_rRangeBegin,
+                                              ActionVector::const_iterator&     o_rRangeEnd ) const;
+
+
             ActionVector                            maActions;
         };
     }
