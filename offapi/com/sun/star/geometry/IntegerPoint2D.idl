@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IntegerPoint2D.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:20:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ module com {  module sun {  module star {  module geometry {
     This structure contains x and y integer-valued coordinates of a
     two-dimensional point.
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 struct IntegerPoint2D
 {
