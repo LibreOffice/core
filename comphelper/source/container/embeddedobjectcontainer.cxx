@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:27:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,9 +805,10 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
+    sal_Bool bIsNotEmbedded = !xPersist.is() || xLink.is() && xLink->isLink();
+
     // if the object has a persistance and the object is not a link than it must have persistence entry in the storage
-    OSL_ENSURE( !( xPersist.is() && ( !xLink.is() || !xLink->isLink() ) ) || xAccess->hasByName(aName),
-                "Removing element not present in storage!" );
+    OSL_ENSURE( bIsNotEmbedded || xAccess->hasByName(aName), "Removing element not present in storage!" );
 #endif
 
     // try to close it if permitted
@@ -916,12 +917,9 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         try
         {
 #if OSL_DEBUG_LEVEL > 1
-            uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
             // if the object has a persistance and the object is not a link than it must have persistence entry in storage
-            OSL_ENSURE( xLink.is() && xLink->isLink() || pImpl->mxStorage->hasByName( aName ),
-                        "The object has no persistence entry in the storage!" );
+            OSL_ENSURE( bIsNotEmbedded || pImpl->mxStorage->hasByName( aName ), "The object has no persistence entry in the storage!" );
 #endif
-
             if ( xPersist.is() && pImpl->mxStorage->hasByName( aName ) )
                 pImpl->mxStorage->removeElement( aName );
         }
