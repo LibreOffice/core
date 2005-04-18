@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextLayout.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:35:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,19 @@ interface XPolyPolygon2D;
     likely to change subsequent output of those query methods.<p>
 
     Similar to <type>XCanvasFont</type>, all measurements and
-    coordinates accepted and returned by this interface are in device
-    coordinate space.<p>
+    coordinates accepted and returned by this interface are relative
+    to the font's local coordinate system (which only equals device
+    coordinate space, if the combined render transformation used
+    during text output is the identity transformation). Conversely, if
+    the combined transformation used during text output is
+    <em>not</em> the identity transformation, all measurements
+    returned by this interface should be subjected to that
+    transformation, to yield values in device coordinate space.
+    Depending on the underlying font technology, actual device output
+    might be off by up to one device pixel from the transformed
+    metrics.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 interface XTextLayout : ::com::sun::star::uno::XInterface
 {
@@ -124,7 +133,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         Each glyph is represented by a separate
         <type>XPolyPolygon2D</type> in the returned sequence.<p>
 
-        @returns a sequence of <type>XPolyPolygon2D</type> in device
+        @returns a sequence of <type>XPolyPolygon2D</type> in font
         coordinate space, one for every glyph.
      */
     sequence<XPolyPolygon2D>    queryTextShapes();
@@ -140,7 +149,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         returned, not the logical dimensions of the character in the
         font.<p>
 
-        @returns a sequence of rectangles in device coordinate space,
+        @returns a sequence of rectangles in font coordinate space,
         specifying the bounds, one for every glyph.
 
         @see <member>XTextLayout::queryMeasures()</member>
@@ -158,7 +167,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         <member>XTextLayout::queryInkMeasures()</member>.
 
         @returns a sequence of rectangles specifying the bounds in
-        device coordinate space, one for every glyph.
+        font coordinate space, one for every glyph.
 
         @see <member>XTextLayout::queryInkMeasures()</member>
      */
@@ -180,7 +189,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         <member>XTextLayout::applyLogicalAdvancements()</member>.<p>
 
         @returns a sequence of <type>double</type> specifying the
-        advancements per character in device coordinate space.
+        advancements per character in font coordinate space.
 
         @see <member>XTextLayout::applyLogicalAdvancements()</member>
      */
@@ -199,7 +208,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         characters, e.g. relative to a reference output device.<p>
 
         @param aAdvancements
-        A sequence of character advancements, in device coordinate
+        A sequence of character advancements, in font coordinate
         space.
 
         @see <member>XTextLayout::queryLogicalAdvancements()</member>
@@ -219,7 +228,8 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         <member>XTextLayout::queryTextMeasures</member>, only that the
         overall bounds are returned by this method.<p>
 
-        @return the overall bounding box for the given layout, in device coordinate space.
+        @return the overall bounding box for the given layout, in font
+        coordinate space.
      */
     ::com::sun::star::geometry::RealRectangle2D   queryTextBounds();
 
@@ -234,10 +244,10 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @param nSize
         The requested size of the text after justification (either
         width or height, depending on the writing mode). This
-        parameter is interpreted in device coordinate space.
+        parameter is interpreted in font coordinate space.
 
         @return the actual size of the text after the justification in
-        the device coordinate space. Depending on the font and the
+        the font coordinate space. Depending on the font and the
         script type, this might be somewhat different from the size
         requested. If the requested size was smaller than the
         justification algorithm could compress the text, this value
@@ -269,12 +279,12 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @param nSize
         The requested size of the text for <em>all</em>
-        <type>XTextLayout</type>s after justification in device
+        <type>XTextLayout</type>s after justification in font
         coordinate space (either width or height, depending on the
         writing mode).
 
         @return the actual size of the text after the justification,
-        in device coordinate space. Depending on the font and the
+        in font coordinate space. Depending on the font and the
         script type, this might be somewhat different from the size
         requested. If the requested size was smaller than the
         justification algorithm could compress the text, this value
@@ -291,10 +301,10 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     /** This method determines the hit position in the text.<p>
 
         This method determines the index of the character hit at the
-        specified position (in device coordinate space).<p>
+        specified position (in font coordinate space).<p>
 
         @param aHitPoint
-        The position in device coordinate space to determine the
+        The position in font coordinate space to determine the
         underlying character index for.
 
      */
@@ -367,7 +377,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @param nEndIndex
         End of the selection range.
 
-        @return the highlight polygon in the device coordinate space.
+        @return the highlight polygon in the font coordinate space.
 
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if nStartIndex or nEndIndex are outside the permissible
@@ -393,7 +403,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @param nEndIndex
         End of the selection range.
 
-        @return the highlight polygon in the device coordinate space.
+        @return the highlight polygon in the font coordinate space.
 
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if nStartIndex or nEndIndex are outside the permissible

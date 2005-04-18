@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPolyPolygon2D.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:35:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
@@ -77,6 +80,8 @@
 module com { module sun { module star { module rendering {
 
 /** Generic interface for poly-polygons in 2D.
+
+    @since OOo 2.0.0
  */
 interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
 {
@@ -92,8 +97,24 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         rendering will combine the alpha of overlapping areas, whereas
         addPolyPolygon results in constant alpha, regardless how many
         internal poly-polygons overlap at a single place.
+
+        @param position
+        The poly-polygon will be added at the given position, i.e. the
+        upper, left edge of the referenced poly-polygon will be at
+        this position relative to the target poly-polygon.
+
+        @param polyPolygon
+        The poly-polygon to add. Note that the content of this
+        poly-polygon is copied, later changes to polyPolygon will have
+        no effect on the poly-polygon it was added to.
+
+        @throws an IllegalArgumentException, if the XPolyPolygon2D
+        parameter does not support one of the data-providing
+        derivative interfaces (XBezierPolyPolygon2D,
+        XLinePolyPolygon2D).
      */
-    void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon );
+    void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -110,7 +131,7 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         for. Must be in the range [0,getNumberOfPolygons()-1].
      */
     long        getNumberOfPolygonPoints( [in] long polygon )
-        raises (com::sun::star::lang::IllegalArgumentException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
@@ -131,7 +152,7 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
     /** Query whether the specified polygon outline is closed.
      */
     boolean     isClosed( [in] long index )
-        raises (com::sun::star::lang::IllegalArgumentException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
@@ -139,7 +160,7 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         as the index to affect all polygons of this poly-polygon.
      */
     void        setClosed( [in] long index, [in] boolean closedState )
-        raises (com::sun::star::lang::IllegalArgumentException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 }; }; }; };

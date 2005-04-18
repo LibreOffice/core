@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinePolyPolygon2D.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:34:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 module com { module sun { module star { module rendering {
 
 /** Specialized interface for a 2D poly-polygon containing only straight line segments.
+
+    @since OOo 2.0.0
  */
 interface XLinePolyPolygon2D : XPolyPolygon2D
 {
@@ -110,11 +112,28 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
 
     //-------------------------------------------------------------------------
 
-    /** Set the specified subset of points to the poly-polygon. The
-        subset of poly-polygon points not included in this sequence
-        remains unchanged.
+    /** Set the specified sequence of points to the poly-polygon.
+
+        This method can either set the whole poly-polygon to the new
+        data, or insert the points at the given index
+
+        @param nPolygonIndex
+        The index of the polygon to start point insertion with. This
+        index must be in the range [0,numPolygons], and the insertion
+        will take place <em>before</em> this position (i.e. when
+        specifying 0 here, the given point sequence will precede all
+        existing polygons already within the poly-polygon). To append
+        to a poly-polygon, call setPoints() with
+        <member>XLinePolyPolygon2D::getNumberOfPolygons()</member>
+        as the polygon index. If nPolygonIndex is -1, the given
+        sequence of points <em>replaces</em> the poly-polygon content,
+        such that after this method completes, it contains exactly the
+        specified point data.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+        if one of the given values exceed the permissible range.
      */
-    void                                        setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points, [in] long nPolygonIndex, [in] long nPointIndex )
+    void setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points, [in] long nPolygonIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
@@ -129,7 +148,7 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
     /** Set a single point on the poly-polygon. The remaining points of
         the poly-polygon will not be changed by this method.
      */
-    void                                        setPoint( [in] ::com::sun::star::geometry::RealPoint2D point, [in] long nPolygonIndex, [in] long nPointIndex )
+    void setPoint( [in] ::com::sun::star::geometry::RealPoint2D point, [in] long nPolygonIndex, [in] long nPointIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 };
 
