@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapaction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:25:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
 #endif
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
@@ -129,6 +132,10 @@ namespace cppcanvas
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
+
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                       const Subset&                    rSubset ) const;
 
                 virtual sal_Int32 getActionCount() const;
 
@@ -239,6 +246,32 @@ namespace cppcanvas
                     return false;
 
                 return render( rTransformation );
+            }
+
+            ::basegfx::B2DRange BitmapAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                const geometry::IntegerSize2D aSize( mxBitmap->getSize() );
+
+                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( 0,0,
+                                                                          aSize.Width,
+                                                                          aSize.Height ),
+                                                     mpCanvas->getViewState(),
+                                                     aLocalState );
+            }
+
+            ::basegfx::B2DRange BitmapAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
+                                                         const Subset&                  rSubset ) const
+            {
+                // bitmap only contains a single action, empty bounds
+                // if subset requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return ::basegfx::B2DRange();
+
+                return getBounds( rTransformation );
             }
 
             sal_Int32 BitmapAction::getActionCount() const

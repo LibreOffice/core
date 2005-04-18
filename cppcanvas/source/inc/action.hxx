@@ -2,9 +2,9 @@
  *
  *  $RCSfile: action.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:24:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 namespace basegfx
 {
     class B2DHomMatrix;
+    class B2DRange;
 }
 
 
@@ -130,6 +131,9 @@ namespace cppcanvas
 
                 @param rTransformation
                 Transformation matrix to apply before rendering
+
+                @return true, if rendering was successful. If
+                rendering failed, false is returned.
              */
             virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
@@ -149,6 +153,32 @@ namespace cppcanvas
              */
             virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                  const Subset&                  rSubset ) const = 0;
+
+            /** Query bounds of this action on the associated canvas
+
+                @param rTransformation
+                Transformation matrix to apply
+
+                @return the bounds for this action in device
+                coordinate space.
+             */
+            virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
+
+            /** Query bounds for the given part of the action on the
+                associated canvas.
+
+                @param rTransformation
+                Transformation matrix to apply.
+
+                @param rSubset
+                Subset of the action to query. See Subset description
+                for index semantics.
+
+                @return the bounds for the given subset in device
+                coordinate space.
+             */
+            virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                   const Subset&                    rSubset ) const = 0;
 
             /** Query action count.
 
