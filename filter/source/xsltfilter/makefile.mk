@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.10 $ 
+#   $Revision: 1.11 $ 
 #
-#   last change: $Author: rt $ $Date: 2005-03-29 12:24:34 $ 
+#   last change: $Author: obo $ $Date: 2005-04-18 15:14:31 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -73,7 +73,7 @@ XCLASSPATH+=":$(XML_CLASSPATH)"
 .ENDIF
 .INCLUDE: settings.mk  
 
-SLOFILES=$(SLO)$/XSLTFilter.obj
+SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
@@ -90,6 +90,7 @@ SHL1STDLIBS= \
     $(VOSLIB)           \
     $(CPPUHELPERLIB)    \
     $(CPPULIB)          \
+    $(XMLOFFLIB) \
     $(SALLIB)
 
 .IF "$(SOLAR_JAVA)"!=""
