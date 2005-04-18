@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:49:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,6 +950,10 @@ IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
     // pEditEngine->SetUpdateMode( TRUE );
     // pEditView->ShowCursor( FALSE, TRUE );
     // pEditView->SetAutoScroll( TRUE );
+
+    // #i45572#
+    if ( pEditView )
+        pEditView->ShowCursor( FALSE, TRUE );
 
     pEditEngine->SetModified( bWasModified );
 
