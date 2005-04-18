@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:13:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ SwLineLayout::~SwLineLayout()
         delete GetNext();
     if( pBlink )
         pBlink->Delete( this );
-    delete pSpaceAdd;
+    delete pLLSpaceAdd;
     if ( pKanaComp )
         delete pKanaComp;
 }
@@ -315,13 +315,25 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
 }
 
 /*************************************************************************
+ *                    SwLineLayout::InitSpaceAdd()
+ *************************************************************************/
+
+void SwLineLayout::InitSpaceAdd()
+{
+    if ( !pLLSpaceAdd )
+        CreateSpaceAdd();
+    else
+        SetLLSpaceAdd( 0, 0 );
+}
+
+/*************************************************************************
  *                    SwLineLayout::CreateSpaceAdd()
  *************************************************************************/
 
-void SwLineLayout::CreateSpaceAdd( const short nInit )
+void SwLineLayout::CreateSpaceAdd( const long nInit )
 {
-    pSpaceAdd = new SvShorts;
-    pSpaceAdd->Insert( nInit, 0 );
+    pLLSpaceAdd = new std::vector<long>;
+    SetLLSpaceAdd( nInit, 0 );
 }
 
 /*************************************************************************
@@ -1621,7 +1633,7 @@ long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
 
 USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
                                      xub_StrLen nStt, xub_StrLen nLen,
-                                     USHORT nSpace ) const
+                                     long nSpaceAdd ) const
 {
     ASSERT( nLen, "Kashida justification without text?!" )
 
@@ -1657,7 +1669,7 @@ USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
     {
         xub_StrLen nKashidaPos = GetKashida( nCntKash );
         xub_StrLen nIdx = nKashidaPos;
-        USHORT nSpaceAdd = nSpace;
+        long nKashAdd = nSpaceAdd;
 
         while ( nIdx < nEnd )
         {
@@ -1672,13 +1684,13 @@ USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
 
             while ( nArrayPos < nArrayEnd )
             {
-                pKernArray[ nArrayPos ] += nSpaceAdd;
+                pKernArray[ nArrayPos ] += nKashAdd;
                 if ( pScrArray )
-                   pScrArray[ nArrayPos ] += nSpaceAdd;
+                   pScrArray[ nArrayPos ] += nKashAdd;
                 ++nArrayPos;
             }
 
-            nSpaceAdd += nSpace;
+            nKashAdd += nSpaceAdd;
         }
     }
 
@@ -1708,9 +1720,13 @@ sal_Bool SwScriptInfo::IsArabicLanguage( LanguageType aLang )
 
 USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
                                   long* pScrArray, xub_StrLen nStt,
-                                  xub_StrLen nLen, USHORT nSpace )
+                                  xub_StrLen nLen, xub_StrLen nNumberOfBlanks,
+                                  long nSpaceAdd )
 {
     ASSERT( nStt + nLen <= rTxt.Len(), "String in ThaiJustify too small" )
+
+    SwTwips nNumOfTwipsToDistribute = nSpaceAdd * nNumberOfBlanks /
+                                      SPACING_PRECISION_FACTOR;
 
     long nSpaceSum = 0;
     USHORT nCnt = 0;
@@ -1723,7 +1739,13 @@ USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&
              ( 0xE47 > cCh || cCh > 0xE4E ) && cCh != 0xE31 )
         {
-            nSpaceSum += nSpace;
+            if ( nNumberOfBlanks > 0 )
+            {
+                nSpaceAdd = nNumOfTwipsToDistribute / nNumberOfBlanks;
+                --nNumberOfBlanks;
+                nNumOfTwipsToDistribute -= nSpaceAdd;
+            }
+            nSpaceSum += nSpaceAdd;
             ++nCnt;
         }
 
