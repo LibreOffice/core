@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:17:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,16 +147,15 @@ namespace vcl
         {
             uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromPolygon( const ::Polygon& inputPolygon )
             {
-                int i;
-
-                // fetch preliminary polygon size
-                int nCurrSize = inputPolygon.GetSize();
+                const USHORT nSize( inputPolygon.GetSize() );
 
                 // adapt polygon size. As we store bezier end
                 // and control point in a combined data structure,
                 // every control point reduces the number of sequence
                 // elements by one.
-                for( i=0; i<nCurrSize; ++i )
+                USHORT nCurrSize = nSize;
+                USHORT i;
+                for( i=0; i<nSize; ++i )
                 {
                     if( inputPolygon.GetFlags(i) == POLY_CONTROL )
                         --nCurrSize;
@@ -164,16 +163,19 @@ namespace vcl
 
                 // make room
                 uno::Sequence< geometry::RealBezierSegment2D > outputSequence( nCurrSize );
+                geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
 
                 // fill sequence from polygon
                 i=0;
                 int nOutPos=0;
-                while( i<nCurrSize )
+                while( i<nSize )
                 {
                     DBG_ASSERT( nCurrSize > nOutPos,
                                 "bezierSequenceFromPolygon(): output size calculated incorrectly");
+                    if( nCurrSize <= nOutPos )
+                        return uno::Sequence< geometry::RealBezierSegment2D >(); // bail out
 
-                    if( i+2 < nCurrSize )
+                    if( i+2 < nSize )
                     {
                         // we have at least two more point to process
                         // - control points allowed here
@@ -183,55 +185,62 @@ namespace vcl
                             inputPolygon.GetFlags(i+2) == POLY_CONTROL )
                         {
                             // start of a bezier segment
-                            outputSequence[nOutPos++] = geometry::RealBezierSegment2D( inputPolygon[i].X(),
-                                                                                       inputPolygon[i].Y(),
-                                                                                       inputPolygon[i+1].X(),
-                                                                                       inputPolygon[i+1].Y(),
-                                                                                       inputPolygon[i+2].X(),
-                                                                                       inputPolygon[i+2].Y() );
+                            pOutput[nOutPos++] = geometry::RealBezierSegment2D( inputPolygon[i].X(),
+                                                                                inputPolygon[i].Y(),
+                                                                                inputPolygon[i+1].X(),
+                                                                                inputPolygon[i+1].Y(),
+                                                                                inputPolygon[i+2].X(),
+                                                                                inputPolygon[i+2].Y() );
                             i += 3;
                         }
                         else
                         {
+                            const double nX( inputPolygon[i].X() );
+                            const double nY( inputPolygon[i].Y() );
+
                             // no bezier segment at all - add
                             // degenerated bezier point (i.e. straight line)
-                            outputSequence[nOutPos++] = geometry::RealBezierSegment2D( inputPolygon[i].X(),
-                                                                                       inputPolygon[i].Y(),
-                                                                                       inputPolygon[i].X(),
-                                                                                       inputPolygon[i].Y(),
-                                                                                       inputPolygon[i].X(),
-                                                                                       inputPolygon[i].Y() );
+                            pOutput[nOutPos++] = geometry::RealBezierSegment2D( nX, nY,
+                                                                                nX, nY,
+                                                                                nX, nY );
                             i += 1;
                         }
                     }
-                    else if( i+1 < nCurrSize )
+                    else if( i+1 < nSize )
                     {
-                        DBG_ASSERT( inputPolygon.GetFlags(i) != POLY_CONTROL,
-                                    "bezierSequenceFromPolygon(): Invalid point sequence in Polygon");
+#ifdef DBG_UTIL
+                        if( inputPolygon.GetFlags(i) == POLY_CONTROL )
+                            DBG_WARNING( "bezierSequenceFromPolygon(): Invalid point sequence in Polygon" );
+#endif
+
+                        const double nX( inputPolygon[i].X() );
+                        const double nY( inputPolygon[i].Y() );
 
                         // can't have any bezier segments here
                         // (not enough points left) - add
                         // degenerated bezier point (i.e. straight
                         // line)
-                        outputSequence[nOutPos++] = geometry::RealBezierSegment2D( inputPolygon[i].X(),
-                                                                                   inputPolygon[i].Y(),
-                                                                                   inputPolygon[i].X(),
-                                                                                   inputPolygon[i].Y(),
-                                                                                   inputPolygon[i].X(),
-                                                                                   inputPolygon[i].Y() );
+                        pOutput[nOutPos++] = geometry::RealBezierSegment2D( nX, nY,
+                                                                            nX, nY,
+                                                                            nX, nY );
                         i += 1;
                     }
                     else
                     {
                         // this is the last point - no control points
                         // allowed any more
-                        DBG_ASSERT( inputPolygon.GetFlags(i) != POLY_CONTROL,
-                                    "bezierSequenceFromPolygon(): Invalid point sequence in Polygon");
+#ifdef DBG_UTIL
+                        if( inputPolygon.GetFlags(i) == POLY_CONTROL )
+                            DBG_WARNING( "bezierSequenceFromPolygon(): Invalid point sequence in Polygon" );
+#endif
 
-                        outputSequence[nOutPos++] = geometry::RealBezierSegment2D( inputPolygon[i].X(),
-                                                                                   inputPolygon[i].Y(),
-                                                                                   0.0, 0.0,
-                                                                                   0.0, 0.0 );
+                        const double nX( inputPolygon[i].X() );
+                        const double nY( inputPolygon[i].Y() );
+
+                        pOutput[nOutPos++] = geometry::RealBezierSegment2D( nX, nY,
+                                                                            nX, nY,
+                                                                            nX, nY );
+
                         i += 1;
                     }
                 }
@@ -248,12 +257,13 @@ namespace vcl
 
                 // make room
                 uno::Sequence< geometry::RealPoint2D > outputSequence( nSize );
+                geometry::RealPoint2D* pOutput = outputSequence.getArray();
 
                 // fill sequence from polygon
                 for( i=0; i<nSize; ++i )
                 {
-                    outputSequence[i] = geometry::RealPoint2D( inputPolygon[i].X(),
-                                                               inputPolygon[i].Y() );
+                    pOutput[i] = geometry::RealPoint2D( inputPolygon[i].X(),
+                                                        inputPolygon[i].Y() );
                 }
 
                 return outputSequence;
@@ -267,15 +277,18 @@ namespace vcl
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xPolyPolygonFromPolygon()" );
 
+            uno::Reference< rendering::XPolyPolygon2D > xRes;
+
             if( !xGraphicDevice.is() )
-                return uno::Reference< rendering::XPolyPolygon2D >();
+                return xRes;
+
 
             if( inputPolygon.HasFlags() )
             {
                 uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( 1 );
                 outputSequence[0] = bezierSequenceFromPolygon( inputPolygon );
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
+                xRes.set(
                     xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
                     uno::UNO_QUERY );
             }
@@ -284,10 +297,22 @@ namespace vcl
                 uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( 1 );
                 outputSequence[0] = pointSequenceFromPolygon( inputPolygon );
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
+                xRes.set(
                     xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
                     uno::UNO_QUERY );
             }
+
+            // determine closed state for the polygon (VCL polygons,
+            // by definition, are closed when first and last point are
+            // identical)
+            if( xRes.is() &&
+                inputPolygon.GetSize() > 2 &&
+                inputPolygon[0] == inputPolygon[inputPolygon.GetSize()-1] )
+            {
+                xRes->setClosed( 0, sal_True );
+            }
+
+            return xRes;
         }
 
         //---------------------------------------------------------------------------------------
@@ -297,8 +322,10 @@ namespace vcl
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xPolyPolygonFromPolyPolygon()" );
 
+            uno::Reference< rendering::XPolyPolygon2D > xRes;
+
             if( !xGraphicDevice.is() )
-                return uno::Reference< rendering::XPolyPolygon2D >();
+                return xRes;
 
             const int nNumPolys( inputPolyPolygon.Count() );
 
@@ -317,29 +344,50 @@ namespace vcl
             if( needBeziers )
             {
                 uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( nNumPolys );
+                uno::Sequence< geometry::RealBezierSegment2D >* pOutput = outputSequence.getArray();
 
                 for( i=0; i<nNumPolys; ++i )
                 {
-                    outputSequence[i] = bezierSequenceFromPolygon( inputPolyPolygon[i] );
+                    pOutput[i] = bezierSequenceFromPolygon( inputPolyPolygon[i] );
                 }
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
+                xRes.set(
                     xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
                     uno::UNO_QUERY );
             }
             else
             {
                 uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( nNumPolys );
+                uno::Sequence< geometry::RealPoint2D >* pOutput = outputSequence.getArray();
 
                 for( i=0; i<nNumPolys; ++i )
                 {
-                    outputSequence[i] = pointSequenceFromPolygon( inputPolyPolygon[i] );
+                    pOutput[i] = pointSequenceFromPolygon( inputPolyPolygon[i] );
                 }
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
+                xRes.set(
                     xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
                     uno::UNO_QUERY );
             }
+
+            // determine closed state for each contained polygon (VCL
+            // polygons, by definition, are closed when first and last
+            // point are identical)
+            if( xRes.is() )
+            {
+                for( i=0; i<nNumPolys; ++i )
+                {
+                    const ::Polygon& rCurrPoly( inputPolyPolygon[i] );
+
+                    if( rCurrPoly.GetSize() > 2 &&
+                        rCurrPoly[0] == rCurrPoly[rCurrPoly.GetSize()-1] )
+                    {
+                        xRes->setClosed( i, sal_True );
+                    }
+                }
+            }
+
+            return xRes;
         }
 
         //---------------------------------------------------------------------------------------
@@ -387,12 +435,12 @@ namespace vcl
             // determine size
             for( i=0, nCurrSize=0; i<nSize; ++i )
             {
-                const geometry::RealBezierSegment2D aCurrSegment( curves[i] );
+                const geometry::RealBezierSegment2D& rCurrSegment( curves[i] );
 
-                if( aCurrSegment.Px == aCurrSegment.C1x &&
-                    aCurrSegment.Px == aCurrSegment.C2x &&
-                    aCurrSegment.Py == aCurrSegment.C1y &&
-                    aCurrSegment.Py == aCurrSegment.C2y     )
+                if( rCurrSegment.Px == rCurrSegment.C1x &&
+                    rCurrSegment.Px == rCurrSegment.C2x &&
+                    rCurrSegment.Py == rCurrSegment.C1y &&
+                    rCurrSegment.Py == rCurrSegment.C2y     )
                 {
                     nCurrSize += 1;
                 }
@@ -407,28 +455,28 @@ namespace vcl
             int nCurrPoint;
             for( nCurrPoint=0, i=0; nCurrPoint<nCurrSize; ++nCurrPoint )
             {
-                const geometry::RealBezierSegment2D aCurrSegment( curves[i] );
+                const geometry::RealBezierSegment2D& rCurrSegment( curves[i] );
 
-                if( aCurrSegment.Px == aCurrSegment.C1x &&
-                    aCurrSegment.Px == aCurrSegment.C2x &&
-                    aCurrSegment.Py == aCurrSegment.C1y &&
-                    aCurrSegment.Py == aCurrSegment.C2y     )
+                if( rCurrSegment.Px == rCurrSegment.C1x &&
+                    rCurrSegment.Px == rCurrSegment.C2x &&
+                    rCurrSegment.Py == rCurrSegment.C1y &&
+                    rCurrSegment.Py == rCurrSegment.C2y     )
                 {
-                    aPoly[i++] = Point( FRound( aCurrSegment.Px ),
-                                        FRound( aCurrSegment.Py ) );
+                    aPoly[i++] = Point( FRound( rCurrSegment.Px ),
+                                        FRound( rCurrSegment.Py ) );
                 }
                 else
                 {
-                    aPoly[i] = Point( FRound( aCurrSegment.Px ),
-                                      FRound( aCurrSegment.Py ) );
+                    aPoly[i] = Point( FRound( rCurrSegment.Px ),
+                                      FRound( rCurrSegment.Py ) );
                     aPoly.SetFlags(i++, POLY_NORMAL);
 
-                    aPoly[i] = Point( FRound( aCurrSegment.C1x ),
-                                      FRound( aCurrSegment.C1y ) );
+                    aPoly[i] = Point( FRound( rCurrSegment.C1x ),
+                                      FRound( rCurrSegment.C1y ) );
                     aPoly.SetFlags(i++, POLY_CONTROL);
 
-                    aPoly[i] = Point( FRound( aCurrSegment.C2x ),
-                                      FRound( aCurrSegment.C2y ) );
+                    aPoly[i] = Point( FRound( rCurrSegment.C2x ),
+                                      FRound( rCurrSegment.C2y ) );
                     aPoly.SetFlags(i++, POLY_CONTROL);
                 }
             }
@@ -553,13 +601,14 @@ namespace vcl
         {
             // TODO: handle color space conversions, when defined on canvas/graphicDevice
             uno::Sequence< double > aRet(4);
+            double* pRet = aRet.getArray();
 
-            aRet[0] = rColor.GetRed() / 255.0;
-            aRet[1] = rColor.GetGreen() / 255.0;
-            aRet[2] = rColor.GetBlue() / 255.0;
+            pRet[0] = rColor.GetRed() / 255.0;
+            pRet[1] = rColor.GetGreen() / 255.0;
+            pRet[2] = rColor.GetBlue() / 255.0;
 
             // out notion of alpha is different from the rest of the world's
-            aRet[3] = 1.0 - rColor.GetTransparency() / 255.0;
+            pRet[3] = 1.0 - rColor.GetTransparency() / 255.0;
 
             return aRet;
         }
@@ -569,13 +618,14 @@ namespace vcl
         {
             // TODO: handle color space conversions, when defined on canvas/graphicDevice
             uno::Sequence< sal_Int8 > aRet(4);
+            sal_Int8* pRet = aRet.getArray();
 
-            aRet[0] = rColor.GetRed();
-            aRet[1] = rColor.GetGreen();
-            aRet[2] = rColor.GetBlue();
+            pRet[0] = rColor.GetRed();
+            pRet[1] = rColor.GetGreen();
+            pRet[2] = rColor.GetBlue();
 
             // out notion of alpha is different from the rest of the world's
-            aRet[3] = 255 - rColor.GetTransparency();
+            pRet[3] = 255 - rColor.GetTransparency();
 
             return aRet;
         }
