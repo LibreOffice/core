@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:38:32 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_WRONGSTATEEXCEPTION_HPP_
 #include <com/sun/star/embed/WrongStateException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_UNREACHABLESTATEEXCEPTION_HPP_
+#include <com/sun/star/embed/UnreachableStateException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
@@ -964,7 +968,7 @@ void OleComponent::RunObject()
         if ( FAILED( hr ) )
         {
             if ( hr == REGDB_E_CLASSNOTREG )
-                throw embed::WrongStateException(); // the object server is not installed
+                throw embed::UnreachableStateException(); // the object server is not installed
             else
                 throw io::IOException();
         }
