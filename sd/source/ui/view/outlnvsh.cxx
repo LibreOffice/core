@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 17:00:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,9 +553,9 @@ void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 \************************************************************************/
 void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 {
+    ViewShell::Activate( bIsMDIActivate );
     if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
     {
-        ViewShell::Activate( bIsMDIActivate );
         pOlView->SetLinks();
         pOlView->ConnectToApplication();
 
@@ -578,13 +578,13 @@ void OutlineViewShell::Deactivate( BOOL bIsMDIActivate )
     if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
     {
         pOlView->DisconnectFromApplication();
-
-        // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
-        // to function properly
-        // pOlView->ResetLinks();
-
-        ViewShell::Deactivate( bIsMDIActivate );
     }
+
+    // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
+    // to function properly
+    // pOlView->ResetLinks();
+
+    ViewShell::Deactivate( bIsMDIActivate );
 }
 
 /*************************************************************************
@@ -732,11 +732,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 OutlinerView* pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
                 if (pOutlView)
                 {
+                    pOlView->IgnoreCurrentPageChanges(true);
                     KeyCode  aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
                     pOutlView->PostKeyEvent(aKEvt);
                     if (pFuActual!=NULL && pFuActual->ISA(FuOutlineText))
                         static_cast<FuOutlineText*>(pFuActual)->UpdateForKeyPress (aKEvt);
+                    pOlView->IgnoreCurrentPageChanges(false);
                 }
             }
             rReq.Done();
@@ -1461,7 +1463,10 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 
     USHORT nPage = pFrameView->GetSelectedPage();
     pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
-    pOlView->SetActualPage(pLastPage);
+    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
+    {
+        pOlView->SetActualPage(pLastPage);
+    }
 }
 
 
@@ -1623,6 +1628,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     BOOL bReturn = FALSE;
+    pOlView->IgnoreCurrentPageChanges(true);
 
     if (pWin == NULL && pFuActual)
     {
@@ -1650,6 +1656,7 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     {
         Invalidate( SID_PREVIEW_STATE );
     }
+    pOlView->IgnoreCurrentPageChanges(false);
 
     return(bReturn);
 }
