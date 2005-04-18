@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDirection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:29:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ module com { module sun { module star { module rendering {
 
     This also changes the interpretation of the start point.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 constants TextDirection
 {

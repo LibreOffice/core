@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Texture.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:30:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ interface XParametricPolyPolygon2D;
     as the hatch and the gradient. The transformation member can then
     be used to scale the complete texture as it fits suit.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 struct Texture
 {
