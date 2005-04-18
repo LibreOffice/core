@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-13 10:48:42 $
+#   last change: $Author: obo $ $Date: 2005-04-18 09:04:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,12 +118,14 @@ SLOFILES = \
         $(SLO)$/undoopt.obj                 \
         $(SLO)$/useroptions.obj      \
     $(SLO)$/syslocaleoptions.obj \
+    $(SLO)$/lingucfg.obj    \
     $(SLO)$/itemholder1.obj    \
     $(SLO)$/itemholder2.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/saveopt.obj					\
+    $(SLO)$/lingucfg.obj                \
     $(SLO)$/inetoptions.obj				\
     $(SLO)$/xmlaccelcfg.obj             \
     $(SLO)$/moduleoptions.obj           \
@@ -143,6 +145,7 @@ LIB1OBJFILES=  \
     $(SLO)$/moduleoptions.obj           \
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
+    $(SLO)$/lingucfg.obj                \
     $(SLO)$/javaoptions.obj             \
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
