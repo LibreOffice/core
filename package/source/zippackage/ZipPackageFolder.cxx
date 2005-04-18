@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:16:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
                     }
                     else if ( bToBeEncrypted )
+                    {
+                        // this is the correct original size
                         pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
+                        nOwnStreamOrigSize = pTempEntry->nSize;
+                    }
 
                     xSeek->seek ( 0 );
                 }
@@ -423,6 +427,10 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                             // Should be handled close to the raw stream handling
                             bTransportOwnEncrStreamAsRaw = sal_True;
                             pTempEntry->nMethod = STORED;
+
+                            // TODO/LATER: get rid of this situation
+                            // this size should be different from the one that will be stored in manifest.xml
+                            // it is used in storing algorithms and after storing the correct size will be set
                             pTempEntry->nSize = pTempEntry->nCompressedSize;
                         }
                     }
@@ -477,6 +485,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pValue[4].Value <<= pStream->getIterationCount ();
 
                 // Need to store the uncompressed size in the manifest
+                OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
                 pValue[5].Name = sSizeProperty;
                 pValue[5].Value <<= nOwnStreamOrigSize;
 
