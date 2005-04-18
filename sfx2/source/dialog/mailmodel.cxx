@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 14:14:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
+#endif
 
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textench.h>
@@ -154,6 +157,8 @@
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 extern sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
 
@@ -169,6 +174,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 using namespace ::rtl;
+
+namespace css = ::com::sun::star;
 
 
 // class OThread
@@ -421,6 +428,72 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
     return eRet;
 }
 
+const SfxFilter* impl_getPDFFilterForDoc(const String& sFactoryLongName, const SfxFilterMatcher& rMatcher)
+{
+    static ::rtl::OUString EXT_PDF                   = ::rtl::OUString::createFromAscii("pdf");
+    static ::rtl::OUString SERVICENAME_FILTERFACTORY = ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory");
+    static ::rtl::OUString SERVICENAME_TYPEDETECTION = ::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection");
+    static ::rtl::OUString PROP_EXTENSIONS           = ::rtl::OUString::createFromAscii("Extensions");
+    static ::rtl::OUString PROP_NAME                 = ::rtl::OUString::createFromAscii("Name");
+    static ::rtl::OUString PROP_DOCUMENTSERVICE      = ::rtl::OUString::createFromAscii("DocumentService");
+    static ::rtl::OUString PROP_TYPE                 = ::rtl::OUString::createFromAscii("Type");
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
+    if (!xSMGR.is())
+        return 0;
+
+    css::uno::Reference< css::container::XContainerQuery > xFF(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY);
+    if (!xFF.is())
+        return 0;
+
+    css::uno::Reference< css::container::XContainerQuery > xTD(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
+    if (!xTD.is())
+        return 0;
+
+    try
+    {
+        ::comphelper::SequenceAsVector< ::rtl::OUString > lTypes;
+        ::comphelper::SequenceAsHashMap       lQuery;
+        css::uno::Sequence< ::rtl::OUString > lExts(1);
+        lExts[0]                  = EXT_PDF;
+        lQuery[PROP_EXTENSIONS] <<= lExts;
+
+        css::uno::Reference< css::container::XEnumeration > xResult = xTD->createSubSetEnumerationByProperties(lQuery.getAsConstNamedValueList());
+        while(xResult.is() && xResult->hasMoreElements())
+        {
+            ::comphelper::SequenceAsHashMap lProps(xResult->nextElement());
+            ::rtl::OUString                 sType = lProps.getUnpackedValueOrDefault(PROP_NAME, ::rtl::OUString());
+            lTypes.push_back(sType);
+        }
+
+        ::comphelper::SequenceAsVector< ::rtl::OUString >::const_iterator pIt;
+        for (  pIt  = lTypes.begin();
+               pIt != lTypes.end()  ;
+             ++pIt                  )
+        {
+            const ::rtl::OUString& sType = *pIt;
+
+            lQuery.clear();
+            lQuery[PROP_DOCUMENTSERVICE] <<= ::rtl::OUString(sFactoryLongName);
+            lQuery[PROP_TYPE           ] <<= sType;
+
+            xResult = xFF->createSubSetEnumerationByProperties(lQuery.getAsConstNamedValueList());
+            while(xResult.is() && xResult->hasMoreElements())
+            {
+                ::comphelper::SequenceAsHashMap lProps(xResult->nextElement());
+                ::rtl::OUString                 sName   = lProps.getUnpackedValueOrDefault(PROP_NAME, ::rtl::OUString());
+                const SfxFilter*                pFilter = rMatcher.GetFilter4FilterName(sName);
+                if (pFilter)
+                    return pFilter;
+            }
+        }
+    }
+    catch(const css::uno::Exception&)
+        {}
+
+    return 0;
+}
+
 SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName, String& rType )
 {
     SaveResult eRet = SAVE_CANCELLED;
@@ -437,10 +510,12 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
         pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
 
         // Get PDF Filter from document
-        SfxFilterMatcher aMatcher( String::CreateFromAscii(xDocShell->GetFactory().GetShortName()) );
+        String sFactoryShortName = String::CreateFromAscii(xDocShell->GetFactory().GetShortName());
+        String sFactoryLongName  = SfxObjectShell::GetServiceNameFromFactory(sFactoryShortName);
+        SfxFilterMatcher aMatcher( sFactoryShortName );
         String aPDFExtension = String::CreateFromAscii( "pdf" ); // Extension without dot!
 
-        const SfxFilter*    pFilter     = aMatcher.GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
+        const SfxFilter*    pFilter     = impl_getPDFFilterForDoc( sFactoryLongName, aMatcher);
         sal_Bool            bHasFilter  = pFilter ? sal_True : sal_False;
 
         // create temp file name with leading chars and extension
