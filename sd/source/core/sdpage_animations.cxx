@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:45:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,10 @@ Reference< XAnimationNode > SdPage::getAnimationNode() throw (RuntimeException)
 /** removes all custom animations for the given shape */
 void SdPage::removeAnimations( const SdrObject* pObj )
 {
-    if( mpMainSequence.get() )
+    if( mxAnimationNode.is() )
     {
+        getMainSequence();
+
         Reference< XShape > xShape( const_cast<SdrObject*>(pObj)->getUnoShape(), UNO_QUERY );
 
         if( mpMainSequence->hasEffect( xShape ) )
@@ -191,36 +193,36 @@ FadeEffect SdPage::GetFadeEffect() const
 /** callback from the sd::View when a new paragraph for one object on this page is created */
 void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj )
 {
-    if( mpMainSequence.get() )
+    if( mxAnimationNode.is() )
     {
         ParagraphTarget aTarget;
         aTarget.Shape = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
         aTarget.Paragraph = (sal_Int16)pOutliner->GetAbsPos( pPara );
 
-        mpMainSequence->insertTextRange( makeAny( aTarget ) );
+        getMainSequence()->insertTextRange( makeAny( aTarget ) );
     }
 }
 
 /** callback from the sd::View when a paragraph from one object on this page is removed */
 void SdPage::onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj )
 {
-    if( mpMainSequence.get() )
+    if( mxAnimationNode.is() )
     {
         ParagraphTarget aTarget;
         aTarget.Shape = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
         aTarget.Paragraph = (sal_Int16)pOutliner->GetAbsPos( pPara );
 
-        mpMainSequence->disposeTextRange( makeAny( aTarget ) );
+        getMainSequence()->disposeTextRange( makeAny( aTarget ) );
     }
 }
 
 /** callback from the sd::View when an object just left text edit mode */
 void SdPage::onEndTextEdit( SdrObject* pObj )
 {
-    if( pObj && mpMainSequence.get() )
+    if( pObj && mxAnimationNode.is() )
     {
         Reference< XShape > xObj( pObj->getUnoShape(), UNO_QUERY );
-        mpMainSequence->onTextChanged( xObj );
+        getMainSequence()->onTextChanged( xObj );
     }
 }
 
