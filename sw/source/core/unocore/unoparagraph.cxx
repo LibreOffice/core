@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:30:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,9 +584,14 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
     if (!pUnoCrsr)
         throw RuntimeException();
-    SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-    SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
-    USHORT nAttrCount = rAttrSet.Count();
+    SwTxtNode* pTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+    DBG_ASSERT( pTxtNode != NULL, "need text node" );
+
+    // #i46786# Use SwAttrSet pointer for determining the state.
+    //          Use the value SwAttrSet (from the paragraph OR the style)
+    //          for determining the actual value(s).
+    const SwAttrSet* pAttrSet = pTxtNode->GetpSwAttrSet();
+    const SwAttrSet& rValueAttrSet = pTxtNode->GetSwAttrSet();
 
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
@@ -615,7 +620,6 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
             {
                 // get property state
                 // (compare to SwXParagraph::getPropertyState)
-                const SwAttrSet *pAttrSet = &rAttrSet;
                 sal_Bool bAttrSetFetched = sal_True;
                 PropertyState eState = lcl_SwXParagraph_getPropertyState(
                             *pUnoCrsr, &pAttrSet, *pEntry, bAttrSetFetched );
@@ -638,11 +642,11 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
                         BOOL bDone = FALSE;
                         PropertyState eTemp;
                         bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                    pEntry, *pUnoCrsr, &aValue, eTemp, rTxtNode.GetTxtNode() );
+                                    pEntry, *pUnoCrsr, &aValue, eTemp, pTxtNode );
 
                         // if not found try the real paragraph attributes...
                         if (!bDone)
-                            aValue = aPropSet.getPropertyValue( *pEntry, rAttrSet );
+                            aValue = aPropSet.getPropertyValue( *pEntry, rValueAttrSet );
                     }
 
                     rResult.Value  = aValue;
