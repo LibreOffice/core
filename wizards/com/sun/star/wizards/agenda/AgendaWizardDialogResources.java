@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AgendaWizardDialogResources.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 13:59:15 $
+ *  last change: $Author: obo $  $Date: 2005-04-18 15:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,8 @@ public AgendaWizardDialogResources(XMultiServiceFactory xmsf) {
     reslblPageDesign_value =                getResText(RID_AGENDAWIZARDDIALOG_START + 40);
 
     resDefaultFilename =                    getResText(RID_AGENDAWIZARDDIALOG_START + 41);
+    resDefaultFilename = resDefaultFilename.substring(0,resDefaultFilename.length()-4) + ".ott";
+
     resDefaultTitle =                       getResText(RID_AGENDAWIZARDDIALOG_START + 42);
 
     resErrSaveTemplate =                    getResText(RID_AGENDAWIZARDDIALOG_START + 43);
