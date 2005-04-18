@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cf_service.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:50:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,21 +153,26 @@ CanvasFactory::CanvasFactory(
     : m_xContext(xContext)
 {
     ::rtl::OUString preferredServices;
-    // read out configuration for preferred services:
-    Reference<lang::XMultiServiceFactory> xConfigProvider(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.configuration.ConfigurationProvider"),
-            m_xContext ), UNO_QUERY_THROW );
-    Any propValue(
-        makeAny( beans::PropertyValue(
-                     OUSTR("nodepath"), -1,
-                     makeAny( OUSTR("/org.openoffice.VCL/Settings/Canvas") ),
-                     beans::PropertyState_DIRECT_VALUE ) ) );
-    try {
+
+    try
+    {
+        // read out configuration for preferred services:
+        Reference<lang::XMultiServiceFactory> xConfigProvider(
+            m_xContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.configuration.ConfigurationProvider"),
+                m_xContext ), UNO_QUERY_THROW );
+
+        Any propValue(
+            makeAny( beans::PropertyValue(
+                         OUSTR("nodepath"), -1,
+                         makeAny( OUSTR("/org.openoffice.VCL/Settings/Canvas") ),
+                         beans::PropertyState_DIRECT_VALUE ) ) );
+
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
                 OUSTR("com.sun.star.configuration.ConfigurationAccess"),
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY );
+
         if (xNameAccess.is())
             xNameAccess->getByName( OUSTR("PreferredServices") ) >>= preferredServices;
     }
