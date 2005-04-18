@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallWatchThread.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:55:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@ package com.sun.star.comp.beans;
 //---------------------------------------------------------------------------
 /** Helper class to watch calls into OOo with a timeout.
  */
+//Do not add the thread instances to a threadgroup. When testing the bean in
+//an applet it turned out the the ThreadGroup was in an inconsistent state
+//after navigating off the site that contains the applet and back to it.
+//That was tested with a Sun JRE 1.4.2_06
 public class CallWatchThread extends Thread
 {
     private static boolean DEBUG = false;
@@ -74,8 +78,6 @@ public class CallWatchThread extends Thread
     private boolean bAlive;
     private long nTimeout;
 
-
-
     public CallWatchThread(long nTimeout)
     {
         this(nTimeout, "");
@@ -83,7 +85,6 @@ public class CallWatchThread extends Thread
 
     public CallWatchThread( long nTimeout, String aTag )
     {
-
         super(aTag);
         this.aWatchedThread = Thread.currentThread();
         this.nTimeout = nTimeout;
