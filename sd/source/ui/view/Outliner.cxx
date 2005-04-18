@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:04:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@
 #include "ViewShellBase.hxx"
 #endif
 #include "SpellDialogChildWindow.hxx"
+#include "ObjectBarManager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -963,6 +964,10 @@ void Outliner::RestoreStartPosition (void)
 
             if (mpStartEditedObject != NULL)
             {
+                // Turn on the text toolbar as it is done in FuText so that
+                // undo manager setting/restoring in
+                // sd::View::{Beg,End}TextEdit() works on the same view shell.
+                mpViewShell->GetObjectBarManager().SwitchObjectBar(RID_DRAW_TEXT_TOOLBOX);
                 SdrPageView* pPageView = mpView->GetPageViewPvNum(0);
                 mpView->BegTextEdit (mpStartEditedObject);
 
