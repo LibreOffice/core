@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:36:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,20 @@ namespace vclcanvas
         mpSpriteCanvas( rSpriteCanvas ),
         maContent(),
         maPosition(0.0, 0.0),
-        maSize( ::vcl::unotools::sizeFromRealSize2D( rSpriteSize ) ),
+        maSize( static_cast< sal_Int32 >(
+                    ::std::max( 1.0,
+                                ceil( rSpriteSize.Width ) ) ), // round up to nearest int,
+                                                               // enforce sprite to have at
+                                                               // least (1,1) pixel size
+                static_cast< sal_Int32 >(
+                    ::std::max( 1.0,
+                                ceil( rSpriteSize.Height ) ) ) ),
+        maTransform(),
         mxClipPoly(),
         mfAlpha(0.0),
         mbActive(false),
-        mbIsContentFullyOpaque( false )
+        mbIsContentFullyOpaque( false ),
+        mbTransformDirty( true )
     {
         ENSURE_AND_THROW( rDevice.get() && rSpriteCanvas.get(),
                           "CanvasBitmap::CanvasBitmap(): Invalid device or sprite canvas" );
@@ -240,13 +249,12 @@ namespace vclcanvas
 
         if( alpha != mfAlpha )
         {
+            mfAlpha = alpha;
+
             if( mbActive )
                 mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
                                               ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                              Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                                         maSize ) );
-
-            mfAlpha = alpha;
+                                              getSpriteRect() );
         }
     }
 
@@ -269,10 +277,16 @@ namespace vclcanvas
 
         if( aPoint != maPosition )
         {
+            const ::Rectangle&          rBounds( getSpriteRect() );
+            const ::basegfx::B2DPoint&  rOutPos(
+                ::vcl::unotools::b2DPointFromPoint( rBounds.TopLeft() ) );
+
             if( mbActive )
                 mpSpriteCanvas->moveSprite( Sprite::ImplRef( this ),
-                                            ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                            ::vcl::unotools::pointFromB2DPoint( aPoint ) );
+                                            rBounds.TopLeft(),
+                                            ::vcl::unotools::pointFromB2DPoint(
+                                                rOutPos - maPosition + aPoint ),
+                                            rBounds.GetSize() );
 
             maPosition = aPoint;
         }
@@ -283,12 +297,28 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        // TODO(P3): Implement transformed sprites
-        if( mbActive )
-            mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
-                                          ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                          Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                                     maSize ) );
+        ::basegfx::B2DHomMatrix aMatrix;
+        ::basegfx::unotools::homMatrixFromAffineMatrix(aMatrix,
+                                                       aTransformation);
+
+        if( maTransform != aMatrix )
+        {
+            // retrieve bounds before and after transformation change,
+            // and calc union of them, as the resulting update area.
+            Rectangle aPrevBounds(
+                getSpriteRect() );
+
+            maTransform = aMatrix;
+
+            aPrevBounds.Union( getSpriteRect() );
+
+            if( mbActive )
+                mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
+                                              ::vcl::unotools::pointFromB2DPoint( maPosition ),
+                                              aPrevBounds );
+
+            mbTransformDirty = true;
+        }
     }
 
     void SAL_CALL CanvasCustomSprite::clip( const uno::Reference< rendering::XPolyPolygon2D >& xClip ) throw (uno::RuntimeException)
@@ -300,8 +330,7 @@ namespace vclcanvas
         if( mbActive )
             mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
                                           ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                          Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                                     maSize ) );
+                                          getSpriteRect() );
     }
 
     void SAL_CALL CanvasCustomSprite::setPriority( double nPriority ) throw (uno::RuntimeException)
@@ -327,8 +356,7 @@ namespace vclcanvas
             {
                 mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
                                               ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                              Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                                         maSize ) );
+                                              getSpriteRect() );
             }
         }
     }
@@ -349,8 +377,7 @@ namespace vclcanvas
             {
                 mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
                                               ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                              Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                                         maSize ) );
+                                              getSpriteRect() );
             }
         }
     }
@@ -368,8 +395,7 @@ namespace vclcanvas
             // potentially the whole sprite area has changed.
             mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
                                           ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                          Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
-                                                     maSize ) );
+                                          getSpriteRect() );
         }
 
         // clear surface
@@ -466,12 +492,19 @@ namespace vclcanvas
                 }
             }
 
-            // To we have to update our bitmaps (necessary when virdev was
-            // painted to)?
+            // might get changed below (e.g. adapted for
+            // transformations)
+            ::Size  aOutputSize( maSize );
+            ::Point aOutPos( rOutputPos );
+
+            // Do we have to update our bitmaps (necessary if virdev
+            // was painted to, or transformation changed)?
             if( mbSurfaceDirty ||
+                mbTransformDirty ||
                 maContent->IsEmpty() )
             {
                 mbSurfaceDirty = false;
+                mbTransformDirty = false;
 
                 Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint, maSize ) );
 
@@ -496,76 +529,131 @@ namespace vclcanvas
                     //                       aMask.CreateDisplayBitmap( &rTargetSurface ) );
                     maContent = BitmapEx( aBmp, aMask );
                 }
+
+                // check whether matrix is "easy" to handle - pure
+                // translations or scales are handled by OutputDevice
+                // alone
+                if( !maTransform.isIdentity() )
+                {
+                    if( !::basegfx::fTools::equalZero( maTransform.get(0,1) ) ||
+                        !::basegfx::fTools::equalZero( maTransform.get(1,0) ) )
+                    {
+                        // "complex" transformation, employ affine
+                        // transformator
+
+                        ::basegfx::B2DHomMatrix aTransform( maTransform );
+                        aTransform.translate( aOutPos.X(),
+                                              aOutPos.Y() );
+
+                        // modify output position, to account for the fact
+                        // that transformBitmap() always normalizes its output
+                        // bitmap into the smallest enclosing box.
+                        ::basegfx::B2DRectangle aDestRect;
+                        ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                                                                    ::basegfx::B2DRectangle(0,
+                                                                                            0,
+                                                                                            maSize.Width(),
+                                                                                            maSize.Height()),
+                                                                    aTransform );
+
+                        aOutPos.X() = ::basegfx::fround( aDestRect.getMinX() );
+                        aOutPos.Y() = ::basegfx::fround( aDestRect.getMinY() );
+
+                        maContent = tools::transformBitmap( *maContent,
+                                                            aTransform,
+                                                            uno::Sequence<double>(),
+                                                            tools::MODULATE_NONE );
+
+                        aOutputSize = maContent->GetSizePixel();
+                    }
+                    else
+                    {
+                        // relatively 'simplistic' transformation -
+                        // retrieve scale and translational offset
+                        aOutputSize.setWidth (
+                            ::basegfx::fround( maSize.getWidth()  * maTransform.get(0,0) ) );
+                        aOutputSize.setHeight(
+                            ::basegfx::fround( maSize.getHeight() * maTransform.get(1,1) ) );
+
+                        aOutPos.X() = ::basegfx::fround( aOutPos.X() + maTransform.get(0,2) );
+                        aOutPos.Y() = ::basegfx::fround( aOutPos.Y() + maTransform.get(1,2) );
+                    }
+                }
             }
 
-            if( ::rtl::math::approxEqual(mfAlpha, 1.0) )
+            // transformBitmap() might return empty bitmaps, for tiny
+            // scales.
+            if( !!(*maContent) )
             {
-                // no alpha modulation -> just copy to output
-                if( maContent->IsTransparent() )
-                    rTargetSurface.DrawBitmapEx( rOutputPos, *maContent );
+                if( ::rtl::math::approxEqual(mfAlpha, 1.0) )
+                {
+                    // no alpha modulation -> just copy to output
+                    if( maContent->IsTransparent() )
+                        rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, *maContent );
+                    else
+                        rTargetSurface.DrawBitmap( aOutPos, aOutputSize, maContent->GetBitmap() );
+                }
                 else
-                    rTargetSurface.DrawBitmap( rOutputPos, maContent->GetBitmap() );
-            }
-            else
-            {
-                // TODO(P3): Switch to OutputDevice::DrawTransparent()
-                // here
+                {
+                    // TODO(P3): Switch to OutputDevice::DrawTransparent()
+                    // here
 
-                // draw semi-transparent
-                BYTE nColor( static_cast<UINT8>( ::basegfx::fround( 255.0*(1.0 - mfAlpha) + .5) ) );
-                AlphaMask aAlpha( maSize, &nColor );
+                    // draw semi-transparent
+                    BYTE nColor( static_cast<UINT8>( ::basegfx::fround( 255.0*(1.0 - mfAlpha) + .5) ) );
+                    AlphaMask aAlpha( maContent->GetSizePixel(),
+                                      &nColor );
 
-                // mask out fully transparent areas
-                if( maContent->IsTransparent() )
-                    aAlpha.Replace( maContent->GetMask(), 255 );
+                    // mask out fully transparent areas
+                    if( maContent->IsTransparent() )
+                        aAlpha.Replace( maContent->GetMask(), 255 );
 
-                // alpha-blend to output
-                rTargetSurface.DrawBitmapEx( rOutputPos,
-                                             BitmapEx( maContent->GetBitmap(),
-                                                       aAlpha ) );
+                    // alpha-blend to output
+                    rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
+                                                 BitmapEx( maContent->GetBitmap(),
+                                                           aAlpha ) );
+                }
+
+#if defined(VERBOSE) && defined(DBG_UTIL)
+                // Paint little red sprite area markers
+                rTargetSurface.SetLineColor( Color( 255,0,0 ) );
+                rTargetSurface.SetFillColor();
+                rTargetSurface.DrawLine( Point( aOutPos.X(),
+                                                aOutPos.Y() ),
+                                         Point( aOutPos.X()+4,
+                                                aOutPos.Y() ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X(),
+                                                aOutPos.Y() ),
+                                         Point( aOutPos.X(),
+                                                aOutPos.Y()+4 ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X()+aOutputSize.Width()-5,
+                                                aOutPos.Y() ),
+                                         Point( aOutPos.X()+aOutputSize.Width()-1,
+                                                aOutPos.Y() ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X()+aOutputSize.Width()-1,
+                                                aOutPos.Y() ),
+                                         Point( aOutPos.X()+aOutputSize.Width()-1,
+                                                aOutPos.Y()+4 ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X(),
+                                                aOutPos.Y()+aOutputSize.Height()-1 ),
+                                         Point( aOutPos.X()+4,
+                                                aOutPos.Y()+aOutputSize.Height()-1 ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X(),
+                                                aOutPos.Y()+aOutputSize.Height()-5 ),
+                                         Point( aOutPos.X(),
+                                                aOutPos.Y()+aOutputSize.Height()-1 ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X()+aOutputSize.Width()-5,
+                                                aOutPos.Y()+aOutputSize.Height()-1 ),
+                                         Point( aOutPos.X()+aOutputSize.Width()-1,
+                                                aOutPos.Y()+aOutputSize.Height()-1 ) );
+                rTargetSurface.DrawLine( Point( aOutPos.X()+aOutputSize.Width()-1,
+                                                aOutPos.Y()+aOutputSize.Height()-5 ),
+                                         Point( aOutPos.X()+aOutputSize.Width()-1,
+                                                aOutPos.Y()+aOutputSize.Height()-1 ) );
+#endif
             }
 
             rTargetSurface.SetClipRegion();
         }
-
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        // Paint little red sprite area markers
-        rTargetSurface.SetLineColor( Color( 255,0,0 ) );
-        rTargetSurface.SetFillColor();
-        rTargetSurface.DrawLine( Point( rOutputPos.X(),
-                                        rOutputPos.Y() ),
-                                 Point( rOutputPos.X()+4,
-                                        rOutputPos.Y() ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X(),
-                                        rOutputPos.Y() ),
-                                 Point( rOutputPos.X(),
-                                        rOutputPos.Y()+4 ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-5,
-                                        rOutputPos.Y() ),
-                                 Point( rOutputPos.X()+maSize.Width()-1,
-                                        rOutputPos.Y() ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-1,
-                                        rOutputPos.Y() ),
-                                 Point( rOutputPos.X()+maSize.Width()-1,
-                                        rOutputPos.Y()+4 ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X(),
-                                        rOutputPos.Y()+maSize.Height()-1 ),
-                                 Point( rOutputPos.X()+4,
-                                        rOutputPos.Y()+maSize.Height()-1 ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X(),
-                                        rOutputPos.Y()+maSize.Height()-5 ),
-                                 Point( rOutputPos.X(),
-                                        rOutputPos.Y()+maSize.Height()-1 ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-5,
-                                        rOutputPos.Y()+maSize.Height()-1 ),
-                                 Point( rOutputPos.X()+maSize.Width()-1,
-                                        rOutputPos.Y()+maSize.Height()-1 ) );
-        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-1,
-                                        rOutputPos.Y()+maSize.Height()-5 ),
-                                 Point( rOutputPos.X()+maSize.Width()-1,
-                                        rOutputPos.Y()+maSize.Height()-1 ) );
-#endif
     }
 
     ::basegfx::B2DPoint CanvasCustomSprite::getPos() const
@@ -594,5 +682,30 @@ namespace vclcanvas
         mbSurfaceDirty = true;
 
         return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
+    }
+
+    Rectangle CanvasCustomSprite::getSpriteRect() const
+    {
+        // Internal! Only call with locked object mutex!
+        ::basegfx::B2DRectangle aBounds( 0.0, 0.0,
+                                         maSize.Width(),
+                                         maSize.Height() );
+
+        ::basegfx::B2DHomMatrix aTransform( maTransform );
+        aTransform.translate( maPosition.getX(),
+                              maPosition.getY() );
+
+        // transform bounds at origin, as the sprite transformation is
+        // formulated that way
+        ::basegfx::B2DRectangle aTransformedBounds;
+        ::canvas::tools::calcTransformedRectBounds( aTransformedBounds,
+                                                    aBounds,
+                                                    aTransform );
+
+        // return integer rect, rounded away from the center
+        return Rectangle( static_cast< sal_Int32 >( aTransformedBounds.getMinX() ),
+                          static_cast< sal_Int32 >( aTransformedBounds.getMinY() ),
+                          static_cast< sal_Int32 >( aTransformedBounds.getMaxX() )+1,
+                          static_cast< sal_Int32 >( aTransformedBounds.getMaxY() )+1 );
     }
 }
