@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:31:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,14 +327,7 @@ String getSystemPathFromFileURL( const OUString& rURL )
 static OUString getFileNameFromURL( OUString& rURL )
 {
     INetURLObject aURL( rURL );
-    OUString aName( aURL.getName() );
-    if( 0 == aName.getLength() )
-    {
-        sal_Int32 n = rURL.lastIndexOf( sal_Unicode('/') );
-        if( n != -1 )
-            aName = rURL.copy( n+1 );
-    }
-
+    OUString aName( aURL.getName(INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::DECODE_WITH_CHARSET) );
     return aName;
 }
 
