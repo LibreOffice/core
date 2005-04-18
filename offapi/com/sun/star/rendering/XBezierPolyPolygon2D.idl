@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBezierPolyPolygon2D.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:31:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com { module sun { module star { module rendering {
     By convention, a <type>RealBezierSegment2D</type> is a straight
     line segment, if all three contained points are strictly equal.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 interface XBezierPolyPolygon2D : XPolyPolygon2D
 {
@@ -122,37 +122,33 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
-    sequence< sequence < ::com::sun::star::geometry::RealBezierSegment2D > > getPoints( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
+    sequence< sequence < ::com::sun::star::geometry::RealBezierSegment2D > > getBezierSegments( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
 
-    /** Set the specified subset of points to the poly-polygon.<p>
+    /** Set the specified sequence of bezier segments to the poly-polygon.
 
-        The subset of poly-polygon points not included in this sequence
-        remains unchanged. Use
-        <member>XBezierPolyPolygon2D::getNumberOfPolygons()</member>
-        or
-        <member>XBezierPolyPolygon2D::getNumberOfPolygonPoints()</member>
-        to append points or polygons, respectively.<p>
-
-        @param points
-        A sequence of points to set at the poly-polygon.
+        This method can either set the whole poly-polygon to the new
+        data, or insert the segments at the given index
 
         @param nPolygonIndex
-        The index of the polygon to start point insertion with. This
-        index must be in the range [0,numPolygons].
-
-        @param nPointIndex
-        The index of the point in the polygon specified by
-        nPolygonIndex, <em>before<em> which insertion will take place.
-        This value must not exceed the number of points in this
-        polygon.
+        The index of the polygon to start segment insertion with. This
+        index must be in the range [0,numPolygons], and the insertion
+        will take place <em>before</em> this position (i.e. when
+        specifying 0 here, the given bezier sequence will precede all
+        existing polygons already within the poly-polygon). To append
+        to a poly-polygon, call setPoints() with
+        <member>XBezierPolyPolygon2D::getNumberOfPolygons()</member>
+        as the polygon index. If nPolygonIndex is -1, the given
+        bezier sequence <em>replaces</em> the poly-polygon content,
+        such that after this method completes, it contains exactly the
+        specified bezier segment data.
 
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
-    void                                                setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points, [in] long nPolygonIndex, [in] long nPointIndex )
+    void setBezierSegments( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points, [in] long nPolygonIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
@@ -175,7 +171,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         if one of the given values exceed the permissible range.
 
      */
-    ::com::sun::star::geometry::RealBezierSegment2D getPoint( [in] long nPolygonIndex, [in] long nPointIndex )
+    ::com::sun::star::geometry::RealBezierSegment2D getBezierSegment( [in] long nPolygonIndex, [in] long nPointIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
     //-------------------------------------------------------------------------
@@ -204,7 +200,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
-    void                                                setPoint( [in] ::com::sun::star::geometry::RealBezierSegment2D point, [in] long nPolygonIndex, [in] long nPointIndex )
+    void setBezierSegment( [in] ::com::sun::star::geometry::RealBezierSegment2D point, [in] long nPolygonIndex, [in] long nPointIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 };
 

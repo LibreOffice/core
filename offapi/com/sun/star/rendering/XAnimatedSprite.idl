@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAnimatedSprite.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:31:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com { module sun { module star { module rendering {
     This interface can be used to control an animated sprite object on
     an XSpriteCanvas. Sprites are moving, animated objects.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 interface XAnimatedSprite : XSprite
 {
