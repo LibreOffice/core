@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 15:48:45 $
+#   last change: $Author: obo $ $Date: 2005-04-18 08:29:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,14 +83,6 @@ SHL1STDLIBS = \
     $(SALHELPERLIB) \
     $(SALLIB) \
     $(VOSLIB)
-
-.IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= wsock32.lib
-.ENDIF # WNT
-
-.IF "$(OS)"=="SOLARIS"
-SHL1STDLIBS+= -lnsl -lsocket
-.ENDIF # SOLARIS
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
