@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterpolationMode.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:26:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module rendering {
     takes place between two consecutive frames of a discrete animation
     sequence.
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 constants InterpolationMode
 {
