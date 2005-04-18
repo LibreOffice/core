@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:26:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1572,7 +1572,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
 
     if( aAction.Len() )
     {
-        aAction = URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), aAction);
+        aAction = URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), aAction, Link(), false);
     }
     else
     {
@@ -2112,7 +2112,7 @@ void SwHTMLParser::InsertInput()
         // Die URL erst nach dem Einfuegen setzen, weil sich der
         // Download der Grafik erst dann am XModel anmelden kann,
         // wenn das Control eingefuegt ist.
-        aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc));
+        aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc, Link(), false));
         xPropSet->setPropertyValue( OUString::createFromAscii( "ImageURL" ),
                                     aTmp );
     }
