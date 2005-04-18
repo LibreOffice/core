@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:03:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,14 @@
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPT_HPP_
 #include <com/sun/star/script/provider/XScript.hpp>
 #endif
-
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-class SbMethod;
+#ifndef _SB_SBMETH_HXX
+#include <basic/sbmeth.hxx>
+#endif
+
 
 //.........................................................................
 namespace basprov
@@ -88,10 +90,10 @@ namespace basprov
     class BasicScriptImpl : public BasicScriptImpl_BASE
     {
     private:
-        SbMethod* m_pMethod;
+        SbMethodRef m_xMethod;
         ::rtl::OUString m_funcName;
     public:
-        BasicScriptImpl( const ::rtl::OUString& funcName, SbMethod* pMethod );
+        BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod );
         virtual ~BasicScriptImpl();
 
         // XScript
