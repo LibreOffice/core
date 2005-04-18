@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:28:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,11 @@ public:
                     stream object, the underlying file is only deleted if EnableKillingFile( sal_True ) has been called before!
                     */
     SvStream*       GetStream( StreamMode eMode );
+
+                    /**
+                    Let the TempFile object close and destroy the owned stream object if any.
+                    */
+    void            CloseStream();
 
                     /**
                     If enabled the file will be removed from disk when the dtor is called ( default is not enabled )
