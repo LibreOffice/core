@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:14:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@ namespace basprov
     // BasicScriptImpl
     // =============================================================================
 
-    BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName,  SbMethod* pMethod )
-        :m_pMethod( pMethod ), m_funcName( funcName )
+    BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod )
+        :m_xMethod( xMethod ), m_funcName( funcName )
     {
     }
 
@@ -133,16 +133,16 @@ namespace basprov
 
         Any aReturn;
 
-        if ( m_pMethod )
+        if ( m_xMethod )
         {
             // check if compiled
-            SbModule* pModule = static_cast< SbModule* >( m_pMethod->GetParent() );
+            SbModule* pModule = static_cast< SbModule* >( m_xMethod->GetParent() );
             if ( pModule && !pModule->IsCompiled() )
                 pModule->Compile();
 
             // check number of parameters
             sal_Int32 nParamsCount = aParams.getLength();
-            SbxInfo* pInfo = m_pMethod->GetInfo();
+            SbxInfo* pInfo = m_xMethod->GetInfo();
             if ( pInfo )
             {
                 sal_Int32 nSbxOptional = 0;
@@ -183,11 +183,11 @@ namespace basprov
                 }
             }
             if ( xSbxParams.Is() )
-                m_pMethod->SetParameters( xSbxParams );
+                m_xMethod->SetParameters( xSbxParams );
 
             // call method
             SbxVariableRef xReturn = new SbxVariable;
-            ErrCode nErr = m_pMethod->Call( xReturn );
+            ErrCode nErr = m_xMethod->Call( xReturn );
             if ( nErr != SbxERR_OK )
             {
                 // TODO: throw InvocationTargetException ?
@@ -196,7 +196,7 @@ namespace basprov
             // get output parameters
             if ( xSbxParams.Is() )
             {
-                SbxInfo* pInfo = m_pMethod->GetInfo();
+                SbxInfo* pInfo = m_xMethod->GetInfo();
                 if ( pInfo )
                 {
                     OutParamMap aOutParamMap;
@@ -230,7 +230,7 @@ namespace basprov
             aReturn = sbxToUnoValue( xReturn );
 
             // reset parameters
-            m_pMethod->SetParameters( NULL );
+            m_xMethod->SetParameters( NULL );
         }
 
         return aReturn;
