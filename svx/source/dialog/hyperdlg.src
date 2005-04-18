@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 15:41:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,14 +240,9 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
+            < "Schaltfläche" ; Default ; > ;
         };
         StringList [ en-US ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
         {
             < "Text" ; Default ; > ;
             < "Button" ; Default ; > ;
@@ -426,14 +421,9 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
+            < "Schaltfläche" ; Default ; > ;
         };
         StringList [ en-US ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
         {
             < "Text" ; Default ; > ;
             < "Button" ; Default ; > ;
@@ -639,14 +629,9 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
+            < "Schaltfläche" ; Default ; > ;
         };
         StringList [ en-US ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
         {
             < "Text" ; Default ; > ;
             < "Button" ; Default ; > ;
@@ -831,14 +816,9 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
+            < "Schaltfläche" ; Default ; > ;
         };
         StringList [ en-US ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Button" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
         {
             < "Text" ; Default ; > ;
             < "Button" ; Default ; > ;
@@ -996,16 +976,14 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
 
 String RID_SVXSTR_HYPERDLG_FORM_BUTTON
 {
-    Text [ de ] = "Button" ;
+    Text [ de ] = "Schaltfläche" ;
     Text [ en-US ] = "Button" ;
-    Text [ x-comment ] = "Button" ;
 };
 
 String RID_SVXSTR_HYPERDLG_FROM_TEXT
 {
     Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = "Text" ;
 };
 
 String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
