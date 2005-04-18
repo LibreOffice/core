@@ -707,7 +707,7 @@ function writeBatFile(file)
 	"set UNO_PATH=%OFFICE_PROGRAM_PATH%\n" +
         "\n" +
         "REM Set classpath\n" +
-        "set CLASSPATH=%OFFICE_PROGRAM_PATH%\\classes\\java_uno.jar;%OFFICE_PROGRAM_PATH%\\classes\\jurt.jar;%OFFICE_PROGRAM_PATH%\\classes\\unoil.jar;%OFFICE_PROGRAM_PATH%\\classes\\ridl.jar;%OFFICE_PROGRAM_PATH%\\classes\\sandbox.jar;%OFFICE_PROGRAM_PATH%\\classes\\juh.jar\n" +
+        "set CLASSPATH=%OFFICE_PROGRAM_PATH%\\classes\\jurt.jar;%OFFICE_PROGRAM_PATH%\\classes\\unoil.jar;%OFFICE_PROGRAM_PATH%\\classes\\ridl.jar;%OFFICE_PROGRAM_PATH%\\classes\\juh.jar\n" +
         "\n" +
         "REM Add directory of the SDK tools to the path.\n" +
         "set PATH=%OO_SDK_HOME%\\windows\\bin;%OFFICE_HOME%\\program;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
