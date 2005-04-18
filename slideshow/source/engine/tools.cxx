@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:00:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,21 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
 
+#ifndef _CPPCANVAS_BASEGFXFACTORY_HXX
+#include <cppcanvas/basegfxfactory.hxx>
+#endif
+
+#include <lerp.hxx>
 #include <smilfunctionparser.hxx>
 
 
@@ -136,6 +147,60 @@ namespace presentation
             private:
                 const beans::NamedValue&    mrKey;
             };
+
+            ::basegfx::B2DHomMatrix getAttributedShapeTransformation( const ::basegfx::B2DRectangle&        rShapeBounds,
+                                                                      const ShapeAttributeLayerSharedPtr&   pAttr )
+            {
+                ::basegfx::B2DHomMatrix     aTransform;
+                const ::basegfx::B2DSize&   rSize( rShapeBounds.getRange() );
+
+                const double nShearX( pAttr->isShearXAngleValid() ?
+                                      pAttr->getShearXAngle() :
+                                      0.0 );
+                const double nShearY( pAttr->isShearYAngleValid() ?
+                                      pAttr->getShearYAngle() :
+                                      0.0 );
+                const double nRotation( pAttr->isRotationAngleValid() ?
+                                        pAttr->getRotationAngle()*M_PI/180.0 :
+                                        0.0 );
+
+                // scale, shear and rotation pivot point is the shape
+                // center - adapt origin accordingly
+                aTransform.translate( -0.5, -0.5 );
+
+                // ensure valid size (zero size will inevitably lead
+                // to a singular transformation matrix)
+                aTransform.scale( ::basegfx::pruneScaleValue(
+                                      rSize.getX() ),
+                                  ::basegfx::pruneScaleValue(
+                                      rSize.getY() ) );
+
+                const bool bNeedShearX( !::basegfx::fTools::equalZero(nShearX) );
+                const bool bNeedShearY( !::basegfx::fTools::equalZero(nShearY) );
+                const bool bNeedRotation( !::basegfx::fTools::equalZero(nRotation) );
+
+                if( bNeedRotation || bNeedShearX || bNeedShearY )
+                {
+                    if( bNeedShearX )
+                        aTransform.shearX( nShearX );
+
+                    if( bNeedShearY )
+                        aTransform.shearY( nShearY );
+
+                    if( bNeedRotation )
+                        aTransform.rotate( nRotation );
+                }
+
+                // move left, top corner back to position of the
+                // shape. Since we've already translated the
+                // center of the shape to the origin (the
+                // translate( -0.5, -0.5 ) above), translate to
+                // center of final shape position here.
+                aTransform.translate( rShapeBounds.getCenterX(),
+                                      rShapeBounds.getCenterY() );
+
+                return aTransform;
+            }
         }
 
         // Value extraction from Any
@@ -474,24 +539,34 @@ namespace presentation
         // are non-trivial for draw shapes, and I won't duplicate them here). Thus, shapes
         // rotated on the page will still have 0.0 rotation angle, as the metafile
         // representation fetched over the API is our default zero case.
-        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rOrigBounds,
-                                                        const ::basegfx::B2DRectangle&      rBounds,
-                                                        const ShapeAttributeLayerSharedPtr& pAttr,
-                                                        bool                                bWithTranslation )
-        {
-            ::basegfx::B2DHomMatrix aTransform;
 
+        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rShapeBounds,
+                                                        const ShapeAttributeLayerSharedPtr& pAttr )
+        {
             if( !pAttr.get() )
             {
-                aTransform.scale( rBounds.getWidth(), rBounds.getHeight() );
+                ::basegfx::B2DHomMatrix aTransform;
 
-                if( bWithTranslation )
-                    aTransform.translate( rBounds.getMinX(), rBounds.getMinY() );
+                aTransform.scale( rShapeBounds.getWidth(), rShapeBounds.getHeight() );
+                aTransform.translate( rShapeBounds.getMinX(), rShapeBounds.getMinY() );
+
+                return aTransform;
             }
             else
             {
-                const ::basegfx::B2DSize& rSize( rBounds.getRange() );
+                return getAttributedShapeTransformation( rShapeBounds,
+                                                         pAttr );
+            }
+        }
 
+        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DSize&              rPixelSize,
+                                                         const ::basegfx::B2DSize&              rOrigSize,
+                                                         const ShapeAttributeLayerSharedPtr&    pAttr )
+        {
+            ::basegfx::B2DHomMatrix aTransform;
+
+            if( pAttr.get() )
+            {
                 const double nShearX( pAttr->isShearXAngleValid() ?
                                       pAttr->getShearXAngle() :
                                       0.0 );
@@ -502,53 +577,63 @@ namespace presentation
                                         pAttr->getRotationAngle()*M_PI/180.0 :
                                         0.0 );
 
-                // scale, shear and rotation pivot point is the shape
-                // center - adapt origin accordingly
-                aTransform.translate( -0.5, -0.5 );
+                // scale, shear and rotation pivot point is the
+                // sprite's pixel center center - adapt origin
+                // accordingly
+                aTransform.translate( -0.5*rPixelSize.getX(),
+                                      -0.5*rPixelSize.getY() );
+
+                const ::basegfx::B2DSize aSize(
+                    pAttr->isWidthValid() ? pAttr->getWidth() : rOrigSize.getX(),
+                    pAttr->isHeightValid() ? pAttr->getHeight() : rOrigSize.getY() );
 
                 // ensure valid size (zero size will inevitably lead
-                // to a singular transformation matrix)
-                aTransform.scale( ::std::max( 0.0001,
-                                              rSize.getX() ),
-                                  ::std::max( 0.0001,
-                                              rSize.getY() ) );
+                // to a singular transformation matrix).
+                aTransform.scale( ::basegfx::pruneScaleValue(
+                                      aSize.getX() /
+                                      ::basegfx::pruneScaleValue(
+                                          rOrigSize.getX() ) ),
+                                  ::basegfx::pruneScaleValue(
+                                      aSize.getY() /
+                                      ::basegfx::pruneScaleValue(
+                                          rOrigSize.getY() ) ) );
 
-                if( !::basegfx::fTools::equalZero(nShearX) )
-                    aTransform.shearX( nShearX );
+                const bool bNeedShearX( !::basegfx::fTools::equalZero(nShearX) );
+                const bool bNeedShearY( !::basegfx::fTools::equalZero(nShearY) );
+                const bool bNeedRotation( !::basegfx::fTools::equalZero(nRotation) );
 
-                if( !::basegfx::fTools::equalZero(nShearY) )
-                    aTransform.shearY( nShearY );
-
-                if( !::basegfx::fTools::equalZero(nRotation) )
-                    aTransform.rotate( nRotation );
-
-                if( bWithTranslation )
+                if( bNeedRotation || bNeedShearX || bNeedShearY )
                 {
-                    // move left, top corner back to position of the
-                    // shape. Since we've already translated the
-                    // center of the shape to the origin (the
-                    // translate( -0.5, -0.5 ) above), translate to
-                    // center of final shape position here.
-                    aTransform.translate( rBounds.getCenterX(),
-                                          rBounds.getCenterY() );
+                    if( bNeedShearX )
+                        aTransform.shearX( nShearX );
+
+                    if( bNeedShearY )
+                        aTransform.shearY( nShearY );
+
+                    if( bNeedRotation )
+                        aTransform.rotate( nRotation );
                 }
-                else
-                {
-                    // move left, top corner back to origin,
-                    // offset calculations take place outside
-                    // of this method (sprite offsets etc.)
-                    aTransform.translate( rSize.getX() * .5,
-                                          rSize.getY() * .5 );
-                }
+
+                // move left, top corner back to original position of
+                // the sprite (we've translated the center of the
+                // sprite to the origin above).
+                aTransform.translate( 0.5*rPixelSize.getX(),
+                                      0.5*rPixelSize.getY() );
             }
 
+            // return identity transform for un-attributed
+            // shapes. This renders the sprite as-is, in it's
+            // document-supplied size.
             return aTransform;
         }
 
-        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rShapeBounds,
+        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
                                                     const ::basegfx::B2DHomMatrix&      rShapeTransform,
                                                     const ShapeAttributeLayerSharedPtr& pAttr )
         {
+            ENSURE_AND_THROW( pAttr.get(),
+                              "getShapeUpdateArea(): Invalid ShapeAttributeLayer" );
+
             ::basegfx::B2DHomMatrix aTransform;
 
             if( pAttr->isCharScaleValid() &&
@@ -572,9 +657,69 @@ namespace presentation
             // apply shape transformation to unit rect
             return ::canvas::tools::calcTransformedRectBounds(
                 aRes,
-                ::basegfx::B2DRectangle( 0.0, 0.0,
-                                         1.0, 1.0 ),
+                rUnitBounds,
                 aTransform );
+        }
+
+        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
+                                                    const ::basegfx::B2DRectangle&      rShapeBounds )
+        {
+            return ::basegfx::B2DRectangle(
+                lerp( rShapeBounds.getMinX(),
+                      rShapeBounds.getMaxX(),
+                      rUnitBounds.getMinX() ),
+                lerp( rShapeBounds.getMinY(),
+                      rShapeBounds.getMaxY(),
+                      rUnitBounds.getMinY() ),
+                lerp( rShapeBounds.getMinX(),
+                      rShapeBounds.getMaxX(),
+                      rUnitBounds.getMaxX() ),
+                lerp( rShapeBounds.getMinY(),
+                      rShapeBounds.getMaxY(),
+                      rUnitBounds.getMaxY() ) );
+        }
+
+        ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
+                                                 const ShapeAttributeLayerSharedPtr&    pAttr )
+        {
+            // an already empty shape bound need no further
+            // treatment. In fact, any changes applied below would
+            // actually remove the special empty state, thus, don't
+            // change!
+            if( !pAttr.get() ||
+                rOrigBounds.isEmpty() )
+            {
+                return rOrigBounds;
+            }
+            else
+            {
+                // cannot use maBounds anymore, attributes might have been
+                // changed by now.
+                // Have to use absolute values here, as negative sizes
+                // (aka mirrored shapes) _still_ have the same bounds,
+                // only with mirrored content.
+                ::basegfx::B2DSize aSize;
+                aSize.setX( fabs( pAttr->isWidthValid() ?
+                                  pAttr->getWidth() :
+                                  rOrigBounds.getWidth() ) );
+                aSize.setY( fabs( pAttr->isHeightValid() ?
+                                  pAttr->getHeight() :
+                                  rOrigBounds.getHeight() ) );
+
+                ::basegfx::B2DPoint aPos;
+                aPos.setX( pAttr->isPosXValid() ?
+                           pAttr->getPosX() :
+                           rOrigBounds.getCenterX() );
+                aPos.setY( pAttr->isPosYValid() ?
+                           pAttr->getPosY() :
+                           rOrigBounds.getCenterY() );
+
+                // the positional attribute retrieved from the
+                // ShapeAttributeLayer actually denotes the _middle_
+                // of the shape (do it as the PPTs do...)
+                return ::basegfx::B2DRectangle( aPos - 0.5*aSize,
+                                                aPos + 0.5*aSize );
+            }
         }
 
         RGBColor unoColor2RGBColor( sal_Int32 nColor )
@@ -587,6 +732,58 @@ namespace presentation
                     static_cast< sal_uInt8 >( nColor >> 8U ),
                     static_cast< sal_uInt8 >( nColor ),
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
+        }
+
+        void initSlideBackground( const ::cppcanvas::CanvasSharedPtr& rCanvas,
+                                  const ::basegfx::B2ISize&           rSize )
+        {
+            ::cppcanvas::CanvasSharedPtr pCanvas( rCanvas->clone() );
+
+            // set transformation to identitiy (->device pixel)
+            pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
+
+            // #i42440# Fill the _full_ background in
+            // black. Since we had to extend the bitmap by one
+            // pixel, and the bitmap is initialized white,
+            // depending on the slide content a one pixel wide
+            // line will show to the bottom and the right.
+            const ::basegfx::B2DPolygon aPoly(
+                ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::B2DRectangle( 0.0, 0.0,
+                                             rSize.getX(),
+                                             rSize.getY() ) ) );
+
+            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
+                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCanvas, aPoly ) );
+
+            if( pPolyPoly.get() )
+            {
+                pPolyPoly->setRGBAFillColor( 0x000000FFU );
+                pPolyPoly->draw();
+            }
+
+            // fill the bounds rectangle in white. Subtract one pixel
+            // from both width and height, because the slide size is
+            // chosen one pixel larger than given by the drawing
+            // layer. This is because shapes with line style, that
+            // have the size of the slide would otherwise be cut
+            // off. OTOH, every other slide background (solid fill,
+            // gradient, bitmap) render one pixel less, thus revealing
+            // ugly white pixel to the right and the bottom.
+            const ::basegfx::B2DPolygon aPoly2(
+                ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::B2DRectangle( 0.0, 0.0,
+                                             rSize.getX()-1,
+                                             rSize.getY()-1 ) ) );
+
+            pPolyPoly = ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon(
+                pCanvas, aPoly2 );
+
+            if( pPolyPoly.get() )
+            {
+                pPolyPoly->setRGBAFillColor( 0xFFFFFFFFU );
+                pPolyPoly->draw();
+            }
         }
     }
 }
