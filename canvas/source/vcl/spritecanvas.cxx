@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:38:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,8 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        maCanvasHelper.disposing();
+
         mxComponentContext.clear();
         mxDevice.reset();
         mpBackBuffer.reset(),
@@ -450,14 +452,15 @@ namespace vclcanvas
 
     void SpriteCanvas::moveSprite( const Sprite::ImplRef&   sprite,
                                    const Point&             rOldPos,
-                                   const Point&             rNewPos )
+                                   const Point&             rNewPos,
+                                   const Size&              rSpriteSize )
     {
         tools::LocalGuard aGuard;
 
         if( !mpRedrawManager.get() )
             return; // we're disposed
 
-        mpRedrawManager->moveSprite( sprite, rOldPos, rNewPos );
+        mpRedrawManager->moveSprite( sprite, rOldPos, rNewPos, rSpriteSize );
     }
 
     void SpriteCanvas::updateSprite( const Sprite::ImplRef& sprite,
