@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 11:41:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,22 @@ void SAL_CALL OfficeIPCThread::run()
              {
                 // Send requests to dispatch watcher if we have at least one. The receiver
                 // is responsible to delete the request after processing it.
+                if ( aCmdLineArgs.HasModuleParam() )
+                {
+                    SvtModuleOptions    aOpt;
+
+                    // Support command line parameters to start a module (as preselection)
+                    if ( aCmdLineArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                        pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
+                    else if ( aCmdLineArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                        pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
+                    else if ( aCmdLineArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                        pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
+                    else if ( aCmdLineArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                        pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+                }
+
+
                 ImplPostProcessDocumentsEvent( pRequest );
             }
             else
