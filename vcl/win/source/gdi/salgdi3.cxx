@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:47:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2100,6 +2100,9 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                 // Added again, but add only when not yet closed
                 if(pPoints[nPnt - 1] != pPoints[0])
                 {
+                    if( bHasOfflinePoints )
+                        pFlags[nPnt] = pFlags[0];
+
                     pPoints[nPnt++] = pPoints[0];
                 }
 
