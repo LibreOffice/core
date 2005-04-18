@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:35:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,20 @@ namespace basegfx
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
             maRangeZ = rRange.maRangeZ;
+        }
+
+        bool equal(const B3DRange& rRange) const
+        {
+            return (maRangeX.equal(rRange.maRangeX)
+                    && maRangeY.equal(rRange.maRangeY)
+                    && maRangeZ.equal(rRange.maRangeZ));
+        }
+
+        bool equal(const B3DRange& rRange, const double& rfSmallValue) const
+        {
+            return (maRangeX.equal(rRange.maRangeX, rfSmallValue)
+                    && maRangeY.equal(rRange.maRangeY, rfSmallValue)
+                    && maRangeZ.equal(rRange.maRangeZ, rfSmallValue));
         }
 
         double getMinX() const
