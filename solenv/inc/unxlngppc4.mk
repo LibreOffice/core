@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:57:17 $
+#   last change: $Author: obo $ $Date: 2005-04-18 14:02:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,7 +155,7 @@ LINKC*=$(CC)
 
 # default linker flags
 
-LINKFLAGSDEFS*=-Wl,-export-dynamic
+LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
 LINKFLAGS= $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
