@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:53:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 08:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,7 +1350,7 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
 {
     if ( !m_bForm && _bFill && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
     {
-        setModelReadOnly(sal_False);
+        // setModelReadOnly(sal_False);
         Sequence<Any> aArgs(2);
         PropertyValue aValue;
         aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocument"));
@@ -1363,7 +1363,7 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
         Reference< XJobExecutor > xExecuteable(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aArgs),UNO_QUERY);
         if ( xExecuteable.is() )
             xExecuteable->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fill")));
-        setModelReadOnly(sal_True);
+//      setModelReadOnly(sal_True);
     }
 }
 // -----------------------------------------------------------------------------
