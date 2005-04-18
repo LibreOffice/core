@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 15:58:32 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,9 +1018,15 @@ void LoadEnv::impl_detectTypeAndFilter()
         catch(const css::container::NoSuchElementException&)
             {}
     }
+
     // check if the filter (if one exists) points to a template format filter.
-    // Then we have to add the property AsTemplate implicitly.
-    // Otherwhise the template will be loaded in "Edit" mode instead as "Untitled".
+    // Then we have to add the property "AsTemplate".
+    // We need this information to decide afterwards if we can use a "recycle frame"
+    // for target "_default" or has to create a new one everytimes.
+    // On the other side we have to supress that, if this property already exists
+    // and should trigger a special handling. Then the outside calli of this method here,
+    // has to know, what he is doing .-)
+
     sal_Bool bIsOwnTemplate = sal_False;
     if (sFilter.getLength())
     {
