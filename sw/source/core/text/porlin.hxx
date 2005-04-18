@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:44:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ public:
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
 
     // for text- and multi-portions
-    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
