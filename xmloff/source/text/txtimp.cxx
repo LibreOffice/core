@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:41:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,7 +1202,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     }
 
     // outline level; set after list style has been set
-    if( bPara && nOutlineLevel != -1 )
+    if( bPara && nOutlineLevel != -1 && ! IsInList() )
     {
         // find list style name
         OUString sListStyle;
