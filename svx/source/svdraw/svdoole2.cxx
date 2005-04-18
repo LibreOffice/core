@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:19:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,9 @@ void SdrOle2Obj::Connect()
 
     if( mpImpl->mbConnected )
     {
-        DBG_ERROR("Connect() called on connected object!");
+        // mba: currently there are situations where it seems to be unavoidable to have multiple connects
+        // changing this would need a larger code rewrite, so for now I remove the assertion
+        // DBG_ERROR("Connect() called on connected object!");
         return;
     }
 
@@ -882,8 +884,17 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
                 if ( xObjRef.is() )
                 {
-                    // if the object already assigned to the helper the new one must be assigned
+                    // if the object is already assigned to the helper
+                    uno::Reference < embed::XEmbeddedObject > xOldObj = xObjRef.GetObject();
+
+                    // remove lock to enable closing the file without assigning to a temporary container
+                    xObjRef.Lock(FALSE);
+
+                    // remove all listeners
                     xObjRef.Clear();
+
+                    // remove object from container (because it is no assigned to another model/container)
+                    rContainer.RemoveEmbeddedObject( xOldObj );
                 }
 
                 mpImpl->aPersistName = aTmp;
@@ -1313,17 +1324,15 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                 {
                     // setting of VisArea not necessary for objects that don't cache it in loaded state
                 }
-                catch( embed::NoVisualAreaSizeException& )
-                {
-                    // objects my not have visual areas
-                }
-                catch( uno::Exception& e )
-                {
-                    (void)e;
-                    DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
-                }
-
-                Disconnect();
+        catch( embed::NoVisualAreaSizeException& )
+        {
+            // objects my not have visual areas
+        }
+        catch( uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
+        }
             }
         }
     }
