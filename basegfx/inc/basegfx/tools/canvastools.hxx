@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:41:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,16 @@ namespace basegfx
                                                  ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
                                             const ::basegfx::B2DPolyPolygon&                            rPolyPoly    );
 
+
+        ::com::sun::star::uno::Sequence<
+              ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::geometry::RealBezierSegment2D > >
+                    bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
+
+        ::com::sun::star::uno::Sequence<
+              ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::geometry::RealPoint2D > >
+                    pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
         ::basegfx::B2DPolygon polygonFromPoint2DSequence(
             const ::com::sun::star::uno::Sequence<
