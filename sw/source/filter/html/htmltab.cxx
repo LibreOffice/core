@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:27:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3286,7 +3286,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
         if( rImageURL.Len() )
         {
-            pBrushItem->SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), rImageURL) );
+            pBrushItem->SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), rImageURL, Link(), false) );
             pBrushItem->SetGraphicPos( GPOS_TILED );
         }
     }
