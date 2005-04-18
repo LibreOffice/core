@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:21:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,7 @@ namespace framework
                                                                                         m_bDoLayout : 1,
                                                                                         m_bVisible : 1,
                                                                                         m_bParentWindowVisible : 1;
+            sal_Bool                                                                    m_bMustDoLayout : 1;
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
