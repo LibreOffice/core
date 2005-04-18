@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:39:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,7 @@ short SwOutlineTabDialog::Ok()
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
                                                     RES_POOLCOLL_HEADLINE1 + i );
                 pTxtColl->SetOutlineLevel( NO_NUMBERING );
+                pTxtColl->ResetAttr(RES_PARATR_NUMRULE);
             }
             else if(aCollNames[i] != sHeadline)
             {
