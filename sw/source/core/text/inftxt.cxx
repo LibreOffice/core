@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:01:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,6 +694,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 {
     if( !nLen )
         return;
+
     if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
     {
         // check if accessibility options allow blinking portions:
@@ -706,13 +707,11 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 
             Point aPoint( aPos );
 
-#ifdef BIDI
             if ( GetTxtFrm()->IsRightToLeft() )
                 GetTxtFrm()->SwitchLTRtoRTL( aPoint );
 
             if ( TEXT_LAYOUT_BIDI_STRONG != GetOut()->GetLayoutMode() )
                 aPoint.X() -= rPor.Width();
-#endif
 
             if ( GetTxtFrm()->IsVertical() )
                 GetTxtFrm()->SwitchHorizontalToVertical( aPoint );
@@ -728,11 +727,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
             pBlink = NULL;
         }
     }
-
-    short nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
-                        rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
-
-#ifdef BIDI
 
     // The SwScriptInfo is useless if we are inside a field portion
     SwScriptInfo* pSI = 0;
@@ -753,33 +747,23 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLen,
                              rPor.Width(), bBullet );
 
-#else
-
-    const SwScriptInfo& rSI =
-                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
-
-    // in some cases, compression is not allowed or surpressed for
-    // performance reasons
-    USHORT nComp =( SW_CJK == GetFont()->GetActual() &&
-                    rSI.CountCompChg() &&
-                    ! IsMulti() &&
-                    ! rPor.InFldGrp() ) ?
-                    GetKanaComp() :
-                                0 ;
-
-    const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
-    sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell()
-                             && !GetOpt().IsHideSpell();
-    SwParaPortion* pPara = GetParaPortion();
-    ASSERT( pPara, "No paragraph!");
-    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, &pPara->GetScriptInfo(),
-                             rText, nStart, nLen, rPor.Width(), bBullet );
-
-#endif
-
     aDrawInf.SetLeft( GetPaintRect().Left() );
     aDrawInf.SetRight( GetPaintRect().Right() );
     aDrawInf.SetUnderFnt( pUnderFnt );
+
+    const long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
+                             rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
+    if ( nSpaceAdd )
+    {
+        xub_StrLen nCharCnt;
+        // --> FME 2005-04-04 #i41860# Thai justified alignemt needs some
+        // additional information:
+        aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
+                                    static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
+                                    0 );
+        // <--
+    }
+
     aDrawInf.SetSpace( nSpaceAdd );
     aDrawInf.SetKanaComp( nComp );
 
@@ -801,13 +785,10 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         // nicht berechnet werden koennen.
         const Point aPoint( aPos.X(), aPos.Y() - rPor.GetAscent() );
         const Size aSize( rPor.Width(), rPor.Height() );
-        aDrawInf.SetFont( pFnt );
         aDrawInf.SetPos( aPoint );
         aDrawInf.SetSize( aSize );
         aDrawInf.SetAscent( rPor.GetAscent() );
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
-        aDrawInf.SetSpace( nSpaceAdd );
-        aDrawInf.SetKanaComp( nComp );
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
         GetTxtFly()->DrawTextOpaque( aDrawInf );
     }
@@ -819,8 +800,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         else
         {
             aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
-            aDrawInf.SetSpace( nSpaceAdd );
-            aDrawInf.SetKanaComp( nComp );
             pFnt->_DrawText( aDrawInf );
         }
     }
