@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:36:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     register const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    const KSHORT nNewWidth = rInf.X() + PrtWidth();
+    const KSHORT nNewWidth = static_cast<USHORT>(rInf.X() + PrtWidth());
     // Nur Portions mit echter Breite koennen ein sal_True zurueckliefern
     // Notizen beispielsweise setzen niemals bFull==sal_True
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
@@ -449,7 +449,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
  *              virtual SwLinePortion::CalcSpacing()
  *************************************************************************/
 
-long SwLinePortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+long SwLinePortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
     return 0;
 }
