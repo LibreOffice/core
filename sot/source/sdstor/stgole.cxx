@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-22 12:28:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ BOOL StgCompObjStream::Load()
         *this >> aClsId;
         INT32 nLen1 = 0;
         *this >> nLen1;
+        // higher bits are ignored
+        nLen1 &= 0xFFFF;
         sal_Char* p = new sal_Char[ (USHORT) nLen1 ];
         if( Read( p, nLen1 ) == (ULONG) nLen1 )
         {
