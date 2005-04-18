@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:27:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ namespace
                                              2*rLineInfo.GetDotCount() );
 
             o_rStrokeAttributes.DashArray.realloc( nNumArryEntries );
+            double* pDashArray = o_rStrokeAttributes.DashArray.getArray();
 
 
             // iteratively fill dash array, first with dashs, then
@@ -264,13 +265,13 @@ namespace
 
             for( sal_Int32 i=0; i<rLineInfo.GetDashCount(); ++i )
             {
-                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDashLen;
-                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDistance;
+                pDashArray[nCurrEntry++] = nDashLen;
+                pDashArray[nCurrEntry++] = nDistance;
             }
             for( sal_Int32 i=0; i<rLineInfo.GetDotCount(); ++i )
             {
-                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDotLen;
-                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDistance;
+                pDashArray[nCurrEntry++] = nDotLen;
+                pDashArray[nCurrEntry++] = nDistance;
             }
         }
     }
@@ -414,7 +415,6 @@ namespace
             rStates.pop_back();
         }
     }
-
 }
 
 
@@ -1719,14 +1719,6 @@ namespace cppcanvas
                                     ::PolyPolygon aPath;
                                     aFill.getPath( aPath );
 
-                                    // subdivide if polygon has curves
-                                    basegfx::B2DPolyPolygon aTmpPolyPolygon( aPath.getB2DPolyPolygon() );
-                                    if (aTmpPolyPolygon.areControlVectorsUsed())
-                                    {
-                                        aTmpPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle( aTmpPolyPolygon );
-                                        aPath = ::PolyPolygon( aTmpPolyPolygon );
-                                    }
-
                                     ActionSharedPtr pPolyAction(
                                         internal::PolyPolyActionFactory::createPolyPolyAction(
                                             rVDev.LogicToPixel( aPath ),
@@ -1943,6 +1935,8 @@ namespace cppcanvas
                             MetaPolyLineAction* pPolyLineAct = static_cast<MetaPolyLineAction*>(pCurrAct);
 
                             const LineInfo& rLineInfo( pPolyLineAct->GetLineInfo() );
+                            ::Polygon       aPoly( rVDev.LogicToPixel(
+                                                       pPolyLineAct->GetPolygon() ) );
 
                             ActionSharedPtr pLineAction;
 
@@ -1951,7 +1945,7 @@ namespace cppcanvas
                                 // plain hair line polygon
                                 pLineAction =
                                     internal::PolyPolyActionFactory::createLinePolyPolyAction(
-                                        rVDev.LogicToPixel( pPolyLineAct->GetPolygon() ),
+                                        aPoly,
                                         rCanvas,
                                         rState );
 
@@ -1976,7 +1970,7 @@ namespace cppcanvas
 
                                 pLineAction =
                                     internal::PolyPolyActionFactory::createPolyPolyAction(
-                                        rVDev.LogicToPixel( pPolyLineAct->GetPolygon() ),
+                                        aPoly,
                                         rCanvas,
                                         rState,
                                         aStrokeAttributes ) ;
@@ -2488,6 +2482,240 @@ namespace cppcanvas
             return true;
         }
 
+
+        namespace
+        {
+            class ActionRenderer
+            {
+            public:
+                ActionRenderer( const ::basegfx::B2DHomMatrix& rTransformation ) :
+                    maTransformation( rTransformation ),
+                    mbRet( true )
+                {
+                }
+
+                bool result()
+                {
+                    return mbRet;
+                }
+
+                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rAction )
+                {
+                    // ANDing the result. We want to fail if at least
+                    // one action failed.
+                    mbRet &= rAction.mpAction->render( maTransformation );
+                }
+
+                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction&  rAction,
+                                 const Action::Subset&                                  rSubset )
+                {
+                    // ANDing the result. We want to fail if at least
+                    // one action failed.
+                    mbRet &= rAction.mpAction->render( maTransformation,
+                                                       rSubset );
+                }
+
+            private:
+                const ::basegfx::B2DHomMatrix   maTransformation;
+                bool                            mbRet;
+            };
+
+            class AreaQuery
+            {
+            public:
+                AreaQuery( const ::basegfx::B2DHomMatrix& rTransformation ) :
+                    maTransformation( rTransformation ),
+                    maBounds()
+                {
+                }
+
+                bool result()
+                {
+                    return true; // nothing can fail here
+                }
+
+                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rAction )
+                {
+                    maBounds.expand( rAction.mpAction->getBounds( maTransformation ) );
+                }
+
+                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction&  rAction,
+                                 const Action::Subset&                                  rSubset )
+                {
+                    maBounds.expand( rAction.mpAction->getBounds( maTransformation,
+                                                                  rSubset ) );
+                }
+
+                ::basegfx::B2DRange getBounds() const
+                {
+                    return maBounds;
+                }
+
+            private:
+                const ::basegfx::B2DHomMatrix   maTransformation;
+                ::basegfx::B2DRange             maBounds;
+            };
+
+            // Doing that via inline class. Compilers tend to not inline free
+            // functions.
+            struct UpperBoundActionIndexComparator
+            {
+                bool operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rLHS,
+                                 const ::cppcanvas::internal::ImplRenderer::MtfAction& rRHS )
+                {
+                    const sal_Int32 nLHSCount( rLHS.mpAction ?
+                                               rLHS.mpAction->getActionCount() : 0 );
+                    const sal_Int32 nRHSCount( rRHS.mpAction ?
+                                               rRHS.mpAction->getActionCount() : 0 );
+
+                    // compare end of action range, to have an action selected
+                    // by lower_bound even if the requested index points in
+                    // the middle of the action's range
+                    return rLHS.mnOrigIndex + nLHSCount < rRHS.mnOrigIndex + nRHSCount;
+                }
+            };
+
+            /** Algorithm to apply given functor to a subset range
+
+                @tpl Functor
+
+                Functor to call for each element of the subset
+                range. Must provide the following method signatures:
+                bool result() (returning false if operation failed)
+
+             */
+            template< typename Functor > bool
+                forSubsetRange( Functor&                                            rFunctor,
+                                ImplRenderer::ActionVector::const_iterator          aRangeBegin,
+                                ImplRenderer::ActionVector::const_iterator          aRangeEnd,
+                                sal_Int32                                           nStartIndex,
+                                sal_Int32                                           nEndIndex,
+                                const ImplRenderer::ActionVector::const_iterator&   rEnd )
+            {
+                if( aRangeBegin == aRangeEnd )
+                {
+                    // only a single action. Setup subset, and call functor
+                    Action::Subset aSubset;
+                    aSubset.mnSubsetBegin = ::std::max( 0L,
+                                                        nStartIndex - aRangeBegin->mnOrigIndex );
+                    aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
+                                                        nEndIndex - aRangeBegin->mnOrigIndex );
+
+                    ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
+
+                    rFunctor( *aRangeBegin, aSubset );
+
+                    return rFunctor.result();
+                }
+                else
+                {
+                    // more than one action.
+
+                    // render partial first, full intermediate, and
+                    // partial last action
+                    Action::Subset aSubset;
+                    aSubset.mnSubsetBegin = ::std::max( 0L,
+                                                        nStartIndex - aRangeBegin->mnOrigIndex );
+                    aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
+
+                    ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
+
+                    rFunctor( *aRangeBegin, aSubset );
+
+                    if( !rFunctor.result() )
+                        return false;
+
+                    // first action rendered, skip to next
+                    ++aRangeBegin;
+
+                    // render full middle actions
+                    if( !::std::for_each( aRangeBegin,
+                                          aRangeEnd,
+                                          rFunctor ).result() )
+                    {
+                        return false;
+                    }
+
+                    if( aRangeEnd == rEnd ||
+                        aRangeEnd->mnOrigIndex > nEndIndex )
+                    {
+                        // aRangeEnd denotes end of action vector,
+                        //
+                        // or
+                        //
+                        // nEndIndex references something _after_
+                        // aRangeBegin, but _before_ aRangeEnd
+                        //
+                        // either way: no partial action left
+                        return true;
+                    }
+
+                    aSubset.mnSubsetBegin = 0;
+                    aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
+
+                    ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
+
+                    rFunctor( *aRangeEnd, aSubset );
+
+                    return rFunctor.result();
+                }
+            }
+        }
+
+        bool ImplRenderer::getSubsetIndices( sal_Int32&                     io_rStartIndex,
+                                             sal_Int32&                     io_rEndIndex,
+                                             ActionVector::const_iterator&  o_rRangeBegin,
+                                             ActionVector::const_iterator&  o_rRangeEnd ) const
+        {
+            ENSURE_AND_RETURN( io_rStartIndex<=io_rEndIndex,
+                               "ImplRenderer::getSubsetIndices(): invalid action range" );
+
+            ENSURE_AND_RETURN( !maActions.empty(),
+                               "ImplRenderer::getSubsetIndices(): no actions to render" );
+
+            const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );
+            const sal_Int32 nMaxActionIndex( maActions.back().mnOrigIndex +
+                                             maActions.back().mpAction->getActionCount() );
+
+            // clip given range to permissible values (there might be
+            // ranges before and behind the valid indices)
+            io_rStartIndex = ::std::max( nMinActionIndex,
+                                         io_rStartIndex );
+            io_rEndIndex = ::std::min( nMaxActionIndex,
+                                       io_rEndIndex );
+
+            if( io_rStartIndex == io_rEndIndex ||
+                io_rStartIndex > io_rEndIndex )
+            {
+                // empty range, don't render anything. The second
+                // condition e.g. happens if the requested range lies
+                // fully before or behind the valid action indices.
+                return false;
+            }
+
+
+            const ActionVector::const_iterator aBegin( maActions.begin() );
+            const ActionVector::const_iterator aEnd( maActions.end() );
+
+
+            // find start and end action
+            // =========================
+            o_rRangeBegin = ::std::lower_bound( aBegin, aEnd,
+                                                MtfAction( ActionSharedPtr(), io_rStartIndex ),
+                                                UpperBoundActionIndexComparator() );
+            o_rRangeEnd   = ::std::lower_bound( aBegin, aEnd,
+                                                MtfAction( ActionSharedPtr(), io_rEndIndex ),
+                                                UpperBoundActionIndexComparator() );
+            return true;
+        }
+
+
+        // Public methods
+        // ====================================================================
+
         ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
                                     const GDIMetaFile&      rMtf,
                                     const Parameters&       rParams ) :
@@ -2647,100 +2875,17 @@ namespace cppcanvas
         {
         }
 
-        namespace
-        {
-            class ActionRenderer
-            {
-            public:
-                ActionRenderer( const ::basegfx::B2DHomMatrix& rTransformation ) :
-                    maTransformation( rTransformation ),
-                    mbRet( true )
-                {
-                }
-
-                bool result()
-                {
-                    return mbRet;
-                }
-
-                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rAction )
-                {
-                    // ANDing the result. We want to fail if at least
-                    // one action failed.
-                    mbRet &= rAction.mpAction->render( maTransformation );
-                }
-
-            private:
-                const ::basegfx::B2DHomMatrix   maTransformation;
-                bool                            mbRet;
-            };
-
-            // Doing that via inline class. Compilers tend to not inline free
-            // functions.
-            struct UpperBoundActionIndexComparator
-            {
-                bool operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rLHS,
-                                 const ::cppcanvas::internal::ImplRenderer::MtfAction& rRHS )
-                {
-                    const sal_Int32 nLHSCount( rLHS.mpAction ?
-                                               rLHS.mpAction->getActionCount() : 0 );
-                    const sal_Int32 nRHSCount( rRHS.mpAction ?
-                                               rRHS.mpAction->getActionCount() : 0 );
-
-                    // compare end of action range, to have an action selected
-                    // by lower_bound even if the requested index points in
-                    // the middle of the action's range
-                    return rLHS.mnOrigIndex + nLHSCount < rRHS.mnOrigIndex + nRHSCount;
-                }
-            };
-
-        }
-
         bool ImplRenderer::drawSubset( sal_Int32    nStartIndex,
                                        sal_Int32    nEndIndex ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::draw()" );
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::drawSubset()" );
 
-            ENSURE_AND_RETURN( nStartIndex<=nEndIndex,
-                               "ImplRenderer::drawSubset(): invalid action range" );
+            ActionVector::const_iterator aRangeBegin;
+            ActionVector::const_iterator aRangeEnd;
 
-            ENSURE_AND_RETURN( !maActions.empty(),
-                               "ImplRenderer::drawSubset(): no actions to render" );
-
-            const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );
-            const sal_Int32 nMaxActionIndex( maActions.back().mnOrigIndex +
-                                             maActions.back().mpAction->getActionCount() );
-
-            // clip given range to permissible values (there might be
-            // ranges before and behind the valid indices)
-            nStartIndex = ::std::max( nMinActionIndex,
-                                      nStartIndex );
-            nEndIndex = ::std::min( nMaxActionIndex,
-                                    nEndIndex );
-
-            if( nStartIndex == nEndIndex ||
-                nStartIndex > nEndIndex )
-            {
-                // empty range, rendered 'nothing' successfully. The
-                // second condition e.g. happens if the requested
-                // range lies fully before or behind the valid action
-                // indices.
-                return true;
-            }
-
-
-            const ActionVector::const_iterator aBegin( maActions.begin() );
-            const ActionVector::const_iterator aEnd( maActions.end() );
-
-
-            // find start and end action
-            // =========================
-            ActionVector::const_iterator aRangeBegin( ::std::lower_bound( aBegin, aEnd,
-                                                                          MtfAction( ActionSharedPtr(), nStartIndex ),
-                                                                          UpperBoundActionIndexComparator() ) );
-            ActionVector::const_iterator aRangeEnd( ::std::lower_bound( aBegin, aEnd,
-                                                                        MtfAction( ActionSharedPtr(), nEndIndex ),
-                                                                        UpperBoundActionIndexComparator() ) );
+            if( !getSubsetIndices( nStartIndex, nEndIndex,
+                                   aRangeBegin, aRangeEnd ) )
+                return true; // nothing to render (but _that_ was successful)
 
             // now, aRangeBegin references the action in which the
             // subset rendering must start, and aRangeEnd references
@@ -2756,70 +2901,51 @@ namespace cppcanvas
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvas::tools::getRenderStateTransform( aMatrix, maRenderState );
 
-            if( aRangeBegin == aRangeEnd )
-            {
-                // only a single action. Setup subset, and render
-                Action::Subset aSubset;
-                aSubset.mnSubsetBegin = ::std::max( 0L,
-                                                    nStartIndex - aRangeBegin->mnOrigIndex );
-                aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
-                                                    nEndIndex - aRangeBegin->mnOrigIndex );
+            ActionRenderer aRenderer( aMatrix );
 
-                ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                   "ImplRenderer::drawSubset(): Invalid indices" );
+            return forSubsetRange( aRenderer,
+                                   aRangeBegin,
+                                   aRangeEnd,
+                                   nStartIndex,
+                                   nEndIndex,
+                                   maActions.end() );
+        }
 
-                return aRangeBegin->mpAction->render( aMatrix, aSubset );
-            }
-            else
-            {
-                // more than one action.
+        ::basegfx::B2DRange ImplRenderer::getSubsetArea( sal_Int32  nStartIndex,
+                                                         sal_Int32  nEndIndex ) const
+        {
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::getSubsetArea()" );
 
-                // render partial first, full intermediate, and
-                // partial last action
-                Action::Subset aSubset;
-                aSubset.mnSubsetBegin = ::std::max( 0L,
-                                                    nStartIndex - aRangeBegin->mnOrigIndex );
-                aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
+            ActionVector::const_iterator aRangeBegin;
+            ActionVector::const_iterator aRangeEnd;
 
-                ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                   "ImplRenderer::drawSubset(): Invalid indices" );
+            if( !getSubsetIndices( nStartIndex, nEndIndex,
+                                   aRangeBegin, aRangeEnd ) )
+                return ::basegfx::B2DRange(); // nothing to render -> empty range
 
-                if( !aRangeBegin->mpAction->render( aMatrix, aSubset ) )
-                    return false;
+            // now, aRangeBegin references the action in which the
+            // subset querying must start, and aRangeEnd references
+            // the action in which the subset querying must end (it
+            // might also end right at the start of the referenced
+            // action, such that zero of that action needs to be
+            // queried).
 
-                // first action rendered, skip to next
-                ++aRangeBegin;
 
-                // render full middle actions
-                if( !::std::for_each( aRangeBegin,
-                                      aRangeEnd,
-                                      ActionRenderer( aMatrix ) ).result() )
-                {
-                    return false;
-                }
+            // query bounds for subset of actions
+            // ==================================
 
-                if( aRangeEnd == aEnd ||
-                    aRangeEnd->mnOrigIndex > nEndIndex )
-                {
-                    // aRangeEnd denotes end of action vector,
-                    //
-                    // or
-                    //
-                    // nEndIndex references something _after_
-                    // aRangeBegin, but _before_ aRangeEnd
-                    //
-                    // either way: no partial action left
-                    return true;
-                }
+            ::basegfx::B2DHomMatrix aMatrix;
+            ::canvas::tools::getRenderStateTransform( aMatrix, maRenderState );
 
-                aSubset.mnSubsetBegin = 0;
-                aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
+            AreaQuery aQuery( aMatrix );
+            forSubsetRange( aQuery,
+                            aRangeBegin,
+                            aRangeEnd,
+                            nStartIndex,
+                            nEndIndex,
+                            maActions.end() );
 
-                ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                   "ImplRenderer::drawSubset(): Invalid indices" );
-
-                return aRangeEnd->mpAction->render( aMatrix, aSubset );
-            }
+            return aQuery.getBounds();
         }
 
         bool ImplRenderer::draw() const
