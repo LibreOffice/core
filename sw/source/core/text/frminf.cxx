@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frminf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:21:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,11 @@ xub_StrLen SwTxtMargin::GetTxtEnd() const
     long i;
     for( i = nEnd - 1; i >= nPos; --i )
     {
-        xub_Unicode aChar = rTxt.GetChar( i );
+        xub_Unicode aChar = rTxt.GetChar( static_cast<xub_StrLen>(i) );
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
-            return i + 1;
+            return static_cast<xub_StrLen>(i + 1);
     }
-    return i + 1;
+    return static_cast<xub_StrLen>(i + 1);
 }
 
 /*************************************************************************
@@ -170,7 +170,7 @@ sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 // Wo beginnt der Text (ohne whitespaces)? ( Dokument global )
 SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 {
-    SwTwips nTxtStart = rLine.GetTxtStart();
+    xub_StrLen nTxtStart = rLine.GetTxtStart();
     SwTwips nStart;
     if( rLine.GetStart() == nTxtStart )
         nStart = rLine.GetLineStart();
