@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:54:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,11 +537,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         SwTwips nFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
         SwBidiPortion* pLastBidiPor = 0;
-        SvShorts* pSpaceAdd = pCurr->GetpSpaceAdd();
         SvUShorts* pKanaComp = pCurr->GetpKanaComp();
         MSHORT nSpaceIdx = 0;
         MSHORT nKanaIdx = 0;
-        short nSpaceAdd = pSpaceAdd ? (*pSpaceAdd)[0] : 0;
+        long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
 
         sal_Bool bNoTxt = sal_True;
 
@@ -566,10 +565,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             }
             if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
             {
-                if ( pSpaceAdd )
+                if ( pCurr->IsSpaceAdd() )
                 {
-                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                    if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                        nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                     else
                         nSpaceAdd = 0;
                 }
@@ -584,10 +583,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 else
                 {
                     // fix margin portion => next SpaceAdd, KanaComp value
-                    if( pSpaceAdd )
+                    if ( pCurr->IsSpaceAdd() )
                     {
-                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                        if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                            nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                         else
                             nSpaceAdd = 0;
                     }
@@ -640,10 +639,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         if( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() )
                         {
                             // update to current SpaceAdd, KanaComp values
-                            if ( pSpaceAdd )
+                            if ( pCurr->IsSpaceAdd() )
                             {
-                                if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                                if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                                    nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                                 else
                                     nSpaceAdd = 0;
                             }
@@ -661,10 +660,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     {
                         if ( ((SwMultiPortion*)pPor)->HasTabulator() )
                         {
-                            if ( pSpaceAdd )
+                            if ( pCurr->IsSpaceAdd() )
                             {
-                                if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                                if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                                    nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                                 else
                                     nSpaceAdd = 0;
                             }
@@ -890,8 +889,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 pOrig->Pos().X() +=
                                     ((SwDoubleLinePortion*)pPor)->PreWidth();
                         }
+
                         if( bSpaceChg )
                             SwDoubleLinePortion::ResetSpaceAdd( pCurr );
+
                         pCurr = pOldCurr;
                         nStart = nOldStart;
                         nY = nOldY;
@@ -975,10 +976,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() )
                     {
-                        if ( pSpaceAdd )
+                        if ( pCurr->IsSpaceAdd() )
                         {
-                            if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                            if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                                nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                             else
                                 nSpaceAdd = 0;
                         }
@@ -993,10 +994,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 if( pPor->IsMultiPortion() &&
                     ((SwMultiPortion*)pPor)->HasTabulator() )
                 {
-                    if ( pSpaceAdd )
+                    if ( pCurr->IsSpaceAdd() )
                     {
-                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                        if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                            nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                         else
                             nSpaceAdd = 0;
                     }
@@ -1297,19 +1298,18 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     sal_Bool bHolePortion = sal_False;
     sal_Bool bLastHyph = sal_False;
 
-    SvShorts *pSpaceAdd = pCurr->GetpSpaceAdd();
     SvUShorts *pKanaComp = pCurr->GetpKanaComp();
     xub_StrLen nOldIdx = GetInfo().GetIdx();
     MSHORT nSpaceIdx = 0;
     MSHORT nKanaIdx = 0;
-    short nSpaceAdd = pSpaceAdd ? (*pSpaceAdd)[0] : 0;
+    long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
     short nKanaComp = pKanaComp ? (*pKanaComp)[0] : 0;
 
     // nWidth ist die Breite der Zeile, oder die Breite des
     // Abschnitts mit dem Fontwechsel, in dem nX liegt.
 
     KSHORT nWidth = pPor->Width();
-    if ( pSpaceAdd || pKanaComp )
+    if ( pCurr->IsSpaceAdd() || pKanaComp )
     {
         if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
@@ -1320,10 +1320,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
           )
         {
-            if ( pSpaceAdd )
+            if ( pCurr->IsSpaceAdd() )
             {
-                if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                    nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                 else
                     nSpaceAdd = 0;
             }
@@ -1354,7 +1354,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         bHolePortion = pPor->IsHolePortion();
         pPor = pPor->GetPortion();
         nWidth = pPor->Width();
-        if ( pSpaceAdd || pKanaComp )
+        if ( pCurr->IsSpaceAdd() || pKanaComp )
         {
             if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
@@ -1366,10 +1366,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
               )
             {
-                if ( pSpaceAdd )
+                if ( pCurr->IsSpaceAdd() )
                 {
-                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                    if ( ++nSpaceIdx < pCurr->GetLLSpaceAddCount() )
+                        nSpaceAdd = pCurr->GetLLSpaceAdd( nSpaceIdx );
                     else
                         nSpaceAdd = 0;
                 }
@@ -1611,6 +1611,18 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                                          aSizeInf.GetIdx(),
                                          pPor->GetLen() );
                 aDrawInf.SetOfst( nX );
+
+                if ( nSpaceAdd )
+                {
+                    xub_StrLen nCharCnt;
+                    // --> FME 2005-04-04 #i41860# Thai justified alignemt needs some
+                    // additional information:
+                    aDrawInf.SetNumberOfBlanks( pPor->InTxtGrp() ?
+                                                static_cast<const SwTxtPortion*>(pPor)->GetSpaceCnt( aSizeInf, nCharCnt ) :
+                                                0 );
+                    // <--
+                }
+
                 aDrawInf.SetSpace( nSpaceAdd );
                 aDrawInf.SetFont( aSizeInf.GetFont() );
                 aDrawInf.SetFrm( pFrm );
