@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:58:03 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,20 @@ private:
         is moved into the visible area.
     */
     bool mbIsMakeSelectionVisiblePending;
+
+    /** Delete the given list of normal pages.  This method is a helper
+        function for DeleteSelectedPages().
+        @param rSelectedNormalPages
+            A list of normal pages.  Supplying master pages is an error.
+    */
+    void DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedNormalPages);
+
+    /** Delete the given list of master pages.  This method is a helper
+        function for DeleteSelectedPages().
+        @param rSelectedMasterPages
+            A list of master pages.  Supplying normal pages is an error.
+    */
+    void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
