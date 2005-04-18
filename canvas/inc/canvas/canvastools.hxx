@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:34:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,39 +170,39 @@ namespace canvas
             initViewState( ::com::sun::star::rendering::ViewState&                          viewState );
 
         ::basegfx::B2DHomMatrix&
-            getViewStateTransform( ::basegfx::B2DHomMatrix&                                         transform,
+            getViewStateTransform( ::basegfx::B2DHomMatrix&                                 transform,
                                    const ::com::sun::star::rendering::ViewState&            viewState );
 
         ::com::sun::star::rendering::ViewState&
             setViewStateTransform( ::com::sun::star::rendering::ViewState&                  viewState,
-                                   const ::basegfx::B2DHomMatrix&                                   transform );
+                                   const ::basegfx::B2DHomMatrix&                           transform );
 
         ::basegfx::B2DHomMatrix&
-            getRenderStateTransform( ::basegfx::B2DHomMatrix&                                       transform,
+            getRenderStateTransform( ::basegfx::B2DHomMatrix&                               transform,
                                      const ::com::sun::star::rendering::RenderState&        renderState );
 
         ::com::sun::star::rendering::RenderState&
             setRenderStateTransform( ::com::sun::star::rendering::RenderState&              renderState,
-                                     const ::basegfx::B2DHomMatrix&                                 transform );
+                                     const ::basegfx::B2DHomMatrix&                         transform );
 
         ::com::sun::star::rendering::ViewState&
             appendToViewState( ::com::sun::star::rendering::ViewState&                      viewState,
-                               const ::basegfx::B2DHomMatrix&                                       transform );
+                               const ::basegfx::B2DHomMatrix&                               transform );
 
         ::com::sun::star::rendering::RenderState&
             appendToRenderState( ::com::sun::star::rendering::RenderState&                  renderState,
-                                 const ::basegfx::B2DHomMatrix&                                     transform );
+                                 const ::basegfx::B2DHomMatrix&                             transform );
 
         ::com::sun::star::rendering::ViewState&
             prependToViewState( ::com::sun::star::rendering::ViewState&                     viewState,
-                                const ::basegfx::B2DHomMatrix&                                      transform );
+                                const ::basegfx::B2DHomMatrix&                              transform );
 
         ::com::sun::star::rendering::RenderState&
             prependToRenderState( ::com::sun::star::rendering::RenderState&                 renderState,
-                                  const ::basegfx::B2DHomMatrix&                                    transform );
+                                  const ::basegfx::B2DHomMatrix&                            transform );
 
         ::basegfx::B2DHomMatrix&
-            mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&                                   transform,
+            mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&                           transform,
                                          const ::com::sun::star::rendering::ViewState&      viewState,
                                          const ::com::sun::star::rendering::RenderState&    renderState );
 
@@ -213,11 +213,23 @@ namespace canvas
                                      const ::com::sun::star::uno::Reference<
                                          ::com::sun::star::rendering::XCanvas >                 xCanvas );
 
-        bool operator==( const ::com::sun::star::rendering::RenderState&                    rLHS,
-                         const ::com::sun::star::rendering::RenderState&                    rRHS );
+        void setDeviceColor( ::com::sun::star::rendering::RenderState&  o_renderState,
+                             const double&                              rColor0,
+                             const double&                              rColor1,
+                             const double&                              rColor2,
+                             const double&                              rColor3 );
 
-        bool operator==( const ::com::sun::star::rendering::ViewState&                      rLHS,
-                         const ::com::sun::star::rendering::ViewState&                      rRHS );
+        void getDeviceColor( double&                                            o_rColor0,
+                             double&                                            o_rColor1,
+                             double&                                            o_rColor2,
+                             double&                                            o_rColor3,
+                             const ::com::sun::star::rendering::RenderState&    rRenderState );
+
+        bool operator==( const ::com::sun::star::rendering::RenderState&    rLHS,
+                         const ::com::sun::star::rendering::RenderState&    rRHS );
+
+        bool operator==( const ::com::sun::star::rendering::ViewState&      rLHS,
+                         const ::com::sun::star::rendering::ViewState&      rRHS );
 
 
         // Matrix utilities
