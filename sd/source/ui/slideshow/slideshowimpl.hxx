@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:30:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ public:
 
     DECL_LINK( updateHdl, Timer* );
     DECL_LINK( ReadyForNextInputHdl, Timer* );
+    DECL_LINK( endPresentationHdl, void* );
 
     // XShapeEventListener
     virtual void SAL_CALL click( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, ::sal_Int32 nSlideIndex, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (::com::sun::star::uno::RuntimeException);
