@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:48:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,10 +568,30 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         return(bContinue);
     }
 
+    // Store the size and some other properties of the first page and notes
+    // page so that inserted pages can be properly scaled even when inserted
+    // before the first page.
+    // Note that the pointers are used later on as general page pointers.
+    SdPage* pPage = GetSdPage(0, PK_STANDARD);
+    Size  aSize(pPage->GetSize());
+    INT32 nLeft  = pPage->GetLftBorder();
+    INT32 nRight = pPage->GetRgtBorder();
+    INT32 nUpper = pPage->GetUppBorder();
+    INT32 nLower = pPage->GetLwrBorder();
+    Orientation eOrient = pPage->GetOrientation();
+
+    SdPage* pNPage = GetSdPage(0, PK_NOTES);
+    Size aNSize(GetSdPage(0, PK_NOTES)->GetSize());
+    INT32 nNLeft  = pNPage->GetLftBorder();
+    INT32 nNRight = pNPage->GetRgtBorder();
+    INT32 nNUpper = pNPage->GetUppBorder();
+    INT32 nNLower = pNPage->GetLwrBorder();
+    Orientation eNOrient = pPage->GetOrientation();
+
     // Seitengroesse und -raender an die Werte der letzten
     // Seiten anpassen?
     SdPage* pBMPage = pBookmarkDoc->GetSdPage(0,PK_STANDARD);
-    SdPage* pPage = GetSdPage(nSdPageCount - 1, PK_STANDARD);
+    pPage = GetSdPage(nSdPageCount - 1, PK_STANDARD);
 
     if( bNoDialogs )
     {
@@ -908,7 +928,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     }
 
     // #96029# nInsertPos > 2 is always true when inserting into non-empty models
-    if (nInsertPos > 2)
+    if (nInsertPos > 0)
     {
         /**********************************************************************
         |* Nur wenn Vorgaenger-Seiten vorhanden sind:
@@ -921,6 +941,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         |*
         |* Undo unnoetig, da die Seiten dabei sowieso rausfliegen.
         \*********************************************************************/
+        /*
         pPage = (SdPage*) GetPage(nInsertPos - 2);
         SdPage* pNPage = (SdPage*) GetPage(nInsertPos - 1);
 
@@ -937,6 +958,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         INT32 nNUpper = pNPage->GetUppBorder();
         INT32 nNLower = pNPage->GetLwrBorder();
         Orientation eNOrient = pPage->GetOrientation();
+        */
 
         ULONG nExchangeListPos = 0;
         USHORT nSdPageStart = (nInsertPos - 1) / 2;
