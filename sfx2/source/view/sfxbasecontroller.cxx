@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:20:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,7 @@ struct IMPL_SfxBaseController_DataContainer
     sal_Bool                                m_bDisposing            ;
     sal_Bool                                m_bHasKeyListeners;
     sal_Bool                                m_bHasMouseClickListeners;
+    sal_Bool                                m_bSuspendState;
     /** When this flag is <true/> (the default) then in dispose() the frame
         and with it the view shell are released together with the
         controller.
@@ -565,6 +566,7 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_bHasKeyListeners      ( sal_False                                             )
             ,   m_bHasMouseClickListeners( sal_False                                                )
             ,   m_bIsFrameReleasedWithController( sal_True                                              )
+            ,   m_bSuspendState         (sal_False                                              )
     {
     }
 
@@ -833,11 +835,19 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xMo
 
 sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // ignore dublicate calls, which doesnt change anything real
+    if (bSuspend == m_pData->m_bSuspendState)
+       return sal_True;
+
     if ( bSuspend == sal_True )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( !m_pData->m_pViewShell )
+        {
+            m_pData->m_bSuspendState = sal_True;
             return sal_True;
+        }
 
         if ( !m_pData->m_pViewShell->PrepareClose() )
             return sal_False;
@@ -859,6 +869,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
             // disable window and dispatcher until suspend call is withdrawn
             pActFrame->Enable( FALSE );
             pActFrame->GetDispatcher()->Lock( TRUE );
+            m_pData->m_bSuspendState = sal_True;
         }
 
         return bRet;
@@ -875,6 +886,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
             pActFrame->GetDispatcher()->Lock( FALSE );
         }
 
+        m_pData->m_bSuspendState = sal_False;
         return sal_True ;
     }
 
