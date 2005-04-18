@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationsetnode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:03:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,13 @@
 #ifndef _SLIDESHOW_ANIMATIONSETNODE_HXX
 #define _SLIDESHOW_ANIMATIONSETNODE_HXX
 
-#include <animationbasenode.hxx>
+#include <activityanimationbasenode.hxx>
 
 namespace presentation
 {
     namespace internal
     {
-        class AnimationSetNode : public AnimationBaseNode
+        class AnimationSetNode : public ActivityAnimationBaseNode
         {
         public:
             AnimationSetNode( const ::com::sun::star::uno::Reference<
@@ -78,16 +78,16 @@ namespace presentation
 
             virtual bool init();
 
-            /// Overridden, because duration 'indefinite' leads to duration '0' in this case
-            virtual void scheduleDeactivationEvent() const;
-
 #if defined(VERBOSE) && defined(DBG_UTIL)
             virtual const char* getDescription() const;
 #endif
 
         private:
+            void implScheduleDeactivationEvent() const;
             AnimationActivitySharedPtr createSetActivity();
         };
+
+        typedef ::boost::shared_ptr< AnimationSetNode > AnimationSetNodeSharedPtr;
     }
 }
 

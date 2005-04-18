@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generateevent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:05:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace presentation
     namespace internal
     {
         /** Create an event for the given description, call the
-            given AnimationNode method.
+            given functor.
 
             @param rEventDescription
             Directly from the API
