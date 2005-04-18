@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:31:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,15 @@ using namespace utl;
 #define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
 
 XTempFile::XTempFile ()
-: mbRemoveFile( sal_True )
+: mpStream( NULL )
+, mbRemoveFile( sal_True )
 , mbInClosed( sal_False )
 , mbOutClosed( sal_False )
+, mnCachedPos( 0 )
+, mbHasCachedPos( sal_False )
 {
     mpTempFile = new TempFile;
     mpTempFile->EnableKillingFile ( sal_True );
-    mpStream = mpTempFile->GetStream ( STREAM_STD_READWRITE );
 }
 XTempFile::~XTempFile ()
 {
@@ -183,6 +185,18 @@ sal_Int32 SAL_CALL XTempFile::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 
     if (nRead < static_cast < sal_uInt32 > ( nBytesToRead ) )
         aData.realloc( nRead );
 
+    if ( nBytesToRead > nRead )
+    {
+        // usually that means that the stream was read till the end
+        // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
+        mnCachedPos = mpStream->Tell();
+        mbHasCachedPos = sal_True;
+
+        mpStream = NULL;
+        if ( mpTempFile )
+            mpTempFile->CloseStream();
+    }
+
     return nRead;
 }
 sal_Int32 SAL_CALL XTempFile::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
@@ -192,6 +206,7 @@ sal_Int32 SAL_CALL XTempFile::readSomeBytes( Sequence< sal_Int8 >& aData, sal_In
     if ( mbInClosed )
         throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
 
+    checkConnected();
     checkError();
 
     if (nMaxBytesToRead < 0)
@@ -212,6 +227,7 @@ void SAL_CALL XTempFile::skipBytes( sal_Int32 nBytesToSkip )
     if ( mbInClosed )
         throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
 
+    checkConnected();
     checkError();
     mpStream->SeekRel(nBytesToSkip);
     checkError();
@@ -335,6 +351,17 @@ void SAL_CALL XTempFile::closeOutput(  )
 
     mbOutClosed = sal_True;
 
+    // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
+    if ( mpStream )
+    {
+        mnCachedPos = mpStream->Tell();
+        mbHasCachedPos = sal_True;
+
+        mpStream = NULL;
+        if ( mpTempFile )
+            mpTempFile->CloseStream();
+    }
+
     if ( mbInClosed )
     {
         // stream will be deleted by TempFile implementation
@@ -349,14 +376,32 @@ void SAL_CALL XTempFile::closeOutput(  )
 }
 
 
-
 void XTempFile::checkError () const
 {
-    if (mpStream->SvStream::GetError () != ERRCODE_NONE )
+    if (!mpStream || mpStream->SvStream::GetError () != ERRCODE_NONE )
         throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
 }
-void XTempFile::checkConnected () const
+void XTempFile::checkConnected ()
 {
+    if (!mpStream && mpTempFile)
+    {
+        mpStream = mpTempFile->GetStream( STREAM_STD_READWRITE );
+        if ( mpStream && mbHasCachedPos )
+        {
+            mpStream->Seek( mnCachedPos );
+            if ( mpStream->SvStream::GetError () == ERRCODE_NONE )
+            {
+                mbHasCachedPos = sal_False;
+                mnCachedPos = 0;
+            }
+            else
+            {
+                mpStream = NULL;
+                mpTempFile->CloseStream();
+            }
+        }
+    }
+
     if (!mpStream)
         throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
 }
