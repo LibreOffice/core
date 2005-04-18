@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 08:59:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,7 +1399,7 @@ public class OOoBean
             catch ( Throwable aExc ) {};
 
             // stop thread
-            super.stop();
+            this.interrupt();
         }
 
         /// gets called when the connection dies
@@ -1435,7 +1435,9 @@ public class OOoBean
 
             // continue to trying to connect the OOo instance
             long n = 0;
-            while ( iConnection != null && iConnection.getComponentContext() != null )
+            while ( isInterrupted() == false
+                    && iConnection != null
+                    && iConnection.getComponentContext() != null )
             {
                 dbgPrint( "EventListener(" + aTag + ").running() #" + ++n );
 
@@ -1470,8 +1472,9 @@ public class OOoBean
                 }
                 catch ( java.lang.InterruptedException aExc )
                 {
-                    // empty the OOoBean and cut the connection
-                    stopOOoConnection();
+                    dbgPrint("EventListener(" + aTag + ") interupted.");
+                    //thread can be ended by EvendListener.end();
+                    break;
                 }
             }
         }
