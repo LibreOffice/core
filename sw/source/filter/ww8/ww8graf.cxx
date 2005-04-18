@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:44:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2802,7 +2802,9 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     // --> OD 2005-03-07 #b6234902# - both flags <bBelowText> and <bDrawHell>
     // have to be set to move object into the background.
-    const bool bMoveToBackgrd = ( pF->bBelowText && pRecord->bDrawHell ) ||
+    // --> OD 2005-04-11 #i46794# - it reveals that value of flag <bBelowText>
+    // can be neglected.
+    const bool bMoveToBackgrd = pRecord->bDrawHell ||
                                 ( ( bIsHeader || bIsFooter ) && pF->nwr == 3 );
     if ( bMoveToBackgrd )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
