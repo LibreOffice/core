@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 15:31:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,38 +302,38 @@ TabPage TP_CONFIG_ACCEL
 {
     HelpId = HID_CONFIG_ACCEL ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 244 , 258 ) ;
+    Size = MAP_APPFONT ( 273 , 258 ) ;
+    RadioButton RB_OFFICE
+    {
+        Pos = MAP_APPFONT ( 192 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "%PRODUCTNAME" ;
+    };
+    RadioButton RB_MODULE
+    {
+        Pos = MAP_APPFONT ( 192 , 19 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "$(MODULE)" ;
+    };
     PushButton BTN_ACC_CHANGE
     {
-        Pos = MAP_APPFONT ( 188 , 40 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 192 , 35 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
         PUSHBUTTON_TEXT_CHANGE
     };
     PushButton BTN_ACC_REMOVE
     {
-        Pos = MAP_APPFONT ( 188 , 57 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 192 , 52 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_REMOVE
     };
-    RadioButton RB_OFFICE
-    {
-        Pos = MAP_APPFONT ( 188 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "%PRODUCTNAME" ;
-    };
-    RadioButton RB_MODULE
-    {
-        Pos = MAP_APPFONT ( 188 , 19 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "$(MODULE)" ;
-    };
     FixedLine GRP_ACC_KEYBOARD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 176 , 8 ) ;
+        Size = MAP_APPFONT ( 183 , 8 ) ;
         Text [ de ]  = "Tastenkombinationen" ;
         Group = TRUE ;
         Text [ en-US ] = "Shortcut keys";
@@ -342,7 +342,7 @@ TabPage TP_CONFIG_ACCEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 164 , 120 ) ;
+        Size = MAP_APPFONT ( 174 , 120 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_ACCELCONFIG_LISTBOX ;
@@ -350,7 +350,7 @@ TabPage TP_CONFIG_ACCEL
     FixedLine GRP_ACC_FUNCTIONS
     {
         Pos = MAP_APPFONT ( 6 , 140 ) ;
-        Size = MAP_APPFONT ( 174 , 8 ) ;
+        Size = MAP_APPFONT ( 183 , 8 ) ;
         Group = TRUE ;
         GROUPBOX_TEXT_FUNCTIONS
     };
@@ -366,7 +366,7 @@ TabPage TP_CONFIG_ACCEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 55 , 87 ) ;
+        Size = MAP_APPFONT ( 55 , 91 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGGROUP_ACC_LISTBOX ;
     };
@@ -381,7 +381,7 @@ TabPage TP_CONFIG_ACCEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 73 , 161 ) ;
-        Size = MAP_APPFONT ( 57 , 87 ) ;
+        Size = MAP_APPFONT ( 57 , 91 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGFUNCTION_ACC_LISTBOX ;
     };
@@ -398,32 +398,32 @@ TabPage TP_CONFIG_ACCEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 136 , 161 ) ;
-        Size = MAP_APPFONT ( 40 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 91 ) ;
         TabStop = TRUE ;
-    };
-    PushButton BTN_RESET
-    {
-        Pos = MAP_APPFONT ( 188 , 242 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        PUSHBUTTON_TEXT_RESET
     };
     PushButton BTN_LOAD
     {
-        Pos = MAP_APPFONT ( 188 , 208 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 192 , 204 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_LOAD
     };
     PushButton BTN_SAVE
     {
-        Pos = MAP_APPFONT ( 188 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 192 , 221 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_SAVE
+    };
+    PushButton BTN_RESET
+    {
+        Pos = MAP_APPFONT ( 192 , 238 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_RESET
     };
 };
  // TP_CONFIG_STATBAR -----------------------------------------------------
