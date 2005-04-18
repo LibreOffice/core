@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:56:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             break;
 
         case RTF_LEVELFOLLOW:
+          /* removed; waiting for swnum02 to be integrated!
             switch (nTokenValue)
             {
             case 0:
@@ -314,6 +315,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 aStringFollow=String(' ');
                 break;
             }
+            */
             break;
 
         case RTF_LEVELOLD:
@@ -402,6 +404,13 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
         String newSuffix=pCurNumFmt->GetSuffix();
         newSuffix+=aStringFollow;
         pCurNumFmt->SetSuffix(newSuffix);
+        /* removed; waiting for swnum02 to be integrated!
+        if (aStringFollow.GetChar(0)=='\t' && !pCurNumFmt->IsItemize())
+        {
+            pCurNumFmt->SetAbsLSpace(0);
+            pCurNumFmt->SetFirstLineOffset(0);
+        }
+        */
     }
 
     SkipToken( -1 );
