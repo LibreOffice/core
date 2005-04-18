@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transparencygroupaction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:32:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <canvas/canvastools.hxx>
+
 #include <transparencygroupaction.hxx>
 #include <outdevstate.hxx>
 
@@ -112,6 +114,9 @@
 #include <canvas/canvastools.hxx>
 #endif
 
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
@@ -204,6 +209,10 @@ namespace cppcanvas
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
+
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                       const Subset&                    rSubset ) const;
 
                 virtual sal_Int32 getActionCount() const;
 
@@ -511,11 +520,9 @@ namespace cppcanvas
                 else
                 {
                     // add alpha modulation value to DeviceColor
-                    aLocalState.DeviceColor.realloc(4);
-                    aLocalState.DeviceColor[0] = 1.0;
-                    aLocalState.DeviceColor[1] = 1.0;
-                    aLocalState.DeviceColor[2] = 1.0;
-                    aLocalState.DeviceColor[3] = mnAlpha;
+                    ::canvas::tools::setDeviceColor( aLocalState,
+                                                     1.0, 1.0, 1.0, mnAlpha );
+
                     mpCanvas->getUNOCanvas()->drawBitmapModulated( mxBufferBitmap,
                                                                    mpCanvas->getViewState(),
                                                                    aLocalState );
@@ -539,6 +546,36 @@ namespace cppcanvas
                 aSubset.mnSubsetEnd   = -1;
 
                 return render( rTransformation, aSubset );
+            }
+
+            ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation ) const
+            {
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                return tools::calcDevicePixelBounds(
+                    ::basegfx::B2DRange( 0,0,
+                                         maDstSize.Width(),
+                                         maDstSize.Height() ),
+                    mpCanvas->getViewState(),
+                    aLocalState );
+            }
+
+            ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                                                    const Subset&                   rSubset ) const
+            {
+                // TODO(F3): Currently, the bounds for
+                // TransparencyGroupAction subsets equal those of the
+                // full set, although this action is able to render
+                // true subsets.
+
+                // polygon only contains a single action, empty bounds
+                // if subset requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return ::basegfx::B2DRange();
+
+                return getBounds( rTransformation );
             }
 
             sal_Int32 TransparencyGroupAction::getActionCount() const
