@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:27:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,44 +1188,45 @@ SvxScriptSelectorDialog::GetDocTitle(
 
     try
     {
-        Reference< beans::XPropertySet > xProps(
-            xModel->getCurrentController()->getFrame(), UNO_QUERY_THROW );
-
-        OUString prop = OUString::createFromAscii( "Title" );
-        OUString tmp;
-
-        if ( sal_True == ( xProps->getPropertyValue( prop ) >>= tmp ) )
+        Reference< frame::XController > xCurrentController = xModel->getCurrentController();
+        if ( xCurrentController.is() )
         {
-            if ( xModel->getURL().getLength() == 0 )
-            {
-                // process "UntitledX - YYYYYYYY" // to get UntitledX
-                sal_Int32 pos = 0;
-                aResult = tmp.getToken(0, ' ', pos);
-            }
-            else
-            {
-                Reference< document::XDocumentInfoSupplier > xDIS(
-                    xModel, UNO_QUERY );
+            Reference< beans::XPropertySet > xProps( xCurrentController->getFrame(), UNO_QUERY_THROW );
 
-                if ( xDIS.is() )
+            OUString prop = OUString::createFromAscii( "Title" );
+            OUString tmp;
+
+            if ( sal_True == ( xProps->getPropertyValue( prop ) >>= tmp ) )
+            {
+                if ( xModel->getURL().getLength() == 0 )
                 {
-                    Reference< beans::XPropertySet > xProp (
-                        xDIS->getDocumentInfo(), UNO_QUERY );
-                    xProp->getPropertyValue( prop ) >>= tmp;
+                    // process "UntitledX - YYYYYYYY" // to get UntitledX
+                    sal_Int32 pos = 0;
+                    aResult = tmp.getToken(0, ' ', pos);
                 }
-
-                if ( tmp.getLength() == 0 )
+                else
                 {
-                    // strip out the last leaf of location name
-                    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-                    tmp = xModel->getURL();
-                    sal_Int32 idx = tmp.lastIndexOf( '/' );
-                    if ( ( idx + 1 ) <  tmp.getLength()  )
+                    Reference< document::XDocumentInfoSupplier > xDIS(
+                        xModel, UNO_QUERY );
+
+                    if ( xDIS.is() )
                     {
-                        tmp = tmp.copy( idx + 1 );
+                        Reference< beans::XPropertySet > xProp (
+                            xDIS->getDocumentInfo(), UNO_QUERY );
+                        xProp->getPropertyValue( prop ) >>= tmp;
                     }
+
+                    if ( tmp.getLength() == 0 )
+                    {
+                        // strip out the last leaf of location name
+                        // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
+                        tmp = xModel->getURL();
+                        INetURLObject aURLObj( tmp );
+                        if ( !aURLObj.HasError() )
+                            tmp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                    }
+                    aResult = tmp;
                 }
-                aResult = tmp;
             }
         }
     }
