@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicmigration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:26:27 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ namespace migration
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
             {
-                ::osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+                ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
                 if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
                 {
                     if ( aFileStatus.getFileType() == ::osl::FileStatus::Directory )
