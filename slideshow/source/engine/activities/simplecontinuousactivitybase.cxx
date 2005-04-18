@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:04:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,72 +197,72 @@ namespace presentation
             // need to do auto-reverse?
             // ========================
 
+            double nRepeats;
+            double nRelativeSimpleTime;
+
             // TODO(Q3): Refactor this mess
             if( isAutoReverse() )
             {
                 // divert active duration into repeat and
                 // fractional part.
-                double nRepeats;
-                double nFractionalActiveDuration( modf(nT, &nRepeats) );
+                const double nFractionalActiveDuration( modf(nT, &nRepeats) );
 
                 // for auto-reverse, map ranges [1,2), [3,4), ...
                 // to ranges [0,1), [1,2), etc.
-                if( (int)nRepeats % 2 )
+                if( ((int)nRepeats) % 2 )
                 {
                     // we're in an odd range, reverse sweep
-                    nT = ((int)nRepeats / 2) + 1.0 - nFractionalActiveDuration;
+                    nRelativeSimpleTime = 1.0 - nFractionalActiveDuration;
                 }
                 else
                 {
                     // we're in an even range, pass on as is
-                    nT = ((int)nRepeats / 2) + nFractionalActiveDuration;
+                    nRelativeSimpleTime = nFractionalActiveDuration;
+                }
+
+                // effective repeat count for autoreverse is half of
+                // the input time's value (each run of an autoreverse
+                // cycle is half of a repeat)
+                nRepeats /= 2;
+            }
+            else
+            {
+                // determine repeat
+                // ================
+
+                // calc simple time and number of repeats from nT
+                // Now, that's easy, since the fractional part of
+                // nT gives the relative simple time, and the
+                // integer part the number of full repeats:
+                nRelativeSimpleTime = modf(nT, &nRepeats);
+
+                // clamp repeats to max permissible value (maRepeats.getValue() - 1.0)
+                if( isRepeatCountValid() &&
+                    nRepeats >= getRepeatCount() )
+                {
+                    // Note that this code here only gets
+                    // triggered if maRepeats.getValue() is an
+                    // _integer_. Otherwise, nRepeats will never
+                    // reach nor exceed
+                    // maRepeats.getValue(). Thus, the code below
+                    // does not need to handle cases of fractional
+                    // repeats, and can always assume that a full
+                    // animation run has ended (with
+                    // nRelativeSimpleTime=1.0 for
+                    // non-autoreversed activities).
+
+                    // with modf, nRelativeSimpleTime will never
+                    // become 1.0, since nRepeats is incremented and
+                    // nRelativeSimpleTime set to 0.0 then.
+                    //
+                    // For the animation to reach its final value,
+                    // nRepeats must although become
+                    // maRepeats.getValue()-1.0, and
+                    // nRelativeSimpleTime=1.0.
+                    nRelativeSimpleTime = 1.0;
+                    nRepeats -= 1.0;
                 }
             }
-
-
-            // determine repeat
-            // ================
-
-            // calc simple time and number of repeats from nT
-            // Now, that's easy, since the fractional part of
-            // nT gives the relative simple time, and the
-            // integer part the number of full repeats:
-            double nRepeats;
-            double nRelativeSimpleTime( modf(nT, &nRepeats) );
-
-            // clamp repeats to max permissible value (maRepeats.getValue() - 1.0)
-            if( isRepeatCountValid() &&
-                nRepeats >= getRepeatCount() )
-            {
-                // Note that this code here only gets
-                // triggered if maRepeats.getValue() is an
-                // _integer_. Otherwise, nRepeats will never
-                // reach nor exceed
-                // maRepeats.getValue(). Thus, the code below
-                // does not need to handle cases of fractional
-                // repeats, and can always assume that a full
-                // animation run has ended (with
-                // nRelativeSimpleTime=1.0 for
-                // non-autoreversed activities, and
-                // nRelativeSimpleTime=0.0 for autoreversed
-                // ones).
-
-                // with modf, nRelativeSimpleTime will never
-                // become 1.0 (or 0.0 for simple auto-reversed
-                // effects, for that matter), since nRepeats
-                // is incremented and nRelativeSimpleTime set
-                // to 0.0 then.
-                //
-                // For the animation to reach its final value,
-                // nRepeats must although become
-                // maRepeats.getValue()-1.0, and
-                // nRelativeSimpleTime=1.0. For auto-reversed
-                // animations, nRelativeSimpleTime must become
-                // 0.0
-                nRelativeSimpleTime = isAutoReverse() ? 0.0 : 1.0;
-                nRepeats -= 1.0;
-            }
-
 
             // actually perform something
             // ==========================
