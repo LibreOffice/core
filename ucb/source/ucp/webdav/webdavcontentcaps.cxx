@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 10:03:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,8 @@ uno::Sequence< beans::Property > Content::getProperties(
 
         bTransient = m_bTransient;
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
-        xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
+        if ( m_xCachedProps.get() )
+            xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
         xProvider.set( m_pProvider );
     }
 
