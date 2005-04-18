@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 09:21:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,6 +964,13 @@ void SlideshowImpl::stopShow()
     This actually starts the slideshow. */
 void SlideshowImpl::onFirstPaint()
 {
+    if( mpShowWindow )
+    {
+        mpShowWindow->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+        mpShowWindow->Erase();
+        mpShowWindow->SetBackground();
+    }
+
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     maUpdateTimer.SetTimeout( (ULONG)100 );
     maUpdateTimer.Start();
@@ -1249,10 +1256,17 @@ void SlideshowImpl::gotoLastSlide()
 
 void SlideshowImpl::endPresentation()
 {
+    Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
+}
+
+IMPL_LINK( SlideshowImpl, endPresentationHdl, void*, EMPTYARG )
+{
     if( mpViewShell )
         mpViewShell->GetViewShellBase().StopPresentation();
     else
         stopShow();
+
+    return 0;
 }
 
 void SlideshowImpl::gotoSlideIndex( sal_Int32 nPageIndex )
@@ -1579,25 +1593,6 @@ bool SlideshowImpl::isDrawingPossible()
 
 double SlideshowImpl::update()
 {
-    /*
-    double fUpdate = -1.0;
-
-    const Reference<XSlideShow> xShow(mxShow);
-    if (xShow.is())
-    {
-        const bool bUpdate = xShow->update(fUpdate);
-        if( bUpdate )
-        {
-            maUpdateTimer.SetTimeout( static_cast<ULONG>(fUpdate * 1000.0) );
-            maUpdateTimer.Start();
-        }
-        else
-        {
-            maUpdateTimer.Stop();
-        }
-    }
-    return fUpdate;
-    */
     startUpdateTimer();
     return -1;
 }
@@ -1644,10 +1639,12 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 //         // Boost our prio, as long as we're in the render loop
 //         ::canvas::tools::PriorityBooster aBooster(2);
 
+        Reference< XSlideShow > xShow( mxShow );
+
         double fUpdate = -1.0;
         while(mxShow.is() && ( fUpdate < 1.0 ))
         {
-             if( !mxShow->update(fUpdate) )
+             if( !xShow->update(fUpdate) )
              {
                  fUpdate = -1.0;
                  break;
