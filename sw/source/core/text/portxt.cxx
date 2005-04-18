@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:12:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,9 +688,10 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
     return nCnt;
 }
 
-long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
      xub_StrLen nCnt = 0;
+
     if ( InExpGrp() )
     {
         if( !IsBlankPortion() && !InNumberGrp() )
@@ -723,17 +724,18 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
             SwLinePortion* pPor = GetPortion();
 
             // we do not want an extra space in front of margin portions
-            if ( ! nCnt )
-                return 0;
+            if ( nCnt )
+            {
+                while ( pPor && !pPor->Width() && ! pPor->IsHolePortion() )
+                    pPor = pPor->GetPortion();
 
-            while ( pPor && !pPor->Width() && ! pPor->IsHolePortion() )
-                pPor = pPor->GetPortion();
-
-            if ( !pPor || pPor->InFixMargGrp() || pPor->IsHolePortion() )
-                return ( nCnt - 1 ) * nSpaceAdd;
+                if ( !pPor || pPor->InFixMargGrp() || pPor->IsHolePortion() )
+                    --nCnt;
+            }
         }
     }
-    return nCnt * nSpaceAdd;
+
+    return nCnt * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 /*************************************************************************
