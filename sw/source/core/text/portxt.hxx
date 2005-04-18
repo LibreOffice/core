@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:37:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public:
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
-    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     // zaehlt die Spaces fuer Blocksatz
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf, xub_StrLen& rCnt ) const;
