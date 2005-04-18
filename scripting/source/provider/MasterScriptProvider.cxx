@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:17:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,15 +527,9 @@ MasterScriptProvider::parseLocationName( const ::rtl::OUString& location )
     // strip out the last leaf of location name
     // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
     ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
-
-    if ( lastSlashIndex > -1 )
-    {
-        if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
-        {
-            temp = temp.copy( lastSlashIndex + 1 );
-        }
-    }
+    INetURLObject aURLObj( temp );
+    if ( !aURLObj.HasError() )
+        temp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     return temp;
 }
 
