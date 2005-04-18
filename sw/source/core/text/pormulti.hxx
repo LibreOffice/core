@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 14:44:58 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,24 +182,17 @@ public:
     inline void SetFlyInCntnt( sal_Bool bNew ) { bFlyInCntnt = bNew; }
     inline sal_Bool IsDouble() const { return bDouble; }
     inline sal_Bool IsRuby() const { return bRuby; }
-#ifdef BIDI
     inline sal_Bool IsBidi() const { return bBidi; }
-#endif
     inline sal_Bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
-#ifdef BIDI
-    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd ) const;
-#endif
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 
     // Summarize the internal lines to calculate the (external) size
     void CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf );
 
-#ifndef BIDI
-    inline sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
-#endif
     inline sal_Bool HasBrackets() const;
     inline sal_Bool HasRotation() const { return 0 != (1 & nDirection); }
     inline sal_Bool IsRevers() const { return 0 != (2 & nDirection); }
@@ -226,7 +219,7 @@ public:
 
     inline SwBracket* GetBrackets() const { return pBracket; }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
-    void PaintBracket( SwTxtPaintInfo& rInf, short nSpc, sal_Bool bOpen ) const;
+    void PaintBracket( SwTxtPaintInfo& rInf, long nSpaceAdd, sal_Bool bOpen ) const;
     void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
     inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
     inline KSHORT PostWidth() const { return pBracket->nPostWidth; }
@@ -235,9 +228,6 @@ public:
     inline KSHORT BracketWidth(){ return PreWidth() + PostWidth(); }
 
     void CalcBlanks( SwTxtFormatInfo &rInf );
-#ifndef BIDI
-    sal_Bool ChangeSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
-#endif
     static void ResetSpaceAdd( SwLineLayout* pCurr );
     inline SwTwips GetLineDiff() const { return nLineDiff; }
     inline xub_StrLen GetSpaceCnt() const
@@ -247,10 +237,8 @@ public:
     inline xub_StrLen GetBlank1() const { return nBlank1; }
     inline xub_StrLen GetBlank2() const { return nBlank2; }
 
-    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
-#ifdef BIDI
-    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd ) const;
-#endif
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 };
 
 class SwRubyPortion : public SwMultiPortion
@@ -301,9 +289,9 @@ public:
     inline void SetSpaceCnt( xub_StrLen nNew ) { nBlanks = nNew; }
     inline xub_StrLen GetSpaceCnt() const { return nBlanks; }
     // Calculates extra spacing based on number of blanks
-    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
     // Manipulate the spacing array at pCurr
-    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd ) const;
+    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 };
 #endif
 
@@ -318,25 +306,14 @@ class SwTxtCursorSave
     BYTE nOldProp;
     sal_Bool bSpaceChg;
 public:
-#ifdef BIDI
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
-        SwTwips nY, USHORT& nX, xub_StrLen nCurrStart, short nSpaceAdd );
-#else
-    SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
-        SwTwips nY, xub_StrLen nCurrStart, short nSpaceAdd );
-#endif
+        SwTwips nY, USHORT& nX, xub_StrLen nCurrStart, long nSpaceAdd );
     ~SwTxtCursorSave();
 };
 
 /*************************************************************************
  *                  inline - Implementations
  *************************************************************************/
-
-#ifndef BIDI
-inline sal_Bool SwMultiPortion::ChgSpaceAdd(SwLineLayout* pCurr,short nSpaceAdd)
-    { return IsDouble() ? ((SwDoubleLinePortion*)this)->ChangeSpaceAdd( pCurr,
-                            nSpaceAdd ) : sal_False; }
-#endif
 
 inline sal_Bool SwMultiPortion::HasBrackets() const
     { return IsDouble() ? 0 != ((SwDoubleLinePortion*)this)->GetBrackets()
