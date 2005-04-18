@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animatedsprite.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:51:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,12 @@ namespace presentation
             mpViewLayer( rViewLayer ),
             mpSprite(),
             maEffectiveSpriteSizePixel( rSpriteSizePixel ),
+            maContentPixelOffset(),
             mnAlpha(0.0),
             maPosPixel(),
             maPos(),
             maClip(),
+            maTransform(),
             mbSpriteVisible( false )
         {
             ENSURE_AND_THROW( mpViewLayer.get(), "AnimatedSprite::AnimatedSprite(): Invalid view layer" );
@@ -124,11 +126,17 @@ namespace presentation
 
             const ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
 
-            // extract linear part of canvas view transformation (linear means:
-            // without translational components)
+            // extract linear part of canvas view transformation
+            // (linear means: without translational components). The
+            // only translation that is imposed at the view transform
+            // is the local content pixel offset.
+            //
+            // We can apply that directly here, no need to call
+            // aLinearTransform.translate(), since, as said above, the
+            // last column of aLinearTransform is assumed [0 0 1]
             ::basegfx::B2DHomMatrix aLinearTransform( mpViewLayer->getCanvas()->getTransformation() );
-            aLinearTransform.set( 0, 2, 0.0 );
-            aLinearTransform.set( 1, 2, 0.0 );
+            aLinearTransform.set( 0, 2, maContentPixelOffset.getX() );
+            aLinearTransform.set( 1, 2, maContentPixelOffset.getY() );
 
             // apply linear part of canvas view transformation to sprite canvas
             pContentCanvas->setTransformation( aLinearTransform );
@@ -200,6 +208,16 @@ namespace presentation
             return mpSprite.get() != NULL;
         }
 
+        void AnimatedSprite::setPixelOffset( const ::basegfx::B2DSize& rPixelOffset )
+        {
+            maContentPixelOffset = rPixelOffset;
+        }
+
+        ::basegfx::B2DSize AnimatedSprite::getPixelOffset() const
+        {
+            return maContentPixelOffset;
+        }
+
         void AnimatedSprite::move( const ::basegfx::B2DPoint& rNewPos )
         {
             maPos.setValue( rNewPos );
@@ -222,6 +240,12 @@ namespace presentation
         {
             maClip.setValue( rClip );
             mpSprite->setClip( rClip );
+        }
+
+        void AnimatedSprite::transform( const ::basegfx::B2DHomMatrix& rTransform )
+        {
+            maTransform.setValue( rTransform );
+            mpSprite->transform( rTransform );
         }
 
         void AnimatedSprite::setPriority( double )
