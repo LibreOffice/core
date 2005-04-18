@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:35:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,15 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
     // <--
 
     // format anchor frame - format of its follow not needed
-    SwForbidFollowFormat aForbidFollowFormat( mrAnchorTxtFrm );
-    mrAnchorTxtFrm.Calc();
+    // --> OD 2005-04-08 #i43255# - forbid follow format, only if anchor text
+    // frame is in table
+    if ( mrAnchorTxtFrm.IsInTab() )
+    {
+        SwForbidFollowFormat aForbidFollowFormat( mrAnchorTxtFrm );
+        mrAnchorTxtFrm.Calc();
+    }
+    else
+    {
+        mrAnchorTxtFrm.Calc();
+    }
 }
