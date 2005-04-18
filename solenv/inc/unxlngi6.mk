@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:57:01 $
+#   last change: $Author: obo $ $Date: 2005-04-18 14:02:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,7 +169,7 @@ LINKC*=$(CC)
 # default linker flags
 LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
