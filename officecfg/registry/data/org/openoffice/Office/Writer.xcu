@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:41:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@
      <value>true</value>
     </prop>
     <prop oor:name="Greeting" oor:type="xs:string">
-     <value>Sincerely</value>
+     <value></value>
     </prop>
     <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
      <value>true</value>
@@ -281,7 +281,7 @@
      <value>1</value>
     </prop>
     <prop oor:name="Salutation" oor:type="xs:string">
-     <value>To Whom it May Concern</value>
+     <value></value>
     </prop>
     <prop oor:name="SenderAddressType" oor:type="xs:int">
      <value>1</value>
@@ -356,7 +356,7 @@
      <value>0</value>
     </prop>
     <prop oor:name="Greeting" oor:type="xs:string">
-     <value>Cheers</value>
+     <value></value>
     </prop>
     <prop oor:name="PrintGreeting" oor:type="xs:boolean">
      <value>true</value>
@@ -368,7 +368,7 @@
      <value>true</value>
     </prop>
     <prop oor:name="Salutation" oor:type="xs:string">
-     <value>Hello</value>
+     <value></value>
     </prop>
     <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
@@ -482,7 +482,7 @@
      <value>true</value>
     </prop>
     <prop oor:name="Greeting" oor:type="xs:string">
-     <value>Best regards</value>
+     <value></value>
     </prop>
     <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
      <value>true</value>
@@ -506,7 +506,7 @@
      <value>1</value>
     </prop>
     <prop oor:name="Salutation" oor:type="xs:string">
-     <value>Dear Sir or Madam</value>
+     <value></value>
     </prop>
     <prop oor:name="SenderAddressType" oor:type="xs:int">
      <value>1</value>
