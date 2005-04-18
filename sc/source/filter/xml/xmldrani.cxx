@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:57:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 08:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,8 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsEnabledUserList(sal_False),
     bSubTotalsAscending(sal_True),
     bNative(sal_True),
-    aSortSequence()
+    aSortSequence(),
+    sDatabaseRangeName(ScGlobal::GetRscString(STR_DB_NONAME))
 {
     nSourceType = sheet::DataImportMode_NONE;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
