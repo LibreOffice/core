@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:39:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,8 @@ namespace vclcanvas
         virtual void hideSprite( const Sprite::ImplRef& sprite );
         virtual void moveSprite( const Sprite::ImplRef& sprite,
                                  const Point&           rOldPos,
-                                 const Point&           rNewPos );
+                                 const Point&           rNewPos,
+                                 const Size&            rSpriteSize );
         virtual void updateSprite( const Sprite::ImplRef&   sprite,
                                    const Point&             rPos,
                                    const Rectangle&         rUpdateArea );
