@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:42:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2295,26 +2295,17 @@ void SwTxtNode::ClearSwpHintsArr( int bDelAll, int bDelFields )
     }
 }
 
-#ifdef VERTICAL_LAYOUT
 USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
                            USHORT nScript ) const
-#else
-USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
-#endif
 {
     USHORT nWhichId = RES_CHRATR_LANGUAGE;
     USHORT nRet = LANGUAGE_DONTKNOW;
     if( pSwpHints )
     {
-#ifdef VERTICAL_LAYOUT
         if ( ! nScript )
             nScript = pBreakIt->GetRealScriptOfText( aText, nBegin );
 
         nWhichId = GetWhichOfScript( nWhichId, nScript );
-#else
-        nWhichId = GetWhichOfScript( nWhichId,
-                        pBreakIt->GetRealScriptOfText( aText, nBegin ));
-#endif
 
         xub_StrLen nEnd = nBegin + nLen;
         for( USHORT i = 0, nSize = pSwpHints->Count(); i < nSize; ++i )
@@ -2368,7 +2359,7 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
 
         nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
-            nRet = GetAppLanguage();
+            nRet = static_cast<USHORT>(GetAppLanguage());
     }
     return nRet;
 }
