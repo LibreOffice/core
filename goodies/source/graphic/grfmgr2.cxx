@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:47:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,10 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
         {
             const BitmapEx aSrcBmpEx( rGraphic.GetBitmapEx() );
 
-            if( mpCache->IsDisplayCacheable( pOut, rPt, rSz, rObj, rAttr ) )
+            // #i46805# No point in caching a bitmap that is rendered
+            // via RectFill on the OutDev
+            if( !(pOut->GetDrawMode() & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP )) &&
+                mpCache->IsDisplayCacheable( pOut, rPt, rSz, rObj, rAttr ) )
             {
                 BitmapEx aDstBmpEx;
 
