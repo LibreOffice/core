@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svuidlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:46:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,7 @@ ModalDialog MD_INSERT_OBJECT_APPLET
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
-        Text [ de ] = "~Klasse" ;
+        Text [ de ] = "~Name der Class-Datei" ;
         Text [ en-US ] = "~Class" ;
     };
     Edit ED_CLASSFILE
@@ -543,7 +543,7 @@ ModalDialog MD_INSERT_OBJECT_APPLET
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
-        Text [ de ] = "~Class Location" ;
+        Text [ de ] = "~Speicherort für Class-Datei" ;
         Text [ en-US ] = "Class ~Location" ;
     };
     Edit ED_CLASSLOCATION
