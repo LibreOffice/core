@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 17:00:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,21 +810,29 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 }
             }
 
-            // Set the visibility of the right pane.
-            GetPaneManager().RequestViewShellChange(
-                PaneManager::PT_RIGHT,
-                ViewShell::ST_TASK_PANE,
-                PaneManager::CM_SYNCHRONOUS);
-
-            // Now we can call the tool pane to make the specified panel
-            // visible.
-            if (bShowToolPanel && bPanelIdGiven)
+            // Ignore the request for some combinations of panels and view
+            // shell types.
+            if (bPanelIdGiven
+                && ! (nPanelId==toolpanel::TaskPaneViewShell::PID_LAYOUT
+                    && GetMainViewShell()!=NULL
+                    && GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
             {
-                toolpanel::TaskPaneViewShell* pTaskPane
-                    = static_cast<toolpanel::TaskPaneViewShell*>(
-                        GetPaneManager().GetViewShell(PaneManager::PT_RIGHT));
-                if (pTaskPane != NULL)
-                    pTaskPane->ShowPanel (nPanelId);
+                // Set the visibility of the right pane.
+                GetPaneManager().RequestViewShellChange(
+                    PaneManager::PT_RIGHT,
+                    ViewShell::ST_TASK_PANE,
+                    PaneManager::CM_SYNCHRONOUS);
+
+                // Now we can call the tool pane to make the specified panel
+                // visible.
+                if (bShowToolPanel && bPanelIdGiven)
+                {
+                    toolpanel::TaskPaneViewShell* pTaskPane
+                        = static_cast<toolpanel::TaskPaneViewShell*>(
+                            GetPaneManager().GetViewShell(PaneManager::PT_RIGHT));
+                    if (pTaskPane != NULL)
+                        pTaskPane->ShowPanel (nPanelId);
+                }
             }
         }
 
