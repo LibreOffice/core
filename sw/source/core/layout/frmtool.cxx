@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:35:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,6 +1079,31 @@ SwCntntNotify::~SwCntntNotify()
     if ( pCnt->IsTxtFrm() && POS_DIFF( aFrm, pCnt->Frm() ) )
     {
         pCnt->InvalidateObjs( true );
+    }
+    // <--
+
+    // --> OD 2005-04-12 #i43255# - move code to invalidate at-character
+    // anchored objects due to a change of its anchor character from
+    // method <SwTxtFrm::Format(..)>.
+    if ( pCnt->IsTxtFrm() )
+    {
+        SwTxtFrm* pMasterFrm = pCnt->IsFollow()
+                               ? static_cast<SwTxtFrm*>(pCnt)->FindMaster()
+                               : static_cast<SwTxtFrm*>(pCnt);
+        if ( pMasterFrm && !pMasterFrm->IsFlyLock() &&
+             pMasterFrm->GetDrawObjs() )
+        {
+            SwSortedObjs* pObjs = pMasterFrm->GetDrawObjs();
+            for ( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
+            {
+                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+                if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                        == FLY_AUTO_CNTNT )
+                {
+                    pAnchoredObj->CheckCharRectAndTopOfLine( !pMasterFrm->IsEmpty() );
+                }
+            }
+        }
     }
     // <--
 }
