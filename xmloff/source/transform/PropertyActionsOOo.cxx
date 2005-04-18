@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:58:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,9 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
 
     { XML_NAMESPACE_DRAW, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OOO,
           NO_PARAMS }, /* generated entry */
+
+    // b6242385: read writing-mode for text frames
+    { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_ATACTION_COPY, NO_PARAMS },
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
