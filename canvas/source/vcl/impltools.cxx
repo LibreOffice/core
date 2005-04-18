@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:37:42 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,25 +158,49 @@ namespace vclcanvas
     {
         ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
-            uno::Reference< lang::XServiceInfo > xRef( xPoly,
-                                                       uno::UNO_QUERY );
+            LinePolyPolygon* pPolyImpl = dynamic_cast< LinePolyPolygon* >( xPoly.get() );
 
-            if( xRef.is() &&
-                xRef->getImplementationName().equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(LINEPOLYPOLYGON_IMPLEMENTATION_NAME))) )
+            if( pPolyImpl )
             {
-                // TODO(Q1): Maybe use dynamic_cast here
-
-                // TODO(F1): Provide true beziers here!
-                return static_cast<LinePolyPolygon*>(xPoly.get())->getPolyPolygon();
+                return pPolyImpl->getPolyPolygon();
             }
             else
             {
-                // TODO(F1): extract points from polygon interface
-                ENSURE_AND_THROW( false,
-                                  "polyPolygonFromXPolyPolygon2D(): could not extract points" );
-            }
+                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
 
-            return ::basegfx::B2DPolyPolygon();
+                // not a known implementation object - try data source
+                // interfaces
+                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
+                    xPoly,
+                    uno::UNO_QUERY );
+
+                if( xBezierPoly.is() )
+                {
+                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
+                        xBezierPoly->getBezierSegments( 0,
+                                                        nPolys,
+                                                        0,
+                                                        -1 ) );
+                }
+                else
+                {
+                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
+                        xPoly,
+                        uno::UNO_QUERY );
+
+                    // no implementation class and no data provider
+                    // found - contract violation.
+                    CHECK_AND_THROW( xLinePoly.is(),
+                                     "VCLCanvas::polyPolygonFromXPolyPolygon2D(): Invalid input "
+                                     "poly-polygon, cannot retrieve vertex data" );
+
+                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
+                        xLinePoly->getPoints( 0,
+                                              nPolys,
+                                              0,
+                                              -1 ) );
+                }
+            }
         }
 
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
@@ -372,11 +396,11 @@ namespace vclcanvas
             bool bCopyBack( false );
 
             // calc effective transformation for bitmap
+            const ::basegfx::B2DRectangle aSrcRect( 0, 0,
+                                                    aBmpSize.Width(),
+                                                    aBmpSize.Height() );
             ::canvas::tools::calcTransformedRectBounds( aDestRect,
-                                                        ::basegfx::B2DRectangle(0,
-                                                                                0,
-                                                                                aBmpSize.Width(),
-                                                                                aBmpSize.Height()),
+                                                        aSrcRect,
                                                         rTransform );
 
             // re-center bitmap, such that it's left, top border is
@@ -385,7 +409,7 @@ namespace vclcanvas
             // this rectangle unscaled to the origin.
             ::basegfx::B2DHomMatrix aLocalTransform;
             ::canvas::tools::calcRectToOriginTransform( aLocalTransform,
-                                                        aDestRect,
+                                                        aSrcRect,
                                                         rTransform );
 
             const bool bModulateColors( eModulationMode == MODULATE_WITH_DEVICECOLOR &&
@@ -451,8 +475,8 @@ namespace vclcanvas
             }
             // else: mapping table is not used
 
-            const Size aDestBmpSize( ::basegfx::fround( aDestRect.getMaxX() ),
-                                     ::basegfx::fround( aDestRect.getMaxY() ) );
+            const Size aDestBmpSize( ::basegfx::fround( aDestRect.getWidth() ),
+                                     ::basegfx::fround( aDestRect.getHeight() ) );
 
             if( aDestBmpSize.Width() == 0 || aDestBmpSize.Height() == 0 )
                 return BitmapEx();
@@ -479,7 +503,7 @@ namespace vclcanvas
                     // we're doing inverse mapping here, i.e. mapping
                     // points from the destination bitmap back to the
                     // source
-                    ::basegfx::B2DHomMatrix aTransform( rTransform );
+                    ::basegfx::B2DHomMatrix aTransform( aLocalTransform );
                     aTransform.invert();
 
                     // for the time being, always read as ARGB
