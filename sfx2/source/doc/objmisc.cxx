@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:40:45 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,6 +1243,9 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     pImp->bInitialized = sal_True;
     SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
+
+    // Title is not available until loading has finished
+    Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
     if ( pImp->nEventId )
         PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
 }
