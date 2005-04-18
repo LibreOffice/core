@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:41:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
     SwLinePortion *pFirst = pCurr->GetFirstPortion();
     SwLinePortion *pPos = pFirst;
     SwTxtPaintInfo aTmpInf( GetInfo() );
-    aTmpInf.SetSpaceAdd( pCurr->GetpSpaceAdd() );
+    aTmpInf.SetpSpaceAdd( pCurr->GetpLLSpaceAdd() );
     aTmpInf.ResetSpaceIdx();
     aTmpInf.SetKanaComp( pCurr->GetpKanaComp() );
     aTmpInf.ResetKanaIdx();
