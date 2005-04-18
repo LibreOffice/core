@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:12:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 
     // Wir suchen den naechsten Tab. Wenn gerade ein rechts-Tab unterwegs
     // ist, so koennen wir uns nicht auf rInf.X() beziehen.
-    KSHORT nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
+    SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
     if( nTabPos < rInf.X() )
         nTabPos = rInf.X();
 
@@ -342,7 +342,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     ASSERT( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Hier lassen wir uns nieder...
-    Fix( rInf.X() );
+    Fix( static_cast<USHORT>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
 
@@ -385,7 +385,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             }
             case POR_TABLEFT:
             {
-                PrtWidth( GetTabPos() - rInf.X() );
+                PrtWidth( static_cast<USHORT>(GetTabPos() - rInf.X()) );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
                 // In tabulator compatibility mode, we reset the bFull flag
@@ -412,7 +412,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             !rInf.GetFly() )
             // <--
         {
-            PrtWidth( rInf.Width() - rInf.X() );
+            PrtWidth( static_cast<USHORT>(rInf.Width() - rInf.X()) );
             SetFixWidth( PrtWidth() );
         }
         else
