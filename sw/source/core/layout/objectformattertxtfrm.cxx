@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:29:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,70 +696,76 @@ void lcl_FormatCntntOfLayoutFrm( SwLayoutFrm* pLayFrm,
 */
 void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
 {
-    // if anchor frame is directly inside a section, format this section and
-    // its previous frames.
-    // Note: It's a very simple format without formatting objects.
-    if ( mrAnchorTxtFrm.IsInSct() )
+    // --> OD 2005-04-13 #i47014# - no format of section and previous columns
+    // for follow text frames.
+    if ( !mrAnchorTxtFrm.IsFollow() )
     {
-        SwFrm* pSectFrm = mrAnchorTxtFrm.GetUpper();
-        while ( pSectFrm )
+        // if anchor frame is directly inside a section, format this section and
+        // its previous frames.
+        // Note: It's a very simple format without formatting objects.
+        if ( mrAnchorTxtFrm.IsInSct() )
         {
-            if ( pSectFrm->IsSctFrm() || pSectFrm->IsCellFrm() )
+            SwFrm* pSectFrm = mrAnchorTxtFrm.GetUpper();
+            while ( pSectFrm )
             {
-                break;
+                if ( pSectFrm->IsSctFrm() || pSectFrm->IsCellFrm() )
+                {
+                    break;
+                }
+                pSectFrm = pSectFrm->GetUpper();
             }
-            pSectFrm = pSectFrm->GetUpper();
+            if ( pSectFrm && pSectFrm->IsSctFrm() )
+            {
+                // --> OD 2005-03-04 #i44049#
+                mrAnchorTxtFrm.LockJoin();
+                // <--
+                SwFrm* pFrm = pSectFrm->GetUpper()->GetLower();
+                while ( pFrm != pSectFrm )
+                {
+                    if ( pFrm->IsLayoutFrm() )
+                        lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
+                    else
+                        pFrm->Calc();
+
+                    pFrm = pFrm->GetNext();
+                }
+                lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pSectFrm),
+                                            &mrAnchorTxtFrm );
+                // --> OD 2005-03-04 #i44049#
+                mrAnchorTxtFrm.UnlockJoin();
+                // <--
+            }
         }
-        if ( pSectFrm && pSectFrm->IsSctFrm() )
+
+        // --> OD 2005-01-12 #i40140# - if anchor frame is inside a column,
+        // format the content of the previous columns.
+        // Note: It's a very simple format without formatting objects.
+        SwFrm* pColFrmOfAnchor = mrAnchorTxtFrm.FindColFrm();
+        if ( pColFrmOfAnchor )
         {
             // --> OD 2005-03-04 #i44049#
             mrAnchorTxtFrm.LockJoin();
             // <--
-            SwFrm* pFrm = pSectFrm->GetUpper()->GetLower();
-            while ( pFrm != pSectFrm )
+            SwFrm* pColFrm = pColFrmOfAnchor->GetUpper()->GetLower();
+            while ( pColFrm != pColFrmOfAnchor )
             {
-                if ( pFrm->IsLayoutFrm() )
-                    lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
-                else
-                    pFrm->Calc();
+                SwFrm* pFrm = pColFrm->GetLower();
+                while ( pFrm )
+                {
+                    if ( pFrm->IsLayoutFrm() )
+                        lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
+                    else
+                        pFrm->Calc();
 
-                pFrm = pFrm->GetNext();
+                    pFrm = pFrm->GetNext();
+                }
+
+                pColFrm = pColFrm->GetNext();
             }
-            lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pSectFrm),
-                                        &mrAnchorTxtFrm );
             // --> OD 2005-03-04 #i44049#
             mrAnchorTxtFrm.UnlockJoin();
             // <--
         }
-    }
-
-    // --> OD 2005-01-12 #i40140# - if anchor frame is inside a column,
-    // format the content of the previous columns.
-    // Note: It's a very simple format without formatting objects.
-    SwFrm* pColFrmOfAnchor = mrAnchorTxtFrm.FindColFrm();
-    if ( pColFrmOfAnchor )
-    {
-        // --> OD 2005-03-04 #i44049#
-        mrAnchorTxtFrm.LockJoin();
-        // <--
-        SwFrm* pColFrm = pColFrmOfAnchor->GetUpper()->GetLower();
-        while ( pColFrm != pColFrmOfAnchor )
-        {
-            SwFrm* pFrm = pColFrm->GetLower();
-            while ( pFrm )
-            {
-                if ( pFrm->IsLayoutFrm() )
-                    lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
-                else
-                    pFrm->Calc();
-
-                pFrm = pFrm->GetNext();
-            }
-
-            pColFrm = pColFrm->GetNext();
-        }
-        // --> OD 2005-03-04 #i44049#
-        mrAnchorTxtFrm.UnlockJoin();
         // <--
     }
     // <--
