@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:31:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,12 @@ protected:
     sal_Bool            mbInClosed;
     sal_Bool            mbOutClosed;
 
+    // intended to hold the current position in disconnected state
+    sal_Int64           mnCachedPos;
+    sal_Bool            mbHasCachedPos;
+
     void checkError () const;
-    void checkConnected () const;
+    void checkConnected ();
 
 public:
     XTempFile ();
