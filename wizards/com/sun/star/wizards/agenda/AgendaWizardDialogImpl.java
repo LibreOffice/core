@@ -2,8 +2,8 @@
 *
 *  $RCSfile: AgendaWizardDialogImpl.java,v $
 *
-*  $Revision: 1.4 $
-*  last change: $Author: vg $  $Date: 2004-12-23 09:38:08 $
+*  $Revision: 1.5 $
+*  last change: $Author: obo $  $Date: 2005-04-18 15:11:45 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -373,7 +373,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             checkSavePath();
 
             SystemDialog saveAs = SystemDialog.createStoreDialog(xMSF);
-            saveAs.addFilterToDialog("stw","writer_StarOffice_XML_Writer_Template",true);
+            saveAs.addFilterToDialog("ott","writer8_template",true);
             // call the saveAs dialog.
             String url = saveAs.callStoreDialog(
                 FileAccess.getParentDir(agenda.cp_TemplatePath),
@@ -461,7 +461,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             xTextDocument = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, agenda.cp_TemplatePath , "writer_StarOffice_XML_Writer_Template", false, resources.resErrSaveTemplate );
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, agenda.cp_TemplatePath , "writer8_template", false, resources.resErrSaveTemplate );
         } catch (Exception e) {
             SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "ErrBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
             //e.printStackTrace();
