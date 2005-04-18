@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvas.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:21:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ namespace cppcanvas
                 actual primitive bounding box, when the canvas
                 performs anti-aliasing.
              */
-            ANTIALIASING_EXTRA_SIZE=3
+            ANTIALIASING_EXTRA_SIZE=2
         };
 
         virtual ~Canvas() {}
