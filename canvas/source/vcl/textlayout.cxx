@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textlayout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:01:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 #include <boost/scoped_array.hpp>
 #endif
 
+#ifndef _SV_METRIC_HXX
+#include <vcl/metric.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
 #include <com/sun/star/rendering/TextDirection.hpp>
 #endif
@@ -85,6 +92,38 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
+    namespace
+    {
+        void setupLayoutMode( OutputDevice& rOutDev,
+                              sal_Int8      nTextDirection )
+        {
+            // TODO(P3): avoid if already correctly set
+            ULONG nLayoutMode;
+            switch( nTextDirection )
+            {
+                default:
+                    nLayoutMode = 0;
+                    break;
+                case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR;
+                    break;
+                case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+                case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
+                    break;
+                case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+            }
+
+            // set calculated layout mode. Origin is always the left edge,
+            // as required at the API spec
+            rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
+    }
+
     TextLayout::TextLayout( const rendering::StringContext& aText,
                             sal_Int8                        nDirection,
                             sal_Int64                       nRandomSeed,
@@ -105,6 +144,8 @@ namespace vclcanvas
 
     void SAL_CALL TextLayout::disposing()
     {
+        tools::LocalGuard aGuard;
+
         mpFont.reset();
         mpRefDevice.reset();
     }
@@ -112,29 +153,39 @@ namespace vclcanvas
     // XTextLayout
     uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
     uno::Sequence< double > SAL_CALL TextLayout::queryLogicalAdvancements(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         return maLogicalAdvancements;
     }
 
     void SAL_CALL TextLayout::applyLogicalAdvancements( const uno::Sequence< double >& aAdvancements ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         CHECK_AND_THROW( aAdvancements.getLength() == maText.Length,
                          "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
 
@@ -143,70 +194,119 @@ namespace vclcanvas
 
     geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds(  ) throw (uno::RuntimeException)
     {
-        // TODO(F1)
-        return geometry::RealRectangle2D();
+        tools::LocalGuard aGuard;
+
+        VirtualDevice aVDev( mpRefDevice->getOutDev() );
+        aVDev.SetFont( mpFont->getVCLFont() );
+
+        // need metrics for Y offset, the XCanvas always renders
+        // relative to baseline
+        const ::FontMetric& aMetric( aVDev.GetFontMetric() );
+
+        setupLayoutMode( aVDev, mnTextDirection );
+
+        const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );
+        const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
+
+        if( maLogicalAdvancements.getLength() )
+        {
+            return geometry::RealRectangle2D( 0, nAboveBaseline,
+                                              maLogicalAdvancements[ maLogicalAdvancements.getLength()-1 ],
+                                              nBelowBaseline );
+        }
+        else
+        {
+            return geometry::RealRectangle2D( 0, nAboveBaseline,
+                                              aVDev.GetTextWidth(
+                                                  maText.Text,
+                                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) ),
+                                              nBelowBaseline );
+        }
     }
 
     double SAL_CALL TextLayout::justify( double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return 0.0;
     }
 
     double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts, double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return 0.0;
     }
 
     rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& aHitPoint ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return rendering::TextHit();
     }
 
     rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return rendering::Caret();
     }
 
     sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return 0;
     }
 
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
     double SAL_CALL TextLayout::getBaselineOffset(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         // TODO(F1)
         return 0.0;
     }
 
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         return mnTextDirection;
     }
 
     uno::Reference< rendering::XCanvasFont > SAL_CALL TextLayout::getFont(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         return mpFont.getRef();
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
         return maText;
     }
 
@@ -215,43 +315,32 @@ namespace vclcanvas
                            const rendering::ViewState&   viewState,
                            const rendering::RenderState& renderState ) const
     {
-        // TODO(P3): avoid if already correctly set
-        ULONG nLayoutMode;
-        switch( mnTextDirection )
+        tools::LocalGuard aGuard;
+
+        setupLayoutMode( rOutDev, mnTextDirection );
+
+        if( maLogicalAdvancements.getLength() )
         {
-            default:
-                nLayoutMode = 0;
-                break;
-            case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
-                nLayoutMode = TEXT_LAYOUT_BIDI_LTR;
-                break;
-            case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                nLayoutMode = TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
-                break;
-            case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
-                break;
-            case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
-                break;
+            // TODO(P2): cache that
+            ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
+            setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
+
+            // TODO(F3): ensure correct length and termination for DX
+            // array (last entry _must_ contain the overall width)
+
+            rOutDev.DrawTextArray( rOutpos,
+                                   maText.Text,
+                                   aOffsets.get(),
+                                   ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                                   ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
         }
-
-        // set calculated layout mode. Origin is always the left edge,
-        // as required at the API spec
-        rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
-
-        // TODO(P2): cache that
-        ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
-        setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
-
-        // TODO(F3): ensure correct length and termination for DX
-        // array (last entry _must_ contain the overall width)
-
-        rOutDev.DrawTextArray( rOutpos,
-                               maText.Text,
-                               aOffsets.get(),
-                               ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                               ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+        else
+        {
+            rOutDev.DrawText( rOutpos,
+                              maText.Text,
+                              ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                              ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+        }
 
         return true;
     }
