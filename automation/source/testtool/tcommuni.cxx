@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:26:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 13:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
+#include <vcl/timer.hxx>
 
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
@@ -138,8 +139,11 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
     {
         if ( aFirstRetryCall > Time() )
         {
-            for ( int i = 10 ; i-- ; )
-                GetpApp()->Reschedule();
+            Timer aWait;
+            aWait.SetTimeout( 500 );         // Max 500 mSec
+            aWait.Start();
+            while ( aWait.IsActive() )
+                GetpApp()->Yield();
             return TRUE;
         }
         else
