@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:55:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.container.XSet;
 import com.sun.star.connection.XConnection;
+import com.sun.star.connection.XConnector;
+import com.sun.star.connection.ConnectionSetupException;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XUnoUrlResolver;
@@ -111,6 +114,7 @@ public class LocalOfficeConnection
     private Process             mProcess;
     private ContainerFactory        mContainerFactory;
     private XComponentContext       mContext;
+    private XBridge mBridge;
 
     private String              mURL;
     private String              mConnType;
@@ -298,6 +302,24 @@ public class LocalOfficeConnection
         }
         mComponents.clear();
 
+        //Terminate the bridge. It turned out that this is necessary for the bean
+        //to work properly when displayed in an applet within Internet Explorer.
+        //When navigating off the page which is showing  the applet and then going
+        //back to it, then the Java remote bridge is damaged. That is the Java threads
+        //do not work properly anymore. Therefore when Applet.stop is called the connection
+        //to the office including the bridge needs to be terminated.
+        if (mBridge != null)
+        {
+            XComponent comp = (XComponent)UnoRuntime.queryInterface(
+                    XComponent.class, mBridge);
+            if (comp != null)
+               comp.dispose();
+            else
+                System.err.println("LocalOfficeConnection: could not dispose bridge!");
+
+            mBridge = null;
+        }
+
         mContainerFactory = null;
         mContext = null;
     }
@@ -348,7 +370,7 @@ public class LocalOfficeConnection
             Object aInitialObject = null;
             try
             {
-                aInitialObject = xUrlResolver.resolve( mURL );
+                aInitialObject = resolve(xLocalContext, mURL);
             }
             catch( com.sun.star.connection.NoConnectException e )
             {
@@ -364,7 +386,7 @@ public class LocalOfficeConnection
                     {
                         // try to connect to soffice
                         Thread.currentThread().sleep( 500 );
-                        aInitialObject = xUrlResolver.resolve( mURL );
+                        aInitialObject = resolve(xLocalContext, mURL);
                     }
                     catch( com.sun.star.connection.NoConnectException aEx )
                     {
@@ -424,6 +446,78 @@ public class LocalOfficeConnection
 
         return null;
     }
+
+
+    //The function is copied and adapted from the UrlResolver.resolve.
+    //We cannot use the URLResolver because we need access to the bridge which has
+    //to be disposed when Applet.stop is called.
+    private Object resolve(XComponentContext xLocalContext, String dcp)
+        throws com.sun.star.connection.NoConnectException,
+            com.sun.star.connection.ConnectionSetupException,
+            com.sun.star.lang.IllegalArgumentException
+    {
+         String conDcp = null;
+        String protDcp = null;
+        String rootOid = null;
+
+        if(dcp.indexOf(';') == -1) {// use old style
+            conDcp = dcp;
+            protDcp = "iiop";
+            rootOid = "classic_uno";
+        }
+        else { // new style
+            int index = dcp.indexOf(':');
+            String url = dcp.substring(0, index).trim();
+            dcp = dcp.substring(index + 1).trim();
+
+            index = dcp.indexOf(';');
+            conDcp = dcp.substring(0, index).trim();
+            dcp = dcp.substring(index + 1).trim();
+
+            index = dcp.indexOf(';');
+            protDcp = dcp.substring(0, index).trim();
+            dcp = dcp.substring(index + 1).trim();
+
+            rootOid = dcp.trim().trim();
+        }
+
+        Object rootObject = null;
+        XBridgeFactory xBridgeFactory= null;
+
+        XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
+        try {
+            xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(
+                    XBridgeFactory.class,
+                    xLocalServiceManager.createInstanceWithContext(
+                        "com.sun.star.bridge.BridgeFactory", xLocalContext));
+        } catch (com.sun.star.uno.Exception e) {
+            throw new com.sun.star.uno.RuntimeException(e.getMessage());
+        }
+        mBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
+
+        if(mBridge == null) {
+            Object connector= null;
+            try {
+                connector = xLocalServiceManager.createInstanceWithContext(
+                        "com.sun.star.connection.Connector", xLocalContext);
+            } catch (com.sun.star.uno.Exception e) {
+                    throw new com.sun.star.uno.RuntimeException(e.getMessage());
+            }
+
+            XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
+
+            // connect to the server
+            XConnection xConnection = connector_xConnector.connect(conDcp);
+            try {
+                mBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, null);
+            } catch (com.sun.star.bridge.BridgeExistsException e) {
+                throw new com.sun.star.uno.RuntimeException(e.getMessage());
+            }
+        }
+        rootObject = mBridge.getInstance(rootOid);
+        return rootObject;
+    }
+
 
     /**
      * Retrives a path to the office program folder.
