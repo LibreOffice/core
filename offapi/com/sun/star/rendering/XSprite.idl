@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSprite.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:35:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,18 +147,19 @@ interface XSprite : ::com::sun::star::uno::XInterface
         shape. If this transformation contains translational
         components, be aware that sprite content moved beyond the
         sprite area (a box from (0,0) to (spriteWidth,spriteHeight))
-        might be clipped. Use <member>XSprite::move</member> to change
-        the sprite location on screen. The canvas implementations are
-        free, if they have a cached representation of the sprite at
-        hand, to transform only this cached representation (e.g. a
-        bitmap), instead of re-rendering the sprite from first
-        principles. This is usually the case for an implementation of
-        a <type>XCustomSprite</type> interface, since it typically has
-        no other cached pictorial information at hand.<p>
+        might (but need not) be clipped. Use
+        <member>XSprite::move</member> to change the sprite location
+        on screen. The canvas implementations are free, if they have a
+        cached representation of the sprite at hand, to transform only
+        this cached representation (e.g. a bitmap), instead of
+        re-rendering the sprite from first principles. This is usually
+        the case for an implementation of a <type>XCustomSprite</type>
+        interface, since it typically has no other cached pictorial
+        information at hand.<p>
 
         Please note that if this sprite is not animated, the
-        associated <type>XSpriteCanvas</type> does not update changed sprites
-        automatically, but has to be told to do so via
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 
         @param aTransformation
