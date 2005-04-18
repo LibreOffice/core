@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:17:25 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3124,7 +3124,7 @@ void SwRedline::InvalidateRange()       // das Layout anstossen
  * text node nNdIdx
  *************************************************************************/
 
-void SwRedline::CalcStartEnd( USHORT nNdIdx, USHORT& nStart, USHORT& nEnd ) const
+void SwRedline::CalcStartEnd( ULONG nNdIdx, USHORT& nStart, USHORT& nEnd ) const
 {
     const SwPosition *pRStt = Start(), *pREnd = End();
     if( pRStt->nNode < nNdIdx )
