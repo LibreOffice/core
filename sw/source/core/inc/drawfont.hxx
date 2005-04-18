@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:36:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,10 @@ class SwDrawTextInfo
     USHORT nWidth;
     USHORT nAscent;
     USHORT nCompress;
-    short nSperren;
-    short nKern;
-    short nSpace;
+    long nSperren;
+    long nSpace;
+    long nKern;
+    xub_StrLen nNumberOfBlanks;
     BYTE nCursorBidiLevel;
     BOOL bBullet : 1;
     BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
@@ -135,6 +136,7 @@ public:
     BOOL bAscent: 1;
     BOOL bSperr : 1;
     BOOL bSpace : 1;
+    BOOL bNumberOfBlanks : 1;
     BOOL bUppr  : 1;
     BOOL bDrawSp: 1;
 #endif
@@ -153,6 +155,7 @@ public:
         nKern = 0;
         nCompress = 0;
         nWidth = nW;
+        nNumberOfBlanks = 0;
         nCursorBidiLevel = 0;
         bBullet = bB;
         pUnderFnt = 0;
@@ -184,7 +187,7 @@ public:
         // these flags control, whether the matching member variables have
         // been set by using the Set-function before they may be accessed
         // by their Get-function:
-        bPos = bWrong = bSize = bFnt = bAscent = bSpace = bUppr =
+        bPos = bWrong = bSize = bFnt = bAscent = bSpace = bNumberOfBlanks = bUppr =
         bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = FALSE;
 #endif
     }
@@ -314,21 +317,27 @@ public:
         return nCompress;
     }
 
-    short GetSperren() const
+    long GetSperren() const
     {
         ASSERT( bSperr, "DrawTextInfo: Undefined >Sperren<" );
         return nSperren;
     }
 
-    short GetKern() const
+    long GetKern() const
     {
         return nKern;
     }
 
-    short GetSpace() const
+    long GetSpace() const
     {
         ASSERT( bSpace, "DrawTextInfo: Undefined Spacing" );
         return nSpace;
+    }
+
+    xub_StrLen GetNumberOfBlanks() const
+    {
+        ASSERT( bNumberOfBlanks, "DrawTextInfo::Undefined NumberOfBlanks" );
+        return nNumberOfBlanks;
     }
 
     BYTE GetCursorBidiLevel() const
@@ -483,34 +492,35 @@ public:
 #endif
     }
 
-    void SetKern( short nNew )
+    void SetKern( long nNew )
     {
         nKern = nNew;
     }
 
-    void SetSperren( short nNew )
-    {
-        nSperren = nNew;
-#ifndef PRODUCT
-        bSperr = TRUE;
-#endif
-    }
-
-    void SetSpace( short nNew )
+    void SetSpace( long nNew )
     {
         if( nNew < 0 )
         {
-            SetSperren( -nNew );
+            nSperren = -nNew;
             nSpace = 0;
         }
         else
         {
             nSpace = nNew;
-            SetSperren( 0 );
+            nSperren = 0;
         }
 #ifndef PRODUCT
         bSpace = TRUE;
+        bSperr = TRUE;
 #endif
+    }
+
+    void SetNumberOfBlanks( xub_StrLen nNew )
+    {
+#ifndef PRODUCT
+        bNumberOfBlanks = TRUE;
+#endif
+        nNumberOfBlanks = nNew;
     }
 
     void SetCursorBidiLevel( BYTE nNew )
