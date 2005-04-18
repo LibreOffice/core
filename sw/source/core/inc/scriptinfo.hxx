@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:27:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ class SwTxtNode;
 class Point;
 class MultiSelection;
 typedef std::list< xub_StrLen > PositionList;
+
+#define SPACING_PRECISION_FACTOR 100
 
 /*************************************************************************
  *                class SwScanner
@@ -283,13 +285,13 @@ public:
                 Start referring to the paragraph.
     @param  nLen
                 The number of characters to be considered.
-    @param  nSpace
+    @param  nSpaceAdd
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
     USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
                            xub_StrLen nIdx, xub_StrLen nLen,
-                           USHORT nSpace = 0 ) const;
+                           long nSpaceAdd = 0 ) const;
 
 /** Checks if language is one of the 16 Arabic languages
 
@@ -314,13 +316,14 @@ public:
                 Start referring to the paragraph.
     @param  nLen
                 The number of characters to be considered.
-    @param  nSpace
+    @param  nSpaceAdd
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
     static USHORT ThaiJustify( const XubString& rTxt, long* pKernArray,
                                long* pScrArray, xub_StrLen nIdx,
-                               xub_StrLen nLen, USHORT nSpace = 0 );
+                               xub_StrLen nLen, xub_StrLen nNumberOfBlanks = 0,
+                               long nSpaceAdd = 0 );
 
     static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
                                         sal_Bool bAllowInvalid = sal_False );
