@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:54:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
+#endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -223,7 +226,7 @@ void SwDoGetCapitalSize::Do()
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 {
     // Start:
-    short nOldKern = rInf.GetKern();
+    const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
     Point aPos;
     rInf.SetPos( aPos );
@@ -467,18 +470,6 @@ void SwDoCapitalCrsrOfst::Do()
         }
         else
         {
-#ifdef OLD
-            if ( rInf.GetUpper() )
-                nCrsr += pUpperFnt->GetCrsrOfst( rInf.GetpOut(),
-                            rInf.GetScriptInfo(), rInf.GetText(), nOfst,
-                            rInf.GetIdx(), rInf.GetLen(), rInf.GetKern(),
-                            0, rInf.GetKanaComp() );
-            else
-                nCrsr += pLowerFnt->GetCrsrOfst( rInf.GetpOut(),
-                    rInf.GetScriptInfo(), rInf.GetText(), nOfst, rInf.GetIdx(),
-                    rInf.GetLen(), rInf.GetKern(), rInf.GetSpace(),
-                    rInf.GetKanaComp() );
-#else
             SwDrawTextInfo aDrawInf( rInf.GetShell(), *rInf.GetpOut(),
                                      rInf.GetScriptInfo(),
                                      rInf.GetText(),
@@ -500,7 +491,6 @@ void SwDoCapitalCrsrOfst::Do()
                 aDrawInf.SetSpace( rInf.GetSpace() );
                 nCrsr += pLowerFnt->GetCrsrOfst( aDrawInf );
             }
-#endif
             nOfst = 0;
         }
     }
@@ -512,7 +502,7 @@ void SwDoCapitalCrsrOfst::Do()
 
 xub_StrLen SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
 {
-    short nOldKern = rInf.GetKern();
+    const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
     SwDoCapitalCrsrOfst aDo( rInf, rInf.GetOfst() );
     Point aPos;
@@ -661,7 +651,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                             || aFont.GetStrikeout() != STRIKEOUT_NONE;
     const BOOL bWordWise = bUnderStriked && aFont.IsWordLineMode() &&
                            rDo.GetInf().GetDrawSpace();
-    const short nKern = rDo.GetInf().GetKern();
+    const long nKern = rDo.GetInf().GetKern();
 
     if ( bUnderStriked )
     {
@@ -766,6 +756,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         // The upper ones...
         if( nOldPos != nPos )
         {
+            const long nSpaceAdd = rDo.GetInf().GetSpace() / SPACING_PRECISION_FACTOR;
+
             do
             {
                 rDo.GetInf().SetUpper( TRUE );
@@ -811,15 +803,15 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
                         nKana += rDo.GetInf().GetKanaDiff();
                         rDo.GetInf().SetOut( *pOldOut );
-                        if( rDo.GetInf().GetSpace() )
-                            aPartSize.Width() += rDo.GetInf().GetSpace() *
-                                                 ( nTmp - nOldPos );
+                        if( nSpaceAdd )
+                            aPartSize.Width() += nSpaceAdd * ( nTmp - nOldPos );
                         if( nKern && nPos < nMaxPos )
                             aPartSize.Width() += nKern;
                         rDo.Do();
                         aStartPos = rDo.GetInf().GetPos();
                         nOldPos = nTmp;
                     }
+
                     while( nTmp < nPos && CH_BLANK != rOldText.GetChar( nTmp ) )
                         ++nTmp;
                 }
@@ -852,9 +844,13 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     nKana += rDo.GetInf().GetKanaDiff();
                     rDo.GetInf().SetOut( *pOldOut );
                     if( !bWordWise && rDo.GetInf().GetSpace() )
+                    {
                         for( xub_StrLen nI = nOldPos; nI < nPos; ++nI )
+                        {
                             if( CH_BLANK == rOldText.GetChar( nI ) )
-                            aPartSize.Width() += rDo.GetInf().GetSpace();
+                                aPartSize.Width() += nSpaceAdd;
+                        }
+                    }
                     if( nKern && nPos < nMaxPos )
                         aPartSize.Width() += nKern;
                     rDo.Do();
