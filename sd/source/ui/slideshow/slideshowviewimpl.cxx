@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:50:40 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,8 +309,14 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     ::osl::MutexGuard aGuard( m_aMutex );
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
-    const Size& rWindowSize = mrOutputWindow.GetSizePixel();
-    Size aOutputSize( rWindowSize );
+    const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
+
+    // Reduce available width by one, as the slides might actually
+    // render one pixel wider and higher as aPageSize below specifies
+    // (when shapes of page size have visible border lines)
+    const Size  aWindowSize( rTmpSize.Width()-1,
+                             rTmpSize.Height()-1 );
+    Size aOutputSize( aWindowSize );
 
     if( meAnimationMode != ANIMATIONMODE_SHOW )
     {
@@ -333,8 +339,8 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
         aOutputSize.Width() = ( aOutputSize.Height() * aPageSize.Width() ) / aPageSize.Height();
     }
 
-    Point aOutputOffset( ( rWindowSize.Width() - aOutputSize.Width() ) >> 1,
-                            ( rWindowSize.Height() - aOutputSize.Height() ) >> 1 );
+    Point aOutputOffset( ( aWindowSize.Width() - aOutputSize.Width() ) >> 1,
+                            ( aWindowSize.Height() - aOutputSize.Height() ) >> 1 );
 
     ::basegfx::B2DHomMatrix aMatrix;
 
