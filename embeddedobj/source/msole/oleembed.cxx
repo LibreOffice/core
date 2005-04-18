@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:38:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,11 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
         {
             m_pOleComponent->RunObject();
         }
+        catch( embed::UnreachableStateException& )
+        {
+            GetRidOfComponent();
+            throw;
+        }
         catch( embed::WrongStateException& )
         {
             GetRidOfComponent();
@@ -125,7 +130,7 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
     else
 #endif
     {
-        throw embed::WrongStateException();
+        throw embed::UnreachableStateException();
     }
 }
 
