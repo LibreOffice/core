@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:35:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,7 @@ namespace cppcanvas
 
         const USHORT nBitmaps( rAnim.Count() );
         uno::Sequence< uno::Reference< rendering::XBitmap > > aBitmapSequence( nBitmaps );
+        uno::Reference< rendering::XBitmap >* pBitmaps = aBitmapSequence.getArray();
 
         unsigned int i;
         BitmapEx aBmpEx;
@@ -391,7 +392,7 @@ namespace cppcanvas
             if( rAnimBmp.eDisposal == DISPOSE_NOT )
                 aRestoreBuffer = aBmpEx;
 
-            aBitmapSequence[i] = ::vcl::unotools::xBitmapFromBitmapEx(
+            pBitmaps[i] = ::vcl::unotools::xBitmapFromBitmapEx(
                 xCanvas->getDevice(),
                 aBmpEx);
         }

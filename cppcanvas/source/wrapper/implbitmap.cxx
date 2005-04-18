@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:33:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
+
+#include <canvas/canvastools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -132,11 +134,8 @@ namespace cppcanvas
             }
 
             rendering::RenderState aLocalState( maRenderState );
-            aLocalState.DeviceColor.realloc( 4 );
-            aLocalState.DeviceColor[0] = 1.0;
-            aLocalState.DeviceColor[1] = 1.0;
-            aLocalState.DeviceColor[2] = 1.0;
-            aLocalState.DeviceColor[3] = nAlphaModulation;
+            ::canvas::tools::setDeviceColor( aLocalState,
+                                             1.0, 1.0, 1.0, nAlphaModulation );
 
             // TODO(P1): implement caching
             pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap,
