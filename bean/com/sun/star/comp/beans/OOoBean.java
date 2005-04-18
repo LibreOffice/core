@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:55:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,9 @@ public class OOoBean
 
         If there was no connection yet or anymore, this method can be called
         anyway.
+
+        When the OOoBean is displayed in an applet by a web browser, then this
+        method must be called from within java.applet.Applet.stop.
      */
     public synchronized void stopOOoConnection()
     {
