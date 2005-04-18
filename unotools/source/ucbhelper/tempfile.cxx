@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:31:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,15 @@ SvStream* TempFile::GetStream( StreamMode eMode )
     }
 
     return pImp->pStream;
+}
+
+void TempFile::CloseStream()
+{
+    if ( pImp->pStream )
+    {
+        delete pImp->pStream;
+        pImp->pStream = NULL;
+    }
 }
 
 String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
