@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 09:02:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,19 +229,15 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
     }
 }
 
-long SwMultiPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf )
-    const
+long SwMultiPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
     return 0;
 }
 
-#ifdef BIDI
-sal_Bool SwMultiPortion::ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd )
-    const
+sal_Bool SwMultiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
 {
     return sal_False;
 }
-#endif
 
 /*************************************************************************
  *              virtual SwMultiPortion::HandlePortion()
@@ -336,18 +332,18 @@ SwBidiPortion::SwBidiPortion( xub_StrLen nEnd, BYTE nLv )
 }
 
 
-long SwBidiPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
-    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd;
+    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
-sal_Bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd ) const
+sal_Bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
 {
     sal_Bool bRet = sal_False;
-    if( ! HasTabulator() && nSpaceAdd > 0 && pCurr->IsNoSpaceAdd() )
+    if( !HasTabulator() && nSpaceAdd > 0 && !pCurr->IsSpaceAdd() )
     {
         pCurr->CreateSpaceAdd();
-        ( pCurr->GetSpaceAdd() )[0] = nSpaceAdd;
+        pCurr->SetLLSpaceAdd( nSpaceAdd, 0 );
         bRet = sal_True;
     }
 
@@ -473,7 +469,8 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
  * --------------------------------------------------*/
 
 void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
-    short nSpaceAdd, sal_Bool bOpen ) const
+                                        long nSpaceAdd,
+                                        sal_Bool bOpen ) const
 {
     sal_Unicode cCh = bOpen ? pBracket->cPre : pBracket->cPost;
     if( !cCh )
@@ -630,9 +627,9 @@ void SwDoubleLinePortion::CalcBlanks( SwTxtFormatInfo &rInf )
     rInf.SetIdx( nStart );
 }
 
-long SwDoubleLinePortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+long SwDoubleLinePortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
-    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd;
+    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 /*-----------------01.11.00 14:29-------------------
@@ -645,33 +642,31 @@ long SwDoubleLinePortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rIn
  * space arrays.
  * --------------------------------------------------*/
 
-#ifdef BIDI
 sal_Bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
-                                           short nSpaceAdd ) const
-#else
-sal_Bool SwDoubleLinePortion::ChangeSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd )
-#endif
+                                           long nSpaceAdd ) const
 {
     sal_Bool bRet = sal_False;
     if( !HasTabulator() && nSpaceAdd > 0 )
     {
-        if( pCurr->IsNoSpaceAdd() )
-        {   // The wider line gets the spaceadd from the surrounding line direct
+        if( !pCurr->IsSpaceAdd() )
+        {
+            // The wider line gets the spaceadd from the surrounding line direct
             pCurr->CreateSpaceAdd();
-            ( pCurr->GetSpaceAdd() )[0] = nSpaceAdd;
+            pCurr->SetLLSpaceAdd( nSpaceAdd, 0 );
             bRet = sal_True;
         }
         else
         {
             xub_StrLen nMyBlank = GetSmallerSpaceCnt();
             xub_StrLen nOther = GetSpaceCnt();
-            SwTwips nMultiSpace = pCurr->GetSpaceAdd()[0] * nMyBlank
-                                  + nOther * nSpaceAdd;
+            SwTwips nMultiSpace = pCurr->GetLLSpaceAdd( 0 ) * nMyBlank + nOther * nSpaceAdd;
+
             if( nMyBlank )
                 nMultiSpace /= nMyBlank;
-            if( nMultiSpace < KSHRT_MAX )
+
+            if( nMultiSpace < KSHRT_MAX * SPACING_PRECISION_FACTOR )
             {
-                pCurr->GetpSpaceAdd()->Insert(KSHORT(nMultiSpace),0);
+                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
                 bRet = sal_True;
             }
         }
@@ -685,8 +680,8 @@ sal_Bool SwDoubleLinePortion::ChangeSpaceAdd( SwLineLayout* pCurr, short nSpaceA
 
 void SwDoubleLinePortion::ResetSpaceAdd( SwLineLayout* pCurr )
 {
-    pCurr->GetSpaceAdd().Remove(0);
-    if( !pCurr->GetSpaceAdd().Count() )
+    pCurr->RemoveFirstLLSpaceAdd();;
+    if( !pCurr->GetLLSpaceAddCount() )
         pCurr->FinishSpaceAdd();
 }
 
@@ -820,9 +815,9 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
     USHORT nSub = 0;
     switch ( nAdjustment )
     {
-        case 1: nRight = nLineDiff/2;    // no break
-        case 2: nLeft = nLineDiff - nRight; break;
-        case 3: nSub = 1; // no break
+        case 1: nRight = static_cast<USHORT>(nLineDiff / 2);    // no break
+        case 2: nLeft  = static_cast<USHORT>(nLineDiff - nRight); break;
+        case 3: nSub   = 1; // no break
         case 4:
         {
             xub_StrLen nCharCnt = 0;
@@ -841,13 +836,14 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
                     nTmp = -short(nCalc);
                 else
                     nTmp = SHRT_MIN;
-                pCurr->CreateSpaceAdd( nTmp );
+
+                pCurr->CreateSpaceAdd( SPACING_PRECISION_FACTOR * nTmp );
                 nLineDiff -= nCalc * ( nCharCnt - 1 );
             }
             if( nLineDiff > 1 )
             {
-                nRight = nLineDiff/2;
-                nLeft = nLineDiff - nRight;
+                nRight = static_cast<USHORT>(nLineDiff / 2);
+                nLeft  = static_cast<USHORT>(nLineDiff - nRight);
             }
             break;
         }
@@ -1422,20 +1418,21 @@ class SwSpaceManipulator
 {
     SwTxtPaintInfo& rInfo;
     SwMultiPortion& rMulti;
-    SvShorts *pOldSpaceAdd;
+    std::vector<long>* pOldSpaceAdd;
     MSHORT nOldSpIdx;
-    short nSpaceAdd;
+    long nSpaceAdd;
     sal_Bool bSpaceChg  : 1;
     sal_uInt8 nOldDir   : 2;
 public:
     SwSpaceManipulator( SwTxtPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
     void SecondLine();
-    inline short GetSpaceAdd() const { return nSpaceAdd; }
+    inline long GetSpaceAdd() const { return nSpaceAdd; }
 };
 
 SwSpaceManipulator::SwSpaceManipulator( SwTxtPaintInfo& rInf,
-    SwMultiPortion& rMult ) : rInfo( rInf ), rMulti( rMult )
+                                        SwMultiPortion& rMult ) :
+         rInfo( rInf ), rMulti( rMult )
 {
     pOldSpaceAdd = rInfo.GetpSpaceAdd();
     nOldSpIdx = rInfo.GetSpaceIdx();
@@ -1447,22 +1444,18 @@ SwSpaceManipulator::SwSpaceManipulator( SwTxtPaintInfo& rInf,
     {
         nSpaceAdd = ( pOldSpaceAdd && !rMulti.HasTabulator() ) ?
                       rInfo.GetSpaceAdd() : 0;
-        if( rMulti.GetRoot().GetpSpaceAdd() )
+        if( rMulti.GetRoot().IsSpaceAdd() )
         {
-            rInfo.SetSpaceAdd( rMulti.GetRoot().GetpSpaceAdd() );
+            rInfo.SetpSpaceAdd( rMulti.GetRoot().GetpLLSpaceAdd() );
             rInfo.ResetSpaceIdx();
             bSpaceChg = rMulti.ChgSpaceAdd( &rMulti.GetRoot(), nSpaceAdd );
         }
         else if( rMulti.HasTabulator() )
-            rInfo.SetSpaceAdd( NULL );
+            rInfo.SetpSpaceAdd( NULL );
     }
-#ifdef BIDI
     else if ( ! rMulti.IsBidi() )
-#else
-    else
-#endif
     {
-        rInfo.SetSpaceAdd( rMulti.GetRoot().GetpSpaceAdd() );
+        rInfo.SetpSpaceAdd( rMulti.GetRoot().GetpLLSpaceAdd() );
         rInfo.ResetSpaceIdx();
     }
 }
@@ -1471,19 +1464,19 @@ void SwSpaceManipulator::SecondLine()
 {
     if( bSpaceChg )
     {
-        rInfo.GetpSpaceAdd()->Remove( 0 );
+        rInfo.RemoveFirstSpaceAdd();
         bSpaceChg = sal_False;
     }
     SwLineLayout *pLay = rMulti.GetRoot().GetNext();
-    if( pLay->GetpSpaceAdd() )
+    if( pLay->IsSpaceAdd() )
     {
-        rInfo.SetSpaceAdd( pLay->GetpSpaceAdd() );
+        rInfo.SetpSpaceAdd( pLay->GetpLLSpaceAdd() );
         rInfo.ResetSpaceIdx();
         bSpaceChg = rMulti.ChgSpaceAdd( pLay, nSpaceAdd );
     }
     else
     {
-        rInfo.SetSpaceAdd( (!rMulti.IsDouble() || rMulti.HasTabulator() ) ?
+        rInfo.SetpSpaceAdd( (!rMulti.IsDouble() || rMulti.HasTabulator() ) ?
                                 0 : pOldSpaceAdd );
         rInfo.SetSpaceIdx( nOldSpIdx);
     }
@@ -1493,10 +1486,10 @@ SwSpaceManipulator::~SwSpaceManipulator()
 {
     if( bSpaceChg )
     {
-        rInfo.GetpSpaceAdd()->Remove( 0 );
+        rInfo.RemoveFirstSpaceAdd();
         bSpaceChg = sal_False;
     }
-    rInfo.SetSpaceAdd( pOldSpaceAdd );
+    rInfo.SetpSpaceAdd( pOldSpaceAdd );
     rInfo.SetSpaceIdx( nOldSpIdx);
     rInfo.SetDirection( nOldDir );
 }
@@ -1507,13 +1500,8 @@ SwSpaceManipulator::~SwSpaceManipulator()
  * internal it is like a SwTxtFrm::Paint with multiple DrawTextLines
  * --------------------------------------------------*/
 
-#ifdef BIDI
 void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti, const SwMultiPortion* pEnvPor )
-#else
-void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
-    SwMultiPortion& rMulti )
-#endif
 {
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
@@ -2567,14 +2555,12 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
  * and restores them in the destructor.
  * --------------------------------------------------*/
 
-#ifdef BIDI
 SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
-    SwMultiPortion* pMulti, SwTwips nY, USHORT& nX, xub_StrLen nCurrStart,
-    short nSpaceAdd )
-#else
-SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
-    SwMultiPortion* pMulti, SwTwips nY, xub_StrLen nCurrStart, short nSpaceAdd )
-#endif
+                                  SwMultiPortion* pMulti,
+                                  SwTwips nY,
+                                  USHORT& nX,
+                                  xub_StrLen nCurrStart,
+                                  long nSpaceAdd )
 {
     pTxtCrsr = pTxtCursor;
     nStart = pTxtCursor->nStart;
@@ -2586,7 +2572,7 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
         ; // nothing
     nWidth = pTxtCursor->pCurr->Width();
     nOldProp = pTxtCursor->GetPropFont();
-#ifdef BIDI
+
     if ( pMulti->IsDouble() || pMulti->IsBidi() )
     {
         bSpaceChg = pMulti->ChgSpaceAdd( pTxtCursor->pCurr, nSpaceAdd );
@@ -2601,23 +2587,13 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
             nSpaceCnt = ((SwBidiPortion*)pMulti)->GetSpaceCnt();
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pTxtCursor->pCurr->Width( nWidth + nSpaceAdd * nSpaceCnt );
+            pTxtCursor->pCurr->Width( static_cast<USHORT>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion
         if ( nX && pMulti->IsBidi() )
             nX = pTxtCursor->pCurr->Width() - nX;
     }
-#else
-    if( pMulti->IsDouble() )
-    {
-        pTxtCursor->SetPropFont( 50 );
-        bSpaceChg = pMulti->ChgSpaceAdd( pTxtCursor->pCurr, nSpaceAdd );
-        if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pTxtCursor->pCurr->Width( nWidth + nSpaceAdd *
-            ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt() );
-    }
-#endif
     else
         bSpaceChg = sal_False;
 }
