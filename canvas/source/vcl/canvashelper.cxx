@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:36:48 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,12 +290,35 @@ namespace vclcanvas
 
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
-            const PolyPolygon aPolyPoly( tools::mapPolyPolygon( tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon),
-                                                                viewState, renderState ) );
-            mpOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+            const ::basegfx::B2DPolyPolygon& rPolyPoly( tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+            const PolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
 
-            if( mp2ndOutDev.get() )
-                mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+            if( rPolyPoly.isClosed() )
+            {
+                mpOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+
+                if( mp2ndOutDev.get() )
+                    mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+            }
+            else
+            {
+                // mixed open/closed state. Cannot render open polygon
+                // via DrawPolyPolygon(), since that implicitley
+                // closed every polygon. OTOH, no need to distinguish
+                // further and render closed polygons via
+                // DrawPolygon(), and open ones via DrawPolyLine():
+                // closed polygons will simply already contain the
+                // closing segment.
+                USHORT nSize( aPolyPoly.Count() );
+
+                for( USHORT i=0; i<nSize; ++i )
+                {
+                    mpOutDev->getOutDev().DrawPolyLine( aPolyPoly[i] );
+
+                    if( mp2ndOutDev.get() )
+                        mp2ndOutDev->getOutDev().DrawPolyLine( aPolyPoly[i] );
+                }
+            }
         }
 
         // TODO(P1): Provide caching here.
@@ -384,10 +407,22 @@ namespace vclcanvas
 
             const PolyPolygon aVCLPolyPoly( aStrokedPolyPoly );
 
-            mpOutDev->getOutDev().DrawPolyPolygon( aVCLPolyPoly );
+            // TODO(F2): When using alpha here, must handle that via
+            // temporary surface or somesuch.
 
-            if( mp2ndOutDev.get() )
-                mp2ndOutDev->getOutDev().DrawPolyPolygon( aVCLPolyPoly );
+            // Note: the generated stroke poly-polygon is NOT free of
+            // self-intersections. Therefore, if we would render it
+            // via OutDev::DrawPolyPolygon(), on/off fill would
+            // generate off areas on those self-intersections.
+            USHORT nSize( aVCLPolyPoly.Count() );
+
+            for( USHORT i=0; i<nSize; ++i )
+            {
+                mpOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+
+                if( mp2ndOutDev.get() )
+                    mp2ndOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+            }
         }
 
         // TODO(P1): Provide caching here.
@@ -667,7 +702,7 @@ namespace vclcanvas
                 GraphicAttr             aGrfAttr;
                 GraphicObjectSharedPtr  pGrfObj;
 
-                const ::Size aBmpSize( aBmpEx.GetSizePixel() );
+                ::Size aBmpSize( aBmpEx.GetSizePixel() );
 
                 // setup alpha modulation
                 if( bModulateColors )
@@ -729,7 +764,10 @@ namespace vclcanvas
 
                     // clear scale values, generated bitmap already
                     // contains scaling
-                    aScale.setX( 0.0 ); aScale.setY( 0.0 );
+                    aScale.setX( 1.0 ); aScale.setY( 1.0 );
+
+                    // update bitmap size, bitmap has changed above.
+                    aBmpSize = aBmpEx.GetSizePixel();
                 }
 
                 // output GraphicObject
@@ -856,16 +894,17 @@ namespace vclcanvas
 
             // for the time being, always return as BGRA
             uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
+            sal_Int8* pRes = aRes.getArray();
 
             int nCurrPos(0);
             for( int y=0; y<nHeight; ++y )
             {
                 for( int x=0; x<nWidth; ++x )
                 {
-                    aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                    aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    aRes[ nCurrPos++ ] = (sal_Int8)255L;
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
+                    pRes[ nCurrPos++ ] = (sal_Int8)255L;
                 }
             }
 
@@ -1205,21 +1244,13 @@ namespace vclcanvas
                     break;
 
                 case FILL_COLOR:
-                    // #i42440# Make VCL canvas comply to XCanvas
-                    // polygon fill semantics (no exclusion of
-                    // rightmost/bottommost pixel).  IFF someone needs
-                    // to change that, then at least
-                    // implrenderer.cxx's META_RECT_ACTION has to be
-                    // adapted, as it can generate polygons with zero
-                    // width/height (but OutDev renders it as one
-                    // pixel wide).
                     rOutDev.SetFillColor( aColor );
-                    rOutDev.SetLineColor( aColor );
+                    rOutDev.SetLineColor();
 
                     if( p2ndOutDev )
                     {
                         p2ndOutDev->SetFillColor( aColor );
-                        p2ndOutDev->SetLineColor( aColor );
+                        p2ndOutDev->SetLineColor();
                     }
                     break;
 
