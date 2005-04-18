@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:18:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@
 
 #include "filedlg.hxx"
 #include "strings.hrc"
+#include "helpids.h"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -252,6 +253,7 @@ PresetPropertyBox::PresetPropertyBox( Window* pParent, const Any& rValue, const 
     mpControl = new ListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
     CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( aPresetId );
@@ -324,6 +326,7 @@ ColorPropertyBox::ColorPropertyBox( Window* pParent, const Any& rValue, const Li
     mpControl = new ColorListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
@@ -398,6 +401,7 @@ FontPropertyBox::FontPropertyBox( Window* pParent, const Any& rValue, const Link
     mpControl = new FontNameBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX );
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem;
@@ -558,8 +562,8 @@ CharHeightPropertyBox::CharHeightPropertyBox( Window* pParent, const Any& rValue
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
-
     mpControl->SetModifyHdl( rModifyHdl );
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
 }
 
 // --------------------------------------------------------------------
@@ -649,6 +653,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( Window* pParent, const Any& rV
 
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
     Link implModifyHdl( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( implModifyHdl );
@@ -750,6 +755,7 @@ RotationPropertyBox::RotationPropertyBox( Window* pParent, const Any& rValue, co
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
     Link implModifyHdl( LINK( this, RotationPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( implModifyHdl );
@@ -898,6 +904,7 @@ ScalePropertyBox::ScalePropertyBox( Window* pParent, const Any& rValue, const Li
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
     Link implModifyHdl( LINK( this, ScalePropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( implModifyHdl );
@@ -1049,6 +1056,7 @@ FontStylePropertyBox::FontStylePropertyBox( Window* pParent, const Any& rValue, 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpEdit, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
+    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );
 
     update();
 }
