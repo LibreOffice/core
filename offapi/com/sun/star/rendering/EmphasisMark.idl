@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EmphasisMark.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:24:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ module com { module sun { module star { module rendering {
     These constants control the automatic rendering of emphasis marks
     for a given font.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 constants EmphasisMark
 {
