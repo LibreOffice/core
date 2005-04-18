@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:36:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
+#endif
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _SV_VIRDEV_HXX
@@ -177,6 +180,8 @@ namespace vclcanvas
         CanvasCustomSprite(const CanvasCustomSprite&);
         CanvasCustomSprite& operator=( const CanvasCustomSprite& );
 
+        Rectangle getSpriteRect() const;
+
         // for the integrated bitmap canvas implementation
         BackBufferSharedPtr     mpBackBuffer;
         BackBufferSharedPtr     mpBackBufferMask;
@@ -188,6 +193,7 @@ namespace vclcanvas
         // sprite state
         ::basegfx::B2DPoint                                 maPosition;
         Size                                                maSize;
+        ::basegfx::B2DHomMatrix                             maTransform;
         ::com::sun::star::uno::Reference<
               ::com::sun::star::rendering::XPolyPolygon2D > mxClipPoly;
         double                                              mfAlpha;
@@ -201,6 +207,9 @@ namespace vclcanvas
             BitmapEx.
          */
         mutable bool                                        mbIsContentFullyOpaque;
+
+        /// True, iff maTransform has changed
+        mutable bool                                        mbTransformDirty;
     };
 }
 
