@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:28:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,7 +1720,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
         if( aURL.Len() )
         {
-            aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL ) );
+            aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link(), false ) );
             aBrushItem.SetGraphicPos( eRepeat );
         }
 
