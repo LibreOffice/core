@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:39:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,33 +129,38 @@ namespace basegfx
                 const sal_uInt32 nNumPoints( rPoly.count() );
 
                 uno::Sequence< geometry::RealBezierSegment2D > outputSequence( nNumPoints );
+                geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
 
                 // fill sequence from polygon
                 sal_uInt32 i;
                 for( i=0; i<nNumPoints; ++i )
                 {
                     const ::basegfx::B2DPoint   aStartPoint( rPoly.getB2DPoint(i) );
-                    const ::basegfx::B2DVector  aCtrl1( rPoly.getControlVectorA(i) );
-                    const ::basegfx::B2DVector  aCtrl2( rPoly.getControlVectorB(i) );
+                    const ::basegfx::B2DPoint   aEndPoint( i+1<nNumPoints ? rPoly.getB2DPoint(i+1) : aStartPoint );
+                    const ::basegfx::B2DPoint   aCtrl1( rPoly.getControlPointA(i) );
+                    const ::basegfx::B2DPoint   aCtrl2( rPoly.getControlPointB(i) );
 
-                    if( aCtrl1.equalZero() &&
-                        aCtrl2.equalZero() )
+                    if( aStartPoint.equal( aCtrl1 ) &&
+                        aStartPoint.equal( aCtrl2 ) )
                     {
-                        outputSequence[i] = geometry::RealBezierSegment2D( aStartPoint.getX(),
-                                                                           aStartPoint.getY(),
-                                                                           aStartPoint.getX(),
-                                                                           aStartPoint.getY(),
-                                                                           aStartPoint.getX(),
-                                                                           aStartPoint.getY() );
+                        const double nX( aStartPoint.getX() );
+                        const double nY( aStartPoint.getY() );
+
+                        // ATTN: The following line should match the
+                        // comparison below in
+                        // polygonFromBezier2DSequence()!
+                        pOutput[i] = geometry::RealBezierSegment2D( nX, nY,
+                                                                    nX, nY,
+                                                                    nX, nY );
                     }
                     else
                     {
-                        outputSequence[i] = geometry::RealBezierSegment2D( aStartPoint.getX(),
-                                                                           aStartPoint.getY(),
-                                                                           aCtrl1.getX(),
-                                                                           aCtrl1.getY(),
-                                                                           aCtrl2.getX(),
-                                                                           aCtrl2.getY() );
+                        pOutput[i] = geometry::RealBezierSegment2D( aStartPoint.getX(),
+                                                                    aStartPoint.getY(),
+                                                                    aCtrl1.getX(),
+                                                                    aCtrl1.getY(),
+                                                                    aCtrl2.getX(),
+                                                                    aCtrl2.getY() );
                     }
                 }
 
@@ -167,6 +172,7 @@ namespace basegfx
                 const sal_uInt32 nNumPoints( rPoly.count() );
 
                 uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
+                geometry::RealPoint2D* pOutput = outputSequence.getArray();
 
                 // fill sequence from polygon
                 sal_uInt32 i;
@@ -174,12 +180,48 @@ namespace basegfx
                 {
                     const ::basegfx::B2DPoint   aPoint( rPoly.getB2DPoint(i) );
 
-                    outputSequence[i] = geometry::RealPoint2D( aPoint.getX(),
-                                                               aPoint.getY() );
+                    pOutput[i] = geometry::RealPoint2D( aPoint.getX(),
+                                                        aPoint.getY() );
                 }
 
                 return outputSequence;
             }
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
+        {
+            const sal_uInt32 nNumPolies( rPolyPoly.count() );
+            sal_uInt32 i;
+
+            uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( nNumPolies );
+            uno::Sequence< geometry::RealBezierSegment2D >* pOutput = outputSequence.getArray();
+
+            for( i=0; i<nNumPolies; ++i )
+            {
+                pOutput[i] = bezierSequenceFromB2DPolygon( rPolyPoly.getB2DPolygon(i) );
+            }
+
+            return outputSequence;
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        uno::Sequence< uno::Sequence< geometry::RealPoint2D > > pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly  )
+        {
+            const sal_uInt32 nNumPolies( rPolyPoly.count() );
+            sal_uInt32 i;
+
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( nNumPolies );
+            uno::Sequence< geometry::RealPoint2D >* pOutput = outputSequence.getArray();
+
+            for( i=0; i<nNumPolies; ++i )
+            {
+                pOutput[i] = pointSequenceFromB2DPolygon( rPolyPoly.getB2DPolygon(i) );
+            }
+
+            return outputSequence;
         }
 
         //---------------------------------------------------------------------------------------
@@ -230,26 +272,14 @@ namespace basegfx
 
             if( rPolyPoly.areControlPointsUsed() )
             {
-                uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( nNumPolies );
-
-                for( i=0; i<nNumPolies; ++i )
-                {
-                    outputSequence[i] = bezierSequenceFromB2DPolygon( rPolyPoly.getB2DPolygon(i) );
-                }
-
-                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
+                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon(
+                              bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) ),
                           uno::UNO_QUERY );
             }
             else
             {
-                uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( nNumPolies );
-
-                for( i=0; i<nNumPolies; ++i )
-                {
-                    outputSequence[i] = pointSequenceFromB2DPolygon( rPolyPoly.getB2DPolygon(i) );
-                }
-
-                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
+                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon(
+                              pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) ),
                           uno::UNO_QUERY );
             }
 
@@ -302,6 +332,8 @@ namespace basegfx
             {
                 const geometry::RealBezierSegment2D aCurrSegment( curves[nCurrPoint] );
 
+                // ATTN: This line should match the setup in
+                // bezierSequenceFromB2DPolygon()!
                 if( aCurrSegment.Px == aCurrSegment.C1x &&
                     aCurrSegment.Px == aCurrSegment.C2x &&
                     aCurrSegment.Py == aCurrSegment.C1y &&
