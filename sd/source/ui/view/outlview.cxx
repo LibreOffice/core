@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 17:01:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ OutlineView::OutlineView (
       mbHighContrastMode( false ),
       maDocColor( COL_WHITE ),
       mpProgress(NULL),
-      mbIgnoreCurrentPageChanges(false)
+      mnIgnoreCurrentPageChangesLevel(0)
 {
     BOOL bInitOutliner = FALSE;
 
@@ -275,9 +275,11 @@ OutlineView::OutlineView (
         // Outliner mit Inhalt fuellen
         FillOutliner();
     }
+
     Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
-    pOutlineViewShell->GetViewShellBase().GetEventMultiplexer().AddEventListener(
-        aLink, tools::EventMultiplexer::ET_CURRENT_PAGE);
+    pOutlineViewShell->GetViewShellBase().GetEventMultiplexer().AddEventListener( aLink,
+        tools::EventMultiplexer::ET_CURRENT_PAGE
+        | tools::EventMultiplexer::ET_PAGE_ORDER);
 }
 
 /*************************************************************************
@@ -1852,7 +1854,7 @@ SdPage* OutlineView::GetActualPage()
 /** selects the paragraph for the given page at the outliner view*/
 void OutlineView::SetActualPage( SdPage* pActual )
 {
-    if( pActual && !mbIgnoreCurrentPageChanges)
+    if( pActual && mnIgnoreCurrentPageChangesLevel==0)
     {
         // get the number of paragraphs with ident 0 we need to skip before
         // we finde the actual page
@@ -2102,6 +2104,20 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
             case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
                 SetActualPage(pOutlineViewShell->GetActualPage());
                 break;
+
+            case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
+                if (pOutliner != NULL && pDoc!=NULL && mnIgnoreCurrentPageChangesLevel==0)
+                {
+                    if (((pDoc->GetPageCount()-1)%2) == 0)
+                    {
+                        pOutliner->Clear();
+                        FillOutliner();
+                        ::sd::Window* pWindow = pOutlineViewShell->GetActiveWindow();
+                        if (pWindow != NULL)
+                            pWindow->Invalidate();
+               }
+                }
+                break;
         }
     }
     return 0;
@@ -2112,7 +2128,10 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
 
 void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
 {
-    mbIgnoreCurrentPageChanges = bIgnoreChanges;
+    if (bIgnoreChanges)
+        mnIgnoreCurrentPageChangesLevel++;
+    else
+        mnIgnoreCurrentPageChangesLevel--;
 }
 
 } // end of namespace sd
