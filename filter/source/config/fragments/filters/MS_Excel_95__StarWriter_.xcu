@@ -4,7 +4,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>CEXCEL</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Microsoft Excel 95 (StarOffice Writer)</value>
+            <value xml:lang="x-default">Microsoft Excel 95 (%productname% Writer)</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>calc_MS_Excel_95</value></prop>
