@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:27:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@
 #include "LayerTabBar.hxx"
 #include "ViewShellManager.hxx"
 #include "UpdateLockManager.hxx"
+#include "ViewShellHint.hxx"
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -203,10 +204,10 @@ namespace sd {
 
 void DrawViewShell::Activate(BOOL bIsMDIActivate)
 {
+    ViewShell::Activate(bIsMDIActivate);
+
     if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
     {
-        ViewShell::Activate(bIsMDIActivate);
-
         // When no object bars are active then activate some.
         ObjectBarManager& rObjectBarManager (GetObjectBarManager());
         if (rObjectBarManager.GetTopObjectBarId() == snInvalidShellId)
@@ -246,8 +247,9 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
     if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
     {
-        ViewShell::Deactivate(bIsMDIActivate);
     }
+
+    ViewShell::Deactivate(bIsMDIActivate);
 }
 
 /*************************************************************************
@@ -1604,7 +1606,11 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     if( mpSlideShow )
         return DND_ACTION_NONE;
 
-    return pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
+    Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
+    sal_Int8 nResult (pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ));
+    Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
+
+    return nResult;
 }
 
 } // end of namespace sd
