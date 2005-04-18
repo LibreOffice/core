@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:52:25 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,9 +305,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     aDrawInf.SetFrm( pTxtFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( sal_False );
-#ifdef BIDI
     aDrawInf.SetIgnoreFrmRTL( sal_True );
-#endif
 
     sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, *pSh->GetOut() ) > nMax;
