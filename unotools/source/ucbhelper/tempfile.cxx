@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:14:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <tools/debug.hxx>
 #include <stdio.h>
 
+#ifdef UNX
+#include <sys/stat.h>
+#endif
+
 using namespace osl;
 
 namespace
@@ -126,7 +130,14 @@ sal_Bool ensuredir( const rtl::OUString& rUnqPath )
     // HACK: create directory on a mount point with nobrowse option
     // returns ENOSYS in any case !!
     osl::Directory aDirectory( aPath );
+#ifdef UNX
+/* RW permission for the user only! */
+ mode_t old_mode = umask(077);
+#endif
     osl::FileBase::RC nError = aDirectory.open();
+#ifdef UNX
+umask(old_mode);
+#endif
     aDirectory.close();
     if( nError == osl::File::E_None )
         return sal_True;
@@ -256,7 +267,14 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
         {
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
+#ifdef UNX
+/* RW permission for the user only! */
+ mode_t old_mode = umask(077);
+#endif
             FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+#ifdef UNX
+umask(old_mode);
+#endif
             if (  err == FileBase::E_None )
             {
                 rName = aTmp;
@@ -334,7 +352,14 @@ TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const
         else
         {
             File aFile( aTmp );
+#ifdef UNX
+/* RW permission for the user only! */
+ mode_t old_mode = umask(077);
+#endif
             FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+#ifdef UNX
+umask(old_mode);
+#endif
             if ( err == FileBase::E_None )
             {
                 pImp->aName = aTmp;
