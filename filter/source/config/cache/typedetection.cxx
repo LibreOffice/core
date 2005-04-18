@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:13:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,12 +276,51 @@ TypeDetection::~TypeDetection()
 void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDescriptor,
                                        const ::rtl::OUString&               sType      )
 {
+    // a)
     // Dont overwrite a might preselected filter!
     ::rtl::OUString sFilter = rDescriptor.getUnpackedValueOrDefault(
                                 ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
                                 ::rtl::OUString());
     if (sFilter.getLength())
         return;
+
+    // b)
+    // check a preselected document service too.
+    // Then we have to search a suitable filter witin this module.
+    ::rtl::OUString sDocumentService = rDescriptor.getUnpackedValueOrDefault(
+                                            ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(),
+                                            ::rtl::OUString());
+    if (sDocumentService.getLength())
+    {
+        try
+        {
+            // SAFE ->
+            ::osl::ResettableMutexGuard aLock(m_aLock);
+
+            // Attention: For executing next lines of code, We must be shure that
+            // all filters already loaded :-(
+            // That can disturb our "load on demand feature". But we have no other chance!
+            m_rCache->load(FilterCache::E_CONTAINS_FILTERS);
+
+            CacheItem lIProps;
+            lIProps[PROPNAME_DOCUMENTSERVICE] <<= sDocumentService;
+            lIProps[PROPNAME_TYPE           ] <<= sType;
+            OUStringList lFilters = m_rCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
+
+            aLock.clear();
+            // <- SAFE
+
+            if (lFilters.size() > 0)
+            {
+                const ::rtl::OUString& sFilter = *(lFilters.begin());
+                rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+                rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+                return;
+            }
+        }
+        catch(const css::uno::Exception&)
+            {}
+    }
 
     // We use the preferred filter for the specified type.
     // Note: The configuration must maintain this value, so
@@ -298,11 +337,12 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
         aLock.clear();
         // <- SAFE
 
-        // found valid type and filter => set it on the given descriptor
+        // no exception => found valid type and filter => set it on the given descriptor
         rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
         rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+        return;
     }
-    catch(const css::container::NoSuchElementException&)
+    catch(const css::uno::Exception&)
         {}
 }
 
@@ -322,6 +362,10 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // Further we must know if it matches by pattern
     // Every flat detected type by pattern wont be detected deep!
     sal_Bool bMatchByPattern = sal_False;
+
+    // And we must know if a preselection must be preferred, because
+    // it matches by it's extension too.
+    sal_Bool bMatchByExtension = sal_False;
 
     // If we e.g. collect all filters of a factory (be a forced factory preselection)
     // we should preferr all filters of this factory, where the type match the given URL.
@@ -374,6 +418,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
             if (aCheck.Matches(aParsedURL.Main))
             {
                 bBreakDetection        = sal_True;
+                bMatchByExtension      = sal_True;
                 bPreferredPreselection = sal_True;
                 break;
             }
@@ -415,6 +460,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     {
         FlatDetectionInfo aInfo;
         aInfo.sType              = sType;
+        aInfo.bMatchByExtension  = bMatchByExtension;
         aInfo.bMatchByPattern    = bMatchByPattern;
         aInfo.bPreselectedAsType = sal_True;
 
@@ -706,39 +752,123 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
 /*-----------------------------------------------
     03.11.2003 09:19
 -----------------------------------------------*/
-::rtl::OUString TypeDetection::impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor   ,
-                                                       const OUStringList&                  lUsedDetectors)
+::rtl::OUString TypeDetection::impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor          ,
+                                                       const OUStringList&                  lOutsideUsedDetectors)
 {
+    // We must know if a detect service was already used:
+    //  i) in a combined flat/deep detection scenario outside or
+    // ii) in this method for a deep detection only.
+    // Reason: Such deep detection services work differently in these two modes!
+    OUStringList                 lInsideUsedDetectors;
+    OUStringList::const_iterator pIt;
+
+    // a)
+    // The list of "already used detect services" correspond to the list
+    // of preselected or flat detected types. But these detect services was called
+    // to check these types explicitly and return black/white ... yes/no only.
+    // Now they are called to return any possible result. But we should preferr
+    // these already used detect services against all other ones!
+    for (  pIt  = lOutsideUsedDetectors.begin();
+           pIt != lOutsideUsedDetectors.end()  ;
+         ++pIt                                 )
+    {
+        const ::rtl::OUString& sDetectService = *pIt;
+              ::rtl::OUString  sDeepType      = impl_askDetectService(sDetectService, rDescriptor);
+        if (sDeepType.getLength())
+            return sDeepType;
+        lInsideUsedDetectors.push_back(sDetectService);
+    }
+
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
     OUStringList lDetectors = m_rCache->getItemNames(FilterCache::E_DETECTSERVICE);
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    // The list of "already used detect services" correspond to the list
-    // of preselected or flat detected types. But these detect services was called
-    // to check these types explicitly and return black/white ... yes/no only.
-    // Now they are called to return any possible result. But we should preferr
-    // these already used detect services against all other ones!
-    OUStringList::const_iterator pIt;
-    for (  pIt  = lUsedDetectors.begin();
-           pIt != lUsedDetectors.end()  ;
-         ++pIt                          )
+    // b)
+    // Sometimes it would be nice to ask a special set of detect services before
+    // any other detect service is asked. E.g. by using a preselection of a DocumentService.
+    // That's needed to prevent us from asking the "wrong application module" and
+    // opening the files into the "wrong application".
+    ::rtl::OUString sPreselDocumentService = rDescriptor.getUnpackedValueOrDefault(
+                                                ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(),
+                                                ::rtl::OUString());
+    if (sPreselDocumentService.getLength())
     {
-        const ::rtl::OUString& sDetectService = *pIt;
-              ::rtl::OUString  sDeepType      = impl_askDetectService(sDetectService, rDescriptor);
-        if (sDeepType.getLength())
-            return sDeepType;
+        for (  pIt  = lDetectors.begin();
+               pIt != lDetectors.end()  ;
+             ++pIt                      )
+        {
+            const ::rtl::OUString& sDetectService = *pIt;
+
+            OUStringList::const_iterator pAlreadyUsed = ::std::find(lInsideUsedDetectors.begin(), lInsideUsedDetectors.end(), sDetectService);
+            if (pAlreadyUsed != lInsideUsedDetectors.end())
+                continue;
+
+            // SAFE -> --------------------------------------------------------
+            aLock.reset();
+
+            CacheItem lIProps;
+            lIProps[PROPNAME_DETECTSERVICE] <<= sDetectService;
+            OUStringList lTypes = m_rCache->getMatchingItemsByProps(FilterCache::E_TYPE, lIProps);
+
+            aLock.clear();
+            // <- SAFE --------------------------------------------------------
+
+            sal_Bool bMatchDetectorToDocumentService = sal_False;
+            OUStringList::const_iterator pIt2;
+            for (  pIt2  = lTypes.begin();
+                   pIt2 != lTypes.end()  ;
+                 ++pIt2                  )
+            {
+                const ::rtl::OUString& sType  = *pIt2;
+
+                try
+                {
+                    // SAFE -> ----------------------------------------------------
+                    aLock.reset();
+
+                    CacheItem aType = m_rCache->getItem(FilterCache::E_TYPE, sType);
+                    ::rtl::OUString sFilter;
+                    aType[PROPNAME_PREFERREDFILTER] >>= sFilter;
+                    CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, sFilter);
+                    ::rtl::OUString sCheckDocumentService;
+                    aFilter[PROPNAME_DOCUMENTSERVICE] >>= sCheckDocumentService;
+
+                    aLock.clear();
+                    // <- SAFE
+
+                    if (sCheckDocumentService.equals(sPreselDocumentService))
+                    {
+                        bMatchDetectorToDocumentService = sal_True;
+                        break;
+                    }
+                }
+                catch(const css::uno::Exception&)
+                    { continue; }
+            }
+
+            if (bMatchDetectorToDocumentService)
+            {
+                ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
+                if (sDeepType.getLength())
+                    return sDeepType;
+                lInsideUsedDetectors.push_back(sDetectService);
+            }
+        }
     }
 
+    // c)
+    // Last chance. No "used detectors", no "preselected detectors" ... ask any existing detect services
+    // for this till know unknown format.
     for (  pIt  = lDetectors.begin();
            pIt != lDetectors.end()  ;
          ++pIt                      )
     {
         const ::rtl::OUString& sDetectService = *pIt;
 
-        OUStringList::const_iterator pAlreadyUsed = ::std::find(lUsedDetectors.begin(), lUsedDetectors.end(), sDetectService);
-        if (pAlreadyUsed != lUsedDetectors.end())
+        OUStringList::const_iterator pAlreadyUsed = ::std::find(lInsideUsedDetectors.begin(), lInsideUsedDetectors.end(), sDetectService);
+        if (pAlreadyUsed != lInsideUsedDetectors.end())
             continue;
 
         ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
