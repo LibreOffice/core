@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:13:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,8 +324,8 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         Boundary aBound =
             pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nWrdStart,
             pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
-        nWrdStart = aBound.startPos;
-        nLen = aBound.endPos - nWrdStart;
+        nWrdStart = static_cast<xub_StrLen>(aBound.startPos);
+        nLen = static_cast<xub_StrLen>(aBound.endPos - nWrdStart);
         bRet = 0 != nLen;
         if( bRet )
         {
@@ -682,7 +682,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
             rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
 
         // 5964: alte Werte muessen wieder zurueckgesetzt werden.
-        const KSHORT nOldX   = rInf.X();
+        const SwTwips nOldX  = rInf.X();
         const xub_StrLen nOldIdx = rInf.GetIdx();
         rInf.X( rInf.X() - PrtWidth() );
         rInf.SetIdx( rInf.GetIdx() - GetLen() );
