@@ -2264,6 +2264,7 @@ File gid_File_Xsl_Import_Wordml_Wordml2ooo_Custom_Draw
     Name = "/xslt/import/wordml/wordml2ooo_custom_draw.xsl";
 End
 
+
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Draw
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2319,6 +2320,15 @@ File gid_File_Xsl_Import_Wordml_Wordml2ooo_Path
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_path.xsl";
 End
+
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Props
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_props.xsl";
+End
+
 
 #ifdef SOLAR_JAVA
 
