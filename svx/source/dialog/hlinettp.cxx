@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:37:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,17 +155,16 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     ///////////////////////////////////////
     // overload handlers
-    maRbtLinktypInternet.SetClickHdl( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
-    maRbtLinktypFTP.SetClickHdl     ( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
-    maRbtLinktypTelnet.SetClickHdl  ( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    Link aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    maRbtLinktypInternet.SetClickHdl( aLink );
+    maRbtLinktypFTP.SetClickHdl     ( aLink );
+    maRbtLinktypTelnet.SetClickHdl  ( aLink );
     maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
     maBtTarget.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickTargetHdl_Impl ) );
     maEdLogin.SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
-
     maCbbTarget.SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
     maCbbTarget.SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
-
     maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
 }
 
@@ -370,7 +369,7 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
     maCbAnonymous.Show( bFTP );
 
     //update 'link target in document'-window and opening-button
-    if( aScheme.SearchAscii( sHTTPScheme ) == 0 )
+    if( aScheme.SearchAscii( sHTTPScheme ) == 0 || aScheme.Len() == 0 )
     {
         maBtTarget.Enable();
         if ( mbMarkWndOpen )
