@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Configuration.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2005-03-01 17:27:59 $
+ *  last change: $Author: obo $  $Date: 2005-04-18 15:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,8 @@ public abstract class Configuration {
 
     public static String getOfficeLinguistic(XMultiServiceFactory xMSF) {
         try {
-            Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Office.Linguistic/General/", false);
-            String sLinguistic = (String) Helper.getUnoObjectbyName(oMasterKey, "DefaultLocale");
+            Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
+            String sLinguistic = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
             return sLinguistic;
         } catch (Exception exception) {
             exception.printStackTrace();
