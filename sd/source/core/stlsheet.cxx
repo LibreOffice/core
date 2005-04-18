@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:22:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,10 +396,10 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
             pViewShellBase->GetViewFrame());
         DBG_ASSERT(pBase!=NULL, "ViewShellBase not valid");
         ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
-        if (pViewShell != NULL && pViewShell->GetDoc() == pDoc)
+        ::sd::DrawViewShell* pDrawViewShell = dynamic_cast< ::sd::DrawViewShell*>(pViewShell);
+        if (pDrawViewShell != NULL && pDrawViewShell->GetDoc() == pDoc)
         {
-            SdPage* pPage =
-                static_cast< ::sd::DrawViewShell*>(pViewShell)->GetActualPage();
+            SdPage* pPage = pDrawViewShell->GetActualPage();
             DBG_ASSERT(pPage, "aktuelle Seite nicht gefunden");
             aRealStyle = pPage->GetLayoutName();
             // hinter dem Separator abschneiden
