@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:37:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,11 +282,8 @@ namespace vclcanvas
                     {
                         // setup alpha modulation values
                         rendering::RenderState aLocalState( renderState );
-                        aLocalState.DeviceColor.realloc( 4 );
-                        aLocalState.DeviceColor[0] = 0.0;
-                        aLocalState.DeviceColor[1] = 0.0;
-                        aLocalState.DeviceColor[2] = 0.0;
-                        aLocalState.DeviceColor[3] = textures[0].Alpha;
+                        ::canvas::tools::setDeviceColor( aLocalState,
+                                                         0.0, 0.0, 0.0, textures[0].Alpha );
 
                         return drawBitmapModulated( rCanvas,
                                                     textures[0].Bitmap,
