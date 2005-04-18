@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dmultirange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:40:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ namespace basegfx
                 VectorOfRanges::const_iterator aFound( aEnd );
                 while( aCurrScan != aEnd )
                 {
-                    if( *aCurrScan == *aCurr ||
+                    if( aCurrScan->equal( *aCurr ) ||
                         aCurrScan->isInside( *aCurr ) )
                     {
                         // current probe is equal to aCurr, or
