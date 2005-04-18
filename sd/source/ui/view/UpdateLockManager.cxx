@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UpdateLockManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:27:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,11 @@ private:
     bool mbListenerIsRegistered;
     /// Remember whether the frame::XLayoutManager is locked.
     bool mbLayouterIsLocked;
+    /** We hold a weak reference to the layout manager in order to have
+        access to it even when the ViewShellBase object is not valid anymore
+        and can not be used to obtain the layout manager.
+    */
+    WeakReference<frame::XLayoutManager> mxLayoutManager;
 
     //=====  frame::XLayoutEventListener  =====================================
 
@@ -431,26 +436,36 @@ IMPL_LINK(UpdateLockManager::Implementation, Timeout, void*, unused)
 Reference< ::com::sun::star::frame::XLayoutManager>
     UpdateLockManager::Implementation::GetLayoutManager (void)
 {
-    Reference<frame::XLayoutManager> xLayouter;
+    Reference<frame::XLayoutManager> xLayoutManager;
 
-    Reference<beans::XPropertySet> xFrameProperties (
-        mrBase.GetViewFrame()->GetFrame()->GetFrameInterface(),
-        UNO_QUERY);
-    if (xFrameProperties.is())
+    if (mxLayoutManager.get() == NULL)
     {
-        try
+        if (mrBase.GetViewFrame()!=NULL
+            && mrBase.GetViewFrame()->GetFrame()!=NULL)
         {
-            Any aValue (xFrameProperties->getPropertyValue(
-                ::rtl::OUString::createFromAscii("LayoutManager")));
-            aValue >>= xLayouter;
-        }
-        catch (const beans::UnknownPropertyException& rException)
-        {
-            (void)rException;
+            Reference<beans::XPropertySet> xFrameProperties (
+                mrBase.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                UNO_QUERY);
+            if (xFrameProperties.is())
+            {
+                try
+                {
+                    Any aValue (xFrameProperties->getPropertyValue(
+                        ::rtl::OUString::createFromAscii("LayoutManager")));
+                    aValue >>= xLayoutManager;
+                }
+                catch (const beans::UnknownPropertyException& rException)
+                {
+                    (void)rException;
+                }
+            }
+            mxLayoutManager = xLayoutManager;
         }
     }
+    else
+        xLayoutManager = mxLayoutManager;
 
-    return xLayouter;
+    return xLayoutManager;
 }
 
 
