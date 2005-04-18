@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sessionlistener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-11 14:12:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,23 +260,16 @@ sal_Bool SAL_CALL SessionListener::doRestore()
     osl_resetCondition(m_cRestoreDone);
     try {
         Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-        // check whether there is anything to restore
-        Reference< XPropertySet > xPropSet(xDispatch, UNO_QUERY_THROW);
-        sal_Bool bCrash = sal_False;
-        sal_Bool bRecovery = sal_False;
-        xPropSet->getPropertyValue(OUString::createFromAscii("Crashed")) >>= bCrash;
-        xPropSet->getPropertyValue(OUString::createFromAscii("ExistsRecoveryData")) >>= bRecovery;
-        if (!bCrash && bRecovery)
-        {
-            URL aURL;
-            aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionRestore");
-            Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
-            xURLTransformer->parseStrict(aURL);
-            Sequence< PropertyValue > args;
-            xDispatch->addStatusListener(this, aURL);
-            xDispatch->dispatch(aURL, args);
-            m_bRestored = sal_True;
-        }
+
+        URL aURL;
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionRestore");
+        Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
+        xURLTransformer->parseStrict(aURL);
+        Sequence< PropertyValue > args;
+        xDispatch->addStatusListener(this, aURL);
+        xDispatch->dispatch(aURL, args);
+        m_bRestored = sal_True;
+
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
         OSL_ENSURE(sal_False, aMsg.getStr());
