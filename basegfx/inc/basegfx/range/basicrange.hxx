@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:05:27 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _INC_FLOAT
 #include <float.h>
+#endif
+
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 
@@ -188,6 +192,20 @@ namespace basegfx
         {
             mnMinimum = rRange.mnMinimum;
             mnMaximum = rRange.mnMaximum;
+        }
+
+        bool equal(const BasicRange& rRange) const
+        {
+            return (
+                fTools::equal(mnMinimum, rRange.mnMinimum) &&
+                fTools::equal(mnMaximum, rRange.mnMaximum));
+        }
+
+        bool equal(const BasicRange& rRange, const double& rfSmallValue) const
+        {
+            return (
+                fTools::equal(mnMinimum, rRange.mnMinimum, rfSmallValue) &&
+                fTools::equal(mnMaximum, rRange.mnMaximum, rfSmallValue));
         }
 
         void expand(T nValue)
