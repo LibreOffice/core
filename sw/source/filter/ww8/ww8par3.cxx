@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:16:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,6 +1586,11 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
                 RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
                     rStyleInfo.nListLevel, false);
             }
+        }
+        else
+        {
+            pTxtNode->
+                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
         }
     }
     return bRes;
