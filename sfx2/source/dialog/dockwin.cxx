@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:23:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 
 // implemented in 'sfx2/source/appl/childwin.cxx'
 extern sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize );
+extern sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize );
 
 class SfxDockingWindow_Impl
 {
@@ -156,7 +157,6 @@ void SfxDockingWindow::Resize()
                 case SFX_ALIGN_RIGHT:
                 case SFX_ALIGN_FIRSTRIGHT:
                 case SFX_ALIGN_LASTRIGHT:
-                    pImp->nVerticalSize = aSize.Height();
                     pImp->nHorizontalSize = aSize.Width();
                     pImp->aSplitSize = aSize;
                     break;
@@ -167,7 +167,6 @@ void SfxDockingWindow::Resize()
                 case SFX_ALIGN_HIGHESTBOTTOM:
                 case SFX_ALIGN_LOWESTBOTTOM:
                     pImp->nVerticalSize = aSize.Height();
-                    pImp->nHorizontalSize = aSize.Width();
                     pImp->aSplitSize = aSize;
                     break;
             }
@@ -662,6 +661,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             pImp->aSplitSize.Height() = aMinSize.Height();
     }
 
+    sal_Bool bVertHorzRead( sal_False );
     if ( pInfo->aExtraString.Len() )
     {
         // get information about alignment, split size and position in SplitWindow
@@ -723,6 +723,10 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
                 {
                     pImp->nLine = pImp->nDockLine = (USHORT) aPos.X();
                     pImp->nPos  = pImp->nDockPos  = (USHORT) aPos.Y();
+                    pImp->nVerticalSize = pImp->aSplitSize.Height();
+                    pImp->nHorizontalSize = pImp->aSplitSize.Width();
+                    if ( GetSplitSizeFromString( aStr, pImp->aSplitSize ))
+                        bVertHorzRead = sal_True;
                 }
             }
         }
@@ -730,8 +734,11 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             DBG_ERROR( "Information is missing!" );
     }
 
-    pImp->nVerticalSize = pImp->aSplitSize.Height();
-    pImp->nHorizontalSize = pImp->aSplitSize.Width();
+    if ( !bVertHorzRead )
+    {
+        pImp->nVerticalSize = pImp->aSplitSize.Height();
+        pImp->nHorizontalSize = pImp->aSplitSize.Width();
+    }
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     if ( GetAlignment() != SFX_ALIGN_NOALIGNMENT )
@@ -890,6 +897,10 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.aExtraString += String::CreateFromInt32( pImp->nHorizontalSize );
         rInfo.aExtraString += '/';
         rInfo.aExtraString += String::CreateFromInt32( pImp->nVerticalSize );
+        rInfo.aExtraString += ',';
+        rInfo.aExtraString += String::CreateFromInt32( pImp->aSplitSize.Width() );
+        rInfo.aExtraString += ';';
+        rInfo.aExtraString += String::CreateFromInt32( pImp->aSplitSize.Height() );
     }
 
     rInfo.aExtraString += ')';
@@ -1518,8 +1529,6 @@ USHORT SfxDockingWindow::GetWinBits_Impl() const
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {
     pImp->aSplitSize = rSize;
-    pImp->nVerticalSize = rSize.Height();
-    pImp->nHorizontalSize = rSize.Width();
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
