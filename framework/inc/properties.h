@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:14:25 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,15 +241,18 @@ namespace framework{
 /** properties for "AutoRecovery" class */
 
 #define AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA "ExistsRecoveryData"
+#define AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA  "ExistsSessionData"
 #define AUTORECOVERY_PROPNAME_ASCII_CRASHED             "Crashed"
 
 #define AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA       ::rtl::OUString::createFromAscii( AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA )
+#define AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA        ::rtl::OUString::createFromAscii( AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA )
 #define AUTORECOVERY_PROPNAME_CRASHED                   ::rtl::OUString::createFromAscii( AUTORECOVERY_PROPNAME_ASCII_CRASHED )
 
 #define AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA     0
-#define AUTORECOVERY_PROPHANDLE_CRASHED                 1
+#define AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA      1
+#define AUTORECOVERY_PROPHANDLE_CRASHED                 2
 
-#define AUTORECOVERY_PROPCOUNT                          2
+#define AUTORECOVERY_PROPCOUNT                          3
 
 //_______________________________________________
 /** properties for Filter config */
