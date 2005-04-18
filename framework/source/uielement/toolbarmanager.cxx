@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:28:20 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,8 +975,10 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
         if ( nId == 0 )
             continue;
 
+        rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
+        sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
 
         svt::ToolboxController* pController( 0 );
@@ -1018,7 +1020,10 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
             }
         }
 
-        if ( !xController.is() && m_pToolBar )
+        if (( aCommandURL == aLoadURL ) && ( !m_pToolBar->IsItemVisible(nId)))
+            bCreate = sal_False;
+
+        if ( !xController.is() && m_pToolBar && bCreate )
         {
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
