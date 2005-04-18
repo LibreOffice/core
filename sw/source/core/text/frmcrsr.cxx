@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:34:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1544,7 +1544,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         if( nDiff > 0 )
         {
             nDiff /= nDist;
-            rFill.Fill().nParaCnt = nDiff + 1;
+            rFill.Fill().nParaCnt = static_cast<USHORT>(nDiff + 1);
             rFill.nLineWidth = 0;
             rFill.bInner = sal_False;
             rFill.bEmpty = sal_True;
