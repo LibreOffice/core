@@ -83,7 +83,7 @@ public class LinePolyPolygon
 
     public LinePolyPolygon( RealPoint2D[][] points )
     {
-        setPoints( points, 0, 0 );
+        setPoints( points, 0 );
     }
 
     public java.awt.geom.GeneralPath getJavaPath()
@@ -190,9 +190,9 @@ public class LinePolyPolygon
         return null;
     }
 
-    public synchronized void setPoints( RealPoint2D[][] points, int nPolygonIndex, int nPointIndex )
+    public synchronized void setPoints( RealPoint2D[][] points, int nPolygonIndex )
     {
-        if( nPolygonIndex != 0 || nPointIndex != 0 )
+        if( nPolygonIndex != 0 )
             CanvasUtils.printLog( "LinePolyPolygon.setPoints: subset not yet implemented!" );
 
         path = CanvasUtils.makeGenPathFromLinePoints( points );

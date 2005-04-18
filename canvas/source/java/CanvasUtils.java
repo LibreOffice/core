@@ -188,7 +188,7 @@ public class CanvasUtils
     {
         try
         {
-            com.sun.star.geometry.RealBezierSegment2D [][] points = poly.getPoints(0,-1,0,-1);
+            com.sun.star.geometry.RealBezierSegment2D [][] points = poly.getBezierSegments(0,-1,0,-1);
 
             return makeGenPathFromBezierPoints( points );
         }
