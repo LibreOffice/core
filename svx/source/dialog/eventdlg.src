@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 15:28:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ TabPage RID_SVXPAGE_EVENTS
     HelpId = HID_SVX_CONFIG_EVENT ;
     OutputSize = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 244 , 258 ) ;
+    Size = MAP_APPFONT ( 272 , 258 ) ;
     String STR_EVENT
     {
         Text [ de ] = "Ereignis" ;
@@ -83,13 +83,13 @@ TabPage RID_SVXPAGE_EVENTS
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 178 , 232 ) ;
+        Size = MAP_APPFONT ( 180 , 229 ) ;
         TabStop = TRUE ;
         HelpID = HID_SVX_MACRO_LB_EVENT ;
     };
     FixedText TXT_SAVEIN
     {
-        Pos = MAP_APPFONT ( 6 , 244 ) ;
+        Pos = MAP_APPFONT ( 6 , 240 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Group = TRUE ;
         Text [ de ] = "Speichern in" ;
@@ -98,22 +98,22 @@ TabPage RID_SVXPAGE_EVENTS
     ListBox LB_SAVEIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 244 ) ;
-        Size = MAP_APPFONT ( 130 , 53 ) ;
+        Pos = MAP_APPFONT ( 54 , 238 ) ;
+        Size = MAP_APPFONT ( 132 , 53 ) ;
         DropDown = TRUE ;
     };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 190 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 192 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
         Disable = TRUE ;
         Text [ de ] = "Zuweisen";
         Text [ en-US ] = "Assign Macro";
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 190 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 192 , 23 ) ;
+        Size = MAP_APPFONT ( 75 , 14 ) ;
         Disable = TRUE ;
         Text [ de ] = "Entfernen";
         Text [ en-US ] = "Remove Macro";
