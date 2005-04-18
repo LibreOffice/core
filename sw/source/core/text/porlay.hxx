@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:00:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #include "portxt.hxx"
 #include "swfont.hxx"
 
+#include <vector>
+
 class SwMarginPortion;
 class SwDropPortion;
 class SvStream;
@@ -136,10 +138,10 @@ public:
 class SwLineLayout : public SwTxtPortion
 {
 private:
-    SwLineLayout *pNext;// Die naechste Zeile.
-    SvShorts* pSpaceAdd;// Fuer den Blocksatz
-    SvUShorts* pKanaComp;
-    KSHORT nRealHeight; // Die aus Zeilenabstand/Register resultierende Hoehe
+    SwLineLayout *pNext;                // Die naechste Zeile.
+    std::vector<long>* pLLSpaceAdd;     // Used for justified alignment.
+    SvUShorts* pKanaComp;               // Used for Kana compression.
+    KSHORT nRealHeight;                 // Die aus Zeilenabstand/Register resultierende Hoehe.
     sal_Bool bFormatAdj : 1;
     sal_Bool bDummy     : 1;
     sal_Bool bFntChg    : 1;
@@ -225,18 +227,32 @@ public:
     // fuer die Sonderbehandlung bei leeren Zeilen
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
-    inline sal_Bool IsNoSpaceAdd() { return pSpaceAdd == NULL; }
-    inline void InitSpaceAdd()
-    { if ( !pSpaceAdd ) CreateSpaceAdd(); else (*pSpaceAdd)[0] = 0; }
+    //
+    // STUFF FOR JUSTIFIED ALIGNMENT
+    //
+    inline sal_Bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
+    void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
+    void CreateSpaceAdd( const long nInit = 0 );
+    inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = NULL; }
+    inline USHORT GetLLSpaceAddCount() const { return pLLSpaceAdd->size(); }
+    inline void SetLLSpaceAdd( long nNew, USHORT nIdx )
+    {
+        if ( nIdx == GetLLSpaceAddCount() )
+            pLLSpaceAdd->push_back( nNew );
+        else
+            (*pLLSpaceAdd)[ nIdx ] = nNew;
+    }
+    inline long GetLLSpaceAdd( USHORT nIdx ) { return (*pLLSpaceAdd)[ nIdx ]; }
+    inline void RemoveFirstLLSpaceAdd() { pLLSpaceAdd->erase( pLLSpaceAdd->begin() ); }
+    inline std::vector<long>* GetpLLSpaceAdd() const { return pLLSpaceAdd; }
+
+    //
+    // STUFF FOR KANA COMPRESSION
+    //
     inline void SetKanaComp( SvUShorts* pNew ){ pKanaComp = pNew; }
-    inline void FinishSpaceAdd() { delete pSpaceAdd; pSpaceAdd = NULL; }
     inline void FinishKanaComp() { delete pKanaComp; pKanaComp = NULL; }
-    inline SvShorts* GetpSpaceAdd() const { return pSpaceAdd; }
-    inline SvShorts& GetSpaceAdd() { return *pSpaceAdd; }
     inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
     inline SvUShorts& GetKanaComp() { return *pKanaComp; }
-
-    void CreateSpaceAdd( const short nInit = 0 );
 
     /** determine ascent and descent for positioning of as-character anchored
         object
@@ -399,7 +415,7 @@ inline void SwLineLayout::ResetFlags()
 }
 
 inline SwLineLayout::SwLineLayout()
-    : pNext( 0 ), nRealHeight( 0 ), pSpaceAdd( 0 ), pKanaComp( 0 ),
+    : pNext( 0 ), nRealHeight( 0 ), pLLSpaceAdd( 0 ), pKanaComp( 0 ),
       bUnderscore( sal_False )
 {
     ResetFlags();
