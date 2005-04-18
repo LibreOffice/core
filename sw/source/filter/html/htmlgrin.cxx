@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:26:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,7 @@ ANCHOR_SETEVENT:
     {
         if( sHRef.Len() )
         {
-            sHRef = URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), sHRef );
+            sHRef = URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), sHRef, Link(), false );
         }
         else
         {
