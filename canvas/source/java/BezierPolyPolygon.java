@@ -83,7 +83,7 @@ public class BezierPolyPolygon
 
     public BezierPolyPolygon( RealBezierSegment2D[][] points )
     {
-        setPoints( points, 0, 0 );
+        setBezierSegments( points, 0 );
     }
 
     public java.awt.geom.GeneralPath getJavaPath()
@@ -144,25 +144,25 @@ public class BezierPolyPolygon
     // XBezierPolyPolygon implementation
     // =================================
     //
-    public RealBezierSegment2D[][] getPoints( int nPolygonIndex, int nNumberOfPolygons, int nPointIndex, int nNumberOfPoints )
+    public RealBezierSegment2D[][] getBezierSegments( int nPolygonIndex, int nNumberOfPolygons, int nPointIndex, int nNumberOfPoints )
     {
         return null;
     }
 
-    public void setPoints( RealBezierSegment2D[][] points, int nPolygonIndex, int nPointIndex )
+    public void setBezierSegments( RealBezierSegment2D[][] points, int nPolygonIndex )
     {
-        if( nPolygonIndex != 0 || nPointIndex != 0 )
+        if( nPolygonIndex != 0 )
             CanvasUtils.printLog( "LinePolyPolygon.setPoints: subset not yet implemented!" );
 
         path = CanvasUtils.makeGenPathFromBezierPoints( points );
     }
 
-    public RealBezierSegment2D getPoint( int nPolygonIndex, int nPointIndex )
+    public RealBezierSegment2D getBezierSegment( int nPolygonIndex, int nPointIndex )
     {
         return null;
     }
 
-    public void setPoint( RealBezierSegment2D point, int nPolygonIndex, int nPointIndex )
+    public void setBezierSegment( RealBezierSegment2D point, int nPolygonIndex, int nPointIndex )
     {
         CanvasUtils.printLog( "LinePolyPolygon.setPoint: not yet implemented!" );
     }
