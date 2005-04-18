@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:03:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,6 +1313,16 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                 {
                     // setting of VisArea not necessary for objects that don't cache it in loaded state
                 }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    // objects my not have visual areas
+                }
+                catch( uno::Exception& e )
+                {
+                    (void)e;
+                    DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
+                }
+
                 Disconnect();
             }
         }
