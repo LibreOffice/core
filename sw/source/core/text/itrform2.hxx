@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:15:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ public:
     KSHORT GetFrmRstHeight() const;
 
     // Wie breit waerest Du ohne rechte Begrenzungen (Flys etc.)?
-    KSHORT _CalcFitToContent( );
+    SwTwips _CalcFitToContent( );
 
     SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, xub_StrLen nPos);
 
