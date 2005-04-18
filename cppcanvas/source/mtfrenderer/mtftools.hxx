@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtftools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:30:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 10:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,12 @@ namespace cppcanvas
             sal_Int8    mnUnderlineStyle;
             sal_Int8    mnStrikeoutStyle;
         };
+
+        /** Transform given bounds to device coordinate system.
+         */
+        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&                       rBounds,
+                                                   const ::com::sun::star::rendering::ViewState&    viewState,
+                                                   const ::com::sun::star::rendering::RenderState&  renderState );
 
         /** Generate text underline/strikeout info struct from OutDev
             state.
