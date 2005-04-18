@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animatedsprite.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:12:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
 #ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
 #endif
@@ -129,6 +132,17 @@ namespace presentation
              */
             bool resize( const ::basegfx::B2DSize& rSpriteSizePixel );
 
+            /** Set an offset for the content output in pixel
+
+                This method offsets the output on the sprite content
+                canvas by the specified amount of device pixel (for
+                subsequent render operations).
+             */
+            void                setPixelOffset( const ::basegfx::B2DSize& rPixelOffset );
+
+            /// Retrieve current pixel offset for content output.
+            ::basegfx::B2DSize  getPixelOffset() const;
+
             /// Show the sprite
             void show();
 
@@ -176,6 +190,13 @@ namespace presentation
              */
             void clip( const ::basegfx::B2DPolyPolygon& rClip );
 
+            /** Set a sprite transformation.
+
+                If the sprite is not yet created, this method has no
+                effect.
+             */
+            void transform( const ::basegfx::B2DHomMatrix& rTransform );
+
             /** Set the sprite priority.
 
                 The sprite priority determines the ordering of the
@@ -195,11 +216,13 @@ namespace presentation
 
             ::cppcanvas::CustomSpriteSharedPtr                          mpSprite;
             ::basegfx::B2DSize                                          maEffectiveSpriteSizePixel;
+            ::basegfx::B2DSize                                          maContentPixelOffset;
 
             double                                                      mnAlpha;
             ::comphelper::OptionalValue< ::basegfx::B2DPoint >          maPosPixel;
             ::comphelper::OptionalValue< ::basegfx::B2DPoint >          maPos;
             ::comphelper::OptionalValue< ::basegfx::B2DPolyPolygon >    maClip;
+            ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >      maTransform;
 
             bool                                                        mbSpriteVisible;
         };
