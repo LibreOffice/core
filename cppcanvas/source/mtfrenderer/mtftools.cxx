@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtftools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:30:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,6 +555,21 @@ namespace cppcanvas
             }
 
             return aTextLinesPolyPoly;
+        }
+
+        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&       rBounds,
+                                                   const rendering::ViewState&      viewState,
+                                                   const rendering::RenderState&    renderState )
+        {
+            ::basegfx::B2DHomMatrix aTransform;
+            ::canvas::tools::mergeViewAndRenderTransform( aTransform,
+                                                          viewState,
+                                                          renderState );
+
+            ::basegfx::B2DRange aTransformedBounds;
+            return ::canvas::tools::calcTransformedRectBounds( aTransformedBounds,
+                                                               rBounds,
+                                                               aTransform );
         }
 
         // create line actions for text such as underline and
