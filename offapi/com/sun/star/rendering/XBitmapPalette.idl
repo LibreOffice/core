@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBitmapPalette.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:32:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module rendering {
 
 /** Interface to access the palette of a color-indexed bitmap.
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 interface XBitmapPalette : ::com::sun::star::uno::XInterface
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCanvasFont.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:33:03 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,10 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         all its glyphs.<p>
 
         Note that the metric values in the returned result are in the
-        device coordinate system, and already adjusted to the
-        corresponding size of this font.
+        font coordinate system, i.e. relative to the corresponding
+        size of this font. That is, when this font was created with a
+        cell size of 20 units, the metrics returned are calculated
+        relative to this size.
      */
     FontMetrics                                         getFontMetrics();
 

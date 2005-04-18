@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedPrimitive.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:32:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module rendering {
     This interface provides a method to quickly redraw some
     <type>XCanvas</type> primitives, using cached data.<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 interface XCachedPrimitive : ::com::sun::star::uno::XInterface
 {
