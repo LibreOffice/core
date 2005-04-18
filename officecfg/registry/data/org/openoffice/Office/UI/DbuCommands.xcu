@@ -89,21 +89,25 @@
             </node>
             <node oor:name=".uno:DBDelete" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Löschen</value>
                     <value xml:lang="en-US">Delete</value>
                 </prop>
             </node>
             <node oor:name=".uno:DBRename" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Umbenennen...</value>
                     <value xml:lang="en-US">Rename...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DBEdit" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Bearbeiten...</value>
                     <value xml:lang="en-US">Edit...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DBOpen" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Datenbankobjekt öffnen...</value>
                     <value xml:lang="en-US">Open Database Object...</value>
                 </prop>
             </node>
