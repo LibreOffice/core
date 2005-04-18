@@ -1,7 +1,7 @@
     <node oor:name="Text (encoded) (StarWriter/GlobalDocument)" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Text Encoded (StarOffice Master Document)</value>
-            <value xml:lang="de">Text Kodiert (StarOffice Globaldokument)</value>
-            <value xml:lang="x-translate">Text Encoded (StarOffice Master Document)</value>
+            <value xml:lang="en-US">Text Encoded (%productname% Master Document)</value>
+            <value xml:lang="de">Text Kodiert (%productname% Globaldokument)</value>
+            <value xml:lang="x-translate">Text Encoded (%productname% Master Document)</value>
         </prop>
     </node>
