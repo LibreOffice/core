@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:21:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1670,6 +1670,8 @@ public:
 
     // 2. Initialisier-Dummy:
     BYTE    nDataEnd;
+
+    bool bUseThaiLineBreakingRules;
 
     /* Constructor for importing, needs to know the version of word used */
     WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize);
