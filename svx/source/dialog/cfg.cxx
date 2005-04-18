@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:25:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3366,6 +3366,21 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
         {
             m_aURLToSelect = text.copy( 0 );
         }
+    }
+
+    long nTxtW = aTopLevelLabel.GetCtrlTextWidth( aTopLevelLabel.GetText() );
+    long nCtrlW = aTopLevelLabel.GetSizePixel().Width();
+    if ( nTxtW >= nCtrlW )
+    {
+        long nDelta = Max( (long)10, nTxtW - nCtrlW );
+        Size aNewSz = aTopLevelLabel.GetSizePixel();
+        aNewSz.Width() += nDelta;
+        aTopLevelLabel.SetSizePixel( aNewSz );
+        aNewSz = aTopLevelListBox.GetSizePixel();
+        aNewSz.Width() -= nDelta;
+        Point aNewPt = aTopLevelListBox.GetPosPixel();
+        aNewPt.X() += nDelta;
+        aTopLevelListBox.SetPosSizePixel( aNewPt, aNewSz );
     }
 }
 
