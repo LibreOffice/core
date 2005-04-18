@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppt97animations.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:18:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void Ppt97Animation::SetSoundFileUrl( const ::rtl::OUString& rSoundFileUrl )
 
 double Ppt97Animation::GetDelayTimeInSeconds() const
 {
-    return m_aAtom.nDelayTime/1000.0;
+    return m_aAtom.nDelayTime != 0X7FFFFFFF ? m_aAtom.nDelayTime/1000.0 : 0.0;
 }
 
 bool Ppt97Animation::GetSpecialDuration( double& rfDurationInSeconds ) const
