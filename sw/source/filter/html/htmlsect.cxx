@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:27:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,11 +362,11 @@ void SwHTMLParser::NewDivision( int nToken )
             }
             if( STRING_NOTFOUND == nPos )
             {
-                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef);
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef, Link(), false);
             }
             else
             {
-                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.Copy( 0, nPos ) );
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.Copy( 0, nPos ), Link(), false );
                 aURL += sfx2::cTokenSeperator;
                 if( STRING_NOTFOUND == nPos2 )
                 {
