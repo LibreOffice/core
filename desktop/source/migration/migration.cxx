@@ -2,9 +2,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:49:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
 
         // work through directory contents...
         DirectoryItem item;
-        FileStatus fs(FileStatusMask_FileURL);
+        FileStatus fs(FileStatusMask_Type | FileStatusMask_FileURL);
         while (dir.getNextItem(item) == FileBase::E_None)
         {
             if (item.getFileStatus(fs) == FileBase::E_None)
