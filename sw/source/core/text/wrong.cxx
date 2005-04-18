@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:39:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
             // calculate new length of word
             nWrLen = ( nEnd > nWrPos + nWrLen ) ?
                        nPos - nWrPos :
-                       nWrLen + nDiff;
+                       static_cast<xub_StrLen>(nWrLen + nDiff);
             if( nWrLen )
             {
                 aLen.GetObject( --nLst ) = nWrLen;
@@ -285,7 +285,7 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
     }
     while( i < Count() )
     {
-        xub_StrLen nTmp = nDiff + GetObject( i );
+        const xub_StrLen nTmp = static_cast<xub_StrLen>(nDiff + GetObject( i ));
         GetObject( i++ ) = nTmp;
     }
 }
