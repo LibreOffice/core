@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:53:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
@@ -2952,10 +2956,15 @@ void SdXMLPluginShapeContext::EndElement()
 
         if ( maSize.Width && maSize.Height )
         {
-            // the visual area for a plugin must be set on loading
-            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
-            aAny <<= aRect;
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), aAny );
+            const rtl::OUString sVisibleArea( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) );
+            uno::Reference< beans::XPropertySetInfo > aXPropSetInfo( xProps->getPropertySetInfo() );
+            if ( !aXPropSetInfo.is() || aXPropSetInfo->hasPropertyByName( sVisibleArea ) )
+            {
+                // the visual area for a plugin must be set on loading
+                awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+                aAny <<= aRect;
+                xProps->setPropertyValue( sVisibleArea, aAny );
+            }
         }
 
         if( !mbMedia )
