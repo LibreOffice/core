@@ -2,17 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
-<<<<<<< childwin.cxx
- *  $Revision: 1.19 $
-=======
- *  $Revision: 1.19 $
->>>>>>> 1.13.142.2
+ *  $Revision: 1.20 $
  *
-<<<<<<< childwin.cxx
- *  last change: $Author: vg $ $Date: 2005-03-23 16:23:13 $
-=======
- *  last change: $Author: vg $ $Date: 2005-03-23 16:23:13 $
->>>>>>> 1.13.142.2
+ *  last change: $Author: obo $ $Date: 2005-04-18 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +178,30 @@ sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
         return sal_False;
 
     return sal_True;
+}
+
+sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize )
+{
+    sal_Int32 nIndex = rStr.Search( ',' );
+    if (( nIndex >= 0 ) && ( nIndex < rStr.Len()))
+    {
+        String aStr = rStr.Copy( nIndex+1 );
+
+        sal_Int32 nCount = aStr.GetTokenCount(';');
+        if ( nCount != 2 )
+            return sal_False;
+
+        rSize.Width() = aStr.GetToken(0, ';' ).ToInt32();
+        rSize.Height() = aStr.GetToken(1, ';' ).ToInt32();
+
+        // negative sizes are invalid
+        if ( rSize.Width() < 0 || rSize.Height() < 0 )
+            return sal_False;
+
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 //=========================================================================
