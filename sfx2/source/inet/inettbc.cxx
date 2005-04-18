@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:25:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,10 +230,6 @@ Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
     SvtURLBox* pURLBox = new SvtURLBox( pParent );
     pURLBox->SetOpenHdl( LINK( this, SfxURLToolBoxControl_Impl, OpenHdl ) );
     pURLBox->SetSelectHdl( LINK( this, SfxURLToolBoxControl_Impl, SelectHdl ) );
-
-    pURLBox->AddEventListener( LINK( this, SfxURLToolBoxControl_Impl, WindowEventListener ));
-    pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
-    pAccExec->init(::comphelper::getProcessServiceFactory(), getFrameInterface() );
 
     return pURLBox;
 }
