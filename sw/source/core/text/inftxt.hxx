@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:09:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ public:
 class SwTxtPaintInfo : public SwTxtSizeInfo
 {
     SwWrongList *pWrongList;
-    SvShorts    *pSpaceAdd;
+    std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // Fuer den Hintergrund
     SwRect      aItemRect;          // ebenfalls fuer den Hintergrund
     SwTxtFly    aTxtFly;    // FlyFrm-Berechnung
@@ -514,15 +514,21 @@ public:
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtPaintInfo &rInf );
 
+    //
+    // STUFF FOR JUSTIFIED ALIGNMENT
+    //
     inline const MSHORT GetSpaceIdx() const { return nSpaceIdx; }
     inline void ResetSpaceIdx(){nSpaceIdx = 0; }
     inline void SetSpaceIdx( MSHORT nNew ) { nSpaceIdx = nNew; }
     inline void IncSpaceIdx() { ++nSpaceIdx; }
-    inline void SetSpaceAdd( SvShorts *pNew ){ pSpaceAdd = pNew; }
-    inline SvShorts* GetpSpaceAdd() const { return pSpaceAdd; }
-    inline const short GetSpaceAdd() const
-        { return ( pSpaceAdd && nSpaceIdx < pSpaceAdd->Count() )
+    inline void RemoveFirstSpaceAdd() { pSpaceAdd->erase( pSpaceAdd->begin() ); }
+    inline const long GetSpaceAdd() const
+        { return ( pSpaceAdd && nSpaceIdx < pSpaceAdd->size() )
                    ? (*pSpaceAdd)[nSpaceIdx] : 0; }
+
+    inline void SetpSpaceAdd( std::vector<long>* pNew ){ pSpaceAdd = pNew; }
+    inline std::vector<long>* GetpSpaceAdd() const { return pSpaceAdd; }
+
 
     inline void SetWrongList( SwWrongList *pNew ){ pWrongList = pNew; }
     inline SwWrongList* GetpWrongList() const { return pWrongList; }
