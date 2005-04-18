@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:23:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ protected:
     // spannt beim Blocksatz die Glues auf.
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0 );
-    USHORT CalcKanaAdj( SwLineLayout *pCurr );
+    SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
     inline SwTxtAdjuster( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf )
            { SwTxtMargin::CtorInit( pFrm, pInf ); }
