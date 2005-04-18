@@ -90,7 +90,7 @@ REM new UNO bootstrap mechanism use the configured office installation.
 set UNO_PATH=%OFFICE_PROGRAM_PATH%
 
 REM Set classpath
-set CLASSPATH=%OFFICE_PROGRAM_PATH%\classes\jurt.jar;%OFFICE_PROGRAM_PATH%\classes\unoil.jar;%OFFICE_PROGRAM_PATH%\classes\ridl.jar;%OFFICE_PROGRAM_PATH%\classes\sandbox.jar;%OFFICE_PROGRAM_PATH%\classes\juh.jar
+set CLASSPATH=%OFFICE_PROGRAM_PATH%\classes\jurt.jar;%OFFICE_PROGRAM_PATH%\classes\unoil.jar;%OFFICE_PROGRAM_PATH%\classes\ridl.jar;%OFFICE_PROGRAM_PATH%\classes\juh.jar
 
 REM Add directory of the SDK tools to the path.
 set PATH=%OO_SDK_HOME%\windows\bin;%OFFICE_HOME%\program;%OO_SDK_HOME%\WINexample.out\bin;%PATH%
