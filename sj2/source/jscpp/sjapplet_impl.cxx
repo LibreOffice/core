@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:34:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 08:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,20 @@
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/java/XJavaVM.hpp>
 
+#ifdef LINUX
+#define Time xlib_time
+#define Window xlib_window
+#define Font xlib_font
+#define Cursor xlib_cursor
+#define KeyCode xlib_keycode
 
+#include "X11/Xlib.h"
+#undef Time
+#undef Window
+#undef Font
+#undef Cursor
+#undef KeyCode
+#endif
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -190,6 +203,10 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData)
     jclass jcFrame  = pEnv->FindClass("sun/awt/X11/XEmbeddedFrame"); testJavaException(pEnv);
     jobject joFrame = pEnv->AllocObject(jcFrame); testJavaException(pEnv);
     jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(J)V" ); testJavaException(pEnv);
+
+    //When using GTK, for example on JDS, then the applet is not painted. Just calling XSync
+    //seems to fix this problem.
+    XSync( (Display*)pEnvData->pDisplay, False);
     pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong) pEnvData->aWindow); testJavaException(pEnv);
     _joWindow = pEnv->NewGlobalRef(joFrame);
 #endif
