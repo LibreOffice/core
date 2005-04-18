@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributableshape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:11:46 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,32 @@ namespace presentation
              */
             virtual bool revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer ) = 0;
 
-            /** Change shape visibility
+            /** Get the topmost shape attribute layer (if any).
+
+                This method returns the topmost layer for shape
+                attributes, i.e. the one which ultimately determines
+                the shape's look.
+
+                Please note that the attribute layers do <em>not</em>
+                contain the underlying XShape's attributes as
+                default. Instead, attributes not explicitely set by
+                animations remain in invalid state, allowing the
+                shape's paint method to determine whether they have to
+                override the underlying graphical shape
+                representation. XShape attributes must be passed
+                explicitely to animations which need them (e.g. 'by'
+                animations).
+
+                @return the topmost layer
+             */
+            virtual ShapeAttributeLayerSharedPtr getTopmostAttributeLayer() const = 0;
+
+
+            /** Change default shape visibility
 
                 This method hides or unhides a shape. Note that every
-                attribute layer generated for this shape will override
-                the setting given here, until it is revoked.
+                attribute layer generated for this shape is able to
+                override the setting given here, until it is revoked.
 
                 @param bVisible
                 When true, shape will be visible, when false,
