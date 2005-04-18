@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:49:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,8 +1283,10 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
             if ( pBasMgr )
             {
                 SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                pWin = FindBasWin( pShell, pLib->GetName(), pActiveModule->GetName(), TRUE );
+                String aLibName = pLib->GetName();
+                pWin = FindBasWin( pShell, aLibName, pActiveModule->GetName(), TRUE );
                 DBG_ASSERT( pWin, "Error/Step-Hdl: Fenster wurde nicht erzeugt/gefunden!" );
+                SetCurLib( pShell, aLibName );
                 SetCurWindow( pWin, TRUE );
             }
         }
