@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 15:29:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,17 +342,17 @@ TabPage RID_SVXPAGE_INET_SEARCH
     ListBox LB_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , GB_SEARCH_TOP + 11 ) ;
-        Size = MAP_APPFONT ( 44 , 120 ) ;
+        Size = MAP_APPFONT ( 39 , 120 ) ;
         Border = TRUE ;
         AutoHScroll = TRUE;
     };
-    #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 44 + 3 )
-    #define LABEL_LEN 46
+    #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 39 + 5 )
+    #define LABEL_LEN 64
     #define EDIT_START_XPOS (LABEL_START_XPOS + LABEL_LEN + 3)
     FixedText FT_SEARCH_NAME
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 12 ) ;
-        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 13 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
         Text [ x-comment ] = " ";
@@ -360,21 +360,21 @@ TabPage RID_SVXPAGE_INET_SEARCH
     Edit ED_SEARCH_NAME
     {
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 11 ) ;
-        Size = MAP_APPFONT ( 140 , 12 ) ;
+        Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SEARCH
     {
         Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 27 ) ;
-        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ de ] = "Art" ;
         Text [ en-US ] = "Type" ;
         Text [ x-comment ] = " ";
     };
     RadioButton RB_AND
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 27 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 26 ) ;
+        Size = MAP_APPFONT ( 39 , 10 ) ;
         Check = TRUE ;
         Text [ de ] = "~Und" ;
         Text [ en-US ] = "And" ;
@@ -382,80 +382,80 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     RadioButton RB_OR
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 44 + 3 , GB_SEARCH_TOP + 27 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS + 39 + 3 , GB_SEARCH_TOP + 26 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
         Text [ de ] = "Ode~r" ;
         Text [ en-US ] = "~Or" ;
         Text [ x-comment ] = " ";
     };
     RadioButton RB_EXACT
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 44 + 3 + 45 + 3 , GB_SEARCH_TOP + 27 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS + 39 + 3 + 38 + 3 , GB_SEARCH_TOP + 26 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
         Text [ de ] = "E~xakt" ;
         Text [ en-US ] = "E~xact" ;
         Text [ x-comment ] = " ";
     };
     FixedText FT_URL
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 42 ) ;
-        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 41 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ de ] = "~Präfix" ;
         Text [ en-US ] = "~Prefix" ;
         Text [ x-comment ] = " ";
     };
     Edit ED_URL
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 41 ) ;
-        Size = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 39 ) ;
+        Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_POSTFIX
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 58 ) ;
-        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 56 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ de ] = "Su~ffix" ;
         Text [ en-US ] = "Su~ffix" ;
         Text [ x-comment ] = " ";
     };
     Edit ED_POSTFIX
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 57 ) ;
-        Size = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 54 ) ;
+        Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SEPARATOR
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 74 ) ;
-        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 71 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ de ] = "~Trenner" ;
         Text [ en-US ] = "~Separator" ;
         Text [ x-comment ] = " ";
     };
     Edit ED_SEPARATOR
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 73 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 69 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_CASE
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS, GB_SEARCH_TOP + 90 ) ;
-        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS, GB_SEARCH_TOP + 86 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ de ] = "~Schreibstil" ;
         Text [ en-US ] = "~Case match" ;
         Text [ x-comment ] = " ";
     };
     ListBox ED_CASE
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS, GB_SEARCH_TOP + 89 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS, GB_SEARCH_TOP + 84 ) ;
         Size = MAP_APPFONT ( 42 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
         StringList [ de ] =
         {
             < "Keiner" ; > ;
-            < "Gro? "; > ;
+            < "Groß"; > ;
             < "Klein" ; > ;
         };
         StringList [ en-US ] =
@@ -464,14 +464,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
             < "Upper" ; > ;
             < "Lower" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
     };
-    };
-     // nicht übersetzen !
     PushButton PB_NEW
     {
         Pos = MAP_APPFONT ( 39 , 158 ) ;
@@ -485,7 +478,6 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "H~inzufügen" ;
         Text [ en-US ] = "~Add" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_CHANGE
     {
@@ -508,7 +500,6 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ de ] = "Möchten Sie die aktuelle Änderung übernehmen?" ;
         Text [ en-US ] = "Do you want to accept the current modification?";
     };
-    Text [ x-comment ] = " ";
 };
 
 
