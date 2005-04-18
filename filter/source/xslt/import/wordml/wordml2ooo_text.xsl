@@ -539,7 +539,9 @@
                 </xsl:attribute>
             </xsl:if>
             <xsl:element name="style:text-properties">
-                <xsl:apply-templates select="current()"/>
+
+                <xsl:apply-templates select="current()"/> 
+<!--		<xsl:call-template name="text-properties"/> -->
             </xsl:element>
         </xsl:element>
     </xsl:template>

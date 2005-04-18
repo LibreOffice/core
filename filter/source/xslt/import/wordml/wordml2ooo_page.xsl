@@ -200,98 +200,14 @@
             <xsl:attribute name="style:name">pm<xsl:number from="/w:wordDocument/w:body" level="any" count="w:sectPr" format="1"/>
             </xsl:attribute>
             <style:page-layout-properties>
-                <xsl:attribute name="fo:page-width">
-                    <xsl:call-template name="ConvertMeasure">
-                        <xsl:with-param name="value" select="concat(w:pgSz/@w:w,'twip')"/>
-                    </xsl:call-template>cm</xsl:attribute>
-                <xsl:attribute name="fo:page-height">
-                    <xsl:call-template name="ConvertMeasure">
-                        <xsl:with-param name="value" select="concat(w:pgSz/@w:h,'twip')"/>
-                    </xsl:call-template>cm</xsl:attribute>
-                <xsl:choose>
-                    <xsl:when test="/w:wordDocument/w:docPr/w:gutterAtTop">
-                        <xsl:attribute name="fo:margin-top">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:top + w:pgMar/@w:gutter,'twip')"/>
-                                <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
-                            </xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-left">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:left,'twip')"/>
-                            </xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-right">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:right,'twip')"/>
-                            </xsl:call-template>cm</xsl:attribute>
-                    </xsl:when>
-                    <xsl:when test="w:rtlGutter">
-                        <xsl:attribute name="fo:margin-top">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:top,'twip')"/>
-                                <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
-                            </xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-left">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:left  ,'twip')"/>
-                            </xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-right">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:right + w:pgMar/@w:gutter,'twip')"/>
-                            </xsl:call-template>cm</xsl:attribute>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:attribute name="fo:margin-top">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:top,'twip')"/>
-                                <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
-                            </xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-left">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value">
-                                    <xsl:choose>
-                                        <xsl:when test="w:pgMar/@w:gutter">
-                                            <xsl:value-of select="concat(w:pgMar/@w:left +w:pgMar/@w:gutter, 'twip') "/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="concat(w:pgMar/@w:left , 'twip') "/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:with-param>
-                            </xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-right">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:pgMar/@w:right,'twip')"/>
-                            </xsl:call-template>cm</xsl:attribute>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:attribute name="fo:margin-bottom">
-                    <xsl:call-template name="ConvertMeasure">
-                        <xsl:with-param name="value" select="concat(w:pgMar/@w:bottom,'twip')"/>
-                        <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
-                    </xsl:call-template>cm</xsl:attribute>
-                <xsl:attribute name="style:footnote-max-height">
-                    <xsl:call-template name="ConvertMeasure">
-                        <xsl:with-param name="value" select="concat(w:pgMar/@w:footer,'twip')"/>
-                    </xsl:call-template>cm</xsl:attribute>
-                <xsl:if test="w:pgSz/@w:orient">
-                    <xsl:attribute name="style:print-orientation">
-                        <xsl:value-of select="w:pgSz/@w:orient"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:if test="w:cols/@w:num and w:cols/@w:num &gt; 0">
-                    <!-- create sction property-->
-                    <style:columns>
-                        <xsl:attribute name="fo:column-count">
-                            <xsl:value-of select="w:cols/@w:num"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="fo:column-gap">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="value" select="concat(w:cols/@w:space,'twip')"/>
-                            </xsl:call-template>cm</xsl:attribute>
-                    </style:columns>
-                </xsl:if>
+			<xsl:call-template name="page-layout-properties"/>
                 <xsl:apply-templates select="/w:wordDocument/w:bgPict"/>
             </style:page-layout-properties>
+	    <style:header-style>
+		<style:header-footer-properties style:dynamic-spacing="true" fo:margin-bottom="0">
+		   <xsl:attribute name="fo:min-height.value"><xsl:value-of select="concat('(.(twips2cm(?(>($0(-[', w:pgMar/@w:top, '](|[', w:pgMar/@w:header, '][720])))[0])($0)[0]))[cm])')"/></xsl:attribute>
+		</style:header-footer-properties>
+	    </style:header-style>
         </style:page-layout>
     </xsl:template>
     <xsl:template match="w:sectPr" mode="master-page">
@@ -305,6 +221,12 @@
             <xsl:attribute name="style:page-layout-name">
                 <xsl:value-of select="concat('pm', $master-page-name)"/>
             </xsl:attribute>
+	    <style:header>
+		<xsl:apply-templates select="w:hdr/child::*"/>
+	    </style:header>
+	    <style:footer>
+		<xsl:apply-templates select="w:ftr/child::*"/>
+	    </style:footer>
             <!-- Headers and footers-->
             <!--
             <style:header-style>
