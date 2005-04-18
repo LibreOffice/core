@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:08:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,6 +689,17 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnY                  = rData.GetY();
         aState.mnWidth              = rData.GetWidth();
         aState.mnHeight             = rData.GetHeight();
+
+        if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
+        {
+            // #i43799# adjust window state sizes if a minimial output size was set
+            // otherwise the frame and the client might get different sizes
+            if( maMinOutSize.Width() > aState.mnWidth )
+                aState.mnWidth = maMinOutSize.Width();
+            if( maMinOutSize.Height() > aState.mnHeight )
+                aState.mnHeight = maMinOutSize.Height();
+        }
+
         aState.mnMaximizedX         = rData.GetMaximizedX();
         aState.mnMaximizedY         = rData.GetMaximizedY();
         aState.mnMaximizedWidth     = rData.GetMaximizedWidth();
@@ -760,7 +771,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         }
         else
             if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
-                ImplHandleResize( pWindow, rData.GetWidth(), rData.GetHeight() );
+                ImplHandleResize( pWindow, aState.mnWidth, aState.mnHeight );   // #i43799# use aState and not rData, see above
     }
     else
     {
