@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-13 11:24:55 $
+#   last change: $Author: obo $ $Date: 2005-04-18 09:06:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,6 @@ SLOFILES=\
     $(SLO)$/imap.obj		\
     $(SLO)$/imap2.obj		\
     $(SLO)$/imap3.obj		\
-    $(SLO)$/lingucfg.obj	\
     $(SLO)$/ownlist.obj		\
     $(SLO)$/pver.obj		\
     $(SLO)$/vcldata.obj
