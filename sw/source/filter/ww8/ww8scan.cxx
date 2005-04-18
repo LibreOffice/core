@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:39:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6160,7 +6160,7 @@ void WW8PLCF_HdFt::UpdateIndex( BYTE grpfIhdt )
 //          WW8Dop
 //-----------------------------------------
 
-WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize)
+WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseThaiLineBreakingRules(false)
 {
     memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
     fDontUseHTMLAutoSpacing = true; //default
@@ -6362,7 +6362,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize)
     delete[] pDataPtr;
 }
 
-WW8Dop::WW8Dop()
+WW8Dop::WW8Dop() : bUseThaiLineBreakingRules(false)
 {
     // first set everything to a default of 0
     memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
@@ -6638,6 +6638,10 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         pData += 8;
         Set_UInt32(pData, GetCompatabilityOptions());
         sal_uInt32 a32Bit = 0;
+        if (bUseThaiLineBreakingRules)
+        {
+            a32Bit|=0x2000; //#i42909# set thai "line breaking rules" compatibility option
+        }
         if (fDontUseHTMLAutoSpacing)
             a32Bit |= 0x0004;
         Set_UInt32(pData, a32Bit);
