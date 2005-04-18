@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:22:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2079,6 +2079,7 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     QUERYINT( beans::XPropertySet );
     QUERYINT( beans::XMultiPropertySet );
     QUERYINT( beans::XPropertyState );
+    QUERYINT( text::XTextRangeCompare );
     QUERYINT( lang::XServiceInfo );
     QUERYINT( text::XTextRangeMover );
     QUERYINT( lang::XTypeProvider );
