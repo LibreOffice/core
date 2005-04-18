@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-28 15:49:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,8 +695,24 @@ public class LocalOfficeConnection
         public void startupService()
             throws java.io.IOException
         {
+            int nSizeCmdArray = 4;
+            String sOption = null;
+            //examine if user specified command-line options in system properties.
+            //We may offer later a more sophisticated way of providing options if
+            //the need arises. Currently this is intended to ease the pain during
+            //development  with pre-release builds of OOo where one wants to start
+            //OOo with the -norestore options. The value of the property is simple
+            //passed on to the Runtime.exec call.
+            try {
+                sOption = System.getProperty("com.sun.star.officebean.Options");
+                if (sOption != null)
+                    nSizeCmdArray ++;
+            } catch (java.lang.SecurityException e)
+            {
+                e.printStackTrace();
+            }
            // create call with arguments
-            String[] cmdArray = new String[4];
+            String[] cmdArray = new String[nSizeCmdArray];
             cmdArray[0] = (new File(getProgramPath(), OFFICE_APP_NAME)).getPath();
             cmdArray[1] = "-nologo";
             cmdArray[2] = "-nodefault";
@@ -707,6 +723,9 @@ public class LocalOfficeConnection
                 cmdArray[3] = "-accept=socket,port=" + mPort + ";urp";
             else
                 throw new java.io.IOException( "not connection specified" );
+
+            if (sOption != null)
+                cmdArray[4] = sOption;
 
             // start process
             mProcess = Runtime.getRuntime().exec(cmdArray);
