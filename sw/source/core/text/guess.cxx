@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:46:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, sal_True );
     nBreakStart = (xub_StrLen)aBound.startPos;
-    nWordLen = aBound.endPos - nBreakStart;
+    nWordLen = static_cast<xub_StrLen>(aBound.endPos - nBreakStart);
 
     // if everything else fails, we want to cut at nPos
     nCutPos = nPos;
