@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:38:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,13 +350,11 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
         SwCntntNode::SetAttr( *pAutoAttr );
 
     const SfxPoolItem* pItem;
-    if( GetNodes().IsDocNodes() &&
-        SFX_ITEM_SET == GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
-        TRUE, &pItem ) && ((SwNumRuleItem*)pItem)->GetValue().Len() )
+    if( GetNodes().IsDocNodes())
     {
-        pNdNum = new SwNodeNum( 0 );
-        SwNumRule* pRule = GetDoc()->FindNumRulePtr(
-                                    ((SwNumRuleItem*)pItem)->GetValue() );
+        //pNdNum = new SwNodeNum( 0 );
+        SwNumRule* pRule = GetNumRule();
+
         if( pRule )
             pRule->SetInvalidRule( TRUE );
     }
@@ -1049,8 +1047,26 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     const BYTE nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;
     const BYTE nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;
 
+    // -> HB 2005-04-05 #i46625#
+
+    // Only change numbering level if paragraph has the same numbering
+    // rule as the assigned paragraph style
+    SwNumRule * pRule = GetNumRule();
+
+    const SfxPoolItem * pItem = NULL;
+    String sNewCollNumRuleName;
+    if (SFX_ITEM_SET ==
+        pNewColl->GetItemState(RES_PARATR_NUMRULE, TRUE, &pItem))
+    {
+        sNewCollNumRuleName =
+            static_cast<const SwNumRuleItem *>(pItem)->GetValue();
+    }
+
     SwNodes& rNds = GetNodes();
-    if( nOldLevel != nNewLevel )
+    if( nOldLevel != nNewLevel &&
+        (pRule == NULL || sNewCollNumRuleName.Len() == 0 ||
+         sNewCollNumRuleName == pRule->GetName()))
+    // <- HB 2005-04-05 #i46625#
     {
         // Numerierung aufheben, falls sie aus der Vorlage kommt
         // und nicht nicht aus der neuen
