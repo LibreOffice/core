@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:49:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -751,7 +754,17 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, TRUE );
 //  ErrorBox( this, WB_OK | WB_DEF_OK, String( aErrorTextPrefix + aErrorText ) ).Execute();
 //  ErrorHandler::HandleError( pBasic->GetErrorCode() );
+
+    // #i47002#
+    Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
+
     ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
+
+    // #i47002#
+    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if ( !pWindow )
+        return FALSE;
+
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
     return FALSE;
