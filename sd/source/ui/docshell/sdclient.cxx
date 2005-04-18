@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:04:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include "Client.hxx"
+
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
@@ -193,7 +197,26 @@ void Client::ViewChanged()
             MapMode             aMap100( MAP_100TH_MM );
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) );
             Rectangle           aVisArea;
-            awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
+            awt::Size aSz;
+            try
+            {
+                aSz = GetObject()->getVisualAreaSize( GetAspect() );
+            }
+            catch( embed::NoVisualAreaSizeException& e )
+            {
+                (void)e;
+                DBG_ERROR( "sd::Client::ViewChanged(), can not get visual area size!\n" );
+                aSz.Width = 5000;
+                aSz.Height = 5000;
+            }
+            catch( uno::Exception& e )
+            {
+                (void)e;
+                DBG_ERROR( "sd::Client::ViewChanged(), unexcpected exception catched!\n" );
+                aSz.Width = 5000;
+                aSz.Height = 5000;
+            }
+
             aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
             aVisArea = OutputDevice::LogicToLogic( aVisArea, aMapUnit, aMap100 );
             Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
