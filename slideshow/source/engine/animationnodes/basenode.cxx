@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:06:25 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ namespace presentation
 
             // setup state transition table
             mpStateTransitionTable = getStateTransitionTable( getRestartMode(),
-                                                                getFillMode() );
+                                                              getFillMode() );
         }
 
         void BaseNode::dispose()
