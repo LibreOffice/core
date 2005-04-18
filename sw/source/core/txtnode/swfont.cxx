@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:40:31 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,7 +836,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     else
     {
         SV_STAT( nGetTextSize );
-        short nOldKern = rInf.GetKern();
+        long nOldKern = rInf.GetKern();
         const XubString &rOldTxt = rInf.GetText();
         rInf.SetKern( CheckKerning() );
         if ( !IsCaseMap() )
@@ -924,7 +924,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     if( GetEscapement() )
         CalcEsc( rInf, aPos );
 
-    rInf.SetKern( CheckKerning() + rInf.GetSperren() );
+    rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
 
     if( IsCapital() )
         DrawCapital( rInf );
@@ -990,17 +990,19 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             const sal_Bool bAsianFont =
                 ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() );
             for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
+            {
                 if( CH_BLANK == rOldStr.GetChar( nTmp ) || bAsianFont ||
                     ( nTmp + 1 < rOldStr.Len() && pSI &&
                       ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
                     ++nSpace;
+            }
 
             // if next portion if a hole portion we do not consider any
             // extra space added because the last character was ASIAN
             if ( nSpace && rInf.IsSpaceStop() && bAsianFont )
                  --nSpace;
 
-            nSpace *= rInf.GetSpace();
+            nSpace *= rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         }
 
         rInf.SetWidth( USHORT(aSize.Width() + nSpace) );
@@ -1049,7 +1051,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     if( GetEscapement() )
         CalcEsc( rInf, aPos );
 
-    rInf.SetKern( CheckKerning() + rInf.GetSperren() );
+    rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
     const Point &rOld = rInf.GetPos();
     rInf.SetPos( aPos );
 
@@ -1123,7 +1125,7 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
     else
     {
         const XubString &rOldTxt = rInf.GetText();
-        short nOldKern = rInf.GetKern();
+        long nOldKern = rInf.GetKern();
         rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );
         if ( !IsCaseMap() )
