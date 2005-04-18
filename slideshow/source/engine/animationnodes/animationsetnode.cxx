@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationsetnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:05:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace presentation
         AnimationSetNode::AnimationSetNode( const uno::Reference< animations::XAnimationNode >& xNode,
                                             const BaseContainerNodeSharedPtr&                   rParent,
                                             const NodeContext&                                  rContext ) :
-            AnimationBaseNode( xNode, rParent, rContext )
+            ActivityAnimationBaseNode( xNode, rParent, rContext )
         {
         }
 
@@ -104,7 +104,14 @@ namespace presentation
             return true;
         }
 
-        void AnimationSetNode::scheduleDeactivationEvent() const
+#if defined(VERBOSE) && defined(DBG_UTIL)
+        const char* AnimationSetNode::getDescription() const
+        {
+            return "AnimationSetNode";
+        }
+#endif
+
+        void AnimationSetNode::implScheduleDeactivationEvent() const
         {
             if( !isIndefiniteTiming( getXNode()->getDuration() ) )
             {
@@ -124,18 +131,34 @@ namespace presentation
             }
         }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* AnimationSetNode::getDescription() const
-        {
-            return "AnimationSetNode";
-        }
-#endif
-
         AnimationActivitySharedPtr AnimationSetNode::createSetActivity()
         {
+            ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
+
             const ::rtl::OUString& rAttrName( getXAnimateNode()->getAttributeName() );
 
             const AttributableShapeSharedPtr& rShape( getShape() );
+
+            // make deactivation a two-step procedure. Normally, we
+            // could solely rely on
+            // BaseNode::scheduleDeactivationEvent() to deactivate()
+            // us. Unfortunately, that method on the one hand ignores
+            // indefinite timing, on the other hand generates
+            // zero-timeout delays, which might get fired _before_ our
+            // set activity has taken place. Therefore, we enforce
+            // sequentiality by letting only the set activity schedule
+            // the deactivation event (and ActivityAnimationBaseNode
+            // takes care for the fact when mpActivity should be zero).
+            AnimationSetNodeSharedPtr pSelf(
+                ::boost::dynamic_pointer_cast< AnimationSetNode >(getSelf()) );
+
+            ENSURE_AND_THROW( pSelf.get(),
+                              "AnimationSetNode::createSetActivity(): cannot cast getSelf() to my type!" );
+
+            aParms.mpEndEvent =
+                makeEvent(
+                    ::boost::bind( &AnimationSetNode::implScheduleDeactivationEvent,
+                                   pSelf ) );
 
             switch( AnimationFactory::classifyAttributeName( rAttrName ) )
             {
@@ -154,7 +177,8 @@ namespace presentation
                                                     rShape, getContext().mpLayerManager ),
                                       "AnimationSetNode::createSetActivity(): Could not import numeric to value" );
 
-                    return makeSetActivity( AnimationFactory::createNumberPropertyAnimation(
+                    return makeSetActivity( aParms,
+                                            AnimationFactory::createNumberPropertyAnimation(
                                                 rAttrName,
                                                 rShape,
                                                 getContext().mpLayerManager,
@@ -172,7 +196,8 @@ namespace presentation
                                                     getContext().mpLayerManager ),
                                       "AnimationSetNode::createSetActivity(): Could not import enum to value" );
 
-                    return makeSetActivity( AnimationFactory::createEnumPropertyAnimation(
+                    return makeSetActivity( aParms,
+                                            AnimationFactory::createEnumPropertyAnimation(
                                                 rAttrName,
                                                 rShape,
                                                 getContext().mpLayerManager,
@@ -190,7 +215,8 @@ namespace presentation
                                                     getContext().mpLayerManager ),
                                       "AnimationSetNode::createSetActivity(): Could not import color to value" );
 
-                    return makeSetActivity( AnimationFactory::createColorPropertyAnimation(
+                    return makeSetActivity( aParms,
+                                            AnimationFactory::createColorPropertyAnimation(
                                                 rAttrName,
                                                 rShape,
                                                 getContext().mpLayerManager,
@@ -208,7 +234,8 @@ namespace presentation
                                                     getContext().mpLayerManager ),
                                       "AnimationSetNode::createSetActivity(): Could not import string to value" );
 
-                    return makeSetActivity( AnimationFactory::createStringPropertyAnimation(
+                    return makeSetActivity( aParms,
+                                            AnimationFactory::createStringPropertyAnimation(
                                                 rAttrName,
                                                 rShape,
                                                 getContext().mpLayerManager,
@@ -226,7 +253,8 @@ namespace presentation
                                                     getContext().mpLayerManager ),
                                       "AnimationSetNode::createSetActivity(): Could not import bool to value" );
 
-                    return makeSetActivity( AnimationFactory::createBoolPropertyAnimation(
+                    return makeSetActivity( aParms,
+                                            AnimationFactory::createBoolPropertyAnimation(
                                                 rAttrName,
                                                 rShape,
                                                 getContext().mpLayerManager,
