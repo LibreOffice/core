@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setactivity.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:50:32 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <animation.hxx>
 #include <animatableshape.hxx>
 #include <shapeattributelayer.hxx>
+#include <activitiesfactory.hxx>
 
 
 namespace presentation
@@ -89,11 +90,14 @@ namespace presentation
             typedef ::boost::shared_ptr< AnimationT >   AnimationSharedPtrT;
             typedef typename AnimationT::ValueType      ValueT;
 
-            SetActivity( const AnimationSharedPtrT& rAnimation,
-                         const ValueT&              rToValue ) :
+            SetActivity( const ActivitiesFactory::CommonParameters& rParms,
+                         const AnimationSharedPtrT&                 rAnimation,
+                         const ValueT&                              rToValue ) :
                 mpAnimation( rAnimation ),
                 mpShape(),
                 mpAttributeLayer(),
+                mpEndEvent( rParms.mpEndEvent ),
+                mrEventQueue( rParms.mrEventQueue ),
                 maToValue( rToValue )
             {
                 ENSURE_AND_THROW( mpAnimation.get(),
@@ -121,6 +125,10 @@ namespace presentation
                                     mpAttributeLayer );
                 (*mpAnimation)(maToValue);
                 mpAnimation->end();
+
+                // fire end event, if any
+                if( mpEndEvent.get() )
+                    mrEventQueue.addEvent( mpEndEvent );
 
                 return false; // we're going inactive immediately
             }
@@ -155,13 +163,16 @@ namespace presentation
             AnimationSharedPtrT             mpAnimation;
             AnimatableShapeSharedPtr        mpShape;
             ShapeAttributeLayerSharedPtr    mpAttributeLayer;
+            EventSharedPtr                  mpEndEvent;
+            EventQueue&                     mrEventQueue;
             ValueT                          maToValue;
         };
 
-        template< class AnimationT > AnimationActivitySharedPtr makeSetActivity( const ::boost::shared_ptr< AnimationT >&   rAnimation,
+        template< class AnimationT > AnimationActivitySharedPtr makeSetActivity( const ActivitiesFactory::CommonParameters& rParms,
+                                                                                 const ::boost::shared_ptr< AnimationT >&   rAnimation,
                                                                                  const typename AnimationT::ValueType&      rToValue )
         {
-            return AnimationActivitySharedPtr( new SetActivity< AnimationT >(rAnimation,rToValue) );
+            return AnimationActivitySharedPtr( new SetActivity< AnimationT >(rParms,rAnimation,rToValue) );
         }
     }
 }
