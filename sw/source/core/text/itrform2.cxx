@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:45:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,7 +1648,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     // adjust text if kana compression is enabled
     if ( GetInfo().CompressLine() )
     {
-        USHORT nRepaintOfst = CalcKanaAdj( pCurr );
+        SwTwips nRepaintOfst = CalcKanaAdj( pCurr );
 
         // adjust repaint offset
         if ( nRepaintOfst < GetInfo().GetPaintOfst() )
@@ -1932,7 +1932,7 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
  * that the line length is USHORT twips.
  *************************************************************************/
 
-USHORT SwTxtFormatter::_CalcFitToContent()
+SwTwips SwTxtFormatter::_CalcFitToContent()
 {
     FormatReset( GetInfo() );
     BuildPortions( GetInfo() );
