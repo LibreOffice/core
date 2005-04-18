@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
 
- *  last change: $Author: vg $ $Date: 2005-03-08 13:46:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         nYPos = 0;
         eOrient = VERT_TOP;
     }
-    Width( rGrfSize.Width() + 2 * GRFNUM_SECURE );
+    Width( static_cast<USHORT>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     nFixWidth = Width();
     nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( KSHORT(nGrfHeight) );
@@ -875,7 +875,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     const sal_Bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
-    SetAscent( GetRelPos() > 0 ? GetRelPos() : 0 );
+    SetAscent( static_cast<USHORT>(GetRelPos() > 0 ? GetRelPos() : 0) );
     if( GetAscent() > Height() )
         Height( GetAscent() );
 
@@ -1216,8 +1216,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             if( !aWidth[ aScrType[i] ] )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
-                aWidth[ aScrType[i] ] = 2*
-                            rInf.GetOut()->GetFontMetric().GetSize().Width()/3;
+                aWidth[ aScrType[i] ] =
+                        static_cast<USHORT>(2 * rInf.GetOut()->GetFontMetric().GetSize().Width() / 3);
             }
             ++i;
         }
@@ -1281,7 +1281,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
-                nMaxDescent = aSize.Height() - nAsc;
+                nMaxDescent = static_cast<USHORT>(aSize.Height() - nAsc);
         }
         // for one or two characters we double the width of the portion
         if( nCount < 3 )
