@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:57:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ namespace vclcanvas
 
             // for the time being, always return as BGRA
             uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
+            sal_Int8* pRes = aRes.getArray();
 
             int nCurrPos(0);
             for( int y=rect.Y1;
@@ -193,10 +194,10 @@ namespace vclcanvas
                          x<aBmpSize.Width() && x<rect.X2;
                          ++x )
                     {
-                        aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                        aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                        aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                        aRes[ nCurrPos++ ] = pAlphaReadAccess->GetPixel( y, x ).GetIndex();
+                        pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
+                        pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
+                        pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
+                        pRes[ nCurrPos++ ] = pAlphaReadAccess->GetPixel( y, x ).GetIndex();
                     }
                 }
                 else
@@ -205,10 +206,10 @@ namespace vclcanvas
                          x<aBmpSize.Width() && x<rect.X2;
                          ++x )
                     {
-                        aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                        aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                        aRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                        aRes[ nCurrPos++ ] = (sal_Int8)255;
+                        pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
+                        pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
+                        pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
+                        pRes[ nCurrPos++ ] = (sal_Int8)255;
                     }
                 }
             }
@@ -455,7 +456,7 @@ namespace vclcanvas
     }
 
     void SAL_CALL CanvasBitmapHelper::setPixel( const uno::Sequence< sal_Int8 >&    color,
-                                          const geometry::IntegerPoint2D&   pos )
+                                                const geometry::IntegerPoint2D&     pos )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setPixel()" );
 
@@ -541,16 +542,17 @@ namespace vclcanvas
         {
             // for the time being, always return as BGRA
             uno::Sequence< sal_Int8 > aRes( 4 );
+            sal_Int8* pRes = aRes.getArray();
 
             const BitmapColor aColor( pReadAccess->GetColor( pos.Y, pos.X ) );
-            aRes[ 3 ] = aColor.GetRed();
-            aRes[ 2 ] = aColor.GetGreen();
-            aRes[ 1 ] = aColor.GetBlue();
+            pRes[ 3 ] = aColor.GetRed();
+            pRes[ 2 ] = aColor.GetGreen();
+            pRes[ 1 ] = aColor.GetBlue();
 
             if( pAlphaReadAccess.get() != NULL )
-                aRes[ 3 ] = pAlphaReadAccess->GetPixel( pos.Y, pos.X ).GetIndex();
+                pRes[ 3 ] = pAlphaReadAccess->GetPixel( pos.Y, pos.X ).GetIndex();
             else
-                aRes[ 3 ] = (sal_Int8)255;
+                pRes[ 3 ] = (sal_Int8)255;
 
             return aRes;
         }
