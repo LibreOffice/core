@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:51:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,8 +1098,19 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         {
             // --> FME 2005-02-21 #i42912#
             // UpdateNum should be called if pNodeNum is 0:
-            if( !static_cast<SwTxtNode*>(this)->_GetNodeNum() )
-                 static_cast<SwTxtNode*>(this)->UpdateNum( SwNodeNum(0) );
+
+            // HB 2005-04-05 #i46588#
+            // Call UpdateNum with a node number of the appropriate level.
+            SwTxtNode * pTxtNd = static_cast<SwTxtNode*>(this);
+            if( !pTxtNd->_GetNodeNum() )
+            {
+                BYTE nLevel = pTxtNd->GetOutlineLevel();
+
+                if (nLevel == NO_NUMBERING)
+                    nLevel = 0;
+
+                 pTxtNd->UpdateNum( SwNodeNum(nLevel) );
+            }
             // <--
 
 #ifndef NUM_RELSPACE
