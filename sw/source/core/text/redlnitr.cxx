@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:33:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
