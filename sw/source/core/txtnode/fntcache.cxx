@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:00:23 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
             CreatePrtFont( rOut );
             const Font aOldFnt( rRefDev.GetFont() );
             ((OutputDevice&)rRefDev).SetFont( *pPrtFont );
-            nPrtHeight = rRefDev.GetTextHeight();
+            nPrtHeight = static_cast<USHORT>(rRefDev.GetTextHeight());
 
 #if OSL_DEBUG_LEVEL > 1
             // Check if vcl did not change the meading of GetTextHeight
@@ -391,7 +391,7 @@ USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut 
             ((OutputDevice&)rOut).SetFont( aOldFnt );
             bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
-            nExtLeading = aMet.GetExtLeading();
+            nExtLeading = static_cast<USHORT>(aMet.GetExtLeading());
         }
 
         const bool bUseExtLeading = pSh->IsAddExtLeading();
@@ -481,7 +481,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
             GuessLeading( rSh, aMet );
 
         if ( USHRT_MAX == nExtLeading )
-            nExtLeading = aMet.GetExtLeading();
+            nExtLeading = static_cast<USHORT>(aMet.GetExtLeading());
 
 #if OSL_DEBUG_LEVEL > 1
         const XubString aDbgTxt1( pPrtFont->GetName() );
@@ -1167,7 +1167,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             //
             // Modify Array for special justifications
             //
-            short nSpaceAdd = rInf.GetSpace();
+            long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
             sal_Bool bSpecialJust = sal_False;
 
             if ( rInf.GetFont() && rInf.GetLen() )
@@ -1206,16 +1206,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
 
                 // Thai Justification
-                if ( SW_CTL == nActual && nSpaceAdd  )
+                if ( SW_CTL == nActual && nSpaceAdd )
                 {
 
                     LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
 
                     if ( LANGUAGE_THAI == aLang )
                     {
+                        // Use rInf.GetSpace() because it has more precision than
+                        // nSpaceAdd:
                         SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
                                                    rInf.GetIdx(), rInf.GetLen(),
-                                                   nSpaceAdd );
+                                                   rInf.GetNumberOfBlanks(),
+                                                   rInf.GetSpace() );
 
                         // adding space to blanks is already done
                         bSpecialJust = sal_True;
@@ -1304,7 +1307,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else if( bStretch )
         {
-            USHORT nTmpWidth = rInf.GetWidth();
+            long nTmpWidth = rInf.GetWidth();
             if( rInf.GetKern() && rInf.GetLen() && nTmpWidth > rInf.GetKern() )
                 nTmpWidth -= rInf.GetKern();
             rInf.GetOut().DrawStretchText( aPos, nTmpWidth,
@@ -1387,7 +1390,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         //
         // Modify Printer and ScreenArrays for special justifications
         //
-        short nSpaceAdd = rInf.GetSpace();
+        long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
 
         if ( rInf.GetFont() && rInf.GetLen() )
         {
@@ -1436,7 +1439,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray,
                                                pScrArray, rInf.GetIdx(),
-                                               rInf.GetLen(), nSpaceAdd );
+                                               rInf.GetLen(),
+                                               rInf.GetNumberOfBlanks(),
+                                               rInf.GetSpace() );
 
                     // adding space to blanks is already done
                     nSpaceAdd = 0;
@@ -1495,7 +1500,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // im Blocksatz handelt, muessen wir zwei ausgeben:
         if ( ( nCnt == 1 ) && rInf.GetSpace() && ( cChPrev == CH_BLANK ) )
         {
-            pKernArray[0] = rInf.GetWidth() + rInf.GetSpace() + rInf.GetKern();
+            pKernArray[0] = rInf.GetWidth() +
+                            rInf.GetKern() +
+                          ( rInf.GetSpace() / SPACING_PRECISION_FACTOR );
 
             if ( bSwitchL2R )
                 rInf.GetFrm()->SwitchLTRtoRTL( aPos );
@@ -1531,8 +1538,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // vor bzw. hinter den kompletten Zwischenraum gesetzt werden,
             // sonst wuerde das Durch-/Unterstreichen Luecken aufweisen.
             long nSpaceSum = 0;
-            USHORT nHalfSpace = pPrtFont->IsWordLineMode() ? 0 : nSpaceAdd / 2;
-            USHORT nOtherHalf = nSpaceAdd - nHalfSpace;
+            long nHalfSpace = pPrtFont->IsWordLineMode() ? 0 : nSpaceAdd / 2;
+            long nOtherHalf = nSpaceAdd - nHalfSpace;
             if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
                 nSpaceSum = nHalfSpace;
             for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
@@ -1693,19 +1700,21 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             if ( bColSave )
                                 rInf.GetOut().SetLineColor( SwViewOption::GetSpellColor() );
 
+                            const long nTmpSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+
                             do
                             {
                                 nStart -= rInf.GetIdx();
                                 Point aStart( rInf.GetPos() );
                                 Point aEnd;
-                                short nBlank = 0;
+                                long nBlank = 0;
                                 const xub_StrLen nEnd = nStart + nWrLen;
 
                                 if( nEnd < nCnt
                                     && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nEnd ) )
                                 {
                                     if( nEnd + 1 == nCnt )
-                                        nBlank -= rInf.GetSpace();
+                                        nBlank -= nTmpSpaceAdd;
                                     else
                                         nBlank -= nHalfSpace;
                                 }
@@ -2016,14 +2025,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
 xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 {
-    short nSpaceAdd = rInf.GetSpace() ? rInf.GetSpace() : - rInf.GetSperren();
-    short nKern = rInf.GetKern();
+    long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+    const long nSperren = -rInf.GetSperren() / SPACING_PRECISION_FACTOR;
+    long nKern = rInf.GetKern();
 
-    if( nSpaceAdd < 0 )
-    {
-        nKern -= nSpaceAdd;
-        nSpaceAdd = 0;
-    }
+    if( 0 != nSperren )
+        nKern -= nSperren;
+
     long *pKernArray = new long[ rInf.GetLen() ];
 
     if ( pPrinter )
@@ -2059,15 +2067,16 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
             if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang )
             {
-                long nSpaceSum = rInf.GetSpace();
+                long nSpaceSum = nSpaceAdd;
                 for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
                 {
                     pKernArray[ nI ] += nSpaceSum;
-                    nSpaceSum += rInf.GetSpace();
+                    nSpaceSum += nSpaceAdd;
                 }
 
                 nSpaceAdd = 0;
             }
+
         }
 
         // Thai Justification
@@ -2079,6 +2088,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             {
                 SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
                                            rInf.GetIdx(), rInf.GetLen(),
+                                           rInf.GetNumberOfBlanks(),
                                            rInf.GetSpace() );
 
                 // adding space to blanks is already done
@@ -2094,7 +2104,8 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             {
                 if ( pSI && pSI->CountKashida() )
                     pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
-                                         rInf.GetSpace() );
+                                         nSpaceAdd );
+
                 nSpaceAdd = 0;
             }
         }
@@ -2103,7 +2114,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     long nLeft = 0;
     long nRight = 0;
     xub_StrLen nCnt = 0;
-    xub_StrLen nSpaceSum = 0;
+    long nSpaceSum = 0;
     long nKernSum = 0;
 
     if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
@@ -2149,8 +2160,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     while ( ( nRight < long( rInf.GetOfst() ) ) && ( nIdx < nEnd ) )
     {
-        if ( nSpaceAdd &&
-             CH_BLANK == rInf.GetText().GetChar( nIdx ) )
+        if ( nSpaceAdd && CH_BLANK == rInf.GetText().GetChar( nIdx ) )
             nSpaceSum += nSpaceAdd;
 
         // go to next character (cell).
