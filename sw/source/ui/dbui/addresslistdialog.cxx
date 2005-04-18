@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 15:55:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 15:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -528,7 +531,8 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             aAny <<= aInfo;
             xDataProperties->setPropertyValue(C2U("Info"), aAny);
 
-            uno::Reference<frame::XStorable> xStore(xNewInstance, UNO_QUERY_THROW);
+            uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
+            uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
             String sExt = String::CreateFromAscii(".odb");
             String sTmpName;
             {
