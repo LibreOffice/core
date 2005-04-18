@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:43:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ public:
 
     // simuliert eine Formatierung, als wenn es keinen rechten Rand und
     // keine Flys oder andere Hindernisse gaebe und liefert die Breite.
-    USHORT CalcFitToContent();
+    SwTwips CalcFitToContent();
 
     // liefert den zusaetzlichen Zeilenabstand fuer den naechsten Absatz
     // OD 07.01.2004 #i11859# - change return data type;
