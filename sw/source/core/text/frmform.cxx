@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:30:17 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,8 +355,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         SwTwips nMyPos = (Frm().*fnRect->fnGetTop)();
 
         const SwPageFrm *pPage = 0;
-        sal_Bool  bOldInvaCntnt,
-              bOldInvaLayout;
+        sal_Bool  bOldInvaCntnt;
         if ( !IsInFly() && GetNext() )
         {
             pPage = FindPageFrm();
