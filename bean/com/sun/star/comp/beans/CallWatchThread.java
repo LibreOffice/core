@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallWatchThread.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 08:58:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,7 @@ public class CallWatchThread extends Thread
     private boolean bAlive;
     private long nTimeout;
 
-    private static ThreadGroup aWatcherGroup;
 
-    static
-    {
-        aWatcherGroup = new ThreadGroup("OOoBean Call Watcher Threads");
-        aWatcherGroup.setDaemon(false);
-    }
 
     public CallWatchThread(long nTimeout)
     {
@@ -89,7 +83,8 @@ public class CallWatchThread extends Thread
 
     public CallWatchThread( long nTimeout, String aTag )
     {
-        super(aWatcherGroup, aTag);
+
+        super(aTag);
         this.aWatchedThread = Thread.currentThread();
         this.nTimeout = nTimeout;
 
