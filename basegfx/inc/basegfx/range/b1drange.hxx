@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:34:00 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,16 @@ namespace basegfx
         void operator=(const B1DRange& rRange)
         {
             maRange = rRange.maRange;
+        }
+
+        bool equal(const B1DRange& rRange) const
+        {
+            return (maRange.equal(rRange.maRange));
+        }
+
+        bool equal(const B1DRange& rRange, const double& rfSmallValue) const
+        {
+            return (maRange.equal(rRange.maRange,rfSmallValue));
         }
 
         double getMinimum() const
