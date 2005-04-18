@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:36:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,15 +102,15 @@
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_SETPROPERTYTOLERANTFAILED_HPP_
-#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_GETPROPERTYTOLERANTRESULT_HPP_
-#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
-#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
-#endif
+//#ifndef _COM_SUN_STAR_BEANS_SETPROPERTYTOLERANTFAILED_HPP_
+//#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_BEANS_GETPROPERTYTOLERANTRESULT_HPP_
+//#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
+//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+//#endif
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -458,6 +458,9 @@ void SwXParagraph::firePropertiesChangeEvent(
 /* -----------------------------25.09.03 11:09--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+/* disabled for #i46921#
+
 uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
         const uno::Sequence< Any >& rValues )
@@ -502,17 +505,6 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyVal
                 pFailed[ nFailed++ ].Result  = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
             {
-/*
-                // get property state
-                // (compare to SwXParagraph::getPropertyState)
-                PropertyState eState;
-                const SwAttrSet *pAttrSet = &rAttrSet;
-                sal_Bool bAttrSetFetched = sal_True;
-                eState = lcl_SwXParagraph_getPropertyState(
-                            *pUnoCrsr, &pAttrSet, *pEntry, bAttrSetFetched );
-                rInfo.State  = eState;
-*/
-
                 // set property value
                 // (compare to SwXParagraph::setPropertyValues)
                 if (pEntry->nFlags & PropertyAttribute::READONLY)
@@ -692,6 +684,9 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
 
     return aResult;
 }
+
+
+*/
 
 /* -----------------------------12.09.00 11:09--------------------------------
 
