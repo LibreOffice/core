@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FloatingPointBitmapLayout.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:24:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com { module sun { module star { module rendering {
     This structure collects all necessary information to describe the
     memory layout of a bitmap having floating point color channels<p>
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 struct FloatingPointBitmapLayout
 {

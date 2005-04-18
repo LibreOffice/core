@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontMetrics.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:25:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,21 @@ module com { module sun { module star { module rendering {
     included here.<p>
 
     Please note that when querying FontMetrics from an XCanvasFont
-    interface, all values here are given in device coordinates, and
-    already tuned to the specific font size. That means, the
-    referenceCharWidth and/or ascent+descent+internalLeading will
-    approximately (rounded to integer device resolution, or exactly,
-    if fractional font rendering is enabled) match the
-    referenceAdvancement/cellSize members of the FontRequest for
-    which the XCanvasFont was queried.
+    interface, all values here are given relative to the font cell
+    size. That means, the referenceCharWidth and/or
+    ascent+descent+internalLeading will approximately (rounded to
+    integer device resolution, or exactly, if fractional font
+    rendering is enabled) match the referenceAdvancement/cellSize
+    members of the FontRequest for which the XCanvasFont was
+    queried. Please be aware that the values returned in this
+    structure only map one-to-one to device pixel, if the combined
+    rendering transformation for text output equals the identity
+    transformation. Otherwise, the text output (and thus the resulting
+    metrics) will be subject to that transformation. Depending on the
+    underlying font technology, actual device output might be off by
+    up to one device pixel from the transformed metrics.
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 struct FontMetrics
 {

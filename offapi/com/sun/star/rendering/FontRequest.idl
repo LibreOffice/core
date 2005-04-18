@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontRequest.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:25:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module rendering {
     <member>FontInfo::StyleName</member> empty, if font selection
     should only happen via the PANOSE description.
 
-    @since #110496#
+    @since OOo 2.0.0
  */
 struct FontRequest
 {
@@ -110,8 +110,14 @@ struct FontRequest
 
         This member and the referenceAdvancement member are mutually
         exclusive, one of them has to be set to 0 (which means don't
-        care). For distorted fonts, the render transformation must be
-        used.<p>
+        care).<p>
+
+        For distorted fonts, the render transformation must be
+        used. That is, the size specified here corresponds to device
+        pixel only if the combined render transformation during text
+        output equals the identity transform. This also applies to all
+        query methods, for both <type>XCanvasFont</type> and
+        <type>XTextLayout</type>.<p>
     */
     double                          CellSize;
 
