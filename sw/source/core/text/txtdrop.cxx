@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:37:32 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ void SwTxtPainter::PaintDropPortion()
 
     Top();
 
-    GetInfo().SetSpaceAdd( pCurr->GetpSpaceAdd() );
+    GetInfo().SetpSpaceAdd( pCurr->GetpLLSpaceAdd() );
     GetInfo().ResetSpaceIdx();
     GetInfo().SetKanaComp( pCurr->GetpKanaComp() );
     GetInfo().ResetKanaIdx();
@@ -1156,7 +1156,7 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
                         break;
                 }
 
-                SwTwips nTmpWidth =
+                const SwTwips nTmpWidth =
                         ( InSpaceGrp() && rInf.GetSpaceAdd() ) ?
                         Width() + CalcSpacing( rInf.GetSpaceAdd(), rInf ) :
                         Width();
