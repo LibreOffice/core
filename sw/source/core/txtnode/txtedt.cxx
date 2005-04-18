@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:15:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,8 +585,8 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos )
     if (aBndry.endPos != aBndry.startPos && IsSymbol( (xub_StrLen)aBndry.startPos ))
         aBndry.endPos = aBndry.startPos;
 
-    return aText.Copy( (xub_StrLen) aBndry.startPos,
-                       (xub_StrLen) (aBndry.endPos - aBndry.startPos) );
+    return aText.Copy( static_cast<xub_StrLen>(aBndry.startPos),
+                       static_cast<xub_StrLen>(aBndry.endPos - aBndry.startPos) );
 }
 
 
@@ -665,7 +665,7 @@ BOOL SwScanner::NextWord()
         const USHORT nCurrScript =
                 pBreakIt->xBreak->getScriptType( rText, nBegin );
 
-        XubString aTmpWord = rText.Copy( nBegin, aBound.endPos - nBegin );
+        XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
         const long nScriptEnd = nBegin +
             pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
         const long nEnd = Min( aBound.endPos, nScriptEnd );
@@ -675,7 +675,8 @@ BOOL SwScanner::NextWord()
         if ( aBound.startPos < nBegin )
         {
             // search from nBegin backwards until the next script change
-            aTmpWord = rText.Copy( aBound.startPos, nBegin - aBound.startPos + 1 );
+            aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
+                                   static_cast<xub_StrLen>(nBegin - aBound.startPos + 1) );
             nScriptBegin = aBound.startPos +
                 pBreakIt->xBreak->beginOfScript( aTmpWord, nBegin - aBound.startPos,
                                                 nCurrScript );
@@ -688,7 +689,8 @@ BOOL SwScanner::NextWord()
     {
         const USHORT nCurrScript =
                 pBreakIt->xBreak->getScriptType( rText, aBound.startPos );
-        XubString aTmpWord = rText.Copy( aBound.startPos, aBound.endPos - aBound.startPos );
+        XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
+                                         static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
         const long nScriptEnd = aBound.startPos +
             pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
         const long nEnd = Min( aBound.endPos, nScriptEnd );
