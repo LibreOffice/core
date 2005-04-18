@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:41:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGECHANGELISTENER_HPP_
 #include <com/sun/star/document/XStorageChangeListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
+#include <com/sun/star/document/XActionLockable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -478,6 +482,109 @@ void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
     if( m_pData->m_pObjectShell.Is() )
         m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2, NULL, NULL ) );
 }
+
+// SfxOwnFramesLocker ====================================================================================
+// allows to lock all the frames related to the provided SfxObjectShell
+class SfxOwnFramesLocker
+{
+    uno::Sequence< uno::Reference< frame::XFrame > > m_aLockedFrames;
+
+    Window* GetVCLWindow( const uno::Reference< frame::XFrame >& xFrame );
+public:
+    SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
+    ~SfxOwnFramesLocker();
+    void UnlockFrames();
+};
+
+SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
+{
+    if ( !pObjectShell )
+        return;
+
+    for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pObjectShell, TYPE(SfxTopViewFrame) ); pFrame;
+            pFrame = SfxViewFrame::GetNext(*pFrame, pObjectShell, TYPE(SfxTopViewFrame) ) )
+    {
+        SfxFrame* pSfxFrame = pFrame->GetFrame();
+        if ( pSfxFrame )
+        {
+            try
+            {
+                // get vcl window related to the frame and lock it if it is still not locked
+                uno::Reference< frame::XFrame > xFrame = pSfxFrame->GetFrameInterface();
+                Window* pWindow = GetVCLWindow( xFrame );
+                if ( !pWindow )
+                    throw uno::RuntimeException();
+
+                if ( pWindow->IsEnabled() )
+                {
+                    pWindow->Disable();
+
+                    try
+                    {
+                        sal_Int32 nLen = m_aLockedFrames.getLength();
+                        m_aLockedFrames.realloc( nLen + 1 );
+                        m_aLockedFrames[nLen] = xFrame;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        pWindow->Enable();
+                        throw;
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Not possible to lock the frame window!\n" );
+            }
+        }
+    }
+}
+
+SfxOwnFramesLocker::~SfxOwnFramesLocker()
+{
+    UnlockFrames();
+}
+
+Window* SfxOwnFramesLocker::GetVCLWindow( const uno::Reference< frame::XFrame >& xFrame )
+{
+    Window* pWindow = NULL;
+
+    if ( xFrame.is() )
+    {
+        uno::Reference< awt::XWindow > xWindow = xFrame->getContainerWindow();
+        if ( xWindow.is() )
+               pWindow = VCLUnoHelper::GetWindow( xWindow );
+    }
+
+    return pWindow;
+}
+
+void SfxOwnFramesLocker::UnlockFrames()
+{
+    for ( sal_Int32 nInd = 0; nInd < m_aLockedFrames.getLength(); nInd++ )
+    {
+        try
+        {
+            if ( m_aLockedFrames[nInd].is() )
+            {
+                // get vcl window related to the frame and unlock it
+                Window* pWindow = GetVCLWindow( m_aLockedFrames[nInd] );
+                if ( !pWindow )
+                    throw uno::RuntimeException();
+
+                pWindow->Enable();
+
+                m_aLockedFrames[nInd] = uno::Reference< frame::XFrame >();
+            }
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Can't unlock the frame window!\n" );
+        }
+    }
+}
+
+// =======================================================================================================
 
 //________________________________________________________________________________________________________
 //  constructor
@@ -1998,6 +2105,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        SfxOwnFramesLocker aLocker( m_pData->m_pObjectShell );
+
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
         {
             // check that only acceptable parameters are provided here
@@ -2082,6 +2191,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        SfxOwnFramesLocker aLocker( m_pData->m_pObjectShell );
         impl_store( rURL, rArgs, sal_False );
 
         SEQUENCE< PROPERTYVALUE > aSequence ;
@@ -2105,6 +2215,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        SfxOwnFramesLocker aLocker( m_pData->m_pObjectShell );
         impl_store( rURL, rArgs, sal_True );
     }
 }
