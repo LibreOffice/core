@@ -2,9 +2,9 @@
 *
 *  $RCSfile: SQLQueryComposer.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:15:54 $
+*  last change: $Author: obo $ $Date: 2005-04-18 14:11:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -96,6 +96,7 @@ public class SQLQueryComposer {
     Vector composedCommandNames = new Vector(1);
     public XSingleSelectQueryComposer xQueryComposer;
     XMultiServiceFactory xMSF;
+    boolean bincludeGrouping = true;
 
     public SQLQueryComposer(QueryMetaData _CurDBMetaData) {
         try {
@@ -112,10 +113,12 @@ public class SQLQueryComposer {
     }
 
     private boolean addtoSelectClause(String FieldName) throws SQLException {
-        if (CurDBMetaData.xDBMetaData.supportsGroupByUnrelated()) {
-            if (CurDBMetaData.GroupFieldNames != null) {
-                if (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, FieldName) > -1)
-                    return false;
+        if (bincludeGrouping){
+            if (CurDBMetaData.xDBMetaData.supportsGroupByUnrelated()) {
+                if (CurDBMetaData.GroupFieldNames != null) {
+                    if (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, FieldName) > -1)
+                        return false;
+                }
             }
         }
         return true;
@@ -237,6 +240,7 @@ public class SQLQueryComposer {
     public boolean setQueryCommand(String QueryName, XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames) {
         try {
             String s;
+            bincludeGrouping = _bincludeGrouping;
             CurDBMetaData.setfieldtitles();
             fromclause = "FROM";
             String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
