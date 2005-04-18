@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:55:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,34 @@ namespace canvas
             matrix.m11 = 1.0;
 
             return matrix;
+        }
+
+        void setDeviceColor( ::com::sun::star::rendering::RenderState&  o_renderState,
+                             const double&                              rColor0,
+                             const double&                              rColor1,
+                             const double&                              rColor2,
+                             const double&                              rColor3 )
+        {
+            o_renderState.DeviceColor.realloc( 4 );
+            double* pColors = o_renderState.DeviceColor.getArray();
+
+            pColors[0] = rColor0;
+            pColors[1] = rColor1;
+            pColors[2] = rColor2;
+            pColors[3] = rColor3;
+        }
+
+        void getDeviceColor( double&                                            o_rColor0,
+                             double&                                            o_rColor1,
+                             double&                                            o_rColor2,
+                             double&                                            o_rColor3,
+                             const ::com::sun::star::rendering::RenderState&    rRenderState )
+        {
+            o_rColor0 = rRenderState.DeviceColor[0];
+            o_rColor1 = rRenderState.DeviceColor[1];
+            o_rColor2 = rRenderState.DeviceColor[2];
+            o_rColor3 = rRenderState.DeviceColor.getLength() > 3 ?
+                rRenderState.DeviceColor[3] : 1.0;
         }
 
         bool operator==( const rendering::RenderState& renderState1,
