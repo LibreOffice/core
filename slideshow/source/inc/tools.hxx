@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:56:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 09:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,29 +300,46 @@ namespace presentation
         /** Get the shape transformation from the attribute set
 
             @param rBounds
-            Shape bound rect
+            Original shape bound rect (to substitute default attribute
+            layer values)
 
             @param pAttr
-            Attribute set. Might be NULL
-
-            @param bWithTranslation
-            Whether the transformation should contain translation
-            to shape output position, or not (e.g. for sprites)
+            Attribute set. Might be NULL (then, rBounds is used to set
+            a simple scale and translate of the unit rect to rBounds).
         */
-        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rOrigBounds,
-                                                        const ::basegfx::B2DRectangle&      rBounds,
-                                                        const ShapeAttributeLayerSharedPtr& pAttr,
-                                                        bool                                bWithTranslation );
+        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rBounds,
+                                                        const ShapeAttributeLayerSharedPtr& pAttr );
+
+        /** Get a shape's sprite transformation from the attribute set
+
+            @param rPixelSize
+            Pixel size of the sprite
+
+            @param rOrigSize
+            Original shape size (i.e. the size of the actual sprite
+            content, in the user coordinate system)
+
+            @param pAttr
+            Attribute set. Might be NULL (then, rBounds is used to set
+            a simple scale and translate of the unit rect to rBounds).
+
+            @return the transformation to be applied to the sprite.
+        */
+        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DSize&              rPixelSize,
+                                                         const ::basegfx::B2DSize&              rOrigSize,
+                                                         const ShapeAttributeLayerSharedPtr&    pAttr );
 
         /** Calc update area for a shape.
 
             This method calculates the 'covered' area for the shape,
             i.e. the rectangle that is affected when rendering the
-            shape.
+            shape. Apart from applying the given transformation to the
+            shape rectangle, this method also takes attributes into
+            account, which further scale the output (e.g. character
+            sizes).
 
-            @param rShapeBounds
-            Bound rect of the shape (without any transformations taken
-            into account).
+            @param rUnitBounds
+            Shape bounds, in the unit rect coordinate space
 
             @param rShapeTransform
             Transformation matrix the shape should undergo.
@@ -330,14 +347,50 @@ namespace presentation
             @param pAttr
             Current shape attributes
          */
-        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rShapeBounds,
+        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
                                                     const ::basegfx::B2DHomMatrix&      rShapeTransform,
                                                     const ShapeAttributeLayerSharedPtr& pAttr );
+
+        /** Calc update area for a shape.
+
+            This method calculates the 'covered' area for the shape,
+            i.e. the rectangle that is affected when rendering the
+            shape. The difference from the other getShapeUpdateArea()
+            method is the fact that this one works without
+            ShapeAttributeLayer, and only scales up the given shape
+            user coordinate bound rect. The method is typically used
+            to retrieve user coordinate system bound rects for shapes
+            which are smaller than the default unit bound rect
+            (because e.g. of subsetting)
+
+            @param rUnitBounds
+            Shape bounds, in the unit rect coordinate space
+
+            @param rShapeBounds
+            Current shape bounding box in user coordinate space.
+         */
+        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
+                                                    const ::basegfx::B2DRectangle&      rShapeBounds );
+
+        /** Calc output position and size of shape, according to given
+            attribute layer.
+
+            Rotations, shears etc. and not taken into account,
+            i.e. the returned rectangle is NOT the bounding box. Use
+            it as if aBounds.getMinimum() is the output position and
+            aBounds.getRange() the scaling of the shape.
+         */
+        ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
+                                                 const ShapeAttributeLayerSharedPtr&    pAttr );
 
         /** Convert a plain UNO API 32 bit int to RGBColor
          */
         RGBColor unoColor2RGBColor( sal_Int32 );
 
+        /** Init canvas with default background (white)
+         */
+        void initSlideBackground( const ::cppcanvas::CanvasSharedPtr& rCanvas,
+                                  const ::basegfx::B2ISize&           rSize );
 
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
