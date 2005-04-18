@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:40:38 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 11:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2086,29 +2086,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             {
                 pPre->InvalidatePos();
             }
-        }
-    }
-    SwTxtFrm *pMaster = IsFollow() ? FindMaster() : this;
-    // OD 2004-03-29 #i26791#
-    if ( pMaster && !pMaster->IsFlyLock() &&
-         pMaster->GetDrawObjs() )
-    {
-        SwSortedObjs* pObjs = pMaster->GetDrawObjs();
-        for( MSHORT i = 0; i < pObjs->Count(); ++i )
-        {
-            // OD 2004-03-29 #i26791#
-            // --> OD 2004-07-02 #i28701# - consider changed type of
-            // <SwSortedObjs> list entries.
-            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-            if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                    == FLY_AUTO_CNTNT )
-            {
-                // --> OD 2005-01-04 #118895# - no check for paragraph portion
-                // information for empty paragraphs, because they have none.
-                pAnchoredObj->CheckCharRectAndTopOfLine( !IsEmpty() );
-                // <--
-            }
-            // <--
         }
     }
 
