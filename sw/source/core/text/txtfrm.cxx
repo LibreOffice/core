@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:34:37 $
+ *  last change: $Author: obo $ $Date: 2005-04-18 14:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2178,7 +2178,7 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
  *                      SwTxtFrm::CalcFitToContent()
  *************************************************************************/
 
-KSHORT SwTxtFrm::CalcFitToContent()
+SwTwips SwTxtFrm::CalcFitToContent()
 {
     // --> FME 2004-07-16 #i31490#
     // If we are currently locked, we better return with a
@@ -2215,7 +2215,7 @@ KSHORT SwTxtFrm::CalcFitToContent()
     SwTxtFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
-    const USHORT nMax = aLine._CalcFitToContent() + 1;
+    const SwTwips nMax = aLine._CalcFitToContent() + 1;
 
     Frm().Width( nOldFrmWidth );
     Prt().Width( nOldPrtWidth );
