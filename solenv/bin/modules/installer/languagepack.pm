@@ -59,10 +59,12 @@
 
 package installer::languagepack;
 
+use installer::converter;
 use installer::existence;
 use installer::files;
 use installer::logger;
 use installer::pathanalyzer;
+use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::systemactions;
 use installer::worker;
@@ -107,6 +109,16 @@ sub select_language_items
             if ( $specificlanguage eq $onelanguage )
             {
                 $oneitem->{'modules'} = "gid_Module_Root";   # all files in a language pack are root files
+
+                if (( $installer::globals::islinuxrpmbuild ) || ( $installer::globals::issolarispkgbuild ))
+                {
+                    if ( $oneitem->{'Dir'} )
+                    {
+                        if ( $oneitem->{'Dir'} eq "gid_Dir_Fonts_Truetype" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Fonts"; }
+                        if ( $oneitem->{'Dir'} eq "gid_Dir_Resource" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Resource"; }
+                        if ( $oneitem->{'Dir'} eq "gid_Dir_Help_Isolanguage" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Help"; }
+                    }
+                }
 
                 # preparing different modules for Windows Installer language packs
                 if ( $installer::globals::iswindowsbuild ) { $oneitem->{'modules'} = "gid_Module_Langpack_" . $specificlanguage; }
@@ -168,10 +180,11 @@ sub put_license_file_into_script
 
 sub create_tar_gz_file
 {
-    my ($installdir, $packagename) = @_;
+    my ($installdir, $packagename, $packagestring) = @_;
 
+    $packagename =~ s/\.rpm\s*$//;
     my $targzname = $packagename . ".tar.gz";
-    $systemcall = "cd $installdir; tar -cf - $packagename | gzip > $targzname";
+    $systemcall = "cd $installdir; tar -cf - $packagestring | gzip > $targzname";
     installer::logger::print_message( "... $systemcall ...\n" );
 
     my $returnvalue = system($systemcall);
@@ -194,6 +207,31 @@ sub create_tar_gz_file
 }
 
 #########################################################
+# Determining the name of the package file
+#########################################################
+
+sub get_packagename_from_packagelist
+{
+    my ( $alldirs ) = @_;
+
+    my $packagename = "";
+
+    for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
+    {
+        if ( ${$alldirs}[$i] =~ /-fonts/ ) { next; }
+        if ( ${$alldirs}[$i] =~ /-help/ ) { next; }
+        if ( ${$alldirs}[$i] =~ /-res/ ) { next; }
+
+        $packagename = ${$alldirs}[$i];
+        last;
+    }
+
+    if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find base package in directory $installdir!", "get_packagename_from_packagelist"); }
+
+    return $packagename;
+}
+
+#########################################################
 # Determining the name of the package file or the rpm
 # in the installation directory. For language packs
 # there is only one file in this directory
@@ -204,6 +242,7 @@ sub determine_packagename
     my ( $installdir ) = @_;
 
     my $packagename = "";
+    my $allnames = "";
 
     if ( $installer::globals::islinuxrpmbuild )
     {
@@ -211,27 +250,43 @@ sub determine_packagename
 
         my $fileextension = "rpm";
         my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $installdir);
-        $packagename = ${$rpmfiles}[0]; # only one rpm in language pack
-        if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
+        if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
+        my $rpmsav = installer::converter::copy_array_from_references($rpmfiles);
+        for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
 
+        $packagename = get_packagename_from_packagelist($rpmfiles);
+
+        my $packagestring = installer::converter::convert_array_to_space_separated_string($rpmfiles);
+        $packagename = create_tar_gz_file($installdir, $packagename, $packagestring);   # only one file
+        for ( my $i = 0; $i <= $#{$rpmsav}; $i++ )
+        {
+            my $onefile = $installdir . $installer::globals::separator . ${$rpmsav}[$i];
+            unlink($onefile);
+        }
+
+        $allnames = $rpmfiles;
     }
 
     if ( $installer::globals::issolarisbuild )
     {
-        # determining the rpm file in directory $installdir
+        # determining the Solaris package file in directory $installdir
         my $alldirs = installer::systemactions::get_all_directories($installdir);
-        $packagename = ${$alldirs}[0]; # only one Solaris package in language pack
-        if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
 
-        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packagename);
-        $packagename = create_tar_gz_file($installdir, $packagename);   # only a file (not a directory) can be included into the shell script
-        installer::systemactions::remove_complete_directory(${$alldirs}[0], 1)
+        if ( ! ( $#{$alldirs} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
+        my $alldirssav = installer::converter::copy_array_from_references($alldirs);
+        for ( my $i = 0; $i <= $#{$alldirs}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$alldirs}[$i]); }
+
+        $packagename = get_packagename_from_packagelist($alldirs);
+        my $packagestring = installer::converter::convert_array_to_space_separated_string($alldirs);
+        $packagename = create_tar_gz_file($installdir, $packagename, $packagestring);   # only a file (not a directory) can be included into the shell script
+        for ( my $i = 0; $i <= $#{$alldirssav}; $i++ ) { installer::systemactions::remove_complete_directory(${$alldirssav}[$i], 1); }
+        $allnames = $alldirs;
     }
 
     my $infoline = "Found package in installation directory $installdir : $packagename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    return $packagename;
+    return ( $packagename, $allnames);
 }
 
 #########################################################
@@ -241,16 +296,33 @@ sub determine_packagename
 
 sub put_packagename_into_script
 {
-    my ($scriptfile, $packagename) = @_;
+    my ($scriptfile, $packagename, $allnames) = @_;
 
     my $localpackagename = $packagename;
     $localpackagename =~ s/\.tar\.gz//; # making "OOOopenoffice-it-ea.tar.gz" to "OOOopenoffice-it-ea"
     my $infoline = "Adding packagename $localpackagename into language pack script\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    my $installline = "";
+
+    for ( my $i = 0; $i <= $#{$allnames}; $i++ )
     {
-        ${$scriptfile}[$i] =~ s/PACKAGENAMEPLACEHOLDER/$localpackagename/;
+        if ( $installer::globals::issolarisbuild )
+        {
+            $installline = $installline . "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile ${$allnames}[$i]\n";
+        }
+
+        if ( $installer::globals::islinuxrpmbuild )
+        {
+            $installline = $installline . "  rpm --prefix \$PRODUCTINSTALLLOCATION -i \$outdir/${$allnames}[$i]\n";
+        }
+    }
+
+    $installline =~ s/\s*$//;
+
+    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
+    {
+        ${$scriptfile}[$j] =~ s/INSTALLLINES/$installline/;
     }
 }
 
@@ -281,9 +353,13 @@ sub put_productname_into_script
 
 sub put_linenumber_into_script
 {
-    my ( $scriptfile, $licensefile ) = @_;
+    my ( $scriptfile, $licensefile, $allnames ) = @_;
 
     my $linenumber =  $#{$scriptfile} + $#{$licensefile} + 3;   # also adding the content of the license file!
+
+    # INSTALLLINES is replaced twice
+    my $addlines = 2 * $#{$allnames};
+    $linenumber = $linenumber + $addlines;  # The number is also increased by the number of packages
 
     my $infoline = "Adding linenumber $linenumber into language pack script\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -304,9 +380,10 @@ sub determine_scriptfile_name
 
     my $scriptfilename = $packagename;
 
-    if ( $installer::globals::islinuxrpmbuild ) { $scriptfilename =~ s/\.rpm\s*$/\.sh/; }
+#   if ( $installer::globals::islinuxrpmbuild ) { $scriptfilename =~ s/\.rpm\s*$/\.sh/; }
+#   if ( $installer::globals::issolarisbuild ) { $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/; }
 
-    if ( $installer::globals::issolarisbuild ) { $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/; }
+    $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/;
 
     my $infoline = "Setting language pack script file name to $scriptfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -421,18 +498,21 @@ sub build_installer_for_languagepack
     $infoline = "Found licensefile $licensefilename: $$licenseref \n";
     push( @installer::globals::logfileinfo, $infoline);
 
+    # including variables into license file
+    installer::scpzipfiles::replace_all_ziplistvariables_in_file($licensefile, $allvariableshashref);
+
     # add license text into script template
     put_license_file_into_script($scriptfile, $licensefile);
 
     # add rpm or package file name into script template
-    my $packagename = determine_packagename($installdir);
-    put_packagename_into_script($scriptfile, $packagename);
+    my ( $packagename, $allnames) = determine_packagename($installdir);
+    put_packagename_into_script($scriptfile, $packagename, $allnames);
 
     # add product name into script template
     put_productname_into_script($scriptfile, $allvariableshashref);
 
     # replace linenumber in script template
-    put_linenumber_into_script($scriptfile, $licensefile);
+    put_linenumber_into_script($scriptfile, $licensefile, $allnames);
 
     # saving the script file
     my $newscriptfilename = determine_scriptfile_name($packagename);
