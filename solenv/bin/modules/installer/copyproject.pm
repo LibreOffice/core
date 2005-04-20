@@ -2,9 +2,9 @@
 #
 #   $RCSfile: copyproject.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:53:47 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:45:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,7 @@ sub copy_project
         my $onefile = ${$scpactionsref}[$i];
 
         my $source = $onefile->{'sourcepath'};
-        my $destination = $installdir . $installer::globals::separator . $onefile->{'Name'};
+        my $destination = $installdir . $installer::globals::separator . $onefile->{'DestinationName'};
 
         installer::systemactions::copy_one_file($source, $destination);
 
