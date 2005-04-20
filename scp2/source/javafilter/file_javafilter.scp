@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_javafilter.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:22:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 12:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ End
 
 File gid_File_Lib_Jfregca
     TXT_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE);
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "jfregca.dll";
 End
