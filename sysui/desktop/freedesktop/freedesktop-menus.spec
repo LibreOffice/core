@@ -30,17 +30,44 @@ rm -rf usr/share/mime-info
 rm -rf usr/share/mimelnk
 rm -rf usr/share/applnk-redhat
 
-# Get rid of "X-Red-Hat-Base" category-keyword
-#for i in usr/share/applications/*; do
-#ed "$i" <<EOF
-#,s#X-Red-Hat-Base;##
-#wq
-#EOF
-#done
-
 ## create shared-mime-info file 
 mkdir -p usr/share/mime/packages
 perl %basedir/create_mime_xml.pl > usr/share/mime/packages/openoffice.org.xml
+
+## add symlinks so that nautilus can identify the mime-icons 
+## not strictly freedesktop-stuff but there is no common naming scheme yet.
+## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
+## for e.g. application/vnd.oasis.opendocument.spreadsheet
+cd usr/share/icons/hicolor
+originalname=%unixfilename
+iconname=${originalname//.}
+for dir in *; do
+  cd $dir/mimetypes
+# ln -s $iconname-database.png Anybody knows the mimetype?
+  ln -s $iconname-drawing.png                gnome-mime-application-vnd.sun.xml.draw.png
+  ln -s $iconname-drawing-template.png       gnome-mime-application-vnd.sun.xml.draw.template.png
+  ln -s $iconname-formula.png                gnome-mime-application-vnd.sun.xml.math.png
+  ln -s $iconname-master-document.png        gnome-mime-application-vnd.sun.xml.writer.global.png
+  ln -s $iconname-oasis-database.png         gnome-mime-application-vnd.oasis.opendocument.database.png
+  ln -s $iconname-oasis-drawing.png          gnome-mime-application-vnd.oasis.opendocument.graphics.png
+  ln -s $iconname-oasis-drawing-template.png gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
+  ln -s $iconname-oasis-formula.png          gnome-mime-application-vnd.oasis.opendocument.formula.png
+  ln -s $iconname-oasis-master-document.png  gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  ln -s $iconname-oasis-presentation.png     gnome-mime-application-vnd.oasis.opendocument.presentation.png
+  ln -s $iconname-oasis-presentation-template.png gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
+  ln -s $iconname-oasis-spreadsheet.png           gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  ln -s $iconname-oasis-spreadsheet-template.png  gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  ln -s $iconname-oasis-text.png             gnome-mime-application-vnd.oasis.opendocument.text.png
+  ln -s $iconname-oasis-text-template.png    gnome-mime-application-vnd.oasis.opendocument.text-template.png
+  ln -s $iconname-oasis-web-template.png     gnome-mime-application-vnd.oasis.opendocument.text-web.png
+  ln -s $iconname-presentation.png           gnome-mime-application-vnd.sun.xml.impress.png
+  ln -s $iconname-presentation-template.png  gnome-mime-application-vnd.sun.xml.impress.template.png
+  ln -s $iconname-spreadsheet.png            gnome-mime-application-vnd.sun.xml.calc.png
+  ln -s $iconname-spreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
+  ln -s $iconname-text.png                   gnome-mime-application-vnd.sun.xml.writer.png
+  ln -s $iconname-text-template.png          gnome-mime-application-vnd.sun.xml.writer.template.png
+  cd ../..  
+done
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -50,32 +77,61 @@ cp -a * $RPM_BUILD_ROOT
 # dummy for %ghost
 touch $RPM_BUILD_ROOT/etc/%unixfilename
 
+# hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
+# to be present on the build-system/the buildroot. But the point is that we generate stale
+# links intentionally (until we find a better solution) #46226
+export NO_BRP_STALE_LINK_ERROR=yes
+
 %clean
 cd ..
 rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%name-%version-build%unique
 
-%triggerin -- openofficeorg-core01, openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-math
+%triggerin -- openofficeorg-core01
 # create file in /etc that contains the office installation path
 cat > /tmp/install.$$ << EOF
 sleep 2
 coreprefix=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01\`
+# non-patched epm cannot create relocatable packages
 if [ \$coreprefix == "(none)" ]; then 
 	coreprefix="/opt/openoffice.org%version"
 fi
-ln -sf \$coreprefix /etc/%unixfilename
-
-# no need to run it when updating, since %postun of the old package is run
-# afterwards
-if [ "$2" = "1" ] ; then  # first install
-  if (which update-desktop-database); then
-    update-desktop-database /usr/share/applications
-  fi
+ln -snf \$coreprefix /etc/%unixfilename
+# needed here as as well since execution of this one is delayed, the link is
+# not intact when the other triggers are run before this one
+if (which update-desktop-database); then
+  update-desktop-database /usr/share/applications
 fi
-
 rm -f /tmp/install.$$
 EOF
 
 /bin/sh /tmp/install.$$ &
+
+%triggerin -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-math
+# this is run when one of the above packages is already installed and the menu
+# package gets installed OR when the menu-package is already installed and one
+# of the above listed packages gets installed
+
+# Dut to a bug in rpm it is not possible to check why the script is triggered...
+# This is how it should be: 1st arg: number of this package, 2nd arg: number of
+# package that triggers - the bug is that rpm reports the same number for both
+# (the value of the 2nd one), so just run this always...
+# http://rhn.redhat.com/errata/RHBA-2004-098.html
+# https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=100509
+if (which update-desktop-database); then
+  update-desktop-database /usr/share/applications
+fi
+
+%triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-math
+if [ "$1" = "0" ] ; then  
+  # the menu-package gets uninstalled/updated - postun will run the command
+  exit 0
+fi
+if [ "$2" = "0" ] ; then  
+  # the triggering package gets removed
+  if (which update-desktop-database); then
+    update-desktop-database /usr/share/applications
+  fi
+fi
 
 %post 
 # no need to run it when updating, since %postun of the old package is run
@@ -215,10 +271,12 @@ then
 fi
 
 %postun 
-# run always - both when upgrading as well as when erasing the package
-if (which update-desktop-database); then
-  update-desktop-database /usr/share/applications
+if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled by the triggers
+  if (which update-desktop-database); then
+    update-desktop-database /usr/share/applications
+  fi
 fi
+# run always - both when upgrading as well as when erasing the package
 if (which update-mime-database); then
   update-mime-database /usr/share/mime
 fi
