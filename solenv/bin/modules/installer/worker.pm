@@ -548,6 +548,7 @@ sub remove_all_items_with_special_flag
         {
             my $infoline = "Attention: Removing from collector: $oneitem->{'Name'} !\n";
             push( @installer::globals::logfileinfo, $infoline);
+            if ( $flag eq "BINARYTABLE_ONLY" ) { push(@installer::globals::binarytableonlyfiles, $oneitem); }
             next;
         }
         push( @allitems, $oneitem );
@@ -796,7 +797,10 @@ sub write_content_into_inf_file
     {
         my $moduleid = ${$allmodules}[$j];
 
-        if ( ! ( $moduleid eq $inffile->{'modules'} )) { next; }
+        my $inffilemodule = $inffile->{'modules'};
+        if ( $inffilemodule =~ /Module_Root/i ) { $inffilemodule = "gid_Module_Root"; }
+
+        if ( ! ( $moduleid eq $inffilemodule )) { next; }
 
         my $shortmodulename = $moduleid;
         $shortmodulename =~ s/gid_Module_//;
@@ -980,6 +984,31 @@ sub select_patch_items
 }
 
 ###########################################################
+# Selecting patch items
+###########################################################
+
+sub select_patch_items_without_name
+{
+    my ( $itemsref, $itemname ) = @_;
+
+    installer::logger::include_header_into_logfile("Selecting RegistryItems for patches");
+
+    my @itemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+
+        # Items with style "PATCH" have to be included into the patch
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+        if ( $styles =~ /\bPATCH\b/ ) { push(@itemsarray, $oneitem); }
+    }
+
+    return \@itemsarray;
+}
+
+###########################################################
 # Searching if LICENSE and README, which are not removed
 # in select_patch_items are really needed for the patch.
 # If not, they are removed now.
@@ -999,6 +1028,13 @@ sub analyze_patch_files
         my $styles = "";
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if ( !( $styles =~ /\bPATCH\b/) ) { next; } # removing all files without flag PATCH (LICENSE, README, ...)
+
+        if ( $installer::globals::iswindowsbuild )
+        {
+            # all files of the Windows patch belong to the root module
+            $onefile->{'modules'} = "gid_Module_Root";
+        }
+
         push(@filesarray, $onefile);
     }
 
@@ -1040,35 +1076,119 @@ sub prepare_linuxlinkfiles
     my ( $filesref ) = @_;
 
     @installer::globals::linuxlinks = (); # empty this array, because it could be already used
+    @installer::globals::linuxpatchfiles = (); # empty this array, because it could be already used
+
+    my @filesarray = ();
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
         my $onefile = ${$filesref}[$i];
+        my %linkfilehash = ();
+        my $linkfile = \%linkfilehash;
+        installer::converter::copy_item_object($onefile, $linkfile);
+
+        my $ispatchfile = 0;
         my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'} };
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+        if ( $styles =~ /\bPATCH\b/ ) { $ispatchfile = 1; }
 
-        if ( $styles =~ /\bLINUXLINK\b/ )
+        my $original_destination = $onefile->{'destination'};
+        # $onefile->{'destination'} is used in the epm list file. This value can be changed now!
+
+        if ( $ispatchfile ) { $onefile->{'destination'} = $onefile->{'destination'} . "\.$installer::globals::linuxlibrarypatchlevel"; }
+        else { $onefile->{'destination'} = $onefile->{'destination'} . "\.$installer::globals::linuxlibrarybaselevel"; }
+
+        my $infoline = "LINUXLINK: Changing file destination from $original_destination to $onefile->{'destination'} !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        # all files without PATCH flag are included into the RPM
+        if ( ! $ispatchfile ) { push( @filesarray, $onefile); }
+        else { push( @installer::globals::linuxpatchfiles, $onefile); }
+
+        # Preparing the collector for the links
+        # Setting the new file name as destination of the link
+        my $linkdestination = $linkfile->{'Name'};
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$linkdestination);
+        if ( $ispatchfile ) { $linkfile->{'destinationfile'} = $linkdestination . "\.$installer::globals::linuxlibrarypatchlevel"; }
+        else { $linkfile->{'destinationfile'} = $linkdestination . "\.$installer::globals::linuxlibrarybaselevel"; }
+        push( @installer::globals::linuxlinks, $linkfile );
+
+        $infoline = "LINUXLINK: Created link: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return \@filesarray;
+}
+
+###########################################################
+# Renaming Windows files in Patch and creating file
+# patchfiles.txt
+###########################################################
+
+sub prepare_windows_patchfiles
+{
+    my ( $filesref, $languagestringref ) = @_;
+
+    my @patchfiles = ();
+    my $patchfilename = "patchlist.txt";
+    my $patchfilename2 = "patchmsi.dll";
+
+    my $header = "\[SwapFiles\]\n";
+    push(@patchfiles, $header);
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+
+        my $filename = $onefile->{'Name'};
+        if (( $filename eq $patchfilename ) || ( $filename eq $patchfilename2 )) { next; }
+
+        my $olddestination = $onefile->{'destination'};
+        my $newdestination = $olddestination . "." . $installer::globals::windowsfilespatchlevel;
+        my $line = "\"" . $olddestination . "\"" . "=" . "\"" . $newdestination . "\"" . "\n";
+        $onefile->{'destination'} = $newdestination;
+
+        my $newfilename = $onefile->{'Name'} . "." . $installer::globals::windowsfilespatchlevel;
+        $onefile->{'Name'} = $newfilename;
+
+        push(@patchfiles, $line);
+    }
+
+    my $winpatchdirname = "winpatch";
+    my $winpatchdir = installer::systemactions::create_directories($winpatchdirname, $languagestringref);
+
+    my $patchlistfile = installer::existence::get_specified_file_by_name($filesref, $patchfilename);
+
+    # saving the file
+    $patchfilename = $winpatchdir . $installer::globals::separator . $patchfilename;
+    installer::files::save_file($patchfilename, \@patchfiles);
+
+    # and assigning the new source
+    $patchlistfile->{'sourcepath'} = $patchfilename;
+}
+
+###########################################################
+# Replacing %-variables with the content
+# of $allvariableshashref
+###########################################################
+
+sub replace_variables_in_string
+{
+    my ( $string, $variableshashref ) = @_;
+
+    if ( $string =~ /^.*\%\w+.*$/ )
+    {
+        my $key;
+
+        foreach $key (keys %{$variableshashref})
         {
-            my %linkfilehash = ();
-            my $linkfile = \%linkfilehash;
-            installer::converter::copy_item_object($onefile, $linkfile);
-
-            my $original_destination = $onefile->{'destination'};
-            # $onefile->{'destination'} is used in the epm list file. This value can be changed now!
-            $onefile->{'destination'} = $onefile->{'destination'} . "\.$installer::globals::linuxlibrarypatchlevel";
-
-            my $infoline = "Flag LINUXLINK: Changing file destination from $original_destination to $onefile->{'destination'} !\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            # preparing the collector for the links
-
-            $linkfile->{'destinationfile'} = $linkfile->{'Name'} . "\.$installer::globals::linuxlibrarypatchlevel"; # Setting the new file name as destination of the link
-            push( @installer::globals::linuxlinks, $linkfile );
-
-            $infoline = "Flag LINUXLINK: Created link: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $value = $variableshashref->{$key};
+            $key = "\%" . $key;
+            $string =~ s/\Q$key\E/$value/g;
         }
     }
+
+    return $string;
 }
 
 1;
