@@ -767,6 +767,63 @@ sub include_component_at_specific_line
 }
 
 ##########################################################
+# Font packages do not exist for all languages.
+##########################################################
+
+sub remove_font_package_from_unit
+{
+    my ( $unitcopy, $onelanguage ) = @_;
+
+    my $searchstring = "-fonts";
+
+    my $packagestring = "";
+    my $namestring = "";
+
+    if ( $installer::globals::issolarispkgbuild )
+    {
+        $packagestring = "\<pkgunit";
+        $namestring = "pkgName";
+    }
+    elsif ( $installer::globals::islinuxrpmbuild )
+    {
+        $packagestring = "\<rpmunit";
+        $namestring = "rpmUniqueName";
+    }
+
+    for ( my $i = 0; $i <= $#{$unitcopy}; $i++ )
+    {
+        if ( ${$unitcopy}[$i] =~ /^\s*\Q$packagestring\E/ )
+        {
+            # this is a package, but is it the correct one?
+
+            my $do_delete = 0;
+            my $linecounter = 1;
+            my $startline = $i+1;
+            my $line = ${$unitcopy}[$startline];
+            if (($line =~ /^\s*\Q$namestring\E\s*\=/) && ($line =~ /\Q$searchstring\E/)) { $do_delete = 1; }
+
+            my $endcounter = 0;
+
+            while ((!( $line =~ /\/\>/ )) && ( $startline <= $#{$unitcopy} ))
+            {
+                $linecounter++;
+                $startline++;
+                $line = ${$unitcopy}[$startline];
+                if (($line =~ /^\s*\Q$namestring\E\s*\=/) && ($line =~ /\Q$searchstring\E/)) { $do_delete = 1; }
+            }
+
+            $linecounter = $linecounter + 1;
+
+            if ( $do_delete )
+            {
+                splice(@{$unitcopy},$i, $linecounter);  # removing $linecounter lines, beginning in line $i
+                last;
+            }
+        }
+    }
+}
+
+##########################################################
 # If this is an installation set with language packs,
 # modules for each language pack have to be created
 # dynamically
@@ -787,6 +844,14 @@ sub duplicate_languagepack_in_xmlfile
 
         # replacing string ONELANGUAGE in the unit copy
         for ( my $j = 0; $j <= $#{$unitcopy}; $j++ ) { ${$unitcopy}[$j] =~ s/ONELANGUAGE/$onelanguage/g; }
+
+        # not for all languages exist a font package
+        if ( ! $installer::globals::fontpackageexists{$onelanguage} )
+        {
+            my $infoline = "Java installer: Removing font package for language $onelanguage\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            remove_font_package_from_unit($unitcopy, $onelanguage);
+        }
 
         # including the unitcopy into the xml file
         include_component_at_specific_line($xmlfile, $unitcopy, $startline);
@@ -858,7 +923,9 @@ sub get_rpm_unit_from_xmlfile
     push( @installer::globals::logfileinfo, $infoline);
 
     my @rpmunit = ();
-    my $includeline = "";
+    my $includeline = 0;
+    my $record = 0;
+    my $foundrpm = 0;
 
     for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
     {
@@ -907,16 +974,16 @@ sub exchange_name_in_rpmunit
 
 sub prepare_linkrpm_in_xmlfile
 {
-    my ($xmlfile) = @_;
+    my ($xmlfile, $rpmlist) = @_;
 
-    for ( my $i = 0; $i <= $#installer::globals::linkrpms; $i++ )
+    for ( my $i = 0; $i <= $#{$rpmlist}; $i++ )
     {
         my $oldpackagename = "";
         my $newpackagename = "";
 
-        my $rpmline = $installer::globals::linkrpms[$i];
+        my $rpmline = ${$rpmlist}[$i];
 
-        my $infoline = "Preparing link RPM: $rpmline\n";
+        my $infoline = "Preparing link/patch RPM: $rpmline\n";
         push( @installer::globals::logfileinfo, $infoline);
 
         if ( $rpmline =~ /^\s*(\S.*?\S)\s+(\S.*?\S)\s*$/ )
@@ -1567,7 +1634,7 @@ sub create_java_installer
     remove_empty_packages_in_xmlfile($xmlfile);
     prepare_language_pack_in_xmlfile($xmlfile);
     substitute_variables($xmlfile, $allvariableshashref);
-    if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile); }
+    if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile,\@installer::globals::linkrpms); }
     if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
