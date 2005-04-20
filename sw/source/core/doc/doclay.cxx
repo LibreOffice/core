@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:43:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 12:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,6 +675,13 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                         bCopyIsMove && this == pSrcDoc ) );
         // --> OD 2004-11-22 #i35635#
         pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
+        // <--
+        // --> OD 2005-04-15 #i47455# - notify draw frame format
+        // that position attributes are already set, because they are copied
+        if ( pDest->ISA(SwDrawFrmFmt) )
+        {
+            static_cast<SwDrawFrmFmt*>(pDest)->PosAttrSet();
+        }
         // <--
 
         if( pDest->GetAnchor() == rNewAnchor )
