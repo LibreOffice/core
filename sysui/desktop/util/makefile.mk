@@ -80,7 +80,10 @@ LINKFLAGS+=-z nodefs
 .ENDIF # "$(OS)" == "SOLARIS"
 
 # Disable lazy binding of symbols
-.IF "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS"
+.IF "$(OS)" == "LINUX"
+LINKFLAGS+=-Wl,-z,now
+.ENDIF
+.IF "$(OS)" == "SOLARIS"
 LINKFLAGS+=-z now
 .ENDIF  
 
