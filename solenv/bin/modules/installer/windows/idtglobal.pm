@@ -59,6 +59,7 @@
 
 package installer::windows::idtglobal;
 
+use installer::converter;
 use installer::existence;
 use installer::exiter;
 use installer::files;
@@ -996,14 +997,18 @@ sub set_custom_action
 
     my $contains_file = 0;
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    # All files are located in $filesref and in @installer::globals::binarytableonlyfiles.
+    # Both must be added together
+    my $localfilesref = installer::converter::combine_arrays_from_references(\@installer::globals::binarytableonlyfiles, $filesref);
+
+    for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {
-        my $filename = ${$filesref}[$i]->{'Name'};
+        my $filename = ${$localfilesref}[$i]->{'Name'};
 
         if ( $filename eq $exefilename )
         {
             $contains_file = 1;
-            $uniquename = ${$filesref}[$i]->{'uniquename'};
+            $uniquename = ${$localfilesref}[$i]->{'uniquename'};
             last;
         }
     }
@@ -1041,9 +1046,13 @@ sub add_custom_action_to_install_table
 
     my $contains_file = 0;
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    # All files are located in $filesref and in @installer::globals::binarytableonlyfiles.
+    # Both must be added together
+    my $localfilesref = installer::converter::combine_arrays_from_references(\@installer::globals::binarytableonlyfiles, $filesref);
+
+    for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {
-        my $filename = ${$filesref}[$i]->{'Name'};
+        my $filename = ${$localfilesref}[$i]->{'Name'};
 
         if ( $filename eq $exefilename )
         {
@@ -1051,7 +1060,7 @@ sub add_custom_action_to_install_table
 
             # Determining the feature of the file
 
-            if ( ${$filesref}[$i] ) { $feature = ${$filesref}[$i]->{'modules'}; }
+            if ( ${$localfilesref}[$i] ) { $feature = ${$localfilesref}[$i]->{'modules'}; }
 
             # If modules contains a list of modules, only taking the first one.
             if ( $feature =~ /^\s*(.*?)\,/ ) { $feature = $1; }
