@@ -59,6 +59,7 @@
 
 package installer::languages;
 
+use installer::converter;
 use installer::exiter;
 use installer::globals;
 use installer::remover;
@@ -85,6 +86,7 @@ sub analyze_languagelist
 
         $installer::globals::unixmultipath = $installer::globals::languagelist;
         $installer::globals::unixmultipath =~ s/\,/\_/g;    # hashes not allowed, comma to underline
+        $installer::globals::alllanguagesinproductarrayref = installer::converter::convert_stringlist_into_array(\$installer::globals::unixmultipath, "_");
     }
 
     while ($first =~ /^(\S+)\#(\S+?)$/) # Minimal matching, to keep the order of languages
@@ -230,6 +232,78 @@ sub get_default_language
     my ($languagesref) = @_;
 
     return ${$languagesref}[0];     # ToDo, only returning the first language
+}
+
+##########################################################
+# Contains the installation set one of the languages
+# ja, ko, zh-CH, or zh-TW ?
+##########################################################
+
+sub detect_asian_language
+{
+    my ($languagesref) = @_;
+
+    my @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
+
+    my $containsasia = 0;
+
+    for ( my $i = 0; $i <= $#{$languagesref}; $i++ )
+    {
+        my $onelang = ${$languagesref}[$i];
+        $onelang =~ s/\s*$//;
+
+        for ( my $j = 0; $j <= $#asianlanguages; $j++ )
+        {
+            my $asialang = $asianlanguages[$j];
+            $asialang =~ s/\s*$//;
+
+            if ( $onelang eq $asialang )
+            {
+                $containsasia = 1;
+                last;
+            }
+        }
+
+        if ( $containsasia ) { last; }
+    }
+
+    return $containsasia;
+}
+
+################################################################
+# Contains the installation set one of the western languages
+# ja, ko, zh-CH, or zh-TW ?
+################################################################
+
+sub detect_western_language
+{
+    my ($languagesref) = @_;
+
+    my @westernlanguages = ("en-US","pt","ru","el","nl","fr","es","fi","hu","ca","sl","it","cs","sk","en-GB","da","sv","no","pl","de","pt-BR","th","et","tr","hi-IN","ar","he");
+
+    my $containswestern = 0;
+
+    for ( my $i = 0; $i <= $#{$languagesref}; $i++ )
+    {
+        my $onelang = ${$languagesref}[$i];
+        $onelang =~ s/\s*$//;
+
+        for ( my $j = 0; $j <= $#westernlanguages; $j++ )
+        {
+            my $westernlang = $westernlanguages[$j];
+            $westernlang =~ s/\s*$//;
+
+            if ( $onelang eq $westernlang )
+            {
+                $containswestern = 1;
+                last;
+            }
+        }
+
+        if ( $containswestern ) { last; }
+    }
+
+    return $containswestern;
 }
 
 1;
