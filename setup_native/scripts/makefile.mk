@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 10:49:30 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:40:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ TARGET=install
 
 UNIXTEXT= \
     $(BIN)$/langpackscript.sh \
+    $(BIN)$/linuxpatchscript.sh \
     $(BIN)$/downloadscript.sh
 
 # --- Targets ------------------------------------------------------
