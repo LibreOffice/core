@@ -156,6 +156,7 @@ PKGNAME=$(shell sed -n -e 's/^Name: //p' $(TARGET)-menus.spec)
 RPMFILE=$(BIN)/noarch/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
+    $(MISC)/$(TARGET)/usr/bin/soffice \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
     $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
@@ -244,6 +245,10 @@ $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
 $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.sh
     @$(MKDIRHIER) $(@:d)
     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+
+$(MISC)/$(TARGET)/usr/bin/soffice : 
+    @$(MKDIRHIER) $(@:d)
+    @ln -sf /etc/$(UNIXFILENAME)/program/soffice $@
 
 $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
