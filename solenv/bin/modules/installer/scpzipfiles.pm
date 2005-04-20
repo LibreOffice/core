@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 16:20:59 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:48:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,7 @@ sub replace_all_ziplistvariables_in_rtffile
 
                 my ($key, $value);
 
-                if ( $variableline =~ /^\s*(\w+?)\s+(.*?)\s*$/ )
+                if ( $variableline =~ /^\s*([\w-]+?)\s+(.*?)\s*$/ )
                 {
                     $key = $1;
                     $value = $2;
