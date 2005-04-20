@@ -397,6 +397,8 @@ sub create_epm_header
     {
         my $requiresstring = $onepackage->{$requires};
 
+        if ( $installer::globals::add_required_package ) { $requiresstring = $requiresstring . "," . $installer::globals::add_required_package; }
+
         my $allrequires = installer::converter::convert_stringlist_into_array(\$requiresstring, ",");
 
         for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
@@ -406,6 +408,24 @@ sub create_epm_header
             installer::packagelist::adapt_packagename(\$onerequires);
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
+        }
+    }
+    else
+    {
+        if ( $installer::globals::add_required_package )
+        {
+            my $requiresstring = $installer::globals::add_required_package;
+
+            my $allrequires = installer::converter::convert_stringlist_into_array(\$requiresstring, ",");
+
+            for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
+            {
+                my $onerequires = ${$allrequires}[$i];
+                installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
+                installer::packagelist::adapt_packagename(\$onerequires);
+                $line = "%requires" . " " . $onerequires . "\n";
+                push(@epmheader, $line);
+            }
         }
     }
 
@@ -783,6 +803,46 @@ sub set_maxinst_in_pkginfo
     add_one_line_into_file($changefile, $newline, $filename);
 }
 
+#############################################################
+# Setting several Solaris variables into the pkginfo file.
+#############################################################
+
+sub set_solaris_parameter_in_pkginfo
+{
+    my ($changefile, $filename, $allvariables) = @_;
+
+    my $newline = "";
+
+    # SUNW_PRODNAME
+    # SUNW_PRODVERS
+    # SUNW_PKGVERS
+    # Not: SUNW_PKGTYPE
+    # HOTLINE
+    # EMAIL
+
+    my $productname = $allvariables->{'PRODUCTNAME'};
+    $newline = "SUNW_PRODNAME=$productname\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    my $productversion = "";
+    if ( $allvariables->{'PRODUCTVERSION'} )
+    {
+        $productversion = $allvariables->{'PRODUCTVERSION'};
+        if ( $allvariables->{'PRODUCTEXTENSION'} ) { $productversion = $productversion . "/" . $allvariables->{'PRODUCTEXTENSION'}; }
+    }
+    $newline = "SUNW_PRODVERS=$productversion\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    $newline = "SUNW_PKGVERS=1\.0\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    $newline = "HOTLINE=Please contact your local service provider\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    $newline = "EMAIL=\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+}
+
 #####################################################################
 # Adding a new line for topdir into specfile, removing old
 # topdir if set.
@@ -994,14 +1054,25 @@ sub replace_variables_in_shellscripts
 {
     my ($scriptfile, $scriptfilename, $oldstring, $newstring) = @_;
 
+    my $debug = 0;
+    if ( $oldstring eq "PRODUCTDIRECTORYNAME" ) { $debug = 1; }
+
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
         if ( ${$scriptfile}[$i] =~ /\Q$oldstring\E/ )
         {
-            ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/;
-            ${$scriptfile}[$i] =~ s/\/\//\//;   # replacing "//" by "/" , if path $newstring is empty!
+            my $oldline = ${$scriptfile}[$i];
+            ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/g;
+            ${$scriptfile}[$i] =~ s/\/\//\//g;  # replacing "//" by "/" , if path $newstring is empty!
             my $infoline = "Info: Substituting in $scriptfilename $oldstring by $newstring\n";
             push(@installer::globals::logfileinfo, $infoline);
+            if ( $debug )
+            {
+                $infoline = "Old Line: $oldline";
+                push(@installer::globals::logfileinfo, $infoline);
+                $infoline = "New Line: ${$scriptfile}[$i]";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
         }
     }
 }
@@ -1209,6 +1280,29 @@ sub include_patchinfos_into_pkginfo
 }
 
 ############################################################
+# Adding language infos in pkginfo file
+############################################################
+
+sub include_languageinfos_into_pkginfo
+{
+    my ( $changefile, $filename, $languagestringref, $onepackage, $variableshashref ) = @_;
+
+    # SUNWPKG_LIST=core01
+    # SUNW_LOC=de
+
+    my $newline = "SUNW_LOC=" . $$languagestringref . "\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    if ( $onepackage->{'pkg_list_entry'} )
+    {
+        my $packagelistentry = $onepackage->{'pkg_list_entry'};
+        installer::packagelist::resolve_packagevariables(\$packagelistentry, $variableshashref, 1);
+        $newline = "SUNW_PKGLIST=" . $packagelistentry . "\n";
+        add_one_line_into_file($changefile, $newline, $filename);
+    }
+}
+
+############################################################
 # Including the relocatable directory into
 # spec file and pkginfo file
 # Linux: set topdir in specfile
@@ -1219,7 +1313,7 @@ sub include_patchinfos_into_pkginfo
 
 sub prepare_packages
 {
-    my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $variableshashref, $filesref) = @_;
+    my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $variableshashref, $filesref, $languagestringref) = @_;
 
     my $filename = "";
     my $newline = "";
@@ -1270,8 +1364,10 @@ sub prepare_packages
     {
         set_revision_in_pkginfo($changefile, $filename, $variableshashref);
         set_maxinst_in_pkginfo($changefile, $filename);
+        set_solaris_parameter_in_pkginfo($changefile, $filename, $variableshashref);
         if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref); }
         if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
+        if ( $installer::globals::languagepack ) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
 
         my $prototypefilename = $packagename . ".prototype";
@@ -1875,6 +1971,8 @@ sub put_systemintegration_into_installset
         {
             my $productname = $variables->{'UNIXPRODUCTNAME'};
             push(@systemfiles, "SUNW$productname-desktop-integratn.tar.gz");
+            push(@systemfiles, "SUNW$productname-desktop-int-root.tar.gz");
+            push(@systemfiles, "SUNW$productname-shared-mime-info.tar.gz");
         }
     }
 
@@ -1888,11 +1986,15 @@ sub put_systemintegration_into_installset
             push(@systemfiles, "openofficeorg-suse-menus-$productversion-1.noarch.rpm");
             push(@systemfiles, "openofficeorg-mandrakelinux-menus-$productversion-1.noarch.rpm");
             push(@systemfiles, "openofficeorg-freedesktop-menus-$productversion-1.noarch.rpm");
+
+            # i46530 create desktop-integration subdirectory
+            $destdir = "$destdir/desktop-integration";
+            mkdir $destdir,0777;
         }
         else
         {
             my $productname = $variables->{'UNIXPRODUCTNAME'};
-            push(@systemfiles, "$productname-redhat-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
+            push(@systemfiles, "$productname-desktop-integration-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
             push(@systemfiles, "$productname-suse-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
         }
     }
@@ -2087,6 +2189,77 @@ sub finalize_patch
     my $patchinfofile = installer::files::read_file($patchinfofilename);
     set_patchinfo($patchinfofile, $patchid);
     installer::files::save_file($patchinfofilename, $patchinfofile);
+}
+
+######################################################
+# Finalizing Linux patch: Renaming directory and
+# including additional patch files.
+######################################################
+
+sub finalize_linux_patch
+{
+    my ( $newepmdir, $allvariables, $includepatharrayref ) = @_;
+
+    # Copying the setup into the patch directory
+    # and including the list of RPMs into it
+
+    print "... creating patch setup ...\n";
+
+    installer::logger::include_header_into_logfile("Creating Linux patch setup:");
+
+    # find and read setup script template
+
+    my $scriptfilename = "linuxpatchscript.sh";
+    my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
+    if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find patch script template $scriptfilename!", "finalize_linux_patch"); }
+    my $scriptfile = installer::files::read_file($$scriptref);
+
+    my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    # Collecting all RPMs in the patch directory
+
+    my $fileextension = "rpm";
+    my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $newepmdir);
+    if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
+    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
+
+    my $installline = "";
+
+    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
+    {
+        $installline = $installline . "  rpm --prefix \$PRODUCTINSTALLLOCATION -U $newepmdir/${$rpmfiles}[$i]\n";
+    }
+
+    $installline =~ s/\s*$//;
+
+    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
+    {
+        ${$scriptfile}[$j] =~ s/INSTALLLINES/$installline/;
+    }
+
+    # Replacing the productname
+
+    my $productname = $allvariables->{'PRODUCTNAME'};
+    $productname = lc($productname);
+    $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
+
+    $infoline = "Adding productname $productname into Linux patch script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/PRODUCTNAMEPLACEHOLDER/$productname/; }
+
+    # Saving the file
+
+    my $newscriptfilename = "setup"; # $newepmdir . $installer::globals::separator . "setup";
+    installer::files::save_file($newscriptfilename, $scriptfile);
+
+    $infoline = "Saved Linux patch setup $newscriptfilename \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    # Setting unix rights 755
+    my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
+    system($localcall);
 }
 
 1;
