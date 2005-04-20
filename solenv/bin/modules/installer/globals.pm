@@ -139,8 +139,14 @@ BEGIN
     $addpackagelist = "";
     $is_unix_multi = 0;
     $unixmultipath = "";
+    $alllanguagesinproductarrayref = "";
     $makelinuxlinkrpm = 0;
-    $linuxlibrarypatchlevel = "1";
+    $add_required_package = "";
+    $linuxrespin = 0;
+    @linuxpatchfiles = ();
+    $linuxlibrarybaselevel = "1";
+    $linuxlibrarypatchlevel = "1.1";
+    $windowsfilespatchlevel = "1";
     @linuxlinks = ();
     @linkrpms = ();
 
@@ -185,6 +191,7 @@ BEGIN
     $makedownload = 1;
     $islanguagepackinunixmulti = 0;
     @installsetfiles = ();
+    @binarytableonlyfiles = ();
 
     $is_copy_only_project = 0;
     $addchildprojects = 0;
@@ -231,10 +238,12 @@ BEGIN
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis.mlf";
     $langpackfilename = "Langpack.mlf";
+    $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
     $languagenames = "";
 
     @removedirs = ();
     @emptypackages = ();
+    %fontpackageexists = ();
 
     $plat = $^O;
 
