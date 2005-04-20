@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:57:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 10:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,11 +832,7 @@ public:
     void push( sal_uInt16 nFlags );
     void pop();
 
-    void setFont( const Font& rFont )
-    {
-        m_aGraphicsStack.front().m_aFont = rFont;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
-    }
+    void setFont( const Font& rFont );
 
     void setMapMode( const MapMode& rMapMode );
     void setMapMode() { setMapMode( m_aMapMode ); }
