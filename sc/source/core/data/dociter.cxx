@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:31:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 10:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1308,13 +1308,14 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     if (!bFound)
     {
         // If all hits didn't result in a moving limit there's something
-        // strange, e.g. data range not properly sorted, only identical values
-        // encountered, which doesn't mean there aren't any others in between..
-        // leave it to GetThis()
-        if (nLastInRange == nFirstLastInRange)
-            nLo = nFirstLastInRange;
-        else if (((nRes < 0 && bLessEqual) || nRes > 0) && nLo > 0)
-            --nLo;  // step back for subsequent GetThis() to find last in range
+        // strange, e.g. data range not properly sorted, or only identical
+        // values encountered, which doesn't mean there aren't any others in
+        // between.. leave it to GetThis(). The condition for this would be
+        // if (nLastInRange == nFirstLastInRange) nLo = nFirstLastInRange;
+        // Else, in case no exact match was found, we step back for a
+        // subsequent GetThis() to find the last in range. Effectively this is
+        // --nLo with nLastInRange == nLo-1. Both conditions combined yield:
+        nLo = nLastInRange;
     }
     if (nLo < pCol->nCount && pCol->pItems[nLo].nRow <= aParam.nRow2)
     {
