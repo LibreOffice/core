@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:29:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 12:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,8 +685,10 @@ SwLayNotify::~SwLayNotify()
         // --> OD 2005-03-30 #i43913# - no unlock of position of objects,
         // if <pLay> is a cell frame, and its table frame resp. its parent table
         // frame is locked.
-        bool bUnlockPosOfObjs( true );
-        if ( pLay->IsCellFrm() )
+        // --> OD 2005-04-15 #i47458# - force unlock of position of lower objects,
+        // only if position of layout frame has changed.
+        bool bUnlockPosOfObjs( bPos );
+        if ( bUnlockPosOfObjs && pLay->IsCellFrm() )
         {
             SwTabFrm* pTabFrm( pLay->FindTabFrm() );
             if ( pTabFrm &&
