@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-11 09:01:56 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:45:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -267,6 +267,69 @@ sub include_package_into_script
 
     my $localcall = "chmod 775 $scriptfilename \>\/dev\/null 2\>\&1";
     system($localcall);
+}
+
+#########################################################
+# Creating a tar.gz file
+#########################################################
+
+sub create_tar_gz_file_from_package
+{
+    my ($installdir, $getuidlibrary) = @_;
+
+    my $infoline = "";
+    my $alldirs = installer::systemactions::get_all_directories($installdir);
+    my $onedir = ${$alldirs}[0];
+    $installdir = $onedir;
+
+    my $allfiles = installer::systemactions::get_all_files_from_one_directory($installdir);
+
+    for ( my $i = 0; $i <= $#{$allfiles}; $i++ )
+    {
+        my $onefile = ${$allfiles}[$i];
+        my $systemcall = "cd $installdir; rm $onefile";
+        my $returnvalue = system($systemcall);
+
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+
+    $alldirs = installer::systemactions::get_all_directories($installdir);
+    $packagename = ${$alldirs}[0]; # only taking the first Solaris package
+    if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
+
+    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packagename);
+
+    my $targzname = $packagename . ".tar.gz";
+    $systemcall = "cd $installdir; LD_PRELOAD=$getuidlibrary tar -cf - $packagename | gzip > $targzname";
+    print "... $systemcall ...\n";
+
+    my $returnvalue = system($systemcall);
+
+    $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 #########################################################
@@ -977,7 +1040,9 @@ sub create_download_sets
         installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
 
         $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
-        include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary);
+
+        if (( $installer::globals::issolarisbuild ) && ( $ENV{'SPECIAL_ADA_BUILD'} )) { create_tar_gz_file_from_package($installationdir, $getuidlibrary); }
+        else { include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary); }
     }
     else    # Windows specific part
     {
