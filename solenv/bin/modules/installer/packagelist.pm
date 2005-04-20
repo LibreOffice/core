@@ -2,9 +2,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-04 10:00:01 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:47:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,6 +125,35 @@ sub analyze_list
     return \@allpackages;
 }
 
+###################################################
+# Setting the modules for language packs
+###################################################
+
+sub analyze_list_languagepack
+{
+    my ($packagelist) = @_;
+
+    @allpackages = ();
+
+    for ( my $i = 0; $i <= $#{$packagelist}; $i++ )
+    {
+        my $onepackage = ${$packagelist}[$i];
+
+        my $onegid = $onepackage->{'module'};
+
+        installer::remover::remove_leading_and_ending_whitespaces(\$onegid);
+
+        my @allmodules = ();
+
+        push(@allmodules, $onegid);
+
+        $onepackage->{'allmodules'} = \@allmodules;
+
+        push(@allpackages, $onepackage);
+    }
+
+    return \@allpackages;
+}
 
 ########################################################
 # Recursively defined procedure to order
