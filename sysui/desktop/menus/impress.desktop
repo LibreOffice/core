@@ -7,6 +7,6 @@ Type=Application
 InitialPreference=2
 Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;
 Exec=openoffice -impress %U
-MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint;application/vnd.ms-powerpoint
 Name=%PRODUCTNAME Impress
 Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
