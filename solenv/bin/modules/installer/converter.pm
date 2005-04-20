@@ -2,9 +2,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-04 09:58:19 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:45:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,7 +172,9 @@ sub convert_array_to_comma_separated_string
 
     for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
     {
-        $newstring = $newstring . ${$arrayref}[$i] . ",";
+        my $arrayentry = ${$arrayref}[$i];
+        $arrayentry =~ s/\s*$//;
+        $newstring = $newstring . $arrayentry . ",";
     }
 
     $newstring =~ s/\,\s*$//;
@@ -192,7 +194,9 @@ sub convert_array_to_space_separated_string
 
     for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
     {
-        $newstring = $newstring . ${$arrayref}[$i] . " ";
+        my $arrayentry = ${$arrayref}[$i];
+        $arrayentry =~ s/\s*$//;
+        $newstring = $newstring . $arrayentry . " ";
     }
 
     $newstring =~ s/\s*$//;
@@ -283,6 +287,47 @@ sub copy_collector
     }
 
     return \@newcollector;
+}
+
+#################################################################
+# Copying an array
+#################################################################
+
+sub copy_array_from_references
+{
+    my ( $arrayref ) = @_;
+
+    my @newarray = ();
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        push(@newarray, ${$arrayref}[$i]);
+    }
+
+    return \@newarray;
+}
+
+#################################################################
+# Combining two arrays
+#################################################################
+
+sub combine_arrays_from_references
+{
+    my ( $arrayref1, $arrayref2 ) = @_;
+
+    my @newarray = ();
+
+    for ( my $i = 0; $i <= $#{$arrayref1}; $i++ )
+    {
+        push(@newarray, ${$arrayref1}[$i]);
+    }
+
+    for ( my $i = 0; $i <= $#{$arrayref2}; $i++ )
+    {
+        push(@newarray, ${$arrayref2}[$i]);
+    }
+
+    return \@newarray;
 }
 
 #################################################################
