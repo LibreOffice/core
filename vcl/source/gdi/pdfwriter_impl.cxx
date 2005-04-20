@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:06:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 10:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7802,6 +7802,20 @@ void PDFWriterImpl::updateGraphicsState()
         writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
+/* #i47544# imitate OutputDevice behaviour:
+*  if a font with a nontransparent color is set, it overwrites the current
+*  text color. OTOH setting the text color will overwrite the color of the font.
+*/
+void PDFWriterImpl::setFont( const Font& rFont )
+{
+    Color aColor = rFont.GetColor();
+    if( aColor == Color( COL_TRANSPARENT ) )
+        aColor = m_aGraphicsStack.front().m_aFont.GetColor();
+    m_aGraphicsStack.front().m_aFont = rFont;
+    m_aGraphicsStack.front().m_aFont.SetColor( aColor );
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+}
+
 void PDFWriterImpl::push( sal_uInt16 nFlags )
 {
     m_aGraphicsStack.push_front( m_aGraphicsStack.front() );
@@ -7822,6 +7836,8 @@ void PDFWriterImpl::pop()
         setFillColor( aState.m_aFillColor );
     if( ! (aState.m_nFlags & PUSH_FONT) )
         setFont( aState.m_aFont );
+    if( ! (aState.m_nFlags & PUSH_TEXTCOLOR) )
+        setTextColor( aState.m_aFont.GetColor() );
     if( ! (aState.m_nFlags & PUSH_MAPMODE) )
         setMapMode( aState.m_aMapMode );
     if( ! (aState.m_nFlags & PUSH_CLIPREGION) )
