@@ -844,6 +844,21 @@ sub put_transforms_into_setupini
     push(@{$setupinifile}, $line);
 }
 
+###################################################
+# Including Windows line ends in ini files
+# Profiles on Windows shall have \r\n line ends
+###################################################
+
+sub include_windows_lineends
+{
+    my ($onefile) = @_;
+
+    for ( my $i = 0; $i <= $#{$onefile}; $i++ )
+    {
+        ${$onefile}[$i] =~ s/\r?\n$/\r\n/;
+    }
+}
+
 ##########################################################################
 # Generation the file setup.ini, that is used by the loader setup.exe.
 ##########################################################################
@@ -886,6 +901,11 @@ sub create_setup_ini
             put_transforms_into_setupini($setupinifile, ${$languagesarray}[$i], $counter);
             $counter++;
         }
+    }
+
+    if ( $installer::globals::iswin && $installer::globals::plat =~ /cygwin/i)      # Windows line ends only for Cygwin
+    {
+        include_windows_lineends($setupinifile);
     }
 
     installer::files::save_file($setupinifilename, $setupinifile);
@@ -1370,6 +1390,7 @@ sub set_global_code_variables
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
     push( @installer::globals::logfileinfo, $infoline);
 
+    $allvariableshashref->{'PRODUCTCODE'} = $installer::globals::productcode;
 }
 
 ###############################################################
