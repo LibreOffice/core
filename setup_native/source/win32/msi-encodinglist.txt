@@ -13,11 +13,13 @@ fi    1252  1035
 hu    1250  1038
 ca    1252  1027   # Catalan
 it    1252  1040
-cs    1250  1029
-sk    1250  1051
+cs    1250  1029   # Czech
+sk    1250  1051   # Slovak
 en-GB 1252  2057
 da    1252  1030
 sv    1252  1053
+nb    1252  1044
+nn    1252  2068
 no    1252  1044
 pl    1250  1045
 de    1252  1031
@@ -26,6 +28,8 @@ th     874  1054
 et    1257  1061
 ja     932  1041
 ko     949  1042
+km    1252  1107   # Khmer
+cy    1252  1106   # Welsh
 zh-CN  936  2052
 zh-TW  950  1028
 tr    1254  1055   # Turkish
@@ -40,7 +44,6 @@ hy       0  1067   # Armenian
 eu    1252  1069   # Basque
 be    1251  1059   # Belarusian
 bg    1251  1026   # Bulgarian
-cz    1250  1029   # Czech
 is    1252  1039   # Icelandic
 id    1252  1057   # Indonesian
 lv    1257  1062   # Latvian
@@ -66,5 +69,6 @@ uk    1251  1058   # Ukrainian
 ur    1256  1056   # Urdu
 vi    1258  1066   # Vietnamese
 xh       0  1076   # Xhosa
+ns       0  1132   # Northern Sotho (Sepedi)
 yi       0  1085   # Yiddish
 zu       0  1077   # Zulu
