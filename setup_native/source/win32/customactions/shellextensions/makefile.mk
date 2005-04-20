@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-04 10:12:15 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:42:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,11 @@ UWINAPILIB=
 
 SLOFILES = \
     $(SLO)$/shellextensions.obj \
-    $(SLO)$/startmenuicon.obj\
-    $(SLO)$/upgrade.obj
+    $(SLO)$/startmenuicon.obj \
+    $(SLO)$/upgrade.obj \
+    $(SLO)$/iconcache.obj \
+    $(SLO)$/postuninstall.obj
+
 
 SHL1STDLIBS=	kernel32.lib\
                 user32.lib\
