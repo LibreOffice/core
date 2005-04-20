@@ -91,6 +91,6 @@ ALLTAR : PACKAGE_RPM
 PACKAGE_RPM :
     @$(MKDIRHIER) $(MISC)$/$(TARGET)
     @$(MKDIRHIER) $(MISC)$/$(TARGET)$/BUILD
-    @$(RPM) --define "basedir $(shell pwd)" --define "unixfilename $(UNIXFILENAME)" --define "version $(PKGVERSION)" --define "release $(PKGREV)" --define "_rpmdir $(RPMDIR)" -bb freedesktop-menus.spec --define "source $(shell cd $(MISC)$/redhat; pwd)" --define "unique $(shell echo $$$$)" --define "_builddir $(shell $(MISC)$/$(TARGET)/BUILD; pwd)" 
+    @$(RPM) --define "basedir $(shell pwd)" --define "unixfilename $(UNIXFILENAME)" --define "version $(PKGVERSION)" --define "release $(PKGREV)" --define "_rpmdir $(RPMDIR)" -bb freedesktop-menus.spec --define "source $(shell cd $(MISC)$/redhat; pwd)" --define "unique $(shell echo $$$$)" --define "_builddir $(shell cd $(MISC)$/$(TARGET)/BUILD; pwd)" 
     
 .ENDIF
