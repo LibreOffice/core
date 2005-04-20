@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-11 09:03:59 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:48:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -680,6 +680,8 @@ sub set_manufacturer
         $installer::globals::manufacturer = $sunname;
         $installer::globals::longmanufacturer = $sunname . ", Inc.";
     }
+
+    $allvariables->{'MANUFACTURER'} = $installer::globals::manufacturer;
 }
 
 ##############################################################
