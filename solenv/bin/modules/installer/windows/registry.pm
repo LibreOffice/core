@@ -2,9 +2,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:57:44 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:50:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ package installer::windows::registry;
 
 use installer::files;
 use installer::globals;
+use installer::worker;
 use installer::windows::idtglobal;
 
 #####################################################
@@ -159,11 +160,13 @@ sub get_registry_root
 
 sub get_registry_key
 {
-    my ($registry) = @_;
+    my ($registry, $allvariableshashref) = @_;
 
     my $key = "";
 
     if ( $registry->{'Subkey'} ) { $key = $registry->{'Subkey'}; }
+
+    if ( $key =~ /\%/ ) { $key = installer::worker::replace_variables_in_string($key, $allvariableshashref); }
 
     return $key;
 }
@@ -230,7 +233,7 @@ sub get_registry_component
 
 sub create_registry_table
 {
-    my ($registryref, $allregistrycomponentsref, $basedir, $languagesarrayref) = @_;
+    my ($registryref, $allregistrycomponentsref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
 
     for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
     {
@@ -254,7 +257,7 @@ sub create_registry_table
 
             $registry{'Registry'} = get_registry_identifier($oneregistry);
             $registry{'Root'} = get_registry_root($oneregistry);
-            $registry{'Key'} = get_registry_key($oneregistry);
+            $registry{'Key'} = get_registry_key($oneregistry, $allvariableshashref);
             $registry{'Name'} = get_registry_name($oneregistry);
             $registry{'Value'} = get_registry_value($oneregistry);
             $registry{'Component_'} = get_registry_component($oneregistry);
