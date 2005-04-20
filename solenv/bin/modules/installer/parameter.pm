@@ -333,7 +333,7 @@ sub setglobalvariables
 
     # Defaulting to native package format for epm
 
-    if ( $installer::globals::packageformat eq "") { $installer::globals::packageformat = "native"; }
+    if ( ! $installer::globals::packageformat ) { $installer::globals::packageformat = "native"; }
 
     # $installer::globals::servicesrdb_can_be_created can only be set, if regcomp (regcomp.exe) can be executed.
 
@@ -520,12 +520,12 @@ sub control_required_parameter
 
     #######################################
     # Patch currently only available
-    # for Solaris packages
+    # for Solaris packages and Linux
     #######################################
 
-    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ))
+    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::iswindowsbuild ))
     {
-        installer::logger::print_error( "Patch flag currently only available for Solaris pkg builds!" );
+        installer::logger::print_error( "Sorry, Patch flag currently only available for Solaris pkg, Linux RPM and Windows builds!" );
         usage();
         exit(-1);
     }
