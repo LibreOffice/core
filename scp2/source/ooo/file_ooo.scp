@@ -1773,7 +1773,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name (ja) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
     Name (ko) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
@@ -1783,7 +1783,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name (th) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (hi-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
@@ -1793,7 +1793,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
     Name (ja) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
     Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
@@ -2346,6 +2346,15 @@ File gid_File_JREProperties
     Name = "JREProperties.class";
     Dir = gid_Dir_Program;
     Styles = (PACKED);
+End
+#endif
+
+#ifdef WNT
+File gid_File_Txt_Patchfiles
+    TXT_FILE_BODY;
+    Name = "patchlist.txt";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,PATCH_ONLY);
 End
 #endif
 
