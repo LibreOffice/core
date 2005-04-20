@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:59:05 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 12:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2270,6 +2270,9 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     // --> OD 2005-03-07 #i44049# - add another condition for not moving backward:
     // If one of its objects has restarted the layout process, moving backward
     // isn't sensible either.
+    // --> OD 2005-04-19 #i47697# - refine condition made for issue i44049:
+    // - allow move backward as long as the anchored object is only temporarily
+    //   positions considering its wrapping style.
     if ( pNewUpper &&
          rThis.IsTxtFrm() && !IsFollow() )
     {
@@ -2291,7 +2294,10 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             for ( ; i < rThis.GetDrawObjs()->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*rThis.GetDrawObjs())[i];
-                if ( pAnchoredObj->RestartLayoutProcess() )
+                // --> OD 2005-04-19 #i47697# - refine condition - see above
+                if ( pAnchoredObj->RestartLayoutProcess() &&
+                     !pAnchoredObj->IsTmpConsiderWrapInfluence() )
+                // <--
                 {
                     pNewUpper = 0;
                     break;
