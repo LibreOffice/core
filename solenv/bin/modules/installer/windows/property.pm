@@ -152,12 +152,47 @@ sub get_productname_for_property_table
         $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
     }
 
+    if ( $installer::globals::patch )
+    {
+        my $patchstring = "Patch";
+        $productname = $productname . " " . $patchstring;
+    }
+
     return $productname;
 }
 
 sub get_productversion_for_property_table
 {
     return $installer::globals::msiproductversion;
+}
+
+#######################################################
+# Setting some important properties
+# (for finding the product in deinstallation process)
+#######################################################
+
+sub set_important_properties
+{
+    my ($propertyfile, $allvariables) = @_;
+
+    # Setting new variables with the content of %PRODUCTNAME and %PRODUCTVERSION
+    if ( $allvariables->{'PRODUCTNAME'} )
+    {
+        my $onepropertyline =  "DEFINEDPRODUCT" . "\t" . $allvariables->{'PRODUCTNAME'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'PRODUCTVERSION'} )
+    {
+        my $onepropertyline = "DEFINEDVERSION" . "\t" . $allvariables->{'PRODUCTVERSION'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if (( $allvariables->{'PRODUCTNAME'} ) && ( $allvariables->{'PRODUCTVERSION'} ) && ( $allvariables->{'MANUFACTURER'} ) && ( $allvariables->{'PRODUCTCODE'} ))
+    {
+        my $onepropertyline = "FINDPRODUCT" . "\t" . "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $allvariables->{'PRODUCTNAME'} . "\\" . $allvariables->{'PRODUCTVERSION'} . "\\" . $allvariables->{'PRODUCTCODE'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
 }
 
 ####################################################################################
@@ -197,6 +232,9 @@ sub update_property_table
         ${$propertyfile}[$i] =~ s/\bPRODUCTNAMETEMPLATE\b/$productname/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTVERSIONTEMPLATE\b/$productversion/;
     }
+
+    # Setting variables into propertytable
+    set_important_properties($propertyfile, $allvariables);
 
     # Saving the file
 
