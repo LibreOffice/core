@@ -3,4 +3,7 @@ DeinstallExecSequenceEntry
 InstallStartmenuFolderIcon
 DeinstallStartmenuFolderIcon
 SetProductInstallMode
+RebuildShellIconCache
+ExecutePostUninstallScript
+
     
