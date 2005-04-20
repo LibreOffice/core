@@ -4,6 +4,7 @@ Version: 2.0
 Release: 1
 Group: Office
 License: LGPL, SISSL
+Vendor: OpenOffice.org
 AutoReqProv: no
 Requires: openofficeorg-core01, redhat-release
 %define _unpackaged_files_terminate_build 0
@@ -16,7 +17,7 @@ cat > /tmp/install.$$ << EOF
 while [ "\$TARGET" == "" ]
 do
   sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -sf \$TARGET /etc/%PREFIX
+  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -snf \$TARGET /etc/%PREFIX
   # some rpm versions do not wait for the shared lock
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
@@ -183,6 +184,7 @@ then
 fi
 
 %files
+%attr(0755,root,root) /usr/bin/soffice
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%PREFIX
 %attr(0755,root,root) /usr/bin/%PREFIX-printeradmin
 %defattr(0644, root, root)
