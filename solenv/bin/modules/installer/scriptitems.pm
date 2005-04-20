@@ -1021,6 +1021,164 @@ sub add_License_Files_into_Installdir
 }
 
 ############################################################################
+# Removing files with flag ONLY_ASIA_LANGUAGE, only if no asian
+# language is part of the product.
+# This special files are connected to the root module and are not
+# included into a language pack (would lead to conflicts!).
+# But this files shall only be included into the product, if the
+# product contains at least one asian language.
+############################################################################
+
+sub remove_onlyasialanguage_files_from_productlists
+{
+    my ($filesarrayref) = @_;
+
+    my $infoline;
+
+    my @newfilesarray = ();
+    my $returnfilesarrayref;
+
+    my $containsasianlanguage = installer::languages::detect_asian_language($installer::globals::alllanguagesinproductarrayref);
+
+    my $alllangstring = installer::converter::convert_array_to_comma_separated_string($installer::globals::alllanguagesinproductarrayref);
+    $infoline = "\nLanguages in complete product: $alllangstring\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( ! $containsasianlanguage )
+    {
+        $infoline = "Product does not contain asian language -> removing files\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+        {
+            my $onefile = ${$filesarrayref}[$i];
+            my $styles = "";
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+            if ( $styles =~ /\bONLY_ASIA_LANGUAGE\b/ )
+            {
+                $infoline = "Flag ONLY_ASIA_LANGUAGE: Removing file $onefile->{'Name'} from files collector!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                next;
+            }
+
+            push(@newfilesarray, $onefile);
+        }
+
+        $returnfilesarrayref = \@newfilesarray;
+    }
+    else
+    {
+        $returnfilesarrayref = $filesarrayref;
+
+        $infoline = "Product contains asian language -> Nothing to do\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+    }
+
+    return $returnfilesarrayref;
+}
+
+############################################################################
+# Removing files with flag ONLY_WESTERN_LANGUAGE, only if no western
+# language is part of the product.
+# This special files are connected to the root module and are not
+# included into a language pack (would lead to conflicts!).
+# But this files shall only be included into the product, if the
+# product contains at least one western language.
+############################################################################
+
+sub remove_onlywesternlanguage_files_from_productlists
+{
+    my ($filesarrayref) = @_;
+
+    my $infoline;
+
+    my @newfilesarray = ();
+    my $returnfilesarrayref;
+
+    my $containswesternlanguage = installer::languages::detect_western_language($installer::globals::alllanguagesinproductarrayref);
+
+    my $alllangstring = installer::converter::convert_array_to_comma_separated_string($installer::globals::alllanguagesinproductarrayref);
+    $infoline = "\nLanguages in complete product: $alllangstring\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( ! $containswesternlanguage )
+    {
+        $infoline = "Product does not contain western language -> removing files\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+        {
+            my $onefile = ${$filesarrayref}[$i];
+            my $styles = "";
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+            if ( $styles =~ /\bONLY_WESTERN_LANGUAGE\b/ )
+            {
+                $infoline = "Flag ONLY_WESTERN_LANGUAGE: Removing file $onefile->{'Name'} from files collector!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                next;
+            }
+
+            push(@newfilesarray, $onefile);
+        }
+
+        $returnfilesarrayref = \@newfilesarray;
+    }
+    else
+    {
+        $returnfilesarrayref = $filesarrayref;
+
+        $infoline = "Product contains western language -> Nothing to do\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+    }
+
+    return $returnfilesarrayref;
+}
+
+############################################################################
+# Some files are included for more than one language and have the same
+# name and the same destination directory for all languages. This would
+# lead to conflicts, if the filenames are not changed.
+# In scp project this files must have the flag MAKE_LANG_SPECIFIC
+# For this files, the language is included into the filename.
+############################################################################
+
+sub make_filename_language_specific
+{
+    my ($filesarrayref) = @_;
+
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+
+        if ( $onefile->{'ismultilingual'} )
+        {
+            my $styles = "";
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+            if ( $styles =~ /\bMAKE_LANG_SPECIFIC\b/ )
+            {
+                my $language = $onefile->{'specificlanguage'};
+                my $olddestination = $onefile->{'destination'};
+                my $oldname = $onefile->{'Name'};
+
+                $onefile->{'Name'} =~ s/\./_$language\./;
+                $onefile->{'destination'} =~ s/\./_$language\./;
+
+                $infoline = "Flag MAKE_LANG_SPECIFIC:\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                $infoline = "Changing name from $oldname to $onefile->{'Name'} !\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                $infoline = "Changing destination from $olddestination to $onefile->{'destination'} !\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+}
+
+############################################################################
 # Removing all scpactions, that have no name.
 # See: FlatLoaderZip
 ############################################################################
@@ -1128,6 +1286,44 @@ sub remove_Languagepacklibraries_from_Installset
 }
 
 ############################################################################
+# Removing all files with flag PATCH_ONLY from installation set.
+# This function is not called during patch creation.
+############################################################################
+
+sub remove_patchonlyfiles_from_Installset
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_patchonlyfiles_from_Installset : $#{$itemsarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bPATCH_ONLY\b/ )
+        {
+            $infoline = "Removing file with flag PATCH_ONLY $oneitem->{'gid'} from the installation set.\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    return \@newitemsarray;
+}
+
+############################################################################
 # FAKE: Some files cotain a $ in their name. epm conflicts with such files.
 # Quick solution: Renaming this files, converting "$" to "_"
 # Still a ToDo ! :-)
@@ -1216,6 +1412,7 @@ sub collect_directories_from_filesarray
             $directoryhash{'HostName'} = $destinationpath;
             $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
             $directoryhash{'Dir'} = $onefile->{'Dir'};
+            if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; } # this directories must be created
 
             if ( $onefile->{'Dir'} eq "PREDEFINED_PROGDIR" ) { $predefinedprogdir_added = 1; }
 
@@ -1238,6 +1435,7 @@ sub collect_directories_from_filesarray
                     $directoryhash{'HostName'} = $destinationpath;
                     $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
                     $directoryhash{'Dir'} = $onefile->{'Dir'};
+                    if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; } # this directories must be created
 
                     push(@alldirectories, \%directoryhash);
                 }
@@ -1318,7 +1516,8 @@ sub collect_directories_with_create_flag_from_directoryarray
                         $directoryhash{'specificlanguage'} = $onedir->{'specificlanguage'};
                         # $directoryhash{'gid'} = $onedir->{'gid'};
                         $directoryhash{'Dir'} = $onedir->{'gid'};
-                        $directoryhash{'Styles'} = $onedir->{'Styles'};
+                        # $directoryhash{'Styles'} = $onedir->{'Styles'};
+                        if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; }
 
                         push(@{$directoriesforepmarrayref}, \%directoryhash);
                     }
