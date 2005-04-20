@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 11:10:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-20 12:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     int  nCode;
 
     /* get app name or NULL if unknown (don't call assert) */
-    LPCSTR lpszAppName = "OSL";
+    LPCSTR lpszAppName = "Error";
     sal_Char   szMessage[512];
 
     /* format message into buffer */
