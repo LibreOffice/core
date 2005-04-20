@@ -50,11 +50,21 @@ echo "Searching for the PRODUCTNAMEPLACEHOLDER installation ..."
 case $platform in
 SunOS)
   PACKAGENAME=`pkginfo -x | grep PRODUCTNAMEPLACEHOLDER-core01 | sed "s/ .*//"`
-  PRODUCTINSTALLLOCATION="`pkginfo -r $PACKAGENAME`"
+  if [ "x$PACKAGENAME" != "x" ]
+  then
+    PRODUCTINSTALLLOCATION="`pkginfo -r $PACKAGENAME`"
+  else
+    PRODUCTINSTALLLOCATION=""
+  fi
   ;;
 Linux)
   RPMNAME=`rpm -qa | grep PRODUCTNAMEPLACEHOLDER-core01`
-  PRODUCTINSTALLLOCATION="`rpm -ql $RPMNAME | head -n 1`"
+  if [ "x$RPMNAME" != "x" ]
+  then
+    PRODUCTINSTALLLOCATION="`rpm -ql $RPMNAME | head -n 1`"
+  else
+    PRODUCTINSTALLLOCATION=""
+  fi
   ;;
 *)
   echo "Unsupported platform"
@@ -117,12 +127,11 @@ SunOS)
   $tail_prog +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
   adminfile=$outdir/admin.$$
   echo "basedir=$PRODUCTINSTALLLOCATION" > $adminfile
-  /usr/sbin/pkgadd -d $outdir -a $adminfile PACKAGENAMEPLACEHOLDER
-
+INSTALLLINES
   ;;
 Linux)
-  $tail_prog +$linenum $0 > $outdir/PACKAGENAMEPLACEHOLDER
-  rpm --prefix $PRODUCTINSTALLLOCATION -i $outdir/PACKAGENAMEPLACEHOLDER
+  $tail_prog +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
+INSTALLLINES
   ;;
 *)
   echo "Unsupported platform"
