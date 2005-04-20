@@ -2,9 +2,9 @@
 #
 #   $RCSfile: createfolder.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:18:51 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:48:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 package installer::windows::createfolder;
 
 use installer::existence;
+use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
@@ -86,19 +87,21 @@ sub get_createfolder_directory
 
 sub get_createfolder_component
 {
-    my ($onedir, $filesref) = @_;
+    my ($onedir, $filesref, $allvariableshashref) = @_;
 
     # Directories do not belong to a module.
     # Therefore they can only belong to the root module and
     # will be added to a component at the root module.
     # All directories will be added to the component
-    # containing the file "gid_File_Lib_Vcl"
+    # containing the file $allvariableshashref->{'GLOBALFILEGID'}
 
-    my $vclgid = "gid_File_Lib_Vcl";
+    if ( ! $allvariableshashref->{'GLOBALFILEGID'} ) { installer::exiter::exit_program("ERROR: GLOBALFILEGID must be defined in list file!", "get_createfolder_component"); }
+    if (( $installer::globals::patch ) && ( ! $allvariableshashref->{'GLOBALFILEGID'} )) { installer::exiter::exit_program("ERROR: GLOBALPATCHFILEGID must be defined in list file!", "get_createfolder_component"); }
 
-    if ($installer::globals::product =~ /ada/i ) { $vclgid = "gid_File_Adabas"; }
+    my $globalfilegid = $allvariableshashref->{'GLOBALFILEGID'};
+    if ( $installer::globals::patch ) { $globalfilegid = $allvariableshashref->{'GLOBALPATCHFILEGID'}; }
 
-    my $onefile = installer::existence::get_specified_file($filesref, $vclgid);
+    my $onefile = installer::existence::get_specified_file($filesref, $globalfilegid);
 
     return $onefile->{'componentname'};
 }
@@ -111,7 +114,7 @@ sub get_createfolder_component
 
 sub create_createfolder_table
 {
-    my ($dirref, $filesref, $basedir) = @_;
+    my ($dirref, $filesref, $basedir, $allvariableshashref) = @_;
 
     my @createfoldertable = ();
 
@@ -132,7 +135,7 @@ sub create_createfolder_table
             my %directory = ();
 
             $directory{'Directory_'} = get_createfolder_directory($onedir);
-            $directory{'Component_'} = get_createfolder_component($onedir, $filesref);
+            $directory{'Component_'} = get_createfolder_component($onedir, $filesref, $allvariableshashref);
 
             my $oneline = $directory{'Directory_'} . "\t" . $directory{'Component_'} . "\n";
 
