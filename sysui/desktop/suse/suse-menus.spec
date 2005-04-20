@@ -4,6 +4,7 @@ Version: 2.0
 Release: 1
 Group: Office
 License: LGPL, SISSL
+Vendor: OpenOffice.org
 AutoReqProv: no
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
 Requires: openofficeorg-core01, /etc/SuSE-release
@@ -19,7 +20,7 @@ cat > /tmp/install.$$ << EOF
 while [ "\$TARGET" == "" ]
 do
   sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -sf \$TARGET /etc/%PREFIX
+  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -snf \$TARGET /etc/%PREFIX
   # some rpm versions do not wait for the shared lock
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
@@ -186,6 +187,7 @@ then
 fi
 
 %files
+%attr(0755,root,root) /usr/bin/soffice
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%PREFIX
 %attr(0755,root,root) /usr/bin/%PREFIX-printeradmin
 %defattr(0644, root, root)
@@ -519,4 +521,3 @@ fi
 /opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-formula.png
 /opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-database.png
 /opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-web-template.png
-%define _rpmdir /export/home/obr/workspaces/sysui03/sysui/unxlngi6.pro/bin
