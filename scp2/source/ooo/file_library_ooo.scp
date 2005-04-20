@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.99 $
+*  $Revision: 1.100 $
 *
-*  last change: $Author: obo $ $Date: 2005-04-13 08:43:44 $
+*  last change: $Author: obo $ $Date: 2005-04-20 12:01:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1057,9 +1057,20 @@ End
 
 File gid_File_Lib_Lngpckinsthlp
     BIN_FILE_BODY;
-    Styles = (PACKED, LANGUAGEPACK, BINARYTABLE);
+    Styles = (PACKED, LANGUAGEPACK, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "lngpckinsthlp.dll";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Lib_Patchmsi
+    TXT_FILE_BODY;
+    Name = "patchmsi.dll";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY);
 End
 
 #endif
@@ -1406,7 +1417,7 @@ End
 
 File gid_File_Lib_Reg4msdocmsi
     TXT_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE);
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "reg4msdocmsi.dll";
 End
@@ -1417,7 +1428,7 @@ End
 
 File gid_File_Lib_Qslnkmsi
     TXT_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE);
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "qslnkmsi.dll";
 End
@@ -1428,7 +1439,7 @@ End
 
 File gid_File_Lib_Sdqsmsi
     TXT_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE);
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "sdqsmsi.dll";
 End
@@ -1606,7 +1617,7 @@ End
 
 File gid_File_Lib_Instooofiltmsi
     TXT_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE);
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "instooofiltmsi.dll";
 End
