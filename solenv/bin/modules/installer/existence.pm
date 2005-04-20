@@ -2,9 +2,9 @@
 #
 #   $RCSfile: existence.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-04 09:59:04 $
+#   last change: $Author: obo $ $Date: 2005-04-20 11:46:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,9 +128,13 @@ sub get_specified_file
         }
     }
 
+    my $errorline = "ERROR: Could not find file $searchgid in list of files!";
+
+    if ( $installer::globals::patch) { $errorline = "ERROR: Could not find file $searchgid in list of files! intro.bmp must be part of every patch. Please assign the flag PATCH in scp2 project."; }
+
     if (!($foundfile))
     {
-        installer::exiter::exit_program("ERROR: Could not find file $searchgid in list of files!", "get_specified_file");
+        installer::exiter::exit_program($errorline, "get_specified_file");
     }
 
     return $onefile;
