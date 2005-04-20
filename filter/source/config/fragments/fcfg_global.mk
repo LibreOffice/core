@@ -32,10 +32,7 @@ F4_GLOBAL = \
 # -----------------------------------------------
 # count = 12
 F4_UI_GLOBAL = \
-    StarWriter_3_0__StarWriter_GlobalDocument__ui \
-    StarWriter_4_0__StarWriter_GlobalDocument__ui \
     StarWriter_4_0_GlobalDocument_ui \
-    StarWriter_5_0__StarWriter_GlobalDocument__ui \
     StarWriter_5_0_GlobalDocument_ui \
     Text__encoded___StarWriter_GlobalDocument__ui \
     writer_globaldocument_StarOffice_XML_Writer_ui \
