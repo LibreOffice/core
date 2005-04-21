@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:12:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-21 11:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParent ,
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
     pWindow->SetHelpId ( HID_NAVIGATOR_WINDOW );
-    pWindow->SetOutputSizePixel( Size( 240, 240 ) );
+    pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
     SetHideNotDelete( TRUE );
@@ -129,5 +129,4 @@ BOOL SfxNavigator::Close()
     else
         return FALSE;
 }
-
 
