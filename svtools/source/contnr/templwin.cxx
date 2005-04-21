@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 10:39:20 $
+ *  last change: $Author: obo $ $Date: 2005-04-21 11:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,11 +1132,15 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             }
             else
             {
+            /*
                 SvtExecuteInfo* pExecuteInfo = new SvtExecuteInfo;
                 pExecuteInfo->xDispatch = xDisp;
                 pExecuteInfo->aTargetURL = aURL;
                 Application::PostUserEvent(
                     STATIC_LINK(0, SvtFrameWindow_Impl, ExecuteHdl_Impl), pExecuteInfo );
+            */
+                Sequence < PropertyValue > aArgs;
+                xDisp->dispatch( aURL, aArgs );
                 m_aOpenURL = rtl::OUString();
             }
         }
