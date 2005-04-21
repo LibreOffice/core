@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkxml.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-02-10 16:24:06 $
+#   last change: $Author: obo $ $Date: 2005-04-21 13:26:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,14 +71,17 @@ my
 $is_debug=0;
 my $err = 0;
 my $path = $ENV{'SOLARVERSION'} . '/' . $ENV{'INPATH'} . '/xml' . "$ENV{'UPDMINOREXT'}/";
+my $pck_path = $ENV{'SOLARVERSION'} . '/' . $ENV{'INPATH'} . '/pck' . "$ENV{'UPDMINOREXT'}/";
+my $unzipexe="unzip";
+
 #Path of the directory from which the recursion starts (must have ending '/').
 print "Checking:$path\n";
-
 # Initiate the recursion
 &RecurseDirs($path);
+$err += &check_registry_zips($pck_path);
 if ($err > 0)
 {
-    print "$err damaged files encountered\n";
+    print "Error: $err damaged files encountered\n";
     exit(1); # stop dmake
 } else
 {
@@ -131,3 +134,38 @@ sub check       #04.02.2005 13:40
         close(FH);
     }
  }
+
+ ############################################################################
+ sub check_registry_zips        #20.04.2005 18:47
+ ############################################################################
+  {
+    my $path = shift;
+    my $error = 0;
+    opendir (DIRECTORY, $path) or
+        die "Can't read $path\n";
+    my @all_files = grep (!/^\.\.?$/, readdir (DIRECTORY)); #Read all the files except for '.' and '..'
+    closedir (DIRECTORY);
+    foreach $file (@all_files) {
+        if ( $file =~ /registry_.+\.zip$/ ) {
+            print "file=$path$file\n" if ($is_debug);
+            open(UNZIP,"$unzipexe -l $path$file |");
+            my $ferror = 0;
+            while ( $line = <UNZIP> ) {
+                #print $line;
+                my @param = split(" ",$line);
+                if ( $param[0] =~ /\d+/ ) {
+                    if ( $param[0] == 0 && $param[3] =~ /.+\.xcu$/)
+                    {
+                        $error++; $ferror=1;
+                    }
+                }
+            }
+            if ( $ferror ) {
+                print "Error: $path$file contains files with 0 byte size\n";
+            }
+            close(UNZIP);
+        }
+    }
+
+    ($error);
+ }  ##check_registry_zips
