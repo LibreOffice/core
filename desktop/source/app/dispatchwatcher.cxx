@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:16:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-21 11:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,12 +344,14 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                     // We have to be listener to catch errors during dispatching URLs.
                     // Otherwise it would be possible to have an office running without an open
                     // window!!
-                    Sequence < PropertyValue > aNoArgs;
+                    Sequence < PropertyValue > aArgs(1);
+                    aArgs[0].Name    = ::rtl::OUString::createFromAscii("SynchronMode");
+                    aArgs[0].Value <<= sal_True;
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
-                        xDisp->dispatchWithNotification( aURL, aNoArgs, DispatchWatcher::GetDispatchWatcher() );
+                        xDisp->dispatchWithNotification( aURL, aArgs, DispatchWatcher::GetDispatchWatcher() );
                     else
-                        xDispatcher->dispatch( aURL, aNoArgs );
+                        xDispatcher->dispatch( aURL, aArgs );
                 }
                 catch ( ::com::sun::star::uno::Exception& )
                 {
@@ -475,9 +477,11 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
     if ( aDispatches.size() > 0 )
     {
         // Execute all asynchronous dispatches now after we placed them into our request container!
-        Sequence < PropertyValue > aArgs( 1 );
+        Sequence < PropertyValue > aArgs( 2 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
+        aArgs[1].Name = ::rtl::OUString::createFromAscii("SynchronMode");
+        aArgs[1].Value <<= sal_True;
 
         for ( sal_uInt32 n = 0; n < aDispatches.size(); n++ )
         {
