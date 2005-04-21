@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:58:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-21 11:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,27 +707,12 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
             // c)
             if (!sDetectService.getLength())
             {
-                // In case this type was preselected by the user, it must be used.
-                // It doesnt matter, if this type has a deep detection service registered
-                // or not.
-                // But only a "direct preselection" can be accepted here.
-                // That means: The user must preselect the type or the filter.
-                // But no document service. Because selection of type and filter
-                // can be interpreted as selection of one specific file format.
-                // Selection of a document service does not select a special format.
-                // It selected s set of formats! In such case we try to find a better solution
-                // by continuing this loop. But we save this first type without detect service
-                // as possible fallback .-)
-
-                if (
-                    (aFlatTypeInfo.bPreselectedAsType  ) ||
-                    (aFlatTypeInfo.bPreselectedByFilter)
-                   )
+                // accept or not accept flat types without deep detection: that's the question :-)
+                // May be there exists some states, where we have to use our LastChance feature instead
+                // of using the flat type directly.
+                // Here the list of task ID's, which wasrelated to these lines of code:
+                // #i47159#, #i43404#, #i46494#
                 return sFlatType;
-
-                if (!rLastChance.getLength())
-                    rLastChance = sFlatType;
-                continue;
             }
 
             // dont forget to add every real asked deep detection service here.
