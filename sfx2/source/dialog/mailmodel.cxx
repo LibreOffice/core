@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:39:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-21 11:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,29 +388,46 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
             SfxMedium* pMedium = xDocShell->GetMedium();
             if ( pMedium )
             {
-                uno::Reference< embed::XStorage > xDocStorage = pMedium->GetStorage();
-                if ( xDocStorage.is() )
+                // the document is not modified and has a name, the input stream must be up to date
+                SvStream* pDocStream = pMedium->GetInStream();
+                SvStream* pTargetStream = aTempFile.GetStream( STREAM_READWRITE );
+
+                OSL_ENSURE( pDocStream, "Medium with a name has no stream?!!\n" );
+                OSL_ENSURE( pTargetStream, "Temporary file object has no stream?!!\n" );
+                if ( pDocStream && !pDocStream->GetError() && pTargetStream && !pTargetStream->GetError() )
                 {
-                    try
+                    sal_Int32 nPos = pDocStream->Tell();
+                    pDocStream->Seek( 0 );
+                    pTargetStream->SetStreamSize( 0 );
+
+                    const sal_uInt32 nBuffLen = 8192;
+                    uno::Sequence< sal_Int8 > aBuff( nBuffLen );
+                    void* pData = (void*)(aBuff.getArray());
+                    sal_uInt32 nRead = 0;
+                    do
                     {
-                        uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rFileName, embed::ElementModes::READWRITE );
-                        if( xTempStorage.is() )
+                        nRead = pDocStream->Read( pData, nBuffLen );
+                        if ( nRead && !pDocStream->GetError() )
                         {
-                               xDocStorage->copyToStorage( xTempStorage );
-                            uno::Reference< embed::XTransactedObject > xTransactedObject( xTempStorage, UNO_QUERY );
-                            if ( xTransactedObject.is() )
+                            if ( nRead != pTargetStream->Write( pData, nRead ) || pTargetStream->GetError() )
                             {
-                                xTransactedObject->commit();
-                                eRet = SAVE_SUCCESSFULL;
+                                eRet = SAVE_ERROR;
+                                break;
                             }
                         }
                     }
-                    catch ( RuntimeException& e )
+                    while( nRead );
+
+                    pDocStream->ResetError();
+                    pDocStream->Seek( nPos );
+
+                    if ( eRet != SAVE_ERROR )
                     {
-                        throw e;
-                    }
-                    catch ( Exception )
-                    {
+                        pTargetStream->Flush();
+                        if ( pTargetStream->GetError() )
+                            eRet = SAVE_ERROR;
+                        else
+                            eRet = SAVE_SUCCESSFULL;
                     }
                 }
             }
