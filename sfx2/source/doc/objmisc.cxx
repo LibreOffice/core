@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:39:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,6 +1153,42 @@ sal_Bool SfxObjectShell::IsLoadingFinished() const
 }
 
 void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel);
+void SfxObjectShell::InitOwnModel_Impl()
+{
+    if ( !pImp->bModelInitialized )
+    {
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+        if ( pSalvageItem )
+        {
+            pImp->aTempName = pMedium->GetPhysicalName();
+            pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
+            pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
+            pMedium->GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetOrigURL() ) );
+        }
+        else
+        {
+            pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+            pMedium->GetItemSet()->ClearItem( SID_DOCUMENT );
+        }
+
+        pMedium->GetItemSet()->ClearItem( SID_REFERER );
+        uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
+        if ( xModel.is() )
+        {
+            ::rtl::OUString aURL = GetMedium()->GetOrigURL();
+            SfxItemSet *pSet = GetMedium()->GetItemSet();
+            if ( !GetMedium()->IsReadOnly() )
+                pSet->ClearItem( SID_INPUTSTREAM );
+            uno::Sequence< beans::PropertyValue > aArgs;
+            TransformItems( SID_OPENDOC, *pSet, aArgs );
+            xModel->attachResource( aURL, aArgs );
+            impl_addToModelCollection(xModel);
+        }
+
+        pImp->bModelInitialized = sal_True;
+    }
+}
+
 void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 {
     sal_Bool bSetModifiedTRUE = sal_False;
@@ -1189,35 +1225,8 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
     {
-        ::rtl::OUString aTitle = GetTitle( SFX_TITLE_DETECT );
-
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
-        if ( pSalvageItem )
-        {
-            pImp->aTempName = pMedium->GetPhysicalName();
-            pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
-            pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
-            pMedium->GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetOrigURL() ) );
-        }
-        else
-        {
-            pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
-            pMedium->GetItemSet()->ClearItem( SID_DOCUMENT );
-        }
-
-        pMedium->GetItemSet()->ClearItem( SID_REFERER );
-        uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
-        if ( xModel.is() )
-        {
-            ::rtl::OUString aURL = GetMedium()->GetOrigURL();
-            SfxItemSet *pSet = GetMedium()->GetItemSet();
-            if ( !GetMedium()->IsReadOnly() )
-                pSet->ClearItem( SID_INPUTSTREAM );
-            uno::Sequence< beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *pSet, aArgs );
-            xModel->attachResource( aURL, aArgs );
-            impl_addToModelCollection(xModel);
-        }
+        GetTitle( SFX_TITLE_DETECT );
+        InitOwnModel_Impl();
     }
 
     pImp->nLoadedFlags |= nFlags;
@@ -1752,6 +1761,7 @@ void SfxObjectShell::SetHeaderAttributesForSourceViewHack()
 void SfxObjectShell::StartLoading_Impl()
 {
     pImp->nLoadedFlags = 0;
+    pImp->bModelInitialized = sal_False;
 }
 
 sal_Bool SfxObjectShell::IsPreview() const
