@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationcommandnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:11:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <delayevent.hxx>
 #include <tools.hxx>
 #include <nodetools.hxx>
-#include <generateevent.hxx>
 
 
 using namespace ::com::sun::star;
