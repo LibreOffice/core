@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-22 13:34:55 $
+#   last change: $Author: obo $ $Date: 2005-04-22 13:43:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,6 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #
 #*************************************************************************
-
 #
 # cwsanalyze.pl   - analyze child workspace, report findings
 # cwsintegrate.pl - integrate child workspace into master workspace
@@ -102,7 +101,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.7 $ ';
+my $id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
