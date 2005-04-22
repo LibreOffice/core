@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:23:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,6 +833,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     SfxApplication* pApp = SFX_APP();
     pImp->nLoadedFlags = 0;
+    pImp->bModelInitialized = sal_False;
 
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
     sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
@@ -883,6 +884,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             if ( !GetError() )
             {
                 pImp->nLoadedFlags = 0;
+                pImp->bModelInitialized = sal_False;
                 bOk = xStorage.is() && LoadOwnFormat( *pMed );
                 if ( bOk )
                 {
@@ -916,6 +918,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( GetError() == ERRCODE_NONE )
         {
             pImp->nLoadedFlags = 0;
+            pImp->bModelInitialized = sal_False;
             if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
@@ -945,6 +948,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             else
             {
                 bOk = ConvertFrom(*pMedium);
+                InitOwnModel_Impl();
             }
         }
     }
