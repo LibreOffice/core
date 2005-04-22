@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-10 18:39:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,27 +259,6 @@ Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
-    OUString aUserDir;
-    if ( GetCommandLineArgs()->GetUserDir( aUserDir ))
-    {
-        OUString aUserDirURL;
-
-        if ( osl::FileBase::getFileURLFromSystemPath( aUserDir, aUserDirURL ) == 0 )
-        {
-            // now must be a valid file URL. For best results make absolute using
-            OUString aProcessWorkDirURL;
-
-            oslProcessError nProcessError = osl_getProcessWorkingDir( &aProcessWorkDirURL.pData );
-            if ( nProcessError == osl_Process_E_None )
-            {
-                osl::FileBase::getAbsoluteFileURL( aProcessWorkDirURL, aUserDirURL, aUserDirURL );
-
-                // now override the bootstrap setting:
-                rtl::Bootstrap::set( OUString::createFromAscii( "UserInstallation" ), aUserDirURL );
-            }
-        }
-    }
-
     try
     {
         Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
@@ -322,7 +301,6 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         // read command line parameters
         ::rtl::OUString conDcp;
         ::rtl::OUString aClientDisplay;
-        ::rtl::OUString aUserDir;
         ::rtl::OUString aTmpString;
         sal_Bool        bHeadlessMode = sal_False;
 
@@ -334,7 +312,6 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 
         if ( pCmdLine->GetAcceptString( aTmpString ))
             conDcp = aTmpString;
-        pCmdLine->GetUserDir( aUserDir );
 
         // Headless mode for FAT Office
         bHeadlessMode   = pCmdLine->IsHeadless();
