@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usereventqueue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:10:43 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,22 @@ namespace presentation
                                                                 EventQueue& rEventQueue )
             {
                 // fire next event in given queue
-                if( rQueue.empty() )
-                    return false;
+                EventSharedPtr pEvent;
+                while( !rQueue.empty() )
+                {
+                    pEvent = rQueue.front();
+                    rQueue.pop();
 
-                EventSharedPtr pEvent( rQueue.front() );
-                rQueue.pop();
+                    // skip all inactive events (as the purpose of
+                    // nextEventFromQueue() is to activate the next
+                    // event, and events which return false on
+                    // isCharged() will never be activated by the
+                    // EventQueue)
+                    if( pEvent->isCharged() )
+                        return rEventQueue.addEvent( pEvent );
+                }
 
-                return rEventQueue.addEvent( pEvent );
+                return false; // no more (active) events in queue
             }
         }
 
