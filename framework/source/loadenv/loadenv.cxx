@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:11:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1734,6 +1734,9 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
        )
        return;
 
+    // SOLAR SAFE ->
+    ::vos::OClearableGuard aSolarLock1(Application::GetSolarMutex());
+
     Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
     sal_Bool bSystemWindow = pWindow->IsSystemWindow();
     sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
@@ -1741,12 +1744,13 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (!bSystemWindow && !bWorkWindow)
         return;
 
-    SystemWindow* pSystemWindow = (SystemWindow*)pWindow;
-    WorkWindow*   pWorkWindow   = (WorkWindow*  )pWindow;
-
     // dont overwrite this special state!
+    WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
     if (pWorkWindow->IsMinimized())
         return;
+
+    aSolarLock1.clear();
+    // <- SOLAR SAFE
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -1786,7 +1790,25 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         ::rtl::OUString sWindowState ;
         aWindowState >>= sWindowState;
         if (sWindowState.getLength())
+        {
+            // SOLAR SAFE ->
+            ::vos::OClearableGuard aSolarLock2(Application::GetSolarMutex());
+
+            // We have to retrieve the window pointer again. Because nobody can guarantee
+            // that the XWindow was not disposed inbetween .-)
+            // But if we get a valid pointer we can be sure, that it's the system window pointer
+            // we already checked and used before. Because nobody recylce the same uno reference for
+            // a new internal c++ implementation ... hopefully .-))
+            Window* pWindowCheck  = VCLUnoHelper::GetWindow(xWindow);
+            if (! pWindowCheck)
+                return;
+
+            SystemWindow* pSystemWindow = (SystemWindow*)pWindowCheck;
             pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
+
+            aSolarLock2.clear();
+            // <- SOLAR SAFE
+        }
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
