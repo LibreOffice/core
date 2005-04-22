@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:56:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ IMPL_CREATEINSTANCE( Collator_zh_stroke )
 IMPL_CREATEINSTANCE( Collator_zh_zhuyin )
 IMPL_CREATEINSTANCE( Collator_zh_TW_radical )
 IMPL_CREATEINSTANCE( Collator_zh_TW_stroke )
-IMPL_CREATEINSTANCE( Collator_ko_dict )
 IMPL_CREATEINSTANCE( Collator_ko_charset )
 IMPL_CREATEINSTANCE( Collator_zh_charset )
 IMPL_CREATEINSTANCE( Collator_ja_charset )
@@ -484,9 +483,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_zh_TW_stroke",
         "com.sun.star.i18n.Collator_zh_TW_stroke",
         &Collator_zh_TW_stroke_CreateInstance },
-    {   "com.sun.star.i18n.Collator_ko_dict",
-        "com.sun.star.i18n.Collator_ko_dict",
-        &Collator_ko_dict_CreateInstance },
     {   "com.sun.star.i18n.Collator_ko_charset",
         "com.sun.star.i18n.Collator_ko_charset",
         &Collator_ko_charset_CreateInstance },
