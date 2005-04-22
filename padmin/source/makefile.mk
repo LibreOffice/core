@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-04 15:08:33 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:36:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ APP1TARGET=spadmin.bin
 APP1DEPN+=$(SHL1TARGETN)
 
 APP1OBJS=\
+    $(OBJ)$/desktopcontext.obj  \
     $(OBJ)/pamain.obj
 
 APP1STDLIBS=	\
