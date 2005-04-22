@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:43:08 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,7 +1688,7 @@ void Desktop::Main()
         Application::AcquireSolarMutex( nAcquireCount );
 
     // call Application::Execute to process messages in vcl message loop
-    RTL_LOGFILE_TRACE( "PERFORMANCE - enter Application::Execute()" );
+    RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
     try
     {
@@ -1906,7 +1906,7 @@ IMPL_STATIC_LINK( Desktop, AsyncTerminate, void*, NOTINTERESTEDIN )
 
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
     OpenClients();
 
