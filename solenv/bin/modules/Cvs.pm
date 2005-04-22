@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-14 11:27:10 $
+#   last change: $Author: obo $ $Date: 2005-04-22 14:20:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -253,6 +253,32 @@ sub get_branch_rev
     pop @field;
     return join('.', @field);
 }
+
+sub get_latest_rev_on_branch
+{
+    my $self  = shift;
+    my $label = shift;
+
+    my $branch_rev = $self->get_branch_rev($label);
+    return 0 if !$branch_rev;
+
+    my $latest_rev_on_branch = 0;
+
+    foreach ( @{$self->get_sorted_revs()} ) {
+        if ( $_ =~ /^$branch_rev\.(\d+)$/ ) {
+            $latest_rev_on_branch = $_;
+        }
+    }
+
+    # No revision has ever been commited on this branch,
+    # return branch root.
+    if ( !$latest_rev_on_branch ) {
+        $branch_rev =~ /^(.*)\.(\d+)$/;
+        $latest_rev_on_branch = $1;
+    }
+    return $latest_rev_on_branch;
+}
+
 
 #### methods to manipulate archive ####
 
