@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-29 15:51:37 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:36:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -186,6 +186,7 @@ SHL2STDLIBS=    \
                 $(SALLIB)
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
+SHL2DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF2NAME=       $(SHL2TARGET)
 
