@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:59:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,12 +786,12 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     // in significant incorrect bounding rectangles for some charcters.
     Size aFntSize = aFnt.GetSize();
 
-    // HDU: workaround to avoid HUGE font sizes (#112783#)
+    // HDU: workaround to avoid HUGE font sizes and resulting problems (#112783#)
     long nScaleFactor = 1;
-    while( aFntSize.Height() > 400 * nScaleFactor )
+    while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;
 
-    aFnt.SetSize( Size( aFntSize.Width() * nScaleFactor, aFntSize.Height() * nScaleFactor ) );
+    aFnt.SetSize( Size( aFntSize.Width() / nScaleFactor, aFntSize.Height() / nScaleFactor ) );
     pGlyphDev->SetFont(aFnt);
 
     long nTextWidth = rDev.GetTextWidth(rText);
@@ -805,8 +805,8 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
 
     if (!aTmp.IsEmpty())
     {
-        aResult = Rectangle(aTmp.Left() / nScaleFactor, aTmp.Top() / nScaleFactor,
-                            aTmp.Right() / nScaleFactor, aTmp.Bottom() / nScaleFactor);
+        aResult = Rectangle(aTmp.Left() * nScaleFactor, aTmp.Top() * nScaleFactor,
+                            aTmp.Right() * nScaleFactor, aTmp.Bottom() * nScaleFactor);
         if (&rDev != pGlyphDev) /* only when rDev is a printer... */
         {
             long nGDTextWidth  = pGlyphDev->GetTextWidth(rText);
@@ -814,14 +814,14 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
                 nTextWidth != nGDTextWidth)
             {
                 aResult.Right() *= nTextWidth;
-                aResult.Right() /= nGDTextWidth / nScaleFactor;
+                aResult.Right() /= nGDTextWidth * nScaleFactor;
             }
         }
     }
 
     // move rectangle to match possibly different baselines
     // (because of different devices)
-    long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() / nScaleFactor;
+    long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
     aResult.Move(0, nDelta);
 
     pGlyphDev->Pop();
