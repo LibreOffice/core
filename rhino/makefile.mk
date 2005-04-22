@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-06 10:53:50 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:38:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,15 @@ TARGET=ooo_rhino
 
 TARFILE_NAME=rhino15R4
 TARFILE_ROOTDIR=rhino1_5R4
+
+ADDITIONAL_FILES=makefile.mk \
+    toolsrc/org/mozilla/javascript/tools/debugger/AbstractCellEditor.java \
+    toolsrc/org/mozilla/javascript/tools/debugger/AbstractTreeTableModel.java \
+    toolsrc/org/mozilla/javascript/tools/debugger/JTreeTable.java \
+    toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java \
+    toolsrc/org/mozilla/javascript/tools/debugger/TreeTableModelAdapter.java \
+    toolsrc/org/mozilla/javascript/tools/debugger/TreeTableModel.java
+
 PATCH_FILE_NAME=rhino1_5R4.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
