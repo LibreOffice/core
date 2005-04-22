@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:53:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ public:
     void                    setHaveSystemChildFrame() const
     { pXLib_->setHaveSystemChildFrame(); }
 
-    void            Init( Colormap hXColmap, Visual *pVisual );
+    void            Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNotification = true );
 
     void            SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT );
     bool            DispatchInternalEvent();
@@ -529,7 +529,8 @@ class VCL_DLLPUBLIC SalX11Display : public SalDisplay
 public:
              SalX11Display( Display* pDisp,
                          Visual* pVisual = NULL,
-                         Colormap aColMap = None );
+                         Colormap aColMap = None,
+                         bool bHandleStartupNotification = true );
     virtual ~SalX11Display();
 
     virtual long        Dispatch( XEvent *pEvent );
