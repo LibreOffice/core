@@ -1,7 +1,7 @@
 General dups:
 objects3dtoolbox, cube
 spelling, spelldialog
-drawchart, insertobjectchart
+drawchart, insertobjectchart, starchartdialog
 connector, connectortoolbox
 basicshapes, basicshapes.rectangle
 helpbookmark, addbookmark
@@ -23,3 +23,19 @@ dsbformletter, <mail-merge?>
 diagramdata (charts), <database data>
 diaauto, diaeffect, diaspeed, diatime
 animationeffects,animationmode
+
+# shapes:
+arrowshapes, arrowshapes.left-right-arrow
+calloutshapes.round-rectangular-callout, calloutshapes
+flowchartshapes.flowchart-alternate-process, basicshapes.round-quadrat
+flowchartshapes.flowchart-decision, basicshapes.diamond
+flowchartshapes.flowchart-extract, basicshapes.isosceles-triangle
+flowchartshapes.flowchart-magnetic-disk, basicshapes.can
+flowchartshapes.flowchart-preparation, basicshapes.hexagon
+fontworkshapetype.fontwork-circle-curve, basicshapes.ring
+fontworkshapetype.fontwork-stop, basicshapes.octagon
+fontworkshapetype.fontwork-triangle-down, flowchartshapes.flowchart-merge
+fontworkshapetype.fontwork-triangle-up, basicshapes.isosceles-triangle
+fontworkshapetype.fontwork-wave, flowchartshapes.flowchart-punched-tape
+starshapes, starshapes.star5.svg
+symbolshapes.smiley, symbolshapes
