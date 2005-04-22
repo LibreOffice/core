@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:37:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ class CommandLineArgs
         };
 
         CommandLineArgs();
-        CommandLineArgs( const ::vos::OExtCommandLine& aExtCmdLine );
+        CommandLineArgs( ::vos::OExtCommandLine& aExtCmdLine );
         CommandLineArgs( const ::rtl::OUString& aIPCThreadCmdLine );
 
         // generic methods to access parameter
@@ -214,7 +214,7 @@ class CommandLineArgs
         CommandLineArgs operator=( const CommandLineArgs& );
 
         sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
-        void                    ParseCommandLine_Impl( const ::vos::OExtCommandLine& );
+        void                    ParseCommandLine_Impl( ::vos::OExtCommandLine& );
         void                    ParseCommandLine_String( const ::rtl::OUString& );
         void                    ResetParamValues();
         sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
