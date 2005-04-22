@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:10:55 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,4 +213,19 @@ namespace rtl
 #define RTL_LOGFILE_CONTEXT_TRACE3( instance, frmt, arg1, arg2 , arg3 ) ((void)0)
 #endif
 
+// Normal RTL_LOGFILE_* entries will not make it into release versions,
+// TIMELOG is disabled a few versions prior relase build.
+//
+// We need some logs also in these builds, eg. for making performance regression tests.
+//
+// POLICY: Don't use RTL_LOGFILE_PRODUCT_* for your personal logging information.
+//         Be aware that these logs make it into the product shipped to customers.
+//         If you have good reasons for doing this, please contact product management.
+
+#define RTL_LOGFILE_PRODUCT_TRACE( string )  \
+            rtl_logfile_longTrace( "| : %s\n", string )
+#define RTL_LOGFILE_PRODUCT_CONTEXT( instance, name ) \
+            ::rtl::Logfile instance( name )
+
 #endif
+
