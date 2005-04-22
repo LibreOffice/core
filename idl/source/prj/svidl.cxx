@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svidl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
         SvFileStream aOutStm2( rFile2, STREAM_STD_READ );
         if( aOutStm1.GetError() == SVSTREAM_OK )
         {
-            void * pBuf1 = new BYTE[ BR ];
-            void * pBuf2 = new BYTE[ BR ];
+            BYTE * pBuf1 = new BYTE[ BR ];
+            BYTE * pBuf2 = new BYTE[ BR ];
             nC1 = aOutStm1.Read( pBuf1, BR );
             nC2 = aOutStm2.Read( pBuf2, BR );
             BOOL bOk = TRUE;
@@ -107,8 +107,8 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
                     nC2 = aOutStm2.Read( pBuf2, BR );
                 }
             }
-            delete pBuf1;
-            delete pBuf2;
+            delete[] pBuf1;
+            delete[] pBuf2;
         }
     }
     DirEntry aF2( rFile2 );
