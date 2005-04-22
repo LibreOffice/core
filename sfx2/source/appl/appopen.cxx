@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:19:53 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,7 +1497,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
-            RTL_LOGFILE_CONTEXT( aLog2, "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
+            RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
             if ( xDisp.is() )
                 xDisp->dispatch( aURL, aArgs );
         }
