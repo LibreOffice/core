@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:39:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,7 +2096,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeSelf" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeSelf" );
 
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -2182,7 +2182,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
                                         const   SEQUENCE< PROPERTYVALUE >&  rArgs   )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeAsURL" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeAsURL" );
 
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
