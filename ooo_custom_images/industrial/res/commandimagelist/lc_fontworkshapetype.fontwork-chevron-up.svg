@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24.000000px"
+   height="24.000000px"
+   id="svg1288"
+   sodipodi:version="0.32"
+   inkscape:version="0.41+cvs"
+   sodipodi:docbase="/home/jimmac"
+   sodipodi:docname="lc_fontworkshapetype.fontwork-chevron-up.svg"
+   inkscape:export-filename="/home/jimmac/Desktop/kde-uglies/lc_arrowshapes.circular-arrow.png"
+   inkscape:export-xdpi="90.000000"
+   inkscape:export-ydpi="90.000000">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient2218">
+      <stop
+         style="stop-color:#b6b6b6;stop-opacity:1.0000000;"
+         offset="0.0000000"
+         id="stop2220" />
+      <stop
+         style="stop-color:#f0f0f0;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop2222" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2218"
+       id="linearGradient2224"
+       x1="6.2532201"
+       y1="4.3914247"
+       x2="16.256456"
+       y2="19.500000"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(28.16367,-1.019354)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2218"
+       id="linearGradient2585"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(28.16367,-0.478759)"
+       x1="-19.154701"
+       y1="4.6617217"
+       x2="-14.197009"
+       y2="19.049505" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.098901"
+     inkscape:cx="6.4683270"
+     inkscape:cy="4.9304379"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1246"
+     inkscape:window-height="769"
+     inkscape:window-x="528"
+     inkscape:window-y="277" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         rdf:about=""
+         id="Work6">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           id="type9"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:nodetypes="ccccccc"
+       id="path2591"
+       d="M 4.0094063,22.513366 L 12.028218,17.738119 L 20.948020,22.423267 L 20.948020,6.5658415 L 12.028218,2.9618805 L 3.9193072,6.9262375 L 4.0094063,22.513366 z "
+       style="opacity:0.21142854;fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000" />
+    <path
+       style="fill:url(#linearGradient2585);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+       d="M 2.7480203,21.342079 L 11.217327,16.566832 L 20.137129,21.251980 L 20.137129,5.3945541 L 11.217327,1.7905931 L 2.6579212,5.7549502 L 2.7480203,21.342079 z "
+       id="path2581"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       sodipodi:nodetypes="ccccccc"
+       id="path2587"
+       d="M 3.5995346,20.022470 L 11.249632,15.627757 L 19.458624,19.939551 L 19.458624,5.8863812 L 11.249632,2.5696162 L 3.5166154,6.2180582 L 3.5995346,20.022470 z "
+       style="fill:none;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.79999971;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000" />
+  </g>
+</svg>
