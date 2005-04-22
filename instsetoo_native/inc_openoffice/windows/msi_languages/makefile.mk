@@ -61,6 +61,7 @@ ULFFILES = \
     LaunchCo.ulf \
     Property.ulf \
     RadioBut.ulf \
+    Nsis.ulf     \
     SIS.ulf      \
     UIText.ulf 
     
