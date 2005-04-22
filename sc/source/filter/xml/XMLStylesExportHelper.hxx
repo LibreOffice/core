@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:51:15 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ private:
     const rtl::OUString         sOnError;
     const rtl::OUString         sEventType;
     const rtl::OUString         sStarBasic;
+    const rtl::OUString         sScript;
     const rtl::OUString         sLibrary;
     const rtl::OUString         sMacroName;
 
