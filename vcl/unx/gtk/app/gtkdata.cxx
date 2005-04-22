@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:59:34 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol 
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
-    Init ( aCol, pVis );
+    Init ( aCol, pVis, false );
 }
 
 GtkSalDisplay::~GtkSalDisplay()
