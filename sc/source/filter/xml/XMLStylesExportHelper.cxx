@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:41:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,10 @@
 #include <comphelper/extract.hxx>
 #endif
 
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -180,6 +184,7 @@ ScMyValidationsContainer::ScMyValidationsContainer()
     sOnError(RTL_CONSTASCII_USTRINGPARAM("OnError")),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
     sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
+    sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
     sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
     sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
 {
@@ -482,13 +487,18 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
                         }
                         {
+                            // #i47525# for a script URL the type and the property name for the URL
+                            // are both "Script", for a simple macro name the type is "StarBasic"
+                            // and the property name is "MacroName".
+                            bool bScriptURL = SfxApplication::IsXScriptURL( aItr->sErrorTitle );
+
                             uno::Sequence<beans::PropertyValue> aSeq(3);
                             beans::PropertyValue* pArr(aSeq.getArray());
                             pArr[0].Name = sEventType;
-                            pArr[0].Value <<= sStarBasic;
+                            pArr[0].Value <<= bScriptURL ? sScript : sStarBasic;
                             pArr[1].Name = sLibrary;
                             pArr[1].Value <<= sEmptyString;
-                            pArr[2].Name = sMacroName;
+                            pArr[2].Name = bScriptURL ? sScript : sMacroName;
                             pArr[2].Value <<= aItr->sErrorTitle;
 
                             // 2) export the sequence
