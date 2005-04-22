@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-26 15:25:17 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:40:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,6 @@ USE_DEFFILE=TRUE
 
 LOCALIZE_ME=chinese_direction_tmpl.hrc
 
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -116,5 +115,6 @@ DEF1NAME=		$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
 
-$(SLO)$/chinese_dictionarydialog.obj: $(INCCOM)$/chinese_direction.hrc 
+$(SLO)$/chinese_dictionarydialog.obj: $(INCCOM)$/chinese_direction.hrc
+$(SLO)$/chinese_translationdialog.obj: $(INCCOM)$/chinese_direction.hrc
 
