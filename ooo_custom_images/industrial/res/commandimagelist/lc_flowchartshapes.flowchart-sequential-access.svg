@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24.000000px"
+   height="24.000000px"
+   id="svg1288"
+   sodipodi:version="0.32"
+   inkscape:version="0.41+cvs"
+   sodipodi:docbase="/home/jimmac/Desktop/kde-uglies"
+   sodipodi:docname="lc_flowchartshapes.flowchart-sequential-access.svg"
+   inkscape:export-filename="/home/jimmac/Desktop/kde-uglies/lc_arrowshapes.circular-arrow.png"
+   inkscape:export-xdpi="82.500000"
+   inkscape:export-ydpi="82.500000">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient2080">
+      <stop
+         id="stop2082"
+         offset="0.0000000"
+         style="stop-color:#8d8d8d;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2084"
+         offset="1.0000000"
+         style="stop-color:#f0f0f0;stop-opacity:1.0000000;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2218">
+      <stop
+         style="stop-color:#a2a2a2;stop-opacity:1.0000000;"
+         offset="0.0000000"
+         id="stop2220" />
+      <stop
+         style="stop-color:#f0f0f0;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop2222" />
+    </linearGradient>
+    <linearGradient
+       y2="49.646511"
+       x2="-3.7979760"
+       y1="55.719353"
+       x1="-18.948881"
+       gradientTransform="matrix(0.000000,1.192114,-1.192114,0.000000,100.8265,26.12576)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2302"
+       xlink:href="#linearGradient2218"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="73.594872"
+       x2="-2.2400904"
+       y1="78.890167"
+       x1="-19.331446"
+       gradientTransform="matrix(0.000000,1.155211,-1.136763,0.000000,130.7011,25.77759)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient1346"
+       xlink:href="#linearGradient2218"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="102.18482"
+       x2="-0.29239422"
+       y1="106.60042"
+       x1="-20.197088"
+       gradientTransform="matrix(0.000000,1.155211,-1.136763,0.000000,130.7011,25.77759)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2570"
+       xlink:href="#linearGradient2218"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="0.21568627"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.0000000"
+     inkscape:cx="16.693573"
+     inkscape:cy="-18.571777"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="785"
+     inkscape:window-height="646"
+     inkscape:window-x="496"
+     inkscape:window-y="370" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         rdf:about=""
+         id="Work6">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           id="type9"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       style="opacity:0.17142858;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       d="M 13.000000,2.2500000 C 6.9970000,2.2500000 2.1250000,7.1220000 2.1250000,13.125000 C 2.1250000,19.128000 6.9970000,23.750000 13.000000,23.750000 L 23.375000,23.750000 L 23.375000,19.750000 L 21.312500,19.750000 C 22.833882,17.879060 23.875000,15.722587 23.875000,13.125000 C 23.875000,7.1220000 19.003000,2.2500000 13.000000,2.2500000 z "
+       id="path2572"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       sodipodi:nodetypes="cccccccc"
+       id="path1508"
+       d="M 12.250000,1.0000000 C 6.2470000,1.0000000 1.3750000,5.8720000 1.3750000,11.875000 C 1.3750000,17.878000 6.2470000,22.500000 12.250000,22.500000 L 22.625000,22.500000 L 22.625000,18.500000 L 20.562500,18.500000 C 22.083882,16.629060 23.125000,14.472587 23.125000,11.875000 C 23.125000,5.8720000 18.253000,1.0000000 12.250000,1.0000000 z "
+       style="opacity:1.0000000;color:#000000;fill:url(#linearGradient2570);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;font-family:Bitstream Vera Sans;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible;display:inline;overflow:visible" />
+    <path
+       style="opacity:0.78285714;color:#000000;fill:none;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.99999982;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       d="M 12.249999,1.9555550 C 6.7805994,1.9555550 2.3416666,6.3944878 2.3416666,11.863887 C 2.3416666,17.333286 6.7805994,21.544442 12.249999,21.544442 L 21.702775,21.544442 L 21.702775,19.524998 L 18.261109,19.524998 C 20.459757,17.570363 22.158331,14.230577 22.158331,11.863887 C 22.158331,6.3944878 17.719398,1.9555550 12.249999,1.9555550 z "
+       id="path1808"
+       sodipodi:nodetypes="cccccccc" />
+  </g>
+</svg>
