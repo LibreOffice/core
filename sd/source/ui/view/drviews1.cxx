@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:17:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,6 +1032,9 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 }
             }
         }
+
+        if( pDrView )
+            pDrView->EndTextEdit();
 
         pActualPage = NULL;
 
