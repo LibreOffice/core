@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-22 13:35:09 $
+#   last change: $Author: obo $ $Date: 2005-04-22 13:43:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,6 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #
 #*************************************************************************
-
 #
 # cwsresync.pl - sync child workspace modules/files with newer
 #                milestones of master workspace
@@ -108,7 +107,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.16 $ ';
+my $id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
