@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:16:05 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:41:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -276,7 +276,8 @@ LIB2FILES= \
             $(SLB)$/salapp.lib
 SHL2TARGET=vclplug_gen$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB=ipure_x
-SHL2LIBS=  $(LIB2TARGET)
+SHL2LIBS=$(LIB2TARGET)
+SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 
 # libs for generic plugin
 SHL2STDLIBS=\
@@ -344,7 +345,8 @@ LIB3FILES= \
             $(SLB)$/dapp.lib
 SHL3TARGET=vclplug_dummy$(UPD)$(DLLPOSTFIX)
 SHL3IMPLIB=idummy_plug_
-SHL3LIBS=  $(LIB3TARGET)
+SHL3LIBS=$(LIB3TARGET)
+SHL3DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 
 # libs for dummy plugin
 SHL3STDLIBS=\
@@ -373,6 +375,7 @@ LIB4FILES=\
 SHL4TARGET=vclplug_gtk$(UPD)$(DLLPOSTFIX)
 SHL4IMPLIB=igtk_plug_
 SHL4LIBS=$(LIB4TARGET)
+SHL4DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 # libs for gtk plugin
 SHL4STDLIBS+=$(PKGCONFIG_LIBS:s/ -lpangoxft-1.0//)
 # hack for faked SO environment
