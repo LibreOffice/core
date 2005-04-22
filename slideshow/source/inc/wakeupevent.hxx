@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wakeupevent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:58:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace presentation
 
             virtual void dispose();
             virtual bool fire();
-            virtual bool wasFired() const;
+            virtual bool isCharged() const;
             virtual double getActivationTime( double nCurrentTime ) const;
 
             /// Start the internal timer

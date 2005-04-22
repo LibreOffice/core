@@ -2,9 +2,9 @@
  *
  *  $RCSfile: event.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:54:06 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,16 @@ namespace presentation
              */
             virtual bool fire() = 0;
 
-            /** Query whether this event has been fired.
+            /** Query whether this event is still charged, i.e. able
+                to fire.
+
+                Inactive events are ignored by the normal event
+                containers (EventQueue, UserEventQueue etc.), and no
+                explicit fire() is called upon them.
 
                 @return true, if this event has already been fired.
              */
-            virtual bool wasFired() const = 0;
+            virtual bool isCharged() const = 0;
 
             /** Query the activation time instant this event shall be
                 fired, if it was inserted at instant nCurrentTime into
