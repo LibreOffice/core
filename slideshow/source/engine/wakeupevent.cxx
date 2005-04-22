@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wakeupevent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:47:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,11 @@ namespace presentation
             return mrActivityQueue.addActivity( mpActivity );
         }
 
-        bool WakeupEvent::wasFired() const
+        bool WakeupEvent::isCharged() const
         {
-            // this event won't expire, we fire everytime we're re-inserted
-            // into the event queue.
-            return false;
+            // this event won't expire, we fire everytime we're
+            // re-inserted into the event queue.
+            return true;
         }
 
         double WakeupEvent::getActivationTime( double nCurrentTime ) const
