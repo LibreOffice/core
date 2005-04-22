@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:17:04 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,22 @@
 #endif
 
 /***************************************************************************
- * class KDEXLib                                                           *
+ * class SalKDEDisplay                                                     *
  ***************************************************************************/
 
-class KDEXLib : public SalXLib
+SalKDEDisplay::SalKDEDisplay( Display* pDisp, Visual* pVisual, Colormap aColMap )
+    : SalX11Display( pDisp, pVisual, aColMap, false )
 {
-public:
-    KDEXLib() : SalXLib() {}
-    virtual ~KDEXLib() {}
-    virtual void Init();
-};
+}
+
+SalKDEDisplay::~SalKDEDisplay()
+{
+    KStartupInfo::appStarted();
+}
+
+/***************************************************************************
+ * class KDEXLib                                                           *
+ ***************************************************************************/
 
 void KDEXLib::Init()
 {
@@ -174,39 +180,14 @@ void KDEXLib::Init()
 
     KCmdLineArgs::init( nFakeArgc, pFakeArgv, kAboutData );
 
-    // Do not let KApplication eat the DESKTOP_STARTUP_ID
-    char *pDesktopStartupId = NULL;
-    char *pEnv = getenv( "DESKTOP_STARTUP_ID" );
-    if ( pEnv )
-    {
-        pDesktopStartupId = strdup( pEnv );
-        unsetenv( "DESKTOP_STARTUP_ID" );
-    }
-
     KApplication::disableAutoDcopRegistration();
-    KStartupInfo::disableAutoAppStartedSending();
     new KApplication();
 
-    // Now set DESKTOP_STARTUP_ID for the VCL initialization
-    if ( pDesktopStartupId )
-    {
-        setenv( "DESKTOP_STARTUP_ID", pDesktopStartupId, 1 );
-        free( pDesktopStartupId );
-    }
-
     Display* pDisp = QPaintDevice::x11AppDisplay();
-    XVisualInfo aVI;
-    Colormap    aColMap;
-    int         nScreen = DefaultScreen( pDisp );
-    if( SalDisplay::BestVisual( pDisp, nScreen, aVI ) ) // DefaultVisual
-        aColMap = DefaultColormap( pDisp, nScreen );
-    else
-        aColMap = XCreateColormap( pDisp,
-                                   RootWindow( pDisp, nScreen ),
-                                   aVI.visual,
-                                   AllocNone );
 
-    SalDisplay *pSalDisplay = new SalX11Display( pDisp, aVI.visual, aColMap );
+    SalDisplay *pSalDisplay = new SalKDEDisplay( pDisp,
+            static_cast< Visual * >( QPaintDevice::x11AppVisual() ),
+            QPaintDevice::x11AppColormap() );
 
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
