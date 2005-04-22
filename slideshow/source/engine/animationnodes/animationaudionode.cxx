@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:05:02 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include <delayevent.hxx>
 #include <tools.hxx>
 #include <nodetools.hxx>
-#include <generateevent.hxx>
 
 
 using namespace ::com::sun::star;
@@ -225,7 +224,7 @@ namespace presentation
 
         bool AnimationAudioNode::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
         {
-            // TODO: for now we support only STOPAUDIO events.
+            // TODO(F2): for now we support only STOPAUDIO events.
             deactivate();
             return true;
         }
