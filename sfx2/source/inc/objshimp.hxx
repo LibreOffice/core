@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:23:24 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ struct SfxObjectShell_Impl
                         bOwnsStorage:1,
                         bNoBaseURL:1,
                         bInitialized:1,
-                        bSignatureErrorIsShown:1;
+                        bSignatureErrorIsShown:1,
+                        bModelInitialized:1; // whether the related model is initialized
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -253,6 +254,7 @@ struct SfxObjectShell_Impl
         , bNoBaseURL( sal_False )
         , bInitialized( sal_False )
         , bSignatureErrorIsShown( sal_False )
+        , bModelInitialized( sal_False )
     {}
     ~SfxObjectShell_Impl();
 
