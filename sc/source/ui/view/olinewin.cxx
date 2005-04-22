@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:25:28 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,8 @@ long ScOutlineWindow::GetOutputSizeEntry() const
 size_t ScOutlineWindow::GetLevelCount() const
 {
     const ScOutlineArray* pArray = GetOutlineArray();
-    return pArray ? (pArray->GetDepth() + 1) : 0;
+    size_t nLevelCount = pArray ? pArray->GetDepth() : 0;
+    return nLevelCount ? (nLevelCount + 1) : 0;
 }
 
 long ScOutlineWindow::GetLevelPos( size_t nLevel ) const
