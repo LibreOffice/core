@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:39:14 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,15 +1629,18 @@ void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
             Additional pitfall: points on pie charts and points on donut
             charts have to be accessed with different indexes (on donut
             charts, series index and point index are exchanged). */
-        for( sal_uInt16 nPointIdx = 0; nPointIdx < nPointCount; ++nPointIdx )
+        if( mxSeriesFmt.is() )
         {
-            // get the data point property set from the chart
-            ScfPropertySet aPointProp( lclGetPointPropSet( xDiagram, nTypeId, nSeriesIdx, nPointIdx ) );
-            // set the series formatting
-            mxSeriesFmt->Convert( aPointProp );
-            // set additional formatting for automatic point colors
-            if( bVarPoints && mxSeriesFmt->IsAutoArea() )
-                mxSeriesFmt->ConvertVarPoint( aPointProp, nPointIdx );
+            for( sal_uInt16 nPointIdx = 0; nPointIdx < nPointCount; ++nPointIdx )
+            {
+                // get the data point property set from the chart
+                ScfPropertySet aPointProp( lclGetPointPropSet( xDiagram, nTypeId, nSeriesIdx, nPointIdx ) );
+                // set the series formatting
+                mxSeriesFmt->Convert( aPointProp );
+                // set additional formatting for automatic point colors
+                if( bVarPoints && mxSeriesFmt->IsAutoArea() )
+                    mxSeriesFmt->ConvertVarPoint( aPointProp, nPointIdx );
+            }
         }
     }
     else
@@ -1649,16 +1652,19 @@ void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
         bool bSecondary = GetChartData().GetAxesSetId( mnGroupIdx ) == EXC_CHAXESSET_SECONDARY;
         aSeriesProp.SetProperty( EXC_CHPROP_AXIS, bSecondary ? SECONDARY_Y : PRIMARY_Y );
         // set the series formatting
-        mxSeriesFmt->Convert( aSeriesProp );
-        // own area formatting for every data point
-        if( bVarPoints && (nSeriesCount == 1) && mxSeriesFmt->IsAutoArea() )
+        if( mxSeriesFmt.is() )
         {
-            for( sal_uInt16 nPointIdx = 0; nPointIdx < nPointCount; ++nPointIdx )
+            mxSeriesFmt->Convert( aSeriesProp );
+            // own area formatting for every data point
+            if( bVarPoints && (nSeriesCount == 1) && mxSeriesFmt->IsAutoArea() )
             {
-                // get the data point property set from the chart
-                ScfPropertySet aPointProp( lclGetPointPropSet( xDiagram, nTypeId, nSeriesIdx, nPointIdx ) );
-                // set the data point formatting, nPointIdx used as automatic format index
-                mxSeriesFmt->ConvertVarPoint( aPointProp, nPointIdx );
+                for( sal_uInt16 nPointIdx = 0; nPointIdx < nPointCount; ++nPointIdx )
+                {
+                    // get the data point property set from the chart
+                    ScfPropertySet aPointProp( lclGetPointPropSet( xDiagram, nTypeId, nSeriesIdx, nPointIdx ) );
+                    // set the data point formatting, nPointIdx used as automatic format index
+                    mxSeriesFmt->ConvertVarPoint( aPointProp, nPointIdx );
+                }
             }
         }
     }
