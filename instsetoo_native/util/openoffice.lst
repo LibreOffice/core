@@ -2,6 +2,7 @@ OpenOffice
 {
 	Settings
 	{
+		downloadname    OOo_{productversion}_{os}_install_{languages}
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
@@ -21,6 +22,8 @@ OpenOffice
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
+			DOWNLOADBANNER	downloadbanner.bmp
+			DOWNLOADBITMAP	downloadbitmap.bmp
 	    }
 				active			1
 				compression		5
