@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:30:56 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,7 +860,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;
     aReadLock.unlock();
 
-    RTL_LOGFILE_CONTEXT( aLog2, "PERFORMANCE - Desktop::loadComponentFromURL()" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - Desktop::loadComponentFromURL()" );
     return LoadEnv::loadComponentFromURL(xThis, xSMGR, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
