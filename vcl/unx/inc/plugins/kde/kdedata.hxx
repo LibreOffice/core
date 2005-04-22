@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,13 @@ public:
     virtual void deInitNWF();
 };
 
+class SalKDEDisplay : public SalX11Display
+{
+public:
+    SalKDEDisplay( Display* pDisp, Visual* pVisual = NULL, Colormap aColMap = None );
+    virtual ~SalKDEDisplay();
+};
+
 class KDESalFrame : public X11SalFrame
 {
     static const int nMaxGraphics = 2;
@@ -95,9 +102,9 @@ class KDESalFrame : public X11SalFrame
     GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
 public:
-    KDESalFrame( SalFrame* pParent, ULONG nStyle ) :
-            X11SalFrame( pParent, nStyle ) {}
+    KDESalFrame( SalFrame* pParent, ULONG nStyle );
     virtual ~KDESalFrame();
+
     virtual SalGraphics* GetGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void UpdateSettings( AllSettings& rSettings );
@@ -110,6 +117,14 @@ public:
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
     virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
+};
+
+class KDEXLib : public SalXLib
+{
+public:
+    KDEXLib() : SalXLib() {}
+    virtual ~KDEXLib() {}
+    virtual void Init();
 };
 
 #endif // _VCL_KDEDATA_HXX
