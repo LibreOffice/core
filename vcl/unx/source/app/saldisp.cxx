@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:00:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,9 @@ SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
         mpFallbackFactory ( NULL ),
         pDisp_( display ),
         hRefWindow_( None ),
-        m_pWMAdaptor( NULL )
+        m_pWMAdaptor( NULL ),
+        m_pSnDisplay( NULL ),
+        m_pSnLauncheeContext( NULL )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
@@ -664,7 +666,8 @@ void SalDisplay::doDestruct()
         sn_launchee_context_complete( m_pSnLauncheeContext );
         sn_launchee_context_unref( m_pSnLauncheeContext );
     }
-    sn_display_unref( m_pSnDisplay );
+    if ( m_pSnDisplay )
+        sn_display_unref( m_pSnDisplay );
 #endif /* HAVE_LIBSN */
 
     if( IsDisplay() )
@@ -751,10 +754,10 @@ static int DisplayYield( int fd, SalX11Display *pDisplay )
   return TRUE;
 }
 
-SalX11Display::SalX11Display( Display *display, Visual *pVisual, Colormap aColMap )
+SalX11Display::SalX11Display( Display *display, Visual *pVisual, Colormap aColMap, bool bHandleStartupNotification )
         : SalDisplay( display, aColMap )
 {
-    Init( aColMap, pVisual );
+    Init( aColMap, pVisual, bHandleStartupNotification );
 
     pXLib_->Insert( ConnectionNumber( pDisp_ ),
                     this,
@@ -777,7 +780,7 @@ SalX11Display::~SalX11Display()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::Init( Colormap hXColmap, Visual *pVisual )
+void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNotification )
 {
     XVisualInfo aXVI;
 
@@ -1173,13 +1176,16 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual )
     pIntegrator->Acquire();
 
 #ifdef HAVE_LIBSN
-    m_pSnDisplay = sn_display_new( pDisp_, SnErrorTrapPush, SnErrorTrapPop );
-    m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
+    if ( bHandleStartupNotification )
+    {
+        m_pSnDisplay = sn_display_new( pDisp_, SnErrorTrapPush, SnErrorTrapPop );
+        m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
 #  ifdef DBG_UTIL
-    if( !m_pSnLauncheeContext )
-         fprintf( stderr, "Failed to get launch feedback info from "
-          "DESKTOP_LAUNCH_ID/DESKTOP_LAUNCH_WINDOW\n" );
+        if( !m_pSnLauncheeContext )
+            fprintf( stderr, "Failed to get launch feedback info from "
+                    "DESKTOP_LAUNCH_ID/DESKTOP_LAUNCH_WINDOW\n" );
 #  endif /* DBG_UTIL */
+    }
 #endif /* HAVE_LIBSN */
 
 #ifdef DBG_UTIL
@@ -2456,7 +2462,7 @@ void SalX11Display::Yield( BOOL bWait )
         m_pSnLauncheeContext = NULL;
     }
 
-    if( sn_display_process_event( m_pSnDisplay, &aEvent ) )
+    if( m_pSnDisplay && sn_display_process_event( m_pSnDisplay, &aEvent ) )
         return;
 #endif /* HAVE_LIBSN */
 
