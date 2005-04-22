@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:17:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include <kglobal.h>
 #include <kmainwindow.h>
 #include <kmenubar.h>
+#include <kstartupinfo.h>
 #include <kstyle.h>
 
 #undef Region
@@ -1710,6 +1711,13 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 // -----------------------------------------------------------------------
 // KDESalFrame implementation
 // -----------------------------------------------------------------------
+
+KDESalFrame::KDESalFrame( SalFrame* pParent, ULONG nStyle ) :
+    X11SalFrame( pParent, nStyle )
+{
+    if ( !pParent )
+        KStartupInfo::appStarted();
+}
 
 /** Helper function to convert colors.
 */
