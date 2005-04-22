@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-03 20:00:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #endif
 #ifndef _PAD_HELPER_HXX_
 #include <helper.hxx>
+#endif
+
+#ifndef _PADMIN_DESKTOPCONTEXT_HXX_
+#include <desktopcontext.hxx>
 #endif
 
 #ifndef _CPPUHELPER_BOOTSTRAP_HXX_
@@ -161,6 +165,10 @@ void MyApp::Main()
         exit( 1 );
     }
 
+    // Detect desktop environment - need to do this as early as possible
+    com::sun::star::uno::setCurrentContext(
+        new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+
     /*
      *  Create UCB.
      */
@@ -180,6 +188,17 @@ void MyApp::Main()
     }
 #endif
 
+    /*
+     * Initialize the Java UNO AccessBridge if accessibility is turned on
+     */
+
+    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+    {
+        BOOL bQuitApp;
+        if( !InitAccessBridge( true, bQuitApp ) )
+            if( bQuitApp )
+                return;
+    }
 
     // initialize test-tool library (if available)
     tools::InitTestToolLib();
