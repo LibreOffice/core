@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:56:59 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,8 +565,9 @@ void ScXMLContentValidationContext::EndElement()
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
-            if ( aValues[i].Name.equalsAsciiL( "MacroName",
-                                                    sizeof("MacroName")-1 ) )
+            // #i47525# must allow "MacroName" or "Script"
+            if ( aValues[i].Name.equalsAsciiL( "MacroName", sizeof("MacroName")-1 ) ||
+                 aValues[i].Name.equalsAsciiL( "Script", sizeof("Script")-1 ) )
             {
                 aValues[i].Value >>= sErrorTitle;
                 break;
