@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delayevent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:14:29 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace presentation
 
             virtual bool fire()
             {
-                if( !wasFired() )
+                if( isCharged() )
                 {
                     mbWasFired = true;
 
@@ -101,9 +101,9 @@ namespace presentation
                 return true;
             }
 
-            virtual bool wasFired() const
+            virtual bool isCharged() const
             {
-                return mbWasFired;
+                return !mbWasFired;
             }
 
             virtual double getActivationTime( double nCurrentTime ) const
@@ -121,12 +121,29 @@ namespace presentation
             bool    mbWasFired;
         };
 
+        /** Generate delay event
+
+            @param rFunctor
+            Functor to call when the event fires.
+
+            @param nTimeout
+            Timeout in seconds, to wait until functor is called.
+
+            @return generated delay event
+         */
         template< typename Functor > EventSharedPtr makeDelay( const Functor&   rFunctor,
                                                                double           nTimeout    )
         {
             return EventSharedPtr( new Delay< Functor >(rFunctor, nTimeout) );
         }
 
+        /** Generate immediate event
+
+            @param rFunctor
+            Functor to call when the event fires.
+
+            @return generated immediate event.
+         */
         template< typename Functor > EventSharedPtr makeEvent( const Functor&   rFunctor )
         {
             return EventSharedPtr( new Delay< Functor >(rFunctor, 0.0) );
