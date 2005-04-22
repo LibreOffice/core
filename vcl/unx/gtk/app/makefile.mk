@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:09:09 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:32:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,11 +92,6 @@ SLOFILES=\
             $(SLO)$/gtkdata.obj	\
             $(SLO)$/gtkinst.obj	\
             $(SLO)$/gtksys.obj
-
-.IF "$(WITH_LIBSN)"=="YES"
-CDEFS+=-DHAVE_LIBSN
-CFLAGS+=$(LIBSN_CFLAGS)
-.ENDIF
 
 .ELSE # "$(ENABLE_GTK)" != ""
 
