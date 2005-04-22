@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-20 11:45:44 $
+#   last change: $Author: obo $ $Date: 2005-04-22 14:39:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 
 package installer::download;
 
+use File::Spec;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -415,6 +416,8 @@ sub put_banner_bmp_into_template
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
+    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $$completefilenameref =~ s/\//\\/g; }
+
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_banner_bmp_into_template"); }
 
     replace_one_variable($templatefile, "BANNERBMPPLACEHOLDER", $$completefilenameref);
@@ -434,6 +437,8 @@ sub put_welcome_bmp_into_template
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
+    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $$completefilenameref =~ s/\//\\/g; }
+
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_welcome_bmp_into_template"); }
 
     replace_one_variable($templatefile, "WELCOMEBMPPLACEHOLDER", $$completefilenameref);
@@ -450,6 +455,8 @@ sub put_setup_ico_into_template
     my $filename = "downloadsetup.ico";
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+
+    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $$completefilenameref =~ s/\//\\/g; }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_setup_ico_into_template"); }
 
@@ -534,6 +541,9 @@ sub get_file_list
 
         my $oneline = " " . "SetOutPath" . " " . "\"\$INSTDIR" . $relativedir . "\"" . "\n";
 
+        if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+            $oneline =~ s/\//\\/g;
+        }
         push(@filelist, $oneline);
 
         # Collecting all files in the specific directory
@@ -545,6 +555,9 @@ sub get_file_list
             my $onefile = ${$files}[$j];
 
             my $fileline = "  " . "File" . " " . "\"" . $onefile . "\"" . "\n";
+            if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+                $fileline =~ s/\//\\/g;
+            }
             push(@filelist, $fileline);
         }
     }
@@ -801,8 +814,8 @@ sub copy_and_translate_nsis_language_files
 {
     my ($nsispath, $localnsisdir, $languagesarrayref, $mlffile) = @_;
 
-    my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language files" . $installer::globals::separator;
-    my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
+    my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language\ files" . $installer::globals::separator;
+    my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern\ UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
 
     for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
@@ -813,12 +826,14 @@ sub copy_and_translate_nsis_language_files
         my $sourcepath = $nlffilepath . $nsislanguage . "\.nlf";
         if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
         my $nlffilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nlf";
+        if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $nlffilename =~ s/\//\\/g; }
         installer::systemactions::copy_one_file($sourcepath, $nlffilename);
 
         # Copying the nsh file
         $sourcepath = $nshfilepath . $nsislanguage . "\.nsh";
         if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
         my $nshfilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nsh";
+        if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $nshfilename =~ s/\//\\/g; }
         installer::systemactions::copy_one_file($sourcepath, $nshfilename);
 
         # Changing the macro name in nsh file: MUI_LANGUAGEFILE_BEGIN -> MUI_LANGUAGEFILE_PACK_BEGIN
@@ -854,6 +869,8 @@ sub put_output_path_into_template
 {
     my ($templatefile, $downloaddir) = @_;
 
+    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $downloaddir =~ s/\//\\/g; }
+
     replace_one_variable($templatefile, "OUTPUTDIRPLACEHOLDER", $downloaddir);
 }
 
@@ -863,12 +880,30 @@ sub put_output_path_into_template
 
 sub get_path_to_nsis_sdk
 {
+    my $vol;
+    my $dir;
+    my $file;
     my $nsispath = "";
 
-    if ( $ENV{'ENV_ROOT'} ) { $nsispath = $ENV{'ENV_ROOT'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable \"ENV_ROOT\" not set!", "get_path_to_nsis_sdk"); }
+    # do we have nsis already in path ?
+    @paths = split(/:/, $ENV{'PATH'});
+    foreach $paths (@paths) {
+        $nsispath = $paths . "/nsis";
+        if ( -x $nsispath ) { $nsispath = $paths; break } else { $nsispath = ""; }
+    }
 
-    $nsispath = $nsispath . $installer::globals::separator . "NSIS";
+    if ( $nsispath eq "" )
+    {
+        if ( $ENV{'ENV_ROOT'} ) { $nsispath = $ENV{'ENV_ROOT'}; }
+        else { installer::exiter::exit_program("ERROR: no path for NSIS found or Environment variable \"ENV_ROOT\" not set!", "get_path_to_nsis_sdk"); }
+
+        $nsispath = $nsispath . $installer::globals::separator . "NSIS";
+    }
+    else
+    {
+        ($vol, $dir, $file) = File::Spec->splitpath( $nsispath );
+        $nsispath = $dir;
+    }
 
     if ( $ENV{'NSISSDK_SOURCE'} ) { $nsispath = $ENV{'NSISSDK_SOURCE'}; }   # overriding the NSIS SDK with NSISSDK_SOURCE
 
@@ -883,7 +918,7 @@ sub call_nsis
 {
     my ( $nsispath, $nsifile ) = @_;
 
-    my $makensisexe = $nsispath . $installer::globals::separator . "makensis.exe";
+    my $makensisexe = "guw.pl " . $nsispath . $installer::globals::separator . "makensis.exe";
 
     installer::logger::print_message( "... starting $makensisexe ... \n" );
 
