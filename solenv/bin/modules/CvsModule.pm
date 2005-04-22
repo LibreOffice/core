@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-13 18:10:30 $
+#   last change: $Author: obo $ $Date: 2005-04-22 13:34:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -885,6 +885,105 @@ sub strip_module_from_path
             }
         }
     }
+}
+
+#
+# Procedure does the same as "cvs view",
+# extracted to the module in order to provide
+# consistency for future implementations
+#
+sub view {
+    my $self    = shift;
+    my $path    = shift;
+    my $saved_cwd = cwd();
+    if ( !chdir($path) ) {
+        carp("ERROR: can't chdir() to $path");
+        return "cantchdir";
+    }
+    cwd();
+    my $module     = $self->module();
+    my $cvs_binary = $self->cvs_binary();
+
+    my $verbose = $self->verbose();
+    my ($info, $seen,  @field);
+    my $line = "$cvs_binary status -R";
+    open (CVSVIEW , "$line 2>&1 |") or carp("ERROR: can't run $line");
+
+    $seen = 0;
+
+    # check error
+    if ( $? >> 8  ) {
+        # don't know if cvs status ever returns with status != 0
+        close(CVSVIEW);
+        carp("ERROR: cvs view failed!\n");
+    }
+
+    while(<CVSVIEW>) {
+        $line = $_;
+        chomp $line;
+
+        if ( $line =~ /^\?/ ) {
+            print ("$line\n");
+            next;
+        }
+
+        if ( $line =~ /Needs\sCheckout/o ) {
+            $info = "needs checkout";
+            next;
+        }
+
+        if ( $line =~ /Needs\sPatch/o ) {
+            $info = "needs patch";
+            next;
+        }
+
+        if ( $line =~ /Needs\sMerge/o ) {
+            $info = "needs merge";
+            next;
+        }
+
+        if ( $line =~ /Locally\sAdded/o ) {
+            @field = split /\s+/, $line;
+            print "$field[1]: locally added\n";
+            next;
+        }
+
+        if ( $line =~ /Locally\sModified/o ) {
+            $info = "locally modified";
+            next;
+        }
+
+        if ( $line =~ /Locally\sRemoved/o ) {
+            $info = "locally removed";
+            next;
+        }
+
+        if ($line =~ /conflicts/o ) {
+            $info = "conflicts on merge";
+            next;
+        }
+
+        if ($info && $line =~ /Repository/o ) {
+            @field = split /\s+/, $line;
+            print "$field[4]: $info\n";
+            $info = 0;
+            next;
+        }
+
+        if ( $line =~/==============/ ) {
+            $info = 0;
+            $seen = 1;
+        }
+    }
+    close (CVSVIEW);
+    chdir($saved_cwd);
+    cwd();
+
+    if ( !$seen ) {
+        print STDERR "potential \"cvs view\" failure, please use \"cvs status\"\n";
+        print STDERR "to examine error condition\n";
+    }
+
 }
 
 ####
