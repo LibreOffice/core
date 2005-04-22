@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-25 12:50:38 $
+#   last change: $Author: obo $ $Date: 2005-04-22 13:35:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.15 $ ';
+my $id_str = ' $Revision: 1.16 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -155,7 +155,7 @@ my $cws = get_and_verify_cws();
 if ( $milestone ) {
     verify_milestone_or_exit($cws, $milestone);
 }
-my @action_list = parse_args($cws, $dir, @args);
+my @action_list = parse_args($cws, $dir, $milestone, @args);
 walk_action_list($cws, $dir, $milestone, @action_list);
 log_stats();
 exit(0);
@@ -247,6 +247,12 @@ sub parse_options
         exit(1);
     }
 
+    if ( $milestone eq 'HEAD' && $opt_link ) {
+        print_error("'HEAD' is not a valid milestone for '-l milestone' option.", 0);
+        usage();
+        exit(1);
+    }
+
     $dir = $dir ? $dir : cwd();
 
     # check directory
@@ -264,8 +270,9 @@ sub parse_options
 # and fill the action_list
 sub parse_args
 {
-    my $cws  = shift;
-    my $dir  = shift;
+    my $cws       = shift;
+    my $dir       = shift;
+    my $milestone = shift;
     my @args = @_;
 
     # For each entry in the args list we'll prepare a corresponding entry
@@ -302,6 +309,15 @@ sub parse_args
             }
         }
 
+        # If HEAD is specified as milestone, make sure that every argument is really a file.
+        if ( $milestone eq 'HEAD' ) {
+            foreach ( @args ) {
+                if ( ! -f $_ ) {
+                    print_error("Only files are allowed as argument for resyncing against HEAD", 0);
+                    print_error("'$_' is not a file: $!", 1);
+                }
+            }
+        }
 
         if ( is_in_module($dir) ) {
             # check arguments for inside module operation
@@ -335,6 +351,7 @@ sub parse_args
             }
         }
     }
+
     return @action_list;
 }
 
@@ -536,12 +553,36 @@ sub resync_file_action
     my $file                = shift;
 
     my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
-    my $milestone_tag = get_milestone_tag($cws, $qualified_milestone);
+    my $resync_tag;
+    if ( $qualified_milestone eq 'HEAD' ) {
+        $resync_tag = $master_branch_tag ? $master_branch_tag : 'HEAD';
+    }
+    else {
+        $resync_tag = get_milestone_tag($cws, $qualified_milestone);
+    }
     my $cvs_archive = get_cvs_archive($file);
 
     my $tags_ref = $cvs_archive->get_tags();
     my $old_rev = $tags_ref->{$cws_anchor_tag};
-    my $new_rev = $tags_ref->{$milestone_tag};
+    my $new_rev;
+    if ( $qualified_milestone eq 'HEAD' ) {
+        if ( $resync_tag eq 'HEAD' ) {
+            # resyncing against trunk
+            $new_rev = $cvs_archive->get_head();
+        }
+        else {
+            # resycing against MWS on branch
+            $new_rev = $cvs_archive->get_latest_rev_on_branch($resync_tag);
+        }
+        # check if file is still alive on MWS
+        if ( $cvs_archive->get_data_by_rev->{$new_rev}->{STATE} eq 'dead' ) {
+            $new_rev = undef;
+        }
+
+    }
+    else {
+        $new_rev = $tags_ref->{$resync_tag};
+    }
 
     # File has been removed on master
     if ( !$new_rev ) {
@@ -549,12 +590,12 @@ sub resync_file_action
     }
 
     # skip files which are up to date with milestone
-    if ( $old_rev eq $new_rev ) {
+    if ( $new_rev && ($old_rev eq $new_rev) ) {
         print_message("\tResyncing '$file': skip (old rev. and new rev. are identical).");
         return;
     }
 
-    my $rc = merge_file($cws_anchor_tag, $milestone_tag, [$file, $old_rev, $new_rev], $cvs_archive);
+    my $rc = merge_file($cws_anchor_tag, $resync_tag, [$file, $old_rev, $new_rev], $cvs_archive);
     $global_stats{$rc}++;
     return;
 }
@@ -916,6 +957,7 @@ sub relink_cws_action
     }
 
     print_message("Updating solver.");
+    my @added_modules = $cws->modules();
     if ( $mws_accessible )
     {
         require sync_dir; import sync_dir;
@@ -988,6 +1030,7 @@ sub relink_cws_action
         }
         # copy all wanted output trees
         $sync_dir::do_keepzip = 1;
+        sync_dir::set_excludelist( \@added_modules );
         my $btarget = "finalize";
         foreach my $platform ( @found_platforms )
         {
@@ -1058,7 +1101,6 @@ sub relink_cws_action
     print_message("Recreating CWS source tree with MWS milestone '$milestone'.");
     if ( $mws_accessible ) {
         # all but added modules
-        my @added_modules = $cws->modules();
         my %modules_hash =();
         print "debug: added modules: @added_modules\n" if $is_debug;
         $result = opendir( SOURCE, "$mws_location/".$new_master."/src.".$milestone);
@@ -1585,6 +1627,11 @@ sub verify_milestone_or_exit
     my $cws = shift;
     my $qualified_milestone = shift;
 
+    # HEAD is not a milestone but a valid resync target for single files.
+    # This is useful if you want to resync a single file against the latest
+    # version on a MWS even if that file is not yet part of a valid milestone.
+    return if $qualified_milestone eq 'HEAD';
+
     my ($master, $milestone);
     my $invalid = 0;
 
@@ -1768,6 +1815,8 @@ sub usage
     print STDERR "Usage:\n";
     print STDERR "cwsresync [-h]" . $sw_force_update .
                  "[-d dir] -m <milest.> <all|mod.|dir|file> [mod.|dir|file ...]\n";
+    print STDERR "cwsresync [-h]" . $sw_force_update .
+                 "[-d dir] -m HEAD <file> [file ...]\n";
     print STDERR "cwsresync [-h] [-d dir] -r|-c <all|module|dir|file> [module|dir|file ...]\n";
     print STDERR "cwsresync [-h]" . $sw_skip_checkout ."-l <milestone>\n";
     print STDERR "Synchronize child workspace mod./dirs/files ";
