@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:54:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,8 @@ namespace presentation
 
         bool EventQueue::addEvent( const EventSharedPtr& rEvent )
         {
-            OSL_ENSURE( rEvent.get() != NULL, "EventQueue::addEvent: event ptr NULL" );
-
-            if( rEvent.get() == NULL )
-                return false;
+            ENSURE_AND_RETURN( rEvent.get() != NULL,
+                               "EventQueue::addEvent: event ptr NULL" );
 
             // prepare entry
             EventEntry entry;
@@ -162,43 +160,61 @@ namespace presentation
                 EventEntry event( maEvents.top() );
                 maEvents.pop();
 
-                try
+                // only process event, if it is still 'charged',
+                // i.e. the fire() call effects something. This is
+                // used when e.g. having events registered at multiple
+                // places, which should fire only once: after the
+                // initial fire() call, those events become inactive
+                // and return false on isCharged. This frees us from
+                // the need to prune queues of those inactive shells.
+                if( event.pEvent->isCharged() )
+                {
+                    try
+                    {
+#if OSL_DEBUG_LEVEL > 0
+                        VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
+                                       event.pEvent.get(),
+                                       event.pEvent->getActivationTime(0.0) );
+#endif
+
+                        event.pEvent->fire();
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // catch anything here, we don't want
+                        // to leave this scope under _any_
+                        // circumstance. Although, do _not_
+                        // reinsert an activity that threw
+                        // once.
+
+                        // NOTE: we explicitely don't catch(...) here,
+                        // since this will also capture segmentation
+                        // violations and the like. In such a case, we
+                        // still better let our clients now...
+                        OSL_TRACE( "::presentation::internal::EventQueue: Event threw a uno::Exception, action might not have been fully performed" );
+                    }
+                    catch( SlideShowException& )
+                    {
+                        // catch anything here, we don't want
+                        // to leave this scope under _any_
+                        // circumstance. Although, do _not_
+                        // reinsert an activity that threw
+                        // once.
+
+                        // NOTE: we explicitely don't catch(...) here,
+                        // since this will also capture segmentation
+                        // violations and the like. In such a case, we
+                        // still better let our clients now...
+                        OSL_TRACE( "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
+                    }
+                }
+                else
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
+                    VERBOSE_TRACE( "Ignoring discharged event: unknown (0x%X), timeout was: %f",
                                    event.pEvent.get(),
                                    event.pEvent->getActivationTime(0.0) );
 #endif
-
-                    event.pEvent->fire();
-                }
-                catch( uno::Exception& )
-                {
-                    // catch anything here, we don't want
-                    // to leave this scope under _any_
-                    // circumstance. Although, do _not_
-                    // reinsert an activity that threw
-                    // once.
-
-                    // NOTE: we explicitely don't catch(...) here,
-                    // since this will also capture segmentation
-                    // violations and the like. In such a case, we
-                    // still better let our clients now...
-                    OSL_TRACE( "::presentation::internal::EventQueue: Event threw a uno::Exception, action might not have been fully performed" );
-                }
-                catch( SlideShowException& )
-                {
-                    // catch anything here, we don't want
-                    // to leave this scope under _any_
-                    // circumstance. Although, do _not_
-                    // reinsert an activity that threw
-                    // once.
-
-                    // NOTE: we explicitely don't catch(...) here,
-                    // since this will also capture segmentation
-                    // violations and the like. In such a case, we
-                    // still better let our clients now...
-                    OSL_TRACE( "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
                 }
             }
 
