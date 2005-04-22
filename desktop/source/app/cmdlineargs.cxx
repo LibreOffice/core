@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:47:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,8 @@
 #endif
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
-#include <uno/current_context.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace rtl;
@@ -108,7 +105,7 @@ CommandLineArgs::CommandLineArgs()
 }
 
 // intialize class with command line parameters from process environment
-CommandLineArgs::CommandLineArgs( const ::vos::OExtCommandLine& aExtCmdLine )
+CommandLineArgs::CommandLineArgs( ::vos::OExtCommandLine& aExtCmdLine )
 {
     ResetParamValues();
     ParseCommandLine_Impl( aExtCmdLine );
@@ -123,16 +120,15 @@ CommandLineArgs::CommandLineArgs( const ::rtl::OUString& aCmdLineArgs )
 
 // ----------------------------------------------------------------------------
 
-void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtCmdLine )
+void CommandLineArgs::ParseCommandLine_Impl( ::vos::OExtCommandLine& aCmdLine )
 {
-    ::vos::OExtCommandLine aCmdLine;
-
     sal_uInt32      nCount = aCmdLine.getCommandArgCount();
     ::rtl::OUString aDummy;
     String          aArguments;
 
-    Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
+    Reference<XMultiServiceFactory> xMS(comphelper::getProcessServiceFactory(), UNO_QUERY);
+    OSL_ENSURE(xMS.is(), "CommandLineArgs: no ProcessServiceFactory.");
+
     Reference< XExternalUriReferenceTranslator > xTranslator(
         xMS->createInstance(
         OUString::createFromAscii(
