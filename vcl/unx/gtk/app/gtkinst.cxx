@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:08:47 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,10 @@
 #include <plugins/gtk/gtkframe.hxx>
 #include <plugins/gtk/gtkobject.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
+#include <stdio.h>
 #endif
 
 GtkHookedYieldMutex::GtkHookedYieldMutex()
@@ -163,6 +165,28 @@ extern "C"
 #endif
             return NULL;
         }
+        /*  #i47797# as long as we do not have a working atk bridge
+         *  prevent atk from interfering with the java accessibility bridge
+         */
+        #if ! defined HAVE_ATK_ACCESSIBILITY_BRIDGE
+        const gchar* pGtkModules = g_getenv( "GTK_MODULES" );
+        if( pGtkModules )
+        {
+            rtl::OString aModules( pGtkModules );
+            rtl::OStringBuffer aModulesOut( aModules.getLength() );
+            sal_Int32 nIndex = 0;
+            while( nIndex >= 0 )
+            {
+                rtl::OString aToken = aModules.getToken( 0, ':', nIndex );
+                if( aToken.equals( "gail" ) ||
+                    aToken.equals( "atk-bridge" ) )
+                    continue;
+                aModulesOut.append( ':' );
+                aModulesOut.append( aToken );
+            }
+            g_setenv( "GTK_MODULES", aModulesOut.getStr(), TRUE );
+        }
+        #endif
 
         GtkYieldMutex *pYieldMutex;
 
