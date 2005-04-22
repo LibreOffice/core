@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-13 17:25:52 $
+#   last change: $Author: obo $ $Date: 2005-04-22 13:34:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.6 $ ';
+my $id_str = ' $Revision: 1.7 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -704,18 +704,23 @@ sub extract_taskids
 {
     # Task ids can be of the form:
     #     #12345#,#4711# pr #12345,4711#
-    # Optionally task ids may be prefixed with 'i' for issuezilla-
+    # Optionally task ids may be prefixed with
+    #   'i' for issuezilla tasks
+    #   'b' for for bugtraq+ tasks
+    #   'm' for mozilla bugzilla tasks
+    #   'g' for gnome bugzilla tasks
+    #   'e' for evolution bugzilla tasks
     # We may have to cope with a bit of white space, too.
     my $comment = shift;
 
     my @ids;
     my @candidates;
-    if ( @candidates = ($comment =~ /#([i\d\s,]+)#/gi) ) {
+    if ( @candidates = ($comment =~ /#([ibmge\d\s,]+)#/gi) ) {
         foreach my $candidate (@candidates) {
             my @field = split(/,/, $candidate);
             foreach (@field) {
                 tr/ //d;
-                push(@ids, $_) if /^i?\d+$/i ;
+                push(@ids, $_) if /^[ibmge]?\d+$/i ;
             }
         }
     }
