@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-21 15:33:09 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 15:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,8 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     pthread_mutex_lock(&g_mutex);
 
     /* output message buffer */
-    OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
+    if ( !getenv("DISABLE_SAL_DBGBOX") || 0 != f )
+        OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
     /* output backtrace */
     osl_diagnose_backtrace_Impl(f);
