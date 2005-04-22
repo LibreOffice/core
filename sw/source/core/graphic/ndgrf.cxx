@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:52:13 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 11:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,8 +867,19 @@ BOOL SwGrfNode::SavePersistentData()
     if( HasStreamName() && !SwapIn() )
         return FALSE;
 
-    if( HasStreamName() )
-        DelStreamName();
+    // --> OD 2005-04-19 #i44367#
+    // Do not delete graphic file in storage, because the graphic file could
+    // be referenced by other graphic nodes.
+    // Because it's hard to detect this case here and it would only fix
+    // one problem with shared graphic files - there are also problems,
+    // a certain graphic file is referenced by two independent graphic nodes,
+    // brush item or drawing objects, the stream isn't no longer removed here.
+    // To do this stuff correct, a reference counting on shared streams
+    // inside one document have to be implemented.
+    // Important note: see also fix for #i40014#
+//    if( HasStreamName() )
+//        DelStreamName();
+    // <--
 
     // Und in TempFile rausswappen
     return (BOOL) SwapOut();
