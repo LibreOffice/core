@@ -19,19 +19,13 @@ To Do:
 	From toolbar->Customize ...
 		+ sorted by least work to 100% first
 
-	** Controls [ all Controls toolbars ]:
-		+ Auto pilots on/off: lc_usewizards.png
 	** XML Form controls
 		+ Data navigator: lc_showdatanavigator.png
 	** Page preview
 		+ Book preview: lc_showbookview.png
-		+ Print page view: lc_printpagepreview.png
 	** Picture
-		+ Color: [pallette thing would be nicer] lc_colorsettings.png
 		+ Graphics mode: lc_grafmode.png
 	** Table
-		+ merge cells: lc_mergecells.png
-		+ split cells: lc_splitcell.png
 		+ table properties: lc_tabledialog.png
 	** Fontwork
 		+ lc_fontworksameletterheights.png
