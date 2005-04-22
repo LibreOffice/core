@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:05:16 $
+ *  last change: $Author: obo $ $Date: 2005-04-22 13:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace presentation
 
                 virtual bool fire()
                 {
-                    if( !wasFired() )
+                    if( isCharged() )
                     {
                         mbWasFired = true;
 
@@ -121,9 +121,9 @@ namespace presentation
                     return true;
                 }
 
-                virtual bool wasFired() const
+                virtual bool isCharged() const
                 {
-                    return mbWasFired;
+                    return !mbWasFired;
                 }
 
                 virtual double getActivationTime( double nCurrentTime ) const
