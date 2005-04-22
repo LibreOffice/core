@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:13:33 $
+#   last change: $Author: obo $ $Date: 2005-04-22 11:37:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,7 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     -fz$(MISC)$/$(SDI$(TNR)NAME).sid	\
     $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 
-$(HIDSID$(TNR)PARTICLE): $(MISC)$/$(SDI$(TNR)NAME).sid
+$(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET) $(MISC)$/$(SDI$(TNR)NAME).sid
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
