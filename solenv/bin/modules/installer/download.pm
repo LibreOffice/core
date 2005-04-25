@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-22 14:39:04 $
+#   last change: $Author: obo $ $Date: 2005-04-25 11:55:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -918,7 +918,7 @@ sub call_nsis
 {
     my ( $nsispath, $nsifile ) = @_;
 
-    my $makensisexe = "guw.pl " . $nsispath . $installer::globals::separator . "makensis.exe";
+    my $makensisexe = $nsispath . $installer::globals::separator . "makensis.exe";
 
     installer::logger::print_message( "... starting $makensisexe ... \n" );
 
