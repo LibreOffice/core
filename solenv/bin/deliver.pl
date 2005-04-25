@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-25 08:53:29 $
+#   last change: $Author: rt $ $Date: 2005-04-25 16:16:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.87 $ ';
+$id_str = ' $Revision: 1.88 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -633,12 +633,14 @@ sub mod_so
     my $line = shift;
 
     if ( $line =~ s/(%__SRC%[\\|\/]bin)/$1\\so/i ) {
-        $line =~ s/(%_DEST%[\\|\/]bin%_EXT%)/$1\\so/i;
-        return $line;
+        if ( $line =~ s/(%_DEST%[\\|\/]\w+%_EXT%)/$1\\so/i ) {
+            return $line;
+        }
     }
     elsif ( $line =~ s/(%COMMON_OUTDIR%[\\|\/]bin)/$1\\so/i ) {
-        $line =~ s/(%COMMON_DEST%[\\|\/]bin%_EXT%)/$1\\so/i;
-        return $line;
+        if ( $line =~ s/(%COMMON_DEST%[\\|\/]\w+%_EXT%)/$1\\so/i ) {
+            return $line;
+        }
     }
     else {
         return undef;
