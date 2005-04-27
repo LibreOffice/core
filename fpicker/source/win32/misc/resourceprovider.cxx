@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:58:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 08:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //
 //------------------------------------------------------------
 
-#define RES_NAME svt
+#define RES_NAME fps_office
 
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
