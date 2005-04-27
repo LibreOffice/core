@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:57:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 08:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "DrawDocShell.hxx"
 #include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
+#include "ViewShellImplementation.hxx"
 #include "sdattr.hxx"
 #include "PresentationViewShell.hxx"
 #include "TaskPaneViewShell.hxx"
@@ -306,6 +307,19 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             rShell.Cancel();
             rRequest.Done ();
             break;
+
+        case SID_ASSIGN_LAYOUT:
+        {
+            SFX_REQUEST_ARG (rRequest, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
+            SFX_REQUEST_ARG (rRequest, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+            mrController.GetViewShell().mpImpl->AssignLayout(
+                pDocument->GetSdPage((USHORT)pWhatPage->GetValue(),
+                    mrController.GetModel().GetPageType()),
+                (AutoLayout)pWhatLayout->GetValue());
+            rShell.Cancel();
+            rRequest.Done ();
+        }
+        break;
 
         default:
             break;
