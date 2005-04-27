@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:58:26 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 11:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,33 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY1_HPP_
 #include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
 #include <com/sun/star/beans/PropertyValues.hdl>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+
+
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
@@ -107,45 +123,43 @@ DBG_NAME( EditView );
 // From SW => Create common method
 LanguageType lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
 {
-    LanguageType nLang = LANGUAGE_NONE;
+    //
+    // build list of languages to check
+    //
+    LanguageType aLangList[4];
+    const AllSettings& rSettings  = Application::GetSettings();
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+    // The default document language from "Tools/Options - Language Settings - Languages: Western"
+    aLangList[0] = aLinguOpt.nDefaultLanguage;
+    // The one from "Tools/Options - Language Settings - Languages: User interface"
+    aLangList[1] = rSettings.GetUILanguage();
+    // The one from "Tools/Options - Language Settings - Languages: Locale setting"
+    aLangList[2] = rSettings.GetLanguage();
+    // en-US
+    aLangList[3] = LANGUAGE_ENGLISH_US;
+#ifdef DEBUG
+    lang::Locale a1( SvxCreateLocale( aLangList[0] ) );
+    lang::Locale a2( SvxCreateLocale( aLangList[1] ) );
+    lang::Locale a3( SvxCreateLocale( aLangList[2] ) );
+    lang::Locale a4( SvxCreateLocale( aLangList[3] ) );
+#endif
 
-    Reference< XSpellAlternatives >     xAlt;
-    Sequence< short >   aLangs;
-    if (xSpell.is())
-        aLangs = xSpell->getLanguages();
-    const short *pLang = aLangs.getConstArray();
-    INT32   nCount = aLangs.getLength();
+    util::Language nLang = LANGUAGE_NONE;
 
-    //! due to dieckmann (new german) spellchecker excepting many english
-    //! (and other?) words as correct
-    //! GERMAN and GERMAN_SWISS should be checked last.
-    //! Otherwise e.g. english words might be reported as being german words!
+    INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
     for (INT32 i = 0;  i < nCount;  i++)
     {
-        INT16 nTmpLang = pLang[i];
-        if (nTmpLang != LANGUAGE_NONE  &&
-            nTmpLang != LANGUAGE_GERMAN  &&
-            nTmpLang != LANGUAGE_GERMAN_SWISS)
+        INT16 nTmpLang = aLangList[i];
+        if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
         {
-            if (xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ) &&
-                xSpell->hasLanguage( nTmpLang ))
+            if (xSpell->hasLanguage( nTmpLang ) &&
+                xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ))
             {
                 nLang = nTmpLang;
                 break;
             }
         }
-    }
-    if (nLang == LANGUAGE_NONE  &&
-        xSpell->isValid( rWord, LANGUAGE_GERMAN, Sequence< PropertyValue >() ) &&
-        xSpell->hasLanguage( LANGUAGE_GERMAN ))
-    {
-        nLang = LANGUAGE_GERMAN;
-    }
-    if (nLang == LANGUAGE_NONE  &&
-        xSpell->isValid( rWord, LANGUAGE_GERMAN_SWISS, Sequence< PropertyValue >() ) &&
-        xSpell->hasLanguage( LANGUAGE_GERMAN_SWISS ))
-    {
-        nLang = LANGUAGE_GERMAN_SWISS;
     }
 
     return nLang;
