@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:27:19 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3085,7 +3085,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
         if ( pPrintHint )
         {
-            if ( pPrintHint->GetWhich() == -1 )
+            if ( pPrintHint->GetWhich() == -1 )     // -1 : Initialisation of PrintOptions
             {
                 if ( !m_pData->m_xPrintJob.is() )
                     m_pData->m_xPrintJob = new SfxPrintJob_Impl( m_pData );
@@ -3127,15 +3127,37 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     m_pData->m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
                 }
             }
-            else if ( pPrintHint->GetWhich() == -3 )
+            else if ( pPrintHint->GetWhich() == -3 )    // -3 : AdditionalPrintOptions
             {
-                    sal_Int32 nOld = m_pData->m_aPrintOptions.getLength();
-                    sal_Int32 nAdd = pPrintHint->GetAdditionalOptions().getLength();
-                    m_pData->m_aPrintOptions.realloc(  nOld + nAdd );
+                    uno::Sequence < beans::PropertyValue >& lOldOpts = m_pData->m_aPrintOptions;
+                    const uno::Sequence < beans::PropertyValue >& lNewOpts = pPrintHint->GetAdditionalOptions();
+                    sal_Int32 nOld = lOldOpts.getLength();
+                    sal_Int32 nAdd = lNewOpts.getLength();
+                    lOldOpts.realloc( nOld + nAdd );
+
+                    // assume that all new elements are overwriting old ones and so don't need to be added
+                    sal_Int32 nTotal = nOld;
                     for ( sal_Int32 n=0; n<nAdd; n++ )
-                        m_pData->m_aPrintOptions[ nOld+n ] = pPrintHint->GetAdditionalOptions()[n];
+                    {
+                        sal_Int32 m;
+                        for ( m=0; m<nOld; m++ )
+                            if ( lNewOpts[n].Name == lOldOpts[m].Name )
+                                // new option overwrites old one
+                                break;
+
+                        if ( m == nOld )
+                            // this is a new option, so add it to the resulting sequence - counter must be incremented
+                            lOldOpts[nTotal++].Value = lNewOpts[n].Value;
+                        else
+                            // overwrite old option with new value, counter stays unmodified
+                            lOldOpts[m].Value = lNewOpts[n].Value;
+                    }
+
+                    if ( nTotal != lOldOpts.getLength() )
+                        // at least one new options has overwritten an old one, so we allocated too much
+                        lOldOpts.realloc(  nTotal );
             }
-            else if ( pPrintHint->GetWhich() != -2 )
+            else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
             {
                 view::PrintJobEvent aEvent;
                 aEvent.Source = m_pData->m_xPrintJob;
