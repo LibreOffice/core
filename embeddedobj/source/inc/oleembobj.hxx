@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:38:18 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ public:
 
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
+    void OnViewChanged_Impl();
 
     void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
