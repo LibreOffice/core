@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.16 $
+*  $Revision: 1.17 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-10 18:23:43 $
+*  last change: $Author: obo $ $Date: 2005-04-27 08:53:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -482,3 +482,30 @@ Shortcut gid_Shortcut_Lib_LibXMLSec_xmlsecnss_2
 End
 #endif
 //i38417 -end-
+
+
+//i44154
+
+#ifdef MACOSX
+
+Shortcut gid_Shortcut_Lib_Java_Uno
+    FileID = gid_File_Lib_Java_Uno;
+    Dir = gid_Dir_Program;
+    Name = "libjava_uno.jnilib";
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef MACOSX
+
+Shortcut gid_Shortcut_Lib_Hsqldb_2
+    FileID = gid_File_Lib_Hsqldb_2;
+    Dir = gid_Dir_Program;
+    Name = "libhsqldb2.jnilib";
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+//i44154 -end-
