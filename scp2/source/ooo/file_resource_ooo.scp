@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: obo $ $Date: 2005-04-13 08:44:06 $
+*  last change: $Author: obo $ $Date: 2005-04-27 11:16:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -121,6 +121,8 @@ STD_RES_FILE( gid_File_Res_Pcr, pcr)
 STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)
 
 STD_RES_FILE( gid_File_Res_Preload, preload)
+
+STD_RES_FILE( gid_File_Res_Productregistration, productregistration)
 
 #ifdef UNX
 
