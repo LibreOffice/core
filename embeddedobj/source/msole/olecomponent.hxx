@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:52:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,16 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
 #endif
 
 #include <vector>
@@ -126,15 +134,15 @@ class OleWrapperAdviseSink;
 class OleEmbeddedObject;
 struct OleComponentNative_Impl;
 
-class OleComponent : public ::cppu::WeakImplHelper4< ::com::sun::star::util::XCloseable, ::com::sun::star::lang::XComponent,
-                                                     ::com::sun::star::lang::XUnoTunnel,
+class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCloseable, ::com::sun::star::lang::XComponent,
+                                                     ::com::sun::star::lang::XUnoTunnel, ::com::sun::star::util::XModifiable,
                                                      ::com::sun::star::datatransfer::XTransferable >
 {
     ::osl::Mutex m_aMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
 
     sal_Bool m_bDisposed;
-
+    sal_Bool m_bModified;
     OleComponentNative_Impl* m_pNativeImpl;
 
     OleEmbeddedObject* m_pUnoOleObject;
@@ -235,6 +243,13 @@ public:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException) ;
+
+    // XModifiable
+    virtual sal_Bool SAL_CALL isModified() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setModified( sal_Bool bModified )
+        throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif
