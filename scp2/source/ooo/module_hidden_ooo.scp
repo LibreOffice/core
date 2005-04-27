@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: obo $ $Date: 2005-04-20 12:09:09 $
+*  last change: $Author: obo $ $Date: 2005-04-27 11:16:12 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -495,6 +495,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Fsstorage,
 	gid_File_Lib_Hatchwindowfactory,
 	gid_File_Lib_Passwordcontainer,
+	gid_File_Lib_Productregistration,
 	gid_File_Lib_Svtmisc);
 End
 
