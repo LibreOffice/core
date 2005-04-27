@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:04:39 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
 #endif
@@ -103,6 +107,16 @@
 #endif
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
 #endif
 
 #include <svx/acorrcfg.hxx>
@@ -166,45 +180,43 @@ using namespace ::rtl;
 
 util::Language lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
 {
+    //
+    // build list of languages to check
+    //
+    LanguageType aLangList[4];
+    const AllSettings& rSettings  = Application::GetSettings();
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+    // The default document language from "Tools/Options - Language Settings - Languages: Western"
+    aLangList[0] = aLinguOpt.nDefaultLanguage;
+    // The one from "Tools/Options - Language Settings - Languages: User interface"
+    aLangList[1] = rSettings.GetUILanguage();
+    // The one from "Tools/Options - Language Settings - Languages: Locale setting"
+    aLangList[2] = rSettings.GetLanguage();
+    // en-US
+    aLangList[3] = LANGUAGE_ENGLISH_US;
+#ifdef DEBUG
+    lang::Locale a1( SvxCreateLocale( aLangList[0] ) );
+    lang::Locale a2( SvxCreateLocale( aLangList[1] ) );
+    lang::Locale a3( SvxCreateLocale( aLangList[2] ) );
+    lang::Locale a4( SvxCreateLocale( aLangList[3] ) );
+#endif
+
     util::Language nLang = LANGUAGE_NONE;
 
-    Reference< XSpellAlternatives >     xAlt;
-    Sequence< util::Language >  aLangs;
-    if (xSpell.is())
-        aLangs = xSpell->getLanguages();
-    const util::Language *pLang = aLangs.getConstArray();
-    INT32   nCount = aLangs.getLength();
-
-    //! due to dieckmann (new german) spellchecker excepting many english
-    //! (and other?) words as correct
-    //! GERMAN and GERMAN_SWISS should be checked last.
-    //! Otherwise e.g. english words might be reported as being german words!
+    INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
     for (INT32 i = 0;  i < nCount;  i++)
     {
-        INT16 nTmpLang = pLang[i];
-        if (nTmpLang != LANGUAGE_NONE  &&
-            nTmpLang != LANGUAGE_GERMAN  &&
-            nTmpLang != LANGUAGE_GERMAN_SWISS)
+        INT16 nTmpLang = aLangList[i];
+        if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
         {
-            if (xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ) &&
-                xSpell->hasLanguage( nTmpLang ))
+            if (xSpell->hasLanguage( nTmpLang ) &&
+                xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ))
             {
                 nLang = nTmpLang;
                 break;
             }
         }
-    }
-    if (nLang == LANGUAGE_NONE  &&
-        xSpell->isValid( rWord, LANGUAGE_GERMAN, Sequence< PropertyValue >() ) &&
-        xSpell->hasLanguage( LANGUAGE_GERMAN ))
-    {
-        nLang = LANGUAGE_GERMAN;
-    }
-    if (nLang == LANGUAGE_NONE  &&
-        xSpell->isValid( rWord, LANGUAGE_GERMAN_SWISS, Sequence< PropertyValue >() ) &&
-        xSpell->hasLanguage( LANGUAGE_GERMAN_SWISS ))
-    {
-        nLang = LANGUAGE_GERMAN_SWISS;
     }
 
     return nLang;
@@ -223,7 +235,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
     if (xSpellAlt.is())
         aStrings = xSpellAlt->getAlternatives();
     const OUString *pString = aStrings.getConstArray();
-    sal_Int16 nStringCount = aStrings.getLength();
+    sal_Int16 nStringCount = static_cast< sal_Int16 >( aStrings.getLength() );
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
