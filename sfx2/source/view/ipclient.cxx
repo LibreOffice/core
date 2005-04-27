@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:25:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,7 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
     if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") )
     {
         m_pClient->ViewChanged();
+        m_pClient->Invalidate();
     }
 }
 
