@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:35:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 08:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,11 +169,12 @@ extern "C"
          *  prevent atk from interfering with the java accessibility bridge
          */
         #if ! defined HAVE_ATK_ACCESSIBILITY_BRIDGE
-        const gchar* pGtkModules = g_getenv( "GTK_MODULES" );
+        const char* pGtkModules = getenv( "GTK_MODULES" );
         if( pGtkModules )
         {
             rtl::OString aModules( pGtkModules );
-            rtl::OStringBuffer aModulesOut( aModules.getLength() );
+            rtl::OStringBuffer aModulesOut( aModules.getLength() + 11 );
+            aModulesOut.append( "GTK_MODULES=" );
             sal_Int32 nIndex = 0;
             while( nIndex >= 0 )
             {
@@ -184,7 +185,7 @@ extern "C"
                 aModulesOut.append( ':' );
                 aModulesOut.append( aToken );
             }
-            g_setenv( "GTK_MODULES", aModulesOut.getStr(), TRUE );
+            putenv( strdup( aModulesOut.getStr() ) );
         }
         #endif
 
