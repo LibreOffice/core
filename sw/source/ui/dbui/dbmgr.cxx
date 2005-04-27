@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:55:07 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,6 +1285,17 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
             text::MailMergeEvent aEvt( xRef, rView.GetDocShell()->GetModel() );
             pEvtSrc->LaunchMailMergeEvent( aEvt );
         }
+
+        String aTmp;
+        aTmp += String::CreateFromInt32( rDocInfo.nStartPageInTarget );
+        aTmp += '-';
+        aTmp += String::CreateFromInt32( rDocInfo.nEndPageInTarget );
+
+        Sequence<PropertyValue> aViewProperties(1);
+        PropertyValue* pViewProperties =  aViewProperties.getArray();
+        pViewProperties[0].Name = C2U("Pages");
+        pViewProperties[0].Value <<= ::rtl::OUString( aTmp );
+        rView.SetAdditionalPrintOptions(aViewProperties);
 
         rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
         if( rOpt.IsPrintSingleJobs() && bRet )
