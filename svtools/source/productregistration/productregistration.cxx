@@ -1,0 +1,492 @@
+/*************************************************************************
+ *
+ *  $RCSfile: productregistration.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-04-27 11:14:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "productregistration.hxx"
+
+#ifndef SVTOOLS_REGOPTIONS_HXX
+#include "regoptions.hxx"
+#endif
+#ifndef SVTOOLS_REGISTRATIONDLG_HXX
+#include "registrationdlg.hxx"
+#endif
+#ifndef _SVTOOLS_HRC
+#include "svtools.hrc"
+#endif
+
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include "cppuhelper/factory.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+#include <algorithm>
+#include <functional>
+#include <memory>
+
+#define PRODREG_IMPLNAME "com.sun.star.comp.setup.ProductRegistration"
+#define PRODREG_SERVNAME "com.sun.star.setup.ProductRegistration"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
+
+using rtl::OUString;
+
+//........................................................................
+namespace svt
+{
+//........................................................................
+
+    using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::system;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::awt;
+
+    //-------------------------------------------------------------------
+
+    struct EqualsOUString : public ::std::unary_function< OUString, sal_Bool >
+    {
+        const OUString& m_rCompare;
+        EqualsOUString( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+
+        sal_Bool operator() ( const OUString& _rCompare )
+        {
+            return m_rCompare.equals( _rCompare );
+        }
+    };
+
+    //====================================================================
+    //= OProductRegistration
+    //====================================================================
+
+    //--------------------------------------------------------------------
+    OProductRegistration::OProductRegistration( const Reference< XMultiServiceFactory >& _rxORB )
+        :m_xORB( _rxORB )
+    {
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XInterface > OProductRegistration::Create( const Reference< XMultiServiceFactory >& _rxORB )
+    {
+        return static_cast< ::cppu::OWeakObject* >( new OProductRegistration( _rxORB ) );
+    }
+
+    //--------------------------------------------------------------------
+    OUString SAL_CALL OProductRegistration::getImplementationName_Static( )
+    {
+        return OUString::createFromAscii( PRODREG_IMPLNAME );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< OUString > SAL_CALL OProductRegistration::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    {
+        Sequence< OUString > aServiceNames( 1 );
+        aServiceNames[ 0 ] = OUString::createFromAscii( PRODREG_SERVNAME );
+        return aServiceNames;
+    }
+
+    //--------------------------------------------------------------------
+    OUString SAL_CALL OProductRegistration::getImplementationName(  ) throw (RuntimeException)
+    {
+        return getImplementationName_Static( );
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool SAL_CALL OProductRegistration::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+    {
+        Sequence< OUString > aServiceNames( getSupportedServiceNames( ) );
+        const OUString* pNames = aServiceNames.getConstArray( );
+        const OUString* pNamesEnd = aServiceNames.getConstArray( ) + aServiceNames.getLength();
+
+        const OUString* pFound = ::std::find_if(
+            pNames,
+            pNamesEnd,
+            EqualsOUString( _rServiceName )
+        );
+        return pFound != pNamesEnd;
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< OUString > SAL_CALL OProductRegistration::getSupportedServiceNames(  ) throw (RuntimeException)
+    {
+        return getSupportedServiceNames_Static( );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OProductRegistration::trigger( const OUString& _rEvent ) throw (RuntimeException)
+    {
+        switch ( classify( _rEvent ) )
+        {
+            case etRegistrationRequired:
+                doOnlineRegistration();
+                break;
+
+            default:
+                OSL_ENSURE( sal_False, "OProductRegistration::trigger: invalid event!" );
+                break;
+        }
+    }
+
+    //--------------------------------------------------------------------
+    static Window* lcl_getPreferredDialogParent( Reference< XMultiServiceFactory > _rxORB )
+    {
+        Window* pReturn = Application::GetDefDialogParent();
+            // default
+
+        try
+        {
+            //................................................................
+            // get the desktop service
+            Reference< XDesktop > xDesktop(
+                _rxORB->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+
+            Reference< XFrame > xFrameCandidate;
+            if ( xDesktop.is() )
+            {
+                // the current frame, by definition, is the one which owns the focus currently
+                xFrameCandidate = xDesktop->getCurrentFrame();
+                if ( !xFrameCandidate.is() )
+                {
+                    // hmm. Perhaps the frames collection of the desktop knows about an "active frame"?
+                    Reference< XFramesSupplier > xFrames( xDesktop, UNO_QUERY );
+                    if ( xFrames.is() )
+                        xFrameCandidate = xFrames->getActiveFrame();
+                }
+            }
+
+            if ( xFrameCandidate.is() )
+            {
+                Reference< XWindow > xWindow = xFrameCandidate->getContainerWindow();
+                if ( xWindow.is() )
+                    pReturn = VCLUnoHelper::GetWindow( xWindow );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_getPreferredDialogParent: caught an exception!" );
+        }
+
+        return pReturn;
+    }
+
+    //--------------------------------------------------------------------
+    static bool lcl_isEvalVersion( const Reference< XMultiServiceFactory >& _rxORB )
+    {
+        bool bIsEvaluationVersion = false;
+
+        try
+        {
+            Reference < XMaterialHolder > xHolder(
+                _rxORB->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ),
+                UNO_QUERY
+            );
+
+            if ( xHolder.is() )
+            {
+                Any aData = xHolder->getMaterial();
+                Sequence < NamedValue > aSeq;
+
+                if ( aData >>= aSeq )
+                {
+                    // it's an evaluation version - a non-eval version wouldn't provide this "material"
+                    bIsEvaluationVersion = true;
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( false, "lcl_isEvalVersion: caught an exception!" );
+        }
+
+        return bIsEvaluationVersion;
+    }
+
+    //--------------------------------------------------------------------
+    Any SAL_CALL OProductRegistration::execute( const Sequence< NamedValue >& _rArgs ) throw (IllegalArgumentException, Exception, RuntimeException)
+    {
+        Any aReturn;
+
+        static sal_Bool bFirstEncounter( sal_True );
+        if ( bFirstEncounter )
+        {   // during this session, this event was never triggered before ....
+            bFirstEncounter = sal_False;
+
+            sal_Bool bDeactivateJob = sal_True;
+
+            // our config options
+            RegOptions aRegOptions;
+            // check them for the permissions for the dialog
+            RegOptions::DialogPermission ePermission( aRegOptions.getDialogPermission() );
+
+            if ( RegOptions::dpDisabled != ePermission )
+            {   // the dialog is _not_ disabled
+
+                // for this session, I'm no interested in the dialog registration anymore
+                aRegOptions.markSessionDone( );
+
+                if  (   ( RegOptions::dpNotThisSession == ePermission )     // first trigger session not reached
+                    ||  ( RegOptions::dpRemindLater == ePermission )        // or at a later reminder date
+                    )
+                {   // the dialog should be executed during one of the next sessions
+                    bDeactivateJob = sal_False;
+                }
+                else
+                {
+                    // if we're here, the dialog should be executed during this session
+                    OSL_ENSURE( RegOptions::dpThisSession == ePermission, "OProductRegistration::execute: invalid permissions!" );
+
+                    {
+                        // this is some kind of HACK.
+                        // This registration dialog is intended to appear very very early during the
+                        // first office start after installation. Unfortunately, this is so early
+                        // that even SFX is not yet loaded, thus the SfxHelp class is not yet available,
+                        // thus, there is no help during the lifetime of the dialog.
+                        // To fake this, we explicitly load the necessary services when the user
+                        // really requests help herein.
+                        // #110791# - 2003-06-11 - fs@openoffice.org
+                        Reference < XInitialization > xOfficeWrapper(
+                                m_xORB->createInstance(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.OfficeWrapper" ) )
+                            ),
+                            UNO_QUERY
+                        );
+                        if ( xOfficeWrapper.is() )
+                            xOfficeWrapper->initialize( Sequence < Any >() );
+                    }
+
+                    std::auto_ptr<ResMgr> pResMgr (ResMgr::CreateResMgr (
+                        CREATEVERSIONRESMGR_NAME(productregistration)));
+
+                    // execute it
+                    RegistrationDialog aDialog (
+                        lcl_getPreferredDialogParent( m_xORB ),
+                        ResId( DLG_REGISTRATION_REQUEST, pResMgr.get() ),
+                        lcl_isEvalVersion( m_xORB ) );
+                    aDialog.Execute();
+
+                    switch ( aDialog.getResponse() )
+                    {
+                        case RegistrationDialog::urRegisterNow:
+                            // -> do the registration
+                            doOnlineRegistration();
+                            break;
+
+                        case RegistrationDialog::urRegisterLater:
+                            bDeactivateJob = sal_False;
+                            // remind again in seven days from now on ...
+                            aRegOptions.activateReminder( 7 );
+                            break;
+
+                        case RegistrationDialog::urRegisterNever:
+                        case RegistrationDialog::urAlreadyRegistered:
+                            // never register or already registered
+                            // -> deactivate the job, and nothing else
+                            break;
+
+                        default:
+                            OSL_ENSURE( sal_False, "OProductRegistration::execute: invalid response from the dialog!" );
+                    }
+                }
+            }
+
+            Sequence< NamedValue > aJobResponse( 1 );
+            aJobResponse[0].Name = OUString::createFromAscii( "Deactivate" );
+            aJobResponse[0].Value <<= bDeactivateJob;
+            aReturn <<= aJobResponse;
+        }
+
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------
+    void OProductRegistration::doOnlineRegistration( )
+    {
+        sal_Bool bSuccess = sal_False;
+        try
+        {
+            // create the Desktop component which can load components
+            Reference< XSystemShellExecute > xSystemShell(
+                m_xORB->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ),
+                UNO_QUERY
+            );
+            OSL_ENSURE( xSystemShell.is(), "OProductRegistration::doOnlineRegistration: invalid SystemExecute component!" );
+
+            // access the configuration to retrieve the URL we shall use for registration
+            RegOptions aOptions;
+            OUString sRegistrationURL( aOptions.getRegistrationURL( ) );
+            OSL_ENSURE( sRegistrationURL.getLength(), "OProductRegistration::doOnlineRegistration: invalid URL found!" );
+
+            if ( xSystemShell.is() && sRegistrationURL.getLength() )
+            {
+                xSystemShell->execute( sRegistrationURL, OUString(), SystemShellExecuteFlags::DEFAULTS );
+                bSuccess = sal_True;
+            }
+        }
+        catch( const Exception& )
+        {
+        }
+        if ( !bSuccess )
+        {
+            std::auto_ptr<ResMgr> pResMgr (ResMgr::CreateResMgr (
+                CREATEVERSIONRESMGR_NAME(productregistration)));
+
+            ErrorBox aRegistrationError(
+                Application::GetDefDialogParent(),
+                ResId( ERRBOX_REG_NOSYSBROWSER, pResMgr.get() ));
+            aRegistrationError.Execute();
+        }
+    }
+
+    //--------------------------------------------------------------------
+    OProductRegistration::EventType OProductRegistration::classify( const OUString& _rEventDesc )
+    {
+        EventType eReturn = etUnknown;
+        if ( _rEventDesc.equalsAscii( "RegistrationRequired" ) )
+        {
+            eReturn = etRegistrationRequired;
+        }
+        return eReturn;
+    }
+
+//........................................................................
+}   // namespace svt
+//........................................................................
+
+extern "C"
+{
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
+    void * /* pServiceManager */, void * pRegistryKey)
+{
+    if (pRegistryKey)
+    {
+        Reference< XRegistryKey > xRegistryKey (
+            reinterpret_cast< XRegistryKey* >( pRegistryKey ));
+        Reference< XRegistryKey > xNewKey;
+
+        xNewKey = xRegistryKey->createKey(
+            OUString::createFromAscii( "/" PRODREG_IMPLNAME "/UNO/SERVICES" ));
+        xNewKey->createKey(
+            OUString::createFromAscii( PRODREG_SERVNAME ));
+
+        return sal_True;
+    }
+    return sal_False;
+}
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
+    const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
+{
+    void * pResult = 0;
+    if (pServiceManager)
+    {
+        Reference< XSingleServiceFactory > xFactory;
+        if (svt::OProductRegistration::getImplementationName_Static().compareToAscii (pImplementationName) == 0)
+        {
+            xFactory = cppu::createSingleFactory (
+                reinterpret_cast< XMultiServiceFactory* >(pServiceManager),
+                svt::OProductRegistration::getImplementationName_Static(),
+                svt::OProductRegistration::Create,
+                svt::OProductRegistration::getSupportedServiceNames_Static());
+        }
+        if (xFactory.is())
+        {
+            xFactory->acquire();
+            pResult = xFactory.get();
+        }
+    }
+    return pResult;
+}
+
+} // extern "C"
