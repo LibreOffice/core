@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:55:10 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 08:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,11 @@ interface SlideSorterView : Object
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
+    ]
+    SID_ASSIGN_LAYOUT
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetMenuState;
     ]
 }
 
