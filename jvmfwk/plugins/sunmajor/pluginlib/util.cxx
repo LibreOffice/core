@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:20:51 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 08:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ char const *g_arCollectDirs[] = {
 char const *g_arSearchPaths[] = {
 #ifdef MACOSX
     "",
-    "System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/"
+    "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
 #else
     "",
     "usr/",
