@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:17:41 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ private:
     USHORT nMode;
 
     ByteString sLanguageRestriction;
+
     ByteString sIsoCode99;
     ByteString sOutputFile;
     int nFileCnt;
@@ -171,6 +172,8 @@ private:
 public:
     SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool bLocal , bool bQuiet2_in );
     ~SourceTreeLocalizer();
+
+    ByteString getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand , ByteString rParameter );
 
     void SetLanguageRestriction( const ByteString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
@@ -319,7 +322,8 @@ void SourceTreeLocalizer::WorkOnFile(
             sCommand += sTempFile;
             if ( sLanguageRestriction.Len()) {
                 sCommand += " -l ";
-                sCommand += sLanguageRestriction;
+                sCommand += getSourceLanguages( sLanguageRestriction , sCommand , rParameter );
+                //sCommand += sLanguageRestriction;
             }
             if ( rIso.Equals("iso") && sIsoCode99.Len()) {
                 sCommand += " -ISO99 ";
@@ -364,6 +368,18 @@ void SourceTreeLocalizer::WorkOnFile(
         }
         // reset current working directory
         aOldCWD.SetCWD();
+}
+
+ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand , ByteString sParameter )
+{
+    // Source languages in helpcontent2 and macromigration en-US only!
+    if( sCommand.Search("helpex") != STRING_NOTFOUND ) {
+        sLanguageRestriction.Assign( ByteString("en-US") );
+    }
+    else if( sCommand.Search("xmlex") != STRING_NOTFOUND ){
+        sLanguageRestriction.Assign( ByteString("en-US") );
+    }
+    return sLanguageRestriction;
 }
 
 /*****************************************************************************/
