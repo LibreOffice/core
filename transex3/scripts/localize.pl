@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 11:27:32 $
+#   last change: $Author: obo $ $Date: 2005-04-27 09:35:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,7 +189,8 @@ sub splitfile{
                 $lastFile = $currentFile; # ?
                 $last_sdffile = $cur_sdffile;
             }
-            if( ( $lang eq "en-US" || ( $prj ne "helpcontent2" && $lang eq "de") ) ){}
+            if( $lang eq "en-US" || ( $lang eq "de" && $prj ne "helpcontent2" && $prj ne "macromigration" ) ) {  # Skip source languages
+            }
 #            elsif( $currentFile eq $lastFile ){
             elsif( $cur_sdffile eq $last_sdffile ){
                 $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
@@ -198,7 +199,9 @@ sub splitfile{
                 $lastFile = $currentFile; #?
                 $last_sdffile = $cur_sdffile;
                 %block = ();
-                if( !( $lang eq "en-US" || ( $prj ne "helpcontent2" && $lang eq "de") ) ){  $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; }
+                if( !( $lang eq "en-US" || ( $lang eq "de" && $prj ne "helpcontent2" && $prj ne "macromigration" ) ) ){
+                    $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
+                }
             }
         } #else { print STDOUT "splitfile REGEX kaputt\n";}
 
@@ -530,7 +533,8 @@ sub collectfiles{
 
                             if ( $lang eq $cur_lang ){
                                 # Overwrite fallback strings with collected strings
-                                if( $cur_lang ne "de" || $cur_lang ne "en-US" ){
+                                if( $cur_lang ne "de" ||
+                                    $cur_lang ne "en-US" ){
                                      $fallbackhashhash_ref->{ $cur_lang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
                                }
 
@@ -541,7 +545,8 @@ sub collectfiles{
             }
 
             foreach my $line ( keys( %{$fallbackhashhash_ref->{ $cur_lang } } )) {
-                if( $cur_lang ne "de" && $cur_lang ne "en-US" ){
+                if( #$cur_lang ne "de" &&
+                    $cur_lang ne "en-US" ){
                     print ALLPARTICLES_MERGED ( $fallbackhashhash_ref->{ $cur_lang }{ $line }, "\n" );
                 }
              }
