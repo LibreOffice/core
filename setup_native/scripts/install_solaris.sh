@@ -86,7 +86,7 @@ fi
 
 COREPKG01=`find $PACKAGE_PATH/* -type d -prune -name "*-core01*" -print`
 COREPKGLIST=`find $PACKAGE_PATH/* -type d -prune -name "*-core*" -print`
-PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-cde*" ! -name "*-core*" ! -name "*-gnome*" -print`
+PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-shared-mime-info" ! -name "*-cde*" ! -name "*-core*" ! -name "*-gnome*" -print`
 
 if [ -z "$COREPKG01" ]
 then
