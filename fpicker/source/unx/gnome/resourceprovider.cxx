@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:49:44 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 08:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //
 //------------------------------------------------------------
 
-#define RES_NAME svt
+#define RES_NAME fps_office
+#define OTHER_RES_NAME svt
 
 //------------------------------------------------------------
 // we have to translate control ids to resource ids
@@ -136,13 +137,18 @@ _Entry CtrlIdToResIdTable[] = {
     { CHECKBOX_SELECTION,                       STR_SVT_FILEPICKER_SELECTION },
     { FOLDERPICKER_TITLE,                       STR_SVT_FOLDERPICKER_DEFAULT_TITLE },
     { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION },
-    { FILE_PICKER_TITLE_OPEN,                   STR_FILEDLG_OPEN },
-    { FILE_PICKER_TITLE_SAVE,                   STR_FILEDLG_SAVE },
-    { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE },
     { FILE_PICKER_OVERWRITE,                    STR_SVT_ALREADYEXISTOVERWRITE }
 };
 
+_Entry OtherCtrlIdToResIdTable[] = {
+    { FILE_PICKER_TITLE_OPEN,                   STR_FILEDLG_OPEN },
+    { FILE_PICKER_TITLE_SAVE,                   STR_FILEDLG_SAVE },
+    { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE },
+};
+
+
 const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
+const sal_Int32 OTHER_SIZE_TABLE = sizeof( OtherCtrlIdToResIdTable ) / sizeof( _Entry );
 
 //------------------------------------------------------------
 //
@@ -157,6 +163,22 @@ sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
         if ( CtrlIdToResIdTable[i].ctrlId == aControlId )
         {
             aResId = CtrlIdToResIdTable[i].resId;
+            break;
+        }
+    }
+
+    return aResId;
+}
+
+sal_Int16 OtherCtrlIdToResId( sal_Int32 aControlId )
+{
+    sal_Int16 aResId = -1;
+
+    for ( sal_Int32 i = 0; i < OTHER_SIZE_TABLE; i++ )
+    {
+        if ( OtherCtrlIdToResIdTable[i].ctrlId == aControlId )
+        {
+            aResId = OtherCtrlIdToResIdTable[i].resId;
             break;
         }
     }
@@ -179,6 +201,7 @@ public:
     CResourceProvider_Impl( )
     {
         m_ResMgr = CREATEVERSIONRESMGR( RES_NAME );
+        m_OtherResMgr = CREATEVERSIONRESMGR( OTHER_RES_NAME );
     }
 
     //-------------------------------------
@@ -188,6 +211,7 @@ public:
     ~CResourceProvider_Impl( )
     {
         delete m_ResMgr;
+        delete m_OtherResMgr;
     }
 
     //-------------------------------------
@@ -203,16 +227,20 @@ public:
 
         try
         {
-            OSL_ASSERT( m_ResMgr );
+            OSL_ASSERT( m_ResMgr && m_OtherResMgr );
 
             // translate the control id to a resource id
             sal_Int16 aResId = CtrlIdToResId( aId );
-
             if ( aResId > -1 )
-            {
                 aResString = String( ResId( aResId, m_ResMgr ) );
+        else
+        {
+                aResId = OtherCtrlIdToResId( aId );
+                if ( aResId > -1 )
+                    aResString = String( ResId( aResId, m_OtherResMgr ) );
+        }
+        if ( aResId > -1 )
                 aResOUString = OUString( aResString );
-            }
         }
         catch(...)
         {
@@ -223,6 +251,7 @@ public:
 
 public:
     ResMgr* m_ResMgr;
+    ResMgr* m_OtherResMgr;
 };
 
 //------------------------------------------------------------
