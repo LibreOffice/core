@@ -50,4 +50,5 @@ st  svtools\util                            nmake   -   all st_util st__brw st__
 st	svtools\source\fsstor				nmake	-	all	st_fsstor NULL
 st	svtools\source\hatchwindow			nmake	-	all	st_hatchwin NULL
 st	svtools\source\passwordcontainer	nmake	-	all	st_passcont NULL
+st	svtools\source\productregistration	nmake	-	all	st_prodreg st_util NULL
 st	svtools\uno							nmake	-	all	st_svtuno st_util NULL
