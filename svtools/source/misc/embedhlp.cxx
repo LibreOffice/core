@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 11:22:36 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,16 +211,21 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& aEvent
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-#if 0
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+#if 0
     if ( pObject && aEvent.EventName.equalsAscii("OnSaveDone") || aEvent.EventName.equalsAscii("OnSaveAsDone") )
     {
         // TODO/LATER: container must be set before!
         // When is this event created? Who sets the new container when it changed?
         pObject->UpdateReplacement();
     }
+    else
 #endif
+    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") )
+    {
+        pObject->UpdateReplacement();
+    }
 }
 
 void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership )
