@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:32:12 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,7 +1222,7 @@ SwSbxValue SwCalc::Term()
     nLastLeft = left;
     for(;;)
     {
-        SbxOperator eSbxOper = (SbxOperator)USHRT_MAX;
+        USHORT nSbxOper = USHRT_MAX;
 
         switch( eCurrOper )
         {
@@ -1250,15 +1250,15 @@ SwSbxValue SwCalc::Term()
                             }
                             break;
 
-            case CALC_EQ:   eSbxOper = SbxEQ;   break;
-            case CALC_NEQ:  eSbxOper = SbxNE;   break;
-            case CALC_LEQ:  eSbxOper = SbxLE;   break;
-            case CALC_GEQ:  eSbxOper = SbxGE;   break;
-            case CALC_GRE:  eSbxOper = SbxGT;   break;
-            case CALC_LES:  eSbxOper = SbxLT;   break;
+            case CALC_EQ:   nSbxOper = SbxEQ;   break;
+            case CALC_NEQ:  nSbxOper = SbxNE;   break;
+            case CALC_LEQ:  nSbxOper = SbxLE;   break;
+            case CALC_GEQ:  nSbxOper = SbxGE;   break;
+            case CALC_GRE:  nSbxOper = SbxGT;   break;
+            case CALC_LES:  nSbxOper = SbxLT;   break;
 
-            case CALC_MUL:  eSbxOper = SbxMUL;  break;
-            case CALC_DIV:  eSbxOper = SbxDIV;  break;
+            case CALC_MUL:  nSbxOper = SbxMUL;  break;
+            case CALC_DIV:  nSbxOper = SbxDIV;  break;
 
             case CALC_MIN_IN:
                             {
@@ -1368,8 +1368,11 @@ SwSbxValue SwCalc::Term()
             default:        return left;
         }
 
-        if( USHRT_MAX != (USHORT)eSbxOper )
+        if( USHRT_MAX != nSbxOper )
         {
+            // #i47706: cast to SbxOperator AFTER comparing to USHRT_MAX
+            SbxOperator eSbxOper = (SbxOperator)nSbxOper;
+
             GetToken();
             if( SbxEQ <= eSbxOper && eSbxOper <= SbxGE )
                 left.PutBool( left.Compare( eSbxOper, Prim() ));
