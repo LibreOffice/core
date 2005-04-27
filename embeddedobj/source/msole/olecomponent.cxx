@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:13:33 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 09:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aRe
 OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& xFactory, OleEmbeddedObject* pUnoOleObject )
 : m_pInterfaceContainer( NULL )
 , m_bDisposed( sal_False )
+, m_bModified( sal_False )
 , m_pNativeImpl( new OleComponentNative_Impl() )
 , m_xFactory( xFactory )
 , m_pOleWrapClientSite( NULL )
@@ -688,6 +689,7 @@ sal_Bool OleComponent::InitializeObject_Impl()
 
     // the only need in this registration is workaround for close notification
     m_pNativeImpl->m_pOleObject->Advise( m_pImplAdviseSink, ( DWORD* )&m_nAdvConn );
+    m_pNativeImpl->m_pViewObject2->SetAdvise( DVASPECT_CONTENT, ADVF_PRIMEFIRST, m_pImplAdviseSink );
 
     OleSetContainedObject( m_pNativeImpl->m_pOleObject, TRUE );
 
@@ -1256,8 +1258,23 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 {
     // TODO: make a notification ?
     // TODO: check if it is enough or may be saving notifications are required for Visio2000
+    OleEmbeddedObject* pLockObject = NULL;
 
-    // for now this method will do nothing since the object is updated on saving
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if ( m_pUnoOleObject )
+        {
+            pLockObject = m_pUnoOleObject;
+            pLockObject->acquire();
+        }
+    }
+
+    if ( pLockObject )
+    {
+        m_pUnoOleObject->OnViewChanged_Impl();
+        pLockObject->release();
+    }
+
 }
 
 //----------------------------------------------
@@ -1587,5 +1604,61 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequ
     }
 
     return 0;
+}
+
+sal_Bool SAL_CALL OleComponent::isModified() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_bModified;
+}
+
+void SAL_CALL OleComponent::setModified( sal_Bool bModified )
+        throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException)
+{
+    m_bModified = bModified;
+
+    if ( bModified && m_pInterfaceContainer )
+    {
+        ::cppu::OInterfaceContainerHelper* pContainer =
+            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XModifyListener >* ) NULL ) );
+        if ( pContainer != NULL )
+        {
+            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+            while ( pIterator.hasMoreElements() )
+            {
+                try
+                {
+                    lang::EventObject aEvent( (util::XModifiable*) this );
+                    ((util::XModifyListener*)pIterator.next())->modified( aEvent );
+                }
+                catch( uno::RuntimeException& )
+                {
+                    pIterator.remove();
+                }
+            }
+        }
+    }
+}
+
+void SAL_CALL OleComponent::addModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( !m_pInterfaceContainer )
+        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+
+    m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ), xListener );
+}
+
+void SAL_CALL OleComponent::removeModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( m_pInterfaceContainer )
+        m_pInterfaceContainer->removeInterface( ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ),
+                                                xListener );
 }
 
