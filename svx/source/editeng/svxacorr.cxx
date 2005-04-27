@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 12:51:52 $
+ *  last change: $Author: obo $ $Date: 2005-04-27 11:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1934,20 +1934,19 @@ String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             BOOL bNewFile, BOOL bTst ) const
 {
     String sRet, sExt( ConvertLanguageToIsoString( eLang ) );
+    sExt.Insert('_', 0);
     sExt.AppendAscii( ".dat" );
     if( bNewFile )
-        ( sRet = sUserAutoCorrFile ) ;
+        ( sRet = sUserAutoCorrFile )  += sExt;
     else if( !bTst )
-        ( sRet = sShareAutoCorrFile ) ;
+        ( sRet = sShareAutoCorrFile )  += sExt;
     else
     {
         // test first in the user directory - if not exist, then
-        ( sRet = sUserAutoCorrFile ) ;
+        ( sRet = sUserAutoCorrFile ) += sExt;
         if( !FStatHelper::IsDocument( sRet ))
-            ( sRet = sShareAutoCorrFile ) ;
+            ( sRet = sShareAutoCorrFile ) += sExt;
     }
-    sRet.AppendAscii( "_" );
-    sRet += sExt;
     return sRet;
 }
 
