@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.14 $
+*  $Revision: 1.15 $
 *
-*  last change: $Author: rt $ $Date: 2005-04-04 10:15:06 $
+*  last change: $Author: obo $ $Date: 2005-04-27 11:30:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -63,7 +63,8 @@
 
 File gid_File_Extra_Autocorr
     Dir = gid_Dir_Share_Autocorr;
-    ARCHIVE_TXT_FILE_BODY;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE);
     Name = "autocorr.zip";
 End
 
