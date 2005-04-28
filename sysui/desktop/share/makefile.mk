@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 11:19:32 $
+#   last change: $Author: rt $ $Date: 2005-04-28 09:20:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,6 @@ ALLTAR : $(LAUNCHERFLAGFILE) $(DESTULFFILES)
 # merge-in the translations. 
 #
 $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl $(COMMONMISC)$/$(TARGET)$/launcher_name.ulf $(COMMONMISC)$/$(TARGET)$/launcher_comment.ulf
-    @touch $@
     @$(MKDIRHIER) $(@:db).$(INPATH)
     @echo Creating desktop entries ..
     @echo ---------------------------------
@@ -114,4 +113,5 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl
     @$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))
 .ENDIF
     @mv -f $(@:db).$(INPATH)/* $(@:d)
+    @touch $@
 
