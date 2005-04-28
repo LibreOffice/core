@@ -2,7 +2,6 @@ OpenOffice
 {
 	Settings
 	{
-		downloadname    OOo_{productversion}_{os}_install_{languages}
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
