@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:23:54 $
+ *  last change: $Author: mba $ $Date: 2005-04-28 15:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3146,8 +3146,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                                 break;
 
                         if ( m == nOld )
+                        {
                             // this is a new option, so add it to the resulting sequence - counter must be incremented
+                            lOldOpts[nTotal].Name = lNewOpts[n].Name;
                             lOldOpts[nTotal++].Value = lNewOpts[n].Value;
+                        }
                         else
                             // overwrite old option with new value, counter stays unmodified
                             lOldOpts[m].Value = lNewOpts[n].Value;
