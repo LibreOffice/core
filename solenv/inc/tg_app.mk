@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:21:27 $
+#   last change: $Author: obo $ $Date: 2005-04-29 08:49:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,10 @@ USE_APP$(TNR)DEF=
 
 .IF "$(APP$(TNR)TARGETN)"!=""
 
+.IF "$(APP$(TNR)PRODUCTNAME)"!=""
+APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME="$(APP$(TNR)PRODUCTNAME)"
+.ENDIF			# "$(APP$(TNR)PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP$(TNR)TARGET)_linkinc.ls .PHONY:
@@ -200,7 +204,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP$(TNR)VERINFO)$(EMQ)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF		# "$(APP$(TNR)VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    $(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP$(TNR)LINKER) @$(mktmp \
