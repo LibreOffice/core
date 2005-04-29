@@ -105,6 +105,7 @@ use installer::windows::file;
 use installer::windows::font;
 use installer::windows::icon;
 use installer::windows::idtglobal;
+use installer::windows::inifile;
 use installer::windows::media;
 use installer::windows::msiglobal;
 use installer::windows::property;
@@ -1515,6 +1516,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         @installer::globals::binarytableonlyfiles = ();
         $filesinproductlanguageresolvedarrayref = installer::worker::remove_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE_ONLY");
 
+        # Collecting all profileitems with flag "INIFILETABLE" for table "IniFile"
+        my $inifiletableentries = installer::worker::collect_all_items_with_special_flag($profileitemsinproductlanguageresolvedarrayref ,"INIFILETABLE");
+
         # Creating the important dynamic idt files
 
         installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
@@ -1556,6 +1560,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, $languagesarrayref, $includepatharrayref, \@iconfilecollector);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folderitems4.log", $folderitemsinproductlanguageresolvedarrayref); }
+
+        installer::windows::inifile::create_inifile_table($inifiletableentries, $filesinproductlanguageresolvedarrayref, $newidtdir);
 
         installer::windows::icon::create_icon_table(\@iconfilecollector, $newidtdir);    # creating the icon table with all iconfiles used as shortcuts (FolderItems)
 
@@ -1778,6 +1784,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for starting an inf file in deinstallation process (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll7", "65", "shlxtmsi.dll", "ExecutePostUninstallScript", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll7", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action to remove old Windows registry (CustomAc.idt and InstallE.idt )
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "RegCleanOld", "65", "regcleanold.dll", "CleanCurUserOldSystemRegistryFromSetup", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regcleanold.dll",  "RegCleanOld", "Not REMOVE=\"ALL\" And Not PATCH And Not ALLUSERS=\"\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             if ( $installer::globals::tab )
             {
