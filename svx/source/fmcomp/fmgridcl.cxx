@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:27:50 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,7 +1135,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             else
             {
                 // Standardlabel setzen
-                ::rtl::OUString sLabelBase(String(SVX_RES(RID_STR_COLUMN)));
+                ::rtl::OUString sLabelBase = String(SVX_RES(RID_STR_COLUMN));
                 // disambiguate the name
                 Reference< XNameAccess > xColNames(xCols, UNO_QUERY);
                 ::rtl::OUString sLabel;
