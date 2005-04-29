@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:29:22 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
             {
             }
 
-            ::rtl::OUString aName (String(SVX_RES(RID_STR_STDFORMNAME)));
+            ::rtl::OUString aName = String(SVX_RES(RID_STR_STDFORMNAME));
             xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
 
