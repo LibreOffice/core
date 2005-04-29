@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:38:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 08:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <tools/datetime.hxx>
 #include <osl/file.hxx>
 #include <osl/time.h>
+#include <osl/module.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -468,10 +469,60 @@ void FirstStartWizard::storeAcceptDate()
         OUString aAcceptDate = _getCurrentDateString();
         pset->setPropertyValue(OUString::createFromAscii("LicenseAcceptDate"), makeAny(aAcceptDate));
         Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
+
+        // since the license is accepted the local user registry can be cleaned if required
+        cleanOldOfficeRegKeys();
     } catch (RuntimeException)
     {
     }
 
+}
+
+#ifdef WNT
+typedef int ( __stdcall * CleanCurUserRegProc ) ( wchar_t* );
+#endif
+
+void FirstStartWizard::cleanOldOfficeRegKeys()
+{
+#ifdef WNT
+    // after the wizard is completed clean OOo1.1.x entries in the current user registry if required
+    // issue i47658
+
+    OUString aBaseLocationPath;
+    OUString aSharedLocationPath;
+    OUString aInstallMode;
+
+    Bootstrap::PathStatus aBaseLocateResult =
+        Bootstrap::locateBaseInstallation( aBaseLocationPath );
+    Bootstrap::PathStatus aSharedLocateResult =
+        Bootstrap::locateSharedData( aSharedLocationPath );
+    aInstallMode = Bootstrap::getAllUsersValue( ::rtl::OUString() );
+
+    // TODO: replace the checking for install mode
+    if ( aBaseLocateResult == Bootstrap::PATH_EXISTS && aSharedLocateResult == Bootstrap::PATH_EXISTS
+      && aInstallMode.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1" ) ) ) )
+    {
+        ::rtl::OUString aDeregCompletePath =
+                    aBaseLocationPath + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/regcleanold.dll" ) );
+        ::rtl::OUString aExecCompletePath =
+                    aSharedLocationPath + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/regdeinstall/userdeinst.exe" ) );
+
+        osl::Module aCleanModule( aDeregCompletePath );
+        CleanCurUserRegProc pNativeProc = ( CleanCurUserRegProc )(
+                    aCleanModule.getFunctionSymbol(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CleanCurUserOldSystemRegistry" ) ) ) );
+
+        if( pNativeProc!=NULL )
+        {
+            ::rtl::OUString aExecCompleteSysPath;
+            if ( osl::File::getSystemPathFromFileURL( aExecCompletePath, aExecCompleteSysPath ) == FileBase::E_None
+              && aExecCompleteSysPath.getLength() )
+            {
+                ( *pNativeProc )( (wchar_t*)( aExecCompleteSysPath.getStr() ) );
+            }
+        }
+    }
+#endif
 }
 
 void FirstStartWizard::disableWizard()
