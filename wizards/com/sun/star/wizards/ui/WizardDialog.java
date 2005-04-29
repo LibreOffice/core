@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:27:01 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 08:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private Resource oWizardResource;
     public String sMsgEndAutopilot;
     private int hid;
+    private boolean bTerminateListenermustberemoved = true;
 
 
     /** Creates a new instance of WizardDialog
@@ -527,7 +528,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public void finishWizard_1() {
         finishWizard();
-        Desktop.getDesktop(xMSF).removeTerminateListener(this);
+        removeTerminateListener();
     }
 
     public int getMaximalStep() {
@@ -576,6 +577,13 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     }
 
 
+    public void removeTerminateListener( ){
+        if (bTerminateListenermustberemoved){
+            Desktop.getDesktop(xMSF).removeTerminateListener(this);
+            bTerminateListenermustberemoved = false;
+        }
+    }
+
     private boolean wizardClosed = false;
     /**
      * called by the cancel button and
@@ -585,7 +593,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      */
     public void cancelWizard_1() {
         cancelWizard();
-        Desktop.getDesktop(xMSF).removeTerminateListener(this);
+        removeTerminateListener();
     }
 
     public void windowHidden() {
