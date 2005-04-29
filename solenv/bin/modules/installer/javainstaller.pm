@@ -1571,7 +1571,9 @@ sub create_java_installer
     # renaming one language java file to "MyResources.java"
 
     my $baselanguage = installer::languages::get_default_language($buildlanguagesref);
-    if ( $baselanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $baselanguage = $1; }   # java file name and class name contain only "_en"
+    $baselanguage =~ s/\-/\_/;      # "pt-BR" -> "pt_BR"
+    $baselanguage =~ s/en_US/en/;   # java file name and class name contain only "_en"
+    # if ( $baselanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $baselanguage = $1; }     # java file name and class name contain only "_en"
     # $baselanguage =~ s/en-US/en/;  # java file name and class name contain only "_en"
     my $baselanguagefilename = $javadir . $installer::globals::separator . "locale/resources/MyResources_" . $baselanguage . "\.java";
     my $basedestfilename = $javadir . $installer::globals::separator . "locale/resources/MyResources.java";
