@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:40:30 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
         if ( xControlAccess.is() )
         {
-            ::rtl::OUString aCtrlText( String( SfxResId( STR_EXPORTBUTTON ) ) );
+            ::rtl::OUString aCtrlText = String( SfxResId( STR_EXPORTBUTTON ) );
             xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aCtrlText );
 
             aCtrlText = ::rtl::OUString( String( SfxResId( STR_LABEL_FILEFORMAT ) ) );
