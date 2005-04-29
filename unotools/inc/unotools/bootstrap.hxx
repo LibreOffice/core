@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:22:57 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 08:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ namespace utl
         /// retrieve the product patch level; uses the given default, if not found
         static rtl::OUString getProductPatchLevel(rtl::OUString const& _sDefault);
 
+        /// retrieve the ALLUSERS information item from setup.ini file; uses the given default, if not found
+        static rtl::OUString getAllUsersValue(rtl::OUString const& _sDefault);
+
         /// reload cached data
         static void reloadData();
 
@@ -168,7 +171,7 @@ namespace utl
     public:
         // singleton impl-class
         class Impl;
-        static Impl const& data();
+        static Impl const& data(); // the data related to the bootstrap.ini file
     };
 //-----------------------------------------------------------------------------
 } // namespace utl
