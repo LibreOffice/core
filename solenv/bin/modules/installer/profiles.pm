@@ -2,9 +2,9 @@
 #
 #   $RCSfile: profiles.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:46:36 $
+#   last change: $Author: obo $ $Date: 2005-04-29 08:48:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -202,6 +202,11 @@ sub create_profiles
         for ( my $j = 0; $j <= $#{$profileitemsref}; $j++ )
         {
             my $oneprofileitem = ${$profileitemsref}[$j];
+
+            my $styles = "";
+            if ( $oneprofileitem->{'Styles'} ) { $styles = $oneprofileitem->{'Styles'}; }
+            if ( $styles =~ /\bINIFILETABLE\b/ ) { next; }  # these values are written during installation, not during packing
+
             my $profileid = $oneprofileitem->{'ProfileID'};
 
             if ( $profileid eq $profilegid )
