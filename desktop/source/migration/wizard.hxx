@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:02:11 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 08:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ private:
 
     DECL_LINK(DeclineHdl, PushButton*);
 
+    void cleanOldOfficeRegKeys();
+
 public:
     static sal_Bool isFirstStart();
     static sal_Bool isLicenseAccepted();
@@ -129,7 +131,6 @@ protected:
 
     // from svt::RoadmapWizard
     virtual String       getStateDisplayName( WizardState _nState );
-
 };
 }
 #endif
