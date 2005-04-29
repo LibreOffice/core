@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:52:21 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5362,7 +5362,7 @@ void SvxIconSelectorDialog::ImportGraphics(
 
     if ( rejectedCount != 0 )
     {
-        OUString message( String( ResId( RID_SVXSTR_IMPORT_ICON_ERROR, DIALOG_MGR() ) ) );
+        OUString message = String( ResId( RID_SVXSTR_IMPORT_ICON_ERROR, DIALOG_MGR() ) );
         if ( m_nExpectedSize != 16 )
         {
             message = replaceSixteen( message, m_nExpectedSize );
