@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:29:54 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,8 +448,8 @@ void SdXMLImExTransform2D::AddMatrix(const Matrix3D& rNew)
 const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUString aNewString;
-    OUString aClosingBrace(String(sal_Unicode(')')));
-    OUString aEmptySpace(String(sal_Unicode(' ')));
+    OUString aClosingBrace(sal_Unicode(')'));
+    OUString aEmptySpace(sal_Unicode(' '));
 
     for(sal_uInt32 a(0L); a < maList.Count(); a++)
     {
@@ -861,8 +861,8 @@ void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMa
 const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUString aNewString;
-    OUString aClosingBrace(String(sal_Unicode(')')));
-    OUString aEmptySpace(String(sal_Unicode(' ')));
+    OUString aClosingBrace(sal_Unicode(')'));
+    OUString aEmptySpace(sal_Unicode(' '));
 
     for(sal_uInt32 a(0L); a < maList.Count(); a++)
     {
@@ -1267,7 +1267,7 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
 const OUString& SdXMLImExViewBox::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUString aNewString;
-    OUString aEmptySpace(String(sal_Unicode(' ')));
+    OUString aEmptySpace(sal_Unicode(' '));
 
     Imp_PutNumberChar(aNewString, rConv, mnX);
     aNewString += aEmptySpace;
