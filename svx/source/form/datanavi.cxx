@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:29:35 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
+#endif
+#ifndef _RCID_H
+#include <tools/rcid.h>
 #endif
 
 #ifndef _SVX_XMLEXCHG_HXX_
@@ -868,6 +871,195 @@ namespace svxform
             sName, aImage, aImage, pParent, FALSE, LIST_APPEND, _pNewNode );
     }
     //------------------------------------------------------------------------
+    class lcl_ResourceString
+    {
+    protected:
+        lcl_ResourceString()
+        {
+        }
+
+        lcl_ResourceString( const lcl_ResourceString& );
+
+        virtual ~lcl_ResourceString()
+        {
+        }
+
+        // load UI resources from resource file
+        void init()
+        {
+            // create a resource manager, for the svx resource file
+            // and the UI locale
+            ByteString aResourceFile( "svx" );
+            aResourceFile += ByteString::CreateFromInt32( INT32( SOLARUPD ) );
+            ResMgr* pResMgr = ResMgr::CreateResMgr(
+                aResourceFile.GetBuffer(),
+                Application::GetSettings().GetUILocale() );
+
+            // load the resources for the AddSubmission modal dialog.
+            // This will create our own resource context.
+            ResId aRes( RID_SVXDLG_ADD_SUBMISSION, pResMgr );
+            aRes.SetRT( RSC_MODALDIALOG );
+            pResMgr->GetResource( aRes );
+
+            // now, we can access the local resources from the dialog's
+            // resource context
+            _initResources();
+
+            // clean up: remove context, and delete the resource manager
+            // ( Increment(..) is needed since PopContext() requires that
+            //   the file pointer is at the end. )
+            pResMgr->Increment( pResMgr->GetRemainSize() );
+            pResMgr->PopContext();
+            delete pResMgr;
+        }
+
+        // load resources... to be overloaded in sub-classes
+        virtual void _initResources() = 0;
+    };
+
+    class lcl_ReplaceString : public lcl_ResourceString
+    {
+        rtl::OUString m_sDoc_UI;
+        rtl::OUString m_sInstance_UI;
+        rtl::OUString m_sNone_UI;
+
+        rtl::OUString m_sDoc_API;
+        rtl::OUString m_sInstance_API;
+        rtl::OUString m_sNone_API;
+
+        lcl_ReplaceString() :
+            lcl_ResourceString(),
+            m_sDoc_API(      RTL_CONSTASCII_USTRINGPARAM("all") ),
+            m_sInstance_API( RTL_CONSTASCII_USTRINGPARAM("instance") ),
+            m_sNone_API(     RTL_CONSTASCII_USTRINGPARAM("none") )
+        {
+            init();
+        }
+
+        lcl_ReplaceString( const lcl_ReplaceString& );
+
+        virtual ~lcl_ReplaceString()
+        {
+        }
+
+        // load UI resources from resource file
+        virtual void _initResources()
+        {
+            // now, we can access the local resources from the dialog's
+            // resource context
+            m_sDoc_UI      = String( ResId( STR_REPLACE_DOC ) );
+            m_sInstance_UI = String( ResId( STR_REPLACE_INST ) );
+            m_sNone_UI     = String( ResId( STR_REPLACE_NONE ) );
+        }
+
+    public:
+
+        /** create and obtain the singleton instance */
+        static const lcl_ReplaceString& get()
+        {
+            // keep the singleton instance here
+            static lcl_ReplaceString* m_pInstance = NULL;
+
+            if( m_pInstance == NULL )
+                m_pInstance = new lcl_ReplaceString();
+            return *m_pInstance;
+        }
+
+        /** convert submission replace string from API value to UI value.
+            Use 'none' as default. */
+        rtl::OUString toUI( const rtl::OUString& rStr ) const
+        {
+            if( rStr == m_sDoc_API )
+                return m_sDoc_UI;
+            else if( rStr == m_sInstance_API )
+                return m_sInstance_UI;
+            else
+                return m_sNone_UI;
+        }
+
+        /** convert submission replace string from UI to API.
+            Use 'none' as default. */
+        rtl::OUString toAPI( const rtl::OUString& rStr ) const
+        {
+            if( rStr == m_sDoc_UI )
+                return m_sDoc_API;
+            else if( rStr == m_sInstance_UI )
+                return m_sInstance_API;
+            else
+                return m_sNone_API;
+        }
+    };
+
+    class lcl_MethodString : public lcl_ResourceString
+    {
+        rtl::OUString m_sPost_UI;
+        rtl::OUString m_sPut_UI;
+        rtl::OUString m_sGet_UI;
+
+        rtl::OUString m_sPost_API;
+        rtl::OUString m_sPut_API;
+        rtl::OUString m_sGet_API;
+
+        lcl_MethodString() :
+            lcl_ResourceString(),
+            m_sPost_API( RTL_CONSTASCII_USTRINGPARAM("post") ),
+            m_sPut_API(  RTL_CONSTASCII_USTRINGPARAM("put") ),
+            m_sGet_API(  RTL_CONSTASCII_USTRINGPARAM("get") )
+        {
+            init();
+        }
+
+        lcl_MethodString( const lcl_MethodString& );
+
+        virtual ~lcl_MethodString()
+        {
+        }
+
+        // load UI resources from resource file
+        virtual void _initResources()
+        {
+            m_sPost_UI = String( ResId( STR_METHOD_POST ) );
+            m_sPut_UI  = String( ResId( STR_METHOD_PUT ) );
+            m_sGet_UI  = String( ResId( STR_METHOD_GET ) );
+        }
+
+    public:
+
+        /** create and obtain the singleton instance */
+        static const lcl_MethodString& get()
+        {
+            // keep the singleton instance here
+            static lcl_MethodString* m_pInstance = NULL;
+
+            if( m_pInstance == NULL )
+                m_pInstance = new lcl_MethodString();
+            return *m_pInstance;
+        }
+
+        /** convert from API to UI; put is default. */
+        rtl::OUString toUI( const rtl::OUString& rStr ) const
+        {
+            if( rStr == m_sGet_API )
+                return m_sGet_UI;
+            else if( rStr == m_sPost_API )
+                return m_sPost_UI;
+            else
+                return m_sPut_UI;
+        }
+
+        /** convert from UI to API; put is default */
+        rtl::OUString toAPI( const rtl::OUString& rStr ) const
+        {
+            if( rStr == m_sGet_UI )
+                return m_sGet_API;
+            else if( rStr == m_sPost_UI )
+                return m_sPost_API;
+            else
+                return m_sPut_API;
+        }
+    };
+
+    //------------------------------------------------------------------------
     SvLBoxEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvLBoxEntry* pEntry = NULL;
@@ -895,7 +1087,7 @@ namespace svxform
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry += String( sTemp );
+                sEntry += String( lcl_MethodString::get().toUI( sTemp ) );
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
@@ -910,7 +1102,7 @@ namespace svxform
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += String( sTemp );
+                sEntry += String( lcl_ReplaceString::get().toUI( sTemp ) );
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
             }
             catch ( Exception& )
@@ -983,12 +1175,12 @@ namespace svxform
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry += String( sTemp );
+                sEntry += String( lcl_MethodString::get().toUI( sTemp ) );
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += String( sTemp );
+                sEntry += String( lcl_ReplaceString::get().toUI( sTemp ) );
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
             }
@@ -3347,7 +3539,7 @@ namespace svxform
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
                 sTemp = m_aActionED.GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, makeAny( sTemp ) );
-                sTemp = m_aMethodLB.GetSelectEntry();
+                sTemp = lcl_MethodString::get().toAPI( m_aMethodLB.GetSelectEntry() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
                 sTemp = m_aRefED.GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
@@ -3355,7 +3547,7 @@ namespace svxform
                 sEntry.Erase( sEntry.Search( ':' ) );
                 sTemp = sEntry;
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
-                sTemp = m_aReplaceLB.GetSelectEntry();
+                sTemp = lcl_ReplaceString::get().toAPI( m_aReplaceLB.GetSelectEntry() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
             }
             catch ( Exception& )
@@ -3451,6 +3643,7 @@ namespace svxform
                 m_aRefED.SetText( sTemp );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
+                sTemp = lcl_MethodString::get().toUI( sTemp );
                 USHORT nPos = m_aMethodLB.GetEntryPos( String( sTemp ) );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                     nPos = m_aMethodLB.InsertEntry( sTemp );
@@ -3463,6 +3656,7 @@ namespace svxform
                 m_aBindLB.SelectEntryPos( nPos );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
+                sTemp = lcl_ReplaceString::get().toUI( sTemp );
                 if ( sTemp.getLength() == 0 )
                     sTemp = m_aReplaceLB.GetEntry(0); // first entry == "none"
                 nPos = m_aReplaceLB.GetEntryPos( String( sTemp ) );
