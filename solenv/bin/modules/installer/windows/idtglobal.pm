@@ -363,6 +363,16 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
     }
 
+    if ( $definestring eq "inifile" )
+    {
+        $oneline = "IniFile\tFileName\tDirProperty\tSection\tKey\tValue\tAction\tComponent_\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\tl255\tS72\tl96\tl128\tl255\ti2\ts72\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "IniFile\tIniFile\n";
+        push(@{$idtref}, $oneline);
+    }
+
     if ( $definestring eq "selfreg" )
     {
         $oneline = "File_\tCost\n";
