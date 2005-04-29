@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:42:49 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 08:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #define BOOTSTRAP_DIRNAME_USERDIR           "user"
 
 #define VERSIONFILE_SECTION                 "Versions"
+
+#define SETUP_DATA_NAME                     SAL_CONFIGFILE("setup")
+#define SETUP_ITEM_ALLUSERS                 "ALLUSERS"
 // ---------------------------------------------------------------------------------------
 typedef char const * AsciiString;
 // ---------------------------------------------------------------------------------------
@@ -740,6 +743,17 @@ OUString Bootstrap::getProductPatchLevel(OUString const& _sDefault)
     OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_PATCH_LEVEL));
 
     return data().getBootstrapValue( csBuildIdItem, _sDefault );
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getAllUsersValue(OUString const& _sDefault)
+{
+    OUString const csAllUsersItem(RTL_CONSTASCII_USTRINGPARAM(SETUP_ITEM_ALLUSERS));
+
+    rtl::Bootstrap aData( getExecutableDirectory() + OUString( RTL_CONSTASCII_USTRINGPARAM( "/"SETUP_DATA_NAME ) ) );
+    OUString sResult;
+    aData.getFrom( csAllUsersItem, sResult, _sDefault );
+    return sResult;
 }
 // ---------------------------------------------------------------------------------------
 
