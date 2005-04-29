@@ -37,6 +37,10 @@ USE_APP1DEF=
 
 .IF "$(APP1TARGETN)"!=""
 
+.IF "$(APP1PRODUCTNAME)"!=""
+APP1PRODUCTDEF:=-DPRODUCT_NAME="$(APP1PRODUCTNAME)"
+.ENDIF			# "$(APP1PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
@@ -105,7 +109,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
+    $(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP1LINKER) @$(mktmp \
@@ -199,6 +203,10 @@ USE_APP2DEF=
 
 .IF "$(APP2TARGETN)"!=""
 
+.IF "$(APP2PRODUCTNAME)"!=""
+APP2PRODUCTDEF:=-DPRODUCT_NAME="$(APP2PRODUCTNAME)"
+.ENDIF			# "$(APP2PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
@@ -267,7 +275,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
+    $(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP2LINKER) @$(mktmp \
@@ -361,6 +369,10 @@ USE_APP3DEF=
 
 .IF "$(APP3TARGETN)"!=""
 
+.IF "$(APP3PRODUCTNAME)"!=""
+APP3PRODUCTDEF:=-DPRODUCT_NAME="$(APP3PRODUCTNAME)"
+.ENDIF			# "$(APP3PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
@@ -429,7 +441,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
+    $(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP3LINKER) @$(mktmp \
@@ -523,6 +535,10 @@ USE_APP4DEF=
 
 .IF "$(APP4TARGETN)"!=""
 
+.IF "$(APP4PRODUCTNAME)"!=""
+APP4PRODUCTDEF:=-DPRODUCT_NAME="$(APP4PRODUCTNAME)"
+.ENDIF			# "$(APP4PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
@@ -591,7 +607,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
+    $(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP4LINKER) @$(mktmp \
@@ -685,6 +701,10 @@ USE_APP5DEF=
 
 .IF "$(APP5TARGETN)"!=""
 
+.IF "$(APP5PRODUCTNAME)"!=""
+APP5PRODUCTDEF:=-DPRODUCT_NAME="$(APP5PRODUCTNAME)"
+.ENDIF			# "$(APP5PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
@@ -753,7 +773,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
+    $(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP5LINKER) @$(mktmp \
@@ -847,6 +867,10 @@ USE_APP6DEF=
 
 .IF "$(APP6TARGETN)"!=""
 
+.IF "$(APP6PRODUCTNAME)"!=""
+APP6PRODUCTDEF:=-DPRODUCT_NAME="$(APP6PRODUCTNAME)"
+.ENDIF			# "$(APP6PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
@@ -915,7 +939,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
+    $(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP6LINKER) @$(mktmp \
@@ -1009,6 +1033,10 @@ USE_APP7DEF=
 
 .IF "$(APP7TARGETN)"!=""
 
+.IF "$(APP7PRODUCTNAME)"!=""
+APP7PRODUCTDEF:=-DPRODUCT_NAME="$(APP7PRODUCTNAME)"
+.ENDIF			# "$(APP7PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
@@ -1077,7 +1105,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
+    $(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP7LINKER) @$(mktmp \
@@ -1171,6 +1199,10 @@ USE_APP8DEF=
 
 .IF "$(APP8TARGETN)"!=""
 
+.IF "$(APP8PRODUCTNAME)"!=""
+APP8PRODUCTDEF:=-DPRODUCT_NAME="$(APP8PRODUCTNAME)"
+.ENDIF			# "$(APP8PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
@@ -1239,7 +1271,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
+    $(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP8LINKER) @$(mktmp \
@@ -1333,6 +1365,10 @@ USE_APP9DEF=
 
 .IF "$(APP9TARGETN)"!=""
 
+.IF "$(APP9PRODUCTNAME)"!=""
+APP9PRODUCTDEF:=-DPRODUCT_NAME="$(APP9PRODUCTNAME)"
+.ENDIF			# "$(APP9PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
@@ -1401,7 +1437,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
+    $(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP9LINKER) @$(mktmp \
@@ -1495,6 +1531,10 @@ USE_APP10DEF=
 
 .IF "$(APP10TARGETN)"!=""
 
+.IF "$(APP10PRODUCTNAME)"!=""
+APP10PRODUCTDEF:=-DPRODUCT_NAME="$(APP10PRODUCTNAME)"
+.ENDIF			# "$(APP10PRODUCTNAME)"!=""
+
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
@@ -1563,7 +1603,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10VERINFO)" != ""
-    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
+    $(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(APP10LINKER) @$(mktmp \
