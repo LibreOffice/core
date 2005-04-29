@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:35:53 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 09:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ void CustomAnimationList::update()
             {
                 SvLBoxEntry* pLBoxEntry = new CustomAnimationListEntry;
                 pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), 0));
-                OUString aDescription( String( SdResId( STR_CUSTOMANIMATION_TRIGGER ) ) );
+                OUString aDescription = String( SdResId( STR_CUSTOMANIMATION_TRIGGER ) );
                 aDescription += OUString( RTL_CONSTASCII_USTRINGPARAM(": ") );
                 aDescription += getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription, this ) );
