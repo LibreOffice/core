@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:09:17 $
+ *  last change: $Author: obo $  $Date: 2005-04-29 08:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,7 @@ public abstract class WWD_Startup extends WWD_General {
             checkSteps();
 
             executeDialog(myFrame);
+            removeTerminateListener();
 
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
