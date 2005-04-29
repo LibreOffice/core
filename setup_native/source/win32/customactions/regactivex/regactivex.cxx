@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:03:03 $
+ *  last change: $Author: obo $ $Date: 2005-04-29 08:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,12 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
 //----------------------------------------------------------
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser )
 {
+    // For Win98/WinME the values should be written to the local machine
+    OSVERSIONINFO       aVerInfo;
+    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
+    if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
+        InstallForAllUser = TRUE;
+
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
     {
@@ -119,6 +125,12 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 //----------------------------------------------------------
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser )
 {
+    // For Win98/WinME the values should be written to the local machine
+    OSVERSIONINFO       aVerInfo;
+    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
+    if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
+        InstallForAllUser = TRUE;
+
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
     {
