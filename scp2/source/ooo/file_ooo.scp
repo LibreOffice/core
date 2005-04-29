@@ -240,6 +240,28 @@ End
 
 #endif
 
+File gid_File_Bin_Setofficelang
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "setofficelang.bin";
+  #else
+    Name = "setofficelang.exe";
+  #endif
+End
+
+#ifdef UNX
+
+File gid_File_Script_Setofficelang
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "setofficelang";
+End
+
+#endif
+
 File gid_File_Bin_Configimport
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
