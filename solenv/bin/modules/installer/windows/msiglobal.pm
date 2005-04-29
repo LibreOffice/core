@@ -440,6 +440,9 @@ sub get_codepage_for_sis
 
     my $codepage = installer::windows::language::get_windows_encoding($language);
 
+    # Codepage 65001 does not work in Summary Information Stream
+    if ( $codepage == 65001 ) { $codepage = 0; }
+
     # my $codepage = "1252";    # determine dynamically in a function
     # my $codepage = "65001";       # UTF-8
     return $codepage;
