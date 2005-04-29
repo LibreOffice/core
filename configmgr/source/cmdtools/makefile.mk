@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 12:56:45 $
+#   last change: $Author: obo $ $Date: 2005-04-29 08:50:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,11 +67,13 @@ PRJNAME=configmgr
 
 TARGET=configtools
 TARGET1=configimport
+TARGET2=setofficelang
 
 # Targettype should be CUI, but we need to be able to run the tools on Windows without a shell
 .IF "$(GUI)" == "WNT"
 TARGETTYPE=GUI
 APP1NOSAL="TRUE"
+APP2NOSAL="TRUE"
 .ELSE  # "$(GUI)" == "WNT
 TARGETTYPE=CUI
 .ENDIF # "$(GUI)" == "WNT
@@ -84,7 +86,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
+# CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
 APPSTDLIBS=\
             $(SALLIB) \
@@ -93,16 +95,20 @@ APPSTDLIBS=\
 
 OBJFILES=\
     $(OBJ)$/configimport.obj \
+    $(OBJ)$/setofficelang.obj \
     $(OBJ)$/unomain.obj 
 
 
 # --- Apps --------------------------------------------------------
 APP1STDLIBS = $(APPSTDLIBS)
+APP2STDLIBS = $(APPSTDLIBS)
 
 .IF "$(GUI)"=="UNX"
 APP1TARGET= $(TARGET1).bin
+APP2TARGET= $(TARGET2).bin
 .ELSE
 APP1TARGET= $(TARGET1)
+APP2TARGET= $(TARGET2)
 .ENDIF
 
 APP1OBJS=	\
@@ -110,6 +116,10 @@ APP1OBJS=	\
     $(OBJ)$/oslstream.obj \
     $(OBJ)$/trivialbufferedfile.obj \
     $(OBJ)$/configimport.obj \
+    $(OBJ)$/unomain.obj 
+
+APP2OBJS=	\
+    $(OBJ)$/setofficelang.obj \
     $(OBJ)$/unomain.obj 
 
 # --- Scripts ------------------------------------------------------
