@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:17:28 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,13 +732,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 OutlinerView* pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
                 if (pOutlView)
                 {
-                    pOlView->IgnoreCurrentPageChanges(true);
+                    OutlineViewPageChangesGuard aGuard(pOlView);
+
                     KeyCode  aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
                     pOutlView->PostKeyEvent(aKEvt);
                     if (pFuActual!=NULL && pFuActual->ISA(FuOutlineText))
                         static_cast<FuOutlineText*>(pFuActual)->UpdateForKeyPress (aKEvt);
-                    pOlView->IgnoreCurrentPageChanges(false);
                 }
             }
             rReq.Done();
@@ -1628,7 +1628,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     BOOL bReturn = FALSE;
-    pOlView->IgnoreCurrentPageChanges(true);
+    OutlineViewPageChangesGuard aGuard(pOlView);
 
     if (pWin == NULL && pFuActual)
     {
@@ -1656,7 +1656,6 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     {
         Invalidate( SID_PREVIEW_STATE );
     }
-    pOlView->IgnoreCurrentPageChanges(false);
 
     return(bReturn);
 }
@@ -2048,9 +2047,8 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
     }
     if (bNewPage)
     {
-        pOlView->IgnoreCurrentPageChanges(true);
+        OutlineViewPageChangesGuard aGuard(pOlView);
         SetCurrentPage (pPage);
-        pOlView->IgnoreCurrentPageChanges(false);
     }
 }
 
