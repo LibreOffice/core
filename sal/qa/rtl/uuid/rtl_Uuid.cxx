@@ -67,12 +67,11 @@ public:
 #define TEST_UUID 20
     void createUuid_001()
     {
-    sal_uInt8 pNode[16];
     sal_uInt8 aNode[TEST_UUID][16];
     sal_Int32 i,i2;
     for( i = 0 ; i < TEST_UUID ; i ++ )
     {
-        rtl_createUuid( aNode[i], pNode, sal_False );
+        rtl_createUuid( aNode[i], i == 0 ? 0 : aNode[i - 1], sal_False );
     }
     sal_Bool bRes = sal_True;
     for( i = 0 ; i < TEST_UUID ; i ++ )
