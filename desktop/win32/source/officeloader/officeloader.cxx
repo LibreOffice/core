@@ -2,9 +2,9 @@
 //
 //   $RCSfile: officeloader.cxx,v $
 //
-//   $Revision: 1.2 $
+//   $Revision: 1.3 $
 //
-//   last change: $Author: rt $ $Date: 2004-11-26 14:49:57 $
+//   last change: $Author: obo $ $Date: 2005-05-02 13:22:22 $
 //
 //   The Contents of this file are made available subject to the terms of
 //   either of the following licenses
@@ -122,7 +122,23 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
         if ( fSuccess )
         {
-            WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
+            DWORD   dwWaitResult;
+
+            do
+            {
+                // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWidth" so we have to do so
+                // as if we where processing any messages
+
+                dwWaitResult = MsgWaitForMultipleObjects( 1, &aProcessInfo.hProcess, FALSE, INFINITE, QS_ALLEVENTS );
+
+                if (  WAIT_OBJECT_0 + 1 == dwWaitResult )
+                {
+                    MSG msg;
+
+                    PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
+                }
+            } while ( WAIT_OBJECT_0 + 1 == dwWaitResult );
+
             dwExitCode = 0;
             GetExitCodeProcess( aProcessInfo.hProcess, &dwExitCode );
 
