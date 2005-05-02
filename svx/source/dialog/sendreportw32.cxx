@@ -84,7 +84,7 @@ namespace svx{
                 sizeof(szBuffer) ) )
                 maEMailAddrED.SetText( (sal_Unicode *)szBuffer );
 
-            BOOL    fAllowContact = FALSE;
+            DWORD   fAllowContact = FALSE;
             RegReadValue(
                 HKEY_CURRENT_USER,
                 TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
