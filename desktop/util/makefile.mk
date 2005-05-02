@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-11 10:51:54 $
+#   last change: $Author: obo $ $Date: 2005-05-02 13:22:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -182,50 +182,6 @@ APP1STACK=10000000
 
 .ENDIF # WNT
 
-.IF "$(GUI)" == "WNT"
-
-APP2DEPN= $(APP2RES) verinfo.rc
-APP2NOSAL=TRUE
-APP2TARGET=sowrapper
-APP2STDLIBS+=shell32.lib
-APP2OBJS=       $(OBJ)$/sowrapper.obj \
-                $(OBJ)$/wrapperw.obj \
-                $(OBJ)$/wrappera.obj
-APP2RES=    $(RES)$/$(APP2TARGET).res
-APP2ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
-APP2VERINFO=verinfo.rc
-APP2LINKRES=$(MISC)$/$(APP2TARGET).res
-
-
-APP3DEPN= $(APP3RES) verinfo.rc
-APP3NOSAL=TRUE
-APP3TARGET=solocal
-APP3STDLIBS+=shell32.lib
-APP3OBJS= \
-                $(OBJ)$/sowrapper.obj \
-                $(OBJ)$/lwrapw.obj \
-                $(OBJ)$/lwrapa.obj
-APP3RES=    $(RES)$/$(APP3TARGET).res
-APP3ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
-APP3VERINFO=verinfo.rc
-APP3LINKRES=$(MISC)$/$(APP3TARGET).res
-
-APP4DEPN= $(APP4RES) verinfo.rc
-APP4NOSAL=TRUE
-APP4TARGET=soremote
-APP4STDLIBS+=shell32.lib
-APP4OBJS= \
-                $(OBJ)$/sowrapper.obj \
-                $(OBJ)$/rwrapw.obj \
-                $(OBJ)$/rwrapa.obj
-
-APP4RES=    $(RES)$/$(APP4TARGET).res
-APP4ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
-APP4VERINFO=verinfo.rc
-APP4LINKRES=$(MISC)$/$(APP4TARGET).res
-.ENDIF # "$(GUI)" == "WNT"
-
-
 APP5TARGET=soffice
 APP5NOSAL=TRUE
 APP5STDLIBS=			\
@@ -302,6 +258,8 @@ $(APP1TARGETN) : $(BIN)$/so
 
 .IF "$(GUI)" == "WNT"
 ALLTAR: $(BIN)$/$(TARGET).exe.manifest
+ALLTAR: $(BIN)$/$(TARGET).bin
+ALLTAR: $(BIN)$/so$/$(TARGET).bin
 .ENDIF # WNT
 
 $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
@@ -318,6 +276,12 @@ ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 # create a manifest file with the same name as the
 # office executable file soffice.exe.manifest
 $(BIN)$/$(TARGET).exe.manifest: template.manifest
+   +$(COPY) $< $@
+
+$(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
+   +$(COPY) $< $@
+   
+$(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
    +$(COPY) $< $@
 
 $(MISCX)$/$(APP1TARGET).def : makefile.mk
