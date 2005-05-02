@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-25 11:55:33 $
+#   last change: $Author: obo $ $Date: 2005-05-02 15:28:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -450,9 +450,11 @@ sub put_welcome_bmp_into_template
 
 sub put_setup_ico_into_template
 {
-    my ($templatefile, $includepatharrayref) = @_;
+    my ($templatefile, $includepatharrayref, $allvariables) = @_;
 
-    my $filename = "downloadsetup.ico";
+    # my $filename = "downloadsetup.ico";
+    if ( ! $allvariables->{'DOWNLOADSETUPICO'} ) { installer::exiter::exit_program("ERROR: DOWNLOADSETUPICO not defined in product definition!", "put_setup_ico_into_template"); }
+    my $filename = $allvariables->{'DOWNLOADSETUPICO'};
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
@@ -598,20 +600,35 @@ sub nsis_language_converter
     my $nsislanguage = "";
 
     if ( $language eq "en-US" ) { $nsislanguage = "English"; }
+    elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; }
+    elsif ( $language eq "ca" ) { $nsislanguage = "Catalan"; }
+    elsif ( $language eq "cs" ) { $nsislanguage = "Czech"; }
+    elsif ( $language eq "da" ) { $nsislanguage = "Danish"; }
     elsif ( $language eq "de" ) { $nsislanguage = "German"; }
+    elsif ( $language eq "el" ) { $nsislanguage = "Greek"; }
+    elsif ( $language eq "fi" ) { $nsislanguage = "Finnish"; }
     elsif ( $language eq "fr" ) { $nsislanguage = "French"; }
+    elsif ( $language eq "hu" ) { $nsislanguage = "Hungarian"; }
     elsif ( $language eq "it" ) { $nsislanguage = "Italian"; }
     elsif ( $language eq "nl" ) { $nsislanguage = "Dutch"; }
     elsif ( $language eq "es" ) { $nsislanguage = "Spanish"; }
     elsif ( $language eq "sv" ) { $nsislanguage = "Swedish"; }
+    elsif ( $language eq "sk" ) { $nsislanguage = "Slovak"; }
     elsif ( $language eq "pl" ) { $nsislanguage = "Polish"; }
     elsif ( $language eq "pt-BR" ) { $nsislanguage = "PortugueseBR"; }
     elsif ( $language eq "ru" ) { $nsislanguage = "Russian"; }
     elsif ( $language eq "ja" ) { $nsislanguage = "Japanese"; }
     elsif ( $language eq "ko" ) { $nsislanguage = "Korean"; }
+    elsif ( $language eq "th" ) { $nsislanguage = "Thai"; }
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
-    else { installer::exiter::exit_program("ERROR: Could not find nsis language for $language!", "nsis_language_converter");  }
+    else {
+
+        my $infoline = "NSIS language_converter : Could not find nsis language for $language!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        $nsislanguage = "English";
+        # installer::exiter::exit_program("ERROR: Could not find nsis language for $language!", "nsis_language_converter");
+    }
 
     return $nsislanguage;
 }
@@ -1103,7 +1120,7 @@ sub create_download_sets
         put_windows_productname_into_template($templatefile, $allvariableshashref);
         put_banner_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
         put_welcome_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
-        put_setup_ico_into_template($templatefile, $includepatharrayref);
+        put_setup_ico_into_template($templatefile, $includepatharrayref, $allvariableshashref);
         put_publisher_into_template($templatefile);
         put_website_into_template($templatefile);
         put_windows_productversion_into_template($templatefile, $allvariableshashref);
