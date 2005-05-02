@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:27 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,10 @@ void EventMultiplexer::Implementation::RemoveEventListener (
 
 void EventMultiplexer::Implementation::ConnectToController (void)
 {
+    // Just in case that we missed some event we now disconnect from the old
+    // controller.
+    DisconnectFromController ();
+
     // Register at the controller of the main view shell.
 
     mxControllerPropertySetWeak = Reference<beans::XPropertySet> (
@@ -569,6 +573,7 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
             break;
 
         case frame::FrameAction_COMPONENT_REATTACHED:
+        case frame::FrameAction_COMPONENT_ATTACHED:
             ConnectToController();
             break;
 
@@ -764,4 +769,3 @@ EventMultiplexerEvent::EventMultiplexerEvent (
 }
 
 } } // end of namespace ::sd::tools
-
