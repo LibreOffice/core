@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:47:25 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ PaneDockingWindow::PaneDockingWindow (
     SystemWindow* pSystemWindow = GetSystemWindow();
     if (pSystemWindow != NULL)
         pSystemWindow->GetTaskPaneList()->AddWindow(this);
+
+    AddEventListener(LINK(this,PaneDockingWindow,WindowEventListener));
 }
 
 
@@ -116,6 +118,8 @@ PaneDockingWindow::PaneDockingWindow (
 
 PaneDockingWindow::~PaneDockingWindow (void)
 {
+    RemoveEventListener(LINK(this,PaneDockingWindow,WindowEventListener));
+
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
         GetBindings().GetDispatcher()->GetFrame());
 
@@ -409,5 +413,37 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
     }
 }
 
+
+
+
+IMPL_LINK(PaneDockingWindow, WindowEventListener, VclSimpleEvent*, pEvent)
+{
+    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
+    {
+        ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
+            GetBindings().GetDispatcher()->GetFrame());
+
+        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
+        switch (pWindowEvent->GetId())
+        {
+            case VCLEVENT_WINDOW_SHOW:
+                if (pBase != NULL)
+                    pBase->GetPaneManager().RequestWindowVisibilityChange(
+                        mePane,
+                        true,
+                        PaneManager::CM_ASYNCHRONOUS);
+                break;
+
+            case VCLEVENT_WINDOW_HIDE:
+                if (pBase != NULL)
+                    pBase->GetPaneManager().RequestWindowVisibilityChange(
+                        mePane,
+                        false,
+                        PaneManager::CM_ASYNCHRONOUS);
+                break;
+        }
+    }
+    return 1;
+}
 
 } // end of namespace ::sd
