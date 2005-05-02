@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2004-12-13 10:36:55 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1584,7 +1584,7 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
 
             if ( nBytesRead == nFileSize )
             {
-                if ( 0 == stricmp( GetFileName(filename).c_str(), "soffice.exe" ) )
+                if ( 0 == stricmp( GetFileName(filename).c_str(), "soffice.bin" ) )
                     repatch_soffice_exe( pBuffer, nBytesRead );
 
                 rtlDigestError error = rtl_digest_MD5 (
