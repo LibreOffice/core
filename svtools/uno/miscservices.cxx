@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 11:51:04 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
 
         xNewKey = xRegistryKey->createKey (
-            OUString::createFromAscii( "/com.sun.star.comp.svtools.SvFilterOptionsDialog/UNO/SERVICES" ) );
+            OUString::createFromAscii( "/com.sun.star.svtools.SvFilterOptionsDialog/UNO/SERVICES" ) );
         xNewKey->createKey (
             OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" ) );
 
@@ -168,7 +168,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 aServiceNames);
         }
         else if (rtl_str_compare (
-                     pImplementationName, "com.sun.star.comp.svtools.SvFilterOptionsDialog") == 0)
+                     pImplementationName, "com.sun.star.svtools.SvFilterOptionsDialog") == 0)
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
