@@ -21,8 +21,9 @@ OpenOffice
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
-			DOWNLOADBANNER	downloadbanner.bmp
-			DOWNLOADBITMAP	downloadbitmap.bmp
+			DOWNLOADBANNER	ooobanner.bmp
+			DOWNLOADBITMAP	ooobitmap.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
 	    }
 				active			1
 				compression		5
