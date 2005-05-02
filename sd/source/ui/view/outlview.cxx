@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:38:06 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,8 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 
 IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 {
+    OutlineViewPageChangesGuard aGuard(this);
+
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
     {
@@ -711,6 +713,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
+
     return 0;
 }
 
@@ -723,6 +726,8 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 {
+    OutlineViewPageChangesGuard aGuard(this);
+
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
     {
@@ -861,7 +866,6 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         }
 
     }
-
     // wieviele Titel sind vor dem fraglichen Titelabsatz?
     ULONG nPos = -1L;
 
@@ -2132,6 +2136,19 @@ void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
         mnIgnoreCurrentPageChangesLevel++;
     else
         mnIgnoreCurrentPageChangesLevel--;
+}
+
+OutlineViewPageChangesGuard::OutlineViewPageChangesGuard( OutlineView* pView )
+: mpView( pView )
+{
+    if( mpView )
+        mpView->IgnoreCurrentPageChanges( true );
+}
+
+OutlineViewPageChangesGuard::~OutlineViewPageChangesGuard()
+{
+    if( mpView )
+        mpView->IgnoreCurrentPageChanges( false );
 }
 
 } // end of namespace sd
