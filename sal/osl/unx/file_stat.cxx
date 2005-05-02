@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_stat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 16:15:40 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,7 @@ namespace /* private */
         */
         pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
 
-        if (0 == (S_IR & file_stat.st_mode))
-            pStat->uValidFields &= ~osl_FileStatus_Mask_Attributes;
-
-        if (0 == (S_IW & file_stat.st_mode))
+        if ((0 == (S_IW & file_stat.st_mode)) && (S_IR & file_stat.st_mode))
             pStat->uAttributes |= osl_File_Attribute_ReadOnly;
 
         if (S_IX & file_stat.st_mode)
