@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:28:50 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <rtl/random.h>
 #include <rtl/uuid.h>
 #include <rtl/digest.h>
+#include "rtl/instance.hxx"
 
 #define SWAP_INT32_TO_NETWORK(x)\
                { sal_uInt32 y = x;\
@@ -171,13 +172,14 @@ static sal_uInt64 getSystemTime( )
     return nNow + nTicks;
 }
 
+namespace {
 
-class UuidRandomPoolHolder
+class Pool
 {
     rtlRandomPool pool;
 public:
-    UuidRandomPoolHolder() : pool( rtl_random_createPool() ) {}
-    ~UuidRandomPoolHolder();
+    Pool() : pool( rtl_random_createPool() ) {}
+    ~Pool();
 
     rtlRandomError addBytes( const void *Buffer, sal_Size Bytes )
     {
@@ -190,17 +192,21 @@ public:
     }
 };
 
-UuidRandomPoolHolder::~UuidRandomPoolHolder()
+Pool::~Pool()
 {
     if( pool )
         rtl_random_destroyPool( pool );
+}
+
+struct PoolHolder: public rtl::Static< Pool, PoolHolder > {};
+
 }
 
 static sal_uInt16 getInt16RandomValue( sal_uInt64 nSystemTime )
 {
     sal_uInt16 n;
 
-    static UuidRandomPoolHolder pool;
+    Pool & pool = PoolHolder::get();
     OSL_VERIFY( rtl_Random_E_None == pool.addBytes( &nSystemTime, sizeof( nSystemTime ) ) );
     OSL_VERIFY( rtl_Random_E_None == pool.getBytes( &n, 2 ) );
     return n;
