@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:37:03 $
+ *  last change: $Author: obo $ $Date: 2005-05-02 13:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,16 @@ private:
     DECL_LINK( AppEventListenerHdl, void * );
 
     DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent*);
+};
+
+// calls IgnoreCurrentPageChangesLevel with true in ctor and with false in dtor
+class OutlineViewPageChangesGuard
+{
+public:
+    OutlineViewPageChangesGuard( OutlineView* pView );
+    ~OutlineViewPageChangesGuard();
+private:
+    OutlineView* mpView;
 };
 
 } // end of namespace sd
