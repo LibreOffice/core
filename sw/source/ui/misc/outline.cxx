@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 15:15:08 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,14 +478,15 @@ short SwOutlineTabDialog::Ok()
     // bei allen erzeugten Vorlagen die Ebenen setzen, muss
     // geschehen, um evtl. aufgehobene Zuordnungen
     // auch wieder zu loeschen
+
+    const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
+
     USHORT i, nCount = rWrtSh.GetTxtFmtCollCount();
     for( i = 0; i < nCount; ++i )
     {
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if( !rTxtColl.IsDefault() )
         {
-            const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
-
             rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));
 
             if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)
@@ -519,12 +520,18 @@ short SwOutlineTabDialog::Ok()
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
                                 aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
                 if(pTxtColl)
-                    pTxtColl->SetOutlineLevel( (BYTE)i );
+                {
+                    pTxtColl->SetOutlineLevel( i );
+
+                    SwNumRuleItem aItem(pOutlineRule->GetName());
+                    pTxtColl->SetAttr(aItem);
+                }
             }
         }
     }
 
-    rWrtSh.SetOutlineNumRule( *pNumRule );
+    rWrtSh.SetOutlineNumRule( *pNumRule);
+
     return RET_OK;
 }
 
