@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:41:55 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ using namespace ::com::sun::star::io;
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/otransactedfilestream.hxx>
 //#include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
@@ -923,14 +924,19 @@ sal_Bool SfxMedium::TryStorage()
     return pImp->xStorage.is();
 }
 
+sal_Bool SfxMedium::BasedOnOriginalFile_Impl()
+{
+    return ( !pImp->pTempFile && !( aLogicName.Len() && pImp->m_bSalvageMode )
+      && GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).getLength()
+      && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
+      && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
+}
+
 void SfxMedium::StorageBackup_Impl()
 {
     ::ucb::Content aOriginalContent;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-    if ( !pImp->pTempFile && !pImp->m_aBackupURL.getLength()
-      && GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).getLength()
-      && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
-      && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
+    if ( BasedOnOriginalFile_Impl() && !pImp->m_aBackupURL.getLength()
       && ::ucb::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aOriginalContent ) )
     {
         DoInternalBackup_Impl( aOriginalContent );
@@ -1006,20 +1012,30 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 
             ::rtl::OUString aOutputURL = GetOutputStorageURL_Impl();
 
-            // TODO/LATER: not an atomar operation
-            if ( !bOverWrite && xSimpleFileAccess->exists( aOutputURL ) )
+            // TODO/LATER: nonatomar operation
+            sal_Bool bExists = xSimpleFileAccess->exists( aOutputURL );
+            if ( !bOverWrite && bExists )
                 throw ::com::sun::star::ucb::NameClashException();
 
-            uno::Reference< io::XStream > xStream =
-                            xSimpleFileAccess->openFileReadWrite( aOutputURL );
+            uno::Reference< io::XStream > xStream;
 
-            uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
-            uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY );
-            if ( !xTruncate.is() )
-                throw uno::RuntimeException();
+            if ( BasedOnOriginalFile_Impl() )
+            {
+                // the storage will be based on original file, the wrapper should be used
+                xStream = new ::comphelper::OTruncatedTransactedFileStream( aOutputURL, xSimpleFileAccess, xFactory, !bExists );
+            }
+            else
+            {
+                // the storage will be based on the temporary file, the stream can be truncated directly
+                xStream = xSimpleFileAccess->openFileReadWrite( aOutputURL );
+                uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
+                uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY );
+                if ( !xTruncate.is() )
+                    throw uno::RuntimeException();
 
-            xTruncate->truncate();
-            xOutStream->flush();
+                xTruncate->truncate();
+                xOutStream->flush();
+            }
 
             pImp->xStream = xStream;
                GetItemSet()->Put( SfxUsrAnyItem( SID_STREAM, makeAny( xStream ) ) );
@@ -1437,7 +1453,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                         {
                             // use backup to restore the file
                             // the storage has already disconnected from original location
-                            CloseStreams_Impl();
+                            CloseAndReleaseStreams_Impl();
                             if ( !UseBackupToRestore_Impl( aOriginalContent, xDummyEnv ) )
                             {
                                 // connect the medium to the temporary file of the storage
@@ -2446,19 +2462,31 @@ void SfxMedium::CloseAndRelease()
         CloseStorage();
     }
 
+    CloseAndReleaseStreams_Impl();
+}
+
+void SfxMedium::CloseAndReleaseStreams_Impl()
+{
+    CloseReadStorage_Impl();
+
+    uno::Reference< io::XInputStream > xInToClose = pImp->xInputStream;
+    uno::Reference< io::XOutputStream > xOutToClose;
+    if ( pImp->xStream.is() )
+        xOutToClose = pImp->xStream->getOutputStream();
+
+    // The probably exsisting SvStream wrappers should be closed first
+    CloseStreams_Impl();
+
     try
     {
-        CloseReadStorage_Impl();
-        if ( pImp->xInputStream.is() )
-            pImp->xInputStream->closeInput();
-        if ( pImp->xStream.is() && pImp->xStream->getOutputStream().is() )
-            pImp->xStream->getOutputStream()->closeOutput();
+        if ( xInToClose.is() )
+            xInToClose->closeInput();
+        if ( xOutToClose.is() )
+            xOutToClose->closeOutput();
     }
     catch ( uno::Exception& )
     {
     }
-
-    CloseStreams_Impl();
 }
 
 //------------------------------------------------------------------
