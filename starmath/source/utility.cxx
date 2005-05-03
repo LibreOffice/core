@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:07:08 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,12 +333,12 @@ String SmFontPickList::GetStringItem(void *pItem)
 
     aString = pFont->GetName();
 
-    if (pFont->GetItalic() > ITALIC_NONE)
+    if (IsItalic( *pFont ))
     {
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTITALIC));
     }
-    if (pFont->GetWeight() > WEIGHT_NORMAL) // bold?
+    if (IsBold( *pFont ))    // bold?
     {
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTBOLD));
@@ -466,6 +466,21 @@ void SmFontPickListBox::Remove(const Font &rFont)
 }
 
 ////////////////////////////////////////
+
+BOOL IsItalic( const Font &rFont )
+{
+    FontItalic eItalic = rFont.GetItalic();
+    // the code below leaves only _NONE and _DONTKNOW as not italic
+    return eItalic == ITALIC_OBLIQUE  ||  eItalic == ITALIC_NORMAL;
+}
+
+
+BOOL IsBold( const Font &rFont )
+{
+    FontWeight eWeight = rFont.GetWeight();
+    return eWeight != WEIGHT_DONTKNOW && eWeight > WEIGHT_NORMAL;
+}
+
 
 void SmFace::Impl_Init()
 {
