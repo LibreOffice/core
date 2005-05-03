@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:05:31 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ namespace presentation
                             // given subset type, but only when it's part
                             // of the given paragraph)
                             nTreeNodes = rTreeNodeSupplier.getNumberOfSubsetTreeNodes(
-                                pTargetShape->getSubsetNode(),
+                                pTargetSubset->getSubset(),
                                 eIterateNodeType );
                         }
                         else
@@ -495,7 +495,7 @@ namespace presentation
                                     new ShapeSubset(
                                         pTargetSubset,
                                         rTreeNodeSupplier.getSubsetTreeNode(
-                                            pTargetShape->getSubsetNode(),
+                                            pTargetSubset->getSubset(),
                                             i,
                                             eIterateNodeType ) ) );
                             }
