@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:04:58 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,11 @@ SmFormat::SmFormat()
 
     vFont[FNT_VARIABLE].SetItalic(ITALIC_NORMAL);
     vFont[FNT_FUNCTION].SetItalic(ITALIC_NONE);
-    vFont[FNT_TEXT].SetItalic(ITALIC_NONE);
+    vFont[FNT_NUMBER]  .SetItalic(ITALIC_NONE);
+    vFont[FNT_TEXT]    .SetItalic(ITALIC_NONE);
+    vFont[FNT_SERIF]   .SetItalic(ITALIC_NONE);
+    vFont[FNT_SANS]    .SetItalic(ITALIC_NONE);
+    vFont[FNT_FIXED]   .SetItalic(ITALIC_NONE);
 
     for ( USHORT i = FNT_BEGIN;  i <= FNT_END;  i++ )
     {
