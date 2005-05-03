@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:53:36 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,30 +138,38 @@ void WinSalTimer::Stop()
 
 void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
 {
-    SalData* pSalData = GetSalData();
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // Test for MouseLeave
-    SalTestMouseLeave();
-
-    if ( pSVData->mpSalTimer )
+    __try
     {
-        // Try to aquire the mutex. If we don't get the mutex then we
-        // try this a short time later again.
-        if ( ImplSalYieldMutexTryToAcquire() )
-        {
-            pSalData->mbInTimerProc = TRUE;
-            pSVData->mpSalTimer->CallCallback();
-            pSalData->mbInTimerProc = FALSE;
-            ImplSalYieldMutexRelease();
+        SalData* pSalData = GetSalData();
+        ImplSVData* pSVData = ImplGetSVData();
 
-            // Run the timer in the correct time, if we start this
-            // with a small timeout, because we don't get the mutex
-            if ( pSalData->mnTimerId &&
-                 (pSalData->mnTimerMS != pSalData->mnTimerOrgMS) )
-                ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
+        // Test for MouseLeave
+        SalTestMouseLeave();
+
+        if ( pSVData->mpSalTimer )
+        {
+            // Try to aquire the mutex. If we don't get the mutex then we
+            // try this a short time later again.
+            if ( ImplSalYieldMutexTryToAcquire() )
+            {
+                pSalData->mbInTimerProc = TRUE;
+                pSVData->mpSalTimer->CallCallback();
+                pSalData->mbInTimerProc = FALSE;
+                ImplSalYieldMutexRelease();
+
+                // Run the timer in the correct time, if we start this
+                // with a small timeout, because we don't get the mutex
+                if ( pSalData->mnTimerId &&
+                    (pSalData->mnTimerMS != pSalData->mnTimerOrgMS) )
+                    ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
+            }
+            else
+                ImplSalStartTimer( 10, TRUE );
         }
-        else
-            ImplSalStartTimer( 10, TRUE );
+    }
+    // #120661# exception should not be caught in user32
+    // see also SalFrameWndProcW/A
+    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    {
     }
 }
