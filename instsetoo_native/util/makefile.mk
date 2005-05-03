@@ -111,11 +111,13 @@ LOCALPYFILES= \
 .IF "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
 ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
-.ELIF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+.ELSE			# "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
+.IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : openoffice
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+.ENDIF			# "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
 
 .IF "$(PKGFORMAT)"!=""
 PKGFORMATSWITCH=-format $(PKGFORMAT)
@@ -126,23 +128,35 @@ updatepack:
 
 .IF "$(alllangiso)"!=""
 
-.IF "$(BUILD_SPECIAL)"!=""  
+MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
+MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
+.IF "$(BUILD_SPECIAL)"!=""
+MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
+MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
 .IF "$(OOO_RELEASE_BUILD)"==""
 openoffice: openoffice_en-US
 .ELSE
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 .ENDIF
-.ELSE
+.ELSE			# "$(BUILD_SPECIAL)"!=""
+NOLOGOSPLASH:=$(BIN)$/intro.bmp
+MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
+MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
+
+ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
+
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
-.ENDIF
+$(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
+.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
+$(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 
 openoffice_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_openoffice$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(PKGFORMATSWITCH)
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(PKGFORMATSWITCH)
 
 ooolanguagepack_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_ooolangpack$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(PKGFORMATSWITCH)
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(PKGFORMATSWITCH)
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
@@ -156,3 +170,15 @@ $(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) oo
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     @+$(COPY) $< $@
+
+$(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
+    +$(COPY) $< $@
+
+hack_msitemplates .PHONY:
+    +-$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
+    +-$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
+    $(GNUCOPY) -ua $(MSIOFFICETEMPLATESOURCE) $(MSIOFFICETEMPLATEDIR:d:d)
+    $(GNUCOPY) -ua $(MSILANGPACKTEMPLATESOURCE) $(MSILANGPACKTEMPLATEDIR:d:d)
+    +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
+    +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
+
