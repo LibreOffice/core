@@ -304,9 +304,7 @@ $transitionsRef = [
                  ["vertical",
                   "horizontal",
                   "diagonalBottomLeft",
-                  "diagonalTopLeft",
-                  "topLeft",
-                  "topRight"]],
+                  "diagonalTopLeft"]],
 
                 ["bowTieWipe",
                  ["vertical",
@@ -506,7 +504,7 @@ $transitionsRef = [
                   "fromTopLeft"]],
 
                 ["fade",
-                 ["crossFade",
+                 ["crossfade",
                   "fadeToColor",
                   "fadeFromColor",
                   "fadeOverColor"]],
