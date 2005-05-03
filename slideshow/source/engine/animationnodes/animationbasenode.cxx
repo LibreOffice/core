@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:29:54 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,10 +161,6 @@ namespace presentation
             // plain shape target
             uno::Reference< drawing::XShape > xShape( mxAnimateNode->getTarget(),
                                                       uno::UNO_QUERY );
-
-            // paragraph target
-            ::com::sun::star::presentation::ParagraphTarget aTarget;
-            mxAnimateNode->getTarget() >>= aTarget;
 
             // distinguish 5 cases:
             //
