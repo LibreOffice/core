@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:35:00 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3845,19 +3845,20 @@ void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
     {
         default:
         case TIDENT:
+        {
             //Note that we change the fontstyle to italic for strings that
             //are italic and longer than a single character.
-            if ((pTemp->GetText().Len() > 1) &&
-                (pTemp->GetFont().GetItalic() > ITALIC_NONE))
+            sal_Bool bIsItalic = IsItalic( pTemp->GetFont() );
+            if ((pTemp->GetText().Len() > 1) && bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH,XML_FONTSTYLE,
                 XML_ITALIC);
-            else if ((pTemp->GetText().Len() == 1) &&
-                (pTemp->GetFont().GetItalic() == ITALIC_NONE))
+            else if ((pTemp->GetText().Len() == 1) && !bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH,XML_FONTSTYLE,
                 XML_NORMAL);
             aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MI,
             sal_True,sal_False);
             break;
+        }
         case TNUMBER:
             aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MN,
             sal_True,sal_False);
