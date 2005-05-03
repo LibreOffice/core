@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.136 $
+#   $Revision: 1.137 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-06 14:28:14 $
+#   last change: $Author: obo $ $Date: 2005-05-03 14:25:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.136 $ ';
+    $id_str = ' $Revision: 1.137 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -170,7 +170,6 @@
     $ignore = '';
     @ignored_errors = ();
     %incompatibles = ();
-    %force_deliver = ();
     $only_platform = ''; # the only platform to prepare
     $only_common = ''; # the only common output tree to delete when preparing
     %build_modes = ();
@@ -357,10 +356,8 @@ sub BuildAll {
                     &print_announce($Prj);
                     if ($modules_types{$Prj} eq 'mod') {
                         $PrjDir = &CorrectPath($StandDir.$Prj);
-                        &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
                         &get_deps_hash($Prj, \%LocalDepsHash);
                         &BuildDependent(\%LocalDepsHash);
-                        my $deliver_commando = &get_deliver_commando($Prj);
                         if ($cmd_file) {
                             print "$deliver_commando\n";
                         } else {
@@ -1312,7 +1309,6 @@ sub build_multiprocessing {
                 next;
             };
 
-            mark_force_deliver($Prj, CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP});
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             &get_deps_hash($Prj, $projects_deps_hash{$Prj});
@@ -1384,7 +1380,7 @@ sub build_actual_queue {
                 !defined $broken_modules_hashes{$projects_deps_hash{$Prj}})
             {
                 chdir(&CorrectPath($StandDir.$Prj));
-                system (get_deliver_commando($Prj)) if (!$show && ($Prj ne $CurrentPrj));
+                system ($deliver_commando) if (!$show && ($Prj ne $CurrentPrj));
                 RemoveFromDependencies($Prj, \%global_deps_hash);
                 splice (@$build_queue, $i, 1);
                 next;
@@ -2114,23 +2110,6 @@ sub check_dir {
             cwd();
         };
     };
-};
-
-sub mark_force_deliver {
-    my ($module_name, $module_path) = @_;
-#    my $cws_tag_string = 'Tcws_' . lc($ENV{WORK_STAMP}.'_'.$ENV{CWS_WORK_STAMP});
-    my $cvs_tag_file = $module_path . '/CVS/Tag';
-    return if (!open CVSTAG, "<$cvs_tag_file");
-    my @tag = <CVSTAG>;
-    close CVSTAG;
-    $tag[0] =~ /^(\S+)/o;
-    $force_deliver{$module_name}++ if ($1 =~ /^Tcws_/o);
-};
-
-sub get_deliver_commando {
-    my $module_name = shift;
-    return $deliver_commando if (!defined $force_deliver{$module_name});
-    return $deliver_commando ;
 };
 
 #
