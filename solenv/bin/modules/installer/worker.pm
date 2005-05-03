@@ -384,6 +384,13 @@ sub analyze_and_save_logfile
     {
         my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_witherror");
         if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
+        # Error output to STDERR
+        for ( my $j = 0; $j <= $#installer::globals::errorlogfileinfo; $j++ )
+        {
+            my $line = $installer::globals::errorlogfileinfo[$j];
+            $line =~ s/\s*$//g;
+            installer::logger::print_error( $line );
+        }
         $is_success = 0;
 
         $finalinstalldir = $errordir;
