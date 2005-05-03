@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:08:38 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,14 @@ void ClippedSlideChange::performIn(
     const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
     double                                      t )
 {
-    rSprite->setClip( maClippingFunctor( t, getEnteringSize() ) );
+    // #i46602# Better work in device coordinate space here,
+    // otherwise, we too easily suffer from roundoffs. Apart from
+    // that, getEnteringSizePixel() _guarantees_ to cover the whole
+    // slide bitmap. There's a catch, though: this removes any effect
+    // of the view transformation (e.g. rotation) from the transition.
+    rSprite->setClipPixel(
+        maClippingFunctor( t,
+                           getEnteringSizePixel(pView) ) );
 }
 
 void ClippedSlideChange::performOut(
