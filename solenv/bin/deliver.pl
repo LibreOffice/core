@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-25 16:16:38 $
+#   last change: $Author: obo $ $Date: 2005-05-03 14:26:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.88 $ ';
+$id_str = ' $Revision: 1.89 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1190,10 +1190,12 @@ sub zip_files
         chdir($dest_dir{$zip_file}) or die "Error: cannot chdir into $dest_dir{$zip_file}";
         my $this_ref = $list_ref{$zip_file};
         if ( $opt_delete ) {
-            open(ZIP, "| $zipexe -q -o -d -@ $work_file") or die "error opening zip file";
-            foreach $file ( @$this_ref ) {
-                print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
-                print ZIP "$file\n";
+            if ( -e $work_file ) {
+                open(ZIP, "| $zipexe -q -o -d -@ $work_file") or die "error opening zip file";
+                foreach $file ( @$this_ref ) {
+                    print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
+                    print ZIP "$file\n";
+                }
             }
             close(ZIP);
         } else {
@@ -1250,7 +1252,7 @@ sub zipped_path_extension
         }
         utime $DateTime, $DateTime, $to;
     } else {
-        die "Error: file $from does not exist";
+        die "Error: file $from does not exist" if ( ! $opt_delete);
     }
     return;
 }
