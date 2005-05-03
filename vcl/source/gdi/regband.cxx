@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regband.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:16:43 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SV_REGBAND_HXX
 #include <regband.hxx>
 #endif
+
+#include <algorithm>
+
 
 // =======================================================================
 //
@@ -609,6 +612,52 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 {
     DBG_ASSERT( nXLeft <= nXRight, "ImplRegionBand::XOr(): nxLeft > nXRight" );
 
+    // #i46602# Reworked rectangle Xor
+    //
+    // In general, we can distinguish 11 cases of intersection
+    // (details below). The old implementation explicitely handled 7
+    // cases (numbered in the order of appearance, use CVS to get your
+    // hands on the old version), therefore, I've sticked to that
+    // order, and added four more cases. The code below references
+    // those numbers via #1, #2, etc.
+    //
+    // Num Mnem        newX:oldX newY:oldY  Description                                             Result          Can quit?
+    //
+    // #1  Empty band      -         -      The band is empty, thus, simply add new bandSep         just add        Yes
+    //
+    // #2  apart           -         -      The rectangles are disjunct, add new one as is          just add        Yes
+    //
+    // #3  atop            ==        ==     The rectangles are _exactly_ the same, remove existing  just remove     Yes
+    //
+    // #4  around          <         >      The new rectangle extends the old to both sides         intersect       No
+    //
+    // #5  left            <         <      The new rectangle is left of the old (but intersects)   intersect       Yes
+    //
+    // #5b left-atop       <         ==     The new is left of the old, and coincides on the right  intersect       Yes
+    //
+    // #6  right           >         >      The new is right of the old (but intersects)            intersect       No
+    //
+    // #6b right-atop      ==        >      The new is right of the old, and coincides on the left  intersect       No
+    //
+    // #7 inside           >         <      The new is fully inside the old                         intersect       Yes
+    //
+    // #8 inside-right     >         ==     The new is fully inside the old, coincides on the right intersect       Yes
+    //
+    // #9 inside-left      ==        <      The new is fully inside the old, coincides on the left  intersect       Yes
+    //
+    //
+    // Then, to correctly perform XOr, the segment that's switched off
+    // (i.e. the overlapping part of the old and the new segment) must
+    // be extended by one pixel value at each border:
+    //           1   1
+    // 0   4     0   4
+    // 111100000001111
+    //
+    // Clearly, the leading band sep now goes from 0 to 3, and the
+    // trailing band sep from 11 to 14. This mimicks the xor look of a
+    // bitmap operation.
+    //
+
     // band empty? -> add element
     if ( !mpFirstSep )
     {
@@ -627,90 +676,168 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
     while ( pSep  )
     {
-        // new separation completely left ?
-        if( nXRight < pSep->mnXLeft )
+        long nOldLeft( pSep->mnXLeft );
+        long nOldRight( pSep->mnXRight );
+
+        // did the current segment actually touch the new rect? If
+        // not, skip all comparisons, go on, loop and try to find
+        // intersecting bandSep
+        if( nXLeft <= nOldRight )
         {
-            pNewSep             = new ImplRegionBandSep;
-            pNewSep->mnXLeft    = nXLeft;
-            pNewSep->mnXRight   = nXRight;
-            pNewSep->mpNextSep  = pSep;
-            pNewSep->mbRemoved  = FALSE;
+            if( nXRight < nOldLeft )
+            {
+                // #2
 
-            // connections from the new separation
-            pNewSep->mpNextSep = pSep;
+                // add _before_ current bandSep
+                pNewSep             = new ImplRegionBandSep;
+                pNewSep->mnXLeft    = nXLeft;
+                pNewSep->mnXRight   = nXRight;
+                pNewSep->mpNextSep  = pSep;
+                pNewSep->mbRemoved  = FALSE;
 
-            // connections to the new separation
-            if ( pSep == mpFirstSep )
-                mpFirstSep = pNewSep;
-            else
-                pPrevSep->mpNextSep = pNewSep;
-            pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
-            break;
-        }
-        // separation equal to band ?
-        //  -> remove band
-        if( nXLeft == pSep->mnXLeft && nXRight == pSep->mnXRight )
-        {
-            pSep->mbRemoved = TRUE;
-            pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
-            break;
-        }
-        // new separation completely overlapping?
-        //   -> move boundaries to left remainder
-        //   -> reduce boundaries of new separation
-        if ( (nXLeft <= pSep->mnXLeft) && (nXRight > pSep->mnXRight) )
-        {
-            long nNewLeft = pSep->mnXRight;
-            pSep->mnXRight = pSep->mnXLeft;
-            pSep->mnXLeft = nXLeft;
-            nXLeft = nNewLeft;
-        }
+                // connections from the new separation
+                pNewSep->mpNextSep = pSep;
 
-        // new separation overlaping from left?
-        //   -> move boundaries to left remainder
-        //   -> set boundaries of new separation to right remainder
-        else if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
-        {
-            long nNewLeft = nXRight;
-            nXRight = pSep->mnXRight;
-            pSep->mnXRight = pSep->mnXLeft;
-            pSep->mnXLeft = nXLeft;
-            nXLeft = nNewLeft;
-        }
+                // connections to the new separation
+                if ( pSep == mpFirstSep )
+                    mpFirstSep = pNewSep;
+                else
+                    pPrevSep->mpNextSep = pNewSep;
+                pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                break;
+            }
+            else if( nXLeft == nOldLeft && nXRight == nOldRight )
+            {
+                // #3
+                pSep->mbRemoved = TRUE;
+                pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                break;
+            }
+            else if( nXLeft != nOldLeft && nXRight == nOldRight )
+            {
+                // # 5b, 8
+                if( nXLeft < nOldLeft )
+                {
+                    nXRight = nOldLeft; // 5b
+                }
+                else
+                {
+                    nXRight = nXLeft; // 8
+                    nXLeft = nOldLeft;
+                }
 
-        // new separation overlaping from right? -> reduce boundary
-        else if ( (nXLeft <= pSep->mnXRight) && (nXRight >= pSep->mnXRight) )
-        {
-            long nNewLeft = pSep->mnXRight;
-            pSep->mnXRight = nXLeft;
-            nXLeft = nNewLeft;
-        }
+                pSep->mnXLeft = nXLeft;
+                pSep->mnXRight = nXRight-1;
 
-        // new separation within the current one? -> reduce boundary
-        // and add new entry for remainder
-        else if ( (nXLeft >= pSep->mnXLeft) && (nXRight <= pSep->mnXRight) )
-        {
-            pNewSep             = new ImplRegionBandSep;
-            pNewSep->mnXLeft    = pSep->mnXLeft;
-            pNewSep->mnXRight   = nXLeft;
-            pNewSep->mbRemoved  = FALSE;
+                pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                break;
+            }
+            else if( nXLeft == nOldLeft && nXRight != nOldRight )
+            {
+                // # 6b, 9
 
-            pSep->mnXLeft = nXRight;
+                if( nXRight > nOldRight )
+                {
+                    nXLeft = nOldRight+1; // 6b
 
-            // connections from the new separation
-            pNewSep->mpNextSep = pSep;
+                    // cannot break here, simply mark segment as removed,
+                    // and go on with adapted nXLeft/nXRight
+                    pSep->mbRemoved = TRUE;
+                }
+                else
+                {
+                    pSep->mnXLeft = nXRight+1; // 9
 
-            // connections to the new separation
-            if ( pSep == mpFirstSep )
-                mpFirstSep = pNewSep;
-            else
-                pPrevSep->mpNextSep = pNewSep;
+                    pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                    break;
+                }
+            }
+            else // if( nXLeft != nOldLeft && nXRight != nOldRight ) follows automatically
+            {
+                // #4,5,6,7
+                DBG_ASSERT( nXLeft != nOldLeft && nXRight != nOldRight,
+                            "ImplRegionBand::XOr(): Case 4,5,6,7 expected all coordinates to be not equal!" );
+
+                // The plain-jane check would look like this:
+                //
+                // if( nXLeft < nOldLeft )
+                // {
+                //     // #4,5
+                //     if( nXRight > nOldRight )
+                //     {
+                //        // #4
+                //     }
+                //     else
+                //     {
+                //         // #5 done!
+                //     }
+                // }
+                // else
+                // {
+                //     // #6,7
+                //     if( nXRight > nOldRight )
+                //     {
+                //         // #6
+                //     }
+                //     else
+                //     {
+                //         // #7 done!
+                //     }
+                // }
+                //
+                // but since we generally don't have to care whether
+                // it's 4 or 6 (only that we must not stop processing
+                // here), condensed that in such a way that only the
+                // coordinates get shuffled into correct ordering.
+
+                if( nXLeft < nOldLeft )
+                    ::std::swap( nOldLeft, nXLeft );
+
+                bool bDone( false );
+
+                if( nXRight < nOldRight )
+                {
+                    ::std::swap( nOldRight, nXRight );
+                    bDone = true;
+                }
+
+                // now, nOldLeft<nXLeft<=nOldRight<nXRight always
+                // holds. Note that we need the nXLeft<=nOldRight here, as
+                // the intersection part might be only one pixel (original
+                // nXLeft==nXRight)
+                DBG_ASSERT( nOldLeft<nXLeft && nXLeft<=nOldRight && nOldRight<nXRight,
+                            "ImplRegionBand::XOr(): Case 4,5,6,7 expected coordinates to be ordered now!" );
+
+                pSep->mnXLeft = nOldLeft;
+                pSep->mnXRight = nXLeft-1;
+
+                nXLeft = nOldRight+1;
+                // nxRight is already setup correctly
+
+                if( bDone )
+                {
+                    // add behind current bandSep
+                    pNewSep = new ImplRegionBandSep;
+
+                    pNewSep->mnXLeft    = nXLeft;
+                    pNewSep->mnXRight   = nXRight;
+                    pNewSep->mpNextSep  = pSep->mpNextSep;
+                    pNewSep->mbRemoved  = FALSE;
+
+                    // connections from the new separation
+                    pSep->mpNextSep = pNewSep;
+
+                    pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                    break;
+                }
+            }
         }
 
         pPrevSep = pSep;
         pSep = pSep->mpNextSep;
     }
-    // new separation completely right ?
+
+    // new separation completely right of existing bandSeps ?
     if( pPrevSep && nXLeft >= pPrevSep->mnXRight )
     {
         pNewSep             = new ImplRegionBandSep;
