@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:30:38 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,6 +1484,11 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             aMergedSet.Put(rNdSet);
     }
 
+    SwTxtNode *txtNode=rNode.GetTxtNode();
+    if (txtNode!=NULL && !txtNode->IsNumbered())
+    {
+        aMergedSet.ClearItem(RES_PARATR_NUMRULE);
+    }
     OutRTF_SfxItemSet(rRTFWrt, aMergedSet, bDeep);
 
     rRTFWrt.pFlyFmt = pSaveFmt;
@@ -1802,7 +1807,20 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
     if (!bIsWMF)
         OutComment(rRTFWrt, sRTF_SHPPICT);
 
-    ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, rRTFWrt);
+    if (pBLIPType)
+        ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, rRTFWrt);
+    else
+    {
+        aStream.Seek(0);
+        GraphicConverter::Export(aStream, aGraphic, CVT_WMF);
+        pBLIPType = sRTF_WMETAFILE;
+        aStream.Seek(STREAM_SEEK_TO_END);
+        nSize = aStream.Tell();
+        pGraphicAry = (sal_uInt8*)aStream.GetData();
+
+        ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize,
+            rRTFWrt);
+    }
 
     if (!bIsWMF)
     {
