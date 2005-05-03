@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:15:52 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,7 @@ private:
 
     void removeShapeEvents();
     void registerShapeEvents( sal_Int32 nPageNumber );
+    void registerShapeEvents( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes ) throw (::com::sun::star::uno::Exception);
 
     // default: disabled copy/assignment
     SlideshowImpl(const SlideshowImpl&);
