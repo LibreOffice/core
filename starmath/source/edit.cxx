@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:58:30 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,30 +295,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
         pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
-        USHORT aFntInfoId[3] = {
-                EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL };
-        for (int i = 0;  i < 3;  ++i)
-        {
-            const SfxPoolItem *pItem;
-            if ((pItem = pEditEngineItemPool->GetPoolDefaultItem(  aFntInfoId[i] )))
-            {
-                const SvxFontItem *pFntItem = ((const SvxFontItem *) pItem);
-                const Font &rFnt = aSettings.GetFieldFont();
-                SvxFontItem aFntItem( rFnt.GetFamily(), rFnt.GetName(),
-                        rFnt.GetStyleName(), rFnt.GetPitch(),
-                        pFntItem->GetCharSet(),
-                        aFntInfoId[i] );
-                pEditEngineItemPool->SetPoolDefaultItem( aFntItem );
-            }
-        }
-
-        SvxFontHeightItem aItem( GetFont().GetSize().Height(), 100,
-                                 EE_CHAR_FONTHEIGHT );
-        pEditEngineItemPool->SetPoolDefaultItem( aItem );
-        aItem.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
-        pEditEngineItemPool->SetPoolDefaultItem( aItem );
-        aItem.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
-        pEditEngineItemPool->SetPoolDefaultItem( aItem );
+        SetEditEngineDefaultFonts( *pEditEngine, *pEditEngineItemPool );
 
         // forces new settings to be used
         // unfortunately this resets the whole edit engine
