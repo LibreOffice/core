@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:49:17 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
 #endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #include <stdio.h>
 
 //------------------------------------------------------------------------
@@ -100,6 +103,34 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+
+rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
+{
+    rtl::OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
+        RTL_TEXTENCODING_UTF8 );
+    INetURLObject aURL(sURL);
+    if (INET_PROT_FILE == aURL.GetProtocol())
+    {
+        gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
+        rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName), osl_getThreadTextEncoding());
+    INetURLObject aCurrentURL(OUString::createFromAscii("file:///") + sEncoded);
+    aCurrentURL.SetHost(aURL.GetHost());
+    sURL = aCurrentURL.getExternalURL();
+    }
+    return sURL;
+}
+
+rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
+{
+    OString sURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
+    INetURLObject aURL(rURL);
+    if (INET_PROT_FILE == aURL.GetProtocol())
+    {
+        rtl::OUString sOUURL = aURL.getExternalURL(INetURLObject::DECODE_WITH_CHARSET, osl_getThreadTextEncoding());
+        sURL = OUStringToOString( sOUURL, osl_getThreadTextEncoding());
+    }
+    return sURL;
+}
 
 gboolean rundialog(RunDialog *pDialog)
 {
@@ -136,7 +167,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
     OSL_ASSERT( m_pDialog != NULL );
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    OString aTxt = OUStringToOString( aDirectory, RTL_TEXTENCODING_UTF8 );
+    OString aTxt = unicodetouri(aDirectory);
 
     if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
@@ -154,9 +185,7 @@ rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::Runti
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
-    ::rtl::OUString aCurrentFolderName =
-        ::rtl::OUString( const_cast<const sal_Char *>( pCurrentFolder ),
-                    strlen( pCurrentFolder ), RTL_TEXTENCODING_UTF8 );
+    ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
 
     return aCurrentFolderName;
