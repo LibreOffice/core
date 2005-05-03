@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:47:01 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1877,7 +1877,11 @@ void PolyArgs::ClosePolygon()
     // #i35928#
     // This may be a invalid polygons, e.g. the last point is a control point.
     // So close the polygon (and add the first point again) if the last point
-    // is a control point or different from first
+    // is a control point or different from first.
+    // #i48298#
+    // Now really duplicating the first point, to close or correct the
+    // polygon. Also no longer duplicating the flags, but enforcing
+    // POLY_NORMAL for the newly added last point.
     const sal_uInt16 nPolySize(aPoly.GetSize());
     if(nPolySize)
     {
@@ -1885,11 +1889,11 @@ void PolyArgs::ClosePolygon()
             || (aPoly.GetPoint(nPolySize - 1) != aPoly.GetPoint(0)))
         {
             aPoly.SetSize(nPolySize + 1);
-            aPoly.SetPoint(aPoly.GetPoint(nPolySize - 1), nPolySize);
+            aPoly.SetPoint(aPoly.GetPoint(0), nPolySize);
 
             if(aPoly.HasFlags())
             {
-                aPoly.SetFlags(nPolySize, aPoly.GetFlags(nPolySize - 1));
+                aPoly.SetFlags(nPolySize, POLY_NORMAL);
             }
         }
     }
