@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 15:11:57 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2458,6 +2458,19 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
 
     SwTxtFmtColl *pNextColl = &pColl->GetNextTxtFmtColl();
     ChgFmtColl( pNextColl );
+
+    if (pNextColl != pColl)
+    {
+        /* -> HB #i47372# */
+        BYTE nLevel = pNextColl->GetOutlineLevel();
+
+        if (nLevel == NO_NUMBERING)
+            nLevel = 0;
+
+        SetLevel(nLevel);
+
+        /* <- HB #i47372# */
+    }
 
     return pNode;
 }
