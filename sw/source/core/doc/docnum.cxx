@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:37:07 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     pOutlineRule->CheckCharFmts( this );
 
     PropagateOutlineRule();
+    pOutlineRule->SetInvalidRule(TRUE);
     UpdateNumRule();
     UpdateExpFlds();
 
@@ -229,7 +230,7 @@ void SwDoc::PropagateOutlineRule()
 
                 SwNumRule * pCurNumRule = pTxtNode->GetNumRule();
 
-                if (pCurNumRule == NULL)
+                if (pCurNumRule == NULL || pCurNumRule == GetOutlineNumRule())
                 {
                     const SwPaM aPam(*pTxtNode);
                     SetNumRule(aPam, *GetOutlineNumRule());
