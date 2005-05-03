@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:48:46 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,13 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     }
 
     gtk_file_chooser_set_extra_widget( GTK_FILE_CHOOSER( m_pDialog ), m_pVBox );
+
+    g_signal_connect( G_OBJECT( m_pToggles[PREVIEW] ), "toggled",
+                      G_CALLBACK( preview_toggled_cb ), this );
+//  g_signal_connect( G_OBJECT( m_pFilterComboBox ), "changed",
+//                    G_CALLBACK( filter_changed_atsave_cb ), this );
+    g_signal_connect( G_OBJECT( m_pDialog ), "notify::filter",
+                      G_CALLBACK( filter_changed_cb ), this );
 
     gtk_widget_show( m_pVBox );
 }
@@ -857,10 +864,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
     {
         gchar *path = gtk_file_chooser_get_current_folder_uri(
             GTK_FILE_CHOOSER( m_pDialog ));
-        nURLOffset = strlen( path );
-        aSelectedFiles[0] = OUString( reinterpret_cast<const sal_Char*>(path),
-            nURLOffset, RTL_TEXTENCODING_UTF8 );
-        ++nURLOffset;
+        nURLOffset = strlen(path) + 1;
+        aSelectedFiles[0] = uritounicode(path);
         g_free(path);
     }
 
@@ -872,9 +877,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
     {
         const gchar *path = reinterpret_cast<gchar*>(pPathList->data)
             + nURLOffset;
-        aSelectedFiles[ nToIndex ] =
-            OUString( reinterpret_cast<const sal_Char*>( path ),
-                strlen( path ), RTL_TEXTENCODING_UTF8 );
+        aSelectedFiles[ nToIndex ] = uritounicode(path);
 
         if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
         {
@@ -986,7 +989,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                     Sequence < OUString > aPathSeq = getFiles();
                     if( aPathSeq.getLength() == 1 )
                     {
-                        OString sFileName = rtl::OUStringToOString( aPathSeq[0], RTL_TEXTENCODING_UTF8 );
+                        OString sFileName = unicodetouri( aPathSeq[0] );
                         if( g_file_test( g_filename_from_uri( sFileName.getStr(), NULL, NULL ), G_FILE_TEST_IS_REGULAR ) )
                         {
                             CResourceProvider aResProvider;
@@ -1411,6 +1414,14 @@ void SalGtkFilePicker::filter_changed_cb( GtkFileChooser *file_chooser, GParamSp
     pobjFP->controlStateChanged( evt );
 }
 
+void SalGtkFilePicker::filter_changed_atsave_cb( GtkComboBox *widget, SalGtkFilePicker *pobjFP )
+{
+    FilePickerEvent evt;
+    evt.ElementId = LISTBOX_FILTER;
+    OSL_TRACE( "filter_changed, isn't it great %x\n", pobjFP );
+    pobjFP->controlStateChanged( evt );
+}
+
 void SalGtkFilePicker::folder_changed_cb( GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
@@ -1660,20 +1671,12 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             gtk_widget_show( m_pHBoxs[ nTVIndex ] );
         }
     }
-
-    // if Preview check is visible, connect the signal handler
-    if( mbToggleVisibility[PREVIEW] )
-        gtk_signal_connect( GTK_OBJECT( m_pToggles[PREVIEW] ), "toggled",
-            GTK_SIGNAL_FUNC( preview_toggled_cb ), ( gpointer )this );
-
-    //Be informed when a filter changes
-    g_signal_connect( GTK_OBJECT( m_pDialog ), "notify::filter",
-            G_CALLBACK( filter_changed_cb ), this );
 }
 
 void SalGtkFilePicker::preview_toggled_cb( GtkObject *cb, SalGtkFilePicker* pobjFP )
 {
-    pobjFP->setShowState( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( cb ) ) );
+    if( pobjFP->mbToggleVisibility[PREVIEW] )
+        pobjFP->setShowState( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( cb ) ) );
 }
 
 //------------------------------------------------------------------------------------
