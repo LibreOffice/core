@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:47:43 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,14 @@ static void GetReplaceEditString( String &rText )
     // inserted into the document. Thus we strip them from the text.
 
     xub_StrLen nPos = rText.Search( sal_Unicode('(') );
-    if (STRING_NOTFOUND != nPos)
+    while (STRING_NOTFOUND != nPos)
     {
         xub_StrLen nEnd = rText.Search( sal_Unicode(')'), nPos );
         if (STRING_NOTFOUND != nEnd)
-            rText.Erase( nPos, nEnd );
+            rText.Erase( nPos, nEnd-nPos+1 );
+        else
+            break;
+        nPos = rText.Search( sal_Unicode('(') );
     }
 
     nPos = rText.Search( sal_Unicode('*') );
