@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:38:59 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,10 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     // are still in the main document array. In order to preserve the
     // absolute indices, we need to move them into the undo nodes
     // array.
-    SwNodes& rNodes = * const_cast<SwNodes*>( pDoc->GetUndoNds() );
-    saveHeaderFooterNodes( (SwPageDesc&)aOld, rNodes );
-    saveHeaderFooterNodes( (SwPageDesc&)aNew, rNodes );
+    // #i46909# no undo if header or footer changed
+    //    SwNodes& rNodes = * const_cast<SwNodes*>( pDoc->GetUndoNds() );
+    //    saveHeaderFooterNodes( (SwPageDesc&)aOld, rNodes );
+    //    saveHeaderFooterNodes( (SwPageDesc&)aNew, rNodes );
 }
 
 SwUndoPageDesc::~SwUndoPageDesc()
