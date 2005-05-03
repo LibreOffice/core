@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:24:57 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,7 @@ class SalGtkFilePicker :
 
         static void preview_toggled_cb (GtkObject *cb, SalGtkFilePicker *pobjFP);
         static void filter_changed_cb (GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP);
+        static void filter_changed_atsave_cb (GtkComboBox* widget, SalGtkFilePicker *pobjFP);
         static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
