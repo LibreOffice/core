@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFolderPicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:49:04 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDir
     OSL_ASSERT( m_pDialog != NULL );
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    OString aTxt = OUStringToOString( aDirectory, RTL_TEXTENCODING_UTF8 );
+    OString aTxt = unicodetouri( aDirectory );
 
     if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
@@ -191,9 +191,7 @@ rtl::OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::Run
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
-    ::rtl::OUString aCurrentFolderName =
-        ::rtl::OUString( const_cast<const sal_Char *>( pCurrentFolder ),
-                    strlen( pCurrentFolder ), RTL_TEXTENCODING_UTF8 );
+    ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
 
     return aCurrentFolderName;
