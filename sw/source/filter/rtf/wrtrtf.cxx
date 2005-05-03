@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:44:29 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,7 +1268,7 @@ void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
 
     if (!ExportAsInline(rFlyFrmFmt))
         Strm() << sRTF_PARD << SwRTFWriter::sNewLine;
-    else
+//#i46098#:    else
         pFlyFmt = pOldFlyFmt;
 }
 
