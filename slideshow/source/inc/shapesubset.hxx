@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapesubset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:20:20 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,10 @@ namespace presentation
                 contains the whole original shape's content
              */
             bool isFullSet() const;
+
+            /** Query subset this object represents
+             */
+            DocTreeNode getSubset() const;
 
         private:
             // default copy/assignment are okay
