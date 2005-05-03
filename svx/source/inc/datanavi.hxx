@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:29:48 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,7 @@ namespace svxform
         XSubmission_ref     m_xNewSubmission;
         XPropertySet_ref    m_xSubmission;
         XPropertySet_ref    m_xTempBinding;
+        XPropertySet_ref    m_xCreatedBinding;
 
         DECL_LINK(          RefHdl, PushButton * );
         DECL_LINK(          OKHdl, OKButton * );
