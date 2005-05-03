@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:06:52 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = (rFace.GetItalic() > ITALIC_NONE);
+                BOOL bVal = IsItalic( rFace );
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -780,7 +780,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = (rFace.GetWeight() > WEIGHT_NORMAL); // bold?
+                BOOL bVal = IsBold( rFace ); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
