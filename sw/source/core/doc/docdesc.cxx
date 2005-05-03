@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:53:06 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,13 +360,19 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     //Orientierung uebernehmen
     pDesc->SetLandscape( rChged.GetLandscape() );
 
+    // #i46909# no undo if header or footer changed
+    bool bHeaderFooterChanged = false;
+
     //Header abgleichen.
     const SwFmtHeader &rHead = rChged.GetMaster().GetHeader();
-    if( DoesUndo() )
+    if( bDoesUndo )
     {
+        // #i46909# no undo if header or footer changed
         // hat sich an den Nodes etwas veraendert ?
-
         const SwFmtHeader &rOldHead = pDesc->GetMaster().GetHeader();
+        bHeaderFooterChanged |=
+            ( rHead.IsActive() != rOldHead.IsActive() ||
+              rChged.IsHeaderShared() != pDesc->IsHeaderShared() );
     }
     pDesc->GetMaster().SetAttr( rHead );
     if ( rChged.IsHeaderShared() || !rHead.IsActive() )
@@ -421,10 +427,14 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     //Footer abgleichen.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
-    if( DoesUndo() )
+    if( bDoesUndo )
     {
+        // #i46909# no undo if header or footer changed
         // hat sich an den Nodes etwas veraendert ?
         const SwFmtFooter &rOldFoot = pDesc->GetMaster().GetFooter();
+        bHeaderFooterChanged |=
+            ( rFoot.IsActive() != rOldFoot.IsActive() ||
+              rChged.IsFooterShared() != pDesc->IsFooterShared() );
     }
     pDesc->GetMaster().SetAttr( rFoot );
     if ( rChged.IsFooterShared() || !rFoot.IsActive() )
@@ -475,7 +485,8 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     pDesc->ChgFooterShare( rChged.IsFooterShared() );
 
     // if header/footer nodes are in undo area, copy them into the document
-    saveHeaderFooterNodes( *pDesc, GetNodes() );
+    // #i46909# no undo if header or footer changed
+    //    saveHeaderFooterNodes( *pDesc, GetNodes() );
 
     if ( pDesc->GetName() != rChged.GetName() )
         pDesc->SetName( rChged.GetName() );
@@ -534,6 +545,13 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     SetModified();
 
     DoUndo(bDoesUndo);
+
+    // #i46909# no undo if header or footer changed
+    if( bHeaderFooterChanged )
+    {
+        ClearRedo();
+        DelAllUndoObj();
+    }
 }
 
 /*************************************************************************
