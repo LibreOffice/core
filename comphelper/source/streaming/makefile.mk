@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:05:20 $
+#   last change: $Author: obo $ $Date: 2005-05-03 13:55:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ SLOFILES=	$(SLO)$/basicio.obj \
             $(SLO)$/seqstream.obj	\
             $(SLO)$/streamsection.obj \
             $(SLO)$/seekableinput.obj \
+            $(SLO)$/otransactedfilestream.obj \
 
 # --- Targets ----------------------------------
 
