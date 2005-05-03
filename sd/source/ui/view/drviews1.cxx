@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:28:19 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,9 +1002,9 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
     if (IsSwitchPageAllowed())
     {
-        bOK = TRUE;
+        ModifyGuard aGuard( GetDoc() );
 
-        BOOL bIsChanged = GetDoc()->IsChanged();
+        bOK = TRUE;
 
         if (pActualPage)
         {
@@ -1285,8 +1285,6 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
 //      if (pDrView->GetSlideShow())
 //          pDrView->SetAnimationMode(TRUE);
-
-        GetDoc()->SetChanged(bIsChanged);
     }
 
     return (bOK);
