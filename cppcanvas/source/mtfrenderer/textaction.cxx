@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 10:00:58 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,7 +2057,50 @@ namespace cppcanvas
 
                         // append result to collecting polypoly
                         for( USHORT i=0; i<aVCLPolyPolygon.Count(); ++i )
-                            aResultingVCLPolyPolygon.Insert( aVCLPolyPolygon.GetObject( i ) );
+                        {
+                            // #i47795# Ensure closed polygons (since
+                            // FreeType returns the glyph outlines
+                            // open)
+                            const ::Polygon& rPoly( aVCLPolyPolygon.GetObject( i ) );
+                            const USHORT nCount( rPoly.GetSize() );
+                            if( nCount<3 ||
+                                rPoly[0] == rPoly[nCount-1] )
+                            {
+                                // polygon either degenerate, or
+                                // already closed.
+                                aResultingVCLPolyPolygon.Insert( rPoly );
+                            }
+                            else
+                            {
+                                ::Polygon aPoly(nCount+1);
+
+                                // close polygon explicitely
+                                if( rPoly.HasFlags() )
+                                {
+                                    for( USHORT j=0; j<nCount; ++j )
+                                    {
+                                        aPoly[j] = rPoly[j];
+                                        aPoly.SetFlags(j, rPoly.GetFlags(j));
+                                    }
+
+                                    // duplicate first point
+                                    aPoly[nCount] = rPoly[0];
+                                    aPoly.SetFlags(nCount, POLY_NORMAL);
+                                }
+                                else
+                                {
+                                    for( USHORT j=0; j<nCount; ++j )
+                                    {
+                                        aPoly[j] = rPoly[j];
+                                    }
+
+                                    // duplicate first point
+                                    aPoly[nCount] = rPoly[0];
+                                }
+
+                                aResultingVCLPolyPolygon.Insert( aPoly );
+                            }
+                        }
 
                         // TODO(F3): Depending on the semantics of
                         // GetTextOutlines(), this here is wrong!
