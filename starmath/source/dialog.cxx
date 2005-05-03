@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:58:03 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,8 @@ SmFontStyles::SmFontStyles() :
 const String & SmFontStyles::GetStyleName( const Font &rFont ) const
 {
     //! compare also SmSpecialNode::Prepare
-    BOOL bBold   = rFont.GetWeight() > WEIGHT_NORMAL,
-         bItalic = rFont.GetItalic() > ITALIC_NONE;
+    BOOL bBold   = IsBold( rFont ),
+         bItalic = IsItalic( rFont );
 
     if (bBold && bItalic)
         return aBoldItalic;
@@ -422,15 +422,15 @@ void SmFontDialog::SetFont(const Font &rFont)
 {
     Face = rFont;
 
-    aFontBox.SetText(Face.GetName());
-    aBoldCheckBox.Check(Face.GetWeight() > WEIGHT_BOLD);
-    aItalicCheckBox.Check(Face.GetItalic() > ITALIC_NONE);
+    aFontBox.SetText( Face.GetName() );
+    aBoldCheckBox.Check( IsBold( Face ) );
+    aItalicCheckBox.Check( IsItalic( Face ) );
 
     aShowFont.SetFont(Face);
 }
 
 
-SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
+SmFontDialog::SmFontDialog(Window * pParent, BOOL bHideCheckboxes, BOOL bFreeRes)
     : ModalDialog(pParent,SmResId(RID_FONTDIALOG)),
     aFixedText1     (this, ResId(1)),
     aFontBox        (this, ResId(1)),
@@ -476,6 +476,23 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
     aFontBox.SetModifyHdl(LINK(this, SmFontDialog, FontModifyHdl));
     aBoldCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
     aItalicCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
+
+    if (bHideCheckboxes)
+    {
+        aBoldCheckBox.Check( FALSE );
+        aBoldCheckBox.Enable( FALSE );
+        aBoldCheckBox.Show( FALSE );
+        aItalicCheckBox.Check( FALSE );
+        aItalicCheckBox.Enable( FALSE );
+        aItalicCheckBox.Show( FALSE );
+        aFixedText2.Show( FALSE );
+
+        Size  aSize( aFontBox.GetSizePixel() );
+        long nComboBoxBottom = aFontBox.GetPosPixel().Y() + aFontBox.GetSizePixel().Height();
+        long nCheckBoxBottom = aItalicCheckBox.GetPosPixel().Y() + aItalicCheckBox.GetSizePixel().Height();
+        aSize.Height() += nCheckBoxBottom - nComboBoxBottom;
+        aFontBox.SetSizePixel( aSize );
+    }
 }
 
 void SmFontDialog::InitColor_Impl()
@@ -594,21 +611,22 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 {
     SmFontPickListBox *pActiveListBox;
 
+    BOOL bHideCheckboxes = FALSE;
     switch (pMenu->GetCurItemId())
     {
         case 1: pActiveListBox = &aVariableFont; break;
         case 2: pActiveListBox = &aFunctionFont; break;
         case 3: pActiveListBox = &aNumberFont;   break;
         case 4: pActiveListBox = &aTextFont;     break;
-        case 5: pActiveListBox = &aSerifFont;    break;
-        case 6: pActiveListBox = &aSansFont;     break;
-        case 7: pActiveListBox = &aFixedFont;    break;
+        case 5: pActiveListBox = &aSerifFont; bHideCheckboxes = TRUE;   break;
+        case 6: pActiveListBox = &aSansFont;  bHideCheckboxes = TRUE;   break;
+        case 7: pActiveListBox = &aFixedFont; bHideCheckboxes = TRUE;   break;
         default:pActiveListBox = NULL;
     }
 
     if (pActiveListBox)
     {
-        SmFontDialog *pFontDialog = new SmFontDialog(this);
+        SmFontDialog *pFontDialog = new SmFontDialog(this, bHideCheckboxes);
 
         pActiveListBox->WriteTo(*pFontDialog);
         if (pFontDialog->Execute() == RET_OK)
