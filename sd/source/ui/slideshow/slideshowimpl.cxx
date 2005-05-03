@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:15:40 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGETARGET_HPP_
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
@@ -821,22 +825,39 @@ void SlideshowImpl::stopShow()
 
     removeShapeEvents();
 
-    mxShow->removeSlideShowListener( Reference< XSlideShowListener >(this) );
-
-    if( mxView.is() )
-        mxShow->removeView( mxView.getRef() );
-
-    Reference< XComponent > xComponent( mxShow, UNO_QUERY );
-    if( xComponent.is() )
+    try
     {
-        xComponent->dispose();
-        xComponent.clear();
+
+        mxShow->removeSlideShowListener( Reference< XSlideShowListener >(this) );
+
+        if( mxView.is() )
+            mxShow->removeView( mxView.getRef() );
+
+        Reference< XComponent > xComponent( mxShow, UNO_QUERY );
+        if( xComponent.is() )
+        {
+            xComponent->dispose();
+            xComponent.clear();
+        }
+        mxShow.clear();
+
+        if( mxView.is() )
+        {
+            mxView->dispose();
+            mxView.reset();
+        }
     }
-    mxShow.clear();
-
-    if( mxView.is() )
+    catch( Exception& e )
     {
-        mxView->dispose();
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::stopShow(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+
+        mxShow.clear();
         mxView.reset();
     }
 
@@ -978,11 +999,21 @@ void SlideshowImpl::onFirstPaint()
 
 void SlideshowImpl::paint( const Rectangle& rRect )
 {
-    if( mxView.is() )
+    if( mxView.is() ) try
     {
         awt::PaintEvent aEvt;
         // aEvt.UpdateRect = TODO
         mxView->paint( aEvt );
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::paint(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
@@ -1118,65 +1149,19 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nPageNumber)
         Reference< XDrawPagesSupplier > xDrawPages( mxModel, UNO_QUERY_THROW );
         Reference< XIndexAccess > xPages( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
 
-        Reference< XDrawPage > xDrawPage;
+        Reference< XShapes > xDrawPage;
         xPages->getByIndex(nPageNumber) >>= xDrawPage;
-
-        Reference< XShapeEventListener > xListener( this );
 
         if( xDrawPage.is() )
         {
-            const sal_Int32 nShapeCount = xDrawPage->getCount();
-            sal_Int32 nShape;
-            for( nShape = 0; nShape < nShapeCount; nShape++ )
+            Reference< XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
+            if( xMasterPageTarget.is() )
             {
-                Reference< XShape > xShape;
-                xDrawPage->getByIndex( nShape ) >>= xShape;
-
-                Reference< XPropertySet > xSet( xShape, UNO_QUERY );
-                if( !xSet.is() )
-                    continue;
-
-                Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
-                if( !xSetInfo.is() || !xSetInfo->hasPropertyByName( msOnClick ) )
-                    continue;
-
-                WrappedShapeEventImplPtr pEvent( new WrappedShapeEventImpl );
-                xSet->getPropertyValue( msOnClick ) >>= pEvent->meClickAction;
-
-                switch( pEvent->meClickAction )
-                {
-                case ClickAction_PREVPAGE:
-                case ClickAction_NEXTPAGE:
-                case ClickAction_FIRSTPAGE:
-                case ClickAction_LASTPAGE:
-                case ClickAction_STOPPRESENTATION:
-                    break;
-                case ClickAction_BOOKMARK:
-                    if( xSetInfo->hasPropertyByName( msBookmark ) )
-                        xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
-                    if( getPageNumberForBookmark( pEvent->maStrBookmark ) == -1 )
-                        continue;
-                    break;
-                case ClickAction_DOCUMENT:
-                case ClickAction_SOUND:
-                case ClickAction_PROGRAM:
-                case ClickAction_MACRO:
-                    if( xSetInfo->hasPropertyByName( msBookmark ) )
-                        xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
-                    break;
-                case ClickAction_VERB:
-                    if( xSetInfo->hasPropertyByName( msVerb ) )
-                        xSet->getPropertyValue( msVerb ) >>= pEvent->mnVerb;
-                    break;
-                default:
-                    continue; // skip all others
-                }
-
-                maShapeEventMap[ xShape ] = pEvent;
-
-                mxShow->addShapeEventListener( xListener, xShape );
-                mxShow->setShapeCursor( xShape, awt::SystemPointer::REFHAND );
+                Reference< XShapes > xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
+                if( xMasterPage.is() )
+                    registerShapeEvents( xMasterPage );
             }
+            registerShapeEvents( xDrawPage );
         }
     }
     catch( Exception& e )
@@ -1191,9 +1176,89 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nPageNumber)
     }
 }
 
+void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes )
+    throw( Exception )
+{
+    try
+    {
+        Reference< XShapeEventListener > xListener( this );
+
+        const sal_Int32 nShapeCount = xShapes->getCount();
+        sal_Int32 nShape;
+        for( nShape = 0; nShape < nShapeCount; nShape++ )
+        {
+            Reference< XShape > xShape;
+            xShapes->getByIndex( nShape ) >>= xShape;
+
+            if( xShape.is() &&
+                xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape") ) )
+            {
+                Reference< XShapes > xSubShapes( xShape, UNO_QUERY );
+                if( xSubShapes.is() )
+                    registerShapeEvents( xSubShapes );
+            }
+
+            Reference< XPropertySet > xSet( xShape, UNO_QUERY );
+            if( !xSet.is() )
+                continue;
+
+            Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
+            if( !xSetInfo.is() || !xSetInfo->hasPropertyByName( msOnClick ) )
+                continue;
+
+            WrappedShapeEventImplPtr pEvent( new WrappedShapeEventImpl );
+            xSet->getPropertyValue( msOnClick ) >>= pEvent->meClickAction;
+
+            switch( pEvent->meClickAction )
+            {
+            case ClickAction_PREVPAGE:
+            case ClickAction_NEXTPAGE:
+            case ClickAction_FIRSTPAGE:
+            case ClickAction_LASTPAGE:
+            case ClickAction_STOPPRESENTATION:
+                break;
+            case ClickAction_BOOKMARK:
+                if( xSetInfo->hasPropertyByName( msBookmark ) )
+                    xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
+                if( getPageNumberForBookmark( pEvent->maStrBookmark ) == -1 )
+                    continue;
+                break;
+            case ClickAction_DOCUMENT:
+            case ClickAction_SOUND:
+            case ClickAction_PROGRAM:
+            case ClickAction_MACRO:
+                if( xSetInfo->hasPropertyByName( msBookmark ) )
+                    xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
+                break;
+            case ClickAction_VERB:
+                if( xSetInfo->hasPropertyByName( msVerb ) )
+                    xSet->getPropertyValue( msVerb ) >>= pEvent->mnVerb;
+                break;
+            default:
+                continue; // skip all others
+            }
+
+            maShapeEventMap[ xShape ] = pEvent;
+
+            mxShow->addShapeEventListener( xListener, xShape );
+                mxShow->setShapeCursor( xShape, awt::SystemPointer::REFHAND );
+        }
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::registerShapeEvents(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
+}
+
 void SlideshowImpl::gotoPreviousSlide()
 {
-    if( mxShow.is() )
+    if( mxShow.is() ) try
     {
         if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
         {
@@ -1207,11 +1272,21 @@ void SlideshowImpl::gotoPreviousSlide()
             update();
         }
     }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::gotoPreviousSlide(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
 }
 
 void SlideshowImpl::gotoNextSlide()
 {
-    if( mxShow.is() )
+    if( mxShow.is() ) try
     {
         if( mpAnimationPageList->getCurrentPageIndex() == (mpAnimationPageList->getPageIndexCount() - 1) )
         {
@@ -1222,6 +1297,16 @@ void SlideshowImpl::gotoNextSlide()
             mxShow->nextSlide();
             update();
         }
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::gotoNextSlide(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
@@ -1271,16 +1356,26 @@ IMPL_LINK( SlideshowImpl, endPresentationHdl, void*, EMPTYARG )
 
 void SlideshowImpl::gotoSlideIndex( sal_Int32 nPageIndex )
 {
-    if( (nPageIndex >= 0) && mxShow.is() )
+    if( (nPageIndex >= 0) && mxShow.is() ) try
     {
         mxShow->displaySlide( nPageIndex );
         update();
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::gotoSlideIndex(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
 void SlideshowImpl::enablePen()
 {
-    if( mxShow.is())
+    if( mxShow.is()) try
     {
         uno::Any aValue;
         if( maPresSettings.mbMouseAsPen )
@@ -1293,11 +1388,21 @@ void SlideshowImpl::enablePen()
 
         mxShow->setProperty( aPenProp );
     }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::enablePen(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
 }
 
 bool SlideshowImpl::pause( bool bPause )
 {
-    if( bPause != mbIsPaused )
+    if( bPause != mbIsPaused ) try
     {
         mbIsPaused = bPause;
         if( mxShow.is() )
@@ -1313,10 +1418,18 @@ bool SlideshowImpl::pause( bool bPause )
             return false;
         }
     }
-    else
+    catch( Exception& e )
     {
-        return false;
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::pause(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
+
+    return false;
 }
 
 // XShapeEventListener
@@ -1517,7 +1630,7 @@ void SlideshowImpl::jumpToPageNumber( sal_Int32 nPageNumber )
 
 void SlideshowImpl::jumpToPageIndex( sal_Int32 nPageIndex )
 {
-    if( mpAnimationPageList.get() )
+    if( mpAnimationPageList.get() ) try
     {
         DBG_ASSERT( (nPageIndex >= 0) && (nPageIndex < mpAnimationPageList->getPageIndexCount()), "sd::SlideshowImpl::jumpToPageIndex(), illegal page index!" );
 
@@ -1526,6 +1639,16 @@ void SlideshowImpl::jumpToPageIndex( sal_Int32 nPageIndex )
             mxShow->displaySlide(nPageIndex);
             update();
         }
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::jumpToPageIndex(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
@@ -1684,93 +1807,108 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
         return false;
 
     bool bRet = true;
-    const int nKeyCode = rKEvt.GetKeyCode().GetCode();
-    switch( nKeyCode )
+
+    try
     {
-        // cancel show
-        case KEY_ESCAPE:
-        case KEY_BACKSPACE:
-        case KEY_SUBTRACT:
-            endPresentation();
-            break;
-
-        // advance show
-        case KEY_SPACE:
-            mxShow->nextEffect();
-            update();
-            break;
-
-        case KEY_RETURN:
+        const int nKeyCode = rKEvt.GetKeyCode().GetCode();
+        switch( nKeyCode )
         {
-            if( maCharBuffer.Len() )
-            {
-                if( mpAnimationPageList.get() )
-                {
-                    sal_Int32 nPageIndex = mpAnimationPageList->findPageIndex( maCharBuffer.ToInt32() - 1 );
-                    if( nPageIndex != -1 )
-                        jumpToPageIndex( nPageIndex );
-                }
-                maCharBuffer.Erase();
-            }
-            else
-            {
+            // cancel show
+            case KEY_ESCAPE:
+            case KEY_BACKSPACE:
+            case KEY_SUBTRACT:
+                endPresentation();
+                break;
+
+            // advance show
+            case KEY_SPACE:
                 mxShow->nextEffect();
                 update();
-            }
-        }
-        break;
+                break;
 
-        // numeric: add to buffer
-        case KEY_0:
-        case KEY_1:
-        case KEY_2:
-        case KEY_3:
-        case KEY_4:
-        case KEY_5:
-        case KEY_6:
-        case KEY_7:
-        case KEY_8:
-        case KEY_9:
-            maCharBuffer.Append( rKEvt.GetCharCode() );
-            break;
-
-        case KEY_PAGEDOWN:
-        case KEY_RIGHT:
-        case KEY_DOWN:
-        case KEY_N:
-            gotoNextSlide();
-            break;
-
-        case KEY_PAGEUP:
-        case KEY_LEFT:
-        case KEY_UP:
-        case KEY_P:
-            gotoPreviousSlide();
-            break;
-
-        case KEY_HOME:
-            gotoFirstSlide();
-            break;
-
-        case KEY_END:
-            gotoLastSlide();
-            break;
-
-        case( KEY_B ):
-        case( KEY_W ):
-        {
-            if( mpShowWindow )
+            case KEY_RETURN:
             {
-                const Color aBlankColor( (nKeyCode == KEY_B ) ? COL_BLACK : COL_WHITE );
-                if( mpShowWindow->SetBlankMode( mpAnimationPageList->getCurrentPageIndex(), aBlankColor ) )
-                    pause( true );
+                if( maCharBuffer.Len() )
+                {
+                    if( mpAnimationPageList.get() )
+                    {
+                        sal_Int32 nPageIndex = mpAnimationPageList->findPageIndex( maCharBuffer.ToInt32() - 1 );
+                        if( nPageIndex != -1 )
+                            jumpToPageIndex( nPageIndex );
+                    }
+                    maCharBuffer.Erase();
+                }
+                else
+                {
+                    mxShow->nextEffect();
+                    update();
+                }
             }
-        }
-        break;
+            break;
 
-        default:
-            bRet = false;
-        break;
+            // numeric: add to buffer
+            case KEY_0:
+            case KEY_1:
+            case KEY_2:
+            case KEY_3:
+            case KEY_4:
+            case KEY_5:
+            case KEY_6:
+            case KEY_7:
+            case KEY_8:
+            case KEY_9:
+                maCharBuffer.Append( rKEvt.GetCharCode() );
+                break;
+
+            case KEY_PAGEDOWN:
+            case KEY_RIGHT:
+            case KEY_DOWN:
+            case KEY_N:
+                gotoNextSlide();
+                break;
+
+            case KEY_PAGEUP:
+            case KEY_LEFT:
+            case KEY_UP:
+            case KEY_P:
+                gotoPreviousSlide();
+                break;
+
+            case KEY_HOME:
+                gotoFirstSlide();
+                break;
+
+            case KEY_END:
+                gotoLastSlide();
+                break;
+
+            case( KEY_B ):
+            case( KEY_W ):
+            {
+                if( mpShowWindow )
+                {
+                    const Color aBlankColor( (nKeyCode == KEY_B ) ? COL_BLACK : COL_WHITE );
+                    if( mpShowWindow->SetBlankMode( mpAnimationPageList->getCurrentPageIndex(), aBlankColor ) )
+                        pause( true );
+                }
+            }
+            break;
+
+            default:
+                bRet = false;
+            break;
+        }
+    }
+    catch( Exception& e )
+    {
+        bRet = false;
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::keyInput(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
     return bRet;
@@ -1972,10 +2110,20 @@ void SlideshowImpl::resize( const Size& rSize )
 //          mpShowWindow->ToTop();
     }
 
-    if( mxView.is() )
+    if( mxView.is() ) try
     {
         awt::WindowEvent aEvt;
         mxView->windowResized(aEvt);
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::resize(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
