@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:38:12 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,5 +740,28 @@ private:
     virtual void PageListChanged();
     virtual void MasterPageListChanged();
 };
+
+namespace sd
+{
+
+// an instance of this guard disables modification of a document
+// during its lifetime
+class ModifyGuard
+{
+public:
+    ModifyGuard( DrawDocShell* pDocShell );
+    ModifyGuard( SdDrawDocument* pDoc );
+    ~ModifyGuard();
+
+private:
+    void init();
+
+    DrawDocShell* mpDocShell;
+    SdDrawDocument* mpDoc;
+    BOOL mbIsEnableSetModified;
+    BOOL mbIsDocumentChanged;
+};
+
+}
 
 #endif // _DRAWDOC_HXX
