@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:30:34 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2483,6 +2483,36 @@ String RID_LETTERWIZARDLANGUAGE_START + 11
 {
     Text [ de ] = "Chinesisch (Traditionell)";
     Text [ en-US] = "Chinese (Traditional)";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 12
+{
+    Text [ de ] = "Tschechisch";
+    Text [ en-US] = "Czech";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 13
+{
+    Text [ de ] = "Bulgarisch";
+    Text [ en-US] = "Bulgarian";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 14
+{
+    Text [ de ] = "Dänish";
+    Text [ en-US] = "Danish";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 15
+{
+    Text [ de ] = "Ungarish";
+    Text [ en-US] = "Hungarian";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 16
+{
+    Text [ de ] = "Kroatisch";
+    Text [ en-US] = "Croatian";
 };
 
 
