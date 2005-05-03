@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:49:32 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ class SalGtkPicker
 
         virtual rtl::OUString SAL_CALL implgetDisplayDirectory(  )
             throw( com::sun::star::uno::RuntimeException );
-
+        static rtl::OUString uritounicode(const gchar *pIn);
+        static rtl::OString unicodetouri(const rtl::OUString &rURL);
 };
 
 class RunDialog
