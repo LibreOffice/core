@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:38:39 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,10 @@ void SAL_CALL Submission::submitWithInteraction(
     Model* pModel = Model::getModel( xModel );
     OSL_ENSURE( pModel != NULL, "illegal model?" );
 
+// #i36765# #i47248# warning on submission of illegal data.  Removed for
+// upcoming 2.0 release because string change could not go through
+// translation anymore. Please re-enable in the next version.
+/*
     // check for validity (and query user if invalid)
     bool bValid = pModel->isValid();
     if( ! bValid )
@@ -565,10 +569,6 @@ void SAL_CALL Submission::submitWithInteraction(
         InvalidDataOnSubmitException aInvalidDataException(
             lcl_message(sID, OUSTRING(" due to invalid data") ), *this );
 
-// #i36765# warning on submission of illegal data.  Removed for
-// upcoming 2.0 release because string change could not go through
-// translation anymore. Please re-enable in the next version.
-/*
         if( _rxHandler.is() )
         {
             // labouriously create interaction request
@@ -596,12 +596,12 @@ void SAL_CALL Submission::submitWithInteraction(
             if( pContinue->wasSelected() )
                 bValid = true;
         }
-*/
 
         // abort if invalid (and user didn't tell us to continue)
         if( ! bValid )
             throw aInvalidDataException;
     }
+*/
 
     // attempt submission
     bool bResult = false;
