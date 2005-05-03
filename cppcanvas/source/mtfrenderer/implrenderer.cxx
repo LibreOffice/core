@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 09:59:07 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2516,8 +2516,8 @@ namespace cppcanvas
                 }
 
             private:
-                const ::basegfx::B2DHomMatrix   maTransformation;
-                bool                            mbRet;
+                ::basegfx::B2DHomMatrix maTransformation;
+                bool                    mbRet;
             };
 
             class AreaQuery
@@ -2552,8 +2552,8 @@ namespace cppcanvas
                 }
 
             private:
-                const ::basegfx::B2DHomMatrix   maTransformation;
-                ::basegfx::B2DRange             maBounds;
+                ::basegfx::B2DHomMatrix maTransformation;
+                ::basegfx::B2DRange     maBounds;
             };
 
             // Doing that via inline class. Compilers tend to not inline free
@@ -2631,12 +2631,11 @@ namespace cppcanvas
                     ++aRangeBegin;
 
                     // render full middle actions
-                    if( !::std::for_each( aRangeBegin,
-                                          aRangeEnd,
-                                          rFunctor ).result() )
-                    {
+                    rFunctor = ::std::for_each( aRangeBegin,
+                                                aRangeEnd,
+                                                rFunctor );
+                    if( !rFunctor.result() )
                         return false;
-                    }
 
                     if( aRangeEnd == rEnd ||
                         aRangeEnd->mnOrigIndex > nEndIndex )
