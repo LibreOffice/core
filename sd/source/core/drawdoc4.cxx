@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:37:54 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::sd;
 
 /*************************************************************************
 |*
@@ -955,10 +956,11 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
             if (bHasOnlineSpellErrors)
             {
+                sd::ModifyGuard aGuard( this );
+
                 // Text aus Outliner holen
-                BOOL bModified = IsChanged();
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
-                SetChanged(bModified);
+
                 pObj->BroadcastObjectChange();
             }
         }
@@ -1527,4 +1529,43 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
     rLatinFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
     rCJKFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), DEFAULTFONT_FLAGS_ONLYONE );
     rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE ) ;
+}
+
+ModifyGuard::ModifyGuard( DrawDocShell* pDocShell )
+: mpDocShell( pDocShell ), mpDoc( 0 )
+{
+    init();
+}
+
+ModifyGuard::ModifyGuard( SdDrawDocument* pDoc )
+: mpDocShell( 0 ), mpDoc( pDoc )
+{
+    init();
+}
+
+void ModifyGuard::init()
+{
+    if( mpDocShell )
+    {
+        mpDoc = mpDocShell->GetDoc();
+    }
+    else if( mpDoc )
+    {
+        mpDocShell = mpDoc->GetDocSh();
+    }
+
+    mbIsEnableSetModified = mpDocShell ? mpDocShell->IsEnableSetModified() : FALSE;
+    mbIsDocumentChanged = mpDoc ? mpDoc->IsChanged() : FALSE;
+
+    if( mbIsEnableSetModified )
+        mpDocShell->EnableSetModified( FALSE );
+}
+
+ModifyGuard::~ModifyGuard()
+{
+    if( mbIsEnableSetModified )
+        mpDocShell->EnableSetModified( TRUE );
+
+    if( mpDoc && (mpDoc->IsChanged() != mbIsDocumentChanged) )
+        mpDoc->SetChanged(mbIsDocumentChanged);
 }
