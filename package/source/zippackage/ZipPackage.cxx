@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:38:23 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #endif
@@ -150,6 +153,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_USEBACKUPEXCEPTION_HPP_
 #include <com/sun/star/embed/UseBackupException.hpp>
@@ -942,12 +948,11 @@ sal_Bool ZipPackage::writeFileIsTemp()
     // In case the target local file does not exist or empty
     // write directly to it otherwize create a temporary file to write to
 
-    sal_Bool aUseTemp = sal_True;
+    sal_Bool bUseTemp = sal_True;
     Reference < XOutputStream > xTempOut;
     Reference< XActiveDataStreamer > xSink;
 
-    if ( eMode == e_IMode_URL && !pZipFile
-        && isLocalFile_Impl( sURL ) )
+    if ( eMode == e_IMode_URL && !pZipFile && isLocalFile_Impl( sURL ) )
     {
         xSink = openOriginalForOutput();
         if( xSink.is() )
@@ -957,12 +962,19 @@ sal_Bool ZipPackage::writeFileIsTemp()
             {
                 xTempOut = xStr->getOutputStream();
                 if( xTempOut.is() )
-                    aUseTemp = sal_False;
+                    bUseTemp = sal_False;
             }
         }
     }
+    else if ( eMode == e_IMode_XStream && !pZipFile )
+    {
+        // write directly to an empty stream
+        xTempOut = xStream->getOutputStream();
+        if( xTempOut.is() )
+            bUseTemp = sal_False;
+    }
 
-    if( aUseTemp )
+    if( bUseTemp )
     {
         // create temporary file
         const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
@@ -1121,26 +1133,64 @@ sal_Bool ZipPackage::writeFileIsTemp()
     }
 
     // Update our References to point to the new temp file
-    if( aUseTemp )
+    if( bUseTemp )
     {
-        xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY );
-        xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
+        xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY_THROW );
+        xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY_THROW );
     }
     else
     {
-        // the case when the original file was written directly
-
+        // the case when the original contents were written directly
         try
         {
-            // the output should be closed after request fo input
-            // to avoid file closing
-            xContentStream = xSink->getStream()->getInputStream();
-            xTempOut->closeOutput();
-            xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
+            xTempOut->flush();
+
+            // in case the stream supports transactions it should be commited
+            uno::Reference< beans::XPropertySet > xProps( xTempOut, uno::UNO_QUERY );
+            if ( xProps.is() )
+            {
+                uno::Reference< embed::XTransactedObject > xTransactObj;
+                try
+                {
+                    // if the property provides a valid object the transaction is required
+                    xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TransactionSupport" ) ) )
+                            >>= xTransactObj;
+                }
+                catch( uno::Exception& )
+                {
+                }
+
+                if ( xTransactObj.is() )
+                    xTransactObj->commit();
+            }
+
+            // in case the stream is based on a file it will implement the following interface
+            // the call should be used to be sure that the contents are written to the file system
+            uno::Reference< io::XAsyncOutputMonitor > asyncOutputMonitor( xTempOut, uno::UNO_QUERY );
+            if ( asyncOutputMonitor.is() )
+                asyncOutputMonitor->waitForCompletion();
+
+            if ( eMode == e_IMode_URL )
+                xContentStream = xSink->getStream()->getInputStream();
+            else if ( eMode == e_IMode_XStream )
+                xContentStream = xStream->getInputStream();
         }
-        catch( Exception& )
+        catch ( lang::WrappedTargetException& )
         {
+            throw;
         }
+        catch ( uno::Exception& )
+        {
+            // the original content is written directly here only in case either it did not exist before
+            // or was empty, in both cases no information loss appeares, thus no special handling is required
+              uno::Any aCaught( ::cppu::getCaughtException() );
+            throw WrappedTargetException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Problem writing the original content!" ) ),
+                    static_cast < OWeakObject * > ( this ),
+                    aCaught );
+        }
+
+        xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY_THROW );
 
         OSL_ENSURE( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
     }
@@ -1152,7 +1202,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
     else
         pZipFile = new ZipFile ( xContentStream, xFactory, sal_False );
 
-    return aUseTemp;
+    return bUseTemp;
 }
 
 Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
@@ -1379,7 +1429,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "This calls are pretty simple, they should not fail!\n" );
+        OSL_ENSURE( sal_False, "These calls are pretty simple, they should not fail!\n" );
     }
 
     ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) );
