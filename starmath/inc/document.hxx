@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:02:55 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ class Printer;
 
 class SmDocShell;
 class EditEngine;
-class EditEngineItemPool;
 
 class SmPrinterAccess
 {
@@ -144,6 +143,12 @@ public:
     OutputDevice* GetRefDev()  { return pRefDev; }
 };
 
+
+////////////////////////////////////////////////////////////
+
+void SetEditEngineDefaultFonts(
+        EditEngine &rEditEngine,
+        SfxItemPool &rEditEngineItemPool );
 
 ////////////////////////////////////////////////////////////
 
