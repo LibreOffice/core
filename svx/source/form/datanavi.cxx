@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-29 09:07:44 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3483,8 +3483,8 @@ namespace svxform
     AddSubmissionDialog::~AddSubmissionDialog()
     {
         // #i38991# if we have added a binding, we need to remove it as well.
-        if( m_xTempBinding.is() && m_xUIHelper.is() )
-            m_xUIHelper->removeBindingIfUseless( m_xTempBinding );
+        if( m_xCreatedBinding.is() && m_xUIHelper.is() )
+            m_xUIHelper->removeBindingIfUseless( m_xCreatedBinding );
     }
 
     //------------------------------------------------------------------------
@@ -3615,11 +3615,12 @@ namespace svxform
         if( !m_xTempBinding.is() )
         {
             Reference<css::xforms::XModel> xModel( m_xUIHelper, UNO_QUERY_THROW );
-            m_xTempBinding = m_xUIHelper->getBindingForNode(
+            m_xCreatedBinding = m_xUIHelper->getBindingForNode(
                 Reference<css::xml::dom::XNode>(
                     xModel->getDefaultInstance()->getDocumentElement(),
                     UNO_QUERY_THROW ),
                 sal_True );
+            m_xTempBinding = m_xCreatedBinding;
         }
 
         // replace box
