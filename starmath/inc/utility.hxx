@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:03:57 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ public:
 // SmFace
 //
 
+BOOL    IsItalic( const Font &rFont );
+BOOL    IsBold( const Font &rFont );
 
 class SmFace : public Font
 {
