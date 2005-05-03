@@ -1984,7 +1984,7 @@ sub put_systemintegration_into_installset
         {
             push(@systemfiles, "openofficeorg-redhat-menus-$productversion-1.noarch.rpm");
             push(@systemfiles, "openofficeorg-suse-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openofficeorg-mandrakelinux-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openofficeorg-mandriva-menus-$productversion-1.noarch.rpm");
             push(@systemfiles, "openofficeorg-freedesktop-menus-$productversion-1.noarch.rpm");
 
             # i46530 create desktop-integration subdirectory
