@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 12:37:10 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,18 +474,10 @@ void SmDocShell::ArrangeFormula()
 }
 
 
-EditEngine& SmDocShell::GetEditEngine()
+void SetEditEngineDefaultFonts(
+        EditEngine &rEditEngine,
+        SfxItemPool &rEditEngineItemPool )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetEditEngine" );
-
-    if (!pEditEngine)
-    {
-        //!
-        //! see also SmEditWindow::DataChanged !
-        //!
-
-        pEditEngineItemPool = EditEngine::CreatePool();
-
         //
         // set fonts to be used
         //
@@ -520,7 +512,19 @@ EditEngine& SmDocShell::GetEditEngine()
                     rFntDta.nFallbackLang : rFntDta.nLang;
             Font aFont = Application::GetDefaultDevice()->GetDefaultFont(
                         rFntDta.nFontType, nLang, DEFAULTFONT_FLAGS_ONLYONE );
-            pEditEngineItemPool->SetPoolDefaultItem(
+#ifdef DEBUG_TL
+            ByteString aFntName( aFont.GetName(), 1 );
+            int eFntFamily = aFont.GetFamily();
+            ByteString aFntStyleName( aFont.GetStyleName(), 1 );
+            int ePitch = aFont.GetPitch();
+            int eCharSet = aFont.GetCharSet();
+            fprintf(stderr, "\nFontName %s \n", aFntName.GetBuffer() );
+            fprintf(stderr, "StyleName %s \n", aFntStyleName.GetBuffer() );
+            fprintf(stderr, "eFntFamily %d \n", eFntFamily );
+            fprintf(stderr, "ePitch %d \n", ePitch );
+            fprintf(stderr, "eCharSet %d \n", eCharSet );
+#endif
+            rEditEngineItemPool.SetPoolDefaultItem(
                     SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                         aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
                         rFntDta.nFontInfoId ) );
@@ -531,11 +535,27 @@ EditEngine& SmDocShell::GetEditEngine()
                         Application::GetDefaultDevice()->LogicToPixel(
                         Size( 0, 11 ), MapMode( MAP_POINT ) ).Height(), 100,
                         EE_CHAR_FONTHEIGHT );
-        pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
+        rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
         aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
-        pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
+        rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
         aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
-        pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
+        rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+}
+
+
+EditEngine& SmDocShell::GetEditEngine()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetEditEngine" );
+
+    if (!pEditEngine)
+    {
+        //!
+        //! see also SmEditWindow::DataChanged !
+        //!
+
+        pEditEngineItemPool = EditEngine::CreatePool();
+
+        SetEditEngineDefaultFonts( *pEditEngine, *pEditEngineItemPool );
 
         pEditEngine = new EditEngine( pEditEngineItemPool );
 
@@ -1279,11 +1299,11 @@ void SmDocShell::Execute(SfxRequest& rReq)
         {
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog(NULL);
 
-            pFontTypeDialog->ReadFrom(GetFormat());
+            SmFormat aOldFormat  = GetFormat();
+            pFontTypeDialog->ReadFrom( aOldFormat );
             if (pFontTypeDialog->Execute() == RET_OK)
             {
-                SmFormat aOldFormat  = GetFormat();
-                SmFormat aNewFormat;
+                SmFormat aNewFormat( aOldFormat );
 
                 pFontTypeDialog->WriteTo(aNewFormat);
                 SfxUndoManager *pUndoMgr = GetUndoManager();
@@ -1303,11 +1323,11 @@ void SmDocShell::Execute(SfxRequest& rReq)
         {
             SmFontSizeDialog *pFontSizeDialog = new SmFontSizeDialog(NULL);
 
-            pFontSizeDialog->ReadFrom(GetFormat());
+            SmFormat aOldFormat  = GetFormat();
+            pFontSizeDialog->ReadFrom( aOldFormat );
             if (pFontSizeDialog->Execute() == RET_OK)
             {
-                SmFormat aOldFormat  = GetFormat();
-                SmFormat aNewFormat;
+                SmFormat aNewFormat( aOldFormat );
 
                 pFontSizeDialog->WriteTo(aNewFormat);
 
@@ -1328,11 +1348,11 @@ void SmDocShell::Execute(SfxRequest& rReq)
         {
             SmDistanceDialog *pDistanceDialog = new SmDistanceDialog(NULL);
 
-            pDistanceDialog->ReadFrom(GetFormat());
+            SmFormat aOldFormat  = GetFormat();
+            pDistanceDialog->ReadFrom( aOldFormat );
             if (pDistanceDialog->Execute() == RET_OK)
             {
-                SmFormat aOldFormat  = GetFormat();
-                SmFormat aNewFormat;
+                SmFormat aNewFormat( aOldFormat );
 
                 pDistanceDialog->WriteTo(aNewFormat);
 
@@ -1353,11 +1373,11 @@ void SmDocShell::Execute(SfxRequest& rReq)
         {
             SmAlignDialog *pAlignDialog = new SmAlignDialog(NULL);
 
-            pAlignDialog->ReadFrom(GetFormat());
+            SmFormat aOldFormat  = GetFormat();
+            pAlignDialog->ReadFrom( aOldFormat );
             if (pAlignDialog->Execute() == RET_OK)
             {
-                SmFormat aOldFormat  = GetFormat();
-                SmFormat aNewFormat;
+                SmFormat aNewFormat( aOldFormat );
 
                 pAlignDialog->WriteTo(aNewFormat);
 
