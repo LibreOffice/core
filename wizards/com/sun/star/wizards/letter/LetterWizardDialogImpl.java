@@ -847,7 +847,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public void initializeNorms() {
         //To add new Languages please modify this method and LetterWizardDialogResources.java
-        Norms = new String[11];
+        Norms = new String[16];
 
         Norms[0] = "en-US";
         Norms[1] = "de";
@@ -860,6 +860,11 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         Norms[8] = "ko";
         Norms[9] = "zh-CN";
         Norms[10] = "zh-TW";
+        Norms[11] = "cs";
+        Norms[12] = "bg";
+        Norms[13] = "da";
+        Norms[14] = "hu";
+        Norms[15] = "hr";
 
         setControlProperty("lstLetterNorm", "StringItemList", resources.LanguageLabels);
 
