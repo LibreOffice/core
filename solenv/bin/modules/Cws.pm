@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 11:27:06 $
+#   last change: $Author: obo $ $Date: 2005-05-03 14:18:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -455,6 +455,41 @@ sub get_integrated_cws
 
     return wantarray ? @{$self->get_childworkspaces_for_milestone($master, $milestone)}
                      :   $self->get_childworkspaces_for_milestone($master, $milestone);
+}
+
+#
+# Get all cws' with a status passed
+#
+sub get_cws_with_state
+{
+    my $self = shift;
+    my $mws = shift;
+    my $status = shift;
+
+    return wantarray ? @{$self->get_cws_with_state_from_ice($mws, $status)}
+                    :   $self->get_cws_with_state_from_ice($mws, $status);
+}
+
+sub get_cws_with_state_from_ice {
+    my $self = shift;
+    my $mws = shift;
+    my $status = shift;
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getCWSWithState($mws, $status) };
+    if ( $@ ) {
+        carp("ERROR: get_cws_with_state_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+
+};
+
+sub get_task_prio_cws
+{
+    my $self        = shift;
+    my $ref_taskids = shift;
+    return @{$self->get_task_prios_of_tasks($ref_taskids)};
 }
 
 sub set_log_entry
@@ -1098,6 +1133,25 @@ sub get_childworkspaces_for_milestone
     eval { $result = $eis->searchChildWorkspacesForMilestone($master, $milestone) };
     if ( $@ ) {
         carp("ERROR: get_childworkspaces_for_milestone(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+sub get_task_prios_of_tasks
+{
+    my $self        = shift;
+    my $ref_taskids = shift;
+
+    my $eis = Cws::eis();
+    my $result;
+    my @items = ();
+    foreach ( @{$ref_taskids} ) {
+        push(@items, Eis::to_string($_));
+    }
+
+    eval { $result = $eis->getTasksPriorities( \@items ) };
+    if ( $@ ) {
+        carp("ERROR: get_task_prios_of_tasks(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
