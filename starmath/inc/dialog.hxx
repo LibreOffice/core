@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 16:06:25 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 13:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ class SmFontDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmFontDialog(Window * pParent, BOOL bFreeRes = TRUE);
+    SmFontDialog(Window * pParent, BOOL bHideCheckboxes, BOOL bFreeRes = TRUE);
 
     const Font& GetFont() const { return Face; }
     void        SetFont(const Font &rFont);
