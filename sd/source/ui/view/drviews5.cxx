@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:09:14 $
+ *  last change: $Author: obo $ $Date: 2005-05-03 14:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void DrawViewShell::ArrangeGUIElements (void)
 
 void DrawViewShell::ReadFrameViewData(FrameView* pView)
 {
-    BOOL bChanged = GetDoc()->IsChanged();      // merken
+    ModifyGuard aGuard( GetDoc() );
 
     // Diese Option wird am Model eingestellt
     GetDoc()->SetPickThroughTransparentTextFrames(
@@ -430,8 +430,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     // Muss am Ende gerufen werden, da ein WriteFrameViewData() ausgeloest wird
     if (pDrView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
         pDrView->SetFrameDragSingles( pView->IsFrameDragSingles() );
-
-    GetDoc()->SetChanged( bChanged );
 }
 
 /*************************************************************************
