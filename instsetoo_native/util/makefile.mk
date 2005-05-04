@@ -165,10 +165,13 @@ openoffice:
 .ENDIF			# "$(alllangiso)"!=""
 
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(LOCALPYFILES) 
+$(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(LOCALPYFILES) $(BIN)$/cp1251.py
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
+    @+$(COPY) $< $@
+
+$(BIN)$/cp1251.py : $(SOLARLIBDIR)$/python$/encodings$/cp1251.py
     @+$(COPY) $< $@
 
 $(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
