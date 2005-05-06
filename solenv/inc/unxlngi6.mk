@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-18 14:02:11 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:37:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,9 +99,6 @@ CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
 CFLAGS+=-Wreturn-type -fmessage-length=0 -c $(INCLUDE)
-.IF "$(PRODUCT)"!=""
-CFLAGS+=-Wuninitialized
-.ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
@@ -146,6 +143,7 @@ CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
+CFLAGSOPT+=-Wuninitialized				# not supported without optimization
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
