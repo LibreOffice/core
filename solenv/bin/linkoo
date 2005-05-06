@@ -12,9 +12,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-11 08:58:17 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:24:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -215,13 +215,18 @@ sub scan_and_link_files($$$)
 	my $dest = $installed_files->{$file};
 
 	if (-l "$dest/$file") {
-	    if (!$dry_run) {
-		# re-write the link
-		unlink ("$dest/$file");
-		symlink ("$src/$file", "$dest/$file") || die "Failed to symlink: $!";
-		print " [$file]";
-	    } else {
-		print "re-make link $src/$file => $dest/$file\n";
+	    my $link = readlink ("$dest/$file");
+	    if ($link =~ /^\//) { # Absolute path
+		if (!$dry_run) {
+		    # re-write the link
+		    unlink ("$dest/$file");
+		    symlink ("$src/$file", "$dest/$file") || die "Failed to symlink: $!";
+		    print " [$file]";
+		} else {
+		    print "re-make link $src/$file => $dest/$file\n";
+		}
+	    } elsif ($dry_run) {
+		print "skipping symbolic link $dest/$file -> $link\n";
 	    }
 	} else {
 	    check_create_linked ($dest);
