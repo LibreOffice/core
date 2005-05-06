@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:25:41 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -305,6 +308,23 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     uno::Any aFrame = xPrSet->getPropertyValue(C2U("Frame"));
     uno::Reference< frame::XFrame >  xFrm;
     aFrame >>= xFrm;
+
+    uno::Reference< beans::XPropertySet > xPropSet( xFrm, uno::UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        try
+        {
+            uno::Reference< frame::XLayoutManager > xLayoutManager;
+            uno::Any aValue = xPropSet->getPropertyValue(C2U("LayoutManager"));
+            aValue >>= xLayoutManager;
+            if ( xLayoutManager.is() )
+                xLayoutManager->setVisible( sal_False );
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
     _xController = xFrm->getController();
     if(_xController.is())
     {
