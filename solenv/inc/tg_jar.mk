@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:14:13 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:37:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,7 @@ $(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) : $(EXTENDEDMANIFESTFILE)
 .ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
 
 $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) $(EXTENDEDMANIFESTFILEDEP)
-    +-$(MKDIR) $(@:d) >& $(NULLDEV)
+    +-$(MKDIRHIER) $(@:d) >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
     +echo Manifest-Version: 1.0 > $@
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
@@ -137,6 +137,9 @@ $(JARTARGETN) :
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @+-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
-    +cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,$(CLASSDIR)$/, $(JARMANIFEST)) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
+.IF "$(JARMANIFEST)"!=""
+    +cd $(CLASSDIR)$/$(TARGET) && zip -u -rX ..$/$(@:f) $(subst,$(CLASSDIR)$/$(TARGET)$/, $(JARMANIFEST)) $(CHECKZIPRESULT)
+.ENDIF			# "$(JARMANIFEST)"!=""
+    +cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
 .ENDIF
 
