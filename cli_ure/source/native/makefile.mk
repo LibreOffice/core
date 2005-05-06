@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 14:54:46 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:41:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,7 @@ ALLTAR : \
 ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY)) 
 
 $(ASSEMBLY_ATTRIBUTES) .PHONY:
-    ECHO $(ASSEMBLY_KEY_X)
+    +echo $(ASSEMBLY_KEY_X)
     $(GNUCOPY) -p assembly.cxx $@
     +echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyVersion( $(ASSEMBLY_VERSION) )]; $(ECHOQUOTE) \
