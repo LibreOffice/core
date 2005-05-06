@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 09:47:25 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,19 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     {
         OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
     }
+    Reference<XChild> xChild(m_pImpl->m_xForms.get(),UNO_QUERY);
+    if ( xChild.is() )
+        xChild->setParent(static_cast<OWeakObject*>(this));
+
+    xChild.set(m_pImpl->m_xReports.get(),UNO_QUERY);
+    if ( xChild.is() )
+        xChild->setParent(static_cast<OWeakObject*>(this));
+    xChild.set(m_pImpl->m_xTableDefinitions.get(),UNO_QUERY);
+    if ( xChild.is() )
+        xChild->setParent(static_cast<OWeakObject*>(this));
+    xChild.set(m_pImpl->m_xCommandDefinitions.get(),UNO_QUERY);
+    if ( xChild.is() )
+        xChild->setParent(static_cast<OWeakObject*>(this));
 }
 //--------------------------------------------------------------------------
 ODatabaseDocument::~ODatabaseDocument()
@@ -1100,6 +1113,7 @@ void ODatabaseDocument::notifyEvent(const ::rtl::OUString& _sEventName)
 //------------------------------------------------------------------------------
 void ODatabaseDocument::disposing()
 {
+    Reference<XInterface> xHold = m_pImpl->m_xModel;
     {
         notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
         if ( m_pChildCommitListen )
@@ -1121,6 +1135,20 @@ void ODatabaseDocument::disposing()
             if ( xComp.is() )
                 xComp->removeEventListener( static_cast< XTransactionListener* >( this ) );
         }
+
+        Reference<XChild> xChild(m_pImpl->m_xForms.get(),UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(NULL);
+
+        xChild.set(m_pImpl->m_xReports.get(),UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(NULL);
+        xChild.set(m_pImpl->m_xTableDefinitions.get(),UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(NULL);
+        xChild.set(m_pImpl->m_xCommandDefinitions.get(),UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(NULL);
 
         m_pImpl->m_xModel.clear();
     }
