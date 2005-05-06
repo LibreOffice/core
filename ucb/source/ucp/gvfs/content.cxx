@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 11:53:24 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,6 @@ uno::Any SAL_CALL Content::execute(
             str.getStr(),
             str.getLength(),
             RTL_TEXTENCODING_UTF8);
-        fprintf(stdout,"requesting %s\n",stra.getStr());
 
         star::ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -1620,6 +1619,11 @@ Content::feedSink( uno::Reference< ::com::sun::star::uno::XInterface > aSink,
 }
 
 extern "C" {
+
+#ifndef GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION
+#  error "We require Gnome VFS 2.6.x to compile (will run fine with < 2.6)"
+#endif
+
     static void
     vfs_authentication_callback (gconstpointer in_void,
                      gsize         in_size,
@@ -1630,44 +1634,79 @@ extern "C" {
         task::XInteractionHandler *xIH;
 
 #ifdef DEBUG
-        g_warning ("Authentication callback (%p)...", callback_data);
+        g_warning ("Full authentication callback (%p) ...", callback_data);
 #endif
 
         if( !( xIH = (task::XInteractionHandler *) callback_data ) )
             return;
 
-        const GnomeVFSModuleCallbackAuthenticationIn *in =
-            (const GnomeVFSModuleCallbackAuthenticationIn *) in_void;
-        GnomeVFSModuleCallbackAuthenticationOut *out =
-            (GnomeVFSModuleCallbackAuthenticationOut *) out_void;
+        const GnomeVFSModuleCallbackFullAuthenticationIn *in =
+            (const GnomeVFSModuleCallbackFullAuthenticationIn *) in_void;
+        GnomeVFSModuleCallbackFullAuthenticationOut *out =
+            (GnomeVFSModuleCallbackFullAuthenticationOut *) out_void;
 
         g_return_if_fail (in != NULL && out != NULL);
-        g_return_if_fail (sizeof (GnomeVFSModuleCallbackAuthenticationIn) == in_size &&
-                  sizeof (GnomeVFSModuleCallbackAuthenticationOut) == out_size);
+        g_return_if_fail (sizeof (GnomeVFSModuleCallbackFullAuthenticationIn) == in_size &&
+                  sizeof (GnomeVFSModuleCallbackFullAuthenticationOut) == out_size);
 
+#ifdef DEBUG
+#  define NNIL(x) (x?x:"<Null>")
+        g_warning (" InComing data 0x%x uri '%s' prot '%s' server '%s' object '%s' "
+                   "port %d auth_t '%s' user '%s' domain '%s' "
+                   "def user '%s', def domain '%s'",
+                   (int) in->flags, NNIL(in->uri), NNIL(in->protocol),
+                   NNIL(in->server), NNIL(in->object),
+                   (int) in->port, NNIL(in->authtype), NNIL(in->username), NNIL(in->domain),
+                   NNIL(in->default_user), NNIL(in->default_domain));
+#  undef NNIL
+#endif
 
-        ::rtl::OUString inHostName, inRealm;
-        ::rtl::OUString aUserName, aPassword;
+        ucbhelper::SimpleAuthenticationRequest::EntityType
+                                   eDomain, eUserName, ePassword;
+        ::rtl::OUString aHostName, aDomain, aUserName, aPassword;
 
-        if( in->uri ) {
-            GnomeVFSURI *uri = gnome_vfs_uri_new( in->uri );
-            if( gnome_vfs_uri_get_host_name( uri ) )
-                inHostName = rtl::OUString::createFromAscii
-                    ( gnome_vfs_uri_get_host_name( uri ) );
-            if( gnome_vfs_uri_get_user_name( uri ) )
-                aUserName = rtl::OUString::createFromAscii
-                    ( gnome_vfs_uri_get_user_name( uri ) );
-            if( gnome_vfs_uri_get_password( uri ) )
-                aPassword = rtl::OUString::createFromAscii
-                    ( gnome_vfs_uri_get_password( uri ) );
-            gnome_vfs_uri_unref (uri);
+        aHostName = GnomeToOUString( in->server );
+
+        if (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_DOMAIN)
+        {
+            aDomain = GnomeToOUString( in->domain );
+            eDomain = ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY;
+            if (!aDomain.getLength())
+                aDomain = GnomeToOUString( in->default_domain );
         }
-        if( in->realm )
-            inRealm = rtl::OUString::createFromAscii( in->realm );
+        else // no underlying capability to display realm otherwise
+            eDomain = ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
+
+        aUserName = GnomeToOUString( in->username );
+        if (!aUserName.getLength())
+            aUserName = GnomeToOUString( in->default_user );
+        eUserName = (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_USERNAME) ?
+            ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY :
+                (aUserName.getLength() ?
+                    ucbhelper::SimpleAuthenticationRequest::ENTITY_FIXED :
+                    ucbhelper::SimpleAuthenticationRequest::ENTITY_NA);
+
+        // No suggested password.
+        ePassword = (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_PASSWORD) ?
+            ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY :
+            ucbhelper::SimpleAuthenticationRequest::ENTITY_FIXED;
+
+        // Really, really bad things happen if we don't provide
+        // the same user/password as was entered last time if
+        // we failed to authenticate - infinite looping / flickering
+        // madness etc. [ nice infrastructure ! ]
+        static rtl::OUString aLastUserName, aLastPassword;
+        if (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_PREVIOUS_ATTEMPT_FAILED)
+        {
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+            aUserName = aLastUserName;
+            aPassword = aLastPassword;
+        }
 
         rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-            = new ucbhelper::SimpleAuthenticationRequest
-                ( inHostName, inRealm, rtl::OUString(), rtl::OUString() );
+            = new ucbhelper::SimpleAuthenticationRequest (aHostName, eDomain, aDomain,
+                                                          eUserName, aUserName,
+                                                          ePassword, aPassword);
 
         xIH->handle( xRequest.get() );
 
@@ -1683,17 +1722,97 @@ extern "C" {
                     = xRequest->getAuthenticationSupplier();
 
                 aUserName = xSupp->getUserName();
+                aDomain   = xSupp->getRealm();
                 aPassword = xSupp->getPassword();
 
+                {
+                    osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+                    aLastUserName = aUserName;
+                    aLastPassword = aPassword;
+                }
+
                 out->username = OUStringToGnome( aUserName );
+                out->domain   = OUStringToGnome( aDomain );
                 out->password = OUStringToGnome( aPassword );
+                out->save_password = xSupp->getRememberPasswordMode();
+
 #ifdef DEBUG
-                g_warning ("Got valid user/password '%s' '%s'",
-                       out->username, out->password);
+                g_warning ("Got valid user/domain/password '%s' '%s' '%s', %s password",
+                           out->username, out->domain, out->password,
+                           out->save_password ? "save" : "don't save");
 #endif
             }
+            else
+                out->abort_auth = TRUE;
         }
+        else
+            out->abort_auth = TRUE;
     }
+
+    static void
+    vfs_authentication_old_callback (gconstpointer in_void,
+                                     gsize         in_size,
+                                     gpointer      out_void,
+                                     gsize         out_size,
+                                     gpointer      callback_data)
+    {
+#ifdef DEBUG
+        g_warning ("Old authentication callback (%p) [ UNTESTED ] ...", callback_data);
+#endif
+        const GnomeVFSModuleCallbackAuthenticationIn *in =
+            (const GnomeVFSModuleCallbackAuthenticationIn *) in_void;
+        GnomeVFSModuleCallbackAuthenticationOut *out =
+            (GnomeVFSModuleCallbackAuthenticationOut *) out_void;
+
+        g_return_if_fail (in != NULL && out != NULL);
+        g_return_if_fail (sizeof (GnomeVFSModuleCallbackAuthenticationIn) == in_size &&
+                  sizeof (GnomeVFSModuleCallbackAuthenticationOut) == out_size);
+
+        GnomeVFSModuleCallbackFullAuthenticationIn mapped_in = {
+                (GnomeVFSModuleCallbackFullAuthenticationFlags)
+                (GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_PASSWORD |
+                 GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_USERNAME |
+                 GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_DOMAIN),
+                0, };
+        GnomeVFSModuleCallbackFullAuthenticationOut mapped_out = { 0, };
+
+        // Map the old style input auth. data to the new style structure.
+        if (in->previous_attempt_failed)
+            mapped_in.flags = (GnomeVFSModuleCallbackFullAuthenticationFlags)
+                (mapped_in.flags |
+                 GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_PREVIOUS_ATTEMPT_FAILED);
+
+        GnomeVFSURI *pURI = NULL;
+        // Urk - parse all this from the URL ...
+        mapped_in.uri = in->uri;
+        if (in->uri)
+        {
+            pURI = gnome_vfs_uri_new( in->uri );
+            mapped_in.protocol = (char *) gnome_vfs_uri_get_scheme (pURI);
+            mapped_in.server   = (char *) gnome_vfs_uri_get_host_name (pURI);
+            mapped_in.port     = gnome_vfs_uri_get_host_port (pURI);
+            mapped_in.username = (char *) gnome_vfs_uri_get_user_name (pURI);
+        }
+        mapped_in.domain = in->realm;
+        mapped_in.default_user = mapped_in.username;
+        mapped_in.default_domain = mapped_in.domain;
+
+        vfs_authentication_callback ((gconstpointer) &mapped_in,
+                                     sizeof (mapped_in),
+                                     (gpointer) &mapped_out,
+                                     sizeof (mapped_out),
+                                     callback_data);
+
+        if (pURI)
+            gnome_vfs_uri_unref (pURI);
+
+        // Map the new style auth. out data to the old style out structure.
+        out->username = mapped_out.username;
+        out->password = mapped_out.password;
+        g_free (mapped_out.domain);
+        g_free (mapped_out.keyring);
+    }
+
 
     static void
     auth_destroy (gpointer data)
@@ -1724,11 +1843,15 @@ refresh_auth( GQueue *vq )
     GList *l;
 
     gnome_vfs_module_callback_pop( GNOME_VFS_MODULE_CALLBACK_AUTHENTICATION );
+    gnome_vfs_module_callback_pop( GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION );
 
     for (l = vq->head; l; l = l->next) {
         if (l->data) {
             gnome_vfs_module_callback_push
                 ( GNOME_VFS_MODULE_CALLBACK_AUTHENTICATION,
+                  vfs_authentication_old_callback, l->data, NULL );
+            gnome_vfs_module_callback_push
+                ( GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION,
                   vfs_authentication_callback, l->data, NULL );
             break;
         }
