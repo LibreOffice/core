@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:00:43 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,35 @@ namespace vclcanvas
 
         virtual ~Sprite() {}
 
+        /** Repaint whole sprite on given target surface
+         */
         virtual void redraw( OutputDevice& rTargetSurface ) const = 0;
-        virtual void redraw( OutputDevice& rTargetSurface, const Point& rOutputPosition ) const = 0;
 
-        virtual ::basegfx::B2DPoint getPos() const = 0;
+        /** Repaint sprite.
 
-        // TODO(Q3): Rename method, it hides XBitmap::getSize()
-        virtual ::basegfx::B2DSize  getSize() const = 0;
+            @param rTargetSurface
+            Target surface to output sprite content
+
+            @param rOutputPos
+            Position where to render the sprite (overrides the
+            sprite's output position)
+         */
+        virtual void redraw( OutputDevice&  rTargetSurface,
+                             const Point&   rOutputPos ) const = 0;
+
+        /** Query whether sprite update will fully cover the given area.
+
+            Use this method to determine whether any background
+            content (regardless of static or sprite) needs an update
+            before rendering this sprite.
+
+            @return true, if sprite redraw will fully overwrite given
+            area.
+         */
+        virtual bool isAreaUpdateOpaque( const Rectangle& rUpdateArea ) const = 0;
+
+        virtual ::basegfx::B2DPoint getSpritePos() const = 0;
+        virtual ::basegfx::B2DSize  getSpriteSize() const = 0;
     };
 }
 
