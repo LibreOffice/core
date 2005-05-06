@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:20:08 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 int GtkSalFrame::m_nFloats = 0;
 
-static USHORT GetModCode( guint state )
+static USHORT GetKeyModCode( guint state )
 {
     USHORT nCode = 0;
     if( (state & GDK_SHIFT_MASK) )
@@ -101,6 +101,12 @@ static USHORT GetModCode( guint state )
         if( ! (nCode & KEY_MOD1) )
             nCode |= KEY_CONTROLMOD;
     }
+    return nCode;
+}
+
+static USHORT GetMouseModCode( guint state )
+{
+    USHORT nCode = GetKeyModCode( state );
     if( (state & GDK_BUTTON1_MASK) )
         nCode |= MOUSE_LEFT;
     if( (state & GDK_BUTTON2_MASK) )
@@ -220,7 +226,7 @@ void GtkSalFrame::doKeyCallback( guint state,
     SalKeyEvent aEvent;
 
     aEvent.mnTime           = time;
-    aEvent.mnCode           = GetKeyCode( keyval ) | GetModCode( state );
+    aEvent.mnCode           = GetKeyCode( keyval ) | GetKeyModCode( state );
     aEvent.mnCharCode       = aOrigCode;
     aEvent.mnRepeat         = 0;
 
@@ -249,7 +255,7 @@ void GtkSalFrame::doKeyCallback( guint state,
                                                      &level,
                                                      &consumed ) )
             {
-                aEvent.mnCode   = GetKeyCode( updated_keyval ) | GetModCode( state );
+                aEvent.mnCode   = GetKeyCode( updated_keyval ) | GetKeyModCode( state );
                 aEvent.mnCharCode = (USHORT)gdk_keyval_to_unicode( updated_keyval );
                 bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
             }
@@ -1451,7 +1457,7 @@ SalFrame::SalPointerState GtkSalFrame::GetPointerState()
     GdkModifierType aMask;
     gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
     aState.maPos = Point( x - maGeometry.nX, y - maGeometry.nY );
-    aState.mnState = GetModCode( aMask );
+    aState.mnState = GetMouseModCode( aMask );
     return aState;
 }
 
@@ -1745,7 +1751,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
     aEvent.mnTime   = pEvent->time;
     aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
     aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
-    aEvent.mnCode   = GetModCode( pEvent->state );
+    aEvent.mnCode   = GetMouseModCode( pEvent->state );
 
     bool bClosePopups = false;
     if( pEvent->type == GDK_BUTTON_PRESS &&
@@ -1826,7 +1832,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget* pWidget, GdkEvent* pEvent, gpoint
     aEvent.mnDelta          = bNeg ? -120 : 120;
     aEvent.mnNotchDelta     = bNeg ? -1 : 1;
     aEvent.mnScrollLines    = nLines;
-    aEvent.mnCode           = GetModCode( pSEvent->state );
+    aEvent.mnCode           = GetMouseModCode( pSEvent->state );
     aEvent.mbHorz           = (pSEvent->direction == GDK_SCROLL_LEFT || pSEvent->direction == GDK_SCROLL_RIGHT);
 
     GTK_YIELD_GRAB();
@@ -1848,7 +1854,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, 
     aEvent.mnTime   = pEvent->time;
     aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
     aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
-    aEvent.mnCode   = GetModCode( pEvent->state );
+    aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
 
@@ -1892,7 +1898,7 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget* pWidget, GdkEventCrossing* pEve
     aEvent.mnTime   = pEvent->time;
     aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
     aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
-    aEvent.mnCode   = GetModCode( pEvent->state );
+    aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
     GTK_YIELD_GRAB();
@@ -2148,7 +2154,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
     {
         SalKeyModEvent aModEvt;
 
-        USHORT nModCode = GetModCode( pEvent->state );
+        USHORT nModCode = GetKeyModCode( pEvent->state );
 
         aModEvt.mnModKeyCode = 0; // emit no MODKEYCHANGE events
         if( pEvent->type == GDK_KEY_PRESS && !pThis->m_nKeyModifiers )
@@ -2322,6 +2328,33 @@ gboolean GtkSalFrame::signalVisibility( GtkWidget* pWidget, GdkEventVisibility* 
     return FALSE;
 }
 
+/* FIXME:
+* #122282# still more hacking: some IMEs never start a preedit but simply commit
+* in this case we cannot commit a single character. Workaround: do not do the
+* single key hack for enter or space if the unicode commited does not match
+*/
+
+static bool checkSinkleKeyCommitHack( guint keyval, sal_Unicode cCode )
+{
+    bool bRet = true;
+    switch( keyval )
+    {
+        case GDK_KP_Enter:
+        case GDK_Return:
+            if( cCode != '\n' && cCode != '\r' )
+                bRet = false;
+            break;
+        case GDK_space:
+        case GDK_KP_Space:
+            if( cCode != ' ' )
+                bRet = false;
+            break;
+        default:
+            break;
+    }
+    return bRet;
+}
+
 void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
@@ -2359,10 +2392,17 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
         )
     {
         const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
+        sal_Unicode aOrigCode = aTextEvent.maText.GetChar(0);
 
-        pThis->m_bWasPreedit = false;
-        pThis->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aTextEvent.maText.GetChar(0), true, true );
-        return;
+        if( checkSinkleKeyCommitHack( rKP.keyval, aOrigCode ) )
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, ":signalIMCommit (as key): '%s'\n", pText );
+            #endif
+            pThis->m_bWasPreedit = false;
+            pThis->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aOrigCode, true, true );
+            return;
+        }
     }
 
     #if OSL_DEBUG_LEVEL > 1
@@ -2471,6 +2511,9 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
 
 void GtkSalFrame::signalIMPreeditStart( GtkIMContext* pContext, gpointer frame )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, ":signalImPreeditStart\n" );
+#endif
 //    GtkSalFrame* pThis = (GtkSalFrame*)frame;
 }
 
