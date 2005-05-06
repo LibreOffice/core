@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:02:41 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "taskpane/ScrollPanel.hxx"
 #include "tools/SlotStateListener.hxx"
+#include "EventMultiplexer.hxx"
 
 #include <vector>
 #include <memory>
@@ -265,7 +266,8 @@ LayoutMenu::LayoutMenu (
       mrBase (rViewShellBase),
       mbUseOwnScrollBar (bUseOwnScrollBar),
       mnPreferredColumnCount(3),
-      mxListener(NULL)
+      mxListener(NULL),
+      mbSelectionUpdatePending(true)
 {
     SetStyle (
         GetStyle()
@@ -278,17 +280,18 @@ LayoutMenu::LayoutMenu (
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     SetPool (&rDocumentShell.GetDoc()->GetPool());
 
-    Fill ();
-    pParent->RequestResize();
+    InvalidateContent();
 
-    mrBase.GetPaneManager().AddEventListener (
-        LINK(this, LayoutMenu, ViewShellChangeCallback));
+    Link aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    mrBase.GetEventMultiplexer().AddEventListener(aEventListenerLink,
+        ::sd::tools::EventMultiplexer::ET_CURRENT_PAGE
+        | ::sd::tools::EventMultiplexer::ET_VIEW);
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
 
-    Link aLink (LINK(this,LayoutMenu,StateChangeHandler));
+    Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
-        aLink,
+        aStateChangeLink,
         mrBase.GetController()->getFrame(),
         ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
 }
@@ -303,8 +306,8 @@ LayoutMenu::~LayoutMenu (void)
         xComponent->dispose();
 
     Clear();
-    mrBase.GetPaneManager().RemoveEventListener (
-        LINK(this, LayoutMenu, ViewShellChangeCallback));
+    Link aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    mrBase.GetEventMultiplexer().RemoveEventListener (aLink);
 }
 
 
@@ -436,6 +439,11 @@ void LayoutMenu::Paint (const Rectangle& rRect)
 {
     SetBackground (GetSettings().GetStyleSettings().GetWindowColor());
 
+    if (mbSelectionUpdatePending)
+    {
+        mbSelectionUpdatePending = false;
+        UpdateSelection();
+    }
     ValueSet::Paint (rRect);
 
     SetBackground (Wallpaper());
@@ -481,7 +489,7 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 {
     if (rEvent.IsRight())
     {
-        GrabFocus ();
+        //        GrabFocus ();
         ReleaseMouse();
         if (GetShellManager() != NULL)
             GetShellManager()->MoveToTop (this);
@@ -548,13 +556,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 void LayoutMenu::InvalidateContent (void)
 {
-    // Throw away the current set and fill the menu anew according to the
-    // current settings (this includes the support for vertical writing.)
-    Fill();
-
     // The number of items may have changed.  Request a resize so that the
     // vertical size of this control can be adapted.
     RequestResize();
+
+    // Throw away the current set and fill the menu anew according to the
+    // current settings (this includes the support for vertical writing.)
+    Fill();
 }
 
 
@@ -721,15 +729,6 @@ SfxRequest LayoutMenu::CreateRequest (
 
 
 
-IMPL_LINK(LayoutMenu, ViewShellChangeCallback, PaneManagerEvent*, pEvent)
-{
-    Fill();
-    return 0;
-}
-
-
-
-
 void LayoutMenu::Fill (void)
 {
     const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
@@ -778,7 +777,8 @@ void LayoutMenu::Fill (void)
             n++;
         }
     }
-    OSL_TRACE("added %d entries to layout menu", n);
+
+    mbSelectionUpdatePending = true;
 }
 
 
@@ -821,6 +821,75 @@ IMPL_LINK(LayoutMenu, StateChangeHandler, ::rtl::OUString*, pSlotName)
     InvalidateContent();
     return 0;
 }
+
+
+
+
+void LayoutMenu::UpdateSelection (void)
+{
+    bool bItemSelected = false;
+
+    do
+    {
+        // Get current page of main view.
+        ViewShell* pViewShell = mrBase.GetMainViewShell();
+        if (pViewShell == NULL)
+            break;
+
+        SdPage* pCurrentPage = pViewShell->getCurrentPage();
+        if (pCurrentPage == NULL)
+            break;
+
+        // Get layout of current page.
+        AutoLayout aLayout (pCurrentPage->GetAutoLayout());
+        if (aLayout<AUTOLAYOUT__START || aLayout>AUTOLAYOUT__END)
+            break;
+
+        // Find the entry of the menu for to the layout.
+        USHORT nItemCount (GetItemCount());
+        for (USHORT nId=1; nId<=nItemCount; nId++)
+            if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
+            {
+                SelectItem(nId);
+                bItemSelected = true;
+                break;
+            }
+    }
+    while (false);
+
+    if ( ! bItemSelected)
+        SetNoSelection();
+}
+
+
+
+
+IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
+{
+    switch (pEvent->meEventId)
+    {
+        case ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
+            if ( ! mbSelectionUpdatePending)
+                UpdateSelection();
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+            InvalidateContent();
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+            HideFocus();
+            break;
+
+        default:
+            /* Ignored */
+            break;
+    }
+
+    return 0;
+}
+
 
 
 
