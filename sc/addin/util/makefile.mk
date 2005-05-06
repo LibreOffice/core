@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-14 11:13:21 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:39:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,11 @@ $(BIN)$/addin.zip : \
     $(MISC)$/rot.lst \
     $(MISC)$/dfa.lst
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +$(TYPE) $(MISC)$/rot.lst | tr -s " " "\n" | zip -@ -u -j -ll $(BIN)$/addin.zip 
-    +$(TYPE) $(MISC)$/dfa.lst | tr -s " " "\n" | zip -@ -u -j -ll $(BIN)$/addin.zip 
+    +$(TYPE) $(MISC)$/rot.lst | tr -s " " "\n" | zip -@ -u -j -ll $(BIN)$/addin.zip $(CHECKZIPRESULT)
+    +$(TYPE) $(MISC)$/dfa.lst | tr -s " " "\n" | zip -@ -u -j -ll $(BIN)$/addin.zip $(CHECKZIPRESULT)
     +chmod +rw $(BIN)$/addin.zip
 .ELSE
-    +$(TYPE) $< | zip -@ -u -j $(BIN)$/addin.zip
+    +$(TYPE) $< | zip -@ -u -j $(BIN)$/addin.zip $(CHECKZIPRESULT)
 .ENDIF
 
 ALL: \
