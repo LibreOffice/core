@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-20 09:35:15 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,13 +600,21 @@ string crash_get_details( const hash_map< string, string >& rSettings )
 // ensure validity of program relative paths
 static void setup_program_dir( const char* progname )
 {
-    string aDir = progname;
-    size_t pos = aDir.rfind( '/' );
-    // FIXME: search PATH if necessary
-    assert( pos != string::npos );
-    g_strProgramDir = aDir.substr( 0, pos + 1 );
-    aDir.erase( pos );
-    chdir( aDir.c_str() );
+    char    szCanonicProgPath[PATH_MAX];
+
+
+    if ( realpath( progname, szCanonicProgPath ) )
+    {
+        string aDir = szCanonicProgPath;
+
+        size_t pos = aDir.rfind( '/' );
+        // FIXME: search PATH if necessary
+        assert( pos != string::npos );
+
+        g_strProgramDir = aDir.substr( 0, pos + 1 );
+        aDir.erase( pos );
+        chdir( aDir.c_str() );
+    }
 }
 
 //*************************************************************************
