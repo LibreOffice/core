@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:35:29 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,14 +576,18 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
             {
             }
         }
-        try
+
+        if ( m_xModuleImageManager.is() )
         {
-            m_xModuleImageManager->removeConfigurationListener(
-                Reference< XUIConfigurationListener >(
-                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
-        }
-        catch ( Exception& )
-        {
+            try
+            {
+                m_xModuleImageManager->removeConfigurationListener(
+                    Reference< XUIConfigurationListener >(
+                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+            }
+            catch ( Exception& )
+            {
+            }
         }
 
         if ( m_xImageOrientationListener.is() )
