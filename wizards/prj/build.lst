@@ -15,12 +15,12 @@ wz      wizards\source\standard                                 nmake           
 wz      wizards\source\launcher                                 nmake           -       all     wz_launcher NULL
 wz      wizards\com\sun\star\wizards                            nmake           -       all     wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\query                      nmake           -       all     wz_querywiz wz_commonwiz NULL
-wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_commonwiz wz_querywiz NULL
-wz      wizards\com\sun\star\wizards\table                      nmake           -       all     wz_tablewiz wz_commonwiz wz_reportwiz NULL
-wz      wizards\com\sun\star\wizards\form                       nmake           -       all     wz_formwiz wz_commonwiz wz_tablewiz NULL
-wz      wizards\com\sun\star\wizards\letter                     nmake           -       all     wz_letterwiz wz_commonwiz wz_formwiz NULL
-wz      wizards\com\sun\star\wizards\fax                        nmake           -       all     wz_faxwiz wz_commonwiz wz_letterwiz NULL
-wz      wizards\com\sun\star\wizards\agenda                     nmake           -       all     wz_agendawiz wz_commonwiz wz_faxwiz NULL
-wz      wizards\com\sun\star\wizards\web\data                   nmake           -       all     wz_webdata wz_commonwiz wz_agendawiz NULL
-wz      wizards\com\sun\star\wizards\web\export                 nmake           -       all     wz_webexport wz_webdata wz_commonwiz wz_agendawiz NULL
-wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport wz_agendawiz NULL
+wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\table                      nmake           -       all     wz_tablewiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\form                       nmake           -       all     wz_formwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\letter                     nmake           -       all     wz_letterwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\fax                        nmake           -       all     wz_faxwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\agenda                     nmake           -       all     wz_agendawiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\web\data                   nmake           -       all     wz_webdata wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\web\export                 nmake           -       all     wz_webexport wz_webdata wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport NULL
