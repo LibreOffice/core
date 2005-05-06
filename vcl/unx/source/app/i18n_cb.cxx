@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:43 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,7 @@ void
 PreeditCaretCallback ( XIC ic, XPointer client_data,
     XIMPreeditCaretCallbackStruct *call_data )
 {
+    #if OSL_DEBUG_LEVEL > 1
     // XXX PreeditCaretCallback is pure debug code for now
     const char *direction = "?";
     const char *style = "?";
@@ -577,8 +578,7 @@ PreeditCaretCallback ( XIC ic, XPointer client_data,
         (unsigned int)ic, (unsigned int)client_data );
     fprintf (stderr, "\t position=%i, direction=\"%s\", style=\"%s\" )\n",
         call_data->position, direction, style );
-
-    // XXX
+    #endif
 }
 
 // -----------------------------------------------------------------------
