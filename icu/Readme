@@ -1,0 +1,4 @@
+This file describes the procedure of creating and maintaining makefiles.zip
+# Obo's part
+
+    The automatically generated makefiles are not necessarily optimal. The build is started from allinone/all directory, and the all.mak file is used to build the entire module through. Each subtarget in this file is going to be made recursively unless there is a switch RECURSE=0. If the switch is available, for each subtarget all its prerequisites should be made earlier than the subtarget itself. Therefore, you should order the ALL target's prerequisites so that they are going to be built in a consistent order. Unfortunately there's no automatic process for it, just prove the prerequisites for each subtarget and push them forward in target's ALL prerequisites list. The changes between generated & optimized all.mak can be seen when comparing the files from v1.5 & v1.6 of makefiles.zip.
