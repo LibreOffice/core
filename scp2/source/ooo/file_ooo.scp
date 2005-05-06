@@ -2380,12 +2380,14 @@ File gid_File_Txt_Patchfiles
 End
 #endif
 
+#ifndef WITHOUT_BINFILTER
 File gid_Starregistry_Legacy_Binfilters_Rdb
     TXT_FILE_BODY;
     Name = "legacy_binfilters.rdb";
     Dir = gid_Dir_Program;
     Styles = (PACKED, STARREGISTRY);
 End
+#endif
 
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
