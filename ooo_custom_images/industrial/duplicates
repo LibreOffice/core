@@ -1,7 +1,10 @@
+To Redo:
+colorsettings
+
 General dups:
 objects3dtoolbox, cube
 spelling, spelldialog
-drawchart, insertobjectchart, starchartdialog
+drawchart, insertobjectchart
 connector, connectortoolbox
 basicshapes, basicshapes.rectangle
 helpbookmark, addbookmark
@@ -20,22 +23,17 @@ alignvcenter, alignverticalcenter
 dsbinsertcolumns, <insert-fields?>
 dsbinsertcontent, <update-fields?>
 dsbformletter, <mail-merge?>
-diagramdata (charts), <database data>
-diaauto, diaeffect, diaspeed, diatime
-animationeffects,animationmode
-
-# shapes:
-arrowshapes, arrowshapes.left-right-arrow
-calloutshapes.round-rectangular-callout, calloutshapes
-flowchartshapes.flowchart-alternate-process, basicshapes.round-quadrat
-flowchartshapes.flowchart-decision, basicshapes.diamond
-flowchartshapes.flowchart-extract, basicshapes.isosceles-triangle
-flowchartshapes.flowchart-magnetic-disk, basicshapes.can
-flowchartshapes.flowchart-preparation, basicshapes.hexagon
-fontworkshapetype.fontwork-circle-curve, basicshapes.ring
-fontworkshapetype.fontwork-stop, basicshapes.octagon
-fontworkshapetype.fontwork-triangle-down, flowchartshapes.flowchart-merge
-fontworkshapetype.fontwork-triangle-up, basicshapes.isosceles-triangle
-fontworkshapetype.fontwork-wave, flowchartshapes.flowchart-punched-tape
-starshapes, starshapes.star5.svg
-symbolshapes.smiley, symbolshapes
+lc_arrowshapes, lc_arrowshapes.left-right-arrow
+lc_calloutshapes.round-rectangular-callout, lc_calloutshapes
+lc_flowchartshapes.flowchart-alternate-process, lc_basicshapes.round-quadrat
+lc_flowchartshapes.flowchart-decision, lc_basicshapes.diamond
+lc_flowchartshapes.flowchart-extract, lc_basicshapes.isosceles-triangle
+lc_flowchartshapes.flowchart-magnetic-disk, lc_basicshapes.can
+lc_flowchartshapes.flowchart-preparation, lc_basicshapes.hexagon
+lc_fontworkshapetype.fontwork-circle-curve, lc_basicshapes.ring
+lc_fontworkshapetype.fontwork-stop, lc_basicshapes.octagon
+lc_fontworkshapetype.fontwork-triangle-down, lc_flowchartshapes.flowchart-merge
+lc_fontworkshapetype.fontwork-triangle-up, lc_basicshapes.isosceles-triangle
+lc_fontworkshapetype.fontwork-wave, lc_flowchartshapes.flowchart-punched-tape
+lc_starshapes, lc_starshapes.star5
+lc_symbolshapes.smiley, lc_symbolshapes
