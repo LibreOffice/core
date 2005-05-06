@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:41:23 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,9 +526,6 @@ static int ReportCrash( int Signal )
                     {
                         Dl_info dl_info;
 
-                        /* Don't want to use malloc here */
-                        char buffer[MAX_PATH_LEN];
-
                         fprintf( stackout, "0x%x:",
                             (unsigned int)stackframes[iFrame] );
 
@@ -544,18 +541,27 @@ static int ReportCrash( int Signal )
                         {
                             const char *dli_fname = NULL;
                             const char *dli_fdir = NULL;
+                            const char *dli_fpath = NULL;
+                            char szCanonicPath[PATH_MAX];
+                            char szDirectory[PATH_MAX];
 
                             /* Don't expect that dladdr filled all members of dl_info */
-                            dli_fname = dl_info.dli_fname ? strrchr(  dl_info.dli_fname, '/' ) : NULL;
+
+                            if ( dl_info.dli_fname && realpath( dl_info.dli_fname, szCanonicPath ) )
+                                dli_fpath = szCanonicPath;
+                            else
+                                dli_fpath = dl_info.dli_fname;
+
+                            dli_fname = dli_fpath ? strrchr(  dli_fpath, '/' ) : NULL;
                             if ( dli_fname )
                             {
                                 ++dli_fname;
-                                memcpy( buffer, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
-                                buffer[dli_fname - dl_info.dli_fname] = 0;
-                                dli_fdir = buffer;
+                                memcpy( szDirectory, dli_fpath, dli_fname - dli_fpath );
+                                szDirectory[dli_fname - dli_fpath] = 0;
+                                dli_fdir = szDirectory;
                             }
                             else
-                                dli_fname = dl_info.dli_fname;
+                                dli_fname = dli_fpath;
 
                             /* create checksum of library on stack */
                             if ( dli_fname )
