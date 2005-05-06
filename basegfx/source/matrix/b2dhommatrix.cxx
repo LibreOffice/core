@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:37:48 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -290,9 +294,56 @@ namespace basegfx
     {
         if(!::basegfx::fTools::equalZero(fRadiant))
         {
+            double fSin;
+            double fCos;
+
+            // is the rotation angle an approximate multiple of pi/2?
+            // If yes, force fSin/fCos to -1/0/1, to maintain
+            // orthogonality (which might also be advantageous for the
+            // other cases, but: for multiples of pi/2, the exact
+            // values _can_ be attained. It would be largely
+            // unintuitive, if a 180 degrees rotation would introduce
+            // slight roundoff errors, instead of exactly mirroring
+            // the coordinate system).
+            if( fTools::equalZero( fmod( fRadiant, F_PI2 ) ) )
+            {
+                // determine quadrant
+                const sal_Int32 nQuad(
+                    (4 + fround( 4/F_2PI*fmod( fRadiant, F_2PI ) )) % 4 );
+                switch( nQuad )
+                {
+                    case 0: // -2pi,0,2pi
+                        fSin = 0.0;
+                        fCos = 1.0;
+                        break;
+
+                    case 1: // -3/2pi,1/2pi
+                        fSin = 1.0;
+                        fCos = 0.0;
+                        break;
+
+                    case 2: // -pi,pi
+                        fSin = 0.0;
+                        fCos = -1.0;
+                        break;
+
+                    case 3: // -1/2pi,3/2pi
+                        fSin = -1.0;
+                        fCos = 0.0;
+                        break;
+
+                    default:
+                        OSL_ENSURE( false,
+                                    "B2DHomMatrix::rotate(): Impossible case reached" );
+                }
+            }
+            else
+            {
+                fSin = sin(fRadiant);
+                fCos = cos(fRadiant);
+            }
+
             Impl2DHomMatrix aRotMat(get2DIdentityMatrix());
-            double fSin(sin(fRadiant));
-            double fCos(cos(fRadiant));
 
             aRotMat.set(0, 0, fCos);
             aRotMat.set(1, 1, fCos);
