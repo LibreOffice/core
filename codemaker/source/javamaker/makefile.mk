@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 11:58:10 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:36:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,19 +75,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
-CFLAGSNOOPT+=-Ob0
-.ENDIF
-
 OBJFILES = \
     $(OBJ)$/classfile.obj \
     $(OBJ)$/javamaker.obj \
     $(OBJ)$/javaoptions.obj \
     $(OBJ)$/javatype.obj
-
-NOOPTFILES= \
-            $(OBJ)$/javatype.obj
-
 
 APP1TARGET= $(TARGET)
 
