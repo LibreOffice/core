@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:55:10 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,18 @@
 
 class SfxModule;
 
+
 namespace sd {
 class DrawDocShell;
 class PaneManagerEvent;
 class ViewShellBase;
 }
+
+
+namespace sd { namespace tools {
+class EventMultiplexerEvent;
+} }
+
 
 namespace sd { namespace toolpanel {
 
@@ -189,6 +196,8 @@ private:
 
     ::com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> mxListener;
 
+    bool mbSelectionUpdatePending;
+
     /** Calculate the number of displayed rows.  This depends on the given
         item size, the given number of columns, and the size of the
         control.  Note that this is not the number of rows managed by the
@@ -232,12 +241,16 @@ private:
         USHORT nSlotId,
         AutoLayout aLayout);
 
+    /** Select the layout that is used by the current page.
+    */
+    void UpdateSelection (void);
+
     /** When clicked then set the current page of the view in the center pane.
     */
     DECL_LINK(ClickHandler, ValueSet*);
-    DECL_LINK(ViewShellChangeCallback, PaneManagerEvent*);
     DECL_LINK(RightClickHandler, MouseEvent*);
     DECL_LINK(StateChangeHandler, ::rtl::OUString*);
+    DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*);
 };
 
 } } // end of namespace ::sd::toolpanel
