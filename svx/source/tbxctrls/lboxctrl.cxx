@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:55:56 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,13 +362,16 @@ void SvxUndoRedoControl::StateChanged(
     {
         aUndoRedoList.clear();
 
-        SfxStringListItem &rItem = *(SfxStringListItem *)pState;
-        const List* pLst = rItem.GetList();
-        DBG_ASSERT( pLst, "no undo actions available" );
-        if ( pLst )
+        if ( pState && pState->ISA( SfxStringListItem ) )
         {
-            for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
-                aUndoRedoList.push_back( rtl::OUString( *(String *)pLst->GetObject( nI )));
+            SfxStringListItem &rItem = *(SfxStringListItem *)pState;
+            const List* pLst = rItem.GetList();
+            DBG_ASSERT( pLst, "no undo actions available" );
+            if ( pLst )
+            {
+                for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
+                    aUndoRedoList.push_back( rtl::OUString( *(String *)pLst->GetObject( nI )));
+            }
         }
     }
 }
