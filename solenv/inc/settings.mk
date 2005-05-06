@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.170 $
+#   $Revision: 1.171 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-03 14:43:59 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:37:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -846,6 +846,9 @@ INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
 INCLOCPRJ=$(foreach,i,$(PRJINC) $i$/inc)
 INCDEPN+=$(INCLOCPRJ)
 .ENDIF
+.IF "$(INCPRE)"!=""
+INCDEPN+=$(INCPRE)
+.ENDIF
 
 # Resource-Pfad fuer .SRS
 
@@ -1038,19 +1041,11 @@ CDEFSOPT=-DOPTIMIZE
 HDEFS=-D:$(GUI) -D:$(COM)
 
 MKDEPFLAGS=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/:s/-I-I/-I/)
-MKDEPALLINC=$(SOLARINC:s/-I/ -I/) $(INCPRE:^"-I":s/-I-I/-I/)
+MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
 MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
 MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
 MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) -I$(SOLARVERSION)$/$(INPATH)$/inc
 MKDEPLOCAL=-I$(INCCOM)
-
-BISON=bison
-YACCFLAGS*=-d 
-
-SVIDL=$(WRAPCMD) svidl
-
-LDUMP=$(WRAPCMD) ldump4
-LDUMP2=$(WRAPCMD) ldump4
 
 .IF "$(MKDEPENDALL)"!=""
 MKDEPFLAGS+=$(MKDEPALLINC)
@@ -1071,6 +1066,14 @@ MKDEPFLAGS+=$(MKDEPSOLVER)
 #.IF "$(MKDEPENDLOCAL)"!="NO"
 MKDEPFLAGS+=$(MKDEPLOCAL)
 #.ENDIF
+
+BISON=bison
+YACCFLAGS*=-d 
+
+SVIDL=$(WRAPCMD) svidl
+
+LDUMP=$(WRAPCMD) ldump4
+LDUMP2=$(WRAPCMD) ldump4
 
 ZIPUPDATE=-u -j
 ZIPFLAGS=$(ZIPUPDATE)
