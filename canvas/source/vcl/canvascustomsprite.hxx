@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 09:10:43 $
+ *  last change: $Author: obo $ $Date: 2005-05-06 09:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,11 @@ namespace vclcanvas
 
         // Sprite
         virtual void redraw( OutputDevice& rTargetSurface ) const;
-        virtual void redraw( OutputDevice& rTargetSurface, const Point& rOutputPosition ) const;
-        virtual ::basegfx::B2DPoint getPos() const;
-        virtual ::basegfx::B2DSize  getSize() const;
+        virtual void redraw( OutputDevice&  rTargetSurface,
+                             const Point&   rOutputPos ) const;
+        virtual bool isAreaUpdateOpaque( const Rectangle& rUpdateArea ) const;
+        virtual ::basegfx::B2DPoint getSpritePos() const;
+        virtual ::basegfx::B2DSize  getSpriteSize() const;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
@@ -180,6 +182,8 @@ namespace vclcanvas
         CanvasCustomSprite(const CanvasCustomSprite&);
         CanvasCustomSprite& operator=( const CanvasCustomSprite& );
 
+        Rectangle getSpriteRect( const ::basegfx::B2DRectangle& rBounds ) const;
+        Rectangle getFullSpriteRect() const;
         Rectangle getSpriteRect() const;
 
         // for the integrated bitmap canvas implementation
@@ -190,6 +194,17 @@ namespace vclcanvas
 
         mutable ::canvas::vcltools::VCLObject<BitmapEx>     maContent;
 
+        /** Currently active clip area.
+
+            This member is either empty, denoting that the current
+            clip shows the full sprite content, or contains a
+            rectangular subarea of the sprite, outside of which
+            the sprite content is fully clipped.
+
+            @see mbIsCurrClipRectangle
+         */
+        ::basegfx::B2DRectangle                             maCurrClipBounds;
+
         // sprite state
         ::basegfx::B2DPoint                                 maPosition;
         Size                                                maSize;
@@ -198,6 +213,14 @@ namespace vclcanvas
               ::com::sun::star::rendering::XPolyPolygon2D > mxClipPoly;
         double                                              mfAlpha;
         bool                                                mbActive;
+
+        /** If true, denotes that the current sprite clip is a true
+            rectangle, i.e. maCurrClipBounds <em>exactly</em>
+            describes the visible area of the sprite.
+
+            @see maCurrClipBounds
+         */
+        bool                                                mbIsCurrClipRectangle;
 
         /** OutDev render speedup.
 
@@ -210,6 +233,7 @@ namespace vclcanvas
 
         /// True, iff maTransform has changed
         mutable bool                                        mbTransformDirty;
+
     };
 }
 
