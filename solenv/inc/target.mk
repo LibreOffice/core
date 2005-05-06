@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.151 $
+#   $Revision: 1.152 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:13:41 $
+#   last change: $Author: obo $ $Date: 2005-05-06 09:37:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -463,7 +463,7 @@ JAVATARGET:=$(MISC)$/$(TARGET)_dummy.java
 .IF "$(JARTARGET)"!=""
 JARCLASSDIRS*=.
 .IF "$(NEW_JAR_PACK)"!=""
-JARMANIFEST*=$(CLASSDIR)$/META-INF$/MANIFEST.MF
+JARMANIFEST*=$(CLASSDIR)$/$(TARGET)$/META-INF$/MANIFEST.MF
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
 JARTARGETN=$(CLASSDIR)$/$(JARTARGET)
 .IF "$(NOJARDEP)$(NEW_JAR_PACK)"==""
