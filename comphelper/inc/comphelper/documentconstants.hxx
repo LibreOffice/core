@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentconstants.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:27:11 $
+ *  last change: $Author: oj $ $Date: 2005-05-09 12:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 #define MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII   "application/vnd.oasis.opendocument.spreadsheet"
 #define MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII         "application/vnd.oasis.opendocument.chart"
 #define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII       "application/vnd.oasis.opendocument.formula"
-#define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.oasis.opendocument.database"
+#define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.sun.xml.base"
 
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) )
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ) )
