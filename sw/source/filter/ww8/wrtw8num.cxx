@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:28:51 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 07:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,8 +756,7 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 
     bool bNoNum = false;
 
-    ASSERT(IsNum(nSwLevel), "NO_NUM?");
-    if( IsNum(nSwLevel))
+    if( ! IsNum(nSwLevel))
     {
         SetNoNum(&nSwLevel, FALSE);     // 0..WW8ListManager::nMaxLevel
         bNoNum = true;
