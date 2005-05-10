@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:40:59 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 07:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                         // then write as unicode - character
                         if (*pUCMode != nLen)
                         {
-                             rStream << "\\uc" << ByteString::CreateFromInt32(nLen).GetBuffer();
+                          rStream << "\\uc" << ByteString::CreateFromInt32(nLen).GetBuffer() << " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
                             *pUCMode = nLen;
                         }
                         ByteString sNo(ByteString::CreateFromInt32(c));
@@ -219,7 +219,7 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
     for (xub_StrLen n = 0; n < rStr.Len(); ++n)
         Out_Char(rStream, rStr.GetChar(n), &nUCMode, eDestEnc, bWriteHelpFile);
     if (nUCMode != 1)
-        rStream << "\\uc1";
+      rStream << "\\uc1"<< " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;
 }
 
