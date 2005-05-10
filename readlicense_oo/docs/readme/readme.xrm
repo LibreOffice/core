@@ -6,7 +6,7 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-03-10 11:26:14 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-05-10 16:00:41 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -229,7 +229,7 @@
 			<Text id="erter343534" xml:lang="de">OpenOffice.org 2.0 kann parallel zu einer älteren Version von OpenOffice.org installiert werden. Im Falle einer späteren Deinstallation des alten OpenOffice.org muss das Installationsprogramm Programm der neuen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wird sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
 			<Text id="erter343534" xml:lang="en-US">You can install OpenOffice.org 2.0 alongside of an older version of OpenOffice.org. If you later choose to deinstall the older version of OpenOffice.org, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
 		<Text id="erter34353ew4" xml:lang="de" Wrap="true">Bitte beachten Sie, dass das Kopieren und Einfügen über die Zwischenablage zwischen OpenOffice.org 1.0 und OpenOffice.org 2.0 im OpenOffice.org-Format teilweise nicht funktioniert. Rufen Sie in einem solchem Fall den Dialog Bearbeiten-Inhalte einfügen auf und wählen Sie ein anderes Format als OpenOffice.org aus oder öffnen Sie stattdessen das betreffende Dokument in OpenOffice.org 2.0 direkt.</Text>
-			<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between OpenOffice.org 2.0 and OpenOffice.org 2.0 might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than OpenOffice.org, or open the document in OpenOffice.org 2.0 directly.</Text>
+			<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between OpenOffice.org 1.x and OpenOffice.org 2.0 might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than OpenOffice.org, or open the document in OpenOffice.org 2.0 directly.</Text>
 		</Paragraph>
 		<Paragraph id="B3">
 			<Text id="erte53t434534" xml:lang="de">Bitte stellen Sie sicher, dass genügend freier Speicherplatz im temporären Verzeichnis Ihres Systems vorhanden ist und dass für dieses Verzeichnis Schreib-, Lese- und Ausführungsrechte gesetzt sind. Bitte beachten Sie, dass während der Installation kein anderes Programm ausgeführt werden darf.</Text>
@@ -343,7 +343,7 @@
 		</Paragraph>
 		<Paragraph id="G2" gui="UNX">
 			<Text id="pji76w" xml:lang="de">Normalerweise (Standardeinstellung) ist in OpenOffice.org "File Locking" (Dateisperrung) ausgeschaltet. Um dies zu aktivieren, müssen die entsprechenden Umgebungsvariablen gesetzt werden SAL_ENABLE_FILE_LOCKING=1 und export SAL_ENABLE_FILE_LOCKING. Diese Einträge sind  bereits in auskommentierter Form in der soffice Script-Datei enthalten.</Text>
-			<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned off in OpenOffice.org. To activate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=1 and export SAL_ENABLE_FILE_LOCKING. These entries are already in disabled form in the soffice script file.</Text>
+			<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned on in OpenOffice.org. To deactivate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=0 and export SAL_ENABLE_FILE_LOCKING. These entries are already in enabled form in the soffice script file.</Text>
 		</Paragraph>
 		<Paragraph id="G3" gui="UNX">
 			<Text id="pji76wsdf" xml:lang="de">Achtung: Bei aktiviertem File-Locking kann es zu Problemen mit Solaris 2.5.1 und 2.7 in Verbindung mit Linux NFS 2.0 kommen. Wenn Ihre Systemumgebung diese Parameter aufweist, raten wir dringend von der Verwendung des File-Locking ab. Andernfalls hängt OpenOffice.org, wenn Sie versuchen, eine Datei eines NFS-gemounteten Verzeichnisses von einem Linux Rechner aus zu öffnen. </Text>
@@ -423,7 +423,6 @@
 		<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *easy way to lurk on discussions* (heavy) </Text>
 		<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy) </Text>
 		<Text id="e" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
-		<Text id="f" xml:lang="en-US">Groupware: dev@groupware.openoffice.org  (moderate) </Text>
 		</List>
 		</Paragraph>
 	</Section>
@@ -455,7 +454,9 @@
 		<Text id="c" xml:lang="en-US">. Alternatively, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
 		</Paragraph>
 		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US">Also check the FAQ section, located on left hand navigation bar of the OpenOffice.org homepage. Frequently asked questions are posted here.</Text>
+			<Text id="a" xml:lang="en-US" url="ahead">Also check the FAQ section at </Text>
+			<Text id="b" xml:lang="en-US" url="true">http://user-faq.openoffice.org/</Text>
+			<Text id="c" xml:lang="en-US">.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="WayToStart">
