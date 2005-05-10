@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:40:02 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 16:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,12 @@ namespace basegfx
     {
         double fLen(scalar(*this));
 
-        if(!::basegfx::fTools::equalZero(fLen))
+        if(::basegfx::fTools::equalZero(fLen))
+        {
+            mfX = 0.0;
+            mfY = 0.0;
+        }
+        else
         {
             const double fOne(1.0);
 
