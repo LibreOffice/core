@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 14:02:49 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 07:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,11 +1517,16 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
 
         if( INET_PROT_FILE == aURL.GetProtocol() )
         {
-            ::vos::OProcess                 aApp( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            ::vos::OArgumentList            aParameters;
-            ::vos::OProcess::TProcessError  eError = aApp.execute( (::vos::OProcess::TProcessOption) ( ::vos::OProcess::TOption_SearchPath |
-                                                                                                        ::vos::OProcess::TOption_Detached ),
-                                                                    aParameters );
+            SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
+
+            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+            if (pViewFrm)
+                pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
+                                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                            &aUrl,
+                                            &aBrowsing,
+                                            0L );
         }
     }
     break;
