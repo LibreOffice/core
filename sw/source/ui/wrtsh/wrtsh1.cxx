@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:19:08 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 08:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,30 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
             xObj->setVisualAreaSize( nAspect, aSz );
-            xObj.UpdateReplacement();
+            // --> OD 2005-05-02 #i48419# - action 'UpdateReplacement' doesn't
+            // have to change the modified state of the document.
+            // This is only a workaround for the defect, that this action
+            // modifies a document after load, because unnecessarily the
+            // replacement graphic is updated, in spite of the fact that
+            // nothing has been changed.
+            // If the replacement graphic changes by this action, the document
+            // will be already modified via other mechanisms.
+            {
+                bool bResetEnableSetModified(false);
+                if ( GetDoc()->GetDocShell()->IsEnableSetModified() )
+                {
+                    GetDoc()->GetDocShell()->EnableSetModified( FALSE );
+                    bResetEnableSetModified = true;
+                }
+
+                xObj.UpdateReplacement();
+
+                if ( bResetEnableSetModified )
+                {
+                    GetDoc()->GetDocShell()->EnableSetModified( TRUE );
+                }
+            }
+            // <--
         }
     }
 
