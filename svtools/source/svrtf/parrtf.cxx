@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:40:44 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 07:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ int SvRTFParser::_GetNextToken()
                                         nUCharOverread = nUCharOverread;
 #endif
                             }
+                            aToken.Erase(); // #i47831# erase token to prevent the token from beeing treated as text
                             // read next token
                             nRet = 0;
                             break;
