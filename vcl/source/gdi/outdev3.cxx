@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 12:22:54 $
+ *  last change: $Author: rt $ $Date: 2005-05-10 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5566,6 +5566,10 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
         ImplInitClipRegion();
     if ( mbOutputClipped )
         return;
+
+    if( mbNewFont )
+        if( !ImplNewFont() )
+            return;
 
     Point   aStartPt = ImplLogicToDevicePixel( rStartPos );
     Point   aEndPt = ImplLogicToDevicePixel( rEndPos );
