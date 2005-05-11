@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:41:52 $
+#   last change: $Author: rt $ $Date: 2005-05-11 15:53:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,6 @@ APP1STDLIBS=\
             $(TOOLSLIB)
 
 .IF "$(GUI)"=="UNX"
-APP1STDLIBS+=$(PKGCONFIG_LIBS:s/-lpangoxft-1.0//)
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 .ELSE
 APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
