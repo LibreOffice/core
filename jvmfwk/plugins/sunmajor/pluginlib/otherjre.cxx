@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 08:53:19 $
+ *  last change: $Author: rt $ $Date: 2005-05-11 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,14 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
 #elif UNX
 #ifdef MACOSX
         "/../../../JavaVM"
+#endif
+#if defined(LINUX) && defined(POWERPC)
+    "/bin/classic/libjvm.so",
+    "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so" // for Blackdown PPC
+    "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
+
 #else
+
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
 #endif
@@ -121,6 +128,9 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/lib"
 #else
 #if defined(LINUX) && defined(POWERPC)
+    "/bin",
+    "/jre/bin",
+    "/bin/classic",
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/classic",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
