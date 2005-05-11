@@ -72,7 +72,7 @@ LIBSALCPPRT=$(0)
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
-PKGCONFIG_MODULES=gnome-vfs-2.0
+PKGCONFIG_MODULES=gnome-vfs-2.0 ORBit-2.0 ORBit-CosNaming-2.0 gconf-2.0 bonobo-activation-2.0 libbonobo-2.0
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"
