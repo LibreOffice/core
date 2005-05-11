@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 08:53:32 $
+ *  last change: $Author: rt $ $Date: 2005-05-11 11:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ char const *g_arJavaNames[] = {
     "jdk",
     "jre",
     "java",
-    "Home"
+    "Home",
+    "IBMJava2-ppc-142"
 };
 /* These are directory names which could contain multiple java installations.
  */
@@ -127,6 +128,8 @@ char const *g_arSearchPaths[] = {
     "",
     "usr/",
     "usr/local/",
+    "usr/local/IBMJava2-ppc-142",
+    "usr/local/j2sdk1.3.1",
     "usr/lib/",
     "usr/bin/"
 #endif
@@ -268,6 +271,8 @@ FileHandleReader::readLine(rtl::OString * pLine)
                 m_nIndex = 0;
                 m_nSize = static_cast< int >(nRead);
                 break;
+        case osl_File_E_INTR:
+            continue;
 
             default:
                 return RESULT_ERROR;
