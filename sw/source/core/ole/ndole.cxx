@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:20:55 $
+ *  last change: $Author: rt $ $Date: 2005-05-11 12:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,14 +431,28 @@ BOOL SwOLENode::SavePersistentData()
 {
     if( aOLEObj.xOLERef.is() )
     {
+        comphelper::EmbeddedObjectContainer* pCnt = aOLEObj.xOLERef.GetContainer();
+
+#if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = GetDoc()->GetPersist();
-        if( p )     // muss da sein
+        DBG_ASSERT( p, "No document!" );
+        if( p )
+        {
+            comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
+            OSL_ENSURE( !pCnt || &rCnt == pCnt, "The helper is assigned to unexpected container!\n" );
+        }
+#endif
+
+        if ( pCnt && pCnt->HasEmbeddedObject( aOLEObj.aName ) )
         {
             uno::Reference < container::XChild > xChild( aOLEObj.xOLERef.GetObject(), uno::UNO_QUERY );
             if ( xChild.is() )
                 xChild->setParent( 0 );
 
-            p->GetEmbeddedObjectContainer().RemoveEmbeddedObject( aOLEObj.aName);
+            pCnt->RemoveEmbeddedObject( aOLEObj.aName );
+
+            // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
+            // by different name, in future it might makes sence that the name is transported here.
             aOLEObj.xOLERef.AssignToContainer( 0, aOLEObj.aName );
             try
             {
@@ -546,6 +560,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SfxObjectShell* pSrc = GetDoc()->GetPersist();
 
     p->GetEmbeddedObjectContainer().CopyEmbeddedObject( pSrc->GetEmbeddedObjectContainer(), pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ), aNewName );
+
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName,
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
                                     (SwAttrSet*)GetpSwAttrSet() );
@@ -761,26 +776,35 @@ SwOLEObj::~SwOLEObj()
     if( pOLENd && !pOLENd->GetDoc()->IsInDtor() )
     {
         // if the model is not currently in destruction it means that this object should be removed from the model
+        comphelper::EmbeddedObjectContainer* pCnt = xOLERef.GetContainer();
+
+#if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
         DBG_ASSERT( p, "No document!" );
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
-            if ( rCnt.HasEmbeddedObject( aName ) )
-            {
-                uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
-                if ( xChild.is() )
-                    xChild->setParent( 0 );
-
-                // not already removed by deleting the object
-                xOLERef.AssignToContainer( 0, aName );
-
-                // unlock object so that object can be closed in RemoveEmbeddedObject
-                // successful closing of the object will automatically clear the reference then
-                xOLERef.Lock(FALSE);
-                rCnt.RemoveEmbeddedObject( aName );
-            }
+            OSL_ENSURE( !pCnt || &rCnt == pCnt, "The helper is assigned to unexpected container!\n" );
         }
+#endif
+
+        if ( pCnt && pCnt->HasEmbeddedObject( aName ) )
+        {
+            uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( 0 );
+
+            // not already removed by deleting the object
+            xOLERef.AssignToContainer( 0, aName );
+
+            // unlock object so that object can be closed in RemoveEmbeddedObject
+            // successful closing of the object will automatically clear the reference then
+            xOLERef.Lock(FALSE);
+
+            // Always remove object from conteiner it is connected to
+            pCnt->RemoveEmbeddedObject( aName );
+        }
+
     }
 
     if ( xOLERef.is() )
