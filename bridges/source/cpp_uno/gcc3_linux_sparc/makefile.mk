@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 13:41:21 $
+#   last change: $Author: rt $ $Date: 2005-05-11 11:04:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,12 +85,14 @@ CFLAGSNOOPT=-O0
 
 NOOPTFILES = \
     $(SLO)$/uno2cpp.obj	\
-    $(SLO)$/cpp2uno.obj
+    $(SLO)$/cpp2uno.obj	\
+    $(SLO)$/call.obj
 
 SLOFILES= \
     $(SLO)$/except.obj		\
     $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj
+    $(SLO)$/uno2cpp.obj		\
+    $(SLO)$/call.obj
 
 
 SHL1TARGET=$(TARGET)
@@ -112,3 +114,5 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
+$(SLO)$/%.obj: %.s
+    $(ASM) $(AFLAGS) -o $(SLO)$/$(@:b).o $< ; touch $@
