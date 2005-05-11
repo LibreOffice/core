@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-02 13:19:29 $
+ *  last change: $Author: rt $ $Date: 2005-05-11 11:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,6 +712,8 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_PASTE:
         {
+            OutlineViewPageChangesGuard aGuard(pOlView);
+
             if (pFuActual)
             {
                 pFuActual->DoPaste();
