@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:15:35 $
+ *  last change: $Author: rt $ $Date: 2005-05-11 11:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,16 @@ void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* 
 
     if ( mpImp->pGraphic && pContainer )
         SetGraphicToContainer( *mpImp->pGraphic, *pContainer, mpImp->aPersistName, ::rtl::OUString() );
+}
+
+comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
+{
+    return mpImp->pContainer;
+}
+
+::rtl::OUString EmbeddedObjectRef::GetPersistName() const
+{
+    return mpImp->aPersistName;
 }
 
 MapUnit EmbeddedObjectRef::GetMapUnit() const
