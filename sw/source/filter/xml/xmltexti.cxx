@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:28:02 $
+ *  last change: $Author: rt $ $Date: 2005-05-11 12:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,41 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     }
     else
     {
-        String aName( aObjName );
+        // check whether an object with this name already exists in the document
+        String aName;
+        SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
+                pNd; pNd = (SwCntntNode*)aIter.Next() )
+        {
+            SwOLENode* pOLENd = pNd->GetOLENode();
+            if( pOLENd )
+            {
+                ::rtl::OUString aExistingName = pOLENd->GetOLEObj().GetCurrentPersistName();
+                if ( aExistingName.equals( aObjName ) )
+                {
+                    OSL_ENSURE( sal_False, "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
+
+                    ::rtl::OUString aTmpName = pDoc->GetPersist()->GetEmbeddedObjectContainer().CreateUniqueObjectName();
+                    try
+                    {
+                        pDoc->GetPersist()->GetStorage()->copyElementTo( aObjName,
+                                                                         pDoc->GetPersist()->GetStorage(),
+                                                                         aTmpName );
+                        aName = aTmpName;
+                    }
+                    catch ( uno::Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "Couldn't create a copy of the object!\n" );
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if ( !aName.Len() )
+            aName = aObjName;
+
         pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, &aItemSet );
         aObjName = aName;
     }
