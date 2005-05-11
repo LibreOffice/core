@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-18 14:02:23 $
+#   last change: $Author: rt $ $Date: 2005-05-11 11:29:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,7 +155,7 @@ LINKC*=$(CC)
 
 # default linker flags
 
-LINKFLAGSDEFS*=-Wl,-z,defs
+LINKFLAGSDEFS*=
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
 LINKFLAGS= $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
@@ -188,6 +188,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
