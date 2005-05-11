@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:11:46 $
+ *  last change: $Author: hjs $ $Date: 2005-05-11 10:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ bool isSimpleStruct(typelib_TypeDescriptionReference * type) {
              = reinterpret_cast< typelib_CompoundTypeDescription * >(td);
          ctd != 0; ctd = ctd->pBaseTypeDescription)
     {
-        OSL_ASSERT(ctd->eTypeClass == typelib_TypeClass_STRUCT);
+        OSL_ASSERT(ctd->aBase.eTypeClass == typelib_TypeClass_STRUCT);
         for (sal_Int32 i = 0; i < ctd->nMembers; ++i) {
             typelib_TypeClass c = ctd->ppTypeRefs[i]->eTypeClass;
             switch (c) {
