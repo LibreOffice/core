@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:45:00 $
+#   last change: $Author: rt $ $Date: 2005-05-11 11:03:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,11 @@ JAVAFLAGSDEBUG=-g
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DSPARC -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
 
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -82,14 +87,17 @@ JAVA_RUNTIME=-ljava
 .ELSE
 JAVA_RUNTIME=-ljava_g
 .ENDIF
-.ENDIF 
+.ENDIF
 
 # name of C++ Compiler
-CXX*=g++
-# name of C Compiler
-CC*=gcc
+#CXX*=g++
+#name of C Compiler
+#CC*=gcc
 
-CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-Wreturn-type -fmessage-length=0 -c $(INCLUDE)
+.IF "$(PRODUCT)"!=""
+CFLAGS+=-Wuninitialized
+.ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
@@ -101,18 +109,15 @@ CFLAGSENABLESYMBOLS=-g
 # flags for the C++ Compiler
 CFLAGSCC= -pipe 
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions
+CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe 
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
-# HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
-.IF "$(BUILD_SPECIAL)"==""
-CFLAGSCXX+=-include preinclude.h
-.ENDIF
 PICSWITCH:=-fPIC
+
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
 # Compiler flags for compiling static object in single threaded environment with character user interface
@@ -131,11 +136,13 @@ CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
-CFLAGSOPT=-O2 -fno-strict-aliasing
-# reduce to -O1 to avoid optimisation problems
-# CFLAGSOPT=-O1 -fno-strict-aliasing
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
+.ELSE 	# "$(PRODUCT)"!=""
+CFLAGSOPT=   							# no optimizing for non products
+.ENDIF	# "$(PRODUCT)"!=""
 # Compiler flags for disabling optimazations
-CFLAGSNOOPT=-fno-strict-aliasing
+CFLAGSNOOPT=-O0
 # Compiler flags for discibing the output path
 CFLAGSOUTOBJ=-o
 # Enable all warnings
@@ -148,11 +155,12 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK*=$(CC)
+LINK*=$(CXX)
 
 # default linker flags
-LINKFLAGSRUNPATH*=-Wl,-rpath\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSRUNPATH)
+LINKFLAGSDEFS*=-Wl,-z,defs
+LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGS=-z combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
@@ -167,14 +175,10 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-.IF "$(NO_BSYMBOLIC)"==""
-.IF "$(PRJNAME)" != "envtest"
-LINKFLAGSSHLGUI+=-Wl,-Bsymbolic
-LINKFLAGSSHLCUI+=-Wl,-Bsymbolic
-.ENDIF
-.ENDIF				# "$(NO_BSYMBOLIC)"==""
-
-LINKVERSIONMAPFLAG=-Wl,--version-script
+# linker flags for optimization (symbol hashtable)
+# for now, applied to symbol scoped libraries, only
+LINKFLAGSOPTIMIZE*=-Wl,-O1
+LINKVERSIONMAPFLAG=$(LINKFLAGSOPTIMIZE) -Wl,--version-script
 
 SONAME_SWITCH=-Wl,-h
 
@@ -183,6 +187,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -201,7 +206,7 @@ STDSHLCUIST=-ldl -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc $(STDLIBCPP)
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
