@@ -18,6 +18,7 @@ import com.sun.star.container.NoSuchElementException;
 import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.RuntimeException;
@@ -33,7 +34,7 @@ import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.event.*;
 import com.sun.star.wizards.common.Helper;
-
+import com.sun.star.wizards.common.Resource;
 
 
 public class LetterWizardDialogImpl extends LetterWizardDialog {
@@ -59,6 +60,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     String sUserTemplatePath;
     String sBitmapPath;
     String sLetterPath;
+    String sLetterLangPackPath;
     String sWorkPath;
     String sCurrentNorm;
     String sPath;
@@ -117,10 +119,11 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             buildStep5();
             buildStep6();
 
+            initializePaths();
             initializeNorms();
             initializeSalutation();
             initializeGreeting();
-            initializePaths();
+
 
             //special Control for setting the save Path:
             insertPathSelectionControl();
@@ -846,6 +849,65 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public void initializeNorms() {
+
+        //The following commented code is to be used for support of
+        //language packs and on-the-fly new languages:
+        /*
+        LocaleCodes lc = new LocaleCodes();
+        String [] allLocales = lc.getIDs();
+        String[] nameList = {"",""};
+        String sLetterSubPath = "/wizard/letter/";
+
+        try {
+            sLetterPath = FileAccess.getParentDir(sTemplatePath);
+            sLetterPath = FileAccess.deleteLastSlashfromUrl(sLetterPath);
+            sLetterPath = sLetterPath + sLetterSubPath;
+            sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
+
+            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
+            nameList = xSimpleFileAccess.getFolderContents(sLetterPath, true);
+        } catch (CommandAbortedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoValidPathException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Norms = new String[nameList.length];
+
+        boolean found = false;
+        String cIsoCode;
+        for (int i=0; i < nameList.length; i++) {
+            found = false;
+            cIsoCode = FileAccess.getFilename(nameList[i]);
+            for (int t=0; t < allLocales.length; t++) {
+                String [] aLang = allLocales[t].split(";");
+                if (cIsoCode.equalsIgnoreCase(aLang[1])) {
+                    System.out.println(aLang[2]);
+                    found = true;
+                    t = allLocales.length;
+                }
+            }
+            if (!found) {
+                for (int t=0; t < allLocales.length; t++) {
+                    String [] aLang = allLocales[t].split(";");
+                    if (cIsoCode.equalsIgnoreCase(aLang[1].substring(0,2))) {
+                        System.out.println(aLang[2]);
+                        found = true;
+                        t = allLocales.length;
+                    }
+                }
+            }
+            Norms[i] = cIsoCode;
+        }
+
+        **/
+
         //To add new Languages please modify this method and LetterWizardDialogResources.java
         Norms = new String[16];
 
@@ -867,7 +929,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         Norms[15] = "hr";
 
         setControlProperty("lstLetterNorm", "StringItemList", resources.LanguageLabels);
-
     }
 
     private CGLetter getCurrentLetter() {
@@ -882,8 +943,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     private void initializePaths() {
         try {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            //sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+            //sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
         }
@@ -892,8 +953,11 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     public boolean initializeTemplates(XMultiServiceFactory xMSF) {
         try {
             sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
+            //creation of the language independent path:
+            sLetterPath = FileAccess.getParentDir(sTemplatePath);
+            sLetterPath = FileAccess.deleteLastSlashfromUrl(sLetterPath);
             String sLetterSubPath = "/wizard/letter/" + sCurrentNorm;
-            sLetterPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
+            sLetterPath = FileAccess.combinePaths(xMSF, sLetterPath, sLetterSubPath);
             sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "");
 
             BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
