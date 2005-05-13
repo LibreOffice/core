@@ -52,7 +52,6 @@ application/vnd.oasis.opendocument.spreadsheet ods
 application/vnd.oasis.opendocument.spreadsheet-template ots
 application/vnd.oasis.opendocument.chart odc
 application/vnd.oasis.opendocument.formula odf
-application/vnd.oasis.opendocument.database odb
 application/vnd.oasis.opendocument.image odi
 application/vnd.sun.xml.writer sxw
 application/vnd.sun.xml.writer.template stw
@@ -71,6 +70,7 @@ application/vnd.sun.xml.draw.template std
 application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
+application/vnd.sun.xml.base odb
 END
 
 # and replace the original file
@@ -141,6 +141,7 @@ application/vnd.sun.xml.draw.template; %PREFIX -view %s
 application/vnd.stardivision.draw; %PREFIX -view %s
 application/x-stardraw; %PREFIX -view %s
 application/vnd.oasis.opendocument.database; %PREFIX -view %s
+application/vnd.sun.xml.base; %PREFIX -view %s
 application/vnd.wordperfect; %PREFIX -view %s
 application/wordperfect5.1; %PREFIX -view %s
 application/x-wordperfect; %PREFIX -view %s
