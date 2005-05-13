@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 13:51:39 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 12:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,6 +1195,8 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
             aEquation.SetFlat(sal_True);
             bRet = aEquation.Export(rMedium);
         }
+        else if( pFlt->GetFilterName().EqualsAscii("MathType 3.x"))
+            bRet = WriteAsMathType3( rMedium );
     }
     return bRet;
 }
@@ -1757,6 +1759,16 @@ void SmDocShell::SetModified(BOOL bModified)
     if( IsEnableSetModified() )
         SfxObjectShell::SetModified( bModified );
     Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+}
+
+BOOL SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
+{
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::WriteAsMathType3" );
+
+    MathType aEquation( aText, pTree );
+
+    BOOL bRet = 0 != aEquation.ConvertFromStarMath( rMedium );
+    return bRet;
 }
 
 
