@@ -35,7 +35,13 @@ fi
 
 echo "Installing..."
 
-INSTALLLINES
+RPMLIST=""
+for i in `ls RPMS/*.rpm`
+do
+  rpm -q `rpm -qp --qf "%{NAME}\n" $i` && RPMLIST="$RPMLIST $i"
+done
+
+rpm --prefix $PRODUCTINSTALLLOCATION -U $RPMLIST
 
 echo "Done..."
 
