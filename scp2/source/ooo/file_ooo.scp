@@ -320,11 +320,7 @@ End
 File gid_File_Bin_Soffice_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-  #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
     Name = "soffice.bin";
 End
 
