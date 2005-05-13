@@ -56,6 +56,7 @@
 //Standard Java classes
 import java.util.*;
 import java.io.*;
+import java.lang.ref.*;
 
 // Imported TraX classes
 import javax.xml.transform.*;
@@ -120,6 +121,9 @@ public class XSLTransformer
 
     //
     private XMultiServiceFactory svcfactory;
+
+    // cache for transformations by stylesheet
+    private static Hashtable transformers = new Hashtable();
 
     // --- Initialization ---
 
@@ -310,12 +314,34 @@ public class XSLTransformer
                     BufferedOutputStream output = new BufferedOutputStream(
                         new XOutputStreamToOutputStreamAdapter(xostream));
                     StreamResult xmlresult = new StreamResult(output);
-                    TransformerFactory tfactory = TransformerFactory.newInstance();
-                    Transformer transformer = tfactory.newTransformer(stylesource);
+
+                    // in order to help performance and to remedy a a possible memory
+                    // leak in xalan, where it seems, that Transformer instances cannot
+                    // be reclaimed though they are no longer referenced here, we use
+                    // a cache of weak references to transformers created for specific
+                    // style sheet URLs see also #i48384#
+                    Transformer transformer = null;
+                    synchronized(transformers) {
+                        java.lang.ref.WeakReference ref = null;
+                        // try to get the transformer reference from the cache
+                        if ((ref = (java.lang.ref.WeakReference)transformers.get(stylesheeturl)) == null ||
+                            (transformer = (Transformer)ref.get()) == null) {
+                            // we cannot find a valid reference for this stylesheet
+                            if (ref != null) {
+                                transformers.remove(stylesheeturl);
+                            }
+                            TransformerFactory tfactory = TransformerFactory.newInstance();
+                            transformer = tfactory.newTransformer(stylesource);
+                            ref = new java.lang.ref.WeakReference(transformer);
+                            transformers.put(stylesheeturl, ref);
+                        }
+                    }
 
                     // invalid to set 'null' as parameter as 'null' is not a valid Java object
                     if(sourceurl != null)
                         transformer.setParameter("sourceURL", sourceurl);
+                    if(sourcebaseurl != null)
+                        transformer.setParameter("sourceBaseURL", sourcebaseurl);
                     if(targeturl != null)
                         transformer.setParameter("targetURL", targeturl);
                     if(targetbaseurl != null)
