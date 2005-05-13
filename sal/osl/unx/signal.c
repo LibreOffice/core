@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-06 09:19:26 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,27 +541,22 @@ static int ReportCrash( int Signal )
                         {
                             const char *dli_fname = NULL;
                             const char *dli_fdir = NULL;
-                            const char *dli_fpath = NULL;
-                            char szCanonicPath[PATH_MAX];
                             char szDirectory[PATH_MAX];
+                            char szCanonicDirectory[PATH_MAX];
 
                             /* Don't expect that dladdr filled all members of dl_info */
 
-                            if ( dl_info.dli_fname && realpath( dl_info.dli_fname, szCanonicPath ) )
-                                dli_fpath = szCanonicPath;
-                            else
-                                dli_fpath = dl_info.dli_fname;
-
-                            dli_fname = dli_fpath ? strrchr(  dli_fpath, '/' ) : NULL;
+                            dli_fname = dl_info.dli_fname ? strrchr(  dl_info.dli_fname, '/' ) : NULL;
                             if ( dli_fname )
                             {
                                 ++dli_fname;
-                                memcpy( szDirectory, dli_fpath, dli_fname - dli_fpath );
-                                szDirectory[dli_fname - dli_fpath] = 0;
-                                dli_fdir = szDirectory;
+                                memcpy( szDirectory, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
+                                szDirectory[dli_fname - dl_info.dli_fname] = 0;
+
+                                dli_fdir = realpath( szDirectory, szCanonicDirectory ) ? szCanonicDirectory : szDirectory;
                             }
                             else
-                                dli_fname = dli_fpath;
+                                dli_fname = dl_info.dli_fname;
 
                             /* create checksum of library on stack */
                             if ( dli_fname )
