@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:56:48 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 15:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#include <comphelper/documentconstants.hxx>
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -264,7 +265,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
             {
                 ::rtl::OUString sMediaType;
                 xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
-                if ( sMediaType.equalsAscii("application/vnd.sun.xml.base") )
+                if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) )
                     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
                 ::comphelper::disposeComponent(xProp);
             }
