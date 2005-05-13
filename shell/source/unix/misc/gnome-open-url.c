@@ -72,6 +72,11 @@ struct _GError
   char *message;
 };
 
+typedef enum {
+  GNOME_VFS_OK
+} GnomeVFSResult;
+
+
 /*
  * HACK: avoid error messages caused by not setting a GNOME program name
  */
@@ -97,20 +102,28 @@ gchar* gnome_gconf_get_gnome_libs_settings_relative (const gchar *subkey)
 
 gboolean gnome_url_show (const char *url, GError **error)
 {
-    void* handle = dlopen("libgnome-2.so.0", RTLD_LAZY);
+    void* handle = dlopen("libgnomevfs-2.so.0", RTLD_LAZY);
+    gboolean ret = 0;
 
-    if( NULL != handle)
+    if( NULL != handle )
     {
-        gboolean (* func) (const char *url, GError **error) =
-            (gboolean (*) (const char *, GError **)) dlsym(handle, "gnome_url_show");
+        gboolean (* init) (void) =
+            (gboolean (*) (void)) dlsym(handle, "gnome_vfs_init");
 
-        if( NULL != func )
-            return func(url, error);
+        if( NULL != init && init() )
+        {
+            GnomeVFSResult (* func) (const char *url) =
+                (GnomeVFSResult (*) (const char *)) dlsym(handle, "gnome_vfs_url_show");
+
+            if( NULL != func )
+                ret = (GNOME_VFS_OK == func(url));
+        }
+
+        dlclose(handle);
     }
 
-    return 0;
+    return ret;
 }
-
 
 /*
  * The intended use of this tool is to pass the argument to
