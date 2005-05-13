@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sorter.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:30:29 $
+#   last change: $Author: rt $ $Date: 2005-05-13 09:42:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,32 @@ sub sorting_array_of_hashes
 
                 $onehashunder = $onehashover;
                 $sortvalueunder = $sortvalueover;
+            }
+        }
+    }
+}
+
+#########################################
+# Sorting an array of of strings
+#########################################
+
+sub sorting_array_of_strings
+{
+    my ($arrayref) = @_;
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        my $onestringunder = ${$arrayref}[$i];
+
+        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
+        {
+            my $onestringover = ${$arrayref}[$j];
+
+            if ( $onestringunder gt $onestringover)
+            {
+                ${$arrayref}[$i] = $onestringover;
+                ${$arrayref}[$j] = $onestringunder;
+                $onestringunder = $onestringover;
             }
         }
     }
