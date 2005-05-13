@@ -48,6 +48,23 @@ original target interfaces on queryInterface() calls.
         <type>com.sun.star.lang.XTypeProvider</type>
         <type>com.sun.star.uno.XComponentContext</type>
     </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.desktop.migration.Autocorrection</name>
+        <description>migration service for OpenOffice.org autocorrection</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.migration.Autocorrection</supported-service>
+        <service-dependency>...</service-dependency>
+        <type>com.sun.star.beans.NamedValue</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.XInitialization</type>
+        <type>com.sun.star.task.XJob</type>
+        <type>com.sun.star.lang.XServiceInfo</type>
+        <type>com.sun.star.lang.XTypeProvider</type>
+        <type>com.sun.star.uno.XComponentContext</type>
+    </component-description>
     <project-build-dependency>unotools</project-build-dependency>
     <project-build-dependency>tools</project-build-dependency>
     <project-build-dependency>cppuhelper</project-build-dependency>
