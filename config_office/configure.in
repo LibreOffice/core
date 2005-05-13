@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-04-11 09:31:15 $
+dnl * Date: $Date: 2005-05-13 12:13:27 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.116 $ )
+AC_REVISION( $Revision: 1.117 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -188,10 +188,10 @@ AC_ARG_WITH(system-python,
 #[  --with-system-icu       Use icu already on system
 #],,)
 AC_ARG_WITH(system-db,
-[  --with-system-db       Use berkeley db already on system
+[  --with-system-db        Use berkeley db already on system
 ],,)
 AC_ARG_WITH(db-jar,
-[  --with-db-jar=JARFILE          Specify path to jarfile manually ],
+[  --with-db-jar=JARFILE   Specify path to jarfile manually ],
 [ DB_JAR="$withval"
 ])
 AC_ARG_WITH(system-sablot,
@@ -260,7 +260,7 @@ AC_ARG_WITH(java,
                           no support for Java components, applets, accessibility
                           or XML filters. Use --with-java=gij to enable gij/gcj
                           as java/javac replacements
-], WITH_JAVA=$withval, WITH_JAVA=java)
+], if test "$withval" = "yes"; then WITH_JAVA=java; else WITH_JAVA=$withval; fi, WITH_JAVA=java)
 AC_ARG_WITH(ant-home,
 [  --with-ant-home         If you have installed Jakarta Ant on your system,
                           please supply the path here.
@@ -310,6 +310,15 @@ AC_ARG_WITH(nmake-path,
                           like: /cygdrive/c/Programme/Microsoft SDK/Bin/Win64"
  
                           Usage: --with-nmake-path=<absolute path to nmake.exe>
+],,)
+AC_ARG_WITH(nsis-path,
+[  --with-nsis-path        For Windows users, please supply the path to the
+                          "Nullsoft Scriptable Install System" (NSIS). If NSIS is
+                          found in the path or this option is supplied a self
+                          contained executable installer for OpenOffice.org will
+                          be created.
+
+                          Usage: --with-nsis-path=<absolute path to nsis.exe>
 ],,)
 AC_ARG_WITH(frame-home,
 [  --with-frame-home       For Microsoft C/C++ .NET compiler users, please supply
@@ -2216,13 +2225,14 @@ portable - Portable software distribution
 	     fi
       ;;
    esac
-   AC_SUBST(EPM)
    AC_SUBST(BUILD_EPM)
    AC_SUBST(PKGFORMAT)
    AC_SUBST(RPM)
 else
    AC_MSG_RESULT([no])
+   EPM=NO
 fi
+AC_SUBST(EPM)
 
 dnl ===================================================================
 dnl Check for system stdlibs
@@ -3085,6 +3095,30 @@ AC_SUBST(DIRECTXSDK_HOME)
 AC_SUBST(DIRECTXSDK_LIB)
 
 dnl ============================================
+dnl Check for Nullsoft Scriptable Install System
+dnl ============================================
+NSIS_PATH=""
+if test "$_os" = "WINNT" ; then
+    AC_MSG_CHECKING([for NSIS])
+    AC_PATH_PROG(NSIS_PATH, nsis.exe)
+    if test -n "$NSIS_PATH"; then
+        NSIS_PATH=`dirname "$NSIS_PATH"`
+    fi
+    if test -e "$with_nsis_path/nsis.exe"; then
+        NSIS_PATH="$with_nsis_path"
+    fi
+    if test -z "$NSIS_PATH"; then
+        AC_MSG_WARN([NSIS not found, no self contained installer will be build.])
+        echo "NSIS not found, no self contained installer will be build." >> warn
+    else
+        NSIS_PATH=`cygpath -d "$NSIS_PATH"`
+        NSIS_PATH=`cygpath -u "$NSIS_PATH"`
+        AC_MSG_RESULT([found ($NSIS_PATH)])
+    fi
+fi
+AC_SUBST(NSIS_PATH)
+
+dnl ============================================
 dnl Check for extra include/library files
 dnl needed for MS Visual Toolkit compiler build.
 dnl ============================================
@@ -3442,7 +3476,7 @@ AC_MSG_CHECKING([whether to enable GNOME VFS support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes"; then
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 )
+    PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 >= 2.6.0 )
     PKG_CHECK_MODULES( GCONF, gconf-2.0 )
 else
     AC_MSG_RESULT([no])
