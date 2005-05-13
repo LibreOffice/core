@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:28:35 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 13:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,45 +552,37 @@ void ReplaceStringHookProc( UniString& rStr )
 {
     static int nAll = 0, nPro = 0;
 
-    String &rBrandName = BrandName::get();
-    String &rVersion = Version::get();
-    String &rExtension = Extension::get();
-    String &rXMLFileFormatVersion = XMLFileFormatVersion::get();
-    String &rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
-    if ( !rBrandName.Len() )
-    {
-        Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-        rtl::OUString aTmp;
-        aRet >>= aTmp;
-        rBrandName = aTmp;
-
-        aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATVERSION );
-        aRet >>= aTmp;
-        rXMLFileFormatVersion = aTmp;
-
-        aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-        aRet >>= aTmp;
-        rVersion = aTmp;
-
-        if ( !rExtension.Len() )
-        {
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
-            aRet >>= aTmp;
-            rExtension = aTmp;
-        }
-
-        if ( !rWriterCompatibilityVersionOOo11.Len() )
-        {
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty(
-                ::utl::ConfigManager::WRITERCOMPATIBILITYVERSIONOOO11 );
-            aRet >>= aTmp;
-            rWriterCompatibilityVersionOOo11 = aTmp;
-}
-    }
-
     nAll++;
     if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
     {
+        String &rBrandName = BrandName::get();
+        String &rVersion = Version::get();
+        String &rExtension = Extension::get();
+        String &rXMLFileFormatVersion = XMLFileFormatVersion::get();
+
+        if ( !rBrandName.Len() )
+        {
+            rtl::OUString aTmp;
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+            aRet >>= aTmp;
+            rBrandName = aTmp;
+
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATVERSION );
+            aRet >>= aTmp;
+            rXMLFileFormatVersion = aTmp;
+
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+            aRet >>= aTmp;
+            rVersion = aTmp;
+
+            if ( !rExtension.Len() )
+            {
+                aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
+                aRet >>= aTmp;
+                rExtension = aTmp;
+            }
+        }
+
         nPro++;
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
@@ -599,8 +591,20 @@ void ReplaceStringHookProc( UniString& rStr )
     }
 
     if ( rStr.SearchAscii( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != STRING_NOTFOUND )
+    {
+        String &rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
+        if ( !rWriterCompatibilityVersionOOo11.Len() )
+        {
+            rtl::OUString aTmp;
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty(
+                    ::utl::ConfigManager::WRITERCOMPATIBILITYVERSIONOOO11 );
+            aRet >>= aTmp;
+            rWriterCompatibilityVersionOOo11 = aTmp;
+        }
+
         rStr.SearchAndReplaceAllAscii( "%WRITERCOMPATIBILITYVERSIONOOO11",
-                                       rWriterCompatibilityVersionOOo11 );
+                                        rWriterCompatibilityVersionOOo11 );
+    }
 }
 
 Desktop::Desktop()
@@ -1350,7 +1354,7 @@ void Desktop::Main()
         }
         // refresh path information
         utl::Bootstrap::reloadData();
-        SetSplashScreenProgress(10);
+        SetSplashScreenProgress(25);
     }
 
     Reference< XMultiServiceFactory > xSMgr =
@@ -1363,7 +1367,7 @@ void Desktop::Main()
     {
         RegisterServices( xSMgr );
 
-        SetSplashScreenProgress(15);
+        //SetSplashScreenProgress(15);
 
 #ifndef UNX
         if ( pCmdLineArgs->IsHelp() ) {
@@ -1404,7 +1408,7 @@ void Desktop::Main()
         //  Read the common configuration items for optimization purpose
         if ( !InitializeConfiguration() ) return;
 
-        SetSplashScreenProgress(20);
+        //SetSplashScreenProgress(20);
 
         // create title string
         sal_Bool bCheckOk = sal_False;
@@ -1440,12 +1444,12 @@ void Desktop::Main()
 #endif
 
         SetDisplayName( aTitle );
-        SetSplashScreenProgress(30);
+//        SetSplashScreenProgress(30);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions = new SvtPathOptions;
-        SetSplashScreenProgress(40);
+//        SetSplashScreenProgress(40);
         pLanguageOptions = new SvtLanguageOptions(sal_True);
-        SetSplashScreenProgress(45);
+//        SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
         // Check special env variable #111015#
@@ -1546,7 +1550,7 @@ void Desktop::Main()
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
             if (xDesktopFrame.is())
             {
-                SetSplashScreenProgress(60);
+//                SetSplashScreenProgress(60);
                 Reference< XFrame > xBackingFrame;
                 Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
@@ -1555,14 +1559,14 @@ void Desktop::Main()
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
                 {
-                    SetSplashScreenProgress(70);
+                    SetSplashScreenProgress(75);
                     Sequence< Any > lArgs(1);
                     lArgs[0] <<= xContainerWindow;
 
                     Reference< XController > xBackingComp(
                         xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
                         UNO_QUERY);
-                    SetSplashScreenProgress(80);
+//                    SetSplashScreenProgress(80);
                     if (xBackingComp.is())
                     {
                         Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
@@ -1570,7 +1574,7 @@ void Desktop::Main()
                         // Because the backing component set the property "IsBackingMode" of the frame
                         // to true inside attachFrame(). But setComponent() reset this state everytimes ...
                         xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                        SetSplashScreenProgress(90);
+                        SetSplashScreenProgress(100);
                         xBackingComp->attachFrame(xBackingFrame);
                         CloseSplashScreen();
                         xContainerWindow->setVisible(sal_True);
@@ -1605,7 +1609,7 @@ void Desktop::Main()
         return;
     }
     */
-    SetSplashScreenProgress(55);
+//    SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
 
@@ -1614,14 +1618,14 @@ void Desktop::Main()
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
-    SetSplashScreenProgress(60);
+//    SetSplashScreenProgress(60);
 
     Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
 
     sal_Bool bTerminateRequested = sal_False;
 
     // Preload function depends on an initialized sfx application!
-    SetSplashScreenProgress(70);
+    SetSplashScreenProgress(75);
 
     sal_Bool bUseSystemFileDialog(sal_True);
     if ( pCmdLineArgs->IsHeadless() )
@@ -1637,7 +1641,7 @@ void Desktop::Main()
     // use system window dialogs
     Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
-    SetSplashScreenProgress(80);
+//    SetSplashScreenProgress(80);
 
     if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
         InitializeQuickstartMode( xSMgr );
