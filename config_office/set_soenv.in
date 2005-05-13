@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.60 $
-# Date:        $Date: 2005-05-11 11:30:25 $
+# Version:     $Revision: 1.61 $
+# Date:        $Date: 2005-05-13 07:30:21 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1815,6 +1815,7 @@ if ($platform =~ m/solaris|freebsd/)
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
   ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 }
+ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
 #
 # Writing unset variables you might not need to file.
 # 
