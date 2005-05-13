@@ -1228,11 +1228,22 @@ sub change_keys_of_scpactions
     {
         my $oneitem = ${$itemsarrayref}[$i];
 
-        $oneitem->{'DestinationName'} = $oneitem->{'Name'};     # Name cannot be multilingual (!?)
-        delete($oneitem->{'Name'});
-
         my $key;
 
+        # First Name to DestinationName, then deleting Name
+        foreach $key (keys %{$oneitem})
+        {
+            if ( $key =~ /\bName\b/ )
+            {
+                my $value = $oneitem->{$key};
+                my $oldkey = $key;
+                $key =~ s/Name/DestinationName/;
+                $oneitem->{$key} = $value;
+                delete($oneitem->{$oldkey});
+            }
+        }
+
+        # Second Copy to Name, then deleting Copy
         foreach $key (keys %{$oneitem})
         {
             if ( $key =~ /\bCopy\b/ )
