@@ -267,6 +267,34 @@ sub copy_one_file
 }
 
 ########################
+# Copying one file
+########################
+
+sub hardlink_one_file
+{
+    my ($source, $dest) = @_;
+
+    my ($returnvalue, $infoline);
+
+    my $copyreturn = link($source, $dest);
+
+    if ($copyreturn)
+    {
+        $infoline = "Link: $source to $dest\n";
+        $returnvalue = 1;
+    }
+    else
+    {
+        $infoline = "ERROR: Could not link $source to $dest\n";
+        $returnvalue = 0;
+    }
+
+    push(@installer::globals::logfileinfo, $infoline);
+
+    return $returnvalue;
+}
+
+########################
 # Renaming one file
 ########################
 
@@ -328,6 +356,50 @@ sub copy_directory
             if ( -f $sourcefile )   # only files, no directories
             {
                 copy_one_file($sourcefile, $destfile);
+            }
+        }
+    }
+}
+
+#####################################################################
+# Creating hard links to a complete directory with sub directories.
+#####################################################################
+
+sub hardlink_complete_directory
+{
+    my ($sourcedir, $destdir) = @_;
+
+    my @sourcefiles = ();
+
+    $sourcedir =~ s/\Q$installer::globals::separator\E\s*$//;
+    $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( ! -d $destdir ) { create_directory($destdir); }
+
+    my $infoline = "\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Creating hard links for all files from directory $sourcedir to directory $destdir\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    opendir(DIR, $sourcedir);
+    @sourcefiles = readdir(DIR);
+    closedir(DIR);
+
+    my $onefile;
+
+    foreach $onefile (@sourcefiles)
+    {
+        if ((!($onefile eq ".")) && (!($onefile eq "..")))
+        {
+            my $source = $sourcedir . $installer::globals::separator . $onefile;
+            my $dest = $destdir . $installer::globals::separator . $onefile;
+            if ( -f $source )   # only files, no directories
+            {
+                hardlink_one_file($source, $dest);
+            }
+            if ( -d $source )   # recursive
+            {
+                hardlink_complete_directory($source, $dest);
             }
         }
     }
