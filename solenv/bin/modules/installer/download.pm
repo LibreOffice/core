@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-02 15:28:54 $
+#   last change: $Author: rt $ $Date: 2005-05-13 09:41:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,10 +188,10 @@ sub call_sum
 #   if ( $installer::globals::islinuxrpmbuild ) { $ownerstring = "--owner=0"; }
 #   my $systemcall = "cd $installdir; tar $ownerstring -cf - * | /usr/bin/sum |";
 
-#   $ENV{'LD_PRELOAD'} = $getuidlibrary;
-#   my $systemcall = "cd $installdir; tar -cf - * | /usr/bin/sum |";
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
 
-    my $systemcall = "cd $installdir; LD_PRELOAD=$getuidlibrary tar -cf - * | /usr/bin/sum |";
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * | /usr/bin/sum |";
 
     my $sumoutput = "";
 
@@ -245,10 +245,10 @@ sub include_package_into_script
 #   if ( $installer::globals::islinuxrpmbuild ) { $ownerstring = "--owner=0"; }
 #   my $systemcall = "cd $installdir; tar $ownerstring -cf - * >> $scriptfilename";
 
-#   $ENV{'LD_PRELOAD'} = $getuidlibrary;
-#   my $systemcall = "cd $installdir; tar -cf - * >> $scriptfilename";
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
 
-    my $systemcall = "cd $installdir; LD_PRELOAD=$getuidlibrary tar -cf - * >> $scriptfilename";
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * >> $scriptfilename";
 
     my $returnvalue = system($systemcall);
 
@@ -313,7 +313,10 @@ sub create_tar_gz_file_from_package
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packagename);
 
     my $targzname = $packagename . ".tar.gz";
-    $systemcall = "cd $installdir; LD_PRELOAD=$getuidlibrary tar -cf - $packagename | gzip > $targzname";
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename | gzip > $targzname";
     print "... $systemcall ...\n";
 
     my $returnvalue = system($systemcall);
@@ -906,7 +909,16 @@ sub get_path_to_nsis_sdk
     @paths = split(/:/, $ENV{'PATH'});
     foreach $paths (@paths) {
         $nsispath = $paths . "/nsis";
-        if ( -x $nsispath ) { $nsispath = $paths; break } else { $nsispath = ""; }
+
+        if ( -x $nsispath )
+        {
+            $nsispath = $paths;
+            last;
+        }
+        else
+        {
+            $nsispath = "";
+        }
     }
 
     if ( $nsispath eq "" )
@@ -1077,8 +1089,9 @@ sub create_download_sets
         # replace linenumber in script template
         put_linenumber_into_script($scriptfile);
 
-        # getting the path of the getuid.so
-        my $getuidlibrary = get_path_for_library($includepatharrayref);
+        # getting the path of the getuid.so (only required for Solaris and Linux)
+        my $getuidlibrary = "";
+        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $getuidlibrary = get_path_for_library($includepatharrayref); }
 
         # calling sum to determine checksum and size of the tar file
         my $sumout = call_sum($installationdir, $getuidlibrary);
