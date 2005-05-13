@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:03:53 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 12:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2160,6 +2160,8 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
         pS->Seek(0);
         EQNOLEFILEHDR aHdr(nSize+4+1);
         aHdr.Write(pS);
+
+        pStor->Commit();
     }
 
     return 1;
