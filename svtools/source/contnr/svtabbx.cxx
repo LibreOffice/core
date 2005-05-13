@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:42:16 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,7 +995,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     // get header
     Reference< XAccessible > xChild = m_aAccessibleChildren[ _nColumn ];
     // already exists?
-    if ( !xChild.is() )
+    if ( !xChild.is() && m_pAccessible )
     {
         // no -> create new header cell
         ::svt::AccessibleBrowseBoxHeaderCell* pNew = new ::svt::AccessibleBrowseBoxHeaderCell(
