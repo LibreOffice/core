@@ -1,4 +1,4 @@
-application/vnd.oasis.opendocument.database
+application/vnd.sun.xml.base
 	description=OpenDocument Database
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=
