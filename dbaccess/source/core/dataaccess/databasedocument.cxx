@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-06 09:18:46 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 15:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
 #endif
+#include <comphelper/documentconstants.hxx>
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
@@ -965,7 +966,7 @@ void ODatabaseDocument::writeStorage(const ::rtl::OUString& _rURL
     {
         static const ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
         Any aAny;
-        aAny <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.base") );
+        aAny <<= MIMETYPE_OASIS_OPENDOCUMENT_DATABASE;
         xProp->setPropertyValue( sPropName, aAny );
     }
 
