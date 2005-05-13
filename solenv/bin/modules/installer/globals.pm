@@ -140,6 +140,7 @@ BEGIN
     $is_unix_multi = 0;
     $unixmultipath = "";
     $alllanguagesinproductarrayref = "";
+    $shiptestdirectory = "";
     $makelinuxlinkrpm = 0;
     $add_required_package = "";
     $linuxrespin = 0;
@@ -189,6 +190,8 @@ BEGIN
     $addlicensefile = 1;
     $addsystemintegration = 0;
     $makedownload = 1;
+    $makejds = 1;
+    $jdsexcludefilename ="";
     $islanguagepackinunixmulti = 0;
     @installsetfiles = ();
     @binarytableonlyfiles = ();
