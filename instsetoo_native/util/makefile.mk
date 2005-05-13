@@ -108,7 +108,7 @@ LOCALPYFILES= \
 # native - "Native" software distribution for the platform
 # portable - Portable software distribution
 
-.IF "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
+.IF "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELSE			# "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
