@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-02 13:17:17 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 09:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,53 +1518,6 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 //* Generate MD5 checksum
 //*****************************************************************************
 
-#define MAGIC_DESCRIPTION_FILLER    'x'
-#define MAGIC_DESCRIPTION_COUNT     80
-
-static void repatch_soffice_exe( void *pBuffer, size_t nBufSize )
-{
-    wchar_t DescriptionBuffer[MAGIC_DESCRIPTION_COUNT];
-
-    memset( DescriptionBuffer, 0, sizeof(DescriptionBuffer) );
-    wcsncpy( DescriptionBuffer, g_wstrProductKey.c_str(), elementsof(DescriptionBuffer) - 1 );
-
-    bool bPatched = false;
-
-    do
-    {
-        void *pFound = memchr( pBuffer, ((char *)DescriptionBuffer)[0], nBufSize );
-
-        if ( pFound )
-        {
-            size_t distance = (char *)pFound - (char *)pBuffer;
-
-            if ( nBufSize >= distance )
-            {
-                nBufSize -= distance;
-
-                if ( nBufSize >= sizeof(DescriptionBuffer) &&
-                    0 == memcmp( pFound, DescriptionBuffer, sizeof(DescriptionBuffer) ) )
-                {
-                    for ( int i = 0; i < 80; i++ )
-                    {
-                        ((wchar_t *)pFound)[i] = MAGIC_DESCRIPTION_FILLER;
-                    }
-                    bPatched = true;
-                }
-                else
-                {
-                    pBuffer = (void *)(((char *)pFound) + 1);
-                    nBufSize--;
-                }
-            }
-            else
-                nBufSize = 0;
-        }
-        else
-            nBufSize = 0;
-    } while ( !bPatched && nBufSize );
-}
-
 static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
 {
     sal_uInt32  nBytesProcessed = 0;
@@ -1584,9 +1537,6 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
 
             if ( nBytesRead == nFileSize )
             {
-                if ( 0 == stricmp( GetFileName(filename).c_str(), "soffice.bin" ) )
-                    repatch_soffice_exe( pBuffer, nBytesRead );
-
                 rtlDigestError error = rtl_digest_MD5 (
                     pBuffer,   nBytesRead,
                     pChecksum, nChecksumLen );
@@ -1605,48 +1555,6 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
     return nBytesProcessed;
 }
 
-#if 0
-static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
-{
-    sal_uInt32  nBytesProcessed = 0;
-
-    FILE *fp = fopen( filename, "rb" );
-
-    if ( fp )
-    {
-        rtlDigest digest = rtl_digest_createMD5();
-
-        if ( digest )
-        {
-            size_t          nBytesRead;
-            sal_uInt8       buffer[4096];
-            rtlDigestError  error = rtl_Digest_E_None;
-
-            while ( rtl_Digest_E_None == error &&
-                0 != (nBytesRead = fread( buffer, 1, sizeof(buffer), fp )) )
-            {
-                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );
-                nBytesProcessed += nBytesRead;
-            }
-
-            if ( rtl_Digest_E_None == error )
-            {
-                error = rtl_digest_getMD5( digest, pChecksum, nChecksumLen );
-            }
-
-            if ( rtl_Digest_E_None != error )
-                nBytesProcessed = 0;
-
-            rtl_digest_destroyMD5( digest );
-        }
-
-        fclose( fp );
-    }
-
-    return nBytesProcessed;
-}
-
-#endif
 //***************************************************************************
 
 static bool WriteStackFile( FILE *fout, hash_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
