@@ -7,6 +7,6 @@ Type=Application
 InitialPreference=2
 Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;
 Exec=openoffice -base %U
-MimeType=application/vnd.oasis.opendocument.database
+MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base
 Name=%PRODUCTNAME Base
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.
