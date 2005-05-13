@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:09:01 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement ) thr
                 mpObject->ActionChanged();
                 // mpObject->BroadcastObjectChange();
 
-                return (sal_Int32)((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS);
+                return (sal_Int32)((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS) - 1;
             }
 
             throw lang::IllegalArgumentException();
@@ -334,7 +334,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
 {
     if( mpObject && ( Identifier >= NON_USER_DEFINED_GLUE_POINTS ))
     {
-        const USHORT nId = (USHORT)(Identifier - NON_USER_DEFINED_GLUE_POINTS);
+        const USHORT nId = (USHORT)(Identifier - NON_USER_DEFINED_GLUE_POINTS) + 1;
 
         SdrGluePointList* pList = mpObject->GetGluePointList();
         const USHORT nCount = pList ? pList->GetCount() : 0;
@@ -367,7 +367,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
         if( (Identifier < NON_USER_DEFINED_GLUE_POINTS) || !(aElement >>= aGluePoint))
             throw lang::IllegalArgumentException();
 
-        const USHORT nId = (USHORT)Identifier - NON_USER_DEFINED_GLUE_POINTS;
+        const USHORT nId = (USHORT)( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
         SdrGluePointList* pList = mpObject->GetGluePointList();
         const USHORT nCount = pList ? pList->GetCount() : 0;
@@ -408,7 +408,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
         }
         else
         {
-            const USHORT nId = (USHORT)Identifier - NON_USER_DEFINED_GLUE_POINTS;
+            const USHORT nId = (USHORT)( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
             const SdrGluePointList* pList = mpObject->GetGluePointList();
             const USHORT nCount = pList ? pList->GetCount() : 0;
@@ -447,7 +447,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
         *pIdentifier++ = (sal_Int32)i;
 
     for( i = 0; i < nCount; i++ )
-        *pIdentifier++ = (sal_Int32) (*pList)[i].GetId() + NON_USER_DEFINED_GLUE_POINTS;
+        *pIdentifier++ = (sal_Int32) ( (*pList)[i].GetId() + NON_USER_DEFINED_GLUE_POINTS ) - 1;
 
     return aIdSequence;
 }
