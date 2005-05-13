@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:40:43 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 15:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,7 +1092,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             {
                 nPos = aLbGradient.GetSelectEntryPos();
                 if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    (eSavedStyle != eStyle) )
+                    nPos != aLbGradient.GetSavedValue() )
                 {
                     XGradient aGradient = pGradientList->Get( nPos )->GetGradient();
                     String aString = aLbGradient.GetSelectEntry();
