@@ -232,7 +232,7 @@ BEGIN
     @solarispatchfiles = (".diPatch", "patchinfo");
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
-    @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
+    @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar", "commonwizards.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
     @languagepackfeature =();
     $msiassemblyfiles = "";
