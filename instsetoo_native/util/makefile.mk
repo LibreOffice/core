@@ -108,16 +108,16 @@ LOCALPYFILES= \
 # native - "Native" software distribution for the platform
 # portable - Portable software distribution
 
-.IF "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
+.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
-.ELSE			# "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
+.ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : openoffice
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-.ENDIF			# "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
+.ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 
 .IF "$(PKGFORMAT)"!=""
 PKGFORMATSWITCH=-format $(PKGFORMAT)
