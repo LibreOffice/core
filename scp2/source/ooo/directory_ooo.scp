@@ -1155,6 +1155,16 @@ Directory gid_Dir_Template
     DosName = "template";
 End
 
+Directory gid_Dir_Share_Template_Wizard
+    ParentID = gid_Dir_Template;
+    DosName = "wizard";
+End
+
+Directory gid_Dir_Share_Template_Wizard_Letter
+    ParentID = gid_Dir_Share_Template_Wizard;
+    DosName = "letter";
+End
+
 Directory gid_Dir_Template_Language
     ParentID = gid_Dir_Template;
     DIR_ISOLANGUAGE_ALL_LANG_2;
