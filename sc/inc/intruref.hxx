@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intruref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $  $Date: 2004-03-08 11:41:24 $
+ *  last change: $Author: rt $  $Date: 2005-05-13 07:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
     Mainly used in formula compiler and interpreter context, e.g. ScTokenRef,
     ScMatrixRef.
 
-    Type T must implement methods IncRef() and DecRef().
+    Type T must implement methods IncRef() and DecRef(), in case typename T is
+    const they must be const as well and the reference counter be mutable.
   */
 template< typename T > class ScSimpleIntrusiveReference
 {
