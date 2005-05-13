@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:33:43 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 15:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,7 +782,8 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             pTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
         }
     }
-    pTextEditOutliner->ClearPaintInfoRec();
+    if (pTextEditOutliner != NULL)
+        pTextEditOutliner->ClearPaintInfoRec();
 
     // wenn hier angekommen, dann ist irgendwas schief gelaufen
     if (!bDontDeleteOutliner) {
