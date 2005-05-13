@@ -2,9 +2,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:22:44 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,6 @@ MigrationImpl::~MigrationImpl()
 
 sal_Bool MigrationImpl::doMigration()
 {
-    // XXX not implemented in this CWS
-    // return sal_False;
-
     if (sal_True /*checkState()*/)
     {
         try{
@@ -308,18 +305,30 @@ install_info MigrationImpl::findInstallation()
 
     Config aVersion(usVersion);
     aVersion.SetGroup("Versions");
+
+    strings_v vInst;
+    ByteString sInst;
+    for (int i=0; i<aVersion.GetKeyCount(); i++) {
+        sInst =aVersion.GetKeyName(i);
+        vInst.push_back(OUString(static_cast< OString >(sInst), sInst.Len(), RTL_TEXTENCODING_UTF8));
+    }
+
     ByteString sInstall;
-    strings_v::const_iterator i_ver = m_vrVersions->begin();
-    while (i_ver != m_vrVersions->end())
-    {
-        // this will use the last valid version from the sversion file
-        // aInfo will be overwritten for each matching version identifier
-        if ((sInstall = aVersion.ReadKey(OUStringToOString(*i_ver, RTL_TEXTENCODING_UTF8))).Len() > 0)
+    strings_v::const_iterator i_ins = vInst.begin();
+    while (i_ins != vInst.end()) {
+        strings_v::const_iterator i_ver = m_vrVersions->begin();
+        while (i_ver != m_vrVersions->end())
         {
-            aInfo.productname = *i_ver;
-            aInfo.userdata = OUString(static_cast< OString >(sInstall), sInstall.Len(), RTL_TEXTENCODING_UTF8);
+            // this will use the last valid version from the sversion file
+            // aInfo will be overwritten for each matching version identifier
+            if ( i_ins->indexOf(*i_ver) == 0) {
+                sInstall = aVersion.ReadKey(OUStringToOString(*i_ins, RTL_TEXTENCODING_UTF8));
+                aInfo.productname = *i_ins;
+                aInfo.userdata = OUString(static_cast< OString >(sInstall), sInstall.Len(), RTL_TEXTENCODING_UTF8);
+            }
+            i_ver++;
         }
-        i_ver++;
+        i_ins++;
     }
     return aInfo;
 }
