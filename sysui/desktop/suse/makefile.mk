@@ -130,7 +130,7 @@ MIMEICONLIST = $(HCMIMEICONLIST) \
     master-document \
     database
 
-GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
+GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys 
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
 
 KDEMIMEFLAGFILE = \
