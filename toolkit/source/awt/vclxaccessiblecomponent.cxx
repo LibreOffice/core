@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:04 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
     DBG_CHKTHIS(VCLXAccessibleComponent,0);
 
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #122218# */ )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
