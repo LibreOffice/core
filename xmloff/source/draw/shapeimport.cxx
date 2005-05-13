@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:26:28 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1366,6 +1366,26 @@ void XMLShapeImportHelper::addGluePointMapping( com::sun::star::uno::Reference< 
 {
     if( mpPageContext )
         mpPageContext->maShapeGluePointsMap[xShape][nSourceId] = nDestinnationId;
+}
+
+/** moves all current DestinationId's by n */
+void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, const sal_Int32 n )
+{
+    if( mpPageContext )
+    {
+        ShapeGluePointsMap::iterator aShapeIter( mpPageContext->maShapeGluePointsMap.find( xShape ) );
+        if( aShapeIter != mpPageContext->maShapeGluePointsMap.end() )
+        {
+            GluePointIdMap::iterator aShapeIdIter = (*aShapeIter).second.begin();
+            GluePointIdMap::iterator aShapeIdEnd  = (*aShapeIter).second.end();
+            while ( aShapeIdIter != aShapeIdEnd )
+            {
+                if ( (*aShapeIdIter).second != -1 )
+                    (*aShapeIdIter).second += n;
+                aShapeIdIter++;
+            }
+        }
+    }
 }
 
 /** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
