@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicmigration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:26:43 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _DESKTOP_BASICMIGRATION_HXX_
 #define _DESKTOP_BASICMIGRATION_HXX_
 
+#ifndef _DESKTOP_MISC_HXX_
+#include "misc.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -85,9 +89,6 @@
 #include <osl/file.hxx>
 #endif
 
-#include <vector>
-#include <memory>
-
 
 class INetURLObject;
 
@@ -107,9 +108,6 @@ namespace migration
     // =============================================================================
     // class BasicMigration
     // =============================================================================
-
-    typedef ::std::vector< ::rtl::OUString > TStringVector;
-    typedef ::std::auto_ptr< TStringVector > TStringVectorPtr;
 
     typedef ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
