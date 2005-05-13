@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:48:54 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2675,7 +2675,9 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
 
     if( nIndex > 3 )
     {
-        nIndex -= 4;
+//      nIndex -= 4;
+        nIndex -= 3;        // SJ: the start api index is 0, whereas the implementation in svx starts from 1
+
         // for user defined glue points we have
         // to get the id for this index first
         const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
@@ -2705,7 +2707,8 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
     {
         nId = rConn1.GetConnectorId();
         if( !rConn1.IsAutoVertex() )
-            nId += 4;
+//          nId += 4;
+            nId += 3;       // SJ: the start api index is 0, whereas the implementation in svx starts from 1
     }
     return nId;
 }
