@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:49:25 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,44 +1236,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             if ( !pMenuItemHandler->xPopupMenuController.is() &&
                                  m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
                             {
-                                // Try instanciate a popup menu controller. It is stored in the menu item handler.
-                                Reference< XMultiComponentFactory > xPopupMenuControllerFactory( m_xPopupMenuControllerRegistration, UNO_QUERY );
-                                if ( xPopupMenuControllerFactory.is() )
-                                {
-                                    Sequence< Any > aSeq( 2 );
-                                    PropertyValue aPropValue;
-
-                                    aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                                    aPropValue.Value      <<= m_aModuleIdentifier;
-                                    aSeq[0] <<= aPropValue;
-                                    aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                                    aPropValue.Value      <<= m_xFrame;
-                                    aSeq[1] <<= aPropValue;
-
-                                    Reference< XComponentContext > xComponentContext;
-
-                                    // #110897#
-                                    // Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-                                    Reference< XPropertySet > xProps( getServiceFactory(), UNO_QUERY );
-
-                                    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
-                                        xComponentContext;
-
-                                    Reference< XPopupMenuController > xPopupMenuController(
-                                                                            xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                                aItemCommand,
-                                                                                aSeq,
-                                                                                xComponentContext ),
-                                                                            UNO_QUERY );
-
-                                    if ( xPopupMenuController.is() )
-                                    {
-                                        // Provide our awt popup menu to the popup menu controller
-                                        pMenuItemHandler->xPopupMenuController = xPopupMenuController;
-                                        xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
-                                        bPopupMenu = sal_True;
-                                    }
-                                }
+                                bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
                             }
                             else if ( pMenuItemHandler->xPopupMenuController.is() )
                             {
@@ -1493,6 +1456,49 @@ String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
     return aLabel;
 }
 
+sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
+{
+    rtl::OUString aItemCommand( pMenuItemHandler->aMenuItemURL );
+
+    // Try instanciate a popup menu controller. It is stored in the menu item handler.
+    Reference< XMultiComponentFactory > xPopupMenuControllerFactory( m_xPopupMenuControllerRegistration, UNO_QUERY );
+    if ( xPopupMenuControllerFactory.is() )
+    {
+        Sequence< Any > aSeq( 2 );
+        PropertyValue aPropValue;
+
+        aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+        aPropValue.Value      <<= m_aModuleIdentifier;
+        aSeq[0] <<= aPropValue;
+        aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aPropValue.Value      <<= m_xFrame;
+        aSeq[1] <<= aPropValue;
+
+        Reference< XComponentContext > xComponentContext;
+        Reference< XPropertySet >      xProps( getServiceFactory(), UNO_QUERY );
+
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
+            xComponentContext;
+
+        Reference< XPopupMenuController > xPopupMenuController(
+                                                xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
+                                                    aItemCommand,
+                                                    aSeq,
+                                                    xComponentContext ),
+                                                UNO_QUERY );
+
+        if ( xPopupMenuController.is() )
+        {
+            // Provide our awt popup menu to the popup menu controller
+            pMenuItemHandler->xPopupMenuController = xPopupMenuController;
+            xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
 void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
 {
     m_xFrame            = rFrame;
@@ -1539,7 +1545,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
         framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, (MenuBar *)pMenu );
     }
 
-    String aEmpty;
+    String      aEmpty;
+    sal_Bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
     int nItemCount = pMenu->GetItemCount();
     for ( int i = 0; i < nItemCount; i++ )
     {
@@ -1553,7 +1560,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
             pMenu->SetItemCommand( nItemId, aItemCommand );
         }
 
-        if ( pMenu->IsMenuBar() && ( pMenu->GetItemText( nItemId ).Len() == 0 ))
+        if (( pMenu->IsMenuBar() && ( pMenu->GetItemText( nItemId ).Len() == 0 )) ||
+            bAccessibilityEnabled )
         {
             if ( aItemCommand.getLength() > 0 )
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));
@@ -1594,6 +1602,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( pItemHandler );
                 delete pPopupMenu;
+
+                if ( bAccessibilityEnabled )
+                {
+                    if ( CreatePopupMenuController( pItemHandler ))
+                        pItemHandler->xPopupMenuController->updatePopupMenu();
+                }
             }
             else if (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
                      ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
@@ -1726,7 +1740,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
             pItemHandler->aMenuItemURL = aItemCommand;
 
             if ( m_xPopupMenuControllerRegistration.is() &&
-                    m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
+                 m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
             {
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
@@ -1735,11 +1749,37 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 PopupMenu* pPopupMenu = (PopupMenu *)pVCLXPopupMenu->GetMenu();
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
                 pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
+
+                if ( bAccessibilityEnabled )
+                {
+                    if ( CreatePopupMenuController( pItemHandler ))
+                        pItemHandler->xPopupMenuController->updatePopupMenu();
+                }
             }
 
             m_aMenuItemHandlerVector.push_back( pItemHandler );
             if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                 aQueryLabelItemIdVector.push_back( nItemId );
+        }
+    }
+
+    if ( bAccessibilityEnabled )
+    {
+        RetrieveShortcuts( m_aMenuItemHandlerVector );
+        std::vector< MenuItemHandler* >::iterator p;
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        {
+            MenuItemHandler* pMenuItemHandler = *p;
+
+            // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
+            // Only non-popup menu items can have a short-cut
+            if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
+            {
+                KeyCode aKeyCode( KEY_F1 );
+                pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
+            }
+            else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == 0 )
+                pMenu->SetAccelKey( pMenuItemHandler->nItemId, pMenuItemHandler->aKeyCode );
         }
     }
 
