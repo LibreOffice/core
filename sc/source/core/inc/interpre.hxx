@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:32:01 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 #include "scspew.hxx"
 #endif
 
+#include <map>
+
 class ScDocument;
 class SbxVariable;
 class ScBaseCell;
@@ -140,7 +142,12 @@ enum ScIterFunc {
     ifMAX                               // Maximum
 };
 
-typedef ::std::map< const ScToken*, ScTokenRef> ScTokenMatrixMap;
+struct ScConstTokenRef_less
+{
+    bool operator () ( const ScConstTokenRef& r1, const ScConstTokenRef& r2 ) const
+        { return &r1 < &r2; }
+};
+typedef ::std::map< const ScConstTokenRef, ScTokenRef, ScConstTokenRef_less> ScTokenMatrixMap;
 
 class ScInterpreter
 {
