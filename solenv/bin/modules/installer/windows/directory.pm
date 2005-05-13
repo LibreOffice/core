@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 12:59:33 $
+#   last change: $Author: rt $ $Date: 2005-05-13 09:42:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,7 +200,7 @@ sub add_root_directories
         }
         else
         {
-            $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey\n";
+            $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey$sourcediraddon\n";
             push(@{$directorytableref}, $oneline);
         }
 
