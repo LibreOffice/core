@@ -437,7 +437,7 @@ Dim s as Integer
 		FirstList(i,1) = SecList(s,1)
 		sLocExtension = lcase(FirstList(i,1))
 		Select Case sLocExtension
-			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;, &quot;sxi&quot; , &quot;sxw&quot; , &quot;sxd&quot; , &quot;sxg&quot; , &quot;sxm&quot; , &quot;sxc&quot; 
+			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;, &quot;sxi&quot; , &quot;sxw&quot; , &quot;sxd&quot; , &quot;sxg&quot; , &quot;sxm&quot; , &quot;sxc&quot; , &quot;pps&quot;
 				AbsDocuFound = AbsDocuFound + 1
 			Case else
 				AbsTemplateFound = AbsTemplateFound + 1
@@ -517,6 +517,9 @@ Dim FilterIndex as Integer
 Dim sDocumentType as String
 Dim oTextCursor
 Dim oCell
+	If Not bLogExists Then
+        Exit Sub
+    End If 
 	bFilterTracerIsinsideTable = False
 	FilterIndex = GetIndexForPartStringinMultiArray(sFilterName(), CurFileContent, 0)
 	sDocumentType = sFiltername(FilterIndex,3)
@@ -609,14 +612,14 @@ Dim bLogIsThere as Boolean
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_default&quot;, 4, OpenProperties())
-		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
+		sLogUrl = SOWorkPath &amp; &quot;/Logfile.odt&quot;
 		Do
 			bLogIsThere = oUcb.Exists(sLogUrl)
 			If bLogIsThere Then
 				If i = 2 Then
-					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_2.sxw&quot;, &quot;/Logfile.sxw&quot;)
+					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_2.odt&quot;, &quot;/Logfile.odt&quot;)
 				Else
-					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_&quot; &amp; cStr(i) &amp; &quot;.sxw&quot;, &quot;/Logfile_&quot; &amp; cStr(i-1) &amp; &quot;.sxw&quot;)
+					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_&quot; &amp; cStr(i) &amp; &quot;.odt&quot;, &quot;/Logfile_&quot; &amp; cStr(i-1) &amp; &quot;.odt&quot;)
 				End If
 				i = i + 1
 			End If
