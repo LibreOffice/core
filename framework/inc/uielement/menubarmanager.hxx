@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:48:16 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void UpdateSpecialWindowMenu( Menu* pMenu );
         void Destroy();
 
-
         struct MenuItemHandler
         {
             MenuItemHandler( USHORT             aItemId,
@@ -286,6 +285,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );
 
         MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
+        sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
 
         sal_Bool                                                                                       m_bDisposed : 1,
                                                                                                        m_bInitialized : 1,
