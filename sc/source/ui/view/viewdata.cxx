@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:49:08 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2522,11 +2522,13 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                     pOptions->SetGridColor( rTabSett.maGridColor, EMPTY_STRING );
 
                 // view mode and zoom
-                bPagebreak = rTabSett.mbPageMode;
                 if( rTabSett.mnNormalZoom )
                     aZoomX = aZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
                 if( rTabSett.mnPageZoom )
                     aPageZoomX = aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
+                /*  #i46820# set pagebreak mode via SetPagebreakMode(), this will
+                    update map modes that are needed to draw text correctly. */
+                SetPagebreakMode( rTabSett.mbPageMode );
             }
         }
     }
