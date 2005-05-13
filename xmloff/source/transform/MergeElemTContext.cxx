@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MergeElemTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:53:37 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,38 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
                         pContext = pTC;
                     }
                     break;
+                case XML_ETACTION_EXTRACT_CHARACTERS:
+                    {
+                        if( !m_bStartElementExported )
+                            ExportStartElement();
+                        XMLParagraphTransformerContext* pPTC =
+                            new XMLParagraphTransformerContext( GetTransformer(),
+                            rQName);
+                        pContext = pPTC;
+                    }
+                    break;
+                default:
+                    OSL_ENSURE( !this, "unknown action" );
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        XMLTransformerActions *pActions =
+            GetTransformer().GetUserDefinedActions( m_nActionMap );
+        OSL_ENSURE( pActions, "go no actions" );
+        if( pActions )
+        {
+            XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+            XMLTransformerActions::const_iterator aIter =
+                pActions->find( aKey );
+
+            if( !(aIter == pActions->end()) )
+            {
+                switch( (*aIter).second.m_nActionType )
+                {
                 case XML_ETACTION_EXTRACT_CHARACTERS:
                     {
                         if( !m_bStartElementExported )
