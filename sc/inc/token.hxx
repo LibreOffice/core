@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:29:38 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ private:
 
             OpCode              eOp;            // OpCode
             const StackVar      eType;          // type of data
-            USHORT              nRefCnt;        // reference count
+            mutable USHORT      nRefCnt;        // reference count
 
                                 // not implemented, prevent usage
                                 ScToken();
@@ -151,8 +151,12 @@ public:
             BOOL                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
             BYTE                GetParamCount() const;
     inline  void                NewOpCode( OpCode e )   { eOp = e; }
-    inline  void                IncRef()                { nRefCnt++;       }
-    inline  void                DecRef()                { if( !--nRefCnt ) Delete(); }
+    inline  void                IncRef() const          { nRefCnt++; }
+    inline  void                DecRef() const
+                                    {
+                                        if (!--nRefCnt)
+                                            const_cast<ScToken*>(this)->Delete();
+                                    }
     inline  USHORT              GetRef() const          { return nRefCnt; }
 
     /**
@@ -214,6 +218,7 @@ public:
 
 
 typedef ScSimpleIntrusiveReference< class ScToken > ScTokenRef;
+typedef ScSimpleIntrusiveReference< const class ScToken > ScConstTokenRef;
 
 
 class ScByteToken : public ScToken
