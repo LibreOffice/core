@@ -68,6 +68,7 @@ use installer::logger;
 use installer::mail;
 use installer::pathanalyzer;
 use installer::scriptitems;
+use installer::sorter;
 use installer::systemactions;
 use installer::windows::language;
 
@@ -402,6 +403,7 @@ sub analyze_and_save_logfile
         if ( $installer::globals::updatepack )
         {
             if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
+            elsif ( $installdir =~ /_jds_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_jds_inprogress", "_jds"); }
             else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
             installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
@@ -442,6 +444,19 @@ sub clean_output_tree
         {
             installer::logger::print_message( "... removing directory $installer::globals::removedirs[$i] ...\n" );
             installer::systemactions::remove_complete_directory($installer::globals::removedirs[$i], 1);
+        }
+    }
+
+    # Last try to remove the ship test directory
+
+    if ( $installer::globals::shiptestdirectory )
+    {
+        if ( -d $installer::globals::shiptestdirectory )
+        {
+            my $infoline = "Last try to remove $installer::globals::shiptestdirectory . \n";
+            push(@installer::globals::globallogfileinfo, $infoline);
+            my $systemcall = "rmdir $installer::globals::shiptestdirectory";
+            my $returnvalue = system($systemcall);
         }
     }
 }
@@ -1196,6 +1211,444 @@ sub replace_variables_in_string
     }
 
     return $string;
+}
+
+###########################################################
+# Replacing %-variables with the content
+# of $allvariableshashref
+###########################################################
+
+sub replace_dollar_variables_in_string
+{
+    my ( $string, $variableshashref ) = @_;
+
+    if ( $string =~ /^.*\$\{\w+\}.*$/ )
+    {
+        my $key;
+
+        foreach $key (keys %{$variableshashref})
+        {
+            my $value = $variableshashref->{$key};
+            $key = "\$\{" . $key . "\}";
+            $string =~ s/\Q$key\E/$value/g;
+        }
+    }
+
+    return $string;
+}
+
+###########################################################
+# The list file contains the list of packages/RPMs that
+# have to be copied.
+###########################################################
+
+sub get_all_files_from_filelist
+{
+    my ( $listfile, $section ) = @_;
+
+    my @allpackages = ();
+
+    for ( my $i = 0; $i <= $#{$listfile}; $i++ )
+    {
+        my $line = ${$listfile}[$i];
+        if ( $line =~ /^\s*\#/ ) { next; } # this is a comment line
+        if ( $line =~ /^\s*$/ ) { next; } # empty line
+        $line =~ s/^\s*//;
+        $line =~ s/\s*$//;
+        push(@allpackages, $line);
+    }
+
+    return \@allpackages;
+}
+
+###########################################################
+# Getting one section from a file. Section begins with
+# [xyz] and ends with file end or next [abc].
+###########################################################
+
+sub get_section_from_file
+{
+    my ($file, $sectionname) = @_;
+
+    my @section = ();
+    my $record = 0;
+
+    for ( my $i = 0; $i <= $#{$file}; $i++ )
+    {
+        my $line = ${$file}[$i];
+
+        if (( $record ) && ( $line =~ /^\s*\[/ ))
+        {
+            $record = 0;
+            last;
+        }
+
+        if ( $line =~ /^\s*\[\Q$sectionname\E\]\s*$/ ) { $record = 1; }
+
+        if ( $line =~ /^\s*\[/ ) { next; } # this is a section line
+        if ( $line =~ /^\s*\#/ ) { next; } # this is a comment line
+        if ( $line =~ /^\s*$/ ) { next; }  # empty line
+        $line =~ s/^\s*//;
+        $line =~ s/\s*$//;
+        if ( $record ) { push(@section, $line); }
+    }
+
+    return \@section;
+
+}
+
+#######################################################
+# Substituting one variable in the xml file
+#######################################################
+
+sub replace_one_dollar_variable
+{
+    my ($file, $variable, $searchstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$file}; $i++ )
+    {
+        ${$file}[$i] =~ s/\$\{$searchstring\}/$variable/g;
+    }
+}
+
+#######################################################
+# Substituting the variables in the xml file
+#######################################################
+
+sub substitute_dollar_variables
+{
+    my ($file, $variableshashref) = @_;
+
+    my $key;
+
+    foreach $key (keys %{$variableshashref})
+    {
+        my $value = $variableshashref->{$key};
+        replace_one_dollar_variable($file, $value, $key);
+    }
+}
+
+#############################################################################
+# Collecting all packages or rpms located in the installation directory
+#############################################################################
+
+sub get_all_packages_in_installdir
+{
+    my ($directory) = @_;
+
+    my $infoline = "";
+
+    my @allpackages = ();
+    my $allpackages = \@allpackages;
+
+    if ( $installer::globals::islinuxrpmbuild )
+    {
+        $allpackages = installer::systemactions::find_file_with_file_extension("rpm", $directory);
+    }
+
+    if ( $installer::globals::issolarisbuild )
+    {
+        $allpackages = installer::systemactions::get_all_directories($directory);
+    }
+
+    return $allpackages;
+}
+
+###############################################################
+# The list of exclude packages can contain the
+# beginning of the package name, not the complete name.
+###############################################################
+
+sub is_matching
+{
+    my ($onepackage, $allexcludepackages ) = @_;
+
+    my $matches = 0;
+
+    for ( my $i = 0; $i <= $#{$allexcludepackages}; $i++ )
+    {
+        my $oneexcludepackage = ${$allexcludepackages}[$i];
+
+        if ( $onepackage =~ /^\s*$oneexcludepackage/ )
+        {
+            $matches = 1;
+            last;
+        }
+    }
+
+    return $matches;
+}
+
+###############################################################
+# Copying all Solaris packages or RPMs from installation set
+###############################################################
+
+sub copy_all_packages
+{
+    my ($allexcludepackages, $sourcedir, $destdir) = @_;
+
+    my $infoline = "";
+
+    $sourcedir =~ s/\/\s*$//;
+    $destdir =~ s/\/\s*$//;
+
+    # $allexcludepackages is a list of RPMs and packages, that shall NOT be included into jds product
+
+    my $allpackages = get_all_packages_in_installdir($sourcedir);
+
+    for ( my $i = 0; $i <= $#{$allpackages}; $i++ )
+    {
+        my $onepackage = ${$allpackages}[$i];
+
+        my $packagename = $onepackage;
+
+        if ( $installer::globals::issolarispkgbuild )   # on Solaris $onepackage contains the complete path
+        {
+            installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packagename);
+        }
+
+        if ( ! installer::existence::exists_in_array($packagename, $allexcludepackages))
+        {
+            if ( ! is_matching($packagename, $allexcludepackages ) )
+            {
+
+                if ( $installer::globals::islinuxrpmbuild )
+                {
+                    my $sourcepackage = $sourcedir . $installer::globals::separator . $packagename;
+                    my $destfile = $destdir . $installer::globals::separator . $packagename;
+                    if ( ! -f $sourcepackage ) { installer::exiter::exit_program("ERROR: Could not find RPM $sourcepackage!", "copy_all_packages"); }
+                    installer::systemactions::hardlink_one_file($sourcepackage, $destfile);
+                }
+
+                if ( $installer::globals::issolarispkgbuild )
+                {
+                    my $destinationdir = $destdir . $installer::globals::separator . $packagename;
+                    if ( ! -d $onepackage ) { installer::exiter::exit_program("ERROR: Could not find Solaris package $onepackage!", "copy_all_packages"); }
+                    installer::systemactions::hardlink_complete_directory($onepackage, $destinationdir);
+                }
+            }
+            else
+            {
+                $infoline = "Excluding package (matching): $onepackage\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+        else
+        {
+            $infoline = "Excluding package (precise name): $onepackage\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+######################################################
+# Making systemcall
+######################################################
+
+sub make_systemcall
+{
+    my ($systemcall) = @_;
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+###########################################################
+# Copying all Solaris packages or RPMs from solver
+###########################################################
+
+sub copy_additional_packages
+{
+    my ($allcopypackages, $destdir, $includepatharrayref) = @_;
+
+    my $infoline = "Copy additional packages into installation set.\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    $destdir =~ s/\/\s*$//;
+
+    for ( my $i = 0; $i <= $#{$allcopypackages}; $i++ )
+    {
+        my $onepackage = ${$allcopypackages}[$i];
+        $infoline = "Copy package: $onepackage\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        # this package must be delivered into the solver
+
+        my $packagesourceref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onepackage, $includepatharrayref, 0);
+        if ($$packagesourceref eq "") { installer::exiter::exit_program("ERROR: Could not find jds file $onepackage!", "copy_additional_packages"); }
+
+        my $destfile = $destdir . $installer::globals::separator . $onepackage;
+        installer::systemactions::copy_one_file($$packagesourceref, $destfile);
+
+        if (( $installer::globals::issolarispkgbuild ) && ( $onepackage =~ /\.tar\.gz\s*$/ ))
+        {
+            my $systemcall = "cd $destdir; cat $onepackage | gunzip | tar -xf -";
+            make_systemcall($systemcall);
+
+            # deleting the tar.gz files
+            $systemcall = "cd $destdir; rm -f $onepackage";
+            make_systemcall($systemcall);
+        }
+    }
+}
+
+###########################################################
+# Creating jds installation sets
+###########################################################
+
+sub create_jds_sets
+{
+    my ($installationdir, $allvariableshashref, $languagestringref, $languagesarrayref, $includepatharrayref) = @_;
+
+    installer::logger::print_message( "\n******************************************\n" );
+    installer::logger::print_message( "... creating jds installation set ...\n" );
+    installer::logger::print_message( "******************************************\n" );
+
+    installer::logger::include_header_into_logfile("Creating jds installation sets:");
+
+    # special handling for unix multi language installation sets
+    if ( $installer::globals::is_unix_multi ) { $languagestringref = \$installer::globals::unixmultipath; }
+
+    my $firstdir = $installationdir;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$firstdir);
+
+    my $lastdir = $installationdir;
+    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$lastdir);
+
+    if ( $lastdir =~ /\./ ) { $lastdir =~ s/\./_jds_inprogress\./ }
+    else { $lastdir = $lastdir . "_jds_inprogress"; }
+
+    # removing existing directory "_native_packed_inprogress" and "_native_packed_witherror" and "_native_packed"
+
+    my $jdsdir = $firstdir . $lastdir;
+    if ( -d $jdsdir ) { installer::systemactions::remove_complete_directory($jdsdir); }
+
+    my $olddir = $jdsdir;
+    $olddir =~ s/_inprogress/_witherror/;
+    if ( -d $olddir ) { installer::systemactions::remove_complete_directory($olddir); }
+
+    $olddir = $jdsdir;
+    $olddir =~ s/_inprogress//;
+    if ( -d $olddir ) { installer::systemactions::remove_complete_directory($olddir); }
+
+    # creating the new directory
+
+    installer::systemactions::create_directory($jdsdir);
+
+    $installer::globals::saveinstalldir = $jdsdir;
+
+    # find and read jds files list
+    my $filelistname = $installer::globals::jdsexcludefilename;
+
+    # File has to be located next to the package list
+    my $path = $installer::globals::packagelist;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
+    $filelistname = $path . $filelistname;
+
+    if ( ! -f $filelistname ) { installer::exiter::exit_program("ERROR: Could not find jds list file $filelistname!", "create_jds_sets"); }
+    my $listfile = installer::files::read_file($filelistname);
+
+    my $infoline = "Found jds list file: $filelistname \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    # substituting the variables
+    substitute_dollar_variables($listfile, $allvariableshashref);
+
+    # determining the packages/RPMs to copy
+    # my $allexcludepackages = get_all_files_from_filelist($listfile, "excludefiles");
+    my $allexcludepackages = get_section_from_file($listfile, "excludefiles");
+    my $allcopypackages = get_section_from_file($listfile, "copyfiles");
+
+    # determining the source directory
+    my $alldirs = installer::systemactions::get_all_directories($installationdir);
+    my $sourcedir = ${$alldirs}[0]; # there is only one directory
+
+    # copy all packages/RPMs
+    copy_all_packages($allexcludepackages, $sourcedir, $jdsdir);
+    copy_additional_packages($allcopypackages, $jdsdir, $includepatharrayref);
+
+    return $jdsdir;
+}
+
+#############################################################################
+# Checking, whether this installation set contains the correct languages
+#############################################################################
+
+sub check_jds_language
+{
+    my ($allvariableshashref, $languagestringref) = @_;
+
+    my $infoline = "";
+
+    # languagesarrayref and $allvariableshashref->{'JDSLANG'}
+
+    if ( ! $allvariableshashref->{'JDSLANG'} ) { installer::exiter::exit_program("ERROR: For building JDS installation sets \"JDSLANG\" must be defined!", "check_jds_language"); }
+    my $languagestring = $allvariableshashref->{'JDSLANG'};
+
+    my $sortedarray1 = installer::converter::convert_stringlist_into_array(\$languagestring, ",");
+
+    installer::sorter::sorting_array_of_strings($sortedarray1);
+
+    my $languagesstring = $$languagestringref;
+    if ($installer::globals::is_unix_multi) { $languagestring = $installer::globals::unixmultipath; }
+
+    my $sortedarray2 = installer::converter::convert_stringlist_into_array(\$languagestring, "_");
+    installer::sorter::sorting_array_of_strings($sortedarray2);
+
+    my $string1 = installer::converter::convert_array_to_comma_separated_string($sortedarray1);
+    my $string2 = installer::converter::convert_array_to_comma_separated_string($sortedarray2);
+
+    my $arrays_are_equal = compare_arrays($sortedarray1, $sortedarray2);
+
+    return $arrays_are_equal;
+}
+
+###################################################################################
+# Comparing two arrays. The arrays are equal, if the complete content is equal.
+###################################################################################
+
+sub compare_arrays
+{
+    my ($array1, $array2) = @_;
+
+    my $arrays_are_equal = 1;
+
+    # checking the size
+
+    if ( ! ( $#{$array1} == $#{$array2} )) { $arrays_are_equal = 0; }   # different size
+
+    if ( $arrays_are_equal ) # only make further investigations if size is equal
+    {
+        for ( my $i = 0; $i <= $#{$array1}; $i++ )
+        {
+            # ingnoring whitespaces at end and beginning
+            ${$array1}[$i] =~ s/^\s*//;
+            ${$array2}[$i] =~ s/^\s*//;
+            ${$array1}[$i] =~ s/\s*$//;
+            ${$array2}[$i] =~ s/\s*$//;
+
+            if ( ! ( ${$array1}[$i] eq ${$array2}[$i] ))
+            {
+                $arrays_are_equal = 0;
+                last;
+            }
+        }
+    }
+
+    return $arrays_are_equal;
 }
 
 #################################################################
