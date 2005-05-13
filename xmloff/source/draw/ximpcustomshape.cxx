@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:52:37 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,6 +1129,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_glue_points :
                 {
                     sal_Int32 i, nPairs = GetEnhancedParameterPairSequence( maPath, rValue, EAS_GluePoints );
+                    GetImport().GetShapeImport()->moveGluePointMapping( mrxShape, nPairs );
                     for ( i = 0; i < nPairs; i++ )
                         GetImport().GetShapeImport()->addGluePointMapping( mrxShape, i + 4, i + 4 );
                 }
