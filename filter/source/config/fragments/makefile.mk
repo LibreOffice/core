@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Date: 2005-03-21 11:49:06 $
+#   last change: $Date: 2005-05-13 08:23:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -175,7 +175,7 @@ ALLTAR: \
 #cmc, hack to workaround the java build requirement
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
-MERGE    := $(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar -debug
+MERGE    := $(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar
 PACKLANG := $(JAVA) org.apache.xalan.xslt.Process -XSL langfilter.xsl
 .ENDIF
 
