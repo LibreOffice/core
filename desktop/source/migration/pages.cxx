@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:38:17 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,9 @@ sal_Bool MigrationPage::commitPage(COMMIT_REASON _eReason)
 {
     if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
+        EnterWait();
         Migration::doMigration();
+        LeaveWait();
         m_bMigrationDone = sal_True;
     }
     else
