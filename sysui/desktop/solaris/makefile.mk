@@ -95,7 +95,7 @@ MIMELIST = \
     oasis-web-template \
     oasis-database
 
-GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
+GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys 
   
 .IF "$(OS)"=="SOLARIS"
 
