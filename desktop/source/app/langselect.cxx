@@ -2,8 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: vg $ $Date: 2005-03-11 10:47:45 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,19 @@ Sequence< OUString > LanguageSelection::getInstalledLanguages()
     return seqLanguages;
 }
 
+// FIXME
+// it's not very clever to handle language fallbacks here, but
+// right now, there is no place that handles those fallbacks globally
+static Sequence< OUString > _getFallbackLocales(const OUString& aIsoLang)
+{
+    Sequence< OUString > seqFallbacks;
+    if (aIsoLang.equalsAscii("zh-HK")) {
+        seqFallbacks = Sequence< OUString >(1);
+        seqFallbacks[0] = OUString::createFromAscii("zh-TW");
+    }
+    return seqFallbacks;
+}
+
 sal_Bool LanguageSelection::isInstalledLanguage(OUString& usLocale, sal_Bool bExact)
 {
     sal_Bool bInstalled = sal_False;
@@ -306,14 +319,32 @@ sal_Bool LanguageSelection::isInstalledLanguage(OUString& usLocale, sal_Bool bEx
 
     if (!bInstalled && !bExact)
     {
+        // try fallback locales
+        Sequence< OUString > seqFallbacks = _getFallbackLocales(usLocale);
+        for (sal_Int32 j=0; j<seqFallbacks.getLength(); j++)
+        {
+            for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
+            {
+                if (seqFallbacks[j].equals(seqLanguages[i]))
+                {
+                    bInstalled = sal_True;
+                    usLocale = seqFallbacks[j];
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!bInstalled && !bExact)
+    {
         // no exact match was found, well try to find a substitute
-        Locale aLocale = IsoStringToLocale(usLocale);
-        Locale aInstalledLocale;
+        OUString aInstalledLocale;
         for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
         {
-            aInstalledLocale = IsoStringToLocale(seqLanguages[i]);
-            if (aLocale.Language.equals(aInstalledLocale.Language))
+            if (usLocale.indexOf(seqLanguages[i]) == 0)
             {
+                // requested locale starts with the installed locale
+                // (i.e. installed locale has index 0 in requested locale)
                 bInstalled = sal_True;
                 usLocale = seqLanguages[i];
                 break;
