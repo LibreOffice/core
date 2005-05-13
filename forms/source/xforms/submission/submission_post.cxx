@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission_post.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:40:39 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         // wait for command to finish
         // pProgressHelper->m_cFinished.wait();
         try {
-            m_aResultStream = aContent.openStream();
+            m_aResultStream = Reference< XInputStream >(aSink, UNO_QUERY_THROW);
         } catch (Exception& oe) {
             OSL_ENSURE(sal_False, "Cannot open reply stream from content");
         }

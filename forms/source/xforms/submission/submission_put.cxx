@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission_put.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:41:04 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,12 +115,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
         aContent.writeStream(aInStream, sal_True);
         //aContent.closeStream();
 
-        // get reply (if any)
-        try {
-            m_aResultStream = aContent.openStream();
-        } catch (Exception& oe) {
-            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
-        }
+        // no content as a result of put...
 
     } catch (Exception& e)
     {
