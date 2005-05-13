@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:47:38 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,7 +1272,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 if ( pList && ( pList->GetCount() > nC ) )
                                 {
                                     bValidGluePoint = sal_True;
-                                    nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 4 );
+                                    nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
                                 }
                                 else
                                 {
@@ -1313,7 +1313,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                             aGluePoint.SetPercent( sal_True );
                                                             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
                                                             aGluePoint.SetEscDir( SDRESC_SMART );
-                                                            nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 4 );
+                                                            nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
                                                             bNotFound = sal_False;
                                                         }
                                                         nPointCount++;
@@ -1354,7 +1354,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     if ( pList && ( pList->GetCount() > nC ) )
                                     {
                                         bValidGluePoint = sal_True;
-                                        nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 4 );
+                                        nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
                                     }
                                 }
                                 else if ( nGluePointType == EnhancedCustomShapeGluePointType::RECT )
@@ -1478,7 +1478,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 bValidGluePoint = sal_True;
                                                 ((SdrObjCustomShape*)pO)->SetMergedItem( aGeometryItem );
                                                 SdrGluePointList* pList = pO->ForceGluePointList();
-                                                nId = (sal_Int32)((*pList)[ (sal_uInt16)nGluePoints ].GetId() + 4 );
+                                                nId = (sal_Int32)((*pList)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
                                             }
                                         }
                                     }
