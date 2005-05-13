@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 13:50:49 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 12:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         const SfxHint& rHint, const TypeId& rHintType);
 
     void        RestartFocusTimer ();
+
+    BOOL        WriteAsMathType3( SfxMedium& );
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
