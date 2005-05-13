@@ -192,6 +192,7 @@ BEGIN
     $islanguagepackinunixmulti = 0;
     @installsetfiles = ();
     @binarytableonlyfiles = ();
+    @allscpactions = ();
 
     $is_copy_only_project = 0;
     $addchildprojects = 0;
