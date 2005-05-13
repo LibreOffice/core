@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:49:22 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ namespace desktop
 SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     : IntroWindow()
     , _vdev(*((IntroWindow*)this))
-    , _cProgressColor( -1 )
+    , _cProgressFrameColor( -1 )
+    , _cProgressBarColor( -1 )
     , _iProgress(0)
     , _iMax(100)
     , _bPaintBitmap(sal_True)
@@ -148,13 +149,16 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
         }
     }
 
-    if ( -1 == _cProgressColor.GetColor() )
+    if ( -1 == _cProgressFrameColor.GetColor() )
+        _cProgressFrameColor = Color( COL_LIGHTGRAY );
+
+    if ( -1 == _cProgressBarColor.GetColor() )
     {
         // progress bar: new color only for big bitmap format
         if ( _width > 500 )
-            _cProgressColor = Color( 157, 202, 18 );
+            _cProgressBarColor = Color( 157, 202, 18 );
         else
-            _cProgressColor = Color( COL_BLUE );
+            _cProgressBarColor = Color( COL_BLUE );
     }
 
     Application::AddEventListener(
@@ -275,30 +279,52 @@ void SplashScreen::loadConfig()
     sIniFileName += OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "soffice" ) ) );
     rtl::Bootstrap aIniFile( sIniFileName );
 
-    OUString sProgressColor = implReadBootstrapKey(
-        aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressColor" ) ) );
+    OUString sProgressFrameColor = implReadBootstrapKey(
+        aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressFrameColor" ) ) );
+    OUString sProgressBarColor = implReadBootstrapKey(
+        aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressBarColor" ) ) );
     OUString sSize = implReadBootstrapKey(
         aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressSize" ) ) );
     OUString sPosition = implReadBootstrapKey(
         aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressPosition" ) ) );
 
-    if ( sProgressColor.getLength() )
+    if ( sProgressFrameColor.getLength() )
     {
         UINT8 nRed = 0;
         UINT8 nGreen = 0;
         UINT8 nBlue = 0;
         sal_Int32 idx = 0;
-        sal_Int32 temp = sProgressColor.getToken( 0, ',', idx ).toInt32();
+        sal_Int32 temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
         {
             nRed = static_cast< UINT8 >( temp );
-            temp = sProgressColor.getToken( 0, ',', idx ).toInt32();
+            temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         }
         if ( idx != -1 )
         {
             nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressColor.getToken( 0, ',', idx ).toInt32() );
-            _cProgressColor = Color( nRed, nGreen, nBlue );
+            nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
+            _cProgressFrameColor = Color( nRed, nGreen, nBlue );
+        }
+    }
+
+    if ( sProgressBarColor.getLength() )
+    {
+        UINT8 nRed = 0;
+        UINT8 nGreen = 0;
+        UINT8 nBlue = 0;
+        sal_Int32 idx = 0;
+        sal_Int32 temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
+        if ( idx != -1 )
+        {
+            nRed = static_cast< UINT8 >( temp );
+            temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
+        }
+        if ( idx != -1 )
+        {
+            nGreen = static_cast< UINT8 >( temp );
+            nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
+            _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }
 
@@ -312,6 +338,9 @@ void SplashScreen::loadConfig()
             _barheight = sSize.getToken( 0, ',', idx ).toInt32();
         }
     }
+
+    if ( _barheight >= 10 )
+        _barspace = 3;  // more space between frame and bar
 
     if ( sPosition.getLength() )
     {
@@ -388,10 +417,11 @@ void SplashScreen::Paint( const Rectangle& r)
 
         // border
         _vdev.SetFillColor();
-        _vdev.SetLineColor( Color( COL_LIGHTGRAY ) );
+        _vdev.SetLineColor( _cProgressFrameColor );
         _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
-        _vdev.SetFillColor( _cProgressColor );
+        _vdev.SetFillColor( _cProgressBarColor );
         _vdev.SetLineColor();
+        Rectangle aRect(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace);
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
             _tlx+_barspace+length, _tly+_barheight-_barspace));
     }
