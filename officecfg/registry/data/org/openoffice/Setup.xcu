@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:06:16 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 08:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@
     <node oor:name="Migration">
         <prop oor:name="SupportedVersions" >
             <value oor:separator=",">
-                        StarOffice 7, OpenOffice.org 1.1.1, OpenOffice.org 1.1.2, OpenOffice.org 1.1.3, OpenOffice.org 1.1.4
+                        StarOffice 7, OpenOffice.org 1.1, StarSuite 7
             </value>
         </prop>
 
@@ -572,12 +572,25 @@
                     <value>com.sun.star.migration.Basic</value>
                 </prop>
             </node>
+            <node oor:name="Autocorrection" oor:op="replace">
+                <prop oor:name="MigrationService">
+                    <value>com.sun.star.migration.Autocorrection</value>
+                </prop>
+            </node>
             <node oor:name="UserProfile" oor:op="replace">
                 <prop oor:name="IncludedNodes">
                     <value>org.openoffice.UserProfile</value>
                 </prop>
             </node>
             <node oor:name="Common" oor:op="replace">
+                <prop oor:name="IncludedFiles">
+                    <value>
+                        .*/autotext/.*
+                        .*/config/.*\.so[bcdegh]
+                        .*/gallery/.*
+                        .*/template/.*
+                    </value>
+                </prop>
                 <prop oor:name="IncludedNodes">
                     <value>
                         org.openoffice.Office.Common/Accessibility
@@ -649,6 +662,9 @@
                 </prop>
             </node>
             <node oor:name="Linguistic" oor:op="replace">
+                <prop oor:name="IncludedFiles">
+                    <value>.*/wordbook/.*</value>
+                </prop>
                 <prop oor:name="IncludedNodes">
                     <value>org.openoffice.Office.Linguistic</value>
                 </prop>
