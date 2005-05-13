@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:03:25 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,20 @@ void ScMyTables::DeleteTable()
         rImport.GetStylesImportHelper()->SetStylesToRanges();
         rImport.SetStylesToRangesFinished();
     }
+
+    //#i48793#; has to be set before protection
+    if (!aMatrixRangeList.empty())
+    {
+        ScMyMatrixRangeList::iterator aItr = aMatrixRangeList.begin();
+        ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
+        while(aItr != aEndItr)
+        {
+            SetMatrix(aItr->aRange, aItr->sFormula);
+            ++aItr;
+        }
+        aMatrixRangeList.clear();
+    }
+
     if (rImport.GetDocument() && bProtection)
     {
         uno::Sequence<sal_Int8> aPass;
@@ -702,18 +716,6 @@ void ScMyTables::DeleteTable()
             uno::Reference<xml::sax::XLocator> xLocator;
             rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rtl::OUString(), xLocator);*/
         }
-    }
-
-    if (!aMatrixRangeList.empty())
-    {
-        ScMyMatrixRangeList::iterator aItr = aMatrixRangeList.begin();
-        ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
-        while(aItr != aEndItr)
-        {
-            SetMatrix(aItr->aRange, aItr->sFormula);
-            ++aItr;
-        }
-        aMatrixRangeList.clear();
     }
 }
 
