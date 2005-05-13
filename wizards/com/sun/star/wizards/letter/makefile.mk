@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:22:53 $
+#   last change: $Author: rt $ $Date: 2005-05-13 09:43:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ JAVAFILES=			\
         LetterWizardDialog.java \
         LetterWizardDialogEvents.java \
         LetterWizardDialogResources.java \
+        LocaleCodes.java \
         CGLetter.java \
         CGLetterWizard.java \
         CGPaperElementLocation.java
