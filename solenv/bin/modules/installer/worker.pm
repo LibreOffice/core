@@ -1198,4 +1198,53 @@ sub replace_variables_in_string
     return $string;
 }
 
+#################################################################
+# Copying the files defined as ScpActions into the
+# installation set.
+#################################################################
+
+sub put_scpactions_into_installset
+{
+    my ($installdir) = @_;
+
+    installer::logger::include_header_into_logfile("Start: Copying scp action files into installation set");
+
+    for ( my $i = 0; $i <= $#installer::globals::allscpactions; $i++ )
+    {
+        my $onescpaction = $installer::globals::allscpactions[$i];
+
+        my $subdir = "";
+        if ( $onescpaction->{'Subdir'} ) { $subdir = $onescpaction->{'Subdir'}; }
+
+        if ( $onescpaction->{'Name'} eq "loader.exe" ) { next; }    # do not copy this ScpAction loader
+
+        my $destdir = $installdir;
+        $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
+        if ( $subdir ) { $destdir = $destdir . $installer::globals::separator . $subdir; }
+        installer::systemactions::create_directory($destdir);
+
+        my $sourcefile = $onescpaction->{'sourcepath'};
+        my $destfile = $destdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
+
+        installer::systemactions::copy_one_file($sourcefile, $destfile);
+    }
+
+    installer::logger::include_header_into_logfile("End: Copying scp action files into installation set");
+
+}
+
+#################################################################
+# Collecting scp actions for all languages
+#################################################################
+
+sub collect_scpactions
+{
+    my ($allscpactions) = @_;
+
+    for ( my $i = 0; $i <= $#{$allscpactions}; $i++ )
+    {
+        push(@installer::globals::allscpactions, ${$allscpactions}[$i]);
+    }
+}
+
 1;
