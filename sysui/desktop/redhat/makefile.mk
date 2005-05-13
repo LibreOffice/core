@@ -130,7 +130,7 @@ MIMEICONLIST = $(HCMIMEICONLIST) \
     master-document \
     database
 
-GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys ../mimetypes/openoffice.mime
+GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys ../mimetypes/openoffice.mime 
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
 
 KDEMIMEFLAGFILE = \
