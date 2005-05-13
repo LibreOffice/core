@@ -507,6 +507,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $installer::globals::addchildprojects = 0;  # no child projects for patches
         $installer::globals::addlicensefile = 0;    # no license files for patches
         $installer::globals::makedownload = 0;
+        $installer::globals::makejds = 0;
     }
 
     if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) )
@@ -514,6 +515,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $installer::globals::addchildprojects = 0;
         $installer::globals::addsystemintegration = 0;
         $installer::globals::makedownload = 0;
+        $installer::globals::makejds = 0;
         $installer::globals::addlicensefile = 0;
     }
 
@@ -1453,6 +1455,29 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
                 installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+            }
+        }
+
+        #######################################################
+        # Creating jds installation set
+        #######################################################
+
+        if (( $islastrun ) && ( $installer::globals::makejds ))
+        {
+            my $create_jds = 0;
+
+            if ( $allvariableshashref->{'JDSBUILD'} ) { $create_jds = 1; }
+            if (( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::issolarispkgbuild )) { $create_jds = 0; }
+
+            if (( $is_success ) && ( $create_jds ))
+            {
+                my $correct_language = installer::worker::check_jds_language($allvariableshashref, $languagestringref);
+
+                if ( $correct_language )
+                {
+                    my $jdsdir = installer::worker::create_jds_sets($finalinstalldir, $allvariableshashref, $languagestringref, $languagesarrayref, $includepatharrayref);
+                    installer::worker::analyze_and_save_logfile($loggingdir, $jdsdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+                }
             }
         }
 
