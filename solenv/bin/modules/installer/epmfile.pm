@@ -2217,26 +2217,26 @@ sub finalize_linux_patch
     my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    # Collecting all RPMs in the patch directory
-
-    my $fileextension = "rpm";
-    my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $newepmdir);
-    if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
-    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
-
-    my $installline = "";
-
-    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
-    {
-        $installline = $installline . "  rpm --prefix \$PRODUCTINSTALLLOCATION -U $newepmdir/${$rpmfiles}[$i]\n";
-    }
-
-    $installline =~ s/\s*$//;
-
-    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
-    {
-        ${$scriptfile}[$j] =~ s/INSTALLLINES/$installline/;
-    }
+#   # Collecting all RPMs in the patch directory
+#
+#   my $fileextension = "rpm";
+#   my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $newepmdir);
+#   if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
+#   for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
+#
+#   my $installline = "";
+#
+#   for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
+#   {
+#       $installline = $installline . "  rpm --prefix \$PRODUCTINSTALLLOCATION -U $newepmdir/${$rpmfiles}[$i]\n";
+#   }
+#
+#   $installline =~ s/\s*$//;
+#
+#   for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
+#   {
+#       ${$scriptfile}[$j] =~ s/INSTALLLINES/$installline/;
+#   }
 
     # Replacing the productname
 
