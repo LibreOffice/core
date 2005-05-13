@@ -363,11 +363,11 @@ installer::logger::print_message( "... analyzing scpactions ... \n" );
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1.log", $scpactionsinproductarrayref); }
 
-$scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
-if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2.log", $scpactionsinproductarrayref); }
+# $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
+# if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2.log", $scpactionsinproductarrayref); }
 
 installer::scriptitems::change_keys_of_scpactions($scpactionsinproductarrayref);
-if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2a.log", $scpactionsinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2.log", $scpactionsinproductarrayref); }
 
 installer::logger::print_message( "... analyzing shortcuts ... \n" );
 
@@ -951,6 +951,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     }
 
     #########################################################
+    # Collecting all scp actions
+    #########################################################
+
+    installer::worker::collect_scpactions($scpactionsinproductlanguageresolvedarrayref);
+
+    #########################################################
     # creating inf files for user system integration
     #########################################################
 
@@ -1381,7 +1387,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($installer::globals::subdir, $includepatharrayref, $allvariableshashref); }
 
             # Adding license and readme into installation set
-            if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($installer::globals::subdir); }
+            # if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($installer::globals::subdir); }
+            if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Adding child projects to installation dynamically
             if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref); }
@@ -1411,7 +1418,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref); }
 
             # Adding license and readme into installation set
-            if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($newepmdir); }
+            # if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($newepmdir); }
+            if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
@@ -1893,7 +1901,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::logger::print_message( "... copying files into installation set ...\n" );
 
-        installer::windows::msiglobal::copy_scpactions_into_installset($defaultlanguage, $installdir, $scpactionsinproductlanguageresolvedarrayref);
+        # installer::windows::msiglobal::copy_scpactions_into_installset($defaultlanguage, $installdir, $scpactionsinproductlanguageresolvedarrayref);
+        installer::worker::put_scpactions_into_installset($installdir);
 
         # ... copying the setup.exe, instmsia.exe and instmsiw.exe
 
