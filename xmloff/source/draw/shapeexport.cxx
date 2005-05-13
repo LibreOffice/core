@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:46:04 $
+ *  last change: $Author: rt $ $Date: 2005-05-13 07:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,12 +384,21 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 // get family ID
                 uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
                 DBG_ASSERT( xStylePropSet.is(), "style without a XPropertySet?" );
-                if(xStylePropSet.is())
+                try
                 {
-                    OUString aFamilyName;
-                    xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
-                    if(aFamilyName.getLength() && aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("presentation"))))
-                        aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+                    if(xStylePropSet.is())
+                    {
+                        OUString aFamilyName;
+                        xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
+                        if(aFamilyName.getLength() && aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("presentation"))))
+                            aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+                    }
+                }
+                catch(beans::UnknownPropertyException aException)
+                {
+                    // Ignored.
+                    DBG_ASSERT(false,
+                        "XMLShapeExport::collectShapeAutoStyles: style has no 'Family' property");
                 }
 
                 // get parent-style name
