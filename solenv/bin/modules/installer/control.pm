@@ -434,6 +434,9 @@ sub check_updatepack
                     $infoline = "Try to create directory: $directory\n";
                     push(@installer::globals::globallogfileinfo, $infoline);
 
+                    # saving this directory for later removal
+                    $installer::globals::shiptestdirectory = $directory;
+
                     if ( installer::systemactions::try_to_create_directory($directory))
                     {
                         $infoline = "Write access on Ship drive\n";
