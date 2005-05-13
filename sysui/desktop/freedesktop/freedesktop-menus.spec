@@ -48,6 +48,7 @@ for dir in *; do
   ln -s $iconname-drawing-template.png       gnome-mime-application-vnd.sun.xml.draw.template.png
   ln -s $iconname-formula.png                gnome-mime-application-vnd.sun.xml.math.png
   ln -s $iconname-master-document.png        gnome-mime-application-vnd.sun.xml.writer.global.png
+  ln -s $iconname-oasis-database.png         gnome-mime-application-vnd.sun.xml.base.png
   ln -s $iconname-oasis-database.png         gnome-mime-application-vnd.oasis.opendocument.database.png
   ln -s $iconname-oasis-drawing.png          gnome-mime-application-vnd.oasis.opendocument.graphics.png
   ln -s $iconname-oasis-drawing-template.png gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
@@ -164,7 +165,6 @@ application/vnd.oasis.opendocument.spreadsheet ods
 application/vnd.oasis.opendocument.spreadsheet-template ots
 application/vnd.oasis.opendocument.chart odc
 application/vnd.oasis.opendocument.formula odf
-application/vnd.oasis.opendocument.database odb
 application/vnd.oasis.opendocument.image odi
 application/vnd.sun.xml.writer sxw
 application/vnd.sun.xml.writer.template stw
@@ -182,6 +182,7 @@ application/vnd.sun.xml.draw sxd
 application/vnd.sun.xml.draw.template std
 application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
+application/vnd.sun.xml.base odb
 application/vnd.stardivision.math smf
 END
 
@@ -253,6 +254,7 @@ application/vnd.sun.xml.draw.template; %unixfilename -view %s
 application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.database; %unixfilename -view %s
+application/vnd.sun.xml.base; %unixfilename -view %s
 END
 
   # and replace the original file
