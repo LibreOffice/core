@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: obo $ $Date: 2005-04-27 11:16:12 $
+*  last change: $Author: rt $ $Date: 2005-05-13 09:46:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -92,6 +92,7 @@ Module gid_Module_Root_Files_2
 	gid_File_Exe_Nsplugin,
 	gid_File_Exe_Quickstart,
 	gid_File_Exe_Sbase,
+	gid_File_Images_Zip,
 	gid_File_JREProperties,
 	gid_File_Script_Configimport,
 	gid_File_Script_Unopkg,
@@ -165,7 +166,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Xflatxml,
 	gid_File_Jar_Xmerge,
 	gid_File_Jar_Xmergebridge,
-	gid_File_Images_Zip,
 	gid_File_Rdb_Types,
 	gid_Starregistry_Legacy_Binfilters_Rdb,
 	gid_Starregistry_Services_Rdb);
@@ -538,6 +538,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Tplwizbitmap,
 	gid_File_Extra_Tplwizfax_Lang,
 	gid_File_Extra_Tplwizletter,
+	gid_File_Extra_Tplwizletter_Lang,
 	gid_File_Extra_Tplwizreport_Lang,
 	gid_File_Extra_Tplwizstyles_Lang,
 	gid_File_Extra_Tplwizmemo_Lang,
@@ -788,6 +789,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Xsl_Export_Wordml_Ooo2wordml_Text,
 	gid_File_Xsl_Import_Common_Ms2ooo_Docpr,
 	gid_File_Xsl_Import_Spreadsheetml_Spreadsheetml2ooo,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Props,
 	gid_File_Xsl_Import_Wordml_Wordml2ooo,
 	gid_File_Xsl_Import_Wordml_Wordml2ooo_Custom_Draw,
 	gid_File_Xsl_Import_Wordml_Wordml2ooo_Draw,
@@ -843,6 +845,7 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Epg,
 	gid_File_Res_Epp,
 	gid_File_Res_Eur,
+	gid_File_Res_Fps_Office,
 	gid_File_Res_Frm,
 	gid_File_Res_Fwe,
 	gid_File_Res_Gal,
@@ -865,6 +868,7 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Bf_Sd,
 	gid_File_Res_Bf_Sw,
 	gid_File_Res_Bf_Sfx,
+	gid_File_Res_Productregistration,
 	gid_File_Res_Sd,
 	gid_File_Res_Sfx,
 	gid_File_Res_Spa,
