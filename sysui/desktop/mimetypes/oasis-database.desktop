@@ -5,5 +5,5 @@ Hidden=false
 Icon=oasis-database
 Type=MimeType
 Patterns=*.odb
-MimeType=application/vnd.oasis.opendocument.database
+MimeType=application/vnd.sun.xml.base
 Comment=OpenDocument Database
