@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-11 15:53:59 $
+#   last change: $Author: rt $ $Date: 2005-05-17 14:57:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,7 +150,7 @@ APP1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib
 
 # --- Library -----------------------------------
 
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET)_so
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
 .ENDIF
@@ -173,7 +173,7 @@ DEF1EXPORTFILE=exports_wnt.dxp
 
 SHL2OBJS=$(SHL1OBJS)
 SHL2STDLIBS=$(SHL1STDLIBS)
-SHL2TARGET=$(TARGET)_oo
+SHL2TARGET=$(TARGET)
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
 .ENDIF
