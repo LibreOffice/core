@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.93 $
+*  $Revision: 1.94 $
 *
-*  last change: $Author: rt $ $Date: 2005-03-29 13:21:16 $
+*  last change: $Author: rt $ $Date: 2005-05-18 09:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,8 +942,14 @@ namespace xmloff { namespace token {
         TOKEN( "highlighted-range",               XML_HIGHLIGHTED_RANGE ),
         TOKEN( "horizontal",                      XML_HORIZONTAL ),
         TOKEN( "horizontal-lines",                XML_HORIZONTAL_LINES ),
+        // --> OD 2005-05-12 #i49139#
+        // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+        // Usage is deprecated, but the old token are needed for the
+        // OpenOffice.org file format import/export filter for the renaming
         TOKEN( "horizontal-on-left-pages",        XML_HORIZONTAL_ON_LEFT_PAGES ),
         TOKEN( "horizontal-on-right-pages",       XML_HORIZONTAL_ON_RIGHT_PAGES ),
+        // <--
         TOKEN( "horizontal-pos",                  XML_HORIZONTAL_POS ),
         TOKEN( "horizontal-rel",                  XML_HORIZONTAL_REL ),
         TOKEN( "horizontal-scrollbar-width",      XML_HORIZONTAL_SCROLLBAR_WIDTH ),
@@ -2873,6 +2879,12 @@ namespace xmloff { namespace token {
 
         TOKEN( "http://www.w3.org/",    XML_URI_W3_PREFIX ),
         TOKEN( "/xforms",               XML_URI_XFORMS_SUFFIX ),
+        // --> OD 2005-05-12 #i49139#
+        // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+        TOKEN( "horizontal-on-even",        XML_HORIZONTAL_ON_EVEN ),
+        TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
+        // <--
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
