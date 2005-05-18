@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-29 13:27:44 $
+#   last change: $Author: rt $ $Date: 2005-05-18 10:00:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,110 +64,129 @@ PRJ=..$/..
 
 PRJNAME=xmlsecurity
 TARGET=demo
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE :	$(PRJ)$/util$/target.pmk
-
-
-CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
-
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 LIBTARGET=NO
 
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :  settings.mk
+.INCLUDE :	$(PRJ)$/util$/target.pmk
+
+CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
+
 # --- Files --------------------------------------------------------
 
-SHARE_LIBS =	\
-    $(CPPULIB)	\
-    $(CPPUHELPERLIB) \
-    $(SALLIB)	\
-    $(UCBHELPERLIB) \
-    $(UNOTOOLSLIB)	    \
-    $(TOOLSLIB) \
-    $(XMLOFFLIB) \
+SHARE_LIBS =			\
+    $(CPPULIB)			\
+    $(CPPUHELPERLIB)	\
+    $(SALLIB)			\
+    $(UCBHELPERLIB)		\
+    $(UNOTOOLSLIB)		\
+    $(TOOLSLIB)			\
+    $(XMLOFFLIB)		\
+    $(LIBXML2LIB)		\
+    $(NSS3LIB)			\
+    $(NSPR4LIB)			\
+    $(XMLSECLIB)		\
     $(COMPHELPERLIB)
 
-        
-.IF "$(GUI)"=="WNT"
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
-SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "libxmlsec.lib" "libxmlsec-mscrypto.lib" "helper.lib" "xsec_xmlsec.lib"
+SHARE_LIBS+= $(XMLSECLIB-MS)
 .ELSE
-SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "libxmlsec.lib" "libxmlsec-nss.lib" "helper.lib" "xsec_xmlsec.lib"
-.ENDIF
-.ELSE
-SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "helper.lib" "-lxsec_xmlsec"
+SHARE_LIBS+= $(XMLSECLIB-NSS)
 .ENDIF
 
+
+
+# HACK: Use SLO for demo directly...
 SHARE_OBJS =	\
     $(OBJ)$/util.obj \
-    $(SLO)$/biginteger.obj
+    $(OBJ)$/util2.obj \
+    $(SLO)$/biginteger.obj \
+    $(SLO)/xmlsignaturehelper.obj	\
+    $(SLO)/xmlsignaturehelper2.obj	\
+    $(SLO)/xsecctl.obj	\
+    $(SLO)/xsecparser.obj	\
+    $(SLO)/xsecsign.obj	\
+    $(SLO)/xsecverify.obj
 
 #
-# The 1st application
+# ---------- signdemo ----------
 #
-APP1TARGET=	signdemo
-APP1OBJS=	\
-        $(SHARE_OBJS)	\
-        $(OBJ)$/signdemo.obj
-        
-.IF "$(OS)" == "LINUX"
-APP1STDLIBS+= -lstdc++
-.ENDIF
-
-APP1STDLIBS+=	\
-        $(SHARE_LIBS)
+APP1TARGET=signdemo
+APP1DEPN=makefile.mk
+APP1STDLIBS+=$(SHARE_LIBS)
+APP1OBJS= $(SHARE_OBJS)	$(OBJ)$/signdemo.obj
 
 #
-# The 2rd application
+# ---------- verifydemo ----------
 #
-APP2TARGET=	verifydemo
-APP2OBJS=	\
-        $(SHARE_OBJS)	\
-        $(OBJ)$/verifydemo.obj
-        
-.IF "$(OS)" == "LINUX"
-APP2STDLIBS+= -lstdc++
-.ENDIF
-
-APP2STDLIBS+=	\
-        $(SHARE_LIBS)
+APP2TARGET=verifydemo
+APP2DEPN=makefile.mk
+APP2STDLIBS+=$(SHARE_LIBS)
+APP2OBJS= $(SHARE_OBJS)	$(OBJ)$/verifydemo.obj
 
 #
-# The 3rd application
+# ---------- multisigdemo ----------
 #
-APP3TARGET=	multisigdemo
-APP3OBJS=	\
-        $(SHARE_OBJS)	\
-        $(OBJ)$/multisigdemo.obj
-        
-.IF "$(OS)" == "LINUX"
-APP3STDLIBS+= -lstdc++
-.ENDIF
-
-APP3STDLIBS+=	\
-        $(SHARE_LIBS)
+APP3TARGET=multisigdemo
+APP3DEPN=makefile.mk
+APP3STDLIBS+=$(SHARE_LIBS)
+APP3OBJS= $(SHARE_OBJS)	$(OBJ)$/multisigdemo.obj
 
 #
-# The 4rd application
+# ---------- mozprofile ----------
 #
-.IF "$(CRYPTO_ENGINE)" == "nss"
-APP4TARGET=	moz_profile
-APP4OBJS=	\
-        $(SLO)$/moz_profile.obj
-        
-.IF "$(OS)" == "LINUX"
-APP4STDLIBS+= -lstdc++
-.ENDIF
+APP4TARGET=mozprofile
+APP4DEPN=makefile.mk
+APP4STDLIBS+=$(SHARE_LIBS)
+APP4OBJS= $(SHARE_OBJS)	$(OBJ)$/mozprofile.obj
 
-APP4STDLIBS+=	\
-        $(SHARE_LIBS)
-.ENDIF
+#
+# ---------- performance ----------
+#
+APP5TARGET=performance
+APP5DEPN=makefile.mk
+APP5STDLIBS+=$(SHARE_LIBS)
+APP5OBJS= $(OBJ)$/util.obj	$(OBJ)$/performance.obj
+
+#
+# ---------- jflatfilter ----------
+#
+PACKAGE=	    com$/sun$/star$/xml$/security$/eval
+JARFILES=       sandbox.jar ridl.jar jurt.jar unoil.jar juh.jar
+JAVAFILES:=     $(shell +ls *.java)
+JAVACLASSFILES= $(CLASSDIR)$/$(PACKAGE)$/JavaFlatFilter.class
+JARCLASSDIRS=   $(PACKAGE)
+JARTARGET=      jflatfilter.jar
+JARCOMPRESS=    TRUE
+
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(BIN)$/demo.rdb
+
+$(JAVACLASSFILES) : $(JAVAFILES)
+
+REGISTERLIBS=					\
+    shlibloader.uno$(DLLPOST)	\
+    dynamicloader.uno$(DLLPOST) \
+    namingservice.uno$(DLLPOST) \
+    servicemgr.uno$(DLLPOST)	\
+    sax.uno$(DLLPOST)			\
+    $(DLLPRE)mozab2$(DLLPOST)
+
+$(BIN)$/demo.rdb: \
+        makefile.mk \
+    $(foreach,i,$(REGISTERLIBS) $(SOLARSHAREDBIN)$/$(i))
+    -rm -f $@ $(BIN)$/regcomp.rdb $(BIN)$/demo.tmp
+    $(REGCOMP) -register -r $(BIN)$/demo.tmp -c "$(strip $(REGISTERLIBS))"
+    $(REGCOMP) -register -r $(BIN)$/demo.tmp -c $(DLLPRE)xsec_fw$(DLLPOST)
+    $(REGCOMP) -register -r $(BIN)$/demo.tmp -c $(DLLPRE)xsec_xmlsec$(DLLPOST)
+    $(REGMERGE) $(BIN)$/demo.tmp / $(SOLARBINDIR)/types.rdb
+    mv $(BIN)$/demo.tmp $@
+
 
