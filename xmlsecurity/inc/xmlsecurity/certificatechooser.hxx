@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,9 @@ class HeaderBar;
 class CertificateChooser : public ModalDialog
 {
 private:
-    // XSecurityEnvironment is needed for building the certification path
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
-
-    // Show info for this certificate
     cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
+    SignatureInformations maCertsToIgnore;
 
     FixedText           maHintFT;
     SvxSimpleTable      maCertLB;
@@ -107,16 +105,22 @@ private:
     CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;
 
+    BOOL                mbInitialized;
+
     USHORT              GetSelectedEntryPos( void ) const;
+//  DECL_LINK(          Initialize, void* );
     DECL_LINK(          ViewButtonHdl, Button* );
     DECL_LINK(          CertificateHighlightHdl, void* );
     DECL_LINK(          CertificateSelectHdl, void* );
 
     void ImplShowCertificateDetails();
+    void ImplInitialize();
 
 public:
     CertificateChooser( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
     ~CertificateChooser();
+
+    short Execute();
 
     cssu::Reference< dcss::security::XCertificate > GetSelectedCertificate();
 
