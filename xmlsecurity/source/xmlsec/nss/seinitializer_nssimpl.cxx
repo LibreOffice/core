@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:37:03 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <sal/types.h>
 
 #include <tools/debug.hxx>
+#include <rtl/logfile.hxx>
 
 #include "seinitializer_nssimpl.hxx"
 
@@ -136,11 +137,59 @@ void nsscrypto_finalize() {
     NSS_Shutdown();
 }
 
-//bool getMozillaCurrentProfile(rtl::OUString& profilePath);
 bool getMozillaCurrentProfile(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF,
-    rtl::OUString& profilePath);
+    rtl::OUString& profilePath)
+{
+    /*
+     * first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
+     */
+        char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
+        if (env)
+        {
+            profilePath = rtl::OUString::createFromAscii( env );
+            RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            return true;
+        }
+        else
+        {
+            RTL_LOGFILE_TRACE( "getMozillaCurrentProfile: Using MozillaBootstrap..." );
+        mozilla::MozillaProductType productTypes[4] = {
+            mozilla::MozillaProductType_Thunderbird,
+            mozilla::MozillaProductType_Mozilla,
+            mozilla::MozillaProductType_Firefox,
+            mozilla::MozillaProductType_Default };
+        int nProduct = 4;
 
+        uno::Reference<uno::XInterface> xInstance = rxMSF->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+        OSL_ENSURE( xInstance.is(), "failed to create instance" );
+
+        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap
+            =  uno::Reference<mozilla::XMozillaBootstrap>(xInstance,uno::UNO_QUERY);
+        OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+
+        if (xMozillaBootstrap.is())
+        {
+            for (int i=0; i<nProduct; i++)
+            {
+                ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+
+                RTL_LOGFILE_TRACE2( "getMozillaCurrentProfile: getDefaultProfile [%i] returns %s", i, rtl::OUStringToOString( profile, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
+                if (profile != NULL && profile.getLength()>0)
+                {
+                    profilePath = xMozillaBootstrap->getProfilePath(productTypes[i],profile);
+                    RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using Mozilla Profile: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    return true;
+                }
+            }
+        }
+
+        RTL_LOGFILE_PRODUCT_TRACE( "XMLSEC: No Mozilla Profile found!" );
+        return false;
+    }
+}
 
 SEInitializer_NssImpl::SEInitializer_NssImpl(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF)
@@ -176,54 +225,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             pDefaultCertDir = new rtl::OString;
             rtl::OUString ouCertDir;
 
-#if 0
-            /*
-             * a dialog should be displayed to let user select a product, from
-             * 1) Mozilla (mozilla::MozillaProductType_Mozilla),
-             * 2) Thunderbird (mozilla::MozillaProductType_Thunderbird),
-             * 3) Firefox(mozilla::MozillaProductType_Firefox),
-             *
-             * At this moment, I just use Mozilla
-             */
-            mozilla::MozillaProductType profileType = mozilla::MozillaProductType_Firefox;
 
-            char* productNames[4] = {
-                "Mozilla","Thunderbird","Firefox","Default"
-            };
-
-            mozilla::MozillaProductType productTypes[4] = {
-                mozilla::MozillaProductType_Mozilla,
-                mozilla::MozillaProductType_Thunderbird,
-                mozilla::MozillaProductType_Firefox,
-                mozilla::MozillaProductType_Default };
-
-            int nProduct = 4;
-
-            fprintf( stdout, "\nSelect a product from the following list\n" ) ;
-            fprintf( stdout, "================================================================================" ) ;
-            for( int i = 0; i < nProduct; ++i )
-            {
-                fprintf( stdout, "%d : [%s]\n", i+1, productNames[i]);
-            }
-
-            fprintf( stdout, "================================================================================\n" ) ;
-            bool bInvalid = false;
-            int sel = 0;
-
-            do
-            {
-                if (bInvalid)
-                {
-                    fprintf( stdout, "Invalid value! " );
-                }
-
-                fprintf( stdout, "Select <1-%d>:", nProduct ) ;
-                fscanf( stdin, "%d", &sel ) ;
-                bInvalid = true;
-            }while(sel<1 || sel>nProduct);
-
-            profileType = productTypes[sel-1];
-#endif
 
             if ( getMozillaCurrentProfile(mxMSF, ouCertDir) )
                 *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
@@ -233,7 +235,10 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
 
     if( !sCertDir.getLength() )
-        return NULL;
+    {
+        RTL_LOGFILE_TRACE( "XMLSEC: Error - No certificate directory!" );
+        // return NULL;
+    }
 
 
     /* Initialize NSPR and NSS */
@@ -248,7 +253,18 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
     ----*/
     if( !nsscrypto_initialize( sCertDir.getStr() ) )
-        return NULL ;
+    {
+        RTL_LOGFILE_TRACE( "XMLSEC: Error - nsscrypto_initialize() failed." );
+        if ( NSS_NoDB_Init(NULL) != SECSuccess )
+        {
+            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init also failed, NSS Security not available!" );
+            return NULL;
+        }
+        else
+        {
+            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init works, enough for verifying signatures..." );
+        }
+    }
     else
         atexit( nsscrypto_finalize ) ;
 
@@ -263,6 +279,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     {
     //  PK11_LogoutAll();
     //  NSS_Shutdown();
+        RTL_LOGFILE_TRACE( "XMLSEC: Error - pInternalSlot is NULL!" );
         return NULL;
     }
     try
@@ -282,20 +299,22 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
         soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, NULL ) ;
         if( soltList != NULL ) {
-            for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next ) {
-
+            for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next )
+            {
+                RTL_LOGFILE_TRACE( "XMLSEC: Trying token..." );
                 found = PR_FALSE;
 
                 pSlot = soltEle->slot ;
 
                 if(pSlot != NULL){
-
+                    RTL_LOGFILE_TRACE2( "XMLSEC: Found a slot: SlotName=%s, TokenName=%s", PK11_GetSlotName(pSlot), PK11_GetTokenName(pSlot) );
                     pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
                     if( pSymKey == NULL )
                     {
                         PK11_FreeSlot( pSlot ) ;
                     //  PK11_LogoutAll();
                     //  NSS_Shutdown();
+                        RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
                         return NULL;
                     }
 
@@ -354,6 +373,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
                     if(found != PR_FALSE)
                     {
+                        RTL_LOGFILE_TRACE( "XMLSEC: Using this slot as the Default Security Environment." );
                         xSecCtx->setDefaultSecurityEnvironmentIndex( n ) ;
                     }
 
