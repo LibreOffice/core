@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:14:02 $
+#   last change: $Author: rt $ $Date: 2005-05-18 08:05:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ dummy:
 .ELSE		# "$(GUIBASE)"!="unx"
 
 .IF "$(ENABLE_KDE)" != ""
+
+.IF "$(KDE_ROOT)"!=""
+KDE_CFLAGS:=-I$(KDE_ROOT)$/include -DQT_CLEAN_NAMESPACE
+.ENDIF 			# "$(KDE_ROOT)"!=""
 
 CFLAGS+=$(KDE_CFLAGS)
 
