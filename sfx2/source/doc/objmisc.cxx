@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:32:25 $
+ *  last change: $Author: kz $ $Date: 2005-05-18 10:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,8 +1244,9 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
     {
         // closing the streams on loading should be under control of SFX!
+        // if a readonly medium has storage then it's stream is already based on temporary file
         DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
-        if( !(pMedium->GetOpenMode() & STREAM_WRITE) )
+        if( !(pMedium->GetOpenMode() & STREAM_WRITE) && !pMedium->HasStorage_Impl() )
             // don't lock file opened read only
             pMedium->CloseInStream();
     }
