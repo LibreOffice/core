@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:26:22 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,6 @@ extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 
 char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
 {
-    char* pPassword = NULL;
-
     uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     if ( xMSF.is() )
     {
@@ -137,31 +135,16 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
 
             if ( pPasswordRequest->isPassword() )
             {
-                // We need TOOLS anyway, because of class RequestDocumentPassword.
-                // If this changes, use rtl String functions for this...
                 ByteString aPassword = ByteString( String( pPasswordRequest->getPassword() ), gsl_getSystemTextEncoding() );
                 USHORT nLen = aPassword.Len();
-                pPassword = (char*) PORT_Alloc( nLen+1 ) ;
+                char* pPassword = (char*) PORT_Alloc( nLen+1 ) ;
                 pPassword[nLen] = 0;
                 memcpy( pPassword, aPassword.GetBuffer(), nLen );
-
                 return pPassword;
             }
         }
     }
-
-#ifdef DEBUG
-    // When debug, we will set the password to 'sceri'
-    pPassword = ( char* )PORT_Alloc( 20 ) ;
-    pPassword[0]='s';
-    pPassword[1]='c';
-    pPassword[2]='e';
-    pPassword[3]='r';
-    pPassword[4]='i';
-    pPassword[5]=0x0;
-#endif
-
-    return pPassword;
+    return NULL;
 }
 
 SecurityEnvironment_NssImpl :: SecurityEnvironment_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_pSlot( NULL ) , m_pHandler( NULL ) , m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList() {
