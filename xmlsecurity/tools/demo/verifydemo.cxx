@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verifydemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:28:31 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 10:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,77 +59,45 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
 #include "util.hxx"
 
-#include <rtl/ustring.hxx>
+#include <stdio.h>
 #include <cppuhelper/servicefactory.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <unotools/streamhelper.hxx>
 
-//CP : added by CP
-#include <rtl/locale.h>
-#include <osl/nlsupport.h>
+#include <xmlsecurity/xmlsignaturehelper.hxx>
 
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-
-//CP : end
-
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssi = com::sun::star::io;
+using namespace ::com::sun::star;
 
 long startVerifyHandler( void *, void * )
 {
-    char answer;
-    fprintf( stdout,
-        "A signature is found, whether to verify it(y/n)?[y]:" );
-    fscanf( stdin, "%c", &answer);
-
-    return  (answer == 'n')?0:1;
+    return QueryVerifySignature();
 }
 
 int SAL_CALL main( int argc, char **argv )
 {
-    if( argc != 4 )
+    if( argc < 2 )
     {
-        fprintf( stderr, "Usage: %s <rdb file> <signature file> <cryptoken>\n" , argv[0] ) ;
+        fprintf( stderr, "Usage: %s <signature file> [<cryptoken>]\n" , argv[0] ) ;
         return -1 ;
     }
 
-    /*
-     * creates a component factory from local rdb file.
-     */
-    cssu::Reference< cssl::XMultiServiceFactory > xManager = NULL ;
-    cssu::Reference< cssu::XComponentContext > xContext = NULL ;
-    try
-    {
-        xManager = serviceManager( xContext , rtl::OUString::createFromAscii( "local" ), rtl::OUString::createFromAscii( argv[1] ) ) ;
-        OSL_ENSURE( xManager.is() ,
-            "ServicesManager - "
-            "Cannot get service manager" );
+    rtl::OUString aSIGFileName = rtl::OUString::createFromAscii(argv[1]);
+    rtl::OUString aCryptoToken;
+    if ( argc >= 3 )
+        aCryptoToken = rtl::OUString::createFromAscii(argv[2]);
 
-        fprintf( stdout , "xManager created.\n" ) ;
-    }
-    catch( cssu::Exception& e )
-    {
-        fprintf( stderr , "Error Message: %s\n" , rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
-        return -1;
-    }
+    uno::Reference< lang::XMultiServiceFactory > xMSF = CreateDemoServiceFactory();
+
 
     /*
      * creates a signature helper
      */
-    XMLSignatureHelper aSignatureHelper( xManager );
+    XMLSignatureHelper aSignatureHelper( xMSF );
 
     /*
      * creates a security context.
      */
-    bool bInit = aSignatureHelper.Init( rtl::OUString::createFromAscii(argv[3]) );
+    bool bInit = aSignatureHelper.Init( aCryptoToken );
     if ( !bInit )
     {
         fprintf( stderr, "Error initializing security context!" );
@@ -143,24 +111,10 @@ int SAL_CALL main( int argc, char **argv )
 
     aSignatureHelper.StartMission();
 
-     /*
-      * prepares the signature stream.
-      */
-    rtl::OUString aSIGFileName = rtl::OUString::createFromAscii(argv[2]);
-    SvFileStream* pStream = new SvFileStream( aSIGFileName, STREAM_READ );
-    pStream->Seek( STREAM_SEEK_TO_END );
-    ULONG nBytes = pStream->Tell();
-    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
-
-     /*
-      * creates the signature stream.
-      */
-    cssu::Reference< cssi::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
-
     /*
      * verifies the signature
      */
+    uno::Reference< io::XInputStream > xInputStream = OpenInputStream( aSIGFileName );
     bool bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
 
     /*
@@ -170,27 +124,16 @@ int SAL_CALL main( int argc, char **argv )
 
     if ( !bDone )
     {
-        fprintf( stderr, "Error in Signature!\n" );
+        fprintf( stderr, "\nSTATUS: Error verifying Signature!\n" );
     }
     else
     {
-        fprintf( stdout, "Signatures verified without any problems!\n" );
+        fprintf( stdout, "\nSTATUS: All choosen Signatures veryfied successfully!\n" );
     }
 
     aSignatureHelper.EndMission();
 
-    // By CP , for correct encoding
-    sal_uInt16 encoding ;
-    rtl_Locale *pLocale = NULL ;
-    osl_getProcessLocale( &pLocale ) ;
-    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-    // CP end
-
-    fprintf( stdout, "------------- Signature details -------------\n" );
-    fprintf( stdout, "%s",
-        rtl::OUStringToOString(
-            getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
-            encoding).getStr());
+    QueryPrintSignatureDetails( aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment() );
 
     return 0;
 }
