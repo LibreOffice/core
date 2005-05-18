@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:33:43 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ WidgetPainter::~WidgetPainter( void )
     delete m_pEditableComboBox, m_pEditableComboBox = NULL;
     delete m_pLineEdit, m_pLineEdit = NULL;
     delete m_pSpinWidget, m_pSpinWidget = NULL;
-    delete m_pSpinEdit, m_pSpinEdit = NULL;
+    m_pSpinEdit = NULL; // Deleted in m_pSpinWidget's destructor
     delete m_pTabAlone, m_pTabAlone = NULL;
     delete m_pTabBarParent, m_pTabBarParent = NULL;
     m_pTabBar = NULL;    // Deleted in m_pTabBarParent's destructor
@@ -790,6 +790,8 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( "QToolButton", pClassName ) == 0 )
     {
+        if( (nStyle & QStyle::Style_MouseOver) )
+            nStyle &= ~QStyle::Style_Off;
         kapp->style().drawComplexControl( QStyle::CC_ToolButton,
                 &qPainter, pWidget, qRect,
                 pWidget->colorGroup(), nStyle,
@@ -1171,6 +1173,7 @@ QStyle::SFlags WidgetPainter::vclStateValue2SFlags( ControlState nState,
     case BUTTONVALUE_ON:    nStyle |= QStyle::Style_On;       break;
     case BUTTONVALUE_OFF:   nStyle |= QStyle::Style_Off;      break;
     case BUTTONVALUE_MIXED: nStyle |= QStyle::Style_NoChange; break;
+    default: break;
     }
 
     return nStyle;
@@ -1233,7 +1236,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     ( (nType == CTRL_CHECKBOX)    && (nPart == PART_ENTIRE_CONTROL) ) ||
     ( (nType == CTRL_COMBOBOX)    && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
     ( (nType == CTRL_EDITBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    ( (nType == CTRL_LISTBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW) ) ||
+    ( (nType == CTRL_LISTBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW || nPart == HAS_BACKGROUND_TEXTURE ) ) ||
     ( (nType == CTRL_SPINBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
     // no CTRL_SPINBUTTONS for KDE
     ( (nType == CTRL_TAB_ITEM)    && (nPart == PART_ENTIRE_CONTROL) ) ||
@@ -1715,8 +1718,16 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 KDESalFrame::KDESalFrame( SalFrame* pParent, ULONG nStyle ) :
     X11SalFrame( pParent, nStyle )
 {
-    if ( !pParent )
-        KStartupInfo::appStarted();
+}
+
+void KDESalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+{
+    if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
+    {
+        KDEXLib* pXLib = static_cast<KDEXLib*>(GetDisplay()->GetXLib());
+        pXLib->doStartup();
+    }
+    X11SalFrame::Show( bVisible, bNoActivate );
 }
 
 /** Helper function to convert colors.
@@ -1945,7 +1956,24 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuColor( toColor( qMenuCG.button() ) );
         aStyleSettings.SetMenuBarColor( toColor( qMenuCG.button() ) );
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
-        aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.highlightedText() ) );
+
+        // Menu items higlight text color, theme specific
+        if ( kapp->style().inherits( "HighContrastStyle" ) ||
+                kapp->style().inherits( "KeramikStyle" ) ||
+                kapp->style().inherits( "QWindowsStyle" ) ||
+                kapp->style().inherits( "ThinKeramikStyle" ) ||
+                kapp->style().inherits( "PlastikStyle" ) )
+        {
+            aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.highlightedText() ) );
+        }
+        else
+            aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.buttonText() ) );
+
+        // set special menubar higlight text color
+        if ( kapp->style().inherits( "HighContrastStyle" ) )
+            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
+        else
+            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.buttonText() );
 
         // Font
         Font aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
