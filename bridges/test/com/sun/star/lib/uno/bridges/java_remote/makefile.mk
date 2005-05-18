@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:49:32 $
+#   last change: $Author: kz $ $Date: 2005-05-18 10:54:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ JAVATESTFILES := \
     Bug111153_Test.java \
     Bug114133_Test.java \
     MethodIdTest.java \
-    PolyStructTest.java
+    PolyStructTest.java \
+    StopMessageDispatcherTest.java
 IDLTESTFILES := \
     Bug98508_Test.idl \
     PolyStructTest.idl
