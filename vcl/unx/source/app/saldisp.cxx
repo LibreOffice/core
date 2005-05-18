@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:33:58 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,11 @@ void SalDisplay::doDestruct()
 
     if( IsDisplay() )
     {
+        delete mpInputMethod, mpInputMethod = (SalI18N_InputMethod*)ILLEGAL_POINTER;
+        delete mpKbdExtension, mpKbdExtension = (SalI18N_KeyboardExtension*)ILLEGAL_POINTER;
+
+        // do not call anything that could implicitly call back into
+        // this object after this point
         osl_destroyMutex( hEventGuard_ );
 
         XDestroyWindow( pDisp_, hRefWindow_ );
@@ -709,9 +714,6 @@ void SalDisplay::doDestruct()
 
         if( pRootVisual_ != pVisual_ )
             delete pRootVisual_;
-
-        delete mpInputMethod;
-        delete mpKbdExtension;
     }
 
     pVisual_        = (SalVisual*)ILLEGAL_POINTER;
