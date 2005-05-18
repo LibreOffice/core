@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:36:32 $
+#   last change: $Author: rt $ $Date: 2005-05-18 09:58:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,6 @@ SOLARINC += -I$(NSS_INC)
 .ENDIF
 
 SLOFILES = \
-    $(SLO)$/moz_profile.obj \
     $(SLO)$/securityenvironment_nssimpl.obj \
     $(SLO)$/xmlencryption_nssimpl.obj \
     $(SLO)$/xmlsecuritycontext_nssimpl.obj \
