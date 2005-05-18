@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.199 $
+ *  $Revision: 1.200 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-10 16:06:14 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1599,7 +1599,9 @@ ImplDevFontListData::~ImplDevFontListData()
     {
         ImplFontData* pFace = mpFirst;
         mpFirst = pFace->GetNextFace();
+#if 0 // HOTFIX for 122732
         delete pFace;
+#endif
     }
 }
 
