@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:15:42 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 10:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,31 +59,26 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
-
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
-#include <com/sun/star/xml/crypto/XUriBinding.hpp>
+// Get the demo.rdb servcie manager...
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateDemoServiceFactory();
 
-/*
- * get service manager and context
- */
-::com::sun::star::uno::Reference<
-    ::com::sun::star::lang::XMultiServiceFactory >
-    serviceManager( ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > &xContext,
-        ::rtl::OUString sUnoUrl,
-        ::rtl::OUString sRdbUrl)
-    throw( ::com::sun::star::uno::RuntimeException , ::com::sun::star::uno::Exception );
+// Ask user to show more signature details...
+void QueryPrintSignatureDetails( const SignatureInformations& SignatureInformations, ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > );
 
-::rtl::OUString getSignatureInformations(
-    const SignatureInformations& SignatureInformations,
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment );
+// Query value from user.
+int QuerySelectNumber( int nMin, int nMax );
 
-::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >
-    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment  , BOOL nType);
+// Ask to verify the signature
+long QueryVerifySignature();
+
+// Open In/Output Stream
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > OpenInputStream( const ::rtl::OUString& rStreamName );
+::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > OpenOutputStream( const ::rtl::OUString& rStreamName );
+
+::rtl::OUString getSignatureInformations( const SignatureInformations& SignatureInformations, ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment );
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment, BOOL nType);
