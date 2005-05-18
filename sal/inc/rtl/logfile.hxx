@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:28:03 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 10:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,11 @@ namespace rtl
             rtl_logfile_longTrace( "| : %s\n", string )
 #define RTL_LOGFILE_PRODUCT_CONTEXT( instance, name ) \
             ::rtl::Logfile instance( name )
+#define RTL_LOGFILE_PRODUCT_TRACE1( frmt, arg1 ) \
+             rtl_logfile_longTrace( "| : " ); \
+             rtl_logfile_trace( frmt, arg1 ); \
+             rtl_logfile_trace( "\n" )
+
 
 #endif
 
