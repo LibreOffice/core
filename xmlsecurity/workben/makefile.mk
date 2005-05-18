@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 18:19:34 $
+#   last change: $Author: rt $ $Date: 2005-05-18 10:10:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,13 +100,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
 
-.IF "$(GUI)"=="WNT"
-#APP1STDLIBS+= "libxmlsec.lib" "helper.lib" "dialogs.lib" "xsec_xmlsec.lib"
-APP1STDLIBS+= "xsec_xmlsec.lib"
-.ELSE
-#APP1STDLIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lhelper" "-ldialogs" "-lxsec_xmlsec"
-APP1STDLIBS+= "-lxsec_xmlsec"
-.ENDIF
 
 
 # --- Targets ------------------------------------------------------
