@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:33:28 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,28 @@ SalKDEDisplay::SalKDEDisplay( Display* pDisp, Visual* pVisual, Colormap aColMap 
 
 SalKDEDisplay::~SalKDEDisplay()
 {
-    KStartupInfo::appStarted();
+    // in case never a frame opened
+    static_cast<KDEXLib*>(GetXLib())->doStartup();
+    // clean up own members
+    doDestruct();
+    // prevent SalDisplay from closing KApplication's display
+    pDisp_ = NULL;
 }
 
 /***************************************************************************
  * class KDEXLib                                                           *
  ***************************************************************************/
+
+KDEXLib::~KDEXLib()
+{
+    // properly deinitialize KApplication
+    delete (KApplication*)m_pApplication;
+    // free the faked cmdline arguments no longer needed by KApplication
+    for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
+        free( m_pFreeCmdLineArgs[i] );
+    delete [] m_pFreeCmdLineArgs;
+    delete [] m_pAppCmdLineArgs;
+}
 
 void KDEXLib::Init()
 {
@@ -149,8 +165,7 @@ void KDEXLib::Init()
             "kendy@artax.karlin.mff.cuni.cz",
             "http://artax.karlin.mff.cuni.cz/~kendy" );
 
-    int nFakeArgc = 1;
-    char** pFakeArgv = NULL;
+    m_nFakeCmdLineArgs = 1;
     USHORT nIdx;
     vos::OExtCommandLine aCommandLine;
     int nParams = aCommandLine.getCommandArgCount();
@@ -160,28 +175,37 @@ void KDEXLib::Init()
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
         aCommandLine.getCommandArg( nIdx, aParam );
-        if ( !pFakeArgv && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
+        if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
         {
             aCommandLine.getCommandArg( nIdx + 1, aParam );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
-            nFakeArgc = 3;
-            pFakeArgv = new char*[ nFakeArgc ];
-            pFakeArgv[ 1 ] = strdup( "-display" );
-            pFakeArgv[ 2 ] = strdup( aDisplay.getStr() );
+            m_nFakeCmdLineArgs = 3;
+            m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
+            m_pFreeCmdLineArgs[ 1 ] = strdup( "-display" );
+            m_pFreeCmdLineArgs[ 2 ] = strdup( aDisplay.getStr() );
         }
     }
-    if ( !pFakeArgv )
-        pFakeArgv = new char*[ nFakeArgc ];
+    if ( !m_pFreeCmdLineArgs )
+        m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
 
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
-    pFakeArgv[0] = strdup( rtl::OUStringToOString( aBin, osl_getThreadTextEncoding() ).getStr() );
+    rtl::OString aExec = rtl::OUStringToOString( aBin, osl_getThreadTextEncoding() );
+    m_pFreeCmdLineArgs[0] = strdup( aExec.getStr() );
 
-    KCmdLineArgs::init( nFakeArgc, pFakeArgv, kAboutData );
+    // make a copy of the string list for freeing it since
+    // KApplication manipulates the pointers inside the argument vector
+    // note: KApplication bad !
+    m_pAppCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
+    for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
+        m_pAppCmdLineArgs[i] = m_pFreeCmdLineArgs[i];
+
+    KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
 
     KApplication::disableAutoDcopRegistration();
-    new KApplication();
+    m_pApplication = new KApplication();
+    kapp->disableSessionManagement();
 
     Display* pDisp = QPaintDevice::x11AppDisplay();
 
@@ -202,6 +226,18 @@ void KDEXLib::Init()
     SetIgnoreXErrors( bOldErrorSetting );
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
+}
+
+void KDEXLib::doStartup()
+{
+    if( ! m_bStartupDone )
+    {
+        KStartupInfo::appStarted();
+        m_bStartupDone = true;
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "called KStartupInfo::appStarted()\n" );
+        #endif
+    }
 }
 
 /**********************************************************************
