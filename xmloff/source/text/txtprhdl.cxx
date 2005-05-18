@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:07:09 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,8 +946,12 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
                rStrExpValue = sVal;
         }
         else if( bHori &&
-                 ( IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_LEFT_PAGES ) ||
-                   IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_RIGHT_PAGES ) ))
+                 // --> OD 2005-05-12 #i49139#
+                 // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+                 // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+                 ( IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_EVEN ) ||
+                   IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_ODD ) ))
+                 // <--
         {
             rStrExpValue = GetXMLToken( XML_HORIZONTAL );
         }
@@ -1429,10 +1433,16 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_VERTICAL, sal_False );
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT:
-        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_LEFT_PAGES, sal_True );
+        // --> OD 2005-05-12 #i49139#
+        // XML_HORIZONTAL_ON_LEFT_PAGES is replaced by XML_HORIZONTAL_ON_EVEN.
+        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_EVEN, sal_True );
+        // <--
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT:
-        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_RIGHT_PAGES, sal_True );
+        // --> OD 2005-05-12 #i49139#
+        // XML_HORIZONTAL_ON_RIGHT_PAGES is replaced by XML_HORIZONTAL_ON_ODD.
+        pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_ODD, sal_True );
+        // <--
         break;
     case XML_TYPE_TEXT_CLIP:
         pHdl = new XMLClipPropertyHandler;
