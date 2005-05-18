@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:32:39 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 07:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,72 +395,36 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxObjectShell::CreateVersionByName_Impl( SfxMedium& rMedium,
-                                                const ::rtl::OUString& aVersionName,
-                                                const ::rtl::OUString& aPasswd )
+::rtl::OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
 {
-    sal_Bool bResult = sal_False;
-
     ::rtl::OUString aTempURL = ::utl::TempFile().GetURL();
 
     DBG_ASSERT( aTempURL.getLength(), "Can't create a temporary file!\n" );
     if ( aTempURL.getLength() )
     {
-        // the storage existance must be checked by the caller
-        uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
-
         try
         {
             uno::Reference< embed::XStorage > xTempStorage =
                 ::comphelper::OStorageHelper::GetStorageFromURL( aTempURL, embed::ElementModes::READWRITE );
 
-              // save the new version to the storage, perhaps also with password if the root storage is password protected
-            if ( aPasswd.getLength() )
-            {
-                // the following code must throw an exception in case of failure
-                ::comphelper::OStorageHelper::SetCommonStoragePassword( xTempStorage, aPasswd );
-            }
+            // the password will be transfered from the xStorage to xTempStorage by storage implemetation
+            xStorage->copyToStorage( xTempStorage );
 
-              // save again, now as a version, use the target medium as a transport medium
-              // this should be changed in the future, using a different medium seems to be better
-              rMedium.SetStorage_Impl( xTempStorage );
-              if ( SaveAsOwnFormat( rMedium ) )
-            {
-                uno::Reference< embed::XTransactedObject > xTransact( xTempStorage, uno::UNO_QUERY );
-                DBG_ASSERT( xTransact.is(), "The storage implementation must implement XTransactedObject!" );
-                if ( xTransact.is() )
-                    xTransact->commit();
-
-                bResult = sal_True;
-            }
-
-            // the temporary storage will be closed by refcounting
+            // the temporary storage was commited by the previous method and it will die by refcount
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "Setting of common encryption key failed!" );
+            DBG_ERROR( "Creation of a storage copy is failed!" );
+            ::utl::UCBContentHelper::Kill( aTempURL );
+
             aTempURL = ::rtl::OUString();
 
             // TODO/LATER: may need error code setting based on exception
             SetError( ERRCODE_IO_GENERAL );
         }
-
-              // reconnect medium to "old" storage
-        rMedium.SetStorage_Impl( xMedStorage );
-
-              // compress stream and store it into the root storage
-        if ( bResult )
-            bResult = PutURLContentsToVersionStream_Impl( aTempURL, xMedStorage, aVersionName );
-
-        ::utl::UCBContentHelper::Kill( aTempURL );
-    }
-    else
-    {
-        // TODO/LATER: error handling?
-        SetError( ERRCODE_IO_GENERAL );
     }
 
-    return bResult;
+    return aTempURL;
 }
 
 //-------------------------------------------------------------------------
@@ -1464,18 +1428,34 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         const SfxFilter* pFilter = rMedium.GetFilter();
 
+        const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
+                SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
+        ::rtl::OUString aTmpVersionURL;
+
         if ( bOk )
         {
             bOk = sal_False;
+            // currently the case that the storage is the same should be impossible
             if ( xMedStorage == GetStorage() )
+            {
+                OSL_ENSURE( !pVersionItem, "This scenario is impossible currently!\n" );
                 // usual save procedure
                 bOk = Save();
+            }
             else
+            {
                 // save to target
                 bOk = SaveAsOwnFormat( rMedium );
+                if ( bOk && pVersionItem )
+                {
+                    aTmpVersionURL = CreateTempCopyOfStorage_Impl( xMedStorage );
+                    bOk = ( aTmpVersionURL.getLength() > 0 );
+                }
+            }
         }
 
-        if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+
+        if ( bOk && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
             // store the thumbnail representation image
             // TODO: handle the case when document is encrypted and/or signed
@@ -1528,10 +1508,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 }
             }
 
-            // look for a "version" parameter
-            const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
-                SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
-
             if ( bOk && pVersionItem )
             {
                 // store a version also
@@ -1565,7 +1541,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     // the version list must have been transferred from the "old" medium before
                     rMedium.AddVersion_Impl( aInfo );
                     rMedium.SaveVersionList_Impl( sal_True );
-                    bOk = CreateVersionByName_Impl( rMedium, aInfo.Identifier, aPasswd );
+                    bOk = PutURLContentsToVersionStream_Impl( aTmpVersionURL, xMedStorage, aInfo.Identifier );
                 }
             }
                else if ( bOk && pImp->bIsSaving )
@@ -1573,6 +1549,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 rMedium.SaveVersionList_Impl( sal_True );
             }
         }
+
+        if ( aTmpVersionURL.getLength() )
+            ::utl::UCBContentHelper::Kill( aTmpVersionURL );
     }
     else
     {
