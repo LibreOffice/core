@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:08:17 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ void XMLSignatureHelper::SetX509Certificate(
 
 void XMLSignatureHelper::SetX509Certificate(
         sal_Int32 nSecurityId,
-        const sal_Int32 nSecurityEnvironmentIndex,
+        sal_Int32 nSecurityEnvironmentIndex,
         const rtl::OUString& ouX509IssuerName,
         const rtl::OUString& ouX509SerialNumber)
 {
