@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:10:27 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWasPreedit;
     bool                            m_bIgnoreCommit;
+    bool                            m_bIgnorePreedit;
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
