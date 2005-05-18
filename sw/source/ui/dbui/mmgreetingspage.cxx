@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:29:18 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 11:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#include <helpid.h>
 
 using namespace svt;
 using namespace ::com::sun::star::uno;
@@ -290,6 +291,15 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     m_pNeutralFT = &     m_aNeutralFT;
     m_pNeutralCB    = &m_aNeutralCB;
 
+    m_pPersonalizedCB->SetHelpId(   HID_MM_GREETINGS_CB_PERSONALIZED);
+    m_pFemaleLB->SetHelpId(         HID_MM_GREETINGS_LB_FEMALE      );
+    m_pFemalePB->SetHelpId(         HID_MM_GREETINGS_PB_FEMALE      );
+    m_pMaleLB->SetHelpId(           HID_MM_GREETINGS_LB_MALE        );
+    m_pMalePB->SetHelpId(           HID_MM_GREETINGS_PB_MALE        );
+    m_pFemaleColumnLB->SetHelpId(   HID_MM_GREETINGS_LB_FEMALECOLUMN);
+    m_pFemaleFieldCB->SetHelpId(    HID_MM_GREETINGS_CB_FEMALEFIELD );
+    m_pNeutralCB->SetHelpId(        HID_MM_GREETINGS_CB_NEUTRAL     );
+
     FreeResource();
     m_aGreetingLineCB.SetClickHdl(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
     Link aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
@@ -480,6 +490,15 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_pFemaleFieldCB = & m_aFemaleFieldCB;
     m_pNeutralFT = &     m_aNeutralFT;
     m_pNeutralCB    = &m_aNeutralCB;
+
+    m_pPersonalizedCB->SetHelpId(   HID_MM_BODY_CB_PERSONALIZED     );
+    m_pFemaleLB->SetHelpId(         HID_MM_BODY_LB_FEMALE           );
+    m_pFemalePB->SetHelpId(         HID_MM_BODY_PB_FEMALE           );
+    m_pMaleLB->SetHelpId(           HID_MM_BODY_LB_MALE             );
+    m_pMalePB->SetHelpId(           HID_MM_BODY_PB_MALE             );
+    m_pFemaleColumnLB->SetHelpId(   HID_MM_BODY_LB_FEMALECOLUMN     );
+    m_pFemaleFieldCB->SetHelpId(    HID_MM_BODY_CB_FEMALEFIELD      );
+    m_pNeutralCB->SetHelpId(        HID_MM_BODY_CB_NEUTRAL          );
 
     FreeResource();
     m_aGreetingLineCB.SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
