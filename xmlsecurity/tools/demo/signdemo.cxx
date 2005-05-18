@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:27:59 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 10:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,71 +59,44 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
 #include "util.hxx"
 
-#include <rtl/ustring.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <unotools/streamhelper.hxx>
-
-#include <xmlsecurity/biginteger.hxx>
-//CP : added by CP
-#include <rtl/locale.h>
-#include <osl/nlsupport.h>
-
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-
-//CP : end
-
+#include <stdio.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <cppuhelper/servicefactory.hxx>
 
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssi = com::sun::star::io;
+#include <xmlsecurity/biginteger.hxx>
+#include <xmlsecurity/xmlsignaturehelper.hxx>
+
+using namespace ::com::sun::star;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    if( argc != 6 )
+    if( argc < 4 )
     {
-        fprintf( stderr, "Usage: %s <rdb file> <signature file> <xml stream file> <binary stream file> <cryptoken>\n" , argv[0] ) ;
+        fprintf( stderr, "Usage: %s <signature file> <xml stream file> <binary stream file> [<cryptoken>]\n" , argv[0] ) ;
         return -1 ;
     }
 
-    /*
-     * creates a component factory from local rdb file.
-     */
-    cssu::Reference< cssl::XMultiServiceFactory > xManager = NULL ;
-    cssu::Reference< cssu::XComponentContext > xContext = NULL ;
-    try
-    {
-        xManager = serviceManager( xContext , rtl::OUString::createFromAscii( "local" ), rtl::OUString::createFromAscii( argv[1] ) ) ;
-        OSL_ENSURE( xManager.is() ,
-            "ServicesManager - "
-            "Cannot get service manager" );
+    rtl::OUString aSIGFileName = rtl::OUString::createFromAscii(argv[1]);
+    rtl::OUString aXMLFileName = rtl::OUString::createFromAscii(argv[2]);
+    rtl::OUString aBINFileName = rtl::OUString::createFromAscii(argv[3]);
+    rtl::OUString aCryptoToken;
+    if ( argc >= 5 )
+        aCryptoToken = rtl::OUString::createFromAscii(argv[4]);
 
-        fprintf( stdout , "xManager created.\n" ) ;
-    }
-    catch( cssu::Exception& e )
-    {
-        fprintf( stderr , "Error Message: %s\n" , rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
-        return -1;
-    }
+    uno::Reference< lang::XMultiServiceFactory > xMSF = CreateDemoServiceFactory();
 
     /*
      * creates a signature helper
      */
-    XMLSignatureHelper aSignatureHelper( xManager );
+    XMLSignatureHelper aSignatureHelper( xMSF );
 
     /*
      * creates a security context.
      */
-    bool bInit = aSignatureHelper.Init( rtl::OUString::createFromAscii(argv[5]) );
+    bool bInit = aSignatureHelper.Init( aCryptoToken );
     if ( !bInit )
     {
         fprintf( stderr, "Error initializing security context!\n" );
@@ -135,67 +108,30 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * select a private key certificate
      */
-    int n = 0;
-    int i = 0 , index=-1;
-    n = aSignatureHelper.GetSecurityEnvironmentNumber();
-    if(n == 0)
+    sal_Int32 i;
+    sal_Int32 nEnvCount = aSignatureHelper.GetSecurityEnvironmentNumber();
+    if( nEnvCount == 0 )
     {
         fprintf( stdout, "\nNo SecurityEnvironment found!\n" ) ;
         return -1;
     }
 
-    int * p=NULL;
-    cssu::Reference< ::com::sun::star::security::XCertificate > xPersonalCert;
-    cssu::Sequence< cssu::Reference< cssxc::XSecurityEnvironment > > xSecurityEnvironment(n) ;
+    uno::Sequence< uno::Reference< xml::crypto::XSecurityEnvironment > > xSecurityEnvironments(nEnvCount) ;
+    for( i=0; i < nEnvCount; i++ )
+        xSecurityEnvironments[i] = aSignatureHelper.GetSecurityEnvironmentByIndex(i);
 
-    for(;;)
+    fprintf( stdout, "\nSelect a SecurityEnvironment:\n" ) ;
+    for( i = 0; i < nEnvCount; i ++ )
+        fprintf( stdout, "\n[%d] %s", i+1, rtl::OUStringToOString( xSecurityEnvironments[i]->getSecurityEnvironmentInformation() ,RTL_TEXTENCODING_ASCII_US ).getStr());
+
+    sal_Int32 nEnvIndex = QuerySelectNumber( 1, nEnvCount ) -1;
+
+    uno::Reference< ::com::sun::star::security::XCertificate > xPersonalCert = getCertificateFromEnvironment(xSecurityEnvironments[nEnvIndex], true);
+
+    if ( !xPersonalCert.is() )
     {
-        for(i=0;i<n;i++)
-        {
-            xSecurityEnvironment[i] = aSignatureHelper.GetSecurityEnvironmentByIndex(i);
-            index = i;
-        }
-        fprintf( stdout, "\nSelect a SecurityEnvironment\n" ) ;
-        fprintf( stdout, "================================================================================\n" ) ;
-        for( i = 0; i < n; i ++ )
-        {
-            fprintf( stdout, "[%d]\n%s\n",
-                i+1,
-                rtl::OUStringToOString( xSecurityEnvironment[i]->getSecurityEnvironmentInformation() , RTL_TEXTENCODING_ASCII_US ).getStr());
-        }
-
-        fprintf( stdout, "================================================================================\n" ) ;
-
-        bool bInvalid = false;
-        int sel = 0;
-        do
-        {
-            if (bInvalid)
-            {
-                fprintf( stdout, "Invalid value! \n" );
-            }
-
-            fprintf( stdout, "Select <1-%d>:", n ) ;
-            fflush(stdin);
-            fscanf( stdin, "%d", &sel ) ;
-            bInvalid = true;
-        }while(sel<1 || sel>n);
-
-        index = sel-1;
-
-        xPersonalCert = getCertificateFromEnvironment(xSecurityEnvironment[index] , true);
-
-        if( xPersonalCert != NULL ) break;
-
-        char cExit[5];
-        fprintf( stdout, "\nDo you want select again?[y/n]\n" ) ;
-        fflush(stdin);
-        fscanf( stdin, "%s", cExit ) ;
-        if( cExit[0] != 'Y' &&  cExit[0] != 'y' )
-        {
-            fprintf( stdout, "\nNo Certificate , so exit!\n" ) ;
-            return -3;
-        }
+        fprintf( stdout, "No certificate choosen - exit.\n" );
+        return (-2);
     }
 
     /*
@@ -206,11 +142,7 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * configures the X509 certificate
      */
-    aSignatureHelper.SetX509Certificate(
-        nSecurityId,
-        index ,
-        xPersonalCert->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
+    aSignatureHelper.SetX509Certificate( nSecurityId, nEnvIndex, xPersonalCert->getIssuerName(), bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
 
     /*
      * configures date/time
@@ -220,53 +152,31 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * signs the xml stream
      */
-    rtl::OUString aXMLFileName = rtl::OUString::createFromAscii(argv[3]);
     aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
 
     /*
      * signs the binary stream
      */
-    rtl::OUString aBINFileName = rtl::OUString::createFromAscii(argv[4]);
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
-
-    /*
-     * creates the output stream
-     */
-    rtl::OUString aSIGFileName = rtl::OUString::createFromAscii(argv[2]);
-    SvFileStream* pStream = new SvFileStream( aSIGFileName, STREAM_WRITE );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
-    cssu::Reference< cssi::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
 
     /*
      * creates signature
      */
+    uno::Reference< io::XOutputStream > xOutputStream = OpenOutputStream( aSIGFileName );
     bool bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
 
     if ( !bDone )
     {
-        fprintf( stderr, "Error creating Signature!\n" );
+        fprintf( stderr, "\nSTATUS: Error creating Signature!\n" );
     }
     else
     {
-        fprintf( stdout, "Signature successfully created!\n" );
+        fprintf( stdout, "\nSTATUS: Signature successfully created!\n" );
     }
 
     aSignatureHelper.EndMission();
 
-    // By CP , for correct encoding
-    sal_uInt16 encoding ;
-    rtl_Locale *pLocale = NULL ;
-    osl_getProcessLocale( &pLocale ) ;
-    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-    // CP end
-
-    fprintf( stdout, "------------- Signature details -------------\n" );
-    fprintf( stdout, "%s",
-        rtl::OUStringToOString(
-            getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
-            encoding).getStr());
-
-    fprintf( stdout, "------------- Signature details o-------------\n" );
+    QueryPrintSignatureDetails( aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment() );
 
     return 0;
 }
