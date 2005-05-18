@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:23:28 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 11:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,3 +979,20 @@
 #define HID_NID_NEXT                                (HID_BASE + 2247)
 #define HID_MM_NEXT_PAGE                            (HID_BASE + 2248)
 #define HID_MM_PREV_PAGE                            (HID_BASE + 2249)
+#define HID_MM_GREETINGS_CB_PERSONALIZED            (HID_BASE + 2250)
+#define HID_MM_GREETINGS_LB_FEMALE                  (HID_BASE + 2251)
+#define HID_MM_GREETINGS_PB_FEMALE                  (HID_BASE + 2252)
+#define HID_MM_GREETINGS_LB_MALE                    (HID_BASE + 2253)
+#define HID_MM_GREETINGS_PB_MALE                    (HID_BASE + 2254)
+#define HID_MM_GREETINGS_LB_FEMALECOLUMN            (HID_BASE + 2255)
+#define HID_MM_GREETINGS_CB_FEMALEFIELD             (HID_BASE + 2256)
+#define HID_MM_GREETINGS_CB_NEUTRAL                 (HID_BASE + 2257)
+#define HID_MM_BODY_CB_PERSONALIZED                 (HID_BASE + 2258)
+#define HID_MM_BODY_LB_FEMALE                       (HID_BASE + 2259)
+#define HID_MM_BODY_PB_FEMALE                       (HID_BASE + 2260)
+#define HID_MM_BODY_LB_MALE                         (HID_BASE + 2261)
+#define HID_MM_BODY_PB_MALE                         (HID_BASE + 2262)
+#define HID_MM_BODY_LB_FEMALECOLUMN                 (HID_BASE + 2263)
+#define HID_MM_BODY_CB_FEMALEFIELD                  (HID_BASE + 2264)
+#define HID_MM_BODY_CB_NEUTRAL                      (HID_BASE + 2265)
+
