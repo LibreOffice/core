@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:59:02 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,16 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     OUString aProtectAttrValue;
     XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
+    // --> OD 2005-05-13 #i49139# - attribute <style:mirror> has to be priority
+    // over attribute <style:draw>. The filter from OpenDocument file format
+    // to OpenOffice.org file format produces styles with both attributes.
+    sal_Bool bExistStyleMirror( sal_False );
+    OUString aStyleMirrorAttrValue;
+    sal_Bool bExistDrawMirror( sal_False );
+    OUString aDrawMirrorAttrValue;
+    XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( 0L );
+    // <--
+
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -942,13 +952,45 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
             {
-                const OUString aAttrValue( GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE ) ? XML_HORIZONTAL : XML_NONE ) );
-                pContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                            XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR )),
-                                            aAttrValue);
-
+                // --> OD 2005-05-13 #i49139#
+                aDrawMirrorAttrValue =
+                                GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE )
+                                             ? XML_HORIZONTAL : XML_NONE );
+                bExistDrawMirror = sal_True;
+                pMirrorContext = pContext;
+                // <--
             }
             break;
+        // --> OD 2005-05-12 #i49139#
+        case XML_ATACTION_STYLE_MIRROR_OOO:   // adapts style:mirror values
+            {
+                SvXMLTokenEnumerator aTokenEnum( sAttrValue );
+                OUString aToken;
+                while( aTokenEnum.getNextToken( aToken ) )
+                {
+                    if ( aStyleMirrorAttrValue.getLength() > 0 )
+                    {
+                        aStyleMirrorAttrValue += rtl::OUString::createFromAscii( " " );
+                    }
+
+                    if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
+                    {
+                        aStyleMirrorAttrValue += GetXMLToken( XML_HORIZONTAL_ON_EVEN );
+                    }
+                    else if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_RIGHT_PAGES ) )
+                    {
+                        aStyleMirrorAttrValue += GetXMLToken( XML_HORIZONTAL_ON_ODD );
+                    }
+                    else
+                    {
+                        aStyleMirrorAttrValue += aToken;
+                    }
+                }
+                bExistStyleMirror = sal_True;
+                pMirrorContext = pContext;
+            }
+            break;
+        // <--
         case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
             {
                 double fValue = sAttrValue.toDouble();
@@ -965,6 +1007,23 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         }
     }
+
+    // --> OD 2005-05-13 #i49139#
+    if ( bExistStyleMirror )
+    {
+        pMirrorContext->AddAttribute(
+                        GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR ) ),
+                        aStyleMirrorAttrValue);
+    }
+    else if ( bExistDrawMirror )
+    {
+        pMirrorContext->AddAttribute(
+                        GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR ) ),
+                        aDrawMirrorAttrValue);
+    }
+    // <--
 
     if( bMoveProtect || bSizeProtect || aProtectAttrValue.getLength() )
     {
