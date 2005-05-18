@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multisigdemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-28 02:27:50 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 10:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,19 +64,14 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <unotools/streamhelper.hxx>
 
 #include <xmlsecurity/biginteger.hxx>
+#include <xmlsecurity/xmlsignaturehelper.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssi = com::sun::star::io;
+using namespace ::com::sun::star;
 
 long denyVerifyHandler( void *, void * )
 {
@@ -85,156 +80,102 @@ long denyVerifyHandler( void *, void * )
 
 long startVerifyHandler( void *, void * )
 {
-    char answer;
-    fprintf( stdout,
-        "A signature is found, whether to verify it(y/n)?[y]:" );
-    fscanf( stdin, "%c", &answer);
-
-    return  (answer == 'n')?0:1;
+    return QueryVerifySignature();
 }
 
 int SAL_CALL main( int argc, char **argv )
 {
-    if( argc != 7 )
+    if( argc < 5 )
     {
-        fprintf( stderr, "Usage: %s <rdb file> <signature file 1> <xml stream file> <binary stream file> <cryptoken> <signature file 2>\n" , argv[0] ) ;
+        fprintf( stderr, "Usage: %s <signature file 1> <signature file 2> <xml stream file> <binary stream file> [<cryptoken>]\n" , argv[0] ) ;
         return -1 ;
     }
 
-    /*
-     * creates a component factory from local rdb file.
-     */
-    cssu::Reference< cssl::XMultiServiceFactory > xManager = NULL ;
-    cssu::Reference< cssu::XComponentContext > xContext = NULL ;
-    try
-    {
-        xManager = serviceManager( xContext , rtl::OUString::createFromAscii( "local" ), rtl::OUString::createFromAscii( argv[1] ) ) ;
-        OSL_ENSURE( xManager.is() ,
-            "ServicesManager - "
-            "Cannot get service manager" );
+    uno::Reference< lang::XMultiServiceFactory > xMSF = CreateDemoServiceFactory();
 
-        fprintf( stdout , "xManager created.\n" ) ;
-    }
-    catch( cssu::Exception& e )
-    {
-        fprintf( stderr , "Error Message: %s\n" , rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
-        return -1;
-    }
-
+    rtl::OUString aSIGFileName = rtl::OUString::createFromAscii(argv[1]);
+    rtl::OUString aSIGFileName2 = rtl::OUString::createFromAscii(argv[2]);
     rtl::OUString aXMLFileName = rtl::OUString::createFromAscii(argv[3]);
     rtl::OUString aBINFileName = rtl::OUString::createFromAscii(argv[4]);
-    rtl::OUString aSIGFileName = rtl::OUString::createFromAscii(argv[2]);
-    rtl::OUString aSIGFileName2 = rtl::OUString::createFromAscii(argv[6]);
+    rtl::OUString aCryptoToken;
+    if ( argc >= 7 )
+        aCryptoToken = rtl::OUString::createFromAscii(argv[6]);
+
     sal_Int32 nSecurityId;
-    SvFileStream* pStream;
-    ULONG nBytes;
-    SvLockBytesRef xLockBytes;
-    cssu::Reference< cssi::XOutputStream > xOutputStream;
-    cssu::Reference< cssi::XInputStream > xInputStream;
+    uno::Reference< io::XOutputStream > xOutputStream;
+    uno::Reference< io::XInputStream > xInputStream;
     bool bDone;
     SignatureInformations signatureInformations;
-    cssu::Reference< ::com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler;
+    uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler;
 
-    XMLSignatureHelper aSignatureHelper( xManager );
+    // -------- START -------
 
-    bool bInit = aSignatureHelper.Init( rtl::OUString::createFromAscii(argv[5]) );
+    XMLSignatureHelper aSignatureHelper( xMSF );
+
+    bool bInit = aSignatureHelper.Init( aCryptoToken );
     if ( !bInit )
     {
         fprintf( stderr, "Error initializing security context!\n" );
         return -1;
     }
 
-    fprintf( stdout, "------ Mission 1 : create the first signature file ...\n");
+    fprintf( stdout, "\n\nTEST MISSION 1: Create the first signature file\n");
 
     aSignatureHelper.StartMission();
 
     /*
      * select a private key certificate
      */
-    cssu::Reference< cssxc::XSecurityEnvironment > xSecurityEnvironment = aSignatureHelper.GetSecurityEnvironment();
-    cssu::Sequence< cssu::Reference< ::com::sun::star::security::XCertificate > > xPersonalCerts
-        = xSecurityEnvironment->getPersonalCertificates() ;
+    uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnvironment = aSignatureHelper.GetSecurityEnvironment();
+    uno::Sequence< uno::Reference< ::com::sun::star::security::XCertificate > > xPersonalCerts = xSecurityEnvironment->getPersonalCertificates() ;
 
-    nSecurityId = aSignatureHelper.GetNewSecurityId();
+    fprintf( stdout, "\nPlease select two certificates:\n" );
 
-    /*
-     * use no.3 certificate to configure the X509 certificate
-     */
-    aSignatureHelper.SetX509Certificate(
-        nSecurityId,
-        xPersonalCerts[2]->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCerts[2]->getSerialNumber()));
+    for ( int nSig = 0; nSig < 2; nSig++ )
+    {
+        // New security ID for signature...
+        nSecurityId = aSignatureHelper.GetNewSecurityId();
 
-    aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
-    aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
-    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
-
-
-    /*
-     * creates another signature on the xml stream, use no.1 certificate
-     */
-    nSecurityId = aSignatureHelper.GetNewSecurityId();
-
-    aSignatureHelper.SetX509Certificate(
-        nSecurityId,
-        xPersonalCerts[0]->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCerts[0]->getSerialNumber()));
-    aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
-    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
-
-    /*
-     * creates the output stream
-     */
-    pStream = new SvFileStream( aSIGFileName, STREAM_WRITE );
-    xLockBytes = new SvLockBytes( pStream, TRUE );
-    xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
-
+        // Select certificate...
+        uno::Reference< ::com::sun::star::security::XCertificate > xPersonalCert = getCertificateFromEnvironment( xSecurityEnvironment, true );
+        aSignatureHelper.SetX509Certificate( nSecurityId, xPersonalCert->getIssuerName(), bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
+        aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
+        aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
+        aSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
+    }
     /*
      * creates signature
      */
+    xOutputStream = OpenOutputStream( aSIGFileName );
     bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
     if ( !bDone )
-    {
-        fprintf( stderr, "Error creating Signature!\n" );
-    }
+        fprintf( stderr, "\nSTATUS MISSION 1: Error creating Signature!\n" );
     else
-    {
-        fprintf( stdout, "Signature successfully created!\n" );
-    }
+        fprintf( stdout, "\nSTATUS MISSION 1: Signature successfully created!\n" );
 
     aSignatureHelper.EndMission();
 
 
-    fprintf( stdout, "------ Mission 2 : transfer the second signature to a new signature file ...\n");
+    fprintf( stdout, "\n\nTEST MISSION 2: Transfer the second signature to a new signature file\n");
 
     /*
      * You can use an uninitialized SignatureHelper to perform this mission.
      */
 
     /*
-     * configures the start-verify handler
+     * configures the start-verify handler. Don't need to verify for transfering...
      */
     aSignatureHelper.SetStartVerifySignatureHdl( Link( NULL, denyVerifyHandler ) );
     aSignatureHelper.StartMission();
 
-    pStream = new SvFileStream( aSIGFileName, STREAM_READ );
-    pStream->Seek( STREAM_SEEK_TO_END );
-    nBytes = pStream->Tell();
-    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    xLockBytes = new SvLockBytes( pStream, TRUE );
-    xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
-
+    xInputStream = OpenInputStream( aSIGFileName );
     bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
 
     if ( !bDone )
-    {
-        fprintf( stderr, "Error in reading Signature!\n" );
-    }
+        fprintf( stderr, "\nSTATUS MISSION 2: Error in reading Signature!\n" );
     else
-    {
-        fprintf( stdout, "Signature successfully transfered!\n" );
-    }
+        fprintf( stdout, "\nSTATUS MISSION 2: Signature successfully transfered!\n" );
 
     /*
      * get all signature information
@@ -244,37 +185,28 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * write the first signature into the second signature file.
      */
-    pStream = new SvFileStream( aSIGFileName2, STREAM_WRITE );
-    xLockBytes = new SvLockBytes( pStream, TRUE );
-    xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
 
+    xOutputStream = OpenOutputStream( aSIGFileName2 );
     xDocumentHandler = aSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
-
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[1]);
     aSignatureHelper.CloseDocumentHandler( xDocumentHandler);
     aSignatureHelper.EndMission();
 
-    fprintf( stdout, "------ Mission 3 : insert a new signature to the first signature file ...\n");
+    fprintf( stdout, "\n\nTEST MISSION 3: Insert a new signature to the first signature file\n");
 
     aSignatureHelper.StartMission();
 
     nSecurityId = aSignatureHelper.GetNewSecurityId();
 
-    /*
-     * use no.5 certificate to the new signature
-     */
-    aSignatureHelper.SetX509Certificate(
-        nSecurityId,
-        xPersonalCerts[1]->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCerts[1]->getSerialNumber()));
-
+    // Select certificate...
+    uno::Reference< ::com::sun::star::security::XCertificate > xPersonalCert = getCertificateFromEnvironment( xSecurityEnvironment, true );
+    aSignatureHelper.SetX509Certificate( nSecurityId, xPersonalCert->getIssuerName(), bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
+    aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
-    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
+    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
 
-    pStream = new SvFileStream( aSIGFileName, STREAM_WRITE );
-    xLockBytes = new SvLockBytes( pStream, TRUE );
-    xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
 
+    xOutputStream = OpenOutputStream( aSIGFileName );
     xDocumentHandler = aSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
 
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[0]);
@@ -283,80 +215,47 @@ int SAL_CALL main( int argc, char **argv )
     aSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
     if ( !bDone )
-    {
-        fprintf( stderr, "Error creating Signature!\n" );
-    }
+        fprintf( stderr, "\nSTATUS MISSION 3: Error creating Signature!\n" );
     else
-    {
-        fprintf( stdout, "Signature successfully created!\n" );
-    }
+        fprintf( stdout, "\nSTATUS MISSION 3: Signature successfully created!\n" );
 
     aSignatureHelper.EndMission();
 
-    fprintf( stdout, "------ Mission 4 : verify the first signature file ...\n");
+    fprintf( stdout, "\n\nTEST MISSION 4 : Verify the first signature file\n");
 
     aSignatureHelper.SetStartVerifySignatureHdl( Link( NULL, startVerifyHandler ) );
 
     aSignatureHelper.StartMission();
 
-    pStream = new SvFileStream( aSIGFileName, STREAM_READ );
-    pStream->Seek( STREAM_SEEK_TO_END );
-    nBytes = pStream->Tell();
-    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    xLockBytes = new SvLockBytes( pStream, TRUE );
-    xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
-
+    xInputStream = OpenInputStream( aSIGFileName );
     bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
 
     if ( !bDone )
-    {
-        fprintf( stderr, "Error in Signature!\n" );
-    }
+        fprintf( stderr, "\nSTATUS MISSION 4: Error verifying Signatures!\n" );
     else
-    {
-        fprintf( stdout, "Signatures verified without any problems!\n" );
-    }
+        fprintf( stdout, "\nSTATUS MISSION 4: All choosen Signatures veryfied successfully!\n" );
 
     aSignatureHelper.EndMission();
 
-    fprintf( stdout, "------------- Signature details -------------\n" );
-    fprintf( stdout, "%s",
-        rtl::OUStringToOString(
-            getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
-            RTL_TEXTENCODING_UTF8).getStr());
+    QueryPrintSignatureDetails( aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment() );
 
-    fprintf( stdout, "------ Mission 5 : verify the second signature file ...\n");
+    fprintf( stdout, "\n\nTEST MISSION 5: Verify the second signature file\n");
 
     aSignatureHelper.StartMission();
 
-    pStream = new SvFileStream( aSIGFileName2, STREAM_READ );
-    pStream->Seek( STREAM_SEEK_TO_END );
-    nBytes = pStream->Tell();
-    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    xLockBytes = new SvLockBytes( pStream, TRUE );
-    xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
-
+    xInputStream = OpenInputStream( aSIGFileName2 );
     bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
 
     if ( !bDone )
-    {
-        fprintf( stderr, "Error in Signature!\n" );
-    }
+        fprintf( stderr, "\nSTATUS MISSION 5: Error verifying Signatures!\n" );
     else
-    {
-        fprintf( stdout, "Signatures verified without any problems!\n" );
-    }
+        fprintf( stdout, "\nSTATUS MISSION 5: All choosen Signatures veryfied successfully!\n" );
 
     aSignatureHelper.EndMission();
 
-    fprintf( stdout, "------------- Signature details -------------\n" );
-    fprintf( stdout, "%s",
-        rtl::OUStringToOString(
-            getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
-            RTL_TEXTENCODING_UTF8).getStr());
+    QueryPrintSignatureDetails( aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment() );
 
     return 0;
 }
-
