@@ -1,5 +1,5 @@
-*** misc/xmlsec1-1.2.6/apps/Makefile.in	2004-08-26 14:00:30.000000000 +0800
---- misc/build/xmlsec1-1.2.6/apps/Makefile.in	2005-02-23 11:06:36.000000000 +0800
+*** misc/xmlsec1-1.2.6/apps/Makefile.in	2004-08-26 08:00:30.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/apps/Makefile.in	2005-05-09 19:54:13.132635976 +0200
 ***************
 *** 370,376 ****
   	$(CRYPTO_DEPS) \
@@ -17,8 +17,8 @@
   
   .SUFFIXES:
   .SUFFIXES: .c .lo .o .obj
-*** misc/xmlsec1-1.2.6/configure	2004-08-26 14:00:34.000000000 +0800
---- misc/build/xmlsec1-1.2.6/configure	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/configure	2004-08-26 08:00:34.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/configure	2005-05-09 19:54:13.176632266 +0200
 ***************
 *** 24598,24604 ****
   fi
@@ -106,8 +106,8 @@
           	    		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
                   else
-*** misc/xmlsec1-1.2.6/configure.in	2004-08-26 10:49:24.000000000 +0800
---- misc/build/xmlsec1-1.2.6/configure.in	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/configure.in	2004-08-26 04:49:24.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/configure.in	2005-05-09 19:54:13.179632013 +0200
 ***************
 *** 143,149 ****
   dnl find libxml
@@ -195,8 +195,8 @@
           	dnl do not add -L/usr/lib because compiler does it anyway
       		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2005-02-23 11:06:57.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2005-05-09 19:55:57.192859540 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2005-05-09 19:54:13.180631929 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -272,8 +272,8 @@
 ! #endif /* __XMLSEC_MSCRYPTO_AKMNGR_H__ */
 ! 
 ! 
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	2003-09-26 14:12:46.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	2003-09-26 08:12:46.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	2005-05-09 19:54:13.180631929 +0200
 ***************
 *** 77,82 ****
 --- 77,97 ----
@@ -298,8 +298,8 @@
   
   #endif /* XMLSEC_NO_X509 */
   
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	2005-02-23 11:06:54.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	2005-05-09 19:55:57.148863251 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	2005-05-09 19:54:13.181631844 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -359,8 +359,8 @@
 ! #endif /* __XMLSEC_NSS_AKMNGR_H__ */
 ! 
 ! 
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/app.h	2004-01-13 05:06:14.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/app.h	2004-01-12 22:06:14.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	2005-05-09 19:54:13.181631844 +0200
 ***************
 *** 22,27 ****
 --- 22,30 ----
@@ -384,8 +384,8 @@
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrLoad	(xmlSecKeysMngrPtr mngr,
   									 const char* uri);
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	2005-02-23 11:06:55.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	2005-05-09 19:55:57.165861817 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	2005-05-09 19:54:13.182631760 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -425,8 +425,8 @@
 ! #endif /* __XMLSEC_NSS_CIPHERS_H__ */
 ! 
 ! 
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	2004-01-13 05:06:14.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	2004-01-12 22:06:14.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	2005-05-09 19:54:13.183631676 +0200
 ***************
 *** 264,269 ****
 --- 264,278 ----
@@ -445,8 +445,8 @@
   #endif /* XMLSEC_NO_RSA */
   
   
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	2003-07-30 10:46:35.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	2003-07-30 04:46:35.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	2005-05-09 19:54:13.183631676 +0200
 ***************
 *** 16,21 ****
 --- 16,23 ----
@@ -469,8 +469,8 @@
   XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
   								 const char *uri,
   								 xmlSecKeysMngrPtr keysMngr);
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	2003-07-30 10:46:35.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	2003-07-30 04:46:35.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	2005-05-09 19:54:13.184631591 +0200
 ***************
 *** 3,8 ****
 --- 3,9 ----
@@ -492,8 +492,8 @@
   $(NULL)
   
   install-exec-hook:
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	2004-08-26 14:00:31.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	2005-02-23 11:06:37.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	2004-08-26 08:00:31.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	2005-05-09 19:54:13.184631591 +0200
 ***************
 *** 273,278 ****
 --- 273,279 ----
@@ -515,8 +515,8 @@
   $(NULL)
   
   all: all-am
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	2005-02-23 11:06:56.000000000 +0800
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	2005-05-09 19:55:57.178860721 +0200
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	2005-05-09 19:54:13.185631507 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -703,8 +703,8 @@
 ! 
 ! #endif	/* __XMLSEC_NSS_TOKENS_H__ */
 ! 
-*** misc/xmlsec1-1.2.6/libxml2-config	2005-02-23 11:07:03.000000000 +0800
---- misc/build/xmlsec1-1.2.6/libxml2-config	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/libxml2-config	2005-05-09 19:55:57.284851780 +0200
+--- misc/build/xmlsec1-1.2.6/libxml2-config	2005-05-09 19:54:13.186631423 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -753,8 +753,28 @@
 ! done
 ! 
 ! exit 0
-*** misc/xmlsec1-1.2.6/src/bn.c	2004-06-22 02:33:27.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/bn.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/ltmain.sh	2004-08-26 08:00:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/ltmain.sh	2005-05-09 19:55:51.745319024 +0200
+***************
+*** 3564,3570 ****
+  		fi
+  	      else
+  		eval flag=\"$hardcode_libdir_flag_spec\"
+! 		dep_rpath="$dep_rpath $flag"
+  	      fi
+  	    elif test -n "$runpath_var"; then
+  	      case "$perm_rpath " in
+--- 3564,3571 ----
+  		fi
+  	      else
+  		eval flag=\"$hardcode_libdir_flag_spec\"
+! #	what the ...		
+! #		dep_rpath="$dep_rpath $flag"
+  	      fi
+  	    elif test -n "$runpath_var"; then
+  	      case "$perm_rpath " in
+*** misc/xmlsec1-1.2.6/src/bn.c	2004-06-21 20:33:27.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/bn.c	2005-05-09 19:54:13.188631254 +0200
 ***************
 *** 170,177 ****
    */
@@ -1320,8 +1340,8 @@
       }
   
       return(0);
-*** misc/xmlsec1-1.2.6/src/dl.c	2003-10-29 23:57:20.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/dl.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/dl.c	2003-10-29 16:57:20.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/src/dl.c	2005-05-09 19:54:13.189631170 +0200
 ***************
 *** 329,334 ****
 --- 329,338 ----
@@ -1347,8 +1367,8 @@
   }
   
 --- 354,359 ----
-*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	2005-02-23 11:06:59.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	2005-05-09 19:55:57.223856925 +0200
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	2005-05-09 19:54:13.190631085 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -1588,8 +1608,8 @@
 ! 	return( 0 ) ;
 ! }
 ! 
-*** misc/xmlsec1-1.2.6/src/mscrypto/certkeys.c	2004-03-17 13:06:43.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/mscrypto/certkeys.c	2004-03-17 06:06:43.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	2005-05-09 19:54:13.192630917 +0200
 ***************
 *** 41,46 ****
 --- 41,47 ----
@@ -2266,8 +2286,8 @@
   }
   
   static xmlSecKeyDataType
-*** misc/xmlsec1-1.2.6/src/mscrypto/crypto.c	2003-11-12 10:38:51.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/mscrypto/crypto.c	2003-11-12 03:38:51.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	2005-05-09 19:54:13.193630832 +0200
 ***************
 *** 330,342 ****
   BYTE* 
@@ -2299,8 +2319,8 @@
   	return(NULL);
       }
   	
-*** misc/xmlsec1-1.2.6/src/mscrypto/x509.c	2003-09-26 08:58:13.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/mscrypto/x509.c	2003-09-26 02:58:13.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	2005-05-09 19:54:13.195630664 +0200
 ***************
 *** 1572,1577 ****
 --- 1572,1578 ----
@@ -2468,8 +2488,8 @@
       xmlFree(str);
       return(res);
   }
-*** misc/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	2003-09-27 11:12:22.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	2003-09-27 05:12:22.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	2005-05-09 19:54:13.197630495 +0200
 ***************
 *** 125,130 ****
 --- 125,131 ----
@@ -3183,8 +3203,8 @@
   	    }
   	}
   	xmlFree(cName);
-*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	2005-02-23 11:06:58.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	2005-05-09 19:55:57.206858359 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	2005-05-09 19:54:13.199630327 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -3570,8 +3590,8 @@
 ! 	return(0) ;
 ! }
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/ciphers.c	2003-09-26 08:58:15.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/ciphers.c	2003-09-26 02:58:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	2005-05-09 19:54:13.204629905 +0200
 ***************
 *** 1,838 ****
 ! /** 
@@ -5364,8 +5384,8 @@
   }
 ! 
   
-*** misc/xmlsec1-1.2.6/src/nss/crypto.c	2003-10-29 23:57:25.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/crypto.c	2003-10-29 16:57:25.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	2005-05-09 19:54:13.204629905 +0200
 ***************
 *** 130,135 ****
 --- 130,136 ----
@@ -5418,8 +5438,8 @@
   
       return(gXmlSecNssFunctions);
   }
-*** misc/xmlsec1-1.2.6/src/nss/digests.c	2003-09-26 08:58:15.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/digests.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/digests.c	2003-09-26 02:58:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/digests.c	2005-05-09 19:54:13.205629821 +0200
 ***************
 *** 21,27 ****
   #include <xmlsec/transforms.h>
@@ -5515,8 +5535,8 @@
   		return(-1);
   	    }
   	    xmlSecAssert2(ctx->dgstSize > 0, -1);
-*** misc/xmlsec1-1.2.6/src/nss/hmac.c	2003-09-26 08:58:15.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/hmac.c	2003-09-26 02:58:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	2005-05-09 19:54:13.206629736 +0200
 ***************
 *** 23,30 ****
   #include <xmlsec/transforms.h>
@@ -5650,8 +5670,8 @@
   		return(-1);
   	    }
   	    xmlSecAssert2(dgstSize > 0, -1);
-*** misc/xmlsec1-1.2.6/src/nss/keysstore.c	2003-09-26 08:58:15.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/keysstore.c	2003-09-26 02:58:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	2005-05-09 19:54:13.209629483 +0200
 ***************
 *** 1,119 ****
   /** 
@@ -6718,8 +6738,8 @@
 !     return(0);
   }
 + 
-*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	2005-02-23 11:07:00.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	2005-05-09 19:55:57.237855744 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	2005-05-09 19:54:13.211629315 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -7468,8 +7488,8 @@
 ! 
 ! #endif /* XMLSEC_NO_RSA */
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	2005-02-23 11:07:01.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	2005-05-09 19:55:57.250854648 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	2005-05-09 19:54:13.215628977 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -8671,8 +8691,8 @@
 ! 
 ! #endif /* XMLSEC_NO_DES */
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/Makefile.am	2003-09-16 17:43:03.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/Makefile.am	2003-09-16 11:43:03.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	2005-05-09 19:54:13.215628977 +0200
 ***************
 *** 20,40 ****
   	$(NULL)
@@ -8719,8 +8739,8 @@
   	$(NULL)
   
   libxmlsec1_nss_la_LIBADD = \
-*** misc/xmlsec1-1.2.6/src/nss/Makefile.in	2004-08-26 14:00:32.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	2005-02-23 11:06:38.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/Makefile.in	2004-08-26 08:00:32.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	2005-05-09 19:54:51.856370203 +0200
 ***************
 *** 54,62 ****
   	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -8844,8 +8864,8 @@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
-*** misc/xmlsec1-1.2.6/src/nss/pkikeys.c	2004-03-17 13:06:45.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/pkikeys.c	2004-03-17 06:06:45.000000000 +0100
+--- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	2005-05-09 19:54:13.227627965 +0200
 ***************
 *** 5,10 ****
 --- 5,11 ----
@@ -9644,8 +9664,8 @@
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
-*** misc/xmlsec1-1.2.6/src/nss/signatures.c	2003-09-26 08:58:15.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/signatures.c	2003-09-26 02:58:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	2005-05-09 19:54:13.228627881 +0200
 ***************
 *** 199,205 ****
   			xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
@@ -9782,8 +9802,8 @@
   		return(-1);
   	    }
   
-*** misc/xmlsec1-1.2.6/src/nss/symkeys.c	2003-07-21 11:12:52.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/symkeys.c	2003-07-21 05:12:52.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	2005-05-09 19:54:13.232627544 +0200
 ***************
 *** 15,192 ****
   #include <stdio.h>
@@ -11114,8 +11134,8 @@
    *
    * Sets the value of HMAC key data.
    *
-*** misc/xmlsec1-1.2.6/src/nss/tokens.c	2005-02-23 11:07:02.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/tokens.c	2005-05-09 19:55:57.269853046 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	2005-05-09 19:54:13.234627375 +0200
 ***************
 *** 1 ****
 ! dummy
@@ -11664,8 +11684,8 @@
 ! 	return(0);
 ! }
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/x509.c	2003-09-26 11:53:09.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/x509.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/x509.c	2003-09-26 05:53:09.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/x509.c	2005-05-09 19:54:13.237627122 +0200
 ***************
 *** 34,40 ****
   #include <xmlsec/keys.h>
@@ -12773,8 +12793,8 @@
   xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
       SECItem *sn;
 --- 1701,1706 ----
-*** misc/xmlsec1-1.2.6/src/nss/x509vfy.c	2003-09-26 08:58:15.000000000 +0800
---- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/src/nss/x509vfy.c	2003-09-26 02:58:15.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	2005-05-09 19:54:13.239626954 +0200
 ***************
 *** 30,35 ****
 --- 30,36 ----
@@ -13903,8 +13923,8 @@
   
 + #endif /* XMLSEC_NO_X509 */
   
-*** misc/xmlsec1-1.2.6/win32/Makefile.msvc	2004-06-09 22:35:12.000000000 +0800
---- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	2005-02-23 11:06:39.000000000 +0800
+*** misc/xmlsec1-1.2.6/win32/Makefile.msvc	2004-06-09 16:35:12.000000000 +0200
+--- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	2005-05-09 19:54:13.240626869 +0200
 ***************
 *** 223,228 ****
 --- 223,232 ----
