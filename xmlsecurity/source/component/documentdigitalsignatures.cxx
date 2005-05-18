@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:19:50 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,22 +203,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const Reference< ::com::
 
 Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::ImplVerifySignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (RuntimeException)
 {
-    XMLSignatureHelper aSignatureHelper( mxMSF );
-
-    bool bInit = aSignatureHelper.Init( rtl::OUString() );
-
-    DBG_ASSERT( bInit, "Error initializing security context!" );
-
-    if ( !bInit )
-    {
-        Sequence< ::com::sun::star::security::DocumentSignaturesInformation > aInfos(0);
-        return aInfos;
-    }
-
-    aSignatureHelper.SetStorage( rxStorage );
-
-    aSignatureHelper.StartMission();
-
+    // First check for the InputStream, to avoid unnecessary initialization of the security environemnt...
     SignatureStreamHelper aStreamHelper;
     Reference< io::XInputStream > xInputStream = xSignStream;
 
@@ -229,9 +214,24 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
             xInputStream = Reference< io::XInputStream >( aStreamHelper.xSignatureStream, UNO_QUERY );
     }
 
-    if ( xInputStream.is() )
-        aSignatureHelper.ReadAndVerifySignature( xInputStream );
+    if ( !xInputStream.is() )
+        return Sequence< ::com::sun::star::security::DocumentSignaturesInformation >(0);
 
+
+    XMLSignatureHelper aSignatureHelper( mxMSF );
+
+    bool bInit = aSignatureHelper.Init( rtl::OUString() );
+
+    DBG_ASSERT( bInit, "Error initializing security context!" );
+
+    if ( !bInit )
+        return Sequence< ::com::sun::star::security::DocumentSignaturesInformation >(0);
+
+    aSignatureHelper.SetStorage( rxStorage );
+
+    aSignatureHelper.StartMission();
+
+    aSignatureHelper.ReadAndVerifySignature( xInputStream );
 
     aSignatureHelper.EndMission();
 
