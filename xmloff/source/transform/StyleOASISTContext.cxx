@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:12:05 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,32 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
                     {
                         // keep original for writer graphic objects
-                        pAttrList->AddAttribute( rAttrName, rAttrValue );
+                        // --> OD 2005-05-12 #i49139# - adapts attribute values,
+                        OUString aNewAttrValue;
+                        SvXMLTokenEnumerator aTokenEnum( rAttrValue );
+                        OUString aToken;
+                        while( aTokenEnum.getNextToken( aToken ) )
+                        {
+                            if ( aNewAttrValue.getLength() > 0 )
+                            {
+                                aNewAttrValue += rtl::OUString::createFromAscii( " " );
+                            }
+
+                            if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )
+                            {
+                                aNewAttrValue += GetXMLToken( XML_HORIZONTAL_ON_LEFT_PAGES );
+                            }
+                            else if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_ODD ) )
+                            {
+                                aNewAttrValue += GetXMLToken( XML_HORIZONTAL_ON_RIGHT_PAGES );
+                            }
+                            else
+                            {
+                                aNewAttrValue += aToken;
+                            }
+                        }
+                        pAttrList->AddAttribute( rAttrName, aNewAttrValue );
+                        // <--
 
                         // create old draw:mirror for drawing graphic objects
                         OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );
