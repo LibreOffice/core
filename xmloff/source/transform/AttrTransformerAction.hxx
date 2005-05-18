@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:15:01 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@ enum XMLAttrTransformerAction
     XML_ATACTION_SVG_WIDTH_HEIGHT_OOO,   // replace "inch" with "in" and subtracts 1/100th mm
     XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS, // replace "in" with "inch" and adds 1/100th mm
     XML_ATACTION_DRAW_MIRROR_OOO,        // renames draw:mirror to style:mirror and adapts values
+    // --> OD 2005-05-12 #i49139#
+    XML_ATACTION_STYLE_MIRROR_OOO,        // adapts style:mirror values
+    // <--
     XML_ATACTION_DRAW_MIRROR_OASIS,      // renames style:mirror to draw:mirror and adapts values
     XML_ATACTION_GAMMA_OASIS,            // converts percentage to double value
     XML_ATACTION_GAMMA_OOO,              // converts double value to percentage
