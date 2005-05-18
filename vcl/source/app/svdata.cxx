@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:36:45 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ void ImplInitSVData()
     // init global instance data
     memset( pSVData, 0, sizeof( ImplSVData ) );
     pSVData->maHelpData.mbAutoHelpId = sal_True;
+    pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 }
 
 // -----------------------------------------------------------------------
