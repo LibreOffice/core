@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:18:47 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
     :ModalDialog    ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
+    ,maCertsToIgnore( _rCertsToIgnore )
     ,maHintFT       ( this, ResId( FT_HINT_SELECT ) )
     ,maCertLB       ( this, ResId( LB_SIGNATURES ) )
     ,maViewBtn      ( this, ResId( BTN_VIEWCERT ) )
@@ -114,81 +115,121 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
     static long nTabs[] = { 3, 0, 30*CS_LB_WIDTH/100, 60*CS_LB_WIDTH/100 };
     maCertLB.SetTabs( &nTabs[0] );
     maCertLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
-
-    FreeResource();
-
-    mxSecurityEnvironment = _rxSecurityEnvironment;
     maCertLB.SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     maCertLB.SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     maViewBtn.SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
 
-    try
-    {
-        maCerts = mxSecurityEnvironment->getPersonalCertificates();
-    }
-    catch (security::NoPasswordException&)
-    {
-    }
+    FreeResource();
 
-    sal_Int32 nCertificates = maCerts.getLength();
-    sal_Int32 nCertificatesToIgnore = _rCertsToIgnore.size();
-    for( sal_Int32 nCert = nCertificates; nCert; )
-    {
-        uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
-        sal_Bool bIgnoreThis = false;
+    mxSecurityEnvironment = _rxSecurityEnvironment;
+    mbInitialized = FALSE;
 
-        // Do we already use that?
-        if( nCertificatesToIgnore )
-        {
-            rtl::OUString aIssuerName = xCert->getIssuerName();
-            for( sal_Int32 nSig = 0; nSig < nCertificatesToIgnore; ++nSig )
-            {
-                const SignatureInformation& rInf = _rCertsToIgnore[ nSig ];
-                if ( ( aIssuerName == rInf.ouX509IssuerName ) &&
-                     ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
-                {
-                    bIgnoreThis = true;
-                    break;
-                }
-            }
-        }
-
-        if ( !bIgnoreThis )
-        {
-            // Check if we have a private key for this...
-            long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters( xCert );
-
-            if ( !( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) )
-                bIgnoreThis = true;
-
-        }
-
-        if ( bIgnoreThis )
-        {
-            ::comphelper::removeElementAt( maCerts, nCert );
-            nCertificates = maCerts.getLength();
-        }
-    }
-
-    // fill list of certificates; the first entry will be selected
-    for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
-    {
-        String sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
-        sEntry += '\t';
-        sEntry += XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() );
-        sEntry += '\t';
-        sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() );
-        SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
-        pEntry->SetUserData( ( void* )nC ); // missuse user data as index
-    }
-
-    // enable/disable buttons
+    // disable buttons
     CertificateHighlightHdl( NULL );
 }
 
 CertificateChooser::~CertificateChooser()
 {
 }
+
+short CertificateChooser::Execute()
+{
+    // #i48432#
+    // We can't check for personal certificates before raising this dialog,
+    // because the mozilla implementation throws a NoPassword exception,
+    // if the user pressed cancel, and also if the database does not exist!
+    // But in the later case, the is no password query, and the user is confused
+    // that nothing happens when pressing "Add..." in the SignatureDialog.
+
+    // PostUserEvent( LINK( this, CertificateChooser, Initialize ) );
+
+    // PostUserLink behavior is to slow, so do it directly before Execute().
+    // Problem: This Dialog should be visible right now, and the parent should not be accessible.
+    // Show, Update, DIsableInput...
+
+    Window* pMe = this;
+    Window* pParent = GetParent();
+    if ( pParent )
+        pParent->EnableInput( FALSE );
+    pMe->Show();
+    pMe->Update();
+    ImplInitialize();
+    if ( pParent )
+        pParent->EnableInput( TRUE );
+    return ModalDialog::Execute();
+}
+
+// IMPL_LINK( CertificateChooser, Initialize, void*, EMPTYARG )
+void CertificateChooser::ImplInitialize()
+{
+    if ( !mbInitialized )
+    {
+        try
+        {
+            maCerts = mxSecurityEnvironment->getPersonalCertificates();
+        }
+        catch (security::NoPasswordException&)
+        {
+        }
+
+        sal_Int32 nCertificates = maCerts.getLength();
+        sal_Int32 nCertificatesToIgnore = maCertsToIgnore.size();
+        for( sal_Int32 nCert = nCertificates; nCert; )
+        {
+            uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
+            sal_Bool bIgnoreThis = false;
+
+            // Do we already use that?
+            if( nCertificatesToIgnore )
+            {
+                rtl::OUString aIssuerName = xCert->getIssuerName();
+                for( sal_Int32 nSig = 0; nSig < nCertificatesToIgnore; ++nSig )
+                {
+                    const SignatureInformation& rInf = maCertsToIgnore[ nSig ];
+                    if ( ( aIssuerName == rInf.ouX509IssuerName ) &&
+                        ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
+                    {
+                        bIgnoreThis = true;
+                        break;
+                    }
+                }
+            }
+
+            if ( !bIgnoreThis )
+            {
+                // Check if we have a private key for this...
+                long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters( xCert );
+
+                if ( !( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) )
+                    bIgnoreThis = true;
+
+            }
+
+            if ( bIgnoreThis )
+            {
+                ::comphelper::removeElementAt( maCerts, nCert );
+                nCertificates = maCerts.getLength();
+            }
+        }
+
+        // fill list of certificates; the first entry will be selected
+        for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
+        {
+            String sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
+            sEntry += '\t';
+            sEntry += XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() );
+            sEntry += '\t';
+            sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() );
+            SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
+            pEntry->SetUserData( ( void* )nC ); // missuse user data as index
+        }
+
+        // enable/disable buttons
+        CertificateHighlightHdl( NULL );
+        mbInitialized = TRUE;
+    }
+}
+
 
 uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCertificate()
 {
