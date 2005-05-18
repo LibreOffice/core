@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:20:04 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 09:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,10 +267,6 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 {
     try
     {
-        // Check if we have the password for the key store.
-        // If no, we don't want to raise an empty dialog.
-        maSignatureHelper.GetSecurityEnvironment()->getPersonalCertificates();
-
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
         CertificateChooser aChooser( this, xSecEnv, maCurrentSignatureInformations );
         if ( aChooser.Execute() == RET_OK )
@@ -341,9 +337,6 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 ImplFillSignaturesBox();
             }
         }
-    }
-    catch (NoPasswordException&)
-    {
     }
     catch ( uno::Exception& )
     {
