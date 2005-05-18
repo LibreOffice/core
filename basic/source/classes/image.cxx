@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:09:30 $
+ *  last change: $Author: kz $ $Date: 2005-05-18 13:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,18 @@ BOOL SbiImage::Load( SvStream& r )
                 //r >> aSource;
                 break;
             }
+#ifdef EXTENDED_BINARY_MODULES
+            case B_EXTSOURCE:
+            {
+                for( UINT16 i = 0 ; i < nCount ; i++ )
+                {
+                    String aTmp;
+                    r.ReadByteString( aTmp, eCharSet );
+                    aOUSource += aTmp;
+                }
+                break;
+            }
+#endif
             case B_PCODE:
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
@@ -292,13 +304,32 @@ BOOL SbiImage::Save( SvStream& r )
         nPos = SbiOpenRecord( r, B_SOURCE, 1 );
         String aTmp;
         sal_Int32 nLen = aOUSource.getLength();
+        const sal_Int32 nMaxUnitSize = STRING_MAXLEN - 1;
         if( nLen > STRING_MAXLEN )
-            aTmp = aOUSource.copy( 0, STRING_MAXLEN - 1 );
+            aTmp = aOUSource.copy( 0, nMaxUnitSize );
         else
             aTmp = aOUSource;
         r.WriteByteString( aTmp, eCharSet );
         //r << aSource;
         SbiCloseRecord( r, nPos );
+
+#ifdef EXTENDED_BINARY_MODULES
+        if( nLen > STRING_MAXLEN )
+        {
+            sal_Int32 nRemainingLen = nLen - nMaxUnitSize;
+            UINT16 nUnitCount = UINT16( (nRemainingLen + nMaxUnitSize - 1) / nMaxUnitSize );
+            nPos = SbiOpenRecord( r, B_EXTSOURCE, nUnitCount );
+            for( UINT16 i = 0 ; i < nUnitCount ; i++ )
+            {
+                sal_Int32 nCopyLen =
+                    (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
+                String aTmp = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
+                nRemainingLen -= nCopyLen;
+                r.WriteByteString( aTmp, eCharSet );
+            }
+            SbiCloseRecord( r, nPos );
+        }
+#endif
     }
     // Binaere Daten?
     if( pCode && SbiGood( r ) )
