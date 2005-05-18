@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontsubstconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 10:47:47 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 11:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         bIsEnabled = *(sal_Bool*)aValues.getConstArray()[0].getValue();
 
     OUString sPropPrefix(C2U(cFontPairs));
-    Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix);
+    Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix, CONFIG_NAME_LOCAL_PATH);
     const OUString* pNodeNames = aNodeNames.getConstArray();
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();
