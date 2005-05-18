@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:37:15 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 11:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,3 +391,22 @@ hidspecial HID_MM_CUSTOMFIELDS                             { HelpID = HID_MM_CUS
 hidspecial HID_MM_MAILSTATUS_TLB                           { HelpID = HID_MM_MAILSTATUS_TLB ;};
 hidspecial HID_MM_NEXT_PAGE                                { HelpID = HID_MM_NEXT_PAGE ;};
 hidspecial HID_MM_PREV_PAGE                                { HelpID = HID_MM_PREV_PAGE ;};
+hidspecial HID_MM_GREETINGS_CB_PERSONALIZED              { HelpID = HID_MM_GREETINGS_CB_PERSONALIZED ;};
+hidspecial HID_MM_GREETINGS_LB_FEMALE                    { HelpID = HID_MM_GREETINGS_LB_FEMALE       ;};
+hidspecial HID_MM_GREETINGS_PB_FEMALE                    { HelpID = HID_MM_GREETINGS_PB_FEMALE       ;};
+hidspecial HID_MM_GREETINGS_LB_MALE                      { HelpID = HID_MM_GREETINGS_LB_MALE         ;};
+hidspecial HID_MM_GREETINGS_PB_MALE                      { HelpID = HID_MM_GREETINGS_PB_MALE         ;};
+hidspecial HID_MM_GREETINGS_LB_FEMALECOLUMN              { HelpID = HID_MM_GREETINGS_LB_FEMALECOLUMN ;};
+hidspecial HID_MM_GREETINGS_CB_FEMALEFIELD               { HelpID = HID_MM_GREETINGS_CB_FEMALEFIELD  ;};
+hidspecial HID_MM_GREETINGS_CB_NEUTRAL                   { HelpID = HID_MM_GREETINGS_CB_NEUTRAL      ;};
+hidspecial HID_MM_BODY_CB_PERSONALIZED                   { HelpID = HID_MM_BODY_CB_PERSONALIZED      ;};
+hidspecial HID_MM_BODY_LB_FEMALE                         { HelpID = HID_MM_BODY_LB_FEMALE            ;};
+hidspecial HID_MM_BODY_PB_FEMALE                         { HelpID = HID_MM_BODY_PB_FEMALE            ;};
+hidspecial HID_MM_BODY_LB_MALE                           { HelpID = HID_MM_BODY_LB_MALE              ;};
+hidspecial HID_MM_BODY_PB_MALE                           { HelpID = HID_MM_BODY_PB_MALE              ;};
+hidspecial HID_MM_BODY_LB_FEMALECOLUMN                   { HelpID = HID_MM_BODY_LB_FEMALECOLUMN      ;};
+hidspecial HID_MM_BODY_CB_FEMALEFIELD                    { HelpID = HID_MM_BODY_CB_FEMALEFIELD       ;};
+hidspecial HID_MM_BODY_CB_NEUTRAL                        { HelpID = HID_MM_BODY_CB_NEUTRAL           ;};
+hidspecial HID_MM_LAYOUT_PAGE                            { HelpID = HID_MM_LAYOUT_PAGE ;};
+hidspecial HID_MM_GREETINGSPAGE                          { HelpID = HID_MM_GREETINGSPAGE;};
+
