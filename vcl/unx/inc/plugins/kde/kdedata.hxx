@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:33:08 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ public:
     virtual SalGraphics* GetGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void UpdateSettings( AllSettings& rSettings );
+    virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };
 
 class KDESalInstance : public X11SalInstance
@@ -121,10 +122,23 @@ public:
 
 class KDEXLib : public SalXLib
 {
+    bool            m_bStartupDone;
+    void*           m_pApplication;
+    char**          m_pFreeCmdLineArgs;
+    char**          m_pAppCmdLineArgs;
+    int             m_nFakeCmdLineArgs;
 public:
-    KDEXLib() : SalXLib() {}
-    virtual ~KDEXLib() {}
+    KDEXLib() : SalXLib(),
+        m_bStartupDone( false ),
+        m_pApplication( NULL ),
+        m_pFreeCmdLineArgs( NULL ),
+        m_pAppCmdLineArgs( NULL ),
+        m_nFakeCmdLineArgs( 0 )
+        {}
+    virtual ~KDEXLib();
     virtual void Init();
+
+    void doStartup();
 };
 
 #endif // _VCL_KDEDATA_HXX
