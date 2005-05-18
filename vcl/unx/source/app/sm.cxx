@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:26:57 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ class ICEConnectionObserver
 public:
 
     static void activate();
+    static void deactivate();
     static void lock();
     static void unlock();
     static void wakeup();
@@ -494,6 +495,7 @@ void SessionManagerClient::close()
         SmcCloseConnection( aSmcConnection, 0, NULL );
         SMprintf( "SmcConnection closed\n" );
         ICEConnectionObserver::unlock();
+        ICEConnectionObserver::deactivate();
 #endif
         aSmcConnection = NULL;
     }
@@ -575,6 +577,35 @@ void ICEConnectionObserver::activate()
 #ifdef USE_SM_EXTENSION
         IceAddConnectionWatch( ICEWatchProc, NULL );
 #endif
+    }
+}
+
+void ICEConnectionObserver::deactivate()
+{
+    if( bIsWatching )
+    {
+        lock();
+        bIsWatching = FALSE;
+#ifdef USE_SM_EXTENSION
+        IceRemoveConnectionWatch( ICEWatchProc, NULL );
+#endif
+        nConnections = 0;
+        if( ICEThread )
+        {
+            osl_terminateThread( ICEThread );
+            wakeup();
+        }
+        unlock();
+        if( ICEThread )
+        {
+            osl_joinWithThread( ICEThread );
+            osl_destroyThread( ICEThread );
+            close( nWakeupFiles[1] );
+            close( nWakeupFiles[0] );
+            ICEThread = NULL;
+        }
+        osl_destroyMutex( ICEMutex );
+        ICEMutex = NULL;
     }
 }
 
