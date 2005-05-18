@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:16:24 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,8 @@ private:
     void            ImplCreatePopup( BOOL bPreSelectFirst );
     BOOL            ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu = TRUE );
     Rectangle       ImplGetItemRect( USHORT nPos );
+
+    void            ImplInitStyleSettings();
 
                     DECL_LINK( CloserHdl, PushButton* );
                     DECL_LINK( FloatHdl, PushButton* );
@@ -4571,6 +4573,8 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
     aHideBtn.SetSymbol( SYMBOL_HIDE );
     aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
+
+    ImplInitStyleSettings();
 }
 
 MenuBarWindow::~MenuBarWindow()
@@ -5218,6 +5222,21 @@ void MenuBarWindow::ImplLayoutChanged()
         pMenu->ImplKillLayoutData();
 }
 
+void MenuBarWindow::ImplInitStyleSettings()
+{
+    if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
+        IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+    {
+        Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
+        if( aHighlightTextColor != Color( COL_TRANSPARENT ) )
+        {
+            StyleSettings aStyle = maSettings.GetStyleSettings();
+            aStyle.SetMenuHighlightTextColor( aHighlightTextColor );
+            maSettings.SetStyleSettings( aStyle );
+        }
+    }
+}
+
 void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -5228,6 +5247,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplLayoutChanged();
+        ImplInitStyleSettings();
     }
 }
 
