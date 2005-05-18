@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filefmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: kz $ $Date: 2005-05-18 13:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,11 @@ class SvStream;
 #define B_LINERANGES    0x524C      // LR line ranges for publics
 #define B_MODEND        0x454D      // ME module end
 #define B_SBXOBJECTS    0x5853      // SX SBX objects
+
+#define EXTENDED_BINARY_MODULES
+#ifdef  EXTENDED_BINARY_MODULES
+#define B_EXTSOURCE     0x5345      // ES extended source
+#endif
 
 // Ein Library Record enthaelt nur Module Records
 //  UINT16 Kennung BL
