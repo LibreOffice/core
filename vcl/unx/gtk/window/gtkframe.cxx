@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-06 09:19:29 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ void GtkSalFrame::InitCommon()
     m_pIMContext        = NULL;
     m_bWasPreedit       = false;
     m_bIgnoreCommit     = false;
+    m_bIgnorePreedit    = false;
     m_aPrevKeyPresses.clear();
     m_nPrevKeyPresses   = 0;
     m_hBackgroundPixmap = None;
@@ -626,15 +627,15 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
     m_nStyle = SAL_FRAME_STYLE_CHILD;
     InitCommon();
-     // #i41820#
-     int x_ret, y_ret;
-     unsigned int w, h, bw, d;
-     XLIB_Window aRoot, aParent;
-     XGetGeometry( getDisplay()->GetDisplay(), pSysData->aWindow,
-                   &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
-     maGeometry.nWidth   = w;
-     maGeometry.nHeight  = h;
-     gtk_window_resize( m_pWindow, w, h );
+    // #i41820#
+    int x_ret, y_ret;
+    unsigned int w, h, bw, d;
+    XLIB_Window aRoot;
+    XGetGeometry( getDisplay()->GetDisplay(), pSysData->aWindow,
+                  &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
+    maGeometry.nWidth   = w;
+    maGeometry.nHeight  = h;
+    gtk_window_resize( m_pWindow, w, h );
     XReparentWindow( getDisplay()->GetDisplay(),
                      GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
                      (XLIB_Window)pSysData->aWindow,
@@ -713,7 +714,7 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
     Size aSize = pSalBitmap->GetSize();
     g_return_val_if_fail( pSalAlpha->GetSize() == aSize, NULL );
 
-    ULONG nX, nY;
+    int nX, nY;
     guchar *pPixbufData = (guchar *)g_malloc (4 * aSize.Width() * aSize.Height() );
     guchar *pDestData = pPixbufData;
 
@@ -1465,6 +1466,7 @@ void GtkSalFrame::createIMContext()
 {
     if( ! m_pIMContext )
     {
+        m_bIgnorePreedit = true;
         m_pIMContext = gtk_im_multicontext_new ();
         g_signal_connect( m_pIMContext, "commit",
                           G_CALLBACK (signalIMCommit), this );
@@ -1482,6 +1484,7 @@ void GtkSalFrame::createIMContext()
         gtk_im_context_set_client_window( m_pIMContext, GTK_WIDGET(m_pWindow)->window );
         gtk_im_context_focus_in( m_pIMContext );
         m_bWasPreedit = false;
+        m_bIgnorePreedit = false;
    }
 }
 
@@ -1521,7 +1524,7 @@ void GtkSalFrame::EndExtTextInput( USHORT nFlags )
     if( m_pIMContext )
     {
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, ":EndExtTextInput\n" );
+        fprintf( stderr, ":EndExtTextInput: delete old context\n" );
         #endif
         // since some IMs won't do a reset on gtk_im_context_reset
         // and not empty their preedit buffer, there does not
@@ -1532,6 +1535,9 @@ void GtkSalFrame::EndExtTextInput( USHORT nFlags )
 
         // destroy old IC
         deleteIMContext();
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, ":EndExtTextInput: create new context\n" );
+        #endif
         // create new IC
         createIMContext();
     }
@@ -1950,6 +1956,9 @@ gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gp
     {
         if( pEvent->in )
         {
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "signalFocus( in )\n" );
+            #endif
             pThis->hardIMReset();
             gtk_im_context_set_client_window( pThis->m_pIMContext, GTK_WIDGET(pThis->m_pWindow)->window );
             gtk_im_context_focus_in( pThis->m_pIMContext );
@@ -2418,6 +2427,8 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
 void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    if( pThis->m_bIgnorePreedit )
+        return;
 
     char*           pText           = NULL;
     PangoAttrList*  pAttrs          = NULL;
@@ -2511,20 +2522,26 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
 
 void GtkSalFrame::signalIMPreeditStart( GtkIMContext* pContext, gpointer frame )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, ":signalImPreeditStart\n" );
-#endif
-//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    if( ! pThis->m_bIgnorePreedit )
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, ":signalImPreeditStart\n" );
+        #endif
+    }
 }
 
 void GtkSalFrame::signalIMPreeditEnd( GtkIMContext* pContext, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, ":signalImPreeditEnd\n" );
-#endif
-    GTK_YIELD_GRAB();
-    pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+    if( ! pThis->m_bIgnorePreedit )
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, ":signalImPreeditEnd\n" );
+        #endif
+        GTK_YIELD_GRAB();
+        pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+    }
 }
 
 gboolean GtkSalFrame::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer frame )
