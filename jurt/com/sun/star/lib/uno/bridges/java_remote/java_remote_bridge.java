@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 14:35:03 $
+ *  last change: $Author: kz $ $Date: 2005-05-18 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.39 $ $ $Date: 2004-10-18 14:35:03 $
+ * @version     $Revision: 1.40 $ $ $Date: 2005-05-18 10:55:21 $
  * @author      Kay Ramme
  * @since       UDK1.0
  */
@@ -171,8 +171,6 @@ public class java_remote_bridge
         }
 
         public Object invoke(Object params[]) {
-            Throwable throwable = null;
-
             try {
                 for (;;) {
                     synchronized (this) {
@@ -261,29 +259,9 @@ public class java_remote_bridge
                     iMessage = null;
                     // this is important to get rid of the job (especially while testing lifecycles)
                 }
+            } catch (Throwable e) {
+                dispose(new DisposedException(e.toString()));
             }
-            catch(EOFException eofException) {
-                if(DEBUG) {
-                    System.err.println(getClass() + " - reading message - exception occurred: \"" + eofException + "\"");
-                    System.err.println(getClass() + " - giving up");
-                }
-
-                throwable = new DisposedException( eofException.getMessage() );
-            }
-            catch(Exception exception) {
-                if(DEBUG) {
-                    System.err.println(getClass() + " - reading message - exception occurred: \"" + exception + "\"");
-                    exception.printStackTrace();
-                    System.err.println(getClass() + " - giving up");
-                }
-                  if(DEBUG)
-                    exception.printStackTrace();
-
-                throwable = new DisposedException( exception.getMessage() );
-            }
-
-            java_remote_bridge.this.dispose(throwable);
-
             return null;
         }
 
