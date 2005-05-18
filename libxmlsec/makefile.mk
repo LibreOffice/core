@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:39:02 $
+#   last change: $Author: rt $ $Date: 2005-05-18 10:10:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,15 @@ CONFIGURE_FLAGS=crypto=$(CRYPTOLIB) xslt=no iconv=no static=no include=$(BASEINC
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
+.IF "$(GUI)"=="UNX"
+.IF "$(OS)$(COM)"=="LINUXGCC"
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+.ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
+.IF "$(OS)$(COM)"=="SOLARISC52"
+LDFLAGS:=-Wl,-R'$$$$ORIGIN'
+.ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
+.EXPORT: LDFLAGS
+.ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
 CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no
