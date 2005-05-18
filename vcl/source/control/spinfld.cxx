@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:06:23 $
+ *  last change: $Author: rt $ $Date: 2005-05-18 08:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,6 +737,8 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         Region aContentUp, aContentDown;
 
         if ( (pDev->GetOutDevType() == OUTDEV_WINDOW) &&
+            // there is just no useful native support for spinfields with dropdown
+            ! (GetStyle() & WB_DROPDOWN) &&
             IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) )
         {
             Window *pWin = (Window*) pDev;
