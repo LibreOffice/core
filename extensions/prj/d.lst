@@ -5,7 +5,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\bin\[^n]*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
