@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:35:45 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,24 @@ sal_Bool SAL_CALL
         return false;
     }
     return false;
+}
+//------------------------------------------------------------------------------
+
+rtl::OUString SAL_CALL
+    MultiStratumBackend::getSchemaVersion(const rtl::OUString& aComponent)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
+{
+    osl::MutexGuard aGuard(mMutex);
+
+    if (checkOkState())
+    {
+        uno::Reference<backenduno::XVersionedSchemaSupplier> xVersionSupplier(mSchemaSupplier,uno::UNO_QUERY);
+        if (xVersionSupplier.is())
+            return xVersionSupplier->getSchemaVersion(aComponent) ;
+    }
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
