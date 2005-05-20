@@ -404,25 +404,25 @@ sub set_childproductnames
     if ( $installer::globals::islinuxrpmbuild )
     {
         $installer::globals::adafilename = "adabas-13.01.00-1.i586.rpm";
-        $installer::globals::javafilename = "jre-1_5_0_01-linux-i586.rpm";
+        $installer::globals::javafilename = "jre-1_5_0_03-linux-i586.rpm";
         $installer::globals::jdsexcludefilename = "jds_excludefiles_linux.txt";
     }
 
     if ( $installer::globals::issolarissparcbuild )
     {
         $installer::globals::adafilename = "SUNWadabas.tar.gz";
-        $installer::globals::javafilename = "SUNWj5rt_1_5_0_01_sparc.tar.gz";
-        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_01_sparc.tar.gz";
-        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_01_sparc.tar.gz";
+        $installer::globals::javafilename = "SUNWj5rt_1_5_0_03_sparc.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_03_sparc.tar.gz";
+        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_03_sparc.tar.gz";
         $installer::globals::jdsexcludefilename = "jds_excludefiles_solaris_sparc.txt";
     }
 
     if ( $installer::globals::issolarisx86build )
     {
         $installer::globals::adafilename = "";
-        $installer::globals::javafilename = "SUNWj5rt_1_5_0_01_x86.tar.gz";
-        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_01_x86.tar.gz";
-        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_01_x86.tar.gz";
+        $installer::globals::javafilename = "SUNWj5rt_1_5_0_03_x86.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_03_x86.tar.gz";
+        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_03_x86.tar.gz";
         $installer::globals::jdsexcludefilename = "jds_excludefiles_solaris_intel.txt";
     }
 
