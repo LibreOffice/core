@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:01:28 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 07:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) 
     ,m_aFolderListName(::rtl::OUString::createFromAscii(getEVOAB_FOLDERLIST_FILE_NAME()))
     ,m_aVersionName(::rtl::OUString::createFromAscii(getEVOAB_VERSION_FILE_NAME()))
     ,m_aFileExt(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(getEVOAB_META_FILE_EXT())))
+    ,m_eSupportedEvoVersion( eUnknown )
 {
     m_aEvoab_CLI_FullPathCommand = getFullPathExportingCommand(_rxFactory);
 
@@ -126,7 +127,7 @@ OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) 
     m_aEvoab_CLI_EffectiveCommand = m_aEvoab_CLI_FullPathCommand;
     m_aTempDir.EnableKillingFile();
 
-    EVO_TRACE_STRING("OEvoabDriver::OEvoabDriver()::m_aEvoab_CLI_FullPathCommand = %s\n", m_aEvoab_CLI_FullPathCommand );
+    EVO_TRACE_STRING("OEvoabDriver::OEvoabDriver()::m_aEvoab_CLI_FullPathCommand = %s", m_aEvoab_CLI_FullPathCommand );
 }
 // static ServiceInfo
 //------------------------------------------------------------------------------
@@ -164,6 +165,81 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const ::rtl::OUString& 
     return xCon;
 }
 // --------------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString lcl_translateProcessErrorMessage( oslProcessError nProcErr)
+    {
+        ::rtl::OUString sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" not executed!."));
+        switch (nProcErr)
+        {
+            case osl_Process_E_None:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed sucessful!"));
+                break;
+            case osl_Process_E_NotFound:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: not found!"));
+                break;
+            case osl_Process_E_NoPermission:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: has no permission!"));
+                break;
+            case osl_Process_E_TimedOut:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: time out!"));
+                break;
+            case osl_Process_E_Unknown:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: unkown reason!"));
+                break;
+            case osl_Process_E_InvalidError:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: invalid error!"));
+                break;
+            default:
+                sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: other reason!"));
+        }
+        return sProcErr;
+    }
+    oslProcessError lcl_execute( const ::rtl::OUString& _rCommand, ::rtl::OUString& _rArgument,
+        const ::rtl::OUString& _rWorkingDir, oslProcessOption _nOptions, oslFileHandle& /*[out]*/ _hStdOut )
+    {
+        oslProcessError nError = osl_Process_E_None;
+
+        EVO_TRACE_STRING("LDriver.cxx::lcl_execute: command    : %s", _rCommand );
+        EVO_TRACE_STRING("LDriver.cxx::lcl_execute: argument   : %s", _rArgument );
+        EVO_TRACE_STRING("LDriver.cxx::lcl_execute: working dir: %s", _rWorkingDir );
+
+        oslProcess hProcess( 0 );
+
+        nError = osl_executeProcess_WithRedirectedIO(
+            _rCommand.pData,
+            &_rArgument.pData,
+            1,
+            _nOptions,
+            0,
+            _rWorkingDir.pData,
+            0,
+            0,
+            &hProcess,
+            NULL,
+            &_hStdOut,
+            NULL
+        );
+        ::rtl::OUString sError = _rCommand + lcl_translateProcessErrorMessage( nError);
+        EVO_TRACE_STRING( "%s", sError );
+
+        if ( nError == osl_Process_E_None )
+        {
+            TimeValue aFiveSeconds;
+            aFiveSeconds.Seconds = 5;
+            aFiveSeconds.Nanosec = 0;
+            oslProcessError nWaitForProcessError = osl_joinProcessWithTimeout( hProcess, &aFiveSeconds );
+            if ( osl_Process_E_None != nWaitForProcessError )
+            {
+                nError = nWaitForProcessError;
+                // TODO: kill the running process?
+            }
+        }
+        return nError;
+    }
+}
+
+// --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
@@ -172,10 +248,13 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
     // here we have to look if we support this url format
     if(acceptsURL_Stat(url))
     {
+        if ( m_eSupportedEvoVersion != eUnknown )
+            return m_eSupportedEvoVersion == eTrue ? sal_True : sal_False;
+
         if(!m_bWorkingDirCreated)
         {
             String sTempDirURL = getTempDirURL();
-            //EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::sTempDirURL = %s\n", sTempDirURL );
+            //EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::sTempDirURL = %s", sTempDirURL );
 
             ::rtl::OUString aTempDirURL(sTempDirURL);
             m_aWorkingDirURL = aTempDirURL;
@@ -185,73 +264,31 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
         ::rtl::OUString aCLICommand = getEvoab_CLI_EffectiveCommand();
         ::rtl::OUString aWorkingDirURL = getWorkingDirURL();
         ::rtl::OUString aArgVersion = ::rtl::OUString::createFromAscii(getEVOAB_CLI_ARG_VERSION());
-        EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aCLICommand = %s\n", aCLICommand );
-        EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aWorkingDirURL = %s\n", aWorkingDirURL );
-        EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aArgVersion = %s\n", aArgVersion );
-        //::rtl::OUString aVerFileName = getEvoVersionFileName();
-        //::rtl::OUString aFullFileName = getWorkingDirURL() + aVerFileName;
-        //EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aVerFileName = %s\n", aVerFileName );
 
-        oslFileHandle aStdout = NULL;
-
-        sal_Bool bSuccess;
-        bSuccess = sal_False;
-        oslProcess aProcess( 0 );
-        oslProcessError nProcErr = osl_Process_E_None;
-        ::rtl::OUString sErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" no.error!"));
-        nProcErr = osl_executeProcess_WithRedirectedIO(aCLICommand.pData,
-                                                    &aArgVersion.pData,
-                                                    1,
-                                                    //osl_Process_SEARCHPATH
-                                                    osl_Process_WAIT,
-                                                        //| osl_Process_HIDDEN,
-                                                    //osl::Security().getHandle(),
-                                                    0,
-                                                    aWorkingDirURL.pData,
-                                                    0,
-                                                    0,
-                                                    &aProcess,
-                                                    NULL,
-                                                    &aStdout,
-                                                    NULL);
-        sErr = aCLICommand + translateProcessErrorMessage( nProcErr);
-        EVO_TRACE_STRING("%s \n", sErr);
+        oslFileHandle hStdout = NULL;
+        oslProcessError nProcErr = lcl_execute( aCLICommand, aArgVersion, aWorkingDirURL, 0, hStdout );
         if(nProcErr != osl_Process_E_None)
         {
             if(doesEvoab_CLI_HavePath())
                 aCLICommand = getEvoab_CLI_Command();
             else
                 aCLICommand = getEvoab_CLI_Path() + getEvoab_CLI_Command();
-            EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aCLICommand = %s\n", aCLICommand );
-
-            nProcErr = osl_executeProcess_WithRedirectedIO(aCLICommand.pData,
-                                                        &aArgVersion.pData,
-                                                        1,
-                                                        osl_Process_SEARCHPATH | osl_Process_WAIT | osl_Process_HIDDEN,
-                                                        0 ,
-                                                        aWorkingDirURL.pData,
-                                                        0,
-                                                        0,
-                                                        &aProcess,
-                                                        NULL,
-                                                        &aStdout,
-                                                        NULL);
+            nProcErr = lcl_execute( aCLICommand, aArgVersion, aWorkingDirURL, osl_Process_SEARCHPATH | osl_Process_HIDDEN, hStdout );
             if ( nProcErr == osl_Process_E_None )
                 m_aEvoab_CLI_EffectiveCommand = aCLICommand;
-            sErr = aCLICommand + translateProcessErrorMessage( nProcErr);
-            EVO_TRACE_STRING("%s \n", sErr);
         }
-        if(nProcErr == osl_Process_E_None)
+
+        if ( hStdout != NULL )
         {
-            OSL_ASSERT( aStdout );
+            OSL_ASSERT( hStdout );
             sal_Char  pBuffer[256];
             sal_uInt64  nBytesRead;
             OSL_ASSERT( pBuffer );
             oslFileError nFileErr = osl_File_E_None;
-            nFileErr = osl_readFile( aStdout, pBuffer, 256, &nBytesRead);
+            nFileErr = osl_readFile( hStdout, pBuffer, 256, &nBytesRead);
             if ( nFileErr != osl_File_E_None )
             {
-                sErr = translateFileErrorMessage( nFileErr);
+                ::rtl::OUString sErr = translateFileErrorMessage( nFileErr);
                 OSL_ENSURE(false, ::rtl::OUStringToOString( sErr, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
             ::rtl::OUString aVersionInfo;
@@ -262,7 +299,7 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
                         ::rtl::OUString( ( sal_Char * )pBuffer,
                         nBytesRead,
                         RTL_TEXTENCODING_UTF8 );
-                EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aVersionInfo = %s\n", aVersionInfo );
+                EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aVersionInfo = %s", aVersionInfo );
                 sal_Int32 nIndex = 0;
                 sal_Bool bNumRetrieved = sal_False;
                 ::rtl::OUString aToken;
@@ -274,7 +311,7 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
                 {
                     aToken = aVersionInfo.getToken( 0, ' ', nIndex );
                     //OSL_TRACE("OEvoabDriver::acceptsURL()::Token:%d", nIndex );
-                    //EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aToken = %s\n", aToken );
+                    //EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aToken = %s", aToken );
                     if( aToken.toChar() >= '0' && aToken.toChar() <= '9' )
                     {
                         bNumRetrieved = sal_True;
@@ -300,10 +337,12 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
             }
             else
                 bRet = sal_False;
+
+            osl_closeFile( hStdout );
         }
-        osl_closeFile( aStdout );
+        m_eSupportedEvoVersion = bRet ? eTrue : eFalse;
     }
-    EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::return, return value = %s\n", ::rtl::OUString::valueOf(bRet) );
+    EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::return, return value = %s", ::rtl::OUString::valueOf(bRet) );
     return bRet;
 }
 
@@ -312,7 +351,7 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
 sal_Bool OEvoabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
 {
 
-    EVO_TRACE_STRING("OEvoabDriver::acceptsURL_Stat()::Scheme = %s\n", url );
+    EVO_TRACE_STRING("OEvoabDriver::acceptsURL_Stat()::Scheme = %s", url );
     // Skip 'sdbc:address: part of URL
     //
     sal_Int32 nLen = url.indexOf(':');
@@ -336,8 +375,8 @@ sal_Bool OEvoabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
         aAddrbookScheme = aAddrbookURI.copy(0, nLen);
 
 
-    EVO_TRACE_STRING("OEvoabDriver::acceptsURL_Stat()::URI = %s\n", aAddrbookURI );
-    EVO_TRACE_STRING("OEvoabDriver::acceptsURL_Stat()::Scheme = %s\n", aAddrbookScheme );
+    EVO_TRACE_STRING("OEvoabDriver::acceptsURL_Stat()::URI = %s", aAddrbookURI );
+    EVO_TRACE_STRING("OEvoabDriver::acceptsURL_Stat()::Scheme = %s", aAddrbookScheme );
 
     return  aAddrbookScheme.compareToAscii( getSDBC_SCHEME_EVOLUTION() ) == 0 ;
 }
@@ -352,7 +391,7 @@ const rtl::OUString OEvoabDriver::getEvoab_CLI_Command() const
     else
         aEvoab_CLI_Command = m_aEvoab_CLI_FullPathCommand.copy(nLen+1);
 
-    EVO_TRACE_STRING( "OEvoabDriver::getEvoab_CLI_Command()::aEvoab_CLI_Command = %s\n", aEvoab_CLI_Command );
+    EVO_TRACE_STRING( "OEvoabDriver::getEvoab_CLI_Command()::aEvoab_CLI_Command = %s", aEvoab_CLI_Command );
 
     return  aEvoab_CLI_Command;
 }
@@ -371,7 +410,7 @@ const rtl::OUString OEvoabDriver::getEvoab_CLI_Path() const
     }
     else
         aEvoab_CLI_Path = m_aEvoab_CLI_FullPathCommand.copy(0, nLen+1);
-    EVO_TRACE_STRING( "OEvoabDriver::getEvoab_CLI_Path()::aEvoab_CLI_Path = %s\n", aEvoab_CLI_Path );
+    EVO_TRACE_STRING( "OEvoabDriver::getEvoab_CLI_Path()::aEvoab_CLI_Path = %s", aEvoab_CLI_Path );
 
     return  aEvoab_CLI_Path;
 }
@@ -390,7 +429,7 @@ const String OEvoabDriver::getEvoFolderListFileURL() const
     ::rtl::OUString aEvoFolderListFileURL;
     aEvoFolderListFileURL = getWorkingDirURL() + getEvoFolderListFileName();
 
-    EVO_TRACE_STRING("OEvoabDriver::getEvoFolderListFileURL(): aEvoFolderListFileURL = %s\n", aEvoFolderListFileURL );
+    EVO_TRACE_STRING("OEvoabDriver::getEvoFolderListFileURL(): aEvoFolderListFileURL = %s", aEvoFolderListFileURL );
     return aEvoFolderListFileURL.getStr();
 }
 
@@ -402,7 +441,7 @@ String OEvoabDriver::getTempDirURL() const
     if((aTempDirURL.lastIndexOf( '/')) != (aTempDirURL.getLength( ) - 1))
         aTempDirURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-    EVO_TRACE_STRING("OEvoabDriver::getTempDirURL(): aTempDirURL = %s\n", aTempDirURL );
+    EVO_TRACE_STRING("OEvoabDriver::getTempDirURL(): aTempDirURL = %s", aTempDirURL );
     return aTempDirURL.getStr();
 }
 //-------------------------------------------------------------------------
@@ -472,34 +511,6 @@ const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_REDIRECT()
 {
     static sal_Char*    EVOAB_CLI_ARG_OUTPUT_REDIRECT = ">";
     return EVOAB_CLI_ARG_OUTPUT_REDIRECT;
-}
-rtl::OUString OEvoabDriver::translateProcessErrorMessage( oslProcessError nProcErr)
-{
-    ::rtl::OUString sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" not executed!."));
-    switch (nProcErr)
-    {
-        case osl_Process_E_None:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed sucessful!"));
-            break;
-        case osl_Process_E_NotFound:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: not found!"));
-            break;
-        case osl_Process_E_NoPermission:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: has no permission!"));
-            break;
-        case osl_Process_E_TimedOut:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: time out!"));
-            break;
-        case osl_Process_E_Unknown:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: unkown reason!"));
-            break;
-        case osl_Process_E_InvalidError:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: invalid error!"));
-            break;
-        default:
-            sProcErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" executed failed: other reason!"));
-    }
-    return sProcErr;
 }
 rtl::OUString OEvoabDriver::translateFileErrorMessage( oslFileError nFileErr)
 {
