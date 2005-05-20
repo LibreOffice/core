@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_calc.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:03:40 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 11:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,3 +903,195 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Printto_Command
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
+
+// "OpenWith" Windows Registry keys for extensions supported by Calc
+
+// .ODS
+RegistryItem gid_Regitem_OpenOffice_ODS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ODS\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .OTS
+RegistryItem gid_Regitem_OpenOffice_OTS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".OTS\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .SXC
+RegistryItem gid_Regitem_OpenOffice_SXC_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".SXC\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .STC
+RegistryItem gid_Regitem_OpenOffice_STC_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".STC\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .DIF
+RegistryItem gid_Regitem_OpenOffice_DIF_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".DIF\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .DBF
+RegistryItem gid_Regitem_OpenOffice_DBF_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".DBF\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .XLS
+RegistryItem gid_Regitem_OpenOffice_XLS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".XLS\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .XLW
+RegistryItem gid_Regitem_OpenOffice_XLW_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".XLW\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .XLT
+RegistryItem gid_Regitem_OpenOffice_XLT_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".XLT\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .RTF
+RegistryItem gid_Regitem_OpenOffice_RTF_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".RTF\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .SDC
+RegistryItem gid_Regitem_OpenOffice_SDC_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".SDC\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .VOR
+RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".VOR\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .SLK
+RegistryItem gid_Regitem_OpenOffice_SLK_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".SLK\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .CSV
+RegistryItem gid_Regitem_OpenOffice_CSV_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".CSV\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .TXT
+RegistryItem gid_Regitem_OpenOffice_TXT_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".TXT\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .HTM
+RegistryItem gid_Regitem_OpenOffice_HTM_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".HTM\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .HTML
+RegistryItem gid_Regitem_OpenOffice_HTML_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".HTML\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .WK1
+RegistryItem gid_Regitem_OpenOffice_WK1_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".WK1\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .WKS
+RegistryItem gid_Regitem_OpenOffice_WKS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".WKS\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .123
+RegistryItem gid_Regitem_OpenOffice_123_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".123\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .XML
+RegistryItem gid_Regitem_OpenOffice_XML_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".XML\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
