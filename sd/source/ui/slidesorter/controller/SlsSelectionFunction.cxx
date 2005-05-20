@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:57:18 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 12:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,7 +968,8 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
             if (mpSubstitutionHandler->HasBeenMoved())
                 mpSubstitutionHandler->Process();
             else
-                SetCurrentPage(*rDescriptor.mpHitDescriptor);
+                if (rDescriptor.mpHitDescriptor != NULL)
+                    SetCurrentPage(*rDescriptor.mpHitDescriptor);
             mpSubstitutionHandler->End();
             break;
 
