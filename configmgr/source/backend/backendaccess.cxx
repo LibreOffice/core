@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.21 $
- *  last change: $Author: obo $ $Date: 2005-03-18 10:35:21 $
+ *  $Revision: 1.22 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #include "configinteractionhandler.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMASUPPLIER_HPP_
-#include <com/sun/star/configuration/backend/XSchemaSupplier.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XVERSIONEDSCHEMASUPPLIER_HPP_
+#include <com/sun/star/configuration/backend/XVersionedSchemaSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
 #include <com/sun/star/configuration/backend/XCompositeLayer.hpp>
@@ -404,16 +404,24 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
     const Logger::Level detail = LogLevel::FINER;
     bool const bLogDetail = logger.isLogging(detail);
 
+    OUString const aSchemaVersion = this->getSchemaVersion(aComponent);
+
     if (logger.isLogging(LogLevel::FINE))
-        logger.fine( OUString::createFromAscii("Reading data for component ") + aComponent,
-                    "readDefaultData()","configmgr::Backend");
+    {
+        rtl::OUStringBuffer aMsg;
+        aMsg.appendAscii("Reading data for component \"").append(aComponent).appendAscii("\"");
+        aMsg.appendAscii(" [version=").append(aSchemaVersion).appendAscii("]");
+
+        logger.fine( aMsg.makeStringAndClear(), "readDefaultData()","configmgr::Backend");
+    }
 
     localehelper::Locale const aRequestedLocale = localehelper::makeLocale(aOptions.getLocale());
     localehelper::LocaleSequence aKnownLocales;
 
     if (bLogDetail) logger.log(detail, "... attempt to read from binary cache", "readDefaultData()","configmgr::Backend");
     bool bCacheHit = mBinaryCache.readComponentData(aComponentData, getServiceFactory(),
-                                                    aComponent, aOptions.getEntity(),
+                                                    aComponent, aSchemaVersion,
+                                                    aOptions.getEntity(),
                                                     aRequestedLocale, aKnownLocales,
                                                     pLayers, nNumLayers, bIncludeTemplates);
 
@@ -439,7 +447,8 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
         {
             if (bLogDetail) logger.log(detail, "... creating binary cache", "readDefaultData()","configmgr::Backend");
             bool bWriteSuccess = mBinaryCache.writeComponentData( aComponentData, getServiceFactory(),
-                                                                  aComponent, aOptions.getEntity(), aKnownLocales,
+                                                                  aComponent, aSchemaVersion,
+                                                                  aOptions.getEntity(), aKnownLocales,
                                                                   pLayers, nNumLayers );
 
             if (!bWriteSuccess)
@@ -808,7 +817,7 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
 
 uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const OUString& aComponent)
 {
-    uno::Reference< backenduno::XSchemaSupplier > xSchemaBackend(mBackend, uno::UNO_QUERY);
+    uno::Reference< backenduno::XSchemaSupplier > xSchemaBackend(mBackend, uno::UNO_QUERY_THROW);
     OSL_ASSERT(xSchemaBackend.is());
 
     uno::Reference< backenduno::XSchema > xSchema = xSchemaBackend->getComponentSchema(aComponent) ;
@@ -825,6 +834,16 @@ uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const OUString& a
     }
 
     return xSchema;
+}
+//------------------------------------------------------------------------------
+
+OUString BackendAccess::getSchemaVersion(const OUString& aComponent)
+{
+    uno::Reference< backenduno::XVersionedSchemaSupplier > xSchemaBackend(mBackend, uno::UNO_QUERY);
+    if (xSchemaBackend.is())
+        return xSchemaBackend->getSchemaVersion(aComponent);
+    else
+        return OUString();
 }
 //------------------------------------------------------------------------------
 
