@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transparencygroupaction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 10:01:14 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 07:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,9 @@ namespace cppcanvas
                 tools::initRenderState(maState,rState);
                 implSetupTransform( maState, rDstPoint );
 
+                // correct clip (which is relative to original transform)
+                tools::modifyClip( maState, rState, rCanvas, rDstPoint, NULL );
+
                 maLastSubset.mnSubsetBegin = 0;
                 maLastSubset.mnSubsetEnd = -1;
             }
@@ -294,6 +297,9 @@ namespace cppcanvas
             {
                 tools::initRenderState(maState,rState);
                 implSetupTransform( maState, rDstPoint );
+
+                // correct clip (which is relative to original transform)
+                tools::modifyClip( maState, rState, rCanvas, rDstPoint, NULL );
 
                 maLastSubset.mnSubsetBegin = 0;
                 maLastSubset.mnSubsetEnd = -1;
@@ -327,9 +333,11 @@ namespace cppcanvas
                 aTotalTransform.set( 0, 2, 0.0 );
                 aTotalTransform.set( 1, 2, 0.0 );
 
-                // as soon as the total transformation changes, we've got
-                // to re-render the bitmap
-                if( aTotalTransform != maLastTransformation ||
+                // if there's no buffer bitmap, or as soon as the
+                // total transformation changes, we've got to
+                // re-render the bitmap
+                if( !mxBufferBitmap.is() ||
+                    aTotalTransform != maLastTransformation ||
                     rSubset.mnSubsetBegin != maLastSubset.mnSubsetBegin ||
                     rSubset.mnSubsetEnd != maLastSubset.mnSubsetEnd )
                 {
@@ -509,6 +517,20 @@ namespace cppcanvas
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::setRenderStateTransform(aLocalState, aTransform);
+
+#ifdef SPECIAL_DEBUG
+                aLocalState.Clip.clear();
+                aLocalState.DeviceColor =
+                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
+                                                            ::Color( 0x80FF0000 ) );
+
+                if( maState.Clip.is() )
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+
+                aLocalState.DeviceColor = maState.DeviceColor;
+#endif
 
                 if( ::rtl::math::approxEqual(mnAlpha, 1.0) )
                 {
