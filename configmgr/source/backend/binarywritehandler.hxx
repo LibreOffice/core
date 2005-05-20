@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarywritehandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:30:23 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace configmgr
             virtual void handle(ISubtree  const & aSubtree);
             virtual void handle(ValueNode const & aValue);
         private:
-            void writeFileHeader(   rtl::OUString const & _aOwnerEntity,
+            void writeFileHeader(   rtl::OUString const & _aSchemaVersion,
                                     const uno::Sequence<OUString> & aKnownLocales,
                                     const uno::Sequence<OUString> & aDataLocales  )
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
