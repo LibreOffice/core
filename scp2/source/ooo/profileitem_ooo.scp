@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: rt $ $Date: 2005-05-13 08:25:16 $
+*  last change: $Author: rt $ $Date: 2005-05-20 15:47:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -226,11 +226,20 @@ ProfileItem gid_Profileitem_Configmgr_Userinstallation
     Value = "${$BootstrapFile:UserInstallation}";
 End
 
-ProfileItem gid_Profileitem_Configmgr_Localcfg_Schemadataurl
+ProfileItem gid_Profileitem_Configmgr_Schemaversion
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 6;
+    Key = "CFG_SchemaVersion";
+    Value = "${$BootstrapFile:buildid}";
+End
+
+ProfileItem gid_Profileitem_Configmgr_Localcfg_Schemadataurl
+    ProfileID = gid_Profile_Configmgr_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 7;
     Key = "CFG_SchemaDataUrl";
     Value = "$BaseInstallation/share/registry/schema ?$CFG_UnoUserPackages/schema ?$CFG_UnoSharedPackages/schema";
 End
@@ -239,7 +248,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Defaultdataurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 7;
+    Order = 8;
     Key = "CFG_DefaultLayerUrls";
     Value = "$BaseInstallation/share/registry $CFG_UnoSharedPackages $CFG_UnoUserPackages";
 End
@@ -248,7 +257,7 @@ ProfileItem gid_Profileitem_Configmgr_Cachedisposal
     ProfileID =gid_Profile_Configmgr_Ini  ;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 8;
+    Order = 9;
     Key  = "CFG_CacheDisposeDelay";
     Value  = "900";
 End
@@ -257,7 +266,7 @@ ProfileItem gid_Profileitem_Configmgr_Cacheinterval
     ProfileID = gid_Profile_Configmgr_Ini ;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 9;
+    Order = 10;
     Key  = "CFG_CacheDisposeInterval";
     Value  = "60";
 End
@@ -266,7 +275,7 @@ ProfileItem gid_Profileitem_Configmgr_Cachewrite
     ProfileID = gid_Profile_Configmgr_Ini ;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 10;
+    Order = 11;
     Key  = "CFG_CacheWriteInterval";
     Value  = "2";
 End
@@ -275,7 +284,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Userdataurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 11;
+    Order = 12;
     Key  = "CFG_UserLayerUrl";
     Value  = "$UserInstallation/user/registry";
 End
@@ -284,7 +293,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Cacheurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 12;
+    Order = 13;
     Key  = "CFG_CacheUrl";
     Value  = "$UserInstallation/user/registry/cache";
 End
