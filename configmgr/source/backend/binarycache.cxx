@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binarycache.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-18 13:28:22 $
+*  last change: $Author: rt $ $Date: 2005-05-20 15:41:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -229,11 +229,10 @@ namespace configmgr
             return aEntity.equals(mOwnerEntity);
         }
         // -----------------------------------------------------------------------------
-        const OUString k_DefaultOwner( RTL_CONSTASCII_USTRINGPARAM( "$(DefaultData)"));
-
         bool BinaryCache::readComponentData(MergedComponentData & aComponentData,
                                 MultiServiceFactory const & aFactory,
                                 OUString const & aComponent,
+                                OUString const & aSchemaVersion,
                                 OUString const & aEntity,
                                 localehelper::Locale const & aRequestedLocale,
                                 localehelper::LocaleSequence & outKnownLocales,
@@ -247,7 +246,8 @@ namespace configmgr
                 RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BinaryCache", "jb99855", "configmgr: BinaryCache::readComponentData() - enabled");
                 BinaryReadHandler aCacheReader(getCacheFileURL(aComponent),aComponent,aFactory);
 
-                if(aCacheReader.validateHeader(pLayers, nNumLayers, k_DefaultOwner, aRequestedLocale, outKnownLocales))
+                // #i49148# Invalidate cache when schema version changes - using former 'owner' parameter for version
+                if(aCacheReader.validateHeader(pLayers, nNumLayers, aSchemaVersion, aRequestedLocale, outKnownLocales))
                 {
                     RTL_LOGFILE_CONTEXT_AUTHOR(aLog1, "configmgr::backend::BinaryCache", "jb99855", "configmgr: BinaryCache::readComponentData() - cache hit");
                     aComponentData.setSchemaRoot( aCacheReader.readComponentTree() );
@@ -267,6 +267,7 @@ namespace configmgr
         bool BinaryCache::writeComponentData(MergedComponentData const & aComponentData,
                                 MultiServiceFactory const & aFactory,
                                 OUString const & aComponent,
+                                OUString const & aSchemaVersion,
                                 OUString const & aEntity,
                                 localehelper::LocaleSequence const & aKnownLocales,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
@@ -279,7 +280,8 @@ namespace configmgr
                 BinaryWriteHandler aCacheWriter(getCacheFileURL(aComponent),aComponent, aFactory);
 
                 //write data to cache
-                if (aCacheWriter.generateHeader(pLayers, nNumLayers, k_DefaultOwner, aKnownLocales))
+                // #i49148# Invalidate cache when schema version changes - using former 'owner' parameter for schema
+                if (aCacheWriter.generateHeader(pLayers, nNumLayers, aSchemaVersion, aKnownLocales))
                 {
                     aCacheWriter.writeComponentTree(aComponentData.getSchemaTree());
                     aCacheWriter.writeTemplatesTree(aComponentData.getTemplatesTree());
