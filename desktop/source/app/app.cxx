@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 13:04:56 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 07:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1912,6 +1912,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
+    OfficeIPCThread::SetReady();
     OpenClients();
 
     // CloseStartupScreen();
@@ -1920,7 +1921,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
     CheckFirstRun( );
 
     // allow ipc interaction
-    OfficeIPCThread::SetReady();
+//    OfficeIPCThread::SetReady();
 
     EnableOleAutomation();
     return 0;
@@ -2221,78 +2222,10 @@ void Desktop::OpenDefault()
             return;
     }
 
-    Sequence < PropertyValue > aNoArgs;
-    Reference< XComponentLoader > xDesktop(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-            OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-            ::com::sun::star::uno::UNO_QUERY );
-
-    // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for moer detail.
-    if ( !aName.compareToAscii( "service:"  , 8 ) )
-    {
-        URL             aURL ;
-        aURL.Complete = aName;
-
-        Reference < XDispatch >         xDispatcher ;
-        Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
-        Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
-
-        if( xParser.is() == sal_True )
-            xParser->parseStrict( aURL );
-
-        if( xProvider.is() == sal_True )
-            xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
-
-        if( xDispatcher.is() == sal_True )
-        {
-            try
-            {
-                // We have to be listener to catch errors during dispatching URLs.
-                // Otherwise it would be possible to have an office running without an open
-                // window!!
-                Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
-                if ( xDisp.is() )
-                    xDisp->dispatchWithNotification( aURL, aNoArgs, DispatchWatcher::GetDispatchWatcher() );
-                else
-                    xDispatcher->dispatch( aURL, aNoArgs );
-            }
-            catch ( ::com::sun::star::uno::Exception& )
-            {
-                OUString aMsg = OUString::createFromAscii(
-                    "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: ");
-                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-            }
-        }
-    }
-    else
-    {
-
-
-        Reference<XComponent> aComp;
-        try
-        {
-            aComp = Reference< XComponent >(xDesktop->loadComponentFromURL(
-                aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs ), UNO_QUERY);
-        }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
-        {
-            OUString aMsg = OUString::createFromAscii(
-                "Desktop::OpenDefault() IllegalArgumentException while calling loadComponentFromURL: ")
-                + iae.Message;
-            OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-        }
-        catch (com::sun::star::io::IOException& ioe)
-        {
-            OUString aMsg = OUString::createFromAscii(
-                "Desktop::OpenDefault() IOException while calling loadComponentFromURL: ")
-                + ioe.Message;
-            OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-        }
-        // shut down again if no component could be loaded
-        OSL_ENSURE(aComp.is(), "Desktop::OpenDesfault(), no component was loaded.");
-        if (!aComp.is())
-            Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
-    }
+    ProcessDocumentsRequest aRequest;
+    aRequest.pcProcessed = NULL;
+    aRequest.aOpenList   = aName;
+    OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
 }
 
 
