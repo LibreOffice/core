@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:28:06 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,11 @@ class BackendAccess : public IMergedDataProvider
           Retrieves the schema of a component.
           */
         uno::Reference< backenduno::XSchema > getSchema(const OUString& aComponent) ;
+
+        /**
+          Retrieves the schema version of a component.
+          */
+        OUString getSchemaVersion(const OUString& aComponent) ;
 
         /**
           Retrieves the layers for a request.
