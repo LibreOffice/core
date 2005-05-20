@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:01:41 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 07:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@ namespace connectivity
         class OEvoabDriver : public file::OFileDriver
         {
         private:
+            enum MaybeVoidBool
+            {
+                eUnknown,
+                eTrue,
+                eFalse
+            };
             ::utl::TempFile m_aTempDir;
             rtl::OUString   m_aFolderListName;
             rtl::OUString   m_aVersionName;
@@ -103,6 +109,8 @@ namespace connectivity
             rtl::OUString   m_aEvoab_CLI_EffectiveCommand;
             rtl::OUString   m_aEvoab_CLI_FullPathCommand;
             sal_Bool        m_bWorkingDirCreated;
+            MaybeVoidBool   m_eSupportedEvoVersion;
+
             sal_Bool        fileExists(const ::rtl::OUString& _rURL, sal_Bool _bIsDir=sal_False) const;
 
         public:
