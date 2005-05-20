@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:48:56 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <com/sun/star/configuration/backend/XBackendEntities.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMASUPPLIER_HPP_
-#include <com/sun/star/configuration/backend/XSchemaSupplier.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XVERSIONEDSCHEMASUPPLIER_HPP_
+#include <com/sun/star/configuration/backend/XVersionedSchemaSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
@@ -124,7 +124,7 @@ namespace backenduno = css::configuration::backend ;
 
 typedef cppu::WeakComponentImplHelper7< backenduno::XBackend,
                                         backenduno::XBackendEntities,
-                                        backenduno::XSchemaSupplier,
+                                        backenduno::XVersionedSchemaSupplier,
                                         backenduno::XBackendChangesNotifier,
                                         backenduno::XBackendChangesListener,
                                         lang::XInitialization,
@@ -154,6 +154,13 @@ class MultiStratumBackend : public BackendBase {
             throw (uno::RuntimeException, uno::Exception,
                    css::configuration::InvalidBootstrapFileException,
                    backenduno::BackendSetupException) ;
+
+        // XVersionedSchemaSupplier
+        virtual rtl::OUString
+            SAL_CALL getSchemaVersion(const rtl::OUString& aComponent)
+                throw (backenduno::BackendAccessException,
+                        lang::IllegalArgumentException,
+                        uno::RuntimeException) ;
 
         // XSchemaSupplier
         virtual uno::Reference<backenduno::XSchema>
