@@ -90,7 +90,7 @@ sub write_ddf_file_header
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set MaxDiskSize=CDROM\n";          # This allows the .cab file to be as large as needed.
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set CompressionType=MSZIP\n";
+    $oneline = ".Set CompressionType=LZX\n";
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Compress=ON\n";
     push(@{$ddffileref} ,$oneline);
