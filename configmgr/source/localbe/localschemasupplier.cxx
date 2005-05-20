@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localschemasupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:58:01 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ LocalSchemaSupplier::~LocalSchemaSupplier(void) {}
 static const rtl::OUString kSchemaDataUrl(
         RTL_CONSTASCII_USTRINGPARAM(CONTEXT_ITEM_PREFIX_"SchemaDataUrl")) ;
 
+static const rtl::OUString kSchemaVersion(
+        RTL_CONSTASCII_USTRINGPARAM(CONTEXT_ITEM_PREFIX_"SchemaVersion")) ;
+
 void SAL_CALL LocalSchemaSupplier::initialize(
         const uno::Sequence<uno::Any>& aParameters)
     throw (uno::RuntimeException, uno::Exception,
@@ -138,6 +141,11 @@ void SAL_CALL LocalSchemaSupplier::initialize(
     for (sal_Int32 i = 0 ; i < aParameters.getLength() ; ++ i) {
         if (aParameters [i] >>= context) { break ; }
     }
+
+    // Setting: schema version
+    // TODO: Add support for repository-specific versions
+    uno::Any const aSchemaVersionSetting = context->getValueByName(kSchemaVersion);
+    aSchemaVersionSetting >>= mSchemaVersion;
 
     // Setting: schema diretory(ies)
     uno::Any const aSchemaDataSetting = context->getValueByName(kSchemaDataUrl);
@@ -190,6 +198,16 @@ void SAL_CALL LocalSchemaSupplier::initialize(
         throw backend::BackendSetupException(sMsg,*this, uno::Any()) ;
     }
     mSchemaDataUrls.realloc(nSchemaLocations);
+}
+//------------------------------------------------------------------------------
+
+rtl::OUString SAL_CALL
+    LocalSchemaSupplier::getSchemaVersion(const rtl::OUString& /*aComponent*/)
+        throw (backend::BackendAccessException, lang::IllegalArgumentException,
+                uno::RuntimeException)
+{
+    // TODO: Add support for repository-specific versions
+    return mSchemaVersion;
 }
 //------------------------------------------------------------------------------
 static const rtl::OUString kSchemaSuffix(RTL_CONSTASCII_USTRINGPARAM(".xcs")) ;
