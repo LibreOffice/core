@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 09:56:12 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 09:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,17 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     {
         pWindow->mpWindowImpl->mpFrameData->mbMouseIn = FALSE;
         if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
+        {
+            ImplDelData aDelData;
+            pWindow->ImplAddDel( &aDelData );
+
             ImplDestroyHelpWindow();
+
+            if ( aDelData.IsDelete() )
+                return 1; // pWindow is dead now - avoid crash! (#122045#)
+            else
+                pWindow->ImplRemoveDel( &aDelData );
+        }
     }
     else
         pWindow->mpWindowImpl->mpFrameData->mbMouseIn = TRUE;
