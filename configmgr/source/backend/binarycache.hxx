@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarycache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:28:35 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ namespace configmgr
             bool readComponentData(MergedComponentData & aComponentData,
                                     MultiServiceFactory const & aFactory,
                                     rtl::OUString const & aComponent,
+                                    rtl::OUString const & aSchemaVersion,
                                     rtl::OUString const & aEntity,
                                     localehelper::Locale const & aRequestedLocale,
                                     localehelper::LocaleSequence & outKnownLocales,
@@ -119,6 +120,7 @@ namespace configmgr
             bool writeComponentData(MergedComponentData const & aComponentData,
                                     MultiServiceFactory const & aFactory,
                                     rtl::OUString const & aComponent,
+                                    rtl::OUString const & aSchemaVersion,
                                     rtl::OUString const & aEntity,
                                     localehelper::LocaleSequence const & aKnownLocales,
                                     const uno::Reference<backenduno::XLayer> * pLayers,
