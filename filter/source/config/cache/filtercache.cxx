@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:08:42 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 07:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,7 +1235,7 @@ void FilterCache::impl_validateAndOptimize()
             {
                 if (bAllFiltersShouldExist)
                 {
-                    ++nErrors;
+                    ++nWarnings; // preferred filters can point to a non-installed office module ! no error ... it's a warning only .-(
                     sLog.appendAscii("error\t:\t");
                 }
                 else
@@ -2331,6 +2331,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
                 css::uno::Reference< css::uno::XInterface >());
 
     CacheItem aItem;
+    aItem[PROPNAME_NAME] <<= sItem;
 
     // Installed
     // Isnt used any longer!
