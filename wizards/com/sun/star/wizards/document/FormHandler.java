@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FormHandler.java,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:16:43 $
+*  last change: $Author: rt $ $Date: 2005-05-20 15:42:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -415,13 +415,15 @@ public class FormHandler {
     if (ControlList != null){
         for (int i = 0; i < ControlList.length; i++){
             if (ControlList[i] != null)
-                try {
-                    String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
-                    if (xNamedForm.hasByName(sControlName))
-                        xNamedForm.removeByName(sControlName);
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                }
+//              try {
+                    ControlList[i].setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
+//                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
+//
+//                  if (_xNamedForm.hasByName(sControlName))
+//                      _xNamedForm.removeByName(sControlName);
+//              } catch (Exception e) {
+//                  e.printStackTrace(System.out);
+//              }
             }
     }}
 
