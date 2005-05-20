@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 15:15:15 $
+#   last change: $Author: rt $ $Date: 2005-05-20 15:46:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ IDLFILES = \
     XBackend.idl			\
     XBackendEntities.idl	\
     XSchemaSupplier.idl		\
+    XVersionedSchemaSupplier.idl		\
     XSingleLayerStratum.idl	\
     XMultiLayerStratum.idl	\
     XSchema.idl				\
