@@ -849,86 +849,54 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public void initializeNorms() {
-
-        //The following commented code is to be used for support of
-        //language packs and on-the-fly new languages:
-        /*
-        LocaleCodes lc = new LocaleCodes();
-        String [] allLocales = lc.getIDs();
-        String[] nameList = {"",""};
-        String sLetterSubPath = "/wizard/letter/";
-
-        try {
-            sLetterPath = FileAccess.getParentDir(sTemplatePath);
-            sLetterPath = FileAccess.deleteLastSlashfromUrl(sLetterPath);
-            sLetterPath = sLetterPath + sLetterSubPath;
-            sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
-
-            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
-            nameList = xSimpleFileAccess.getFolderContents(sLetterPath, true);
-        } catch (CommandAbortedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoValidPathException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        Norms = new String[nameList.length];
-
-        boolean found = false;
-        String cIsoCode;
-        for (int i=0; i < nameList.length; i++) {
-            found = false;
-            cIsoCode = FileAccess.getFilename(nameList[i]);
-            for (int t=0; t < allLocales.length; t++) {
-                String [] aLang = allLocales[t].split(";");
-                if (cIsoCode.equalsIgnoreCase(aLang[1])) {
-                    System.out.println(aLang[2]);
-                    found = true;
-                    t = allLocales.length;
-                }
-            }
-            if (!found) {
-                for (int t=0; t < allLocales.length; t++) {
-                    String [] aLang = allLocales[t].split(";");
-                    if (cIsoCode.equalsIgnoreCase(aLang[1].substring(0,2))) {
-                        System.out.println(aLang[2]);
-                        found = true;
-                        t = allLocales.length;
-                    }
-                }
-            }
-            Norms[i] = cIsoCode;
-        }
-
-        **/
-
         //To add new Languages please modify this method and LetterWizardDialogResources.java
-        Norms = new String[16];
+        //I know, this is ugly. I will implement a more elegant solution in Product Update 1
 
-        Norms[0] = "en-US";
-        Norms[1] = "de";
-        Norms[2] = "fr";
-        Norms[3] = "es";
-        Norms[4] = "it";
-        Norms[5] = "pt-BR";
-        Norms[6] = "sv";
-        Norms[7] = "ja";
-        Norms[8] = "ko";
-        Norms[9] = "zh-CN";
-        Norms[10] = "zh-TW";
-        Norms[11] = "cs";
-        Norms[12] = "bg";
-        Norms[13] = "da";
-        Norms[14] = "hu";
-        Norms[15] = "hr";
+        String ProdName = Configuration.getProductName(xMSF);
 
-        setControlProperty("lstLetterNorm", "StringItemList", resources.LanguageLabels);
+        if (ProdName.startsWith("Open")) {
+            //Add Languages for OpenOffice.org
+            Norms = new String[16];
+
+            Norms[0] = "en-US";
+            Norms[1] = "de";
+            Norms[2] = "fr";
+            Norms[3] = "es";
+            Norms[4] = "it";
+            Norms[5] = "pt-BR";
+            Norms[6] = "sv";
+            Norms[7] = "ja";
+            Norms[8] = "ko";
+            Norms[9] = "zh-CN";
+            Norms[10] = "zh-TW";
+            Norms[11] = "cs";
+            Norms[12] = "bg";
+            Norms[13] = "da";
+            Norms[14] = "hu";
+            Norms[15] = "hr";
+        } else {
+            Norms = new String[11];
+
+            Norms[0] = "en-US";
+            Norms[1] = "de";
+            Norms[2] = "fr";
+            Norms[3] = "es";
+            Norms[4] = "it";
+            Norms[5] = "pt-BR";
+            Norms[6] = "sv";
+            Norms[7] = "ja";
+            Norms[8] = "ko";
+            Norms[9] = "zh-CN";
+            Norms[10] = "zh-TW";
+        }
+
+        String [] LanguageLabels;
+        LanguageLabels = new String[Norms.length];
+        for (int i=0;i < Norms.length; i++) {
+            LanguageLabels[i] = resources.LanguageLabels[i];
+        }
+
+        setControlProperty("lstLetterNorm", "StringItemList", LanguageLabels);
     }
 
     private CGLetter getCurrentLetter() {
@@ -943,8 +911,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     private void initializePaths() {
         try {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
-            //sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
-            //sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
         }
