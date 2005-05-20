@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:56:20 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 12:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,9 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
     mpLBEffects->SelectEntryPos( nFirstEffect );
 
     fillDurationComboBox( mpCBSpeed );
-    mpCBSpeed->SelectEntryPos( 2 );
+
+    if( nFirstEffect != LISTBOX_ENTRY_NOTFOUND )
+        onSelectEffect();
 
     mpLBEffects->SetSelectHdl( LINK( this, CustomAnimationCreateTabPage, implSelectHdl ) );
     mpLBEffects->SetDoubleClickHdl( LINK( this, CustomAnimationCreateTabPage, implDoubleClickHdl ) );
@@ -384,6 +386,10 @@ void CustomAnimationCreateTabPage::onSelectEffect()
 
     mpCBSpeed->SelectEntryPos( nPos );
 
+    bool bHasSpeed = pPreset->getDuration() > 0.001;
+    mpCBSpeed->Enable( bHasSpeed );
+    mpFTSpeed->Enable( bHasSpeed );
+
     if( mpCBXPReview->IsChecked() )
     {
         mpParent->preview( pPreset );
@@ -412,7 +418,7 @@ CustomAnimationPresetPtr CustomAnimationCreateTabPage::getSelectedPreset() const
 double CustomAnimationCreateTabPage::getDuration() const
 {
     USHORT nPos = mpCBSpeed->GetSelectEntryPos();
-    if( nPos == 0xffff )
+    if( (nPos == 0xffff) || !mpCBSpeed->IsEnabled() )
     {
         CustomAnimationPresetPtr pPreset = getSelectedPreset();
         if( pPreset.get() )
