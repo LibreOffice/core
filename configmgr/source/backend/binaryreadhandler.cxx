@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreadhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:29:20 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ namespace configmgr
 
         bool BinaryReadHandler::verifyFileHeader(  const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
-                                    const OUString& _aOwnerEntity,
+                                    const OUString& _aSchemaVersion,
                                     localehelper::Locale const & aRequestedLocale,
                                     localehelper::LocaleSequence & outKnownLocales)
         {
@@ -156,9 +156,9 @@ namespace configmgr
                 if (nMagic !=CFG_BINARY_MAGIC || nVersion != CFG_BINARY_VERSION )
                     return false;
 
-                rtl::OUString aOwnerEntity;
-                m_BinaryReader.read(aOwnerEntity);
-                if (!aOwnerEntity.equals(_aOwnerEntity))
+                rtl::OUString aSchemaVersion;
+                m_BinaryReader.read(aSchemaVersion);
+                if (!aSchemaVersion.equals(_aSchemaVersion))
                     return false;
 
                 uno::Sequence< rtl::OUString > aAvailableLocales;
@@ -627,7 +627,7 @@ namespace configmgr
     // -----------------------------------------------------------------------------
         bool BinaryReadHandler::validateHeader( const uno::Reference<backenduno::XLayer> * pLayers,
                                                 sal_Int32 nNumLayers,
-                                                const OUString& _aOwnerEntity,
+                                                const OUString& _aSchemaVersion,
                                                 localehelper::Locale const & aRequestedLocale,
                                                 localehelper::LocaleSequence & outKnownLocales)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
@@ -637,7 +637,7 @@ namespace configmgr
             if (!m_BinaryReader.open())
                 return false;
 
-            if(!this->verifyFileHeader(pLayers, nNumLayers, _aOwnerEntity, aRequestedLocale, outKnownLocales))
+            if(!this->verifyFileHeader(pLayers, nNumLayers, _aSchemaVersion, aRequestedLocale, outKnownLocales))
                 return false;
 
             //Check if layers are uptodate

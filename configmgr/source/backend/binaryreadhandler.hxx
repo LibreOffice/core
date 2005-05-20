@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreadhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:29:33 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace configmgr
 
             bool validateHeader(    const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
-                                    const OUString& _aOwnerEntity,
+                                    const OUString& _aSchemaVersion,
                                     localehelper::Locale const & aRequestedLocale,
                                     localehelper::LocaleSequence & outKnownLocales)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
@@ -148,7 +148,7 @@ namespace configmgr
         private:
             bool verifyFileHeader(  const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
-                                    const OUString& _aOwnerEntity,
+                                    const OUString& _aSchemaVersion,
                                     localehelper::Locale const & aRequestedLocale,
                                     localehelper::LocaleSequence & outKnownLocales);
 
