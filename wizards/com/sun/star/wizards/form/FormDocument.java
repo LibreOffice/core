@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $  $Date: 2005-03-18 16:17:55 $
+ *  last change: $Author: rt $  $Date: 2005-05-20 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,9 +371,9 @@ public class FormDocument extends TextDocument {
                 oFormController = new FormControlArranger(oFormHandler, xFormContainer, oDBMetaData, xProgressBar, aStartPoint, aFormSize);
             else{
                 if (curArrangement == FormWizard.SOGRID){
-//                  oFormHandler.moveShapesToNirwana(getLabelControls());
-//                  oFormHandler.moveShapesToNirwana(getDatabaseControls());
-                    oFormHandler.moveShapesToNirwana();
+                    oFormHandler.moveShapesToNirwana(getLabelControls());
+                    oFormHandler.moveShapesToNirwana(getDatabaseControls());
+//                  oFormHandler.moveShapesToNirwana();
                 }
             }
             if (curArrangement == FormWizard.SOGRID){
