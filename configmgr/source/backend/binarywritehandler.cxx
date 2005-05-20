@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarywritehandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:30:03 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,14 +306,14 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void BinaryWriteHandler::writeFileHeader(   rtl::OUString const & _aOwnerEntity,
+        void BinaryWriteHandler::writeFileHeader(   rtl::OUString const & _aSchemaVersion,
                                                     const uno::Sequence<OUString> & aKnownLocales,
                                                     const uno::Sequence<OUString> & aDataLocales  )
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             m_BinaryWriter.write(CFG_BINARY_MAGIC);
             m_BinaryWriter.write(CFG_BINARY_VERSION);
-            m_BinaryWriter.write(_aOwnerEntity);
+            m_BinaryWriter.write(_aSchemaVersion);
             writeSequence(m_BinaryWriter,aKnownLocales);
             writeSequence(m_BinaryWriter,aDataLocales);
             m_BinaryWriter.write(m_aComponentName);
