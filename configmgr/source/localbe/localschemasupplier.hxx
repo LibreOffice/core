@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localschemasupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:58:14 $
+ *  last change: $Author: rt $ $Date: 2005-05-20 15:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef CONFIGMGR_LOCALBE_LOCALSCHEMASUPPLIER_HXX_
 #define CONFIGMGR_LOCALBE_LOCALSCHEMASUPPLIER_HXX_
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMASUPPLIER_HPP_
-#include <com/sun/star/configuration/backend/XSchemaSupplier.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XVERSIONEDSCHEMASUPPLIER_HPP_
+#include <com/sun/star/configuration/backend/XVersionedSchemaSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
@@ -89,9 +89,9 @@
 #include <com/sun/star/configuration/backend/CannotConnectException.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif // _CPPUHELPER_COMPBASE2_HXX_
+#endif // _CPPUHELPER_COMPBASE3_HXX_
 
 namespace configmgr { namespace localbe {
 
@@ -100,7 +100,7 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper3<backend::XSchemaSupplier,
+typedef cppu::WeakComponentImplHelper3<backend::XVersionedSchemaSupplier,
                                        lang::XInitialization,
                                        lang::XServiceInfo> SingleBackendBase ;
 
@@ -127,6 +127,13 @@ class LocalSchemaSupplier : public SingleBackendBase {
                        css::configuration::InvalidBootstrapFileException,
                        backend::CannotConnectException,
                        backend::BackendSetupException);
+
+        // XVersionedSchemaSupplier
+        virtual rtl::OUString SAL_CALL
+            getSchemaVersion( const rtl::OUString& aComponent )
+                throw (backend::BackendAccessException,
+                        lang::IllegalArgumentException,
+                        uno::RuntimeException) ;
 
         // XSchemaSupplier
         virtual uno::Reference<backend::XSchema> SAL_CALL
@@ -161,7 +168,6 @@ class LocalSchemaSupplier : public SingleBackendBase {
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getServices(void) ;
 
-    public:
     private :
         /** Service factory */
         uno::Reference<lang::XMultiServiceFactory> mFactory ;
@@ -172,7 +178,9 @@ class LocalSchemaSupplier : public SingleBackendBase {
           for multiple schema directories.
           */
         uno::Sequence<rtl::OUString> mSchemaDataUrls ;
-
+        /** Version of the schema repository */
+        // TODO: Add support for repository-specific versions
+        rtl::OUString mSchemaVersion;
 } ;
 
 } } // configmgr.localschemasupplirt
