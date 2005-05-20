@@ -6,7 +6,7 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-05-10 16:00:41 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-05-20 14:35:34 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -170,8 +170,8 @@
 			<List>
 				<Text id="s2we35" xml:lang="de">Linux Kernel Version 2.2.13 oder höher</Text>
 				<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.2.13 or higher</Text>
-		<Text id="s253we" xml:lang="de">glibc2 Version 2.2.0 oder höher</Text>
-				<Text id="s253we" xml:lang="en-US">glibc2 version 2.2.0 or higher</Text>
+		<Text id="s253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
+				<Text id="s253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
 		<Text id="s2etfseg" xml:lang="de">Pentium kompatibler PC</Text>
 		                <Text id="s2etfseg" xml:lang="de">Pentium kompatibler PC</Text>
 				<Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC</Text>
