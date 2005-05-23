@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 07:28:58 $
+ *  last change: $Author: rt $ $Date: 2005-05-23 15:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,9 @@ static int ReportCrash( int Signal )
                                 szDirectory[dli_fname - dl_info.dli_fname] = 0;
 
                                 dli_fdir = realpath( szDirectory, szCanonicDirectory ) ? szCanonicDirectory : szDirectory;
+
+                                if ( *dli_fdir && dli_fdir[ strlen(dli_fdir) - 1 ] != '/' )
+                                    strcat( dli_fdir, "/" );
                             }
                             else
                                 dli_fname = dl_info.dli_fname;
