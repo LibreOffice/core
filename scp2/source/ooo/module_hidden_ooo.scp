@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: rt $ $Date: 2005-05-20 15:47:28 $
+*  last change: $Author: is $ $Date: 2005-05-23 12:32:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -84,6 +84,8 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Senddoc,
 	gid_File_Bin_Soffice,
 	gid_File_Bin_Soffice_Bin,
+	gid_File_Bin_Setofficelang,
+	gid_File_Bin_Setofficelang_C01,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uno,
 	gid_File_Bin_Unopkg,
@@ -96,6 +98,8 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Npsoplugin,
 	gid_File_JREProperties,
 	gid_File_Script_Configimport,
+	gid_File_Script_Setofficelang,
+	gid_File_Script_Setofficelang_C01,
 	gid_File_Script_Unopkg,
 	gid_File_Script_Viewdoc,
 	gid_File_Server_Bonobo_Presentationstarter,
@@ -114,6 +118,9 @@ Module gid_Module_Root_Files_2
 	gid_File_Exe_Adabas,
 	gid_File_Exe_Userinst,
 	gid_File_Exe_Userdeinst,
+	gid_File_Regcleanold,
+	gid_File_Exe_Regdeinstall,
+	gid_File_Tmp_Inf_Oldreg,
 	gid_File_Tmp_Userinstall_Inf,
 	gid_File_Txt_License,
 	gid_File_Txt_License_Html,
@@ -543,6 +550,17 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Tplwizfax_Lang,
 	gid_File_Extra_Tplwizletter,
 	gid_File_Extra_Tplwizletter_Lang,
+	gid_File_Extra_Tplwizletter_en_US,
+	gid_File_Extra_Tplwizletter_de,
+	gid_File_Extra_Tplwizletter_fr,
+	gid_File_Extra_Tplwizletter_es,
+	gid_File_Extra_Tplwizletter_it,
+	gid_File_Extra_Tplwizletter_pt_BR,
+	gid_File_Extra_Tplwizletter_sv,
+	gid_File_Extra_Tplwizletter_ja,
+	gid_File_Extra_Tplwizletter_ko,
+	gid_File_Extra_Tplwizletter_zh_CN,
+	gid_File_Extra_Tplwizletter_zh_TW,
 	gid_File_Extra_Tplwizreport_Lang,
 	gid_File_Extra_Tplwizstyles_Lang,
 	gid_File_Extra_Tplwizmemo_Lang,
