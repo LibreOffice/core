@@ -4,7 +4,7 @@ Release: %release
 Summary: OpenOffice.org desktop integration
 Name: openofficeorg-freedesktop-menus
 BuildRoot: %_tmppath/%name-%version-build%unique
-#BuildRequires: ed
+#BuildRequires: sed
 #BuildRequires: perl
 Group: Office
 License: LGPL / SISSL
@@ -12,7 +12,10 @@ BuildArch: noarch
 AutoReqProv: no
 
 %description
-OpenOffice.org desktop integration
+OpenOffice.org desktop integration for desktop-environments that implement 
+the menu- and mime-related specifications from http://www.freedesktop.org
+Install this package if you're using a distribution not covered by any of 
+the other openofficeorg-<distribution>-menus packages.
 
 %prep
 # create & change to rpm-Build-Dir
@@ -40,7 +43,7 @@ perl %basedir/create_mime_xml.pl > usr/share/mime/packages/openoffice.org.xml
 ## for e.g. application/vnd.oasis.opendocument.spreadsheet
 cd usr/share/icons/hicolor
 originalname=%unixfilename
-iconname=${originalname//.}
+iconname=`echo $originalname | sed -e 's/\.//g'`
 for dir in *; do
   cd $dir/mimetypes
 # ln -s $iconname-database.png Anybody knows the mimetype?
@@ -284,10 +287,19 @@ if (which update-mime-database); then
 fi
 
 %files 
+# specify stale symlinks verbatim, not as glob - a change in recent versions of 
+# glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
+# https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)
 %ghost /etc/%unixfilename
 %attr(0755, root, root) /usr/bin/*
-/usr/share/applications/*desktop
+/usr/share/applications/%unixfilename-base.desktop
+/usr/share/applications/%unixfilename-calc.desktop
+/usr/share/applications/%unixfilename-draw.desktop
+/usr/share/applications/%unixfilename-impress.desktop
+/usr/share/applications/%unixfilename-math.desktop
+/usr/share/applications/%unixfilename-printeradmin.desktop
+/usr/share/applications/%unixfilename-writer.desktop
 /usr/share/icons/gnome/*/apps/*png
 /usr/share/icons/gnome/*/mimetypes/*png
 /usr/share/icons/hicolor/*/apps/*png
