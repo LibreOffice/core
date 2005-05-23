@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-11 09:30:38 $
+#   last change: $Author: rt $ $Date: 2005-05-23 15:34:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.88 $$"
+LIBSMKREV!:="$$Revision: 1.89 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -239,6 +239,7 @@ SCHEDLIB=-lss$(OFFICEUPD)$(DLLPOSTFIX)
 SSLLIB=-lssl$(OFFICEUPD)$(DLLPOSTFIX)
 SSCLIB=-lssc$(OFFICEUPD)$(DLLPOSTFIX)
 SSWLIB=-lssw$(OFFICEUPD)$(DLLPOSTFIX)
+PRXLIB=-llprx2$(OFFICEUPD)$(DLLPOSTFIX)
 TRACERLIB=-ltrc$(OFFICEUPD)$(DLLPOSTFIX)
 PAPILIB=-lpap$(OFFICEUPD)$(DLLPOSTFIX)
 TRCLIB=$(TRACERLIB)
@@ -425,6 +426,7 @@ SCLIB=$(LIBPRE) sclib.lib
 SDLIB=$(LIBPRE) sdlib.lib
 SDLLIB=$(LIBPRE) sdl.lib
 SWLIB=$(LIBPRE) swlib.lib
+PRXLIB=$(LIBPRE) ilprx2.lib
 ISWLIB=$(LIBPRE) _sw.lib
 ISCLIB=$(LIBPRE) sci.lib
 ISDLIB=$(LIBPRE) sdi.lib
