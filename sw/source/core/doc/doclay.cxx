@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-20 12:16:49 $
+ *  last change: $Author: rt $ $Date: 2005-05-23 19:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,9 +676,12 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         // --> OD 2004-11-22 #i35635#
         pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
         // <--
-        // --> OD 2005-04-15 #i47455# - notify draw frame format
-        // that position attributes are already set, because they are copied
-        if ( pDest->ISA(SwDrawFrmFmt) )
+        // --> OD 2005-05-23 #i49730# - notify draw frame format
+        // that position attributes are already set, if the position attributes
+        // are already set at the source draw frame format.
+        if ( pDest->ISA(SwDrawFrmFmt) &&
+             rSource.ISA(SwDrawFrmFmt) &&
+             static_cast<const SwDrawFrmFmt&>(rSource).IsPosAttrSet() )
         {
             static_cast<SwDrawFrmFmt*>(pDest)->PosAttrSet();
         }
