@@ -1573,6 +1573,20 @@ File gid_File_Oo_Setup_Xcu
     Name = "/registry/data/org/openoffice/Setup.xcu";
 End
 
+File gid_File_Oo_Firststartwizard_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/FirstStartWizard.xcs";
+End
+
+File gid_File_Oo_Firststartwizard_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/FirstStartWizard.xcu";
+End
+
 File gid_File_Oo_System_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
