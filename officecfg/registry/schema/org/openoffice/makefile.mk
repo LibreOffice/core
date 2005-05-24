@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 12:44:11 $
+#   last change: $Author: rt $ $Date: 2005-05-24 13:59:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ XCSFILES= \
     Setup.xcs \
     System.xcs \
     UserProfile.xcs \
-    VCL.xcs
+    VCL.xcs \
+    FirstStartWizard.xcs
 
 .INCLUDE :  target.mk
 
