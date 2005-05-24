@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 08:09:33 $
+ *  last change: $Author: rt $ $Date: 2005-05-24 14:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
 
 namespace desktop
 {
@@ -429,9 +433,13 @@ RegistrationPage::RegistrationPage( svt::OWizardMachine* parent, const ResId& re
     , m_rbReg(this, WizardResId(RB_REGISTRATION_REG))
     , m_flSeparator(this, WizardResId(FL_REGISTRATION))
     , m_ftEnd(this, WizardResId(FT_REGISTRATION_END))
+    , m_bNeverVisible( sal_True )
 {
     FreeResource();
     _setBold(m_ftHeader);
+
+    impl_retrieveConfigurationData();
+    updateButtonStates();
 }
 
 sal_Bool RegistrationPage::determineNextButtonState()
@@ -443,6 +451,39 @@ void RegistrationPage::ActivatePage()
 {
     OWizardPage::ActivatePage();
     GrabFocus();
+}
+
+void RegistrationPage::impl_retrieveConfigurationData()
+{
+    static ::rtl::OUString PACKAGE = ::rtl::OUString::createFromAscii("org.openoffice.FirstStartWizard");
+    static ::rtl::OUString PATH    = ::rtl::OUString::createFromAscii("TabPages/Registration/RegistrationOptions/NeverButton");
+    static ::rtl::OUString KEY     = ::rtl::OUString::createFromAscii("Visible");
+
+    ::com::sun::star::uno::Any aValue;
+    try
+    {
+        aValue = ::comphelper::ConfigurationHelper::readDirectKey(
+                                ::comphelper::getProcessServiceFactory(),
+                                PACKAGE,
+                                PATH,
+                                KEY,
+                                ::comphelper::ConfigurationHelper::E_READONLY);
+    }
+    catch(const ::com::sun::star::uno::Exception&)
+        { aValue.clear(); }
+
+    aValue >>= m_bNeverVisible;
+}
+
+void RegistrationPage::updateButtonStates()
+{
+    if ( !m_bNeverVisible )
+    {
+        ::Point aNeverPos = m_rbNever.GetPosPixel();
+
+        m_rbReg.SetPosPixel( aNeverPos );
+        m_rbNever.Show( FALSE );
+    }
 }
 
 sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
