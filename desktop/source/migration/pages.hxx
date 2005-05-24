@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:42:28 $
+ *  last change: $Author: rt $ $Date: 2005-05-24 14:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,11 @@ private:
     RadioButton m_rbReg;
     FixedLine m_flSeparator;
     FixedText m_ftEnd;
+    sal_Bool    m_bNeverVisible;
+
+    void updateButtonStates();
+    void impl_retrieveConfigurationData();
+
 public:
     RegistrationPage( svt::OWizardMachine* parent, const ResId& resid);
     virtual sal_Bool commitPage(COMMIT_REASON _eReason);
