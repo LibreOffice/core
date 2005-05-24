@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-20 07:48:31 $
+ *  last change: $Author: rt $ $Date: 2005-05-24 13:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1426,6 +1426,23 @@ void Desktop::Main()
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 
+        // set UI language and locale
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
+        //LanguageSelection langselect;
+        OUString aUILocaleString = LanguageSelection::getLanguageString();
+        Locale aUILocale = LanguageSelection::IsoStringToLocale(aUILocaleString);
+        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
+
+        // #i39040#, do not call anything between GetSettings and SetSettings that might have
+        // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
+        // which changes the MiscSettings !!! )
+        AllSettings aSettings( Application::GetSettings() );
+        aSettings.SetUILocale( aUILocale );
+        aSettings.SetLanguage( eLanguage );
+        Application::SetSettings( aSettings );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
+
+
         // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
         OUString aTitleString( aTitle );
         bCheckOk = CheckInstallation( aTitleString );
@@ -1463,32 +1480,6 @@ void Desktop::Main()
             String aWorkPath = aUnrestrictedFolders[0];
             SvtPathOptions().SetWorkPath( aWorkPath );
         }
-
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
-        /*
-        String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
-        LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
-        */
-
-        //LanguageSelection langselect;
-        OUString aUILocaleString = LanguageSelection::getLanguageString();
-        sal_Int32 nIndex = 0;
-        OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
-        OUString aCountry = aUILocaleString.getToken( 0, '-', nIndex);
-        OUString aVariant = aUILocaleString.getToken( 0, '-', nIndex);
-
-        ::com::sun::star::lang::Locale aUILocale( aLanguage, aCountry, aVariant );
-
-        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
-
-        // #i39040#, do not call anything between GetSettings and SetSettings that might have
-        // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
-        // which changes the MiscSettings !!! )
-        AllSettings aSettings( Application::GetSettings() );
-        aSettings.SetUILocale( aUILocale );
-        aSettings.SetLanguage( eLanguage );
-        Application::SetSettings( aSettings );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
 
         aMgrName = String::CreateFromAscii("ofa");
         aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
