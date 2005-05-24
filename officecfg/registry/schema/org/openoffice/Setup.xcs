@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:14:49 $
+ *  last change: $Author: rt $ $Date: 2005-05-24 13:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,6 @@
 				</info>
                 <value/>
 			</prop>
-		</group>		
+		</group>
 	</component>
 </oor:component-schema>
