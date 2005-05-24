@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 12:41:26 $
+#   last change: $Author: rt $ $Date: 2005-05-24 13:58:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ PACKAGE=org.openoffice
 XCUFILES= \
     Inet.xcu \
     Setup.xcu \
-    VCL.xcu
+    VCL.xcu \
+    FirstStartWizard.xcu
 
 MODULEFILES= \
     Inet-defaultsearchengine.xcu \
