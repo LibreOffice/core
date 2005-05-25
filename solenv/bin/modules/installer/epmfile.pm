@@ -1280,6 +1280,31 @@ sub include_patchinfos_into_pkginfo
 }
 
 ############################################################
+# Setting the correct Solaris locales
+############################################################
+
+sub get_solaris_language_for_langpack
+{
+    my ( $onelanguage ) = @_;
+
+    my $sollanguage = $onelanguage;
+    $sollanguage =~ s/\-/\_/;
+
+    if ( $sollanguage eq "de" ) { $sollanguage = "de,de_DE,de_DE.ISO8859-1,de_DE.ISO8859-15,de.ISO8859-15,de_DE.UTF-8,de.UTF-8"; }
+    elsif ( $sollanguage eq "es" ) { $sollanguage = "es,es_ES,es_ES.ISO8859-1,es_ES.ISO8859-15,es.ISO8859-15,es_ES.UTF-8,es.UTF-8"; }
+    elsif ( $sollanguage eq "fr" ) { $sollanguage = "fr,fr_FR,fr_FR.ISO8859-1,fr_FR.ISO8859-15,fr.ISO8859-15,fr_FR.UTF-8,fr.UTF-8"; }
+    elsif ( $sollanguage eq "it" ) { $sollanguage = "it,it_IT,it_IT.ISO8859-1,it_IT.ISO8859-15,it.ISO8859-15,it_IT.UTF-8,it.UTF-8"; }
+    elsif ( $sollanguage eq "sv" ) { $sollanguage = "sv,sv_SE,sv_SE.ISO8859-1,sv_SE.ISO8859-15,sv.ISO8859-15,sv_SE.UTF-8,sv.UTF-8"; }
+    elsif ( $sollanguage eq "pt_BR" ) { $sollanguage = "pt_BR,pt_BR.ISO8859-1,pt_BR.UTF-8"; }
+    elsif ( $sollanguage eq "ja" ) { $sollanguage = "ja,ja_JP.eucJP,ja_JP.PCK,ja_JP.UTF-8"; }
+    elsif ( $sollanguage eq "ko" ) { $sollanguage = "ko,ko_KR.EUC,ko_KR.UTF-8,ko.UTF-8"; }
+    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh_CN.EUC,zh_CN.GB18030,zh_CN.GBK,zh.GBK,zh_CN.UTF-8,zh.UTF-8"; }
+    elsif ( $sollanguage eq "zh_TW" ) { $sollanguage = "zh_TW,zh_TW.BIG5,zh_TW.EUC,zh_TW.UTF-8,zh_HK.BIG5HK,zh_HK.UTF-8"; }
+
+    return $sollanguage;
+}
+
+############################################################
 # Adding language infos in pkginfo file
 ############################################################
 
@@ -1290,7 +1315,9 @@ sub include_languageinfos_into_pkginfo
     # SUNWPKG_LIST=core01
     # SUNW_LOC=de
 
-    my $newline = "SUNW_LOC=" . $$languagestringref . "\n";
+    my $solarislanguage = get_solaris_language_for_langpack($$languagestringref);
+
+    my $newline = "SUNW_LOC=" . $solarislanguage . "\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
     if ( $onepackage->{'pkg_list_entry'} )
