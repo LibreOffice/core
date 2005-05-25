@@ -859,7 +859,7 @@ sub write_content_into_inf_file
 
                 my $value = "";
                 if ( $registryitem->{'Value'} ) { $value = $registryitem->{'Value'}; }
-                if ( $value =~ /\<progpath\>/ ) { $value =~ s/\\\"//g; } # no more usage of "\""
+                if ( $value =~ /\<progpath\>/ ) { $value =~ s/\\\"/\"\"/g; } # Quoting for INF is done by double ""
                 $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
                 $value =~ s/\<progpath\>/\%INSTALLLOCATION\%/g;
                 # $value =~ s/\%INSTALLLOCATION\%\\/\%INSTALLLOCATION\%/g;      # removing "\" after "%INSTALLLOCATION%"
