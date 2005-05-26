@@ -2,9 +2,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 12:46:52 $
+#   last change: $Author: sb $ $Date: 2005-05-26 14:46:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,15 +72,21 @@ Unix-like platforms (Linux x86, Solaris x86, Solaris SPARC):
 /opt/openoffice.org/ure/bin/regmerge
 /opt/openoffice.org/ure/bin/regview
 /opt/openoffice.org/ure/bin/javaldx
-/opt/openoffice.org/ure/bin/startup.sh  [private]
-/opt/openoffice.org/ure/bin/uno.bin  [private]
-/opt/openoffice.org/ure/bin/regcomp.bin  [private]
 /opt/openoffice.org/ure/lib/libuno_cppu.so.3
 /opt/openoffice.org/ure/lib/libuno_cppuhelpergcc3.so.3  [Linux x86 only]
 /opt/openoffice.org/ure/lib/libuno_cppuhelperC52.so.3  [Solaris only]
 /opt/openoffice.org/ure/lib/libuno_sal.so.3
 /opt/openoffice.org/ure/lib/libuno_salhelpergcc3.so.3  [Linux x86 only]
 /opt/openoffice.org/ure/lib/libuno_salhelperC52.so.3  [Solaris only]
+/opt/openoffice.org/ure/share/java/unoloader.jar
+/opt/openoffice.org/ure/share/java/juh.jar
+/opt/openoffice.org/ure/share/java/jurt.jar
+/opt/openoffice.org/ure/share/java/ridl.jar
+/opt/openoffice.org/ure/share/misc/types.rdb
+/opt/openoffice.org/ure/share/misc/services.rdb
+/opt/openoffice.org/ure/bin/startup.sh  [private]
+/opt/openoffice.org/ure/bin/uno.bin  [private]
+/opt/openoffice.org/ure/bin/regcomp.bin  [private]
 /opt/openoffice.org/ure/lib/unorc  [private]
 /opt/openoffice.org/ure/lib/libreg.so.3  [private]
 /opt/openoffice.org/ure/lib/librmcxt.so.3  [private]
@@ -128,13 +134,7 @@ Unix-like platforms (Linux x86, Solaris x86, Solaris SPARC):
 /opt/openoffice.org/ure/lib/libstlport_sunpro.so  [private; Solaris only]
 /opt/openoffice.org/ure/lib/libgcc_s.so.1  [private; Linux x86 only]
 /opt/openoffice.org/ure/lib/libstdc++.so.6  [private; Linux x86 only]
-/opt/openoffice.org/ure/share/java/unoloader.jar
-/opt/openoffice.org/ure/share/java/juh.jar
-/opt/openoffice.org/ure/share/java/jurt.jar
-/opt/openoffice.org/ure/share/java/ridl.jar
 /opt/openoffice.org/ure/share/java/java_uno.jar  [private]
-/opt/openoffice.org/ure/share/misc/types.rdb
-/opt/openoffice.org/ure/share/misc/services.rdb
 /opt/openoffice.org/ure/share/misc/javavendors.xml  [private]
 
 Windows:
@@ -149,6 +149,12 @@ Program Files\URE\bin\cppu3.dll
 Program Files\URE\bin\cppuhelper3MSC.dll
 Program Files\URE\bin\sal3.dll
 Program Files\URE\bin\salhelper3MSC.dll
+Program Files\URE\java\unoloader.jar
+Program Files\URE\java\juh.jar
+Program Files\URE\java\jurt.jar
+Program Files\URE\java\ridl.jar
+Program Files\URE\misc\types.rdb
+Program Files\URE\misc\services.rdb
 Program Files\URE\bin\uno.ini  [private]
 Program Files\URE\bin\reg3.dll  [private]
 Program Files\URE\bin\rmcxt3.dll  [private]
@@ -193,13 +199,7 @@ Program Files\URE\bin\uuresolver.uno.dll  [private]
 Program Files\URE\bin\stlport_vc7145.dll  [private]
 Program Files\URE\bin\msvcr71.dll  [private]
 Program Files\URE\bin\msvcp71.dll  [private]
-Program Files\URE\java\unoloader.jar
-Program Files\URE\java\juh.jar
-Program Files\URE\java\jurt.jar
-Program Files\URE\java\ridl.jar
 Program Files\URE\java\java_uno.jar  [private]
-Program Files\URE\misc\types.rdb
-Program Files\URE\misc\services.rdb
 Program Files\URE\misc\javavendors.xml  [private]
 
 Files marked as "private" are private to the URE installation.  Applications
