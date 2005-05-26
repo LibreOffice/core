@@ -1,0 +1,8 @@
+mkdir: %_DEST%\bin%_EXT%\ure
+..\%__SRC%\bin\ure\README %_DEST%\bin%_EXT%\ure\README
+..\%__SRC%\bin\ure\jvmfwk3.ini %_DEST%\bin%_EXT%\ure\jvmfwk3.ini
+..\%__SRC%\bin\ure\jvmfwk3rc %_DEST%\bin%_EXT%\ure\jvmfwk3rc
+..\%__SRC%\bin\ure\startup.sh %_DEST%\bin%_EXT%\ure\startup.sh
+..\%__SRC%\bin\ure\uno.ini %_DEST%\bin%_EXT%\ure\uno.ini
+..\%__SRC%\bin\ure\unorc %_DEST%\bin%_EXT%\ure\unorc
+..\%__SRC%\bin\uretest.zip %COMMON_DEST%\bin%_EXT%\uretest.zip
