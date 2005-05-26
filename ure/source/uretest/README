@@ -1,0 +1,146 @@
+#*************************************************************************
+#
+#   $RCSfile: README,v $
+#
+#   $Revision: 1.1 $
+#
+#   last change: $Author: sb $ $Date: 2005-05-26 09:36:31 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2005 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#*************************************************************************
+
+
+This directory contains tests for the UNO Runtime Environment (URE).  There are
+two makefiles, Makefile and Makefile.sdk, each to be executed with a
+sufficiently recent GNU make.
+
+The first, Makefile, is intended to be run without setting up any special
+environment.  Currently, this variant is only intended to work on Linux x86.
+The things that must be set up manually are:
+
+- The environment variable SDK_HOME must point to the base directory of some
+  OpenOffice.org Software Development Kit (SDK) (e.g.,
+  /opt/OpenOffice.org2.0_SDK).  This is only necessary to have access to some
+  UNO programming tools and files that are not part of the URE (idlc, cppumaker,
+  javamaker, UNOIDL files, and C++ headers).
+
+- The environment variable URE_HOME, if set, can be used to overwrite the
+  default URE location (/opt/openoffice.org/ure).
+
+- The environment variable GCCS_COMPAT can be used to work around
+  incompatibilities between the GCC version used to build the URE (GCC 3.4.x)
+  and the GCC version used while executing the tests (see below).  The problem
+  is that handling C++ exceptions often does not work reliably (leads to
+  aborting the process) when components built with different GCC versions are
+  run together in one process.  The solution is to force the process to use the
+  "better" version of libgcc_s.so.1 (which comes as part of the GCC
+  installation; the GCC 3.4.x version is also included in the URE installation
+  set).  That is, if the GCC version used while executing the tests is the one
+  installed on the system, and is for example either GCC 3.3.x or GCC 4.0.x,
+  then GCCS_COMPAT should be set to
+
+    LD_PRELOAD=/lib/libgcc_s.so.1
+
+  to force usage of the system's libgcc_s.so.1 version (which is known to be
+  "better" in those cases).  For GCC 3.4.x versions, GCCS_COMPAT need not be
+  set, and for other versions of GCC some experimentation might be necessary to
+  find out which version of libgcc_s.so.1 works.
+
+- A GCC installation (including g++) is expected to be available on the PATH.
+  See the SDK Installation Guide ($SDK_HOME/docs/install.html) for minimum
+  version requirements.
+
+- A JDK installation (java, javac, jar) is expected ot be available on the PATH.
+  See the SDK Installation Guide ($SDK_HOME/docs/install.html) for minimum
+  version requirements.
+
+The second, Makefile.sdk, is intended to be run from within a configured SDK
+environment (where the SDK is configured to work with a URE installation, not an
+office installation; see .../docs/install.html within the SDK installation).
+Three things need to be noted:
+
+- The SDK must be configured to use a C++ compiler (which is in principle
+  optional when working with the SDK, but needed by Makefile.sdk).
+
+- The SDK must be configured to use a JDK (which is in principle optional when
+  working with the SDK, but needed by Makefile.sdk).
+
+- On Linux x86, the environment variable GCCS_COMPAT can be used to work around
+  incompatibilities between the GCC version used to build the URE (GCC 3.4.x)
+  and the GCC version configured in the SDK.  See above for details.
+
+The tests that are executed in Makefile and Makefile.sdk are the same, though
+they are built differently (note that Makefile uses a local sub-directory ./out
+for generated files, while Makefile.sdk uses ./out.sdk):
+
+- test-regview checks that the regview executable from the URE installation
+  works reliably (not in Makefile.sdk; the other executables from the URE
+  installation are tested indirectly when making the other tests).
+
+- test-cpptest builds a C++ UNO component (cppmain.uno) that is run via the uno
+  executable.  It first tries to instantiate all the UNO services and singletons
+  that are part of the URE installation.  Then it tries to instantiate and call
+  a C++ UNO component (ccptest.uno) and a Java UNO component (javatest.uno),
+  both of which must throw a special exception which in turn is caught by
+  cppmain.uno.
+
+- test-javatest builds a Java UNO component (javamain.uno) that is run via the
+  uno executable.  It tries to instantiate and call a C++ UNO component
+  (cpptest.uno) and a Java UNO component (javatest.uno), both of which must
+  throw a special exception which in turn is caught by javamain.uno.
+
+- test-clientserver builds a server C++ UNO component (cppserver.uno) that is
+  run via the uno executable and listens on a pipe connection, and a Java UNO
+  component (javaclient.uno) that us run via the java executable and connects to
+  the server (after waiting for five seconds to give the server time to start
+  up).
