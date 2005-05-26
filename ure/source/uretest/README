@@ -2,9 +2,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 09:36:31 $
+#   last change: $Author: sb $ $Date: 2005-05-26 14:48:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,10 +61,26 @@
 
 
 This directory contains tests for the UNO Runtime Environment (URE).  There are
-two makefiles, Makefile and Makefile.sdk, each to be executed with a
+two makefiles, Makefile and Makefile.pln, each to be executed with a
 sufficiently recent GNU make.
 
-The first, Makefile, is intended to be run without setting up any special
+The first, Makefile, is intended to be run from within a configured SDK
+environment (where the SDK is configured to work with a URE installation, not an
+office installation; see .../docs/install.html within the SDK installation).
+Three things need to be noted:
+
+- The SDK must be configured to use a C++ compiler (which is in principle
+  optional when working with the SDK, but needed by Makefile).
+
+- The SDK must be configured to use a JDK (which is in principle optional when
+  working with the SDK, but needed by Makefile).
+
+- On Linux x86, the environment variable GCCS_COMPAT can be used to work around
+  incompatibilities between the GCC version used to build the URE (GCC 3.4.x)
+  and the GCC version configured in the SDK.  See below under Makefile.pln for
+  details.
+
+The second, Makefile.pln, is intended to be run without setting up any special
 environment.  Currently, this variant is only intended to work on Linux x86.
 The things that must be set up manually are:
 
@@ -104,27 +120,12 @@ The things that must be set up manually are:
   See the SDK Installation Guide ($SDK_HOME/docs/install.html) for minimum
   version requirements.
 
-The second, Makefile.sdk, is intended to be run from within a configured SDK
-environment (where the SDK is configured to work with a URE installation, not an
-office installation; see .../docs/install.html within the SDK installation).
-Three things need to be noted:
-
-- The SDK must be configured to use a C++ compiler (which is in principle
-  optional when working with the SDK, but needed by Makefile.sdk).
-
-- The SDK must be configured to use a JDK (which is in principle optional when
-  working with the SDK, but needed by Makefile.sdk).
-
-- On Linux x86, the environment variable GCCS_COMPAT can be used to work around
-  incompatibilities between the GCC version used to build the URE (GCC 3.4.x)
-  and the GCC version configured in the SDK.  See above for details.
-
-The tests that are executed in Makefile and Makefile.sdk are the same, though
-they are built differently (note that Makefile uses a local sub-directory ./out
-for generated files, while Makefile.sdk uses ./out.sdk):
+The tests that are executed in Makefile and Makefile.pln are the same, though
+they are built differently (note that Makefile uses a local sub-directory
+./out.sdk for generated files, while Makefile.pln uses ./out.pln):
 
 - test-regview checks that the regview executable from the URE installation
-  works reliably (not in Makefile.sdk; the other executables from the URE
+  works reliably (only in Makefile.pln; the other executables from the URE
   installation are tested indirectly when making the other tests).
 
 - test-cpptest builds a C++ UNO component (cppmain.uno) that is run via the uno
