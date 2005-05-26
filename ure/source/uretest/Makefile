@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 09:36:11 $
+#   last change: $Author: sb $ $Date: 2005-05-26 14:49:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,226 +59,208 @@
 #
 #*************************************************************************
 
-# The following variable must be set:
-#SDK_HOME := /opt/OpenOffice.org2.0_SDK
-
-# The following variables can be set, if necessary:
-#URE_HOME := /opt/openoffice.org/ure
+# The following variable can be set, if necessary:
 #GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 
-
-URE_HOME ?= /opt/openoffice.org/ure
 
 .DELETE_ON_ERROR:
 
 
-.PHONY: test
-test: test-regview test-cpptest test-javatest test-clientserver
+PRJ = $(OO_SDK_HOME)
 
-.PHONY: test-regview
-test-regview: out/services.rdb
-	$(URE_HOME)/bin/regview $< > /dev/null
+include $(PRJ)/settings/settings.mk
+include $(PRJ)/settings/std.mk
+
+
+.PHONY: ALL
+ALL: test
+
+include $(PRJ)/settings/stdtarget.mk
+
+
+.PHONY: test
+test: test-cpptest test-javatest test-clientserver
 
 .PHONY: test-cpptest
-test-cpptest: out/cppmain.uno.so out/types.rdb out/services.rdb
-	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
-            -c test.cpp.cppmain.Component -l file://$(PWD)/$< \
-            -ro $(URE_HOME)/share/misc/types.rdb -ro out/types.rdb \
-            -ro $(URE_HOME)/share/misc/services.rdb -ro out/services.rdb
+test-cpptest: out.sdk/cppmain.uno.so out.sdk/types.rdb out.sdk/services.rdb
+	$(GCCS_COMPAT) uno \
+            -c test.cpp.cppmain.Component -l $(URLPREFIX)$(PWD)/$< \
+            -ro $(OO_SDK_URE_HOME)/share/misc/types.rdb -ro out.sdk/types.rdb \
+            -ro $(OO_SDK_URE_HOME)/share/misc/services.rdb \
+            -ro out.sdk/services.rdb
 
 .PHONY: test-javatest
-test-javatest: out/javamain.uno.jar out/types.rdb out/services.rdb
-	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
-            -c test.java.javamain.Component -l file://$(PWD)/$< \
-            -ro $(URE_HOME)/share/misc/types.rdb -ro out/types.rdb \
-            -ro $(URE_HOME)/share/misc/services.rdb -ro out/services.rdb
+test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
+	$(GCCS_COMPAT) uno \
+            -c test.java.javamain.Component -l $(URLPREFIX)$(PWD)/$< \
+            -ro $(OO_SDK_URE_HOME)/share/misc/types.rdb -ro out.sdk/types.rdb \
+            -ro $(OO_SDK_URE_HOME)/share/misc/services.rdb \
+            -ro out.sdk/services.rdb
 
 .PHONY: test-clientserver
-test-clientserver: out/cppserver.uno.so out/runner.jar out/javaclient.jar
-	$(GCCS_COMPAT) $(URE_HOME)/bin/uno -c test.cpp.cppserver.Component \
-            -l file://$(PWD)/out/cppserver.uno.so \
-            -ro $(URE_HOME)/share/misc/types.rdb -ro out/types.rdb \
-            -ro $(URE_HOME)/share/misc/services.rdb \
+test-clientserver: out.sdk/cppserver.uno.so out.sdk/runner.jar \
+            out.sdk/javaclient.jar
+	$(GCCS_COMPAT) uno \
+            -c test.cpp.cppserver.Component \
+            -l $(URLPREFIX)$(PWD)/out.sdk/cppserver.uno.so \
+            -ro $(OO_SDK_URE_HOME)/share/misc/types.rdb -ro out.sdk/types.rdb \
+            -ro $(OO_SDK_URE_HOME)/share/misc/services.rdb \
             -u 'uno:pipe,name=ure_test;urp;server' --singleaccept &
 	sleep 5 && \
-            java -jar out/runner.jar file://$(URE_HOME)/share/java/ \
-            file://$(PWD)/out/javaclient.jar 'uno:pipe,name=ure_test;urp;server'
+            $(SDK_JAVA) -jar out.sdk/runner.jar \
+            $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)/ \
+            $(URLPREFIX)$(PWD)/out.sdk/javaclient.jar \
+            'uno:pipe,name=ure_test;urp;server'
 
 
 .PHONY: clean
 clean:
-	rm -rf out
+	$(DELRECURSIVE) out.sdk
 
 
-out/cppmain.uno.so: out/cppmain.o version.map | out out/lib/libuno_cppu.so \
-            out/lib/libuno_cppuhelpergcc3.so out/lib/libuno_sal.so \
-            out/lib/libuno_salhelpergcc3.so
-	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
-            -Wl,--version-script=version.map $< -Lout/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3
+out.sdk/cppmain.uno.so: out.sdk/cppmain.o version.map | out.sdk
+	$(LINK) $(COMP_LINK_FLAGS) -o $@ $< $(LINK_LIBS) $(CPPULIB) \
+            $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB)
 
-out/cppmain.o: cppmain.cc out/cpputypes.cppumaker.flag \
-            out/types.cppumaker.flag | out
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include \
-            -I out/include/cpputypes -I out/include/types -DCPPU_ENV=gcc3 \
-            -DLINUX -DUNX $<
+out.sdk/cppmain.o: cppmain.cc out.sdk/cpputypes.cppumaker.flag \
+            out.sdk/types.cppumaker.flag | out.sdk
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH) $@ $(CC_INCLUDES) \
+            -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
+            $(CC_DEFINES) $<
 
 
-out/cpptest.uno.so: out/cpptest.o version.map | out \
-            out/lib/libuno_cppu.so out/lib/libuno_cppuhelpergcc3.so \
-            out/lib/libuno_sal.so
-	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
-            -Wl,--version-script=version.map $< -Lout/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal
+out.sdk/cpptest.uno.so: out.sdk/cpptest.o version.map | out.sdk
+	$(LINK) $(COMP_LINK_FLAGS) -o $@ $< $(LINK_LIBS) $(CPPULIB) \
+            $(CPPUHELPERLIB) $(SALLIB)
 
-out/cpptest.o: cpptest.cc out/cpputypes.cppumaker.flag \
-            out/types.cppumaker.flag | out
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include \
-            -I out/include/cpputypes -I out/include/types -DCPPU_ENV=gcc3 \
-            -DLINUX -DUNX $<
+out.sdk/cpptest.o: cpptest.cc out.sdk/cpputypes.cppumaker.flag \
+            out.sdk/types.cppumaker.flag | out.sdk
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH) $@ $(CC_INCLUDES) \
+            -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
+            $(CC_DEFINES) $<
 
 
-out/cppserver.uno.so: out/cppserver.o version.map | out out/lib/libuno_cppu.so \
-            out/lib/libuno_cppuhelpergcc3.so out/lib/libuno_sal.so
-	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
-            -Wl,--version-script=version.map $< -Lout/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal
+out.sdk/cppserver.uno.so: out.sdk/cppserver.o version.map | out.sdk
+	$(LINK) $(COMP_LINK_FLAGS) -o $@ $< $(LINK_LIBS) $(CPPULIB) \
+            $(CPPUHELPERLIB) $(SALLIB)
 
-out/cppserver.o: cppserver.cc out/cpputypes.cppumaker.flag \
-            out/types.cppumaker.flag | out
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include \
-            -I out/include/cpputypes -I out/include/types -DCPPU_ENV=gcc3 \
-            -DLINUX -DUNX $<
+out.sdk/cppserver.o: cppserver.cc out.sdk/cpputypes.cppumaker.flag \
+            out.sdk/types.cppumaker.flag | out.sdk
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH) $@ $(CC_INCLUDES) \
+            -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
+            $(CC_DEFINES) $<
 
 
-out/cpputypes.cppumaker.flag: cpputypes | out
-	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/linux/bin/cppumaker \
-            -O./out/include/cpputypes -T`cat cpputypes` -B/UCR \
-            $(URE_HOME)/share/misc/types.rdb
+out.sdk/cpputypes.cppumaker.flag: cpputypes | out.sdk
+	$(CPPUMAKER) -O./out.sdk/include/cpputypes -T`cat cpputypes` -B/UCR \
+            $(OO_SDK_URE_HOME)/share/misc/types.rdb
 	touch $@
 
-out/types.cppumaker.flag: out/types.rdb | out
-	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/linux/bin/cppumaker \
-            -O./out/include/types -B/UCR $< -X$(URE_HOME)/share/misc/types.rdb
+out.sdk/types.cppumaker.flag: out.sdk/types.rdb | out.sdk
+	$(CPPUMAKER) -O./out.sdk/include/types -B/UCR $< \
+            -X$(OO_SDK_URE_HOME)/share/misc/types.rdb
 	touch $@
 
 
-out/javamain.uno.jar: out/class/javamain/test/java/javamain/JavaMain.class \
-            out/javamain.mf | out
-	jar cfm $@ out/javamain.mf -C out/class/javamain test
+out.sdk/javamain.uno.jar: \
+            out.sdk/class/javamain/test/java/javamain/JavaMain.class \
+            out.sdk/javamain.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/javamain.mf -C out.sdk/class/javamain test
 
-out/javamain.mf: javamain.mf.template | out
+out.sdk/javamain.mf: javamain.mf.template | out.sdk
 	sed -e 's~^Class-Path:$$~& types.jar~' \
             -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
 
-out/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
-            out/types.jar | out/class
-	rm -rf out/class/javamain
-	mkdir out/class/javamain
-	javac -classpath \
-            $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out/types.jar \
-            -sourcepath . -d out/class/javamain $<
+out.sdk/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
+            out.sdk/types.jar | out.sdk/class
+	$(DELRECURSIVE) out.sdk/class/javamain
+	$(MKDIR) out.sdk/class/javamain
+	$(SDK_JAVAC) $(JAVAC_FLAGS) \
+            -classpath $(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar \
+            -sourcepath . -d out.sdk/class/javamain $<
 
 
-out/runner.jar: out/class/runner/test/java/runner/Runner.class out/runner.mf \
-            | out
-	jar cfm $@ out/runner.mf -C out/class/runner test
+out.sdk/runner.jar: out.sdk/class/runner/test/java/runner/Runner.class \
+            out.sdk/runner.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/runner.mf -C out.sdk/class/runner test
 
-out/runner.mf: runner.mf.template | out
+out.sdk/runner.mf: runner.mf.template | out.sdk
 	sed -e \
-            's~^Class-Path:$$~& file://$(URE_HOME)/share/java/unoloader.jar~' \
+            's~^Class-Path:$$~& $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)/unoloader.jar~' \
             -e 's~^UNO-Type-Path:$$~& ~' $< > $@
 
-out/class/runner/test/java/runner/Runner.class: Runner.java | out/class
-	rm -rf out/class/runner
-	mkdir out/class/runner
-	javac -classpath $(URE_HOME)/share/java/unoloader.jar -sourcepath . \
-            -d out/class/runner $<
+out.sdk/class/runner/test/java/runner/Runner.class: Runner.java | out.sdk/class
+	$(DELRECURSIVE) out.sdk/class/runner
+	$(MKDIR) out.sdk/class/runner
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -sourcepath . -d out.sdk/class/runner $<
 
 
-out/javatest.uno.jar: out/class/javatest/test/java/javatest/JavaTest.class \
-            out/javatest.mf | out
-	jar cfm $@ out/javatest.mf -C out/class/javatest test
+out.sdk/javatest.uno.jar: \
+            out.sdk/class/javatest/test/java/javatest/JavaTest.class \
+            out.sdk/javatest.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/javatest.mf -C out.sdk/class/javatest test
 
-out/javatest.mf: javatest.mf.template | out
+out.sdk/javatest.mf: javatest.mf.template | out.sdk
 	sed -e 's~^Class-Path:$$~& types.jar~' \
             -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
 
-out/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
-            out/types.jar | out/class
-	rm -rf out/class/javatest
-	mkdir out/class/javatest
-	javac -classpath \
-            $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out/types.jar \
-            -sourcepath . -d out/class/javatest $<
+out.sdk/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
+            out.sdk/types.jar | out.sdk/class
+	$(DELRECURSIVE) out.sdk/class/javatest
+	$(MKDIR) out.sdk/class/javatest
+	$(SDK_JAVAC) $(JAVAC_FLAGS) \
+            -classpath $(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar \
+            -sourcepath . -d out.sdk/class/javatest $<
 
 
-out/javaclient.jar: out/class/javaclient/test/java/javaclient/JavaClient.class \
-            out/javaclient.mf | out
-	jar cfm $@ out/javaclient.mf -C out/class/javaclient test
+out.sdk/javaclient.jar: \
+            out.sdk/class/javaclient/test/java/javaclient/JavaClient.class \
+            out.sdk/javaclient.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/javaclient.mf -C out.sdk/class/javaclient test
 
-out/javaclient.mf: javaclient.mf.template | out
+out.sdk/javaclient.mf: javaclient.mf.template | out.sdk
 	sed -e 's~^Class-Path:$$~& types.jar~' \
             -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
 
-out/class/javaclient/test/java/javaclient/JavaClient.class: JavaClient.java \
-            out/types.jar | out/class
-	rm -rf out/class/javaclient
-	mkdir out/class/javaclient
-	javac -classpath \
-            $(URE_HOME)/share/java/juh.jar:$(URE_HOME)/share/java/ridl.jar:out/types.jar \
-            -sourcepath . -d out/class/javaclient $<
+out.sdk/class/javaclient/test/java/javaclient/JavaClient.class: \
+            JavaClient.java out.sdk/types.jar | out.sdk/class
+	$(DELRECURSIVE) out.sdk/class/javaclient
+	$(MKDIR) out.sdk/class/javaclient
+	$(SDK_JAVAC) $(JAVAC_FLAGS) \
+            -classpath $(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar \
+            -sourcepath . -d out.sdk/class/javaclient $<
 
 
-out/types.jar: out/types.javamaker.flag out/types.mf | out
-	jar cfm $@ out/types.mf -C out/class/types test
+out.sdk/types.jar: out.sdk/types.javamaker.flag out.sdk/types.mf | out.sdk
+	$(SDK_JAR) cfm $@ out.sdk/types.mf -C out.sdk/class/types test
 
-out/types.mf: types.mf.template | out
+out.sdk/types.mf: types.mf.template | out.sdk
 	sed -e 's~^Class-Path:$$~& ~' -e 's~^UNO-Type-Path:$$~& \<\>~' $< > $@
 
-out/types.javamaker.flag: out/types.rdb | out out/class
-	rm -rf out/class/types
-	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/linux/bin/javamaker \
-            -O./out/class/types -B/UCR $< -X$(URE_HOME)/share/misc/types.rdb
+out.sdk/types.javamaker.flag: out.sdk/types.rdb | out.sdk out.sdk/class
+	$(DELRECURSIVE) out.sdk/class/types
+	$(JAVAMAKER) -O./out.sdk/class/types -B/UCR $< \
+            -X$(OO_SDK_URE_HOME)/share/misc/types.rdb
 	touch $@
 
 
-out/types.rdb: out/types.urd | out
-	$(URE_HOME)/bin/regmerge $@ /UCR $<
+out.sdk/types.rdb: out.sdk/types.urd | out.sdk
+	$(REGMERGE) $@ /UCR $<
 
-out/types.urd: types.idl | out
-	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/linux/bin/idlc -O$(@D) \
-            -I$(SDK_HOME)/idl -cid -we $<
-
-
-out/services.rdb: out/cpptest.uno.so out/javatest.uno.jar | out
-	rm -f $@
-	$(URE_HOME)/bin/regcomp -register -r $@ \
-            -c file://$(PWD)/out/cpptest.uno.so
-	$(URE_HOME)/bin/regcomp -register \
-            -br $(URE_HOME)/share/misc/types.rdb \
-            -br $(URE_HOME)/share/misc/services.rdb -r $@ \
-            -c file://$(PWD)/out/javatest.uno.jar
+out.sdk/types.urd: types.idl | out.sdk
+	$(IDLC) -O$(@D) -I$(IDL_DIR) -cid -we $<
 
 
-out/lib/libuno_cppu.so: | out/lib
-	ln -fs $(URE_HOME)/lib/libuno_cppu.so.3 $@
-
-out/lib/libuno_cppuhelpergcc3.so: | out/lib
-	ln -fs $(URE_HOME)/lib/libuno_cppuhelpergcc3.so.3 $@
-
-out/lib/libuno_sal.so: | out/lib
-	ln -fs $(URE_HOME)/lib/libuno_sal.so.3 $@
-
-out/lib/libuno_salhelpergcc3.so: | out/lib
-	ln -fs $(URE_HOME)/lib/libuno_salhelpergcc3.so.3 $@
+out.sdk/services.rdb: out.sdk/cpptest.uno.so out.sdk/javatest.uno.jar | out.sdk
+	$(DEL) $@
+	$(REGCOMP) -register -r $@ -c $(URLPREFIX)$(PWD)/out.sdk/cpptest.uno.so
+	$(REGCOMP) -register -br $(OO_SDK_URE_HOME)/share/misc/types.rdb \
+            -br $(OO_SDK_URE_HOME)/share/misc/services.rdb -r $@ \
+            -c $(URLPREFIX)$(PWD)/out.sdk/javatest.uno.jar
 
 
-out:
-	mkdir $@
+out.sdk:
+	$(MKDIR) $@
 
-out/class: | out
-	mkdir $@
-
-out/lib: | out
-	mkdir $@
+out.sdk/class: | out.sdk
+	$(MKDIR) $@
