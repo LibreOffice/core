@@ -2,9 +2,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 09:44:30 $
+#   last change: $Author: sb $ $Date: 2005-05-26 12:46:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,8 +60,10 @@
 #*************************************************************************
 
 
-Overview of Linux x86, Solaris x86, Solaris SPARC URE installation:
--------------------------------------------------------------------
+Overview of  URE installation:
+------------------------------
+
+Unix-like platforms (Linux x86, Solaris x86, Solaris SPARC):
 
 /opt/openoffice.org/ure/LICENSE
 /opt/openoffice.org/ure/README
@@ -135,6 +137,71 @@ Overview of Linux x86, Solaris x86, Solaris SPARC URE installation:
 /opt/openoffice.org/ure/share/misc/services.rdb
 /opt/openoffice.org/ure/share/misc/javavendors.xml  [private]
 
+Windows:
+
+Program Files\URE\LICENSE
+Program Files\URE\README
+Program Files\URE\bin\uno.exe
+Program Files\URE\bin\regcomp.exe
+Program Files\URE\bin\regmerge.exe
+Program Files\URE\bin\regview.exe
+Program Files\URE\bin\cppu3.dll
+Program Files\URE\bin\cppuhelper3MSC.dll
+Program Files\URE\bin\sal3.dll
+Program Files\URE\bin\salhelper3MSC.dll
+Program Files\URE\bin\uno.ini  [private]
+Program Files\URE\bin\reg3.dll  [private]
+Program Files\URE\bin\rmcxt3.dll  [private]
+Program Files\URE\bin\store3.dll  [private]
+Program Files\URE\bin\jvmaccess3MSC.dll  [private]
+Program Files\URE\bin\jvmfwk3.dll  [private]
+Program Files\URE\bin\sunjavaplugin.dll  [private]
+Program Files\URE\bin\JREProperties.class  [private]
+Program Files\URE\bin\jvmfwk3.ini  [private]
+Program Files\URE\bin\msci_uno.dll  [private]
+Program Files\URE\bin\java_uno.dll  [private]
+Program Files\URE\bin\urp_uno.dll  [private]
+Program Files\URE\bin\jpipe.dll  [private]
+Program Files\URE\bin\juh.dll  [private]
+Program Files\URE\bin\juhx.dll  [private]
+Program Files\URE\bin\acceptor.uno.dll  [private]
+Program Files\URE\bin\bridgefac.uno.dll  [private]
+Program Files\URE\bin\connector.uno.dll  [private]
+Program Files\URE\bin\implreg.uno.dll  [private]
+Program Files\URE\bin\introspection.uno.dll  [private]
+Program Files\URE\bin\invocadapt.uno.dll  [private]
+Program Files\URE\bin\invocation.uno.dll  [private]
+Program Files\URE\bin\javaloader.uno.dll  [private]
+Program Files\URE\bin\javavm.uno.dll  [private]
+Program Files\URE\bin\namingservice.uno.dll  [private]
+Program Files\URE\bin\nestedreg.uno.dll  [private]
+Program Files\URE\bin\proxyfac.uno.dll  [private]
+Program Files\URE\bin\reflection.uno.dll  [private]
+Program Files\URE\bin\regtypeprov.uno.dll  [private]
+Program Files\URE\bin\remotebridge.uno.dll  [private]
+Program Files\URE\bin\security.uno.dll  [private]
+Program Files\URE\bin\servicemgr.uno.dll  [private]
+Program Files\URE\bin\shlibloader.uno.dll  [private]
+Program Files\URE\bin\simplereg.uno.dll  [private]
+Program Files\URE\bin\streams.uno.dll  [private]
+Program Files\URE\bin\textinstream.uno.dll  [private]
+Program Files\URE\bin\textoutstream.uno.dll  [private]
+Program Files\URE\bin\typeconverter.uno.dll  [private]
+Program Files\URE\bin\typemgr.uno.dll  [private]
+Program Files\URE\bin\uriproc.uno.dll  [private]
+Program Files\URE\bin\uuresolver.uno.dll  [private]
+Program Files\URE\bin\stlport_vc7145.dll  [private]
+Program Files\URE\bin\msvcr71.dll  [private]
+Program Files\URE\bin\msvcp71.dll  [private]
+Program Files\URE\java\unoloader.jar
+Program Files\URE\java\juh.jar
+Program Files\URE\java\jurt.jar
+Program Files\URE\java\ridl.jar
+Program Files\URE\java\java_uno.jar  [private]
+Program Files\URE\misc\types.rdb
+Program Files\URE\misc\services.rdb
+Program Files\URE\misc\javavendors.xml  [private]
+
 Files marked as "private" are private to the URE installation.  Applications
 that use the URE must not make any assumptions about their existance or
 functionality.
@@ -143,77 +210,94 @@ functionality.
 Notes on the public files of a URE installation:
 ------------------------------------------------
 
-bin/uno is an executable to run UNO components.  See the SDK Developer's Guide
-for details.
+uno is an executable to run UNO components.  See the SDK Developer's Guide for
+details.
 
-bin/regcomp, bin/regmerge, and bin/regview are tools to work with binary
-registries that contain UNO type or service information.  See the SDK
-Developer's Guide for details.  (Note that these tools may in the future be
-superseded by a more elaborate mechanism, like unopkg already used by
-OpenOffice.org.)
+regcomp, regmerge, and regview are tools to work with binary registries that
+contain UNO type or service information.  See the SDK Developer's Guide for
+details.  (Note that these tools may in the future be superseded by a more
+elaborate mechanism, like unopkg already used by OpenOffice.org.)
 
-bin/javaldx is a helper program specific to Sun's JDK/JRE (and compatible) that
-is needed so that processes on Unix-like platforms can reliably start a Java VM.
-Executables like bin/uno and bin/regcomp automatically take care of running this
-helper.
+javaldx is a helper program specific to Sun's JDK/JRE (and compatible) that is
+needed on Unix-like platforms so that processes can reliably start a Java VM.
+Executables like uno and regcomp automatically take care of running this helper.
 
-lib/libuno_cppu.so.3, lib/libuno_cppuhelpergcc3.so.3, lib/libuno_sal.so.3, and
-lib/libuno_salhelpergcc3.so.3 are the public C++ UNO runtime dynamic libraries
-that client code can call.  See the "C++ Reference" section of the SDK HTML
-documentation for details of the functionality offered.  (The corresponding C++
-header files are not part of the URE, but are part of the SDK.)
+cppu, cppuhelper, sal, and salhelper are the public C++ UNO runtime dynamic
+libraries that client code can call.  See the "C++ Reference" section of the SDK
+HTML documentation for details of the functionality offered.  (The corresponding
+C++ header files are not part of the URE, but are part of the SDK.)
 
-share/java/unoloader.jar, share/java/juh.jar, share/java/jurt.jar, and
-share/java/ridl.jar are the public Java UNO runtime JARs that client code can
-call.  See the "Java UNO Runtime Reference" section of the SDK HTML
-documentation for details of the functionality offered.
+unoloader.jar, juh.jar, jurt.jar, and ridl.jar are the public Java UNO runtime
+JARs that client code can call.  See the "Java UNO Runtime Reference" section of
+the SDK HTML documentation for details of the functionality offered.
+
+types.rdb and services.rdb are preconfigured UNO type and service registries.
+See "Notes on deployment" below for details.
 
 
 Notes on deployment:
 --------------------
 
 Per default, the URE is installed in a platform-specific location
-(/opt/openoffice.org/ure on Linux x86).  This can be overridden during
-installation (e.g., with rpm --relocate on Linux).  The URE is designed so that
-multiple instances, installed in arbitrary locations, can coexist on a single
-system.  (See below for the use of ~/.ure/javasettings.xml.)
+(/opt/openoffice.org/ure on Unix-like platforms, Program Files\URE on Windows).
+This can be overridden during installation (e.g., with rpm --relocate on Linux).
+The URE is designed so that multiple instances, installed in arbitrary
+locations, can coexist on a single system.  (See below for the use of a per-user
+javasettings_$(_OS)_$(_ARCH).xml file.)
 
-The URE installation comes preconfigured with a number of UNO types
-(share/misc/types.rdb) and UNO services (share/misc/services.rdb).  The UNO
-deployment variable UNO_TYPES is automatically set up so that UNO types are
-searched for in the following places, in the given order:
+The URE installation comes preconfigured with a number of UNO types (types.rdb)
+and UNO services (services.rdb).  The UNO deployment variable UNO_TYPES is
+automatically set up so that UNO types are searched for in the following places,
+in the given order:
 
+Unix-like platforms:
 - share/misc/types.rdb within the URE installation;
 - /etc/opt/ure/types.rdb, if it exists;
 - ~/.ure/types.rdb, if it exists.
 
+Windows:
+- misc/types.rdb within the URE installation;
+- Documents and Settings\<User Name>\Application Data\URE\types.rdb, if it
+  exists.
+
 Similarly, the UNO deployment variable UNO_SERVICES is automatically set up so
 that UNO services are searched for in the following places, in the given order:
 
+Unix-like platforms:
 - share/misc/services.rdb within the URE installation;
 - /etc/opt/ure/services.rdb, if it exists;
 - ~/.ure/services.rdb, if it exists.
+
+Windows:
+- misc/services.rdb within the URE installation;
+- Documents and Settings\<User Name>\Application Data\URE\services.rdb, if it
+  exists.
+
+(Note that on Windows there currently is no support for system-wide deployment,
+for example under Documents and Settings\All Users\Application Data\URE; this
+may be added in the future.)
 
 See the SDK Developer's Guide and <http://udk.openoffice.org/common/man/concept/
 micro_deployment.html> for details about the UNO deployment variables and
 mechnisms to override them.
 
-Additional UNO types can be deployed into /etc/opt/ure/types.rdb or
-~/.ure/types.rdb, using bin/regmerge.  Additional UNO services can be deployed
-into /etc/opt/ure/services.rdb or ~/.ure/services.rdb, using bin/regcomp.
+Additional UNO types and services can be deployed using regcomp.  No additional
+UNO types and services should be deployed into the types.rdb and services.rdb
+within the URE installation.
 
-(The URE installation contains a private lib/unorc that is responsible for
-setting up UNO_TYPES and UNO_SERVICES.  That file additionally contains the
+(The URE installation contains a private unorc or uno.ini that is responsible
+for setting up UNO_TYPES and UNO_SERVICES.  That file additionally contains the
 private deployment variables URE_INTERNAL_LIB_DIR and URE_INTERNAL_JAVA_DIR,
 which are necessary for a properly working URE.)
 
-When a URE executable (bin/uno etc.) starts a Java VM, it uses the URE Java
+When a URE executable (uno etc.) starts a Java VM, it uses the URE Java
 Framework (see <http://udk.openoffice.org/common/man/spec/
 javavendorextension.sxw>) to search for a suitable JDK/JRE installation.  The
-URE installation comes preconfigured with a (private) share/misc/javavendors.xml
-that supports various JDK/JRE versions, and with a (private) lib/jvmfwk3rc that
-specifies where information about suitable JDK/JRE installations is stored:
+URE installation comes preconfigured with a (private) javavendors.xml that
+supports various JDK/JRE versions, and with a (private) jvmfwk3rc or jvmfwk3.ini
+that specifies where information about suitable JDK/JRE installations is stored:
 
+Unix-like platforms:
 - Information is first looked for in
   /etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml;
 - if no information is found there, then information is looked for in
@@ -222,11 +306,21 @@ specifies where information about suitable JDK/JRE installations is stored:
   for, and any relevant information is stored in
   ~/.ure/javasettings_${_OS}_${_ARCH}.xml (which is created as necessary).
 
-(A system administrator can copy some existing ~/.ure/javasettings_${_OS}_
-${_ARCH}.xml to /etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml, so that all users
-automatically find the same JDK/JRE installation.  Also, any javasettings_
-${_OS}_${_ARCH}.xml file can simply be deleted in case it contains any stale
-data and might thus cause problems.)
+Windows:
+- Information is first looked for in Documents and Settings\<User
+  Name>\Application Data\URE\javasettings_${_OS}_${_ARCH}.xml;
+- if no information is found there, a suitable JDK/JRE installation is searched
+  for, and any relevant information is stored in
+  ~/.ure/javasettings_${_OS}_${_ARCH}.xml (which is created as necessary).
+
+(On Unix-like platforms, a system administrator can copy some existing
+~/.ure/javasettings_${_OS}_${_ARCH}.xml to
+/etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml, so that all users automatically
+find the same JDK/JRE installation.  On Windows, there currently is no support
+for such a system-wide deployment, for example under Documents and Settings\All
+Users\Application Data\URE; this may be added in the future.  On any platform,
+any javasettings_${_OS}_${_ARCH}.xml file can simply be deleted in case it
+contains any stale data and might thus cause problems.)
 
 The location of a suitable JDK/JRE installation can also be specified directly
 with the UNO_JAVA_JFW_JREHOME deployment variable, see
@@ -236,17 +330,17 @@ Within the SDK (when configured for the URE; see the "Installation Guide"
 section of the SDK HTML documentation for details), the selected Java
 (environment variable OO_SDK_JAVA_HOME) is used when any of the executables
 javac, jar, or java is run (typically from a makefile).  However, when a URE
-executable (bin/uno etc.) starts a Java VM, the URE Java Framework mechanism is
-used instead, as explained above.  Note that this may lead to problems when
-those two Java versions are incompatible (e.g., when the SDK uses Java 5 to
-create class files, and the URE Java Framework mechanism selects a Java 1.4 VM
-which cannot read them).
+executable (uno etc.) starts a Java VM, the URE Java Framework mechanism is used
+instead, as explained above.  Note that this may lead to problems when those two
+Java versions are incompatible (e.g., when the SDK uses Java 5 to create class
+files, and the URE Java Framework mechanism selects a Java 1.4 VM which cannot
+read them).
 
 
 Notes on programming:
 ---------------------
 
-C++ UNO components run from within the bin/uno executable can depend on an
+C++ UNO components run from within the uno executable can depend on an
 environment in which the public C++ UNO runtime dynamic libraries (cppu,
 cppuhelper, sal, salhelper) are already available (i.e., on Unix-like platforms,
 a component dynamic library need not make sure that the UNO runtime dynamic
