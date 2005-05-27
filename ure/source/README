@@ -2,9 +2,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 14:46:59 $
+#   last change: $Author: sb $ $Date: 2005-05-27 15:04:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -199,6 +199,7 @@ Program Files\URE\bin\uuresolver.uno.dll  [private]
 Program Files\URE\bin\stlport_vc7145.dll  [private]
 Program Files\URE\bin\msvcr71.dll  [private]
 Program Files\URE\bin\msvcp71.dll  [private]
+Program Files\URE\bin\uwinapi.dll  [private]
 Program Files\URE\java\java_uno.jar  [private]
 Program Files\URE\misc\javavendors.xml  [private]
 
