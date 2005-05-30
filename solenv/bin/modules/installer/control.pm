@@ -396,7 +396,7 @@ sub determine_ship_directory
 }
 
 #############################################################
-# Controlling if this is an update pack process
+# Controlling if this is an official RE pack process
 #############################################################
 
 sub check_updatepack
@@ -415,13 +415,13 @@ sub check_updatepack
             $infoline = "Environment variable CWS_WORK_STAMP not set\n";
             push(@installer::globals::globallogfileinfo, $infoline);
 
-            if ( $ENV{'SHIPDRIVE'} )    # the environment variable SHIPDRIVE must be set (set only in CWS)
+            if ( $ENV{'SHIPDRIVE'} )    # the environment variable SHIPDRIVE must be set
             {
                 $shipdrive = $ENV{'SHIPDRIVE'};
                 $infoline = "Ship drive defined: $shipdrive\n";
                 push(@installer::globals::globallogfileinfo, $infoline);
 
-                if ( -d $shipdrive )
+                if ( -d $shipdrive )    # SHIPDRIVE must be a directory
                 {
                     $infoline = "Ship drive exists\n";
                     push(@installer::globals::globallogfileinfo, $infoline);
@@ -482,6 +482,9 @@ sub check_updatepack
                         push(@installer::globals::globallogfileinfo, $infoline);
                         $infoline = "Failed to create directory $directory\n";
                         push(@installer::globals::globallogfileinfo, $infoline);
+                        if ( defined $ENV{'BSCLIENT'} && ( uc $ENV{'BSCLIENT'} eq 'TRUE' ) ) {
+                            installer::exiter::exit_program("ERROR: No write access to SHIPDRIVE allthough BSCLIENT is set.", "check_updatepack");
+                        }
                     }
                 }
                 else
