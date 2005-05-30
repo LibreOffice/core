@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-20 12:52:48 $
+#   last change: $Author: kz $ $Date: 2005-05-30 14:06:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,57 +60,52 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..$/..
 
-PRJNAME=devtools
-TARGET=btcommuni
-ENABLE_EXCEPTIONS=true
-
+PRJNAME=TOOLS
+TARGET=communi
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=\
+CXXFILES=   simplecm.cxx	bcst.cxx
+
+OBJFILES=   \
+            $(OBJ)$/abthread.obj		\
+            $(OBJ)$/tcpio.obj		\
+            $(OBJ)$/packethandler.obj \
+            $(OBJ)$/simplecm.obj	\
+            $(OBJ)$/bcst.obj		\
+            $(OBJ)$/persbcst.obj	\
+            $(OBJ)$/iiclient.obj	\
+            $(OBJ)$/siclient.obj	\
+            $(OBJ)$/infocom.obj		\
+            $(OBJ)$/bsockcon.obj	\
+            $(OBJ)$/ssockcon.obj	\
+            $(OBJ)$/parser.obj		\
+            $(OBJ)$/geninfo.obj		\
+
+SLOFILES=   \
             $(SLO)$/abthread.obj		\
             $(SLO)$/tcpio.obj       \
             $(SLO)$/packethandler.obj \
+            $(SLO)$/simplecm.obj	\
             $(SLO)$/bcst.obj		\
             $(SLO)$/persbcst.obj	\
             $(SLO)$/iiclient.obj	\
             $(SLO)$/siclient.obj	\
             $(SLO)$/infocom.obj		\
             $(SLO)$/bsockcon.obj	\
-            $(SLO)$/ssockcon.obj
-
-SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX) 
-SHL1IMPLIB	=i$(TARGET) 
-SHL1LIBS	=$(SLB)$/$(TARGET).lib
-SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN	=$(SHL1LIBS) 
-SHL1STDLIBS=\
-        $(TOOLSLIB) 	\
-        $(SIMPLECMLIB) 	\
-        $(VOSLIB)	\
-        $(SALLIB)
-
-DEF1NAME    =$(SHL1TARGET)
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME	=$(TARGET) 
+            $(SLO)$/ssockcon.obj	\
+            $(SLO)$/parser.obj		\
+            $(SLO)$/geninfo.obj		\
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP > $@
-    @echo LIBMAIN >> $@
-    @echo LibMain >> $@
-    @echo __CT >> $@
-
+.INCLUDE :  target.mk                                                          
