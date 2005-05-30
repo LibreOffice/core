@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 14:49:12 $
+#   last change: $Author: sb $ $Date: 2005-05-30 07:38:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #*************************************************************************
 
-# The following variable can be set, if necessary:
+# The following variable can be set, if necessary (see README):
 #GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 
 

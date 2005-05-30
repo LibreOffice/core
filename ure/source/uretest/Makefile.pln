@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile.pln,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 14:49:28 $
+#   last change: $Author: sb $ $Date: 2005-05-30 07:38:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,10 +59,10 @@
 #
 #*************************************************************************
 
-# The following variable must be set:
+# The following variable must be set (see README):
 #SDK_HOME := /opt/OpenOffice.org2.0_SDK
 
-# The following variables can be set, if necessary:
+# The following variables can be set, if necessary (see README):
 #URE_HOME := /opt/openoffice.org/ure
 #GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 

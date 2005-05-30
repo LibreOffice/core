@@ -2,9 +2,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-26 14:48:02 $
+#   last change: $Author: sb $ $Date: 2005-05-30 07:38:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,9 @@ Three things need to be noted:
   working with the SDK, but needed by Makefile).
 
 - On Linux x86, the environment variable GCCS_COMPAT can be used to work around
-  incompatibilities between the GCC version used to build the URE (GCC 3.4.x)
-  and the GCC version configured in the SDK.  See below under Makefile.pln for
-  details.
+  incompatibilities between the GCC version used to build the URE and the GCC
+  version used while executing the tests (see above for the configured C++
+  compiler).  See the README of the UDK for further details.
 
 The second, Makefile.pln, is intended to be run without setting up any special
 environment.  Currently, this variant is only intended to work on Linux x86.
@@ -94,23 +94,9 @@ The things that must be set up manually are:
   default URE location (/opt/openoffice.org/ure).
 
 - The environment variable GCCS_COMPAT can be used to work around
-  incompatibilities between the GCC version used to build the URE (GCC 3.4.x)
-  and the GCC version used while executing the tests (see below).  The problem
-  is that handling C++ exceptions often does not work reliably (leads to
-  aborting the process) when components built with different GCC versions are
-  run together in one process.  The solution is to force the process to use the
-  "better" version of libgcc_s.so.1 (which comes as part of the GCC
-  installation; the GCC 3.4.x version is also included in the URE installation
-  set).  That is, if the GCC version used while executing the tests is the one
-  installed on the system, and is for example either GCC 3.3.x or GCC 4.0.x,
-  then GCCS_COMPAT should be set to
-
-    LD_PRELOAD=/lib/libgcc_s.so.1
-
-  to force usage of the system's libgcc_s.so.1 version (which is known to be
-  "better" in those cases).  For GCC 3.4.x versions, GCCS_COMPAT need not be
-  set, and for other versions of GCC some experimentation might be necessary to
-  find out which version of libgcc_s.so.1 works.
+  incompatibilities between the GCC version used to build the URE and the GCC
+  version used while executing the tests (see next).  See the README of the UDK
+  for further details.
 
 - A GCC installation (including g++) is expected to be available on the PATH.
   See the SDK Installation Guide ($SDK_HOME/docs/install.html) for minimum

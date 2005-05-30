@@ -2,9 +2,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-27 15:04:04 $
+#   last change: $Author: sb $ $Date: 2005-05-30 07:38:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -336,6 +336,22 @@ instead, as explained above.  Note that this may lead to problems when those two
 Java versions are incompatible (e.g., when the SDK uses Java 5 to create class
 files, and the URE Java Framework mechanism selects a Java 1.4 VM which cannot
 read them).
+
+On Linux x86, the URE contains a libgcc_s.so.1 that is necessary to run binary
+UNO components that are compiled with GCC.  Compatibility problems can occur
+when additional UNO components are deployed, compiled with a GCC version that
+differs from the one used to compile the URE itself.  The libgcc_s.so.1 (which
+is part of GCC) evolves along at least two dimensions: the version of GCC, and
+the verions of glibc available while building GCC itself.  While UNO components
+requiring an old version of libgcc_s.so.1 typically also work with a newer
+version, the reverse is generally not true (one symptom is that throwing C++
+exceptions invariably leads to process abort).  The URE shipped by Sun
+Microsystems, Inc. includes a libgcc_s.so.1 corresponding to GCC 3.4.1 built on
+a glibc 2.2.4 system.  The solution to the compatibility issue is to always use
+a sufficiently recent version of libgcc_s.so.1 that fulfills the requirements of
+the URE itself and any additionally deployed UNO components.  Thus, if
+necessary, either permanently replace the libgcc_s.so.1 in the URE installation,
+or use LD_PRELOAD.
 
 
 Notes on programming:
