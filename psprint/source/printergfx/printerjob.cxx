@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:47:30 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,10 +979,23 @@ int macxp_ConvertPSFileToPDF( char *psFileName, char *pdfFileName, int pdfFileNa
             returnVal = -1;
         else
        {
-            snprintf( sysCommandBuffer, nBufferSize, "%s;%s -r%d \"%s\" \"%s\"'", kSysPrintSetupString, kApplePS2PDFLocation, jobDPI, psFileName, pdfFileName );
-          #ifdef DEBUG
+            int err;
+            struct stat status;
+
+            err = stat( kApplePsToPdfLocation, &status );
+            if ( err == 0 )
+            {
+                snprintf( sysCommandBuffer, nBufferSize, "%s %s -o %s", kApplePsToPdfLocation, psFileName, pdfFileName );
+              #ifdef DEBUG
                 fprintf( stderr, "printerjob.cxx: converting document to PDF with command '%s'\n", sysCommandBuffer );
-          #endif
+              #endif
+            } else
+            {
+                snprintf( sysCommandBuffer, nBufferSize, "%s;%s -r%d \"%s\" \"%s\"'", kSysPrintSetupString, kApplePS2PDFLocation, jobDPI, psFileName, pdfFileName );
+              #ifdef DEBUG
+                fprintf( stderr, "printerjob.cxx: converting document to PDF with command '%s'\n", sysCommandBuffer );
+              #endif
+            }
 
             /* Convert the PS spool file to a PDF */
             printCmdErr = system( sysCommandBuffer );
