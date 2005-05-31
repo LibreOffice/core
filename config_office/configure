@@ -6749,7 +6749,7 @@ else
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-    if test "$JDK" == "gcj"; then
+    if test "$JDK" = "gcj"; then
         javacompiler=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
     else
         javacompiler="javac"
@@ -6951,7 +6951,7 @@ echo "$as_me: WARNING: in case JAVA_HOME is incorrectly set, some projects with 
     fi
 fi
 
-if test "$JDK" == "gcj"; then
+if test "$JDK" = "gcj"; then
    save_CFLAGS=$CFLAGS
    CFLAGS="$CFLAGS -I$JAVA_HOME/include"
    if test "${ac_cv_header_jni_h+set}" = set; then
@@ -7108,7 +7108,7 @@ fi
 
 
 
-if test "$JDK" == "gcj"; then
+if test "$JDK" = "gcj"; then
     javacache=`echo $WITH_JAVA | $SED -e "s/gij/gcj-dbtool/g"`
     if test -z "$with_jdk_home"; then
         # Extract the first word of "$javacache", so it can be a program name with args.
@@ -11273,7 +11273,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    if test -z "$MOZILLA_VERSION"; then
       MOZILLA_VERSION=1.7.5
    fi
-   if test "$MOZILLA_VERSION" == "1.7b" ; then
+   if test "$MOZILLA_VERSION" = "1.7b" ; then
       MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source.tar.gz"
    else
       MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}.tar.gz"
