@@ -11,7 +11,15 @@ AutoReqProv: no
 #        here and check for the 'mandriva-release' in the future (next year).
 #
 Requires: openofficeorg-core01, mandrake-release
+Provides: openofficeorg-mandrakelinux-menus
+Obsoletes: openofficeorg-mandrakelinux-menus
+
 %define _unpackaged_files_terminate_build 0
+
+%define menuversion %(echo %version|cut -d'.' -f 1-2)
+%{?!update_menus:%define update_menus if [ -x /usr/bin/update-menus ]; then /usr/bin/update-menus || true ; fi}
+%{?!trigger_clean_menus:%define trigger_clean_menus if [ "$2" = "0" -a -x /usr/bin/update-menus ]; then /usr/bin/update-menus || true ; fi}
+
 %description 
 OpenOffice.org desktop integration
 
@@ -30,7 +38,24 @@ EOF
 
 /bin/sh /tmp/install.$$ &
 
+# Update menus
+#
+# - core01 for base
+# - core02 for spadmin (printeradmin)
+#
+%triggerin -- openofficeorg-core01 openofficeorg-calc openofficeorg-draw openofficeorg-impress openofficeorg-writer openofficeorg-math openofficeorg-core02
+%{update_menus}
+
+# Update menus
+#
+# - core01 for base
+# - core02 for spadmin (printeradmin)
+#
+%triggerpostun -- openofficeorg-core01 openofficeorg-calc openofficeorg-draw openofficeorg-impress openofficeorg-writer openofficeorg-math openofficeorg-core02
+%{trigger_clean_menus}
+
 %post
+
 # update /etc/mime.types
 # backing out existing entries to avoid duplicates
 sed '
@@ -142,7 +167,7 @@ application/vnd.sun.xml.draw.template; %PREFIX -view %s
 application/vnd.stardivision.draw; %PREFIX -view %s
 application/x-stardraw; %PREFIX -view %s
 application/vnd.oasis.opendocument.database; %PREFIX -view %s
-application/vnd.sun.xml.database; %PREFIX -view %s
+application/vnd.sun.xml.base; %PREFIX -view %s
 END
 
   # and replace the original file
@@ -171,24 +196,28 @@ EOF
     fi
   fi
 fi
+%{update_menus}
+
+
+%install
 
 #
-# Mandrakelinux menus fun
+# Mandriva menus fun
 #
 # For more info, see:
-#   http://qa.mandrakesoft.com/twiki/bin/view/Main/MandrakeMenu
 #
-# FIXME: Page removed, try to find where it is now :( 
+#   http://qa.mandriva.com/twiki/bin/view/Main/MenuSystem
 #
 %define _menudir /usr/lib/menu
 mkdir -p $RPM_BUILD_ROOT%{_menudir}
+rm -f "$RPM_BUILD_ROOT%{_menudir}/%{name}"
 
 GenerateMenu() {
 [ -f "$RPM_BUILD_ROOT%{_menudir}/%{name}" ] || touch $RPM_BUILD_ROOT%{_menudir}/%{name}
 mimetypes_item=
-[ "$6" != "" ] && mimetypes_item="mimetypes=\"$6\""
+[ "$7" != "" ] && mimetypes_item="mimetypes=\"$7\""
 cat >> $RPM_BUILD_ROOT%{_menudir}/%{name} << EOF
-?package(%{name}): needs=x11 section="$2" icon="%ICONPREFIX-$3.png" title="$4" longtitle="$5" command="$1 %U" \
+?package(openofficeorg-$6): needs=x11 section="$2" icon="%ICONPREFIX-$3.png" title="$4" longtitle="$5" command="$1 %U" \
 $mimetypes_item kde_opt="InitialPreference=100" startup_notify="true"
 EOF
 }
@@ -198,45 +227,51 @@ EOF
 # until new group will be created
 #
 GenerateMenu "%PREFIX -base" \
-	"Office/Spreadsheets" \
+	"Applications/Databases" \
 	"base" \
-	"OpenOffice.org Base" \
-	"OpenOffice.org Database" \
+	"OpenOffice.org %{menuversion} Base" \
+	"OpenOffice.org %{menuversion} Database" \
+	"core01" \
 	"application/vnd.oasis.opendocument.database,application/vnd.sun.xml.base"
 
 GenerateMenu "%PREFIX -calc" \
 	"Office/Spreadsheets" \
 	"calc" \
-	"OpenOffice.org Calc" \
-	"OpenOffice.org Spreadsheet" \
+	"OpenOffice.org %{menuversion} Calc" \
+	"OpenOffice.org %{menuversion} Spreadsheet" \
+	"calc" \
 	"application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.spreadsheet-template,application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template,application/vnd.stardivision.calc,application/vnd.stardivision.chart,application/msexcel,application/vnd.ms-excel"
 
 GenerateMenu "%PREFIX -draw" \
 	"Office/Drawing" \
 	"draw" \
-	"OpenOffice.org Draw" \
-	"OpenOffice.org Drawing" \
+	"OpenOffice.org %{menuversion} Draw" \
+	"OpenOffice.org %{menuversion} Drawing" \
+	"draw" \
 	"application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template,application/vnd.sun.xml.draw,application/vnd.sun.xml.draw.template,application/vnd.stardivision.draw"
 
 GenerateMenu "%PREFIX -impress" \
 	"Office/Presentations" \
 	"impress" \
-	"OpenOffice.org Impress" \
-	"OpenOffice.org Presentation" \
+	"OpenOffice.org %{menuversion} Impress" \
+	"OpenOffice.org %{menuversion} Presentation" \
+	"impress" \
 	"application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.presentation-template,application/vnd.sun.xml.impress,application/vnd.sun.xml.impress.template,application/vnd.stardivision.impress,application/mspowerpoint"
 
 GenerateMenu "%PREFIX -writer" \
 	"Office/Wordprocessors" \
 	"writer" \
-	"OpenOffice.org Writer" \
-	"OpenOffice.org Word Processing Component" \
+	"OpenOffice.org %{menuversion} Writer" \
+	"OpenOffice.org %{menuversion} Word Processing Component" \
+	"writer" \
 	"application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/vnd.oasis.opendocument.text-web,application/vnd.oasis.opendocument.text-master,application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.global,application/vnd.stardivision.writer,application/msword,application/vnd.ms-word,application/x-doc,text/rtf"
 
 GenerateMenu "%PREFIX -math" \
 	"Office/Wordprocessors" \
 	"math" \
-	"OpenOffice.org Math" \
-	"OpenOffice.org Formula Editor" \
+	"OpenOffice.org %{menuversion} Math" \
+	"OpenOffice.org %{menuversion} Formula Editor" \
+	"math" \
 	"application/vnd.oasis.opendocument.formula,application/vnd.sun.xml.math,application/vnd.stardivision.math"
 
 #
@@ -245,11 +280,9 @@ GenerateMenu "%PREFIX -math" \
 GenerateMenu "%PREFIX-printeradmin" \
     "System/Configuration/Printing" \
     "printeradmin" \
-    "OpenOffice.org Printeradmin" \
-    "OpenOffice.org Printer Administration"
-
-update-menus
-
+    "OpenOffice.org %{menuversion} Printeradmin" \
+    "OpenOffice.org %{menuversion} Printer Administration" \
+	"core02"
 
 %preun
 # remove from /etc/mailcap only on de-install
@@ -262,12 +295,8 @@ then
   mv -f /etc/mailcap.tmp$$ /etc/mailcap
 fi
 
-
 %postun
-
-# Mandrakelinux menus fun
-rm -f %{_menudir}/%{name}
-update-menus
+%{update_menus}
 
 
 %files
@@ -275,6 +304,7 @@ update-menus
 %attr(0755,root,root) /usr/bin/%PREFIX-printeradmin
 %defattr(0644, root, root)
 %ghost /etc/%PREFIX
+%{_menudir}/%{name}
 /usr/share/application-registry/%PREFIX.applications
 /usr/share/applications/%PREFIX-writer.desktop
 /usr/share/applications/%PREFIX-calc.desktop
