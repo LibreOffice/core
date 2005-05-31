@@ -15449,7 +15449,7 @@ echo "$as_me: error: \\"patch\\" not found in \$PATH, install the development to
    { (exit 1); exit 1; }; }
 fi
 
-if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "SunOS" -o "$_os" = "FreeBSD" -o "$_os" = "Darwin"; then
    if test -z "$with_gnu_patch"; then
       GNUPATCH=$PATCH
    else
