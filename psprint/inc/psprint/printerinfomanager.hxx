@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:46:36 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
  */
 #define     kApplePrintingFailure       0       /* For whatever reason, we can't print at all */
 #define     kApplePrintingLPR           1       /* Darwin 5.x style LPR printing */
-#define     kApplePrintingCUPS          2       /* MacOS X 10.2/Darwin 6 style CUPS (also CUPS installed by users on 10.1) */
+#define     kApplePrintingCUPS          2       /* MacOS X 10.2/Darwin 6 and later style CUPS (also CUPS installed by users on 10.1) */
 #define     kApplePrintingPrintCenter   3       /* MacOS X 10.1 /usr/sbin/Print printing */
 
 /* Constants for PostScript vs PDF printing */
@@ -98,7 +98,8 @@
 
 /* Define various printing commands */
 #define     kApplePCPrintCommand    "/usr/sbin/Print"       /* Mac OS X 10.1 Print Center Printing command */
-#define     kApplePS2PDFLocation    "/usr/local/bin/ps2pdf" /* PS -> PDF conversion command */
+#define     kApplePS2PDFLocation    "/usr/local/bin/ps2pdf" /* PS -> PDF conversion command using ghostscript */
+#define     kApplePsToPdfLocation   "/usr/bin/pstopdf"      /* Mac OS X 10.3 and above builtin PS->PDF conversion utility */
 #define     kApplePCQueueName       "Apple Print Center Default Printer"    /* Name that appears in Print... dialog as the default */
                                                                 /* printer for 10.1 Print Center printing */
 
