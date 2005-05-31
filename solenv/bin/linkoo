@@ -12,9 +12,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-06 09:24:30 $
+#   last change: $Author: kz $ $Date: 2005-05-31 16:22:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -163,6 +163,39 @@ sub check_create_linked($)
     }
 }
 
+sub do_link($$$$)
+{
+    my $src = shift;
+    my $dest = shift;
+    my $src_name = shift;
+    my $dest_name = shift;
+
+    if (-l "$dest/$dest_name") {
+	my $link = readlink ("$dest/$dest_name");
+	if ($link =~ /^\//) { # Absolute path
+	    if (!$dry_run) {
+		# re-write the link
+		unlink ("$dest/$dest_name");
+		symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink: $!";
+		print " [$dest_name]";
+	    } else {
+		print "re-make link $src/$src_name => $dest/$dest_name\n";
+	    }
+	} elsif ($dry_run) {
+	    print "skipping symbolic link $dest/$dest_name -> $link\n";
+	}
+    } else {
+	check_create_linked ($dest);
+	if (!$dry_run) {
+	    # move / write the link
+	    rename ("$dest/$dest_name", "$dest/linked/$dest_name") || die "Failed rename of $dest/$dest_name: $!";
+	    symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink: $!";
+	    print " $dest_name";
+	} else {
+	    print "move / symlink $src/$src_name => $dest/$dest_name\n";
+	}
+    }
+}
 
 sub scan_and_link_files($$$)
 {
@@ -174,8 +207,10 @@ sub scan_and_link_files($$$)
     my $dirh_toplevel;
     opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
     while (my $subdir = readdir ($dirh_toplevel)) {
+	$subdir =~ m/\./ && next; # eg. vcl.old,
 	my $test = "$build_path/$subdir/$target";
-	-d $test && push @modules, $test;
+	-d $test || next;
+	push @modules, $test;
     }
     closedir ($dirh_toplevel);
 
@@ -213,32 +248,8 @@ sub scan_and_link_files($$$)
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};
 	my $dest = $installed_files->{$file};
-
-	if (-l "$dest/$file") {
-	    my $link = readlink ("$dest/$file");
-	    if ($link =~ /^\//) { # Absolute path
-		if (!$dry_run) {
-		    # re-write the link
-		    unlink ("$dest/$file");
-		    symlink ("$src/$file", "$dest/$file") || die "Failed to symlink: $!";
-		    print " [$file]";
-		} else {
-		    print "re-make link $src/$file => $dest/$file\n";
-		}
-	    } elsif ($dry_run) {
-		print "skipping symbolic link $dest/$file -> $link\n";
-	    }
-	} else {
-	    check_create_linked ($dest);
-	    if (!$dry_run) {
-		# move / write the link
-		rename ("$dest/$file", "$dest/linked/$file") || die "Failed rename of $dest/$file: $!";
-		symlink ("$src/$file", "$dest/$file") || die "Failed to symlink: $!";
-		print " $file";
-	    } else {
-		print "move / symlink $src/$file => $dest/$file\n";
-	    }
-	}
+	
+	do_link ($src, $dest, $file, $file);
     }
     print "\n";
 }
@@ -262,6 +273,33 @@ sub evilness($)
 	    symlink $src, $dest;
 	}
     }
+}
+
+sub link_iso_res()
+{
+    print "Special iso.res case: ";
+    my $ooo_res="$OOO_INSTALL/program/resource/ooo".$LIBVER.$LANG.".res";
+    my $star_res="$OOO_INSTALL/program/resource/iso".$LIBVER.$LANG.".res";
+    if (-l $ooo_res && -l $star_res) {
+	if ($dry_run) {
+	    print "link $ooo_res to $star_res";
+	} else {
+	    unlink ($star_res);
+	    symlink ($ooo_res, $star_res);
+	    print "clobbered";
+	}
+    }
+    print "\n";
+}
+
+# Hack for (renamed) types.rdb (types.db)
+sub link_types_rdb()
+{
+    print "Types.rdb case:";
+    my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
+    my $dest = "$OOO_INSTALL/program";
+    do_link ($src, $dest, 'types.db', 'types.rdb');
+    print "\n";
 }
 
 my $a;
@@ -311,16 +349,8 @@ evilness ('undo');
 my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
-
-print "Special iso.res case:";
-$ooo_res="$OOO_INSTALL/program/resource/ooo".$LIBVER.$LANG.".res";
-$star_res="$OOO_INSTALL/program/resource/iso".$LIBVER.$LANG.".res";
-if (-l $ooo_res && -l $star_res) {
-    unlink ($star_res);
-    symlink ($ooo_res, $star_res);
-    print " clobbered";
-}
-print "\n";
+link_iso_res();
+link_types_rdb();
 
 if (!-f "$OOO_INSTALL/program/ooenv") {
     print "Creating '$OOO_INSTALL/program/ooenv'\n";
