@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:57:36 $
+#   last change: $Author: kz $ $Date: 2005-05-31 17:01:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -182,7 +182,7 @@ LINKFLAGS=$(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 LINKFLAGSAPPGUI=-bind_at_load
 LINKFLAGSSHLGUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
-LINKFLAGSAPPCUI=-bind_at_load -Wl,-u,__objcInit
+LINKFLAGSAPPCUI=-bind_at_load
 LINKFLAGSSHLCUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
 LINKFLAGSTACK=
 LINKFLAGSPROF=
