@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:42:04 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,10 @@
 #define XP_UNIX 1
 
 #include <strings.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
