@@ -2,9 +2,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 17:18:26 $
+#   last change: $Author: kz $ $Date: 2005-05-31 17:05:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -275,13 +275,8 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     +$(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
     +$(COPY) /QSZ $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ELSE
-.IF "$(OS)"=="MACOSX"
-    +$(GNUCOPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    +$(GNUCOPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
-.ELSE
     +$(GNUCOPY) -prL $(INCLUDE_PATH)* $(INCLUDE_DIR)
     +$(GNUCOPY) -prL $(PUBLIC_PATH)* $(INCLUDE_DIR)
-.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
