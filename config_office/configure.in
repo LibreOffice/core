@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-05-13 12:13:27 $
+dnl * Date: $Date: 2005-05-31 16:34:02 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.117 $ )
+AC_REVISION( $Revision: 1.118 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1796,7 +1796,7 @@ dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
-    if test "$JDK" == "gcj"; then 
+    if test "$JDK" = "gcj"; then 
         javacompiler=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
     else
         javacompiler="javac"
@@ -1880,7 +1880,7 @@ if test "$SOLAR_JAVA" != ""; then
     fi
 fi
 
-if test "$JDK" == "gcj"; then 
+if test "$JDK" = "gcj"; then 
    save_CFLAGS=$CFLAGS
    CFLAGS="$CFLAGS -I$JAVA_HOME/include"
    AC_CHECK_HEADER(jni.h, [],
@@ -1897,7 +1897,7 @@ AC_SUBST(JAVADOC)
 dnl ===================================================================
 dnl Check for optional gcj-dbtool
 dnl ===================================================================
-if test "$JDK" == "gcj"; then 
+if test "$JDK" = "gcj"; then 
     javacache=`echo $WITH_JAVA | $SED -e "s/gij/gcj-dbtool/g"`
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVACACHE, $javacache)
@@ -2694,7 +2694,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    if test -z "$MOZILLA_VERSION"; then
       MOZILLA_VERSION=1.7.5
    fi
-   if test "$MOZILLA_VERSION" == "1.7b" ; then
+   if test "$MOZILLA_VERSION" = "1.7b" ; then
       MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source.tar.gz"
    else
       MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}.tar.gz"
