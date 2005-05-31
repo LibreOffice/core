@@ -45,7 +45,7 @@ if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
 
 $main::OO_SDK_MAKE_HOME = "";
 $main::makeName = "make";
-if ( $main::operatingSystem eq "FreeBSD" )
+if ( $main::operatingSystem =~ /freebsd/ )
 {
     $main::makeName = "gmake";
 }
