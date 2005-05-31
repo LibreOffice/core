@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_env.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 16:01:41 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #ifdef UNIX
 #include <sys/types.h>
 #include <strings.h>
-#ifdef NP_LINUX
-#include <stdarg.h>
+#if defined(SOLARIS) && !defined(__GNUC__)
+#include <varargs.h>
 #else
-#include <sys/varargs.h>
+#include <stdarg.h>
 #endif
 // For vsnprintf()
 #define NSP_vsnprintf vsnprintf
