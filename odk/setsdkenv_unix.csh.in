@@ -114,7 +114,7 @@ switch (`${sdkdir}/config.guess | cut -d"-" -f3,4`)
     endif
   breaksw
 
-  case "freebsd":
+  case "freebsd*":
     if ( $?OO_SDK_CPP_HOME == 0) then
 	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
 	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}

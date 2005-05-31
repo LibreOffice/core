@@ -130,7 +130,7 @@ case $sd_platform in
     export LD_LIBRARY_PATH
     ;;
 
-  freebsd)
+  freebsd*)
     if [ -n "$OO_SDK_CPP_HOME" ]
     then
 	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
