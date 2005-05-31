@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.63 $
-# Date:        $Date: 2005-05-18 12:49:00 $
+# Version:     $Revision: 1.64 $
+# Date:        $Date: 2005-05-31 17:03:33 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1534,15 +1534,20 @@ if ($platform =~ m/darwin/)
         
         open OSXVER, "/usr/bin/sw_vers -productVersion |";
         while (<OSXVER>) {
-            if (/^\s*(\d+?)\.(\d+?)\.(\d+?)\s*$/) {
+            if (/^\s*(\d+?)\.(\d+?)(\.(\d+?))*\s*$/) {
                 ToFile("BUILD_OS_MAJOR", $1, "e");
                 $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $1;
 
                 ToFile("BUILD_OS_MINOR", $2, "e");
                 $macosxCdefs.=" -DBUILD_OS_MINOR=" . $2;
 
-                ToFile("BUILD_OS_REV", $3, "e");
-                $macosxCdefs.=" -DBUILD_OS_REV=" . $3;
+                if($3 ne "") {
+                    ToFile("BUILD_OS_REV", $4, "e");
+                    $macosxCdefs.=" -DBUILD_OS_REV=" . $4;
+                } else {
+                    ToFile("BUILD_OS_REV", 0, "e");
+                    $macosxCdefs.=" -DBUILD_OS_REV=0";
+                }
                 last;
             }
         }
@@ -1811,8 +1816,8 @@ if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
   ToFile( "unset INCLUDE LIB", $empty, "x");
   ToFile( "  ", $empty, "x");
 }
-# on Solaris and FreeBSD, set GNUCOPY and GNUPATCH
-if ($platform =~ m/solaris|freebsd/)
+# on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
+if ($platform =~ m/solaris|darwin|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
   ToFile( "GNUCOPY",	"@GNUCP@",	"e");
