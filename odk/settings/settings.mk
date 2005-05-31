@@ -397,7 +397,7 @@ endif
 # FreeBSD specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "freebsd"
+ifneq (,$(findstring freebsd,$(PLATFORM)))
 # Settings for FreeBSD using gcc compiler
 
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
@@ -435,6 +435,7 @@ OSEP=\<
 CSEP=\>
 QUOTE=$(subst S,\,S)
 QM=\"
+SQM='
 ECHOLINE=@echo
 P2BG=&
 
@@ -446,10 +447,10 @@ URLPREFIX=file://
 # Include UDK version numbers
 include $(PRJ)/include/udkversion.mk
 
-SALLIB=-lsal
-CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(COMID)
-SALHELPERLIB=-lsalhelper$(COMID)
+SALLIB=-luno_sal
+CPPULIB=-luno_cppu
+CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 STLPORTLIB=-lstlport_gcc
