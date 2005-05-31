@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-17 14:57:20 $
+#   last change: $Author: kz $ $Date: 2005-05-31 17:09:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,9 +104,9 @@ SHL1OBJS=	$(SLO)$/npshell.obj \
 .IF "$(GUI)"=="UNX"
 SHL1OBJS+=$(SLO)$/npunix.obj
 SLOFILES+=$(SLO)$/npunix.obj
-.IF "$(OS)"!="FREEBSD"
-SHL1STDLIBS+= -ldl -lnsl
-.ENDIF #FREEBSD
+#.IF "$(OS)"!="FREEBSD"
+#SHL1STDLIBS+= -ldl -lnsl
+#.ENDIF #FREEBSD
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
 SHL1OBJS+=$(SLO)$/npwin.obj
@@ -137,7 +137,7 @@ APP1STDLIBS=\
             $(TOOLSLIB)
 
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
 .ELSE
 APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
 .ENDIF
