@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:06:36 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,8 @@
 #include <fcntl.h>
 
 // [ed] 6/15/02 Use the poll replacement on OS X
-#ifdef MACOSX
+// [ericb] 5/7/05 mismatch in Mac OSX 10.4, test is necessary
+#if defined (MACOSX) && (BUILD_OS_MAJOR==10) && (BUILD_OS_MINOR<4)
 #include <poll.h>
 #else
 #include <sys/poll.h>
