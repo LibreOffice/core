@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-11 11:31:21 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,12 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll"
 #elif UNX
-#ifdef MACOSX
-        "/../../../JavaVM"
-#endif
 #if defined(LINUX) && defined(POWERPC)
     "/bin/classic/libjvm.so",
-    "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so" // for Blackdown PPC
+    "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
     "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
-
+#elif defined(MACOSX)
+        "/../../../JavaVM"
 #else
 
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
