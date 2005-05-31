@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:27:55 $
+#   last change: $Author: kz $ $Date: 2005-05-31 16:31:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,9 +99,6 @@ CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
 CFLAGS+=-Wreturn-type -fmessage-length=0 -c $(INCLUDE)
-.IF "$(PRODUCT)"!=""
-CFLAGS+=-Wuninitialized
-.ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
@@ -122,6 +119,9 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -pipe -mtune=pentiumpro
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGSCXX += -fvisibility-inlines-hidden
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
@@ -143,6 +143,7 @@ CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
+CFLAGSOPT+=-Wuninitialized				# not supported without optimization
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
@@ -161,11 +162,12 @@ DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
 LINK*=$(CXX)
+LINKC*=$(CC)
 
 # default linker flags
 LINKFLAGSDEFS*=#-Wl,-z,defs
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
@@ -237,3 +239,4 @@ RCSETVERSION=
 DLLPOSTFIX=fi
 DLLPRE=lib
 DLLPOST=.so
+
