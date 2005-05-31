@@ -1,3 +1,58 @@
+--- misc/STLport-4.5/stlport/stdarg.h	2001-01-27 02:39:59.000000000 +0100
++++ misc/build/STLport-4.5/stlport/stdarg.h	2005-05-01 19:37:22.000000000 +0200
+@@ -20,7 +20,11 @@
+ #  define _STLP_DONT_POP_0x261
+ # endif
+ 
++#if defined(__GNUC__) && defined(__APPLE__) && (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4)
++#  include _STLP_NATIVE_HEADER(../stdarg.h)
++#else
+ # include _STLP_NATIVE_C_HEADER(stdarg.h)
++#endif
+ 
+ # if (_STLP_OUTERMOST_HEADER_ID == 0x261)
+ #  if ! defined (_STLP_DONT_POP_0x261)
+--- misc/STLport-4.5/stlport/stl/c_locale.h	2001-05-31 05:24:41.000000000 +0200
++++ misc/build/STLport-4.5/stlport/stl/c_locale.h	2005-05-01 23:19:20.000000000 +0200
+@@ -290,16 +290,28 @@
+ #  define _Locale_ALPHA  256
+ 
+ # elif defined (__GNUC__) && defined (__APPLE__)
+- 
+-# define _Locale_CNTRL _C
+-# define _Locale_UPPER _U
+-# define _Locale_LOWER _L
+-# define _Locale_DIGIT _D
+-# define _Locale_XDIGIT _X
+-# define _Locale_PUNCT _P
+-# define _Locale_SPACE _S
+-# define _Locale_PRINT _R
+-# define _Locale_ALPHA _A
++
++#  if (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4)
++#   define _Locale_CNTRL _CTYPE_C
++#   define _Locale_UPPER _CTYPE_U
++#   define _Locale_LOWER _CTYPE_L
++#   define _Locale_DIGIT _CTYPE_D
++#   define _Locale_XDIGIT _CTYPE_X
++#   define _Locale_PUNCT _CTYPE_P
++#   define _Locale_SPACE _CTYPE_S
++#   define _Locale_PRINT _CTYPE_R
++#   define _Locale_ALPHA _CTYPE_A
++#  else
++#   define _Locale_CNTRL _C
++#   define _Locale_UPPER _U
++#   define _Locale_LOWER _L
++#   define _Locale_DIGIT _D
++#   define _Locale_XDIGIT _X
++#   define _Locale_PUNCT _P
++#   define _Locale_SPACE _S
++#   define _Locale_PRINT _R
++#   define _Locale_ALPHA _A
++#  endif /*BUILD_OS_MAJOR*/
+ 
+ # elif defined (__hpux) || defined (__osf__)
+  
 *** misc/STLport-4.5/src/dll_main.cpp	Fri Aug 24 21:14:19 2001
 --- misc/build/STLport-4.5/src/dll_main.cpp	Fri Oct 31 12:11:56 2003
 ***************
@@ -121,7 +176,7 @@
 ! 
 ! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
 ! 
-! CXXFLAGS_COMMON =  -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS}
+! CXXFLAGS_COMMON =  ${ENVCDEFS} -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS}
 ! 
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
