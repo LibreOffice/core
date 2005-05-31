@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:59:44 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,8 @@
 #include <alloca.h>
 #endif
 #include <cstdlib>
-#include <math.h> // for isnan
 #include <cstring>
-
-// isnan needs special support on MACOSX
-#if defined(MACOSX)
-#define      isnan( x )         ( ( sizeof ( x ) == sizeof(double) ) ?    \
-                              __isnand ( x ) :                            \
-                                ( sizeof ( x ) == sizeof( float) ) ?      \
-                              __isnanf ( x ) :                            \
-                              __isnan  ( x ) )
-#endif
+#include <rtl/math.hxx>
 
 #if defined (FREEBSD)
 using namespace __gnu_cxx;  //for isnan #iz27753 for FreeBSD
@@ -660,7 +651,7 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
         return 3;
     }
 
-    if( isnan( f ) )
+    if( ::rtl::math::isNan( f ) )
     {
         strncpy( pBuffer, "NaN", 3 );
         return 3;
