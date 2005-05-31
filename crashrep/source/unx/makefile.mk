@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-08 16:24:14 $
+#   last change: $Author: kz $ $Date: 2005-05-31 16:32:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,10 @@ APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 
-APP1STDLIBS=$(DYNAMIC) -lXext -lX11 -ldl -lnsl
+APP1STDLIBS=$(DYNAMIC) -lXext -lX11
+.IF "$(OS)" != "FREEBSD"
+APP1STDLIBS+=-ldl -lnsl
+.ENDIF
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
