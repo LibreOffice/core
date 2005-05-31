@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-18 08:06:49 $
+#   last change: $Author: kz $ $Date: 2005-05-31 16:40:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -252,8 +252,8 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 
 .IF "$(GUI)"=="UNX"
 
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += -ldl
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD"
+SHL1STDLIBS+= -ldl
 .ENDIF
 
 .IF "$(GUIBASE)"=="aqua"
@@ -386,7 +386,11 @@ SHL4NOCHECK=TRUE
 
 
 SHL4STDLIBS+=-l$(SHL2TARGET)
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
+SHL4STDLIBS+=$(SHL3STDLIBS) -lX11
+.ELSE
 SHL4STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
+.ENDIF # "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
@@ -402,7 +406,11 @@ SHL5LIBS=$(LIB5TARGET)
 # libs for KDE plugin
 SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
+SHL5STDLIBS+=$(SHL3STDLIBS) -lX11
+.ELSE
 SHL5STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
+.ENDIF # "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
 .ENDIF # "$(ENABLE_KDE)" != ""
 
 .ENDIF # UNX
