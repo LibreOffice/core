@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:47:17 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,7 +1575,7 @@ sal_Int32 macxp_GetSystemPrintMethod( void )
      }
      else
      {
-          /* Test for MacOS X 10.2/Darwin6 CUPS printing */
+          /* Test for MacOS X 10.2/Darwin6 or later CUPS printing */
           err = stat( "/usr/bin/lpstat", &status );
           if ( err == 0 )
           {
@@ -1627,8 +1627,11 @@ sal_Int32 macxp_GetSystemPrintFormat( void )
           pPDFOverride = getenv( "OOO_PRINT_PS_DIRECTLY" );
           if ( pPDFOverride == NULL )
           {
-          /* Now we have to check for ps2pdf to make sure we can do the conversion */
-               err = stat( kApplePS2PDFLocation, &status );
+          /* Now we have to check for pstopdf or ps2pdf to make sure we can do the conversion */
+               err = stat( kApplePsToPdfLocation, &status );
+               if ( err != 0 )
+                   err = stat( kApplePS2PDFLocation, &status );
+
                if ( err == 0 )
                {
                     printFormat = kApplePrintingUsePDF;
