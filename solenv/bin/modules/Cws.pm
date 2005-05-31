@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-03 14:18:10 $
+#   last change: $Author: rt $ $Date: 2005-05-31 07:49:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -469,21 +469,6 @@ sub get_cws_with_state
     return wantarray ? @{$self->get_cws_with_state_from_ice($mws, $status)}
                     :   $self->get_cws_with_state_from_ice($mws, $status);
 }
-
-sub get_cws_with_state_from_ice {
-    my $self = shift;
-    my $mws = shift;
-    my $status = shift;
-
-    my $eis = Cws::eis();
-    my $result;
-    eval { $result = $eis->getCWSWithState($mws, $status) };
-    if ( $@ ) {
-        carp("ERROR: get_cws_with_state_from_eis(): EIS database transaction failed. Reason:\n$@\n");
-    }
-    return $result;
-
-};
 
 sub get_task_prio_cws
 {
@@ -1133,6 +1118,20 @@ sub get_childworkspaces_for_milestone
     eval { $result = $eis->searchChildWorkspacesForMilestone($master, $milestone) };
     if ( $@ ) {
         carp("ERROR: get_childworkspaces_for_milestone(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+sub get_cws_with_state_from_ice {
+    my $self = shift;
+    my $mws = shift;
+    my $status = shift;
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getCWSWithState($mws, $status) };
+    if ( $@ ) {
+        carp("ERROR: get_cws_with_state_from_eis(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
