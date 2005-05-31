@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 09:40:05 $
+#   last change: $Author: kz $ $Date: 2005-05-31 17:09:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,10 +94,7 @@ UNOTYPES=\
     com.sun.star.scanner.ScannerException						
 
 # --- Files --------------------------------------------------------
-.IF "$(OS)"=="MACOSX"
-dummy:
-    @echo "Nothing to build for Mac OS X"
-.ELSE
+
 SLOFILES=\
                 $(SLO)$/scnserv.obj		\
                 $(SLO)$/scanner.obj
@@ -155,7 +152,6 @@ SHL1VERSIONMAP=exports.map
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-.ENDIF		# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 
