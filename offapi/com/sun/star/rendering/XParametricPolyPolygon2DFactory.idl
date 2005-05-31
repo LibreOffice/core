@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XParametricPolyPolygon2DFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:35:07 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 16:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
         linearly between center and endColor via concentric ellipses
         around the center point. Note that the absolute size of the
         rectangle given at this method does not matter, only it's
-        aspect ratio: if this aspect ratio ís 1, the gradient is
+        aspect ratio: if this aspect ratio is 1, the gradient is
         circular. If it's not 1, the gradient is elliptical, with the
         special twist that the aspect ratio is maintained also for the
         center color: the gradient will not collapse into a single
@@ -124,7 +124,7 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
         linearly between center and endColor via rectangular boxes
         around the center point. Note that the absolute size of the
         rectangle given at this method does not matter, only it's
-        aspect ratio: if this aspect ratio ís 1, the gradient is
+        aspect ratio: if this aspect ratio is 1, the gradient is
         quadratic. If it's not 1, the gradient is rectangular, with
         the special twist that the aspect ratio is maintained also for
         the center color: the gradient will not collapse into a single
