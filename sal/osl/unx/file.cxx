@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:47:51 $
+ *  last change: $Author: kz $ $Date: 2005-05-31 17:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,15 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
+
+
+#define osl_getThreadTextEncoding() RTL_TEXTENCODING_UTF8
+
+// add MACOSX Time Value
+
+#define TimeValue CFTimeValue
+#include <CoreFoundation/CoreFoundation.h>
+#undef TimeValue
 
 #endif
 
@@ -440,13 +449,28 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     if (NULL == pEntry)
         return osl_File_E_NOENT;
 
+
+#if defined(MACOSX) && (BUILD_OS_MAJOR==10) && (BUILD_OS_MINOR>=2)
+
+    // convert decomposed filename to precomposed unicode
+    char composed_name[BUFSIZ];
+    CFMutableStringRef strRef = CFStringCreateMutable (NULL, 0 );
+    CFStringAppendCString( strRef, pEntry->d_name, kCFStringEncodingUTF8 );  //UTF8 is default on Mac OSX
+    CFStringNormalize( strRef, kCFStringNormalizationFormC );
+    CFStringGetCString( strRef, composed_name, BUFSIZ, kCFStringEncodingUTF8 );
+    CFRelease( strRef );
+    rtl_string2UString( &ustrFileName, composed_name, strlen( composed_name),
+    osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+
+#else  // not MACOSX
     /* convert file name to unicode */
     rtl_string2UString( &ustrFileName, pEntry->d_name, strlen( pEntry->d_name ),
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(ustrFileName != 0);
 
-    osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, &ustrFilePath);
+#endif
 
+    osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, &ustrFilePath);
     rtl_uString_release( ustrFileName );
 
     /* use path as directory item */
