@@ -756,6 +756,35 @@
 *** misc/xmlsec1-1.2.6/ltmain.sh	2004-08-26 08:00:15.000000000 +0200
 --- misc/build/xmlsec1-1.2.6/ltmain.sh	2005-05-09 19:55:51.745319024 +0200
 ***************
+*** 2994,3006 ****
+  	  ;;
+  
+  	freebsd-aout)
+! 	  major=".$current"
+! 	  versuffix=".$current.$revision";
+  	  ;;
+  
+  	freebsd-elf)
+! 	  major=".$current"
+! 	  versuffix=".$current";
+  	  ;;
+  
+  	irix | nonstopux)
+--- 2994,3006 ----
+  	  ;;
+  
+  	freebsd-aout)
+! 	  major=.`expr $current - $age`
+! 	  versuffix="$major.$age.$revision"
+  	  ;;
+  
+  	freebsd-elf)
+! 	  major=.`expr $current - $age`
+! 	  versuffix="$major.$age.$revision"
+  	  ;;
+  
+  	irix | nonstopux)
+***************
 *** 3564,3570 ****
   		fi
   	      else
