@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2005-05-30 07:38:01 $
+#   last change: $Author: sb $ $Date: 2005-06-02 08:27:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,22 @@ PRJ = $(OO_SDK_HOME)
 include $(PRJ)/settings/settings.mk
 include $(PRJ)/settings/std.mk
 
+ifeq "$(PLATFORM)" "windows"
+qt = "
+cwd = $(subst \,/,$(shell cd))
+link_output_switch = -out:
+link_std_libs = kernel32.lib msvcrt.lib
+ure_misc = $(subst \,/,$(OO_SDK_URE_HOME)/misc)
+ure_java_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)))
+else
+qt = '
+cwd = $(PWD)
+link_output_switch = -o
+link_std_libs =
+ure_misc = $(OO_SDK_URE_HOME)/share/misc
+ure_java_url = $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)
+endif
+
 
 .PHONY: ALL
 ALL: test
@@ -82,83 +98,93 @@ include $(PRJ)/settings/stdtarget.mk
 test: test-cpptest test-javatest test-clientserver
 
 .PHONY: test-cpptest
-test-cpptest: out.sdk/cppmain.uno.so out.sdk/types.rdb out.sdk/services.rdb
+test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
+            out.sdk/services.rdb
 	$(GCCS_COMPAT) uno \
-            -c test.cpp.cppmain.Component -l $(URLPREFIX)$(PWD)/$< \
-            -ro $(OO_SDK_URE_HOME)/share/misc/types.rdb -ro out.sdk/types.rdb \
-            -ro $(OO_SDK_URE_HOME)/share/misc/services.rdb \
-            -ro out.sdk/services.rdb
+            -c test.cpp.cppmain.Component -l $(URLPREFIX)$(cwd)/$< \
+            -ro "$(ure_misc)/types.rdb" -ro out.sdk/types.rdb \
+            -ro "$(ure_misc)/services.rdb" -ro out.sdk/services.rdb
 
 .PHONY: test-javatest
 test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
 	$(GCCS_COMPAT) uno \
-            -c test.java.javamain.Component -l $(URLPREFIX)$(PWD)/$< \
-            -ro $(OO_SDK_URE_HOME)/share/misc/types.rdb -ro out.sdk/types.rdb \
-            -ro $(OO_SDK_URE_HOME)/share/misc/services.rdb \
-            -ro out.sdk/services.rdb
+            -c test.java.javamain.Component -l $(URLPREFIX)$(cwd)/$< \
+            -ro "$(ure_misc)/types.rdb" -ro out.sdk/types.rdb \
+            -ro "$(ure_misc)/services.rdb" -ro out.sdk/services.rdb
 
+do_server = $(GCCS_COMPAT) uno -c test.cpp.cppserver.Component \
+    -l $(URLPREFIX)$(cwd)/out.sdk/cppserver.uno.$(SHAREDLIB_EXT) \
+    -ro "$(ure_misc)/types.rdb" -ro out.sdk/types.rdb \
+    -ro "$(ure_misc)/services.rdb" -u "uno:pipe,name=ure_test;urp;server" \
+    --singleaccept
+do_client = $(SDK_JAVA) -jar out.sdk/runner.jar $(ure_java_url)/ \
+    $(URLPREFIX)$(cwd)/out.sdk/javaclient.jar \
+    "uno:pipe,name=ure_test;urp;server"
 .PHONY: test-clientserver
-test-clientserver: out.sdk/cppserver.uno.so out.sdk/runner.jar \
+test-clientserver: out.sdk/cppserver.uno.$(SHAREDLIB_EXT) out.sdk/runner.jar \
             out.sdk/javaclient.jar
-	$(GCCS_COMPAT) uno \
-            -c test.cpp.cppserver.Component \
-            -l $(URLPREFIX)$(PWD)/out.sdk/cppserver.uno.so \
-            -ro $(OO_SDK_URE_HOME)/share/misc/types.rdb -ro out.sdk/types.rdb \
-            -ro $(OO_SDK_URE_HOME)/share/misc/services.rdb \
-            -u 'uno:pipe,name=ure_test;urp;server' --singleaccept &
-	sleep 5 && \
-            $(SDK_JAVA) -jar out.sdk/runner.jar \
-            $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)/ \
-            $(URLPREFIX)$(PWD)/out.sdk/javaclient.jar \
-            'uno:pipe,name=ure_test;urp;server'
+ifeq "$(PLATFORM)" "windows"
+	echo $(subst %,%%,$(do_server)) > out.sdk/server.bat
+	echo $(subst %,%%,$(do_client)) > out.sdk/client.bat
+	@ echo Execute test-clientserver manually: start out.sdk\server.bat
+	@ echo and then simultaneously start out.sdk\client.bat
+else
+	$(do_server) &
+	sleep 5 && $(do_client)
+endif
 
 
 .PHONY: clean
 clean:
-	$(DELRECURSIVE) out.sdk
+	$(DELRECURSIVE) $(subst /,$(PS),out.sdk)
 
 
-out.sdk/cppmain.uno.so: out.sdk/cppmain.o version.map | out.sdk
-	$(LINK) $(COMP_LINK_FLAGS) -o $@ $< $(LINK_LIBS) $(CPPULIB) \
-            $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB)
+out.sdk/cppmain.uno.$(SHAREDLIB_EXT): out.sdk/cppmain.$(OBJ_EXT) version.map | \
+            out.sdk
+	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
+            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) \
+            $(link_std_libs)
 
-out.sdk/cppmain.o: cppmain.cc out.sdk/cpputypes.cppumaker.flag \
+out.sdk/cppmain.$(OBJ_EXT): cppmain.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
-	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH) $@ $(CC_INCLUDES) \
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ $(CC_INCLUDES) \
             -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
             $(CC_DEFINES) $<
 
 
-out.sdk/cpptest.uno.so: out.sdk/cpptest.o version.map | out.sdk
-	$(LINK) $(COMP_LINK_FLAGS) -o $@ $< $(LINK_LIBS) $(CPPULIB) \
-            $(CPPUHELPERLIB) $(SALLIB)
+out.sdk/cpptest.uno.$(SHAREDLIB_EXT): out.sdk/cpptest.$(OBJ_EXT) version.map | \
+            out.sdk
+	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
+            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(link_std_libs)
 
-out.sdk/cpptest.o: cpptest.cc out.sdk/cpputypes.cppumaker.flag \
+out.sdk/cpptest.$(OBJ_EXT): cpptest.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
-	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH) $@ $(CC_INCLUDES) \
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ $(CC_INCLUDES) \
             -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
             $(CC_DEFINES) $<
 
 
-out.sdk/cppserver.uno.so: out.sdk/cppserver.o version.map | out.sdk
-	$(LINK) $(COMP_LINK_FLAGS) -o $@ $< $(LINK_LIBS) $(CPPULIB) \
-            $(CPPUHELPERLIB) $(SALLIB)
+out.sdk/cppserver.uno.$(SHAREDLIB_EXT): out.sdk/cppserver.$(OBJ_EXT) \
+            version.map | out.sdk
+	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
+            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(link_std_libs)
 
-out.sdk/cppserver.o: cppserver.cc out.sdk/cpputypes.cppumaker.flag \
+out.sdk/cppserver.$(OBJ_EXT): cppserver.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
-	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH) $@ $(CC_INCLUDES) \
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ $(CC_INCLUDES) \
             -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
             $(CC_DEFINES) $<
 
 
-out.sdk/cpputypes.cppumaker.flag: cpputypes | out.sdk
-	$(CPPUMAKER) -O./out.sdk/include/cpputypes -T`cat cpputypes` -B/UCR \
-            $(OO_SDK_URE_HOME)/share/misc/types.rdb
+out.sdk/cpputypes.cppumaker.flag: | out.sdk
+	$(CPPUMAKER) -O./out.sdk/include/cpputypes \
+            "-Tcom.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak" \
+            -B/UCR "$(ure_misc)/types.rdb"
 	touch $@
 
 out.sdk/types.cppumaker.flag: out.sdk/types.rdb | out.sdk
 	$(CPPUMAKER) -O./out.sdk/include/types -B/UCR $< \
-            -X$(OO_SDK_URE_HOME)/share/misc/types.rdb
+            "-X$(ure_misc)/types.rdb"
 	touch $@
 
 
@@ -168,15 +194,15 @@ out.sdk/javamain.uno.jar: \
 	$(SDK_JAR) cfm $@ out.sdk/javamain.mf -C out.sdk/class/javamain test
 
 out.sdk/javamain.mf: javamain.mf.template | out.sdk
-	sed -e 's~^Class-Path:$$~& types.jar~' \
-            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+	sed -e $(qt)s~^Class-Path:$$~& types.jar~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& types.jar~$(qt) $< > $@
 
 out.sdk/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
             out.sdk/types.jar | out.sdk/class
-	$(DELRECURSIVE) out.sdk/class/javamain
-	$(MKDIR) out.sdk/class/javamain
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/javamain)
+	$(MKDIR) $(subst /,$(PS),out.sdk/class/javamain)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) \
-            -classpath $(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar \
+            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar" \
             -sourcepath . -d out.sdk/class/javamain $<
 
 
@@ -186,12 +212,12 @@ out.sdk/runner.jar: out.sdk/class/runner/test/java/runner/Runner.class \
 
 out.sdk/runner.mf: runner.mf.template | out.sdk
 	sed -e \
-            's~^Class-Path:$$~& $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)/unoloader.jar~' \
-            -e 's~^UNO-Type-Path:$$~& ~' $< > $@
+            $(qt)s~^Class-Path:$$~& $(ure_java_url)/unoloader.jar~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& ~$(qt) $< > $@
 
 out.sdk/class/runner/test/java/runner/Runner.class: Runner.java | out.sdk/class
-	$(DELRECURSIVE) out.sdk/class/runner
-	$(MKDIR) out.sdk/class/runner
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/runner)
+	$(MKDIR) $(subst /,$(PS),out.sdk/class/runner)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -sourcepath . -d out.sdk/class/runner $<
 
 
@@ -201,15 +227,15 @@ out.sdk/javatest.uno.jar: \
 	$(SDK_JAR) cfm $@ out.sdk/javatest.mf -C out.sdk/class/javatest test
 
 out.sdk/javatest.mf: javatest.mf.template | out.sdk
-	sed -e 's~^Class-Path:$$~& types.jar~' \
-            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+	sed -e $(qt)s~^Class-Path:$$~& types.jar~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& types.jar~$(qt) $< > $@
 
 out.sdk/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
             out.sdk/types.jar | out.sdk/class
-	$(DELRECURSIVE) out.sdk/class/javatest
-	$(MKDIR) out.sdk/class/javatest
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/javatest)
+	$(MKDIR) $(subst /,$(PS),out.sdk/class/javatest)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) \
-            -classpath $(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar \
+            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar" \
             -sourcepath . -d out.sdk/class/javatest $<
 
 
@@ -219,15 +245,15 @@ out.sdk/javaclient.jar: \
 	$(SDK_JAR) cfm $@ out.sdk/javaclient.mf -C out.sdk/class/javaclient test
 
 out.sdk/javaclient.mf: javaclient.mf.template | out.sdk
-	sed -e 's~^Class-Path:$$~& types.jar~' \
-            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+	sed -e $(qt)s~^Class-Path:$$~& types.jar~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& types.jar~$(qt) $< > $@
 
 out.sdk/class/javaclient/test/java/javaclient/JavaClient.class: \
             JavaClient.java out.sdk/types.jar | out.sdk/class
-	$(DELRECURSIVE) out.sdk/class/javaclient
-	$(MKDIR) out.sdk/class/javaclient
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/javaclient)
+	$(MKDIR) $(subst /,$(PS),out.sdk/class/javaclient)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) \
-            -classpath $(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar \
+            -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/types.jar" \
             -sourcepath . -d out.sdk/class/javaclient $<
 
 
@@ -235,12 +261,12 @@ out.sdk/types.jar: out.sdk/types.javamaker.flag out.sdk/types.mf | out.sdk
 	$(SDK_JAR) cfm $@ out.sdk/types.mf -C out.sdk/class/types test
 
 out.sdk/types.mf: types.mf.template | out.sdk
-	sed -e 's~^Class-Path:$$~& ~' -e 's~^UNO-Type-Path:$$~& \<\>~' $< > $@
+	sed -e $(qt)s~^Class-Path:$$~& ~$(qt) \
+            -e $(qt)s~^UNO-Type-Path:$$~& \<\>~$(qt) $< > $@
 
 out.sdk/types.javamaker.flag: out.sdk/types.rdb | out.sdk out.sdk/class
-	$(DELRECURSIVE) out.sdk/class/types
-	$(JAVAMAKER) -O./out.sdk/class/types -B/UCR $< \
-            -X$(OO_SDK_URE_HOME)/share/misc/types.rdb
+	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/types)
+	$(JAVAMAKER) -O./out.sdk/class/types -B/UCR $< "-X$(ure_misc)/types.rdb"
 	touch $@
 
 
@@ -251,16 +277,18 @@ out.sdk/types.urd: types.idl | out.sdk
 	$(IDLC) -O$(@D) -I$(IDL_DIR) -cid -we $<
 
 
-out.sdk/services.rdb: out.sdk/cpptest.uno.so out.sdk/javatest.uno.jar | out.sdk
-	$(DEL) $@
-	$(REGCOMP) -register -r $@ -c $(URLPREFIX)$(PWD)/out.sdk/cpptest.uno.so
-	$(REGCOMP) -register -br $(OO_SDK_URE_HOME)/share/misc/types.rdb \
-            -br $(OO_SDK_URE_HOME)/share/misc/services.rdb -r $@ \
-            -c $(URLPREFIX)$(PWD)/out.sdk/javatest.uno.jar
+out.sdk/services.rdb: out.sdk/cpptest.uno.$(SHAREDLIB_EXT) \
+            out.sdk/javatest.uno.jar | out.sdk
+	$(DEL) $(subst /,$(PS),$@)
+	$(REGCOMP) -register -r $@ \
+            -c $(URLPREFIX)$(cwd)/out.sdk/cpptest.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -br "$(ure_misc)/types.rdb" \
+            -br "$(ure_misc)/services.rdb" -r $@ \
+            -c $(URLPREFIX)$(cwd)/out.sdk/javatest.uno.jar
 
 
 out.sdk:
-	$(MKDIR) $@
+	$(MKDIR) $(subst /,$(PS),$@)
 
 out.sdk/class: | out.sdk
-	$(MKDIR) $@
+	$(MKDIR) $(subst /,$(PS),$@)

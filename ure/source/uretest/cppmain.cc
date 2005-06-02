@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppmain.cc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2005-05-26 09:36:55 $
+ *  last change: $Author: sb $ $Date: 2005-06-02 08:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "cppuhelper/unourl.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/thread.h"
+#include "rtl/malformeduriexception.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
@@ -126,7 +127,9 @@ private:
     osl_getThreadIdentifier(0); // check for sal
     (new salhelper::SimpleReferenceObject)->release(); // check for salhelper
     css::uno::getCurrentContext(); // check for cppu
-    { cppu::UnoUrl dummy(rtl::OUString()); } // check for cppuhelper
+    try {// check for cppuhelper
+        cppu::UnoUrl dummy = cppu::UnoUrl(rtl::OUString());
+    } catch (rtl::MalformedUriException &) {}
     static char const * const services[] = {
         "com.sun.star.beans.Introspection",
         "com.sun.star.bridge.Bridge",
@@ -169,19 +172,17 @@ private:
         "com.sun.star.uri.ExternalUriReferenceTranslator",
         "com.sun.star.uri.UriReferenceFactory",
         "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript",
-        "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory",
-#if defined WNT
-        "com.sun.star.bridge.OleApplicationRegistration",
-        "com.sun.star.bridge.OleBridgeSupplier",
-        "com.sun.star.bridge.OleBridgeSupplier2",
-        "com.sun.star.bridge.OleBridgeSupplierVar1",
-        "com.sun.star.bridge.OleObjectFactory",
-        "com.sun.star.bridge.oleautomation.ApplicationRegistration",
-        "com.sun.star.bridge.oleautomation.BridgeSupplier",
-        "com.sun.star.bridge.oleautomation.Factory",
-#endif
+        "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"
         // "com.sun.star.beans.PropertyBag",
         // "com.sun.star.beans.PropertySet",
+        // "com.sun.star.bridge.OleApplicationRegistration",
+        // "com.sun.star.bridge.OleBridgeSupplier",
+        // "com.sun.star.bridge.OleBridgeSupplier2",
+        // "com.sun.star.bridge.OleBridgeSupplierVar1",
+        // "com.sun.star.bridge.OleObjectFactory",
+        // "com.sun.star.bridge.oleautomation.ApplicationRegistration",
+        // "com.sun.star.bridge.oleautomation.BridgeSupplier",
+        // "com.sun.star.bridge.oleautomation.Factory",
         // "com.sun.star.loader.Dynamic",
         // "com.sun.star.registry.DefaultRegistry",
         // "com.sun.star.script.AllListenerAdapter",
