@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Date: 2005-05-13 08:23:40 $
+#   last change: $Date: 2005-06-02 10:00:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -202,7 +202,7 @@ $(REALFILTERPACKAGES_FILTERS_UI_MERGE) : $(ALL_UI_FILTERS)
 # So we have to dump stdout to the target file and let stderr messages break the build!
 $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS) : $(REALFILTERPACKAGES_FILTERS_UI_MERGE)
      +@echo ===================================================================
-     +@echo Building language packages $(@:b:s/Filter_/) for filters
+     +@echo Building language packages $(@:b:s/Filter_//) for filters
      +@echo ===================================================================
      +-$(MKDIRHIER) $(@:d)
      +$(PACKLANG) -IN $< -PARAM lang $(@:d:d:d:d:d:d:d:d:b) > $@
