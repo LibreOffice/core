@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-31 07:49:55 $
+#   last change: $Author: rt $ $Date: 2005-06-02 09:06:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -353,6 +353,14 @@ sub get_tags
     my $master_milestone_tag = uc($current_master) . "_" . $milestone;
 
     return ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag );
+}
+
+# Get child workspace owner
+sub get_owner
+{
+    my $self = shift;
+
+    return $self->get_owner_from_eis();
 }
 
 # Get child workspace approval status,
@@ -945,6 +953,28 @@ sub promote_child_in_eis
         return 0;
     }
     return 1;
+}
+
+# Get child workspace owner from EIS,
+# return undef in case of error.
+sub get_owner_from_eis
+{
+    my $self = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getOwnerEmail($id) };
+    if ( $@ ) {
+        carp("ERROR: get_status(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
 }
 
 # Get child workspace approval status from EIS,
