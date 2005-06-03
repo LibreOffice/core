@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2005-06-02 08:27:52 $
+#   last change: $Author: sb $ $Date: 2005-06-03 07:55:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ ure_java_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_
 else
 qt = '
 cwd = $(PWD)
-link_output_switch = -o
+link_output_switch = $(subst .,.,-o )
 link_std_libs =
 ure_misc = $(OO_SDK_URE_HOME)/share/misc
 ure_java_url = $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)
