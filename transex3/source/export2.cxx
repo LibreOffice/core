@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:16:55 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,19 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
         }
     }
     if( aFileIn.IsOpen() ) aFileIn.Close();
+}
+
+// Merge it into source code!
+bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
+    ByteString sFile = GetEnv( "SRC_ROOT" ) ;
+    sFile.Append("/");
+    sFile.Append( rPrj );
+    sFile.Append("/prj/l10n");
+#ifdef WNT
+    sFile.SearchAndReplaceAll('/','\\');
+#endif
+    DirEntry aFlagfile( sFile );
+    return !aFlagfile.Exists();
 }
 /*****************************************************************************/
 void Export::UnquotHTML( ByteString &rString )
