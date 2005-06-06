@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: obo $ $Date: 2005-01-25 15:07:13 $
+#  last change: $Author: hr $ $Date: 2005-06-06 17:41:42 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -56,10 +56,6 @@ USE_JAVAVER:=TRUE
 # e.g. java.awt.image.BufferStrategy,
 # disabled for now for everything <1.4
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
-.IF "$(JDK)" == "gcj"
-all:
-        @echo This dir cannot be build with gcj because of sun.awt
-.ELSE
 
 JAVAFILES  = \
     SpriteBase.java \
@@ -95,7 +91,6 @@ JARCOMPRESS             = TRUE
 #JARCLASSDIRS            = $(PACKAGE) 
 CUSTOMMANIFESTFILE      = manifest
 
-.ENDIF # gcj
 .ENDIF # "$(JAVANUMVER:s/.//)" >= "000100040000" 
 .ENDIF # "$(SOLAR_JAVA)"=="TRUE"
 
