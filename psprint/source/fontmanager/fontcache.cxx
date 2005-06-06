@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:59:14 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void FontCache::read()
             else
             {
                 nDir = rManager.getDirectoryAtom( aDir, true );
-                m_aCache[ nDir ].m_nTimestamp = nTimestamp;
+                m_aCache[ nDir ].m_nTimestamp = (sal_Int64)aStat.st_mtime;
                 m_aCache[ nDir ].m_bNoFiles = bEmpty;
                 pDir = bEmpty ? NULL : &m_aCache[ nDir ].m_aEntries;
                 bKeepOnlyUserOverridden = ((sal_Int64)aStat.st_mtime != nTimestamp);
