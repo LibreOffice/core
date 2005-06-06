@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 07:59:36 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,12 +483,24 @@ void start_language_section(
     LanguageType ltype = ConvertIsoNamesToLanguage(iso_lang.language(), iso_lang.country());
 
     char buff[10];
-    _itoa(PRIMARYLANGID(ltype), buff, 16);
+    int primLangID = PRIMARYLANGID(ltype);
+    int subLangID = SUBLANGID(ltype);
+    // Our resources are normaly not sub language dependant.
+    // Esp. for spanish we don't want to distinguish between trad.
+    // and internatinal sorting ( which leads to two different sub languages )
+    // Setting the sub language to neutral allows us to use one
+    // stringlist for all spanish variants ( see #123126# )
+    if ( ( primLangID == LANG_SPANISH ) &&
+         ( subLangID == SUBLANG_SPANISH ) )
+        subLangID = SUBLANG_NEUTRAL;
+
+    _itoa(primLangID, buff, 16);
     lang_section += std::string("0x") + std::string(buff);
 
     lang_section += std::string(" , ");
 
-    _itoa(SUBLANGID(ltype), buff, 16);
+    _itoa(subLangID, buff, 16);
+
     lang_section += std::string("0x") + std::string(buff);
     ostream_iter = lang_section;
 }
