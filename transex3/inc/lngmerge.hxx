@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:50:26 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,5 +96,5 @@ public:
     ~LngParser();
 
     BOOL CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
-    BOOL Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile );
+    BOOL Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
 };
