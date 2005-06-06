@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:08:07 $
+#   last change: $Author: hr $ $Date: 2005-06-06 17:24:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ TARGET=ooo_beanshell
 TARFILE_NAME=bsh-2.0b1-src
 TARFILE_ROOTDIR=BeanShell
 PATCH_FILE_NAME=bsh-2.0b1-src.patch
+
+ADDITIONAL_FILES=makefile.mk
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
