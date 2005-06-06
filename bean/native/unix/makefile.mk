@@ -27,17 +27,17 @@ SLOFILES = \
 
 SHL1TARGET=$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
+.IF "$(JDK)" == "gcj"
+SHL1STDLIBS=-lgcjawt -lgcj
+.ELSE
 SHL1STDLIBS=-ljawt
+.ENDIF
 
 .IF "$(OS)" == "LINUX"
 .IF "$(CPUNAME)" == "S390"
 SHL1STDLIBS+=-lzip -lawt
 .ENDIF
 SHL1STDLIBS+=-lstdc++
-.ENDIF
-
-.IF "$(JDK)" == "gcj"
-SHL1STDLIBS+=-lgcj
 .ENDIF
 
 NO_SHL1DESCRIPTION=TRUE
