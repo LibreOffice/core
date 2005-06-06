@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:05:02 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ BOOL LngParser::CreateSDF(
             sCur = aLanguages[ n ];
             ByteString sAct = rText_inout[ sCur ];
             if ( !sAct.Len() && sCur.Len() )
-                sAct = rText_inout[ ByteString("de") ];
+                sAct = rText_inout[ ByteString("en-US") ];
 
             //if( sCur.EqualsIgnoreCaseAscii("de") ){
             //    sAct = UTF8Converter::ConvertToUTF8( sAct, RTL_TEXTENCODING_MS_1252 );
@@ -244,7 +244,7 @@ BOOL LngParser::CreateSDF(
 
 /*****************************************************************************/
 BOOL LngParser::Merge(
-    const ByteString &rSDFFile, const ByteString &rDestinationFile )
+    const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString& rPrj )
 /*****************************************************************************/
 {
     Export::InitLanguages( true );
@@ -365,8 +365,10 @@ BOOL LngParser::Merge(
             for( long int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
 
-                if( ( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US")) && !Text[ sCur ].Len() && pEntrys ){
-                ByteString sNewText;
+                if( ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+                    &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
+
+                    ByteString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, TRUE );
                     if (( sNewText.Len()) &&
                         !(( sCur.Equals("x-comment") ) && ( sNewText == "-" )))
