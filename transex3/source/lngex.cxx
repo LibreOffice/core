@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:17:28 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ int _cdecl main( int argc, char *argv[] )
     if ( sOutputFile.Len()) {
         LngParser aParser( sInputFile, bUTF8, bULF , bQuiet );
         if ( bMergeMode )
-            aParser.Merge( sMergeSrc, sOutputFile );
+            aParser.Merge( sMergeSrc, sOutputFile , sPrj );
         else
             aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
     }
