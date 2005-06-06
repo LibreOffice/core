@@ -68,10 +68,6 @@ import com.sun.star.awt.*;
 import com.sun.star.rendering.*;
 import com.sun.star.geometry.*;
 
-// system-dependent stuff
-import sun.awt.*;
-
-
 public class CanvasFont
     extends com.sun.star.lib.uno.helper.ComponentBase
     implements com.sun.star.lang.XServiceInfo,
