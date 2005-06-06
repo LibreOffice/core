@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:53:00 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class CUPSWrapper
 {
     oslModule       m_pLib;
     osl::Mutex      m_aGetPPDMutex;
+    bool            m_bPPDThreadRunning;
 
     int             (*m_pcupsPrintFile)(const char*, const char*, const char*, int, cups_option_t*);
     int             (*m_pcupsGetDests)(cups_dest_t**);
@@ -123,7 +124,7 @@ public:
                    cups_option_t* pOptions )
     { return m_pcupsPrintFile( pPrinter, pFileName, pTitle, nOptions, pOptions ); }
 
-    const char* cupsGetPPD( const char* pPrinter );
+    rtl::OString cupsGetPPD( const char* pPrinter );
 
     int cupsMarkOptions(ppd_file_t* pPPD, int nOptions, cups_option_t* pOptions )
     { return m_pcupsMarkOptions(pPPD, nOptions, pOptions); }
@@ -174,7 +175,8 @@ void* CUPSWrapper::loadSymbol( const char* pSymbol )
 }
 
 CUPSWrapper::CUPSWrapper()
-        : m_pLib( NULL )
+        : m_pLib( NULL ),
+          m_bPPDThreadRunning( false )
 {
 #ifdef ENABLE_CUPS
     OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libcups.so.2" ) );
@@ -256,68 +258,113 @@ bool CUPSWrapper::isValid()
     return m_pLib != NULL;
 }
 
-static struct GetPPDAttribs
+typedef const char*(*PPDFunction)(const char*);
+struct GetPPDAttribs
 {
-    const char* (*pFunction)(const char*);
+    PPDFunction         m_pFunction;
     osl::Condition      m_aCondition;
-    const char*         m_pParameter;
-    const char*         m_pResult;
+    OString             m_aParameter;
+    OString             m_aResult;
     oslThread           m_aThread;
-} *pAttribs = NULL;
+    int                 m_nRefs;
+    bool*               m_pResetRunning;
+    osl::Mutex*         m_pSyncMutex;
+
+    GetPPDAttribs( PPDFunction pFn, const char * m_pParameter,
+                   bool* pResetRunning, osl::Mutex* pSyncMutex )
+            : m_pFunction( pFn ),
+              m_aParameter( m_pParameter ),
+              m_pResetRunning( pResetRunning ),
+              m_pSyncMutex( pSyncMutex )
+    {
+        m_nRefs = 2;
+        m_aCondition.reset();
+    }
+
+    ~GetPPDAttribs()
+    {
+        if( m_aResult.getLength() )
+            unlink( m_aResult.getStr() );
+    }
+
+    void unref()
+    {
+        if( --m_nRefs == 0 )
+        {
+            *m_pResetRunning = false;
+            delete this;
+        }
+    }
+
+    void executeCall()
+    {
+        // This CUPS method is not at all thread-safe we need
+        // to dup the pointer to a static buffer it returns ASAP
+        OString aResult = m_pFunction( m_aParameter );
+        MutexGuard aGuard( *m_pSyncMutex );
+        m_aResult = aResult;
+        m_aCondition.set();
+        unref();
+    }
+
+    OString waitResult( TimeValue *pDelay )
+    {
+        m_pSyncMutex->release();
+
+        if (m_aCondition.wait( pDelay ) != Condition::result_ok
+            )
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "cupsGetPPD %s timed out\n",
+            (const sal_Char *) m_aParameter
+            );
+            #endif
+        }
+        m_pSyncMutex->acquire();
+
+        OString aRetval = m_aResult;
+        m_aResult = OString();
+        unref();
+
+        return aRetval;
+    }
+};
 
 extern "C" {
-    static void getPPDWorker(void*)
+    static void getPPDWorker(void* pData)
     {
-        pAttribs->m_pResult = pAttribs->pFunction( pAttribs->m_pParameter );
-        if( pAttribs->m_aCondition.check() )
-        {
-            // timed out, unlink file
-            if( pAttribs->m_pResult )
-                unlink( pAttribs->m_pResult );
-            delete pAttribs;
-            pAttribs = NULL;
-        }
-        else
-            pAttribs->m_aCondition.set();
+        GetPPDAttribs* pAttribs = (GetPPDAttribs*)pData;
+        pAttribs->executeCall();
     }
 }
 
-const char* CUPSWrapper::cupsGetPPD( const char* pPrinter )
+OString CUPSWrapper::cupsGetPPD( const char* pPrinter )
 {
-    const char* pResult = NULL;
+    OString aResult;
 
+    m_aGetPPDMutex.acquire();
     // if one thread hangs in cupsGetPPD already, don't start another
-    if( ! pAttribs )
+    if( ! m_bPPDThreadRunning )
     {
-        pAttribs = new GetPPDAttribs();
-        pAttribs->pFunction         = m_pcupsGetPPD;
-        pAttribs->m_aCondition.reset();
-        pAttribs->m_pParameter      = pPrinter;
-        pAttribs->m_pResult         = NULL;
-        pAttribs->m_aThread         = osl_createThread( getPPDWorker, NULL );
+        m_bPPDThreadRunning = true;
+        GetPPDAttribs* pAttribs = new GetPPDAttribs( m_pcupsGetPPD,
+                                                     pPrinter,
+                                                     &m_bPPDThreadRunning,
+                                                     &m_aGetPPDMutex );
+
+        oslThread aThread = osl_createThread( getPPDWorker, pAttribs );
 
         TimeValue aValue;
         aValue.Seconds = 5;
         aValue.Nanosec = 0;
-        if( pAttribs->m_aCondition.wait( &aValue ) == Condition::result_ok )
-        {
-            osl_destroyThread( pAttribs->m_aThread );
-            pResult = pAttribs->m_pResult;
-            delete pAttribs;
-            pAttribs = NULL;
-        }
-        else
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "cupsGetPPD %s timed out\n", pPrinter );
-#endif
-            // should the thread awake again notify it to clean up itself
-            pAttribs->m_aCondition.set();
-            osl_destroyThread( pAttribs->m_aThread );
-        }
-    }
 
-    return pResult;
+        // NOTE: waitResult release and acquires the GetPPD mutex
+        aResult = pAttribs->waitResult( &aValue );
+        osl_destroyThread( aThread );
+    }
+    m_aGetPPDMutex.release();
+
+    return aResult;
 }
 
 static const char* setPasswordCallback( const char* pIn )
@@ -577,20 +624,20 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
             if( dest_it != m_aCUPSDestMap.end() )
             {
                 cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
-                const char* pPPDFile = m_pCUPSWrapper->cupsGetPPD( pDest->name );
+                OString aPPDFile = m_pCUPSWrapper->cupsGetPPD( pDest->name );
                 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "PPD for %s is %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr(), pPPDFile );
+                fprintf( stderr, "PPD for %s is %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr(), aPPDFile.getStr() );
                 #endif
-                if( pPPDFile )
+                if( aPPDFile.getLength() )
                 {
                     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-                    OUString aFileName( OStringToOUString( pPPDFile, aEncoding ) );
+                    OUString aFileName( OStringToOUString( aPPDFile, aEncoding ) );
                     // update the printer info with context information
-                    ppd_file_t* pPPD = m_pCUPSWrapper->ppdOpenFile( pPPDFile );
+                    ppd_file_t* pPPD = m_pCUPSWrapper->ppdOpenFile( aPPDFile.getStr() );
                     if( pPPD )
                     {
                         // create the new parser
-                        PPDParser* pCUPSParser =  new PPDParser( aFileName );
+                        PPDParser* pCUPSParser = new PPDParser( aFileName );
                         pCUPSParser->m_aFile = rPrinter;
                         pNewParser = pCUPSParser;
 
@@ -619,25 +666,29 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                     }
                     #if OSL_DEBUG_LEVEL > 1
                     else
-                        fprintf( stderr, "ppdOpenFile failed, fallinmg back to generic driver\n" );
+                        fprintf( stderr, "ppdOpenFile failed, falling back to generic driver\n" );
                     #endif
 
                     // remove temporary PPD file
-                    unlink( pPPDFile );
+                    unlink( aPPDFile.getStr() );
                 }
                 #if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "no dest found for printer %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr() );
+                    fprintf( stderr, "cupsGetPPD failed, falling back to generic driver\n" );
                 #endif
             }
+            #if OSL_DEBUG_LEVEL > 1
+            else
+                fprintf( stderr, "no dest found for printer %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr() );
+            #endif
         }
         m_aCUPSMutex.release();
     }
-#if OSL_DEBUG_LEVEL >1
+    #if OSL_DEBUG_LEVEL >1
     else
         fprintf( stderr, "could not acquire CUPS mutex !!!\n" );
-#endif
-#endif // ENABLE_CUPS
+    #endif
+    #endif // ENABLE_CUPS
 
     if( ! pNewParser )
     {
