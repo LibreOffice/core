@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-28 09:20:38 $
+#   last change: $Author: hr $ $Date: 2005-06-06 16:26:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,10 @@ TARGET=desktopshare
 
 # --- Files --------------------------------------------------------
 
-# GNOME does not like icon names with more than one '.'
+# gnome-vfs treats everything behind the last '.' as an icon extension, 
+# even though the "icon_filename" in '.keys' is specified as filename 
+# without extension. Since it alos does not know how to handle "9-writer"
+# type icons :-), we are stripping all '.' for now.
 ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
 ULFFILES= \
