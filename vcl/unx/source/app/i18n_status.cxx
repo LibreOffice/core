@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:55:48 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             XSetICValues( I18NStatus::get().getInputContext( bDummy )->GetContext(),
                           XNUnicodeCharacterSubset,
                           rChoices[nIndex].pData,
-                          0);
+                          NULL);
             // FIXME: get rid of X11SalFrame
             X11SalFrame* pParent = static_cast<X11SalFrame*>(I18NStatus::get().getParent());
             if( pParent && pParent->isMapped() )
