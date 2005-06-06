@@ -107,6 +107,7 @@ PKGDEPN = \
     $(MISC)/$(TARGET)/printeradmin.sh \
     $(MISC)/$(TARGET)/openoffice.sh \
     $(MISC)/$(TARGET)/space \
+    $(MISC)/$(TARGET)/depend \
     $(MISC)/$(TARGET)/pkginfo \
     $(MISC)/$(TARGET)/mailcap \
     $(MISC)/$(TARGET)/postinstall \
@@ -158,7 +159,7 @@ $(MISC)/$(TARGET)/openoffice.applications : ../productversion.mk ../mimetypes/op
 # --- pkginfo ----------------------------------------------------
 
 # Copy the pkginfo file to $(MISC) 
-$(MISC)/$(TARGET)/pkginfo : $$(@:f) ../productversion.mk
+$(MISC)/$(TARGET)/{pkginfo depend} : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/g" > $@
 
