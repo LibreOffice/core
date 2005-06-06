@@ -73,10 +73,6 @@ import com.sun.star.rendering.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-// system-dependent stuff
-import sun.awt.*;
-
-
 public class SpriteRep
 {
     private java.awt.image.BufferedImage    buffer;
