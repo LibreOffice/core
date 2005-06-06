@@ -74,10 +74,6 @@ import com.sun.star.geometry.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-// system-dependent stuff
-import sun.awt.*;
-
-
 public class CanvasCustomSprite
     extends com.sun.star.lib.uno.helper.ComponentBase
     implements com.sun.star.rendering.XCustomSprite,
