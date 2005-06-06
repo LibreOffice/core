@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-14 11:43:36 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,7 @@ public:
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
+    static bool isMergingGermanAllowed( const ByteString& rPrj );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
