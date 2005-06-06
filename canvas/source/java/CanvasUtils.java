@@ -75,10 +75,6 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.geom.*;
 
-// system-dependent stuff
-import sun.awt.*;
-
-
 public class CanvasUtils
 {
     //
