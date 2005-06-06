@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:04:48 $
+ *  last change: $Author: hr $ $Date: 2005-06-06 16:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ namespace
 }
 
 // static SV-Data
-ImplSVData* pImplSVData = &private_aImplSVData::get();
+ImplSVData* pImplSVData = NULL;
 
 SalSystem* ImplGetSalSystem()
 {
@@ -189,17 +189,13 @@ static String& ReplaceJavaErrorMessages( String& rString )
 
 void ImplInitSVData()
 {
-    ImplSVData* pSVData = pImplSVData;
-    ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
-    *ppSVData = &private_aImplSVData::get();
-
-    // init global sharedlib data
-    // ...
+    pImplSVData = &private_aImplSVData::get();
 
     // init global instance data
-    memset( pSVData, 0, sizeof( ImplSVData ) );
-    pSVData->maHelpData.mbAutoHelpId = sal_True;
-    pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
+    memset( pImplSVData, 0, sizeof( ImplSVData ) );
+    pImplSVData->maHelpData.mbAutoHelpId = sal_True;
+    pImplSVData->maHelpData.mbAutoHelpId = sal_True;
+    pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 }
 
 // -----------------------------------------------------------------------
@@ -241,12 +237,6 @@ void ImplDeInitSVData()
 
 void ImplDestroySVData()
 {
-    ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
-
-    // delete global sharedlib data
-    // ...
-
-    *ppSVData = NULL;
     pImplSVData = NULL;
 }
 
