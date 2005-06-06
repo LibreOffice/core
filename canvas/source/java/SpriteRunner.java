@@ -73,10 +73,6 @@ import com.sun.star.rendering.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-// system-dependent stuff
-import sun.awt.*;
-
-
 //
 // HOWTO get a Graphics2D from a window
 //
