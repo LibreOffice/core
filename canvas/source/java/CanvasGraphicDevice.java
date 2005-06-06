@@ -73,9 +73,6 @@ import com.sun.star.geometry.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-// system-dependent stuff
-import sun.awt.*;
-
 // TEMP
 import com.sun.star.uno.Type;
 
