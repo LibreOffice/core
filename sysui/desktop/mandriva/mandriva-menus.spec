@@ -284,6 +284,9 @@ GenerateMenu "%PREFIX-printeradmin" \
     "OpenOffice.org %{menuversion} Printer Administration" \
 	"core02"
 
+# This is needed for Hamburg RE builds
+chmod -R g+w $RPM_BUILD_ROOT/usr/lib
+
 %preun
 # remove from /etc/mailcap only on de-install
 if [ "$1" = 0 ]
