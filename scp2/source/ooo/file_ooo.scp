@@ -715,7 +715,7 @@ File gid_File_Jar_Officebean
     TXT_FILE_BODY;
     Name = JARFILENAME(officebean);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif

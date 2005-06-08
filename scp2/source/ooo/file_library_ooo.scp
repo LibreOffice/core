@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.104 $
+*  $Revision: 1.105 $
 *
-*  last change: $Author: hr $ $Date: 2005-06-06 16:09:39 $
+*  last change: $Author: is $ $Date: 2005-06-08 14:10:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -343,7 +343,7 @@ File gid_File_Lib_Comphelper2
   #if SUPD < 627
     Styles = (PACKED);
   #else
-    Styles = (PACKED, UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
   #endif
 End
@@ -708,7 +708,13 @@ STD_LIB_FILE( gid_File_Lib_Fwe , fwe)
 
 STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Fwk , fwk)
+File gid_File_Lib_Fwk
+    Name = LIBNAME(fwk);
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Dir = gid_Dir_Program;
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Fwl , fwl)
 
@@ -753,7 +759,13 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Go , go)
+File gid_File_Lib_Go
+    Name = LIBNAME(go);
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Dir = gid_Dir_Program;
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
@@ -1613,7 +1625,13 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sfx , sfx)
+File gid_File_Lib_Sfx
+    Name = LIBNAME(sfx);
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Dir = gid_Dir_Program;
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
 
 #ifdef WNT
 
@@ -2041,8 +2059,15 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Xcr, xcr)
 STD_UNO_LIB_FILE( gid_File_Lib_Xmx , xmx)
-STD_UNO_LIB_FILE( gid_File_Lib_Xo , xo)
 STD_UNO_LIB_FILE( gid_File_Lib_Xof , xof)
+
+File gid_File_Lib_Xo
+    Name = LIBNAME(xo);
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Dir = gid_Dir_Program;
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Xstor,xstor)
 
