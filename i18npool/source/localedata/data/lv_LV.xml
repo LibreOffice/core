@@ -17,7 +17,7 @@
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>.</DateSeparator>
-<ThousandSeparator> </ThousandSeparator>
+<ThousandSeparator> </ThousandSeparator>
 <DecimalSeparator>,</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>,</Time100SecSeparator>
@@ -171,39 +171,39 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER"  formatindex="3">
-<FormatCode># ##0</FormatCode>
+<FormatCode># ##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
-<FormatCode># ##0,00</FormatCode>
+<FormatCode># ##0,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
-<FormatCode># ###,00</FormatCode>
+<FormatCode># ###,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode># ##0[$Ls-426];-# ##0[$Ls-426]</FormatCode>
+<FormatCode># ##0[$Ls-426];-# ##0[$Ls-426]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode># ##0,00[$Ls-426];-# ##0,00[$Ls-426]</FormatCode>
+<FormatCode># ##0,00[$Ls-426];-# ##0,00[$Ls-426]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode># ##0[$Ls-426];[RED]-# ##0[$Ls-426]</FormatCode>
+<FormatCode># ##0[$Ls-426];[RED]-# ##0[$Ls-426]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode># ##0,00[$Ls-426];[RED]-# ##0,00[$Ls-426]</FormatCode>
+<FormatCode># ##0,00[$Ls-426];[RED]-# ##0,00[$Ls-426]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
-<FormatCode># ##0,00 CCC</FormatCode>
+<FormatCode># ##0,00 CCC</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode># ##0,--[$Ls-426];[RED]-# ##0,--[$Ls-426]</FormatCode>
+<FormatCode># ##0,--[$Ls-426];[RED]-# ##0,--[$Ls-426]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
