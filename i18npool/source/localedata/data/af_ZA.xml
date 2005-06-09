@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.3">
 <LC_INFO>
 <Language>
 <LangID>af</LangID>
@@ -30,14 +30,20 @@
 <DoubleQuotationStart>“</DoubleQuotationStart>
 <DoubleQuotationEnd>”</DoubleQuotationEnd>
 </Markers>
-<TimeAM>VM</TimeAM>
-<TimePM>NM</TimePM>
+<TimeAM>vm.</TimeAM>
+<TimePM>nm.</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT ref="en_ZA" replaceTo="[$R-436]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
-<LC_INDEX ref="en_US"/>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
+<UnicodeScript>0</UnicodeScript>
+<UnicodeScript>1</UnicodeScript>
+<FollowPageWord>bl.</FollowPageWord>
+<FollowPageWord>bl.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -90,7 +96,7 @@
 </Month>
 <Month>
 <MonthID>mar</MonthID>
-<DefaultAbbrvName>Mar</DefaultAbbrvName>
+<DefaultAbbrvName>Mrt</DefaultAbbrvName>
 <DefaultFullName>Maart</DefaultFullName>
 </Month>
 <Month>
@@ -142,13 +148,13 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>BC</DefaultAbbrvName>
-<DefaultFullName>BC</DefaultFullName>
+<DefaultAbbrvName>v.C.</DefaultAbbrvName>
+<DefaultFullName>voor Christus</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>AD</DefaultAbbrvName>
-<DefaultFullName>AD</DefaultFullName>
+<DefaultAbbrvName>n.C.</DefaultAbbrvName>
+<DefaultFullName>na Christus</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
