@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 12:34:55 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:58:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,42 +67,18 @@ TARGET=clientTest
 TARGETTYPE=CUI
 LIBTARGET=NO
 
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files ---
 
-#UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
-#UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb 
-
-
-UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
 .IF "$(NETTOOLKIT)"==""
-UNOTYPES= \
-    com.sun.star.lang.XMultiServiceFactory \
-    com.sun.star.script.XInvocation \
-    com.sun.star.bridge.XBridgeSupplier2 \
-    com.sun.star.bridge.oleautomation.Date \
-    com.sun.star.bridge.oleautomation.Decimal \
-    com.sun.star.bridge.oleautomation.Currency \
-    com.sun.star.bridge.oleautomation.SCode \
-    com.sun.star.bridge.oleautomation.NamedArgument \
-    com.sun.star.bridge.oleautomation.PropertyPutArgument
-
-
-.IF "$(depend)" != ""
-
-.ENDIF # depend
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=  \
@@ -123,8 +99,6 @@ APP1STDLIBS= \
     uuid.lib		\
     gdi32.lib	\
     advapi32.lib    
-
-
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
