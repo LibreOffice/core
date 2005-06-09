@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 12:35:20 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:58:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,39 +60,26 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/
+PRJ=..$/..$/..
 
 PRJNAME=extensions
 TARGET=testcppuno
 TARGETTYPE=CUI
 LIBTARGET=NO
 
-#USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
-
-
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
+INCPRE+=-I$(ATL_INCLUDE)
 
 
 .IF "$(NETTOOLKIT)"==""
-UNOTYPES=	com.sun.star.lang.XMultiServiceFactory \
-            com.sun.star.script.XInvocation			\
-            oletest.XCallback
-
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/testcppuno.obj
@@ -112,15 +99,13 @@ APP1STDLIBS= \
     comdlg32.lib	\
     gdi32.lib
 
-
-
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += $(LIBCIMT)
 .ENDIF
 
-APP1DEF=	$(MISC)\$(APP1TARGET).def
+APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
-# --- Targets ---
 .ENDIF #"$(NETTOOLKIT)"==""
+# --- Targets ---
 .INCLUDE : target.mk
 
