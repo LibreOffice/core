@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:24:29 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ COLLATOR( zh_TW_radical )
 COLLATOR( zh_TW_stroke )
 COLLATOR( zh_TW_charset )
 COLLATOR( ko_charset )
+COLLATOR( km_charset )
 COLLATOR( ja_charset )
 COLLATOR( ja_phonetic_alphanumeric_first )
 COLLATOR( ja_phonetic_alphanumeric_last )
