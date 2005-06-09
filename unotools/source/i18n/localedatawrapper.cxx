@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:41 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#include <string.h>     // memcpy()
+#include <cstring>      // memcpy()
+#include <cstdio>       // fprintf(), stderr
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
@@ -140,6 +139,8 @@ namespace
     {};
 }
 
+BYTE LocaleDataWrapper::nLocaleDataChecking = 0;
+
 LocaleDataWrapper::LocaleDataWrapper(
             const Reference< lang::XMultiServiceFactory > & xSF,
             const lang::Locale& rLocale
@@ -160,7 +161,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         }
         catch ( Exception& e )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ByteString aMsg( "LocaleDataWrapper ctor: Exception caught\n" );
             aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -183,7 +184,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         }
         catch ( Exception& e )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ByteString aMsg( "getComponentInstance: Exception caught\n" );
             aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -249,7 +250,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getLanguageCountryInfo: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -268,7 +269,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getLocaleItem: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -287,7 +288,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getAllCalendars: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -306,7 +307,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getAllCurrencies: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -325,7 +326,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getAllFormats: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -344,7 +345,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getCollatorImplementations: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -363,7 +364,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getTransliterations: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -382,7 +383,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getForbiddenCharacters: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -401,7 +402,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getReservedWord: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -425,7 +426,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getAllInstalledLocaleNames: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -467,42 +468,47 @@ void LocaleDataWrapper::invalidateData()
     sal_Int32 nLanguages = 0;
     for ( sal_Int32 i=0; i<nCount; i++ )
     {
-#ifndef PRODUCT
-        String aDebugLocale( xLoc[i].Language );
-        if ( xLoc[i].Country.getLength() )
+        String aDebugLocale;
+        if (areChecksEnabled())
         {
-            aDebugLocale += '_';
-            aDebugLocale += String( xLoc[i].Country );
-            if ( xLoc[i].Variant.getLength() )
+            aDebugLocale = xLoc[i].Language;
+            if ( xLoc[i].Country.getLength() )
             {
                 aDebugLocale += '_';
-                aDebugLocale += String( xLoc[i].Variant );
+                aDebugLocale += String( xLoc[i].Country);
+                if ( xLoc[i].Variant.getLength() )
+                {
+                    aDebugLocale += '_';
+                    aDebugLocale += String( xLoc[i].Variant);
+                }
             }
         }
-#endif
+
         if ( xLoc[i].Variant.getLength() )
         {
-#ifndef PRODUCT
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: Variants not supported, locale\n" ) );
-            aMsg += ByteString( aDebugLocale, RTL_TEXTENCODING_UTF8  );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#endif
+            if (areChecksEnabled())
+            {
+                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                            "LocaleDataWrapper::getInstalledLanguageTypes: Variants not supported, locale\n"));
+                aMsg += aDebugLocale;
+                outputCheckMessage( aMsg );
+            }
             continue;
         }
         LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
             xLoc[i].Country );
 
-#ifndef PRODUCT
-        // Exclude known problems because no MS-LCID defined
-        if ( eLang == LANGUAGE_DONTKNOW
+        // In checks, exclude known problems because no MS-LCID defined.
+        if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW
 //              && !aDebugLocale.EqualsAscii( "br_AE" ) // ?!? Breton in United Arabic Emirates
             )
         {
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n" ) );
-            aMsg += ByteString( aDebugLocale, RTL_TEXTENCODING_UTF8  );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n"));
+            aMsg += aDebugLocale;
+            outputCheckMessage( aMsg );
         }
-#endif
+
         switch ( eLang )
         {
             case LANGUAGE_NORWEGIAN :       // no_NO, not Bokmal (nb_NO), not Nynorsk (nn_NO)
@@ -516,30 +522,29 @@ void LocaleDataWrapper::invalidateData()
             if ( String( xLoc[i].Language ) != aLanguage ||
                     String( xLoc[i].Country ) != aCountry )
             {
-#ifndef PRODUCT
-                // Exclude known problems because no MS-LCID defined and
-                // default for Language found.
-                if ( TRUE
+                // In checks, exclude known problems because no MS-LCID defined
+                // and default for Language found.
+                if ( areChecksEnabled()
                         && !aDebugLocale.EqualsAscii( "ar_SD" ) // Sudan/ar
                         && !aDebugLocale.EqualsAscii( "en_CB" ) // Carribean is not a country
 //                      && !aDebugLocale.EqualsAscii( "en_BG" ) // ?!? Bulgaria/en
 //                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
                     )
                 {
-                    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n" ) );
-                    aMsg += ByteString( aDebugLocale, RTL_TEXTENCODING_UTF8  );
-                    aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "  ->  0x" ) );
-                    aMsg += ByteString::CreateFromInt32( eLang, 16 );
-                    aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
-                    aMsg += ByteString( aLanguage, RTL_TEXTENCODING_UTF8  );
+                    String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                                "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n"));
+                    aMsg += aDebugLocale;
+                    aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  0x" ) );
+                    aMsg += String::CreateFromInt32( eLang, 16 );
+                    aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
+                    aMsg += aLanguage;
                     if ( aCountry.Len() )
                     {
                         aMsg += '_';
-                        aMsg += ByteString( aCountry, RTL_TEXTENCODING_UTF8  );
+                        aMsg += aCountry;
                     }
-                    DBG_ERRORFILE( aMsg.GetBuffer() );
+                    outputCheckMessage( aMsg );
                 }
-#endif
                 eLang = LANGUAGE_DONTKNOW;
             }
         }
@@ -751,14 +756,18 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     }
     if ( nElem >= nCnt )
     {
-#ifndef PRODUCT
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrSymbolsImpl: no default currency" ) );
-        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+        if (areChecksEnabled())
+        {
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "LocaleDataWrapper::getCurrSymbolsImpl: no default currency"));
+            outputCheckMessage( appendLocaleInfo( aMsg ) );
+        }
         nElem = 0;
         if ( nElem >= nCnt )
         {
-            DBG_ERRORFILE( "getCurrSymbolsImpl: no currency at all" );
+            if (areChecksEnabled())
+                outputCheckMessage( String( RTL_CONSTASCII_USTRINGPARAM(
+                                "LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles")));
             aCurrSymbol.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "ShellsAndPebbles" ) );
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
@@ -782,7 +791,6 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
     const sal_Unicode* p = pStr + nStart;
     int nInSection = 0;
     BOOL bQuote = FALSE;
-    const String& rDecSep = getNumDecimalSep();
     while ( p < pStop )
     {
         if ( bQuote )
@@ -860,10 +868,12 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
-#ifndef PRODUCT
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: no currency formats" ) );
-        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+        if (areChecksEnabled())
+        {
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "LocaleDataWrapper::getCurrFormatsImpl: no currency formats"));
+            outputCheckMessage( appendLocaleInfo( aMsg ) );
+        }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return ;
     }
@@ -907,13 +917,12 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     // positive format
     nElem = (nDef >= 0 ? nDef : (nNeg >= 0 ? nNeg : 0));
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
-#ifndef PRODUCT
-    if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND )
+    if (areChecksEnabled() && (nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND))
     {
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrPositiveFormat?" ) );
-        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+        String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                    "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?"));
+        outputCheckMessage( appendLocaleInfo( aMsg ) );
     }
-#endif
     if ( nBlank == STRING_NOTFOUND )
     {
         if ( nSym < nNum )
@@ -937,14 +946,14 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         const ::rtl::OUString& rCode = pFormatArr[nNeg].Code;
         sal_Int32 nDelim = rCode.indexOf( ';' );
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
-#ifndef PRODUCT
-        if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND
-          || (nPar == STRING_NOTFOUND && nSign == STRING_NOTFOUND) )
+        if (areChecksEnabled() && (nNum == STRING_NOTFOUND ||
+                    nSym == STRING_NOTFOUND || (nPar == STRING_NOTFOUND &&
+                        nSign == STRING_NOTFOUND)))
         {
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrNegativeFormat?" ) );
-            DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?"));
+            outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
-#endif
         if ( nBlank == STRING_NOTFOUND )
         {
             if ( nSym < nNum )
@@ -1075,10 +1084,12 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
         }
         if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
         {
-#ifndef PRODUCT
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: not all DMY present" ) );
-            DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+            if (areChecksEnabled())
+            {
+                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                            "LocaleDataWrapper::scanDateFormat: not all DMY present"));
+                outputCheckMessage( appendLocaleInfo( aMsg ) );
+            }
             if ( nDay == STRING_NOTFOUND )
                 nDay = rCode.Len();
             if ( nMonth == STRING_NOTFOUND )
@@ -1096,10 +1107,12 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
         return YMD;
     else
     {
-#ifndef PRODUCT
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: no magic applyable" ) );
-        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+        if (areChecksEnabled())
+        {
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "LocaleDataWrapper::scanDateFormat: no magic applyable"));
+            outputCheckMessage( appendLocaleInfo( aMsg ) );
+        }
         return DMY;
     }
 }
@@ -1113,10 +1126,12 @@ void LocaleDataWrapper::getDateFormatsImpl()
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
-#ifndef PRODUCT
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no date formats" ) );
-        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+        if (areChecksEnabled())
+        {
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "LocaleDataWrapper::getDateFormatsImpl: no date formats"));
+            outputCheckMessage( appendLocaleInfo( aMsg ) );
+        }
         nDateFormat = nLongDateFormat = DMY;
         return ;
     }
@@ -1156,16 +1171,20 @@ void LocaleDataWrapper::getDateFormatsImpl()
     }
     if ( nEdit == -1 )
     {
-#ifndef PRODUCT
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no edit" ) );
-        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+        if (areChecksEnabled())
+        {
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "LocaleDataWrapper::getDateFormatsImpl: no edit"));
+            outputCheckMessage( appendLocaleInfo( aMsg ) );
+        }
         if ( nDef == -1 )
         {
-#ifndef PRODUCT
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no default" ) );
-            DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
-#endif
+            if (areChecksEnabled())
+            {
+                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                            "LocaleDataWrapper::getDateFormatsImpl: no default"));
+                outputCheckMessage( appendLocaleInfo( aMsg ) );
+            }
             if ( nMedium != -1 )
                 nDef = nMedium;
             else if ( nLong != -1 )
@@ -1615,12 +1634,12 @@ String LocaleDataWrapper::getDuration( const Time& rTime, BOOL bSec, BOOL b100Se
 
 // --- simple number formatting ---------------------------------------
 
-inline long ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHORT nDecimals )
+inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHORT nDecimals )
 {
     // approximately 3.2 bits per digit
-    const long nDig = ((sizeof(long) * 8) / 3) + 1;
+    const size_t nDig = ((sizeof(long) * 8) / 3) + 1;
     // digits, separators, leading zero, sign
-    long nGuess = ((nDecimals < nDig) ?
+    size_t nGuess = ((nDecimals < nDig) ?
         ((((nDig - nDecimals) / 3) * rLoc.getNumThousandSep().Len()) + nDig) :
         nDecimals) + rLoc.getNumDecimalSep().Len() + 3;
     return nGuess;
@@ -1633,7 +1652,7 @@ String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals,
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[48];       // big enough for 64-bit long
     // check if digits and separators will fit into fixed buffer or allocate
-    long nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
+    size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
     sal_Unicode* const pBuffer = (nGuess < 42 ? aBuf :
         new sal_Unicode[nGuess + 16]);
 
@@ -1647,14 +1666,6 @@ String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals,
 }
 
 
-#if SUPD < 638
-String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
-{
-    return getNum( nNumber, nDecimals, bUseThousandSep, TRUE );
-}
-#endif
-
-
 String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
         const String& rCurrencySymbol, BOOL bUseThousandSep ) const
 {
@@ -1664,12 +1675,12 @@ String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
     sal_Unicode cZeroChar = getCurrZeroChar();
 
     // check if digits and separators will fit into fixed buffer or allocate
-    long nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
+    size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
     sal_Unicode* const pNumBuffer = (nGuess < 42 ? aNumBuf :
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* const pBuffer =
-        ((rCurrencySymbol.Len() + nGuess + 20) < sizeof(aBuf) ? aBuf :
+        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < sizeof(aBuf) ? aBuf :
         new sal_Unicode[ rCurrencySymbol.Len() + nGuess + 20 ]);
     sal_Unicode* pBuf = pBuffer;
 
@@ -1866,20 +1877,66 @@ String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
 }
 
 
-#ifndef PRODUCT
-ByteString& LocaleDataWrapper::AppendLocaleInfo( ByteString& rDebugMsg ) const
+String& LocaleDataWrapper::appendLocaleInfo( String& rDebugMsg ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     rDebugMsg += '\n';
-    rDebugMsg += ByteString( String( aLocale.Language ), RTL_TEXTENCODING_UTF8 );
+    rDebugMsg += String( aLocale.Language);
     rDebugMsg += '_';
-    rDebugMsg += ByteString( String( aLocale.Country ), RTL_TEXTENCODING_UTF8 );
-    rDebugMsg.Append( RTL_CONSTASCII_STRINGPARAM( " requested\n" ) );
+    rDebugMsg += String( aLocale.Country);
+    rDebugMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " requested\n" ) );
     lang::Locale aLoaded = getLoadedLocale();
-    rDebugMsg += ByteString( String( aLoaded.Language ), RTL_TEXTENCODING_UTF8 );
+    rDebugMsg += String( aLoaded.Language);
     rDebugMsg += '_';
-    rDebugMsg += ByteString( String( aLoaded.Country ), RTL_TEXTENCODING_UTF8 );
-    rDebugMsg.Append( RTL_CONSTASCII_STRINGPARAM( " loaded" ) );
+    rDebugMsg += String( aLoaded.Country);
+    rDebugMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " loaded" ) );
     return rDebugMsg;
 }
+
+
+// static
+void LocaleDataWrapper::outputCheckMessage( const String& rMsg )
+{
+    outputCheckMessage( ByteString( rMsg, RTL_TEXTENCODING_UTF8).GetBuffer());
+}
+
+
+// static
+void LocaleDataWrapper::outputCheckMessage( const char* pStr )
+{
+    fprintf( stderr, "\n%s\n", pStr);
+    fflush( stderr);
+    DBG_ERROR( pStr);
+}
+
+
+// static
+void LocaleDataWrapper::evaluateLocaleDataChecking()
+{
+    // Using the rtl_Instance template here wouldn't solve all threaded write
+    // accesses, since we want to assign the result to the static member
+    // variable and would need to dereference the pointer returned and assign
+    // the value unguarded. This is the same pattern manually coded.
+    BYTE nCheck = nLocaleDataChecking;
+    if (!nCheck)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
+        nCheck = nLocaleDataChecking;
+        if (!nCheck)
+        {
+#ifndef PRODUCT
+            nCheck = 1;
+#else
+            const char* pEnv = getenv( "OOO_ENABLE_LOCALE_DATA_CHECKS");
+            if (pEnv && (pEnv[0] == 'Y' || pEnv[0] == 'y' || pEnv[0] == '1'))
+                nCheck = 1;
+            else
+                nCheck = 2;
 #endif
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            nLocaleDataChecking = nCheck;
+        }
+    }
+    else
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+}
