@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:15:47 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 13:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1710,7 +1710,9 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
     pCPage              ( NULL ),
     pIPage              ( NULL ),
     pSPage              ( NULL ),
-    pBPage              ( NULL )
+    pBPage              ( NULL ),
+
+    bIsInitDone         ( false )
 
 {
     FreeResource();
@@ -1784,7 +1786,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
 void SfxHelpIndexWindow_Impl::SetActiveFactory()
 {
     DBG_ASSERT( pIPage, "index page not initialized" );
-    if ( !aActiveLB.GetEntryCount() )
+    if ( !bIsInitDone && !aActiveLB.GetEntryCount() )
     {
         aTimer.Stop();
         InitHdl( NULL );
@@ -1867,6 +1869,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
 {
+    bIsInitDone = true;
     Initialize();
 
     // now use the timer for selection
