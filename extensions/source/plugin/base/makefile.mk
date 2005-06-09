@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:42:16 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:55:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,86 +61,12 @@
 #*************************************************************************
 PRJ=..$/..$/..
 
-PRJNAME=plugin
+PRJNAME=extensions
 TARGET=plbase
 TARGETTYPE=GUI
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  ..$/util$/makefile.pmk
-
-# --- Types -------------------------------------
-
-UNOUCRDEP=$(SOLARBINDIR)$/types.rdb makefile.mk
-UNOUCRRDB=$(SOLARBINDIR)$/types.rdb
-
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
-INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-UNOTYPES=\
-    com.sun.star.awt.PosSize							\
-    com.sun.star.awt.MouseButton						\
-    com.sun.star.awt.FocusChangeReason					\
-    com.sun.star.awt.KeyFunction						\
-    com.sun.star.awt.Key								\
-    com.sun.star.awt.KeyModifier						\
-    com.sun.star.awt.KeyGroup							\
-    com.sun.star.awt.XAdjustmentListener				\
-    com.sun.star.awt.XActionListener					\
-    com.sun.star.awt.XTextListener						\
-    com.sun.star.awt.XSpinListener						\
-    com.sun.star.awt.XItemListener						\
-    com.sun.star.awt.XVclContainerListener				\
-    com.sun.star.awt.XVclContainerPeer					\
-    com.sun.star.awt.XVclContainer						\
-    com.sun.star.awt.XVclWindowPeer						\
-    com.sun.star.awt.VclWindowPeerAttribute				\
-    com.sun.star.awt.XActivateListener					\
-    com.sun.star.awt.XTopWindowListener					\
-    com.sun.star.awt.XKeyListener						\
-    com.sun.star.awt.XTopWindow							\
-    com.sun.star.awt.XControl							\
-    com.sun.star.awt.XControlModel						\
-    com.sun.star.awt.XUnoControlContainer				\
-    com.sun.star.beans.PropertyValues					\
-    com.sun.star.beans.PropertyAttribute				\
-    com.sun.star.beans.XPropertySet						\
-    com.sun.star.beans.XMultiPropertySet				\
-    com.sun.star.beans.XFastPropertySet					\
-    com.sun.star.beans.XPropertyState					\
-    com.sun.star.beans.XPropertyAccess					\
-    com.sun.star.beans.XPropertyContainer				\
-    com.sun.star.beans.XPropertyChangeListener			\
-    com.sun.star.beans.XPropertyStateChangeListener		\
-    com.sun.star.plugin.PluginMode						\
-    com.sun.star.plugin.XPluginManager					\
-    com.sun.star.io.XConnectable						\
-    com.sun.star.io.XActiveDataSource					\
-    com.sun.star.io.XActiveDataSink						\
-    com.sun.star.io.XActiveDataControl					\
-    com.sun.star.io.XDataOutputStream					\
-    com.sun.star.io.XOutputStream						\
-    com.sun.star.io.XDataInputStream					\
-    com.sun.star.io.XObjectInputStream					\
-    com.sun.star.io.XMarkableStream						\
-    com.sun.star.lang.XServiceName						\
-    com.sun.star.lang.XServiceInfo						\
-    com.sun.star.lang.XTypeProvider						\
-    com.sun.star.lang.XMultiServiceFactory				\
-    com.sun.star.lang.XSingleServiceFactory				\
-    com.sun.star.registry.XRegistryKey					\
-    com.sun.star.loader.XImplementationLoader			\
-    com.sun.star.container.XSet							\
-    com.sun.star.container.XNameAccess					\
-    com.sun.star.container.XIndexAccess					\
-    com.sun.star.frame.XComponentLoader					\
-    com.sun.star.frame.FrameSearchFlag					\
-    com.sun.star.uno.TypeClass							\
-    com.sun.star.uno.XAggregation						\
-    com.sun.star.uno.XWeak
-
-# --- Files --------------------------------------------------------
 
 SLOFILES=		\
                 $(SLO)$/plctrl.obj		\
@@ -159,3 +85,4 @@ SLOFILES=		\
 .INCLUDE :  target.mk
 
 .INCLUDE :  ..$/util$/target.pmk
+
