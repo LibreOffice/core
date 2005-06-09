@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
-#   last change: $Author: rt $ $Date: 2005-03-29 11:43:32 $
+#   $Revision: 1.38 $
+#   last change: $Author: hr $ $Date: 2005-06-09 13:47:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,6 @@ LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  libs.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
 
 .IF "$(SYSTEM_EXPAT)" == "YES"
@@ -139,16 +138,33 @@ APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj $(OBJ)$/hw2fw.obj
-APP2STDLIBS=$(BTSTRPLIB) $(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
+
+.IF "$(OS)"!="MACOSX"
+APP2STDLIBS+= $(BTSTRPLIB)
+.ENDIF
+
+APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libs at end for OS X
+APP2STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
+
+.IF "$(OS)"!="MACOSX"
+APP3STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 APP3STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
+.IF "$(OS)"=="MACOSX"
+# static libs at end for OS X
+APP3STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 
 # encoding converter for *.gsi
 APP4TARGET= gsiconv
@@ -172,29 +188,37 @@ APP5STDLIBS+= \
 APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
-#.IF "$(OS)"!="MACOSX"
-#APP6STDLIBS+= $(BTSTRPLIB)
-#.ENDIF
+.IF "$(OS)"!="MACOSX"
+APP6STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 
 APP6STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libs at end for OS X
+APP6STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
-#.IF "$(OS)"!="MACOSX"
-#APP7STDLIBS+= $(BTSTRPLIB)
-#.ENDIF
+.IF "$(OS)"!="MACOSX"
+APP7STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 
 APP7STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libs at end for OS X
+APP7STDLIBS+= $(BTSTRPLIB)
+.ENDIF
 
 #APP8TARGET=  sdfupdate
 #APP8OBJS= $(OBJ)$/sdfupdate.obj
