@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 10:46:48 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -548,7 +546,10 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
         USHORT nStringPos )
 {
     const String& rSep = pFormatter->GetNumThousandSep();
-    if (   rString == rSep                                  // nothing else
+    // Is it an ordinary space instead of a non-breaking space?
+    bool bSpaceBreak = rSep.GetChar(0) == 0xa0 && rString.GetChar(0) == 0x20 &&
+        rSep.Len() == 1 && rString.Len() == 1;
+    if ( (rString == rSep || bSpaceBreak)                   // nothing else
         && nStringPos < nAnzStrings - 1                     // safety first!
         && IsNum[nStringPos+1]                              // number follows
         && (   sStrArray[nStringPos+1].Len() == 3           // with 3 digits
@@ -886,7 +887,6 @@ void ImpSvNumberInputScan::GetTimeRef(
         USHORT nIndex,          // j-Wert fuer den ersten Zeitstring der Eingabe (default 0)
         USHORT nAnz )           // Anzahl der Zeitstrings
 {
-    sal_Unicode* pChar = NULL;
     USHORT nHour;
     USHORT nMinute = 0;
     USHORT nSecond = 0;
@@ -1038,7 +1038,6 @@ BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
     {
         pCal->setGregorianDateTime( Date() );       // today
         String aOrgCalendar;        // empty => not changed yet
-        double fOrgDateTime;
         DateFormat DateFmt;
         BOOL bFormatTurn;
         switch ( eEDF )
