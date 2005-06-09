@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:15:28 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:57:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,38 +70,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
-# --- Types -------------------------------------
-
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.xml.sax.XDocumentHandler						\
-    com.sun.star.xml.sax.XExtendedDocumentHandler				\
-    com.sun.star.svg.XSVGPrinter								\
-    com.sun.star.svg.XSVGWriter									
-
 # --- Files -------------------------------------
-
-CXXFILES=	svgprinter.cxx										\
-            svguno.cxx											\
-            svgaction.cxx										\
-            svgwriter.cxx										
 
 SLOFILES=	$(SLO)$/svgprinter.obj								\
             $(SLO)$/svguno.obj									\
@@ -125,9 +94,9 @@ SHL1STDLIBS=\
     $(CPPULIB)			\
     $(SALLIB)
 
-SHL1DEPN=
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
