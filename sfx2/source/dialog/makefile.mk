@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-11 13:25:42 $
+#   last change: $Author: hr $ $Date: 2005-06-09 13:55:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,11 @@ SRC1FILES =\
         srchdlg.src
 
 .IF "$(BUILD_VER_STRING)"!=""
+.IF "$(GUI)"=="UNX"
 CFLAGS+=-DBUILD_VER_STRING='"$(BUILD_VER_STRING)"'
+.ELSE # "$(GUI)"=="UNX"
+CFLAGS+=-DBUILD_VER_STRING="$(subst,",\" "$(BUILD_VER_STRING)")"
+.ENDIF # "$(GUI)"=="UNX"
 .ENDIF
 
 # --- Targets -------------------------------------------------------
@@ -147,11 +151,7 @@ $(INCCOM)$/cuilib.hxx: makefile.mk
     $(RM) $@
     +echo \#define DLL_NAME \"libcui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-.IF "$(USE_SHELL)"!="4nt"
-    +echo \#define DLL_NAME \"cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE          # "$(USE_SHELL)"!="4nt"
-    +echo #define DLL_NAME "cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
+    +echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
