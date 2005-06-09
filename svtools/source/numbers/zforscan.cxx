@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 10:47:11 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,6 +626,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
     if ( bKeywordsNeedInit )
         InitKeywords();
     const CharClass* pChrCls = pFormatter->GetCharClass();
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     const xub_StrLen nStart = nPos;
     short eType = 0;
     ScanState eState = SsStart;
@@ -722,7 +723,18 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                     break;
                     default :
                     {
-                        if ( pChrCls->isLetter( rStr, nPos-1 ) )
+                        if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cToken) ||
+                                StringEqualsChar( pFormatter->GetNumThousandSep(), cToken) ||
+                                StringEqualsChar( pFormatter->GetDateSep(), cToken) ||
+                                StringEqualsChar( pLoc->getTimeSep(), cToken) ||
+                                StringEqualsChar( pLoc->getTime100SecSep(), cToken))
+                        {
+                            // Another separator than pre-known ASCII
+                            eType = NF_SYMBOLTYPE_DEL;
+                            sSymbol += cToken;
+                            eState = SsStop;
+                        }
+                        else if ( pChrCls->isLetter( rStr, nPos-1 ) )
                         {
                             short nTmpType = GetKeyWord( rStr, nPos-1 );
                             if ( nTmpType )
@@ -1577,7 +1589,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 else if (nTypeArray[i] == NF_SYMBOLTYPE_DEL)
                 {
                     sal_Unicode cHere = sStrArray[i].GetChar(0);
-                    switch ( cHere )
+                    // Handle not pre-known separators in switch.
+                    sal_Unicode cSimplified;
+                    if (StringEqualsChar( pFormatter->GetNumThousandSep(), cHere))
+                        cSimplified = ',';
+                    else if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cHere))
+                        cSimplified = '.';
+                    else
+                        cSimplified = cHere;
+                    switch ( cSimplified )
                     {
                         case '#':
                         case '0':
