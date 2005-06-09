@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:25:10 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ IMPL_CREATEINSTANCE( Collator_ja_charset )
 IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_first )
 IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_last )
 IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
+IMPL_CREATEINSTANCE( Collator_km_charset )
 
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
@@ -654,6 +655,10 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
+
+    {   "com.sun.star.i18n.Collator_km_charset",
+        "com.sun.star.i18n.Collator_km_charset",
+        &Collator_km_charset_CreateInstance },
 
 // add here new services !!
     { 0, 0, 0 }
