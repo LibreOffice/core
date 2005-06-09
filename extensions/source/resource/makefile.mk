@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:15:01 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:57:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,30 +66,20 @@ TARGET=res
 LIBTARGET=NO
 USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
-# NEW
-NO_BSYMBOLIC=TRUE
-# END NEW
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
+.INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/resource.obj
 
-EXCEPTIONSFILES=	$(SLO)$/resource.obj
-
 LIB1TARGET= 	$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=	$(EXCEPTIONSFILES)
+LIB1OBJFILES=	$(SLOFILES)
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-
-#		$(UNOLIB)	 \
-# NEW				 \
-#		$(CPPULIB) 	 \
-#		$(CPPUHELPERLIB) 	 \
-# END NEW			 \
 
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
@@ -103,24 +93,6 @@ SHL1DEPN=
 SHL1IMPLIB=		ires
 SHL1LIBS=		$(LIB1TARGET)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.uno.XWeak						\
-    com.sun.star.uno.XAggregation				\
-    com.sun.star.lang.XSingleServiceFactory		\
-    com.sun.star.lang.XMultiServiceFactory		\
-    com.sun.star.lang.XTypeProvider				\
-    com.sun.star.lang.XServiceInfo				\
-    com.sun.star.reflection.InvocationTargetException	\
-    com.sun.star.registry.XRegistryKey			\
-    com.sun.star.script.XInvocation				\
-    com.sun.star.script.XTypeConverter			\
-    com.sun.star.beans.XExactName
-# END NEW
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
