@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 07:51:04 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:59:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,9 +85,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
@@ -113,7 +111,6 @@ UNOTYPES= \
     com.sun.star.uno.XInterface \
     com.sun.star.uno.XWeak
 
-CXXFILES=	testpgp.cxx
 OBJFILES=	$(OBJ)$/testpgp.obj
 
 APP1TARGET=	testpgp
@@ -134,7 +131,6 @@ APP1DEF=	$(MISC)$/$(APP1TARGET).def
 #
 .IF "$(TESTAPP)" == "testcomponent"
 
-CXXFILES=	testcomponent.cxx
 OBJFILES=	$(OBJ)$/testcomponent.obj
 
 APP2TARGET = testcomponent
@@ -154,7 +150,6 @@ APP2STDLIBS = $(UNOLIB) \
 #
 .IF "$(TESTAPP)" == "phytontest"
 
-CXXFILES=	phytontest.cxx
 OBJFILES=	$(OBJ)$/pythontest.obj
 
 #APP4TARGET=	pythontest
@@ -175,7 +170,6 @@ OBJFILES=	$(OBJ)$/pythontest.obj
 #
 .IF "$(TESTAPP)" == "phytonautotest"
 
-CXXFILES=	phytonautotest.cxx
 OBJFILES=	$(OBJ)$/pythonautotest.obj
 
 #APP5TARGET= pythonautotest
@@ -194,7 +188,6 @@ OBJFILES=	$(OBJ)$/pythonautotest.obj
 #
 .IF "$(TESTAPP)" == "testresource"
 
-CXXFILES=	testresource.cxx
 OBJFILES=	$(OBJ)$/testresource.obj
 
 SRS2NAME =		testresource
@@ -221,7 +214,6 @@ APP2DEF=	$(MISC)$/$(APP3TARGET).def
 #
 .IF "$(TESTAPP)" == "testframecontrol"
 
-CXXFILES=	testframecontrol.cxx
 OBJFILES=	$(OBJ)$/testframecontrol.obj
 
 APP3TARGET=	testframecontrol
