@@ -1,0 +1,1359 @@
+ /*************************************************************************
+ *
+ *  $RCSfile: NDatabaseMetaData.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:10:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): Michael Meeks, Jayant Madavi
+ *
+ *
+ ************************************************************************/
+
+#ifndef _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
+#include "NDatabaseMetaData.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_TRANSACTIONISOLATION_HPP_
+#include <com/sun/star/sdbc/TransactionIsolation.hpp>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include <connectivity/FValue.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
+
+#include <vector>
+
+#ifndef _CONNECTIVITY_EVOAB_EVOLUTION_API_HXX_
+#include "EApi.h"
+#endif
+
+#if OSL_DEBUG_LEVEL > 0
+# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+#else /* OSL_DEBUG_LEVEL */
+# define OUtoCStr( x ) ("dummy")
+#endif /* OSL_DEBUG_LEVEL */
+
+using namespace connectivity::evoab;
+using namespace connectivity;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
+
+
+namespace connectivity
+{
+    namespace evoab
+    {
+        static sal_Int32    const s_nCOLUMN_SIZE = 256;
+        static sal_Int32    const s_nDECIMAL_DIGITS = 0;
+        static sal_Int32    const s_nNULLABLE = 1;
+        static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
+
+static GParamSpec **pFields = NULL;
+static guint        nFields = 0;
+
+static const char *pBlackList[] = {
+        "id",
+        "list-show-addresses"
+};
+
+static void
+initFields()
+{
+    if( !pFields )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pFields )
+        {
+            guint        nProps;
+            GParamSpec **pProps;
+            GParamSpec **pToBeFields;
+            pProps = g_object_class_list_properties
+                    ( (GObjectClass *) g_type_class_ref( E_TYPE_CONTACT ),
+                      &nProps );
+            pToBeFields = g_new0( GParamSpec *, nProps );
+
+            for ( guint i = 0; i < nProps; i++ )
+            {
+                switch (pProps[i]->value_type)
+                {
+                case G_TYPE_STRING:
+                case G_TYPE_BOOLEAN:
+                {
+                    bool bAdd = true;
+                    const char *pName = g_param_spec_get_name( pProps[i] );
+                    for (int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
+                    {
+                        if( !strcmp( pBlackList[j], pName ) )
+                        {
+                            bAdd = false;
+                            break;
+                        }
+                    }
+                    if( bAdd )
+                        pToBeFields[ nFields++ ] = g_param_spec_ref( pProps[i] );
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            pFields = pToBeFields;
+        }
+    }
+}
+
+guint
+getFieldCount()
+{
+    initFields();
+    return nFields;
+}
+
+const GParamSpec *
+getField(guint n)
+{
+    initFields();
+    if( n < nFields )
+        return pFields[n];
+    else
+        return NULL;
+}
+
+sal_Int32
+getFieldType( sal_Int32 nCol )
+{
+    sal_Int32 nType = DataType::VARCHAR;
+    initFields();
+    if (nCol >= 0 && nCol < nFields )
+    {
+        if( pFields[nCol]->value_type == G_TYPE_STRING )
+            nType = DataType::VARCHAR;
+        else
+            nType = DataType::BIT;
+    }
+    return nType;
+}
+
+rtl::OUString
+getFieldTypeName( sal_Int32 nCol )
+{
+    switch( getFieldType( nCol ) )
+    {
+    case DataType::BIT:
+            return ::rtl::OUString::createFromAscii( "BIT" );
+    case DataType::VARCHAR:
+            return ::rtl::OUString::createFromAscii( "VARCHAR" );
+    default:
+            break;
+    }
+    return ::rtl::OUString();
+}
+
+rtl::OUString
+getFieldName( sal_Int32 nCol )
+{
+    const GParamSpec *pSpec = getField( nCol );
+    rtl::OUString aName;
+
+    if( pSpec )
+            aName = rtl::OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
+                                            RTL_TEXTENCODING_UTF8 );
+    aName = aName.replace( '-', '_' );
+    return aName;
+}
+
+    }
+}
+
+OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(OEvoabConnection* _pCon)
+    : ::connectivity::ODatabaseMetaDataBase(_pCon)
+    ,m_pConnection(_pCon)
+{
+    OSL_ENSURE(m_pConnection,"OEvoabDatabaseMetaData::OEvoabDatabaseMetaData: No connection set!");
+    //construct();
+}
+void OEvoabDatabaseMetaData::construct()
+{
+}
+OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
+{
+}
+
+// -------------------------------------------------------------------------
+ODatabaseMetaDataResultSet::ORows& SAL_CALL OEvoabDatabaseMetaData::getColumnRows(
+                                         const ::rtl::OUString& tableNamePattern,
+                                         const ::rtl::OUString& columnNamePattern ) throw(SQLException)
+{
+    static ODatabaseMetaDataResultSet::ORows aRows;
+    ODatabaseMetaDataResultSet::ORow  aRow(19);
+    aRows.clear();
+
+    // ****************************************************
+    // Some entries in a row never change, so set them now
+    // ****************************************************
+
+    // Catalog
+    aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii(""));
+    // Schema
+    aRow[2] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii(""));
+    // COLUMN_SIZE
+    aRow[7] = new ORowSetValueDecorator(s_nCOLUMN_SIZE);
+    // BUFFER_LENGTH, not used
+    aRow[8] = ODatabaseMetaDataResultSet::getEmptyValue();
+    // DECIMAL_DIGITS.
+    aRow[9] = new ORowSetValueDecorator(s_nDECIMAL_DIGITS);
+    // NUM_PREC_RADIX
+    aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
+    // NULLABLE
+    aRow[11] = new ORowSetValueDecorator(s_nNULLABLE);
+    // REMARKS
+    aRow[12] = ODatabaseMetaDataResultSet::getEmptyValue();
+    // COULUMN_DEF, not used
+    aRow[13] = ODatabaseMetaDataResultSet::getEmptyValue();
+    // SQL_DATA_TYPE, not used
+    aRow[14] = ODatabaseMetaDataResultSet::getEmptyValue();
+    // SQL_DATETIME_SUB, not used
+    aRow[15] = ODatabaseMetaDataResultSet::getEmptyValue();
+    // CHAR_OCTET_LENGTH, refer to [5]
+    aRow[16] = new ORowSetValueDecorator(s_nCHAR_OCTET_LENGTH);
+    // IS_NULLABLE
+    aRow[18] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii( "YES" ));
+
+
+    aRow[3] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii( "TABLE" ));
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    initFields();
+    for (sal_Int32 i = 0; i < (sal_Int32) nFields; i++)
+    {
+        if( match( columnNamePattern, getFieldName( i ), '\0' ) )
+        {
+            aRow[5] = new ORowSetValueDecorator( static_cast<sal_Int16>( getFieldType( i ) ) );
+            aRow[6] = new ORowSetValueDecorator( getFieldTypeName( i ) );
+
+            OSL_TRACE( "   ColumnName = '%s'", g_param_spec_get_name( pFields[i] ) );
+            // COLUMN_NAME
+            aRow[4] = new ORowSetValueDecorator( getFieldName( i ) );
+            // ORDINAL_POSITION
+            aRow[17] = new ORowSetValueDecorator( i );
+            aRows.push_back( aRow );
+        }
+    }
+
+    return aRows ;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aVal;
+    return aVal;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 1; // We only support a single table
+    return nValue;
+}
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aVal;
+    return aVal;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
+{
+    // normally this is "
+    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
+    return aVal;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aVal;
+    return aVal;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
+{
+    sal_Bool bValue = sal_False;
+    return bValue;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True; // should be supported at least
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException)
+{
+    // We allow you to select from any table.
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
+{
+    // For now definately read-only, no support for update/delete
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException)
+{
+    // todo add Support for this.
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    // Any case may be used
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return m_pConnection->getURL();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue = ::rtl::OUString::valueOf((sal_Int32)1);
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue = ::rtl::OUString::valueOf((sal_Int32)0);
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
+{
+    return 1;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException)
+{
+    return TransactionIsolation::NONE;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException)
+{
+    return 0;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aValue;
+    return aValue;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
+{
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
+{
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
+{
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
+{
+    return ::rtl::OUString();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue = 0; // 0 means no limit
+    return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL OEvoabDatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
+{
+    return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
+}
+// -------------------------------------------------------------------------
+// here follow all methods which return a resultset
+// the first methods is an example implementation how to use this resultset
+// of course you could implement it on your and you should do this because
+// the general way is more memory expensive
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
+{
+    /* Dont need to change as evoab driver supports only table */
+
+    // there exists no possibility to get table types so we have to check
+    static ::rtl::OUString sTableTypes[] =
+    {
+        ::rtl::OUString::createFromAscii("TABLE"),
+        //m_pConnection->getCurrentTableName(),
+        //
+        // Currently we only support a 'TABLE' nothing more complex
+        //
+        // ::rtl::OUString::createFromAscii("VIEW"),
+        // ::rtl::OUString::createFromAscii("SYSTEM TABLE"),
+        // ::rtl::OUString::createFromAscii("GLOBAL TEMPORARY"),
+        // ::rtl::OUString::createFromAscii("LOCAL TEMPORARY"),
+        // ::rtl::OUString::createFromAscii("ALIAS"),
+        // ::rtl::OUString::createFromAscii("SYNONYM")
+    };
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    // this call initialies the resultset metadata with the corresponding information
+    pResult->setTableTypes();
+
+    // here we fill the rows which should be visible when ask for data from the resultset returned here
+    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
+    ODatabaseMetaDataResultSet::ORows aRows;
+    for(sal_Int32 i=0;i < nSize;++i)
+    {
+        ODatabaseMetaDataResultSet::ORow aRow;
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ORowSetValueDecorator(sTableTypes[i]));
+
+        // bound row
+        ODatabaseMetaDataResultSet::ORow::iterator aIter = aRow.begin();
+        aRows.push_back(aRow);
+    }
+    // here we set the rows at the resultset
+    pResult->setRows(aRows);
+    return xRef;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+{
+    /*
+     * Return the proper type information required by evo driver
+     */
+
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setTypeInfoMap();
+    static ODatabaseMetaDataResultSet::ORows aRows;
+
+    if(aRows.empty())
+    {
+        ODatabaseMetaDataResultSet::ORow aRow;
+        aRow.reserve(19);
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString::createFromAscii("VARCHAR")));
+        aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
+        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        // aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::CHAR));
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)10));
+
+        aRows.push_back(aRow);
+
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("VARCHAR"));
+        aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
+        aRow[3] = new ORowSetValueDecorator((sal_Int32)65535);
+        aRows.push_back(aRow);
+    }
+    pResultSet->setRows(aRows);
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setCatalogsMap();
+    return xResultSet;
+}
+// -----------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setSchemasMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumnPrivileges(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
+    const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setColumnPrivilegesMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
+    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
+    const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setColumnsMap();
+    pResultSet->setRows( getColumnRows( tableNamePattern, columnNamePattern ));
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
+    const Any& catalog, const ::rtl::OUString& schemaPattern,
+    const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setTablesMap();
+
+    // check if any type is given
+    // when no types are given then we have to return all tables e.g. TABLE
+
+    const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
+
+    sal_Bool bTableFound = sal_True;
+    sal_Int32 nLength = types.getLength();
+    if(nLength)
+        {
+            bTableFound = sal_False;
+
+            const ::rtl::OUString* pBegin = types.getConstArray();
+            const ::rtl::OUString* pEnd = pBegin + nLength;
+            for(;pBegin != pEnd;++pBegin)
+                {
+                    if(*pBegin == aTable)
+                        {
+                            bTableFound = sal_True;
+                            break;
+                        }
+                }
+        }
+    if(!bTableFound)
+        return xRef;
+
+    ODatabaseMetaDataResultSet::ORows aRows;
+
+    ESourceList *pSourceList;
+    if( !e_book_get_addressbooks (&pSourceList, NULL) )
+            pSourceList = NULL;
+
+    GSList *g;
+    EBook *pTempBook = NULL;
+    for( g = e_source_list_peek_groups( pSourceList ); g; g = g->next)
+    {
+        GSList *s;
+        const char *p = e_source_group_peek_base_uri(E_SOURCE_GROUP(g->data));
+
+        switch (m_pConnection->getSDBCAddressType()) {
+        case SDBCAddress::EVO_GWISE:
+                    if (0==strncmp( "groupwise://", p, 11 ))
+                        break;
+                    else
+                        continue;
+        case SDBCAddress::EVO_LOCAL:
+                    if (0==strncmp( "file://", p, 6 ))
+                        break;
+                    else
+                        continue;
+        case SDBCAddress::EVO_LDAP:
+                    if (0==strncmp( "ldap://", p, 6 ))
+                        break;
+                    else
+                        continue;
+        }
+        for (s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
+        {
+            ESource *pSource = E_SOURCE (s->data);
+
+            rtl::OUString aName = rtl::OStringToOUString( e_source_peek_name( pSource ),
+                                                          RTL_TEXTENCODING_UTF8 );
+
+            ODatabaseMetaDataResultSet::ORow aRow(3);
+            aRow.reserve(6);
+            aRow.push_back(new ORowSetValueDecorator(aName));
+            aRow.push_back(new ORowSetValueDecorator(aTable));
+            aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+            aRows.push_back(aRow);
+        }
+    }
+
+    pResult->setRows(aRows);
+
+    return xRef;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getProcedureColumns(
+    const Any& catalog, const ::rtl::OUString& schemaPattern,
+    const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setProcedureColumnsMap();
+    return xResultSet;
+}
+
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getProcedures(
+    const Any& catalog, const ::rtl::OUString& schemaPattern,
+    const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setProceduresMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getVersionColumns(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setVersionColumnsMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getExportedKeys(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setExportedKeysMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getImportedKeys(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setImportedKeysMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getPrimaryKeys(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setPrimaryKeysMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getIndexInfo(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
+    sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setIndexInfoMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getBestRowIdentifier(
+    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
+    sal_Bool nullable ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setBestRowIdentifierMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTablePrivileges(
+    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setTablePrivilegesMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getCrossReference(
+    const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
+    const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
+    const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
+{
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setCrossReferenceMap();
+    return xResultSet;
+}
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(0,"Not implemented yet!");
+    throw SQLException();
+    return NULL;
+}
+// -----------------------------------------------------------------------------
