@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 12:35:08 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:58:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,48 +60,27 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/
+PRJ=..$/..$/..
 
 PRJNAME=extensions
 TARGET=convTest
 TARGETTYPE=CUI
 LIBTARGET=NO
 
-#USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
-
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/comprehensive
-INCPRE+=	$(OUT)$/inc$/comprehensive
-CPPUMAKERFLAGS += -C
-.ELSE
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
-.ENDIF
+INCPRE+=-I$(ATL_INCLUDE)
 
 .IF "$(NETTOOLKIT)"==""
-UNOTYPES= com.sun.star.bridge.ModelDependent \
-          com.sun.star.lang.XMultiServiceFactory \
-          com.sun.star.bridge.XBridgeSupplier2 \
-    com.sun.star.uno.XComponentContext \
-    com.sun.star.lang.XMultiComponentFactory
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/convTest.obj
-#LIBCMT=msvcrtd.lib
 
 
 APP1STDLIBS= \
@@ -117,19 +96,13 @@ APP1STDLIBS= \
     $(COMPATH)$/atlmfc$/lib$/atls.lib \
     advapi32.lib    
 
-
-
-#gdi32.lib winspool.lib  advapi32.lib shell32.lib    odbc32.lib odbccp32.lib
-
-
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += $(LIBCIMT)
-APP2STDLIBS += $(LIBCIMT)
 .ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
-# --- Targets ---
 .ENDIF  #"$(NETTOOLKIT)"==""
+# --- Targets ---
 .INCLUDE : target.mk
 
