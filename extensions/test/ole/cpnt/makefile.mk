@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-02 09:49:39 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:58:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,49 +63,16 @@ PRJ=..$/..$/..
 
 PRJNAME=	extensions
 TARGET=		oletest
-#LIBTARGET=	NO
-#TARGETTYPE=	CUI
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=	TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=	\
         $(SLO)$/cpnt.obj
-
-UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
-
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
-#INCPRE+= -I$(SOLARINCDIR)$/external$/atl
-
-UNOTYPES= oletest.XTestSequence \
-    oletest.XTestStruct	\
-    oletest.XTestOther 				\
-    oletest.XTestInterfaces			\
-    oletest.XSimple					\
-    oletest.XSimple2				\
-    oletest.XSimple3				\
-    oletest.XTestInParameters	\
-    oletest.XIdentity		\
-    com.sun.star.beans.XPropertySet \
-    com.sun.star.beans.PropertyAttribute	\
-    com.sun.star.uno.XAggregation		\
-    com.sun.star.lang.XTypeProvider		\
-    com.sun.star.lang.XMultiServiceFactory	\
-    com.sun.star.lang.XSingleServiceFactory		\
-    com.sun.star.lang.XEventListener	\
-    com.sun.star.registry.XRegistryKey	\
-    com.sun.star.script.XInvocation	\
-    com.sun.star.reflection.XIdlReflection
-
 
 SHL1TARGET= $(TARGET)
 
@@ -127,23 +94,13 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-
 ALLIDLFILES:=	..$/idl$/oletest.idl
-
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
-ALL : 	$(BIN)$/oletest.rdb	\
-        ALLTAR
-
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
-
 .INCLUDE :  target.mk
 
-
+ALLTAR : 	$(BIN)$/oletest.rdb
 
 $(BIN)$/oletest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR)  -O$(BIN) $?
