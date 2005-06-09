@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:37:46 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 13:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
 #include <rtl/uri.hxx>
+#include <vcl/msgbox.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/sfxecode.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGSSORT
@@ -161,6 +164,28 @@ using namespace ::com::sun::star::lang;
 
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
 #define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
+
+// class NoHelpErrorBox --------------------------------------------------
+
+class NoHelpErrorBox : public ErrorBox
+{
+public:
+    NoHelpErrorBox( Window* _pParent );
+
+    virtual void    RequestHelp( const HelpEvent& rHEvt );
+};
+
+NoHelpErrorBox::NoHelpErrorBox( Window* _pParent ) :
+
+    ErrorBox( _pParent, WB_OK, String( SfxResId( RID_STR_HLPAPPNOTSTARTED ) ) )
+{
+    // Error message: "No help available"
+}
+
+void NoHelpErrorBox::RequestHelp( const HelpEvent& )
+{
+    // do nothing, because no help available
+}
 
 // -----------------------------------------------------------------------
 
@@ -761,7 +786,19 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
-    // check if its an URL or a jump mark!
+    // check if help is available
+    String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
+    AppendConfigToken_Impl( aHelpRootURL, sal_True );
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
+    if ( 0 == aFactories.getLength() )
+    {
+        // no factories -> no help -> error message and return
+        NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
+        aErrBox.Execute();
+        return FALSE;
+    }
+
+    // check if it's an URL or a jump mark!
     String          aHelpURL(rURL    );
     INetURLObject   aParser (aHelpURL);
     ::rtl::OUString sKeyword;
@@ -785,7 +822,7 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     // to the internal sub frame, which shows the help content.
 
     // Note further: We search for this sub frame here directly instead of
-    // the real top level help task ... Its needed to have the same
+    // the real top level help task ... It's needed to have the same
     // sub frame available - so we can use it for loading (which is done
     // in both cases)!
 
