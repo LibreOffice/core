@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2001-06-27 13:08:19 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:59:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,13 +61,11 @@
 #*************************************************************************
 PRJ=..$/..$/..
 
-PRJNAME=	ole
+PRJNAME=	extensions
 TARGET=		unloadtest
-#LIBTARGET=NO
 TARGETTYPE=CUI
 COMP1TYPELIST=$(TARGET1)
 
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 USE_DEFFILE=	TRUE
