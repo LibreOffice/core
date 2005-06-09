@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-05 12:42:03 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:55:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,25 +64,12 @@ PRJ=..$/..
 PRJNAME=extensions
 TARGET=bib
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES=			bibconfig.cxx\
-                    bibcont.cxx \
-                    bibload.cxx \
-                    bibmod.cxx  \
-                    general.cxx	 \
-                    framectr.cxx \
-                    bibview.cxx \
-                    bibbeam.cxx  \
-                    toolbar.cxx	 \
-                    datman.cxx	 \
-
 
 SLOFILES=			$(SLO)$/formcontrolcontainer.obj \
                     $(SLO)$/loadlisteneradapter.obj \
@@ -124,61 +111,6 @@ SHL1STDLIBS= \
         $(SALLIB)
 
 
-#Create UNO Header files
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-
-UNOTYPES=\
-    com.sun.star.awt.PosSize \
-    com.sun.star.awt.XPointer \
-    com.sun.star.awt.XControl \
-    com.sun.star.awt.XControlContainer \
-    com.sun.star.awt.XControlModel \
-    com.sun.star.awt.XWindowPeer \
-    com.sun.star.beans.PropertyAttribute \
-    com.sun.star.beans.PropertyValue \
-    com.sun.star.beans.PropertyValues \
-    com.sun.star.form.XBoundComponent \
-    com.sun.star.form.XLoadable \
-    com.sun.star.form.XGridColumnFactory \
-    com.sun.star.form.ListSourceType		\
-    com.sun.star.form.XForm		\
-    com.sun.star.form.XFormController		\
-    com.sun.star.frame.XComponentLoader \
-    com.sun.star.frame.XDispatchProvider \
-    com.sun.star.frame.XFilterDetect\
-    com.sun.star.frame.FrameSearchFlag	\
-    com.sun.star.io.XPersistObject \
-    com.sun.star.io.XDataInputStream \
-    com.sun.star.io.XActiveDataSource \
-    com.sun.star.io.XMarkableStream \
-    com.sun.star.io.XActiveDataSink \
-    com.sun.star.lang.XLocalizable \
-    com.sun.star.lang.XServiceName \
-    com.sun.star.sdb.CommandType\
-    com.sun.star.sdb.XDatabaseEnvironment \
-    com.sun.star.sdb.XColumn\
-    com.sun.star.sdb.XSingleSelectQueryComposer\
-    com.sun.star.sdbc.DataType \
-    com.sun.star.sdbc.ResultSetType \
-    com.sun.star.sdbc.ResultSetConcurrency \
-    com.sun.star.sdbc.XConnection \
-    com.sun.star.sdbc.XDataSource \
-    com.sun.star.sdbc.XResultSetUpdate \
-    com.sun.star.sdbcx.XTablesSupplier \
-    com.sun.star.sdbcx.XColumnsSupplier \
-    com.sun.star.sdbcx.XRowLocate \
-    com.sun.star.sdbc.XResultSet \
-    com.sun.star.sdbc.ResultSetType \
-    com.sun.star.sdbc.XRowSet\
-    com.sun.star.text.BibliographyDataField \
-    com.sun.star.uno.XNamingService\
-    com.sun.star.util.XLocalizedAliases\
-    com.sun.star.util.XURLTransformer
-
-#END
-
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
@@ -186,10 +118,6 @@ SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 SHL1VERSIONMAP=exports.map
 DEF1NAME=		$(SHL1TARGET)
-
-ALL:\
-    $(do_build) \
-    ALLTAR
 
 # --- Targets ------------------------------------------------------
 
