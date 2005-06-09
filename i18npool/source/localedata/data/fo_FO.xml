@@ -226,8 +226,8 @@
 <IndexKey unoid="alphanumeric" default="true" phonetic="false">AÁBCDÐEFGHIÍJKLMNOÓPQRSTÞUÚVWXYÝZÆØÅ</IndexKey>
 <UnicodeScript>0</UnicodeScript>
 <UnicodeScript>1</UnicodeScript>
-<FollowPageWord>p.</FollowPageWord>
-<FollowPageWord>pp.</FollowPageWord>
+<FollowPageWord>f.</FollowPageWord>
+<FollowPageWord>ff.</FollowPageWord>
 </LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
@@ -334,12 +334,12 @@
 <Era>
 <EraID>bc</EraID>
 <DefaultAbbrvName>f.Kr.</DefaultAbbrvName>
-<DefaultFullName>BC</DefaultFullName>
+<DefaultFullName>før Kristus</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
 <DefaultAbbrvName>e.Kr.</DefaultAbbrvName>
-<DefaultFullName>AD</DefaultFullName>
+<DefaultFullName>efter Kristus</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
