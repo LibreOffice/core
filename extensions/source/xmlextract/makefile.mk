@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:15:41 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:58:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,28 +70,6 @@ USE_DEFFILE=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
-
-# --- Types -------------------------------------
-
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.io.XXMLExtractor
 
 # --- Files -------------------------------------
 
