@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:42:34 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,6 @@
 
 #include "LocaleNode.hxx"
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
-
 // NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
 #define LOCALE_VERSION_DTD "2.0"
 
@@ -125,6 +118,15 @@ void LocaleNode::addChild ( LocaleNode * node) {
 
 void LocaleNode::setParent ( LocaleNode * node) {
     parent = node;
+}
+
+const LocaleNode* LocaleNode::getRoot() const
+{
+    const LocaleNode* pRoot = 0;
+    const LocaleNode* pParent = this;
+    while (pParent = pParent->getParent())
+        pRoot = pParent;
+    return pRoot;
 }
 
 const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
@@ -267,15 +269,28 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     const LocaleNode * countryNode = findNode("Country");
     const LocaleNode * variantNode = findNode("Variant");
 
-    if (languageNode) {
+    if (languageNode)
+    {
         of.writeParameter("langID", languageNode->getChildAt(0)->getValue());
         of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
     }
-    if (countryNode) {
+    else
+        incError( "No Language node.");
+    if (countryNode)
+    {
         of.writeParameter("countryID", countryNode->getChildAt(0)->getValue());
         of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
-    of.writeParameter("Variant", ::rtl::OUString::createFromAscii(""));
+    else
+        incError( "No Country node.");
+    if (variantNode)
+    {
+        of.writeParameter("Variant", variantNode->getValue());
+        fprintf( stderr, "Warning: %s\n",
+                "Variants are not supported by application.");
+    }
+    else
+        of.writeParameter("Variant", ::rtl::OUString());
     of.writeAsciiString("\nstatic const sal_Unicode* LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
@@ -286,28 +301,82 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     of.writeFunction("getLCInfo_", "0", "LCInfoArray");
 }
 
+::rtl::OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
+        const char* pNodeName, const char* pParameterName,
+        sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
+{
+    const LocaleNode * sepNode = findNode( pNodeName);
+    OUString aValue( sepNode->getValue());
+    of.writeParameter( pParameterName, aValue);
+    sal_Int32 nLen = sepNode->getValue().getLength();
+    if (nLen < nMinLen)
+    {
+        ++nError;
+        fprintf( stderr, "Error: less than %d character%s in %s '%s'.\n",
+                nMinLen, (nMinLen > 1 ? "s" : ""), pNodeName,
+                OUStringToOString( aValue, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    else if (nLen > nMaxLen && nMaxLen >= 0)
+        fprintf( stderr,
+                "Warning: more than %d character%s in %s %s not supported by application.\n",
+                nMaxLen, (nMaxLen > 1 ? "s" : ""), pNodeName,
+                OUStringToOString( aValue, RTL_TEXTENCODING_UTF8).getStr());
+    return aValue;
+}
+
+void LocaleNode::incError( const char* pStr ) const
+{
+    ++nError;
+    fprintf( stderr, "Error: %s\n", pStr);
+}
+
 void LCCTYPENode::generateCode (const OFileWriter &of) const
 {
+    const LocaleNode * sepNode = 0;
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getLocaleItem_", useLocale);
         return;
     }
     ::rtl::OUString str =   getAttr() -> getValueByName("unoid");
-    const LocaleNode * sepNode = findNode("DateSeparator");
     of.writeAsciiString("\n\n");
     of.writeParameter("LC_CTYPE_Unoid", str);;
-    of.writeParameter("dateSeparator", sepNode->getValue());
-    sepNode = findNode("ThousandSeparator");
-    of.writeParameter("thousandSeparator", sepNode -> getValue());
-    sepNode = findNode("DecimalSeparator");
-    of.writeParameter("decimalSeparator", sepNode -> getValue());
-    sepNode = findNode("TimeSeparator");
-    of.writeParameter("timeSeparator", sepNode -> getValue());
-    sepNode = findNode("Time100SecSeparator");
-    of.writeParameter("time100SecSeparator", sepNode -> getValue());
-    sepNode = findNode("ListSeparator");
-    of.writeParameter("listSeparator", sepNode -> getValue());
+
+    OUString aDateSep =
+        writeParameterCheckLen( of, "DateSeparator", "dateSeparator", 1, 1);
+    OUString aThoSep =
+        writeParameterCheckLen( of, "ThousandSeparator", "thousandSeparator", 1, 1);
+    OUString aDecSep =
+        writeParameterCheckLen( of, "DecimalSeparator", "decimalSeparator", 1, 1);
+    OUString aTimeSep =
+        writeParameterCheckLen( of, "TimeSeparator", "timeSeparator", 1, 1);
+    OUString aTime100Sep =
+        writeParameterCheckLen( of, "Time100SecSeparator", "time100SecSeparator", 1, 1);
+    OUString aListSep =
+        writeParameterCheckLen( of, "ListSeparator", "listSeparator", 1, 1);
+
+    int nSavErr = nError;
+    int nWarn = 0;
+    if (aDateSep == aTimeSep)
+        incError( "DateSeparator equals TimeSeparator.");
+    if (aDecSep == aThoSep)
+        incError( "DecimalSeparator equals ThousandSeparator.");
+    if (aListSep == aDecSep)
+        fprintf( stderr, "Warning: %s\n",
+                "ListSeparator equals DecimalSeparator.");
+    if (aListSep == aThoSep)
+        fprintf( stderr, "Warning: %s\n",
+                "ListSeparator equals ThousandSeparator.");
+    if (aDecSep != aTime100Sep)
+        ++nWarn, fprintf( stderr, "Warning: %s\n",
+                "DecimalSeparator is different from Time100SecSeparator, this may be correct or not.");
+    if (aThoSep.equalsAscii( " "))
+        ++nWarn, fprintf( stderr, "Warning: %s\n",
+                "ThousandSeparator is an ' ' ordinary space, maybe this should be a non-breaking space U+00A0 instead?");
+    if (nSavErr != nError || nWarn)
+        fprintf( stderr, "Warning: %s\n",
+                "Don't forget to adapt FormatCode elements when changing separators.");
+
     sepNode = findNode("QuotationStart");
     of.writeParameter("quotationStart", sepNode -> getValue());
     sepNode = findNode("QuotationEnd");
@@ -385,14 +454,69 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             of.writeIntParameter("Formatindex", formatCount, formatindex);
 
             const LocaleNode * n = currNode -> findNode("FormatCode");
-            if (n) {
+            if (n)
+            {
                 of.writeParameter("FormatCode", n->getValue(), formatCount);
+                // Check separator usage for FormatCode #,##0.00
+                if (formatindex == 4)
+                {
+                    int nSavErr = nError;
+                    const LocaleNode* pRoot = getRoot();
+                    if (!pRoot)
+                        incError( "No root for FormatCode.");
+                    else
+                    {
+                        const LocaleNode* pSep = pRoot->findNode( "LC_CTYPE");
+                        if (!pSep)
+                            incError( "No LC_CTYPE found for FormatCode.");
+                        else
+                        {
+                            OUString aRef( pSep->getAttr()->getValueByName("ref"));
+                            if (aRef.getLength() > 0)
+                                fprintf( stderr,
+                                        "Warning: Can't check separators used in FormatCode due to LC_CTYPE ref=\"%s\".\n"
+                                        "If these two locales use identical format codes, you should consider to use the ref= mechanism also for the LC_FORMAT element, together with replaceFrom= and replaceTo= for the currency.\n",
+                                        OUStringToOString( aRef, RTL_TEXTENCODING_UTF8).getStr());
+                            else
+                            {
+                                OUString aCode( n->getValue());
+                                sal_Int32 nDec = -1;
+                                sal_Int32 nGrp = -1;
+                                pSep = pRoot->findNode( "DecimalSeparator");
+                                if (!pSep)
+                                    incError( "No DecimalSeparator found for FormatCode.");
+                                else
+                                {
+                                    nDec = aCode.indexOf( pSep->getValue());
+                                    if (nDec < 0)
+                                        incError( "DecimalSeparator not present in FormatCode formatindex=\"4\".");
+                                }
+                                pSep = pRoot->findNode( "ThousandSeparator");
+                                if (!pSep)
+                                    incError( "No ThousandSeparator found for FormatCode.");
+                                else
+                                {
+                                    nGrp = aCode.indexOf( pSep->getValue());
+                                    if (nGrp < 0)
+                                        incError( "ThousandSeparator not present in FormatCode formatindex=\"4\".");
+                                }
+                                if (nDec < nGrp)
+                                    incError( "Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"4\".");
+                            }
+                        }
+                    }
+                    if (nSavErr != nError)
+                        fprintf( stderr, "Warning: %s\n",
+                                "formatindex=\"4\" is the only FormatCode checked, there may be others that have errors.");
+                }
             }
+            else
+                incError( "No FormatCode in FormatElement.");
             n = currNode -> findNode("DefaultName");
             if (n)
                 of.writeParameter("FormatDefaultName", n->getValue(), formatCount);
             else
-                of.writeParameter("FormatDefaultName", ::rtl::OUString::createFromAscii(""), formatCount);
+                of.writeParameter("FormatDefaultName", ::rtl::OUString(), formatCount);
 
         }
         of.writeAsciiString("\nstatic const sal_Int16 ");
@@ -970,7 +1094,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     ::rtl::OUString str;
     sal_Int16 i;
 
-    for ( i = 0; i < sizeof(ReserveWord)/sizeof(NameValuePair); i++,nbOfWords++) {
+    for ( i = 0; i < sal_Int16(sizeof(ReserveWord)/sizeof(NameValuePair)); i++,nbOfWords++) {
         const LocaleNode * curNode = reserveNode->findNode (ReserveWord[i].name);
           str = curNode ? curNode -> getValue() : OUString::createFromAscii(ReserveWord[i].value);
           of.writeParameter("ReservedWord", str, nbOfWords);
@@ -1101,8 +1225,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      // determine number of styles and number of levels per style on the fly.
      sal_Int32 nStyles = getNumberOfChildren();
      vector<sal_Int32> nLevels; // may be different for each style?
-     sal_Int32 i;
-     for( i = 0; i < nStyles; i++ )
+     for( sal_Int32 i = 0; i < nStyles; i++ )
      {
           LocaleNode* p = getChildAt( i );
           nLevels.push_back( p->getNumberOfChildren() );
@@ -1119,11 +1242,11 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      }
 
      // verify that each style has the same number of levels.
-     for( i=0; i<nLevels.size(); i++ )
+     for( size_t i=0; i<nLevels.size(); i++ )
      {
           if( nLevels[0] != nLevels[i] )
           {
-               assert(0);
+               incError( "Numbering levels don't match.");
           }
      }
 
@@ -1148,7 +1271,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 //     of.writeAsciiString("};\n\n");
 
 
-     for( i=0; i<nStyles; i++ )
+     for( sal_Int32 i=0; i<nStyles; i++ )
      {
           for( sal_Int32 j=0; j<nLevels.back(); j++ )
           {
@@ -1174,7 +1297,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      of.writeAsciiString("\n");
 
 
-     for( i=0; i<nStyles; i++ )
+     for( sal_Int32 i=0; i<nStyles; i++ )
      {
           of.writeAsciiString("static const sal_Unicode** outline");
           of.writeAsciiString( "Style" );
@@ -1194,7 +1317,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      of.writeAsciiString("\n");
 
      of.writeAsciiString("static const sal_Unicode*** LCOutlineNumberingLevelsArray[] = {\n" );
-     for( i=0; i<nStyles; i++ )
+     for( sal_Int32 i=0; i<nStyles; i++ )
      {
           of.writeAsciiString( "\t" );
           of.writeAsciiString( "outlineStyle" );
