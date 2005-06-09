@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.26 $
+#*  $Revision: 1.27 $
 #*
-#*  last change: $Author: obo $ $Date: 2005-03-15 14:02:03 $
+#*  last change: $Author: hr $ $Date: 2005-06-09 14:42:08 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -93,6 +93,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ar_SA.cxx  \
     $(MISC)$/localedata_ar_TN.cxx  \
     $(MISC)$/localedata_az_AZ.cxx  \
+    $(MISC)$/localedata_be_BY.cxx  \
     $(MISC)$/localedata_bg_BG.cxx  \
     $(MISC)$/localedata_bs_BA.cxx  \
     $(MISC)$/localedata_ca_ES.cxx  \
@@ -160,6 +161,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_it_CH.cxx  \
     $(MISC)$/localedata_it_IT.cxx  \
     $(MISC)$/localedata_ja_JP.cxx  \
+    $(MISC)$/localedata_ka_GE.cxx  \
     $(MISC)$/localedata_km_KH.cxx  \
     $(MISC)$/localedata_kn_IN.cxx  \
     $(MISC)$/localedata_ko_KR.cxx  \
@@ -271,6 +273,7 @@ DEF3NAME=$(SHL3TARGET)
 SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB) $(LINK_LOCALEDATA_ES_LIB)
 SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
 SHL3OBJS=	\
+    $(SLO)$/localedata_be_BY.obj	\
     $(SLO)$/localedata_bg_BG.obj	\
     $(SLO)$/localedata_bs_BA.obj	\
     $(SLO)$/localedata_ca_ES.obj	\
@@ -299,6 +302,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
     $(SLO)$/localedata_it_IT.obj	\
+    $(SLO)$/localedata_ka_GE.obj	\
     $(SLO)$/localedata_lt_LT.obj	\
     $(SLO)$/localedata_lv_LV.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
