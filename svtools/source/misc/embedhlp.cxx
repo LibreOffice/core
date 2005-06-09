@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-11 11:57:56 $
+ *  last change: $Author: mav $ $Date: 2005-06-09 14:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,8 @@ void EmbeddedObjectRef::Clear()
 
         if ( mpImp->xListener )
         {
-            mpImp->xListener->release();
             mpImp->xListener->pObject = 0;
+            mpImp->xListener->release();
             mpImp->xListener = 0;
         }
 
