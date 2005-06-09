@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:08:19 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:57:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJINC=..$/inc
 
 PRJNAME=extensions
 TARGET=pcr
-#ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -81,88 +80,6 @@ CDEFS+=-DDVO_XFORMS
 .ENDIF
 
 # --- Files --------------------------------------------------------
-
-#Create UNO Header files
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.frame.XController				\
-    com.sun.star.frame.XFrame					\
-    com.sun.star.beans.XPropertyState			\
-    com.sun.star.beans.XPropertySet				\
-    com.sun.star.beans.XMultiPropertySet		\
-    com.sun.star.beans.XFastPropertySet			\
-    com.sun.star.beans.XIntrospectionAccess		\
-    com.sun.star.beans.XIntrospection			\
-    com.sun.star.beans.Property					\
-    com.sun.star.beans.PropertyConcept			\
-    com.sun.star.beans.PropertyAttribute		\
-    com.sun.star.form.ListSourceType			\
-    com.sun.star.form.XForm						\
-    com.sun.star.form.XFormController			\
-    com.sun.star.form.XGridColumnFactory		\
-    com.sun.star.form.FormComponentType			\
-    com.sun.star.script.XEventAttacherManager	\
-    com.sun.star.lang.XInitialization			\
-    com.sun.star.lang.Locale					\
-    com.sun.star.lang.XMultiServiceFactory		\
-    com.sun.star.container.XChild				\
-    com.sun.star.i18n.NumberFormatCode			\
-    com.sun.star.i18n.XLocaleData				\
-    com.sun.star.i18n.LocaleItem				\
-    com.sun.star.i18n.reservedWords				\
-    com.sun.star.util.XTextSearch				\
-    com.sun.star.util.XNumberFormatsSupplier	\
-    com.sun.star.util.XNumberFormatTypes		\
-    com.sun.star.lang.XUnoTunnel				\
-    com.sun.star.util.URL						\
-    com.sun.star.connection.XConnection			\
-    com.sun.star.lang.Locale					\
-    com.sun.star.sdbc.XResultSet				\
-    com.sun.star.sdbc.XRowSet					\
-    com.sun.star.sdbc.XPreparedStatement		\
-    com.sun.star.sdbc.XDataSource				\
-    com.sun.star.script.XTypeConverter			\
-    com.sun.star.sdbcx.XTablesSupplier			\
-    com.sun.star.sdbcx.XColumnsSupplier			\
-    com.sun.star.sdb.XQueriesSupplier			\
-    com.sun.star.awt.FontWeight					\
-    com.sun.star.awt.FontUnderline				\
-    com.sun.star.awt.FontStrikeout				\
-    com.sun.star.awt.FontSlant					\
-    com.sun.star.uno.XNamingService				\
-    com.sun.star.frame.XController				\
-    com.sun.star.awt.XVclWindowPeer				\
-    com.sun.star.awt.XLayoutConstrains			\
-    com.sun.star.awt.XView						\
-    com.sun.star.awt.XPointer					\
-    com.sun.star.awt.XGraphics					\
-    com.sun.star.awt.XVclContainerListener		\
-    com.sun.star.awt.XKeyListener				\
-    com.sun.star.awt.XMouseListener				\
-    com.sun.star.awt.XMouseMotionListener		\
-    com.sun.star.awt.XPaintListener				\
-    com.sun.star.awt.XTopWindowListener			\
-    com.sun.star.awt.XTextListener				\
-    com.sun.star.awt.XActionListener			\
-    com.sun.star.awt.XItemListener				\
-    com.sun.star.container.XContainerListener	\
-    com.sun.star.awt.XSpinListener				\
-    com.sun.star.awt.XAdjustmentListener		\
-    com.sun.star.awt.XMenuListener				\
-    com.sun.star.form.binding.XBindableValue     \
-    com.sun.star.form.binding.XValueBinding      \
-    com.sun.star.form.binding.XListEntrySource   \
-    com.sun.star.form.binding.XListEntrySink     \
-    com.sun.star.xforms.XModel                  \
-    com.sun.star.xforms.XFormsSupplier          \
-    com.sun.star.xforms.XDataTypeRepository     \
-    com.sun.star.xforms.XSubmission             \
-    com.sun.star.xsd.XDataType                  \
-    com.sun.star.xsd.WhiteSpaceTreatment        \
-    com.sun.star.form.submission.XSubmissionSupplier \
-
 
 EXCEPTIONSFILES=    $(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/fontdialog.obj	\
@@ -218,8 +135,6 @@ SRC1FILES=			propres.src	 \
                     formlinkdialog.src \
                     listselectiondlg.src \
                     newdatatype.src
-
-#RESLIB1DEPN= pcr.src pcr.hrc
 
 RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
