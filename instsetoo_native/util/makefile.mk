@@ -171,8 +171,13 @@ $(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) oo
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     @+$(COPY) $< $@
 
+.IF "$(SYSTEM_PYTHON)" != "YES"
 $(BIN)$/cp1251.py : $(SOLARLIBDIR)$/python$/encodings$/cp1251.py
     @+$(COPY) $< $@
+.ELSE
+$(BIN)$/cp1251.py : 
+    @+echo "Using system python - nothing more to do here"
+.ENDIF
 
 $(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
     +$(COPY) $< $@
