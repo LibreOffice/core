@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:26:15 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ class CalendarWrapper;
 
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
+    static  BYTE                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
     ::com::sun::star::lang::Locale          aLocale;
@@ -186,9 +188,9 @@ public:
 
     /** Get LanguageTypes for all installed locales which are unambiguous
         convertible back and forth between locale ISO strings and MS-LCID
-        LanguageType. Upon the first time the function is called in a
-        non-PRODUCT version debug messages are shown for locales not matching,
-        excluding already known problems.
+        LanguageType. Upon the first time the function is called when
+        locale data checking is enabled, messages are shown for locales not
+        matching, excluding already known problems.
         (e.g. used in number formatter dialog init)
      */
     static ::com::sun::star::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
@@ -276,7 +278,6 @@ public:
                                     sal_Bool bTwoDigitYear = sal_False
                                     ) const;
 
-#if SUPD >= 638
                                 /** Simple number formatting
                                     @param nNumber
                                         value * 10**nDecimals
@@ -289,13 +290,6 @@ public:
             String              getNum( long nNumber, USHORT nDecimals,
                                     BOOL bUseThousandSep = TRUE,
                                     BOOL bTrailingZeros = TRUE ) const;
-#else
-            String              getNum( long nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep = TRUE ) const;
-            String              getNum( long nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep,
-                                    BOOL bTrailingZeros ) const;
-#endif
 
                                 /// "Secure" currency formatted string.
             String              getCurr( long nNumber, USHORT nDecimals,
@@ -338,10 +332,30 @@ public:
     inline  const String&       getQuarterAbbreviation( sal_Int16 nQuarter ) const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_ABBREVIATION + nQuarter ); }
 
-#ifndef PRODUCT
-            ByteString&         AppendLocaleInfo( ByteString& rDebugMsg ) const;
-#endif
+    /** Return whether locale data checks are enabled.
+        Checks are enabled if the environment variable
+        OOO_ENABLE_LOCALE_DATA_CHECKS is set to 'Y' or 'Yes' (or any other
+        string starting with 'Y') or '1'.
+        Also used in conjunction with the number formatter. */
+    static  inline  bool        areChecksEnabled()
+                                    {
+                                        if (nLocaleDataChecking == 0)
+                                            evaluateLocaleDataChecking();
+                                        return nLocaleDataChecking == 1;
+                                    }
 
+    /** Append locale info to string, used with locale data checking.
+        A string similar to "de_DE requested\n en_US loaded" is appended. */
+            String&             appendLocaleInfo( String& rDebugMsg ) const;
+
+    /** Ouput a message during locale data checking. The (UTF-8) string is
+        written to stderr and in a non-product build or if DBG_UTIL is enabled
+        also raised as an assertion message box. */
+    static  void                outputCheckMessage( const String& rMsg );
+    static  void                outputCheckMessage( const char* pStr);
+
+private:
+    static  void                evaluateLocaleDataChecking();
 };
 
 
