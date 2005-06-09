@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-31 16:31:10 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:53:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,15 +109,24 @@ CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 .ENDIF
 
 # flags for the C++ Compiler
-CFLAGSCC= -pipe -mtune=pentiumpro
+CFLAGSCC= -pipe
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mtune=pentiumpro
+CFLAGSCXX= -pipe
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
+
+# instruction scheduling 
+.IF "$(GCCNUMVER)">="000300040000"
+CFLAGSCC+=-mtune=pentiumpro
+CFLAGSCXX+=-mtune=pentiumpro
+.ELSE
+CFLAGSCC+=-mcpu=pentiumpro
+CFLAGSCXX+=-mcpu=pentiumpro
+.ENDIF
+
 PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
