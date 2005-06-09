@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:10:47 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:56:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,15 +73,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Types -------------------------------------
 
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
-INCPRE+=$(UNOUCROUT)
+#UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
+#INCPRE+=$(UNOUCROUT)
 
 # --- Types -------------------------------------
 
 SLOFILES =	$(SLO)$/winmgr.obj	\
             $(SLO)$/sysplug.obj
-
-#SRCFILES =	app.src
 
 .ENDIF
 # ------------------------------------------------------------------
@@ -89,5 +87,4 @@ SLOFILES =	$(SLO)$/winmgr.obj	\
 
 .INCLUDE :  target.mk
 .INCLUDE :  ..$/util$/target.pmk
-
 
