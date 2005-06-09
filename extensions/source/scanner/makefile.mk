@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-31 17:09:39 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:57:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,29 +70,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
-# --- UnoTypes -----------------------------------------------------
-
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.Exception									\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.awt.XBitmap									\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.EventObject								\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.scanner.XScannerManager						\
-    com.sun.star.scanner.ScannerContext							\
-    com.sun.star.scanner.ScannerException						
-
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
@@ -156,3 +133,4 @@ DEF1EXPORTFILE=exports.dxp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
