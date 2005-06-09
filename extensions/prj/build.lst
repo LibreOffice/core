@@ -5,7 +5,6 @@ ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh NULL
 ex	extensions\source\plugin\workben		get	-	all	ex_plwkb NULL
 ex	extensions\source\plugin\inc\plugin\win		get	-	all	ex_piwi NULL
 ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux NULL
-ex	extensions\source\plugin\inc\plugin\os2		get	-	all	ex_pios2 NULL
 ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl NULL
 ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w NULL
 ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr NULL
@@ -15,8 +14,7 @@ ex	extensions\source\installation\office\protchk		nmake	-	w	ex_pchk NULL
 ex	extensions\source\plugin\base			nmake	-	all	ex_plbase NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx NULL
-ex	extensions\source\plugin\os2			nmake	-	p	ex_plos2 NULL
-ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plos2.p ex_plunx.u ex_plwin.w NULL
+ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w NULL
 ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc NULL
 ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan NULL
 ex	extensions\source\packer			nmake	-	all	ex_pck NULL
