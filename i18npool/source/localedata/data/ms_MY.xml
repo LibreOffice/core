@@ -34,7 +34,7 @@
 <TimePM>PM</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT ref="en_US" replaceTo="[$RM-43e]"/>
+<LC_FORMAT ref="en_GB" replaceFrom="[CURRENCY]" replaceTo="[$RM-43E]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_INDEX ref="en_US"/>
@@ -43,7 +43,7 @@
 <DaysOfWeek>
 <Day>
 <DayID>sun</DayID>
-<DefaultAbbrvName>Aha</DefaultAbbrvName>
+<DefaultAbbrvName>Ahd</DefaultAbbrvName>
 <DefaultFullName>Ahad</DefaultFullName>
 </Day>
 <Day>
@@ -120,7 +120,7 @@
 </Month>
 <Month>
 <MonthID>sep</MonthID>
-<DefaultAbbrvName>Sept</DefaultAbbrvName>
+<DefaultAbbrvName>Sep</DefaultAbbrvName>
 <DefaultFullName>September</DefaultFullName>
 </Month>
 <Month>
@@ -142,16 +142,16 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>BC</DefaultAbbrvName>
-<DefaultFullName>BC</DefaultFullName>
+<DefaultAbbrvName>S.M.</DefaultAbbrvName>
+<DefaultFullName>Sebelum Masihi</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>AD</DefaultAbbrvName>
-<DefaultFullName>AD</DefaultFullName>
+<DefaultAbbrvName>T.M.</DefaultAbbrvName>
+<DefaultFullName>Tahun Masihi</DefaultFullName>
 </Era>
 </Eras>
-<StartDayOfWeek><DayID>sun</DayID></StartDayOfWeek>
+<StartDayOfWeek><DayID>mon</DayID></StartDayOfWeek>
 <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
 </Calendar>
 </LC_CALENDAR>
