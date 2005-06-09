@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:42:47 $
+ *  last change: $Author: hr $ $Date: 2005-06-09 14:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,19 @@ public:
     void printR () const;
     virtual ~LocaleNode();
     void addChild (  LocaleNode * node);
+    const LocaleNode* getParent() const { return parent; };
+    const LocaleNode* getRoot() const;
     int getError() const;
     virtual void generateCode (const OFileWriter &of) const;
+    // MUST >= nMinLen
+    // nMinLen <= 0 : no error
+    // nMinLen >  0 : error if less than nMinLen characters
+    // SHOULD NOT > nMaxLen
+    // nMaxLen <  0 : any length
+    // nMaxLen >= 0 : warning if more than nMaxLen characters
+    OUString writeParameterCheckLen( const OFileWriter &of, const char* pNodeName, const char* pParameterName, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
+    // ++nError with output to stderr
+    void incError( const char* pStr ) const;
     static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
 };
 
