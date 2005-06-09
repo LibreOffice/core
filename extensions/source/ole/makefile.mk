@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:00:03 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:55:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,72 +75,9 @@ USE_DEFFILE=YES
 
 USE_DEFFILE=TRUE
 
-INCPRE+= -I$(ATL_INCLUDE)	
+INCPRE+= -I$(ATL_INCLUDE)
+
 # --- Settings -----------------------------------------------------
-
-# from cppumaker --------------------------------------------------
-
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/comprehensive
-INCPRE+=	$(OUT)$/inc$/comprehensive
-CPPUMAKERFLAGS += -C
-.ELSE
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-.ENDIF
-
-#----------------------------------------------------------------
-#.INCLUDE: .$/cppumaker.mk
-
-
-UNOTYPES= \
-    com.sun.star.lang.XMultiServiceFactory	\
-    com.sun.star.lang.XSingleServiceFactory	\
-    com.sun.star.lang.XEventListener	\
-    com.sun.star.lang.XUnoTunnel	\
-    com.sun.star.lang.XInitialization	\
-    com.sun.star.uno.TypeClass		\
-    com.sun.star.script.FinishEngineEvent	\
-    com.sun.star.script.XInvocation		\
-    com.sun.star.script.XInvocation2		\
-    com.sun.star.script.MemberType		\
-    com.sun.star.script.XLibraryAccess	\
-    com.sun.star.script.XAllListener	\
-    com.sun.star.script.FailReason		\
-    com.sun.star.script.XEventAttacher	\
-    com.sun.star.script.XEventAttacherManager	\
-    com.sun.star.script.XAllListenerAdapterService	\
-    com.sun.star.script.XInvocationAdapterFactory	\
-    com.sun.star.script.XInvocationAdapterFactory2	\
-    com.sun.star.script.XTypeConverter \
-    com.sun.star.registry.InvalidValueException	\
-    com.sun.star.registry.RegistryKeyType	\
-    com.sun.star.registry.XRegistryKey	\
-    com.sun.star.registry.RegistryValueType	\
-    com.sun.star.registry.InvalidRegistryException	\
-    com.sun.star.loader.XImplementationLoader	\
-    com.sun.star.loader.CannotActivateFactoryException	\
-    com.sun.star.bridge.XBridgeSupplier2 \
-    com.sun.star.bridge.ModelDependent	\
-    com.sun.star.bridge.oleautomation.Date \
-    com.sun.star.bridge.oleautomation.Currency \
-    com.sun.star.bridge.oleautomation.Decimal \
-    com.sun.star.bridge.oleautomation.SCode \
-    com.sun.star.bridge.oleautomation.NamedArgument \
-    com.sun.star.bridge.oleautomation.PropertyPutArgument \
-    com.sun.star.bridge.oleautomation.XAutomationObject \
-    com.sun.star.reflection.InvocationTargetException	\
-    com.sun.star.beans.UnknownPropertyException	\
-    com.sun.star.beans.MethodConcept	\
-    com.sun.star.beans.PropertyConcept	\
-    com.sun.star.beans.XExactName		\
-    com.sun.star.beans.XMaterialHolder	\
-    com.sun.star.uno.Exception		\
-    com.sun.star.uno.XWeak			\
-    com.sun.star.uno.XAggregation		\
-    com.sun.star.reflection.XIdlReflection
-
-
 
 .IF "$(GUI)"=="WNT" && "$(NETTOOLKIT)"==""
 
@@ -172,11 +109,8 @@ SHL1STDLIBS=\
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
 
-#SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1LIBS=
 SHL1OBJS=$(SLOFILES)
-#SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-#SHL1DEF=$(TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(SHL1TARGET).dxp
@@ -186,6 +120,4 @@ DEF1EXPORTFILE=$(SHL1TARGET).dxp
 #----------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-#.INCLUDE :  $(PRJ)$/util$/target.pmk
 
