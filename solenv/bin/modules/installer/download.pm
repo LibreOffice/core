@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-18 12:48:30 $
+#   last change: $Author: hr $ $Date: 2005-06-09 13:54:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,13 @@ use installer::globals;
 use installer::pathanalyzer;
 use installer::systemactions;
 use installer::logger;
+
+BEGIN { # This is needed so that cygwin's perl evaluates ACLs
+    # (needed for correctly evaluating the -x test.)
+    if( $^O =~ /cygwin/i ) {
+        require filetest; import filetest "access";
+    }
+}
 
 ##################################################################
 # Including the lowercase product name into the script template
@@ -907,36 +914,33 @@ sub get_path_to_nsis_sdk
     my $file;
     my $nsispath = "";
 
-    # do we have nsis already in path ?
-    @paths = split(/:/, $ENV{'PATH'});
-    foreach $paths (@paths) {
-        $nsispath = $paths . "/nsis";
+    if ( $ENV{'ENV_ROOT'} ) {
+        $nsispath = $ENV{'ENV_ROOT'} . $installer::globals::separator . "NSIS";
+    }
+    elsif ( $ENV{'NSIS_PATH'} ) {
+        $nsispath = $ENV{'NSIS_PATH'};
+    } else {
+        # do we have nsis already in path ?
+        @paths = split(/:/, $ENV{'PATH'});
+        foreach $paths (@paths) {
+            $path =~ s/[\/\\]+$//; # remove trailing slashes;
+            $nsispath = $paths . "/nsis";
 
-        if ( -x $nsispath )
-        {
-            $nsispath = $paths;
-            last;
-        }
-        else
-        {
-            $nsispath = "";
+            if ( -x $nsispath ) {
+                $nsispath = $paths;
+                last;
+            }
+            else {
+                $nsispath = "";
+            }
         }
     }
+    if ( $ENV{'NSISSDK_SOURCE'} ) { $nsispath = $ENV{'NSISSDK_SOURCE'}; }   # overriding the NSIS SDK with NSISSDK_SOURCE
 
     if ( $nsispath eq "" )
     {
-        if ( $ENV{'ENV_ROOT'} ) { $nsispath = $ENV{'ENV_ROOT'}; }
-        else { installer::exiter::exit_program("ERROR: no path for NSIS found or Environment variable \"ENV_ROOT\" not set!", "get_path_to_nsis_sdk"); }
-
-        $nsispath = $nsispath . $installer::globals::separator . "NSIS";
+        installer::logger::print_message( "... no Environment variable \"ENV_ROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!", "get_path_to_nsis_sdk");
     }
-    else
-    {
-        ($vol, $dir, $file) = File::Spec->splitpath( $nsispath );
-        $nsispath = $dir;
-    }
-
-    if ( $ENV{'NSISSDK_SOURCE'} ) { $nsispath = $ENV{'NSISSDK_SOURCE'}; }   # overriding the NSIS SDK with NSISSDK_SOURCE
 
     return $nsispath;
 }
@@ -1118,6 +1122,15 @@ sub create_download_sets
 
         # find nsis in the system
         my $nsispath = get_path_to_nsis_sdk();
+
+        if ( $nsispath eq "" ) {
+            # If nsis is not found just skip the rest of this function
+            # and do not create the NSIS file.
+            my $infoline = "\nNo NSIS SDK found. Skipping the generation of NSIS file.\n";
+            push(@installer::globals::logfileinfo, $infoline);
+            installer::logger::print_message( "... no NSIS SDK found. Skipping the generation of NSIS file ... \n" );
+            return $downloaddir;
+        }
 
         # find the ulf file for translation
         my $mlffile = get_translation_file($allvariableshashref);
