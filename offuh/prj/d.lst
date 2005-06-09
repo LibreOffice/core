@@ -58,6 +58,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\scanner
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\script
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sheet
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\style
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\svg
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sync2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\system
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\table
@@ -223,6 +224,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\script\*.hpp %_DEST%\inc%_EXT%\com\sun\star\script\*.hpp
 ..\%__SRC%\inc\com\sun\star\sheet\*.hdl %_DEST%\inc%_EXT%\com\sun\star\sheet\*.hdl
 ..\%__SRC%\inc\com\sun\star\sheet\*.hpp %_DEST%\inc%_EXT%\com\sun\star\sheet\*.hpp
+..\%__SRC%\inc\com\sun\star\svg\*.hdl %_DEST%\inc%_EXT%\com\sun\star\svg\*.hdl
+..\%__SRC%\inc\com\sun\star\svg\*.hpp %_DEST%\inc%_EXT%\com\sun\star\svg\*.hpp
 ..\%__SRC%\inc\com\sun\star\style\*.hdl %_DEST%\inc%_EXT%\com\sun\star\style\*.hdl
 ..\%__SRC%\inc\com\sun\star\style\*.hpp %_DEST%\inc%_EXT%\com\sun\star\style\*.hpp
 ..\%__SRC%\inc\com\sun\star\sync2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\sync2\*.hdl
