@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:42:44 $
+#   last change: $Author: hr $ $Date: 2005-06-09 14:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,10 +89,6 @@ SHL1OWNLIBS = \
     ole32.lib	\
     advapi32.lib
 .ENDIF # WNT
-
-.IF "$(GUI)" == "OS2"
-SHL1LINKLIB = $(SLB)$/plos2.lib
-.ENDIF # OS2
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
