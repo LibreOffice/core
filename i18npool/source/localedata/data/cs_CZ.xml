@@ -14,7 +14,7 @@
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>.</DateSeparator>
-<ThousandSeparator> </ThousandSeparator>
+<ThousandSeparator> </ThousandSeparator>
 <DecimalSeparator>,</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>,</Time100SecSeparator>
@@ -168,39 +168,39 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER"  formatindex="3">
-<FormatCode># ##0</FormatCode>
+<FormatCode># ##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
-<FormatCode># ##0,00</FormatCode>
+<FormatCode># ##0,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
-<FormatCode># ###,00</FormatCode>
+<FormatCode># ###,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode># ##0 [$Kč-405];-# ##0 [$Kč-405]</FormatCode>
+<FormatCode># ##0 [$Kč-405];-# ##0 [$Kč-405]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode># ##0,00 [$Kč-405];-# ##0,00 [$Kč-405]</FormatCode>
+<FormatCode># ##0,00 [$Kč-405];-# ##0,00 [$Kč-405]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode># ##0 [$Kč-405];[RED]-# ##0 [$Kč-405]</FormatCode>
+<FormatCode># ##0 [$Kč-405];[RED]-# ##0 [$Kč-405]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode># ##0,00 [$Kč-405];[RED]-# ##0,00 [$Kč-405]</FormatCode>
+<FormatCode># ##0,00 [$Kč-405];[RED]-# ##0,00 [$Kč-405]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
-<FormatCode># ##0,00 CCC</FormatCode>
+<FormatCode># ##0,00 CCC</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode># ##0,-- [$Kč-405];[RED]-# ##0,-- [$Kč-405]</FormatCode>
+<FormatCode># ##0,-- [$Kč-405];[RED]-# ##0,-- [$Kč-405]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -223,7 +223,7 @@
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z Č Ř Š ŭ</IndexKey>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z Á Č Ď É Ě Í Ň Ó Ř Š Ť Ú Ů Ý Ž</IndexKey>
 <UnicodeScript>0</UnicodeScript>
 <UnicodeScript>1</UnicodeScript>
 <UnicodeScript>2</UnicodeScript>
@@ -235,100 +235,100 @@
 <DaysOfWeek>
 <Day>
 <DayID>sun</DayID>
-<DefaultAbbrvName>Ne</DefaultAbbrvName>
-<DefaultFullName>Neděle</DefaultFullName>
+<DefaultAbbrvName>ne</DefaultAbbrvName>
+<DefaultFullName>neděle</DefaultFullName>
 </Day>
 <Day>
 <DayID>mon</DayID>
-<DefaultAbbrvName>Po</DefaultAbbrvName>
-<DefaultFullName>Pondělí</DefaultFullName>
+<DefaultAbbrvName>po</DefaultAbbrvName>
+<DefaultFullName>pondělí</DefaultFullName>
 </Day>
 <Day>
 <DayID>tue</DayID>
-<DefaultAbbrvName>Út</DefaultAbbrvName>
-<DefaultFullName>Úterý</DefaultFullName>
+<DefaultAbbrvName>út</DefaultAbbrvName>
+<DefaultFullName>úterý</DefaultFullName>
 </Day>
 <Day>
 <DayID>wed</DayID>
-<DefaultAbbrvName>St</DefaultAbbrvName>
-<DefaultFullName>Středa</DefaultFullName>
+<DefaultAbbrvName>st</DefaultAbbrvName>
+<DefaultFullName>středa</DefaultFullName>
 </Day>
 <Day>
 <DayID>thu</DayID>
-<DefaultAbbrvName>Čt</DefaultAbbrvName>
-<DefaultFullName>Čtvrtek</DefaultFullName>
+<DefaultAbbrvName>čt</DefaultAbbrvName>
+<DefaultFullName>čtvrtek</DefaultFullName>
 </Day>
 <Day>
 <DayID>fri</DayID>
-<DefaultAbbrvName>Pá</DefaultAbbrvName>
-<DefaultFullName>Pátek</DefaultFullName>
+<DefaultAbbrvName>pá</DefaultAbbrvName>
+<DefaultFullName>pátek</DefaultFullName>
 </Day>
 <Day>
 <DayID>sat</DayID>
-<DefaultAbbrvName>So</DefaultAbbrvName>
-<DefaultFullName>Sobota</DefaultFullName>
+<DefaultAbbrvName>so</DefaultAbbrvName>
+<DefaultFullName>sobota</DefaultFullName>
 </Day>
 </DaysOfWeek>
 <MonthsOfYear>
 <Month>
 <MonthID>jan</MonthID>
-<DefaultAbbrvName>leden</DefaultAbbrvName>
-<DefaultFullName>ledna</DefaultFullName>
+<DefaultAbbrvName>I</DefaultAbbrvName>
+<DefaultFullName>leden</DefaultFullName>
 </Month>
 <Month>
 <MonthID>feb</MonthID>
-<DefaultAbbrvName>únor</DefaultAbbrvName>
-<DefaultFullName>února</DefaultFullName>
+<DefaultAbbrvName>II</DefaultAbbrvName>
+<DefaultFullName>únor</DefaultFullName>
 </Month>
 <Month>
 <MonthID>mar</MonthID>
-<DefaultAbbrvName>březen</DefaultAbbrvName>
-<DefaultFullName>března</DefaultFullName>
+<DefaultAbbrvName>III</DefaultAbbrvName>
+<DefaultFullName>březen</DefaultFullName>
 </Month>
 <Month>
 <MonthID>apr</MonthID>
-<DefaultAbbrvName>duben</DefaultAbbrvName>
-<DefaultFullName>dubna</DefaultFullName>
+<DefaultAbbrvName>IV</DefaultAbbrvName>
+<DefaultFullName>duben</DefaultFullName>
 </Month>
 <Month>
 <MonthID>may</MonthID>
-<DefaultAbbrvName>květen</DefaultAbbrvName>
-<DefaultFullName>května</DefaultFullName>
+<DefaultAbbrvName>V</DefaultAbbrvName>
+<DefaultFullName>květen</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jun</MonthID>
-<DefaultAbbrvName>červen</DefaultAbbrvName>
-<DefaultFullName>června</DefaultFullName>
+<DefaultAbbrvName>VI</DefaultAbbrvName>
+<DefaultFullName>červen</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jul</MonthID>
-<DefaultAbbrvName>červenec</DefaultAbbrvName>
-<DefaultFullName>července</DefaultFullName>
+<DefaultAbbrvName>VII</DefaultAbbrvName>
+<DefaultFullName>červenec</DefaultFullName>
 </Month>
 <Month>
 <MonthID>aug</MonthID>
-<DefaultAbbrvName>srpen</DefaultAbbrvName>
-<DefaultFullName>srpna</DefaultFullName>
+<DefaultAbbrvName>VIII</DefaultAbbrvName>
+<DefaultFullName>srpen</DefaultFullName>
 </Month>
 <Month>
 <MonthID>sep</MonthID>
-<DefaultAbbrvName>září</DefaultAbbrvName>
+<DefaultAbbrvName>IX</DefaultAbbrvName>
 <DefaultFullName>září</DefaultFullName>
 </Month>
 <Month>
 <MonthID>oct</MonthID>
-<DefaultAbbrvName>říjen</DefaultAbbrvName>
-<DefaultFullName>října</DefaultFullName>
+<DefaultAbbrvName>X</DefaultAbbrvName>
+<DefaultFullName>říjen</DefaultFullName>
 </Month>
 <Month>
 <MonthID>nov</MonthID>
-<DefaultAbbrvName>listopad</DefaultAbbrvName>
-<DefaultFullName>listopadu</DefaultFullName>
+<DefaultAbbrvName>XI</DefaultAbbrvName>
+<DefaultFullName>listopad</DefaultFullName>
 </Month>
 <Month>
 <MonthID>dec</MonthID>
-<DefaultAbbrvName>prosinec</DefaultAbbrvName>
-<DefaultFullName>prosince</DefaultFullName>
+<DefaultAbbrvName>XII</DefaultAbbrvName>
+<DefaultFullName>prosinec</DefaultFullName>
 </Month>
 </MonthsOfYear>
 <Eras>
