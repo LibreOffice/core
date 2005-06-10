@@ -382,6 +382,7 @@ sub determine_ship_directory
 
     my $productstring = $installer::globals::product;
     if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $productstring = $productstring . "_languagepack"; }
+    if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
                 $installer::globals::productextension . $installer::globals::separator .
