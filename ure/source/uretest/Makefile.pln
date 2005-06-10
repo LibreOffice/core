@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile.pln,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2005-06-02 08:27:53 $
+#   last change: $Author: sb $ $Date: 2005-06-10 13:49:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,10 +64,12 @@
 
 # The following variables can be set, if necessary (see README):
 #URE_HOME := /opt/openoffice.org/ure
+#GXX_INCLUDE_PATH := /usr/include/g++
 #GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 
 
 URE_HOME ?= /opt/openoffice.org/ure
+GXX_INCLUDE_PATH ?= /usr/include/g++
 
 .DELETE_ON_ERROR:
 
@@ -114,16 +116,18 @@ clean:
 
 out.pln/cppmain.uno.so: out.pln/cppmain.o version.map | out.pln \
             out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
-            out.pln/lib/libuno_sal.so out.pln/lib/libuno_salhelpergcc3.so
+            out.pln/lib/libuno_sal.so out.pln/lib/libuno_salhelpergcc3.so \
+            out.pln/lib/libstlport_gcc.so
 	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
             -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3
+            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3 -lstlport_gcc
 
 out.pln/cppmain.o: cppmain.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include \
-            -I out.pln/include/cpputypes -I out.pln/include/types \
-            -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
+	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
+            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
 
 
 out.pln/cpptest.uno.so: out.pln/cpptest.o version.map | out.pln \
@@ -135,9 +139,10 @@ out.pln/cpptest.uno.so: out.pln/cpptest.o version.map | out.pln \
 
 out.pln/cpptest.o: cpptest.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include \
-            -I out.pln/include/cpputypes -I out.pln/include/types \
-            -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
+	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
+            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
 
 
 out.pln/cppserver.uno.so: out.pln/cppserver.o version.map | out.pln \
@@ -149,15 +154,16 @@ out.pln/cppserver.uno.so: out.pln/cppserver.o version.map | out.pln \
 
 out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include \
-            -I out.pln/include/cpputypes -I out.pln/include/types \
-            -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
+	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
+            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
 
 
 out.pln/cpputypes.cppumaker.flag: | out.pln
 	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/linux/bin/cppumaker \
             -O./out.pln/include/cpputypes \
-            '-Tcom.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak' \
+            '-Tcom.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak' \
             -B/UCR $(URE_HOME)/share/misc/types.rdb
 	touch $@
 
@@ -280,6 +286,9 @@ out.pln/lib/libuno_sal.so: | out.pln/lib
 
 out.pln/lib/libuno_salhelpergcc3.so: | out.pln/lib
 	ln -fs $(URE_HOME)/lib/libuno_salhelpergcc3.so.3 $@
+
+out.pln/lib/libstlport_gcc.so: | out.pln/lib
+	ln -fs $(URE_HOME)/lib/libstlport_gcc.so $@
 
 
 out.pln:
