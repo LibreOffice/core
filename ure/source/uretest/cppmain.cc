@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppmain.cc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2005-06-02 08:27:53 $
+ *  last change: $Author: sb $ $Date: 2005-06-10 13:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "sal/config.h"
 
 #include <cstddef>
+#include <functional>
+#include <memory>
 #include <new>
 
 #include "com/sun/star/lang/XMain.hpp"
@@ -75,8 +77,10 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/unourl.hxx"
 #include "cppuhelper/weak.hxx"
+#include "osl/mutex.hxx"
 #include "osl/thread.h"
 #include "rtl/malformeduriexception.hxx"
 #include "rtl/string.h"
@@ -85,6 +89,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
+#include "stl/hash_map"
 #include "uno/current_context.hxx"
 #include "uno/environment.h"
 #include "uno/lbnames.h"
@@ -127,9 +132,16 @@ private:
     osl_getThreadIdentifier(0); // check for sal
     (new salhelper::SimpleReferenceObject)->release(); // check for salhelper
     css::uno::getCurrentContext(); // check for cppu
-    try {// check for cppuhelper
-        cppu::UnoUrl dummy = cppu::UnoUrl(rtl::OUString());
+    try { // check for cppuhelper
+        std::auto_ptr< cppu::UnoUrl > dummy(new cppu::UnoUrl(rtl::OUString()));
     } catch (rtl::MalformedUriException &) {}
+    { // check for stlport
+        osl::Mutex m;
+        std::auto_ptr< cppu::OMultiTypeInterfaceContainerHelperVar<
+            int, std::hash< int >, std::equal_to< int > > > dummy(
+                new cppu::OMultiTypeInterfaceContainerHelperVar<
+                int, std::hash< int >, std::equal_to< int > >(m));
+    }
     static char const * const services[] = {
         "com.sun.star.beans.Introspection",
         "com.sun.star.bridge.Bridge",
