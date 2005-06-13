@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.138 $
+#   $Revision: 1.139 $
 #
-#   last change: $Author: vg $ $Date: 2005-06-07 13:28:11 $
+#   last change: $Author: vg $ $Date: 2005-06-13 10:41:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@
     };
     my $enable_multiprocessing = 1;
     my $cygwin = 0;
-    $cygwin = 1 if (defined $ENV{TERM} && $ENV{TERM} eq 'cygwin');
+    $cygwin++ if ($^O eq 'cygwin');
     if ($ENV{GUI} eq 'WNT' && !$cygwin) {
         eval { require Win32::Process; import Win32::Process; };
         $enable_multiprocessing = 0 if ($@);
@@ -106,7 +106,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.138 $ ';
+    $id_str = ' $Revision: 1.139 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -382,13 +382,6 @@ sub BuildAll {
 sub dmake_dir {
     my ($new_BuildDir, $OldBuildDir, $error_code);
     my $BuildDir = shift;
-    if ($BuildDir =~ /(\s)/o) {
-        announce_module($`) if ($' eq $pre_job);
-        deliver_module($`) if ($' eq $post_job);
-        _exit(0) if ($child);
-        RemoveFromDependencies($BuildDir, \%LocalDepsHash);
-        return;
-    };
 #    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP} && defined($log))) {
 #        $OldBuildDir = $BuildDir;
 #        my $modified_path = $PathHash{$folder_nick};
@@ -1249,7 +1242,7 @@ sub BuildDependent {
                 };
                 # start current child & all
                 # that could be started now
-                start_child($child_nick) if ($child_nick);
+                start_child($child_nick, $dependencies_hash) if ($child_nick);
                 $child_nick = PickPrjToBuild($dependencies_hash);
                 if (!$child_nick) {
                     return if ($BuildAllParents);
@@ -1278,7 +1271,13 @@ sub children_number {
 };
 
 sub start_child {
-    my $child_nick = shift;
+    my ($child_nick, $dependencies_hash) = @_;
+    if ($child_nick =~ /(\s)/o) {
+        announce_module($`) if ($' eq $pre_job);
+        deliver_module($`) if ($' eq $post_job);
+        RemoveFromDependencies($child_nick, $dependencies_hash);
+        return;
+    };
     my $pid = undef;
     my $children_running;
     my $oldfh = select STDOUT;
@@ -1424,7 +1423,8 @@ sub announce_module {
 
 sub print_announce {
     my $Prj = shift;
-    my $prj_type = $modules_types{$Prj};
+    my $prj_type = '';
+    $prj_type = $modules_types{$Prj} if (defined $modules_types{$Prj});
     my $text;
     if ($prj_type eq 'lnk') {
         $text = "Skipping link to $Prj\n";
