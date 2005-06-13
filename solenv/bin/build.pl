@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.139 $
+#   $Revision: 1.140 $
 #
-#   last change: $Author: vg $ $Date: 2005-06-13 10:41:49 $
+#   last change: $Author: vg $ $Date: 2005-06-13 14:00:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@
 #
 # build - build entire project
 #
-
     use Config;
     use POSIX;
     use Cwd qw (cwd);
@@ -77,7 +76,6 @@
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
         require CopyPrj; import CopyPrj;
     };
-
     my $log = undef;
     if (defined $ENV{CWS_WORK_STAMP}) {
         require Cws; import Cws;
@@ -106,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.139 $ ';
+    $id_str = ' $Revision: 1.140 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -382,6 +380,12 @@ sub BuildAll {
 sub dmake_dir {
     my ($new_BuildDir, $OldBuildDir, $error_code);
     my $BuildDir = shift;
+    if ($BuildDir =~ /(\s)/o) {
+        announce_module($`) if ($' eq $pre_job);
+        deliver_module($`) if ($' eq $post_job);
+        RemoveFromDependencies($BuildDir, \%LocalDepsHash);
+        return;
+    };
 #    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP} && defined($log))) {
 #        $OldBuildDir = $BuildDir;
 #        my $modified_path = $PathHash{$folder_nick};
