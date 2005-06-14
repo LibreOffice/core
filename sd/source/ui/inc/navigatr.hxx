@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:17:53 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@ class NavigatorChildWindow;
 class View;
 }
 class Menu;
+class SdNavigatorControllerItem;
+class SdPageNameControllerItem;
 
 //------------------------------------------------------------------------
 
