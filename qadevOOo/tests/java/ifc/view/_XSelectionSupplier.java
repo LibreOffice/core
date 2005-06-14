@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSelectionSupplier.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:33:23 $
+ *  last change:$Date: 2005-06-14 15:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,10 @@ public class _XSelectionSupplier extends MultiMethodTest {
     * Listener implementation which just set flag when listener
     * method is called.
     */
-    protected class MyChangeListener implements XSelectionChangeListener {
+    public class MyChangeListener implements XSelectionChangeListener {
         public void disposing ( EventObject oEvent ) {}
         public void selectionChanged(EventObject ev) {
+            log.println("listener called");
             selectionChanged = true;
         }
 
@@ -133,6 +134,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
     public void _addSelectionChangeListener(){
         boolean res = true;
         try {
+            selectionChanged = false;
             oObj.addSelectionChangeListener(listener);
             oObj.select(selections[0]);
             oObj.select(selections[1]);
@@ -163,6 +165,14 @@ public class _XSelectionSupplier extends MultiMethodTest {
                 if (locRes) {
                     compRes = util.ValueComparer.equalValue(selections[i], curSelection);
                     log.println("selected object and current selection are equal: "+compRes);
+                    if (!compRes) {
+                        if ((selections[i]) instanceof Object[]){
+                            if (((Object[])selections[i])[0] instanceof Integer) {
+                                log.println("Getting: "+((Integer) ((Object[])curSelection)[0]).intValue());
+                                log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
+                            }
+                        }
+                    }
                     res &= compRes;
                 } else {
                     compRes = util.ValueComparer.equalValue(curSelection, oldSelection);
