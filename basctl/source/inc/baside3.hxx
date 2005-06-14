@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:08:20 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 
+class Printer;
 class StarBASIC;
 class SfxItemSet;
 class DlgEditor;
