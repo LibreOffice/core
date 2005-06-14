@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:45:48 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 // include ---------------------------------------------------------------
 #include "scabstdlg.hxx" //CHINA001
+class Dialog;
 class ScImportAsciiDlg;
 class ScAutoFormatDlg;
 class ScColRowLabelDlg;
