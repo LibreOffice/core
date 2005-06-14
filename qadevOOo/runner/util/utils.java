@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change:$Date: 2005-03-29 11:54:23 $
+ *  last change:$Date: 2005-06-14 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,13 +306,33 @@ public class utils {
     }
 
     /**
+     * This method returns the temp dicrectory of the user.
+     * Since Java 1.4 it is not possible to read environment variables. To workaround
+     * this, the Java parameter -D could be used.
+     */
+    public static String getUsersTempDir(){
+        String tempDir = System.getProperty("my.temp");
+        if (tempDir == null){
+            tempDir = System.getProperty("my.tmp");
+            if (tempDir == null)
+                tempDir = System.getProperty("java.io.tmpdir") ;
+    }
+        // remove ending file separator
+        if (tempDir.endsWith(System.getProperty("file.separator"))){
+            tempDir = tempDir.substring(0,tempDir.length()-1);
+        }
+
+        return tempDir;
+    }
+
+    /**
      *
      * This method get's the temp dir of the connected office
      *
      */
 
     public static String getOfficeTemp (XMultiServiceFactory msf) {
-        String tmpDir = System.getProperty("java.io.tmpdir");
+        String tmpDir = util.utils.getUsersTempDir();
         try {
             String tmp = (String) getOfficeSettingsValue(msf, "Temp");
             if (! tmp.endsWith(System.getProperty("file.separator"))){
@@ -409,21 +429,69 @@ public class utils {
     }
 
     /**
-     *
-     * This method copies a given file to a new one
-     *
+     *  This method check via Office the existance of the given file URL
+     * @param msf the multiservice factory
+     * @param fileURL the file which existance should be checked
+     * @return true if the file exists, else false
      */
-    public static boolean copyFile (XMultiServiceFactory msf, String oldF, String newF) {
-        boolean res = false;
+    public static boolean fileExists(XMultiServiceFactory msf, String fileURL){
+        boolean exists = false;
         try {
+
             Object fileacc = msf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
             XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
                             UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-            if (!simpleAccess.exists(newF)) simpleAccess.copy(oldF,newF);
+            if (simpleAccess.exists(fileURL)) exists = true;
+
+        } catch (Exception e) {
+            System.out.println("Couldn't access file '" + fileURL + "'");
+            e.printStackTrace();
+            exists = false;
+        }
+        return exists;
+    }
+    /**
+     * This method deletes via office the given file URL. It checks the existance
+     * of <CODE>fileURL</CODE>. If exists it will be deletet.
+     * @param msf the multiservice factory
+     * @param fileURL the file to delete
+     * @return true if the file could be deletet or the file does not exist
+     */
+    public static boolean deleteFile(XMultiServiceFactory xMsf, String fileURL){
+        boolean delete = true;
+        try {
+
+            Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
+            XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
+                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            if (simpleAccess.exists(fileURL)) simpleAccess.kill(fileURL);
+
+        } catch (Exception e) {
+            System.out.println("Couldn't delete file '" + fileURL + "'");
+            e.printStackTrace();
+            delete = false;
+        }
+        return delete;
+    }
+
+    /**
+     * This method copies via office a given file to a new one
+     * @param msf the multi service factory
+     * @param oldF the source file
+     * @param newF the destination file
+     * @return true at success
+     */
+    public static boolean copyFile (XMultiServiceFactory xMsf, String source, String destinaion) {
+        boolean res = false;
+        try {
+            Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
+            XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
+                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            if (!simpleAccess.exists(destinaion)) simpleAccess.copy(source,destinaion);
 
             res = true;
         } catch (Exception e) {
-            System.out.println("Couldn't copy file");
+            System.out.println("Couldn't copy file '" + source + "' -> '" + destinaion + "'");
             e.printStackTrace();
             res = false;
         }
@@ -438,10 +506,10 @@ public class utils {
      * <code>false</code> if some errors occured (e.g. file is locked, used
      * by another process).
      */
-    public static boolean overwriteFile(XMultiServiceFactory msf, String oldF, String newF) {
+    public static boolean overwriteFile(XMultiServiceFactory xMsf, String oldF, String newF) {
         boolean res = false;
         try {
-            Object fileacc = msf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
+            Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
 
             XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
                 UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
