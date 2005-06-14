@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:47:14 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 
 #include "bibmod.hxx"
 class BibDataManager;
+class BibFrameCtrl_Impl;
 namespace com{namespace sun{namespace star{
     namespace form{
         class XFormController;
