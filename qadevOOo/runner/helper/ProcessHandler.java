@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Date: 2005-02-24 17:22:10 $
+ *  last change: $Date: 2005-06-14 15:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ public class ProcessHandler {
         if (!isStarted()) return;
         boolean exit = false;
         int counter=1;
-        while(counter<3 && !exit) {
+        while(counter < 3 && !exit) {
             proc.destroy();
 
             try{
@@ -290,7 +290,10 @@ public class ProcessHandler {
             catch(java.lang.InterruptedException e){}
             try {
                 int exitValue = proc.exitValue();
-                if (exitValue<1) exit = true; else counter++;
+                if (exitValue<1)
+                    exit = true;
+                else
+                    counter++;
                 System.out.println("# Office closed with exit code "+exitValue);
             }
             catch(java.lang.IllegalThreadStateException e) {
