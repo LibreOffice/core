@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2005-02-24 17:20:20 $
+ *  last change: $Date: 2005-06-14 15:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,8 @@ public class FileHelper
     public static boolean isDebugEnabled()
         {
             boolean bDebug = false;
-            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String sTmpPath = util.utils.getUsersTempDir();
+            //util.utils.getUsersTempDir();
             String fs = System.getProperty("file.separator");
             String sName = sTmpPath + fs + "DOC_COMPARATOR_DEBUG";
             File aFile = new File(sName);
