@@ -1,0 +1,5 @@
+"UICommandDescription";"com::sun::star::container::XNameAccess";"getByName()"
+"UICommandDescription";"com::sun::star::container::XNameAccess";"getElementNames()"
+"UICommandDescription";"com::sun::star::container::XNameAccess";"hasByName()"
+"UICommandDescription";"com::sun::star::container::XElementAccess";"getElementType()"
+"UICommandDescription";"com::sun::star::container::XElementAccess";"hasElements()"
