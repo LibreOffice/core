@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:46:05 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 class SfxWorkWindow;
 class SfxDockingWindow;
 class SfxDockArr_Impl;
+class SfxEmptySplitWin_Impl;
 struct SfxDock_Impl;
 
 class SfxSplitWindow : public SplitWindow
