@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescGetter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-11-02 11:44:57 $
+ *  last change:$Date: 2005-06-14 15:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@ package share;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import java.util.Vector;
 
@@ -101,9 +103,34 @@ public abstract class DescGetter {
         while (line != null) {
             try {
                 if (line.startsWith("-o")) {
-                    DescEntry aEntry = getDescriptionForSingleJob(
-                                          line.substring(3).trim(), descPath,
-                                          debug);
+                    String job = line.substring(3, line.length()).trim();
+                    DescEntry aEntry ;
+                    // special in case several Interfaces are given comma separated
+                    if (job.indexOf(",") < 0) {
+                        aEntry = getDescriptionForSingleJob(job, descPath,
+                                                                     debug);
+                    } else {
+                        ArrayList subs = getSubInterfaces(job);
+                        String partjob = job.substring(0, job.indexOf(",")).trim();
+                        aEntry = getDescriptionForSingleJob(partjob, descPath,
+                                                                     debug);
+
+                        if (aEntry != null) {
+                            for (int i = 0; i < aEntry.SubEntryCount; i++) {
+                                String subEntry = aEntry.SubEntries[i].longName;
+                                int cpLength = aEntry.longName.length();
+                                subEntry = subEntry.substring(cpLength + 2,
+                                                              subEntry.length());
+
+                                if (subs.contains(subEntry)) {
+                                    aEntry.SubEntries[i].isToTest = true;
+                                }
+                            }
+                        }
+                    }
+//                    DescEntry aEntry = getDescriptionForSingleJob(
+//                                          line.substring(3).trim(), descPath,
+//                                          debug);
                     if (aEntry != null)
                         entryList.add(aEntry);
                 } else if (line.startsWith("-sce")) {
@@ -152,5 +179,20 @@ public abstract class DescGetter {
         entries = (DescEntry[]) entryList.toArray(entries);
 
         return entries;
+    }
+
+    protected ArrayList getSubInterfaces(String job) {
+        ArrayList namesList = new ArrayList();
+        StringTokenizer st = new StringTokenizer(job, ",");
+
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            String token = st.nextToken();
+
+            if (token.indexOf(".") < 0) {
+                namesList.add(token);
+            }
+        }
+
+        return namesList;
     }
 }
