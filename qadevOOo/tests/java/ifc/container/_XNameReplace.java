@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNameReplace.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-12-11 11:37:07 $
+ *  last change:$Date: 2005-06-14 15:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,13 +163,21 @@ public class _XNameReplace extends MultiMethodTest {
 
        log.println("replaceByName()");
         try {
+            boolean ok;
+            log.println("get current object '" + oNames[0] + "'");
             Object old = oObj.getByName(oNames[0]) ;
+            log.println("replace object '" + oNames[0] + "' with another instance");
             oObj.replaceByName(oNames[0],oInstance);
             Object newEl = oObj.getByName(oNames[0]) ;
-            result &= ! ValueComparer.equalValue(old, newEl);
+            ok = ! ValueComparer.equalValue(old, newEl);
+            result &= ok;
+            log.println("result of replace: " + ok);
+            log.println("replace back the old object");
             oObj.replaceByName(oNames[0],old);
             Object origEl = oObj.getByName(oNames[0]) ;
-            result &= ValueComparer.equalValue(old, origEl);
+            ok = ValueComparer.equalValue(old, origEl);
+            result &= ok;
+            log.println("result of replace back: " + ok);
         } catch (com.sun.star.lang.IllegalArgumentException e ) {
             result = false;
             e.printStackTrace(log) ;
