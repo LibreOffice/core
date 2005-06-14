@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _Settings.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-12-10 17:02:36 $
+ *  last change:$Date: 2005-06-14 15:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,26 @@ import lib.StatusException;
  * Generic test for all properties contained in this service
  */
 public class _Settings extends MultiPropertyTest {
+
+    /**
+     * This property accepts only values in a range of 1-3
+     * @see com.sun.star.document.PrinterIndependentLayout
+     */
+    public void _PrinterIndependentLayout() {
+        try{
+            Short oldVal = (Short) oObj.getPropertyValue("PrinterIndependentLayout");
+            Short newVal = oldVal.intValue() == 1 ?  new Short("3") : new Short("1");
+
+
+            testProperty("PrinterIndependentLayout", oldVal, newVal);
+
+        } catch (com.sun.star.beans.UnknownPropertyException e) {
+            throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' is unkown."));
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' could not be tested."));
+        }
+    }
+
     public void _PrinterName() {
         Object[] oServices = null;
         Exception ex = null;
