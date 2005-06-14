@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ public class ScAccessibleCell extends TestCase {
 
     /**
     * Called while disposing a <code>TestEnvironment</code>.
-    * Disposes text document.
+    * Disposes calc document.
     * @param tParam test parameters
     * @param tEnv the environment to cleanup
     * @param log writer to log information while testing
