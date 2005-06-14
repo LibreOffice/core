@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:28:52 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ typedef std::hash_map
 LowerToExactNameMap;
 
 
+class ImplIntrospectionAccess;
 class IntrospectionAccessStatic_Impl
 {
     friend class ImplIntrospection;
