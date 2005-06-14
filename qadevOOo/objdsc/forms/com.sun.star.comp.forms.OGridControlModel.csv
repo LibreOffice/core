@@ -25,6 +25,7 @@
 "OGridControlModel";"com::sun::star::container::XIndexContainer";"insertByIndex()"
 "OGridControlModel";"com::sun::star::container::XIndexContainer";"removeByIndex()"
 "OGridControlModel";"com::sun::star::form::component::GridControl";"Border"
+"OGridControlModel";"com::sun::star::form::component::GridControl";"BorderColor"
 "OGridControlModel";"com::sun::star::form::component::GridControl";"Enabled"
 "OGridControlModel";"com::sun::star::form::component::GridControl";"FontDescriptor"
 "OGridControlModel";"com::sun::star::form::component::GridControl";"RowHeight"
