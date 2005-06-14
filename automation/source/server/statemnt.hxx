@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:52:53 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 #endif
 
 class Window;
+class SystemWindow;
 class Point;
 class SfxPoolItem;
 
