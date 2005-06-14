@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:33:57 $
+ *  last change:$Date: 2005-06-14 15:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,15 @@ public class _XDocumentHandler extends MultiMethodTest {
         boolean checkImport() ;
     }
 
+    /**
+    * This interface implementation must be passed by component test
+    * for setting a target document to the import process
+    */
+    public static interface TargetDocumentSetter {
+
+        void setTargetDocument();
+    }
+
     public XDocumentHandler oObj = null;
     private String[][] xmlData = null ;
     private DocumentLocator locator = null ;
@@ -181,8 +190,18 @@ public class _XDocumentHandler extends MultiMethodTest {
         checker = (ImportChecker)
             tEnv.getObjRelation("XDocumentHandler.ImportChecker") ;
 
+        TargetDocumentSetter targetDocSet = (TargetDocumentSetter)
+            tEnv.getObjRelation("XDocumentHandler.TargetDocumentSetter");
+
         if (xmlData == null || checker == null) throw new StatusException
             (Status.failed("Relation wasn't found")) ;
+
+        if (targetDocSet != null){
+
+        }else{
+            log.println("object realtion 'XDocumentHandler.TargetDocumentSetter' not used.");
+            log.println("be shure that the test have a target to write throu");
+        }
     }
 
     /**
@@ -420,5 +439,4 @@ public class _XDocumentHandler extends MultiMethodTest {
     }
 
 }
-
 
