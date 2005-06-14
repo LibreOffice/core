@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:05:14 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class SvxSearchItem;
 class MoreButton;
 class SfxStyleSheetBasePool;
 class SvxJSearchOptionsPage;
+class SvxSearchController;
 
 struct SearchDlg_Impl;
 
