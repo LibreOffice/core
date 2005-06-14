@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextRangeCompare.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:20:51 $
+ *  last change:$Date: 2005-06-14 15:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ import com.sun.star.uno.XInterface;
  */
 public class _XTextRangeCompare extends MultiMethodTest {
 
+    /**
+     * the test object
+     */
     public XTextRangeCompare oObj = null;
 
 
@@ -140,9 +143,9 @@ public class _XTextRangeCompare extends MultiMethodTest {
 
     /**
      * One cursor is created and to its position a paragraph
-     * inserted, then second cursor created and to its position
-     * a paragraph inserted. After that two cusors' ends are
-     * compared. <p>
+     * inserted, then the fist five characters was selected.
+     * A second cursor was created and the last 7 characteres
+     * was selected.<p>
      *
      * Has <b>OK</b> status if the compare returns 1, i.e.
      * the second cursor end is before the first.
@@ -153,24 +156,26 @@ public class _XTextRangeCompare extends MultiMethodTest {
         log.println( "testing compareRegionEnds()" );
 
         try{
-          cursor1 = oText.createTextCursor();
-          oText.insertString(cursor1, nameStr, false);
-          oText.insertControlCharacter(cursor1,
-                               ControlCharacter.PARAGRAPH_BREAK, false);
-          cursor2 = oText.createTextCursor();
-          oText.insertString(cursor2, nameStr + nameStr, false);
-          oText.insertControlCharacter(cursor2,
-                               ControlCharacter.PARAGRAPH_BREAK, false);
-        }catch(com.sun.star.lang.IllegalArgumentException e){
-            log.println( "Exception occurs while inserting strings: " );
-            e.printStackTrace(log);
-        }
+            cursor1 = oText.createTextCursor();
+            oText.insertString(cursor1, nameStr, false);
 
-        try{
-            n = oObj.compareRegionEnds(cursor2, cursor1);
+            cursor1.gotoStart(false);
+            cursor1.goRight((short)5, true);
+            cursor2 = oText.createTextCursor();
+            cursor2.gotoEnd(false);
+            cursor2.goLeft((short)7, true);
+
+            log.println("hole text: '" + oText.getString() + "'");
+            log.println("cursor1: '"+cursor1.getString() + "'");
+            log.println("cursor2: '"+cursor2.getString() + "'");
+            log.println("check: oObj.compareRegionStarts(cursor1, cursor2)");
+
+            n = oObj.compareRegionEnds(cursor1, cursor2);
+
             log.println( "Result (short) : " + n );
         }catch(com.sun.star.lang.IllegalArgumentException e){
             log.println( "Exception: " + e);
+            e.printStackTrace(log);
         }
 
         if (n == 1){bResult = true;}
@@ -179,9 +184,9 @@ public class _XTextRangeCompare extends MultiMethodTest {
 
     /**
      * One cursor is created and to its position a paragraph
-     * inserted, then second cursor created and to its position
-     * a paragraph inserted. After that two cusors' starts are
-     * compared. <p>
+     * inserted, then the fist five characters was selected.
+     * A second cursor was created and the last 7 characters
+     * was selected.<p>
      *
      * Has <b>OK</b> status if the compare returns 1, i.e.
      * the second cursor start is before the first.
@@ -193,20 +198,23 @@ public class _XTextRangeCompare extends MultiMethodTest {
         try{
             cursor1 = oText.createTextCursor();
             oText.insertString(cursor1, nameStr, false);
-            oText.insertControlCharacter(cursor1,
-                               ControlCharacter.PARAGRAPH_BREAK, false);
+
+            cursor1.gotoStart(false);
+            cursor1.goRight((short)5, true);
             cursor2 = oText.createTextCursor();
-            oText.insertString(cursor2, nameStr + nameStr, false);
-            oText.insertControlCharacter(cursor2,
-                               ControlCharacter.PARAGRAPH_BREAK, false);
-        }catch(com.sun.star.lang.IllegalArgumentException e){
-            log.println( "Exception occurs while inserting strings: " + e);
-        }
-        try{
-            n = oObj.compareRegionStarts(cursor2, cursor1);
+            cursor2.gotoEnd(false);
+            cursor2.goLeft((short)7, true);
+
+            log.println("hole text: '" + oText.getString() + "'");
+            log.println("cursor1: '"+cursor1.getString() + "'");
+            log.println("cursor2: '"+cursor2.getString() + "'");
+            log.println("check: oObj.compareRegionStarts(cursor1, cursor2)");
+            n = oObj.compareRegionStarts(cursor1, cursor2);
+
             log.println( "Result (short) : " + n );
         }catch(com.sun.star.lang.IllegalArgumentException e){
             log.println( "Exception: " + e);
+            e.printStackTrace(log);
         }
         if (n == 1){bResult = true;}
         tRes.tested( "compareRegionStarts()", bResult );
