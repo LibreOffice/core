@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInitialization.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2005-02-24 17:29:43 $
+ *  last change:$Date: 2005-06-14 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,13 @@ public class _XInitialization extends MultiMethodTest {
                 } catch (com.sun.star.uno.Exception e) {
                     log.println("Expected Exception 'com.sun.star.uno.Exception' occured -> OK") ;
                     result = true ;
+                } catch (com.sun.star.uno.RuntimeException e) {
+                    log.println("Expected Exception 'com.sun.star.uno.RuntimeException' occured -> OK") ;
+                    result = true ;
                 } catch (Exception e) {
                     log.println("Un-Expected Exception occured -> FALSE") ;
                     log.println(e.toString());
+                    e.printStackTrace();
                 }
             }
 
