@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:03:18 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > 
 
 
 class DlgEdForm;
+class DlgEditor;
 
 //============================================================================
 // DlgEdObj
