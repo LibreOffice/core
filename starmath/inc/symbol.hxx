@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:03:27 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
 
 #define SYMBOLSET_NONE  0xFFFF
 #define SYMBOL_NONE     0xFFFF
+
+class SmSymSetManager;
 
 ////////////////////////////////////////////////////////////////////////////////
 
