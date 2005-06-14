@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:13:40 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ namespace connectivity
     {
         class OCode;
         class OOperand;
+        class OSQLAnalyzer;
         typedef::std::vector<OCode*> OCodeList;
 
         class OPredicateCompiler : public ::vos::OReference
