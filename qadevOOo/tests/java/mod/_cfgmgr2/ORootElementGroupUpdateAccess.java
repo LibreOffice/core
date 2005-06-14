@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORootElementGroupUpdateAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-12-11 11:54:33 $
+ *  last change:$Date: 2005-06-14 15:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ public class ORootElementGroupUpdateAccess extends TestCase {
         tEnv.addObjRelation("XChangesNotifier.ChangesBatch", (XChangesBatch)UnoRuntime.queryInterface(XChangesBatch.class, oObj));
 
         // set a new temp directory: use java.io.tmpdir as substitute
-        String newTempURL = util.utils.getFullURL(System.getProperty("java.io.tmpdir"));
+        String newTempURL = util.utils.getFullURL(util.utils.getUsersTempDir());
         String curTempURL = "";
         try {
             curTempURL = (String)prop.getPropertyValue("CurrentTempURL");
