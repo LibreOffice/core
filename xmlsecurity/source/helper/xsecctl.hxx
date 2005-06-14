@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:08:35 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,9 @@
 #define FAILTOINITIALIZED 2
 
 #define RTL_ASCII_USTRINGPARAM( asciiStr ) asciiStr, strlen( asciiStr ), RTL_TEXTENCODING_ASCII_US
+
+// forward declaration
+class XSecParser;
 
 class InternalSignatureInformation
 {
