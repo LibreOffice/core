@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:04 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ public:
 //=========================================================================
 
 struct PropertySetRegistry_Impl;
+class PersistentPropertySet;
 
 class PropertySetRegistry :
                 public cppu::OWeakObject,
