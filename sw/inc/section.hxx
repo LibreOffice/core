@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:19:29 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 class SwSectionFmt;
 class SwDoc;
 class SwSection;
+class SwSectionNode;
 class SwTOXBase;
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
