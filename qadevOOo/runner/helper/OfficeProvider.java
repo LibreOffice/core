@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change:$Date: 2005-02-02 13:55:56 $
+ *  last change:$Date: 2005-06-14 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XStringSubstitution;
+import convwatch.PropertyName;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -163,6 +164,13 @@ public class OfficeProvider implements AppProvider {
 
 
         XMultiServiceFactory msf = connectOffice(cncstr);
+
+        // if the office is running and the office crashes while testing it could
+        // be usesfull to restart the office if possible and continuing the tests.
+        // Example: The UNO-API-Tests in the projects will be executed by calling
+        // 'damke'. This connects to an existing office. If the office crashes
+        // it is usefull to restart the office and continuing the tests.
+        if ((param.getBool(util.PropertyName.AUTO_RESTART)) && (msf != null)) makeAppExecCommand(msf, param);
 
         if (msf == null) {
             String exc = "";
@@ -259,7 +267,7 @@ public class OfficeProvider implements AppProvider {
                         param.put("userLayer", userLayer);
 
                         //System.out.println("UserLayer: "+userLayer);
-                        String copyLayer = System.getProperty("java.io.tmpdir") +
+                        String copyLayer = util.utils.getUsersTempDir() +
                         System.getProperty("file.separator") +
                         "user_backup" +
                         System.currentTimeMillis();
@@ -559,5 +567,45 @@ public class OfficeProvider implements AppProvider {
 
         return sysDir;
     }
+
+    /**
+     * If the office is connected but the <CODE>AppExecutionCommand</CODE> is not set,
+     * this function asks the office for its location and fill the
+     * <CODE>AppExecutionCommand</CODE> with valid contet.
+     * This function was only called if parameter <CODE>AutoRestart</CODE> is set.
+     * @param msf the <CODE>MultiServiceFactory</CODE>
+     * @param param the <CODE>TestParameters</CODE>
+     */
+    private static void makeAppExecCommand(XMultiServiceFactory msf, TestParameters param){
+
+        boolean debug = param.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
+
+        // get existing AppExecutionCommand if available, else empty string
+        String command = (String) param.get(util.PropertyName.APP_EXECUTION_COMMAND);
+
+        String connectionString = (String) param.get(util.PropertyName.CONNECTION_STRING);
+
+        String sysBinDir = "";
+
+        try{
+           sysBinDir  = utils.getSystemURL(utils.expandMacro(msf, "$SYSBINDIR"));
+        } catch (java.lang.Exception e){
+            if (debug) System.out.println("could not get system binary directory");
+            return;
+        }
+
+        // does the existing command show to the connected office?
+        if (command.indexOf(sysBinDir) == -1){
+            command = sysBinDir + System.getProperty("file.separator") + "soffice"+
+                      " -norestore -accept=" + connectionString + ";urp;";
+        }
+
+        if (debug){
+            System.out.println("update AppExecutionCommand: " + command);
+        }
+
+        Object dummy = param.put(util.PropertyName.APP_EXECUTION_COMMAND, command);
+    }
+
 
 }
