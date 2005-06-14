@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExporter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2005-01-25 15:53:02 $
+ *  last change:$Date: 2005-06-14 15:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ public class XMLExporter extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
-            log.println( "creating a textdocument" );
+            log.println( "creating a calc document" );
             xSheetDoc = SOF.openDoc("scalc","_blank");
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
