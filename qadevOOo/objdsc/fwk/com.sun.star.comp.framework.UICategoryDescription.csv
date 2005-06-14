@@ -1,0 +1,5 @@
+"UICategoryDescription";"com::sun::star::container::XNameAccess";"getByName()"
+"UICategoryDescription";"com::sun::star::container::XNameAccess";"getElementNames()"
+"UICategoryDescription";"com::sun::star::container::XNameAccess";"hasByName()"
+"UICategoryDescription";"com::sun::star::container::XElementAccess";"getElementType()"
+"UICategoryDescription";"com::sun::star::container::XElementAccess";"hasElements()"
