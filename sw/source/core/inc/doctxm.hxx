@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:11:02 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class  SwTOXInternational;
 class  SvUShorts;
 class  SvStringsDtor;
 class  SvPtrarr;
+class  SwPageDesc;
 class  SwTxtNode;
 class  SwTxtFmtColl;
 struct SwPosition;
