@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModuleUIConfigurationManager.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2005-03-01 20:24:08 $
+ *  last change: $Date: 2005-06-14 15:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ public class ModuleUIConfigurationManager extends TestCase {
     XInterface oObj = null;
     XMultiServiceFactory xMSF = null;
     XTextDocument xTextDoc = null;
+    XStorage xStore = null;
 
     /**
      * Cleanup: close the created document
@@ -113,6 +114,8 @@ public class ModuleUIConfigurationManager extends TestCase {
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("couldn't close document");
         }
+        log.println("   disposing storage");
+        xStore.dispose();
     }
 
     /**
@@ -120,6 +123,7 @@ public class ModuleUIConfigurationManager extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
+
         try {
             xMSF = (XMultiServiceFactory)tParam.getMSF();
 
@@ -143,9 +147,13 @@ public class ModuleUIConfigurationManager extends TestCase {
             XSingleServiceFactory xStorageService = (XSingleServiceFactory)
                     UnoRuntime.queryInterface(XSingleServiceFactory.class, o);
             Object[]props = new Object[2];
-            props[0] = util.utils.getOfficeTempDir(xMSF) + "dummyFile.dat";
+
+            String aFile = util.utils.getOfficeTempDir(xMSF) + "dummyFile.dat";
+            log.println("storage file : '"+ aFile + "'");
+
+            props[0] = aFile;
             props[1] = new Integer(ElementModes.READWRITE);
-            XStorage xStore = (XStorage)UnoRuntime.queryInterface(XStorage.class, xStorageService.createInstanceWithArguments(props));
+            xStore = (XStorage)UnoRuntime.queryInterface(XStorage.class, xStorageService.createInstanceWithArguments(props));
 
             PropertyValue[] initProps = new PropertyValue[4];
             PropertyValue propVal = new PropertyValue();
