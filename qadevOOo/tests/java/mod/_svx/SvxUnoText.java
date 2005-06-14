@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoText.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 19:52:58 $
+ *  last change:$Date: 2005-06-14 15:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._svx;
 
+import com.sun.star.text.XText;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -149,10 +150,11 @@ public class SvxUnoText extends TestCase {
         XInterface oObj = null;
         // create testobject here
         XTextRange aRange = null;
+        XShape oShape = null;
 
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
-            XShape oShape = SOF.createShape
+            oShape = SOF.createShape
                 (xDrawDoc,5000,3500,7500,5000,"Text");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
@@ -187,9 +189,14 @@ public class SvxUnoText extends TestCase {
                                     "com.sun.star.text.TextField.DateTime");
         log.println( "    adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xDrawDoc, tDsc ) );
+
         // adding relation for XTextRangeMover
         tEnv.addObjRelation("RangeForMove", aRange);
         tEnv.addObjRelation("XTextRange", oObj);
+
+        // adding relation for XTextRangeComapre
+        tEnv.addObjRelation("TEXT", (XText) UnoRuntime.queryInterface(XText.class, oShape)) ;
+
         return tEnv;
     } // finish method getTestEnvironment
 
