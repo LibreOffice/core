@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: mba $ $Date: 2005-04-28 15:08:47 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3491,6 +3491,10 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const ::com::sun::star::uno:
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XPRINTJOBLISTENER >*)0), xListener );
 }
 
+// simple declaration of class SvObject is enough
+// the corresponding <so3/iface.hxx> cannon be included because it provides
+// declaration of class SvBorder that conflicts with ../../inc/viewfrm.hxx
+class SvObject;
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
