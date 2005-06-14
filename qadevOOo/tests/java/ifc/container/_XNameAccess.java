@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNameAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:23:28 $
+ *  last change:$Date: 2005-06-14 15:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,8 @@ public class _XNameAccess extends MultiMethodTest {
         String name = null;
 
     if (Names.length != 0) {
-            log.println("testing hasByName() with valid name");
             name = Names[0];
+            log.println("testing hasByName() with valid name '" + name + "'");
             loc_result = oObj.hasByName(name);
             log.println("hasByName with valid names: " + loc_result);
             result &= loc_result;
@@ -159,12 +159,13 @@ public class _XNameAccess extends MultiMethodTest {
         String name = null;
 
         if (Names.length != 0) {
-            log.println("testing with valid name");
             name = Names[0];
+            log.println("testing with valid name '" + name + "'");
             try {
                 loc_result = (null != oObj.getByName(name));
             } catch (Exception e) {
                 log.println("Exception! - FAILED");
+                log.println(e.toString());
                 loc_result = false;
             }
             log.println("getByName with valid name: " + loc_result);
