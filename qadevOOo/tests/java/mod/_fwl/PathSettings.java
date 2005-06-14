@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathSettings.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:54:24 $
+ *  last change:$Date: 2005-06-14 15:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 
 package mod._fwl;
 
+import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.uno.UnoRuntime;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
@@ -98,6 +106,29 @@ import com.sun.star.uno.XInterface;
  */
 public class PathSettings extends TestCase {
 
+    private static NamedValue[]  m_Properties;
+    private static XPropertySet xPS;
+
+    /**
+     * restores the old values of the path settings
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("restore old values of path settings...");
+
+        for (int i=0; i < m_Properties.length; i++){
+            try{
+
+                xPS.setPropertyValue(m_Properties[i].Name, m_Properties[i].Value);
+
+            } catch (com.sun.star.beans.UnknownPropertyException e){
+            } catch (PropertyVetoException e){
+            } catch (IllegalArgumentException e){
+            } catch (WrappedTargetException e){
+            }
+        }
+    }
     /**
      * Creating a Testenvironment for the interfaces to be tested.
      * Creates an instance of the service
@@ -134,8 +165,31 @@ public class PathSettings extends TestCase {
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclProps);
         tEnv.addObjRelation("XMultiPropertySet.ExcludeProps", exclProps);
 
+        saveAllPropertyValues(oObj);
+
         return tEnv;
     } // finish method getTestEnvironment
+
+    private void saveAllPropertyValues(XInterface oObj){
+
+        xPS = (XPropertySet) UnoRuntime.queryInterface(
+                                                XPropertySet.class, oObj);
+
+        XPropertySetInfo xPSI = xPS.getPropertySetInfo();
+
+        Property[] allProperties = xPSI.getProperties();
+        m_Properties = new NamedValue[allProperties.length];
+
+        for (int i=0; i < allProperties.length; i++){
+            try{
+                m_Properties[i] = new NamedValue(allProperties[i].Name,
+                                   xPS.getPropertyValue(allProperties[i].Name));
+
+            } catch (com.sun.star.beans.UnknownPropertyException e){
+            } catch (WrappedTargetException e){
+            }
+        }
+    }
 
 }
 
