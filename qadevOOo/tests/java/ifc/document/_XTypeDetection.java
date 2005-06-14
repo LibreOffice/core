@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeDetection.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-12-10 17:02:55 $
+ *  last change:$Date: 2005-06-14 15:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,29 +123,34 @@ public class _XTypeDetection extends MultiMethodTest {
      */
     public void _queryTypeByDescriptor() {
         boolean result = true ;
+        boolean ok = true;
         log.println("test document with wrong extension");
+        log.println("the document '" + docURL + "' is not what it seems to be ;-)");
         PropertyValue[][] mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
         mediaDescr[0][0].Name = "URL";
         mediaDescr[0][0].Value = docURL;
 
         String type = oObj.queryTypeByDescriptor(mediaDescr, false);
-        result &= type.indexOf("writer") > -1;
+        ok = type.indexOf("writer") > -1;
+        result &= ok;
+        log.println("flat detection should detect a writer and has detected '"+ type +"': " + ok);
 
         type = oObj.queryTypeByDescriptor(mediaDescr, true);
-        result &= type.indexOf("calc") > -1;
+        ok = type.indexOf("calc") > -1;
+        result &= ok;
+        log.println("deep detection should detect a calc and has detected '"+ type +"': " + ok);
 
-        log.println("test dokument with bookmark");
-
+        log.println("test dokument with bookmark: " + bookmarkURL);
         mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
         mediaDescr[0][0].Name = "URL";
         mediaDescr[0][0].Value = bookmarkURL;
-        System.out.println(bookmarkURL);
-        type = "FAILED";
-        type = oObj.queryTypeByDescriptor(mediaDescr, false);
+        type = oObj.queryTypeByDescriptor(mediaDescr, true);
+        ok = type.indexOf("writer") > -1;
+        result &= ok;
+        log.println("deep detection should detect a writer and has detected '"+ type +"': " + ok);
 
-        System.out.println("TYPE: " + type);
         tRes.tested("queryTypeByDescriptor()", result) ;
     }
 }
