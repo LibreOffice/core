@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertyWithState.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:16:13 $
+ *  last change:$Date: 2005-06-14 15:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,87 @@
 
 package ifc.beans;
 
+import com.sun.star.beans.PropertyState;
+import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
 
 import com.sun.star.beans.XPropertyWithState;
+import lib.Status;
+import lib.StatusException;
+
+/**
+* Testing <code>com.sun.star.beans.XPropertyWithState</code>
+* interface methods :
+* <ul>
+*  <li><code> getDefaultAsProperty()</code></li>
+*  <li><code> getStateAsProperty()</code></li>
+*  <li><code> setToDefaultAsProperty()</code></li>
+* </ul> <p>
+* @see com.sun.star.beans.XPropertyWithState
+*/
 
 public class _XPropertyWithState extends MultiMethodTest {
 
+    /**
+     * the test object
+     */
     public XPropertyWithState oObj;
 
 
+    /**
+     * Test calls the method.
+     * Test has ok status if no
+     * <CODE>com.sun.star.lang.WrappedTargetException</CODE>
+     * was thrown
+     */
     public void _getDefaultAsProperty() {
+        try{
 
+            XInterface defaultState = (XInterface) oObj.getDefaultAsProperty();
+
+        } catch (com.sun.star.lang.WrappedTargetException e){
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("'com.sun.star.lang.WrappedTargetException' was thrown"));
+        }
+
+        tRes.tested("getDefaultAsProperty()", true);
     }
 
+    /**
+     * Test is ok if <CODE>getStateAsProperty()</CODE> returns
+     * as <CODE>PropertyState</CODE> which is not <CODE>null</CODE>
+     */
     public void _getStateAsProperty() {
+
+        boolean res = true;
+
+        PropertyState propState = oObj.getStateAsProperty();
+
+        if (propState == null) {
+            log.println("the returned PropertyState is null -> FALSE");
+            res = false;
+        }
+
+        tRes.tested("getStateAsProperty()", res);
     }
 
+    /**
+     * Test calls the method.
+     * Test has ok status if no
+     * <CODE>com.sun.star.lang.WrappedTargetException</CODE>
+     * was thrown
+     */
     public void _setToDefaultAsProperty() {
+        try{
 
+            oObj.setToDefaultAsProperty();
+
+        } catch (com.sun.star.lang.WrappedTargetException e){
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("'com.sun.star.lang.WrappedTargetException' was thrown"));
+        }
+
+        tRes.tested("setToDefaultAsProperty()", true);
     }
 
 }
