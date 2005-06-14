@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fchrfmt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:47:36 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #endif
 
 class SwCharFmt;
+class SwTxtCharFmt;
 class IntlWrapper;
 
 // ATT_CHARFMT *********************************************
