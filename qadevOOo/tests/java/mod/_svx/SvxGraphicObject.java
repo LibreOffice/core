@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxGraphicObject.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 19:47:16 $
+ *  last change:$Date: 2005-06-14 15:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ public class SvxGraphicObject extends TestCase {
 
 
         tEnv.addObjRelation("IMAP",imap);
+        tEnv.addObjRelation("ImapObject",imap);
 
         // adding relation for XText interface
         DefaultDsc tDsc = new DefaultDsc("com.sun.star.text.XTextContent",
