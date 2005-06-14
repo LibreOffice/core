@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtflcnt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:50:02 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #endif
 
 class SwFrmFmt;
+class SwTxtFlyCnt;
 // ATT_FLYCNT *******************************************************
 
 class SwFmtFlyCnt : public SfxPoolItem
