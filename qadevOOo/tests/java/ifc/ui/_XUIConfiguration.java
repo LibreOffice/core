@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfiguration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2005-03-01 20:20:12 $
+ *  last change: $Date: 2005-06-14 15:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,28 @@ import com.sun.star.ui.XUIConfiguration;
 import com.sun.star.ui.XUIConfigurationListener;
 import lib.MultiMethodTest;
 
+/**
+* Testing <code>com.sun.star.ui.XUIConfiguration</code>
+* interface methods :
+* <ul>
+*  <li><code> addConfigurationListener()</code></li>
+*  <li><code> removeConfigurationListener()</code></li>
+* </ul> <p>
+* Test is <b> NOT </b> multithread compilant. <p>
+* After test completion object environment has to be recreated.
+* @see com.sun.star.ui.XUIConfiguration
+*/
+
 public class _XUIConfiguration extends MultiMethodTest {
 
     public XUIConfiguration oObj;
     XUIConfigurationListenerImpl xListener = null;
 
+    /**
+     * Interface for the Listener of the object relation
+     * <CODE>XUIConfiguration.XUIConfigurationListenerImpl</CODE>
+     * @see com.sun.star.ui.XUIConfigurationListener
+     */
     public static interface XUIConfigurationListenerImpl
                                     extends XUIConfigurationListener {
         public void reset();
@@ -81,18 +98,30 @@ public class _XUIConfiguration extends MultiMethodTest {
     }
 
 
+    /**
+     * try to get a listener out of the object relation
+     * <CODE>XUIConfiguration.XUIConfigurationListenerImpl</CODE>
+     */
     public void before() {
         xListener = (XUIConfigurationListenerImpl)tEnv.getObjRelation(
                         "XUIConfiguration.XUIConfigurationListenerImpl");
         XUIConfigurationListener l;
     }
 
+    /**
+     * adds a listener an fire an event
+     * Has <B>OK</B> status if listener was called
+     */
     public void _addConfigurationListener() {
         oObj.addConfigurationListener(xListener);
         xListener.fireEvent();
         tRes.tested("addConfigurationListener()", xListener.actionWasTriggered());
     }
 
+    /**
+     * removes the listener and calls an event.
+     * Has <B>OK</B> status if listener is not called.
+     */
     public void _removeConfigurationListener() {
         requiredMethod("addConfigurationListener()");
         oObj.removeConfigurationListener(xListener);
