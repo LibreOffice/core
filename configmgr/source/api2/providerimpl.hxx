@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:35:31 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ namespace configmgr
     class IConfigDefaultProvider;
     class TreeManager;
     class ContextReader;
+    class OProvider;
 
     struct IConfigBroadcaster;
 
