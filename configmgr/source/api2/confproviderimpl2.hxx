@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ namespace configmgr
     namespace css       = ::com::sun::star;
     namespace uno       = css::uno;
     namespace script    = css::script;
+
+    class OConfigurationProvider;
 
     class OConfigurationProviderImpl : public OProviderImpl
     {
