@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2005-02-24 17:21:17 $
+ *  last change: $Date: 2005-06-14 15:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ public class MSOfficePrint
     ArrayList createWordPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
-            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
@@ -419,7 +419,7 @@ public class MSOfficePrint
     ArrayList createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
-            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
@@ -500,7 +500,7 @@ public class MSOfficePrint
     ArrayList createExcelPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
-            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
@@ -585,7 +585,7 @@ public class MSOfficePrint
     ArrayList createExcelStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
-            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
@@ -673,7 +673,7 @@ public class MSOfficePrint
     ArrayList createPowerPointPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
-            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
