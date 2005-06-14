@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _GraphicObjectShape.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-11-02 11:54:53 $
+ *  last change:$Date: 2005-06-14 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import lib.Status;
+import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.drawing.GraphicObjectShape</code>
@@ -167,6 +169,12 @@ public class _GraphicObjectShape extends MultiPropertyTest {
         try {
             boolean result = true;
             Object imapObject = tEnv.getObjRelation("ImapObject");
+
+            if ( imapObject == null){
+                System.out.println("ERROR: object relation 'ImapObject' isn't available");
+                tRes.tested("ImageMap", false);
+                return;
+            }
 
             Object o = oObj.getPropertyValue("ImageMap");
             XIndexContainer xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, o);
