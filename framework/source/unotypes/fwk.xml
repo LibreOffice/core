@@ -154,8 +154,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.LayoutManager </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.LayoutManager </supported-service>
     </component-description>
 
     <component-description>
@@ -166,8 +166,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuControllerFactory </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuControllerFactory </supported-service>
     </component-description>
 
     <component-description>
@@ -178,8 +178,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -190,8 +190,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -202,8 +202,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -214,8 +214,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -226,8 +226,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -238,8 +238,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -251,8 +251,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -263,8 +263,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.PopupMenuController </supported-service>
     </component-description>
 
     <component-description>
@@ -276,8 +276,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.UICommandDescription </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.UICommandDescription </supported-service>
     </component-description>
 
     <component-description>
@@ -288,8 +288,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.UIElementFactoryManager </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.UIElementFactoryManager </supported-service>
     </component-description>
 
     <component-description>
@@ -300,8 +300,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.frame.ModuleManager </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.ModuleManager </supported-service>
     </component-description>
 
     <component-description>
@@ -313,8 +313,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.UIConfigurationManager </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.UIConfigurationManager </supported-service>
     </component-description>
 
     <component-description>
@@ -326,8 +326,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.ModuleUIConfigurationManagerSupplier </supported-service>
     </component-description>
 
     <component-description>
@@ -340,8 +340,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.ModuleUIConfigurationManager </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.ModuleUIConfigurationManager </supported-service>
     </component-description>
 
     <component-description>
@@ -352,8 +352,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.UIElementFactory </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.UIElementFactory </supported-service>
     </component-description>
 
     <component-description>
@@ -365,8 +365,8 @@
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
-        <status value="draft"/>
-        <supported-service> drafts.com.sun.star.ui.UIConfigurationManager </supported-service>
+        <status value="final"/>
+        <supported-service> com.sun.star.ui.UIConfigurationManager </supported-service>
     </component-description>
 
     <component-description>
@@ -402,7 +402,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> drafts.com.sun.star.ui.ToolBarFactory </supported-service>
+        <supported-service> com.sun.star.ui.ToolBarFactory </supported-service>
     </component-description>
 
     <component-description>
@@ -426,7 +426,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> drafts.com.sun.star.ui.StatusbarFactory </supported-service>
+        <supported-service> com.sun.star.ui.StatusbarFactory </supported-service>
     </component-description>
 
     <component-description>
