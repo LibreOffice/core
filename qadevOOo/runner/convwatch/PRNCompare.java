@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PRNCompare.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:59:04 $
+ *  last change: $Date: 2005-06-14 15:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ public class PRNCompare
                                 String sBasename2 = FileHelper.getBasename(sNewGfx);
                                 String sNameNoSuffix2 = FileHelper.getNameNoSuffix(sBasename2);
 
-                                String sTmpDir = System.getProperty("java.io.tmpdir");
+                                String sTmpDir = util.utils.getUsersTempDir();
                                 String fs = System.getProperty("file.separator");
 
                                 String sOld_BM_Gfx =  sTmpDir + fs + sNameNoSuffix1 + "-BM-" + StringHelper.createValueString(i, 4) + ".jpg";
@@ -553,7 +553,7 @@ public class PRNCompare
             String sBasename2 = FileHelper.getBasename(_sNewGfx);
             String sNameNoSuffix2 = FileHelper.getNameNoSuffix(sBasename2);
 
-            String sTmpDir = System.getProperty("java.io.tmpdir");
+            String sTmpDir = util.utils.getUsersTempDir();
             String fs = System.getProperty("file.separator");
 
             String sDiffName = sTmpDir + fs + sNameNoSuffix1 + "-" + sNameNoSuffix2 + "-diff.jpg";
