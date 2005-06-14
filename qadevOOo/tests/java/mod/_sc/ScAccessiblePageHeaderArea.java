@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeaderArea.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Date: 2005-03-01 20:28:13 $
+ *  last change: $Date: 2005-06-14 15:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
 
     /**
      * Called while disposing a <code>TestEnvironment</code>.
-     * Disposes text document.
+     * Disposes calc document.
      * @param tParam test parameters
      * @param tEnv the environment to cleanup
      * @param log writer to log information while testing
