@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:50:21 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #endif
 
 class SwField;
+class SwTxtFld;
 // ATT_FLD ***********************************
 
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient
