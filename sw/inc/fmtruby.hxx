@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtruby.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:55:07 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+class SwTxtRuby;
 
 class SwFmtRuby : public SfxPoolItem
 {
