@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertySet.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-03-19 15:56:55 $
+ *  last change:$Date: 2005-06-14 15:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,8 +605,8 @@ public class _XPropertySet extends MultiMethodTest {
             } else log.println("Property '"+name+"'is null and can't be changed");
             if (name.equals("LineStyle")) setValue = null;
             if (setValue != null) {
-                oObj.setPropertyValue(name, setValue);
                 log.println("Setting to :"+setValue);
+                oObj.setPropertyValue(name, setValue);
                 hasChanged = (! getProp.equals(oObj.getPropertyValue(name)));
             } else log.println("Couldn't change Property '"+name+"'");
         } catch (com.sun.star.beans.PropertyVetoException e) {
