@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:08:34 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ public:
 #define BASWIN_SUSPENDED        0x04
 #define BASWIN_INRESCHEDULE     0x08
 
+class Printer;
 class SfxUndoManager;
 class SfxObjectShell;
 class BasicEntryDescriptor;
