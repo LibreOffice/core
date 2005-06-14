@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:55:09 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@ namespace dbaccess
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
 typedef std::vector< OWeakConnection > OWeakConnectionArray;
+
+class ODatabaseContext;
+class OSharedConnectionManager;
 
 //============================================================
 //= ODatabaseModelImpl
