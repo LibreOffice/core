@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtinfmt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:52:53 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 
 class SvxMacro;
 class SvxMacroTableDtor;
+class SwTxtINetFmt;
 class IntlWrapper;
 
 // ATT_INETFMT *********************************************
