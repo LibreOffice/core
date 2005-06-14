@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDispatchProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:28:08 $
+ *  last change:$Date: 2005-06-14 15:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,8 @@ public class AppDispatchProvider extends TestCase {
         log.println( "creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        // adding relation for XFrameLoader
-        tEnv.addObjRelation("XDispatchProvider.URL", "slot:5302") ;
-
+        // adding relation for :XDispatchProvider
+        tEnv.addObjRelation("XDispatchProvider.URL", ".uno:BibliographyComponent") ;
 
         return tEnv;
     } // finish method getTestEnvironment
