@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:59:09 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace connectivity
 {
 
     class OSQLParseNode;
-
+    class OSQLParser;
 
     enum OSQLStatementType {
         SQL_STATEMENT_UNKNOWN,
