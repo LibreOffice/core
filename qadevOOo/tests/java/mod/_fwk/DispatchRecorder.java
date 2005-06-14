@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-11-16 13:54:20 $
+ *  last change:$Date: 2005-06-14 15:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._fwk;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XModel;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -69,7 +70,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
-import util.SysUtils;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.DispatchStatement;
@@ -125,7 +125,8 @@ public class DispatchRecorder extends TestCase {
             catch (InterruptedException ex) {
             }
 
-            xFrame = SysUtils.getActiveFrame((XMultiServiceFactory)Param.getMSF());
+            XModel model = (XModel) UnoRuntime.queryInterface(XModel.class, oDoc);
+            xFrame = model.getCurrentController().getFrame();
 
             XPropertySet xFramePS = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, xFrame);
