@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjslist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #ifndef _ACCFRMOBJ_HXX
 #include <accfrmobj.hxx>
 #endif
+
+class SwFrmOrObjSList;
 
 class SwFrmOrObjSList_const_iterator
 {
