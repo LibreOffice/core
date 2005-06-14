@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2005-03-29 11:59:09 $
+ *  last change:$Date: 2005-06-14 15:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public class TypeDetection extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
-        //util.DesktopTools.closeDoc(xTextDoc);
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     XTextDocument xTextDoc = null;
@@ -212,10 +212,8 @@ public class TypeDetection extends TestCase {
 
     protected void setPropertyValueValue(PropertyValue[] props, String pName, Object pValue) {
         int i = 0;
-        System.out.println(props[i].Name);
         while (i < props.length && !props[i].Name.equals(pName)) {
             i++;
-            System.out.println(props[i].Name);
         }
         props[i].Value = pValue;
     }
