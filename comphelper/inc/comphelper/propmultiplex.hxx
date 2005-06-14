@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:00:09 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 namespace comphelper
 {
 //.........................................................................
+
+    class OPropertyChangeMultiplexer;
 
     //==================================================================
     //= OPropertyChangeListener
