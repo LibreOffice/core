@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:43:38 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 class SvStream;
 //BFS01class SdrIOHeader;
 class FmFormObj;
+class FmFormPage;
 class SdrObject;
 
 //FORWARD_DECLARE_INTERFACE(uno,Reference)
