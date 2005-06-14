@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPagePrintable.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:17:28 $
+ *  last change:$Date: 2005-06-14 15:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,20 +155,33 @@ public class _XPagePrintable extends MultiMethodTest {
         boolean res = true;
 
         try {
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+
+            String printFile = utils.getOfficeTemp(xMSF) + "XPagePrintable.prt";
+            log.println("Printing to : "+ printFile);
+
             PropertyValue[] PrintOptions = new PropertyValue[1];
             PropertyValue firstProp = new PropertyValue();
             firstProp.Name = "FileName";
-            log.println("Printing to :"+utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+
-                "XPagePrintable.prt");
-            firstProp.Value = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+
-                "XPagePrintable.prt";
+
+            firstProp.Value = printFile;
             firstProp.State = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
             PrintOptions[0] = firstProp;
-            java.io.File aFile = new java.io.File(utils.getOfficeTempDir(
-                (XMultiServiceFactory)tParam.getMSF())+"XPagePrintable.prt");
-            if (aFile.exists()) aFile.delete() ;
+
+            if (! util.utils.deleteFile(xMSF, printFile)){
+                log.println("ERROR: could not remove '" + printFile + "'");
+                res = false;
+            }
+
             oObj.printPages(PrintOptions);
-            res = aFile.exists();
+
+            util.utils.shortWait(tParam.getInt(util.PropertyName.SHORT_WAIT));
+
+            if (! util.utils.fileExists(xMSF, printFile)){
+                log.println("ERROR: could not find '" + printFile + "'");
+                res = false;
+            }
+
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             log.println("Exception while checking 'printPages'");
             res = false;
