@@ -1,0 +1,5 @@
+"MacrosMenuController";"com::sun::star::frame::XPopupMenuController";"setPopupMenu()"
+"MacrosMenuController";"com::sun::star::frame::XPopupMenuController";"updatePopupMenu()"
+"MacrosMenuController";"com::sun::star::lang::XEventListener";"disposing()"
+"MacrosMenuController";"com::sun::star::lang::XInitialization";"initialize()"
+"MacrosMenuController";"com::sun::star::frame::XStatusListener";"statusChanged()"
