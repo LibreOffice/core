@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtrfmrk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:54:31 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
+class SwTxtRefMark;
 
 // ATT_REFMARK *******************************************************
 
