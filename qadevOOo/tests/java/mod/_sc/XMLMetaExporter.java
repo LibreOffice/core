@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLMetaExporter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2005-01-25 15:53:29 $
+ *  last change:$Date: 2005-06-14 15:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ public class XMLMetaExporter extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
-            log.println( "creating a textdocument" );
+            log.println( "creating a calc document" );
             xSheetDoc = SOF.openDoc("scalc","_blank");
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
