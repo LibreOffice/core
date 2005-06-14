@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2005-03-29 11:58:25 $
+ *  last change:$Date: 2005-06-14 15:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,6 @@ public class OQueryDesign extends TestCase {
         param3.Value = new Boolean(true);
         params[2] = param3;
 
-        Object[] ExceptionParams = new Object[3];
-        ExceptionParams = params;
-        ((PropertyValue) ExceptionParams[1]).Value = Frame;
 
         oObj = Frame.getController();
 
@@ -197,7 +194,24 @@ public class OQueryDesign extends TestCase {
         //Adding ObjRelations for XInitialization
         tEnv.addObjRelation("XInitialization.args", params);
 
-        tEnv.addObjRelation("XInitialization.ExceptionArgs", params);
+        //Object[] ExceptionParams = new Object[3];
+        //ExceptionParams = params;
+        //((PropertyValue) ExceptionParams[1]).Value = Frame;
+        Object[] ExceptionParams = new Object[3];
+        PropertyValue ExceptionParam1 = new PropertyValue();
+        ExceptionParam1.Name = "DataSourceName";
+        ExceptionParam1.Value = "Bibliography2";
+        ExceptionParams[0] = ExceptionParam1;
+        PropertyValue ExceptionParam2 = new PropertyValue();
+        ExceptionParam2.Name = "Frame";
+        ExceptionParam2.Value = null;
+        ExceptionParams[1] = ExceptionParam2;
+        PropertyValue ExceptionParam3 = new PropertyValue();
+        ExceptionParam3.Name = "QueryDesignView";
+        ExceptionParam3.Value = new Integer(17);//new Boolean(true);
+        ExceptionParams[2] = ExceptionParam3;
+
+        tEnv.addObjRelation("XInitialization.ExceptionArgs", ExceptionParams);
 
         tEnv.addObjRelation("Frame", Frame);
 
