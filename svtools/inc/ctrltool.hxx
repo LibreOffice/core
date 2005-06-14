@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 10:04:30 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #endif
 
 class ImplFontListNameInfo;
+class OutputDevice;
 
 /*************************************************************************
 
