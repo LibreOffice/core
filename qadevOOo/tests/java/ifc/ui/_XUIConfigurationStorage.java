@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfigurationStorage.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2005-03-01 20:21:35 $
+ *  last change: $Date: 2005-06-14 15:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,16 @@ package ifc.ui;
 import com.sun.star.embed.XStorage;
 import com.sun.star.ui.XUIConfigurationStorage;
 import lib.MultiMethodTest;
+/**
+* Testing <code>com.sun.star.ui.XUIConfigurationStorage</code>
+* interface methods :
+* <ul>
+*  <li><code> setStorage()</code></li>
+*  <li><code> hasStorage()</code></li>
+* </ul> <p>
+* Test is <b> NOT </b> multithread compilant. <p>
+* @see com.sun.star.ui.XUIConfigurationStorage
+*/
 
 public class _XUIConfigurationStorage extends MultiMethodTest {
 
@@ -74,14 +84,23 @@ public class _XUIConfigurationStorage extends MultiMethodTest {
         xStore = (XStorage)tEnv.getObjRelation("XUIConfigurationStorage.Storage");
     }
 
+    /**
+    * Set the object relation <code>XUIConfigurationStorage.Storage</code>
+    * as storage.
+    * Has <b>OK</b> status if no exception is thrown.
+    */
     public void _setStorage() {
         if (!oObj.hasStorage())
             oObj.setStorage(xStore);
         else
-            log.println("For initializing this object, the setSTorage() method was already called at the object.");
+            log.println("For initializing this object, the setStorage() method was already called at the object.");
         tRes.tested("setStorage()", true);
     }
 
+    /**
+     * Queries object for a storage.
+     * Has <b>OK</b> status if <code>hasStorage</code> returns <code>OK</code>
+     */
     public void _hasStorage() {
         requiredMethod("setStorage()");
         boolean has = oObj.hasStorage();
