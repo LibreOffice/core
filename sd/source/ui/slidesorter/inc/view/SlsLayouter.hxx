@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsLayouter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:07:57 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <utility>
 
 class MapMode;
+class OutputDevice;
 class Size;
 
 namespace sd { namespace slidesorter { namespace view {
