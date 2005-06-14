@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:53:21 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 15:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,13 @@ public class TestParameters extends Hashtable {
     public String AppExecutionCommand="";
 
     /**
+     * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
+     * to get the URL to the binary of the office and to fill the
+     * <CODE>AppExecutionCommand</CODE> with usefull content if needet
+     */
+    public boolean AutoRestart = false;
+
+    /**
      * Shoert wait time for the Office: default is 500 milliseconds
      */
     public int ShortWait = 500;
@@ -140,7 +147,7 @@ public class TestParameters extends Hashtable {
      * default will be the tmp dir
      */
 
-    public String TestDocumentPath=System.getProperty("java.io.tmpdir");
+    public String TestDocumentPath=util.utils.getUsersTempDir();
 
     /**
      * 'true' is a log should be written, 'false' elsewhere <br>
@@ -286,6 +293,7 @@ public class TestParameters extends Hashtable {
         put(PropertyName.APP_EXECUTION_COMMAND,AppExecutionCommand);
         put(PropertyName.TIME_OUT,TimeOut);
         put(PropertyName.THREAD_TIME_OUT,ThreadTimeOut);
+        put(PropertyName.AUTO_RESTART,AutoRestart?Boolean.TRUE:Boolean.FALSE);
 
         // get the operating system
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
