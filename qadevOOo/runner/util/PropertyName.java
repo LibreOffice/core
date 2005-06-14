@@ -14,6 +14,7 @@ public interface PropertyName {
     final public static String TIME_OUT = "TimeOut";
     final public static String THREAD_TIME_OUT = "ThreadTimeOut";
     final public static String OPERATING_SYSTEM = "OperatingSystem";
+    final public static String AUTO_RESTART = "AutoRestart";
 
     final public static String WNTMSCI = "wntmsci";
     final public static String UNXLNGI = "unxlngi";
