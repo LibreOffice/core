@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _GridControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:36:58 $
+ *  last change:$Date: 2005-06-14 15:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,19 @@ public class _GridControl extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            protected Object getNewValue(String prop, Object old) {
+                return util.utils.isVoid(old) ? new Integer(342) :
+                    super.getNewValue(prop, old) ;
+            }
+        }) ;
+    }
+
+    /**
+    * This property can be void, so if old value is <code> null </code>
+    * new value must be specified.
+    */
+    public void _BorderColor() {
+        testProperty("BorderColor", new PropertyTester() {
             protected Object getNewValue(String prop, Object old) {
                 return util.utils.isVoid(old) ? new Integer(342) :
                     super.getNewValue(prop, old) ;
