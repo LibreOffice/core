@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchRecorderSupplier.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-10-06 13:30:20 $
+ *  last change:$Date: 2005-06-14 15:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatchRecorder;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDispatchRecorderSupplier;
 import com.sun.star.frame.XFrame;
@@ -220,11 +221,14 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        XFrame fr = desktop.getCurrentFrame();
+        XModel model = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XFrame fr = model.getCurrentController().getFrame();
+
         XDispatchProvider xDispProv = (XDispatchProvider)
             UnoRuntime.queryInterface(XDispatchProvider.class, fr);
 
         URL dispURL = utils.parseURL((XMultiServiceFactory) tParam.getMSF(), ".uno:InsertText");
+
         XDispatch xDisp = xDispProv.queryDispatch(dispURL,"",0);
 
         PropertyValue[] args = new PropertyValue[1];
