@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:29:12 $
+ *  last change: $Author: obo $ $Date: 2005-06-14 16:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 
 class Menu;
 class DataChangedEvent;
+class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
 
