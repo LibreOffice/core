@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 09:07:23 $
+ *  last change: $Author: obo $ $Date: 2005-06-15 10:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,9 @@ namespace canvas
          */
 
         // mickey's math tricks...
-        inline unsigned int powerof2( unsigned int c ) { return 0x1 << c; }
-        inline unsigned int mask( unsigned int c ) { return ((unsigned int)(-1)) / (powerof2(powerof2(c)) + 1); }
-        inline unsigned int count( unsigned int x, unsigned int c ) { return ((x) & mask(c)) + (((x) >> (powerof2(c))) & mask(c)); }
+        inline unsigned int pow2( unsigned int c ) { return 0x1 << c; }
+        inline unsigned int mask( unsigned int c ) { return ((unsigned int)(-1)) / (pow2(pow2(c)) + 1); }
+        inline unsigned int count( unsigned int x, unsigned int c ) { return ((x) & mask(c)) + (((x) >> (pow2(c))) & mask(c)); }
         template<typename T>
         inline unsigned int bitcount( T c ) {
             unsigned int nByteIndex = 0;
