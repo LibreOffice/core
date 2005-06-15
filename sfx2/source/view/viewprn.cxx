@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:47:45 $
+ *  last change: $Author: obo $ $Date: 2005-06-15 09:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                     // forget new printer, it was taken over (as pPrinter) or deleted
                     pDlgPrinter = NULL;
+
+                    /* Now lets reset the Dialog printer, since its freed */
+                    if (pPrintDlg)
+                        pPrintDlg->SetPrinter (pPrinter);
 
                     if ( SID_PRINTDOC == nId )
                     {
