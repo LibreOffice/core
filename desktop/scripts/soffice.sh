@@ -65,7 +65,7 @@ SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
 
 # the following test is needed on Linux PPC with IBM j2sdk142
-if [ `uname -s`=="Linux" -a  `uname -m`=="ppc" ] ; then
+if [ `uname -s` = "Linux" -a  "`uname -m`" = "ppc" ] ; then
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
 fi
