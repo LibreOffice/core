@@ -1,3 +1,25 @@
+*** misc/mozilla/build/autoconf/mozconfig-find	Fri Jul 16 20:13:24 2004
+--- misc/build/mozilla/build/autoconf/mozconfig-find	Sat Jun  4 14:56:18 2005
+***************
+*** 51,60 ****
+                 $topsrcdir/.mozconfig \
+                 $topsrcdir/mozconfig \
+                 $topsrcdir/mozconfig.sh \
+!                $topsrcdir/myconfig.sh \
+!                $HOME/.mozconfig \
+!                $HOME/.mozconfig.sh \
+!                $HOME/.mozmyconfig.sh
+  do
+    if test -f $_config; then
+      echo $_config;
+--- 51,57 ----
+                 $topsrcdir/.mozconfig \
+                 $topsrcdir/mozconfig \
+                 $topsrcdir/mozconfig.sh \
+!                $topsrcdir/myconfig.sh
+  do
+    if test -f $_config; then
+      echo $_config;
 diff -ru misc/mozilla/gfx/idl/nsIFreeType2.idl misc/build/mozilla/gfx/idl/nsIFreeType2.idl
 --- misc/mozilla/gfx/idl/nsIFreeType2.idl	2004-04-15 21:09:33.000000000 -0400
 +++ misc/build/mozilla/gfx/idl/nsIFreeType2.idl	2005-01-09 13:23:32.968750000 -0500
