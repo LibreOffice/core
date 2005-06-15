@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:50:10 $
+ *  last change: $Author: obo $ $Date: 2005-06-15 10:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,11 @@ VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                                JNIEnv * pMainThreadEnv):
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
+#ifdef SOLAR_JAVA
     OSL_ENSURE(pVm != 0 && nVersion >= JNI_VERSION_1_2 && pMainThreadEnv != 0,
                "bad parameter");
+#endif
+
     acquireInitialContextClassLoader(pMainThreadEnv);
 }
 
