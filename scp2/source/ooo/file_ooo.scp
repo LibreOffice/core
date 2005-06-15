@@ -896,6 +896,8 @@ File gid_File_Mod_Text
     Name = "text.mod";
 End
 
+#ifndef WITHOUT_MOZILLA
+
 #ifndef SYSTEM_MOZILLA
 
 #ifndef MACOSX
@@ -906,6 +908,8 @@ File gid_File_Mozilla_Runtime
     Dir = gid_Dir_Program;
     Name = "mozruntime.zip";
 End
+
+#endif
 
 #endif
 
