@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.65 $
-# Date:        $Date: 2005-06-09 14:14:52 $
+# Version:     $Revision: 1.66 $
+# Date:        $Date: 2005-06-16 14:38:18 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1642,6 +1642,7 @@ if ( $JDK ne "gcj" ) {
 else {
    ToFile( "GCJ_DATABASE",     $GCJ_DATABASE,       "e" );
    ToFile( "JAVACACHE",        '@JAVACACHE@',       "e" );
+   ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
 }
 if ( $platform =~ m/darwin/ )
 {  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
