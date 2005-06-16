@@ -1643,3 +1643,5 @@ _TI2?AVRuntimeException@uno@star@sun@com@@
 ?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSeekable@io@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ??0?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ??4?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
+?ConvertOasisFormats_Impl@@YA?AVOUString@rtl@@AAVString@@@Z
+?IsOasisFormat@SotStorage@@SAEPAV1@@Z
