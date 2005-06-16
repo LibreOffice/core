@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.140 $
+#   $Revision: 1.141 $
 #
-#   last change: $Author: vg $ $Date: 2005-06-13 14:00:18 $
+#   last change: $Author: vg $ $Date: 2005-06-16 10:39:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.140 $ ';
+    $id_str = ' $Revision: 1.141 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -2105,7 +2105,7 @@ sub checkout_current_module {
     cwd();
     print "\nBreaking link to module $module_name";
     checkout_module($module_name);
-    if (!-d $module_name) {
+    if (!-d $module_name && !$show) {
         print_error("Cannot checkout $module_name");
     };
     my $action;
