@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-06-16 14:38:04 $
+dnl * Date: $Date: 2005-06-16 14:58:51 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.121 $ )
+AC_REVISION( $Revision: 1.122 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1892,9 +1892,9 @@ if test "$JDK" = "gcj"; then
    AC_CHECK_HEADER(jni.h, [],
                     [AC_MSG_ERROR([jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?])], [])
 
-   AC_CHECK_LIB(gcjawt, JAWT_GetAWT, [ GCJAWTLIB=-lgcjawt ] )
+   AC_CHECK_LIB(gcjawt, JAWT_GetAWT, [ AWTLIB=-lgcjawt ] )
    if test -z "$AWTLIB"; then
-      AC_CHECK_LIB(jawt, JAWT_GetAWT, [ GCJAWTLIB=-ljawt ] )
+      AC_CHECK_LIB(jawt, JAWT_GetAWT, [ AWTLIB=-ljawt ] )
    fi
    if test -z "$AWTLIB"; then
       AC_MSG_ERROR([either -lgcjawt or -ljawt with JAWT_GetAWT is required to build wih gcj])
