@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 11:49:59 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:21:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,8 @@ UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT = $(OUT)$/inc
 
 SLOFILES = \
+    $(SLO)$/unovirtualmachine.obj \
     $(SLO)$/virtualmachine.obj
-
 
 .INCLUDE: target.mk
 
