@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:47:11 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:42:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ JAVACLASSFILES= \
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
 
-JARCLASSDIRS	= $(PACKAGE)
+JARCLASSDIRS	= $(PACKAGE) test$/testtools$/bridgetest
 JARTARGET		= testComponent.jar
 JARCOMPRESS 	= TRUE
 CUSTOMMANIFESTFILE = manifest
