@@ -113,13 +113,25 @@
         TXT_FILE_BODY; \
         Styles = (PACKED)
 
+#define PACKED_TXT_FILE_BODY_PATCH \
+        TXT_FILE_BODY; \
+        Styles = (PACKED,PATCH)
+
 #define ARCHIVE_TXT_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (ARCHIVE)
 
+#define ARCHIVE_TXT_FILE_BODY_PATCH \
+        TXT_FILE_BODY; \
+        Styles = (ARCHIVE,PATCH)
+
 #define ARCHIVE_SUBST_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (ARCHIVE,SUBSTITUTE)
+
+#define ARCHIVE_SUBST_FILE_BODY_PATCH \
+        TXT_FILE_BODY; \
+        Styles = (ARCHIVE,SUBSTITUTE,PATCH)
 
 #define STD_SETUPZIP_BMP_FILE(id,name) \
     File id \
@@ -134,9 +146,19 @@
         Styles = (PACKED); \
         Dir    = gid_Dir_Program
 
+#define PACKED_LIB_FILE_BODY_PATCH \
+        TXT_FILE_BODY; \
+        Styles = (PACKED,PATCH); \
+        Dir    = gid_Dir_Program
+
 #define PACKED_FILTER_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (PACKED); \
+        Dir    = gid_Dir_Filter
+
+#define PACKED_FILTER_FILE_BODY_PATCH \
+        TXT_FILE_BODY; \
+        Styles = (PACKED,PATCH); \
         Dir    = gid_Dir_Filter
 
 #define STD_LIB_FILE(id,name) \
@@ -145,12 +167,26 @@
         PACKED_LIB_FILE_BODY; \
     End
 
+#define STD_LIB_FILE_PATCH(id,name) \
+    File id \
+        Name   = LIBNAME(name); \
+        PACKED_LIB_FILE_BODY_PATCH; \
+    End
+
 #define STD_RES_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
         RESFILE_ALL_LANG(name); \
         Dir     = gid_Dir_Resource; \
         Styles  = (PACKED); \
+    End
+
+#define STD_RES_FILE_PATCH(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        RESFILE_ALL_LANG(name); \
+        Dir     = gid_Dir_Resource; \
+        Styles  = (PACKED,PATCH); \
     End
 
 #define STD_SETUPZIP_RES_FILE(id,name) \
@@ -164,6 +200,12 @@
 #define STD_FILTER_FILE(id,name) \
     File id \
         PACKED_LIB_FILE_BODY; \
+        Name = FILTER_LIBNAME(name); \
+    End
+
+#define STD_FILTER_FILE_PATCH(id,name) \
+    File id \
+        PACKED_LIB_FILE_BODY_PATCH; \
         Name = FILTER_LIBNAME(name); \
     End
 
@@ -211,12 +253,28 @@
         Styles   = (PACKED,DONT_OVERWRITE); \
     End
 
+#define STD_JAR_FILE_PATCH(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Name     = STRING(CONCAT2(name,.jar)); \
+        Dir      = gid_Dir_Classes; \
+        Styles   = (PACKED,DONT_OVERWRITE,PATCH); \
+    End
+
 #define UNO_JAR_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
         Name     = STRING(CONCAT2(name,.jar)); \
         Dir      = gid_Dir_Classes; \
         Styles   = (PACKED,DONT_OVERWRITE, UNO_COMPONENT); \
+    End
+
+#define UNO_JAR_FILE_PATCH(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Name     = STRING(CONCAT2(name,.jar)); \
+        Dir      = gid_Dir_Classes; \
+        Styles   = (PACKED,DONT_OVERWRITE,UNO_COMPONENT,PATCH); \
     End
 
 #define JARFILENAME(name) STRING(CONCAT2(name,.jar))
@@ -239,16 +297,34 @@
         Dir    = gid_Dir_Program; \
         RegistryID = gid_Starregistry_Services_Rdb
 
+#define PACKED_UNO_LIB_FILE_BODY_PATCH \
+        TXT_FILE_BODY; \
+        Styles = (PACKED,UNO_COMPONENT,PATCH); \
+        Dir    = gid_Dir_Program; \
+        RegistryID = gid_Starregistry_Services_Rdb
+
 #define STD_UNO_LIB_FILE(id,name) \
     File id \
         Name    = LIBNAME(name); \
         PACKED_UNO_LIB_FILE_BODY; \
     End
 
+#define STD_UNO_LIB_FILE_PATCH(id,name) \
+    File id \
+        Name    = LIBNAME(name); \
+        PACKED_UNO_LIB_FILE_BODY_PATCH; \
+    End
+
 #define SPECIAL_UNO_LIB_FILE(id,name) \
     File id \
         Name    = SPECIAL_NAME(name); \
         PACKED_UNO_LIB_FILE_BODY; \
+    End
+
+#define SPECIAL_UNO_LIB_FILE_PATCH(id,name) \
+    File id \
+        Name    = SPECIAL_NAME(name); \
+        PACKED_UNO_LIB_FILE_BODY_PATCH; \
     End
 
 #define SETUPZIP_LIB_FILE(id,name) \
@@ -272,6 +348,12 @@
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
         PACKED_UNO_LIB_FILE_BODY; \
+    End
+
+#define SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(id,name) \
+    File id \
+        Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
+        PACKED_UNO_LIB_FILE_BODY_PATCH; \
     End
 
 #define WINW4WFILTERFILENAME(name) STRING(CONCAT2(name,f32w.dll))
