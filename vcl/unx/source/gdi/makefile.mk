@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:14:58 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:28:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,10 @@ SLOFILES+=$(SLO)$/salprnpsp.obj
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj
 ENVCFLAGS+=-DUSE_CDE
+.ENDIF
+
+.IF "$(XRENDER_LINK)" == "YES"
+CFLAGS+=-DXRENDER_LINK
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)" != ""
