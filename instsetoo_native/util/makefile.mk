@@ -113,7 +113,7 @@ ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-ALLTAR : openoffice
+ALLTAR : openoffice ure_en-US
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
@@ -163,6 +163,101 @@ openoffice:
     @+echo cannot pack nothing...
 
 .ENDIF			# "$(alllangiso)"!=""
+
+ure_en-US: $(MISC)$/ure$/services.rdb
+    + $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst \
+        -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(PKGFORMATSWITCH) \
+        -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
+        -msitemplate $(PRJ)$/inc_ure$/windows$/msi_templates \
+        -msilanguage $(COMMONMISC)$/win_ulffiles
+
+.IF "$(OS)" == "WNT"
+MY_Q =
+MY_URL = file:///$(SOLARBINDIR)
+.ELSE
+MY_Q = '
+MY_URL = file://$(SOLARLIBDIR)
+.ENDIF
+$(MISC)$/ure$/services.rdb .ERRREMOVE:
+    - $(MKDIR) $(@:d)
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/acceptor.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/bridgefac.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/connector.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/implreg.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/introspection.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/invocadapt.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/invocation.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/javaloader.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/javavm.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/namingservice.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/nestedreg.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/proxyfac.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/reflection.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/regtypeprov.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/remotebridge.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/security.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/servicemgr.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/shlibloader.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/simplereg.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/streams.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/textinstream.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/textoutstream.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/typeconverter.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/typemgr.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/uriproc.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
+    + $(REGCOMP) -register -r $@ -c \
+        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/uuresolver.uno$(DLLPOST)$(MY_Q) \
+        $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
 
 .IF "$(LOCALPYFILES)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(LOCALPYFILES) $(BIN)$/cp1251.py
