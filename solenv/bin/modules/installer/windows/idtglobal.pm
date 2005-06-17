@@ -403,6 +403,36 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
     }
 
+    if ( $definestring eq "appsearch" )
+    {
+        $oneline = "Property\tSignature_\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ts72\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "AppSearch\tProperty\tSignature_\n";
+        push(@{$idtref}, $oneline);
+    }
+
+    if ( $definestring eq "reglocat" )
+    {
+        $oneline = "Signature_\tRoot\tKey\tName\tType\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ti2\ts255\tS255\tI2\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "RegLocator\tSignature_\n";
+        push(@{$idtref}, $oneline);
+    }
+
+    if ( $definestring eq "signatur" )
+    {
+        $oneline = "Signature\tFileName\tMinVersion\tMaxVersion\tMinSize\tMaxSize\tMinDate\tMaxDate\tLanguages\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ts255\tS20\tS20\tI4\tI4\tI4\tI4\tS255\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "Signature\tSignature\n";
+        push(@{$idtref}, $oneline);
+    }
+
 }
 
 ##############################################################
@@ -1480,7 +1510,8 @@ sub add_childprojects
     {
         $number = get_free_number_in_uisequence_table($installuitable) + 2;
         $featurename = get_feature_name("_Java", $featuretable);
-        $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n";
+        if ( $featurename ) { $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n"; }
+        else { $line = "InstallJava\tNot Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n"; } # feature belongs to root
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
@@ -1502,7 +1533,8 @@ sub add_childprojects
     {
         $number = get_free_number_in_uisequence_table($installuitable) + 6;
         $featurename = get_feature_name("_Java", $featuretable);
-        $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n";
+        if ( $featurename ) { $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n"; }
+        else { $line = "MaintenanceJava\tInstalled And JAVAPATH\=\"\" And Not PATCH\t$number\n"; } # feature belongs to root
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
