@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queue.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mhu $ $Date: 2001-05-14 11:51:46 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ class Queue : protected QueueBase<element_type>
     SALHELPER_COPYCTOR_API(Queue<element_type>);
 
 public:
-    inline Queue() : m_aNotEmpty (0)
+    inline Queue() : m_aNotEmpty (static_cast< sal_uInt32 >(0))
     {}
 
     inline ~Queue()
