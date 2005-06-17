@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-29 13:14:36 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:07:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,12 @@ TARGET=regcomp
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
+
+.IF "$(OS)" == "LINUX"
+LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+.ELIF "$(OS)" == "SOLARIS"
+LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
