@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:42 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:58:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,11 @@ TARGET  = com_sun_star_comp_loader
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES=												\
-    $(CLASSDIR)$/$(PACKAGE)$/FactoryHelper.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/JavaLoader.class	            \
-    $(CLASSDIR)$/$(PACKAGE)$/JavaLoaderFactory.class	    \
-    $(CLASSDIR)$/$(PACKAGE)$/RegistrationClassFinder.class
+JAVAFILES = \
+    FactoryHelper.java \
+    JavaLoader.java \
+    JavaLoaderFactory.java \
+    RegistrationClassFinder.java
 
 # --- Targets ------------------------------------------------------
 
