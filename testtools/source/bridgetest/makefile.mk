@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 13:28:20 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:42:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -210,22 +210,19 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
         > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
-    -rm -f $@
-.IF "$(GUI)"=="WNT"
-    +echo set CLASSPATH=$(MY_CLASSPATH) >> $@
-.ELSE
-    +echo "CLASSPATH=$(MY_CLASSPATH); export CLASSPATH" >> $@
-.ENDIF
-    +echo uno -ro uno_services.rdb -ro uno_types.rdb \
-       -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.JavaTestObject >> $@
-    $(GIVE_EXEC_RIGHTS) $@
-.ENDIF
-
 .IF "$(GUI)" == "WNT"
 FILEURLPREFIX = file:///
 .ELSE
 FILEURLPREFIX = file://
+.ENDIF
+
+$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
+    -rm -f $@
+    +echo uno -ro uno_services.rdb -ro uno_types.rdb \
+        -s com.sun.star.test.bridge.BridgeTest \
+        $(subst,$/,/ -env:URE_INTERNAL_JAVA_DIR=$(FILEURLPREFIX)$(SOLARBINDIR)) \
+        -- com.sun.star.test.bridge.JavaTestObject > $@
+    $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
 $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
@@ -239,13 +236,14 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         -c remotebridge.uno$(DLLPOST) \
         -c uuresolver.uno$(DLLPOST) \
         -c bridgetest.uno$(DLLPOST) \
-        -c cppobj.uno$(DLLPOST) 
+        -c cppobj.uno$(DLLPOST) \
+        -c uriproc.uno$(DLLPOST)
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
     $(REGCOMP) -register  -br $(MISC)$/$(TARGET)$/bootstrap.rdb -r $@ -c \
         $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(CLASSDIR)$/testComponent.jar) \
-        -classpath $(CLASSPATH)
+        $(subst,$/,/ -env:URE_INTERNAL_JAVA_DIR=$(FILEURLPREFIX)$(SOLARBINDIR))
 .ENDIF
 
 $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
@@ -253,5 +251,5 @@ $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
     + $(COPY) $(SOLARBINDIR)$/types.rdb $@
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
-        -c javavm.uno$(DLLPOST)
+        -c javavm.uno$(DLLPOST) -c uriproc.uno$(DLLPOST)
 .ENDIF
