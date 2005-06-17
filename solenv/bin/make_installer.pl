@@ -1072,7 +1072,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if (!($packagename eq ""))
             {
                 installer::packagelist::resolve_packagevariables(\$packagename, $allvariableshashref, 1);
-                installer::packagelist::adapt_packagename(\$packagename);
             }
 
             my $linkaddon = "";
