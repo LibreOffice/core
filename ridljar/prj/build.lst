@@ -5,3 +5,5 @@ ri ridljar\com\sun\star\lib\util nmake - all cssl_util NULL
 ri ridljar\com\sun\star\uno nmake - all css_uno cssl_util javamaker NULL
 ri ridljar\javamaker nmake - all javamaker NULL
 ri ridljar\util nmake - all util csslu_typedesc csslu_typeinfo cssl_util css_uno javamaker NULL
+ri ridljar\source\unoloader nmake - all unoloader NULL
+ri ridljar\source\unoloader\com\sun\star\lib\unoloader nmake - all unoloader_cssl_unoloader NULL
