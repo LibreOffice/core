@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:23:49 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:02:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,12 +71,12 @@ TARGET  = com_sun_star_uno
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= 											\
-    $(CLASSDIR)$/$(PACKAGE)$/Ascii.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/AsciiString.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/MappingException.class 		\
-    $(CLASSDIR)$/$(PACKAGE)$/AnyConverter.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/WeakReference.class 
+JAVAFILES = \
+    AnyConverter.java \
+    Ascii.java \
+    AsciiString.java \
+    MappingException.java \
+    WeakReference.java
 
 # --- Targets ------------------------------------------------------
 
