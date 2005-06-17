@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.66 $
-# Date:        $Date: 2005-06-16 14:38:18 $
+# Version:     $Revision: 1.67 $
+# Date:        $Date: 2005-06-17 09:24:42 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1749,6 +1749,13 @@ ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
+ToFile( "SYSTEM_MYSPELL",    "@SYSTEM_MYSPELL@",   "e" );
+ToFile( "MYSPELL_CFLAGS",    "@MYSPELL_CFLAGS@",   "e" );
+ToFile( "MYSPELL_LIBS",      "@MYSPELL_LIBS@",     "e" );
+ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
+ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
+ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
+ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 if ($platform !~ m/cygwin/)
