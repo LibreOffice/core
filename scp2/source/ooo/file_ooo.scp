@@ -709,6 +709,17 @@ End
 
 #ifdef SOLAR_JAVA
 
+File gid_File_Jar_Unoloader
+    TXT_FILE_BODY;
+    Name = JARFILENAME(unoloader);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
 #ifndef MACOSX
 
 File gid_File_Jar_Officebean
