@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:52:11 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,11 +264,32 @@ rtl::OUString getExecutableDirectory()
     return getDirFromFile(ouExe);
 }
 
-rtl::OUString findPlugin(const rtl::OUString & plugin)
+rtl::OUString findPlugin(
+    const rtl::OUString & baseUrl, const rtl::OUString & plugin)
 {
+    rtl::OUString sUrl;
+    try
+    {
+        sUrl = rtl::Uri::convertRelToAbs(baseUrl, plugin);
+    }
+    catch (rtl::MalformedUriException & e)
+    {
+        throw FrameworkException(
+            JFW_E_ERROR,
+            (rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "[Java framework] rtl::MalformedUriException in"
+                    " findPlugin: "))
+             + rtl::OUStringToOString(
+                 e.getMessage(), osl_getThreadTextEncoding())));
+    }
+    if (checkFileURL(sUrl) == jfw::FILE_OK)
+    {
+        return sUrl;
+    }
     rtl::OUString retVal;
     rtl::OUString sProgDir = getExecutableDirectory();
-    rtl::OUString sUrl = sProgDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
+    sUrl = sProgDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
         + plugin;
     jfw::FileStatus s = checkFileURL(sUrl);
     if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
