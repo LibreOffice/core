@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:31:36 $
+ *  last change: $Author: rt $ $Date: 2005-06-17 14:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,20 +522,30 @@ boolean SetupAppX::ChooseLanguage( long& rLanguage )
         LANGID nUserDefLang = GetUserDefaultLangID();
         LANGID nSysDefLang = GetSystemDefaultLangID();
 
+        int nUserPrimary = PRIMARYLANGID( nUserDefLang );
+        int nSysPrimary = PRIMARYLANGID( nSysDefLang );
+
         long nUserIndex = -1;
+        long nUserPrimIndex = -1;
         long nSystemIndex = -1;
+        long nSystemPrimIndex = -1;
         long nParamIndex = -1;
 
         for ( long i=0; i<GetLanguageCount(); i++ )
         {
             long nLanguage = GetLanguageID( i );
+            int nPrimary = PRIMARYLANGID( nLanguage );
             GetLanguageName( nLanguage, sString );
             Log( TEXT( "    Info: found Language: %s\r\n" ), sString );
 
             if ( nLanguage == nUserDefLang )
                 nUserIndex = i;
+            if ( nPrimary == nUserPrimary )
+                nUserPrimIndex = i;
             if ( nLanguage == nSysDefLang )
                 nSystemIndex = i;
+            if ( nPrimary == nSysPrimary )
+                nSystemPrimIndex = i;
             if ( m_nLanguageID && ( nLanguage == m_nLanguageID ) )
                 nParamIndex = i;
         }
@@ -555,10 +565,20 @@ boolean SetupAppX::ChooseLanguage( long& rLanguage )
             Log( TEXT( "Info: Found user default language.\r\n" ) );
             rLanguage = GetLanguageID( nUserIndex );
         }
+        else if ( nUserPrimIndex != -1 )
+        {
+            Log( TEXT( "Info: Found user default primary language.\r\n" ) );
+            rLanguage = GetLanguageID( nUserPrimIndex );
+        }
         else if ( nSystemIndex != -1 )
         {
             Log( TEXT( "Info: Found system default language.\r\n" ) );
             rLanguage = GetLanguageID( nSystemIndex );
+        }
+        else if ( nSystemPrimIndex != -1 )
+        {
+            Log( TEXT( "Info: Found system default primary language.\r\n" ) );
+            rLanguage = GetLanguageID( nSystemPrimIndex );
         }
         else
         {
