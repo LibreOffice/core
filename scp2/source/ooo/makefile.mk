@@ -184,6 +184,7 @@ PARFILES=                          \
 
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
+        file_jre_ooo.par           \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par
