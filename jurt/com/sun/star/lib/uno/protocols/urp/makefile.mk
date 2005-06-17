@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:51 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:02:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,11 @@ TARGET  = com_sun_star_lib_uno_protocols_urp
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/urp.class	   		\
-    $(CLASSDIR)$/$(PACKAGE)$/Cache.class   		\
-    $(CLASSDIR)$/$(PACKAGE)$/Marshal.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/Unmarshal.class
+JAVAFILES = \
+    Cache.java \
+    Marshal.java \
+    Unmarshal.java \
+    urp.java
 
 # --- Targets ------------------------------------------------------
 
