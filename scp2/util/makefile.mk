@@ -168,6 +168,9 @@ SCP1FILES += \
 SCP1FILES += \
              vclcanvas.par
 
+SCP2LINK_PRODUCT_TYPE = ure
+SCP2TARGET = ure
+SCP2FILES = ure.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk
