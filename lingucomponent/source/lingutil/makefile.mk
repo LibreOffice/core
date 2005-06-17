@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:40:32 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:21:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ LIBTARGET=NO
 
 .INCLUDE : settings.mk
 
+.IF "$(SYSTEM_MYSPELL)" == "YES"
+@all:
+    @echo "Nothing to do here; using system myspell..."
+.ENDIF
 
 SLOFILES=	\
         $(SLO)$/dictmgr.obj
