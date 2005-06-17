@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 15:16:33 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:04:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,11 +69,9 @@ TARGET  = com_sun_star_lib_uno_helper
 
 # --- Settings -----------------------------------------------------
 .INCLUDE : settings.mk
+.INCLUDE: $(PRJ)$/util$/settings.pmk
 
 # Files --------------------------------------------------------
-JARFILES = ridl.jar jurt.jar unoil.jar
-
-
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/WeakBase.class 	\
         $(CLASSDIR)$/$(PACKAGE)$/WeakAdapter.class  	\
