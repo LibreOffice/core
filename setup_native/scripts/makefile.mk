@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-20 11:40:49 $
+#   last change: $Author: rt $ $Date: 2005-06-17 14:12:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,28 +82,29 @@ UNIXTEXT= \
 
 .IF "$(OS)" == "LINUX"
 
-ALLTAR : $(BIN)$/install $(BIN)$/uninstall
+ALLTAR : $(BIN)$/install $(BIN)$/uninstall 
 
 $(BIN)$/install: install_linux.sh
     $(TYPE) $< | tr -d "\015" > $@ ; chmod 775 $@
 
 $(BIN)$/uninstall: uninstall_linux.sh
     $(TYPE) $< | tr -d "\015" > $@ ; chmod 775 $@
-    
+
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
 
-ALLTAR: $(BIN)$/install $(BIN)$/uninstall $(BIN)$/admin
+ALLTAR: $(BIN)$/install $(BIN)$/uninstall $(LB)$/getuid.so.stripped
 
-$(BIN)$/install: install_solaris.sh
-    $(PERL) install_create.pl install_$(OS).sh $(LB)$/getuid.so $(BIN)$/install ; chmod 775 $(BIN)$/install
+$(BIN)$/install: install_solaris.sh $(LB)$/getuid.so.stripped
+    $(PERL) install_create.pl install_$(OS).sh $(LB)$/getuid.so.stripped $(BIN)$/install ; chmod 775 $(BIN)$/install
 
-$(BIN)$/uninstall: uninstall_solaris.sh
-    $(PERL) install_create.pl uninstall_$(OS).sh $(LB)$/getuid.so $(BIN)$/uninstall ; chmod 775 $(BIN)$/install
+$(BIN)$/uninstall: uninstall_solaris.sh $(LB)$/getuid.so.stripped
+    $(PERL) install_create.pl uninstall_$(OS).sh $(LB)$/getuid.so.stripped $(BIN)$/uninstall ; chmod 775 $(BIN)$/install
 
-$(BIN)$/admin: admin
-    $(COPY) $< $@
+$(LB)$/getuid.so.stripped: $(LB)$/getuid.so
+    @$(COPY) $< $@
+    @/usr/ccs/bin/strip $@
 
 .ENDIF
 
