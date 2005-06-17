@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:42:40 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:22:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ USE_DEFFILE=TRUE
 
 .IF "$(MYSPELLLIB)"==""
 .IF "$(GUI)"=="UNX"
-MYSPELLLIB=-lmyspell
+MYSPELLLIB=$(MYSPELL_LIBS)
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
 MYSPELLLIB=myspell.lib
@@ -125,9 +125,15 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-CXXFLAGS +=  -I..$/myspell -I..$/..$/lingutil
+.IF "$(SYSTEM_MYSPELL)" != "YES"
+CXXFLAGS += -I..$/myspell -I..$/..$/lingutil
 CFLAGSCXX += -I..$/myspell -I..$/..$/lingutil
-CFLAGSCC +=  -I..$/myspell -I..$/..$/lingutil
+CFLAGSCC += -I..$/myspell  -I..$/..$/lingutil
+.ELSE
+CXXGLAGS += $(MYSPELL_CFLAGS)
+CFLAGSCXX += $(MYSPELL_CFLAGS)
+CFLAGSCC += $(MYSPELL_CFLAGS)
+.ENDIF
 
 .IF "$(header)" == ""
 
@@ -157,9 +163,11 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-                $(MYSPELLLIB) \
-                $(ULINGULIB) 
+                $(MYSPELLLIB)
 
+.IF "$(SYSTEM_MYSPELL)" != "YES"
+SHL1STDLIBS+=   $(ULINGULIB)
+.ENDIF
 
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
