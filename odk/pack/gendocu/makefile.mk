@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-29 12:19:11 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:38:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ JAVA_SRC_DIR=$(MISC)$/java_src
 JAVA_PACKAGES=\
         com.sun.star.comp.helper \
         com.sun.star.lib.uno.helper \
+        com.sun.star.lib.unoloader \
         com.sun.star.tools.uno \
         com.sun.star.uno
 #        com.sun.star.beans \
@@ -88,7 +89,8 @@ JAVA_SRC_FILES=\
         $(JAVA_SRC_DIR)$/jut_src.zip \
         $(JAVA_SRC_DIR)$/juh_src.zip \
         $(JAVA_SRC_DIR)$/ridl_src.zip \
-        $(JAVA_SRC_DIR)$/sandbox_src.zip 
+        $(JAVA_SRC_DIR)$/sandbox_src.zip \
+        $(JAVA_SRC_DIR)$/unoloader_src.zip
 
 JAVA_BEAN_SRC_FILES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/ContainerFactory.java \
