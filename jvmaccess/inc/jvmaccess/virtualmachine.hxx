@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:49:46 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@
 #else
 struct JNIEnv;
 struct JavaVM;
-struct JNIEnv;
 typedef int jint;
-typedef void* jobject;
+typedef void * jobject;
 #endif
 
 namespace jvmaccess {
