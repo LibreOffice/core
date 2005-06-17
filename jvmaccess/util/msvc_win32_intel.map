@@ -12,3 +12,19 @@ UDK_3.1 {
     local:
         *;
 };
+
+UDK_3.2 {
+    global:
+} UDK_3.1;
+
+UDK_3.3 {
+    global:
+        # jvmaccess/unovirtualmachine.hxx:
+        ??0CreationException@UnoVirtualMachine@jvmaccess@@QAE@ABV012@@Z; # jvmaccess::UnoVirtualMachine::CreationException::CreationException(CreationException const &)
+        ??0CreationException@UnoVirtualMachine@jvmaccess@@QAE@XZ; # jvmaccess::UnoVirtualMachine::CreationException::CreationException()
+        ??1CreationException@UnoVirtualMachine@jvmaccess@@UAE@XZ; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
+        ??4CreationException@UnoVirtualMachine@jvmaccess@@QAEAAV012@ABV012@@Z; # jvmaccess::UnoVirtualMachine::CreationException::operator =(CreationException const &)
+        ??0UnoVirtualMachine@jvmaccess@@QAE@ABV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@PAV_jobject@@@Z; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, jobject)
+        ?getVirtualMachine@UnoVirtualMachine@jvmaccess@@QBE?AV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@XZ; # jvmaccess::UnoVirtualMachine::getVirtualMachine() const
+        ?getClassLoader@UnoVirtualMachine@jvmaccess@@QBEPAV_jobject@@XZ; # jvmaccess::UnoVirtualMachine::getClassLoader() const
+} UDK_3.2;
