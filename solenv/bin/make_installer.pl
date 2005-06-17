@@ -106,8 +106,10 @@ use installer::windows::font;
 use installer::windows::icon;
 use installer::windows::idtglobal;
 use installer::windows::inifile;
+use installer::windows::java;
 use installer::windows::media;
 use installer::windows::msiglobal;
+use installer::windows::patch;
 use installer::windows::property;
 use installer::windows::removefile;
 use installer::windows::registry;
@@ -922,6 +924,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3blangpack.log", $directoriesforepmarrayref); }
         installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3clangpack.log", $directoriesforepmarrayref); }
+
+        if ( $installer::globals::iswindowsbuild )
+        {
+            $registryitemsinproductlanguageresolvedarrayref = installer::worker::select_langpack_items($registryitemsinproductlanguageresolvedarrayref, "RegistryItem");
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems3aa.log", $registryitemsinproductlanguageresolvedarrayref); }
+        }
+
     }
 
     # Patch projects can now start to select the required information
@@ -1562,8 +1571,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt1.log", $directoriesforepmarrayref); }
 
-        if ( $installer::globals::languagepack ) { @{$registryitemsinproductlanguageresolvedarrayref} = (); }    # empty registry table for language packs !
-
         # Attention: The table "Registry.idt" contains language specific strings -> parameter: $languagesarrayref !
         installer::windows::registry::create_registry_table($registryitemsinproductlanguageresolvedarrayref, \@allregistrycomponents, $newidtdir, $languagesarrayref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems4.log", $registryitemsinproductlanguageresolvedarrayref); }
@@ -1597,11 +1604,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::windows::icon::create_icon_table(\@iconfilecollector, $newidtdir);    # creating the icon table with all iconfiles used as shortcuts (FolderItems)
 
+        installer::windows::createfolder::create_createfolder_table($directoriesforepmarrayref, $filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
+
         if ( ! $installer::globals::languagepack )   # the following tables not for language packs
         {
             # installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
-
-            installer::windows::createfolder::create_createfolder_table($directoriesforepmarrayref, $filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
 
             installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
 
@@ -1626,6 +1633,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $onelanguage = ${$languagesarrayref}[$m];
 
             my $languageidtdir = $idtdirbase . $installer::globals::separator . $onelanguage;
+            if ( -d $languageidtdir ) { installer::systemactions::remove_complete_directory($languageidtdir, 1); }
             installer::systemactions::create_directory($languageidtdir);
 
             # Copy the template idt files and the new created idt files into this language directory
@@ -1710,6 +1718,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # setting the variable REGKEYPRODPATH for language packs
 
             if ( $installer::globals::languagepack ) { installer::windows::property::set_regkeyprodpath_in_property_table($languageidtdir, $allvariableshashref); }
+
+            # setting Java variables for Java products
+
+            if ( $allvariableshashref->{'JAVAPRODUCT'} ) { installer::windows::java::update_java_tables($languageidtdir, $allvariableshashref); }
+
+            # setting patch codes to detect installed products
+
+            if ( $installer::globals::patch ) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
 
             # Adding Windows Installer CustomActions dynamically
 
@@ -1835,6 +1851,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "InstallExchangeFiles", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "DeinstallExchangeFiles", "65", "patchmsi.dll", "UninstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "DeinstallExchangeFiles", "REMOVE=\"ALL\"", "InstallValidate", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+                # adding the custom action for setting the correct ALLUSERS value (CustomAc.idt and InstallE.idt and InstallU.idt )
+                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetProductInstallMode", "321", "patchmsi.dll", "SetProductInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll",  "SetProductInstallMode", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "patchmsi.dll", "SetProductInstallMode", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installuitablename); }
+
             }
 
             # custom actions for language packs
@@ -1998,6 +2020,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         my $create_download = 0;
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
+        if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
 
         if ( $$downloadname ne "" ) { $create_download = 1; }
         if (( $is_success ) && ( $create_download ))
