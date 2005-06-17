@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-08 09:54:01 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:40:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,12 +72,12 @@ TARGET  = com_sun_star_tools_uno
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= 											\
-    $(CLASSDIR)$/$(PACKAGE)$/DumpTypeDescription.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/DumpType.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/RegistryKey.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/RegComp.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/UnoApp.class
+JAVAFILES = \
+    DumpType.java \
+    DumpTypeDescription.java \
+    RegComp.java \
+    RegistryKey.java \
+    UnoApp.java
 
 # --- Targets ------------------------------------------------------
 
