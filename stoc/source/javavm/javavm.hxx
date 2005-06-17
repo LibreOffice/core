@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:17:37 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,10 @@ namespace com { namespace sun { namespace star {
     namespace container { class XContainer; }
     namespace uno { class XComponentContext; }
 } } }
-namespace jvmaccess { class VirtualMachine; }
+namespace jvmaccess {
+    class UnoVirtualMachine;
+    class VirtualMachine;
+}
 
 namespace stoc_javavm {
 
@@ -178,12 +181,17 @@ private:
 
     void setINetSettingsInVM(bool set_reset);
 
+    void setUpUnoVirtualMachine(JNIEnv * environment);
+
+    void handleJniException(JNIEnv * environment);
+
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_xContext;
 
     // the following are controlled by the 'this' mutex:
     bool m_bDisposed;
     rtl::Reference< jvmaccess::VirtualMachine > m_xVirtualMachine;
+    rtl::Reference< jvmaccess::UnoVirtualMachine > m_xUnoVirtualMachine;
     JavaVM * m_pJavaVm;
         // stored as an instance member for backwards compatibility in getJavaVM
     bool m_bDontCreateJvm;
