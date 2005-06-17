@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:26:25 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,11 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 {
     Display* pDisplay = GetXDisplay();
     Visual* pVisual = GetDisplay()->GetVisual()->GetVisual();
+#ifdef XRENDER_LINK
+    XRenderPictFormat* pVisualFormat = XRenderFindVisualFormat ( pDisplay, pVisual );
+#else
     XRenderPictFormat* pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
+#endif
 
     // create xrender Picture for font foreground
     static Pixmap aPixmap;
@@ -772,7 +776,11 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
+#ifdef XRENDER_LINK
+        aSrc = XRenderCreatePicture ( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
+#else
         aSrc = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
+#endif
     }
 
     // set font foreground
@@ -786,10 +794,19 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     // notify xrender of target drawable
     XRenderPictureAttributes aAttr;
+#ifdef XRENDER_LINK
+    Picture aDst = XRenderCreatePicture ( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
+#else
     Picture aDst = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
+#endif
+
     // set clipping
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+#ifdef XRENDER_LINK
+        XRenderSetPictureClipRegion( pDisplay, aDst, pClipRegion_ );
+#else
         (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, pClipRegion_ );
+#endif
 
     ServerFont& rFont = rLayout.GetServerFont();
     GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( rFont );
@@ -807,12 +824,21 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         unsigned int aRenderAry[ MAXGLYPHS ];
         for( int i = 0; i < nGlyphs; ++i )
              aRenderAry[ i ] = aX11GlyphPeer.GetGlyphId( rFont, aGlyphAry[i] );
+#ifdef XRENDER_LINK
+        XRenderCompositeString32 ( pDisplay, PictOpOver,
+            aSrc, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
+#else
         (*aX11GlyphPeer.pXRenderCompositeString32)( pDisplay, PictOpOver,
             aSrc, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
+#endif
     }
 
     // cleanup
+#ifdef XRENDER_LINK
+    XRenderFreePicture ( pDisplay, aDst );
+#else
     (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
+#endif
 }
 
 //--------------------------------------------------------------------------
