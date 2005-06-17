@@ -1,4 +1,4 @@
-oon	instsetoo_native	::	postprocess NULL
+oon	instsetoo_native	::	postprocess ure NULL
 oon	instsetoo_native						usr1	-	all	oon_mkout NULL
 oon	instsetoo_native\packimages				nmake	-	all	oon_pack NULL
 oon	instsetoo_native\inc_openoffice\unix	nmake	-	u	oon_unix NULL
