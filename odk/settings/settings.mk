@@ -102,6 +102,9 @@ endif
 
 LINK_JAVA_LIBS=/LIBPATH:"$(OO_SDK_JAVA_HOME)/lib"
 
+ifneq "$(OO_SDK_URE_HOME)" ""
+URE_MISC=$(OO_SDK_URE_HOME)\misc
+endif
 
 # use this for release version
 #EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1100000
@@ -195,6 +198,10 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
 
 LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
+
+ifneq "$(OO_SDK_URE_HOME)" ""
+URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+endif
 
 endif
 
@@ -305,6 +312,10 @@ EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
 LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
+ifneq "$(OO_SDK_URE_HOME)" ""
+URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+endif
+
 endif
 
 ###########################################################################
@@ -389,6 +400,10 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 #EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
 LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
 LINK_JAVA_LIBS=-framework JavaVM
+
+ifneq "$(OO_SDK_URE_HOME)" ""
+URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+endif
 
 endif
 
@@ -479,5 +494,9 @@ EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined
 #EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
 LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
+
+ifneq "$(OO_SDK_URE_HOME)" ""
+URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+endif
 
 endif
