@@ -23,20 +23,24 @@ stdout.WriteLine("\n" +
 
 var oo_sdk_name = WshSysEnv("OO_SDK_NAME");
 var oo_sdk_home = getSdkHome();
-var office_home = getOfficeHome();
+var office_or_ure = getOfficeOrUre();
+var office_home = "";
+var oo_sdk_ure_home = "";
+if (office_or_ure == "office") {
+    office_home = getOfficeHome();
+} else {
+    oo_sdk_ure_home = getUreHome();
+}
 var oo_sdk_make_home = getMakeHome();
 var oo_sdk_zip_home = getZipHome();
 var oo_sdk_cpp_home = getCppHome();
 var oo_sdk_cli_home = getCliHome();
 var oo_sdk_java_home = getJavaHome();
 var oo_sdk_output_dir = getOutputDir();
-var sdk_auto_deployment = getAutoDeployment();
-//Extend the path to the office program dir and the bin dir of the SDK
-WshSysEnv("PATH") = office_home + "\\program;" + oo_sdk_home + "\\windows\\bin;"
-        + WshSysEnv("PATH");
-
-var uno_java_jfw_jrehome = makeBootstrapFileUrl(oo_sdk_java_home);
-var uno_java_jfw_vendor_settings = makeBootstrapFileUrl(office_home + "\\share\\config\\javavendors.xml");
+var sdk_auto_deployment = "NO";
+if (office_or_ure == "office") {
+    sdk_auto_deployment = getAutoDeployment();
+}
 
 writeBatFile(oo_sdk_home + "\\setsdkenv_windows.bat");
 
@@ -106,6 +110,23 @@ function getSdkHome()
     }   
 }
 
+function getOfficeOrUre()
+{
+    var suggestion = "Office";
+    var choice;
+    while (choice != "office" && choice != "ure") {
+        stdout.Write(
+            "\n Use an installed Office or an installed UNO Runtime"
+            + " Environment (Office/URE) [" + suggestion + "]:");
+        choice = stdin.ReadLine();
+        if (choice == "") {
+            choice = suggestion;
+        }
+        choice = choice.toLowerCase();
+    }
+    return choice;
+}
+
 function getOfficeHome()
 {
     var sSuggestedHome = WshSysEnv("OFFICE_HOME");
@@ -172,6 +193,25 @@ function getOfficeHome()
         }
         return sHome;
     }
+}
+
+function getUreHome()
+{
+    var suggestion = WshSysEnv("OO_SDK_URE_HOME");
+    var choice;
+    for (;;) {
+        stdout.Write(
+            "\n Enter the URE installation directory [" + suggestion + "]:");
+        choice = stdin.ReadLine();
+        if (choice == "") {
+            choice = suggestion;
+        }
+        if (aFileSystemObject.FileExists(choice + "\\bin\\uno.exe")) {
+            break;
+        }
+        stdout.WriteLine("\n Error: A valid URE installation is required.");
+    }
+    return choice;
 }
 
 function getMakeHome()
@@ -632,6 +672,10 @@ function writeBatFile(file)
         "REM Example: set OFFICE_HOME=C:\\Programme\\StarOffice\n" +
         "set OFFICE_HOME=" + office_home +
         "\n\n" +
+        "REM URE installation directory.\n" +
+        "REM Example: set OO_SDK_URE_HOME=C:\\Programme\\URE\n" +
+        "set OO_SDK_URE_HOME=" + oo_sdk_ure_home +
+        "\n\n" +
         "REM Directory of the make command.\n" +
         "REM Example: set OO_SDK_MAKE_HOME=D:\\NextGenerationMake\\make\n" + 
         "set OO_SDK_MAKE_HOME=" + oo_sdk_make_home + 
@@ -660,18 +704,6 @@ function writeBatFile(file)
         "REM Example: set SDK_AUTO_DEPLOYMENT=YES\n" +
         "set SDK_AUTO_DEPLOYMENT=" + sdk_auto_deployment +
         "\n\n" +
-//        "REM bootstrap variable, needed by the java framework\n" + 
-//        "REM Example: set UNO_JAVA_JFW_JREHOME=file:///d:/java/jdk1.5\n" + 
-//        "set UNO_JAVA_JFW_JREHOME=" + uno_java_jfw_jrehome +
-//        "\n\n" +
-//        "REM bootstrap variable, needed by the java framework\n" + 
-//        "REM Example: set UNO_JAVA_JFW_ENV_CLASSPATH=true\n" + 
-//        "set UNO_JAVA_JFW_ENV_CLASSPATH=true\n" +
-//        "\n" +
-//        "REM bootstrap variable, needed by the java framework\n" + 
-//        "REM Example: set UNO_JAVA_JFW_VENDOR_SETTINGS=file:///c:/program files/StarOffice%%208/share/config/javavendors.xml\n" + 
-//        "set UNO_JAVA_JFW_VENDOR_SETTINGS=" + uno_java_jfw_vendor_settings +  
-//        "\n\n" +
         "REM Check installation path for the StarOffice Development Kit.\n" +
         "if not defined OO_SDK_HOME (\n" +
         "   echo Error: the variable OO_SDK_HOME is missing!\n" +
@@ -680,8 +712,11 @@ function writeBatFile(file)
         "\n" + 
         "REM Check installation path for the office.\n" + 
         "if not defined OFFICE_HOME (\n" + 
-        "   echo Error: the variable OFFICE_HOME is missing!\n" + 
+        "if not defined OO_SDK_URE_HOME (\n" + 
+        "   echo Error: either of the variables OFFICE_HOME and\n" +
+        "   echo OO_SDK_URE_HOME is missing!\n" + 
         "   goto :error\n" + 
+        " )\n" +
         " )\n" +
         "\n" +
         "REM Check installation path for GNU make.\n" + 
@@ -700,17 +735,35 @@ function writeBatFile(file)
         "set LIB=%OO_SDK_HOME%\\windows\\lib;%OO_SDK_HOME%\\WINexample.out\\lib;%LIB%\n" +
         "\n" +
         "REM Set office program path.\n" +
-        "set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\\program\n" +
+        "if defined OFFICE_HOME (\n" +
+        "   set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\\program\n" +
+        " )\n" +
         "\n" +
 	"REM Set UNO path, necessary to ensure that the cpp examples using the\n" +
-	"REM new UNO bootstrap mechanism use the configured office installation.\n" +
-	"set UNO_PATH=%OFFICE_PROGRAM_PATH%\n" +
+	"REM new UNO bootstrap mechanism use the configured office installation\n" +
+    "REM (only set when using an Office).\n" +
+    "if defined OFFICE_HOME (\n" +
+	"   set UNO_PATH=%OFFICE_PROGRAM_PATH%\n" +
+    " )\n" +
+        "\n" +
+        "if defined OO_SDK_URE_HOME (\n" +
+        "   set OO_SDK_URE_BIN_DIR=%OO_SDK_URE_HOME%\\bin\n" +
+        "   set OO_SDK_URE_LIB_DIR=%OO_SDK_URE_HOME%\\bin\n" +
+        "   set OO_SDK_URE_JAVA_DIR=%OO_SDK_URE_HOME%\\java\n" +
+        " ) else (\n" +
+        "   set OO_SDK_URE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
+        "   set OO_SDK_URE_LIB_DIR=%OFFICE_PROGRAM_PATH%\n" +
+        "   set OO_SDK_URE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
+        " )\n" +
         "\n" +
         "REM Set classpath\n" +
-        "set CLASSPATH=%OFFICE_PROGRAM_PATH%\\classes\\jurt.jar;%OFFICE_PROGRAM_PATH%\\classes\\unoil.jar;%OFFICE_PROGRAM_PATH%\\classes\\ridl.jar;%OFFICE_PROGRAM_PATH%\\classes\\juh.jar\n" +
+        "set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\\juh.jar;%OO_SDK_URE_JAVA_DIR%\\jurt.jar;%OO_SDK_URE_JAVA_DIR%\\ridl.jar;%OO_SDK_URE_JAVA_DIR%\\unoloader.jar\n" +
+        "if defined OFFICE_HOME (\n" +
+        "    set CLASSPATH=%CLASSPATH%;%OO_SDK_URE_JAVA_DIR%\\unoil.jar\n" +
+        " )\n" +
         "\n" +
         "REM Add directory of the SDK tools to the path.\n" +
-        "set PATH=%OO_SDK_HOME%\\windows\\bin;%OFFICE_HOME%\\program;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
+        "set PATH=%OO_SDK_HOME%\\windows\\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
         "\n" +
         "REM Set PATH appropriate to the output directory\n" +
         "if defined OO_SDK_OUTPUT_DIR (\n" + 
@@ -747,6 +800,7 @@ function writeBatFile(file)
         "echo  *\n" +       
         "echo  * SDK = %OO_SDK_HOME%\n" +
         "echo  * Office = %OFFICE_HOME%\n" +
+        "echo  * URE = %OO_SDK_URE_HOME%\n" +
         "echo  * Make = %OO_SDK_MAKE_HOME%\n" +
         "echo  * Zip = %OO_SDK_ZIP_HOME%\n" +
         "echo  * C++ Compiler = %OO_SDK_CPP_HOME%\n" +
