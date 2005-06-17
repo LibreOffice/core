@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:32:55 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:00:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,11 +67,9 @@ PACKAGE = com$/sun$/star$/lib$/connections$/pipe
 
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/PipeConnection.class \
-    $(CLASSDIR)$/$(PACKAGE)$/pipeAcceptor.class \
-    $(CLASSDIR)$/$(PACKAGE)$/pipeConnector.class
+JAVAFILES = \
+    PipeConnection.java \
+    pipeAcceptor.java \
+    pipeConnector.java
 
 .INCLUDE:  target.mk
