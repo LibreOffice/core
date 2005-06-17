@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2002-10-07 13:17:19 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:00:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,10 @@ PACKAGE = com$/sun$/star$/lib$/connections$/socket
 
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/ConnectionDescriptor.class \
-    $(CLASSDIR)$/$(PACKAGE)$/SocketConnection.class \
-    $(CLASSDIR)$/$(PACKAGE)$/socketAcceptor.class \
-    $(CLASSDIR)$/$(PACKAGE)$/socketConnector.class
+JAVAFILES = \
+    ConnectionDescriptor.java \
+    SocketConnection.java \
+    socketAcceptor.java \
+    socketConnector.java
 
 .INCLUDE:  target.mk
