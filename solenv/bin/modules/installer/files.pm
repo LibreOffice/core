@@ -2,9 +2,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-15 09:54:41 $
+#   last change: $Author: rt $ $Date: 2005-06-17 14:06:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,9 +104,25 @@ sub save_file
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_file : $savefile : $#{$savecontent}"); }
 
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_file");
-    print OUT @{$savecontent};
-    close( OUT);
+    if ( open( OUT, ">$savefile" ) )
+    {
+        print OUT @{$savecontent};
+        close( OUT);
+    }
+    else
+    {
+        # it is useless to save a log file, if there is no write access
+
+        if ( $savefile =~ /\.log/ )
+        {
+            print "\n*************************************************\n";
+            print "ERROR: Cannot write log file: $savefile";
+            print "\n*************************************************\n";
+            exit(-1);   # exiting the program to avoid endless loops
+        }
+
+        installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_file");
+    }
 }
 
 sub save_hash
