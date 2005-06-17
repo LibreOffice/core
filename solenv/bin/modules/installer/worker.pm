@@ -1031,6 +1031,31 @@ sub select_patch_items_without_name
 }
 
 ###########################################################
+# Selecting patch items
+###########################################################
+
+sub select_langpack_items
+{
+    my ( $itemsref, $itemname ) = @_;
+
+    installer::logger::include_header_into_logfile("Selecting RegistryItems for Language Packs");
+
+    my @itemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+
+        # Items with style "LANGUAGEPACK" have to be included into the patch
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+        if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+    }
+
+    return \@itemsarray;
+}
+
+###########################################################
 # Searching if LICENSE and README, which are not removed
 # in select_patch_items are really needed for the patch.
 # If not, they are removed now.
