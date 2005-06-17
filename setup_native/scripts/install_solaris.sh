@@ -1,41 +1,25 @@
 #!/bin/bash
 
-error()
+LINK="no"
+UPDATE="no"
+USAGE="Usage: $0 [-l] [-h] <pkg-source-dir> <office-installation-dir>"
+
+help()
 {
-    echo
-    printf "ERROR:\t$1\n"
-    echo
-    echo "User Mode Installation script for developer and knowledgeable early access tester"
-    echo
-    echo "This installation method is not intended for use in a production environment!"
-    echo "Using this script is unsupported and completely at your own risk"
-    echo
-    echo "Usage:" $0 "<pkg-source-dir> <inst-destination-dir> [-l]"
-    echo "    <pkg-source-dir>:       directory *only* containing the Solaris pkg packages to be installed"
-    echo "    <inst-destination-dir>: absolute path to where the office and the pkg database will get installed"
-    echo "    -l:                     optional parameter to create a link \"soffice\" in $HOME"
-    echo
-    exit 2
+  echo
+  echo "User Mode Installation script for developer and knowledgeable early access tester"
+  echo
+  echo "This installation method is not intended for use in a production environment!"
+  echo "Using this script is unsupported and completely at your own risk"
+  echo
+  echo "Usage:" $0 "<pkg-source-dir> <office-installation-dir> [-l]"
+  echo "    <pkg-source-dir>:       directory *only* containing the Solaris pkg packages to be installed"
+  echo "    <office-installation-dir>: directory to where the office and the pkg database will get installed into"
+  echo
+  echo "Optional Parameter:"
+  echo "    -l :              create a link \"soffice\" in $HOME"
+  echo "    -h :              output this help"
 }
-
-cannot_install()
-{
-    echo
-    printf "ERROR:\tCannot install to directory $MY_ROOT\n"
-    printf "\t$1\n"
-    printf "\tPlease check/cleanup $MY_ROOT or choose a different directory\n"
-    echo
-    exit 2
-}
-
-#
-# expect either two or three arguments
-#
-
-if [ \( $# -ne 2 -a $# -ne 3 \) -o -z "$1" -o -z "$2" ]
-then
-    error "Wrong number of arguments"
-fi
 
 #
 # this script is for userland not for root
@@ -43,148 +27,201 @@ fi
 
 if [ $UID -eq 0 ]
 then
-    error "This script is for installation without administrative rights only\n\tPlease use pkgadd to install as root"
+  printf "\nThis script is for installation without administrative rights only\nPlease use pkgadd/patchadd to install as root\n"
+  help
+  exit 2
 fi
 
-#
-# Evaluate command line arguments
-#
-
-PACKAGE_PATH=$1
-MY_ROOT=$2
-
-LINK="nolink"
-if [ $# -eq 3 ]
-then
-  LINK=$3
-fi
-
-if [ ! -d $PACKAGE_PATH ]
-then
-    error "Directory $PACKAGE_PATH does not exist"
-fi
-
-if [ ! "${MY_ROOT:0:1}" = "/" ]
-then
-    error "Invalid installation directory $MY_ROOT, has to be an absolute path"
-fi
-
-#
-# the admin file is expected to be in the same directory as this script
-#
-
-DIRECTORY=`dirname $0`
-ADMINFILE=$DIRECTORY/admin
-if [ ! -r $ADMINFILE ]
-then
-    error "Admin file $ADMINFILE does not exist or is not readable"
-fi
-
-#
-# Check and get the list of packages to install
-#
-
-COREPKG01=`find $PACKAGE_PATH/* -type d -prune -name "*-core01*" -print`
-COREPKGLIST=`find $PACKAGE_PATH/* -type d -prune -name "*-core*" -print`
-PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-shared-mime-info" ! -name "*-cde*" ! -name "*-core*" ! -name "*-gnome*" -print`
-
-if [ -z "$COREPKG01" ]
-then
-    error "No core package found in directory $PACKAGE_PATH"
-fi
-
-# Do not install gnome-integration package on systems without GNOME
-pkginfo -q SUNWgnome-vfs
-if [ $? -eq 0 ]
-then
-  GNOMEPKG=`find $PACKAGE_PATH/* -type d -prune -name "*-gnome*" -print`
-fi
-
-echo "Packages found:"
-for i in $COREPKGLIST $PKGLIST $GNOMEPKG; do
-  echo `basename $i`
+while getopts "lh" VALUE
+do
+  echo $VALUE
+  case $VALUE in
+    h)      help; exit 0;;
+    l)      LINK="yes"; break;;
+    ?)      echo $USAGE; exit 2;;
+  esac
 done
+shift `expr $OPTIND - 1`
+
+if [ $# != 2 ]
+then
+  echo $USAGE
+  exit 2
+fi
+
+# Determine whether this is a patch or a regular install set ..
+/bin/bash -c "ls $1/*/patchinfo >/dev/null 2>&1"
+if [ "$?" = 0 ]
+then
+  UPDATE="yes"
+  PATCH_PATH="$1"
+  PATCH_INFO_LIST=`/bin/bash -c "cd $1; ls */patchinfo"`
+  PATCH_LIST=`for i in ${PATCH_INFO_LIST}; do dirname $i; done`
+elif [ -f "$1/patchinfo" ]
+then
+  UPDATE="yes"
+  PATCH_PATH=`dirname "$1"`
+  PATCH_LIST=`basename "$1"`
+else
+  if [ -d "$1/packages" ]
+  then
+    PACKAGE_PATH="$1/packages"
+  else
+    PACKAGE_PATH=$1
+  fi
+
+  #
+  # Check and get the list of packages to install
+  #
+  PKG_LIST=`cd $PACKAGE_PATH ; find * -type d -prune ! -name "*adabas*" \
+    ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-shared-mime-info" \
+    ! -name "*-cde*" ! -name "*-gnome*" -print`
+
+  if [ -z "$PKG_LIST" ]
+  then
+    printf "\n$0: No packages found in $PACKAGE_PATH\n"
+    exit 2
+  fi
+
+  # Do not install gnome-integration package on systems without GNOME
+  pkginfo -q SUNWgnome-vfs
+  if [ $? -eq 0 ]
+  then
+    GNOMEPKG=`cd $PACKAGE_PATH ; find * -type d -prune -name "*-gnome*" -print`
+  fi
+
+  echo "Packages found:"
+  for i in $PKG_LIST $GNOMEPKG; do
+    echo $i
+  done
+fi
+
+INSTALL_ROOT=$2
+if [ "$UPDATE" = "yes" ]
+then
+  if [ ! -d ${INSTALL_ROOT}/var/sadm/install/admin ]
+  then
+    printf "\n$0: No package database in ${INSTALL_ROOT}.\n"
+    exit 2
+  fi
+else
+  rmdir ${INSTALL_ROOT} 2>/dev/null
+  if [ -d ${INSTALL_ROOT} ]
+  then
+    printf "\n$0: ${INSTALL_ROOT} exists and is not empty.\n"
+    exit 2
+  fi
+  mkdir -p ${INSTALL_ROOT}/var/sadm/install/admin
+fi
+
+# Previous versions of this script did not write this file
+if [ ! -f ${INSTALL_ROOT}/var/sadm/install/admin/default ]
+then
+  cat > ${INSTALL_ROOT}/var/sadm/install/admin/default << EOF
+action=nocheck
+conflict=nocheck
+setuid=nocheck
+idepend=nocheck
+mail=
+EOF
+fi
+
+# create local tmp directory to install on S10
+LOCAL_TMP=
+if [ -x /usr/bin/mktemp ]
+then
+  LOCAL_TMP=`mktemp -d`
+  rmdir ${INSTALL_ROOT}/tmp 2>/dev/null
+  ln -s ${LOCAL_TMP} ${INSTALL_ROOT}/tmp
+fi
 
 #
-# Check/Create installation directory
-#
-
-CORENAME=`basename $COREPKG01`
-INSTALLDIR=$MY_ROOT`pkgparam -d $PACKAGE_PATH $CORENAME BASEDIR`
-
-# We expect that $INSTALLDIR does not exist, however if it is empty we ignore it
-if [ -d $INSTALLDIR ]
-then
-    # if it is not empty we cannot rm it (might be a permission problem as well)
-    rmdir $INSTALLDIR
-fi
-if [ -d $INSTALLDIR ]
-then
-    cannot_install "Directory $INSTALLDIR exists and is not empty or cannot be removed"
-fi
-
-if [ -d $MY_ROOT/var/sadm ]
-then
-    cannot_install "pkg database does already exist $MY_ROOT/var/sadm"
-fi
-
-# Create the installation directory (otherwise the user would be asked)
-mkdir -p $INSTALLDIR
-if [ ! -d $INSTALLDIR ]
-then
-    cannot_install "Unable to create directory $INSTALLDIR"
-fi
-
-#
-# the tail of the script contains a shared object for overloading the getuid() call
+# the tail of the script contains a shared object for overloading the getuid()
+# and a few other calls
 #
 
 GETUID_SO=/tmp/getuid.so.$$
 linenum=???
 tail +$linenum $0 > $GETUID_SO
-if [ ! -r $GETUID_SO ]
-then
-    error "Cannot create getuid wrapper library $GETUID_SO"
-fi
 
 #
 # Perform the installation
 #
+if [ "$UPDATE" = "yes" ]
+then
+  if [ ! "${INSTALL_ROOT:0:1}" = "/" ]; then
+    INSTALL_ROOT=`cd ${INSTALL_ROOT}; pwd`
+  fi
 
-echo "####################################################################"
-echo "#     Installation of the found packages                           #"
-echo "####################################################################"
-echo
-echo "Path to the packages       : " $PACKAGE_PATH
-echo "Path to the installation   : " $MY_ROOT
+  INSTALL_DIR=${INSTALL_ROOT}`pkgparam -f ${INSTALL_ROOT}/var/sadm/pkg/*core01/pkginfo BASEDIR`
 
-export LD_PRELOAD=$GETUID_SO
+  # restore original "bootstraprc" prior to patching
+  mv -f ${INSTALL_DIR}/program/bootstraprc.orig ${INSTALL_DIR}/program/bootstraprc
 
-for i in $COREPKGLIST $PKGLIST $GNOMEPKG; do
-  echo /usr/sbin/pkgadd -a $ADMINFILE -d $PACKAGE_PATH -R $MY_ROOT `basename $i`
-  /usr/sbin/pkgadd -a $ADMINFILE -d $PACKAGE_PATH -R $MY_ROOT `basename $i`
-done
+  # copy INST_RELEASE file
+  if [ ! -f ${INSTALL_ROOT}/var/sadm/system/admin/INST_RELEASE ]
+  then
+    mkdir -p ${INSTALL_ROOT}/var/sadm/system/admin 2>/dev/null
+    cp -f /var/sadm/system/admin/INST_RELEASE ${INSTALL_ROOT}/var/sadm/system/admin/INST_RELEASE
+  fi
 
-export -n LD_PRELOAD
+  LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch'
+else
+
+  #
+  # Check/Create installation directory
+  #
+
+  for i in ${PKG_LIST}; do
+    echo $i | grep core01 > /dev/null
+    if [ $? = 0 ]; then
+      INSTALL_DIR=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} $i BASEDIR`
+      mkdir -p ${INSTALL_DIR}
+    fi
+  done
+
+  if [ ! "${INSTALL_ROOT:0:1}" = "/" ]; then
+    INSTALL_ROOT=`cd ${INSTALL_ROOT}; pwd`
+  fi
+
+  echo "####################################################################"
+  echo "#     Installation of the found packages                           #"
+  echo "####################################################################"
+  echo
+  echo "Path to the packages       : " $PACKAGE_PATH
+  echo "Path to the installation   : " $INSTALL_ROOT
+
+  LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} ${GNOMEPKG} >/dev/null
+fi
+
 rm -f $GETUID_SO
+
+# remove local tmp directory
+if [ ! -z ${LOCAL_TMP} ]
+then
+  rm -f ${LOCAL_TMP}/.ai.pkg.zone.lock*
+  rmdir ${LOCAL_TMP}
+  rm -f ${INSTALL_ROOT}/tmp
+  mkdir ${INSTALL_ROOT}/tmp
+fi
 
 #
 # Create a link into the users home directory
 #
 
-if [ "$LINK" = "-l" ]
+if [ "$LINK" = "yes" ]
 then
   echo
-  echo "Creating link from $INSTALLDIR/program/soffice to $HOME/soffice"
-  rm -f $HOME/soffice
-  ln -s $INSTALLDIR/program/soffice $HOME/soffice
+  echo "Creating link from $INSTALL_DIR/program/soffice to $HOME/soffice"
+  ln -sf $INSTALL_DIR/program/soffice $HOME/soffice
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
-mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
-sed 's/UserInstallation=$SYSUSERCONFIG\/.staroffice8/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
+mv ${INSTALL_DIR}/program/bootstraprc ${INSTALL_DIR}/program/bootstraprc.orig
+sed 's/UserInstallation=$SYSUSERCONFIG\/.staroffice8/UserInstallation=$ORIGIN\/..\/UserInstallation/g' \
+${INSTALL_DIR}/program/bootstraprc.orig > ${INSTALL_DIR}/program/bootstraprc
 
 echo
 echo "Installation done ..."
-
 exit 0
+
