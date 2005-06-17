@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:49:54 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "jni_bridge.h"
 
+#include "jvmaccess/unovirtualmachine.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/unload.h"
 #include "rtl/strbuf.hxx"
 #include "uno/lbnames.h"
@@ -121,7 +123,7 @@ void SAL_CALL Mapping_map_to_uno(
                 static_cast< Mapping const * >( mapping )->m_bridge;
             JNI_guarded_context jni(
                 bridge->m_jni_info,
-                reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+                reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                     bridge->m_java_env->pContext ) );
 
             JNI_interface_type_info const * info =
@@ -178,7 +180,7 @@ void SAL_CALL Mapping_map_to_java(
                     static_cast< Mapping const * >( mapping )->m_bridge;
                 JNI_guarded_context jni(
                     bridge->m_jni_info,
-                    reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+                    reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                         bridge->m_java_env->pContext ) );
                 jni->DeleteGlobalRef( *ppJavaI );
                 *ppJavaI = 0;
@@ -190,7 +192,7 @@ void SAL_CALL Mapping_map_to_java(
                 static_cast< Mapping const * >( mapping )->m_bridge;
             JNI_guarded_context jni(
                 bridge->m_jni_info,
-                reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+                reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                     bridge->m_java_env->pContext ) );
 
             JNI_interface_type_info const * info =
@@ -283,10 +285,9 @@ Bridge::Bridge(
       m_registered_java2uno( registered_java2uno )
 {
     // bootstrapping bridge jni_info
-    ::jvmaccess::VirtualMachine::AttachGuard jni(
-        reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+    m_jni_info = JNI_info::get_jni_info(
+        reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
             m_java_env->pContext ) );
-    m_jni_info = JNI_info::get_jni_info( jni.getEnvironment() );
 
     OSL_ASSERT( 0 != m_java_env && 0 != m_uno_env );
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
@@ -384,10 +385,23 @@ void JNI_context::java_exc_occured() const
 }
 
 //______________________________________________________________________________
+jmethodID JNI_context::get_loadClass_method() const
+{
+    JLocalAutoRef jo_ClassLoader(
+        *this, m_env->FindClass( "java/lang/ClassLoader" ) );
+    ensure_no_exception();
+    jmethodID jo_loadClass = m_env->GetMethodID(
+        static_cast< jclass >( jo_ClassLoader.get() ), "loadClass",
+        "(Ljava/lang/String;)Ljava/lang/Class;" );
+    ensure_no_exception();
+    return jo_loadClass;
+}
+
+//______________________________________________________________________________
 OUString JNI_context::get_stack_trace( jobject jo_exc ) const
 {
     JLocalAutoRef jo_JNI_proxy(
-        *this, m_env->FindClass( "com/sun/star/bridges/jni_uno/JNI_proxy" ) );
+        *this, find_class( *this, "com.sun.star.bridges.jni_uno.JNI_proxy" ) );
     if (assert_no_exception())
     {
         // static method JNI_proxy.get_stack_trace()
@@ -438,8 +452,8 @@ namespace
 void SAL_CALL java_env_disposing( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
-    ::jvmaccess::VirtualMachine * machine =
-          reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+    ::jvmaccess::UnoVirtualMachine * machine =
+          reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
               java_env->pContext );
     java_env->pContext = 0;
     machine->release();
@@ -454,8 +468,8 @@ void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     java_env->pExtEnv = 0; // no extended support
     OSL_ASSERT( 0 != java_env->pContext );
 
-    ::jvmaccess::VirtualMachine * machine =
-          reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+    ::jvmaccess::UnoVirtualMachine * machine =
+          reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
               java_env->pContext );
     machine->acquire();
 }
