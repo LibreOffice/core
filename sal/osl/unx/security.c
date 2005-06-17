@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:11:15 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
     return PAM_SUCCESS;
 }
 
+#ifndef PAM_LINK
 /*
  * avoid linking against libpam.so, since it is not available on all systems,
  * instead load-on-call, returns structure which holds pointer to
@@ -284,6 +285,7 @@ static sal_PamModule* osl_getPAM()
 
     return pam_module;
 }
+#endif
 
 /*
  * User Identification using PAM
@@ -294,11 +296,13 @@ osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
 {
     sal_Bool success = sal_False;
 
+#ifndef PAM_LINK
     sal_PamModule* pam_module;
 
     pam_module = osl_getPAM();
     if ( pam_module != NULL )
     {
+#endif
         pam_handle_t   *pam_handle = NULL;
         struct pam_conv pam_conversation;
         sal_PamData     pam_data;
@@ -311,21 +315,38 @@ osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
         pam_conversation.conv        = osl_PamConversation;
         pam_conversation.appdata_ptr = (void*)(&pam_data);
 
+#ifndef PAM_LINK
           return_value = pam_module->pam_start( "su", name,
             &pam_conversation, &pam_handle);
+#else
+          return_value = pam_start( "su", name,
+            &pam_conversation, &pam_handle);
+#endif
         if (return_value == PAM_SUCCESS )
+#ifndef PAM_LINK
             return_value = pam_module->pam_authenticate(pam_handle, 0);
+#else
+            return_value = pam_authenticate(pam_handle, 0);
+#endif
           if (return_value == PAM_SUCCESS )
+#ifndef PAM_LINK
             return_value = pam_module->pam_acct_mgmt(pam_handle, 0);
         pam_module->pam_end( pam_handle, return_value );
+#else
+            return_value = pam_acct_mgmt(pam_handle, 0);
+        pam_end( pam_handle, return_value );
+#endif
 
         success = (sal_Bool)(return_value == PAM_SUCCESS);
+#ifndef PAM_LINK
     }
+#endif
 
       return success;
 }
 
 
+#ifndef CRYPT_LINK
 /* dummy crypt, matches the interface of
    crypt() but does not encrypt at all */
 static const sal_Char* SAL_CALL
@@ -370,6 +391,7 @@ osl_dynamicCrypt ( const sal_Char *key, const sal_Char *salt )
 
     return dynamic_crypt( (sal_Char*)key, (sal_Char*)salt );
 }
+#endif
 
 /*
  * compare an encrypted and an unencrypted password for equality
@@ -393,7 +415,11 @@ osl_equalPasswords ( const sal_Char *pEncryptedPassword, const sal_Char *pPlainP
 
     pthread_mutex_lock(&crypt_mutex);
 
+#ifndef CRYPT_LINK
     encrypted_plain = (sal_Char *)osl_dynamicCrypt( pPlainPassword, salt );
+#else
+    encrypted_plain = (sal_Char *)crypt( pPlainPassword, salt );
+#endif
     success = (sal_Bool) (strcmp(pEncryptedPassword, encrypted_plain) == 0);
 
     pthread_mutex_unlock(&crypt_mutex);
