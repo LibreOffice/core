@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:41 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:57:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,7 @@ TARGET  = com_sun_star_comp_bridgefactory
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/BridgeFactory.class
+JAVAFILES = BridgeFactory.java
 
 # --- Targets ------------------------------------------------------
 
