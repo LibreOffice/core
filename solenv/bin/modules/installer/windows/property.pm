@@ -154,7 +154,7 @@ sub get_productname_for_property_table
 
     if ( $installer::globals::patch )
     {
-        my $patchstring = "Patch";
+        my $patchstring = "Product Update";
         $productname = $productname . " " . $patchstring;
     }
 
@@ -190,7 +190,7 @@ sub set_important_properties
 
     if (( $allvariables->{'PRODUCTNAME'} ) && ( $allvariables->{'PRODUCTVERSION'} ) && ( $allvariables->{'MANUFACTURER'} ) && ( $allvariables->{'PRODUCTCODE'} ))
     {
-        my $onepropertyline = "FINDPRODUCT" . "\t" . "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $allvariables->{'PRODUCTNAME'} . "\\" . $allvariables->{'PRODUCTVERSION'} . "\\" . $allvariables->{'PRODUCTCODE'} . "\n";
+        my $onepropertyline = "FINDPRODUCT" . "\t" . "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $allvariables->{'PRODUCTNAME'} . $allvariables->{'PRODUCTADDON'} . "\\" . $allvariables->{'PRODUCTVERSION'} . "\\" . $allvariables->{'PRODUCTCODE'} . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 }
