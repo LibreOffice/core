@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 14:35:02 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:01:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,20 +70,20 @@ TARGET  = com_sun_star_lib_uno_environments_remote
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= 											\
-    $(CLASSDIR)$/$(PACKAGE)$/IMessage.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/Job.class						\
-    $(CLASSDIR)$/$(PACKAGE)$/JobQueue.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/IReceiver.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/Protocol.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/ThreadId.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/IThreadPool.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/ThreadPoolManager.class \
-    $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPoolFactory.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPool.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/NativeThreadPool.class \
-    $(CLASSDIR)$/$(PACKAGE)$/remote_environment.class \
-    $(CLASSDIR)$/$(PACKAGE)$/IProtocol.class
+JAVAFILES = \
+    IMessage.java \
+    IProtocol.java \
+    IReceiver.java \
+    IThreadPool.java \
+    JavaThreadPool.java \
+    JavaThreadPoolFactory.java \
+    Job.java \
+    JobQueue.java \
+    NativeThreadPool.java \
+    Protocol.java \
+    ThreadId.java \
+    ThreadPoolManager.java \
+    remote_environment.java
 
 # --- Targets ------------------------------------------------------
 
