@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-31 16:40:28 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:29:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -311,6 +311,10 @@ XINERAMALIBS= -Wl,-Bstatic -lXinerama -Wl,-Bdynamic
 .ENDIF # OS == MACOSX
 
 SHL2STDLIBS += $(XINERAMALIBS)
+
+.IF "$(XRENDER_LINK)" == "YES"
+SHL2STDLIBS+=`pkg-config --libs xrender`
+.ENDIF
 
 .ENDIF # USE_XINERAMA != no
 
