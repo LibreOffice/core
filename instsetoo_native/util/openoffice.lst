@@ -9,6 +9,7 @@ OpenOffice
 			PRODUCTVERSION 1.9.{milestone}
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
+			USERDIRPRODUCTVERSION 2
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -25,13 +26,54 @@ OpenOffice
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
-	    }
-				active			1
-				compression		5
-				script			setup_osl
-				include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/en-US/,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/$(LANG)/osl,{solarcommonpath}/bin.{minor}/$(LANG)/fat,{solarcommonpath}/bin.{minor}/en-US/,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},{solarcommonpath}/xml.{minor}/office/instance,{solarcommonpath}/xml,../../external/common,{solarenvpath}/{os}/OOo_external,.
-                fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
-                mailinfo ms-eham02-01,packager,packager
+		}
+		active			1
+		compression		5
+		script			setup_osl
+		downloadname	OOo_{productversion}_{os}_install_{languages}
+		langpackdownloadname	OOo_{productversion}_languagepack_{os}_install_{languages}
+		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/en-US/,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/$(LANG)/osl,{solarcommonpath}/bin.{minor}/$(LANG)/fat,{solarcommonpath}/bin.{minor}/en-US/,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},{solarcommonpath}/xml.{minor}/office/instance,{solarcommonpath}/xml,../../external/common,{solarenvpath}/{os}/OOo_external,.
+		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+		mailinfo ms-eham02-01,packager,packager
+	}
+}
+
+OpenOffice_wJRE
+{
+	Settings
+	{
+		variables
+		{
+			PRODUCTNAME OpenOffice.org
+			PRODUCTVERSION 1.9.{milestone}
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			USERDIRPRODUCTVERSION 2
+			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			EVAL
+			FILEFORMATNAME OpenOffice.org
+			FILEFORMATVERSION 1.0
+			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+			PACKAGEVERSION 1.9.{milestone}
+			PACKAGEREVISION 1
+			LICENSENAME LGPL, SISSL
+			SERVICESPROJEKT 1
+			GLOBALFILEGID gid_File_Lib_Vcl
+			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			OPENSOURCE 1
+			SUNDIR 0
+			JAVAPRODUCT 1
+			JAVAVERSION 1.5.0_03
+			DOWNLOADBANNER	ooobanner.bmp
+			DOWNLOADBITMAP	ooobitmap.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
+		}
+		active			1
+		compression		5
+		script			setup_osljre
+		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/en-US/,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/$(LANG)/osl,{solarcommonpath}/bin.{minor}/$(LANG)/fat,{solarcommonpath}/bin.{minor}/en-US/,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},{solarcommonpath}/xml.{minor}/office/instance,{solarcommonpath}/xml,../../external/common,{solarenvpath}/{os}/OOo_external,.
+		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+		mailinfo ms-eham02-01,packager,packager
 	}
 }
 URE
