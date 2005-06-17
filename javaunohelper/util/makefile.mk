@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:57:50 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:05:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,20 +64,14 @@ PRJ		= ..
 PRJNAME = juhelper
 TARGET  = juh
 
-# --- Settings -----------------------------------------------------
-USE_EXTENDED_MANIFESTFILE=TRUE
-USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-
 .INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/version.mk
+.INCLUDE: settings.pmk
 
-JARCLASSDIRS	= \
-    com$/sun$/star$/comp$/helper \
-    com$/sun$/star$/lib$/uno$/adapter \
-    com$/sun$/star$/lib$/uno$/helper
-
+JARCLASSDIRS = com
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS		= TRUE
+JARCLASSPATH = $(JARFILES)
+CUSTOMMANIFESTFILE = manifest
 
 # Special work necessary for building java reference with javadoc.
 # The source of puplic APIs must be delivered and used later in the
@@ -88,7 +82,7 @@ ZIP1DIR=$(PRJ)
 ZIP1LIST=com -x "*makefile.mk"
 
 # --- Targets ------------------------------------------------------
-    
+
 .INCLUDE : target.mk
 
 
