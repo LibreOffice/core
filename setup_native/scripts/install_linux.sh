@@ -1,40 +1,27 @@
 #!/bin/bash
 
-error()
+LINK="no"
+UPDATE="ask"
+USAGE="Usage: $0 [-l,--link] [-U,--update] [-h,--help] <rpm-source-dir> <office-installation-dir>"
+
+help()
 {
-    echo
-    printf "ERROR:\t$1\n"
-    echo
-    echo "User Mode Installation script for developer and knowledgeable early access tester"
-    echo
-    echo "This installation method is not intended for use in a production environment!"
-    echo "Using this script is unsupported and completely at your own risk"
-    echo
-    echo "Usage:" $0 "<rpm-source-dir> <office-installation-dir> [-l]"
-    echo "    <rpm-source-dir>:       directory *only* containing the Linux rpm packages to be installed"
-    echo "    <inst-destination-dir>: directory to where the office will get installed into"
-    echo "    -l:                     optional parameter to create a link \"soffice\" in $HOME"
-    echo
-    exit 2
+  echo
+  echo "User Mode Installation script for developer and knowledgeable early access tester"
+  echo
+  echo "This installation method is not intended for use in a production environment!"
+  echo "Using this script is unsupported and completely at your own risk"
+  echo
+  echo "Usage:" $0 [-lU] "<rpm-source-dir> <office-installation-dir>"
+  echo "    <rpm-source-dir>: directory *only* containing the Linux rpm packages to be installed"
+  echo "    <office-installation-dir>: directory to where the office will get installed into"
+  echo
+  echo "Optional Parameter:"
+  echo "    -l,--link:              create a link \"soffice\" in $HOME"
+  echo "    -U,--update:            update without asking"
+  echo "    -h,--help:              output this help"
+  echo
 }
-
-cannot_install()
-{
-    echo
-    printf "ERROR:\tCannot proceed with the installation\n"
-    printf "\t$1\n"
-    echo
-    exit 2
-}
-
-#
-# expect either two or three arguments
-#
-
-if [ \( $# -ne 2 -a $# -ne 3 \) -o -z "$1" -o -z "$2" ]
-then
-    error "Wrong number of arguments"
-fi
 
 #
 # this script is for userland not for root
@@ -42,82 +29,141 @@ fi
 
 if [ $UID -eq 0 ]
 then
-    error "This script is for installation without administrative rights only\n\tPlease use rpm to install as root"
+  printf "\nThis script is for installation without administrative rights only\nPlease use rpm to install as root\n"
+  help
+  exit 2
 fi
 
-#
-# Evaluate command line arguments
-#
+set -- `getopt -u -o 'lhU' -l 'link,help,update' $*`
+
+if [ $? != 0 ]
+then
+  echo $USAGE
+  exit 2
+fi
+
+for i in $*
+do
+  case $i in
+    -h|--help)      help; exit 0;;
+    -l|--link)      LINK="yes"; shift;;
+    -U|--update)    UPDATE="yes"; shift;;
+    --)             shift; break;;
+   esac
+done
+
+if [ $# != 2 ]
+then
+  echo $USAGE
+  exit 2
+fi
 
 PACKAGE_PATH=$1
-INSTALLDIR=$2
-
-LINK="nolink"
-if [ $# -eq 3 ]
-then
-  LINK=$3
-fi
-
-if [ ! -d $PACKAGE_PATH ]
-then
-    error "Directory $PACKAGE_PATH does not exist"
-fi
-
-if [ ! "${INSTALLDIR:0:1}" = "/" ]
-then
-    error "Invalid installation directory $INSTALLDIR, has to be an absolute path"
-fi
 
 #
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core*" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "adabas*" ! -name "jre*" ! -name "*-gnome*" -print`
-CORERPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core*" -print`
-CORERPM01=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core01-*" -print`
-PREFIX=`rpm -qlp $CORERPM01 | head -n1`
+RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "adabas*" ! -name "jre*" ! -name "*-gnome*" -print`
 
-if [ -z "$CORERPM01" ]
+if [ -z "$RPMLIST" ]
 then
-    error "No core package found in directory $PACKAGE_PATH"
+  printf "\n$0: No packages found in $PACKAGE_PATH\n"
+  exit 2
 fi
 
 # Do not install gnome-integration package on systems without GNOME
-# check for /bin/rpm first, otherwise the rpm database is most likly empty anyway
+# check for /bin/rpm first, otherwise the rpm database is most likely
+# empty anyway
 if [ -x /bin/rpm ]
 then
   GNOMERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-gnome*" -print`
-  /bin/rpm -i --test $GNOMERPM $CORERPM01 2>/dev/null || GNOMERPM=""
+  /bin/rpm -q --whatprovides libgnomevfs-2.so.0 libgconf-2.so.4 >/dev/null || GNOMERPM=""
 fi
 
-echo "Packages found:"
-for i in $CORERPMLIST $RPMLIST $GNOMERPM; do
-  echo `basename $i`
-done
+#
+# Determine whether this should be an update or a fresh install
+#
+
+INSTALLDIR=$2
+RPM_DB_PATH=${INSTALLDIR}/.RPM_OFFICEDATABASE
+
+if [ "$UPDATE" = "ask" ]
+then
+  PRODUCT=`sed --silent -e "
+/^buildid=/ {
+s/buildid=\(.*\)/ [\1]/
+h
+}
+/^ProductKey=/ {
+s/ProductKey=//
+G
+p
+}" ${INSTALLDIR}/program/bootstraprc 2>/dev/null | tr -d "\012"`
+
+  if [ ! -z "$PRODUCT" ]
+  then
+    echo
+    echo "Found an installation of $PRODUCT in $INSTALLDIR"
+    echo
+    while [ "$UPDATE" != "yes" ]
+    do
+      read -a UPDATE -p "Do you want to update this installation (yes/no)? "
+      if [ "$UPDATE" = "no" ]
+      then
+        exit 2
+      fi
+    done
+  else
+    UPDATE="no"
+  fi
+fi
 
 #
 # Check/Create installation directory
 #
 
-# We expect that $INSTALLDIR does not exist, however if it is empty we ignore it
-if [ -d $INSTALLDIR ]
+if [ "$UPDATE" = "yes" ]
 then
-    # if it is not empty we cannot rm it (might be a permission problem as well)
-    rmdir $INSTALLDIR
-fi
-if [ -d $INSTALLDIR ]
-then
-    cannot_install "Directory $INSTALLDIR exists and is not empty or cannot be removed"
+  # restore original bootstraprc
+  mv -f ${INSTALLDIR}/program/bootstraprc.orig ${INSTALLDIR}/program/bootstraprc
+
+  # the RPM_DB_PATH must be absolute
+  if [ ! "${RPM_DB_PATH:0:1}" = "/" ]; then
+    RPM_DB_PATH=`cd ${RPM_DB_PATH}; pwd`
+  fi
+else
+  rmdir ${INSTALLDIR} 2>/dev/null
+
+  if [ -d  ${INSTALLDIR} ]
+  then
+    printf "\n$0: ${INSTALLDIR} exists and is not empty.\n"
+    exit 2
+  fi
+
+  mkdir -p $RPM_DB_PATH || exit 2
+  # XXX why ? XXX
+  chmod 700 $RPM_DB_PATH
+
+  # the RPM_DB_PATH must be absolute
+  if [ ! "${RPM_DB_PATH:0:1}" = "/" ]; then
+    RPM_DB_PATH=`cd ${RPM_DB_PATH}; pwd`
+  fi
+
+  # Creating RPM database and initializing
+  rpm --initdb --dbpath $RPM_DB_PATH
 fi
 
-# We expect that rpm_DB_PATH does not exist, however if it is empty we ignore it
-#RPM_DB_PATH=$HOME/.RPM_OFFICEDATABASE
-RPM_DB_PATH=$INSTALLDIR/.RPM_OFFICEDATABASE
+echo "Packages found:"
+for i in $RPMLIST $GNOMERPM; do
+  echo `basename $i`
+done
 
 #
 # Perform the installation
 #
 
+echo
 echo "####################################################################"
 echo "#     Installation of the found packages                           #"
 echo "####################################################################"
@@ -125,35 +171,23 @@ echo
 echo "Path to the database:       " $RPM_DB_PATH
 echo "Path to the packages:       " $PACKAGE_PATH
 echo "Path to the installation:   " $INSTALLDIR
-
-# Creating directories
-mkdir -p $RPM_DB_PATH
-# XXX why ? XXX
-chmod 700 $RPM_DB_PATH
-if [ ! -d $RPM_DB_PATH ]
-then
-    cannot_install "Unable to create directory $RPM_DB_PATH"
-fi
-
-# Creating RPM database and initializing
-rpm --initdb --dbpath $RPM_DB_PATH
+echo
 echo "Installing the RPMs"
 
 # inject a second slash to the last path segment to avoid rpm 3 concatination bug
-NEWPREFIX=`echo $INSTALLDIR | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
-rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $CORERPMLIST
-rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
+NEWPREFIX=`cd ${INSTALLDIR}; pwd | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
+RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${NEWPREFIX} \n" $RPMLIST $GNOMERPM | sort -u | tr -d "\012"`
+rpm --upgrade --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
 
 #
 # Create a link into the users home directory
 #
 
-if [ "$LINK" = "-l" ]
+if [ "$LINK" = "yes" ]
 then
   echo
-  echo "Creating link from $INSTALLDIR/program/soffice to $HOME/soffice"
-  rm -f $HOME/soffice
-  ln -s $INSTALLDIR/program/soffice $HOME/soffice
+  echo "Creating link from ${INSTALLDIR}/program/soffice to $HOME/soffice"
+  ln -sf $INSTALLDIR/program/soffice $HOME/soffice
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
