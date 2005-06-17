@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:33:13 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:02:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,14 +65,14 @@ PRJNAME	= jurt
 TARGET	= jurt
 
 # --- Settings -----------------------------------------------------
-USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-USE_EXTENDED_MANIFESTFILE=TRUE
 
-.INCLUDE :  settings.mk
+.INCLUDE: makefile.pmk
 
 JARCLASSDIRS	= com
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS 	= TRUE
+JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
+CUSTOMMANIFESTFILE = manifest
 
 # Special work necessary for building java reference with javadoc.
 # The source of puplic APIs must be delivered and used later in the
