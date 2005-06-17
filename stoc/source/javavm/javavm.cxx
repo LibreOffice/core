@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:17:00 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,14 @@ int main( int argc, char * argv[])
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
+#include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 #include "osl/file.hxx"
 #include "osl/thread.h"
@@ -153,8 +156,6 @@ int main( int argc, char * argv[])
 #include "jvmfwk/framework.h"
 #include "jni.h"
 
-#include <setjmp.h>
-#include <signal.h>
 #include <stack>
 #include <string.h>
 #include <time.h>
@@ -179,6 +180,16 @@ int main( int argc, char * argv[])
 #define DEF_JAVALIB "jvm.dll"
 #define TIMEZONE "MET"
 #endif
+
+/* Within this implementation of the com.sun.star.java.JavaVirtualMachine
+ * service and com.sun.star.java.theJavaVirtualMachine singleton, the method
+ * com.sun.star.java.XJavaVM.getJavaVM relies on the string
+ * "$URE_INTERNAL_JAVA_DIR/" being expanded via the
+ * com.sun.star.util.theMacroExpander singleton into an internal (see the
+ * com.sun.star.uri.ExternalUriReferenceTranslator service), hierarchical URI
+ * reference relative to which the URE JAR files can be addressed.  If this is
+ * not the case, getJavaVM raises a com.sun.star.uno.RuntimeException.
+ */
 
 namespace css = com::sun::star;
 
@@ -654,18 +665,21 @@ void initVMConfiguration(
 
 }
 
-jmp_buf jmp_jvm_abort;
-sig_atomic_t g_bInGetJavaVM = 0;
+class DetachCurrentThread {
+public:
+    explicit DetachCurrentThread(JavaVM * jvm): m_jvm(jvm) {}
 
-void abort_handler()
-{
-    // If we are within JNI_CreateJavaVM then we jump back into getJavaVM
-    if( g_bInGetJavaVM != 0 )
-    {
-        fprintf( stderr, "JavaVM: JNI_CreateJavaVM called _exit, caught by abort_handler in javavm.cxx\n");
-        longjmp( jmp_jvm_abort, 0);
+    ~DetachCurrentThread() {
+        jint n = m_jvm->DetachCurrentThread();
+        OSL_ASSERT(n == 0);
     }
-}
+
+private:
+    DetachCurrentThread(DetachCurrentThread &); // not defined
+    void operator =(DetachCurrentThread &); // not defined
+
+    JavaVM * m_jvm;
+};
 
 }
 
@@ -720,6 +734,7 @@ JavaVirtualMachine::JavaVirtualMachine(
     JavaVirtualMachine_Impl(*static_cast< osl::Mutex * >(this)),
     m_xContext(rContext),
     m_bDisposed(false),
+    m_pJavaVm(0),
     m_bDontCreateJvm(false),
     m_aAttachGuards(destroyAttachGuards) // TODO check for validity
 {}
@@ -733,7 +748,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
     if (m_bDisposed)
         throw css::lang::DisposedException(
             rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
-    if (m_xVirtualMachine.is())
+    if (m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "bad call to initialize")),
@@ -744,15 +759,26 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
         static_cast< jvmaccess::VirtualMachine * >(0));
     if (rArguments.getLength() == 1)
         rArguments[0] >>= nPointer;
-    m_xVirtualMachine = reinterpret_cast< jvmaccess::VirtualMachine * >(
-        nPointer);
-    if (!m_xVirtualMachine.is())
+    rtl::Reference< jvmaccess::VirtualMachine > vm(
+        reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
+    if (!vm.is())
         throw css::lang::IllegalArgumentException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "sequence of exactly one any containing a hyper"
                               " representing a non-null pointer to a"
                               " jvmaccess::VirtualMachine required")),
             static_cast< cppu::OWeakObject * >(this), 0);
+    try {
+        m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(vm, 0);
+            //TODO: non-null classLoader
+    } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "jvmaccess::UnoVirtualMachine::CreationException")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+    m_xVirtualMachine = vm;
 }
 
 rtl::OUString SAL_CALL JavaVirtualMachine::getImplementationName()
@@ -789,21 +815,21 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
     css::uno::Sequence< sal_Int8 > aId(16);
     rtl_getGlobalProcessId(reinterpret_cast< sal_uInt8 * >(aId.getArray()));
-    // This method can return either a pointer to m_xVirtualMachine, or, for
-    // backwards compatibility, the underlying JavaVM pointer.  If the passed in
-    // rProcessId has a 17th byte of value zero, a pointer to m_xVirtualMachine
-    // is returned.  If the passed in rProcessId has only 16 bytes, the
-    // underlying JavaVM pointer is returned.
-    bool bReturnVirtualMachine
-        = rProcessId.getLength() == 17 && rProcessId[16] == 0;
+    enum ReturnType {
+        RETURN_JAVAVM, RETURN_VIRTUALMACHINE, RETURN_UNOVIRTUALMACHINE };
+    ReturnType returnType =
+        rProcessId.getLength() == 17 && rProcessId[16] == 0
+        ? RETURN_VIRTUALMACHINE
+        : rProcessId.getLength() == 17 && rProcessId[16] == 1
+        ? RETURN_UNOVIRTUALMACHINE
+        : RETURN_JAVAVM;
     css::uno::Sequence< sal_Int8 > aProcessId(rProcessId);
-    if (bReturnVirtualMachine)
+    if (returnType != RETURN_JAVAVM)
         aProcessId.realloc(16);
     if (aId != aProcessId)
         return css::uno::Any();
 
-    JNIEnv * pMainThreadEnv = NULL;
-    while (! m_xVirtualMachine.is()) // retry until successful
+    while (!m_xVirtualMachine.is()) // retry until successful
     {
         // This is the second attempt to create Java.  m_bDontCreateJvm is
         // set which means instantiating the JVM might crash.
@@ -843,7 +869,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             index ++;
         }
 
-
+        JNIEnv * pMainThreadEnv = 0;
         javaFrameworkError errcode = JFW_E_NONE;
         errcode = jfw_startVM(arOptions, index, & m_pJavaVm,
                                 & pMainThreadEnv);
@@ -972,13 +998,14 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
 
         if (bStarted)
         {
-            m_xVirtualMachine = new jvmaccess::VirtualMachine(
-                m_pJavaVm, JNI_VERSION_1_2, true, pMainThreadEnv);
-
-            // Necessary to make debugging work. This thread will be
-            // suspended when this function returns.
-            m_pJavaVm->DetachCurrentThread();
-
+            {
+                DetachCurrentThread detach(m_pJavaVm);
+                    // necessary to make debugging work; this thread will be
+                    // suspended when the destructor of detach returns
+                m_xVirtualMachine = new jvmaccess::VirtualMachine(
+                    m_pJavaVm, JNI_VERSION_1_2, true, pMainThreadEnv);
+                setUpUnoVirtualMachine(pMainThreadEnv);
+            }
             // Listen for changes in the configuration (e.g. proxy settings):
             // TODO this is done too late; changes to the configuration done
             // after the above call to initVMConfiguration are lost
@@ -987,31 +1014,46 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             break;
         }
     }
-    if (bReturnVirtualMachine)
-    {
-        // Return a non-refcounted pointer to m_xVirtualMachine.  It is
-        // guaranteed that this pointer is valid for the caller as long as
-        // the caller's reference to this XJavaVM service is valid; the
-        // caller should convert this non-refcounted pointer into a
-        // refcounted one as soon as possible.
-        OSL_ENSURE(sizeof (sal_Int64)
-                   >= sizeof (jvmaccess::VirtualMachine *),
-                   "Pointer cannot be represented as sal_Int64");
-        return css::uno::makeAny(reinterpret_cast< sal_Int64 >(
-                                     m_xVirtualMachine.get()));
+    if (!m_xUnoVirtualMachine.is()) {
+        try {
+            jvmaccess::VirtualMachine::AttachGuard guard(m_xVirtualMachine);
+            setUpUnoVirtualMachine(guard.getEnvironment());
+        } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "jvmaccess::VirtualMachine::AttachGuard::"
+                        "CreationException occurred")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
     }
-    else
-    {
-        if (sizeof (m_pJavaVm) <= sizeof (sal_Int32))
-            return css::uno::makeAny(reinterpret_cast< sal_Int32 >(
-                                         m_pJavaVm));
-        else if (sizeof (m_pJavaVm) <= sizeof (sal_Int64))
-            return css::uno::makeAny(reinterpret_cast< sal_Int64 >(
-                                         m_pJavaVm));
-        OSL_ENSURE(false, "Pointer cannot be represented as sal_Int64");
+    switch (returnType) {
+    default: // RETURN_JAVAVM
+        if (m_pJavaVm == 0) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "JavaVirtualMachine service was initialized in a way"
+                        " that the requested JavaVM pointer is not available")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (sizeof (m_pJavaVm) <= sizeof (sal_Int32)) {
+            return css::uno::makeAny(reinterpret_cast< sal_Int32 >(m_pJavaVm));
+        } else {
+            OSL_ASSERT(
+                sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
+            return css::uno::makeAny(reinterpret_cast< sal_Int64 >(m_pJavaVm));
+        }
+    case RETURN_VIRTUALMACHINE:
+        OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
+        return css::uno::makeAny(
+            reinterpret_cast< sal_Int64 >(
+                m_xUnoVirtualMachine->getVirtualMachine().get()));
+    case RETURN_UNOVIRTUALMACHINE:
+        OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
+        return css::uno::makeAny(
+            reinterpret_cast< sal_Int64 >(m_xUnoVirtualMachine.get()));
     }
-
-    return css::uno::Any();
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
@@ -1021,7 +1063,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
     if (m_bDisposed)
         throw css::lang::DisposedException(
             rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
-    return m_xVirtualMachine.is();
+    return m_xUnoVirtualMachine.is();
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
@@ -1064,7 +1106,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     if (m_bDisposed)
         throw css::lang::DisposedException(
             rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
-    if (!m_xVirtualMachine.is())
+    if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "JavaVirtualMachine::registerThread:"
@@ -1080,7 +1122,8 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     try
     {
         pStack->push(
-            new jvmaccess::VirtualMachine::AttachGuard(m_xVirtualMachine));
+            new jvmaccess::VirtualMachine::AttachGuard(
+                m_xUnoVirtualMachine->getVirtualMachine()));
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
@@ -1100,7 +1143,7 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
     if (m_bDisposed)
         throw css::lang::DisposedException(
             rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
-    if (!m_xVirtualMachine.is())
+    if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "JavaVirtualMachine::revokeThread:"
@@ -1257,7 +1300,9 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     rtl::Reference< jvmaccess::VirtualMachine > xVirtualMachine;
     {
         osl::MutexGuard aGuard(*this);
-        xVirtualMachine = m_xVirtualMachine;
+        if (m_xUnoVirtualMachine.is()) {
+            xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
+        }
     }
     if (xVirtualMachine.is())
     {
@@ -1510,10 +1555,10 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
     osl::MutexGuard aGuard(*this);
     try
     {
-        if (m_xVirtualMachine.is())
+        if (m_xUnoVirtualMachine.is())
         {
             jvmaccess::VirtualMachine::AttachGuard aAttachGuard(
-                m_xVirtualMachine);
+                m_xUnoVirtualMachine->getVirtualMachine());
             JNIEnv * pJNIEnv = aAttachGuard.getEnvironment();
 
             // The Java Properties
@@ -1635,4 +1680,147 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
         OSL_ENSURE(false,
                    "jvmaccess::VirtualMachine::AttachGuard::CreationException");
     }
+}
+
+void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
+    css::uno::Reference< css::util::XMacroExpander > exp;
+    if (!(m_xContext->getValueByName(
+              rtl::OUString(
+                  RTL_CONSTASCII_USTRINGPARAM(
+                      "/singletons/com.sun.star.util.theMacroExpander")))
+          >>= exp)
+        || !exp.is())
+    {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "component context fails to supply singleton"
+                    " com.sun.star.util.theMacroExpander of type"
+                    " com.sun.star.util.XMacroExpander")),
+            m_xContext);
+    }
+    rtl::OUString baseUrl;
+    try {
+        baseUrl = exp->expandMacros(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("$URE_INTERNAL_JAVA_DIR/")));
+    } catch (css::lang::IllegalArgumentException &) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com::sun::star::lang::IllegalArgumentException")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+    if (baseUrl.getLength() > 0) {
+        baseUrl = css::uri::ExternalUriReferenceTranslator::create(m_xContext)->
+            translateToExternal(baseUrl);
+        if (baseUrl.getLength() == 0) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.uri.ExternalUriReferenceTranslator."
+                        "translateToExternal failed")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+    }
+    jclass class_URLClassLoader = environment->FindClass(
+        "java/net/URLClassLoader");
+    if (class_URLClassLoader == 0) {
+        handleJniException(environment);
+    }
+    jmethodID ctor_URLClassLoader = environment->GetMethodID(
+        class_URLClassLoader, "<init>", "([Ljava/net/URL;)V");
+    if (ctor_URLClassLoader == 0) {
+        handleJniException(environment);
+    }
+    jclass class_URL = environment->FindClass("java/net/URL");
+    if (class_URL == 0) {
+        handleJniException(environment);
+    }
+    jmethodID ctor_URL_1 = environment->GetMethodID(
+        class_URL, "<init>", "(Ljava/lang/String;)V");
+    if (ctor_URL_1 == 0) {
+        handleJniException(environment);
+    }
+    jvalue args[2];
+    args[0].l = environment->NewString(
+        static_cast< jchar const * >(baseUrl.getStr()),
+        static_cast< jsize >(baseUrl.getLength()));
+    if (args[0].l == 0) {
+        handleJniException(environment);
+    }
+    jobject base = environment->NewObjectA(class_URL, ctor_URL_1, args);
+    if (base == 0) {
+        handleJniException(environment);
+    }
+    jmethodID ctor_URL_2 = environment->GetMethodID(
+        class_URL, "<init>", "(Ljava/net/URL;Ljava/lang/String;)V");
+    if (ctor_URL_2 == 0) {
+        handleJniException(environment);
+    }
+    args[0].l = base;
+    args[1].l = environment->NewStringUTF("unoloader.jar");
+    if (args[1].l == 0) {
+        handleJniException(environment);
+    }
+    args[0].l = environment->NewObjectA(class_URL, ctor_URL_2, args);
+    if (args[0].l == 0) {
+        handleJniException(environment);
+    }
+    args[0].l = environment->NewObjectArray(1, class_URL, args[0].l);
+    if (args[0].l == 0) {
+        handleJniException(environment);
+    }
+    jobject cl1 = environment->NewObjectA(
+        class_URLClassLoader, ctor_URLClassLoader, args);
+    if (cl1 == 0) {
+        handleJniException(environment);
+    }
+    jmethodID method_loadClass = environment->GetMethodID(
+        class_URLClassLoader, "loadClass",
+        "(Ljava/lang/String;)Ljava/lang/Class;");
+    if (method_loadClass == 0) {
+        handleJniException(environment);
+    }
+    args[0].l = environment->NewStringUTF(
+        "com.sun.star.lib.unoloader.UnoClassLoader");
+    if (args[0].l == 0) {
+        handleJniException(environment);
+    }
+    jclass class_UnoClassLoader = static_cast< jclass >(
+        environment->CallObjectMethodA(cl1, method_loadClass, args));
+    if (class_UnoClassLoader == 0) {
+        handleJniException(environment);
+    }
+    jmethodID ctor_UnoClassLoader = environment->GetMethodID(
+        class_UnoClassLoader, "<init>",
+        "(Ljava/net/URL;Ljava/lang/ClassLoader;)V");
+    if (ctor_UnoClassLoader == 0) {
+        handleJniException(environment);
+    }
+    args[0].l = base;
+    args[1].l = cl1;
+    jobject cl2 = environment->NewObjectA(
+        class_UnoClassLoader, ctor_UnoClassLoader, args);
+    if (cl2 == 0) {
+        handleJniException(environment);
+    }
+    try {
+        m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(
+            m_xVirtualMachine, cl2);
+    } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "jvmaccess::UnoVirtualMachine::CreationException")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+}
+
+void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
+    environment->ExceptionClear();
+    throw css::uno::RuntimeException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("JNI exception occurred")),
+        static_cast< cppu::OWeakObject * >(this));
 }
