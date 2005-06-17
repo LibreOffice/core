@@ -147,6 +147,9 @@ ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
 
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
+
+openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
+$(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
@@ -154,6 +157,9 @@ $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 
 openoffice_%:
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(PKGFORMATSWITCH)
+
+openofficewithjre_%:
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openofficewithjre_//) -p OpenOffice_wJRE -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects -addsystemintegration $(PKGFORMATSWITCH)
 
 ooolanguagepack_%:
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(PKGFORMATSWITCH)
@@ -260,7 +266,7 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
         $(subst,$/,/ -env:URE_INTERNAL_LIB_DIR=$(MY_URL))
 
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(LOCALPYFILES) $(BIN)$/cp1251.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i ooolanguagepack_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
