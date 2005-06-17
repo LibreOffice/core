@@ -1,5 +1,7 @@
 ..\%__SRC%\bin\osl\setup_osl.inf %_DEST%\bin%_EXT%\setup_osl.inf
 ..\%__SRC%\bin\osl\setup_osl.ins %_DEST%\bin%_EXT%\setup_osl.ins
+..\%__SRC%\bin\ure\ure.inf %_DEST%\bin%_EXT%\ure.inf
+..\%__SRC%\bin\ure\ure.ins %_DEST%\bin%_EXT%\ure.ins
 
 mkdir: %_DEST%\par%_EXT%
 
@@ -9,6 +11,7 @@ mkdir: %_DEST%\par%_EXT%\fam
 mkdir: %_DEST%\par%_EXT%\ada
 mkdir: %_DEST%\par%_EXT%\adm
 mkdir: %_DEST%\par%_EXT%\omc
+mkdir: %_DEST%\par%_EXT%\ure
 
 ..\%__SRC%\par\osl\*.par %_DEST%\par%_EXT%\osl\*.par
 ..\%__SRC%\par\fat\*.par %_DEST%\par%_EXT%\fat\*.par
@@ -16,6 +19,7 @@ mkdir: %_DEST%\par%_EXT%\omc
 ..\%__SRC%\par\ada\*.par %_DEST%\par%_EXT%\ada\*.par
 ..\%__SRC%\par\adm\*.par %_DEST%\par%_EXT%\adm\*.par
 ..\%__SRC%\par\omc\*.par %_DEST%\par%_EXT%\omc\*.par
+..\%__SRC%\par\ure\*.par %_DEST%\par%_EXT%\ure\*.par
 
 ..\inc\macros.inc %_DEST%\inc%_EXT%\macros.inc
 ..\%__SRC%\inc\langmacros.inc %_DEST%\inc%_EXT%\langmacros.inc
