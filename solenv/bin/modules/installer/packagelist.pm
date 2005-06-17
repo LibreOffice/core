@@ -2,9 +2,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-20 11:47:29 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:48:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -497,16 +497,6 @@ sub resolve_packagevariables
         if ( $make_lowercase ) { $value = lc($value); }
         $$packagenameref =~ s/\%$key/$value/;
     }
-}
-
-#####################################################################
-# Adapting the package name, after variables are resolved
-#####################################################################
-
-sub adapt_packagename
-{
-    my ($nameref) = @_;
-    $$nameref =~ s/\.org/org/g; # openoffice.org -> openofficeorg
 }
 
 1;
