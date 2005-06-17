@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:47:49 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,16 @@ namespace jfw
 {
 bool  g_bJavaSet = false;
 
-VendorSettings::VendorSettings()
+static rtl::OString getVendorSettingsPath(rtl::OUString const & sURL);
+
+VendorSettings::VendorSettings():
+    m_xmlDocVendorSettingsFileUrl(BootParams::getVendorSettings())
 {
     OString sMsgExc("[Java framework] Error in constructor "
                          "VendorSettings::VendorSettings() (fwkbase.cxx)");
     //Prepare the xml document and context
-    OString sSettingsPath = jfw::getVendorSettingsPath();
+    OString sSettingsPath = jfw::getVendorSettingsPath(
+        m_xmlDocVendorSettingsFileUrl);
     if (sSettingsPath.getLength() == 0)
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."
@@ -151,7 +155,8 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
             plugin.sVendor = OStringToOUString(osVendor, RTL_TEXTENCODING_UTF8);
 
             //create the file URL to the library
-            OUString sUrl = findPlugin(sTextLibrary);
+            OUString sUrl = findPlugin(
+                m_xmlDocVendorSettingsFileUrl, sTextLibrary);
             if (sUrl.getLength() == 0)
             {
                 OString sPlugin = OUStringToOString(
@@ -284,7 +289,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
     OSL_ASSERT(sVendor.getLength() > 0);
 
     OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkutil.cxx).");
-    OString sVendorsPath = getVendorSettingsPath();
+    OString sVendorsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     OUStringBuffer usBuffer(256);
     usBuffer.appendAscii("/jf:javaSelection/jf:plugins/jf:library[@vendor=\"");
     usBuffer.append(sVendor);
@@ -304,7 +309,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
             m_xmlDocVendorSettings,pathObjVendor->nodesetval->nodeTab[0], 1);
 
     //make an absolute file url from the relativ plugin URL
-    OUString sUrl = findPlugin(xmlCharPlugin);
+    OUString sUrl = findPlugin(m_xmlDocVendorSettingsFileUrl, xmlCharPlugin);
     if (sUrl.getLength() == 0)
     {
         OString sPlugin = OUStringToOString(
@@ -551,7 +556,7 @@ JFW_MODE getMode()
         if (aBoot.getFrom(sJREHome, sValue) == sal_False)
         {
             rtl::OUString sEnvJRE(
-            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_JREHOME));
+            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_JREHOME));
             if (aBoot.getFrom(sEnvJRE, sValue) == sal_False)
             {
                 rtl::OUString sClasspath(
@@ -710,9 +715,8 @@ rtl::OString getSharedSettingsPath()
     return osSystemPathSettings;
 }
 
-rtl::OString getVendorSettingsPath()
+rtl::OString getVendorSettingsPath(rtl::OUString const & sURL)
 {
-    rtl::OUString sURL = BootParams::getVendorSettings();
     if (sURL.getLength() == 0)
         return rtl::OString();
     rtl::OUString sSystemPathSettings;
@@ -727,7 +731,10 @@ rtl::OString getVendorSettingsPath()
     return osSystemPathSettings;
 }
 
-
+rtl::OString getVendorSettingsPath()
+{
+    return getVendorSettingsPath(BootParams::getVendorSettings());
+}
 
 rtl::OUString getApplicationBase()
 {
