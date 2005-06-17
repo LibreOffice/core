@@ -22,9 +22,11 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\util\logging
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\security
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\task
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\uri
+mkdir: %_DEST%\bin%_EXT%\ure
 
 ..\%__SRC%\misc\udkapi.autodoc %_DEST%\idl%_EXT%\udkapi.autodoc
 ..\%__SRC%\ucr\udkapi.db %_DEST%\bin%_EXT%\udkapi.rdb
+..\%__SRC%\ucr\udkapi.db %_DEST%\bin%_EXT%\ure\types.rdb
 ..\%__SRC%\ucrdoc\udkapi_doc.db %_DEST%\bin%_EXT%\udkapi_doc.rdb
 
 ..\com\sun\star\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star
