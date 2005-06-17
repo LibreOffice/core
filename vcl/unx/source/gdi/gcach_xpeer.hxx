@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:10:05 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ private:
     bool                mbUsingXRender;
     XRenderPictFormat*  mpGlyphFormat;
 
+#ifndef XRENDER_LINK
 public:
     XRenderPictFormat*  (*pXRenderFindFormat)(Display*,unsigned long,XRenderPictFormat*,int);
     XRenderPictFormat*  (*pXRenderFindVisualFormat)(Display*,Visual*);
@@ -110,6 +111,7 @@ public:
     Picture     (*pXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*);
     void        (*pXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
     void        (*pXRenderFreePicture)(Display*,Picture);
+#endif
 };
 
 #endif // _SV_GCACH_XPEER_HXX
