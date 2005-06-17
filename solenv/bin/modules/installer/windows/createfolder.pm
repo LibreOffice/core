@@ -2,9 +2,9 @@
 #
 #   $RCSfile: createfolder.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-20 11:48:56 $
+#   last change: $Author: rt $ $Date: 2005-06-17 14:07:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,34 @@ sub get_createfolder_directory
 }
 
 ##############################################################
+# Searching the correct file for language pack directories.
+##############################################################
+
+sub get_languagepack_file
+{
+    my ($filesref, $onedir) = @_;
+
+    my $language = $onedir->{'specificlanguage'};
+    my $foundfile = 0;
+    my $onefile = "";
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        $onefile = ${$filesref}[$i];
+
+        if ( $onefile->{'specificlanguage'} eq $onedir->{'specificlanguage'} )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    if ( ! $foundfile ) { installer::exiter::exit_program("ERROR: No file with correct language found (language pack build)!", "get_languagepack_file"); }
+
+    return $onefile;
+}
+
+##############################################################
 # Returning component for createfolder table.
 ##############################################################
 
@@ -101,7 +129,9 @@ sub get_createfolder_component
     my $globalfilegid = $allvariableshashref->{'GLOBALFILEGID'};
     if ( $installer::globals::patch ) { $globalfilegid = $allvariableshashref->{'GLOBALPATCHFILEGID'}; }
 
-    my $onefile = installer::existence::get_specified_file($filesref, $globalfilegid);
+    my $onefile = "";
+    if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }
+    else { $onefile = installer::existence::get_specified_file($filesref, $globalfilegid); }
 
     return $onefile->{'componentname'};
 }
@@ -125,6 +155,9 @@ sub create_createfolder_table
     for ( my $i = 0; $i <= $#{$dirref}; $i++ )
     {
         my $onedir = ${$dirref}[$i];
+
+        # language packs get only language dependent directories
+        if (( $installer::globals::languagepack ) && ( $onedir->{'specificlanguage'} eq "" )) { next };
 
         my $styles = "";
 
