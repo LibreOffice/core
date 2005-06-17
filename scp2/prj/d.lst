@@ -3,6 +3,8 @@
 ..\%__SRC%\bin\ure\ure.inf %_DEST%\bin%_EXT%\ure.inf
 ..\%__SRC%\bin\ure\ure.ins %_DEST%\bin%_EXT%\ure.ins
 
+..\%__SRC%\bin\osl\setup_osljre.inf %_DEST%\bin%_EXT%\setup_osljre.inf
+
 mkdir: %_DEST%\par%_EXT%
 
 mkdir: %_DEST%\par%_EXT%\osl
