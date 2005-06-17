@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:42:53 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:22:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,10 +124,26 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-
+.IF "$(SYSTEM_MYSPELL)" == "YES" && "$(SYSTEM_MYTHES)" == "YES"
+CXXFLAGS += $(MYSPELL_CFLAGS)
+CFLAGSCXX += $(MYSPELL_CFLAGS)
+CFLAGSCC += $(MYSPELL_CFLAGS)
+.ENDIF
+.IF "$(SYSTEM_MYSPELL)" == "YES" && "$(SYSTEM_MYTHES)" != "YES"
+CXXFLAGS += -I..$/mythes $(MYSPELL_CFLAGS)
+CFLAGSCXX += -I..$/mythes $(MYSPELL_CFLAGS)
+CFLAGSCC += -I..$/mythes $(MYSPELL_CFLAGS)
+.ENDIF
+.IF "$(SYSTEM_MYPSPELL)" != "YES" && "$(SYSTEM_MYTHES)" == "YES"
+CXXFLAGS += -I..$/..$/lingutil
+CFLAGSCXX += -I..$/..$/lingutil
+CFLAGSCC += -I..$/..$/lingutil
+.ENDIF
+.IF "$(SYSTEM_MYSPELL)" != "YES" && "$(SYSTEM_MYTHES)" != "YES"
 CXXFLAGS += -I..$/mythes -I..$/..$/lingutil
 CFLAGSCXX += -I..$/mythes -I..$/..$/lingutil
 CFLAGSCC += -I..$/mythes -I..$/..$/lingutil
+.ENDIF
 
 .IF "$(header)" == ""
 
@@ -158,9 +174,13 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-                $(MYTHESLIB) \
-        $(ULINGULIB)
+                $(MYTHESLIB)
 
+.IF "$(SYSTEM_MYSPELL)" != "YES"
+SHL1STDLIBS+=   $(ULINGULIB)
+.ELSE
+SHL1STDLIBS+=   $(MYSPELL_LIBS)
+.ENDIF
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
