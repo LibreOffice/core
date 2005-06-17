@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:31:23 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,18 @@ inline jstring ustring_to_jstring(
 //------------------------------------------------------------------------------
 inline jclass find_class( JNI_context const & jni, char const * class_name )
 {
-    jclass jo_class = jni->FindClass( class_name );
+    jclass jo_class = 0;
+    JLocalAutoRef name( jni, jni->NewStringUTF( class_name ) );
+    if ( name.is() ) {
+        // find_class may be called before the JNI_info is set:
+        JNI_info const * info = jni.get_info();
+        jmethodID loadClass = info == 0
+            ? jni.get_loadClass_method() : info->m_method_ClassLoader_loadClass;
+        jvalue arg;
+        arg.l = name.get();
+        jo_class = static_cast< jclass >(
+            jni->CallObjectMethodA( jni.get_class_loader(), loadClass, &arg ) );
+    }
     jni.ensure_no_exception();
     return jo_class;
 }
