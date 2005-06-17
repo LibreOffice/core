@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:01:10 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "jni_base.h"
 
 #include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.hxx"
 
@@ -75,6 +76,7 @@
 
 #include "com/sun/star/uno/Type.hxx"
 
+namespace jvmaccess { class UnoVirtualMachine; }
 
 namespace jni_uno
 {
@@ -162,6 +164,8 @@ class JNI_info
     mutable t_str2type          m_type_map;
 
 public:
+    jmethodID                   m_method_ClassLoader_loadClass;
+
     //
     jobject                     m_object_java_env;
     jobject                     m_object_Any_VOID;
@@ -252,10 +256,11 @@ public:
     //
     inline static void append_sig(
         ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
-        bool use_Object_for_type_XInterface = true );
+        bool use_Object_for_type_XInterface = true, bool use_slashes = true );
 
     // get this
-    static JNI_info const * get_jni_info( JNIEnv * jni_env );
+    static JNI_info const * get_jni_info(
+        rtl::Reference< jvmaccess::UnoVirtualMachine > const & uno_vm );
     inline void destroy( JNIEnv * jni_env );
 
 private:
@@ -264,7 +269,9 @@ private:
 
     void destruct( JNIEnv * jni_env );
 
-    explicit JNI_info( JNIEnv * jni_env );
+    explicit JNI_info(
+        JNIEnv * jni_env, jobject class_loader,
+        jmethodID classLoader_loadClass );
     inline ~JNI_info() {}
 };
 
@@ -278,7 +285,7 @@ inline void JNI_info::destroy( JNIEnv * jni_env )
 //______________________________________________________________________________
 inline void JNI_info::append_sig(
     ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
-    bool use_Object_for_type_XInterface )
+    bool use_Object_for_type_XInterface, bool use_slashes )
 {
     switch (type->eTypeClass)
     {
@@ -313,13 +320,27 @@ inline void JNI_info::append_sig(
         buf->append( 'D' );
         break;
     case typelib_TypeClass_STRING:
-        buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;") );
+        if ( use_slashes ) {
+            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;") );
+        } else {
+            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava.lang.String;") );
+        }
         break;
     case typelib_TypeClass_TYPE:
-        buf->append( RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;") );
+        if ( use_slashes ) {
+            buf->append(
+                RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;") );
+        } else {
+            buf->append(
+                RTL_CONSTASCII_STRINGPARAM("Lcom.sun.star.uno.Type;") );
+        }
         break;
     case typelib_TypeClass_ANY:
-        buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+        if ( use_slashes ) {
+            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+        } else {
+            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava.lang.Object;") );
+        }
         break;
     case typelib_TypeClass_ENUM:
     case typelib_TypeClass_STRUCT:
@@ -333,12 +354,13 @@ inline void JNI_info::append_sig(
         if ( i < 0 ) {
             buf->append(
                 ::rtl::OUStringToOString(
-                    uno_name.replace( '.', '/' ),
+                    use_slashes ? uno_name.replace( '.', '/' ) : uno_name,
                     RTL_TEXTENCODING_JAVA_UTF8 ) );
         } else {
+            rtl::OUString s( uno_name.copy( 0, i ) );
             buf->append(
                 ::rtl::OUStringToOString(
-                    uno_name.copy( 0, i ).replace( '.', '/' ),
+                    use_slashes ? s.replace( '.', '/' ) : s,
                     RTL_TEXTENCODING_JAVA_UTF8 ) );
         }
         buf->append( ';' );
@@ -350,13 +372,17 @@ inline void JNI_info::append_sig(
         TypeDescr td( type );
         append_sig(
             buf, ((typelib_IndirectTypeDescription *)td.get())->pType,
-            use_Object_for_type_XInterface );
+            use_Object_for_type_XInterface, use_slashes );
         break;
     }
     case typelib_TypeClass_INTERFACE:
         if (use_Object_for_type_XInterface && is_XInterface( type ))
         {
-            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+            if ( use_slashes ) {
+                buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+            } else {
+                buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava.lang.Object;") );
+            }
         }
         else
         {
@@ -365,7 +391,7 @@ inline void JNI_info::append_sig(
             buf->append( 'L' );
             buf->append(
                 ::rtl::OUStringToOString(
-                    uno_name.replace( '.', '/' ),
+                    use_slashes ? uno_name.replace( '.', '/' ) : uno_name,
                     RTL_TEXTENCODING_JAVA_UTF8 ) );
             buf->append( ';' );
         }
