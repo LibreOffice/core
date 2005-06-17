@@ -167,10 +167,116 @@ SCP1FILES += \
 
 SCP1FILES += \
              vclcanvas.par
+ 
+# ------------------------------------------------------------------------
+# OpenOffice.org with JRE (Windows Only)
 
-SCP2LINK_PRODUCT_TYPE = ure
-SCP2TARGET = ure
-SCP2FILES = ure.par
+.IF "$(GUI)"=="WNT"
+
+SCP2LINK_PRODUCT_TYPE=osl
+SCP2TARGET = setup_osljre
+SCP2FILES  = installation_ooo.par          \
+             scpaction_ooo.par             \
+             directory_ooo.par             \
+             datacarrier_ooo.par           \
+             file_ooo.par                  \
+             file_images_ooo.par           \
+             file_extra_ooo.par            \
+             file_font_ooo.par             \
+             file_library_ooo.par          \
+             file_resource_ooo.par         \
+             shortcut_ooo.par              \
+             module_ooo.par                \
+             module_hidden_ooo.par         \
+             profile_ooo.par               \
+             profileitem_ooo.par           \
+             module_writer.par             \
+             file_writer.par               \
+             module_calc.par               \
+             file_calc.par                 \
+             module_draw.par               \
+             file_draw.par                 \
+             module_impress.par            \
+             file_impress.par              \
+             canvascommons.par             \
+             module_math.par               \
+             file_math.par                 \
+             module_graphicfilter.par      \
+             file_graphicfilter.par        \
+             module_testtool.par           \
+             file_testtool.par             \
+             module_lingu.par              \
+             file_lingu.par                \
+             module_xsltfilter.par         \
+             file_xsltfilter.par           \
+             module_python.par             \
+             file_python.par               \
+             profileitem_python.par
+
+.IF "$(SOLAR_JAVA)"!=""
+SCP2FILES +=                               \
+             module_javafilter.par         \
+             file_javafilter.par
+.ENDIF
+
+.IF "$(SOLAR_JAVA)"!="" 
+.IF "$(GUI)"=="WNT"
+SCP2FILES +=                               \
+             registryitem_javafilter.par
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)"=="WNT"
+SCP2FILES +=                           \
+             file_jre_ooo.par          \
+             registryitem_ooo.par      \
+             folder_ooo.par            \
+             folderitem_ooo.par        \
+             registryitem_writer.par   \
+             folderitem_writer.par     \
+             registryitem_calc.par     \
+             folderitem_calc.par       \
+             registryitem_draw.par     \
+             folderitem_draw.par       \
+             registryitem_impress.par  \
+             folderitem_impress.par    \
+             registryitem_math.par     \
+             folderitem_math.par       \
+             module_quickstart.par     \
+             registryitem_quickstart.par
+
+.IF "$(NETTOOLKIT)"==""
+SCP2FILES +=                           \
+             module_activex.par        \
+             file_activex.par          \
+             module_winexplorerext.par \
+             file_winexplorerext.par   \
+             registryitem_winexplorerext.par
+.ENDIF
+
+.ENDIF
+
+.IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_GNOMEVFS)" != ""
+SCP2FILES += \
+             module_gnome.par   \
+             file_gnome.par
+.ENDIF
+.ENDIF
+
+.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == "" 
+SCP2FILES += \
+             file_crashrep_dynamic.par
+.ENDIF
+
+SCP2FILES += \
+             vclcanvas.par
+
+.ENDIF
+
+SCP3LINK_PRODUCT_TYPE = ure
+SCP3TARGET = ure
+SCP3FILES = ure.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk
