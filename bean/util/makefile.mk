@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mi $ $Date: 2004-10-18 07:17:06 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:40:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJNAME = bean
 TARGET  = officebean
 
 # --- Settings -----------------------------------------------------
-USE_EXTENDED_MANIFESTFILE=TRUE
-USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 
 .INCLUDE : settings.mk
 
