@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:39:27 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:21:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,8 +152,14 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-        $(HNJLIB) \
-                $(ULINGULIB) 
+        $(HNJLIB)
+
+.IF "$(SYSTEM_MYSPELL)" != "YES"
+SHL1STDLIBS+=   $(ULINGULIB)
+.ELSE
+SHL1STDLIBS+=   $(MYSPELL_LIBS)
+.ENDIF
+
 
 
 # build DLL
