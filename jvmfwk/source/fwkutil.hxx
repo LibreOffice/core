@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:01:18 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,21 @@ rtl::OUString getLibraryLocation();
  */
 rtl::OUString getExecutableDirectory();
 /** Locates the plugin library and returns the file URL.
+
+    First tries to locate plugin relative to baseUrl.  If that fails, tries to
+    locate plugin relative to the executable.  If that fails, and plugin
+    contains no slashes, tries to locate plugin in a platform-specific way
+    (e.g., LD_LIBRARY_PATH).
+
+    @param baseUrl
+    The base file URL relative to which the plugin argument is interpreted.
+
+    @param plugin
     The argument is just the name of the plugin or a relative path
     from the directory of the executable.
  */
-rtl::OUString findPlugin(const rtl::OUString & plugin);
+rtl::OUString findPlugin(
+    const rtl::OUString & baseUrl, const rtl::OUString & plugin);
 //Todo still needed?
 rtl::OUString searchFileNextToThisLib(const rtl::OUString & sFile);
 class CNodeJava;
