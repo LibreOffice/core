@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:05:23 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
+#ifndef XRENDER_LINK
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
@@ -204,24 +205,42 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     pFunc=osl_getSymbol(pRenderLib, freePicFuncName.pData);
     if( !pFunc ) return;
     pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
+#endif
 
     // needed to initialize libXrender internals, we already know its there
+#ifdef XRENDER_LINK
+    XRenderQueryExtension( mpDisplay, &nDummy, &nDummy );
+#else
     (*pXRenderQueryExtension)( mpDisplay, &nDummy, &nDummy );
+#endif
 
     int nMajor, nMinor;
+#ifdef XRENDER_LINK
+    XRenderQueryVersion( mpDisplay, &nMajor, &nMinor );
+#else
     (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
+#endif
     nRenderVersion = 16*nMajor + nMinor;
     // TODO: enable/disable things depending on version
 
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
+#ifdef XRENDER_LINK
+    mpGlyphFormat = XRenderFindFormat ( mpDisplay,
+        PictFormatAlphaMask|PictFormatDepth, &aPictFormat, 0 );
+#else
     mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay,
         PictFormatAlphaMask|PictFormatDepth, &aPictFormat, 0 );
+#endif
 
     if( mpGlyphFormat != NULL )
     {
         // and the visual must be supported too
+#ifdef XRENDER_LINK
+      XRenderPictFormat* pVisualFormat = XRenderFindVisualFormat ( mpDisplay, _pVisual);
+#else
         XRenderPictFormat* pVisualFormat = (*pXRenderFindVisualFormat)( mpDisplay, _pVisual );
+#endif
         if( pVisualFormat != NULL )
             mbUsingXRender = true;
     }
@@ -250,7 +269,11 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
             break;
 
         case XRENDER_KIND:
+#ifdef XRENDER_LINK
+        XRenderFreeGlyphSet( mpDisplay,(GlyphSet)rServerFont.GetExtPointer() );
+#else
             (*pXRenderFreeGlyphSet)( mpDisplay,(GlyphSet)rServerFont.GetExtPointer() );
+#endif
             break;
     }
 
@@ -352,7 +375,11 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
                 int nHeight = rServerFont.GetFontSelData().mnHeight;
                 if( nHeight<250 && rServerFont.GetAntialiasAdvice() )
                 {
+#ifdef XRENDER_LINK
+            aGlyphSet = XRenderCreateGlyphSet ( mpDisplay, mpGlyphFormat );
+#else
                     aGlyphSet = (*pXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
+#endif
                     rServerFont.SetExtended( XRENDER_KIND, (void*)aGlyphSet );
                 }
                 else
@@ -516,8 +543,13 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 
             aGlyphId = nGlyphIndex & 0x00FFFFFF;
             const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
+#ifdef XRENDER_LINK
+        XRenderAddGlyphs ( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
+                (char*)maRawBitmap.mpBits, nBytes );
+#else
             (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
                 (char*)maRawBitmap.mpBits, nBytes );
+#endif
             mnBytesUsed += nBytes;
         }
         else
