@@ -18,6 +18,10 @@ setenv OO_SDK_HOME @OO_SDK_HOME@
 # Example: setenv OFFICE_HOME /opt/staroffice
 set OFFICE_HOME=@OFFICE_HOME@
 
+# URE installation directory.
+# Example: setenv OO_SDK_URE_HOME /opt/openoffice.org/ure
+setenv OO_SDK_URE_HOME @OO_SDK_URE_HOME@
+
 # Directory of the make command.
 # Example: setenv OO_SDK_MAKE_HOME /usr/bin
 setenv OO_SDK_MAKE_HOME @OO_SDK_MAKE_HOME@
@@ -46,11 +50,25 @@ setenv OO_SDK_OUTPUT_DIR @OO_SDK_OUTPUT_DIR@
 setenv SDK_AUTO_DEPLOYMENT @SDK_AUTO_DEPLOYMENT@
 
 # Set office program path.
-setenv OFFICE_PROGRAM_PATH ${OFFICE_HOME}/program
+if ( "${OFFICE_HOME}" != "" ) then
+    setenv OFFICE_PROGRAM_PATH "${OFFICE_HOME}/program"
+endif
 
 # Set UNO path, necessary to ensure that the cpp examples using the
 # new UNO bootstrap mechanism use the configured office installation.
-setenv UNO_PATH ${OFFICE_PROGRAM_PATH}
+if ( ${?OFFICE_PROGRAM_PATH} ) then
+    setenv UNO_PATH "${OFFICE_PROGRAM_PATH}"
+endif
+
+if ( "${OO_SDK_URE_HOME}" != "" ) then
+    setenv OO_SDK_URE_BIN_DIR "${OO_SDK_URE_HOME}/bin"
+    setenv OO_SDK_URE_LIB_DIR "${OO_SDK_URE_HOME}/lib"
+    setenv OO_SDK_URE_JAVA_DIR "${OO_SDK_URE_HOME}/share/java"
+else
+    setenv OO_SDK_URE_BIN_DIR "${OFFICE_PROGRAM_PATH}"
+    setenv OO_SDK_URE_LIB_DIR "${OFFICE_PROGRAM_PATH}"
+    setenv OO_SDK_URE_JAVA_DIR "${OFFICE_PROGRAM_PATH}/classes"
+endif
 
 # Set SDK example output directory
 setenv OO_EXAMPLE_OUT ${OO_SDK_HOME}
@@ -68,13 +86,16 @@ switch (`${sdkdir}/config.guess | cut -d"-" -f3,4`)
         set directoryname=solintel
 	set platform=Solaris Intel
     endif
+    set comid=C52
+    set pltfrm=sunpro
+    set soext=so
     set exampleout=SOLARISexample.out
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
-	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
 
@@ -85,14 +106,17 @@ switch (`${sdkdir}/config.guess | cut -d"-" -f3,4`)
     endif
 
     set directoryname=linux
+    set comid=gcc3
+    set pltfrm=gcc
+    set soext=dylib
     set exampleout=LINUXexample.out
     set platform=Linux
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
-	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
 
@@ -103,14 +127,17 @@ switch (`${sdkdir}/config.guess | cut -d"-" -f3,4`)
     endif
 
     set directoryname=macosx
+    set comid=gcc3
+    set pltfrm=gcc
+    set soext=so
     set exampleout=MACOSXexample.out
     set platform=MacOSX
 
     # set DYLD_LIBRARY_PATH
     if ( $?DYLD_LIBRARY_PATH == 0) then
-	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${DYLD_LIBRARY_PATH}
+	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${DYLD_LIBRARY_PATH}
     endif
   breaksw
 
@@ -121,14 +148,17 @@ switch (`${sdkdir}/config.guess | cut -d"-" -f3,4`)
     endif
 
     set directoryname=freebsd
+    set comid=gcc3
+    set pltfrm=gcc
+    set soext=so
     set exampleout=FREEBSDexample.out
     set platform=FreeBSD
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
-	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     endif
 
     if ( -e "/sbin/sysctl" ) then
@@ -151,16 +181,23 @@ endsw
 
 # set PATH
 if ( $?PATH == 0) then
-    setenv PATH ${OO_SDK_ZIP_HOME}:${OO_SDK_MAKE_HOME}:${OO_SDK_HOME}/${directoryname}/bin:${OO_EXAMPLE_OUT}/${exampleout}:${OFFICE_PROGRAM_PATH}:.
+    setenv PATH ${OO_SDK_ZIP_HOME}:${OO_SDK_MAKE_HOME}:${OO_SDK_HOME}/${directoryname}/bin:${OO_EXAMPLE_OUT}/${exampleout}:${OO_SDK_URE_BIN_DIR}:.
 else
-    setenv PATH ${OO_SDK_ZIP_HOME}:${OO_SDK_MAKE_HOME}:${OO_SDK_HOME}/${directoryname}/bin:${OO_EXAMPLE_OUT}/${exampleout}:${OFFICE_PROGRAM_PATH}:.:${PATH}
+    setenv PATH ${OO_SDK_ZIP_HOME}:${OO_SDK_MAKE_HOME}:${OO_SDK_HOME}/${directoryname}/bin:${OO_EXAMPLE_OUT}/${exampleout}:${OO_SDK_URE_BIN_DIR}:.:${PATH}
 endif
 
 # Set CLASSPATH
+if ( ${?OFFICE_PROGRAM_PATH} ) then
+    if ( $[?CLASSPATH} == 0 ) then
+        setenv CLASSPATH "${OFFICE_PROGRAM_PATH}/classes/unoil.jar"
+    else
+        setenv CLASSPATH "${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${CLASSPATH}"
+    endif
+endif
 if ( $?CLASSPATH == 0) then
-    setenv CLASSPATH ${OFFICE_PROGRAM_PATH}/classes/jurt.jar:${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${OFFICE_PROGRAM_PATH}/classes/ridl.jar:${OFFICE_PROGRAM_PATH}/classes/juh.jar
+    setenv CLASSPATH "${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar"
 else
-    setenv CLASSPATH ${OFFICE_PROGRAM_PATH}/classes/jurt.jar:${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${OFFICE_PROGRAM_PATH}/classes/ridl.jar:${OFFICE_PROGRAM_PATH}/classes/juh.jar:${CLASSPATH}
+    setenv CLASSPATH "${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${CLASSPATH}"
 endif
 
 if ( $?OO_SDK_CPP_HOME == 0) then
@@ -174,6 +211,26 @@ if ( $?OO_SDK_JAVA_HOME == 0) then
 #    setenv UNO_JAVA_JFW_VENDOR_SETTINGS `sp2bv $OFFICE_HOME/share/config/javavendors.xml`
 endif
 
+# For URE, prepare symbolic links for libraries:
+rm -f "${OO_SDK_HOME}/${directoryname}/lib/libuno_cppu.so" \
+    "${OO_SDK_HOME}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}" \
+    "${OO_SDK_HOME}/${directoryname}/lib/libuno_sal.${soext}" \
+    "${OO_SDK_HOME}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
+    "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}.${soext}"
+if ( "${OO_SDK_URE_HOME}" != "" ) then
+    mkdir -p "${OO_SDK_HOME}/${directoryname}/lib"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
+        "${OO_SDK_HOME}/${directoryname}/lib/libuno_cppu.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
+        "${OO_SDK_HOME}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_sal.${soext}.3" \
+        "${OO_SDK_HOME}/${directoryname}/lib/libuno_sal.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
+        "${OO_SDK_HOME}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}.${soext}" \
+        "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}.${soext}"
+endif
+
 echo 
 echo " ************************************************************************"
 echo " *"                                                  
@@ -181,6 +238,7 @@ echo " * SDK environment is prepared for ${platform}"
 echo " *"                                                  
 echo " * SDK = ${OO_SDK_HOME}"
 echo " * Office = ${OFFICE_HOME}"
+echo " * URE = ${OO_SDK_URE_HOME}"
 echo " * Make = ${OO_SDK_MAKE_HOME}"
 echo " * Zip = ${OO_SDK_ZIP_HOME}"
 if ( $?OO_SDK_CPP_HOME == 0) then
@@ -204,6 +262,7 @@ echo " ************************************************************************"
 
 unset sdkdir
 unset directoryname
+unset comid
 unset exampleout
 unset platform
 
