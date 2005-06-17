@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:01:24 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,10 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
-    JNI_context jni( jni_info, jni_env );
+    JNI_context jni(
+        jni_info, jni_env,
+        reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
+            bridge->m_java_env->pContext )->getClassLoader() );
 
     OUString method_name;
 
@@ -643,7 +646,10 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
-    JNI_context jni( jni_info, jni_env );
+    JNI_context jni(
+        jni_info, jni_env,
+        reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
+            bridge->m_java_env->pContext )->getClassLoader() );
 
     uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(
         jni->GetLongField(
