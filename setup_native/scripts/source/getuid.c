@@ -9,6 +9,9 @@ extern "C" {
 
 #ifdef SOLARIS
 
+#include <sys/systeminfo.h>
+#include <strings.h>
+
 int   chown  (const char *path, uid_t owner, gid_t group) {return 0;}
 int   lchown (const char *path, uid_t owner, gid_t group) {return 0;}
 int   fchown (int fildes, uid_t owner, gid_t group)       {return 0;}
