@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:44:04 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 
+#include "jvmaccess/unovirtualmachine.hxx"
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -116,11 +117,12 @@ JNI_interface_type_info::JNI_interface_type_info(
     OUString const & uno_name = OUString::unacquired( &m_td.get()->pTypeName );
     JNI_info const * jni_info = jni.get_info();
 
-    OString java_name(
-        OUStringToOString(
-            uno_name.replace( '.', '/' ),
-            RTL_TEXTENCODING_JAVA_UTF8 ) );
-    JLocalAutoRef jo_class( jni, find_class( jni, java_name.getStr() ) );
+    JLocalAutoRef jo_class(
+        jni,
+        find_class(
+            jni,
+            ( OUStringToOString( uno_name, RTL_TEXTENCODING_JAVA_UTF8 ).
+              getStr() ) ) );
     JLocalAutoRef jo_type( jni, create_type( jni, (jclass) jo_class.get() ) );
 
     // get proxy ctor
@@ -298,8 +300,7 @@ JNI_compound_type_info::JNI_compound_type_info(
         find_class(
             jni,
             OUStringToOString(
-                nucleus.replace( '.', '/' ),
-                RTL_TEXTENCODING_JAVA_UTF8 ).getStr() ) );
+                nucleus, RTL_TEXTENCODING_JAVA_UTF8 ).getStr() ) );
 
     JNI_info const * jni_info = jni.get_info();
 
@@ -522,7 +523,8 @@ JNI_type_info const * JNI_info::get_type_info(
 }
 
 //______________________________________________________________________________
-JNI_info::JNI_info( JNIEnv * jni_env )
+JNI_info::JNI_info(
+    JNIEnv * jni_env, jobject class_loader, jmethodID classLoader_loadClass )
     : m_XInterface_queryInterface_td(
         (reinterpret_cast< typelib_InterfaceTypeDescription * >(
             css::uno::TypeDescription(
@@ -534,51 +536,52 @@ JNI_info::JNI_info( JNIEnv * jni_env )
           ::getCppuType( (css::uno::RuntimeException const *)0 ) ),
       m_void_type( ::getCppuVoidType() ),
       m_class_JNI_proxy( 0 ),
-      m_XInterface_type_info( 0 )
+      m_XInterface_type_info( 0 ),
+      m_method_ClassLoader_loadClass( classLoader_loadClass )
 {
-    JNI_context jni( this, jni_env ); // !no proper jni_info!
+    JNI_context jni( this, jni_env, class_loader ); // !no proper jni_info!
 
     // class lookup
     JLocalAutoRef jo_Object(
-        jni, find_class( jni, "java/lang/Object" ) );
+        jni, find_class( jni, "java.lang.Object" ) );
     JLocalAutoRef jo_Class(
-        jni, find_class( jni, "java/lang/Class" ) );
+        jni, find_class( jni, "java.lang.Class" ) );
     JLocalAutoRef jo_Throwable(
-        jni, find_class( jni, "java/lang/Throwable" ) );
+        jni, find_class( jni, "java.lang.Throwable" ) );
     JLocalAutoRef jo_Character(
-        jni, find_class( jni, "java/lang/Character" ) );
+        jni, find_class( jni, "java.lang.Character" ) );
     JLocalAutoRef jo_Boolean(
-        jni, find_class( jni, "java/lang/Boolean" ) );
+        jni, find_class( jni, "java.lang.Boolean" ) );
     JLocalAutoRef jo_Byte(
-        jni, find_class( jni, "java/lang/Byte" ) );
+        jni, find_class( jni, "java.lang.Byte" ) );
     JLocalAutoRef jo_Short(
-        jni, find_class( jni, "java/lang/Short" ) );
+        jni, find_class( jni, "java.lang.Short" ) );
     JLocalAutoRef jo_Integer(
-        jni, find_class( jni, "java/lang/Integer" ) );
+        jni, find_class( jni, "java.lang.Integer" ) );
     JLocalAutoRef jo_Long(
-        jni, find_class( jni, "java/lang/Long" ) );
+        jni, find_class( jni, "java.lang.Long" ) );
     JLocalAutoRef jo_Float(
-        jni, find_class( jni, "java/lang/Float" ) );
+        jni, find_class( jni, "java.lang.Float" ) );
     JLocalAutoRef jo_Double(
-        jni, find_class( jni, "java/lang/Double" ) );
+        jni, find_class( jni, "java.lang.Double" ) );
     JLocalAutoRef jo_String(
-        jni, find_class( jni, "java/lang/String" ) );
+        jni, find_class( jni, "java.lang.String" ) );
     JLocalAutoRef jo_RuntimeException(
-        jni, find_class( jni, "com/sun/star/uno/RuntimeException" ) );
+        jni, find_class( jni, "com.sun.star.uno.RuntimeException" ) );
     JLocalAutoRef jo_UnoRuntime(
-        jni, find_class( jni, "com/sun/star/uno/UnoRuntime" ) );
+        jni, find_class( jni, "com.sun.star.uno.UnoRuntime" ) );
     JLocalAutoRef jo_Any(
-        jni, find_class( jni, "com/sun/star/uno/Any" ) );
+        jni, find_class( jni, "com.sun.star.uno.Any" ) );
     JLocalAutoRef jo_Enum(
-        jni, find_class( jni, "com/sun/star/uno/Enum" ) );
+        jni, find_class( jni, "com.sun.star.uno.Enum" ) );
     JLocalAutoRef jo_Type(
-        jni, find_class( jni, "com/sun/star/uno/Type" ) );
+        jni, find_class( jni, "com.sun.star.uno.Type" ) );
     JLocalAutoRef jo_TypeClass(
-        jni, find_class( jni, "com/sun/star/uno/TypeClass" ) );
+        jni, find_class( jni, "com.sun.star.uno.TypeClass" ) );
     JLocalAutoRef jo_IEnvironment(
-        jni, find_class( jni, "com/sun/star/uno/IEnvironment" ) );
+        jni, find_class( jni, "com.sun.star.uno.IEnvironment" ) );
     JLocalAutoRef jo_JNI_proxy(
-        jni, find_class( jni, "com/sun/star/bridges/jni_uno/JNI_proxy" ) );
+        jni, find_class( jni, "com.sun.star.bridges.jni_uno.JNI_proxy" ) );
 
     // method Object.toString()
     m_method_Object_toString = jni->GetMethodID(
@@ -942,14 +945,27 @@ void JNI_info::destruct( JNIEnv * jni_env )
 }
 
 //______________________________________________________________________________
-JNI_info const * JNI_info::get_jni_info( JNIEnv * jni_env )
+JNI_info const * JNI_info::get_jni_info(
+    rtl::Reference< jvmaccess::UnoVirtualMachine > const & uno_vm )
 {
     // !!!no JNI_info available at JNI_context!!!
-    JNI_context jni( 0, jni_env );
+    ::jvmaccess::VirtualMachine::AttachGuard guard(
+        uno_vm->getVirtualMachine() );
+    JNIEnv * jni_env = guard.getEnvironment();
+    JNI_context jni( 0, jni_env, uno_vm->getClassLoader() );
 
+    jmethodID jo_loadClass = jni.get_loadClass_method();
+    JLocalAutoRef name(
+        jni,
+        jni->NewStringUTF( "com.sun.star.bridges.jni_uno.JNI_info_holder" ) );
+    jni.ensure_no_exception();
+    jvalue arg;
+    arg.l = name.get();
     JLocalAutoRef jo_JNI_info_holder(
         jni,
-        find_class( jni, "com/sun/star/bridges/jni_uno/JNI_info_holder" ) );
+        jni->CallObjectMethodA(
+            uno_vm->getClassLoader(), jo_loadClass, &arg ) );
+    jni.ensure_no_exception();
     // field JNI_info_holder.m_jni_info_handle
     jfieldID field_s_jni_info_handle =
         jni->GetStaticFieldID(
@@ -963,7 +979,8 @@ JNI_info const * JNI_info::get_jni_info( JNIEnv * jni_env )
                 (jclass) jo_JNI_info_holder.get(), field_s_jni_info_handle ) );
     if (0 == jni_info) // un-initialized?
     {
-        JNI_info * new_info = new JNI_info( jni_env );
+        JNI_info * new_info = new JNI_info(
+            jni_env, uno_vm->getClassLoader(), jo_loadClass );
 
         ClearableMutexGuard guard( Mutex::getGlobalMutex() );
         jni_info =
