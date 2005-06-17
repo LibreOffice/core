@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-13 09:42:38 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:49:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,6 +187,9 @@ sub add_root_directories
         my $productname = $allvariableshashref->{'PRODUCTNAME'};
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $productkey = $productname . " " . $productversion;
+
+        if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} ) { $productkey = $productname; }
+
         my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
 
