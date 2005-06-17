@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:17:23 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
 namespace css = com::sun::star;
@@ -211,26 +212,26 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             UNO_QUERY_THROW);
 
         // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
-        // process ID has an extra 17th byte of value zero, the returned any
-        // contains a pointer to a jvmaccess::VirtualMachine, instead of the
+        // process ID has an extra 17th byte of value one, the returned any
+        // contains a pointer to a jvmaccess::UnoVirtualMachine, instead of the
         // underlying JavaVM pointer:
         Sequence<sal_Int8> processID(17);
         rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *>(processID.getArray()));
-        processID[16] = 0;
+        processID[16] = 1;
 
-        // We get a non-refcounted pointer to a jvmaccess::VirtualMachine
+        // We get a non-refcounted pointer to a jvmaccess::UnoVirtualMachine
         // from the XJavaVM service (the pointer is guaranteed to be valid
         // as long as our reference to the XJavaVM service lasts), and
         // convert the non-refcounted pointer into a refcounted one
         // immediately:
         OSL_ENSURE(sizeof (sal_Int64)
-                        >= sizeof (jvmaccess::VirtualMachine *),
+                        >= sizeof (jvmaccess::UnoVirtualMachine *),
                     "Pointer cannot be represented as sal_Int64");
         sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
-            static_cast< jvmaccess::VirtualMachine * >(0));
+            static_cast< jvmaccess::UnoVirtualMachine * >(0));
         javaVM_xJavaVM->getJavaVM(processID) >>= nPointer;
-        rtl::Reference< jvmaccess::VirtualMachine > xVirtualMachine(
-            reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
+        rtl::Reference< jvmaccess::UnoVirtualMachine > xVirtualMachine(
+            reinterpret_cast< jvmaccess::UnoVirtualMachine * >(nPointer));
         if (!xVirtualMachine.is())
             //throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
             //   "javaloader error - JavaVirtualMachine service could not provide a VM")),
@@ -242,11 +243,33 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
 
         try
         {
-            jvmaccess::VirtualMachine::AttachGuard aGuard(xVirtualMachine);
+            jvmaccess::VirtualMachine::AttachGuard aGuard(
+                xVirtualMachine->getVirtualMachine());
             JNIEnv * pJNIEnv = aGuard.getEnvironment();
 
             // instantiate the java JavaLoader
-            jclass jcJavaLoader = pJNIEnv->FindClass("com/sun/star/comp/loader/JavaLoader");
+            jclass jcClassLoader = pJNIEnv->FindClass("java/lang/ClassLoader");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not find class java/lang/ClassLoader")),
+                    css::uno::Reference<XInterface>());
+            jmethodID jmLoadClass = pJNIEnv->GetMethodID(
+                jcClassLoader, "loadClass",
+                "(Ljava/lang/String;)Ljava/lang/Class;");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not find method java/lang/ClassLoader.loadClass")),
+                    css::uno::Reference<XInterface>());
+            jvalue arg;
+            arg.l = pJNIEnv->NewStringUTF(
+                "com.sun.star.comp.loader.JavaLoader");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not create string")),
+                    css::uno::Reference<XInterface>());
+            jclass jcJavaLoader = static_cast< jclass >(
+                pJNIEnv->CallObjectMethodA(
+                    xVirtualMachine->getClassLoader(), jmLoadClass, &arg));
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "javaloader error - could not find class com/sun/star/comp/loader/JavaLoader")),
