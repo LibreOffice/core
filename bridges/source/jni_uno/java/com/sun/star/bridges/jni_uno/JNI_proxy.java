@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JNI_proxy.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:32:17 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         NativeLibraryLoader.loadLibrary(JNI_proxy.class.getClassLoader(),
                                         "java_uno");
     }
-    protected static ClassLoader s_system_classloader =
-        ClassLoader.getSystemClassLoader();
+    protected static ClassLoader s_classloader =
+        JNI_proxy.class.getClassLoader();
     protected static Class s_InvocationHandler [] =
         new Class [] { java.lang.reflect.InvocationHandler.class };
 
@@ -158,7 +158,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         throws Throwable
     {
         Class proxy_class = java.lang.reflect.Proxy.getProxyClass(
-            s_system_classloader,
+            s_classloader,
             new Class [] { clazz, IQueryInterface.class,
                            com.sun.star.lib.uno.Proxy.class } );
         return proxy_class.getConstructor( s_InvocationHandler );
