@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-06-16 14:58:51 $
+dnl * Date: $Date: 2005-06-17 09:24:13 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.122 $ )
+AC_REVISION( $Revision: 1.123 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -58,7 +58,7 @@ AC_ARG_ENABLE(fontooo,
                           (useful for distributions using fontconfig for OOo)
 ],,enable_fontooo="yes")
 AC_ARG_ENABLE(evolution2,
-[  --enable-evolution2      Allows the built-in evolution 2 addressbook connectivity
+[  --enable-evolution2     Allows the built-in evolution 2 addressbook connectivity
 			  build to be enabled.
 ],,)
 AC_ARG_WITH(system-stdlibs,
@@ -156,6 +156,16 @@ AC_ARG_ENABLE(rpath,
 AC_ARG_ENABLE(pasf,
 [  --disable-pasf          disable support for sound using portaudio/sndfile
 ],,enable_pasf=yes)
+AC_ARG_ENABLE(pam-link,
+[  --enable-pam-link       link with libpam instead of dynamically open it
+],,)
+AC_ARG_ENABLE(crypt-link,
+[  --disable-crypt-link    disable linking with libcrypt instead of dynamically open it
+                          (needed for ancient GNU/Linux distributions without crypt()/libcrypt)
+],,enable_crypt_link=yes)
+AC_ARG_ENABLE(xrender-link,
+[  --enable-xrender-link   link with libXrender instead of dynamically open it
+],,)
 AC_ARG_WITH(myspell-dicts,
 [  --without-myspell-dicts Removes myspell dictionaries from openoffice.org
                           installation set, for people building for specific
@@ -227,6 +237,15 @@ AC_ARG_WITH(system-portaudio,
 ],,)
 AC_ARG_WITH(system-neon,
 [  --with-system-neon      Use neon already on system
+],,)
+AC_ARG_WITH(system-myspell,
+[  --with-system-myspell   Use myspell already on system
+],,)
+AC_ARG_WITH(system-mythes,
+[  --with-system-mythes    Use mythes already on system
+],,)
+AC_ARG_WITH(system-altlinuxhyph,
+[  --with-system-altlinuxhyph    Use ALTLinuxhyph already on system
 ],,)
 AC_ARG_WITH(system-mozilla,
 [  --with-system-mozilla   Use mozilla already on system. Note that some
@@ -1299,12 +1318,37 @@ if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
 fi
 
 dnl ===================================================================
-dnl Check if pam_appl.h is available on Linux or FreeBSD
+dnl Check if PAM/pam_appl.h is available on Linux or FreeBSD
 dnl ===================================================================
 if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "GNU"; then
     AC_CHECK_HEADER(security/pam_appl.h, [],
                     [AC_MSG_ERROR([pam_appl.h could not be found. libpam-dev or pam-devel missing?])], [])
+    AC_MSG_CHECKING([whether to link to libpam])
+    if test -n "$enable_pam_link"; then
+      AC_MSG_RESULT([yes])
+      PAM_LINK=YES
+      AC_CHECK_LIB(pam, pam_start, [],
+          [AC_MSG_ERROR(libpam not found or functional)], [])
+    else
+      AC_MSG_RESULT([no, dynamically open it])
+      PAM_LINK=NO
+    fi
 fi
+AC_SUBST(PAM_LINK)
+
+if test "$_os" = "Linux"; then
+    AC_MSG_CHECKING([whether to link to libcrypt])
+    if test -n "$enable_crypt_link"; then
+        AC_MSG_RESULT([yes])
+        CRYPT_LINK=YES
+        AC_CHECK_LIB(crypt, crypt, [],
+            [AC_MSG_ERROR(libcrypt not found or functional)], [])
+    else
+        AC_MSG_RESULT([no, dynamically open it])
+        CRYPT_LINK=NO
+    fi
+fi
+AC_SUBST(CRYPT_LINK)
 
 dnl ===================================================================
 dnl Testing for c++ compiler and version...
@@ -2903,8 +2947,17 @@ fi
 dnl ===================================================================
 dnl Check for system Xrender
 dnl ===================================================================
-AC_MSG_CHECKING([which XRender headers to use])
-if test -n "$with_system_xrender_headers" && test -n "$with_system_xrender_headers" != "no"; then
+AC_MSG_CHECKING([whether to link to Xrender])
+if test -n "$enable_xrender_link"; then
+   AC_MSG_RESULT([yes])
+   XRENDER_LINK=YES
+   with_system_xrender_headers=yes
+else
+   AC_MSG_RESULT([no, dynamically open it])
+   XRENDER_LINK=NO
+fi
+AC_MSG_CHECKING([which Xrender headers to use])
+if test -n "$with_system_xrender_headers" && test "$with_system_xrender_headers" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_XRENDER_HEADERS=YES
    AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
@@ -2914,7 +2967,12 @@ else
    SYSTEM_XRENDER_HEADERS=NO
    BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
 fi
+if test "$XRENDER_LINK" = "YES"; then
+   AC_CHECK_LIB(Xrender, XRenderQueryVersion, [],
+      [AC_MSG_ERROR(libXrender not found or functional)], [])
+fi
 AC_SUBST(SYSTEM_XRENDER_HEADERS)
+AC_SUBST(XRENDER_LINK)
 
 dnl ===================================================================
 dnl Check for system nas
@@ -3011,6 +3069,71 @@ fi
 AC_SUBST(SYSTEM_NEON)
 AC_SUBST(NEON_LIBS)
 AC_SUBST(NEON_CFLAGS)
+
+dnl ===================================================================
+dnl Check for system myspell
+dnl ===================================================================
+AC_MSG_CHECKING([which myspell to use])
+if test -n "$with_system_myspell" && test "$with_system_myspell" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_MYSPELL=YES
+    PKG_CHECK_MODULES( MYSPELL, myspell,
+      [ MYSPELL_PKGCONFIG=YES ],
+      [
+         AC_CHECK_HEADER(myspell/myspell.hxx, [],
+            [AC_MSG_ERROR(myspell headers not found.)], [])
+         MYSPELL_CFLAGS=-I/usr/include/myspell
+         AC_LANG(C++)
+         AC_CHECK_LIB(myspell, main, [],
+           [ AC_MSG_ERROR(myspell library not found.) ], [])
+         MYSPELL_LIBS=-lmyspell
+      ]
+    )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_MYSPELL=NO
+    MYSPELL_LIBS=-lmyspell
+fi
+AC_SUBST(SYSTEM_MYSPELL)
+AC_SUBST(MYSPELL_CFLAGS)
+AC_SUBST(MYSPELL_LIBS)
+
+dnl ===================================================================
+dnl Checking for altlinuxhyph
+dnl ===================================================================
+AC_MSG_CHECKING([which altlinuxhyph to use])
+if test -n "$with_system_altlinuxhyph" && test "$with_system_altlinuxyph" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_HYPH=YES
+    AC_CHECK_HEADER(hyphen.h, [],
+       [ AC_MSG_ERROR(altlinuxhyph headers not found.)], [])
+    AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
+       [ AC_MSG_ERROR(no. You are sure you have altlinuyhyph headers?)],
+       [#include <hyphen.h>])
+    AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate, [],
+        [ AC_MSG_ERROR(altlinuxhyph library not found.)], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_HYPH=NO
+fi
+AC_SUBST(SYSTEM_HYPH)
+
+dnl ===================================================================
+dnl Checking for mythes
+dnl ===================================================================
+AC_MSG_CHECKING([which mythes to use])
+if test -n "$with_system_mythes" && test "$with_system_mythes" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_MYTHES=YES
+    AC_CHECK_HEADER(mythes.hxx, [],
+       [ AC_MSG_ERROR(mythes.hxx headers not found.)], [])
+    AC_CHECK_LIB(mythes, main, [],
+        [ AC_MSG_ERROR(mythes library not found.)], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_MYTHES=NO
+fi
+AC_SUBST(SYSTEM_MYTHES)
 
 dnl ***************************************
 dnl testing libc version for Linux...
