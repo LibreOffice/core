@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:45 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:00:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,7 @@ TARGET  = com_sun_star_comp_urlresolver
 
 # Files --------------------------------------------------------
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/UrlResolver.class
+JAVAFILES = UrlResolver.java
 
 # --- Targets ------------------------------------------------------
 
