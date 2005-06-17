@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:04:45 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:01:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET  = com_sun_star_lib_uno_environments_java
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES = $(CLASSDIR)$/$(PACKAGE)$/java_environment.class
+JAVAFILES = java_environment.java
 
 # --- Targets ------------------------------------------------------
 
