@@ -9,12 +9,13 @@ privateSnippetExecutorGeneral:
 .LCFIg0:
     movl    %esp,%ebp
 .LCFIg1:
-    subl    $0x8,%esp         # 64bit nRegReturn
+    subl    $0x4,%esp         # 32bit returnValue
+    pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
     pushl   %eax              # 32bit nFunctionIndex
     call    cpp_vtable_call
-    movl    12(%esp),%eax     # 64 bit nRegReturn, lower half
+    movl    16(%esp),%eax     # 32bit returnValue
     leave
     ret
 .LFEg:
@@ -29,7 +30,7 @@ privateSnippetExecutorVoid:
 .LCFIv0:
     movl    %esp,%ebp
 .LCFIv1:
-    subl    $0x8,%esp         # 64bit nRegReturn
+    pushl   $0                # 32bit null pointer (returnValue not used)
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
     pushl   %eax              # 32bit nFunctionIndex
@@ -48,13 +49,14 @@ privateSnippetExecutorHyper:
 .LCFIh0:
     movl    %esp,%ebp
 .LCFIh1:
-    subl    $0x8,%esp         # 64bit nRegReturn
+    subl    $0x8,%esp         # 64bit returnValue
+    pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
     pushl   %eax              # 32bit nFunctionIndex
     call    cpp_vtable_call
-    movl    12(%esp),%eax     # 64 bit nRegReturn, lower half
-    movl    16(%esp),%edx     # 64 bit nRegReturn, upper half
+    movl    16(%esp),%eax     # 64bit returnValue, lower half
+    movl    20(%esp),%edx     # 64bit returnValue, upper half
     leave
     ret
 .LFEh:
@@ -69,12 +71,13 @@ privateSnippetExecutorFloat:
 .LCFIf0:
     movl    %esp,%ebp
 .LCFIf1:
-    subl    $0x8,%esp         # 64bit nRegReturn
+    subl    $0x4,%esp         # 32bit returnValue
+    pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
     pushl   %eax              # 32bit nFunctionIndex
     call    cpp_vtable_call
-    flds    12(%esp)          # 64 bit nRegReturn, lower half
+    flds    16(%esp)          # 32bit returnValue
     leave
     ret
 .LFEf:
@@ -89,12 +92,13 @@ privateSnippetExecutorDouble:
 .LCFId0:
     movl    %esp,%ebp
 .LCFId1:
-    subl    $0x8,%esp         # 64bit nRegReturn
+    subl    $0x8,%esp         # 64bit returnValue
+    pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
     pushl   %eax              # 32bit nFunctionIndex
     call    cpp_vtable_call
-    fldl    12(%esp)          # 64 bit nRegReturn
+    fldl    16(%esp)          # 64bit returnValue
     leave
     ret
 .LFEd:
@@ -109,12 +113,13 @@ privateSnippetExecutorClass:
 .LCFIc0:
     movl    %esp,%ebp
 .LCFIc1:
-    subl    $0x8,%esp         # 64bit nRegReturn
+    subl    $0x4,%esp         # 32bit returnValue
+    pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
     pushl   %eax              # 32bit nFunctionIndex
     call    cpp_vtable_call
-    movl    12(%esp),%eax     # 64 bit nRegReturn, lower half
+    movl    16(%esp),%eax     # 32bit returnValue
     leave
     ret     $4
 .LFEc:
