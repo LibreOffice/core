@@ -20,7 +20,15 @@ CLASSES_DIR=$(PRJ)/classes
 OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
 COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 
-OFFICE_TYPE_LIBRARY=$(subst \\,\,"$(OFFICE_PROGRAM_PATH)$(PS)types.rdb")
+ifneq "$(OO_SDK_URE_HOME)" ""
+URE_TYPES=$(subst \\,\,$(URE_MISC)$(PS)types.rdb)
+URE_SERVICES=$(subst \\,\,$(URE_MISC)$(PS)services.rdb)
+else
+URE_TYPES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)types.rdb)
+URE_SERVICES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)
+endif
+
+OFFICE_TYPE_LIBRARY="$(URE_TYPES)"
 # DKREGISTRYNAME is only for compatibility reasons 
 DKREGISTRYNAME=$(OFFICE_TYPE_LIBRARY)
 
