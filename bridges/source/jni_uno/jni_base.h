@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:49:45 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ typedef __va_list va_list;
 #endif
 #include <memory>
 
+#include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
 #include "osl/diagnose.h"
@@ -106,15 +107,18 @@ class JNI_context
 {
     JNI_info const * m_jni_info;
     JNIEnv *         m_env;
+    jobject          m_class_loader;
 
     JNI_context( JNI_context & ); // not impl
     void operator = ( JNI_context ); // not impl
 
     void java_exc_occured() const;
 public:
-    inline explicit JNI_context( JNI_info const * jni_info, JNIEnv * env )
+    inline explicit JNI_context(
+        JNI_info const * jni_info, JNIEnv * env, jobject class_loader )
         : m_jni_info( jni_info ),
-          m_env( env )
+          m_env( env ),
+          m_class_loader( class_loader )
         {}
 
     inline JNI_info const * get_info() const
@@ -124,6 +128,11 @@ public:
         { return m_env; }
     inline JNIEnv * get_jni_env() const
         { return m_env; }
+
+    inline jobject get_class_loader() const
+        { return m_class_loader; }
+
+    jmethodID get_loadClass_method() const;
 
     inline void ensure_no_exception() const; // throws BridgeRuntimeError
     inline bool assert_no_exception() const; // asserts and clears exception
@@ -163,9 +172,11 @@ class JNI_guarded_context
 
 public:
     inline explicit JNI_guarded_context(
-        JNI_info const * jni_info, ::jvmaccess::VirtualMachine * vm_access )
-        : AttachGuard( vm_access ),
-          JNI_context( jni_info, AttachGuard::getEnvironment() )
+        JNI_info const * jni_info, ::jvmaccess::UnoVirtualMachine * vm_access )
+        : AttachGuard( vm_access->getVirtualMachine() ),
+          JNI_context(
+              jni_info, AttachGuard::getEnvironment(),
+              vm_access->getClassLoader() )
         {}
 };
 
