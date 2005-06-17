@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 02:46:20 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:16:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,12 @@ TARGETTYPE=CUI
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS := TRUE
+
+.IF "$(OS)" == "LINUX"
+LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+.ELIF "$(OS)" == "SOLARIS"
+LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
