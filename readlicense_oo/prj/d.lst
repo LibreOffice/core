@@ -14,6 +14,12 @@ dos: echo =====================================================================
 ..\%__SRC%\misc\license\wnt\license*.html %_DEST%\bin%_EXT%\osl
 ..\%__SRC%\misc\license\wnt\license*.rtf %_DEST%\bin%_EXT%\osl
 
+# URE:
+mkdir: %_DEST%\bin%_EXT%\ure
+..\%__SRC%\misc\license\unx\LICENSE_en-US %_DEST%\bin%_EXT%\ure\LICENSE
+..\%__SRC%\misc\license\wnt\license_en-US.txt %_DEST%\bin%_EXT%\ure\LICENSE
+..\%__SRC%\misc\license\wnt\license_en-US.rtf %_DEST%\bin%_EXT%\ure\license_en-US.rtf
+
 # RTF only for Windows?
 # Why? It comes from cws_src680_langsupporter.
 ..\%__SRC%\misc\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\THIRDPARTYLICENSEREADME.html
