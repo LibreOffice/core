@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 16:19:51 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:02:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,12 +70,13 @@ TARGET  = com_sun_star_lib_util
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= 									\
-    $(CLASSDIR)$/$(PACKAGE)$/IInvokeHook.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/IInvokable.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/NativeLibraryLoader.class \
-    $(CLASSDIR)$/$(PACKAGE)$/StringHelper.class \
-    $(CLASSDIR)$/$(PACKAGE)$/UrlToFileMapper.class
+JAVAFILES = \
+    IInvokable.java \
+    IInvokeHook.java \
+    NativeLibraryLoader.java \
+    StringHelper.java \
+    UrlToFileMapper.java
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
