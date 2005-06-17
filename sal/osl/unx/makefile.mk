@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 15:30:47 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,15 @@ OBJFILES += $(OBJ)$/backtrace.obj
 
 .IF "$(COM)"=="C50"
 APP1STDLIBS+=-lC
+.ENDIF
+
+.IF "$(LINUX)" == "YES"
+.IF "$(PAM_LINK)" == "YES"
+CFLAGS+=-DPAM_LINK
+.ENDIF
+.IF "$(CRYPT_LINK)" == "YES"
+CFLAGS+=-DCRYPT_LINK
+.ENDIF
 .ENDIF
 
 .INCLUDE :  target.mk
