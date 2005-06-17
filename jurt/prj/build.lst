@@ -1,4 +1,4 @@
-ju	jurt	:	ridljar NULL
+ju  jurt : ridljar sal NULL
 ju	jurt									usr1	-	all	ju_mkout NULL
 ju	jurt\com\sun\star\lib\util				nmake	-	all	ju_libutil NULL
 ju	jurt\com\sun\star\uno					nmake	-	all	ju_uno NULL
