@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 17:23:25 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:39:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -214,7 +214,7 @@ INCLUDETOPDIRLIST= \
 INCLUDETOPDIRLIST += $(INCOUT)$/systools
 .ENDIF
 
-INCLUDEDIRLIST={$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
+INCLUDEDIRLIST:={$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
 
 INCLUDEFILELIST=\
     $(INCOUT)$/udkversion.mk \
@@ -229,7 +229,7 @@ INCLUDEFILELIST=\
     $(INCOUT)$/com$/sun$/star$/uno$/Type.h \
     $(INCOUT)$/com$/sun$/star$/uno$/Type.hxx
 
-INCLUDELIST=\
+INCLUDELIST:=\
     {$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type f -print))} \
     $(INCLUDEFILELIST)
 
