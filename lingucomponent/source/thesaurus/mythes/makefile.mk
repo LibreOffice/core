@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 13:08:28 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:22:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,11 @@ LIBTARGET=NO
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(SYSTEM_MYTHES)" == "YES"
+@all:
+    @echo "Using system mythes..."
+.ENDIF
 
 all_target: ALLTAR
 
