@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:48:06 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ namespace jfw
 
 class VendorSettings
 {
+    rtl::OUString m_xmlDocVendorSettingsFileUrl;
     CXmlDocPtr m_xmlDocVendorSettings;
     CXPathContextPtr m_xmlPathContextVendorSettings;
 
@@ -83,7 +84,6 @@ public:
     std::vector<PluginLibrary> getPluginData();
 
     /* returns the file URL to the plugin.
-
      */
     rtl::OUString getPluginLibrary(const rtl::OUString& sVendor);
 
