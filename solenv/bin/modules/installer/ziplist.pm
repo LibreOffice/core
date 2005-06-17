@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-20 11:48:42 $
+#   last change: $Author: rt $ $Date: 2005-06-17 14:07:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -776,6 +776,11 @@ sub add_variables_to_allvariableshashref
     {
         $variableshashref->{'LCPRODUCTEXTENSION'} = "";
     }
+
+    if ( $installer::globals::patch ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::patchaddon; }
+    elsif ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
+    else { $variableshashref->{'PRODUCTADDON'} = ""; }
+
 }
 
 1;
