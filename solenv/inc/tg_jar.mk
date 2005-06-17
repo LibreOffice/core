@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-06 09:37:41 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:49:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,39 +84,15 @@ $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(
     +$(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 
-.IF "$(USE_EXTENDED_MANIFESTFILE)"!=""
-EXTENDEDMANIFESTFILE=$(MISC)$/$(JARTARGET:b)
-.IF "$(JARMANIFEST)"!=""
-$(JARMANIFEST) : $(EXTENDEDMANIFESTFILE)
-.ENDIF			# "$(JARMANIFEST)"!=""
-$(MISC)$/$(JARTARGET:b) : $(SOLARINCDIR)$/$(UPD)minor.mk
-    @+echo Specification-Title: $(SPECTITLE) > $@
-    @+echo Specification-Version: $(VERSION) >> $@
-    @+echo Specification-Vendor: $(VENDOR) >> $@
-    @+echo Implementation-Title: $(IMPLTITLE) >> $@
-# $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
-    @+echo $(USQ)Implementation-Version: $(RSCREVISION)$(USQ) >> $@
-    @+echo Implementation-Vendor: $(VENDOR) >> $@
-.ENDIF			# "$(USE_EXTENDED_MANIFESTFILE)"!=""
-
-.IF "$(EXTENDEDMANIFESTFILE)"!=""
-
-EXTENDEDMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f)
-
-$(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) : $(EXTENDEDMANIFESTFILE)
-    +-$(RM) $@
-    +$(COPY) $(EXTENDEDMANIFESTFILE) $@
-.ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
-
-$(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) $(EXTENDEDMANIFESTFILEDEP)
+$(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     +-$(MKDIRHIER) $(@:d) >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
     +echo Manifest-Version: 1.0 > $@
+.IF "$(JARCLASSPATH)" != ""
+    +echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
+.ENDIF
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
     +echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
-.IF "$(EXTENDEDMANIFESTFILE)"!=""
-    +$(TYPE) $(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) >> $@
-.ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
 .IF "$(CUSTOMMANIFESTFILE)"!=""
     +$(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
