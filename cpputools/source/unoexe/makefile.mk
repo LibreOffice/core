@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:45:39 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:08:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,12 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
+.IF "$(OS)" == "LINUX"
+LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+.ELIF "$(OS)" == "SOLARIS"
+LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
+.ENDIF
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -108,8 +114,12 @@ DEPOBJFILES=$(OBJ)$/unoexe.obj
 APP1TARGET=$(TARGET)
 APP1OBJS=$(DEPOBJFILES)  
 
+# Include all four UNO runtime libraries, so that C++ UNO components running in
+# the uno executable have a defined environment (stlport is already included via
+# APP1STDLIB):
 APP1STDLIBS= \
     $(SALLIB)		\
+    $(SALHELPERLIB) \
     $(CPPULIB)		\
     $(CPPUHELPERLIB)
 
