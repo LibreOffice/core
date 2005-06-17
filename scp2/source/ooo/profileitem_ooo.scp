@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.22 $
+*  $Revision: 1.23 $
 *
-*  last change: $Author: obo $ $Date: 2005-06-17 10:18:12 $
+*  last change: $Author: rt $ $Date: 2005-06-17 14:15:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -161,9 +161,9 @@ ProfileItem gid_Profileitem_Bootstrap_Userinstall
     Order = 3;
     Key = "UserInstallation";
   #ifdef WNT
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%PRODUCTVERSION";
+    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
   #else
-    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME%PRODUCTVERSION";
+    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
   #endif
     StandaloneValue = "$ORIGIN/..";
 End
