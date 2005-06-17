@@ -728,11 +728,14 @@ sub set_revision_in_pkginfo
 
     # For Update and Patch reasons, this string can also be kept constant
 
-    if ( $variables->{'PKGVERSION'} )
+    my $pkgversion = "SOLSPARCPKGVERSION";
+    if ( $installer::globals::issolarisx86build ) { $pkgversion = "SOLIAPKGVERSION"; }
+
+    if ( $variables->{$pkgversion} )
     {
-        if ( $variables->{'PKGVERSION'} ne "FINALVERSION" )
+        if ( $variables->{$pkgversion} ne "FINALVERSION" )
         {
-            my $versionstring = $variables->{'PKGVERSION'};
+            my $versionstring = $variables->{$pkgversion};
 
             for ( my $i = 0; $i <= $#{$file}; $i++ )
             {
@@ -763,15 +766,18 @@ sub set_patchlist_in_pkginfo_for_respin
 {
     my ($changefile, $filename, $allvariables) = @_;
 
-    if ( $allvariables->{'PATCHLISTFORRESPIN'} )
+    my $patchlistname = "SOLSPARCPATCHLISTFORRESPIN";
+    if ( $installer::globals::issolarisx86build ) { $patchlistname = "SOLIAPATCHLISTFORRESPIN"; }
+
+    if ( $allvariables->{$patchlistname} )
     {
-        my $newline = "PATCHLIST=" . $allvariables->{'PATCHLISTFORRESPIN'} . "\n";
+        my $newline = "PATCHLIST=" . $allvariables->{$patchlistname} . "\n";
         add_one_line_into_file($changefile, $newline, $filename);
 
         # Adding patch info for each  patch in the patchlist
         # patchlist separator is a blank
 
-        my $allpatchesstring = $allvariables->{'PATCHLISTFORRESPIN'};
+        my $allpatchesstring = $allvariables->{$patchlistname};
         my $allpatches = installer::converter::convert_whitespace_stringlist_into_array(\$allpatchesstring);
 
         for ( my $i = 0; $i <= $#{$allpatches}; $i++ )
@@ -1259,13 +1265,19 @@ sub include_patchinfos_into_pkginfo
     # SUNW_PKGTYPE=usr
     # SUNW_PKGVERS=1.0
 
-    if ( ! $variableshashref->{'PATCHID'} ) { installer::exiter::exit_program("ERROR: Variable PATCHID not defined in zip list file!", "include_patchinfos_into_pkginfo"); }
+    my $patchidname = "SOLSPARCPATCHID";
+    if ( $installer::globals::issolarisx86build ) { $patchidname = "SOLIAPATCHID"; }
 
-    my $newline = "SUNW_PATCHID=" . $variableshashref->{'PATCHID'} . "\n";
+    if ( ! $variableshashref->{$patchidname} ) { installer::exiter::exit_program("ERROR: Variable $patchidname not defined in zip list file!", "include_patchinfos_into_pkginfo"); }
+
+    my $newline = "SUNW_PATCHID=" . $variableshashref->{$patchidname} . "\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
+    my $patchobsoletesname = "SOLSPARCPATCHOBSOLETES";
+    if ( $installer::globals::issolarisx86build ) { $patchobsoletesname = "SOLIAPATCHOBSOLETES"; }
+
     my $obsoletes = "";
-    if ( $variableshashref->{'PATCHOBSOLETES'} ) { $obsoletes = $variableshashref->{'PATCHOBSOLETES'}; }
+    if ( $variableshashref->{$patchobsoletesname} ) { $obsoletes = $variableshashref->{$patchobsoletesname}; }
     $newline = "SUNW_OBSOLETES=" . $obsoletes . "\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
@@ -2189,8 +2201,11 @@ sub finalize_patch
 {
     my ( $newepmdir, $allvariables ) = @_;
 
-    if ( ! $allvariables->{'PATCHID'} ) { installer::exiter::exit_program("ERROR: Variable PATCHID not defined in zip list file!", "finalize_patch"); }
-    my $patchid = $allvariables->{'PATCHID'};
+    my $patchidname = "SOLSPARCPATCHID";
+    if ( $installer::globals::issolarisx86build ) { $patchidname = "SOLIAPATCHID"; }
+
+    if ( ! $allvariables->{$patchidname} ) { installer::exiter::exit_program("ERROR: Variable $patchidname not defined in zip list file!", "finalize_patch"); }
+    my $patchid = $allvariables->{$patchidname};
     installer::systemactions::rename_directory($newepmdir, $patchid);
 
     # Copying all typical patch files into the patch directory
