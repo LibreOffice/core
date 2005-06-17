@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-20 11:41:34 $
+#   last change: $Author: rt $ $Date: 2005-06-17 14:13:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 UWINAPILIB=
 
 SLOFILES = \
-    $(SLO)$/swappatchfiles.obj
+    $(SLO)$/swappatchfiles.obj \
+    $(SLO)$/upgrade.obj
 
 
 SHL1STDLIBS=	kernel32.lib\
