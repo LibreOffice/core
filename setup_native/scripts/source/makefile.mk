@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-04 15:24:54 $
+#   last change: $Author: rt $ $Date: 2005-06-17 14:13:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,8 +63,11 @@
 PRJ=..$/..
 
 PRJNAME=setup_native
-LIBTARGET=NO
 TARGET=getuid
+
+NO_DEFAULT_STL=TRUE
+LIBSALCPPRT=$(0)
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -88,6 +91,16 @@ CFLAGS+=-D_GNU_SOURCE
 .IF "$(CPU)" == "I"
 .IF "$(COM)" != "GCC"
 CFLAGS+=-D_KERNEL
+.ENDIF
+.ENDIF
+.ENDIF
+
+# this object must not be a Ultra SPARC binary, this does not
+# work with /usr/bin/sort and such.
+.IF "$(OS)" == "SOLARIS"
+.IF "$(CPU)" == "S"
+.IF "$(COM)" != "GCC"
+ENVCFLAGS=-xarch=v8
 .ENDIF
 .ENDIF
 .ENDIF
