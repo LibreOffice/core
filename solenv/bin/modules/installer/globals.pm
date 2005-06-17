@@ -196,6 +196,8 @@ BEGIN
     @installsetfiles = ();
     @binarytableonlyfiles = ();
     @allscpactions = ();
+    $languagepackaddon = "LanguagePack";
+    $patchaddon = "Patch";
 
     $is_copy_only_project = 0;
     $addchildprojects = 0;
@@ -206,6 +208,7 @@ BEGIN
 
     $unomaxservices = 25;
     $javamaxservices = 15;
+    $javaversion = "1.5.0_03";
 
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
