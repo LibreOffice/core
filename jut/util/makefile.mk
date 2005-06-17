@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:37:16 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:40:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,13 @@ TARGET	= jut
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
+.INCLUDE: makefile.pmk
 
 JARCLASSDIRS	= com
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS 	= TRUE
+JARCLASSPATH = $(JARFILES)
+CUSTOMMANIFESTFILE = manifest
 
 # Special work necessary for building java reference with javadoc.
 # The source of puplic APIs must be delivered and used later in the
