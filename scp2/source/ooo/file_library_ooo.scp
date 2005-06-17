@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.106 $
+*  $Revision: 1.107 $
 *
-*  last change: $Author: hr $ $Date: 2005-06-09 14:15:14 $
+*  last change: $Author: obo $ $Date: 2005-06-17 09:33:15 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1916,6 +1916,8 @@ SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
+#ifndef SYSTEM_MYSPELL
+
 File gid_File_Lib_Myspell
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -1930,6 +1932,8 @@ File gid_File_Lib_Myspell
   #endif
     Styles = (PACKED);
 End
+
+#endif
 
 #ifdef WNT
 
