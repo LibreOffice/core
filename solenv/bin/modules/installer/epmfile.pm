@@ -387,7 +387,6 @@ sub create_epm_header
         {
             my $oneprovides = ${$allprovides}[$i];
             installer::packagelist::resolve_packagevariables(\$oneprovides, $variableshashref, 1);
-            installer::packagelist::adapt_packagename(\$oneprovides);
             $line = "%provides" . " " . $oneprovides . "\n";
             push(@epmheader, $line);
         }
@@ -405,7 +404,6 @@ sub create_epm_header
         {
             my $onerequires = ${$allrequires}[$i];
             installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
-            installer::packagelist::adapt_packagename(\$onerequires);
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
         }
@@ -422,7 +420,6 @@ sub create_epm_header
             {
                 my $onerequires = ${$allrequires}[$i];
                 installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
-                installer::packagelist::adapt_packagename(\$onerequires);
                 $line = "%requires" . " " . $onerequires . "\n";
                 push(@epmheader, $line);
             }
