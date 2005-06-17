@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:43:52 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,14 @@
 
 package com.sun.star.comp.loader;
 
+import com.sun.star.lib.unoloader.UnoClassLoader;
 import com.sun.star.lib.util.WeakMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.StringTokenizer;
-import java.util.jar.JarInputStream;
-import java.util.jar.Manifest;
+import java.util.jar.Attributes;
 
 final class RegistrationClassFinder {
     public static Class find(String locationUrl)
@@ -82,15 +82,20 @@ final class RegistrationClassFinder {
         }
         URL url = new URL(locationUrl);
         checkAccess(url);
-        String name = null;
-        Manifest mf = new JarInputStream(url.openStream()).getManifest();
-        if (mf != null) {
-            name = mf.getMainAttributes().getValue("RegistrationClassName");
-        }
+        Attributes attr = UnoClassLoader.getJarMainAttributes(url);
+        String name = attr == null
+            ? null : attr.getValue("RegistrationClassName");
         if (name == null) {
             return null;
         }
-        Class c = new URLClassLoader(new URL[] { url }).loadClass(name);
+        ClassLoader cl1 = RegistrationClassFinder.class.getClassLoader();
+        ClassLoader cl2;
+        if (cl1 instanceof UnoClassLoader) {
+            cl2 = ((UnoClassLoader) cl1).getClassLoader(url, attr);
+        } else {
+            cl2 = URLClassLoader.newInstance(new URL[] { url }, cl1);
+        }
+        Class c = cl2.loadClass(name);
         synchronized (map) {
             Class c2 = (Class) WeakMap.getValue(map.get(locationUrl));
             if (c2 != null) {
