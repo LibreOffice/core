@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:18:00 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1890,8 +1890,7 @@ void Bridge::map_to_java(
     {
         OUString const & type_name = OUString::unacquired( &type->pTypeName );
         OString class_name(
-            OUStringToOString(
-                type_name.replace( '.', '/' ), RTL_TEXTENCODING_JAVA_UTF8 ) );
+            OUStringToOString( type_name, RTL_TEXTENCODING_JAVA_UTF8 ) );
         JLocalAutoRef jo_enum_class(
             jni, find_class( jni, class_name.getStr() ) );
 
@@ -1899,9 +1898,9 @@ void Bridge::map_to_java(
         if (in_param)
         {
             // call static <enum_class>.fromInt( int )
-            OStringBuffer sig_buf( 3 + class_name.getLength() );
+            OStringBuffer sig_buf( 5 + class_name.getLength() );
             sig_buf.append( RTL_CONSTASCII_STRINGPARAM("(I)L") );
-            sig_buf.append( class_name );
+            sig_buf.append( class_name.replace( '.', '/' ) );
             sig_buf.append( ';' );
             OString sig( sig_buf.makeStringAndClear() );
             jmethodID method_id = jni->GetStaticMethodID(
@@ -2376,8 +2375,7 @@ void Bridge::map_to_java(
                 OUString::unacquired( &element_type->pTypeName );
             OString class_name(
                 OUStringToOString(
-                    element_type_name.replace( '.', '/' ),
-                    RTL_TEXTENCODING_JAVA_UTF8 ) );
+                    element_type_name, RTL_TEXTENCODING_JAVA_UTF8 ) );
             JLocalAutoRef jo_enum_class(
                 jni, find_class( jni, class_name.getStr() ) );
 
@@ -2389,9 +2387,9 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 // call static <enum_class>.fromInt( int )
-                OStringBuffer sig_buf( 3 + class_name.getLength() );
+                OStringBuffer sig_buf( 5 + class_name.getLength() );
                 sig_buf.append( RTL_CONSTASCII_STRINGPARAM("(I)L") );
-                sig_buf.append( class_name );
+                sig_buf.append( class_name.replace( '.', '/' ) );
                 sig_buf.append( ';' );
                 OString sig( sig_buf.makeStringAndClear() );
                 jmethodID method_id = jni->GetStaticMethodID(
@@ -2448,7 +2446,8 @@ void Bridge::map_to_java(
         {
             OStringBuffer buf( 64 );
             JNI_info::append_sig(
-                &buf, element_type, false /* use class XInterface */ );
+                &buf, element_type, false /* use class XInterface */,
+                false /* '.' instead of '/' */ );
             OString class_name( buf.makeStringAndClear() );
             JLocalAutoRef jo_seq_class(
                 jni, find_class( jni, class_name.getStr() ) );
