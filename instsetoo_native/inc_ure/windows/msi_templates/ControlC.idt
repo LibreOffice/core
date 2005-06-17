@@ -1,0 +1,70 @@
+Dialog_	Control_	Action	Condition
+s72	s50	s50	s255
+ControlCondition	Dialog_	Control_	Action	Condition
+CustomerInformation	DlgRadioGroupText	Hide	NOT Privileged
+CustomerInformation	DlgRadioGroupText	Hide	ProductState > 0
+CustomerInformation	DlgRadioGroupText	Hide	Version9X
+CustomerInformation	RadioGroup	Hide	NOT Privileged
+CustomerInformation	RadioGroup	Hide	ProductState > 0
+CustomerInformation	RadioGroup	Hide	Version9X
+CustomerInformation	SerialLabel	Show	SERIALNUMSHOW
+CustomerInformation	SerialNumber	Show	SERIALNUMSHOW
+CustomSetup	ChangeFolder	Hide	Installed
+CustomSetup	Details	Hide	Installed
+CustomSetup	InstallLabel	Hide	Installed
+InstallWelcome	Copyright	Hide	SHOWCOPYRIGHT="No"
+InstallWelcome	Copyright	Show	SHOWCOPYRIGHT="Yes"
+LicenseAgreement	Next	Disable	AgreeToLicense <> "Yes"
+LicenseAgreement	Next	Enable	AgreeToLicense = "Yes"
+ReadyToInstall	DlgTitle	Show	ProgressType0="Modify"
+ReadyToInstall	DlgTitle2	Show	ProgressType0="Repair"
+ReadyToInstall	DlgTitle3	Show	ProgressType0="install"
+SetupCompleteError	Back	Default	UpdateStarted
+SetupCompleteError	Back	Disable	NOT UpdateStarted
+SetupCompleteError	Back	Enable	UpdateStarted
+SetupCompleteError	Cancel	Disable	NOT UpdateStarted
+SetupCompleteError	Cancel	Enable	UpdateStarted
+SetupCompleteError	Finish	Default	NOT UpdateStarted
+SetupCompleteError	FinishText1	Hide	UpdateStarted
+SetupCompleteError	FinishText1	Show	NOT UpdateStarted
+SetupCompleteError	FinishText2	Hide	UpdateStarted
+SetupCompleteError	FinishText2	Show	NOT UpdateStarted
+SetupCompleteError	RestContText1	Hide	NOT UpdateStarted
+SetupCompleteError	RestContText1	Show	UpdateStarted
+SetupCompleteError	RestContText2	Hide	NOT UpdateStarted
+SetupCompleteError	RestContText2	Show	UpdateStarted
+SetupCompleteSuccess	CheckBoxUpdates	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
+SetupCompleteSuccess	CheckForUpdatesText	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
+SetupCompleteSuccess	CheckLaunchProgram	Show	SHOWLAUNCHPROGRAM="-1" And PROGRAMFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
+SetupCompleteSuccess	CheckLaunchReadme	Show	SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
+SetupCompleteSuccess	LaunchProgramText	Show	SHOWLAUNCHPROGRAM="-1" And PROGRAMFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
+SetupCompleteSuccess	LaunchReadmeText	Show	SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
+SetupCompleteSuccess	TextLine2	Show	ProgressType2="installed" And ((ACTION<>"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))
+SetupCompleteSuccess	TextLine3	Show	ProgressType2="uninstalled" And ((ACTION<>"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))
+SetupCompleteSuccess	UpdateTextLine1	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
+SetupCompleteSuccess	UpdateTextLine2	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
+SetupCompleteSuccess	UpdateTextLine3	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
+SetupInterrupted	Back	Default	UpdateStarted
+SetupInterrupted	Back	Disable	NOT UpdateStarted
+SetupInterrupted	Back	Enable	UpdateStarted
+SetupInterrupted	Cancel	Disable	NOT UpdateStarted
+SetupInterrupted	Cancel	Enable	UpdateStarted
+SetupInterrupted	Finish	Default	NOT UpdateStarted
+SetupInterrupted	FinishText1	Hide	UpdateStarted
+SetupInterrupted	FinishText1	Show	NOT UpdateStarted
+SetupInterrupted	FinishText2	Hide	UpdateStarted
+SetupInterrupted	FinishText2	Show	NOT UpdateStarted
+SetupInterrupted	RestContText1	Hide	NOT UpdateStarted
+SetupInterrupted	RestContText1	Show	UpdateStarted
+SetupInterrupted	RestContText2	Hide	NOT UpdateStarted
+SetupInterrupted	RestContText2	Show	UpdateStarted
+SetupProgress	DlgDesc	Show	ProgressType2="installed"
+SetupProgress	DlgDesc2	Show	ProgressType2="uninstalled"
+SetupProgress	DlgText	Show	ProgressType3="installs"
+SetupProgress	DlgText2	Show	ProgressType3="uninstalls"
+SetupProgress	DlgTitle	Show	ProgressType1="Installing"
+SetupProgress	DlgTitle2	Show	ProgressType1="Uninstalling"
+SetupResume	PreselectedText	Hide	RESUME
+SetupResume	PreselectedText	Show	NOT RESUME
+SetupResume	ResumeText	Hide	NOT RESUME
+SetupResume	ResumeText	Show	RESUME
