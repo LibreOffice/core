@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 09:16:28 $
+#   last change: $Author: obo $ $Date: 2005-06-17 09:32:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -176,6 +176,15 @@ SHL1STDLIBS+=-lstlport_gcc
 
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=-framework CoreFoundation
+.ENDIF
+
+.IF "$(OS)" == "LINUX"
+.IF "$(PAM_LINK)" == "YES"
+SHL1STDLIBS+=-lpam
+.ENDIF
+.IF "$(CRYPT_LINK)" == "YES"
+SHL1STDLIBS+=-lcrypt
+.ENDIF
 .ENDIF
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
