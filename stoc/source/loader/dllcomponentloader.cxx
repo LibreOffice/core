@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:13:29 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 0
-#include <stdio.h>
-#endif
 #include <stdlib.h>
 #include <osl/file.h>
 #include <vector>
@@ -313,9 +310,7 @@ OUString DllComponentLoader::expand_url( OUString const & url )
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ") );
         buf.append( ret );
         OString str( OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-//         OSL_TRACE( str.getStr() );
-        // use printf here, because OSL_TRACE forwards to printf directly, so %... gets lost
-        fprintf( stderr, "%s\n", str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
 #endif
         return ret;
     }
