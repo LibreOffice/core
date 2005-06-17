@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-02 09:50:15 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 09:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ void Bridge::call_java(
     OSL_ASSERT( function_pos_offset == 0 || function_pos_offset == 1 );
 
     JNI_guarded_context jni(
-        m_jni_info, reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+        m_jni_info, reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
             m_java_env->pContext ) );
 
     // assure fully initialized iface_td:
@@ -577,7 +577,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     {
         JNI_guarded_context jni(
             bridge->m_jni_info,
-            reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+            reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                 bridge->m_java_env->pContext ) );
 
         jni->DeleteGlobalRef( that->m_javaI );
@@ -734,7 +734,7 @@ void SAL_CALL UNO_proxy_dispatch(
                     JNI_info const * jni_info = bridge->m_jni_info;
                     JNI_guarded_context jni(
                         jni_info,
-                        reinterpret_cast< ::jvmaccess::VirtualMachine * >(
+                        reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                             bridge->m_java_env->pContext ) );
 
                     JNI_interface_type_info const * info =
