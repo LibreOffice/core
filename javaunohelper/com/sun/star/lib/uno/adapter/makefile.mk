@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 11:19:25 $
+#   last change: $Author: obo $ $Date: 2005-06-17 10:04:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,10 +69,9 @@ TARGET  = com_sun_star_lib_uno_adapter
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/util$/settings.pmk
 
 # --- Files --------------------------------------------------------
-
-JARFILES = ridl.jar jurt.jar unoil.jar
 
 JAVAFILES=	\
     XInputStreamToInputStreamAdapter.java	\
