@@ -291,7 +291,7 @@ sub register_javacomponents
 
                     my @regcompoutput = ();
 
-                    $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " 2\>\&1 |";
+                    $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " 2\>\&1 |";
 
                     open (REG, "$systemcall");
                     while (<REG>) {push(@regcompoutput, $_); }
