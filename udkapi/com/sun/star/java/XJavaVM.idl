@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:54:38 $
+ *  last change: $Author: obo $ $Date: 2005-06-17 10:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,11 @@ module com {  module sun {  module star {  module java {
 
     @deprecated
     A UNO interface seems to be at the wrong abstraction level for this
-    functionality (also, the C++ class <code>jvmaccess::VirtualMachine</code>
-    used by <member scope="com::sun::star::java">XJavaVM::getJavaVM</member> is
-    not part of the public C++ UNO runtime API).  This should probably be
-    replaced by an appropriate C/C++ API.
+    functionality (also, the C++ classes <code>jvmaccess::VirtualMachine</code>
+    and <code>jvmaccess::UnoVirtualMachine</code> used by
+    <member scope="com::sun::star::java">XJavaVM::getJavaVM</member> are not
+    part of the public C++ UNO runtime API).  This should probably be replaced
+    by an appropriate C/C++ API.
  */
 published interface XJavaVM: com::sun::star::uno::XInterface
 {
@@ -94,35 +95,50 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         <atom>any</atom> contains a JNI <code>JavaVM</code> pointer as a
         <atom>long</atom> or <atom>hyper</atom> integer (depending on the
         platform).  If the <code>processID</code> does not match the current
-        process, or if the VM cannot be instantiated for whatever reason, an
-        empty <atom>any</atom> is returned.</p>
+        process, or if the VM cannot be instantiated for whatever reason, a
+        <void/> <atom>any</atom> is returned.</p>
 
-        <p>If the <code>processID</code> has an additional 17th byte of value
-        zero, the returned <atom>any</atom> contains a non-reference-counted
-        pointer to a (reference-counted) instance of the C++
-        <code>jvmaccess::VirtualMachine</code> class, always represented as a
-        <atom>hyper</atom> integer.  The pointer is guaranteed to be valid as
-        long as the reference to this
+        <p>If the <code>processID</code> has an additional 17th byte of
+        value&nbsp;<code>0</code>, the returned <atom>any</atom> contains a
+        non&ndash;reference-counted pointer to a (reference-counted) instance of
+        the C++ <code>jvmaccess::VirtualMachine</code> class, always represented
+        as a <atom>hyper</atom> integer.  The pointer is guaranteed to be valid
+        as long as the reference to this
         <type scope="com::sun::star::java">XJavaVM</type> is valid (but the
         pointer should be converted into a reference-counted reference as soon
         as possible).  Again, if the first 16 bytes of the
         <code>processID</code> do not match the current process, or if the VM
-        cannot be instantiated for whatever reason, an empty <atom>any</atom> is
-        returned.</p>
+        cannot be instantiated for whatever reason, a <void/> <atom>any</atom>
+        is returned.</p>
+
+        <p>If the <code>processID</code> has an additional 17th byte of
+        value&nbsp;<code>1</code>, the returned <atom>any</atom> contains a
+        non&ndash;reference-counted pointer to a (reference-counted) instance of
+        the C++ <code>jvmaccess::UnoVirtualMachine</code> class, always
+        represented as a <atom>hyper</atom> integer.  The pointer is guaranteed
+        to be valid as long as the reference to this
+        <type scope="com::sun::star::java">XJavaVM</type> is valid.  Again, if
+        the first 16 bytes of the <code>processID</code> do not match the
+        current process, or if the VM cannot be instantiated for whatever
+        reason, a <void/> <atom>any</atom> is returned.</p>
 
         <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
         mainly for backwards compatibility, new code should use the second form
-        (returning a pointer to a <code>jvmaccess::VirtualMachine</code>).  For
-        example, one advantage of using <code>jvmaccess::VirtualMachine</code>
-        instead of the raw <code>JavaVM</code> pointer is that whenever you
-        attach a native thread to the Java virtual machine, that thread's
-        context <code>ClassLoader</code> (see
+        (returning a pointer to a <code>jvmaccess::VirtualMachine</code>) if it
+        does not want to use the Java UNO environment, and it should use the
+        third form (returning a pointer to a
+        <code>jvmaccess::UnoVirtualMachine</code>) if it wants to use the Java
+        UNO environment.  For example, one advantage of using
+        <code>jvmaccess::VirtualMachine</code> instead of the raw
+        <code>JavaVM</code> pointer is that whenever you attach a native thread
+        to the Java virtual machine, that thread's context
+        <code>ClassLoader</code> (see
         <code>java.lang.Thread.getContextClassLoader</code>) will automatically
         be set to a meaningful value.</p>
 
         @param processID
-        The process ID of the caller's process, probably extended by a 17th byte
-        of value zero.
+        The process ID of the caller's process, possibly extended by a 17th byte
+        of value <code>0</code> or&nbsp;<code>1</code>.
 
         @return
         On success, the <atom>any</atom> contains a pointer represented as
