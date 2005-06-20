@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-10 17:15:27 $
+#   last change: $Author: rt $ $Date: 2005-06-20 14:51:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,65 +63,174 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #*************************************************************************
 
-$filename = shift @ARGV;
-$srs = shift @ARGV;
-$prjname = shift @ARGV;
-$defs = join " ",@ARGV;
+my $filename;
+my $srs;
+my $prjname;
+my $defs;
+my $solarincludes;
 
+my $debug = 0;
 my $filebase;
+my $workfile;
+my $shell_workfile;
+my @cleanuplist = ();
 
-$srs =~ /([\\\/])/;
-$delim = $1;
+# variables to setup the compiler line
+my $appext;
+my $compiler;
+my $outbin_flag;
+my $objext;
+my $preprocess_flag; # preprocess to stdout
 
-if ( $filename =~ /.*[\\\/](.*)\..*?/ )
+my $wrap_command = "";
+my $no_hid_files;
+
+sub cleandie
 {
-    $filebase = $1;
+    my $errstring = shift @_;
+    my $erroreval = $@;
+
+    print STDERR "$errstring\n";
+    if ( not $debug ) {
+        foreach my $i (@cleanuplist) {
+            unlink "$workfile$i" if -f "$workfile$i" or print STDERR "ERROR - couldn't remove $workfile$i\n";
+        }
+    }
+    die "$erroreval\n";
 }
-else
+
+sub setcompiler
 {
-    $filename =~ /(.*)\..*?/;
-    $filebase = $1;
-}
+    my $whichcom = $ENV{COM};
+    if ( "$whichcom" eq "GCC" ) {
+        $appext = ""; # windows for now
+        $compiler = "gcc -x c";
+        $outbin_flag = "-o";
+        $objext = ".o";
+        $preprocess_flag = "-E"; # preprocess to stdout
+    } elsif ( "$whichcom" eq "MSC" ) {
+        $appext = ".exe"; # windows for now
+        $compiler = "cl";
+        $outbin_flag = "-Fe";
+        $objext = ".obj";
+        $preprocess_flag = "-EP"; # preprocess to stdout
+    } elsif ( "$whichcom" eq "C52" ) {
+        $appext = ""; # windows for now
+        $compiler = "cc";
+        $outbin_flag = "-o ";
+        $objext = ".o";
+        $preprocess_flag = "-E"; # preprocess to stdout
 
-#remove old objects which remained in place by a former bug
-unlink "$filebase.obj";
-
-$filebase = $srs.$delim.$filebase;
-
-print "filebase: $filebase\n";
-
-$prjname =~ lc $prjname;
-
-if ( -f "$filebase.hid" )
-{
-    unlink "$filebase.hid";
-}
-
-# hack to quit for files which cannot be handled
-foreach $fname ( split / /, $ENV{"NO_HID_FILES"} )
-{
-    if ( $fname eq $filename )
-    {
-        print "No hid generation for $filename due to NO_HID_FILES\n";
-        open TOUCH, ">$filebase.hid";
-        close TOUCH;
-        exit 0;
+        # hack for SO cc wrapper
+        $ENV{wrapper_override_cc_wrapper} = "TRUE";
+        $solarincludes =~ s/stl/xstlx/g;
+        $defs =~ s/\/stl/\/xstlx/g;
+    } else {
+        print STDERR "----------------------------------------------------------------------\n";
+        print STDERR "OOops... looks like your compiler isn't known to \n$0\n";
+        print STDERR "please edit the \"setcompiler\" section of this script to make it work.\n";
+        print STDERR "----------------------------------------------------------------------\n";
+        die "ERROR - compiler (or \$COM settings) unknown!\n";
     }
 }
 
-#echo "perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%filebase%.c0"
-#call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%filebase%.c0
+#---------------------------------------------------
+$filename = shift @ARGV;
+$srs = shift @ARGV;
+$prjname = shift @ARGV;
+$defs = join " ",@ARGV if ($#ARGV);
 
-print  "hidc.exe $filename $filebase.c1 $prjname \n";
-system "hidc.exe $filename $filebase.c1 $prjname";
+if ( !defined $prjname ) { die "ERROR - check usage\n"; }
 
-print  "cl $ENV{SOLARINCLUDES} $defs /EP $filebase.c1     > $filebase.c2 \n";
-system "cl $ENV{SOLARINCLUDES} $defs /EP $filebase.c1     > $filebase.c2";
+if ( $ENV{WRAPCMD} ) {
+    $wrap_command = $ENV{WRAPCMD};
+    $wrap_command .= " ";
+}
 
-open C_PROG, ">$filebase.c";
+if ( $ENV{NO_HID_FILES} ) {
+    $no_hid_files = $ENV{"NO_HID_FILES"};
+}
+$solarincludes = $ENV{SOLARINCLUDES};
+$tmpdir = $ENV{TMP};
+die "ERROR - \"TMP\" environment variable not set\n" if ( !defined $tmpdir );
+die "ERROR - \"$tmpdir\" doesn't exist\n" if ( ! -d $tmpdir );
+
+setcompiler();
+
+# convert windows only?
+$srs =~ s/\\/\//g;
+$filename =~ s/\\/\//g;
+
+$filebase = $filename;
+$filebase =~ s/.*[\\\/]//;
+$filebase =~ s/\..*?$//;
+$workfile = "$tmpdir/${filebase}_".$$;
+
+# now get $workfile ready for shell usage...
+$shell_workfile = $workfile;
+$shell_workfile =~ s/\//\\/g if ( "$ENV{USE_SHELL}" eq "4nt" );
+if (( "$ENV{USE_SHELL}" eq "4nt" ) && ( "$^O" eq "cygwin" )) {
+    $shell_workfile =~ s/\//\\\\/;
+}
+
+print "workfile: $workfile\n";
+
+#remove old objects which remained in place by a former bug
+unlink "$workfile.obj";
+
+# can't do this for modules with mixed case!
+#$prjname =~ lc $prjname;
+
+if ( -f "$workfile.hid" )
+{
+    unlink "$workfile.hid" or die "ERRROR - cannot remove $workfile.hid\n";;
+}
+
+# hack to quit for files which cannot be handled
+if ( defined $ENV{"NO_HID_FILES"} ) {
+    foreach $fname ( split / /, $ENV{"NO_HID_FILES"} )
+    {
+        if ( $fname eq $filename )
+        {
+            print "No hid generation for $filename due to NO_HID_FILES\n";
+            print "Touching $srs/$filebase.hid anyways\n";
+            open TOUCH, ">$srs/$filebase.hid" or die "ERRROR - cannot open $srs/$filebase.hid for writing\n";
+            close TOUCH;
+            exit 0;
+        }
+    }
+}
+
+#echo "perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0"
+#call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0
+
+print  "hidc $filename ${shell_workfile}.c1 $prjname \n";
+$ret = system "hidc $filename ${shell_workfile}.c1 $prjname";
+if ( $ret ) {
+    push @cleanuplist, ".c1";
+    cleandie("ERROR - calling \"hidc\" failed");
+}
+push @cleanuplist, ".c1";
+
+print         "$wrap_command$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n";
+$ret = system "$wrap_command$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2";
+if ( $ret ) {
+    push @cleanuplist, ".c2";
+    cleandie("ERROR - calling compiler for preprocessing failed");
+}
+push @cleanuplist, ".c2";
+
+if (!open C_PROG, ">$workfile.c") {
+    push @cleanuplist, ".c";
+    cleandie("ERROR - open $workfile.c\n for writing failed");
+}
+push @cleanuplist, ".c";
 print C_PROG "#include <wctype.h>\n";
 
-open PRE, "<$filebase.c2";
+if ( !open PRE, "<$workfile.c2" ) {
+    cleandie("ERROR - open $workfile.c2\n for reading failed");
+}
+
 $InMain = 0;
 while (<PRE>)
 {
@@ -139,15 +248,23 @@ while (<PRE>)
 close PRE;
 close C_PROG;
 
-#cl %SOLARINCLUDES% %_srs%\%_filebase%.c /Fe%_srs%\%_filebase%.exe
-print         "cl $ENV{SOLARINCLUDES} $defs $filebase.c /Fo$filebase.obj /Fe$filebase.exe \n";
-$ret = system "cl $ENV{SOLARINCLUDES} $defs $filebase.c /Fo$filebase.obj /Fe$filebase.exe";
-if ( $ret ) { die "$@\n"; }    # die on returncode != 0
+#cl %SOLARINCLUDES% %_srs%\%_workfile%.c /Fe%_srs%\%_workfile%$appext
+print         "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outbin_flag${shell_workfile}$appext \n";
+$ret = system "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outbin_flag${shell_workfile}$appext";
+if ( $ret ) {
+    push @cleanuplist, "$appext";
+    cleandie("ERROR - compiling $workfile.c failed");
+}
+push @cleanuplist, "$objext";
+push @cleanuplist, "$appext";
 
-
-#awk -f %ENV_TOOLS%\hidcode.awk < %srs%\%filebase%.c3 > %srs%\%filebase%.hid
-open C3,"$filebase.exe|";
-open HID,">$filebase.hid";
+#awk -f %ENV_TOOLS%\hidcode.awk < %srs%\%workfile%.c3 > %srs%\%workfile%.hid
+if ( !open C3,"$workfile$appext|" ) {
+    cleandie("ERROR - executing $workfile$appext failed");
+}
+if ( !open HID,">$srs/$filebase.hid.$ENV{INPATH}" ) {
+    cleandie("ERROR - open $srs/$filebase.hid.$ENV{INPATH} for writing failed");
+}
 
 while (<C3>)
 {
@@ -266,9 +383,15 @@ while (<C3>)
     }
 }
 
+close C3;
+close HID;
 
-unlink "$filebase.c";
-unlink "$filebase.c1";
-unlink "$filebase.c2";
-unlink "$filebase.obj";
-unlink "$filebase.exe";
+rename("$srs/$filebase.hid.$ENV{INPATH}", "$srs/$filebase.hid") or cleandie("ERROR - couldn't rename tmp file to final for $filebase");
+
+if ( not $debug ) {
+    foreach my $i (@cleanuplist) {
+        if ( -f "$workfile$i" ) {
+            unlink "$workfile$i"  or cleandie("");
+        }
+    }
+}
