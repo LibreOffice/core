@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-03 14:26:13 $
+#   last change: $Author: rt $ $Date: 2005-06-20 15:27:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.89 $ ';
+$id_str = ' $Revision: 1.90 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -980,11 +980,13 @@ sub push_default_actions
             }
         }
         push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
-        push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
+        push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/additional"]);
         if ( $common_build ) {
-            push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
+            push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
+            push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/additional"]);
+            push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img/additional"]);
         } else {
-            push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
+            push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img/additional"]);
         }
 
         # deliver build.lst to $dest/inc/$module
