@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.67 $
-# Date:        $Date: 2005-06-17 09:24:42 $
+# Version:     $Revision: 1.68 $
+# Date:        $Date: 2005-06-20 15:18:00 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -713,11 +713,12 @@ if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILL
        $PREBUILD_MOZAB = "YES";
    }
    else
-   {   print " not found!\n";
-       print "If you don\'t not use the system mozilla and also not build the needed\n";
+   {   print " not found!\n\n";
+       print "If you don\'t use the system mozilla and also not build the needed\n";
        print "mozilla libraries yourself you have to provide the needed files\n";
        print "$OS$COM$CPU\{inc,lib,runtime\}.zip in moz/zipped/ .\n";
-       print "These files can be found here: <FIXME! Put URL here>.\n";
+       print "These files can be found here:\n";
+       print "  <http://tools.openoffice.org/moz_prebuild/680/>.\n\n";
        die;
    }
 }
