@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 15:51:16 $
+#   last change: $Author: rt $ $Date: 2005-06-20 14:52:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,15 +137,13 @@ DEPSRS1 DEPSRS2 DEPSRS3 DEPSRS4 DEPSRS5 DEPSRS6 DEPSRS7 DEPSRS8 DEPSRS9:
 HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAME)_srs.hid
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
-        @echo ------------------------------
-        @echo Making: $@
-    @$(IFEXIST) $@ $(THEN) $(RM) $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS$(TNR)PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
