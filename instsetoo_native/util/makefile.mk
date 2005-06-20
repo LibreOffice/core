@@ -171,7 +171,7 @@ openoffice:
 .ENDIF			# "$(alllangiso)"!=""
 
 ure_en-US: $(MISC)$/ure$/services.rdb
-    + $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst \
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
         -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(PKGFORMATSWITCH) \
         -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
         -msitemplate $(PRJ)$/inc_ure$/windows$/msi_templates \
