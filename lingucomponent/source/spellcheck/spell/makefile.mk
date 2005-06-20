@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:22:29 $
+#   last change: $Author: obo $ $Date: 2005-06-20 07:51:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ USE_DEFFILE=TRUE
 
 .IF "$(MYSPELLLIB)"==""
 .IF "$(GUI)"=="UNX"
-MYSPELLLIB=$(MYSPELL_LIBS)
+MYSPELLLIB=-lmyspell
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
 MYSPELLLIB=myspell.lib
