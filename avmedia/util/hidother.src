@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:32:29 $
+ *  last change: $Author: rt $ $Date: 2005-06-20 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "..\inc\helpids.hrc"
+#include "../inc/helpids.hrc"
 
 hidspecial HID_AVMEDIA_TOOLBOXITEM_PLAY    { HelpId = HID_AVMEDIA_TOOLBOXITEM_PLAY; };
 hidspecial HID_AVMEDIA_TOOLBOXITEM_PAUSE   { HelpId = HID_AVMEDIA_TOOLBOXITEM_PAUSE; };
