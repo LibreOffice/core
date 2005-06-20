@@ -4654,8 +4654,8 @@ echo "$as_me: error: nmake.exe not found. Make sure it's in the path or use --wi
 	    if test -f "$with_frame_home/lib/mscoree.lib"; then
 		    FRAME_HOME="$with_frame_home"
 	    fi
-	    if test -z "$FRAME_HOME" -a -e "$with_cl_home/../FrameworkSDK/lib/mscoree.lib"; then
-		    FRAME_HOME="$with_cl_home/../FrameworkSDK"
+	    if test -z "$FRAME_HOME" -a -e "$with_cl_home/../SDK/v1.1/lib/mscoree.lib"; then
+		    FRAME_HOME="$with_cl_home/../SDK/v1.1"
 	    fi
 	    if test ! -f "$FRAME_HOME/lib/mscoree.lib"; then
 		{ { echo "$as_me:$LINENO: error: mscoree.lib (.NET Framework) not found. Make sure you use --with-frame-home" >&5
