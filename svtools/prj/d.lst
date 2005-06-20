@@ -38,7 +38,6 @@ hedabu: ..\inc\aeitem.hxx %_DEST%\inc%_EXT%\svtools\aeitem.hxx
 hedabu: ..\inc\adrparse.hxx %_DEST%\inc%_EXT%\svtools\adrparse.hxx
 hedabu: ..\inc\brdcst.hxx %_DEST%\inc%_EXT%\svtools\brdcst.hxx
 hedabu: ..\inc\broadcast.hxx %_DEST%\inc%_EXT%\svtools\broadcast.hxx
-hedabu: ..\inc\brooker.hxx %_DEST%\inc%_EXT%\svtools\brooker.hxx
 hedabu: ..\inc\brwbox.hxx %_DEST%\inc%_EXT%\svtools\brwbox.hxx
 hedabu: ..\inc\calendar.hxx %_DEST%\inc%_EXT%\svtools\calendar.hxx
 hedabu: ..\inc\cancel.hxx %_DEST%\inc%_EXT%\svtools\cancel.hxx
@@ -144,7 +143,6 @@ hedabu: ..\inc\textdata.hxx %_DEST%\inc%_EXT%\svtools\textdata.hxx
 hedabu: ..\inc\txtattr.hxx %_DEST%\inc%_EXT%\svtools\txtattr.hxx
 hedabu: ..\inc\sychconv.hxx %_DEST%\inc%_EXT%\svtools\sychconv.hxx
 hedabu: ..\inc\rcontrol.hxx %_DEST%\inc%_EXT%\svtools\rcontrol.hxx
-hedabu: ..\inc\communi.hxx %_DEST%\inc%_EXT%\svtools\communi.hxx
 hedabu: ..\inc\ttprops.hxx %_DEST%\inc%_EXT%\svtools\ttprops.hxx
 hedabu: ..\inc\ttglobal.hrc %_DEST%\inc%_EXT%\svtools\ttglobal.hrc
 hedabu: ..\inc\svtmsg.hrc %_DEST%\inc%_EXT%\svtools\svtmsg.hrc
