@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.152 $
+#   $Revision: 1.153 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-06 09:37:28 $
+#   last change: $Author: rt $ $Date: 2005-06-20 14:51:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1635,21 +1635,14 @@ TARGETDPJ=$(MISC)$/$(TARGET).dpj
 .ENDIF
 
 .IF "$(no_hids)$(NO_HIDS)"==""
-.IF "$(GUI)"=="WNT"
-.IF "$(USE_SHELL)"=="4nt"
 BUILDHIDS:=TRUE
 .IF "$(GEN_HID_OTHER)"!=""
 PRJHIDOTHERTARGET=$(SRS)$/hidother.hid
 COMMONPRJHIDOTHERTARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC)$/$(TARGET)_othr.hid)
 .ENDIF
-.IF "$(GEN_HID)"!=""
-PRJHIDTARGET=$(MISC)$/$(PRJNAME).hid
-.ENDIF
 .IF "$(GEN_HID2)"!=""
 PRJHID2TARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst
 .ENDIF
-.ENDIF			# "$(USE_SHELL)"=="4NT"
-.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(no_hids)$(NO_HIDS)"==""
 
 .IF "$(OS2_SOLENV_INC)"!=""
@@ -1736,7 +1729,6 @@ ALLTAR:	\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN)\
         $(COMMONPRJHIDOTHERTARGET) \
-        $(PRJHIDTARGET) \
         $(PRJHID2TARGET) \
         $(REMOTE_BUILD)\
         $(LOCALIZE_ME_DEST)\
@@ -1867,7 +1859,6 @@ ALLTAR: $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN) \
         $(COMMONPRJHIDOTHERTARGET) \
-        $(PRJHIDTARGET) \
         $(PRJHID2TARGET) \
                 $(SIGNFORNETSCAPE) \
                 $(SIGNFOREXPLORER) \
@@ -2646,14 +2637,6 @@ ZIPALLTARGET:
 delzip:
     +echo > $@
 
-$(MISC)$/helpids.don: $(HELPIDFILES)
-    @echo Making helpids:
-    @echo ---------------
-    @echo r:\bat\mkhids.btm $(PRJ)\$(INPATH)\misc\help.id $(HELPIDFILES)
-#	rem @copy /uq r:\bat\mkhids.btm r:\bat\mkhids.bat
-#	rem @r:\bat\mkhids.bat $(PRJ)\$(INPATH)\misc\help.id $(HELPIDFILES)
-    @$(TOUCH) $(MISC)\helpids.don
-
 .IF "$(depend)"==""
 .IF "$(SVXLIGHT)"!=""
 $(MISC)$/$(TARGET).dpc : \
@@ -2700,22 +2683,6 @@ warn_target_empty:
 UNOUCRDEPxxx : $(UNOUCRDEP);
 .ENDIF			# "$(UNOTYPES)" != ""
 
-$(MISC)$/$(PRJNAME).hid : \
-        $(RESLIB1SRSFILES)  $(RESLIB2SRSFILES) \
-        $(RESLIB3SRSFILES)  $(RESLIB4SRSFILES) \
-        $(RESLIB5SRSFILES)  $(RESLIB6SRSFILES) \
-        $(RESLIB7SRSFILES)  $(RESLIB8SRSFILES) \
-        $(RESLIB9SRSFILES) \
-        $(PRJHIDOTHERTARGET) $(HIDSRSPARTICLE)
-    @echo Making $@ :
-    @echo ---------------
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    @$(TOUCH) $@
-#    @+$(IFEXIST) $(SRS)$/*.hid $(THEN) dir $(SRS)$/*.hid
-#    @+$(IFEXIST) $(SRS)$/*.hid $(THEN) type $(SRS)$/*.hid >> $@
-#    @+$(IFEXIST) $(MISC)$/*.lst $(THEN) $(ENV_TOOLS)$/slothid.bat $(MISC)$/*.lst $@ $(INPATH)
-#    @+$(IFEXIST) $(MISC)$/*.* $(THEN) $(ENV_TOOLS)$/slothid.bat $(MISC)$/*.lst $@ $(INPATH)
-    @echo not made anymore
 
 #new hid.lst trigger with GEN_HID2=TRUE
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
