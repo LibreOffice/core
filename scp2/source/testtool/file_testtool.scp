@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_testtool.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:25 $
+ *  last change: $Author: rt $ $Date: 2005-06-20 15:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #include "macros.inc"
+
+STD_LIB_FILE( gid_File_Lib_Communi, communi )
+STD_LIB_FILE( gid_File_Lib_Simplecm, simplecm )
 
 File gid_File_Bin_Testtool
     BIN_FILE_BODY;
