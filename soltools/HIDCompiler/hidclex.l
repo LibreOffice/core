@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidclex.l,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 15:46:21 $
+ *  last change: $Author: rt $ $Date: 2005-06-20 15:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 %{
 
-static char *Revision     = "$Revision: 1.3 $" ;
+static char *Revision     = "$Revision: 1.4 $" ;
 
 /*
 
@@ -753,8 +753,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 
 				   	if( firstprint ) {
 				   		firstprint=0;
-						fprintf(outfile, " int main() { \n\n\n");
 						fprintf(outfile, "#include \"starview.hid\" \n\n");
+						fprintf(outfile, " int main() { \n\n\n");
 					}
 
 					char globunder[256];
@@ -955,8 +955,8 @@ int main( int argc, char* argv[] )
 	yylex(); /* do the real work here */
 
    	if( firstprint ) {
-		fprintf(outfile, " int main() { \n\n\n");
 		fprintf(outfile, "#include \"starview.hid\" \n\n");
+		fprintf(outfile, " int main() { \n\n\n");
 	}
 	fprintf(outfile, "\nreturn 0;");
 	fprintf(outfile, "\n} /*main*/\n");
