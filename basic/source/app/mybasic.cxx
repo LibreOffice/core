@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:06:58 $
+ *  last change: $Author: rt $ $Date: 2005-06-20 15:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@
 
 #include "object.hxx"
 
-#include "comm_bas.hxx"
 #include "processw.hxx"
 
 TYPEINIT1(MyBasic,StarBASIC)
@@ -103,7 +102,6 @@ public:
 
 static SampleObjectFac aFac1;
 static MyFactory aFac2;
-static CommunicationFactory aComManFac;
 static ProcessFactory aProcessFac;
 static short nInst = 0;
 
@@ -122,7 +120,6 @@ MyBasic::MyBasic() : StarBASIC()
     {
         AddFactory( &aFac1 );
         AddFactory( &aFac2 );
-        AddFactory( &aComManFac );
         AddFactory( &aProcessFac );
     }
     SbxVariable* p = new SbxCollection( CUniString("MyColl") );
@@ -204,7 +201,6 @@ MyBasic::~MyBasic()
     {
         RemoveFactory( &aFac1 );
         RemoveFactory( &aFac2 );
-        RemoveFactory( &aComManFac );
         RemoveFactory( &aProcessFac );
     }
 }
