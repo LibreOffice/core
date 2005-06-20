@@ -5,15 +5,13 @@
 HID1FILES=$(foreach,i,$(SRC1FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS1NAME)_srs.hid
 $(HIDSRS1PARTICLE) : $(HID1FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID1FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID1FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS1PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -52,15 +50,13 @@ $(SRS)$/$(SRS1NAME).srs: $(foreach,i,$(SRC1FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID2FILES=$(foreach,i,$(SRC2FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS2NAME)_srs.hid
 $(HIDSRS2PARTICLE) : $(HID2FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID2FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID2FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS2PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -99,15 +95,13 @@ $(SRS)$/$(SRS2NAME).srs: $(foreach,i,$(SRC2FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID3FILES=$(foreach,i,$(SRC3FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS3NAME)_srs.hid
 $(HIDSRS3PARTICLE) : $(HID3FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID3FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID3FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS3PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -146,15 +140,13 @@ $(SRS)$/$(SRS3NAME).srs: $(foreach,i,$(SRC3FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID4FILES=$(foreach,i,$(SRC4FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS4NAME)_srs.hid
 $(HIDSRS4PARTICLE) : $(HID4FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID4FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID4FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS4PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -193,15 +185,13 @@ $(SRS)$/$(SRS4NAME).srs: $(foreach,i,$(SRC4FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID5FILES=$(foreach,i,$(SRC5FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS5NAME)_srs.hid
 $(HIDSRS5PARTICLE) : $(HID5FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID5FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID5FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS5PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -240,15 +230,13 @@ $(SRS)$/$(SRS5NAME).srs: $(foreach,i,$(SRC5FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID6FILES=$(foreach,i,$(SRC6FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS6PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS6NAME)_srs.hid
 $(HIDSRS6PARTICLE) : $(HID6FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID6FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID6FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS6PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -287,15 +275,13 @@ $(SRS)$/$(SRS6NAME).srs: $(foreach,i,$(SRC6FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID7FILES=$(foreach,i,$(SRC7FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS7PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS7NAME)_srs.hid
 $(HIDSRS7PARTICLE) : $(HID7FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID7FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID7FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS7PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -334,15 +320,13 @@ $(SRS)$/$(SRS7NAME).srs: $(foreach,i,$(SRC7FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID8FILES=$(foreach,i,$(SRC8FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS8PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS8NAME)_srs.hid
 $(HIDSRS8PARTICLE) : $(HID8FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID8FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID8FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS8PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -381,15 +365,13 @@ $(SRS)$/$(SRS8NAME).srs: $(foreach,i,$(SRC8FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID9FILES=$(foreach,i,$(SRC9FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS9PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS9NAME)_srs.hid
 $(HIDSRS9PARTICLE) : $(HID9FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID9FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID9FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS9PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
@@ -428,15 +410,13 @@ $(SRS)$/$(SRS9NAME).srs: $(foreach,i,$(SRC9FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 HID10FILES=$(foreach,i,$(SRC10FILES:f) $(SRS)$/$(i:s/.src/.hid/))
 HIDSRS10PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS10NAME)_srs.hid
 $(HIDSRS10PARTICLE) : $(HID10FILES)
-        @echo ------------------------------
-        @echo Making: $@
-        @+if exist $@ rm $@
-        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID10FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-        @+$(RENAME) $@.$(ROUT).tmp $@
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID10FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @+$(RENAME) $@.$(ROUT).tmp $@
 
-.IF "$(L10N_framework)"==""
 ALLTAR : $(HIDSRS10PARTICLE)
-.ENDIF			# "$(L10N_framework)"==""
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
