@@ -8,7 +8,7 @@
 # Product       List_of_platforms                                                   List_of_languages   Target
 
 OpenOffice      unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi4,unxlngi5,unxlngi6,unxsols4,wntmsci10   en-US   openoffice
-OpenOffice_wJRE wntmsci10.pro,wntmsci10                                                                                                        en-US   openofficewjre
+OpenOffice_wJRE wntmsci10.pro,wntmsci10                                                                                                        en-US   openofficewithjre
 OpenOfficeLanguagepack   unxlngi4.pro,unxlngi5.pro,unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro   de|es|fr|it|nl|sv|pt-BR|zh-CN|zh-TW|ko|ja   ooolanguagepack
 OpenOfficeLanguagepack   unxlngi6,unxsols4,wntmsci10                                    de   ooolanguagepack
 URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US  ure
