@@ -45,7 +45,8 @@ E *:= .exe	# Executables
 .EXPORT : PWD
    
 .ELSE	# Non 4nt case
-   SHELLFLAGS       *:= -c
+# See iz50689 why -f is needed.
+   SHELLFLAGS       *:= -fc
    GROUPFLAGS       *:=
    SHELLMETAS       *:= *";?<>|()&][$$\#`'
    GROUPSUFFIX      *:= .csh
