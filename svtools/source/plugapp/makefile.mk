@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-13 11:31:31 $
+#   last change: $Author: rt $ $Date: 2005-06-20 15:26:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,12 +73,8 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/ttprops.obj \
-    $(SLO)$/communi.obj \
-    $(SLO)$/brooker.obj
+    $(SLO)$/ttprops.obj 
 
-
-OBJFILES =    $(OBJ)$/commtest.obj	$(OBJ)$/brooker.obj
 
 SRS2NAME=$(TARGET)
 SRC2FILES=   testtool.src
