@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-06-17 09:24:13 $
+dnl * Date: $Date: 2005-06-20 15:17:47 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.123 $ )
+AC_REVISION( $Revision: 1.124 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1267,14 +1267,14 @@ if test "$COMEX" = "8" -o "$COMEX" = "10"; then
     fi
 
     dnl Check mscoree.lib / .NET Frameworks dir
-    dnl This now has two meanings, for .NET200x it has to point to the
+    dnl This now has two meanings, for .NET2003 it has to point to the
     dnl directory with lib/mscoree.lib and for VCTK to lib/msvcrt.lib.
     if test -z "$ENABLE_VCTK"; then
 	    if test -f "$with_frame_home/lib/mscoree.lib"; then
 		    FRAME_HOME="$with_frame_home"
 	    fi
-	    if test -z "$FRAME_HOME" -a -e "$with_cl_home/../FrameworkSDK/lib/mscoree.lib"; then
-		    FRAME_HOME="$with_cl_home/../FrameworkSDK"
+	    if test -z "$FRAME_HOME" -a -e "$with_cl_home/../SDK/v1.1/lib/mscoree.lib"; then
+		    FRAME_HOME="$with_cl_home/../SDK/v1.1"
 	    fi
 	    if test ! -f "$FRAME_HOME/lib/mscoree.lib"; then
 		AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-frame-home])
