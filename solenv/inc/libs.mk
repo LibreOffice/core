@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-16 14:37:26 $
+#   last change: $Author: rt $ $Date: 2005-06-20 15:27:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.90 $$"
+LIBSMKREV!:="$$Revision: 1.91 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -112,6 +112,7 @@ ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
 DBFILELIB=-lfile$(OFFICEUPD)$(DLLPOSTFIX)
 RMCXTLIB=-lrmcxt
 BTSTRPLIB=-lbtstrp
+BTSTRPDTLIB=-lbootstrpdt
 TRANSEXLIB=-ltransex
 IOTXLIB=
 OTXLIB=-lotx_ind
@@ -157,6 +158,10 @@ NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
 NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
+BROOKERLIB=-lbrooker$(OFFICEUPD)$(DLLPOSTFIX)
+SIMPLECMLIB=-lsimplecm$(OFFICEUPD)$(DLLPOSTFIX)
+COMMUNILIB=-lcommuni$(OFFICEUPD)$(DLLPOSTFIX)
+BTCOMMUNILIB=-lbtcommuni$(OFFICEUPD)$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(OFFICEUPD)$(DLLPOSTFIX)
 SVLLIB=-lsvl$(OFFICEUPD)$(DLLPOSTFIX)
 SVMEMLIB=
@@ -364,6 +369,7 @@ SFXLIB=$(SFX2LIB)
 FWELIB=$(LIBPRE) ifwe.lib
 FWILIB=$(LIBPRE) ifwi.lib
 BTSTRPLIB=$(LIBPRE) btstrp.lib
+BTSTRPDTLIB=$(LIBPRE) bootstrpdt.lib
 TRANSEXLIB=$(LIBPRE) transex.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
@@ -376,6 +382,10 @@ NSPR4LIB=$(LIBPRE) nspr4.lib
 PLC4LIB=$(LIBPRE) plc4.lib
 NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
 MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(LIBPRE) crypt32.lib $(LIBPRE) advapi32.lib
+BROOKERLIB=$(LIBPRE) ibrooker.lib
+SIMPLECMLIB=$(LIBPRE) isimplecm.lib
+COMMUNILIB=$(LIBPRE) icommuni.lib
+BTCOMMUNILIB=$(LIBPRE) ibtcommuni.lib
 AUTOMATIONLIB=$(LIBPRE) ists.lib
 SVLLIB=$(LIBPRE) isvl.lib
 PLUGCTORLIB=$(LIBPRE) plugctor.lib
