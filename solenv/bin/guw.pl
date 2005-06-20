@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 18:24:47 $
+#   last change: $Author: rt $ $Date: 2005-06-20 14:50:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,7 +171,13 @@ sub WinFormat {
   } elsif ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
       # This regex evaluates -X<path>, sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
-      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-X<path>) path:\n$variable\n"); }
+      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-X<absolute path>) path:\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(-F[ARdemopr])[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates -FX<path> (MSVC switches for output naming), sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\ncompiler naming (-FX<absolute path>) path:\n$variable\n"); }
       $d1_prefix = $1;
       $d1 = myCygpath($2,1);
   } else {
