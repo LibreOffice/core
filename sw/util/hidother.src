@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 11:32:37 $
+ *  last change: $Author: rt $ $Date: 2005-06-20 15:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#include "..\inc\helpid.h"          // HID_FUNC_XXX
+#include "../inc/helpid.h"          // HID_FUNC_XXX
 //#include "shellid.hxx"            // HID_FUNC_XXX da kommen sie eigentlich her
 #include "hidother.hrc"
 
