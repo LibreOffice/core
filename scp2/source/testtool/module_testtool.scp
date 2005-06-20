@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_testtool.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-06-17 14:15:33 $
+ *  last change: $Author: rt $ $Date: 2005-06-20 15:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,5 +65,5 @@ Module gid_Module_Optional_Testtool
     MOD_NAME_DESC ( MODULE_OPTIONAL_TESTTOOL );
     ParentID = gid_Module_Optional;
     Default = NO;
-    Files = (gid_File_Bin_Testtool, gid_File_Hid_Testtool);
+    Files = (gid_File_Bin_Testtool, gid_File_Lib_Communi, gid_File_Lib_Simplecm, gid_File_Hid_Testtool);
 End
