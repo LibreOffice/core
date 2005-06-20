@@ -10,7 +10,7 @@ ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w NULL
 ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr NULL
 ex	extensions\source\resource			nmake	-	all	ex_resrc NULL
 ex	extensions\source\installation			nmake	-	w	ex_inst NULL
-ex	extensions\source\installation\office\protchk		nmake	-	w	ex_pchk NULL
+ex	extensions\source\installation\office\protchk		nmake	-	all	ex_pchk NULL
 ex	extensions\source\plugin\base			nmake	-	all	ex_plbase NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx NULL
