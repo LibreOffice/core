@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 15:51:02 $
+#   last change: $Author: rt $ $Date: 2005-06-20 14:52:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,8 @@ $(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB$(TNR)HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+# need to strip since solaris cannot handle tab-only whitespace here
+    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES$(TNR)PARTICLE)
