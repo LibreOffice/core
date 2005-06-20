@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-30 14:06:19 $
+#   last change: $Author: rt $ $Date: 2005-06-20 15:34:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,35 +74,11 @@ TARGET=communi
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=   simplecm.cxx	bcst.cxx
-
 OBJFILES=   \
-            $(OBJ)$/abthread.obj		\
-            $(OBJ)$/tcpio.obj		\
-            $(OBJ)$/packethandler.obj \
-            $(OBJ)$/simplecm.obj	\
-            $(OBJ)$/bcst.obj		\
-            $(OBJ)$/persbcst.obj	\
-            $(OBJ)$/iiclient.obj	\
-            $(OBJ)$/siclient.obj	\
-            $(OBJ)$/infocom.obj		\
-            $(OBJ)$/bsockcon.obj	\
-            $(OBJ)$/ssockcon.obj	\
             $(OBJ)$/parser.obj		\
             $(OBJ)$/geninfo.obj		\
 
 SLOFILES=   \
-            $(SLO)$/abthread.obj		\
-            $(SLO)$/tcpio.obj       \
-            $(SLO)$/packethandler.obj \
-            $(SLO)$/simplecm.obj	\
-            $(SLO)$/bcst.obj		\
-            $(SLO)$/persbcst.obj	\
-            $(SLO)$/iiclient.obj	\
-            $(SLO)$/siclient.obj	\
-            $(SLO)$/infocom.obj		\
-            $(SLO)$/bsockcon.obj	\
-            $(SLO)$/ssockcon.obj	\
             $(SLO)$/parser.obj		\
             $(SLO)$/geninfo.obj		\
 
