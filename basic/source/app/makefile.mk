@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 15:44:45 $
+#   last change: $Author: rt $ $Date: 2005-06-20 15:37:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ OBJFILES = \
     $(OBJ)$/textedit.obj    \
     $(OBJ)$/msgedit.obj     \
     $(OBJ)$/dialogs.obj     \
-    $(OBJ)$/comm_bas.obj
 
 EXCEPTIONSFILES = \
     $(OBJ)$/app.obj
@@ -121,7 +120,6 @@ LIB1OBJFILES = \
         $(OBJ)$/textedit.obj     \
         $(OBJ)$/msgedit.obj      \
         $(OBJ)$/dialogs.obj      \
-        $(OBJ)$/comm_bas.obj	\
         $(OBJ)$/sbintern.obj
 
 # --- Targets ------------------------------------------------------------
