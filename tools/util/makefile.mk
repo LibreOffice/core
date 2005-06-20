@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-13 12:15:44 $
+#   last change: $Author: rt $ $Date: 2005-06-20 15:36:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ HXX1FILES=  $(INC)$/debug.hxx       \
             $(INC)$/unqidx.hxx      \
             $(INC)$/unqid.hxx       \
             $(INC)$/mempool.hxx     \
-            $(INC)$/simplecm.hxx    \
             $(INC)$/stream.hxx      \
             $(INC)$/cachestr.hxx    \
             $(INC)$/errcode.hxx     \
