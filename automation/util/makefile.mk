@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-15 11:10:11 $
+#   last change: $Author: rt $ $Date: 2005-06-21 19:08:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,11 +62,9 @@
 
 PRJ=..
 
-PRJNAME=automation
+PRJNAME=AUTOMATION
 TARGET=automation
 TARGETTYPE=GUI
-#basic.hid generieren
-GEN_HID=TRUE
 
 # --- Settings ---------------------------------------------------
 
@@ -75,8 +73,12 @@ GEN_HID=TRUE
 # --- Allgemein ---------------------------------------------------
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1FILES=              \
-    $(SLB)$/server.lib
+LIB1FILES=                 \
+    $(SLB)$/server.lib     \
+    $(SLB)$/simplecm.lib   \
+    $(SLB)$/communi.lib    \
+
+# --- sts library ---------------------------------------------------
 
 SHL1TARGET= sts$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ists
@@ -93,7 +95,6 @@ SHL1STDLIBS= \
             $(CPPULIB) \
             $(COMPHELPERLIB) \
             $(SOTLIB) \
-            $(VOSLIB)
 
 
 .IF "$(GUI)"=="WNT"
@@ -103,7 +104,7 @@ SHL1STDLIBS+= \
 .ENDIF
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=       $(SLB)$/$(TARGET).lib 
+SHL1LIBS=       $(SLB)$/$(TARGET).lib \
 
 DEF1NAME        =$(SHL1TARGET)
 DEF1DEPN        =       \
@@ -111,6 +112,68 @@ DEF1DEPN        =       \
 
 DEFLIB1NAME     =$(TARGET)
 DEF1DES         =TestToolServer
+
+# --- simple communication library (no vcl) ---------------------------------------------------
+
+SHL2TARGET= simplecm$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= isimplecm
+
+SHL2STDLIBS= \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+
+#			$(CPPULIB)
+
+#			$(COMPHELPERLIB)             $(SOTLIB) 			$(CPPUHELPERLIB) 
+
+
+SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
+SHL2LIBS=       $(SLB)$/simplecm.lib 
+
+DEF2NAME        =$(SHL2TARGET)
+DEF2DEPN        =       \
+    $(MISC)$/$(SHL2TARGET).flt
+
+DEFLIB2NAME     =simplecm
+DEF2DES         =SimpleCommunication
+
+# --- communication library ---------------------------------------------------
+
+SHL3TARGET= communi$(UPD)$(DLLPOSTFIX)
+SHL3IMPLIB= icommuni
+
+SHL3STDLIBS= \
+            $(TOOLSLIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB)       \
+            $(SVLIB) \
+            $(BASICLIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(COMPHELPERLIB) \
+            $(SOTLIB) \
+            $(VOSLIB) \
+            $(SIMPLECMLIB) \
+
+
+.IF "$(GUI)"=="WNT"
+SHL3STDLIBS+= \
+        $(LIBPRE) advapi32.lib	\
+        $(LIBPRE) gdi32.lib
+.ENDIF
+
+SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
+SHL3LIBS=       $(SLB)$/communi.lib 
+
+DEF3NAME        =$(SHL3TARGET)
+DEF3DEPN        =       \
+    $(MISC)$/$(SHL3TARGET).flt
+
+DEFLIB3NAME     =communi
+DEF3DES         =Communication
 
 # --- TESTTOOL IDE ------------------------------------------------------
 
@@ -139,7 +202,8 @@ APP1STDLIBS+= \
             $(COMPHELPERLIB) \
             $(SOTLIB) \
             $(BASICLIB) \
-            $(VOSLIB)
+            $(SIMPLECMLIB) \
+            $(COMMUNILIB) \
 
 .IF "$(GUI)"=="UNX"
 APP1STDLIBS+= \
@@ -241,6 +305,29 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo exception >> $@
     @echo bad_alloc >> $@
     @echo __CT >> $@
+
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo WEP > $@
+    @echo LIBMAIN >> $@
+    @echo LibMain >> $@
+    @echo Sbi >> $@
+    @echo exception >> $@
+    @echo bad_alloc >> $@
+    @echo __CT >> $@
+
+$(MISC)$/$(SHL3TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo WEP > $@
+    @echo LIBMAIN >> $@
+    @echo LibMain >> $@
+    @echo Sbi >> $@
+    @echo exception >> $@
+    @echo bad_alloc >> $@
+    @echo __CT >> $@
+
 
 # ------------------------------------------------------------------------
 
