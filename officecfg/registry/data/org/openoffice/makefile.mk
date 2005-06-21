@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-05-24 13:58:55 $
+#   last change: $Author: rt $ $Date: 2005-06-21 13:09:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ MODULEFILES= \
     Setup-calc.xcu   \
     Setup-draw.xcu   \
     Setup-impress.xcu   \
+    Setup-base.xcu   \
     Setup-math.xcu
 
 LOCALIZEDFILES=
