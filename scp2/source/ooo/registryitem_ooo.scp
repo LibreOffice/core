@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: rt $ $Date: 2005-06-17 14:15:18 $
+*  last change: $Author: rt $ $Date: 2005-06-21 13:24:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -556,87 +556,6 @@ RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath_Branded
     Value  = "<progpath>\program";
 End
 
-// new odb file extension
-
-RegistryItem gid_Regitem_Odb
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".odb";
-    ModuleID = gid_Module_Root;
-    Value = "opendocument.DatabaseDocument.1";
-End
-
-RegistryItem gid_Regitem_Odb_PersistentHandler
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = ".odb\PersistentHandler";
-    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-End
-
-RegistryItem gid_Regitem_Odb_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = ".odb\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
-RegistryItem gid_Regitem_Odb_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".odb\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
-    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_DatabaseDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "opendocument.DatabaseDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
-End
-
-RegistryItem gid_Regitem_Odb_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = ".odb";
-    Name = "Content Type";
-    Value = "application/vnd.sun.xml.base";
-End
-
-RegistryItem gid_Regitem_Odb_Mime_Database
-	ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-	ModuleID = gid_Module_Root;
-	Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.base";
-	Name = "Extension";
-	Value = ".odb";
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1";
-    ModuleID = gid_Module_Root;
-    REG_VALUE_LNG(OO_DATABASE)
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\DefaultIcon";
-    ModuleID = gid_Module_Root;
-    Value = "<progpath>\program\soffice.exe,13";
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\shell";
-    ModuleID = gid_Module_Root;
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\shell\open\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
 // Begin registry items for the MS Indexing server filter component
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
@@ -678,13 +597,3 @@ End
 // End registry items for the MS Indexing server filter component
 
 // "OpenWith" Windows Registry keys for extensions supported by OOo
-
-// .ODB
-RegistryItem gid_Regitem_OpenOffice_ODB_OpenWith_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODB\OpenWithProgIDs";
-    ModuleID = gid_Module_Root;
-    Name = "opendocument.DatabaseDocument.1";
-    Value = " ";
-End
-
