@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:04:17 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                 break;
         case SvtModuleOptions::E_SBASIC     :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
                                                 break;
-        case SvtModuleOptions::E_SDATABASE  :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
+        case SvtModuleOptions::E_SDATABASE  :   bInstalled = m_lFactories[SvtModuleOptions::E_DATABASE].getInstalled();
                                                 break;
     }
 
@@ -1496,6 +1496,8 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::
         return E_MATH;
     if (sName.equalsAscii("sbasic"))
         return E_BASIC;
+    if (sName.equalsAscii("sdatabase"))
+        return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;
 }
