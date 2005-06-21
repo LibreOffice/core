@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-06-20 15:17:47 $
+dnl * Date: $Date: 2005-06-21 07:55:05 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.124 $ )
+AC_REVISION( $Revision: 1.125 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -42,6 +42,10 @@ AC_ARG_ENABLE(mozilla,
                           binary for your platform, to build without this
                           version, use this option.
 ],,enable_mozilla="yes")
+AC_ARG_WITH(firefox,
+[  --with-firefox          Use Firefox instead of Mozilla Suite for building.
+                          Only honoured with --with-system-mozilla
+],,)
 AC_ARG_WITH(fonts,
 [  --without-fonts         Removes Bitstream Vera fonts from
                           openoffice.org installation set, for people building
@@ -2688,9 +2692,18 @@ AC_MSG_CHECKING([which mozilla to use])
 if test -n "$with_system_mozilla"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
-    PKG_CHECK_MODULES( MOZILLAXPCOM, mozilla-xpcom )
+    AC_MSG_CHECKING([whether to use Mozilla or Firefox])
+    if test -n "$with_firefox" && test "$with_firefox" != "no"; then
+      moz_flavour=firefox
+     else
+      moz_flavour=mozilla
+    fi
+    tmp=`echo $moz_flavour | $PERL -e 'print ucfirst(<STDIN>);'`
+    AC_MSG_RESULT($tmp)
 
-    PKG_CHECK_MODULES( MOZ_NSS, mozilla-nss )
+    PKG_CHECK_MODULES( MOZILLAXPCOM, $moz_flavour-xpcom )
+
+    PKG_CHECK_MODULES( MOZ_NSS, $moz_flavour-nss )
     save_CPPFLAGS="$CPPFLAGS"
     save_LDFLAGS="$LDFLAGS"
     save_LIBS="$LIBS"
@@ -2704,8 +2717,8 @@ Fixed since nss 3.9.3 (contained by e.g. mozilla >= 1.7.5))], [])
     CPPFLAGS="$save_CPPFLAGS"
     LIBS="$save_LIBS"
 
-    MOZ_INC=`$PKG_CONFIG --variable=includedir mozilla-xpcom`
-    MOZ_LIB=`$PKG_CONFIG --variable=libdir mozilla-xpcom`
+    MOZ_INC=`$PKG_CONFIG --variable=includedir $moz_flavour-xpcom`
+    MOZ_LIB=`$PKG_CONFIG --variable=libdir $moz_flavour-xpcom`
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
     if test "$WITH_OPENLDAP" != "YES"; then
       MOZ_LDAP_CFLAGS="-I$MOZ_INC"
