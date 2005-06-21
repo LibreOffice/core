@@ -1,8 +1,10 @@
 au	automation	:	basic so3 NULL
 au	automation								usr1	-	all	au_mkout NULL
+au	automation\source\simplecm				nmake	-	all	au_scom NULL
+au	automation\source\communi				nmake	-	all	au_comm NULL
 au	automation\source\app					nmake	-	all	au_app NULL
 au	automation\source\server				nmake	-	all	au_server NULL
 au	automation\source\testtool				nmake	-	all	au_tt NULL
 au	automation\source\miniapp				nmake	-	all	au_mini NULL
-au      automation\packimages					nmake	-		all	au_pack NULL
-au	automation\util							nmake	-	all	au_util au_app au_mini au_server au_tt NULL
+au	automation\packimages					nmake	-	all	au_pack NULL
+au	automation\util							nmake	-	all	au_util au_scom au_comm au_app au_mini au_server au_tt NULL
