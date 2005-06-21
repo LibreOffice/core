@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdown_quickstart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-12 08:20:46 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 09:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include "quickstarter.hxx"
-#include <sfx2/qswin32.h>
+#include <setup_native/qswin32.h>
 
 static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 {
