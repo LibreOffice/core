@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:42:11 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
@@ -3695,6 +3698,8 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, FALSE);
     if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
     {
+        if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+            return;
         Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN ) );
         BOOL bShow = FALSE;
