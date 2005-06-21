@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:22:53 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
+#endif
+#ifndef _SFXVISIBILITYITEM_HXX
+#include <svtools/visitem.hxx>
 #endif
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
@@ -697,6 +700,10 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
         {
             switch(nWhich)
             {
+                case SID_TEMPLATE_ADDRESSBOKSOURCE:
+                    if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE) )
+                        rSet.Put(SfxVisibilityItem(nWhich, sal_False));
+                    break;
                 case SID_EXITANDRETURN:
                 case SID_QUITAPP:
                 {
