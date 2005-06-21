@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: vg $ $Date: 2005-02-16 18:20:35 $
-#*    $Revision: 1.22 $
+#*    last change       $Author: rt $ $Date: 2005-06-21 13:21:24 $
+#*    $Revision: 1.23 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -206,6 +206,7 @@ interface Application : Module
     SID_TEMPLATE_ADDRESSBOKSOURCE // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
 
      //---------------------------------------------------------------------
