@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:06:21 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 10:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ Widget createSubWidget( char* pPluginText, Widget shell, XLIB_Window aParentWind
           shell,
         XtNwidth, 200,
         XtNheight, 200,
-          NULL );
+          (char *)NULL );
     XtRealizeWidget( shell );
 
     medDebug( 1, "Reparenting new widget %x to %x\n", XtWindow( newWidget ), aParentWindow );
@@ -176,7 +176,7 @@ void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
                             XtNwidth, 200,
                             XtNheight, 200,
                             XtNoverrideRedirect, True,
-                            NULL );
+                            (char *)NULL );
     *pShellReturn = newShell;
 
     char pText[1024];
@@ -319,7 +319,7 @@ int main( int argc, char **argv)
         NULL,               /* for missing app-defaults file */
         topLevelShellWidgetClass,
         XtNoverrideRedirect, True,
-        NULL);              /* terminate varargs list */
+        (char *)NULL);      /* terminate varargs list */
     pAppDisplay = XtDisplay( topLevel );
 
     XtAppAddInput( app_context,
