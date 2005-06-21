@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CwsConfig.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:46:13 $
+#   last change: $Author: rt $ $Date: 2005-06-21 10:30:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,6 +138,11 @@ sub cws_db_url_list_ref
 
             if ( !defined($password) ) {
                 croak("ERROR: no CVS_PASSWORD entry found in '\$HOME/.cwsrc'.\n" );
+            }
+
+            # *i49473* - do not accept scrambled passwords ending with a space
+            if ( $password =~ / $/) {
+                croak("ERROR: The (scrambled) CVS_PASSWORD ends with a space. This is known to cause problems when connecting to the OpenOffice.org EIS database. Please change your OOo account's password" );
             }
 
             # We are going to stuff $id and $password in an URL, do proper escaping.
