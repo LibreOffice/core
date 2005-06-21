@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2005-06-06 16:26:21 $
+#   last change: $Author: rt $ $Date: 2005-06-21 15:03:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,19 +86,18 @@ ULFFILES= \
     launcher_comment.ulf \
     launcher_name.ulf
 
-DESTULFFILES=$(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i)
-
 LAUNCHERLIST = writer calc draw impress math base printeradmin
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
+MIMEINFO = $(COMMONMISC)/$(TARGET)/openoffice.org.xml
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
 .IF "$(GUI)"=="UNX"
-ALLTAR : $(LAUNCHERFLAGFILE) $(DESTULFFILES)
+ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO)
 .ENDIF          # "$(GUI)"=="UNIX"
 
 #
@@ -117,4 +116,13 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl
 .ENDIF
     @mv -f $(@:db).$(INPATH)/* $(@:d)
     @touch $@
+
+#
+# Merge translations from documents.ulf into shared-mime-info stub
+#
+$(MIMEINFO) : $(COMMONMISC)$/$(TARGET)$/documents.ulf $$(@:f) 
+    @echo Merging translations into shared mime info ..
+    @echo ---------------------------------
+    @$(PERL) merge-shared-mime-translations.pl -p "OpenOffice.org" -u $< > $(@).$(INPATH)
+    @mv -f $(@).$(INPATH) $@
 
