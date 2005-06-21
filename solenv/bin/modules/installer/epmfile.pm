@@ -2035,6 +2035,14 @@ sub put_systemintegration_into_installset
         }
     }
 
+    my $deb = 'openofficeorg-debian-menus_' . $variables->{'PRODUCTVERSION'} . '-1_all.deb';
+    my $debref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$deb, $includepatharrayref, 0);
+
+    if ( $$debref ne "" )
+    {
+         push(@systemfiles, $deb);
+    }
+
     for ( my $i = 0; $i <= $#systemfiles; $i++ )
     {
         my $onefilename = $systemfiles[$i];
