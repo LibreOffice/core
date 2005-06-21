@@ -7,6 +7,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\%__SRC%\bin\noarch\*.rpm %_DEST%\bin%_EXT%\*.rpm
 ..\%__SRC%\bin\*.tar.gz %_DEST%\bin%_EXT%\*.tar.gz
+..\%__SRC%\bin\*.deb %_DEST%\bin%_EXT%\*.deb
 
 ..\%__SRC%\bin\viewdoc.sh %_DEST%\bin%_EXT%\viewdoc
 ..\%__SRC%\bin\gnome-set-default-application %_DEST%\bin%_EXT%\gnome-set-default-application
