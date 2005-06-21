@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 10:54:06 $
+#   last change: $Author: rt $ $Date: 2005-06-21 13:10:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ MODULEFILES= \
     Common-calc.xcu   \
     Common-draw.xcu   \
     Common-impress.xcu   \
+    Common-base.xcu   \
     Common-math.xcu   \
     Common-unx.xcu   \
     Common-wnt.xcu   \
