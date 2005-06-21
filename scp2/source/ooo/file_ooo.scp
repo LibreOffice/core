@@ -516,24 +516,6 @@ End
 
 #endif
 
-File gid_File_Exe_Sbase
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = EXENAME(sbase);
-    Styles = (PACKED);
-End
-
-#ifdef UNX
-
-File gid_File_Share_Xdg_Base
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "base.desktop";
-End
-
-#endif
-
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
 STD_FILTER_FILE( gid_File_Filter_Emp, emp)
@@ -594,12 +576,6 @@ File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(shared);
-End
-
-File gid_File_Help_Sdatabase_Zip
-    Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
-    EXTRA_ALL_LANG(sdatabase);
 End
 
 File gid_File_Help_Help_Zip
