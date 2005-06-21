@@ -16,3 +16,5 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\win32\nsis\*.bmp %_DEST%\bin%_EXT%\*.bmp
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
+
+..\inc\setup_native\qswin32.h %_DEST%\inc%_EXT%\setup_native\qswin32.h
