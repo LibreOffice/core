@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:53:46 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m4" oor:op="replace">
+      <node oor:name="m4" oor:op="replace" install:module="base">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/sdatabase?Interactive</value>
         </prop>
@@ -508,7 +508,7 @@
           <value >_self</value>
         </prop>
       </node>
-      <node oor:name="m14" oor:op="replace" install:module="writer">
+      <node oor:name="m14" oor:op="replace" install:module="base">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >slot:10934</value>
         </prop>
