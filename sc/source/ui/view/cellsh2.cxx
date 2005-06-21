@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:20:34 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/visitem.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -1096,9 +1098,11 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_VIEW_DATA_SOURCE_BROWSER:
                 {
-                    //  get state (BoolItem) from SfxViewFrame
-
-                    pTabViewShell->GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
+                    if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+                        rSet.Put(SfxVisibilityItem(nWhich, sal_False));
+                    else
+                        //  get state (BoolItem) from SfxViewFrame
+                        pTabViewShell->GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
                 }
                 break;
             case SID_SBA_BRW_INSERT:
