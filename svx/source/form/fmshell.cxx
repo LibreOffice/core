@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:23:34 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@
 #endif
 #ifndef _SFXVISIBILITYITEM_HXX
 #include <svtools/visitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
@@ -1198,7 +1201,9 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_FM_USE_WIZARDS:
-                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                if  (   GetImpl()->getDocumentType() == eEnhancedForm
+                    ||  !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE )
+                    )
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                 else if (!m_bDesignMode || !GetFormModel())
                     rSet.DisableItem( nWhich );
