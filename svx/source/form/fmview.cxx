@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:30:30 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
@@ -608,6 +611,11 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
 
     // #i31958# don't call wizards in XForms mode
     if( pFormShell->GetImpl()->getDocumentType() == eEnhancedForm )
+        return;
+
+    // #i46898# no wizards if there is no Base installed - currently, all wizards are
+    // database related
+    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
         return;
 
     Reference< XChild >  xChild(xSet, UNO_QUERY);
