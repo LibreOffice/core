@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:53:49 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 19:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace vos
 #endif
 
 #ifndef _COMMUNI_HXX
-#include <svtools/communi.hxx>
+#include "communi.hxx"
 #endif
 
 #define TT_PORT_NOT_INITIALIZED     ULONG(0xFFFFFFFF)   // Eigentlich ja noch mehr, aber soll mal reichen
