@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-17 11:40:53 $
+#   last change: $Author: rt $ $Date: 2005-06-21 19:08:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,9 @@ OBJFILES = \
     $(OBJ)$/cmdstrm.obj              \
     $(OBJ)$/cretstrm.obj             \
     $(OBJ)$/objtest.obj              \
-    $(OBJ)$/tcommuni.obj
+    $(OBJ)$/tcommuni.obj             \
+    $(OBJ)$/comm_bas.obj             \
+    
 
 EXCEPTIONSFILES= \
     $(OBJ)$/cmdstrm.obj              \
