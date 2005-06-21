@@ -50,6 +50,8 @@ hedabu: ..\bootstrp\vermap.hxx %_DEST%\inc%_EXT%\bootstrp\vermap.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
+hedabu: ..\inc\bigint.hxx %_DEST%\inc%_EXT%\tools\bigint.hxx
+hedabu: ..\inc\color.hxx %_DEST%\inc%_EXT%\tools\color.hxx
 hedabu: ..\inc\contnr.hxx %_DEST%\inc%_EXT%\tools\contnr.hxx
 hedabu: ..\inc\date.hxx %_DEST%\inc%_EXT%\tools\date.hxx
 hedabu: ..\inc\datetime.hxx %_DEST%\inc%_EXT%\tools\datetime.hxx
