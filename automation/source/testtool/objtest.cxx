@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:55:12 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 19:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ using namespace rtl;
 #include <basic/ttstrhlp.hxx>
 #endif
 #include "tcommuni.hxx"
+#include "comm_bas.hxx"
 
 #ifndef _CRETSTRM_HXX
 #include <cretstrm.hxx>
@@ -166,6 +167,7 @@ SV_DECL_REF(SbxValue)
 #endif
 SV_IMPL_REF(SbxValue)
 
+static CommunicationFactory aComManFac;
 
 #define cMyDelim ' '
 #define P_FEHLERLISTE pFehlerListe
@@ -753,6 +755,8 @@ void TestToolObj::InitTestToolObj()
     nMyVar = 0;
     nControlsObj = 0;
 
+    pImpl->pMyBasic->AddFactory( &aComManFac );
+
 
 // Das ist zum testen des IPC
 
@@ -794,6 +798,7 @@ void TestToolObj::InitTestToolObj()
 
 TestToolObj::~TestToolObj()
 {
+    pImpl->pMyBasic->RemoveFactory( &aComManFac );
     EndListening( ((StarBASIC*)GetParent())->GetBroadcaster() );
     pImpl->pNextReturn.Clear();
 
@@ -2846,7 +2851,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.17 $
+    // search $Revision: 1.18 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
