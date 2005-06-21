@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:05:17 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,6 +1975,24 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
     if( pData && !pData->bVisible )
         bVisible = FALSE;
 
+    if ( bVisible && pData && pData->eType == MENUITEM_SEPARATOR )
+    {
+        // always avoid adjacent separators
+        USHORT nCount = (USHORT) pItemList->Count();
+        USHORT n;
+        MenuItemData* pNextData = NULL;
+        // search next visible item
+        for( n = nPos + 1; n < nCount; n++ )
+        {
+            pNextData = pItemList->GetDataFromPos( n );
+            if( pNextData->bVisible )
+                break;
+        }
+        // check for separator
+        if( pNextData && pNextData->bVisible && pNextData->eType == MENUITEM_SEPARATOR )
+            bVisible = FALSE;
+    }
+
     // Fuer den Menubar nicht erlaubt, weil ich nicht mitbekomme
     // ob dadurch ein Eintrag verschwindet oder wieder da ist.
     if ( bVisible && !bIsMenuBar && ( nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES ) &&
@@ -2009,7 +2027,6 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
                     pData = pItemList->GetDataFromPos( n );
                     if ( pData->eType != MENUITEM_SEPARATOR )
                         bNextVisible = pData->bEnabled; // && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( TRUE ) );
-                    // nicht beim naechsten Separator abbrechen...
                 }
             }
             bVisible = bPrevVisible && bNextVisible;
