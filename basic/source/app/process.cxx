@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:07:20 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 10:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,5 +270,6 @@ BOOL Process::Terminate()
 {
     if ( ImplIsRunning() )
         return pProcess->terminate() == vos::OProcess::E_None;
+    return TRUE;
 }
 
