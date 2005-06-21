@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-06-21 07:55:05 $
+dnl * Date: $Date: 2005-06-21 10:13:47 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.125 $ )
+AC_REVISION( $Revision: 1.126 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3171,12 +3171,32 @@ dnl and add "-a \( "$WITH_MINGWIN" != "yes" \)" then
 if test \( "$_os" = "WINNT" \) ; then
 	AC_MSG_CHECKING([for PSDK files])
 	if test -z "$with_psdk_home"; then
-		# This line will work with cygwin 1.3.? and newer, for older versions
-		# cat will output nothing, therefore PSDK_HOME will be empty.
-		PSDK_HOME=`cat "/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir"`
+		# This first line will detect a February 2003 Microsoft Platform SDK
+		PSDK_HOME=`cat "/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir" 2> /dev/null`
+        # But there might be also an April 2005 PSDK, unfortunately MS changed
+        # the registry entry. (we prefer the old version!?)
+        if test -z "$PSDK_HOME"; then
+          PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | head -n 1`
+        fi
+        # normalize if found
+        if test -n "$PSDK_HOME"; then
+          PSDK_HOME=`cygpath -d "$PSDK_HOME"`
+          PSDK_HOME=`cygpath -u "$PSDK_HOME"`
+          # The 2005 PSDK has a trailing backslash
+          PSDK_HOME=`echo $PSDK_HOME | $SED -n "s/\/$//p"`
+        fi
 	else
 		PSDK_HOME="$with_psdk_home"
 	fi
+    # Problem with current PSDK (iz 49865)
+    if test -f "$PSDK_HOME/Lib/libcp.lib"; then
+        AC_MSG_ERROR([
+
+Some modules do not build correctly with MS Platform SDK - April 2005
+Edition if the library ($PSDK_HOME/Lib/libcp.lib) is found.
+Remove/rename/backup that file and restart configure. Details about this
+problem can be found in issue 49856.])
+    fi
 	if test \( -f "$PSDK_HOME/Include/AdoCtint.h" \) \
 		 -a \( -f "$PSDK_HOME/Include/SqlUcode.h" \) \
 		 -a \( -f "$PSDK_HOME/Include/usp10.h" \); then
@@ -3199,7 +3219,7 @@ are installed or use --with-psdk-home .])
          -o ! -x "$PSDK_HOME/bin/msitran.exe" ; then
         AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
     fi
-    AC_MSG_RESULT([PSDK files found])
+    AC_MSG_RESULT([PSDK files found ($PSDK_HOME)])
 fi
 AC_SUBST(PSDK_HOME)
 
