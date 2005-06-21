@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:33:04 $
+#   last change: $Author: rt $ $Date: 2005-06-21 10:30:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.14 $ ';
+my $id_str = ' $Revision: 1.15 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -200,15 +200,6 @@ sub parse_options
         }
     }
 
-    # check if master is known
-    my $result = undef;
-    my $master    = Eis::to_string($masterws);
-    my $eis = Cws::eis();
-    eval { $result = $eis->getCurrentMilestone($master) };
-    if ( !defined $result ) {
-        print_error("Master workspace '$masterws' not found in database.", 4);
-    }
-
     my $wslocation;
     if ( defined($log) ) {
         # check if master is known to 'stand.lst'
@@ -217,7 +208,7 @@ sub parse_options
         $success = $workspace_db->load_list($workspace_lst);
         if ( !$success ) {
             print_error("Can't load workspace list '$workspace_lst'.", 3);
-        }
+       }
         my $workspace = $workspace_db->get_key($masterws);
         if ( !$workspace ) {
             print_error("Master workspace '$masterws' not found in '$workspace_lst' database.", 4);
@@ -236,6 +227,14 @@ sub parse_options
     $cws->master($masterws);
     $cws->child($childws);
     $log->start_log_extended($script_name,$parameter_list,$masterws,$childws) if defined($log);
+
+    # Check if a least one milestone exist on master workspace,
+    # this is a prerequisite before we can create a CWS on it,
+    # otherwise needed tags may not be available.
+    my $current_milestone = $cws->get_current_milestone($masterws);
+    if ( !$current_milestone ) {
+        print_error("Can't retrieve current milestone for master workspace '$masterws'. Master workspace '$masterws' may not (yet) be registered with the EIS database.", 4);
+    }
 
     # check if child workspace already exists
     my $eis_id = $cws->eis_id();
