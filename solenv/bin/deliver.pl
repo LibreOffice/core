@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-20 15:27:11 $
+#   last change: $Author: rt $ $Date: 2005-06-21 09:43:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.90 $ ';
+$id_str = ' $Revision: 1.91 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1173,7 +1173,7 @@ sub zip_files
         print "ZIP: updating $zip_file\n";
         next if ( $opt_check );
 
-        my $work_file = "";
+        local $work_file = "";
         if ( $ext) {
             # We are delivering into a minor. Zip files must not contain the
             # minor extension, so we have to pre and post process it.
@@ -1346,6 +1346,10 @@ sub cleanup_and_die
     my $sig = shift;
     if ( defined($temp_file) && -e $temp_file ) {
         unlink($temp_file);
+    }
+    if ( defined($work_file) && -e $work_file ) {
+        unlink($work_file);
+        print STDERR "$work_file removed\n";
     }
 
     die "caught unexpected signal $sig, terminating ...";
