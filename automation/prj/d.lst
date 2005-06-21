@@ -2,11 +2,17 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\automation
 
 #..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\bin\sts?????.dll %_DEST%\bin%_EXT%\sts?????.dll
-..\%__SRC%\lib\libsts* %_DEST%\lib%_EXT%\*
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\lib* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\ists.lib %_DEST%\lib%_EXT%\ists.lib
+..\%__SRC%\lib\isimplecm.lib %_DEST%\lib%_EXT%\isimplecm.lib
+..\%__SRC%\lib\icommuni.lib %_DEST%\lib%_EXT%\icommuni.lib
 
-..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
+hedabu: ..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
+hedabu: ..\inc\commdefines.hxx %_DEST%\inc%_EXT%\automation\commdefines.hxx
+hedabu: ..\inc\commtypes.hxx %_DEST%\inc%_EXT%\automation\commtypes.hxx
+hedabu: ..\inc\communi.hxx %_DEST%\inc%_EXT%\automation\communi.hxx
+hedabu: ..\inc\simplecm.hxx %_DEST%\inc%_EXT%\automation\simplecm.hxx
 
 ..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.exe
 ..\%__SRC%\bin\testtool %_DEST%\bin%_EXT%\testtool.bin
