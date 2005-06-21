@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 08:07:44 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 13:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@
                     <value >GenericCategories</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.sdb.RelationDesign" oor:op="replace">
+            <node oor:name="com.sun.star.sdb.RelationDesign" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DbuCommands</value>
                 </prop>
@@ -330,7 +330,7 @@
                     <value >Relation Design</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace">
+            <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DbuCommands</value>
                 </prop>
@@ -350,7 +350,7 @@
                     <value >Query Design</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace">
+            <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DbuCommands</value>
                 </prop>
@@ -370,7 +370,7 @@
                     <value >Table Design</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace">
+            <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DbuCommands</value>
                 </prop>
@@ -470,7 +470,7 @@
                     <value >GenericCategories</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
+            <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DbuCommands</value>
                 </prop>
