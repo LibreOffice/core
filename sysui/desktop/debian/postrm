@@ -1,0 +1,15 @@
+#!/bin/sh
+# run always - both when upgrading as well as when erasing the package.
+# Make sure this works when converted to .deb using alien.
+if [ "$1" != "purge" ]; then
+  if [ -x /usr/bin/update-mime-database ]; then
+    update-mime-database /usr/share/mime
+  fi
+  if [ -x /usr/bin/update-desktop-database ]; then
+    update-desktop-database /usr/share/applications
+  fi
+  if [ -x /usr/bin/update-menus ]; then
+    update-menus
+  fi
+fi
+exit 0
