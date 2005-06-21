@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:57:43 $
+ *  last change: $Author: rt $ $Date: 2005-06-21 09:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <io.h>
 #include <osl/thread.h>
 #include <osl/file.hxx>
-#include <qswin32.h>
+#include <setup_native/qswin32.h>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
