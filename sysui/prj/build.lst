@@ -1,4 +1,4 @@
-su	sysui	:	offapi xml2cmp rdbmaker transex3 NULL
+su	sysui	:	offapi xml2cmp rdbmaker transex3 setup_native NULL
 su	sysui\source\win32\QuickStart		nmake	-	w	su_win32_quickstart NULL
 su	sysui\source\win32\QuickStart\so	nmake	-	w	su_win32_quickstart_so su_win32_quickstart.w NULL
 su	sysui\desktop\icons					nmake	-	w	su_iconsw NULL
@@ -9,6 +9,7 @@ su  sysui\desktop\redhat                nmake   -   u   su_dtredhat su_dtshare.u
 su  sysui\desktop\suse                  nmake   -   u   su_dtsuse su_dtshare.u NULL
 su  sysui\desktop\mandriva              nmake   -   u   su_dtmdk su_dtshare.u NULL
 su  sysui\desktop\freedesktop           nmake   -   u   su_dtfreedesktop su_dtredhat.u NULL
+su  sysui\desktop\debian                nmake   -   u   su_dtdebian su_dtshare.u NULL
 su  sysui\desktop\cde                   nmake   -   u   su_dtcde su_dtshare.u NULL
 su  sysui\desktop\solaris               nmake   -   u   su_dtsolaris su_dtcde.u su_dtshare.u NULL
 su  sysui\desktop\util                  nmake   -   u   su_desktop NULL
