@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.15 $
+*  $Revision: 1.16 $
 *
-*  last change: $Author: rt $ $Date: 2005-05-24 14:00:43 $
+*  last change: $Author: rt $ $Date: 2005-06-21 13:24:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -93,7 +93,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Exe_Msfontextract,
 	gid_File_Exe_Nsplugin,
 	gid_File_Exe_Quickstart,
-	gid_File_Exe_Sbase,
 	gid_File_Images_Zip,
 	gid_File_Lib_Npsoplugin,
 	gid_File_JREProperties,
@@ -782,7 +781,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Registry_Spool_Oo_Office_Embedding_Math_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Math_UISort_Xcu,
 	gid_File_Share_Xdg_Printeradmin,
-	gid_File_Share_Xdg_Base,
 	gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
 	gid_File_Xsl_Export_Common_Body,
@@ -846,8 +844,7 @@ Module gid_Module_Root_Files_7
 	Files = (gid_File_Help_Common_Zip,
 	gid_File_Help_Help_Zip,
 	gid_File_Help_Sbasic_Zip,
-	gid_File_Help_Schart_Zip,
-	gid_File_Help_Sdatabase_Zip);
+	gid_File_Help_Schart_Zip);
 End
 
 Module gid_Module_Root_Files_8
