@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-21 19:08:49 $
+#   last change: $Author: rt $ $Date: 2005-06-22 08:39:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=                 \
     $(SLB)$/server.lib     \
     $(SLB)$/simplecm.lib   \
-    $(SLB)$/communi.lib    \
+    $(SLB)$/communi.lib
 
 # --- sts library ---------------------------------------------------
 
@@ -94,7 +94,7 @@ SHL1STDLIBS= \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(COMPHELPERLIB) \
-            $(SOTLIB) \
+            $(SOTLIB)
 
 
 .IF "$(GUI)"=="WNT"
@@ -104,7 +104,7 @@ SHL1STDLIBS+= \
 .ENDIF
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=       $(SLB)$/$(TARGET).lib \
+SHL1LIBS=       $(SLB)$/$(TARGET).lib
 
 DEF1NAME        =$(SHL1TARGET)
 DEF1DEPN        =       \
@@ -121,11 +121,7 @@ SHL2IMPLIB= isimplecm
 SHL2STDLIBS= \
             $(TOOLSLIB) \
             $(VOSLIB) \
-            $(SALLIB) \
-
-#			$(CPPULIB)
-
-#			$(COMPHELPERLIB)             $(SOTLIB) 			$(CPPUHELPERLIB) 
+            $(SALLIB)
 
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
@@ -156,7 +152,7 @@ SHL3STDLIBS= \
             $(COMPHELPERLIB) \
             $(SOTLIB) \
             $(VOSLIB) \
-            $(SIMPLECMLIB) \
+            $(SIMPLECMLIB)
 
 
 .IF "$(GUI)"=="WNT"
@@ -203,7 +199,7 @@ APP1STDLIBS+= \
             $(SOTLIB) \
             $(BASICLIB) \
             $(SIMPLECMLIB) \
-            $(COMMUNILIB) \
+            $(COMMUNILIB)
 
 .IF "$(GUI)"=="UNX"
 APP1STDLIBS+= \
