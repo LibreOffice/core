@@ -258,10 +258,12 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime/packages/openoffice.org.xml : $(CO
 $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
     @$(MKDIRHIER) $(@:d)
     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+    @chmod a+x $@
 
 $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.sh
     @$(MKDIRHIER) $(@:d)
     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+    @chmod a+x $@
 
 $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice : 
     @$(MKDIRHIER) $(@:d)
@@ -269,7 +271,7 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice :
 
 $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
-    @ln -sf /opt/openoffice.org-$(PKGVERSION) $@
+    @ln -sf /opt/openoffice.org$(PKGVERSION) $@
 
 # --- packaging ---------------------------------------------------
 
