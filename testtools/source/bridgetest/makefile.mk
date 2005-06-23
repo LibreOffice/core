@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:42:46 $
+#   last change: $Author: hjs $ $Date: 2005-06-23 15:33:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,13 @@ DLLPRE = # no leading "lib" on .so files
 .IF "$(GUI)"=="WNT"
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
+MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell +$(WRAPCMD) echo $(SOLARBINDIR))))
+MY_LOCAL_CLASSDIR=$(subst,\,/ file:///$(PWD)$/$(CLASSDIR))
 .ELSE
 BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
+MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
+MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
 .ENDIF
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
@@ -204,23 +208,17 @@ MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(P
 # Use "127.0.0.1" instead of "localhost", see #i32281#:
 $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
-    +echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
+    +$(WRAPCMD) echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
         com.sun.star.comp.bridge.TestComponentMain \
         \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" \
         > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-.IF "$(GUI)" == "WNT"
-FILEURLPREFIX = file:///
-.ELSE
-FILEURLPREFIX = file://
-.ENDIF
-
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
     +echo uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
-        $(subst,$/,/ -env:URE_INTERNAL_JAVA_DIR=$(FILEURLPREFIX)$(SOLARBINDIR)) \
+        -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject > $@
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
@@ -242,8 +240,8 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
     $(REGCOMP) -register  -br $(MISC)$/$(TARGET)$/bootstrap.rdb -r $@ -c \
-        $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(CLASSDIR)$/testComponent.jar) \
-        $(subst,$/,/ -env:URE_INTERNAL_JAVA_DIR=$(FILEURLPREFIX)$(SOLARBINDIR))
+        $(MY_LOCAL_CLASSDIR)/testComponent.jar \
+        -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR)
 .ENDIF
 
 $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
