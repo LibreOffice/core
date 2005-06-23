@@ -1,4 +1,4 @@
-cp    scp2    :    setup_native PYTHON:python NULL
+cp    scp2    :    setup_native transex3 PYTHON:python NULL
 cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\macros                 nmake    -    all    cp_langmacros NULL
 cp    scp2\source\activex         nmake    -    all    cp_activex cp_langmacros NULL
