@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-20 14:51:00 $
+#   last change: $Author: hjs $ $Date: 2005-06-24 14:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ sub setcompiler
     if ( "$whichcom" eq "GCC" ) {
         $appext = ""; # windows for now
         $compiler = "gcc -x c";
-        $outbin_flag = "-o";
+        $outbin_flag = "-o ";
         $objext = ".o";
         $preprocess_flag = "-E"; # preprocess to stdout
     } elsif ( "$whichcom" eq "MSC" ) {
