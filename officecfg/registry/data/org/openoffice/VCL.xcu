@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-06 16:07:01 $
+ *  last change: $Author: rt $ $Date: 2005-06-24 10:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Bitstream Vera Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
       </prop>
+    </node>
+
+    <node oor:name="vi" oor:op="replace">
     </node>
 
     <node oor:name="cs" oor:op="replace">
@@ -716,6 +719,86 @@
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
         <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+    </node>
+    <node oor:name="hi-IN" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Hindi;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Nimbus Sans L;Helmet;Interface System;Sans Serif</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Hindi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Hindi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Hindi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Hindi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Hindi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
+    <node oor:name="gu-IN" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Nimbus Sans L;Helmet;Interface System;Sans Serif</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
+    <node oor:name="pa-IN" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Nimbus Sans L;Helmet;Interface System;Sans Serif</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
+    <node oor:name="ta-IN" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Nimbus Sans L;Helmet;Interface System;Sans Serif</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
     <node oor:name="sw" oor:op="replace">
