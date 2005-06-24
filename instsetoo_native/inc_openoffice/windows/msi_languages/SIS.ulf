@@ -1,7 +1,3 @@
-[OOO_SIS_TEMPLATE]
-en-US = "Intel"
-de = "Intel"
-
 [OOO_SIS_TITLE]
 en-US = "Installation database"
 de = "Installationsdatenbank"
