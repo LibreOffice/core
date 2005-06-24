@@ -60,6 +60,7 @@
 package installer::languages;
 
 use installer::converter;
+use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::remover;
@@ -126,13 +127,35 @@ sub get_info_about_languages
     analyze_languagelist();
 }
 
+#############################################################################
+# Checking whether all elements of an array A are also member of array B
+#############################################################################
+
+sub all_elements_of_array1_in_array2
+{
+    my ($array1, $array2) = @_;
+
+    my $array2_contains_all_elements_of_array1 = 1;
+
+    for ( my $i = 0; $i <= $#{$array1}; $i++ )
+    {
+        if (! installer::existence::exists_in_array(${$array1}[$i], $array2))
+        {
+            $array2_contains_all_elements_of_array1 = 0;
+            last;
+        }
+    }
+
+    return $array2_contains_all_elements_of_array1;
+}
+
 #############################################
 # All languages defined for one product
 #############################################
 
 sub get_all_languages_for_one_product
 {
-    my ( $languagestring ) = @_;
+    my ( $languagestring, $allvariables ) = @_;
 
     my @languagearray = ();
 
@@ -151,6 +174,23 @@ sub get_all_languages_for_one_product
 
     installer::remover::remove_leading_and_ending_whitespaces(\$last);
     push(@languagearray, "$last");
+
+    # For some languages (that are not supported by Windows, english needs to be added to the installation set
+    # Languages saved in "@installer::globals::noMSLocaleLangs"
+
+    if ( $installer::globals::iswindowsbuild )
+    {
+        if ( all_elements_of_array1_in_array2(\@languagearray, \@installer::globals::noMSLocaleLangs) )
+        {
+            my $officestartlanguage = $languagearray[0];
+            unshift(@languagearray, "en-US");   # am Anfang einfügen!
+            $installer::globals::ismultilingual = 1;
+            $installer::globals::added_english  = 1;
+            $installer::globals::set_office_start_language  = 1;
+            # setting the variable PRODUCTLANGUAGE, needed for Linguistic-ForceDefaultLanguage.xcu
+            $allvariables->{'PRODUCTLANGUAGE'} = $officestartlanguage;
+        }
+    }
 
     return \@languagearray;
 }
