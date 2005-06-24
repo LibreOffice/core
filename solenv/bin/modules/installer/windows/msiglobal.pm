@@ -458,11 +458,11 @@ sub get_template_for_sis
 
     my $windowslanguage = installer::windows::language::get_windows_language($language);
 
-    my $value = get_value_from_sis_lng($language, $languagefile, $searchstring );
+    # my $value = get_value_from_sis_lng($language, $languagefile, $searchstring );
 
-    $value =~ s/\"\s*$//;                       # removing ending '"'
+    # $value =~ s/\"\s*$//;                     # removing ending '"'
 
-    $value = $value . ";" . $windowslanguage;   # adding the Windows language
+    my $value = "\"Intel;" . $windowslanguage;  # adding the Windows language
 
     $value = $value . "\"";                     # adding ending '"'
 
