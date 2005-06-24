@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.141 $
+#   $Revision: 1.142 $
 #
-#   last change: $Author: vg $ $Date: 2005-06-16 10:39:41 $
+#   last change: $Author: vg $ $Date: 2005-06-24 10:28:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.141 $ ';
+    $id_str = ' $Revision: 1.142 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1340,7 +1340,7 @@ sub build_multiprocessing {
             get_deps_hash($Prj, $projects_deps_hash{$Prj});
         };
         if (!$Prj || !defined $projects_deps_hash{$Prj}) {
-            cancel_build() if (!scalar @build_queue);
+            cancel_build() if (!scalar @build_queue && !children_number());
             sleep(1);
         }
         build_actual_queue(\@build_queue);
