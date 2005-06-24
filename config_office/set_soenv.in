@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.68 $
-# Date:        $Date: 2005-06-20 15:18:00 $
+# Version:     $Revision: 1.69 $
+# Date:        $Date: 2005-06-24 15:49:13 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -184,6 +184,7 @@ $common_build         = "";
 $MK_UNROLL            = "TRUE";
 $MULTITHREAD_OBJ      = "";
 $NO_REC_RES           = "TRUE";
+$NO_HIDS              = "TRUE";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
@@ -524,7 +525,6 @@ elsif ( $platform =~ m/cygwin/ )
       }
       $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
-      $NO_HIDS        = "TRUE";
       $CPUNAME        = "INTEL";
       $CPU            = "I";
       $GUI            = "WNT";
@@ -1452,6 +1452,7 @@ ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "MK_UNROLL",         $MK_UNROLL,         "e" );
 ToFile( "MULTITHREAD_OBJ",   $MULTITHREAD_OBJ,   "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
+ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "TF_PACKAGES",       $TF_PACKAGES,       "e" );
@@ -1612,7 +1613,6 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "ENABLE_VCTK",       "@ENABLE_VCTK@",    "e" );
    ToFile( "NETTOOLKIT",        "@NETTOOLKIT@",     "e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
-   ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
