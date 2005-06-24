@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2005-06-09 13:54:58 $
+#   last change: $Author: rt $ $Date: 2005-06-24 11:37:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1030,6 +1030,18 @@ sub get_translation_file
 }
 
 ####################################################
+# Removing english, if it was added before
+####################################################
+
+sub remove_english_for_nsis_installer
+{
+    my ($languagestringref, $languagesarrayref) = @_;
+
+    # $$languagestringref =~ s/en-US_//;
+    shift(@{$languagesarrayref});
+}
+
+####################################################
 # Creating download installation sets
 ####################################################
 
@@ -1045,6 +1057,9 @@ sub create_download_sets
 
     # special handling for unix multi language installation sets
     if ( $installer::globals::is_unix_multi ) { $languagestringref = \$installer::globals::unixmultipath; }
+
+    # special handling for installation sets, to which english was added automatically
+    if ( $installer::globals::added_english ) { remove_english_for_nsis_installer($languagestringref, $languagesarrayref); }
 
     my $firstdir = $installationdir;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$firstdir);
