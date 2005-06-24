@@ -1814,8 +1814,14 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name (th) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (hi-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (pa-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (ta-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ar) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (he) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (vi) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (km) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
@@ -2460,4 +2466,14 @@ End
 
 #endif
 
+#ifdef WNT
+
+File gid_File_Registry_Spool_Oo_Office_Linguistic_Forcedefaultlanguage_Xcu
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic;
+    Name = "/registry/spool/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu";
+    Styles = (PACKED,SCPZIP_REPLACE,SET_OFFICE_LANGUAGE);
+End
+
+#endif
 
