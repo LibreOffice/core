@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:42:16 $
+ *  last change: $Author: rt $ $Date: 2005-06-24 11:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.7.7 (c)1999 - 2001 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.7.8 (c)1999 - 2001 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
