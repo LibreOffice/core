@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <accel:item accel:code="KEY_F11" accel:shift="true" xlink:href=".uno:SaveAsTemplate"/>
+    <accel:item accel:code="KEY_F11" xlink:href=".uno:DesignerDialog"/>
+    <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href=".uno:StyleCatalog"/>
+    <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
+    <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href=".uno:Undo"/>
+    <accel:item accel:code="KEY_BACKSPACE" accel:mod2="true" xlink:href=".uno:Undo"/>
+    <accel:item accel:code="KEY_UNDO" xlink:href=".uno:Undo"/>
+    <accel:item accel:code="KEY_REPEAT" xlink:href=".uno:Repeat"/>
+    <accel:item accel:code="KEY_DOWN" xlink:href=".uno:GoDown"/>
+    <accel:item accel:code="KEY_UP" xlink:href=".uno:GoUp"/>
+    <accel:item accel:code="KEY_LEFT" xlink:href=".uno:GoLeft"/>
+    <accel:item accel:code="KEY_RIGHT" xlink:href=".uno:GoRight"/>
+    <accel:item accel:code="KEY_PAGEDOWN" xlink:href=".uno:GoDownBlock"/>
+    <accel:item accel:code="KEY_PAGEUP" xlink:href=".uno:GoUpBlock"/>
+    <accel:item accel:code="KEY_END" accel:mod1="true" xlink:href=".uno:GoToEndOfData"/>
+    <accel:item accel:code="KEY_HOME" accel:mod1="true" xlink:href=".uno:GoToStart"/>
+    <accel:item accel:code="KEY_HOME" xlink:href=".uno:GoToStartOfRow"/>
+    <accel:item accel:code="KEY_END" xlink:href=".uno:GoToEndOfRow"/>
+    <accel:item accel:code="KEY_F4" xlink:href=".uno:ViewDataSourceBrowser"/>
+    <accel:item accel:code="KEY_I" accel:mod1="true" xlink:href=".uno:Italic"/>
+    <accel:item accel:code="KEY_B" accel:mod1="true" xlink:href=".uno:Bold"/>
+    <accel:item accel:code="KEY_U" accel:mod1="true" xlink:href=".uno:Underline"/>
+    <accel:item accel:code="KEY_1" accel:mod1="true" xlink:href=".uno:SpacePara1"/>
+    <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href=".uno:SpacePara15"/>
+    <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href=".uno:SpacePara2"/>
+    <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
+    <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:Thesaurus"/>
+    <accel:item accel:code="KEY_P" accel:shift="true" accel:mod1="true" xlink:href=".uno:SuperScript"/>
+    <accel:item accel:code="KEY_B" accel:shift="true" accel:mod1="true" xlink:href=".uno:SubScript"/>
+    <accel:item accel:code="KEY_F5" xlink:href=".uno:Navigator"/>
+    <accel:item accel:code="KEY_R" accel:shift="true" accel:mod1="true" xlink:href=".uno:Repaint"/>
+    <accel:item accel:code="KEY_3" accel:shift="true" accel:mod1="true" xlink:href=".uno:NumberFormatCurrency"/>
+    <accel:item accel:code="KEY_5" accel:shift="true" accel:mod1="true" xlink:href=".uno:NumberFormatPercent"/>
+    <accel:item accel:code="KEY_6" accel:shift="true" accel:mod1="true" xlink:href=".uno:NumberFormatStandard"/>
+    <accel:item accel:code="KEY_4" accel:shift="true" accel:mod1="true" xlink:href=".uno:NumberFormatDate"/>
+    <accel:item accel:code="KEY_1" accel:shift="true" accel:mod1="true" xlink:href=".uno:NumberFormatDecimal"/>
+    <accel:item accel:code="KEY_2" accel:shift="true" accel:mod1="true" xlink:href=".uno:NumberFormatScientific"/>
+    <accel:item accel:code="KEY_F2" accel:shift="true" accel:mod1="true" xlink:href=".uno:FocusInputLine"/>
+    <accel:item accel:code="KEY_F8" accel:shift="true" xlink:href=".uno:StatusSelectionModeExp"/>
+    <accel:item accel:code="KEY_F8" xlink:href=".uno:StatusSelectionModeExt"/>
+    <accel:item accel:code="KEY_F2" accel:mod1="true" xlink:href=".uno:FunctionDialog"/>
+    <accel:item accel:code="KEY_V" accel:shift="true" accel:mod1="true" xlink:href=".uno:PasteSpecial"/>
+    <accel:item accel:code="KEY_F8" accel:mod1="true" xlink:href=".uno:ViewValueHighlighting"/>
+    <accel:item accel:code="KEY_INSERT" xlink:href=".uno:InsertContents"/>
+    <accel:item accel:code="KEY_F3" accel:mod1="true" xlink:href=".uno:DefineName"/>
+    <accel:item accel:code="KEY_F9" xlink:href=".uno:Calculate"/>
+    <accel:item accel:code="KEY_F9" accel:shift="true" accel:mod1="true" xlink:href=".uno:CalculateHard"/>
+    <accel:item accel:code="KEY_F12" xlink:href=".uno:Group"/>
+    <accel:item accel:code="KEY_F12" accel:mod1="true" xlink:href=".uno:Ungroup"/>
+    <accel:item accel:code="KEY_L" accel:mod1="true" xlink:href=".uno:AlignLeft"/>
+    <accel:item accel:code="KEY_R" accel:mod1="true" xlink:href=".uno:AlignRight"/>
+    <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href=".uno:AlignHorizontalCenter"/>
+    <accel:item accel:code="KEY_J" accel:mod1="true" xlink:href=".uno:AlignBlock"/>
+    <accel:item accel:code="KEY_F7" accel:shift="true" xlink:href=".uno:ShowPrecedents"/>
+    <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:ShowDependents"/>
+    <accel:item accel:code="KEY_DOWN" accel:shift="true" xlink:href=".uno:GoDownSel"/>
+    <accel:item accel:code="KEY_UP" accel:shift="true" xlink:href=".uno:GoUpSel"/>
+    <accel:item accel:code="KEY_LEFT" accel:shift="true" xlink:href=".uno:GoLeftSel"/>
+    <accel:item accel:code="KEY_RIGHT" accel:shift="true" xlink:href=".uno:GoRightSel"/>
+    <accel:item accel:code="KEY_PAGEDOWN" accel:shift="true" xlink:href=".uno:GoDownBlockSel"/>
+    <accel:item accel:code="KEY_PAGEUP" accel:shift="true" xlink:href=".uno:GoUpBlockSel"/>
+    <accel:item accel:code="KEY_HOME" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoToStartSel"/>
+    <accel:item accel:code="KEY_END" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoToEndOfDataSel"/>
+    <accel:item accel:code="KEY_HOME" accel:shift="true" xlink:href=".uno:GoToStartOfRowSel"/>
+    <accel:item accel:code="KEY_END" accel:shift="true" xlink:href=".uno:GoToEndOfRowSel"/>
+    <accel:item accel:code="KEY_UP" accel:mod1="true" xlink:href=".uno:GoUpToStartOfData"/>
+    <accel:item accel:code="KEY_DOWN" accel:mod1="true" xlink:href=".uno:GoDownToEndOfData"/>
+    <accel:item accel:code="KEY_LEFT" accel:mod1="true" xlink:href=".uno:GoLeftToStartOfData"/>
+    <accel:item accel:code="KEY_RIGHT" accel:mod1="true" xlink:href=".uno:GoRightToEndOfData"/>
+    <accel:item accel:code="KEY_UP" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoUpToStartOfDataSel"/>
+    <accel:item accel:code="KEY_DOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoDownToEndOfDataSel"/>
+    <accel:item accel:code="KEY_LEFT" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoLeftToStartOfDataSel"/>
+    <accel:item accel:code="KEY_RIGHT" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoRightToEndOfDataSel"/>
+    <accel:item accel:code="KEY_PAGEDOWN" accel:mod1="true" xlink:href=".uno:JumpToNextTable"/>
+    <accel:item accel:code="KEY_PAGEUP" accel:mod1="true" xlink:href=".uno:JumpToPrevTable"/>
+    <accel:item accel:code="KEY_TAB" xlink:href=".uno:JumpToNextUnprotected"/>
+    <accel:item accel:code="KEY_TAB" accel:shift="true" xlink:href=".uno:JumpToPreviousUnprotected"/>
+    <accel:item accel:code="KEY_SPACE" accel:mod1="true" xlink:href=".uno:SelectColumn"/>
+    <accel:item accel:code="KEY_SPACE" accel:shift="true" xlink:href=".uno:SelectRow"/>
+    <accel:item accel:code="KEY_BACKSPACE" accel:shift="true" xlink:href=".uno:Deselect"/>
+    <accel:item accel:code="KEY_BACKSPACE" accel:mod1="true" xlink:href=".uno:GoToCurrentCell"/>
+    <accel:item accel:code="KEY_MULTIPLY" accel:mod1="true" xlink:href=".uno:SelectData"/>
+    <accel:item accel:code="KEY_F2" xlink:href=".uno:SetInputMode"/>
+    <accel:item accel:code="KEY_BACKSPACE" xlink:href=".uno:ClearContents"/>
+    <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Cancel"/>
+    <accel:item accel:code="KEY_DIVIDE" accel:mod1="true" xlink:href=".uno:SelectArrayFormula"/>
+    <accel:item accel:code="KEY_PAGEDOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:JumpToNextTableSel"/>
+    <accel:item accel:code="KEY_PAGEUP" accel:shift="true" accel:mod1="true" xlink:href=".uno:JumpToPrevTableSel"/>
+    <accel:item accel:code="KEY_F4" accel:shift="true" xlink:href=".uno:ToggleRelative"/>
+    <accel:item accel:code="KEY_D" accel:mod1="true" xlink:href=".uno:DataSelect"/>
+    <accel:item accel:code="KEY_F" accel:shift="true" accel:mod1="true" xlink:href=".uno:RepeatSearch"/>
+    <accel:item accel:code="KEY_T" accel:shift="true" accel:mod1="true" xlink:href=".uno:FocusCellAddress"/>
+    <accel:item accel:code="KEY_F5" accel:shift="true" accel:mod1="true" xlink:href=".uno:FocusCellAddress"/>
+    <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
+    <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
+</accel:acceleratorlist>
