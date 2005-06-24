@@ -454,7 +454,7 @@ if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1b: The
 
 for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 {
-    my $languagesarrayref = installer::languages::get_all_languages_for_one_product($installer::globals::languageproducts[$n]);
+    my $languagesarrayref = installer::languages::get_all_languages_for_one_product($installer::globals::languageproducts[$n], $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "languages.log" ,$languagesarrayref); }
 
     if ( ! $installer::globals::is_unix_multi ) { $installer::globals::alllanguagesinproductarrayref = $languagesarrayref; }
@@ -609,6 +609,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     my $filesinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($filesinproductarrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles4.log", $filesinproductlanguageresolvedarrayref); }
+
+    if ( ! $installer::globals::set_office_start_language )
+    {
+        $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_office_start_language_files($filesinproductlanguageresolvedarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles4a.log", $filesinproductlanguageresolvedarrayref); }
+    }
 
     installer::scriptitems::changing_name_of_language_dependent_keys($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles5.log", $filesinproductlanguageresolvedarrayref); }
