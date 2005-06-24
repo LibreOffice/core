@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE accel:acceleratorlist PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "accelerator.dtd">
+<accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <accel:item accel:code="KEY_F5" xlink:href=".uno:RunBasic"/>
+ <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:BasicStop"/>
+ <accel:item accel:code="KEY_F7" xlink:href=".uno:AddWatch"/>
+ <accel:item accel:code="KEY_F8" xlink:href=".uno:BasicStepInto"/>
+ <accel:item accel:code="KEY_F8" accel:shift="true" xlink:href=".uno:BasicStepOver"/>
+ <accel:item accel:code="KEY_F9" xlink:href=".uno:ToggleBreakPoint"/>
+ <accel:item accel:code="KEY_F9" accel:shift="true" xlink:href=".uno:ToggleBreakPointEnabled"/>
+</accel:acceleratorlist>
