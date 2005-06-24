@@ -28,13 +28,15 @@ th     874  1054
 et    1257  1061
 ja     932  1041
 ko     949  1042
-km    1252  1107   # Khmer
+km       0  1107   # Khmer
 cy    1252  1106   # Welsh
 zh-CN  936  2052
 zh-TW  950  1028
 tr    1254  1055   # Turkish
 hi       0  1081
-hi-IN    0  1081
+hi-IN    0  1081   # hindi
+pa-IN    0  1094   # Punjabi
+ta-IN    0  1097   # Tamil
 ar    1256  1025
 ar-SA 1256  1025
 he    1255  1037
@@ -42,7 +44,8 @@ af    1252  1078   # Afrikaans
 sq    1250  1052   # Albanian
 hy       0  1067   # Armenian
 eu    1252  1069   # Basque
-be    1251  1059   # Belarusian
+be-BY 1251  1059   # Belarusian
+bn       0  1093   # Bengali
 bg    1251  1026   # Bulgarian
 is    1252  1039   # Icelandic
 id    1252  1057   # Indonesian
@@ -52,6 +55,7 @@ mt       0  1082   # Maltese
 mr       0  1102   # Marathi
 rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
+rw       0  1569   # Kinyarwanda
 sa       0  1103   # Sanskrit
 sr-SP 1251  3098   # Serbian Cyrillic
 tn       0  1074   # Setsuana
@@ -67,8 +71,9 @@ tt    1251  1092   # Tatar
 ts       0  1073   # Tsonga
 uk    1251  1058   # Ukrainian
 ur    1256  1056   # Urdu
-vi    1258  1066   # Vietnamese
+vi       0  1066   # Vietnamese
 xh       0  1076   # Xhosa
 ns       0  1132   # Northern Sotho (Sepedi)
 yi       0  1085   # Yiddish
 zu       0  1077   # Zulu
+gu-IN    0  1095   # Gujarati
