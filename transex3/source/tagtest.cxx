@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 15:53:25 $
+ *  last change: $Author: rt $ $Date: 2005-06-24 11:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,42 +84,240 @@ TokenInfo::TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &
         SplitTag( rErrorList );
 }
 
+enum tagcheck { TC_START, TC_HAS_TAG_NAME, TC_HAS_PROP_NAME_EQ, TC_HAS_PROP_NAME_EQ_SP, TC_HAS_PROP_NAME_SP, TC_INSIDE_STRING, TC_PROP_FINISHED, TC_CLOSED, TC_CLOSED_SPACE, TC_FINISHED, TC_ERROR };
+
+/*
+                                                      \<  link  href  =  \"text\"  name  =  \"C\"  \>
+START               ' ' ->  HAS_TAG_NAME
+START               '/' ->  CLOSED
+START               '>' ->  FINISHED
+HAS_TAG_NAME        '=' ->  HAS_PROP_NAME_EQ
+HAS_TAG_NAME        ' ' ->  HAS_PROP_NAME_SP
+HAS_TAG_NAME        '/' ->  CLOSED
+HAS_TAG_NAME        '>' ->  FINISHED
+HAS_PROP_NAME_SP    '=' ->  HAS_PROP_NAME_EQ
+HAS_PROP_NAME_EQ    ' ' ->  HAS_PROP_NAME_EQ_SP
+HAS_PROP_NAME_EQ    '"' ->  INSIDE_STRING
+HAS_PROP_NAME_EQ_SP '"' ->  INSIDE_STRING
+INSIDE_STRING       ' ' ->  INSIDE_STRING
+INSIDE_STRING       '=' ->  INSIDE_STRING
+INSIDE_STRING       '>' ->  INSIDE_STRING
+INSIDE_STRING       '"' ->  PROP_FINISHED
+PROP_FINISHED       ' ' ->  HAS_TAG_NAME
+PROP_FINISHED       '/' ->  CLOSED
+PROP_FINISHED       '>' ->  FINISHED
+CLOSED              ' ' ->  CLOSED_SPACE
+CLOSED              '>' ->  FINISHED
+CLOSED_SPACE        '>' ->  FINISHED
+
+*/
 void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 {
-    USHORT nPos = 2;    // skip  \<
-    USHORT nNextPos = 0;
-    String aDelims( String::CreateFromAscii( " \\=" ) );
-    BOOL bPropName = FALSE;
-    BOOL bPropValue = FALSE;
-    BOOL bInsideString = FALSE;
-    return;
-/*
-    while ( nPos < aTokenString.Len() && aTokenString.GetChar( nPos ) == ' ')
+    USHORT nLastPos = 2;    // skip  \<
+    USHORT nCheckPos = nLastPos;
+    String aDelims( String::CreateFromAscii( " \\=>/" ) );
+    String aPortion;
+    BOOL bCheckName = FALSE;
+    BOOL bCheckEmpty = FALSE;
+    sal_Unicode cDelim;
+    tagcheck aState = TC_START;
 
-    while ( nPos != STRING_NOTFOUND )
+    // skip blanks
+    while ( nLastPos < aTokenString.Len() && aTokenString.GetChar( nLastPos ) == ' ')
+        nLastPos++;
+
+    while ( nCheckPos != STRING_NOTFOUND && !( aState == TC_FINISHED || aState == TC_ERROR ) )
     {
-        nNextPos = aTokenString.SearchChar( aDelims.GetBuffer(), nPos );
-        String aPortion = aTokenString.Copy( nPos, nNextPos-nPos+1 );
+        nCheckPos = aTokenString.SearchChar( aDelims.GetBuffer(), nLastPos );
+        aPortion = aTokenString.Copy( nLastPos, nCheckPos-nLastPos );
 
-        if ( bInsideString )
+        if ( aTokenString.GetChar( nCheckPos ) == '\\' )
+            nCheckPos++;
+
+        cDelim = aTokenString.GetChar( nCheckPos );
+        nCheckPos++;
+
+        switch ( aState )
         {
+//            START           ' ' ->  HAS_TAG_NAME
+//            START           '/' ->  CLOSED
+//            START           '>' ->  FINISHED
+            case TC_START:
+                switch ( cDelim )
+                {
+                    case ' ':  aState = TC_HAS_TAG_NAME;
+                               bCheckName = TRUE;
+                               break;
+                    case '/':  aState = TC_CLOSED;
+                               bCheckName = TRUE;
+                               break;
+                    case '>':  aState = TC_FINISHED;
+                               bCheckName = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            HAS_TAG_NAME    '=' ->  HAS_PROP_NAME_EQ
+//            HAS_TAG_NAME    ' ' ->  HAS_PROP_NAME_SP
+//            HAS_TAG_NAME    '/' ->  CLOSED
+//            HAS_TAG_NAME    '>' ->  FINISHED
+            case TC_HAS_TAG_NAME:
+                switch ( cDelim )
+                {
+                    case '=':  aState = TC_HAS_PROP_NAME_EQ;
+                               bCheckName = TRUE;
+                               break;
+                    case ' ':  aState = TC_HAS_PROP_NAME_SP;
+                               bCheckName = TRUE;
+                               break;
+                    case '/':  aState = TC_CLOSED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    case '>':  aState = TC_FINISHED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            HAS_PROP_NAME_SP    '=' ->  HAS_PROP_NAME_EQ
+            case TC_HAS_PROP_NAME_SP:
+                switch ( cDelim )
+                {
+                    case '=':  aState = TC_HAS_PROP_NAME_EQ;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            HAS_PROP_NAME_EQ    ' ' ->  HAS_PROP_NAME_EQ_SP
+//            HAS_PROP_NAME_EQ    '"' ->  INSIDE_STRING
+            case TC_HAS_PROP_NAME_EQ:
+                switch ( cDelim )
+                {
+                    case ' ':  aState = TC_HAS_PROP_NAME_EQ_SP;
+                               bCheckEmpty = TRUE;
+                               break;
+                    case '\"': aState = TC_INSIDE_STRING;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            HAS_PROP_NAME_EQ_SP '"' ->  INSIDE_STRING
+            case TC_HAS_PROP_NAME_EQ_SP:
+                switch ( cDelim )
+                {
+                    case '\"': aState = TC_INSIDE_STRING;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            INSIDE_STRING    *  ->  INSIDE_STRING
+//            INSIDE_STRING   '"' ->  PROP_FINISHED
+            case TC_INSIDE_STRING:
+                switch ( cDelim )
+                {
+                    case '\"': aState = TC_PROP_FINISHED;
+                               break;
+                    default:   aState = TC_INSIDE_STRING;
+                }
+                break;
+
+//            PROP_FINISHED   ' ' ->  HAS_TAG_NAME
+//            PROP_FINISHED   '/' ->  CLOSED
+//            PROP_FINISHED   '>' ->  FINISHED
+            case TC_PROP_FINISHED:
+                switch ( cDelim )
+                {
+                    case ' ': aState = TC_HAS_TAG_NAME;
+                               bCheckEmpty = TRUE;
+                               break;
+                    case '/': aState = TC_CLOSED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    case '>': aState = TC_FINISHED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            CLOSED          ' ' ->  CLOSED_SPACE
+//            CLOSED          '>' ->  FINISHED
+            case TC_CLOSED:
+                switch ( cDelim )
+                {
+                    case ' ': aState = TC_CLOSED_SPACE;
+                               bCheckEmpty = TRUE;
+                               break;
+                    case '>': aState = TC_FINISHED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+//            CLOSED_SPACE    '>' ->  FINISHED
+            case TC_CLOSED_SPACE:
+                switch ( cDelim )
+                {
+                    case '>': aState = TC_FINISHED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+            default: rErrorList.Insert( new ParserMessage( 99, "Internal error Parsing Tag ", *this ) );
         }
-        else
+
+        if ( bCheckName )
         {
-
-            if ( !aName.Len() )
+            ByteString aBytes( aPortion, RTL_TEXTENCODING_UTF8 );
+            // "a-zA-Z_-.0-9"
+            xub_StrLen nCount;
+            BOOL bBroken = FALSE;
+            const sal_Char* aBuf = aBytes.GetBuffer();
+            for ( nCount = 0 ; !bBroken && nCount < aBytes.Len() ; nCount++ )
             {
-                aPortion.EraseLeadingChars( ' ' );
-                if ( aName.IsAlphaAscii() )
-                    aName = aPortion;
-                aName.IsAlphaAscii();
+                bBroken = ! (   ( aBuf[nCount] >= 'a' && aBuf[nCount] <= 'z' )
+                              ||( aBuf[nCount] >= 'A' && aBuf[nCount] <= 'Z' )
+                              ||( aBuf[nCount] >= '0' && aBuf[nCount] <= '9' )
+                              ||( aBuf[nCount] == '_' )
+                              ||( aBuf[nCount] == '-' )
+                              ||( aBuf[nCount] == '.' )
+                            );
             }
-            else if ( aTokenString.GetChar( nNextPos ) == ' ' )
-            {
 
-            }
+            if ( bBroken )
+                rErrorList.Insert( new ParserMessage( 25, "Found illegal character in Tag ", *this ) );
+
+            bCheckName = FALSE;
         }
-    }*/
+
+        if ( bCheckEmpty )
+        {
+            if ( aPortion.Len() )
+                rErrorList.Insert( new ParserMessage( 25, "Found displaced characters in Tag ", *this ) );
+            bCheckEmpty = FALSE;
+        }
+
+
+        nLastPos = nCheckPos;
+
+        // skip further blanks
+        if ( cDelim == ' ' )
+            while ( nLastPos < aTokenString.Len() && aTokenString.GetChar( nLastPos ) == ' ')
+                nLastPos++;
+    }
+    if ( aState != TC_FINISHED )
+        rErrorList.Insert( new ParserMessage( 25, "Error in Tag ", *this ) );
 }
 
 String TokenInfo::GetTagName() const
