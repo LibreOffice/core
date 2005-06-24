@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:42:29 $
+ *  last change: $Author: rt $ $Date: 2005-06-24 14:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,7 +899,7 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                 }
                 if (pNoteShapes)
                 {
-                    while (aNoteShapeItr != aNoteShapeEndItr && (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) <= nTable))
+                    while (aNoteShapeItr != aNoteShapeEndItr)
                     {
                         if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
                             GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
