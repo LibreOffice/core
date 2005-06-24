@@ -67,6 +67,8 @@ BEGIN
 {
     $prog="make_installer.pl";
 
+    @noMSLocaleLangs = ("km","rw");
+
     $ziplistname = "";
     $pathfilename = "";
     $setupscriptname = "";
@@ -74,6 +76,8 @@ BEGIN
     $shellscriptsfilename = "";
     $product = "";
     $languagelist = "";
+    $added_english = 0;
+    $set_office_start_language = 0;
 
     $destdir = "";
     $rootpath = "";
