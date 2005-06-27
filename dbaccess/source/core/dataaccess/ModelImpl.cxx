@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:54:58 $
+ *  last change: $Author: rt $ $Date: 2005-06-27 08:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,17 +430,12 @@ Reference< XSingleServiceFactory > ODatabaseModelImpl::createStorageFactory() co
 // -----------------------------------------------------------------------------
 void ODatabaseModelImpl::commitRootStorage()
 {
-    try
-    {
-        Reference< XTransactedObject > xTransact( getStorage(), UNO_QUERY );
-        OSL_ENSURE( xTransact.is() || !getStorage().is(), "ODatabaseModelImpl::commitRootStorage: cannot commit the storage (missing interface)!" );
-        if ( xTransact.is() )
-            xTransact->commit();
-    }
-    catch(Exception)
-    {
-        OSL_ENSURE( false, "ODatabaseModelImpl::commitRootStorage: caught an exception!" );
-    }
+#if OSL_DEBUG_LEVEL > 0
+    bool bSuccess =
+#endif
+    commitStorageIfWriteable_ignoreErrors( getStorage() );
+    OSL_ENSURE( bSuccess || !getStorage().is(),
+        "ODatabaseModelImpl::commitRootStorage: could commit the storage!" );
 }
 // -----------------------------------------------------------------------------
 Reference<XStorage> ODatabaseModelImpl::getStorage()
@@ -537,23 +532,51 @@ Reference<XStorage> ODatabaseModelImpl::getStorage(const ::rtl::OUString& _sStor
     return xStorage;
 }
 // -----------------------------------------------------------------------------
+bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+{
+    bool bSuccess = false;
+    Reference<XTransactedObject> xTrans( _rxStorage, UNO_QUERY );
+    if ( xTrans.is() )
+    {
+        sal_Int32 nMode = ElementModes::READ;
+        try
+        {
+            Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
+            xStorageProps->getPropertyValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "ODatabaseModelImpl::commitStorageIfWriteable: could not determine the OpenMode of the storage!" );
+        }
+
+        if ( ( nMode & ElementModes::WRITE ) != 0 )
+            xTrans->commit();
+        bSuccess = true;
+    }
+    return bSuccess;
+}
+// -----------------------------------------------------------------------------
+bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage ) SAL_THROW(())
+{
+    bool bSuccess = false;
+    try
+    {
+        bSuccess = commitStorageIfWriteable( _rxStorage );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors: caught an exception!" );
+    }
+    return bSuccess;
+}
+// -----------------------------------------------------------------------------
 sal_Bool ODatabaseModelImpl::commitEmbeddedStorage()
 {
     sal_Bool bStore = sal_False;
-    try
-    {
-        TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
-        if ( aFind != m_aStorages.end() )
-        {
-            Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
-            if ( bStore = xTrans.is() )
-                xTrans->commit();
-        }
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
-    }
+    TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
+    if ( aFind != m_aStorages.end() )
+        bStore = commitStorageIfWriteable_ignoreErrors( aFind->second );
     return bStore;
 }
 // -----------------------------------------------------------------------------
@@ -639,21 +662,18 @@ oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
     return m_refCount;
 }
 // -----------------------------------------------------------------------------
-void ODatabaseModelImpl::commitStorages()
+void ODatabaseModelImpl::commitStorages() SAL_THROW(( IOException, RuntimeException ))
 {
     try
     {
         TStorages::iterator aIter = m_aStorages.begin();
         TStorages::iterator aEnd = m_aStorages.end();
         for (; aIter != aEnd ; ++aIter)
-        {
-            Reference<XTransactedObject> xTrans(aIter->second,UNO_QUERY);
-            if ( xTrans.is() )
-                xTrans->commit();
-        }
+            commitStorageIfWriteable( aIter->second );
     }
     catch(WrappedTargetException)
     {
+        // WrappedTargetException not allowed to leave
         throw IOException();
     }
 }
