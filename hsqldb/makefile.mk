@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 14:55:56 $
+#   last change: $Author: rt $ $Date: 2005-06-27 08:26:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,11 @@ TARFILE_ROOTDIR=hsqldb
 
 PATCH_FILE_NAME=hsqldb_1_8_0
 
-ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
-                    src$/org$/hsqldb$/TxManager.java \
-                    src$/org$/hsqldb$/lib$/LongKeyIntValueHashMap.java \
-                    src$/org$/hsqldb$/persist$/ScaledRAFileInJar.java \
-                    src$/org$/hsqldb$/test$/TestCollation.java
+# ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
+#                     src$/org$/hsqldb$/TxManager.java \
+#                     src$/org$/hsqldb$/lib$/LongKeyIntValueHashMap.java \
+#                     src$/org$/hsqldb$/persist$/ScaledRAFileInJar.java \
+#                     src$/org$/hsqldb$/test$/TestCollation.java
 
 .IF "$(ANT_HOME)" == ""
 ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
