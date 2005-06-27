@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HCatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 10:34:47 $
+ *  last change: $Author: rt $ $Date: 2005-06-27 08:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,10 @@ void OHCatalog::refreshTables()
     TStringVector aVector;
     static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
     static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-    static const ::rtl::OUString s_sAll(RTL_CONSTASCII_USTRINGPARAM("%"));
 
-    Sequence< ::rtl::OUString > sTableTypes(3);
+    Sequence< ::rtl::OUString > sTableTypes(2);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
 
     refreshObjects(sTableTypes,aVector);
 
