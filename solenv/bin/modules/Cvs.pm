@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-22 14:20:17 $
+#   last change: $Author: vg $ $Date: 2005-06-27 15:23:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,6 @@
 #
 #*************************************************************************
 
-
 #
 # Cvs.pm - package for manipulating CVS archives
 #
@@ -94,6 +93,7 @@ sub new
         }
     }
     $self->{ARCHIVE_PATH} = undef;
+    $self->{REPOSITORY_REV} = undef;
     $self->{REV_DATA} = {};
     $self->{REV_SORTED} = [];
     $self->{REV_TAGS} = {};
@@ -213,6 +213,17 @@ sub get_head
 
     $self->parse_log();
     return $self->{HEAD};
+}
+
+sub get_repository_rev
+{
+    my $self = shift;
+
+    if( !$self->{REPOSITORY_REV} ) {
+        # ignore return values
+        $self->status();
+    }
+    return $self->{REPOSITORY_REV};
 }
 
 sub get_archive_path
@@ -428,7 +439,7 @@ sub status
 
     my $file = $self->name();
     my ($nofile, $unknownfailure, $connectionfailure);
-    my ($status, $working_rev, $repository_rev);
+    my ($status, $working_rev);
     my ($sticky_tag, $branch, $sticky_date, $sticky_options);
 
     my $response_ref = $self->execute("status $file");
@@ -437,7 +448,7 @@ sub status
         /File: no file/ && ++$nofile;
         /Status:\s+([\w\-\s]+)$/ && ($status = $1);
         /Working revision:\s+((\d|\.)+)/ && ($working_rev = $1);
-        /Repository revision:\s+((\d|\.)+)\s+(\S+)/ && ($repository_rev = $1) && ($self->{ARCHIVE_PATH} = $3);
+        /Repository revision:\s+((\d|\.)+)\s+(\S+)/ && ($self->{REPOSITORY_REV} = $1) && ($self->{ARCHIVE_PATH} = $3);
         /Sticky Tag:\s+(.+)/ && ($sticky_tag = $1);
         /Sticky Date:\s+(.+)/ && ($sticky_date = $1);
         /Sticky Options:\s+(.+)/ && ($sticky_options = $1);
@@ -466,7 +477,7 @@ sub status
     $unknownfailure++ if !$status;
 
     return 'unknownerror' if $unknownfailure;
-    return ($status, $working_rev, $repository_rev, $sticky_tag, $branch,
+    return ($status, $working_rev, $self->{REPOSITORY_REV}, $sticky_tag, $branch,
             $sticky_date, $sticky_options);
 }
 
