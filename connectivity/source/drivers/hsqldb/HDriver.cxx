@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 10:35:10 $
+ *  last change: $Author: rt $ $Date: 2005-06-27 08:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
 #endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
@@ -242,7 +245,7 @@ namespace connectivity
 
                 bool bIsNewDatabase = !xStorage->hasElements();
 
-                Sequence< PropertyValue > aConvertedProperties(8);
+                Sequence< PropertyValue > aConvertedProperties(9);
                 sal_Int32 nPos = 0;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
                 ::rtl::OUString sConnPartURL = sSystemPath.copy(0,nIndex);
@@ -262,6 +265,23 @@ namespace connectivity
                 aConvertedProperties[nPos++].Value <<= sal_True;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"));
                 aConvertedProperties[nPos++].Value <<= sal_True;
+
+                // don't want to expose HSQLDB's schema capabilities which exist since 1.8.0RC10
+                aConvertedProperties[nPos].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "default_schema" ) );
+                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+
+                Reference<XPropertySet> xProp(xStorage,UNO_QUERY);
+                if ( xProp.is() )
+                {
+                    sal_Int32 nMode = 0;
+                    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"))) >>= nMode;
+                    if ( (nMode & ElementModes::WRITE) != ElementModes::WRITE )
+                    {
+                        aConvertedProperties.realloc(nPos+1);
+                        aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("readonly"));
+                        aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+                    }
+                }
 
                 ::rtl::OUString sConnectURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:"));
 
@@ -473,7 +493,7 @@ namespace connectivity
                 Reference<XStatement> xStmt = _xConnection->createStatement();
                 if ( xStmt.is() )
                 {
-                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT COUNT(*) FROM SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
+                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
                     Reference<XRow> xRow(xRes,UNO_QUERY);
                     if ( xRow.is() && xRes->next() )
                         bLastOne = xRow->getInt(1) == 1;
