@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 10:35:50 $
+ *  last change: $Author: rt $ $Date: 2005-06-27 08:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,28 +146,11 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if ( xResult->next() ) // there can be only one table with this name
         {
-//          Reference<XStatement> xStmt = m_xConnection->createStatement();
-//          if ( xStmt.is() )
-//          {
-//              Reference< XResultSet > xPrivRes = xStmt->executeQuery();
-//              Reference< XRow > xPrivRow(xPrivRes,UNO_QUERY);
-//              while ( xPrivRes.is() && xPrivRes->next() )
-//              {
-//                  if ( xPrivRow->getString(1) )
-//                  {
-//                  }
-//              }
-//          }
-            sal_Int32 nPrivileges = Privilege::DROP         |
-                                    Privilege::REFERENCE    |
-                                    Privilege::ALTER        |
-                                    Privilege::CREATE       |
-                                    Privilege::READ         |
-                                    Privilege::DELETE       |
-                                    Privilege::UPDATE       |
-                                    Privilege::INSERT       |
-                                    Privilege::SELECT;
+            sal_Int32 nPrivileges = ::dbtools::getTablePrivileges( m_xMetaData, sCatalog, sSchema, sTable );
+            if ( m_xMetaData->isReadOnly() )
+                nPrivileges &= ~( Privilege::INSERT | Privilege::UPDATE | Privilege::DELETE | Privilege::CREATE | Privilege::ALTER | Privilege::DROP );
 
+            // obtain privileges
             OHSQLTable* pRet = new OHSQLTable( this
                                                 ,static_cast<OHCatalog&>(m_rParent).getConnection()
                                                 ,sTable
