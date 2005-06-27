@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-14 16:34:44 $
+ *  last change: $Author: rt $ $Date: 2005-06-27 08:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,9 @@ public:
 
     /** commits all storages
     */
-    void commitStorages();
+    void commitStorages()
+            SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
+
 
     /** dispose all frames for registered controllers
     */
@@ -381,6 +383,22 @@ public:
 
     /// commits our storage
     void    commitRootStorage();
+
+    /// commits a given storage if it's not readonly
+    static  bool    commitStorageIfWriteable(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+            )
+            SAL_THROW((
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException
+            ));
+
+    /// commits a given storage if it's not readonly, ignoring (but asserting) all errors
+    static  bool    commitStorageIfWriteable_ignoreErrors(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+            )
+            SAL_THROW(());
 
     void clearConnections();
 
