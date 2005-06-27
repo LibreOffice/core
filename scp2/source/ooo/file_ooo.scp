@@ -722,7 +722,7 @@ UNO_JAR_FILE( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
+STD_JAR_FILE_PATCH( gid_File_Jar_Hsqldb, hsqldb )
 STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
