@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:51:45 $
+ *  last change: $Author: rt $ $Date: 2005-06-27 08:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#include <osl/thread.h>
 
 //........................................................................
 namespace connectivity
@@ -326,7 +327,16 @@ namespace connectivity
                         }
                         catch(Exception& e)
                         {
-                            OSL_ENSURE(0,"Exception catched!");
+#if OSL_DEBUG_LEVEL > 0
+                            ::rtl::OString sMessage( "[HSQLDB-SDBC] caught an exception while opening a stream\n" );
+                            sMessage += "Name: ";
+                            sMessage += ::rtl::OString( sName.getStr(), sName.getLength(), osl_getThreadTextEncoding() );
+                            sMessage += "\nMode: 0x";
+                            if ( _nMode < 16 )
+                                sMessage += "0";
+                            sMessage += ::rtl::OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
+                            OSL_ENSURE( false, sMessage.getStr() );
+#endif
                             StorageContainer::throwJavaException(e,env);
                         }
                     }
