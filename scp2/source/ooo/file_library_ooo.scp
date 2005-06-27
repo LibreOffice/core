@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.107 $
+*  $Revision: 1.108 $
 *
-*  last change: $Author: obo $ $Date: 2005-06-17 09:33:15 $
+*  last change: $Author: rt $ $Date: 2005-06-27 09:19:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -453,7 +453,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dba, dba)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
@@ -993,7 +993,7 @@ End
 
 File gid_File_Lib_Hsqldb_2
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
