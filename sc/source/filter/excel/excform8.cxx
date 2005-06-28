@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:24:11 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,8 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                 aIn >> nIxti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
     _3d_common:
-                if( !rLinkMan.GetScTabRange( nTab1, nTab2, nIxti ) )
+                // #122885# skip references to deleted sheets
+                if( !rLinkMan.GetScTabRange( nTab1, nTab2, nIxti ) || !ValidTab( nTab1 ) || !ValidTab( nTab2 ) )
                     break;
 
                 goto _common;
