@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.108 $
+*  $Revision: 1.109 $
 *
-*  last change: $Author: rt $ $Date: 2005-06-27 09:19:41 $
+*  last change: $Author: rt $ $Date: 2005-06-28 15:16:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -2075,7 +2075,7 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Xcr, xcr)
 STD_UNO_LIB_FILE( gid_File_Lib_Xmx , xmx)
-STD_UNO_LIB_FILE( gid_File_Lib_Xof , xof)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Xof , xof)
 
 File gid_File_Lib_Xo
     Name = LIBNAME(xo);
