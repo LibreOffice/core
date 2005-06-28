@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:05:15 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,6 +1596,11 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                 long nScrX, long nScrY,
                                 BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom )
 {
+    // #i47547# nothing to do if the end of the print area is before the end of
+    // the repeat columns/rows (don't use negative size for ScOutputData)
+    if ( nX2 < nX1 || nY2 < nY1 )
+        return;
+
                             //!     Flag bei FillInfo uebergeben !!!!!
     ScRange aERange;
     BOOL bEmbed = pDoc->IsEmbedded();
