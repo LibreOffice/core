@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:22:22 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,10 @@ sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements(void)
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    return nNextParagraph < pEditSource->GetTextForwarder()->GetParagraphCount();
+    if( pEditSource && pEditSource->GetTextForwarder() )
+        return nNextParagraph < pEditSource->GetTextForwarder()->GetParagraphCount();
+    else
+        return sal_False;
 }
 
 uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
@@ -174,7 +177,8 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nP
     bDisposing( sal_False )
 {
     xParentText =  (text::XText*)&rText;
-    SetSelection( ESelection( nParagraph,0, nParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( nParagraph ) ) );
+    if( GetEditSource() && GetEditSource()->GetTextForwarder() )
+        SetSelection( ESelection( nParagraph,0, nParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( nParagraph ) ) );
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
