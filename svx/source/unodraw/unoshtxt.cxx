@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:16:13 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ namespace css = ::com::sun::star;
     reflected on the screen. If the object leaves edit mode, the old
     behaviour is restored.</p>
  */
-class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster
+class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster, public sdr::ObjectUser
 {
 private:
     oslInterlockedCount maRefCount;
@@ -209,6 +209,8 @@ private:
                                         return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive() ? sal_True : sal_False;
                                     }
 
+    void                            dispose();
+
 public:
     SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pOwner );
     SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow );
@@ -241,6 +243,7 @@ public:
 
     DECL_LINK( NotifyHdl, EENotify* );
 
+    virtual void ObjectInDestruction(const SdrObject& rObject);
 };
 
 //------------------------------------------------------------------------
@@ -268,6 +271,9 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pO
 
     if( mpModel )
         StartListening( *mpModel );
+
+    if( mpObject )
+        mpObject->AddObjectUser( *this );
 }
 
 //------------------------------------------------------------------------
@@ -295,6 +301,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
         StartListening( *mpModel );
     if( mpView )
         StartListening( *mpView );
+    if( mpObject )
+        mpObject->AddObjectUser( *this );
 
     // #104157# Init edit mode state from shape info (IsTextEditActive())
     mbShapeIsEditMode = IsEditMode();
@@ -305,28 +313,10 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
 SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 {
     DBG_ASSERT( mbIsLocked == sal_False, "text edit source was not unlocked before dispose!" );
+    if( mpObject )
+        mpObject->RemoveObjectUser( *this );
 
-    if( mpModel )
-        EndListening( *mpModel );
-    if( mpView )
-        EndListening( *mpView );
-
-    delete mpTextForwarder;
-    delete mpViewForwarder;
-    if( mpOutliner )
-    {
-        // #101088# Deregister on outliner, might be reused from outliner cache
-        mpOutliner->SetNotifyHdl( Link() );
-
-        if( mpModel )
-        {
-            mpModel->disposeOutliner( mpOutliner );
-        }
-        else
-        {
-            delete mpOutliner;
-        }
-    }
+    dispose();
 }
 
 //------------------------------------------------------------------------
@@ -407,33 +397,6 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
 
-            case HINT_OBJREMOVED:
-                if( mpObject == pSdrHint->GetObject() )
-                {
-                    mbDestroyed = TRUE;
-                }
-                break;
-
-            case HINT_MODELCLEARED:
-                mbDestroyed = TRUE;
-                break;
-
-            // #110094#-9
-            //case HINT_OBJLISTCLEAR:
-            //{
-            //    SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
-            //    while( pObjList )
-            //    {
-            //        if( pSdrHint->GetObjList() == pObjList )
-            //        {
-            //            mbDestroyed = sal_True;
-            //            break;
-            //        }
-            //        pObjList = pObjList->GetUpList();
-            //    }
-            //    break;
-            //}
-
             case HINT_BEGEDIT:
                 if( mpObject == pSdrHint->GetObject() )
                 {
@@ -487,47 +450,61 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
         }
     }
+}
 
-    if( mbDestroyed )
+/* this is a callback from the attached SdrObject when it is actually deleted */
+void SvxTextEditSourceImpl::ObjectInDestruction(const SdrObject& rObject)
+{
+    mpObject = 0;
+    dispose();
+    Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+}
+
+/* unregister at all objects and set all references to 0 */
+void SvxTextEditSourceImpl::dispose()
+{
+    if( mpTextForwarder )
     {
         delete mpTextForwarder;
-        mpTextForwarder = NULL;
+        mpTextForwarder = 0;
+    }
 
+    if( mpViewForwarder )
+    {
         delete mpViewForwarder;
-        mpViewForwarder = NULL;
+        mpViewForwarder = 0;
+    }
 
-        if( mpOutliner )
-        {
-            // #101088# Deregister on outliner, might be reused from outliner cache
-            mpOutliner->SetNotifyHdl( Link() );
-
-            if( mpModel )
-            {
-                mpModel->disposeOutliner( mpOutliner );
-            }
-            else
-            {
-                delete mpOutliner;
-            }
-            mpOutliner = NULL;
-        }
+    if( mpOutliner )
+    {
+        // #101088# Deregister on outliner, might be reused from outliner cache
+        mpOutliner->SetNotifyHdl( Link() );
 
         if( mpModel )
         {
-            EndListening( *mpModel );
-            mpModel = NULL;
+            mpModel->disposeOutliner( mpOutliner );
         }
-        if( mpView )
+        else
         {
-            EndListening( *mpView );
-            mpView = NULL;
+            delete mpOutliner;
         }
-
-        mpObject = NULL;
-        mpWindow = NULL;
-
-        Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+        mpOutliner = 0;
     }
+
+    if( mpModel )
+    {
+        EndListening( *mpModel );
+        mpModel = 0;
+    }
+
+    if( mpView )
+    {
+        EndListening( *mpView );
+        mpView = 0;
+    }
+
+    mpObject = 0;
+    mpWindow = 0;
 }
 
 //------------------------------------------------------------------------
