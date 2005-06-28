@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:06:29 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,36 +811,39 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                     // Fetch the new outline view shell.
                     ::sd::OutlineViewShell* pOutlineShell =
                           PTR_CAST(::sd::OutlineViewShell, pBase->GetMainViewShell());
+
                     if (pOutlineShell != NULL)
                     {
+                        sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
                         SvStream* pStream = (SvStream*) pBytes->GetStream();
                         // mba: the stream can't contain any relative URLs, because we don't have any information about a BaseURL!
                         if ( pOutlineShell->Read(*pStream, String(), EE_FORMAT_RTF) == 0 )
                         {
+                            sd::OutlineViewPageChangesGuard aGuard( pView );
+
                             // Remove the first empty pages
                             USHORT nPageCount = pDoc->GetPageCount();
                             pDoc->RemovePage( --nPageCount );  // notes page
                             pDoc->RemovePage( --nPageCount );  // standard page
                         }
-                    }
 
-                    // Call UpdatePreview once for every slide to resync the
-                    // document with the outliner of the OutlineViewShell.
-                    sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
-                    USHORT nPageCount (pDoc->GetSdPageCount(PK_STANDARD));
-                    for (USHORT nIndex=0; nIndex<nPageCount; nIndex++)
-                    {
-                        SdPage* pPage = pDoc->GetSdPage(nIndex, PK_STANDARD);
-                        // Make the page the actual page so that the
-                        // following UpdatePreview() call accesses the
-                        // correct paragraphs.
+                        // Call UpdatePreview once for every slide to resync the
+                        // document with the outliner of the OutlineViewShell.
+                        USHORT nPageCount (pDoc->GetSdPageCount(PK_STANDARD));
+                        for (USHORT nIndex=0; nIndex<nPageCount; nIndex++)
+                        {
+                            SdPage* pPage = pDoc->GetSdPage(nIndex, PK_STANDARD);
+                            // Make the page the actual page so that the
+                            // following UpdatePreview() call accesses the
+                            // correct paragraphs.
+                            pView->SetActualPage(pPage);
+                            pOutlineShell->UpdatePreview(pPage, true);
+                        }
+                        // Select the first slide.
+                        SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
                         pView->SetActualPage(pPage);
                         pOutlineShell->UpdatePreview(pPage, true);
                     }
-                    // Select the first slide.
-                    SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
-                    pView->SetActualPage(pPage);
-                    pOutlineShell->UpdatePreview(pPage, true);
                 }
 
                 // #97231# Undo-Stack needs to be cleared, else the user may remove the
