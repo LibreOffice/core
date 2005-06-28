@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:58:00 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,7 +1482,7 @@ void ScColumn::RemoveAutoSpellObj()
 {
     ScTabEditEngine* pEngine = NULL;
 
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
         if ( pItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
         {
             ScEditCell* pOldCell = (ScEditCell*) pItems[i].pCell;
@@ -1605,7 +1605,7 @@ BOOL ScColumn::TestTabRefAbs(SCTAB nTable)
 {
     BOOL bRet = FALSE;
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
             if ( pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
                 if (((ScFormulaCell*)pItems[i].pCell)->TestTabRefAbs(nTable))
                     bRet = TRUE;
@@ -1735,7 +1735,7 @@ BOOL ScColumn::IsEmptyVisData(BOOL bNotes) const
     else
     {
         BOOL bVisData = FALSE;
-        USHORT i;
+        SCSIZE i;
         for (i=0; i<nCount && !bVisData; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
@@ -2194,7 +2194,7 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 void ScColumn::CompileDBFormula()
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -2205,7 +2205,7 @@ void ScColumn::CompileDBFormula()
 void ScColumn::CompileDBFormula( BOOL bCreateFormulaString )
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -2216,7 +2216,7 @@ void ScColumn::CompileDBFormula( BOOL bCreateFormulaString )
 void ScColumn::CompileNameFormula( BOOL bCreateFormulaString )
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -2227,7 +2227,7 @@ void ScColumn::CompileNameFormula( BOOL bCreateFormulaString )
 void ScColumn::CompileColRowNameFormula()
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -2370,7 +2370,7 @@ ULONG ScColumn::GetCodeCount() const
 {
     ULONG nCodeCount = 0;
 
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         ScBaseCell* pCell = pItems[i].pCell;
         if ( pCell->GetCellType() == CELLTYPE_FORMULA )
