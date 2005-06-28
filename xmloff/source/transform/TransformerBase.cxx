@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:15:31 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ XMLTransformerBase::~XMLTransformerBase() throw ()
     delete m_pReplaceNamespaceMap;
     delete m_pContexts;
     delete m_pElemActions;
+    delete m_pTokenMap;
 }
 
 void SAL_CALL XMLTransformerBase::startDocument( void )
