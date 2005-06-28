@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:02:09 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,9 +541,8 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
     BOOL bAlreadyOutliner = rAttrs.GetItemState( EE_PARA_OUTLLRSPACE ) == SFX_ITEM_ON ? TRUE : FALSE;
 
     XubString aName;
-    XubString aHeading_US( RTL_CONSTASCII_USTRINGPARAM( "Heading" ) );
-    XubString aHeading_GERM( RTL_CONSTASCII_USTRINGPARAM( "berschrift" ) );
-    XubString aNumber_GERM( RTL_CONSTASCII_USTRINGPARAM( "Numerierung" ) );
+    XubString aHeading_US( RTL_CONSTASCII_USTRINGPARAM( "heading" ) );
+    XubString aNumber_US( RTL_CONSTASCII_USTRINGPARAM( "Numbering" ) );
 
     XubString aStr( pEditEngine->GetText( (USHORT)nPara ) );
     xub_Unicode* pPtr = (xub_Unicode*)aStr.GetBuffer();
@@ -557,10 +556,8 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
         USHORT nSearch;
         if ( ( nSearch = aName.Search( aHeading_US ) ) != STRING_NOTFOUND )
             nHeadingNumberStart = nSearch + aHeading_US.Len();
-        else if ( ( nSearch = aName.Search( aHeading_GERM ) ) != STRING_NOTFOUND )
-            nHeadingNumberStart = nSearch + aHeading_GERM.Len();
-        else if ( ( nSearch = aName.Search( aNumber_GERM ) ) != STRING_NOTFOUND )
-            nNumberingNumberStart = nSearch + aNumber_GERM.Len();
+        else if ( ( nSearch = aName.Search( aNumber_US ) ) != STRING_NOTFOUND )
+            nNumberingNumberStart = nSearch + aNumber_US.Len();
     }
 
     if ( nHeadingNumberStart || nNumberingNumberStart )
