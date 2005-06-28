@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:35:08 $
+ *  last change: $Author: kz $ $Date: 2005-06-28 15:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
+    mrData.mnCharWidth = 0;
     if( SfxPrinter* pPrinter = GetPrinter() )
     {
         Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
@@ -246,8 +247,12 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         pPrinter->SetFont( aFont );
         mrData.mnCharWidth = pPrinter->GetTextWidth( String( '0' ) );
     }
-    else
+    if( mrData.mnCharWidth <= 0 )
+    {
+        // #i48717# Win98 with HP LaserJet returns 0
+        DBG_ERRORFILE( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
+    }
 }
 
 const String& XclRoot::QueryPassword() const
