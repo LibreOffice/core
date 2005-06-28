@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.109 $
+*  $Revision: 1.110 $
 *
-*  last change: $Author: rt $ $Date: 2005-06-28 15:16:54 $
+*  last change: $Author: rt $ $Date: 2005-06-28 15:35:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1595,7 +1595,7 @@ File gid_File_Lib_Scriptframe
     Styles = (PACKED, UNO_COMPONENT);
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sd , sd)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sd , sd)
 STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
 File gid_File_Lib_Slideshow
     TXT_FILE_BODY;
@@ -1798,7 +1798,7 @@ STD_LIB_FILE( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE( gid_File_Lib_Svtools, svt )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sw , sw)
