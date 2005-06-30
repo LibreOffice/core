@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:50:49 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 13:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,8 @@ Application* GetpApp()
 
 Application::Application()
 {
-    ImplInitSVData();
+    if( ! ImplGetSVData() )
+        ImplInitSVData();
     ImplGetSVData()->mpApp = this;
     InitSalData();
 }
