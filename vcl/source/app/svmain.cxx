@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:56:21 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 13:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,9 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     if( pExceptionHandler != NULL )
         return FALSE;
+
+    if( ! ImplGetSVData() )
+        ImplInitSVData();
 
     if( !ImplGetSVData()->mpApp )
     {
