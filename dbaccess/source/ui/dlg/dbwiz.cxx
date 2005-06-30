@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:49:19 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
 {
     DBG_CTOR(ODbTypeWizDialog,NULL);
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
-    m_pImpl->setCurrentDataSourceName(_aDataSourceName);
+    m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
 
@@ -357,10 +357,14 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     switch(_nState)
     {
         case START_PAGE: // start state
+        {
             pPage = OGeneralPage::Create(this,*m_pOutSet);
-            static_cast<OGeneralPage*>(pPage)->SetTypeSelectHandler(LINK(this, ODbTypeWizDialog, OnTypeSelected));
+            OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage );
+            pGeneralPage->SetTypeSelectHandler( LINK( this, ODbTypeWizDialog, OnTypeSelected));
+//            pGeneralPage->SetCreationModeHandler( LINK( this, ODbTypeWizDialog, TODO ) );
             nStringId = STR_PAGETITLE_GENERAL;
-            break;
+        }
+        break;
         case CONNECTION_PAGE:
             pPage = OConnectionTabPage::Create(this,*m_pOutSet);
             nStringId = STR_PAGETITLE_CONNECTION;
