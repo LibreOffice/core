@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-06-21 10:13:47 $
+dnl * Date: $Date: 2005-06-30 13:06:19 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.126 $ )
+AC_REVISION( $Revision: 1.127 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3176,14 +3176,14 @@ if test \( "$_os" = "WINNT" \) ; then
         # But there might be also an April 2005 PSDK, unfortunately MS changed
         # the registry entry. (we prefer the old version!?)
         if test -z "$PSDK_HOME"; then
-          PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | head -n 1`
+          PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
         fi
         # normalize if found
         if test -n "$PSDK_HOME"; then
           PSDK_HOME=`cygpath -d "$PSDK_HOME"`
           PSDK_HOME=`cygpath -u "$PSDK_HOME"`
           # The 2005 PSDK has a trailing backslash
-          PSDK_HOME=`echo $PSDK_HOME | $SED -n "s/\/$//p"`
+          PSDK_HOME=`echo $PSDK_HOME | $SED 's/\/$//'`
         fi
 	else
 		PSDK_HOME="$with_psdk_home"
