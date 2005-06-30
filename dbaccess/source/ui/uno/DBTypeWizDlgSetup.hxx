@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:10:12 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,10 @@ class ODBTypeWizDialogSetup
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< ODBTypeWizDialogSetup >
 {
-    sal_Bool m_bOpenDatabase;
-    sal_Bool m_bStartTableWizard;
+    ::rtl::OUString m_sExistingDocToOpen;
+    sal_Bool        m_bOpenDatabase;
+    sal_Bool        m_bStartTableWizard;
+
 protected:
     ODBTypeWizDialogSetup(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
