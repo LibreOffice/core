@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:45:15 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #define INIT_X               6
 #define INIT_Y               28
 #define INDENTED_X           6
+#define INDENT_BELOW_RADIO   10
+#define INDENT_BELOW_CHECK   10
 
 
 #define STR_ADABAS_HELP_SYSDEVSPACE         RID_STR_DLG_START
