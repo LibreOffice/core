@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:20:16 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 15:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ ValueSet::ValueSet( Window* pParent, const ResId& rResId ) :
 ValueSet::~ValueSet()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
-          xComponent (GetAccessible(), ::com::sun::star::uno::UNO_QUERY);
+          xComponent (GetAccessible(FALSE), ::com::sun::star::uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose ();
 
