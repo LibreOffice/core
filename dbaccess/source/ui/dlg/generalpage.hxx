@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-29 13:16:53 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
 #endif
+#ifndef DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
+#include "opendoccontrols.hxx"
+#endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
@@ -74,18 +77,35 @@
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
+#include <memory>
+
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
     class IAdminHelper;
+    class RadioDependentEnabler;
     //=========================================================================
     //= OGeneralPage
     //=========================================================================
     class OGeneralPage : public OGenericAdministrationPage
     {
         OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode = sal_False);
-        // OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode = false);
+        ~OGeneralPage();
+
+    public:
+        enum CreationMode
+        {
+            eCreateNew,
+            eConnectExternal,
+            eOpenExisting
+        };
+
+        struct DocumentDescriptor
+        {
+            String  sURL;
+            String  sFilter;
+        };
 
     private:
         // dialog controls
@@ -93,7 +113,12 @@ namespace dbaui
         FixedText           m_aFTHelpText;
         FixedText           m_aFT_DatasourceTypeHeader;
         RadioButton         m_aRB_CreateDatabase;
+        RadioButton         m_aRB_OpenDocument;
         RadioButton         m_aRB_GetExistingDatabase;
+        FixedText           m_aFT_DocListLabel;
+        ::std::auto_ptr< OpenDocumentListBox >
+                            m_pLB_DocumentList;
+        OpenDocumentButton  m_aPB_OpenDocument;
         FixedText           m_aTypePreLabel;
         FixedText           m_aDatasourceTypeLabel;
         ListBox             m_aDatasourceType;
@@ -102,7 +127,13 @@ namespace dbaui
         FixedText           m_aSpecialMessage;
         sal_Bool            m_DBWizardMode;
         String              m_sMySQLEntry;
-        sal_Bool            m_bEntryCreationMode : 1;
+        CreationMode        m_eOriginalCreationMode;
+        DocumentDescriptor  m_aBrowsedDocument;
+
+        ::std::auto_ptr< RadioDependentEnabler >
+                            m_pSelectTypeController;
+        ::std::auto_ptr< RadioDependentEnabler >
+                            m_pOpenDocController;
 
 
         ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
@@ -120,6 +151,8 @@ namespace dbaui
 
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
         Link                m_aCreationModeHandler; /// to be called if a new type is selected
+        Link                m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
+        Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         sal_Bool            m_bUserGrabFocus : 1;
         String              VerifyDisplayName(DATASOURCE_TYPE eType, String _sDisplayName);
@@ -130,9 +163,12 @@ namespace dbaui
 
         /// set a handler which gets called every time the user selects a new type
         void            SetTypeSelectHandler(const Link& _rHandler) { m_aTypeSelectHandler = _rHandler; }
-        void            SetClickHandler(const Link& _rHandler) { m_aCreationModeHandler = _rHandler; }
-        sal_Bool        IsDatabaseToBeCreated();
-        void            SetToCreationMode(sal_Bool _bCreate);
+        void            SetCreationModeHandler(const Link& _rHandler) { m_aCreationModeHandler = _rHandler; }
+        void            SetDocumentSelectionHandler( const Link& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
+        void            SetChooseDocumentHandler( const Link& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
+        CreationMode    GetDatabaseCreationMode() const;
+
+        DocumentDescriptor  GetSelectedDocument() const;
 
         /// get the currently selected datasource type
         DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
@@ -166,6 +202,8 @@ namespace dbaui
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
         DECL_LINK(OnSetupModeSelected, RadioButton*);
+        DECL_LINK(OnDocumentSelected, ListBox*);
+        DECL_LINK(OnOpenDocument, PushButton*);
     };
 
 //.........................................................................
