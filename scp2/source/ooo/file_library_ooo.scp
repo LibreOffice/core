@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.110 $
+*  $Revision: 1.111 $
 *
-*  last change: $Author: rt $ $Date: 2005-06-28 15:35:00 $
+*  last change: $Author: kz $ $Date: 2005-06-30 13:06:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -2200,7 +2200,7 @@ File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
     #ifdef UNX
         #ifdef MACOSX
-            Name = STRING(CONCAT2(libxmlsec1,UNXSUFFIX));
+            Name = STRING(CONCAT2(libxmlsec1.1.2.6,UNXSUFFIX));
         #else
             Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1.2.6));
         #endif
@@ -2224,7 +2224,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlsecnss
     TXT_FILE_BODY;
     #ifdef MACOSX
-        Name = STRING(CONCAT2(libxmlsec1-nss,UNXSUFFIX));
+        Name = STRING(CONCAT2(libxmlsec1-nss.1.2.6,UNXSUFFIX));
     #else
         Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1.2.6));
     #endif
