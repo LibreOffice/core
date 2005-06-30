@@ -159,7 +159,7 @@
 ! #
 ! #
 ! LINK=libtool -static -o
-! DYN_LINK=g++ -dynamiclib -single_module -install_name @executable_path/libstlport_gcc.dylib -o
+! DYN_LINK=$(CXX) -dynamiclib -single_module -install_name @executable_path/libstlport_gcc.dylib -o
 ! 
 ! OBJEXT=o
 ! DYNEXT=dylib
