@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:40:19 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace dbaui
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADABASADMIN), _pItems)
     {
         m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
-        m_pImpl->setCurrentDataSourceName(_aDataSourceName);
+        m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *GetInputSetImpl());
         SetInputSet(GetInputSetImpl());
