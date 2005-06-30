@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TablesSingleDlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:41:33 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
 {
     DBG_CTOR(OTableSubscriptionDialog,NULL);
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,pParent,this));
-    m_pImpl->setCurrentDataSourceName(_aDataSourceName);
+    m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet = new SfxItemSet( *_pItems );
 
