@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:14:27 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,6 @@
 #ifndef DBAUI_ADABASPAGE_HRC
 #include "AdabasPage.hrc"
 #endif
-
-#define CHECKBOX_HEIGHT     8
-#define FIXEDTEXT_HEIGHT    8
-#define RELATED_CONTROLS    4
-#define UNRELATED_CONTROLS  7
-#define EDIT_HEIGHT         12
-#define EDIT_X              101
-
 
 #define ADVANCED_PAGE_X     200
 #define ADVANCED_PAGE_Y     (105 + 4*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS)
@@ -505,7 +497,7 @@ Image IMG_DATABASE_SCH
 TabPage PAGE_GENERAL
 {
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_GENERAL;
 
@@ -523,45 +515,74 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT (START_X , 27 );
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 5* FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Sie können eine neue Datenbank erstellen, oder eine Verbindung zu einer bestehenden  Datenbank herstellen.\nIn beiden Fällen wird eine Datenbankdatei erstellt. In dieser Datei werden Verbindungsdaten, Formulare und Berichte gespeichert.";
-        Text [ en-US ]  = "You can either create a new database or set up a connection to an existing database. In both cases, a file will be created. This file stores information such as connection  settings, forms and reports." ;
+        Text [ de ] = "Benutzen sie den Datenbank-Assistenten, um eine neue Datenbank anzulegen, eine bestehende Datenbankdatei zu öffnen, oder eine Verbindung zu einer Server-Datenbank herzustellen.";
+        Text [ en-US ]  = "Use the Database Wizard to create a new database, open an existing database file, or connect to a database stored on a server." ;
         WordBreak = TRUE ;
     };
 
     FixedText FT_DATASOURCEHEADER
     {
-        Pos = MAP_APPFONT ( START_X , 104 ) ;
+        Pos = MAP_APPFONT ( START_X , 73 ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Wie möchten Sie fortfahren?";
         Text [ en-US ] = "What do you want to do?";
     };
 
-
     RadioButton RB_CREATEDBDATABASE
     {
         HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE ;
-        Pos = MAP_APPFONT (START_X + 6 , 116 )  ;
+        Pos = MAP_APPFONT (START_X + 6 , 85 )  ;
         Size = MAP_APPFONT ( 205 , 10 ) ;
+        Group = TRUE;
         Text [ de ] = "N~eue Datenbank erstellen";
         Text [ en-US ]  = "Create a n~ew database" ;
     };
 
+    RadioButton RB_OPENEXISTINGDOC
+    {
+        Pos = MAP_APPFONT (START_X + 6 , 97 );
+        Size = MAP_APPFONT ( 206 , 8 ) ;
+        Text [ de ] = "~Bestehende Datenbankdatei öffnen";
+        Text [ en-US ]  = "Open an existing database ~file" ;
+    };
+
+    FixedText FT_DOCLISTLABEL
+    {
+        Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 110 );
+        Size = MAP_APPFONT( 120, 8 );
+        Text [ de ] = "Zuletzt benutzt";
+        Text [ en-US ] = "Recently used";
+    };
+
+    ListBox LB_DOCUMENTLIST
+    {
+        Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 121 );
+        Size = MAP_APPFONT( 120, 14 );
+        DropDown = TRUE;
+        Border = TRUE;
+    };
+
+    PushButton PB_OPENDOCUMENT
+    {
+        Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 139 );
+        Size = MAP_APPFONT( 50, 16 );
+        OutputSize = TRUE;
+        TabStop = TRUE;
+    };
 
     RadioButton RB_GETEXISTINGDATABASE
     {
-          HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE ;
-        Pos = MAP_APPFONT (START_X + 6 , 130 )  ;
-        Size = MAP_APPFONT ( 206 , 10 ) ;
+          HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE;
+        Pos = MAP_APPFONT (START_X + 6 , 159 )  ;
+        Size = MAP_APPFONT ( 206 , 8 ) ;
         Text [ de ] = "~Verbindung zu einer bestehenden Datenbank herstellen";
         Text [ en-US ]  = "Connect to an e~xisting database" ;
     };
 
-
-
     FixedText FT_DATASOURCETYPE_PRE
     {
         Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Bitte wählen Sie den Type der Datenbank aus, zu der eine Verbindung aufgebaut werden soll.";
         Text [ en-US ] = "Select the type of database to which you want to establish a connection.";
     };
@@ -579,13 +600,12 @@ TabPage PAGE_GENERAL
     {
         HelpId = HID_DSADMIN_DSTYPE;
         Pos = MAP_APPFONT ( 90, 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS -2 ) ;
-        Size = MAP_APPFONT ( 70, 120 ) ;
+        Size = MAP_APPFONT ( 120, 120 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE;
     };
-
 
     FixedText FT_DATATYPEAPPENDIX
     {
@@ -598,7 +618,7 @@ TabPage PAGE_GENERAL
     FixedText FT_DATASOURCETYPE_POST
     {
         Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( PAGE_X - 12 , 4*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 4*FIXEDTEXT_HEIGHT ) ;
         Text [ de ]= "Auf den nächsten Seiten können Sie dann detaillierte Verbindungs-Einstellungen vornehmen.\n\nBitte beachten Sie dabei,dass diese neuen Einstellungen Ihre existierenden überschreiben.";
         Text [ en-US ] = "On the following pages, you can make detailed settings for the connection.\n\nThe new settings you make will overwrite your existing settings.";
     };
@@ -606,7 +626,7 @@ TabPage PAGE_GENERAL
     FixedText FT_SPECIAL_MESSAGE
     {
         Pos = MAP_APPFONT ( 6, 4*UNRELATED_CONTROLS + 8*FIXEDTEXT_HEIGHT + RELATED_CONTROLS  );
-        Size = MAP_APPFONT ( PAGE_X - 12, 3*FIXEDTEXT_HEIGHT );
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12, 3*FIXEDTEXT_HEIGHT );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
     };
@@ -643,7 +663,7 @@ TabPage PAGE_DBASE
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_DBASE;
 
     AUTO_CHARSET(         UNRELATED_CONTROLS)
