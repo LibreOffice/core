@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.18 $
+*  $Revision: 1.19 $
 *
-*  last change: $Author: obo $ $Date: 2005-06-15 10:27:53 $
+*  last change: $Author: kz $ $Date: 2005-06-30 13:07:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -67,7 +67,11 @@
 Shortcut gid_Shortcut_Lib_Xml2
     FileID = gid_File_Lib_Xml2;
     Dir = gid_Dir_Program;
+#ifdef MACOSX
+    Name = STRING(CONCAT2(libxml2.2,UNXSUFFIX));
+#else
     Name = STRING(CONCAT3(libxml2,UNXSUFFIX,.2));
+#endif
     Styles = (NETWORK,RELATIVE);
 End
 
@@ -451,7 +455,11 @@ End
 Shortcut gid_Shortcut_Lib_LibXMLSec_xmlseccore
     FileID = gid_File_Lib_LibXMLSec_xmlseccore;
     Dir = gid_Dir_Program;
+#ifdef MACOSX
+    Name = STRING(CONCAT2(libxmlsec1.1,UNXSUFFIX));
+#else
     Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1));
+#endif
     Styles = (NETWORK,RELATIVE);
 End
 #endif
@@ -469,7 +477,11 @@ End
 Shortcut gid_Shortcut_Lib_LibXMLSec_xmlsecnss
     FileID = gid_File_Lib_LibXMLSec_xmlsecnss;
     Dir = gid_Dir_Program;
+#ifdef MACOSX
+    Name = STRING(CONCAT2(libxmlsec1-nss.1,UNXSUFFIX));
+#else
     Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1));
+#endif
     Styles = (NETWORK,RELATIVE);
 End
 #endif
