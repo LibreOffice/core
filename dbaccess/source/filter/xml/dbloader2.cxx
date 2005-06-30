@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 15:43:25 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ using namespace ::com::sun::star::embed;
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 namespace css = ::com::sun::star;
+using ::com::sun::star::awt::XWindow;
 
 // -------------------------------------------------------------------------
 namespace dbaxml
@@ -350,6 +351,9 @@ public:
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
+
+private:
+    sal_Bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard );
 };
 
 DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -404,6 +408,88 @@ Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(voi
 }
 
 // -----------------------------------------------------------------------
+namespace
+{
+    sal_Bool lcl_urlAllowsInteraction( Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL )
+    {
+        bool bDoesAllow = sal_False;
+        try
+        {
+            Reference< XURLTransformer > xTransformer(
+                _rxORB->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ) ),
+                UNO_QUERY
+            );
+            OSL_ENSURE( xTransformer.is(), "DBContentLoader::load: could not create an URLTransformer!" );
+            if ( xTransformer.is() )
+            {
+                URL aURL;
+                aURL.Complete = _rURL;
+                xTransformer->parseStrict( aURL );
+                bDoesAllow = aURL.Arguments.equalsAscii( "Interactive" );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception while analyzing the URL!" );
+        }
+        return bDoesAllow;
+    }
+
+    Reference< XWindow > lcl_getTopMostWindow( Reference< XMultiServiceFactory >& _rxORB )
+    {
+        Reference< XWindow > xWindow;
+        // get the top most window
+        Reference < XFramesSupplier > xDesktop( _rxORB->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY );
+        Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
+        if ( xActiveFrame.is() )
+        {
+            xWindow = xActiveFrame->getContainerWindow();
+            Reference<XFrame> xFrame = xActiveFrame;
+            while ( xFrame.is() && !xFrame->isTop() )
+                xFrame.set(xFrame->getCreator(),UNO_QUERY);
+
+            if ( xFrame.is() )
+                xWindow = xFrame->getContainerWindow();
+        }
+        return xWindow;
+    }
+}
+
+// -----------------------------------------------------------------------
+sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard )
+{
+    Sequence< Any > aWizardArgs(2);
+    aWizardArgs[0] <<= PropertyValue(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+                    0,
+                    makeAny( lcl_getTopMostWindow( m_xServiceFactory ) ),
+                    PropertyState_DIRECT_VALUE);
+
+    aWizardArgs[1] <<= PropertyValue(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")),
+                    0,
+                    makeAny( _rxModel ),
+                    PropertyState_DIRECT_VALUE);
+
+    // create the dialog
+    Reference< XExecutableDialog > xAdminDialog(
+        m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog")),aWizardArgs), UNO_QUERY);
+
+    // execute it
+    ::rtl::OUString sExistingDocumentToOpen;
+    if ( !xAdminDialog.is() || ( RET_OK != xAdminDialog->execute() ) )
+        return sal_False;
+
+    Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
+    sal_Bool bSuccess = sal_False;
+    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenDatabase"))) >>= bSuccess;
+    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartTableWizard"))) >>= _bShouldStartTableWizard;
+    return bSuccess;
+}
+
+// -----------------------------------------------------------------------
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::rtl::OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
@@ -424,9 +510,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SalvagedFile" ) ), _rURL );
     Sequence< PropertyValue > aLoadArgs( rArgs );
 
-    sal_Bool bCreateNew = sal_False;
-    sal_Bool bInteractive = sal_False;
-    Reference<XDocumentDataSource> xDocumentDataSource;
+    sal_Bool bCreateNew = sal_False;        // does the URL denote the private:factory URL?
+    sal_Bool bDidLoadExisting = sal_False;  // when it does, did we (the wizard) load an existing document instead
+    sal_Bool bStartTableWizard = sal_False; // start the table wizard after everything was loaded successfully?
+
+    sal_Bool bSuccess = sal_True;
+
     /* special mode: use already loaded model ...
         In such case no filter name will be selected and no URL will be given!
         Such informations are not neccessary. We have to create a new view only
@@ -436,6 +525,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         Reference< XSingleServiceFactory > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
         if ( xDatabaseContext.is() )
         {
+            sal_Bool bInteractive = sal_False;
+
             bCreateNew = _rURL.match(SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE));
             Sequence<Any> aCreationArgs;
             if ( !bCreateNew )
@@ -444,36 +535,30 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
             }
             else
-            {
-                try
-                {
-                    Reference< XURLTransformer > xTransformer(
-                        m_xServiceFactory->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ) ),
-                        UNO_QUERY
-                    );
-                    OSL_ENSURE( xTransformer.is(), "DBContentLoader::load: could not create an URLTransformer!" );
-                    if ( xTransformer.is() )
-                    {
-                        URL aURL;
-                        aURL.Complete = _rURL;
-                        xTransformer->parseStrict( aURL );
-                        bInteractive = aURL.Arguments.equalsAscii( "Interactive" );
-                    }
-                }
-                catch( const Exception& )
-                {
-                    OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception while analyzing the URL!" );
-                }
-            }
+                bInteractive = lcl_urlAllowsInteraction( m_xServiceFactory, _rURL );
 
+            Reference< XDocumentDataSource > xDocumentDataSource;
             xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
             xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
+
+            if ( bInteractive && xModel.is() )
+            {
+                ::rtl::OUString sURL = xModel->getURL();
+                bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
+                if ( sURL != xModel->getURL() )
+                    bDidLoadExisting = sal_True;
+            }
         }
     }
 
-    sal_Bool bSuccess = sal_True;
-    if ( !bCreateNew && xModel.is() && !xModel->getURL().getLength() )
+    if ( !xModel.is() )
+    {
+        if ( rListener.is() )
+            rListener->loadCancelled(this);
+        return;
+    }
+
+    if ( !bCreateNew && !xModel->getURL().getLength() )
     {
         try
         {
@@ -489,53 +574,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    sal_Bool bStartTableWizard = sal_False;
-
-    if ( bInteractive )
-    {
-        Sequence< Any > aWizardArgs(2);
-        Reference< ::com::sun::star::awt::XWindow> xWindow;
-        // get the top most window
-        if ( rFrame.is() )
-        {
-            xWindow = rFrame->getContainerWindow();
-            Reference<XFrame> xFrame = rFrame;
-            while ( xFrame.is() && !xFrame->isTop() )
-            {
-                xFrame.set(xFrame->getCreator(),UNO_QUERY);
-            }
-            if ( xFrame.is() )
-                xWindow = xFrame->getContainerWindow();
-        }
-        // the parent window
-        aWizardArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
-                                    0,
-                                    makeAny(xWindow),
-                                    PropertyState_DIRECT_VALUE);
-        aWizardArgs[1] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")),
-                                    0,
-                                    makeAny(xModel),
-                                    PropertyState_DIRECT_VALUE);
-
-        // create the dialog
-        Reference< XExecutableDialog > xAdminDialog(
-            m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog")),aWizardArgs), UNO_QUERY);
-
-        // execute it
-        if ( bSuccess = xAdminDialog.is() && RET_OK == xAdminDialog->execute() )
-        {
-            Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
-            xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenDatabase"))) >>= bSuccess;
-            xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartTableWizard"))) >>= bStartTableWizard;
-        }
-    }
-
     Reference< XController > xController;
     if ( bSuccess )
     {
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OApplicationController"))),UNO_QUERY);
 
-        if ( bSuccess = ( xController.is() && xModel.is() ) )
+        if ( bSuccess = xController.is() )
         {
             xController->attachModel(xModel);
             xModel->connectController( xController );
@@ -547,16 +591,15 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             try
             {
                 Reference<XInitialization > xIni(xController,UNO_QUERY);
-                PropertyValue aProp(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
-                Sequence< Any > aInitArgs( aLoadArgs.getLength() + 2 );
+                Sequence< Any > aInitArgs( aLoadArgs.getLength() + 1 );
 
                 Any* pArgIter = aInitArgs.getArray();
                 Any* pEnd   = pArgIter + aInitArgs.getLength();
-                *pArgIter++ <<= aProp;
-
-                aProp.Name = URL_INTERACTIVE;
-                aProp.Value <<= bInteractive;
-                *pArgIter++ <<= aProp;
+                *pArgIter++ <<= PropertyValue(
+                            ::rtl::OUString::createFromAscii( "Frame" ),
+                            0,
+                            makeAny( rFrame ),
+                            PropertyState_DIRECT_VALUE );
 
                 const PropertyValue* pIter = aLoadArgs.getConstArray();
                 for(++pArgIter;pArgIter != pEnd;++pArgIter,++pIter)
@@ -583,7 +626,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             xModelCollection->insert(css::uno::makeAny(xModel));
 
             Reference< css::document::XEventListener > xDocEventBroadcaster(xModel,UNO_QUERY_THROW);
-            css::document::EventObject aEvent(xModel, bCreateNew ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad")));
+            const sal_Char* pEventName = bCreateNew && !bDidLoadExisting ? "OnNew" : "OnLoad";
+            css::document::EventObject aEvent( xModel, ::rtl::OUString::createFromAscii( pEventName ) );
             xDocEventBroadcaster->notifyEvent(aEvent);
         }
         catch(Exception)
@@ -603,8 +647,11 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             m_nStartWizard = Application::PostUserEvent(LINK(this, DBContentLoader, OnStartTableWizard));
         }
     }
-    else if (!bSuccess && rListener.is())
-        rListener->loadCancelled(this);
+    else
+    {
+        if ( rListener.is() )
+            rListener->loadCancelled( this );
+    }
 }
 
 // -----------------------------------------------------------------------
