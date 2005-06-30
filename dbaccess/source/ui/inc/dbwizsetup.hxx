@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:51:17 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ private:
     String                  m_sRM_SpreadSheetText;
     String                  m_sRM_AuthentificationText;
     String                  m_sRM_FinalText;
-//    String                  m_sWizardTitle;
     INetURLObject           m_aDocURL;
     String                  m_sWorkPath;
     OGeneralPage*           m_pGeneralPage;
@@ -173,11 +172,11 @@ public:
 
     /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.
     */
-    sal_Bool IsDatabaseDocumentToBeOpened();
+    sal_Bool IsDatabaseDocumentToBeOpened() const;
 
     /** returns <TRUE/> if the table wizard should be opened, otherwise <FALSE/>.
     */
-    sal_Bool IsTableWizardToBeStarted();
+    sal_Bool IsTableWizardToBeStarted() const;
 
 protected:
     /// to override to create new pages
@@ -209,18 +208,19 @@ protected:
 private:
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
     sal_Bool SaveDatabaseDocument();
-    void activateDatabasePath(OGeneralPage* _pTabpage);
+    void activateDatabasePath();
     void createUniqueFileName(INetURLObject* pURL);
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
     DATASOURCE_TYPE VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const;
 
-    void ToggleFollowingRoadmapSteps();
+    void updateTypeDependentStates();
     sal_Bool callSaveAsDialog();
-//    sal_Bool DocUrlHasValue();
     sal_Bool IsConnectionUrlRequired();
     DECL_LINK(OnTypeSelected, OGeneralPage*);
-    DECL_LINK(ImplCreateDBHdl, OGeneralPage*);
+    DECL_LINK(OnChangeCreationMode, OGeneralPage*);
+    DECL_LINK(OnRecentDocumentSelected, OGeneralPage*);
+    DECL_LINK(OnSingleDocumentChosen, OGeneralPage*);
     DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
     DECL_LINK(ImplModifiedHdl, OGenericAdministrationPage*);
 };
