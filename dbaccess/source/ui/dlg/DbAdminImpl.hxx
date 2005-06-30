@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:48:36 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDatasource;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
 
-        ::com::sun::star::uno::Any              m_aDataSourceName;
+        ::com::sun::star::uno::Any              m_aDataSourceOrName;
         typedef ::std::set< ::rtl::OUString >   StringSet;
         typedef StringSet::const_iterator       ConstStringSetIterator;
 
@@ -164,13 +164,14 @@ namespace dbaui
         /** returns the data source the dialog is currently working with
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
+        /** returs the model we're currently working with
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         getCurrentModel();
 
         // returns the Url of a database document
         String              getDocumentUrl(SfxItemSet& _rDest);
 
-
-
-        void setCurrentDataSourceName(const ::com::sun::star::uno::Any& _aDataSourceName);
+        void setDataSourceOrName( const ::com::sun::star::uno::Any& _rDataSourceOrName );
 
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
