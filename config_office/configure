@@ -16377,14 +16377,14 @@ echo $ECHO_N "checking for PSDK files... $ECHO_C" >&6
         # But there might be also an April 2005 PSDK, unfortunately MS changed
         # the registry entry. (we prefer the old version!?)
         if test -z "$PSDK_HOME"; then
-          PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | head -n 1`
+          PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
         fi
         # normalize if found
         if test -n "$PSDK_HOME"; then
           PSDK_HOME=`cygpath -d "$PSDK_HOME"`
           PSDK_HOME=`cygpath -u "$PSDK_HOME"`
           # The 2005 PSDK has a trailing backslash
-          PSDK_HOME=`echo $PSDK_HOME | $SED -n "s/\/$//p"`
+          PSDK_HOME=`echo $PSDK_HOME | $SED 's/\/$//'`
         fi
 	else
 		PSDK_HOME="$with_psdk_home"
