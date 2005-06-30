@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:10:07 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ namespace dbaui
         ,m_bOwnConnection(!_xConnection.is())
     {
         m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
-        m_pImpl->setCurrentDataSourceName(_aDataSourceName);
+        m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);
         SetInputSet(_pItems);
