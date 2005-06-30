@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:01:42 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,14 @@
 #define FT_GENERALHELPTEXT      42
 #define FT_DATATYPEAPPENDIX     43
 #define FT_DATASOURCEHEADER     44
+#define FT_DOCLISTLABEL         45
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
 #define LB_CHARSET              3
 #define LB_TIMEOUT_UNIT         4
 #define LB_BOOLEANCOMPARISON    5
+#define LB_DOCUMENTLIST         6
 
 #define ET_CONNECTURL           1
 #define ET_DATASOURCENAME       2
@@ -128,6 +130,7 @@
 #define PB_DBASELOCATION        10
 #define PB_BROWSEURL            11
 #define PB_TESTADOCONNECTION    12
+#define PB_OPENDOCUMENT         13
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
@@ -172,6 +175,7 @@
 #define RB_USECONNECTORJ3       2
 #define RB_CREATEDBDATABASE     3
 #define RB_GETEXISTINGDATABASE  4
+#define RB_OPENEXISTINGDOC      5
 
 
 
