@@ -77,7 +77,7 @@ End
 
 File gid_File_Help_Sdatabase_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(sdatabase);
 End
 
