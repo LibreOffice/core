@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:51:16 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@
 
 #define HID_DSADMIN_CATALOG                         (HID_DBACCESS_START + 292)
 #define HID_DSADMIN_SCHEMA                          (HID_DBACCESS_START + 293)
-#define HID_DSADMIN_IGNOREINDEXAPPENDIX                     (HID_DBACCESS_START + 294)
+#define HID_DSADMIN_IGNOREINDEXAPPENDIX             (HID_DBACCESS_START + 294)
 #define HID_DSADMIN_DOSLINEENDS                     (HID_DBACCESS_START + 295)
 
 #define HID_PAGE_DBWIZARD_GENERALPAGE                           (HID_DBACCESS_START + 300)
