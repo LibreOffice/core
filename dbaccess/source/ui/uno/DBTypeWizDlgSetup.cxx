@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:55:03 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,9 @@ void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
 {
     if ( _nExecutionResult == RET_OK )
     {
-        m_bOpenDatabase = static_cast<ODbTypeWizDialogSetup*>(m_pDialog)->IsDatabaseDocumentToBeOpened();
-        m_bStartTableWizard = static_cast<ODbTypeWizDialogSetup*>(m_pDialog)->IsTableWizardToBeStarted();
+        const ODbTypeWizDialogSetup* pDialog = static_cast< ODbTypeWizDialogSetup* >( m_pDialog );
+        m_bOpenDatabase = pDialog->IsDatabaseDocumentToBeOpened();
+        m_bStartTableWizard = pDialog->IsTableWizardToBeStarted();
     }
 }
 
