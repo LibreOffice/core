@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:15:41 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,20 @@
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 #ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
+#endif
+#ifndef DBACCESS_SOURCE_UI_INC_DIALOGCONTROLLING_HXX
+#include "dialogcontrolling.hxx"
 #endif
 
 //.........................................................................
@@ -114,6 +126,9 @@ namespace dbaui
 //.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::container;
+
     //=========================================================================
     //= OGeneralPage
     //=========================================================================
@@ -128,9 +143,13 @@ namespace dbaui
         ,m_aFT_DatasourceTypeHeader     (this, ResId(FT_DATASOURCEHEADER))
         ,m_aRB_CreateDatabase           (this, ResId(RB_CREATEDBDATABASE))
         ,m_aRB_GetExistingDatabase      (this, ResId(RB_GETEXISTINGDATABASE))
+        ,m_aRB_OpenDocument             (this, ResId(RB_OPENEXISTINGDOC))
         ,m_aFTHeaderText                (this, ResId(FT_GENERALHEADERTEXT))
         ,m_aFTHelpText                  (this, ResId(FT_GENERALHELPTEXT))
         ,m_aFTDataSourceAppendix        (this, ResId(FT_DATATYPEAPPENDIX))
+        ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId( LB_DOCUMENTLIST ) ) )
+        ,m_aFT_DocListLabel             (this, ResId(FT_DOCLISTLABEL))
+        ,m_aPB_OpenDocument             (this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId(PB_OPENDOCUMENT))
         ,m_sMySQLEntry                  (ResId(STR_MYSQLENTRY))
         ,m_pCollection                  (NULL)
         ,m_eCurrentSelection            (DST_UNKNOWN)
@@ -154,9 +173,18 @@ namespace dbaui
         m_aDatasourceType.SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
            m_aRB_CreateDatabase.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
            m_aRB_GetExistingDatabase.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
+           m_aRB_OpenDocument.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
         m_aRB_CreateDatabase.Check();
+
+        m_pLB_DocumentList->SetSelectHdl( LINK( this, OGeneralPage, OnDocumentSelected ) );
+        m_aPB_OpenDocument.SetClickHdl( LINK( this, OGeneralPage, OnOpenDocument ) );
     }
 
+    //-------------------------------------------------------------------------
+    OGeneralPage::~OGeneralPage()
+    {
+        m_pLB_DocumentList.reset( NULL );
+    }
 
     //-------------------------------------------------------------------------
     void OGeneralPage::initializeTypeList()
@@ -242,19 +270,15 @@ namespace dbaui
         }
     }
 
-
-    void OGeneralPage::SetToCreationMode(sal_Bool _bCreate){
-        if (_bCreate)
-            m_aRB_CreateDatabase.Check();
-        else
-            m_aRB_GetExistingDatabase.Check();
+    //-------------------------------------------------------------------------
+    OGeneralPage::CreationMode OGeneralPage::GetDatabaseCreationMode() const
+    {
+        if ( m_aRB_CreateDatabase.IsChecked() )
+            return eCreateNew;
+        if ( m_aRB_GetExistingDatabase.IsChecked() )
+            return eConnectExternal;
+        return eOpenExisting;
     }
-
-
-    sal_Bool OGeneralPage::IsDatabaseToBeCreated(){
-        return m_aRB_CreateDatabase.IsChecked();
-    }
-
 
     //-------------------------------------------------------------------------
     void OGeneralPage::GetFocus()
@@ -262,6 +286,8 @@ namespace dbaui
         OGenericAdministrationPage::GetFocus();
         if (m_aDatasourceType.IsEnabled())
             m_aDatasourceType.GrabFocus();
+        if ( m_pLB_DocumentList.get() && m_pLB_DocumentList->IsEnabled() )
+            m_pLB_DocumentList->GrabFocus();
     }
 
     //-------------------------------------------------------------------------
@@ -305,13 +331,10 @@ namespace dbaui
             m_aTypeSelectHandler.Call(this);
     }
 
-
     //-------------------------------------------------------------------------
     void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         initializeHistory();
-//        if (m_aDatasourceType.GetEntryCount() > 0)
-//            return;
         initializeTypeList();
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -322,26 +345,45 @@ namespace dbaui
             m_aTypePreLabel.Hide();
             m_aTypePostLabel.Hide();
             m_aSpecialMessage.Hide();
-            m_aDatasourceTypeLabel.SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), 10, 14 ) );
-            m_aDatasourceType.SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), 90, 12) );
-            m_aFTDataSourceAppendix.SetPosPixel( MovePoint(m_aRB_GetExistingDatabase.GetPosPixel(), 162, 14) );
             SetControlFontWeight(&m_aFTHeaderText);
-            SetText(::rtl::OUString::createFromAscii(""));
-            m_aDatasourceTypeLabel.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
-            m_aDatasourceType.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
-            m_aFTDataSourceAppendix.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
-            m_bEntryCreationMode = IsDatabaseToBeCreated();
+            SetText(String());
+
+            m_aDatasourceType.SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), INDENT_BELOW_RADIO, 14 ) );
+
+            m_pSelectTypeController.reset( new RadioDependentEnabler( m_aRB_GetExistingDatabase, !bValid || bReadonly ) );
+            m_pSelectTypeController->addDependentWindow( m_aDatasourceTypeLabel );
+            m_pSelectTypeController->addDependentWindow( m_aDatasourceType );
+            m_pSelectTypeController->addDependentWindow( m_aFTDataSourceAppendix );
+
+            m_pOpenDocController.reset( new RadioDependentEnabler( m_aRB_OpenDocument, !bValid || bReadonly ) );
+            m_pOpenDocController->addDependentWindow( m_aPB_OpenDocument );
+            m_pOpenDocController->addDependentWindow( m_aFT_DocListLabel );
+            m_pOpenDocController->addDependentWindow( *m_pLB_DocumentList );
+
+            m_pLB_DocumentList->SetDropDownLineCount( 20 );
+            if ( m_pLB_DocumentList->GetEntryCount() )
+                m_pLB_DocumentList->SelectEntryPos( 0 );
+
+            m_aDatasourceTypeLabel.Hide();
+            m_aFTDataSourceAppendix.Hide();
+
+            m_eOriginalCreationMode = GetDatabaseCreationMode();
         }
         else
         {
             m_aFT_DatasourceTypeHeader.Hide();
             m_aRB_CreateDatabase.Hide();
             m_aRB_GetExistingDatabase.Hide();
+            m_aRB_OpenDocument.Hide();
+            m_aPB_OpenDocument.Hide();
+            m_aFT_DocListLabel.Hide();
+            m_pLB_DocumentList->Hide();
             m_aFTHeaderText.Hide();
             m_aFTHelpText.Hide();
             m_aTypePreLabel.Enable(bValid);
             m_aTypePostLabel.Enable(bValid);
             m_aDatasourceTypeLabel.Enable(bValid);
+            m_aFTDataSourceAppendix.Enable(bValid);
             m_aDatasourceType.Enable(bValid);
         }
         // if the selection is invalid, disable evrything
@@ -386,7 +428,7 @@ namespace dbaui
             }
         }
         if (m_aRB_CreateDatabase.IsChecked() && m_DBWizardMode)
-            sDisplayName = m_pCollection->getTypeDisplayName(DST_DBASE);
+            sDisplayName = m_pCollection->getTypeDisplayName(DST_JDBC);
         m_aDatasourceType.SelectEntry(sDisplayName);
 
         // notify our listener that our type selection has changed (if so)
@@ -421,13 +463,13 @@ namespace dbaui
     }
 
 
+    // -----------------------------------------------------------------------
     void OGeneralPage::insertDatasourceTypeEntryData(DATASOURCE_TYPE _eType, String sDisplayName)
     {
-    // insert a (temporary) entry
+        // insert a (temporary) entry
         sal_uInt16 nPos = m_aDatasourceType.InsertEntry(sDisplayName);
         m_aDatasourceType.SetEntryData(nPos, reinterpret_cast<void*>(_eType));
     }
-
 
     // -----------------------------------------------------------------------
     void OGeneralPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -475,19 +517,35 @@ namespace dbaui
     BOOL OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
-        if (m_aRB_CreateDatabase.IsChecked() && (m_DBWizardMode))
+
+        bool bCommitTypeSelection = true;
+        if ( m_DBWizardMode )
         {
-            _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_DBASE)));
-            bChangedSomething = sal_True;
+            if ( m_aRB_CreateDatabase.IsChecked() )
+            {
+                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_DBASE)));
+                bChangedSomething = sal_True;
+                bCommitTypeSelection = false;
+            }
+            else if ( m_aRB_OpenDocument.IsChecked() )
+            {
+                if ( m_aRB_OpenDocument.GetSavedValue() != m_aRB_OpenDocument.IsChecked() )
+                    bChangedSomething = sal_True;
+
+                // TODO
+                bCommitTypeSelection = false;
+            }
         }
-        else
+
+        if ( bCommitTypeSelection )
         {
             USHORT nEntry = m_aDatasourceType.GetSelectEntryPos();
             DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_Int32>(m_aDatasourceType.GetEntryData(nEntry)));
             if (m_DBWizardMode)
             {
-                sal_Bool bCurCreationMode = IsDatabaseToBeCreated();
-                if (( m_aDatasourceType.GetSavedValue() != nEntry) || (bCurCreationMode != m_bEntryCreationMode))
+                if  (  ( m_aDatasourceType.GetSavedValue() != nEntry )
+                    || ( GetDatabaseCreationMode() != m_eOriginalCreationMode )
+                    )
                 {
                     _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(eSelectedType)));
                     bChangedSomething = sal_True;
@@ -523,27 +581,62 @@ namespace dbaui
         return 0L;
     }
 
+    //-------------------------------------------------------------------------
+    OGeneralPage::DocumentDescriptor OGeneralPage::GetSelectedDocument() const
+    {
+        DocumentDescriptor aDocument;
+        if ( m_aBrowsedDocument.sURL.Len() )
+            aDocument = m_aBrowsedDocument;
+        else
+        {
+            aDocument.sURL = m_pLB_DocumentList->GetSelectedDocumentURL();
+            aDocument.sFilter = m_pLB_DocumentList->GetSelectedDocumentFilter();
+        }
+        return aDocument;
+    }
+
+    //-------------------------------------------------------------------------
     IMPL_LINK(OGeneralPage, OnSetupModeSelected, RadioButton*, _pBox)
     {
-        String sDisplayName;
-           sal_Bool bEnable = m_aRB_GetExistingDatabase.IsChecked();
-        m_aDatasourceTypeLabel.Enable(bEnable);
-        m_aDatasourceType.Enable(bEnable);
-        m_aFTDataSourceAppendix.Enable(bEnable);
-        if (!bEnable)
-            sDisplayName = m_pCollection->getTypeDisplayName(DST_DBASE);
-        else
-            sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
-        USHORT n = m_aDatasourceType.GetEntryPos(sDisplayName);
-        if ((n < m_aDatasourceType.GetEntryCount()) && (n >= 0))
-            m_aDatasourceType.SelectEntry(sDisplayName);
-        else
-            m_aDatasourceType.SelectEntry(m_sMySQLEntry);
+        // TODO: nearly all of this could be outsourced to a IWindowOperator, and
+        // triggered via a DialogController, couldn't it?
+//      String sDisplayName;
+//        if (m_aRB_CreateDatabase.IsChecked())
+//          sDisplayName = m_pCollection->getTypeDisplayName(DST_DBASE);
+//      else
+//          sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
+//      USHORT n = m_aDatasourceType.GetEntryPos(sDisplayName);
+//      if ((n < m_aDatasourceType.GetEntryCount()) && (n >= 0))
+//          m_aDatasourceType.SelectEntry(sDisplayName);
+//      else
+//          m_aDatasourceType.SelectEntry(m_sMySQLEntry);
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call(this);
         return 1L;
     }
-    // -----------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+    IMPL_LINK(OGeneralPage, OnDocumentSelected, ListBox*, _pBox)
+    {
+        m_aDocumentSelectionHandler.Call( this );
+        return 0L;
+    }
+
+    //-------------------------------------------------------------------------
+    IMPL_LINK(OGeneralPage, OnOpenDocument, PushButton*, _pBox)
+    {
+        ::sfx2::FileDialogHelper aFileDlg( WB_OPEN, ::String::CreateFromAscii("sdatabase") );
+        if ( aFileDlg.Execute() == ERRCODE_NONE )
+        {
+            m_aBrowsedDocument.sURL = aFileDlg.GetPath();
+            m_aBrowsedDocument.sFilter = String();
+            m_aChooseDocumentHandler.Call( this );
+            return 1L;
+        }
+
+        return 0L;
+    }
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
