@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:42:35 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPa
 //-------------------------------------------------------------------------
 void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDataSourceName)
 {
-    m_pImpl->setCurrentDataSourceName(_aDataSourceName);
+    m_pImpl->setDataSourceOrName(_aDataSourceName);
 
     // reset the tag pages
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
