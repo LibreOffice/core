@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:49:38 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,9 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -268,6 +271,7 @@ using namespace ::cppu;
 #define THUNDERBIRD_PATH       17
 #define CREATENEW_PATH         18
 #define USERDEFINED_PATH       19
+#define OPEN_DOC_PATH          20
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -311,7 +315,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_sRM_FinalText = String(ResId(STR_PAGETITLE_FINAL));
     m_sWorkPath = SvtPathOptions().GetWorkPath();
     pFinalPage = NULL;
-//    m_sWizardTitle = String(ResId(STR_DBWIZARDTITLE));
     // extract the datasource type collection from the item set
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
     if (pCollectionItem)
@@ -322,7 +325,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     FreeResource();
 
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
-    m_pImpl->setCurrentDataSourceName(_aDataSourceName);
+    m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
 
@@ -426,6 +429,8 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( USERDEFINED_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
+    declarePath( OPEN_DOC_PATH, PAGE_DBSETUPWIZARD_INTRO, WZS_INVALID_STATE );
+
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
     m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
     m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
@@ -433,7 +438,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     SetRoadmapInteractive( sal_True );
     ActivatePage();
-//    setTitle(::rtl::OUString(m_sWizardTitle));
 }
 
 
@@ -512,117 +516,99 @@ ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, _pTabPage)
 {
-    activateDatabasePath(_pTabPage);
+    activateDatabasePath();
     return 1L;
 }
 
-
-void ODbTypeWizDialogSetup::activateDatabasePath(OGeneralPage* _pTabPage){
-    if (_pTabPage->IsDatabaseToBeCreated() == sal_True)
+//-------------------------------------------------------------------------
+void ODbTypeWizDialogSetup::activateDatabasePath()
+{
+    switch ( m_pGeneralPage->GetDatabaseCreationMode() )
+    {
+    case OGeneralPage::eCreateNew:
     {
         activatePath( CREATENEW_PATH, sal_True);
         enableState(PAGE_DBSETUPWIZARD_FINAL, sal_True );
         enableButtons( WZB_FINISH, sal_True);
     }
-    else
+    break;
+    case OGeneralPage::eConnectExternal:
     {
-        m_eType = VerifyDataSourceType(_pTabPage->GetSelectedType());
+        m_eType = VerifyDataSourceType(m_pGeneralPage->GetSelectedType());
         if (m_eType == DST_UNKNOWN)
             m_eType = m_eOldType;
-        switch ( m_eType )
+
+        struct _map_type_to_path
         {
-            case DST_DBASE:
-                activatePath( DBASE_PATH, sal_True);
-                break;
+            DATASOURCE_TYPE             eType;
+            RoadmapWizardTypes::PathId  nPathId;
+        } aKnownTypesAndPaths[] = {
+            { DST_DBASE,        DBASE_PATH          },
+            { DST_ADO,          ADO_PATH            },
+            { DST_FLAT,         TEXT_PATH           },
+            { DST_CALC,         SPREADSHEET_PATH    },
+            { DST_ODBC,         ODBC_PATH           },
+            { DST_JDBC,         JDBC_PATH           },
+            { DST_MYSQL_JDBC,   MYSQL_JDBC_PATH     },
+            { DST_MYSQL_ODBC,   MYSQL_ODBC_PATH     },
+            { DST_ORACLE_JDBC,  ORACLE_PATH         },
+            { DST_ADABAS,       ADABAS_PATH         },
+            { DST_LDAP,         LDAP_PATH           },
+            { DST_MSACCESS,     MSACCESS_PATH       },
+            { DST_OUTLOOKEXP,   OUTLOOKEXP_PATH     },
+            { DST_OUTLOOK,      OUTLOOK_PATH        },
+            { DST_MOZILLA,      MOZILLA_PATH        },
+            { DST_THUNDERBIRD,  THUNDERBIRD_PATH    },
+            { DST_EVOLUTION,    EVOLUTION_PATH      },
+            { DST_USERDEFINE1,  USERDEFINED_PATH    },
+            { DST_USERDEFINE2,  USERDEFINED_PATH    },
+            { DST_USERDEFINE3,  USERDEFINED_PATH    },
+            { DST_USERDEFINE4,  USERDEFINED_PATH    },
+            { DST_USERDEFINE5,  USERDEFINED_PATH    },
+            { DST_USERDEFINE6,  USERDEFINED_PATH    },
+            { DST_USERDEFINE7,  USERDEFINED_PATH    },
+            { DST_USERDEFINE8,  USERDEFINED_PATH    },
+            { DST_USERDEFINE9,  USERDEFINED_PATH    },
+            { DST_USERDEFINE10, USERDEFINED_PATH    }
+        };
 
-            case DST_ADO:
-                activatePath( ADO_PATH, sal_True);
+        sal_Int32 i = 0;
+        for ( ; i < sizeof( aKnownTypesAndPaths ) / sizeof( aKnownTypesAndPaths[0] ); ++i )
+        {
+            if ( aKnownTypesAndPaths[i].eType == m_eType )
+            {
+                activatePath( aKnownTypesAndPaths[i].nPathId, sal_True);
                 break;
-
-            case DST_FLAT:
-                activatePath( TEXT_PATH, sal_True);
-                break;
-
-            case DST_CALC:
-                activatePath( SPREADSHEET_PATH, sal_True);
-                break;
-
-            case DST_ODBC:
-                activatePath( ODBC_PATH, sal_True);
-                break;
-
-            case DST_JDBC:
-                activatePath( JDBC_PATH, sal_True);
-                break;
-
-            case DST_MYSQL_JDBC:
-                activatePath( MYSQL_JDBC_PATH, sal_True);
-                break;
-
-            case DST_MYSQL_ODBC:
-                activatePath( MYSQL_ODBC_PATH, sal_True);
-                break;
-
-            case DST_ORACLE_JDBC:
-                activatePath( ORACLE_PATH, sal_True);
-                break;
-
-            case DST_ADABAS:
-                activatePath( ADABAS_PATH, sal_True);
-                break;
-
-            case DST_LDAP       :
-                activatePath( LDAP_PATH, sal_True);
-                break;
-
-            case DST_MSACCESS:
-                activatePath( MSACCESS_PATH, sal_True);
-                break;
-
-            case DST_OUTLOOKEXP:
-                activatePath( OUTLOOKEXP_PATH, sal_True);
-                break;
-
-            case DST_OUTLOOK:
-                activatePath( OUTLOOK_PATH, sal_True);
-                break;
-
-            case DST_MOZILLA:
-                activatePath( MOZILLA_PATH, sal_True);
-                break;
-
-            case DST_THUNDERBIRD:
-                activatePath( THUNDERBIRD_PATH, sal_True);
-                break;
-
-            case DST_EVOLUTION:
-                activatePath( EVOLUTION_PATH, sal_True);
-                break;
-
-            case DST_USERDEFINE1:/// first user defined driver
-            case DST_USERDEFINE2:
-            case DST_USERDEFINE3:
-            case DST_USERDEFINE4:
-            case DST_USERDEFINE5:
-            case DST_USERDEFINE6:
-            case DST_USERDEFINE7:
-            case DST_USERDEFINE8:
-            case DST_USERDEFINE9:
-            case DST_USERDEFINE10:
-                activatePath( USERDEFINED_PATH, sal_True);
-                break;
-            default:
-                OSL_ENSURE(0,"Unknown database type!");
+            }
         }
-    ToggleFollowingRoadmapSteps();
+        DBG_ASSERT( i < sizeof( aKnownTypesAndPaths ) / sizeof( aKnownTypesAndPaths[0] ),
+            "ODbTypeWizDialogSetup::activateDatabasePath: unknown database type!" );
+        updateTypeDependentStates();
     }
+    break;
+    case OGeneralPage::eOpenExisting:
+    {
+        activatePath( OPEN_DOC_PATH, sal_True );
+        enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
+    }
+    break;
+    default:
+        DBG_ERROR( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
+    }
+
+    enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPage::eOpenExisting );
+        // TODO: this should go into the base class. Point is, we activate a path whose *last*
+        // step is also the current one. The base class should automatically disable
+        // the Next button in such a case. However, not for this patch ...
 }
 
-
-void ODbTypeWizDialogSetup::ToggleFollowingRoadmapSteps(){
+//-------------------------------------------------------------------------
+void ODbTypeWizDialogSetup::updateTypeDependentStates()
+{
     sal_Bool bDoEnable = sal_False;
     sal_Bool bIsConnectionRequired = IsConnectionUrlRequired();
-    if (!bIsConnectionRequired){
+    if (!bIsConnectionRequired)
+    {
         bDoEnable = sal_True;
     }
     else
@@ -638,7 +624,9 @@ void ODbTypeWizDialogSetup::ToggleFollowingRoadmapSteps(){
 }
 
 
-sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired(){
+//-------------------------------------------------------------------------
+sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
+{
     DATASOURCE_TYPE eType = getDatasourceType(*m_pOutSet);
     switch ( m_eType )
     {
@@ -653,8 +641,6 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired(){
             return sal_True;
     }
 }
-
-
 
 //-------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatasource)
@@ -754,7 +740,9 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = static_cast<OGenericAdministrationPage*> (pFirstPage);
             m_pGeneralPage = static_cast<OGeneralPage*>(pFirstPage);
             m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
-            m_pGeneralPage->SetClickHandler(LINK( this, ODbTypeWizDialogSetup, ImplCreateDBHdl ) );
+            m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
+            m_pGeneralPage->SetDocumentSelectionHandler(LINK( this, ODbTypeWizDialogSetup, OnRecentDocumentSelected ) );
+            m_pGeneralPage->SetChooseDocumentHandler(LINK( this, ODbTypeWizDialogSetup, OnSingleDocumentChosen ) );
             break;
 
         case PAGE_DBSETUPWIZARD_DBASE:
@@ -862,6 +850,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
 }
 
 
+// -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup)
 {
     if (getDatasourceType(*m_pOutSet) == DST_MYSQL_ODBC)
@@ -871,13 +860,27 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
     return sal_True;
 }
 
-
-IMPL_LINK(ODbTypeWizDialogSetup, ImplCreateDBHdl, OGeneralPage*, _pGeneralPage)
+// -----------------------------------------------------------------------------
+IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPage*, _pGeneralPage)
 {
-    activateDatabasePath(_pGeneralPage);
+    activateDatabasePath();
     return sal_True;
 }
 
+// -----------------------------------------------------------------------------
+IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPage*, _pGeneralPage)
+{
+    enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPage*, _pGeneralPage)
+{
+    if ( prepareLeaveCurrentState( eFinish ) )
+        onFinish( RET_OK );
+    return 0L;
+}
 
 // -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::enterState(WizardState _nState)
@@ -889,10 +892,6 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
         case PAGE_DBSETUPWIZARD_INTRO:
             m_eOldType = m_eType;
             break;
-//        case PAGE_DBSETUPWIZARD_FINAL:
-//            OGeneralPage* pPage = static_cast<OGeneralPage*>(WizardDialog::GetPage(getCurrentState()));
-//            pPage->SetToCreationMode(sal_False);
-//            break;
         case PAGE_DBSETUPWIZARD_FINAL:
             enableButtons( WZB_FINISH, sal_True);
             pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_eType));
@@ -931,9 +930,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 // -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& _sTitle)
 {
-//  SetText(m_sWizardTitle);
 }
-
 
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
@@ -951,10 +948,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
             if ( xStore.is() )
             {
-                if (m_pGeneralPage->IsDatabaseToBeCreated())
-                {
+                if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eCreateNew )
                     CreateDatabase();
-                }
                 Reference< XModel > xModel(xStore, UNO_QUERY);
 
                 Sequence<PropertyValue> aArgs = xModel->getArgs();
@@ -1021,17 +1016,31 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
     return sal_False;
 }
-// -----------------------------------------------------------------------------
-sal_Bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened()
-{
-    return (pFinalPage != NULL) ? pFinalPage->IsDatabaseDocumentToBeOpened() : sal_True;
-}
-// -----------------------------------------------------------------------------
-sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
-{
-    return (pFinalPage != NULL) && pFinalPage->IsTableWizardToBeStarted();
-}
-//-------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    sal_Bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened() const
+    {
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
+            return sal_True;
+
+        if ( pFinalPage != NULL )
+            return pFinalPage->IsDatabaseDocumentToBeOpened();
+
+        return sal_True;
+    }
+
+    // ------------------------------------------------------------------------
+    sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted() const
+    {
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
+            return sal_False;
+
+        if ( pFinalPage != NULL )
+            return pFinalPage->IsTableWizardToBeStarted();
+
+        return sal_False;
+    }
+
+    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
         ::rtl::OUString sUrl;
@@ -1060,10 +1069,9 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
         }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
         m_pImpl->saveChanges(*m_pOutSet);
+    }
 
-   }
-
-//-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -1076,17 +1084,14 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
     }
 
 
-//-------------------------------------------------------------------------
-
+    //-------------------------------------------------------------------------
     short ODbTypeWizDialogSetup::Execute()
     {
         short nResult = ModalDialog::Execute();
         return nResult;
     }
 
-
-
-//-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::callSaveAsDialog()
     {
         sal_Bool bRet = sal_False;
@@ -1123,8 +1128,7 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
         return bRet;
     }
 
-
-//-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
         Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
@@ -1142,9 +1146,7 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
         }
     }
 
-
-
-//-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFileName(INetURLObject* pURL)
     {
         Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
@@ -1173,6 +1175,38 @@ sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
     // -----------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::onFinish(sal_Int32 _nResult)
     {
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
+        {
+            if ( !OWizardMachine::onFinish( _nResult ) )
+                return sal_False;
+
+            Reference< XModel > xModel( m_pImpl->getCurrentModel() );
+            DBG_ASSERT( xModel.is(), "ODbTypeWizDialogSetup::onFinish: no model?" );
+            if ( xModel.is() )
+            {
+                OGeneralPage::DocumentDescriptor aDocument( m_pGeneralPage->GetSelectedDocument() );
+
+                ::comphelper::SequenceAsHashMap aLoadArgs;
+                aLoadArgs.createItemIfMissing( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) ),
+                    ::rtl::OUString( aDocument.sURL ) );
+                aLoadArgs.createItemIfMissing( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ),
+                    ::rtl::OUString( aDocument.sURL ) );
+                aLoadArgs.createItemIfMissing( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) ),
+                    ::rtl::OUString( aDocument.sFilter ) );
+                try
+                {
+                    xModel->attachResource( aDocument.sURL, aLoadArgs.getAsConstPropertyValueList() );
+                }
+                catch( const Exception& e )
+                {
+                    DBG_ERROR( "ODbTypeWizDialogSetup::onFinish: caught an exception while loading the document!" );
+                    (void)e;
+                }
+            }
+
+            return sal_True;
+        }
+
         if (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL)
         {
             skipUntil(PAGE_DBSETUPWIZARD_FINAL);
