@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:48:20 $
+ *  last change: $Author: kz $ $Date: 2005-06-30 16:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,16 +454,25 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
     }
     return xDriver;
 }
+
+// -----------------------------------------------------------------------------
+Reference< XModel > ODbDataSourceAdministrationHelper::getCurrentModel()
+{
+    // ensure that the data source / model have been obtained
+    getCurrentDataSource();
+    return m_xModel;
+}
+
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSource()
 {
     if ( !m_xDatasource.is() )
     {
-        Reference<XInterface> xIn(m_aDataSourceName,UNO_QUERY);
+        Reference<XInterface> xIn(m_aDataSourceOrName,UNO_QUERY);
         if ( !xIn.is() )
         {
             ::rtl::OUString sCurrentDatasource;
-            m_aDataSourceName >>= sCurrentDatasource;
+            m_aDataSourceOrName >>= sCurrentDatasource;
             OSL_ENSURE(sCurrentDatasource.getLength(),"No datasource name given!");
             try
             {
@@ -1129,9 +1138,11 @@ sal_Bool ODbDataSourceAdministrationHelper::saveChanges(const SfxItemSet& _rSour
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void ODbDataSourceAdministrationHelper::setCurrentDataSourceName(const ::com::sun::star::uno::Any& _aDataSourceName)
+void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSourceOrName )
 {
-    m_aDataSourceName = _aDataSourceName;
+    DBG_ASSERT( !m_aDataSourceOrName.hasValue(), "ODbDataSourceAdministrationHelper::setDataSourceOrName: already have one!" );
+        // hmm. We could reset m_xDatasource/m_xModel, probably, and continue working
+    m_aDataSourceOrName = _rDataSourceOrName;
 }
 //.........................................................................
 }   // namespace dbaui
