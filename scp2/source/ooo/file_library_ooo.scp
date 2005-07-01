@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.113 $
+*  $Revision: 1.114 $
 *
-*  last change: $Author: kz $ $Date: 2005-07-01 12:18:32 $
+*  last change: $Author: kz $ $Date: 2005-07-01 13:19:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -718,7 +718,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Fwe , fwe)
 
-STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
+STD_LIB_FILE_PATCH( gid_File_Lib_Fwi , fwi)
 
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
@@ -1425,7 +1425,7 @@ End
 
 File gid_File_Lib_Rdbtdp
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1511,7 +1511,7 @@ File gid_File_Lib_Sal
     Name = STRING(CONCAT3(sal,UDK_MAJOR,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #ifdef MACOSX
@@ -1795,7 +1795,7 @@ End
 #endif
 
 STD_LIB_FILE( gid_File_Lib_Svl, svl )
-STD_UNO_LIB_FILE( gid_File_Lib_Svtools, svt )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svx, svx)
