@@ -1393,7 +1393,17 @@ sub set_global_code_variables
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
     push( @installer::globals::logfileinfo, $infoline);
 
+    # Adding both variables into the variables array
+
     $allvariableshashref->{'PRODUCTCODE'} = $installer::globals::productcode;
+    $allvariableshashref->{'UPGRADECODE'} = $installer::globals::upgradecode;
+
+    $infoline = "Defined variable PRODUCTCODE: $installer::globals::productcode \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    $infoline = "Defined variable UPGRADECODE: $installer::globals::upgradecode \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
 }
 
 ###############################################################
@@ -1421,6 +1431,34 @@ sub set_msiproductversion
     }
 
     $installer::globals::msiproductversion = $productversion;
+}
+
+#################################################################################
+# Including the msi product version into the bootstrap.ini, Windows only
+#################################################################################
+
+sub put_msiproductversion_into_bootstrapfile
+{
+    my ($filesref) = @_;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+
+        if ( $onefile->{'gid'} eq "gid_Profile_Bootstrap_Ini" )
+        {
+            my $file = installer::files::read_file($onefile->{'sourcepath'});
+
+            for ( my $j = 0; $j <= $#{$file}; $j++ )
+            {
+                ${$file}[$j] =~ s/\<msiproductversion\>/$installer::globals::msiproductversion/;
+            }
+
+            installer::files::save_file($onefile->{'sourcepath'}, $file);
+
+            last;
+        }
+    }
 }
 
 1;
