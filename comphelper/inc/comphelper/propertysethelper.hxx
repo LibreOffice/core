@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:59:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ protected:
 public:
     PropertySetHelper( );
     PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw();
+    PropertySetHelper( comphelper::PropertySetInfo* pInfo, __sal_NoAcquire ) throw();
     virtual ~PropertySetHelper() throw();
 
     // XPropertySet
