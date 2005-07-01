@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:02:14 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ const char * dbg_out(const SfxPoolItem & rItem);
 const char * dbg_out(const SfxPoolItem * pItem);
 const char * dbg_out(const SfxItemSet & rSet);
 const char * dbg_out(SwNodes & rNodes);
-const char * dbg_out(SwOutlineNodes & rNodes);
+// const char * dbg_out(SwOutlineNodes & rNodes);
 const char * dbg_out(const SwPosition & rPos);
 const char * dbg_out(const SwPaM & rPam);
 const char * dbg_out(const SwNodeNum & rNum);
