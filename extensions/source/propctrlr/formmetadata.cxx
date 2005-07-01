@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:56:20 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,7 @@ namespace pcr
         // XML node binding
         DEF_INFO_2( LIST_BINDING,      LIST_BINDING,       LIST_BINDING,      FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_3( XML_DATA_MODEL,    XML_DATA_MODEL,     XML_DATA_MODEL,    FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_3( BINDING_NAME,      BINDING_NAME,       BINDING_NAME,      FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
         DEF_INFO_2( BIND_EXPRESSION,   BIND_EXPRESSION,    BIND_EXPRESSION,   FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_REQUIRED,      XSD_REQUIRED,       XSD_REQUIRED,      FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( XSD_RELEVANT,      XSD_RELEVANT,       XSD_RELEVANT,      FORM_VISIBLE, DATA_PROPERTY ),
