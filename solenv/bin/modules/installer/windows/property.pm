@@ -154,7 +154,8 @@ sub get_productname_for_property_table
 
     if ( $installer::globals::patch )
     {
-        my $patchstring = "Product Update";
+        if ( ! $allvariables->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Patch level defined for Windows patch: WINDOWSPATCHLEVEL", "get_productname_for_property_table"); }
+        my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
         $productname = $productname . " " . $patchstring;
     }
 
@@ -173,7 +174,7 @@ sub get_productversion_for_property_table
 
 sub set_important_properties
 {
-    my ($propertyfile, $allvariables) = @_;
+    my ($propertyfile, $allvariables, $languagestringref) = @_;
 
     # Setting new variables with the content of %PRODUCTNAME and %PRODUCTVERSION
     if ( $allvariables->{'PRODUCTNAME'} )
@@ -193,6 +194,40 @@ sub set_important_properties
         my $onepropertyline = "FINDPRODUCT" . "\t" . "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $allvariables->{'PRODUCTNAME'} . $allvariables->{'PRODUCTADDON'} . "\\" . $allvariables->{'PRODUCTVERSION'} . "\\" . $allvariables->{'PRODUCTCODE'} . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
+
+    if ( $allvariables->{'PRODUCTMAJOR'} )
+    {
+        my $onepropertyline = "PRODUCTMAJOR" . "\t" . $allvariables->{'PRODUCTMAJOR'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'PRODUCTMINOR'} )
+    {
+        my $onepropertyline = "PRODUCTMINOR" . "\t" . $allvariables->{'PRODUCTMINOR'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'PRODUCTBUILDID'} )
+    {
+        my $onepropertyline = "PRODUCTBUILDID" . "\t" . $allvariables->{'PRODUCTBUILDID'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::patch )
+    {
+        my $onepropertyline = "ISPATCH" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::languagepack )
+    {
+        my $onepropertyline = "ISLANGUAGEPACK" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    my $languagesline = "PRODUCTALLLANGUAGES" . "\t" . $$languagestringref . "\n";
+    push(@{$propertyfile}, $languagesline);
+
 }
 
 ####################################################################################
@@ -234,7 +269,7 @@ sub update_property_table
     }
 
     # Setting variables into propertytable
-    set_important_properties($propertyfile, $allvariables);
+    set_important_properties($propertyfile, $allvariables, $languagestringref);
 
     # Saving the file
 
