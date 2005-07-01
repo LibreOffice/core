@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.14 $
+*  $Revision: 1.15 $
 *
-*  last change: $Author: rt $ $Date: 2005-06-21 13:24:52 $
+*  last change: $Author: rt $ $Date: 2005-07-01 12:21:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -407,6 +407,15 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Install
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "INSTALLLOCATION";
+	Value = "<progpath>";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Install
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "<progpath>";
