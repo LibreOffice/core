@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxstatuslistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:35:38 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ throw( RuntimeException )
             pItem = new SfxVoidItem( m_nSlotID );
             eState = SFX_ITEM_UNKNOWN;
         }
-        if ( pType == ::getBooleanCppuType() )
+        else if ( pType == ::getBooleanCppuType() )
         {
             sal_Bool bTemp ;
             rEvent.State >>= bTemp ;
