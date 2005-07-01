@@ -3,6 +3,7 @@ s72	S255	I2
 AdminExecuteSequence	Action
 CostFinalize		150
 CostInitialize		50
+CreateFolders		325
 FileCost		100
 InstallAdminPackage		300
 InstallFiles		350
