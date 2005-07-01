@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:06:24 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2394,7 +2394,33 @@ void SalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent
         osl_releaseMutex( hEventGuard_ );
     }
     else
-        DBG_ASSERT( 1, "SalDisplay::SendEvent !acquireMutex\n" );
+        DBG_ASSERT( 1, "SalDisplay::SendInternalEvent !acquireMutex\n" );
+}
+
+void SalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent )
+{
+    if( osl_acquireMutex( hEventGuard_ ) )
+    {
+        if( ! m_aUserEvents.empty() )
+        {
+            std::list< SalUserEvent >::iterator it, next;
+            next = m_aUserEvents.begin();
+            do
+            {
+                it = next++;
+                if( it->m_pFrame    == pFrame   &&
+                    it->m_pData     == pData    &&
+                    it->m_nEvent    == nEvent )
+                {
+                    m_aUserEvents.erase( it );
+                }
+            } while( next != m_aUserEvents.end() );
+        }
+
+        osl_releaseMutex( hEventGuard_ );
+    }
+    else
+        DBG_ASSERT( 1, "SalDisplay::CancelInternalEvent !acquireMutex\n" );
 }
 
 BOOL SalX11Display::IsEvent()
