@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:19:33 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,7 @@ Printer::~Printer()
     {
         // OutputDevice-Dtor versucht das gleiche, deshalb muss hier
         // der FontEntry auch auf NULL gesetzt werden
+        // TODO: consolidate duplicate cleanup by Printer and OutputDevice
         if ( mpFontEntry )
         {
             mpFontCache->Release( mpFontEntry );
@@ -740,6 +741,7 @@ Printer::~Printer()
             mpGetDevSizeList = NULL;
         }
         delete mpFontCache;
+        mpFontCache = NULL;
         // font list deleted by OutputDevice dtor
     }
 
