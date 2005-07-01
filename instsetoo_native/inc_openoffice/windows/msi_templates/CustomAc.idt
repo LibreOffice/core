@@ -5,4 +5,5 @@ ISInitAllUsers	307	ALLUSERS	1
 setAllUsersProfile2K	51	ALLUSERSPROFILE	[%ALLUSERSPROFILE]
 SetAllUsersProfileNT	51	ALLUSERSPROFILE	[%SystemRoot]\Profiles\All Users
 setUserProfileNT	51	USERPROFILE	[%USERPROFILE]
-NewProductFound	19		A later version of this application is already installed on the system.
+NewProductFound	19		OOO_CUSTOMACTION_1
+SameProductFound	19		OOO_CUSTOMACTION_2
