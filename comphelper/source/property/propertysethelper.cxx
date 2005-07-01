@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:35:42 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@ PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw
     mp = new PropertySetHelperImpl;
     mp->mpInfo = pInfo;
     pInfo->acquire();
+}
+
+PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo, __sal_NoAcquire ) throw()
+{
+    mp = new PropertySetHelperImpl;
+    mp->mpInfo = pInfo;
 }
 
 PropertySetHelper::~PropertySetHelper() throw()
