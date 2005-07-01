@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 12:35:26 $
+#   last change: $Author: kz $ $Date: 2005-07-01 12:17:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/except.obj		\
-    $(SLO)$/call.obj
+    $(SLO)$/call.obj \
+    $(SLO)$/flushcode.obj
 
 SHL1TARGET= $(TARGET)
 
