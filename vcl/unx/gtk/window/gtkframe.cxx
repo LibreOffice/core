@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:04:16 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,9 @@ GtkSalFrame::~GtkSalFrame()
         XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
     }
 
-    deleteIMContext();
+    if( m_pIMHandler )
+        delete m_pIMHandler;
+
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
     if( m_pWindow )
@@ -320,42 +322,6 @@ GtkSalFrame::~GtkSalFrame()
         g_object_unref( G_OBJECT(m_pForeignParent) );
     if( m_pForeignTopLevel )
         g_object_unref(G_OBJECT( m_pForeignTopLevel) );
-}
-
-void GtkSalFrame::hardIMReset()
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "IMReset - this should flush the IM's pre-edit buffer\n" );
-#endif
-
-    vcl::DeletionListener aDel( this );
-
-    if( m_pIMContext )
-    {
-        m_bIgnoreCommit = true;
-        gtk_im_context_reset( m_pIMContext );
-        m_bIgnoreCommit = false;
-
-        // a correctly implemented _reset method will
-        // emit a 'commit' signal if pending pre-edit
-        // and also, a predit_changed to '' which will
-        // end input.
-
-        // Since few IM's are correctly implemented,
-        // this will end the ext text input at least
-        // from OO.o's perspective if it is still active.
-    }
-
-    if( !aDel.isDeleted() )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        if( m_bWasPreedit )
-            fprintf( stderr, "Error: ** Your IM ('%s') is broken wrt. reset **\n",
-                     g_getenv ("GTK_IM_MODULE") );
-#endif
-        m_bWasPreedit = false;
-        CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
-    }
 }
 
 void GtkSalFrame::InitCommon()
@@ -391,12 +357,7 @@ void GtkSalFrame::InitCommon()
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_bSendModChangeOnRelease = false;
-    m_pIMContext        = NULL;
-    m_bWasPreedit       = false;
-    m_bIgnoreCommit     = false;
-    m_bIgnorePreedit    = false;
-    m_aPrevKeyPresses.clear();
-    m_nPrevKeyPresses   = 0;
+    m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
 
@@ -918,11 +879,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
                     grabPointer( FALSE );
             }
             gtk_widget_hide( GTK_WIDGET(m_pWindow) );
-            if( m_pIMContext )
-            {
-                gtk_im_context_focus_out( m_pIMContext );
-                hardIMReset();
-            }
+            if( m_pIMHandler )
+                m_pIMHandler->focusChanged( false );
         }
         CallCallback( SALEVENT_RESIZE, NULL );
     }
@@ -1462,100 +1420,24 @@ SalFrame::SalPointerState GtkSalFrame::GetPointerState()
     return aState;
 }
 
-void GtkSalFrame::createIMContext()
-{
-    if( ! m_pIMContext )
-    {
-        m_bIgnorePreedit = true;
-        m_pIMContext = gtk_im_multicontext_new ();
-        g_signal_connect( m_pIMContext, "commit",
-                          G_CALLBACK (signalIMCommit), this );
-        g_signal_connect( m_pIMContext, "preedit_changed",
-                          G_CALLBACK (signalIMPreeditChanged), this );
-        g_signal_connect( m_pIMContext, "retrieve_surrounding",
-                          G_CALLBACK (signalIMRetrieveSurrounding), this );
-        g_signal_connect( m_pIMContext, "delete_surrounding",
-                          G_CALLBACK (signalIMDeleteSurrounding), this );
-        g_signal_connect( m_pIMContext, "preedit_start",
-                          G_CALLBACK (signalIMPreeditStart), this );
-        g_signal_connect( m_pIMContext, "preedit_end",
-                          G_CALLBACK (signalIMPreeditEnd), this );
-
-        gtk_im_context_set_client_window( m_pIMContext, GTK_WIDGET(m_pWindow)->window );
-        gtk_im_context_focus_in( m_pIMContext );
-        m_bWasPreedit = false;
-        m_bIgnorePreedit = false;
-   }
-}
-
-void GtkSalFrame::deleteIMContext()
-{
-    if( m_pIMContext )
-    {
-        // first give IC a chance to deinitialize
-        hardIMReset();
-        gtk_im_context_set_client_window( m_pIMContext, NULL );
-        // destroy old IC
-        g_object_unref( m_pIMContext );
-        m_pIMContext = NULL;
-    }
-}
-
 void GtkSalFrame::SetInputContext( SalInputContext* pContext )
 {
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, ":SetInputContext( 0x%x )\n", pContext );
-    #endif
     if( ! pContext )
         return;
 
     if( ! (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) )
-    {
-        deleteIMContext();
         return;
-    }
 
     // create a new im context
-    createIMContext();
+    if( ! m_pIMHandler )
+        m_pIMHandler = new IMHandler( this );
+    m_pIMHandler->setInputContext( pContext );
 }
 
 void GtkSalFrame::EndExtTextInput( USHORT nFlags )
 {
-    if( m_pIMContext )
-    {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, ":EndExtTextInput: delete old context\n" );
-        #endif
-        // since some IMs won't do a reset on gtk_im_context_reset
-        // and not empty their preedit buffer, there does not
-        // seem to be another choice than to create a completely
-        // new IC. We cannot use the same trick as the generic plugin
-        // here (which disables the preedit state) since gtk
-        // does not give us that much control
-
-        // destroy old IC
-        deleteIMContext();
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, ":EndExtTextInput: create new context\n" );
-        #endif
-        // create new IC
-        createIMContext();
-    }
-}
-
-void GtkSalFrame::updateIMSpotLocation()
-{
-    if( m_pIMContext )
-    {
-        SalExtTextInputPosEvent aPosEvent;
-        CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
-        GdkRectangle aArea;
-        aArea.x = aPosEvent.mnX;
-        aArea.y = aPosEvent.mnY;
-        aArea.width = aPosEvent.mnWidth;
-        aArea.height = aPosEvent.mnHeight;
-        gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
-    }
+    if( m_pIMHandler )
+        m_pIMHandler->endExtTextInput( nFlags );
 }
 
 LanguageType GtkSalFrame::GetInputLanguage()
@@ -1619,12 +1501,10 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
-    if( m_pIMContext )
+    if( m_pIMHandler )
     {
-        hardIMReset();
-        gtk_im_context_set_client_window( m_pIMContext, NULL );
-        g_object_unref( m_pIMContext );
-        m_pIMContext = NULL;
+        delete m_pIMHandler;
+        m_pIMHandler = NULL;
     }
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
@@ -1949,25 +1829,10 @@ gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gp
         pThis->m_nKeyModifiers = 0;
         pThis->m_bSingleAltPress = false;
         pThis->m_bSendModChangeOnRelease = false;
-        pThis->m_bWasPreedit = false;
     }
 
-    if( pThis->m_pIMContext )
-    {
-        if( pEvent->in )
-        {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "signalFocus( in )\n" );
-            #endif
-            pThis->hardIMReset();
-            gtk_im_context_set_client_window( pThis->m_pIMContext, GTK_WIDGET(pThis->m_pWindow)->window );
-            gtk_im_context_focus_in( pThis->m_pIMContext );
-        }
-        else
-        {
-            gtk_im_context_focus_out( pThis->m_pIMContext );
-        }
-    }
+    if( pThis->m_pIMHandler )
+        pThis->m_pIMHandler->focusChanged( pEvent->in );
 
     // ask for changed printers like generic implementation
     if( pEvent->in )
@@ -2087,72 +1952,9 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
 
     vcl::DeletionListener aDel( pThis );
 
-    if( pThis->m_pIMContext )
-    {
-        if( pEvent->type == GDK_KEY_PRESS )
-        {
-            // Add this key press event to the list of previous key presses
-            // to which we compare key release events.  If a later key release
-            // event has a matching key press event in this list, we swallow
-            // the key release because some GTK Input Methods don't swallow it
-            // for us.
-            pThis->m_aPrevKeyPresses.push_back( PreviousKeyPress(pEvent) );
-            pThis->m_nPrevKeyPresses++;
-
-            // Also pop off the earliest key press event if there are more than 10
-            // already.
-            while (pThis->m_nPrevKeyPresses > 10)
-            {
-                pThis->m_aPrevKeyPresses.pop_front();
-                pThis->m_nPrevKeyPresses--;
-            }
-
-            GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( pThis->m_pIMContext ) ) );
-            gboolean bResult = gtk_im_context_filter_keypress( pThis->m_pIMContext, pEvent );
-            g_object_unref( pRef );
-            if( bResult )
-                return TRUE;
-            else
-            {
-                DBG_ASSERT( pThis->m_nPrevKeyPresses > 0, "key press has vanished !" );
-                if( ! pThis->m_aPrevKeyPresses.empty() ) // sanity check
-                {
-                    // event was not swallowed, do not filter a following
-                    // key release event
-                    // note: this relies on gtk_im_context_filter_keypress
-                    // returning without calling a handler (in the "not swallowed"
-                    // case ) which might change the previous key press list so
-                    // we would pop the wrong event here
-                    pThis->m_aPrevKeyPresses.pop_back();
-                    pThis->m_nPrevKeyPresses--;
-                }
-            }
-        }
-    }
-
-    if( aDel.isDeleted() )
-        return TRUE;
-
-    // Determine if we got an earlier key press event corresponding to this key release
-    if (pEvent->type == GDK_KEY_RELEASE)
-    {
-        std::list<PreviousKeyPress>::iterator    iter     = pThis->m_aPrevKeyPresses.begin();
-        std::list<PreviousKeyPress>::iterator    iter_end = pThis->m_aPrevKeyPresses.end();
-
-        while (iter != iter_end)
-        {
-            // If we found a corresponding previous key press event, swallow the release
-            // and remove the earlier key press from our list
-            if (*iter == pEvent)
-            {
-                pThis->m_aPrevKeyPresses.erase(iter);
-                pThis->m_nPrevKeyPresses--;
-                return TRUE;
-            }
-            ++iter;
-        }
-    }
-
+    if( pThis->m_pIMHandler )
+        if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
+            return TRUE;
     GTK_YIELD_GRAB();
 
     // handle modifiers
@@ -2273,8 +2075,8 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
         }
     }
 
-    if( !aDel.isDeleted() )
-        pThis->updateIMSpotLocation();
+    if( !aDel.isDeleted() && pThis->m_pIMHandler )
+        pThis->m_pIMHandler->updateIMSpotLocation();
 
     return TRUE;
 }
@@ -2337,13 +2139,229 @@ gboolean GtkSalFrame::signalVisibility( GtkWidget* pWidget, GdkEventVisibility* 
     return FALSE;
 }
 
+void GtkSalFrame::signalDestroy( GtkObject* pObj, gpointer frame )
+{
+    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    if( GTK_WINDOW( pObj ) == pThis->m_pWindow )
+    {
+        pThis->m_pWindow = NULL;
+    }
+}
+
+// ----------------------------------------------------------------------
+// GtkSalFrame::IMHandler
+// ----------------------------------------------------------------------
+
+GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
+: m_pFrame(pFrame),
+  m_nPrevKeyPresses( 0 ),
+  m_pIMContext( NULL ),
+  m_bFocused( true )
+{
+    m_aInputEvent.mpTextAttr = NULL;
+    createIMContext();
+}
+
+GtkSalFrame::IMHandler::~IMHandler()
+{
+    // cancel an eventual event posted to begin preedit again
+    m_pFrame->getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+    deleteIMContext();
+}
+
+void GtkSalFrame::IMHandler::createIMContext()
+{
+    if( ! m_pIMContext )
+    {
+        m_pIMContext = gtk_im_multicontext_new ();
+        g_signal_connect( m_pIMContext, "commit",
+                          G_CALLBACK (signalIMCommit), this );
+        g_signal_connect( m_pIMContext, "preedit_changed",
+                          G_CALLBACK (signalIMPreeditChanged), this );
+        g_signal_connect( m_pIMContext, "retrieve_surrounding",
+                          G_CALLBACK (signalIMRetrieveSurrounding), this );
+        g_signal_connect( m_pIMContext, "delete_surrounding",
+                          G_CALLBACK (signalIMDeleteSurrounding), this );
+        g_signal_connect( m_pIMContext, "preedit_start",
+                          G_CALLBACK (signalIMPreeditStart), this );
+        g_signal_connect( m_pIMContext, "preedit_end",
+                          G_CALLBACK (signalIMPreeditEnd), this );
+
+        gtk_im_context_set_client_window( m_pIMContext, GTK_WIDGET(m_pFrame->m_pWindow)->window );
+        gtk_im_context_focus_in( m_pIMContext );
+        m_bFocused = true;
+   }
+}
+
+void GtkSalFrame::IMHandler::deleteIMContext()
+{
+    if( m_pIMContext )
+    {
+        // first give IC a chance to deinitialize
+        gtk_im_context_set_client_window( m_pIMContext, NULL );
+        // destroy old IC
+        g_object_unref( m_pIMContext );
+        m_pIMContext = NULL;
+    }
+}
+
+void GtkSalFrame::IMHandler::doCallEndExtTextInput()
+{
+    m_aInputEvent.mpTextAttr = NULL;
+    m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+}
+
+void GtkSalFrame::IMHandler::updateIMSpotLocation()
+{
+    SalExtTextInputPosEvent aPosEvent;
+    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
+    GdkRectangle aArea;
+    aArea.x = aPosEvent.mnX;
+    aArea.y = aPosEvent.mnY;
+    aArea.width = aPosEvent.mnWidth;
+    aArea.height = aPosEvent.mnHeight;
+    gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
+}
+
+void GtkSalFrame::IMHandler::setInputContext( SalInputContext* pContext )
+{
+}
+
+void GtkSalFrame::IMHandler::sendEmptyCommit()
+{
+    vcl::DeletionListener aDel( m_pFrame );
+
+    SalExtTextInputEvent aEmptyEv;
+    aEmptyEv.mnTime             = 0;
+    aEmptyEv.mpTextAttr         = 0;
+    aEmptyEv.maText             = String();
+    aEmptyEv.mnCursorPos        = 0;
+    aEmptyEv.mnCursorFlags      = 0;
+    aEmptyEv.mnDeltaStart       = 0;
+    aEmptyEv.mbOnlyCursor       = False;
+    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
+    if( ! aDel.isDeleted() )
+        m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+}
+
+void GtkSalFrame::IMHandler::endExtTextInput( USHORT nFlags )
+{
+    if( m_aInputEvent.mpTextAttr )
+    {
+        vcl::DeletionListener aDel( m_pFrame );
+        // delete preedit in sal (commit an empty string)
+        sendEmptyCommit();
+        if( ! aDel.isDeleted() )
+        {
+            // mark previous preedit state again (will e.g. be sent at focus gain)
+            m_aInputEvent.mpTextAttr = &m_aInputFlags[0];
+            if( m_bFocused )
+            {
+                // begin preedit again
+                m_pFrame->getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+            }
+        }
+    }
+}
+
+void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
+{
+    m_bFocused = bFocusIn;
+    if( bFocusIn )
+    {
+        gtk_im_context_focus_in( m_pIMContext );
+        if( m_aInputEvent.mpTextAttr )
+        {
+            sendEmptyCommit();
+            // begin preedit again
+            m_pFrame->getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+        }
+    }
+    else
+    {
+        gtk_im_context_focus_out( m_pIMContext );
+        // cancel an eventual event posted to begin preedit again
+        m_pFrame->getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+    }
+}
+
+bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
+{
+    vcl::DeletionListener aDel( m_pFrame );
+
+    if( pEvent->type == GDK_KEY_PRESS )
+    {
+        // Add this key press event to the list of previous key presses
+        // to which we compare key release events.  If a later key release
+        // event has a matching key press event in this list, we swallow
+        // the key release because some GTK Input Methods don't swallow it
+        // for us.
+        m_aPrevKeyPresses.push_back( PreviousKeyPress(pEvent) );
+        m_nPrevKeyPresses++;
+
+        // Also pop off the earliest key press event if there are more than 10
+        // already.
+        while (m_nPrevKeyPresses > 10)
+        {
+            m_aPrevKeyPresses.pop_front();
+            m_nPrevKeyPresses--;
+        }
+
+        GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( m_pIMContext ) ) );
+        gboolean bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
+        g_object_unref( pRef );
+        if( bResult )
+            return true;
+        else
+        {
+            DBG_ASSERT( m_nPrevKeyPresses > 0, "key press has vanished !" );
+            if( ! m_aPrevKeyPresses.empty() ) // sanity check
+            {
+                // event was not swallowed, do not filter a following
+                // key release event
+                // note: this relies on gtk_im_context_filter_keypress
+                // returning without calling a handler (in the "not swallowed"
+                // case ) which might change the previous key press list so
+                // we would pop the wrong event here
+                m_aPrevKeyPresses.pop_back();
+                m_nPrevKeyPresses--;
+            }
+        }
+    }
+
+    if( aDel.isDeleted() )
+        return true;
+
+    // Determine if we got an earlier key press event corresponding to this key release
+    if (pEvent->type == GDK_KEY_RELEASE)
+    {
+        std::list<PreviousKeyPress>::iterator    iter     = m_aPrevKeyPresses.begin();
+        std::list<PreviousKeyPress>::iterator    iter_end = m_aPrevKeyPresses.end();
+
+        while (iter != iter_end)
+        {
+            // If we found a corresponding previous key press event, swallow the release
+            // and remove the earlier key press from our list
+            if (*iter == pEvent)
+            {
+                m_aPrevKeyPresses.erase(iter);
+                m_nPrevKeyPresses--;
+                return true;
+            }
+            ++iter;
+        }
+    }
+
+    return false;
+}
+
 /* FIXME:
 * #122282# still more hacking: some IMEs never start a preedit but simply commit
 * in this case we cannot commit a single character. Workaround: do not do the
 * single key hack for enter or space if the unicode commited does not match
 */
 
-static bool checkSinkleKeyCommitHack( guint keyval, sal_Unicode cCode )
+static bool checkSingleKeyCommitHack( guint keyval, sal_Unicode cCode )
 {
     bool bRet = true;
     switch( keyval )
@@ -2364,24 +2382,25 @@ static bool checkSinkleKeyCommitHack( guint keyval, sal_Unicode cCode )
     return bRet;
 }
 
-void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer frame )
+void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer im_handler )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-
-    SalExtTextInputEvent aTextEvent;
+    GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
     GTK_YIELD_GRAB();
 
-    aTextEvent.mnTime           = 0;
-    aTextEvent.mpTextAttr       = 0;
-    if( ! pThis->m_bIgnoreCommit )
-        aTextEvent.maText       = String( pText, RTL_TEXTENCODING_UTF8 );
-    aTextEvent.mnCursorPos      = aTextEvent.maText.Len();
-    aTextEvent.mnCursorFlags    = 0;
-    aTextEvent.mnDeltaStart     = 0;
-    aTextEvent.mbOnlyCursor     = False;
+    bool bWasPreedit = (pThis->m_aInputEvent.mpTextAttr != 0);
 
-    vcl::DeletionListener aDel( pThis );
+    pThis->m_aInputEvent.mnTime             = 0;
+    pThis->m_aInputEvent.mpTextAttr         = 0;
+    pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
+    pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.Len();
+    pThis->m_aInputEvent.mnCursorFlags      = 0;
+    pThis->m_aInputEvent.mnDeltaStart       = 0;
+    pThis->m_aInputEvent.mbOnlyCursor       = False;
+
+    pThis->m_aInputFlags.clear();
+
+    vcl::DeletionListener aDel( pThis->m_pFrame );
 
     /* necessary HACK: all keyboard input comes in here as soon as a IMContext is set
      *  which is logical and consequent. But since even simple input like
@@ -2395,40 +2414,40 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
      *  SALEVENT_ENDEXTTEXTINPUT, either because of a regular commit
      *  or because there never was a preedit.
      */
-    if( ! pThis->m_bWasPreedit
-        && aTextEvent.maText.Len() == 1
+    bool bSingleCommit = false;
+    if( ! bWasPreedit
+        && pThis->m_aInputEvent.maText.Len() == 1
         && ! pThis->m_aPrevKeyPresses.empty()
         )
     {
         const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
-        sal_Unicode aOrigCode = aTextEvent.maText.GetChar(0);
+        sal_Unicode aOrigCode = pThis->m_aInputEvent.maText.GetChar(0);
 
-        if( checkSinkleKeyCommitHack( rKP.keyval, aOrigCode ) )
+        if( checkSingleKeyCommitHack( rKP.keyval, aOrigCode ) )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, ":signalIMCommit (as key): '%s'\n", pText );
-            #endif
-            pThis->m_bWasPreedit = false;
-            pThis->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aOrigCode, true, true );
-            return;
+            pThis->m_pFrame->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aOrigCode, true, true );
+            bSingleCommit = true;
         }
     }
 
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, ":signalIMCommit '%s'\n", pText );
-    #endif
-
-    pThis->m_bWasPreedit = false;
-    pThis->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aTextEvent);
+    if( ! bSingleCommit )
+    {
+        pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
+        if( ! aDel.isDeleted() )
+            pThis->doCallEndExtTextInput();
+    }
     if( ! aDel.isDeleted() )
-        pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+    {
+        // reset input event
+        pThis->m_aInputEvent.maText = String();
+        pThis->m_aInputEvent.mnCursorPos = 0;
+        pThis->updateIMSpotLocation();
+    }
 }
 
-void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame )
+void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpointer im_handler )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-    if( pThis->m_bIgnorePreedit )
-        return;
+    GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
     char*           pText           = NULL;
     PangoAttrList*  pAttrs          = NULL;
@@ -2438,23 +2457,28 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
                                        &pText,
                                        &pAttrs,
                                        &nCursorPos );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, ":signalImPreeditChanged '%s'\n", pText );
-#endif
-    bool bEndPreedit = (!pText || !*pText) && pThis->m_bWasPreedit;
+    if( pText && ! *pText ) // empty string
+    {
+        // change from nothing to nothing -> do not start preedit
+        // e.g. this will activate input into a calc cell without
+        // user input
+        if( pThis->m_aInputEvent.maText.Len() == 0 )
+        {
+            g_free( pText );
+            return;
+        }
+    }
 
-    SalExtTextInputEvent aTextEvent;
+    bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != NULL;
 
-    aTextEvent.mnTime           = 0;
-    aTextEvent.maText           = String( pText, RTL_TEXTENCODING_UTF8 );
-    aTextEvent.mnCursorPos      = nCursorPos;
-    aTextEvent.mnCursorFlags    = 0;
-    aTextEvent.mnDeltaStart     = 0;
-    aTextEvent.mbOnlyCursor     = False;
+    pThis->m_aInputEvent.mnTime             = 0;
+    pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
+    pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
+    pThis->m_aInputEvent.mnCursorFlags      = 0;
+    pThis->m_aInputEvent.mnDeltaStart       = 0;
+    pThis->m_aInputEvent.mbOnlyCursor       = False;
 
-    USHORT* pSalAttribs = new USHORT[ aTextEvent.maText.Len() ];
-    for( int i = 0; i < aTextEvent.maText.Len(); ++i )
-        pSalAttribs[i] = 0;
+    pThis->m_aInputFlags = std::vector<USHORT>( pThis->m_aInputEvent.maText.Len(), 0 );
 
     PangoAttrIterator   *iter       = pango_attr_list_get_iterator (pAttrs);
     do
@@ -2499,70 +2523,48 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
 
         // Set the sal attributes on our text
         for (int i = start; i < end; i++)
-            pSalAttribs[i] |= sal_attr;
+            pThis->m_aInputFlags[i] |= sal_attr;
     } while (pango_attr_iterator_next (iter));
 
-    aTextEvent.mpTextAttr       = pSalAttribs;
+    pThis->m_aInputEvent.mpTextAttr         = &pThis->m_aInputFlags[0];
 
     g_free( pText );
     pango_attr_list_unref( pAttrs );
 
     GTK_YIELD_GRAB();
 
-    vcl::DeletionListener aDel( pThis );
+    vcl::DeletionListener aDel( pThis->m_pFrame );
 
-    pThis->m_bWasPreedit = true;
-    pThis->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aTextEvent);
-
-    delete [] pSalAttribs;
+    pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
 
     if( bEndPreedit && ! aDel.isDeleted() )
-        pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+        pThis->doCallEndExtTextInput();
+    if( ! aDel.isDeleted() )
+        pThis->updateIMSpotLocation();
 }
 
-void GtkSalFrame::signalIMPreeditStart( GtkIMContext* pContext, gpointer frame )
+void GtkSalFrame::IMHandler::signalIMPreeditStart( GtkIMContext* pContext, gpointer im_handler )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-    if( ! pThis->m_bIgnorePreedit )
-    {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, ":signalImPreeditStart\n" );
-        #endif
-    }
 }
 
-void GtkSalFrame::signalIMPreeditEnd( GtkIMContext* pContext, gpointer frame )
+void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext* pContext, gpointer im_handler )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-    if( ! pThis->m_bIgnorePreedit )
-    {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, ":signalImPreeditEnd\n" );
-        #endif
-        GTK_YIELD_GRAB();
-        pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
-    }
+    GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
+    GTK_YIELD_GRAB();
+
+    vcl::DeletionListener aDel( pThis->m_pFrame );
+    pThis->doCallEndExtTextInput();
+    if( ! aDel.isDeleted() )
+        pThis->updateIMSpotLocation();
 }
 
-gboolean GtkSalFrame::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer frame )
+gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer im_handler )
 {
-//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-
     return FALSE;
 }
 
-gboolean GtkSalFrame::signalIMDeleteSurrounding( GtkIMContext* pContext, gint arg1, gint arg2, gpointer frame )
+gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext* pContext, gint arg1, gint arg2, gpointer im_handler )
 {
-//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-
     return FALSE;
 }
 
-void GtkSalFrame::signalDestroy( GtkObject* pObj, gpointer frame )
-{
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
-    if( GTK_WINDOW( pObj ) == pThis->m_pWindow )
-    {
-        pThis->m_pWindow = NULL;
-    }
-}
