@@ -9,7 +9,6 @@ ExecuteAction		850
 FileCost		450
 FindRelatedProducts		150
 InstallWelcome	Not Installed And (Not PATCH Or IS_MAJOR_UPGRADE)	650
-ISInitAllUsers	VersionNT And NOT Installed And Privileged	575
 IsolateComponents		500
 LaunchConditions		50
 MaintenanceWelcome	Installed And Not RESUME And Not Preselected And Not PATCH	750

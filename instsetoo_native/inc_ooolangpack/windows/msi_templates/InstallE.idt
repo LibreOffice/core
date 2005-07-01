@@ -19,7 +19,6 @@ InstallInitialize		700
 InstallODBC		2600
 InstallServices	VersionNT	2750
 InstallValidate		650
-ISInitAllUsers	VersionNT And NOT Installed And Privileged	525
 IsolateComponents		450
 LaunchConditions		50
 MigrateFeatureStates		600
