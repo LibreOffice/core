@@ -24,25 +24,25 @@ CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileg
 CustomerInformation	Next	EndDialog	Exit	(SERIALNUMVALRETRYLIMIT) And (SERIALNUMVALRETRYLIMIT<0) And (SERIALNUMVALRETURN<>SERIALNUMVALSUCCESSRETVAL)	3
 CustomerInformation	Next	NewDialog	SetupType	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL))	4
 CustomSetup	Back	NewDialog	MaintenanceType	Installed	0
-CustomSetup	Back	NewDialog	LicenseAgreement	NOT Installed	0
+CustomSetup	Back	NewDialog	SetupType	NOT Installed	0
 CustomSetup	Cancel	SpawnDialog	CancelSetup	1	0
 CustomSetup	ChangeFolder	SelectionBrowse	InstallChangeFolder	1	0
 CustomSetup	Details	SelectionBrowse	DiskSpaceRequirements	1	1
 CustomSetup	Help	SpawnDialog	CustomSetupTips	1	1
 CustomSetup	Next	[_IsSetupTypeMin]	Custom	1	0
 CustomSetup	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
-CustomSetup	Next	NewDialog	ReadyToInstall	OutOfNoRbDiskSpace <> 1	0
+CustomSetup	Next	NewDialog	FileTypeDialog	OutOfNoRbDiskSpace <> 1	0
 CustomSetupTips	OK	EndDialog	Return	1	1
 DatabaseFolder	Back	NewDialog	CustomerInformation	1	1
 DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
 DatabaseFolder	ChangeFolder	[_BrowseProperty]	DATABASEDIR	1	2
 DatabaseFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
 DatabaseFolder	Next	NewDialog	SetupType	1	1
-DestinationFolder	Back	NewDialog	CustomerInformation	1	0
+DestinationFolder	Back	NewDialog	LicenseAgreement	1	0
 DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
-DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLDIR	1	2
-DestinationFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
-DestinationFolder	Next	NewDialog	SetupType	1	0
+DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
+DestinationFolder	ChangeFolder	NewDialog	InstallChangeFolder	1	1
+DestinationFolder	Next	NewDialog	ReadyToInstall	1	0
 DiskSpaceRequirements	OK	EndDialog	Return	1	0
 FilesInUse	Exit	EndDialog	Exit	1	0
 FilesInUse	Ignore	EndDialog	Ignore	1	0
@@ -54,7 +54,7 @@ FileTypeDialog	Next	NewDialog	ReadyToInstall	1	0
 InstallChangeFolder	Cancel	EndDialog	Return	1	2
 InstallChangeFolder	Cancel	Reset	0	1	1
 InstallChangeFolder	NewFolder	DirectoryListNew	0	1	0
-InstallChangeFolder	OK	EndDialog	Return	1	3
+InstallChangeFolder	OK	NewDialog	DestinationFolder	1	3
 InstallChangeFolder	OK	SetTargetPath	[_BrowseProperty]	1	2
 InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
@@ -62,7 +62,7 @@ InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 InstallWelcome	Next	NewDialog	LicenseAgreement	1	0
 LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
 LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
-LicenseAgreement	Next	NewDialog	CustomSetup	AgreeToLicense = "Yes"	0
+LicenseAgreement	Next	NewDialog	DestinationFolder	AgreeToLicense = "Yes"	0
 MaintenanceType	Back	NewDialog	MaintenanceWelcome	1	0
 MaintenanceType	Cancel	SpawnDialog	CancelSetup	1	0
 MaintenanceType	Next	[ProgressType0]	Modify	_IsMaintenance = "Change"	2
@@ -87,9 +87,9 @@ PatchWelcome	Cancel	SpawnDialog	CancelSetup	1	1
 PatchWelcome	Next	EndDialog	Return	1	3
 PatchWelcome	Next	Reinstall	ALL	PATCH And REINSTALL=""	1
 PatchWelcome	Next	ReinstallMode	omus	PATCH And REINSTALLMODE=""	2
-ReadyToInstall	Back	NewDialog	CustomSetup	Installed OR _IsSetupTypeMin = "Custom"	2
-ReadyToInstall	Back	NewDialog	MaintenanceType	Installed AND _IsMaintenance = "Reinstall"	3
-ReadyToInstall	Back	NewDialog	CustomSetup	NOT Installed AND _IsSetupTypeMin <> "Custom"	1
+ReadyToInstall	Back	NewDialog	DestinationFolder	Installed OR _IsSetupTypeMin = "Custom"	2
+ReadyToInstall	Back	NewDialog	DestinationFolder	Installed AND _IsMaintenance = "Reinstall"	3
+ReadyToInstall	Back	NewDialog	DestinationFolder	NOT Installed	1
 ReadyToInstall	Cancel	SpawnDialog	CancelSetup	1	0
 ReadyToInstall	InstallNow	[ProgressType1]	Installing	1	0
 ReadyToInstall	InstallNow	[ProgressType2]	installed	1	0
