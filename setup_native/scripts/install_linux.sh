@@ -34,7 +34,7 @@ then
   exit 2
 fi
 
-set -- `getopt -u -o 'lhU' -l 'link,help,update' $*`
+set -- `getopt -u -o 'lhU' -l 'link,help,update' -- $*`
 
 if [ $? != 0 ]
 then
