@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:12:10 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 12:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <cstddef>
 #include <dlfcn.h>
 #include <new.h>
 #include <typeinfo>
@@ -79,6 +80,8 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
+
+#include "bridges/cpp_uno/shared/arraypointer.hxx"
 
 #include "cc50_solaris_intel.hxx"
 
@@ -204,9 +207,7 @@ RTTIHolder::~RTTIHolder()
     for ( std::map< OString, void* >::const_iterator iPos( aAllRTTI.begin() );
           iPos != aAllRTTI.end(); ++iPos )
     {
-        void ** pRTTI = (void **)iPos->second;
-        ::free( pRTTI[ 0 ] );
-        delete (void *)pRTTI;
+        delete[] static_cast< char * >(iPos->second);
     }
 }
 
@@ -239,8 +240,10 @@ void* RTTIHolder::insertRTTI( const OString& rTypename )
 
 
     // rSuperTypename MUST exist !!!
-    void** pRTTI = new void*[ 19 ];
-    pRTTI[  0 ] = (void*)strdup( rTypename.getStr() );
+    std::size_t const RTTI_SIZE = 19; // 14???
+    void** pRTTI = reinterpret_cast< void ** >(
+        new char[RTTI_SIZE * sizeof (void *) + strlen(rTypename.getStr()) + 1]);
+    pRTTI[  0 ] = reinterpret_cast< void * >(RTTI_SIZE * sizeof (void *));
     pRTTI[  1 ] = NULL;
     pRTTI[  2 ] = (void*)(7*sizeof(void*));
     pRTTI[  3 ] = (void*)aHash.getHash()[0];
@@ -255,6 +258,7 @@ void* RTTIHolder::insertRTTI( const OString& rTypename )
     pRTTI[ 11 ] = pRTTI[ 5 ];
     pRTTI[ 12 ] = pRTTI[ 6 ];
     pRTTI[ 13 ] = (void*)0x80000000;
+    strcpy(reinterpret_cast< char * >(pRTTI + RTTI_SIZE), rTypename.getStr());
 
     aAllRTTI[ rTypename ] = (void*)pRTTI;
 #if OSL_DEBUG_LEVEL > 1
@@ -296,8 +300,12 @@ void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr
     OString aMangledName( toRTTImangledname( aRTTICompTypeName ) );
     NIST_Hash aHash( aMangledName.getStr(), aMangledName.getLength() );
 
-    void** pRTTI = new void*[ 14 + nInherit * 5 ];
-    pRTTI[  0 ] = (void*)strdup( aRTTICompTypeName.getStr() );
+    std::size_t const rttiSize = 14 + nInherit * 5;
+    void** pRTTI = reinterpret_cast< void ** >(
+        new char[
+            rttiSize * sizeof (void *)
+            + strlen(aRTTICompTypeName.getStr()) + 1]);
+    pRTTI[  0 ] = reinterpret_cast< void * >(rttiSize * sizeof (void *));
     pRTTI[  1 ] = NULL;
     pRTTI[  2 ] = (void*)(7*sizeof(void*));
     pRTTI[  3 ] = (void*)aHash.getHash()[0];
@@ -314,6 +322,9 @@ void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr
     pRTTI[ 11+nInherit*5 ] = pRTTI[ 5 ];
     pRTTI[ 12+nInherit*5 ] = pRTTI[ 6 ];
     pRTTI[ 13+nInherit*5 ] = (void*)0x80000000;
+    strcpy(
+        reinterpret_cast< char * >(pRTTI + rttiSize),
+        aRTTICompTypeName.getStr());
 
     aAllRTTI[ aRTTICompTypeName ] = (void*)pRTTI;
 
@@ -333,14 +344,12 @@ void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr
 
 //__________________________________________________________________________________________________
 
-static void deleteException( void* pExc )
+static void deleteException(
+    void* pExc, unsigned char* thunk, typelib_TypeDescription* pType )
 {
-     typelib_TypeDescription* pType = (typelib_TypeDescription*)((void**)pExc)[-2];
      uno_destructData( pExc, pType, cpp_release );
      typelib_typedescription_release( pType );
-#if OSL_DEBUG_LEVEL > 0
-    pType = 0;
-#endif
+    delete[] thunk;
 }
 
 //__________________________________________________________________________________________________
@@ -358,6 +367,8 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
             RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
 #endif
+    bridges::cpp_uno::shared::ArrayPointer< unsigned char > thunkPtr(
+        new unsigned char[24]);
     typelib_TypeDescription * pTypeDescr = 0;
     // will be released by deleteException
     typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
@@ -384,54 +395,71 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // a must be
     OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
 
-    void** pExcSpace = (void**)__Crun::ex_alloc( pTypeDescr->nSize + 8 );
-    void * pCppExc = (void*)(((char*)pExcSpace)+8);
-    // will be released in generated dtor
-    // alignment to 8
-    pExcSpace[0] = pTypeDescr;
-    pExcSpace[1] = (void*)0xbadfad;
+    void * pCppExc = __Crun::ex_alloc( pTypeDescr->nSize );
     uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // destruct uno exception
     uno_any_destruct( pUnoExc, 0 );
 
-    __Crun::ex_throw( pCppExc, (const __Crun::static_type_info*)pRTTI, deleteException );
+    unsigned char * thunk = thunkPtr.release();
+    // movl %esp, %ecx:
+    thunk[0] = 0x8B;
+    thunk[1] = 0xCC;
+    // pushl pTypeDescr:
+    thunk[2] = 0x68;
+    *reinterpret_cast< void ** >(thunk + 3) = pTypeDescr;
+    // pushl thunk:
+    thunk[7] = 0x68;
+    *reinterpret_cast< void ** >(thunk + 8) = thunk;
+    // pushl 4(%ecx):
+    thunk[12] = 0xFF;
+    thunk[13] = 0x71;
+    thunk[14] = 0x04;
+    // call deleteException:
+    thunk[15] = 0xE8;
+    *reinterpret_cast< std::ptrdiff_t * >(thunk + 16) =
+        reinterpret_cast< unsigned char * >(deleteException) - (thunk + 20);
+    // addl $12, %esp:
+    thunk[20] = 0x83;
+    thunk[21] = 0xC4;
+    thunk[22] = 0x0C;
+    // ret:
+    thunk[23] = 0xC3;
+
+    __Crun::ex_throw(
+        pCppExc, (const __Crun::static_type_info*)pRTTI,
+        reinterpret_cast< void (*)(void *) >(thunk) );
 }
 
 void cc50_solaris_intel_fillUnoException(
     void* pCppExc,
     const char* pInfo,
-    typelib_TypeDescription * pExcTypeDescr,
     uno_Any* pUnoExc,
     uno_Mapping * pCpp2Uno )
 {
-    if (pExcTypeDescr == 0)
-    {
-        OSL_ASSERT( pInfo != 0 );
-        OString uno_name( toUNOname( pInfo ) );
-        OUString aName( OStringToOUString(
-                            uno_name, RTL_TEXTENCODING_ASCII_US ) );
-        typelib_typedescription_getByName( &pExcTypeDescr, aName.pData );
+    OSL_ASSERT( pInfo != 0 );
+    OString uno_name( toUNOname( pInfo ) );
+    OUString aName( OStringToOUString(
+                        uno_name, RTL_TEXTENCODING_ASCII_US ) );
+    typelib_TypeDescription * pExcTypeDescr = 0;
+    typelib_typedescription_getByName( &pExcTypeDescr, aName.pData );
 
-        if (pExcTypeDescr == 0) // the thing that should not be
-        {
-            RuntimeException aRE(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "exception type not found: ") ) + aName,
-                Reference< XInterface >() );
-            Type const & rType = ::getCppuType( &aRE );
-            uno_type_any_constructAndConvert(
-                pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
+    if (pExcTypeDescr == 0) // the thing that should not be
+    {
+        RuntimeException aRE(
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                          "exception type not found: ") ) + aName,
+            Reference< XInterface >() );
+        Type const & rType = ::getCppuType( &aRE );
+        uno_type_any_constructAndConvert(
+            pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
-            OString cstr( OUStringToOString(
-                              aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr.getStr() );
+        OString cstr( OUStringToOString(
+                          aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, cstr.getStr() );
 #endif
-            return;
-        }
+        return;
     }
-    else
-        pInfo = 0;
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "> c++ exception occured: %s\n",
@@ -442,8 +470,7 @@ void cc50_solaris_intel_fillUnoException(
     // construct uno exception any
     uno_any_constructAndConvert(
         pUnoExc, pCppExc, pExcTypeDescr, pCpp2Uno );
-    if (pInfo != 0)
-        typelib_typedescription_release( pExcTypeDescr );
+    typelib_typedescription_release( pExcTypeDescr );
 }
 
 }
