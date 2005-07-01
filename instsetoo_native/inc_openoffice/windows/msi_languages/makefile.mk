@@ -56,6 +56,7 @@ TARGET=win_ulffiles
 ULFFILES = \
     ActionTe.ulf \
     Control.ulf  \
+    CustomAc.ulf \
     Error.ulf    \
     Langpack.ulf \
     LaunchCo.ulf \
