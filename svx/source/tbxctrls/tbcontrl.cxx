@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:29:51 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2239,6 +2239,7 @@ SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
         DELETEZ( pFamilyState[i] );
     }
     pStyleSheetPool = NULL;
+    DELETEZ( pImpl );
 }
 
 // -----------------------------------------------------------------------
