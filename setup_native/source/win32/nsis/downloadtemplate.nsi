@@ -83,6 +83,7 @@ GoTo onPostDone
 
 onPostNoSilent:
 	Exec "$INSTDIR\setup.exe -lang $LANGUAGE"
+	Quit
 GoTo onPostDone
 
 onPostDone:
