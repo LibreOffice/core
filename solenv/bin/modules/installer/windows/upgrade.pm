@@ -2,9 +2,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-04-04 10:03:34 $
+#   last change: $Author: rt $ $Date: 2005-07-01 12:12:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,11 +80,30 @@ sub create_upgrade_table
 
     installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
 
+    my $newline = $installer::globals::upgradecode . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
+    push(@upgradetable, $newline);
+
     # preventing downgrading
+    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+    push(@upgradetable, $newline);
 
-    my $nodowngradeline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
+    push(@upgradetable, $newline);
 
-    push(@upgradetable, $nodowngradeline);
+    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ))
+    {
+        if ( $allvariableshashref->{'PATCHUPGRADECODE'} )
+        {
+            $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTSPATCH" . "\n";
+            push(@upgradetable, $newline);
+
+            $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTSPATCH" . "\n";
+            push(@upgradetable, $newline);
+
+            $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTSPATCH" . "\n";
+            push(@upgradetable, $newline);
+        }
+    }
 
     # Saving the file
 
