@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:26:37 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,7 +763,10 @@ namespace pcr
     {
         OCommonBehaviourControl::SetCtrSize(rSize);
 
-        sal_uInt16 nCount = GetEntryCount();
+        sal_uInt16 nCount = GetEntryCount() + 1;
+            // +1 is for the rare case where later on, somebody selects a non-existing entry
+            // VCL then implicitly extends the list
+
         if (nCount>LB_DEFAULT_COUNT)
             nCount=LB_DEFAULT_COUNT;
         SetDropDownLineCount(nCount);
