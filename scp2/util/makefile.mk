@@ -202,6 +202,8 @@ SCP2FILES  = installation_ooo.par          \
              file_draw.par                 \
              module_impress.par            \
              file_impress.par              \
+             module_base.par               \
+             file_base.par                 \
              canvascommons.par             \
              module_math.par               \
              file_math.par                 \
@@ -244,6 +246,8 @@ SCP2FILES +=                           \
              folderitem_draw.par       \
              registryitem_impress.par  \
              folderitem_impress.par    \
+             registryitem_base.par     \
+             folderitem_base.par       \
              registryitem_math.par     \
              folderitem_math.par       \
              module_quickstart.par     \
