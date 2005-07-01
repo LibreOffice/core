@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eformshelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:04:40 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,23 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    ::rtl::OUString EFormsHelper::getCurrentFormModelName() const SAL_THROW(())
+    {
+        ::rtl::OUString sModelName;
+        try
+        {
+            Reference< xforms::XModel > xFormsModel( getCurrentFormModel() );
+            if ( xFormsModel.is() )
+                sModelName = xFormsModel->getID();
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentFormModel: caught an exception!" );
+        }
+        return sModelName;
+    }
+
+    //--------------------------------------------------------------------
     Reference< XPropertySet > EFormsHelper::getCurrentBinding() const SAL_THROW(())
     {
         Reference< XPropertySet > xBinding;
@@ -416,6 +433,23 @@ namespace pcr
         }
 
         return xBinding;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString EFormsHelper::getCurrentBindingName() const SAL_THROW(())
+    {
+        ::rtl::OUString sBindingName;
+        try
+        {
+            Reference< XPropertySet > xBinding( getCurrentBinding() );
+            if ( xBinding.is() )
+                xBinding->getPropertyValue( PROPERTY_BINDING_ID ) >>= sBindingName;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentBindingName: caught an exception!" );
+        }
+        return sBindingName;
     }
 
     //--------------------------------------------------------------------
@@ -479,8 +513,22 @@ namespace pcr
     //--------------------------------------------------------------------
     Reference< XPropertySet > EFormsHelper::createBindingForFormModel( const ::rtl::OUString& _rTargetModel ) const SAL_THROW(())
     {
-        Reference< XPropertySet > xBinding;
+        return implGetOrCreateBinding( _rTargetModel, ::rtl::OUString() );
+    }
 
+    //--------------------------------------------------------------------
+    Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(())
+    {
+        OSL_ENSURE( _rBindingName.getLength(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
+        return implGetOrCreateBinding( _rTargetModel, _rBindingName );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(())
+    {
+        OSL_ENSURE( !( !_rTargetModel.getLength() && _rBindingName .getLength() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
+
+        Reference< XPropertySet > xBinding;
         try
         {
             ::rtl::OUString sTargetModel( _rTargetModel );
@@ -491,29 +539,47 @@ namespace pcr
                 getFormModelNames( aModelNames );
                 if ( !aModelNames.empty() )
                     sTargetModel = *aModelNames.begin();
-                OSL_ENSURE( sTargetModel.getLength(), "EFormsHelper::createNewBinding: unable to obtain a default model!" );
+                OSL_ENSURE( sTargetModel.getLength(), "EFormsHelper::implGetOrCreateBinding: unable to obtain a default model!" );
             }
             Reference< xforms::XModel > xModel( getFormModelByName( sTargetModel ) );
             Reference< XNameAccess > xBindingNames( xModel.is() ? xModel->getBindings() : Reference< XSet >(), UNO_QUERY );
             if ( xBindingNames.is() )
             {
-                xBinding = xModel->createBinding( );
-                if ( xBinding.is() )
+                // get or create the binding instance
+                if ( _rBindingName.getLength() )
                 {
-                    // find a nice name for it
-                    String sBaseName( ModuleRes( RID_STR_BINDING_UI_NAME ) );
-                    sBaseName += String::CreateFromAscii( " " );
-                    String sNewName;
-                    sal_Int32 nNumber = 1;
-                    do
+                    if ( xBindingNames->hasByName( _rBindingName ) )
+                        OSL_VERIFY( xBindingNames->getByName( _rBindingName ) >>= xBinding );
+                    else
                     {
-                        sNewName = sBaseName + ::rtl::OUString::valueOf( nNumber++ );
+                        xBinding = xModel->createBinding( );
+                        if ( xBinding.is() )
+                        {
+                            xBinding->setPropertyValue( PROPERTY_BINDING_ID, makeAny( _rBindingName ) );
+                            xModel->getBindings()->insert( makeAny( xBinding ) );
+                        }
                     }
-                    while ( xBindingNames->hasByName( sNewName ) );
-                    Reference< XNamed > xName( xBinding, UNO_QUERY_THROW );
-                    xName->setName( sNewName );
-                    // and insert into the model
-                    xModel->getBindings()->insert( makeAny( xBinding ) );
+                }
+                else
+                {
+                    xBinding = xModel->createBinding( );
+                    if ( xBinding.is() )
+                    {
+                        // find a nice name for it
+                        String sBaseName( ModuleRes( RID_STR_BINDING_UI_NAME ) );
+                        sBaseName += String::CreateFromAscii( " " );
+                        String sNewName;
+                        sal_Int32 nNumber = 1;
+                        do
+                        {
+                            sNewName = sBaseName + ::rtl::OUString::valueOf( nNumber++ );
+                        }
+                        while ( xBindingNames->hasByName( sNewName ) );
+                        Reference< XNamed > xName( xBinding, UNO_QUERY_THROW );
+                        xName->setName( sNewName );
+                        // and insert into the model
+                        xModel->getBindings()->insert( makeAny( xBinding ) );
+                    }
                 }
             }
         }

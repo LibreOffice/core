@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eformshelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:04:51 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,20 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XModel >
                 getCurrentFormModel() const SAL_THROW(());
 
+        /** retrieves the name of the model which the active binding of the control model belongs to
+        */
+        ::rtl::OUString
+                getCurrentFormModelName() const SAL_THROW(());
+
         /** retrieves the binding instance which is currently attached to the control model
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 getCurrentBinding() const SAL_THROW(());
+
+        /** retrieves the name of the binding instance which is currently attached to the control model
+        */
+        ::rtl::OUString
+                getCurrentBindingName() const SAL_THROW(());
 
         /** sets a new binding at the control model
         */
@@ -213,6 +223,17 @@ namespace pcr
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 createBindingForFormModel( const ::rtl::OUString& _rTargetModel ) const SAL_THROW(());
+
+        /** retrieves a given binding for a given model, or creates a new one
+
+            @param _rTargetModel
+                the name of the model to create a binding for. Must not be empty
+            @param _rBindingName
+                the name of the binding to retrieve. If the model denoted by <arg>_rTargetModel</arg> does not
+                have a binding with this name, a new binding is created and returned.
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+            getOrCreateBindingForModel( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(());
 
         /** types of sub-elements of a model
         */
@@ -268,6 +289,10 @@ namespace pcr
 
     private:
         void switchBindingListening( bool _bDoListening );
+
+        /// implementation for both <member>createBindingForFormModel</member> and <member>getOrCreateBindingForModel</member>
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+            implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(());
     };
 
 //........................................................................
