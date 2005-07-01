@@ -114,17 +114,23 @@ DatabaseFolder	Next	PushButton	230	243	66	17	3		OOO_CONTROL_83	Cancel
 DestinationFolder	Back	PushButton	164	243	66	17	3		OOO_CONTROL_84	Next	
 DestinationFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 DestinationFolder	BannerLine	Line	0	44	374	0	1				
-DestinationFolder	Branding1	Text	4	229	140	13	3		{&MSSWhiteSerif8}[ProductName]		
-DestinationFolder	Branding2	Text	3	228	140	13	65537		[ProductName]		
+DestinationFolder	Branding1	Text	4	229	110	13	3		{&MSSWhiteSerif8}[ProductName]		
+DestinationFolder	Branding2	Text	3	228	110	13	65537		[ProductName]		
 DestinationFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_87	ChangeFolder	
-DestinationFolder	ChangeFolder	PushButton	301	65	66	17	3		OOO_CONTROL_88	Back	
-DestinationFolder	DestFolder	Icon	21	52	24	24	5242881		OpenFolderIco		
-DestinationFolder	DlgDesc	Text	21	23	292	25	65539		OOO_CONTROL_89		
-DestinationFolder	DlgLine	Line	145	234	229	0	1				
-DestinationFolder	DlgTitle	Text	13	6	292	25	65539		OOO_CONTROL_90		
-DestinationFolder	Location	Text	57	65	240	40	3	_BrowseProperty	OOO_CONTROL_91		
-DestinationFolder	LocLabel	Text	57	52	290	10	3		OOO_CONTROL_92		
+DestinationFolder	ChangeFolder	PushButton	301	125	66	17	3		OOO_CONTROL_88	Back	
+DestinationFolder	DestFolder	Icon	21	112	24	24	5242881		OpenFolderIco		
+DestinationFolder	DlgDesc	Text	21	23	292	25	65539		OOO_CONTROL_304		
+DestinationFolder	DlgLine	Line	114	234	260	0	1				
+DestinationFolder	DlgTitle	Text	13	6	292	25	65539		{&MSSansBold8}[ProductName]		
+DestinationFolder	Location	Text	57	128	240	40	3	_BrowseProperty	[INSTALLLOCATION]		
+DestinationFolder	LocLabel	Text	57	115	290	10	3		OOO_CONTROL_92		
 DestinationFolder	Next	PushButton	230	243	66	17	3		OOO_CONTROL_93	Cancel	
+DestinationFolder	LabelStartInstall	Text	21	52	290	30	2		OOO_CONTROL_300		
+DestinationFolder	LabelInvalidDir	Text	21	52	290	30	2		OOO_CONTROL_301		
+DestinationFolder	LabelWrongProduct	Text	21	52	290	30	2		OOO_CONTROL_303		
+DestinationFolder	LabelStartInstall2	Text	21	82	290	30	2		OOO_CONTROL_305		
+DestinationFolder	LabelInvalidDir2	Text	21	82	290	30	2		OOO_CONTROL_307		
+DestinationFolder	LabelWrongProduct2	Text	21	82	290	30	2		OOO_CONTROL_306		
 DiskSpaceRequirements	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 DiskSpaceRequirements	BannerLine	Line	0	44	374	0	1				
 DiskSpaceRequirements	Branding1	Text	4	229	140	13	3		{&MSSWhiteSerif8}[ProductName]		
@@ -163,20 +169,19 @@ FileTypeDialog	DlgTitle	Text	13	6	292	25	65539		OOO_CONTROL_278
 FileTypeDialog	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel	
 InstallChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 InstallChangeFolder	BannerLine	Line	0	44	374	0	1				
-InstallChangeFolder	Branding1	Text	4	229	140	13	3		{&MSSWhiteSerif8}[ProductName]		
-InstallChangeFolder	Branding2	Text	3	228	140	13	65537		[ProductName]		
+InstallChangeFolder	Branding1	Text	4	229	110	13	3		{&MSSWhiteSerif8}[ProductName]		
+InstallChangeFolder	Branding2	Text	3	228	110	13	65537		[ProductName]		
 InstallChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_111	ComboText	
-InstallChangeFolder	Combo	DirectoryCombo	21	64	277	80	4128779	_BrowseProperty		Up	
+InstallChangeFolder	Combo	DirectoryCombo	21	64	302	80	4128779	_BrowseProperty		Up	
 InstallChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_113	Combo	
 InstallChangeFolder	DlgDesc	Text	21	23	292	25	65539		OOO_CONTROL_114		
-InstallChangeFolder	DlgLine	Line	145	234	229	0	1				
+InstallChangeFolder	DlgLine	Line	114	234	260	0	1				
 InstallChangeFolder	DlgTitle	Text	13	6	292	25	65539		OOO_CONTROL_115		
 InstallChangeFolder	List	DirectoryList	21	90	332	97	15	_BrowseProperty		TailText	
-InstallChangeFolder	NewFolder	PushButton	335	66	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
 InstallChangeFolder	OK	PushButton	230	243	66	17	3		OOO_CONTROL_118	Cancel	
 InstallChangeFolder	Tail	PathEdit	21	207	332	17	15	_BrowseProperty		OK	
 InstallChangeFolder	TailText	Text	21	193	99	13	3		OOO_CONTROL_120	Tail	
-InstallChangeFolder	Up	PushButton	310	66	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_121
+InstallChangeFolder	Up	PushButton	333	64	19	19	3670019		UpIco	List	OOO_CONTROL_121
 InstallWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_122	Copyright	
 InstallWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_123	Back	
 InstallWelcome	Copyright	Text	135	144	228	73	65539		OOO_CONTROL_124	Next	
