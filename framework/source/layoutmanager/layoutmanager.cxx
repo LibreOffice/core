@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 10:26:44 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,6 +688,31 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         }
         else
         {
+            // Remove configuration listeners before we can release our references
+            if ( xModuleCfgMgr.is() )
+            {
+                try
+                {
+                    xModuleCfgMgr->removeConfigurationListener(
+                        Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
+            if ( xDocCfgMgr.is() )
+            {
+                try
+                {
+                    xDocCfgMgr->removeConfigurationListener(
+                        Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
             // Release references to our configuration managers as we currently don't have
             // an attached module.
             xModuleCfgMgr.clear();
@@ -777,6 +802,39 @@ void LayoutManager::implts_destroyElements()
     aWriteLock.lock();
     impl_clearUpMenuBar();
     aWriteLock.unlock();
+}
+
+void LayoutManager::implts_destroyDockingAreaWindows()
+{
+    std::vector< Reference< css::awt::XWindow > > oldDockingAreaWindows;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP] );
+    oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM] );
+    oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT] );
+    oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT] );
+
+    m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP].clear();
+    m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM].clear();
+    m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT].clear();
+    m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT].clear();
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    for ( sal_Int32 i=0; i < (sal_Int32)oldDockingAreaWindows.size(); i++ )
+    {
+        if ( oldDockingAreaWindows[i].is() )
+        {
+            try
+            {
+                oldDockingAreaWindows[i]->dispose();
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+    }
 }
 
 void LayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle )
@@ -6583,6 +6641,7 @@ throw( RuntimeException )
         }
         m_xInplaceMenuBar.clear();
         m_xContainerWindow.clear();
+        implts_destroyDockingAreaWindows();
 
         if ( m_xModuleCfgMgr.is() )
         {
