@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imageitm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:12:59 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,12 @@ SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
     : SfxInt16Item( rItem )
 {
     pImp = new SfxImageItem_Impl( *(rItem.pImp) );
+}
+
+//---------------------------------------------------------
+SfxImageItem::~SfxImageItem()
+{
+    delete pImp;
 }
 
 //---------------------------------------------------------
