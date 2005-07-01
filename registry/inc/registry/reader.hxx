@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 15:47:07 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -250,7 +250,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -279,7 +279,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -307,7 +307,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -326,7 +326,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -355,7 +355,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -373,7 +373,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -420,7 +420,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -449,7 +449,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -467,7 +467,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -521,7 +521,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -546,7 +546,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -611,7 +611,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -654,7 +654,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
 private:
