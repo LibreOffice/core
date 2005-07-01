@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:57:01 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,18 +572,17 @@ namespace pcr
     //------------------------------------------------------------------------
     IMPL_LINK(OPropertyBrowserController, OnPageActivation, void*, EMPTYARG)
     {
-        syncViewToProperty();
+        setPagePropertyFromSelection();
         return 0L;
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::syncViewToProperty()
+    void OPropertyBrowserController::setPagePropertyFromSelection()
     {
         if (!haveView())
             return;
 
         ::rtl::OUString sOldSelection = m_sPageSelection;
-
         m_sPageSelection = ::rtl::OUString();
 
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
@@ -602,24 +601,26 @@ namespace pcr
             sal_Int32 nHandle = OWN_PROPERTY_ID_CURRENTPAGE;
             fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
         }
+        if ( sOldSelection.getLength() )
+            m_sLastValidPageSelection = sOldSelection;
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::syncPropertyToView()
+    void OPropertyBrowserController::selectPageFromProperty()
     {
         sal_uInt16 nNewPage = (sal_uInt16)-1;
-        if (0 == m_sPageSelection.compareToAscii("Generic"))
+        if ( 0 == m_sPageSelection.compareToAscii( "Generic" ) && m_nGenericPageId )
             nNewPage = m_nGenericPageId;
-        else if (0 == m_sPageSelection.compareToAscii("Data"))
+        else if ( 0 == m_sPageSelection.compareToAscii( "Data" ) && m_nDataPageId )
             nNewPage = m_nDataPageId;
-        else if (0 == m_sPageSelection.compareToAscii("Events"))
+        else if ( 0 == m_sPageSelection.compareToAscii( "Events" ) && m_nEventPageId )
             nNewPage = m_nEventPageId;
 
         if (haveView())
             m_pView->activatePage(nNewPage);
 
         // just in case ...
-        syncViewToProperty();
+        setPagePropertyFromSelection();
     }
 
     //------------------------------------------------------------------------
@@ -671,7 +672,7 @@ namespace pcr
             break;
 
             case OWN_PROPERTY_ID_CURRENTPAGE:
-                syncPropertyToView();
+                selectPageFromProperty();
                 break;
         }
     }
@@ -992,12 +993,15 @@ namespace pcr
                     getPropertyBox()->SetPage( m_nDataPageId );
                 else if ( m_nEventPageId )
                     getPropertyBox()->SetPage( m_nEventPageId );
-                syncViewToProperty();
+
+                setPagePropertyFromSelection();
 
                 getPropertyBox()->Show();
 
                 // activate the old page
-                syncPropertyToView();
+                if ( !m_sPageSelection.getLength() && m_sLastValidPageSelection.getLength() )
+                    m_sPageSelection = m_sLastValidPageSelection;
+                selectPageFromProperty();
             }
         }
 
