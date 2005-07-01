@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:39:24 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,6 +508,12 @@ ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManag
 
 ImageManager::~ImageManager()
 {
+    ResetableGuard aGuard( m_aLock );
+    for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
+    {
+        delete m_pUserImageList[n];
+        m_pUserImageList[n] = 0;
+    }
 }
 
 // XComponent
