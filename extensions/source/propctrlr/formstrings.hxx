@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:56:47 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_UI_REPRESENTATION,      "UserInterfaceRepresentation");
 
     PCR_CONSTASCII_STRING( PROPERTY_XML_DATA_MODEL,         "XMLDataModel" );
+    PCR_CONSTASCII_STRING( PROPERTY_BINDING_NAME,           "BindingName" );
     PCR_CONSTASCII_STRING( PROPERTY_BIND_EXPRESSION,        "BindingExpression" );
     PCR_CONSTASCII_STRING( PROPERTY_LIST_BINDING,           "ListBinding" );
     PCR_CONSTASCII_STRING( PROPERTY_XSD_REQUIRED,           "RequiredExpression" );
