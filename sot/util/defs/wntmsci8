@@ -1645,3 +1645,4 @@ _TI2?AVRuntimeException@uno@star@sun@com@@
 ??4?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
 ?ConvertOasisFormats_Impl@@YA?AVOUString@rtl@@AAVString@@@Z
 ?IsOasisFormat@SotStorage@@SAEPAV1@@Z
+?matchAsciiL@OUString@rtl@@QBEEPBDJJ@Z
