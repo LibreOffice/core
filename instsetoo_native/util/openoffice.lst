@@ -23,6 +23,7 @@ OpenOffice
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
+			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
@@ -62,6 +63,7 @@ OpenOffice_wJRE
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
+			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			JAVAVERSION 1.5.0_03
 			DOWNLOADBANNER	ooobanner.bmp
