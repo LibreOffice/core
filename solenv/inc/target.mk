@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.153 $
+#   $Revision: 1.154 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-20 14:51:52 $
+#   last change: $Author: kz $ $Date: 2005-07-01 12:16:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1615,7 +1615,7 @@ SDI5 ?= TNR!:=5
 .ENDIF
 
 .IF "$(XMLPROPERTIES)"!=""
-XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)_$(i:s/.xrb/.done/))
+XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(MISC)$/$(TARGET)_$(i:s/.xrb/.done/))
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(XMLXULRES)"!=""
@@ -2066,10 +2066,10 @@ $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) localize.sdf
 .IF "$(L10N_framework)"!=""
 XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
-$(COMMONMISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
-    @+-$(RM) $(COMMONMISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
-    +native2ascii -encoding UTF8 $< $(COMMONMISC)$/$(<:b).interm$(TARGET) && xmlex -i $(COMMONMISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
-    @+$(RM)  $(COMMONMISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+$(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
+    @+-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    +$(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(XMLXULRES)"!=""
