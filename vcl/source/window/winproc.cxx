@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-20 09:29:55 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,13 +1364,21 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
                                     ULONG nCursorPos, USHORT nCursorFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
+    Window*     pChild;
 
-    if ( !pChild )
+    int nTries = 200;
+    while( nTries-- )
     {
-        pChild = ImplGetKeyInputWindow( pWindow );
+        pChild = pSVData->maWinData.mpExtTextInputWin;
         if ( !pChild )
-            return 0;
+        {
+            pChild = ImplGetKeyInputWindow( pWindow );
+            if ( !pChild )
+                return 0;
+        }
+        if( !pChild->mpWindowImpl->mpFrameData->mnFocusId )
+            break;
+        Application::Yield();
     }
 
     // If it is the first ExtTextInput call, we inform the information
@@ -1394,9 +1402,7 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
 
     // be aware of being recursively called in StartExtTextInput
     if ( !pChild->mpWindowImpl->mbExtTextInput )
-    {
         return 0;
-    }
 
     // Test for changes
     BOOL        bOnlyCursor = FALSE;
