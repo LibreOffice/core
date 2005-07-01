@@ -39,7 +39,7 @@ ProgressType2	installed
 ProgressType3	installs
 RebootYesNo	Yes
 ReinstallModeText	omus
-SecureCustomProperties	NEWPRODUCTS
+SecureCustomProperties	NEWPRODUCTS;SAMEPRODUCTS;OLDPRODUCTS
 SetupType	Typical
 STR_NEW_DISPLAY_NAME	OOO_STR_NEW_DISPLAY_NAME
 STR_EDIT	OOO_STR_EDIT
