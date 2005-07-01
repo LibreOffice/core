@@ -2,9 +2,9 @@
  *
  *  $RCSfile: descriptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:21:50 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ namespace unographic {
 // ---------------------
 
 GraphicDescriptor::GraphicDescriptor() :
-    ::comphelper::PropertySetHelper( createPropertySetInfo() ),
+    ::comphelper::PropertySetHelper( createPropertySetInfo(), SAL_NO_ACQUIRE ),
     mpGraphic( NULL ),
     meType( GRAPHIC_NONE ),
     mnBitsPerPixel ( 0 ),
