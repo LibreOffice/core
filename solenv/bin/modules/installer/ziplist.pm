@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-17 14:07:33 $
+#   last change: $Author: rt $ $Date: 2005-07-01 12:11:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -781,6 +781,17 @@ sub add_variables_to_allvariableshashref
     elsif ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
     else { $variableshashref->{'PRODUCTADDON'} = ""; }
 
+    my $localbuild = $installer::globals::build;
+    if ( $localbuild =~ /^\s*(\w+?)(\d+)\s*$/ ) { $localbuild = $2; }   # using "680" instead of "src680"
+    $variableshashref->{'PRODUCTMAJOR'} = $localbuild;
+
+    my $localminor = "";
+    if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
+    else { $localminor = $installer::globals::lastminor; }
+    if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
+    $variableshashref->{'PRODUCTMINOR'} = $localminor;
+
+    $variableshashref->{'PRODUCTBUILDID'} = $installer::globals::buildid;
 }
 
 1;
