@@ -18,6 +18,7 @@ NewProductFound	NEWPRODUCTS	160
 PatchWelcome	PATCH And Not IS_MAJOR_UPGRADE	625
 ResolveSource	Not Installed And Not PATCH	525
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	300
+SameProductFound	SAMEPRODUCTS	170
 setAllUsersProfile2K	VersionNT >= 500	512
 SetAllUsersProfileNT	VersionNT = 400	511
 SetupCompleteError		-3

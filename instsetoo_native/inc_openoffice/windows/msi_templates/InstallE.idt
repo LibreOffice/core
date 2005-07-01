@@ -51,6 +51,7 @@ RemoveODBC		1200
 RemoveRegistryValues		1300
 RemoveShortcuts		1600
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
+SameProductFound	SAMEPRODUCTS	120
 ScheduleReboot	ISSCHEDULEREBOOT	3125
 SelfRegModules		2850
 SelfUnregModules		1100
