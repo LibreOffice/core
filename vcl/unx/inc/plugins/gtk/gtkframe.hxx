@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:04:32 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #endif
 
 #include <list>
+#include <vector>
 
 class X11SalGraphics;
 class GtkSalDisplay;
@@ -96,68 +97,103 @@ class GtkSalFrame : public SalFrame
         ~GraphicsHolder();
     };
 
-    //--------------------------------------------------------
-    // Not all GTK Input Methods swallow key release
-    // events.  Since they swallow the key press events and we
-    // are left with the key release events, we need to
-    // manually swallow those.  To do this, we keep a list of
-    // the previous 10 key press events in each GtkSalFrame
-    // and when we get a key release that matches one of the
-    // key press events in our list, we swallow it.
-    struct PreviousKeyPress
+    struct IMHandler
     {
-        GdkWindow *window;
-        gint8   send_event;
-        guint32 time;
-        guint   state;
-        guint   keyval;
-        guint16 hardware_keycode;
-        guint8  group;
-
-        PreviousKeyPress (GdkEventKey *event)
-        :   window (NULL),
-            send_event (0),
-            time (0),
-            state (0),
-            keyval (0),
-            hardware_keycode (0),
-            group (0)
+        //--------------------------------------------------------
+        // Not all GTK Input Methods swallow key release
+        // events.  Since they swallow the key press events and we
+        // are left with the key release events, we need to
+        // manually swallow those.  To do this, we keep a list of
+        // the previous 10 key press events in each GtkSalFrame
+        // and when we get a key release that matches one of the
+        // key press events in our list, we swallow it.
+        struct PreviousKeyPress
         {
-            if (event)
+            GdkWindow *window;
+            gint8   send_event;
+            guint32 time;
+            guint   state;
+            guint   keyval;
+            guint16 hardware_keycode;
+            guint8  group;
+
+            PreviousKeyPress (GdkEventKey *event)
+            :   window (NULL),
+                send_event (0),
+                time (0),
+                state (0),
+                keyval (0),
+                hardware_keycode (0),
+                group (0)
             {
-                window              = event->window;
-                send_event          = event->send_event;
-                time                = event->time;
-                state               = event->state;
-                keyval              = event->keyval;
-                hardware_keycode    = event->hardware_keycode;
-                group               = event->group;
+                if (event)
+                {
+                    window              = event->window;
+                    send_event          = event->send_event;
+                    time                = event->time;
+                    state               = event->state;
+                    keyval              = event->keyval;
+                    hardware_keycode    = event->hardware_keycode;
+                    group               = event->group;
+                }
             }
-        }
 
-        PreviousKeyPress( const PreviousKeyPress& rPrev )
-        :   window( rPrev.window ),
-            send_event( rPrev.send_event ),
-            time( rPrev.time ),
-            state( rPrev.state ),
-            keyval( rPrev.keyval ),
-            hardware_keycode( rPrev.hardware_keycode ),
-            group( rPrev.group )
-        {}
+            PreviousKeyPress( const PreviousKeyPress& rPrev )
+            :   window( rPrev.window ),
+                send_event( rPrev.send_event ),
+                time( rPrev.time ),
+                state( rPrev.state ),
+                keyval( rPrev.keyval ),
+                hardware_keycode( rPrev.hardware_keycode ),
+                group( rPrev.group )
+            {}
 
-        bool PreviousKeyPress::operator== (GdkEventKey *event) const
-        {
-            return (event != NULL)
-                && (event->window == window)
-                && (event->send_event == send_event)
-                && (event->state == state)
-                && (event->keyval == keyval)
-                && (event->hardware_keycode == hardware_keycode)
-                && (event->group == group)
-                && (event->time - time < 3)
-                ;
-        }
+            bool PreviousKeyPress::operator== (GdkEventKey *event) const
+            {
+                return (event != NULL)
+                    && (event->window == window)
+                    && (event->send_event == send_event)
+                    && (event->state == state)
+                    && (event->keyval == keyval)
+                    && (event->hardware_keycode == hardware_keycode)
+                    && (event->group == group)
+                    && (event->time - time < 3)
+                    ;
+            }
+        };
+
+
+        GtkSalFrame*                    m_pFrame;
+        std::list< PreviousKeyPress >   m_aPrevKeyPresses;
+        int                             m_nPrevKeyPresses; // avoid using size()
+        GtkIMContext*                   m_pIMContext;
+        bool                            m_bFocused;
+        SalExtTextInputEvent            m_aInputEvent;
+        std::vector< USHORT >           m_aInputFlags;
+
+        IMHandler( GtkSalFrame* );
+        ~IMHandler();
+
+        void            createIMContext();
+        void            deleteIMContext();
+        void            updateIMSpotLocation();
+        void            setInputContext( SalInputContext* pContext );
+        void            endExtTextInput( USHORT nFlags );
+        bool            handleKeyEvent( GdkEventKey* pEvent );
+        void            focusChanged( bool bFocusIn );
+
+        void            doCallEndExtTextInput();
+        void            sendEmptyCommit();
+
+
+        static void         signalIMCommit( GtkIMContext*, gchar*, gpointer );
+        static gboolean     signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
+        static void         signalIMPreeditChanged( GtkIMContext*, gpointer );
+        static void         signalIMPreeditEnd( GtkIMContext*, gpointer );
+        static void         signalIMPreeditStart( GtkIMContext*, gpointer );
+        static gboolean     signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
     };
+    friend struct IMHandler;
 
     GtkWindow*                      m_pWindow;
     GdkWindow*                      m_pForeignParent;
@@ -169,7 +205,6 @@ class GtkSalFrame : public SalFrame
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
     GdkWindowState                  m_nState;
-    GtkIMContext*                   m_pIMContext;
     SystemEnvData                   m_aSystemData;
     GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
     USHORT                          m_nKeyModifiers;
@@ -181,17 +216,12 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
-    bool                            m_bWasPreedit;
-    bool                            m_bIgnoreCommit;
-    bool                            m_bIgnorePreedit;
+
+    IMHandler*                      m_pIMHandler;
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
     Rectangle                       m_aRestorePosSize;
-
-    std::list< PreviousKeyPress >   m_aPrevKeyPresses;
-    int                             m_nPrevKeyPresses; // avoid using size()
-
 
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
@@ -212,12 +242,6 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
     static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
-    static void         signalIMCommit( GtkIMContext*, gchar*, gpointer );
-    static gboolean     signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
-    static void         signalIMPreeditChanged( GtkIMContext*, gpointer );
-    static void         signalIMPreeditEnd( GtkIMContext*, gpointer );
-    static void         signalIMPreeditStart( GtkIMContext*, gpointer );
-    static gboolean     signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
     static void         signalDestroy( GtkObject*, gpointer );
 
     GtkSalDisplay*  getDisplay();
@@ -226,9 +250,6 @@ class GtkSalFrame : public SalFrame
     void            SetDefaultSize();
     void            setAutoLock( bool bLock );
     void            setScreenSaverTimeout( int nTimeout );
-    void            hardIMReset();
-    void            createIMContext();
-    void            deleteIMContext();
 
     void            doKeyCallback( guint state,
                                    guint keyval,
@@ -256,7 +277,6 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
-    void updateIMSpotLocation();
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );
