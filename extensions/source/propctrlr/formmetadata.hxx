@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:56:33 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,7 @@ namespace pcr
     #define PROPERTY_ID_XFORMS_BUTTONTYPE    184
     #define PROPERTY_ID_LIST_BINDING         185
     #define PROPERTY_ID_VERTICAL_ALIGN       186
+    #define PROPERTY_ID_BINDING_NAME         187
 
 //............................................................................
 } // namespace pcr
