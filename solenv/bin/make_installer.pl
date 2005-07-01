@@ -599,7 +599,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::changing_name_of_language_dependent_keys($dirsinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories4.log", $dirsinproductlanguageresolvedarrayref); }
 
-    installer::scriptitems::checking_directories_with_corrupt_hostname($dirsinproductlanguageresolvedarrayref);
+    installer::scriptitems::checking_directories_with_corrupt_hostname($dirsinproductlanguageresolvedarrayref, $languagesarrayref);
 
     #####################################
     # files part, language dependent
@@ -1569,6 +1569,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating the important dynamic idt files
 
         installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
+        installer::windows::msiglobal::put_msiproductversion_into_bootstrapfile($filesinproductlanguageresolvedarrayref);
 
         installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17.log", $filesinproductlanguageresolvedarrayref); }
@@ -1660,6 +1661,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my @translationfiles = ();          # all idt files, that need a translation
             push(@translationfiles, "ActionTe.idt");
             push(@translationfiles, "Control.idt");
+            push(@translationfiles, "CustomAc.idt");
             push(@translationfiles, "Error.idt");
             push(@translationfiles, "LaunchCo.idt");
             push(@translationfiles, "RadioBut.idt");
@@ -1721,17 +1723,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the files from the binary directory into the binary table
             installer::windows::binary::update_binary_table($languageidtdir, $filesinproductlanguageresolvedarrayref, $binarytablefiles);
 
-            # setting the variable REGKEYPRODPATH for language packs
-
-            if ( $installer::globals::languagepack ) { installer::windows::property::set_regkeyprodpath_in_property_table($languageidtdir, $allvariableshashref); }
-
             # setting Java variables for Java products
 
             if ( $allvariableshashref->{'JAVAPRODUCT'} ) { installer::windows::java::update_java_tables($languageidtdir, $allvariableshashref); }
 
             # setting patch codes to detect installed products
 
-            if ( $installer::globals::patch ) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
+            if (( $installer::globals::patch ) || ( $installer::globals::languagepack )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
 
             # Adding Windows Installer CustomActions dynamically
 
@@ -1857,22 +1855,43 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "InstallExchangeFiles", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "DeinstallExchangeFiles", "65", "patchmsi.dll", "UninstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "DeinstallExchangeFiles", "REMOVE=\"ALL\"", "InstallValidate", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-                # adding the custom action for setting the correct ALLUSERS value (CustomAc.idt and InstallE.idt and InstallU.idt )
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetProductInstallMode", "321", "patchmsi.dll", "SetProductInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll",  "SetProductInstallMode", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "patchmsi.dll", "SetProductInstallMode", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installuitablename); }
-
+                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetUserInstallMode", "65", "patchmsi.dll", "GetUserInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+                if ( $added_customaction )
+                {
+                    # conneting the custom action to a control in the controlevent table
+                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
+                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "4");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or PATCHISOLDER Or ISWRONGPRODUCT");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelPatchOlder", "Show", "PATCHISOLDER");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelPatchOlder2", "Show", "PATCHISOLDER");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
+                }
             }
 
             # custom actions for language packs
 
-            # finding the installed Office (at installation)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "FindingOffice", "65", "lngpckinsthlp.dll", "SetProductInstallationPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "lngpckinsthlp.dll", "FindingOffice", "Not PATCH", "CostFinalize", $filesinproductlanguageresolvedarrayref, $installuitablename); }
-            # finding the installed Office (at deinstallation)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "FindingOfficeUninstall", "65", "lngpckinsthlp.dll", "SetProductInstallationPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "lngpckinsthlp.dll", "FindingOfficeUninstall", "REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetUserInstallMode", "65", "lngpckinsthlp.dll", "GetUserInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction )
+            {
+                # conneting the custom action to a control in the controlevent table
+                installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
+                installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "4");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or ISWRONGPRODUCT");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
+                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
+            }
+
             installer::files::save_file($customactionidttablename, $customactionidttable);
             installer::files::save_file($installexecutetablename, $installexecutetable);
             installer::files::save_file($installuitablename, $installuitable);
@@ -2027,6 +2046,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $create_download = 0;
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
         if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
+        if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
 
         if ( $$downloadname ne "" ) { $create_download = 1; }
         if (( $is_success ) && ( $create_download ))
