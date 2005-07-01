@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:21:47 $
+#   last change: $Author: rt $ $Date: 2005-07-01 12:18:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 
 UWINAPILIB=
 
-SLOFILES =	$(SLO)$/lngpckinsthelper.obj
+SLOFILES =	$(SLO)$/lngpckinsthelper.obj \
+            $(SLO)$/respintest.obj
 
 SHL1STDLIBS=	kernel32.lib\
                 user32.lib\
