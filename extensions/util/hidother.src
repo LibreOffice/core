@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:15:53 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,3 +324,4 @@ hidspecial HID_PROP_XSD_MIN_EXCLUSIVE           { HelpId = HID_PROP_XSD_MIN_EXCL
 hidspecial HID_PROP_UNCHECKEDREFVALUE           { HelpId = HID_PROP_UNCHECKEDREFVALUE; }
 hidspecial HID_PROP_SUBMISSION_ID               { HelpId = HID_PROP_SUBMISSION_ID; }
 hidspecial HID_PROP_LIST_BINDING                { HelpId = HID_PROP_LIST_BINDING; }
+hidspecial HID_PROP_BINDING_NAME                { HelpId = HID_PROP_BINDING_NAME; }
