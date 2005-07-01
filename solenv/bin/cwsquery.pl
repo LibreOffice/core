@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:33:17 $
+#   last change: $Author: rt $ $Date: 2005-07-01 12:55:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.5 $ ';
+my $id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -102,7 +102,7 @@ my $opt_master = '';    # option: master workspace
 my $opt_child  = '';    # option: child workspace
 
 # list of available query modes
-my @query_modes = qw(modules taskids state latest current);
+my @query_modes = qw(modules taskids state latest current owner);
 my %query_modes_hash = ();
 foreach (@query_modes) {
     $query_modes_hash{$_}++;
@@ -202,6 +202,22 @@ sub query_current
     return;
 }
 
+sub query_owner
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $owner = $cws->get_owner();
+        print_message("Owner:");
+        if ( !$owner ) {
+            print "not set\n" ;
+        } else {
+            print "$owner\n";
+        }
+    }
+    return;
+}
+
 sub query_latest
 {
     my $cws = shift;
@@ -281,13 +297,14 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <modules|taskIDs|state|current>\n";
+    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|owner|state|taskIDs>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest>\n";
     print STDERR "Query child workspace for miscellaneous information.\n";
     print STDERR "Modes:\n";
     print STDERR "\tmodules\t\tquery modules added to the CWS\n";
-    print STDERR "\ttaskids\t\tquery taskids to be handled on the CWS\n";
+    print STDERR "\towner\t\tquery CWS owner\n";
     print STDERR "\tstate\t\tquery approval status of CWS\n";
+    print STDERR "\ttaskids\t\tquery taskids to be handled on the CWS\n";
     print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
     print STDERR "\tlatest\t\tquery the latest milestone available for resync\n";
     print STDERR "Options:\n";
