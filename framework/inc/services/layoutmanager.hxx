@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 10:26:30 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,7 @@ namespace framework
             void implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );
             void implts_sortUIElements();
             void implts_destroyElements();
+            void implts_destroyDockingAreaWindows();
             void implts_createAddonsToolBars();
             void implts_createCustomToolBars();
             void implts_createNonContextSensitiveToolBars();
