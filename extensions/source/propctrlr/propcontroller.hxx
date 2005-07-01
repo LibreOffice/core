@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:57:17 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ namespace pcr
 
         ::rtl::OUString     m_sStandard;
         ::rtl::OUString     m_sPageSelection;
+        ::rtl::OUString     m_sLastValidPageSelection;
 
         typedef ::rtl::Reference< IPropertyHandler >    PropertyHandlerRef;
         typedef ::std::vector< PropertyHandlerRef >     PropertyHandlerArray;
@@ -535,8 +536,8 @@ namespace pcr
             return m_xIntrospecteePropertyInfo.is() && m_xIntrospecteePropertyInfo->hasPropertyByName( _rPropName );
         }
 
-        void syncPropertyToView();
-        void syncViewToProperty();
+        void selectPageFromProperty();
+        void setPagePropertyFromSelection();
 
         // good candidates for (onClicked-)callbacks, again ....
         void ChangeFontProperty();
