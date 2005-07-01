@@ -213,7 +213,8 @@ if [ "$LINK" = "yes" ]
 then
   echo
   echo "Creating link from $INSTALL_DIR/program/soffice to $HOME/soffice"
-  ln -sf $INSTALL_DIR/program/soffice $HOME/soffice
+  rm -f $HOME/soffice 2>/dev/null
+  ln -s $INSTALL_DIR/program/soffice $HOME/soffice
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
