@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.112 $
+*  $Revision: 1.113 $
 *
-*  last change: $Author: kz $ $Date: 2005-06-30 16:38:58 $
+*  last change: $Author: kz $ $Date: 2005-07-01 12:18:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1787,7 +1787,7 @@ STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
 File gid_File_Lib_Sunpro5_Uno
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = STRING(CONCAT4(lib,COMNAME,_uno,UNXSUFFIX));
     Dir = gid_Dir_Program;
 End
