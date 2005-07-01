@@ -914,6 +914,42 @@ de = "Standard-HTML-Editor"
 en-US = "{&MSSansBold8}File Type"
 de = "{&MSSansBold8}Dateiart"
 
+[OOO_CONTROL_300]
+en-US = "A version of [DEFINEDPRODUCT] [DEFINEDVERSION] was found by the [ProductName] Installation Wizard. This version will be updated."
+de = "Der [ProductName] Installationsassistent hat eine [DEFINEDPRODUCT] [DEFINEDVERSION] Version gefunden. Diese Version wird aktualisiert."
+
+[OOO_CONTROL_301]
+en-US = "The destination folder specified below does not contain a [DEFINEDPRODUCT] [DEFINEDVERSION] version."
+de = "In dem weiter unten angebenden Zielordner befindet sich keine [DEFINEDPRODUCT] [DEFINEDVERSION] Version."
+
+[OOO_CONTROL_302]
+en-US = "A newer [DEFINEDPRODUCT] [DEFINEDVERSION] has been found."
+de = "Auf Ihrem System wurde eine neuere Version von [DEFINEDPRODUCT] [DEFINEDVERSION] gefunden."
+
+[OOO_CONTROL_303]
+en-US = "The version specified in the folder below cannot be updated."
+de = "Die Version in dem angegebenen Ordner kann nicht aktualisiert werden."
+
+[OOO_CONTROL_304]
+en-US = "Check the destination folder."
+de = "Überprüfen Sie den Zielordner."
+
+[OOO_CONTROL_305]
+en-US = "To continue, click "Next"."
+de = "Klicken Sie auf "Weiter", um fortzufahren."
+
+[OOO_CONTROL_306]
+en-US = "To select a different version, click "Change". Otherwise click "Cancel" to abort the Installation Wizard."
+de = "Klicken Sie auf "Ändern", um eine andere Version auszuwählen. Mit "Abbrechen" beenden Sie den Installationsassistenten."
+
+[OOO_CONTROL_307]
+en-US = "To select a different folder, click "Change"."
+de = "Klicken Sie auf "Ändern" und wählen Sie einen anderen Ordner aus."
+
+[OOO_CONTROL_308]
+de    = "[ProductName] wird installiert nach:"
+en-US  = "Install [ProductName] to:"
+
 [OOO_CONTROL_LANG_1033]
 en-US = "English"
 de = "Englisch"
