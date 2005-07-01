@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-06 16:09:18 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ public:
     virtual void setText( const String & ) = 0;
     virtual String getText() const = 0;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) = 0;
-    virtual void toggle( bool bOn );
+    virtual void toggle( bool bOn ) = 0;
 };
 
 }
@@ -117,10 +117,6 @@ StatusWindow::StatusWindow( WinBits nWinBits ) :
 StatusWindow::~StatusWindow() {}
 
 void StatusWindow::setPosition( SalFrame* pFrame )
-{
-}
-
-void StatusWindow::toggle( bool bOn )
 {
 }
 
@@ -141,6 +137,8 @@ class XIMStatusWindow : public StatusWindow
     bool                    m_bDelayedShow;
     I18NStatus::ShowReason  m_eDelayedReason;
     ULONG                   m_nDelayedEvent;
+    // for toggling
+    bool                    m_bOn;
 
     Point updatePosition();
     void layout();
@@ -155,6 +153,7 @@ public:
     virtual void setText( const String & );
     virtual String getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
+    virtual void toggle( bool bOn );
 
     // overload WorkWindow::DataChanged
     virtual void DataChanged( const DataChangedEvent& rEvt );
@@ -169,7 +168,8 @@ XIMStatusWindow::XIMStatusWindow() :
         m_bAnchoredAtRight( false ),
         m_bDelayedShow( false ),
         m_eDelayedReason( I18NStatus::contextmap ),
-        m_nDelayedEvent( 0 )
+        m_nDelayedEvent( 0 ),
+        m_bOn( true )
 {
     layout();
 }
@@ -178,6 +178,12 @@ XIMStatusWindow::~XIMStatusWindow()
 {
     if( m_nDelayedEvent )
         Application::RemoveUserEvent( m_nDelayedEvent );
+}
+
+void XIMStatusWindow::toggle( bool bOn )
+{
+    m_bOn = bOn;
+    show( bOn, I18NStatus::contextmap );
 }
 
 void XIMStatusWindow::layout()
@@ -309,7 +315,7 @@ IMPL_LINK( XIMStatusWindow, DelayedShowHdl, void*, pDummy )
         Point aPoint = updatePosition();
         pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
-    Show( m_bDelayedShow, SHOW_NOACTIVATE );
+    Show( m_bDelayedShow && m_bOn, SHOW_NOACTIVATE );
     if( m_bDelayedShow )
     {
         XRaiseWindow( (Display*)pData->pDisplay,
@@ -660,7 +666,19 @@ void I18NStatus::setStatusText( const String& rText )
         String aText( pBuffer );
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
-        m_pStatusWindow->show( true, contextmap );
+
+        bool bVisible = true;
+        if( m_pParent )
+        {
+            long w, h;
+            m_pParent->GetClientSize( w, h );
+            if( w == 0 || h == 0 )
+            {
+                bVisible = false;
+            }
+        }
+
+        m_pStatusWindow->show( bVisible, contextmap );
     }
 }
 
@@ -722,7 +740,7 @@ SalFrame* I18NStatus::getStatusFrame() const
 
 bool I18NStatus::canToggleStatusWindow() const
 {
-    return m_aChoices.begin() != m_aChoices.end(); // implies IIIMP
+    return true;
 }
 
 void I18NStatus::toggleStatusWindow()
