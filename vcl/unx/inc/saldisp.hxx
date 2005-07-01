@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:32:53 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,7 @@ public:
     void            Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNotification = true );
 
     void            SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT );
+    void            CancelInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent );
     bool            DispatchInternalEvent();
     void            PrintInfo() const;
 
