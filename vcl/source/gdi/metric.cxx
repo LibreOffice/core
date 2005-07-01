@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:45:44 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,6 +644,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             return true;
         }
 
+        delete[] pCodePairs;
+        delete[] pStartGlyphs;
         return false;
     }
 
@@ -731,6 +733,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             *(pCP++) = *itInt;
 
         // glyph mapping for non-unicode fonts not implemented
+        delete[] pStartGlyphs;
         pStartGlyphs = NULL;
     }
 
