@@ -305,20 +305,16 @@ sub put_packagename_into_script
 
     my $installline = "";
 
+    if ( $installer::globals::issolarisbuild ) { $installline = "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile"; }
+
+    if ( $installer::globals::islinuxrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION -i"; }
+
     for ( my $i = 0; $i <= $#{$allnames}; $i++ )
     {
-        if ( $installer::globals::issolarisbuild )
-        {
-            $installline = $installline . "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile ${$allnames}[$i]\n";
-        }
+        if ( $installer::globals::issolarisbuild ) { $installline = $installline . " ${$allnames}[$i]"; }
 
-        if ( $installer::globals::islinuxrpmbuild )
-        {
-            $installline = $installline . "  rpm --prefix \$PRODUCTINSTALLLOCATION -i \$outdir/${$allnames}[$i]\n";
-        }
+        if ( $installer::globals::islinuxrpmbuild ) { $installline = $installline . " \$outdir/${$allnames}[$i]"; }
     }
-
-    $installline =~ s/\s*$//;
 
     for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
     {
@@ -356,10 +352,6 @@ sub put_linenumber_into_script
     my ( $scriptfile, $licensefile, $allnames ) = @_;
 
     my $linenumber =  $#{$scriptfile} + $#{$licensefile} + 3;   # also adding the content of the license file!
-
-    # INSTALLLINES is replaced twice
-    my $addlines = 2 * $#{$allnames};
-    $linenumber = $linenumber + $addlines;  # The number is also increased by the number of packages
 
     my $infoline = "Adding linenumber $linenumber into language pack script\n";
     push( @installer::globals::logfileinfo, $infoline);
