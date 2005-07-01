@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 11:15:36 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,7 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
     {
         // when dispatch object is released, destroy its connection to this object and destroy it
         pControllerItem->UnBindController();
+        delete pControllerItem;
     }
 }
 
