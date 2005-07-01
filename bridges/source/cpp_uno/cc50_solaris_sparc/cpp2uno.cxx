@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:44:40 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 12:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "cc50_solaris_sparc.hxx"
+#include "flushcode.hxx"
 
 using namespace com::sun::star::uno;
 
@@ -542,15 +543,8 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
-extern "C" void doFlushCode(unsigned long address, unsigned long count);
-
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const * begin, unsigned char const * end)
 {
-    unsigned long n = end - begin;
-    if (n != 0) {
-        unsigned long adr = reinterpret_cast< unsigned long >(begin);
-        unsigned long off = adr & 7;
-        doFlushCode(adr - off, (n + off + 7) >> 3);
-    }
+    bridges::cpp_uno::cc50_solaris_sparc::flushCode(begin, end);
 }
