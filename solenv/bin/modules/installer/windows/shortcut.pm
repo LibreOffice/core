@@ -661,10 +661,10 @@ sub create_shortcut_table
             }
         }
 
-        # For language packs the soffice.exe has to be included, even if it is not part of the product.
+        # For language packs and patches the soffice.exe has to be included, even if it is not part of the product.
         # Also as part of the ARP applet (no substitution needed for ProductName, because the file is not installed!)
 
-        if (( $onefile eq "" ) && ( $installer::globals::languagepack ))
+        if (( $onefile eq "" ) && (( $installer::globals::languagepack ) || ( $installer::globals::patch )))
         {
             my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$sofficefile, $includepatharrayref, 1);
             if ($$sourcepathref eq "") { installer::exiter::exit_program("ERROR: Could not find $sofficefile as icon in language pack!", "create_shortcut_table"); }
