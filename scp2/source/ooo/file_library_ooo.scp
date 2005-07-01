@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.114 $
+*  $Revision: 1.115 $
 *
-*  last change: $Author: kz $ $Date: 2005-07-01 13:19:59 $
+*  last change: $Author: rt $ $Date: 2005-07-01 13:55:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -783,7 +783,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfact
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -835,7 +835,7 @@ File gid_File_Lib_Icudata
     Name = STRING(CONCAT5(icudt,ICU_MAJOR,ICU_MINOR,l,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Icui18n
@@ -1109,7 +1109,7 @@ File gid_File_Lib_Localedata_En
     Name = "localedata_en.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Localedata_Es
@@ -1120,7 +1120,7 @@ File gid_File_Lib_Localedata_Es
     Name = "localedata_es.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Localedata_Euro
@@ -1131,7 +1131,7 @@ File gid_File_Lib_Localedata_Euro
     Name = "localedata_euro.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Localedata_Others
@@ -1142,7 +1142,7 @@ File gid_File_Lib_Localedata_Others
     Name = "localedata_others.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Mcnttype
@@ -1969,7 +1969,7 @@ File gid_File_Lib_Urp_Uno
   #endif
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Utl , utl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Utl , utl)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Uui, uui )
 
