@@ -373,7 +373,7 @@ sub resolving_all_languages_in_productlists
 
 sub checking_directories_with_corrupt_hostname
 {
-    my ($dirsref) = @_;
+    my ($dirsref, $languagesarrayref) = @_;
 
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
     {
@@ -385,7 +385,9 @@ sub checking_directories_with_corrupt_hostname
 
         if ( $hostname eq "" )
         {
-            installer::exiter::exit_program("ERROR: HostName not defined for $onedir->{'gid'} for specified language.", "checking_directories_with_corrupt_hostname");
+            my $langstring = "";
+            for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ ) { $langstring .= ${$languagesarrayref}[$j] . " "; }
+            installer::exiter::exit_program("ERROR: HostName not defined for $onedir->{'gid'} for specified language. Probably you wanted to create an installation set, in a language not defined in scp2 project. You selected the following language(s): $langstring", "checking_directories_with_corrupt_hostname");
         }
 
         if ( $hostname eq "FAILURE" )
@@ -465,6 +467,8 @@ sub replace_setup_variables
     # the environment variable CWS_WORK_STAMP is set only in CWS
     if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
 
+    if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
+
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
         my $oneitem = ${$itemsarrayref}[$i];
@@ -475,6 +479,10 @@ sub replace_setup_variables
         $value =~ s/\<productkey\>/$productkey/;
         $value =~ s/\<productcode\>/$installer::globals::productcode/;
         $value =~ s/\<upgradecode\>/$installer::globals::upgradecode/;
+        $value =~ s/\<alllanguages\>/$languagesstring/;
+        $value =~ s/\<productmajor\>/$localbuild/;
+        $value =~ s/\<productminor\>/$localminor/;
+        $value =~ s/\<productbuildid\>/$installer::globals::buildid/;
 
         $oneitem->{'Value'} = $value;
     }
