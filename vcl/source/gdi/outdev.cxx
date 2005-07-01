@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:20:03 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,19 +497,35 @@ OutputDevice::~OutputDevice()
         }
     }
 
-    if ( mpFontEntry )
+    // release the active font instance
+    if( mpFontEntry )
         mpFontCache->Release( mpFontEntry );
-    if ( mpGetDevFontList )
+    // remove cached results of GetDevFontList/GetDevSizeList
+    // TODO: use smart pointers for them
+    if( mpGetDevFontList )
         delete mpGetDevFontList;
-    if ( mpGetDevSizeList )
+    if( mpGetDevSizeList )
         delete mpGetDevSizeList;
 
+    // release ImplFontCache specific to this OutputDevice
+    // TODO: refcount ImplFontCache
+    if( mpFontCache
+    && (mpFontCache != ImplGetSVData()->maGDIData.mpScreenFontCache)
+    && (ImplGetSVData()->maGDIData.mpScreenFontCache != NULL) )
+    {
+        delete mpFontCache;
+        mpFontCache = NULL;
+    }
+
+    // release ImplFontList specific to this OutputDevice
+    // TODO: refcount ImplFontList
     if( mpFontList
     && (mpFontList != ImplGetSVData()->maGDIData.mpScreenFontList)
     && (ImplGetSVData()->maGDIData.mpScreenFontList != NULL) )
     {
         mpFontList->Clear();
         delete mpFontList;
+        mpFontList = NULL;
     }
 
     delete mpAlphaVDev;
