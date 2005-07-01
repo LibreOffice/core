@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eformspropertyhandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:55:43 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                         m_xORB;
         ::std::auto_ptr< EFormsHelper > m_pHelper;
+        /** current value of the Model property, if there is no binding, yet
+        */
+        ::rtl::OUString                 m_sBindingLessModelName;
 
     public:
         // HandlerFactory
@@ -131,6 +134,14 @@ namespace pcr
         // PropertyHandler overridables
         virtual ::std::vector< ::com::sun::star::beans::Property >
                                             SAL_CALL implDescribeSupportedProperties() const;
+
+    protected:
+        /** returns the value of the PROPERTY_XML_DATA_MODEL property.
+
+            An extra method is necessary here, which respects both the value set at our helper,
+            and <member>m_sBindingLessModelName</member>
+        */
+        ::rtl::OUString getModelNamePropertyValue() const;
     };
 
 //........................................................................

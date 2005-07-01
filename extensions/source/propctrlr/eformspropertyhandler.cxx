@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eformspropertyhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:55:28 $
+ *  last change: $Author: rt $ $Date: 2005-07-01 11:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,15 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    ::rtl::OUString EFormsPropertyHandler::getModelNamePropertyValue() const
+    {
+        ::rtl::OUString sModelName = m_pHelper->getCurrentFormModelName();
+        if ( !sModelName.getLength() )
+            sModelName = m_sBindingLessModelName;
+        return sModelName;
+    }
+
+    //--------------------------------------------------------------------
     Any SAL_CALL EFormsPropertyHandler::getPropertyValue( PropertyId _nPropId, bool _bLazy ) const
     {
         Any aReturn;
@@ -157,14 +166,12 @@ namespace pcr
                 break;
 
             case PROPERTY_ID_XML_DATA_MODEL:
-            {
-                ::rtl::OUString sModelName;
-                Reference< XModel > xFormsModel( m_pHelper->getCurrentFormModel() );
-                if ( xFormsModel.is() )
-                    sModelName = xFormsModel->getID();
-                aReturn <<= sModelName;
-            }
-            break;
+                aReturn <<= getModelNamePropertyValue();
+                break;
+
+            case PROPERTY_ID_BINDING_NAME:
+                aReturn <<= m_pHelper->getCurrentBindingName();
+                break;
 
             case PROPERTY_ID_BIND_EXPRESSION:
             case PROPERTY_ID_XSD_CONSTRAINT:
@@ -224,26 +231,47 @@ namespace pcr
 
             case PROPERTY_ID_XML_DATA_MODEL:
             {
-                ::rtl::OUString sNewModelName;
-                OSL_VERIFY( _rValue >>= sNewModelName );
+                OSL_VERIFY( _rValue >>= m_sBindingLessModelName );
 
-                Reference< XPropertySet > xBinding( m_pHelper->getCurrentBinding() );
-                if ( !xBinding.is() )
+                // if the model changed, reset the binding to NULL
+                if ( m_pHelper->getCurrentFormModelName() != m_sBindingLessModelName )
                 {
-                    // create a new one
-                    xBinding = m_pHelper->createBindingForFormModel( sNewModelName );
-                    // announce it at the control
-                    m_pHelper->setBinding( xBinding );
+                    ::rtl::OUString sOldBindingName = m_pHelper->getCurrentBindingName();
+                    m_pHelper->setBinding( NULL );
+                    firePropertyChange( PROPERTY_BINDING_NAME, PROPERTY_ID_BINDING_NAME,
+                        makeAny( sOldBindingName ), makeAny( ::rtl::OUString() ) );
                 }
-                else
-                {
-                    Reference< XModel > xOldModel = m_pHelper->getCurrentFormModel();
-                    if ( xOldModel.is() )
-                        xOldModel->getBindings()->remove( makeAny( xBinding ) );
+            }
+            break;
 
-                    Reference< XModel > xNewModel = m_pHelper->getFormModelByName( sNewModelName );
-                    if ( xNewModel.is() )
-                        xNewModel->getBindings()->insert( makeAny( xBinding ) );
+            case PROPERTY_ID_BINDING_NAME:
+            {
+                ::rtl::OUString sNewBindingName;
+                OSL_VERIFY( _rValue >>= sNewBindingName );
+
+                bool bPreviouslyEmptyModel = !m_pHelper->getCurrentFormModel().is();
+
+                Reference< XPropertySet > xNewBinding;
+                if ( sNewBindingName.getLength() )
+                    // obtain the binding with this name, for the current model
+                    xNewBinding = m_pHelper->getOrCreateBindingForModel( getModelNamePropertyValue(), sNewBindingName );
+
+                m_pHelper->setBinding( xNewBinding );
+
+                if ( bPreviouslyEmptyModel )
+                {   // simulate a property change for the model property
+                    // This is because we "simulate" the Model property by remembering the
+                    // value ourself. Other instances might, however, not know this value,
+                    // but prefer retrieve it somewhere else - e.g. from the EFormsHelper
+                    //
+                    // The really correct solution would be if *all* property handlers
+                    // obtain a "current property value" for *all* properties from a central
+                    // instance. Then, handler A could ask it for the value of property
+                    // X, and this request would be re-routed to handler B, which ultimately
+                    // knows the current value.
+                    // However, there's no such mechanism in place currently.
+                    firePropertyChange( PROPERTY_XML_DATA_MODEL, PROPERTY_ID_XML_DATA_MODEL,
+                        makeAny( ::rtl::OUString() ), makeAny( getModelNamePropertyValue() ) );
                 }
             }
             break;
@@ -295,6 +323,7 @@ namespace pcr
             {
                 aProperties.reserve( 7 );
                 addStringPropertyDescription( aProperties, PROPERTY_XML_DATA_MODEL );
+                addStringPropertyDescription( aProperties, PROPERTY_BINDING_NAME );
                 addStringPropertyDescription( aProperties, PROPERTY_BIND_EXPRESSION );
                 addStringPropertyDescription( aProperties, PROPERTY_XSD_REQUIRED );
                 addStringPropertyDescription( aProperties, PROPERTY_XSD_RELEVANT );
@@ -373,8 +402,9 @@ namespace pcr
         if ( !m_pHelper.get() )
             return ::std::vector< ::rtl::OUString >();
 
-        ::std::vector< ::rtl::OUString > aInterestedInActuations( 1 );
+        ::std::vector< ::rtl::OUString > aInterestedInActuations( 2 );
         aInterestedInActuations[ 0 ] = PROPERTY_XML_DATA_MODEL;
+        aInterestedInActuations[ 1 ] = PROPERTY_BINDING_NAME;
         return aInterestedInActuations;
     }
 
@@ -407,6 +437,15 @@ namespace pcr
             m_pHelper->getFormModelNames( _rDescriptor.aListValues );
             break;
 
+        case PROPERTY_ID_BINDING_NAME:
+        {
+            _rDescriptor.eControlType = BCT_COMBOBOX;
+            ::rtl::OUString sCurrentModel( getModelNamePropertyValue() );
+            if ( sCurrentModel.getLength() )
+                m_pHelper->getBindingNames( sCurrentModel, _rDescriptor.aListValues );
+        }
+        break;
+
         case PROPERTY_ID_BIND_EXPRESSION:   _rDescriptor.nButtonHelpId = UID_PROP_DLG_BIND_EXPRESSION; break;
         case PROPERTY_ID_XSD_REQUIRED:      _rDescriptor.nButtonHelpId = UID_PROP_DLG_XSD_REQUIRED;    break;
         case PROPERTY_ID_XSD_RELEVANT:      _rDescriptor.nButtonHelpId = UID_PROP_DLG_XSD_RELEVANT;    break;
@@ -426,7 +465,8 @@ namespace pcr
         if ( !m_pHelper.get() )
             return false;
 
-        OSL_ENSURE( ( PROPERTY_ID_BIND_EXPRESSION == _nPropId )
+        OSL_ENSURE( ( PROPERTY_ID_BINDING_NAME == _nPropId )
+                 || ( PROPERTY_ID_BIND_EXPRESSION == _nPropId )
                  || ( PROPERTY_ID_XSD_REQUIRED == _nPropId )
                  || ( PROPERTY_ID_XSD_RELEVANT == _nPropId )
                  || ( PROPERTY_ID_XSD_READONLY == _nPropId )
@@ -532,14 +572,21 @@ namespace pcr
             ::rtl::OUString sDataModelName;
             OSL_VERIFY( _rNewValue >>= sDataModelName );
             bool bBoundToSomeModel = 0 != sDataModelName.getLength();
+            _pUpdater->rebuildPropertyUI( PROPERTY_BINDING_NAME );
+            _pUpdater->enablePropertyUI( PROPERTY_BINDING_NAME, bBoundToSomeModel );
+        }
+        // NO break
 
-            _pUpdater->enablePropertyUI( PROPERTY_BIND_EXPRESSION, bBoundToSomeModel );
-            _pUpdater->enablePropertyUI( PROPERTY_XSD_REQUIRED, bBoundToSomeModel );
-            _pUpdater->enablePropertyUI( PROPERTY_XSD_RELEVANT, bBoundToSomeModel );
-            _pUpdater->enablePropertyUI( PROPERTY_XSD_READONLY, bBoundToSomeModel );
-            _pUpdater->enablePropertyUI( PROPERTY_XSD_CONSTRAINT, bBoundToSomeModel );
-            _pUpdater->enablePropertyUI( PROPERTY_XSD_CALCULATION, bBoundToSomeModel );
-            _pUpdater->enablePropertyUI( PROPERTY_XSD_DATA_TYPE, bBoundToSomeModel );
+        case PROPERTY_ID_BINDING_NAME:
+        {
+            bool bHaveABinding = ( m_pHelper->getCurrentBindingName().getLength() > 0 );
+            _pUpdater->enablePropertyUI( PROPERTY_BIND_EXPRESSION, bHaveABinding );
+            _pUpdater->enablePropertyUI( PROPERTY_XSD_REQUIRED, bHaveABinding );
+            _pUpdater->enablePropertyUI( PROPERTY_XSD_RELEVANT, bHaveABinding );
+            _pUpdater->enablePropertyUI( PROPERTY_XSD_READONLY, bHaveABinding );
+            _pUpdater->enablePropertyUI( PROPERTY_XSD_CONSTRAINT, bHaveABinding );
+            _pUpdater->enablePropertyUI( PROPERTY_XSD_CALCULATION, bHaveABinding );
+            _pUpdater->enablePropertyUI( PROPERTY_XSD_DATA_TYPE, bHaveABinding );
         }
         break;
 
