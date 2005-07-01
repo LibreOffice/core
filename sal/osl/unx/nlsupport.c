@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:29:07 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,6 @@ static rtl_Locale * _parse_locale( const char * locale )
 {
     static sal_Unicode c_locale[2] = { (sal_Unicode) 'C', 0 };
 
-    rtl_uString * pLanguage = NULL;
-    rtl_uString * pCountry  = NULL;
-    rtl_uString * pVariant  = NULL;
-
     /* check if locale contains a valid string */
     if( locale )
     {
@@ -224,6 +220,10 @@ static rtl_Locale * _parse_locale( const char * locale )
 
         if( len >= 2 )
         {
+            rtl_uString * pLanguage = NULL;
+            rtl_uString * pCountry  = NULL;
+            rtl_uString * pVariant  = NULL;
+
             size_t offset = 2;
 
             /* convert language code to unicode */
@@ -244,7 +244,13 @@ static rtl_Locale * _parse_locale( const char * locale )
                 OSL_ASSERT(pVariant != NULL);
             }
 
-            return rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
+            rtl_Locale * ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
+
+            if (pVariant) rtl_uString_release(pVariant);
+            if (pCountry) rtl_uString_release(pCountry);
+            if (pLanguage) rtl_uString_release(pLanguage);
+
+            return ret;
         }
         else
             return rtl_locale_register( c_locale, c_locale + 1, c_locale + 1 );
