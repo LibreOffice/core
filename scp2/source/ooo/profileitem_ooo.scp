@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.23 $
+*  $Revision: 1.24 $
 *
-*  last change: $Author: rt $ $Date: 2005-06-17 14:15:05 $
+*  last change: $Author: rt $ $Date: 2005-07-01 12:20:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -150,6 +150,55 @@ ProfileItem gid_Profileitem_Bootstrap_Upgradecode
     Order = 9;
     Key = "UpgradeCode";
     Value = "<upgradecode>";
+End
+
+#endif
+
+ProfileItem gid_Profileitem_Bootstrap_Productmajor
+    ProfileID = gid_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 10;
+    Key = "ProductMajor";
+    Value = "<productmajor>";
+End
+
+ProfileItem gid_Profileitem_Bootstrap_Productminor
+    ProfileID = gid_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 11;
+    Key = "ProductMinor";
+    Value = "<productminor>";
+End
+
+ProfileItem gid_Profileitem_Bootstrap_Productbuildid
+    ProfileID = gid_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 12;
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
+End
+
+ProfileItem gid_Profileitem_Bootstrap_Alllanguages
+    ProfileID = gid_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 13;
+    Key = "AllLanguages";
+    Value = "<alllanguages>";
+End
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Bootstrap_Msiproductversion
+    ProfileID = gid_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 14;
+    Key = "MsiProductVersion";
+    Value = "<msiproductversion>";
 End
 
 #endif
