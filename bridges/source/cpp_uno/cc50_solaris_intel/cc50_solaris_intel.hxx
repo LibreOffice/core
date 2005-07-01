@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cc50_solaris_intel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 13:09:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-01 12:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <cstddef>
+
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
@@ -72,7 +74,7 @@ namespace __Crun
 {
     struct static_type_info
     {
-        char*       m_pClassName;
+        std::ptrdiff_t m_pClassName;
         int         m_nSkip1; // must be 0
         void*       m_pMagic; // points to some magic data
         int         m_nMagic[ 4 ];
@@ -103,7 +105,6 @@ void cc50_solaris_intel_raiseException(
 
 void cc50_solaris_intel_fillUnoException(
     void*, const char*,
-    typelib_TypeDescription * pExcTypeDescr,
     uno_Any*, uno_Mapping * pCpp2Uno );
 }
 
