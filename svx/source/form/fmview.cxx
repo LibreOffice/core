@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-06-21 13:15:28 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
         return;
 
     // #i31958# don't call wizards in XForms mode
-    if( pFormShell->GetImpl()->getDocumentType() == eEnhancedForm )
+    if ( pFormShell->GetImpl()->isEnhancedForm() )
         return;
 
     // #i46898# no wizards if there is no Base installed - currently, all wizards are
