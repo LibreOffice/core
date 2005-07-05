@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:55:25 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,25 @@ namespace svxform
     //= DocumentClassification
     //====================================================================
     //--------------------------------------------------------------------
+
+    bool DocumentClassification::isEnhancedForm( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
+    {
+        if( !_rxDocumentModel.is() )
+            return false;
+        try
+        {
+            Reference< XNameContainer > xXForms;
+            Reference< XFormsSupplier > xSuppForms( _rxDocumentModel, UNO_QUERY );
+            xXForms = xSuppForms.is() ? xSuppForms->getXForms() : Reference< XNameContainer >();
+            if ( xXForms.is() )
+                return true;
+        }
+        catch( const Exception& )
+        {
+        }
+        return false;
+    }
+
     DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
     {
         DocumentType eType( eUnknownDocumentType );
@@ -140,14 +159,8 @@ namespace svxform
 
         try
         {
-            // XForms
-            {
-                Reference< XNameContainer > xXForms;
-                Reference< XFormsSupplier > xSuppForms( _rxDocumentModel, UNO_QUERY );
-                xXForms = xSuppForms.is() ? xSuppForms->getXForms() : Reference< XNameContainer >();
-                if ( xXForms.is() )
-                    return eEnhancedForm;
-            }
+            if( DocumentClassification::isEnhancedForm( _rxDocumentModel ) )
+                return eEnhancedForm;
 
             // check for database forms before asking the service info
             if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxDocumentModel ) )
