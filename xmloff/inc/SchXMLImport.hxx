@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:34:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,17 @@ enum SchXMLPlotAreaAttrTokenMap
     XML_TOK_PA_TRANSFORM,
     XML_TOK_PA_CHART_ADDRESS,
     XML_TOK_PA_TABLE_NUMBER_LIST,
-    XML_TOK_PA_DS_HAS_LABELS
+    XML_TOK_PA_DS_HAS_LABELS,
+    XML_TOK_PA_VRP,
+    XML_TOK_PA_VPN,
+    XML_TOK_PA_VUP,
+    XML_TOK_PA_PROJECTION,
+    XML_TOK_PA_DISTANCE,
+    XML_TOK_PA_FOCAL_LENGTH,
+    XML_TOK_PA_SHADOW_SLANT,
+    XML_TOK_PA_SHADE_MODE,
+    XML_TOK_PA_AMBIENT_COLOR,
+    XML_TOK_PA_LIGHTING_MODE
 };
 
 enum SchXMLAxisAttrTokenMap
