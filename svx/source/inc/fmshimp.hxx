@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:24:42 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,6 +597,7 @@ public:
     /// classifies our host document
     ::svxform::DocumentType
             getDocumentType() const;
+    bool    isEnhancedForm() const;
 
     /// determines whether our host document is currently read-only
     bool    IsReadonlyDoc() const;
@@ -606,6 +607,7 @@ public:
     inline sal_Bool IsSelectionUpdatePending();
     void            ForceUpdateSelection(sal_Bool bLockInvalidation);
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          getContextDocument() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
         // if the form belongs to the controller (extern) displaying a grid, the according internal form will
