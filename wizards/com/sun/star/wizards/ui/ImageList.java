@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageList.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $  $Date: 2005-03-18 16:25:28 $
+ *  last change: $Author: obo $  $Date: 2005-07-05 10:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,11 @@ import com.sun.star.wizards.common.Renderer;
 import com.sun.star.wizards.ui.event.*;
 
 import java.awt.ItemSelectable;
-import java.awt.SystemColor;
 import java.awt.event.ItemListener;
+
+//import com.sun.star.awt.ItemEvent;
+//import com.sun.star.awt.XItemListener;
+
 
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
