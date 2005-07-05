@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextFieldHandler.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: kz $ $Date: 2004-11-27 09:07:35 $
+*  last change: $Author: obo $ $Date: 2005-07-05 10:17:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,14 +60,10 @@
 
 package com.sun.star.wizards.text;
 
-import java.awt.TextField;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.util.Vector;
 
-import com.sun.star.text.UserDataPart;
 import com.sun.star.text.XDependentTextField;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
