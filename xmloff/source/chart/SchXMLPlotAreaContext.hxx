@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:54:10 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,22 @@ struct DataRowPointStyle
 
 // ----------------------------------------
 
+class SchXML3DSceneAttributesHelper : public SdXML3DSceneAttributesHelper
+{
+public:
+    explicit SchXML3DSceneAttributesHelper( SvXMLImport& rImporter );
+
+    void SetDistance( sal_Int32 nDistance );
+
+    bool IsDirty();
+    void SetDirty();
+
+private:
+    bool m_bIsDirty;
+};
+
+// ----------------------------------------
+
 class SchXMLPlotAreaContext : public SvXMLImportContext
 {
 private:
@@ -145,9 +161,11 @@ private:
     sal_Bool  mbStockHasVolume;
     sal_Int32 mnSeries;
     sal_Int32 mnMaxSeriesLength;
-    SdXML3DSceneAttributesHelper maSceneImportHelper;
+    SchXML3DSceneAttributesHelper maSceneImportHelper;
     com::sun::star::awt::Size maSize;
     com::sun::star::awt::Point maPosition;
+    bool mbSetDiagramSize;
+    bool mbSetDiagramPosition;
     ::rtl::OUString msAutoStyleName;
     ::rtl::OUString& mrChartAddress;
     ::rtl::OUString& mrTableNumberList;
