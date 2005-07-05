@@ -82,6 +82,7 @@ URE
 {
     Settings
     {
+        downloadname URE_{productversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME URE
@@ -90,6 +91,9 @@ URE
             PACKAGEREVISION 1
             LICENSENAME LGPL, SISSL
             NOVERSIONINDIRNAME 1
+            DOWNLOADBANNER ooobanner.bmp
+            DOWNLOADBITMAP ooobitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
         }
         active 1
         compression 5
