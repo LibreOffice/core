@@ -3,7 +3,6 @@ wz      wizards\util                                            nmake           
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\imagelists                               nmake           -       all     wz_imglists NULL
 wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
-wz      wizards\source\formwizard                               nmake           -       all     wz_reswiz NULL
 wz      wizards\source\gimmicks                                 nmake           -       all     wz_gimmickswz NULL
 wz      wizards\source\importwizard                             nmake           -       all     wz_importwiz NULL
 wz      wizards\source\schedule                                 nmake           -       all     wz_schedulewiz NULL
