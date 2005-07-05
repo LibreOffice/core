@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 10:35:40 $
+ *  last change: $Author: oj $ $Date: 2005-07-05 06:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCol
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
-    OColumn* pColumn = new OColumn(sal_True);
+    OColumn* pColumn = new OHSQLColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
@@ -408,7 +408,35 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     }
 }
 // -----------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException)
+{
+    if ( ! m_Type.compareToAscii("VIEW") )
+    {
+        Sequence< Type > aTypes = OTableHelper::getTypes();
+        ::std::vector<Type> aOwnTypes;
+        aOwnTypes.reserve(aTypes.getLength());
+        const Type* pIter = aTypes.getConstArray();
+        const Type* pEnd = pIter + aTypes.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            if( *pIter != ::getCppuType((const Reference<XRename>*)0) )
+            {
+                aOwnTypes.push_back(*pIter);
+            }
+        }
+        Type *pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+        return Sequence< Type >(pTypes, aOwnTypes.size());
+    }
+    return OTableHelper::getTypes();
+}
 
+// -------------------------------------------------------------------------
+Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    if( !m_Type.compareToAscii("VIEW") && rType == ::getCppuType((const Reference<XRename>*)0) )
+        return Any();
 
-
+    return OTableHelper::queryInterface(rType);
+}
+// -------------------------------------------------------------------------
 
