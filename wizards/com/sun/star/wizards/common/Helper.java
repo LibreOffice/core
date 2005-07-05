@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Helper.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:13:52 $
+*  last change: $Author: obo $ $Date: 2005-07-05 10:17:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -335,7 +335,7 @@ public class Helper {
 
         public synchronized double getDocumentDateAsDouble(long javaTimeInMillis) {
             calendar.clear();
-            calendar.setTimeInMillis( javaTimeInMillis ) ;
+            JavaTools.setTimeInMillis(calendar, javaTimeInMillis ) ;
 
             long date1 = getTimeInMillis();
 
