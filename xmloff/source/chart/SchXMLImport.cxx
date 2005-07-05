@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:35:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,10 +199,20 @@ static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_PA_WIDTH             },
     { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_PA_HEIGHT            },
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_PA_STYLE_NAME        },
+    { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_PA_CHART_ADDRESS     },
+    { XML_NAMESPACE_CHART,  XML_TABLE_NUMBER_LIST,      XML_TOK_PA_TABLE_NUMBER_LIST },
+    { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS, XML_TOK_PA_DS_HAS_LABELS     },
     { XML_NAMESPACE_DR3D,   XML_TRANSFORM,              XML_TOK_PA_TRANSFORM         },
-    { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,    XML_TOK_PA_CHART_ADDRESS     },
-    { XML_NAMESPACE_CHART,  XML_TABLE_NUMBER_LIST,     XML_TOK_PA_TABLE_NUMBER_LIST },
-    { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS,XML_TOK_PA_DS_HAS_LABELS     },
+    { XML_NAMESPACE_DR3D,   XML_VRP,                    XML_TOK_PA_VRP               },
+    { XML_NAMESPACE_DR3D,   XML_VPN,                    XML_TOK_PA_VPN               },
+    { XML_NAMESPACE_DR3D,   XML_VUP,                    XML_TOK_PA_VUP               },
+    { XML_NAMESPACE_DR3D,   XML_PROJECTION,             XML_TOK_PA_PROJECTION        },
+    { XML_NAMESPACE_DR3D,   XML_DISTANCE,               XML_TOK_PA_DISTANCE          },
+    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,           XML_TOK_PA_FOCAL_LENGTH      },
+    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,           XML_TOK_PA_SHADOW_SLANT      },
+    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,             XML_TOK_PA_SHADE_MODE        },
+    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,          XML_TOK_PA_AMBIENT_COLOR     },
+    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,          XML_TOK_PA_LIGHTING_MODE     },
     XML_TOKEN_MAP_END
 };
 
