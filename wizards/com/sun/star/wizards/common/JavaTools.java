@@ -2,9 +2,9 @@
 *
 *  $RCSfile: JavaTools.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:14:04 $
+*  last change: $Author: obo $ $Date: 2005-07-05 10:17:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,13 +60,20 @@
 package com.sun.star.wizards.common;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uri.XExternalUriReferenceTranslator;
 import com.sun.star.util.DateTime;
 import com.sun.star.beans.PropertyValue;
 import java.net.URLDecoder;
 import java.util.*;
 import java.io.File;
+
+import com.sun.star.lib.util.UrlToFileMapper;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+
 
 /**
  *
@@ -77,6 +84,27 @@ public class JavaTools {
     /** Creates a new instance of JavaTools */
     public JavaTools() {
     }
+
+    public static void main(String args[]) {
+        String sPath = "";
+        DateTime oDateTime = null;
+        long n;
+        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+        try {
+            XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
+            if(xLocMSF != null){
+                System.out.println("Connected to "+ ConnectStr);
+                oDateTime = getDateTime(9500000);
+                sPath = convertfromURLNotation("file:///E:/trash/Web%20Wizard.xcu");
+                n = getMillis(oDateTime);
+                int a = 1;
+            }
+        }
+        catch(Exception exception){
+            exception.printStackTrace(System.out);
+        }}
+
+
 
     public static String[] copyStringArray(String[] FirstArray) {
         if (FirstArray != null) {
@@ -380,26 +408,22 @@ public class JavaTools {
 
 
 
-    public static String convertfromURLNotation(String URLPath) {
-//      XExternalUriReferenceTranslator xExternalUriReferenceTranslator = (XExternalUriReferenceTranslator)
-//                                      UnoRuntime.queryInterface(XExternalUriReferenceTranslator.class, _xMSF.createInstance("com.sun.star.uri.ExternalUriReferenceTranslator"));
-//      xExternalUriReferenceTranslator.translateToExternal(URLPath);
-        char PathSeparator = File.separatorChar;
-        java.net.URLDecoder oURL = new java.net.URLDecoder();
-        try {
-            URLPath = URLDecoder.decode(URLPath, "UTF-8");
-        } catch (java.io.UnsupportedEncodingException jexception) {
-            jexception.printStackTrace(System.out);
-        }
-        String SystemPath = replaceSubString(URLPath, "", "file:///");
-        SystemPath = SystemPath.replace('/', PathSeparator);
-        return SystemPath;
+    public static String convertfromURLNotation(String _sURLPath) {
+    String sPath = "";
+    try {
+        URL oJavaURL = new URL(_sURLPath);
+        File oFile = UrlToFileMapper.mapUrlToFile(oJavaURL);
+        sPath = oFile.getAbsolutePath();
+    } catch (MalformedURLException e) {
+        e.printStackTrace(System.out);
+    } catch (IOException e) {
+        e.printStackTrace(System.out);
+    }
+    return sPath;
     }
 
     public static DateTime getDateTime(long timeMillis) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.setTimeInMillis(timeMillis);
-        //TODO test me!
         setTimeInMillis(cal, timeMillis);
         DateTime dt = new DateTime();
         dt.Year = (short) cal.get(Calendar.YEAR);
@@ -428,7 +452,7 @@ public class JavaTools {
 
     public static long getMillis(DateTime time) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(time.Year, time.Month, time.Day, time.Hours, time.Seconds);
+        cal.set(time.Year, time.Month, time.Day, time.Hours, time.Minutes, time.Seconds);
         return getTimeInMillis(cal);
     }
 
