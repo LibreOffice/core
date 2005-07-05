@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:26:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,7 +539,7 @@ namespace svxform
 
                     // in XML forms, we don't allow for the properties of a form
                     // #i36484# / 2004-11-04 /- fs@openoffice.org
-                    if ( pFormShell->GetImpl()->getDocumentType() == eEnhancedForm && !m_nControlsSelected )
+                    if ( pFormShell->GetImpl()->isEnhancedForm() && !m_nControlsSelected )
                         aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
 
                     // if the property browser is already open, we don't allow for the properties, too
