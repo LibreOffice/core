@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Configuration.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $  $Date: 2005-04-18 15:12:12 $
+ *  last change: $Author: obo $  $Date: 2005-07-05 10:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,10 @@ public abstract class Configuration {
     }
 
     public static void set(boolean value, String name, Object parent) throws Exception {
-        set(Boolean.valueOf(value), name, parent);
+        if (value = true)
+            set(Boolean.TRUE, name, parent);
+        else
+            set(Boolean.FALSE, name, parent);
     }
 
     public static void set(Object value, String name, Object parent) throws com.sun.star.lang.IllegalArgumentException, PropertyVetoException, UnknownPropertyException, WrappedTargetException {
