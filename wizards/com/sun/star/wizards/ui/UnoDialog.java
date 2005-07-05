@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:26:35 $
+*  last change: $Author: obo $ $Date: 2005-07-05 10:18:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,7 +68,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.*;
-import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
