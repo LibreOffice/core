@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-06-21 13:15:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     }
     else if ((nFeature & FM_UI_FEATURE_SHOW_DATANAVIGATOR) == FM_UI_FEATURE_SHOW_DATANAVIGATOR)
     {
-        bResult = ( GetImpl()->getDocumentType() == eEnhancedForm );
+        bResult = GetImpl()->isEnhancedForm();
     }
     else if (  ( ( nFeature & FM_UI_FEATURE_TB_CONTROLS ) == FM_UI_FEATURE_TB_CONTROLS )
             || ( ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS ) == FM_UI_FEATURE_TB_MORECONTROLS )
@@ -1201,7 +1201,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_FM_USE_WIZARDS:
-                if  (   GetImpl()->getDocumentType() == eEnhancedForm
+                if  ( GetImpl()->isEnhancedForm()
                     ||  !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE )
                     )
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
@@ -1230,7 +1230,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CURRENCYFIELD:
             case SID_FM_PATTERNFIELD:
             case SID_FM_DBGRID:
-                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                if ( GetImpl()->isEnhancedForm() )
                 {
                     // in XForms mode, several controls are disabled:
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
@@ -1306,7 +1306,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
 
                 // special case for data navigator: hide if not in XML form document
-                if ( nWhich == SID_FM_SHOW_DATANAVIGATOR && ( GetImpl()->getDocumentType() != eEnhancedForm ) )
+                if ( nWhich == SID_FM_SHOW_DATANAVIGATOR && !GetImpl()->isEnhancedForm() )
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
             }   break;
 
@@ -1342,7 +1342,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 if (GetImpl()->IsSelectionUpdatePending())
                     GetImpl()->ForceUpdateSelection(sal_False);
 
-                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                if ( GetImpl()->isEnhancedForm() )
                 {
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                     break;
@@ -1369,7 +1369,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxUInt16Item(nWhich, m_nLastSlot));
                 break;
             case SID_FM_DESIGN_MODE:
-                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                if ( GetImpl()->isEnhancedForm() )
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                 else if (!m_pFormView || GetImpl()->IsReadonlyDoc() )
                     rSet.DisableItem( nWhich );
@@ -1417,7 +1417,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_IMAGECONTROL  :
             case SID_FM_CONVERTTO_SCROLLBAR     :
             case SID_FM_CONVERTTO_NAVIGATIONBAR :
-                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                if ( GetImpl()->isEnhancedForm() )
                 {
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                     break;
