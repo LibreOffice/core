@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:30:02 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@ namespace svxform
     public:
         /** classifies a document model
         */
+        static bool isEnhancedForm(
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocumentModel
+                            ) SAL_THROW(());
+
         static DocumentType classifyDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocumentModel
                             ) SAL_THROW(());
