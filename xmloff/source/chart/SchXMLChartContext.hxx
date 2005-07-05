@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-23 10:02:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@ private:
 
     ::rtl::OUString maMainTitle, maSubTitle;
     com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
+    // #i51307# only set actual positions if the svg:x/y attributes have been read
+    bool mbSetMainTitlePos;
+    bool mbSetSubTitlePos;
+    bool mbSetLegendPos;
     sal_Bool mbHasOwnTable;
     sal_Bool mbHasLegend;
 
@@ -158,13 +162,15 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTitleShape;
     rtl::OUString msAutoStyleName;
     com::sun::star::awt::Point& mrPosition;
+    bool & mrSetPosition;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport, const rtl::OUString& rLocalName,
                         rtl::OUString& rTitle,
                         com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape,
-                        com::sun::star::awt::Point& rPosition );
+                        com::sun::star::awt::Point& rPosition,
+                        bool & rSetPosition );
     virtual ~SchXMLTitleContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference<
@@ -182,11 +188,13 @@ class SchXMLLegendContext : public SvXMLImportContext
 private:
     SchXMLImportHelper& mrImportHelper;
     com::sun::star::awt::Point& mrPosition;
+    bool & mrSetPosition;
 
 public:
     SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
                          SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                         com::sun::star::awt::Point& rPosition );
+                         com::sun::star::awt::Point& rPosition,
+                        bool & rSetPosition );
     virtual ~SchXMLLegendContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
