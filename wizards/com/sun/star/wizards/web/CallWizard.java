@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallWizard.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $  $Date: 2005-03-08 15:47:46 $
+ *  last change: $Author: obo $  $Date: 2005-07-05 10:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ import com.sun.star.wizards.common.Resource;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author rpiterman
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class CallWizard {
 
@@ -158,10 +158,6 @@ public class CallWizard {
                         ww = webWizard;
                         webWizard.show();
                         webWizard = null;
-                    }
-                    catch (StoppedByUserException ex1) {
-                        webWizard = null;
-                        //do nothing;
                     }
                     catch (Exception ex) {
                         webWizard = null;
