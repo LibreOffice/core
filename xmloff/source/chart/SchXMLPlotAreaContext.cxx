@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:35:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,34 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
+// ========================================
+
+SchXML3DSceneAttributesHelper::SchXML3DSceneAttributesHelper(
+    SvXMLImport& rImporter ) :
+        SdXML3DSceneAttributesHelper( rImporter ),
+        m_bIsDirty( false )
+{
+    mnDistance =    4110; // default in base class: 1000
+    mnFocalLength = 800;  // default in base class: 1000
+}
+
+bool SchXML3DSceneAttributesHelper::IsDirty()
+{
+    return m_bIsDirty;
+}
+
+void SchXML3DSceneAttributesHelper::SetDirty()
+{
+    m_bIsDirty = true;
+}
+
+void SchXML3DSceneAttributesHelper::SetDistance( sal_Int32 nDistance )
+{
+    mnDistance = nDistance;
+}
+
+// ========================================
+
 SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                                               SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                               uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
@@ -163,13 +191,19 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         mbStockHasVolume( sal_False ),
         mnSeries( 0 ),
         mnMaxSeriesLength( 0 ),
-        maSceneImportHelper( rImport )
+        maSceneImportHelper( rImport ),
+        mbSetDiagramSize( false ),
+        mbSetDiagramPosition( false )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
     if( xDoc.is())
     {
         mxDiagram = xDoc->getDiagram();
+        // other default for distance for pie charts
+        if( mxDiagram.is() &&
+            mxDiagram->getDiagramType().equalsAscii("com.sun.star.chart.PieDiagram"))
+            maSceneImportHelper.SetDistance( 5000 );
     }
     DBG_ASSERT( mxDiagram.is(), "Couldn't get XDiagram" );
 
@@ -278,6 +312,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
         case XML_TOK_PA_LIGHT_SOURCE:
             pContext = maSceneImportHelper.create3DLightContext( nPrefix, rLocalName, xAttrList );
+            maSceneImportHelper.SetDirty();
             break;
 
         // elements for stock charts
@@ -332,15 +367,19 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         {
             case XML_TOK_PA_X:
                 GetImport().GetMM100UnitConverter().convertMeasure( maPosition.X, aValue );
+                mbSetDiagramPosition = true;
                 break;
             case XML_TOK_PA_Y:
                 GetImport().GetMM100UnitConverter().convertMeasure( maPosition.Y, aValue );
+                mbSetDiagramPosition = true;
                 break;
             case XML_TOK_PA_WIDTH:
                 GetImport().GetMM100UnitConverter().convertMeasure( maSize.Width, aValue );
+                mbSetDiagramSize = true;
                 break;
             case XML_TOK_PA_HEIGHT:
                 GetImport().GetMM100UnitConverter().convertMeasure( maSize.Height, aValue );
+                mbSetDiagramSize = true;
                 break;
             case XML_TOK_PA_STYLE_NAME:
                 msAutoStyleName = aValue;
@@ -361,8 +400,19 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         bColHasLabels = sal_True;
                 }
                 break;
-            default:
+            case XML_TOK_PA_TRANSFORM:
+            case XML_TOK_PA_VRP:
+            case XML_TOK_PA_VPN:
+            case XML_TOK_PA_VUP:
+            case XML_TOK_PA_PROJECTION:
+            case XML_TOK_PA_DISTANCE:
+            case XML_TOK_PA_FOCAL_LENGTH:
+            case XML_TOK_PA_SHADOW_SLANT:
+            case XML_TOK_PA_SHADE_MODE:
+            case XML_TOK_PA_AMBIENT_COLOR:
+            case XML_TOK_PA_LIGHTING_MODE:
                 maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
+                maSceneImportHelper.SetDirty();
                 break;
         }
     }
@@ -429,7 +479,7 @@ void SchXMLPlotAreaContext::EndElement()
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
-        if( bIsThreeDim )
+        if( bIsThreeDim && maSceneImportHelper.IsDirty() )
         {
             // set scene attributes at diagram
             maSceneImportHelper.setSceneAttributes( xProp );
@@ -475,8 +525,10 @@ void SchXMLPlotAreaContext::EndElement()
     uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
     if( xDiaShape.is())
     {
-        xDiaShape->setSize( maSize );
-        xDiaShape->setPosition( maPosition );
+        if( mbSetDiagramSize )
+            xDiaShape->setSize( maSize );
+        if( mbSetDiagramPosition )
+            xDiaShape->setPosition( maPosition );
     }
 
     // resize data so that all series and data point properties can be set
@@ -881,7 +933,8 @@ void SchXMLAxisContext::EndElement()
                                     xDoc->unlockControllers();
                                     xDoc->lockControllers();
                                 }
-                                xShape->setPosition( maCurrentAxis.aPosition );
+                                if( maCurrentAxis.bTitleHasMoved )
+                                    xShape->setPosition( maCurrentAxis.aPosition );
                             }
                         }
                     }
@@ -945,7 +998,8 @@ void SchXMLAxisContext::EndElement()
                                     xDoc->unlockControllers();
                                     xDoc->lockControllers();
                                 }
-                                xShape->setPosition( maCurrentAxis.aPosition );
+                                if( maCurrentAxis.bTitleHasMoved )
+                                    xShape->setPosition( maCurrentAxis.aPosition );
                             }
                         }
                     }
@@ -1008,7 +1062,8 @@ void SchXMLAxisContext::EndElement()
                                     xDoc->unlockControllers();
                                     xDoc->lockControllers();
                                 }
-                                xShape->setPosition( maCurrentAxis.aPosition );
+                                if( maCurrentAxis.bTitleHasMoved )
+                                    xShape->setPosition( maCurrentAxis.aPosition );
                             }
                         }
                     }
@@ -1052,7 +1107,8 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             pContext = new SchXMLTitleContext( mrImportHelper, GetImport(), rLocalName,
                                                maCurrentAxis.aTitle,
                                                xTitleShape,
-                                               maCurrentAxis.aPosition );
+                                               maCurrentAxis.aPosition,
+                                               maCurrentAxis.bTitleHasMoved );
         }
         break;
 
