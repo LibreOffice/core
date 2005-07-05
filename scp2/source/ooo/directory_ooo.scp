@@ -882,11 +882,6 @@ Directory gid_Dir_Basic_Euro
     DosName = "Euro";
 End
 
-Directory gid_Dir_Basic_Formwizard
-    ParentID = gid_Dir_Basic;
-    DosName = "FormWizard";
-End
-
 Directory gid_Dir_Basic_Gimmicks
     ParentID = gid_Dir_Basic;
     DosName = "Gimmicks";
