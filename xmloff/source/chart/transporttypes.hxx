@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:35:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,9 @@ struct SchXMLAxis
     rtl::OUString aName;
     rtl::OUString aTitle;
     com::sun::star::awt::Point aPosition;
+    bool bTitleHasMoved;
 
-    SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ) {}
+    SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ), bTitleHasMoved( false ) {}
 };
 
 #endif  // SCH_XML_TRANSPORTTYPES_HXX_
