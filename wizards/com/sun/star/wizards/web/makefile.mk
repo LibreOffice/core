@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:13:20 $
+#   last change: $Author: obo $ $Date: 2005-07-05 10:19:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,6 @@ JAVAFILES=			\
     ProcessErrors.java \
     ProcessStatusRenderer.java \
     StatusDialog.java \
-    StoppedByUserException.java \
     StylePreview.java \
     TOCPreview.java \
     WebWizard.java \
