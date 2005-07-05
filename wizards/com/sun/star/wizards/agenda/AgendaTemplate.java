@@ -2,8 +2,8 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.4 $
- *  last change: $Author: vg $  $Date: 2005-02-21 13:50:05 $
+ *  $Revision: 1.5 $
+ *  last change: $Author: obo $  $Date: 2005-07-05 10:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ import com.sun.star.util.XSearchable;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.TextDocument;
@@ -464,7 +465,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
             calendar.set(date.Year, date.Month - 1 , date.Day);
 
-            docNullTime = calendar.getTimeInMillis();
+            docNullTime = JavaTools.getTimeInMillis(calendar);
 
             dateFormat = NumberFormatter.getNumberFormatterKey( nfs, NumberFormatIndex.DATE_SYSTEM_LONG );
             timeFormat = NumberFormatter.getNumberFormatterKey( nfs, NumberFormatIndex.TIME_HHMM );
@@ -656,7 +657,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                     ( date % 10000 ) / 100 - 1 ,
                       date % 100 ) ;
 
-        long date1 = calendar.getTimeInMillis();
+        long date1 = JavaTools.getTimeInMillis(calendar);
         /*
          * docNullTime and date1 are in millis, but
          * I need a day...
