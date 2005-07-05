@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDialog2.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $  $Date: 2005-03-18 16:26:48 $
+ *  last change: $Author: obo $  $Date: 2005-07-05 10:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,9 @@
  */
 package com.sun.star.wizards.ui;
 
-import java.awt.Color;
 
 import com.sun.star.awt.*;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.Desktop;
