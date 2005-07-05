@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:53:08 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 11:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,27 +742,29 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
         DBG_ASSERT((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
     }
     if (pGroupDim || pNumGroupDim)
-        SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS, sal_True, sal_True);
-    if (pGroupDim)
     {
-        if (!pGroupDim->GetDatePart())
+        SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS, sal_True, sal_True);
+        if (pGroupDim)
         {
-            sal_Int32 nCount = pGroupDim->GetGroupCount();
-            for (sal_Int32 i = 0; i < nCount; ++i)
+            if (!pGroupDim->GetDatePart())
             {
-                const ScDPSaveGroupItem* pGroup = pGroupDim->GetGroupByIndex( i );
-                if (pGroup)
+                sal_Int32 nCount = pGroupDim->GetGroupCount();
+                for (sal_Int32 i = 0; i < nCount; ++i)
                 {
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pGroup->GetGroupName());
-                    SvXMLElementExport aElemDPG(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP, sal_True, sal_True);
-                    sal_Int32 nElemCount = pGroup->GetElementCount();
-                    for(sal_Int32 j = 0; j < nElemCount; ++j)
+                    const ScDPSaveGroupItem* pGroup = pGroupDim->GetGroupByIndex( i );
+                    if (pGroup)
                     {
-                        const String* pElem = pGroup->GetElementByIndex( j );
-                        if (pElem)
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pGroup->GetGroupName());
+                        SvXMLElementExport aElemDPG(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP, sal_True, sal_True);
+                        sal_Int32 nElemCount = pGroup->GetElementCount();
+                        for(sal_Int32 j = 0; j < nElemCount; ++j)
                         {
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);
-                            SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, sal_True, sal_True);
+                            const String* pElem = pGroup->GetElementByIndex( j );
+                            if (pElem)
+                            {
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);
+                                SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, sal_True, sal_True);
+                            }
                         }
                     }
                 }
