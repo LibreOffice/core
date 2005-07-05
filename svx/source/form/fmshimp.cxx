@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:54:21 $
+ *  last change: $Author: obo $ $Date: 2005-07-05 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,31 @@ FmXFormShell::~FmXFormShell()
     DBG_DTOR(FmXFormShell,NULL);
 }
 
+Reference< XModel > FmXFormShell::getContextDocument() const
+{
+    Reference< XModel > xModel;
+
+    // determine the type of document we live in
+    Reference< XController > xController;
+    if ( !m_xAttachedFrame.is() )
+        return xModel;
+
+    xController = m_xAttachedFrame->getController();
+    if ( !xController.is() )
+        return xModel;
+
+    return xController->getModel();
+}
+
+bool
+FmXFormShell::isEnhancedForm() const
+{
+    if ( m_eDocumentType != eUnknownDocumentType )
+        return m_eDocumentType == eEnhancedForm;
+
+    return DocumentClassification::isEnhancedForm( getContextDocument() );
+}
+
 //------------------------------------------------------------------
 ::svxform::DocumentType FmXFormShell::getDocumentType() const
 {
@@ -694,12 +719,7 @@ FmXFormShell::~FmXFormShell()
         return m_eDocumentType;
 
     // determine the type of document we live in
-    Reference< XController > xController;
-    if ( m_xAttachedFrame.is() )
-        xController = m_xAttachedFrame->getController();
-    Reference< XModel > xModel;
-    if ( xController.is() )
-        xModel = xController->getModel();
+    Reference< XModel > xModel = getContextDocument();
     if ( xModel.is() )
         m_eDocumentType = DocumentClassification::classifyDocument( xModel );
     else
