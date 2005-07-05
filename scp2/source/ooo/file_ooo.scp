@@ -70,12 +70,6 @@ File gid_File_Basic_Euro
     Name = "basicsrveuro.zip";
 End
 
-File gid_File_Basic_Form
-    Dir = gid_Dir_Basic_Formwizard;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvform.zip";
-End
-
 File gid_File_Basic_Gimmicks
     Dir = gid_Dir_Basic_Gimmicks;
     ARCHIVE_TXT_FILE_BODY;
