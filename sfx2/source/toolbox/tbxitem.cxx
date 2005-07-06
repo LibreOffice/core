@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:11:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,6 +1340,21 @@ SfxPopupWindow::~SfxPopupWindow()
     }
 
     Window* pWindow = SFX_APP()->GetTopWindow();
+    if( !pWindow )
+    {
+        // #i48549# no top window found (may happen during document close)
+        // ->manually search topmost system window
+        // required because their might be another system window between this and the top window
+        pWindow = GetParent();
+        SystemWindow* pTopMostSysWin = NULL;
+        while ( pWindow )
+        {
+            if ( pWindow->IsSystemWindow() )
+                pTopMostSysWin = (SystemWindow*)pWindow;
+            pWindow = pWindow->GetParent();
+        }
+        pWindow = pTopMostSysWin;
+    }
     while ( pWindow && !pWindow->IsSystemWindow() )
         pWindow = pWindow->GetParent();
 
