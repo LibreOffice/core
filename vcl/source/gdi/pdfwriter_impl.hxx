@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-20 10:51:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ public:
         SvMemoryStream*     m_pStream;
         Bitmap              m_aMask;
         sal_Int32           m_nObject;
+        bool                m_bTrueColor;
 
         JPGEmit() : m_pStream( NULL ) {}
         ~JPGEmit() { delete m_pStream; }
@@ -763,6 +764,9 @@ private:
     sal_Int32 findRadioGroupWidget( sal_Int32 nGroup );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
 
+    // used for edit and listbox
+    Font drawFieldBorder( PDFWidget&, const PDFWriter::AnyWidget&, const StyleSettings& );
+
     void createDefaultPushButtonAppearance( PDFWidget&, const PDFWriter::PushButtonWidget& rWidget );
     void createDefaultCheckBoxAppearance( PDFWidget&, const PDFWriter::CheckBoxWidget& rWidget );
     void createDefaultRadioButtonAppearance( PDFWidget&, const PDFWriter::RadioButtonWidget& rWidget );
@@ -943,7 +947,7 @@ public:
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
     void drawMask( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Color& rFillColor );
-    void drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
+    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 
     void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
     void drawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
