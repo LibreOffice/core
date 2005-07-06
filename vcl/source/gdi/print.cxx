@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-01 13:07:23 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,10 @@ ULONG Printer::GetCapabilities( USHORT nType ) const
     if ( IsDisplayPrinter() )
         return FALSE;
 
-    return mpInfoPrinter->GetCapabilities( maJobSetup.ImplGetConstData(), nType );
+    if( mpInfoPrinter )
+        return mpInfoPrinter->GetCapabilities( maJobSetup.ImplGetConstData(), nType );
+    else
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
