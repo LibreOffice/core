@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:18:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,7 +1365,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Region           aCtrlRegion( aInRect );
         ControlState     nState = 0;
 
-        if ( mbPressed )                        nState |= CTRL_STATE_PRESSED;
+        if ( mbPressed || IsChecked() )                   nState |= CTRL_STATE_PRESSED;
         if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED ) nState |= CTRL_STATE_PRESSED;
         if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
         if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
