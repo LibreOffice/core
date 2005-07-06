@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:32:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,18 +687,18 @@ void GtkXLib::Yield( BOOL bWait )
      */
 
     bool bDispatchThread = false;
-    if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
-    {
-        // we are the dispatch thread
-        osl_resetCondition( m_aDispatchCondition );
-        bDispatchThread = true;
-    }
-    else if( ! bWait )
-        return; // someone else is waiting already, return
-
     {
         // release YieldMutex (and re-acquire at block end)
         YieldMutexReleaser aReleaser;
+        if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
+        {
+            // we are the dispatch thread
+            osl_resetCondition( m_aDispatchCondition );
+            bDispatchThread = true;
+        }
+        else if( ! bWait )
+            return; // someone else is waiting already, return
+
 
         if( bDispatchThread )
             g_main_context_iteration( NULL, bWait );
