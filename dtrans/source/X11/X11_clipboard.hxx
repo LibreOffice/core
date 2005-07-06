@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:25:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,6 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        ::osl::Mutex m_aMutex;
-
         Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
         Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
 
