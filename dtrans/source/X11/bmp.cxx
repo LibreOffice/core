@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:52:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,8 @@ void x11::X11_freeBmp( sal_uInt8* pBmp )
 PixmapHolder::PixmapHolder( Display* pDisplay ) :
         m_pDisplay( pDisplay ),
         m_aColormap( None ),
-        m_aPixmap( None )
+        m_aPixmap( None ),
+        m_aBitmap( None )
 {
     /*  try to get a 24 bit true color visual, if that fails,
      *  revert to default visual
@@ -695,6 +696,11 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
 
     sal_uInt32 nWidth   = readLE32( pData+4 );
     sal_uInt32 nHeight  = readLE32( pData+8 );
+
+    if( m_aPixmap != None )
+        XFreePixmap( m_pDisplay, m_aPixmap ), m_aPixmap = None;
+    if( m_aBitmap != None )
+        XFreePixmap( m_pDisplay, m_aBitmap ), m_aBitmap = None;
 
     m_aPixmap = XCreatePixmap( m_pDisplay,
                                RootWindow( m_pDisplay, m_aInfo.screen ),
