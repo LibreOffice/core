@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-31 17:05:13 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,17 @@ void SessionManagerClient::SaveYourselfProc(
     BuildSmPropertyList();
 #ifdef USE_SM_EXTENSION
     bDocSaveDone = false;
+    /* #i49875# some session managers send a "die" message if the
+     * saveDone does not come early enough for their convenience
+     * this can occasionally happen on startup, especially the first
+     * startup. So shortcut the "not shutting down" case since the
+     * upper layers are currently not interested in that event anyway.
+     */
+    if( ! shutdown )
+    {
+        SessionManagerClient::saveDone();
+        return;
+    }
     Application::PostUserEvent( STATIC_LINK( (void*)(shutdown ? 0xffffffff : 0x0), SessionManagerClient, SaveYourselfHdl ) );
     SMprintf( "waiting for save yourself event to be processed\n" );
 #endif
