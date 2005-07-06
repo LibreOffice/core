@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:28:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,9 @@ PADialog::~PADialog()
 
 long PADialog::Notify( NotifyEvent& rEv )
 {
-    if( rEv.GetType() == EVENT_GETFOCUS || rEv.GetType() == EVENT_LOSEFOCUS )
+    if( IsVisible() &&
+        (rEv.GetType() == EVENT_GETFOCUS || rEv.GetType() == EVENT_LOSEFOCUS )
+      )
     {
         if( m_rPIManager.checkPrintersChanged() )
         {
