@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-20 10:51:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3475,7 +3475,10 @@ Font PDFWriterImpl::replaceFont( const Font& rControlFont, const Font&  rAppSetF
     if( ! aFont.GetName().Len() )
     {
         aFont = rAppSetFont;
-        bAdjustSize = true;
+        if( rControlFont.GetHeight() )
+            aFont.SetSize( Size( 0, rControlFont.GetHeight() ) );
+        else
+            bAdjustSize = true;
     }
     else if( ! aFont.GetHeight() )
     {
@@ -3549,22 +3552,41 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     rButton.m_aMKDict = "/BC [] /BG [] /CA ()";
 }
 
-void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWriter::EditWidget& rWidget )
+Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
+                                     const PDFWriter::AnyWidget& rWidget,
+                                     const StyleSettings& rSettings )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    SvMemoryStream* pEditStream = new SvMemoryStream( 1024, 1024 );
-
-    push( ~0 );
-
-    // prepare font to use
     Font aFont = replaceFont( rWidget.TextFont, rSettings.GetFieldFont() );
     aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ) );
 
     if( rWidget.Background || rWidget.Border )
     {
-        setLineColor( rWidget.Border ? replaceColor( rWidget.BorderColor, rSettings.GetDialogColor() ) : Color( COL_TRANSPARENT ) );
-        setFillColor( rWidget.Background ? replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) : Color( COL_TRANSPARENT ) );
-        drawRectangle( rEdit.m_aRect );
+        if( rWidget.Border && rWidget.BorderColor == Color( COL_TRANSPARENT ) )
+        {
+            sal_Int32 nDelta = getReferenceDevice()->ImplGetDPIX() / 500;
+            if( nDelta < 1 )
+                nDelta = 1;
+            setLineColor( Color( COL_TRANSPARENT ) );
+            Rectangle aRect = rIntern.m_aRect;
+            setFillColor( rSettings.GetLightBorderColor() );
+            drawRectangle( aRect );
+            aRect.Left()  += nDelta; aRect.Top()     += nDelta;
+            aRect.Right() -= nDelta; aRect.Bottom()  -= nDelta;
+            setFillColor( rSettings.GetFieldColor() );
+            drawRectangle( aRect );
+            setFillColor( rSettings.GetLightColor() );
+            drawRectangle( Rectangle( Point( aRect.Left(), aRect.Bottom()-nDelta ), aRect.BottomRight() ) );
+            drawRectangle( Rectangle( Point( aRect.Right()-nDelta, aRect.Top() ), aRect.BottomRight() ) );
+            setFillColor( rSettings.GetDarkShadowColor() );
+            drawRectangle( Rectangle( aRect.TopLeft(), Point( aRect.Left()+nDelta, aRect.Bottom() ) ) );
+            drawRectangle( Rectangle( aRect.TopLeft(), Point( aRect.Right(), aRect.Top()+nDelta ) ) );
+        }
+        else
+        {
+            setLineColor( rWidget.Border ? replaceColor( rWidget.BorderColor, rSettings.GetShadowColor() ) : Color( COL_TRANSPARENT ) );
+            setFillColor( rWidget.Background ? replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) : Color( COL_TRANSPARENT ) );
+            drawRectangle( rIntern.m_aRect );
+        }
 
         if( rWidget.Border )
         {
@@ -3572,12 +3594,24 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
             sal_Int32 nDelta = aFont.GetHeight()/4;
             if( nDelta < 1 )
                 nDelta = 1;
-            rEdit.m_aRect.Left()    += nDelta;
-            rEdit.m_aRect.Top()     += nDelta;
-            rEdit.m_aRect.Right()   -= nDelta;
-            rEdit.m_aRect.Bottom()  -= nDelta;
+            rIntern.m_aRect.Left()  += nDelta;
+            rIntern.m_aRect.Top()   += nDelta;
+            rIntern.m_aRect.Right() -= nDelta;
+            rIntern.m_aRect.Bottom()-= nDelta;
         }
     }
+    return aFont;
+}
+
+void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWriter::EditWidget& rWidget )
+{
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    SvMemoryStream* pEditStream = new SvMemoryStream( 1024, 1024 );
+
+    push( ~0 );
+
+    // prepare font to use, draw field border
+    Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
 
     // prepare DA string
     OStringBuffer aDA( 32 );
@@ -3613,28 +3647,8 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
 
     push( ~0 );
 
-    // prepare font to use
-    Font aFont = replaceFont( rWidget.TextFont, rSettings.GetFieldFont() );
-    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ) );
-
-    if( rWidget.Background || rWidget.Border )
-    {
-        setLineColor( rWidget.Border ? replaceColor( rWidget.BorderColor, rSettings.GetDialogColor() ) : Color( COL_TRANSPARENT ) );
-        setFillColor( rWidget.Background ? replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) : Color( COL_TRANSPARENT ) );
-        drawRectangle( rBox.m_aRect );
-
-        if( rWidget.Border )
-        {
-            // adjust listbox area accounting for border
-            sal_Int32 nDelta = aFont.GetHeight()/4;
-            if( nDelta < 1 )
-                nDelta = 1;
-            rBox.m_aRect.Left()     += nDelta;
-            rBox.m_aRect.Top()      += nDelta;
-            rBox.m_aRect.Right()    -= nDelta;
-            rBox.m_aRect.Bottom()   -= nDelta;
-        }
-    }
+    // prepare font to use, draw field border
+    Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
 
     beginRedirect( pListBoxStream, rBox.m_aRect );
     OStringBuffer aAppearance( 64 );
@@ -6984,9 +6998,12 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
                   "   /Height " );
     aLine.append( (sal_Int32)rObject.m_aID.m_aPixelSize.Height() );
     aLine.append( "\r\n"
-                  "   /BitsPerComponent 8\r\n"
-                  "   /ColorSpace /DeviceRGB\r\n"
-                  "   /Filter /DCTDecode\r\n"
+                  "   /BitsPerComponent 8\r\n" );
+    if( rObject.m_bTrueColor )
+        aLine.append( "   /ColorSpace /DeviceRGB\r\n" );
+    else
+        aLine.append( "   /ColorSpace /DeviceGray\r\n" );
+    aLine.append( "   /Filter /DCTDecode\r\n"
                   "   /Length "
                   );
     aLine.append( nLength );
@@ -7253,7 +7270,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     return true;
 }
 
-void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
+void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
 {
     MARK( "drawJPGBitmap" );
 
@@ -7289,6 +7306,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, c
         rEmit.m_nObject     = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream     = pStream;
+        rEmit.m_bTrueColor  = bIsTrueColor;
         if( !! rMask && rMask.GetSizePixel() == rSizePixel )
             rEmit.m_aMask   = rMask;
 
