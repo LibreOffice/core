@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.115 $
+*  $Revision: 1.116 $
 *
-*  last change: $Author: rt $ $Date: 2005-07-01 13:55:23 $
+*  last change: $Author: obo $ $Date: 2005-07-06 09:23:37 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1342,7 +1342,13 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontaine
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pcr, pcr)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
+File gid_File_Lib_Pdffilter
+    Name = LIBNAME(pdffilter);
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Dir = gid_Dir_Program;
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pk , pk)
 
@@ -1711,7 +1717,12 @@ STD_UNO_LIB_FILE( gid_File_Lib_Sot, sot )
 
 #ifdef UNX
 
-STD_LIB_FILE( gid_File_Lib_Spa, spa )
+File gid_File_Lib_Spa
+    Name = LIBNAME(spa);
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+End
 
 #endif
 
