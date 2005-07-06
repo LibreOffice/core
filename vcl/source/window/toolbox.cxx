@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:16:49 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3691,8 +3691,10 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         if ( !pItem->mbEnabled || !IsEnabled() )
             nImageStyle |= IMAGE_DRAW_DISABLE;
 
-        if ( pItem->meState == STATE_DONTKNOW )
-            nImageStyle |= IMAGE_DRAW_DISABLE;
+        // #i35563# the dontknow state indicates different states at the same time
+        // which should not be rendered disabled but normal
+        //if ( pItem->meState == STATE_DONTKNOW )
+        //    nImageStyle |= IMAGE_DRAW_DISABLE;
 
         // draw the image
         nImageOffX = nOffX;
