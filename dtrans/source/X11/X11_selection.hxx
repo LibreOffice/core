@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:40:50 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,9 @@ namespace x11 {
         void registerHandler( Atom selection, SelectionAdaptor& rAdaptor );
         void deregisterHandler( Atom selection );
         bool requestOwnership( Atom selection );
+
+        // allow for synchronization over one mutex for XClipboard
+        osl::Mutex& getMutex() { return m_aMutex; }
 
 
         Atom getAtom( const ::rtl::OUString& rString );
