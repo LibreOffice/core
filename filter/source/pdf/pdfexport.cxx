@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:39:33 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,7 +1214,7 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Value <<= nColorMode;
 
                 /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
-                rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+                rWriter.DrawJPGBitmap( aStrm, true, aSizePixel, Rectangle( aPoint, aSize ), aMask );
             }
             else
             {
