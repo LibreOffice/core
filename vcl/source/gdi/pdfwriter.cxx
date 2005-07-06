@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:56:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,9 +428,9 @@ void PDFWriter::SetTextAlign( ::TextAlign eAlign )
     ((PDFWriterImpl*)pImplementation)->setTextAlign( eAlign );
 }
 
-void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
+void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
 {
-    ((PDFWriterImpl*)pImplementation)->drawJPGBitmap( rStreamData, rSrcSizePixel, rTargetArea, rMask );
+    ((PDFWriterImpl*)pImplementation)->drawJPGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rMask );
 }
 
 sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
