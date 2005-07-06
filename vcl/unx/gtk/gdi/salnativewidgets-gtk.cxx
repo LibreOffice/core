@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:19:49 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2517,6 +2517,11 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
             ControlState nState, const ImplControlValue& aValue,
             SalControlHandle& rControlHandle, OUString aCaption )
 {
+    // #i50745# gtk does not draw disabled menu entries (and crux theme
+    // even crashes), draw them using vcl functionality.
+    if( nPart == PART_MENU_ITEM && ! (nState & CTRL_STATE_ENABLED) )
+        return FALSE;
+
     GtkStateType    stateType;
     GtkShadowType   shadowType;
     GtkShadowType   selected_shadow_type = GTK_SHADOW_OUT;
@@ -2576,14 +2581,15 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
         {
             if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
             {
+                if( nState & CTRL_STATE_ENABLED )
                 gtk_paint_box( gMenuItemMenuWidget->style,
-                gdkDrawable,
-                GTK_STATE_PRELIGHT,
-                selected_shadow_type,
-                &clipRect,
-                gMenuItemMenuWidget,
-                "menuitem",
-                x, y, w, h);
+                               gdkDrawable,
+                               GTK_STATE_PRELIGHT,
+                               selected_shadow_type,
+                               &clipRect,
+                               gMenuItemMenuWidget,
+                               "menuitem",
+                               x, y, w, h);
             }
         }
     }
