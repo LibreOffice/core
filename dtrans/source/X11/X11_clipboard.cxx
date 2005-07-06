@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:52:13 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
     ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XInitialization
-    >( m_aMutex ),
+    >( rManager.getMutex() ),
 
         m_rSelectionManager( rManager ),
         m_xSelectionManager( & rManager ),
@@ -160,7 +160,7 @@ X11Clipboard::~X11Clipboard()
 
 void X11Clipboard::fireChangedContentsEvent()
 {
-    ClearableMutexGuard aGuard( m_aMutex );
+    ClearableMutexGuard aGuard( m_rSelectionManager.getMutex() );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%d listeners)\n",
              OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
@@ -181,7 +181,7 @@ void X11Clipboard::fireChangedContentsEvent()
 
 void X11Clipboard::clearContents()
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
     // protect against deletion during outside call
     Reference< XClipboard > xThis( static_cast<XClipboard*>(this));
     // copy member references on stack so they can be called
@@ -205,7 +205,7 @@ void X11Clipboard::clearContents()
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_rSelectionManager.getMutex());
 
     if( ! m_aContents.is() )
         m_aContents = new X11Transferable( SelectionManager::get(), static_cast< OWeakObject* >(this), m_aSelection );
@@ -220,7 +220,7 @@ void SAL_CALL X11Clipboard::setContents(
     throw(RuntimeException)
 {
     // remember old values for callbacks before setting the new ones.
-    ClearableMutexGuard aGuard(m_aMutex);
+    ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
 
     Reference< XClipboardOwner > oldOwner( m_aOwner );
     m_aOwner = xClipboardOwner;
@@ -268,7 +268,7 @@ sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
 void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_rSelectionManager.getMutex() );
     m_aListeners.push_back( listener );
 }
 
@@ -277,7 +277,7 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_rSelectionManager.getMutex() );
     m_aListeners.remove( listener );
 }
 
