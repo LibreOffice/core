@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:32:52 $
+ *  last change: $Author: obo $ $Date: 2005-07-06 09:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,9 +458,10 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         }
                         Bitmap aMask;
                         SvMemoryStream aTmp;
-                        aTmp << aGfxLink;
-                        Size aSizePixel;
-                        rWriter.DrawJPGBitmap( aTmp, aGraphic.GetSizePixel(), aOutputRect, aMask );
+                        const sal_uInt8* pData = aGfxLink.GetData();
+                        sal_uInt32 nBytes = aGfxLink.GetDataSize();
+                        aTmp.Write( pData, nBytes );
+                        rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmap().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aMask );
                         if ( bClippingNeeded )
                             rWriter.Pop();
                     }
