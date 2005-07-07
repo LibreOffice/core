@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:59:05 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,44 +207,51 @@ void Listener::ReleaseListeners (void)
 
 void Listener::ConnectToController (void)
 {
+    ViewShell& rShell (mrController.GetViewShell());
+
     // Register at the controller of the main view shell (if we are that not
     // ourself).
-    if ( ! mrController.GetViewShell().IsMainViewShell())
+    if ( ! rShell.IsMainViewShell())
     {
         // Listen to changes of certain properties.
-        Reference<beans::XPropertySet> xSet (
-            mrController.GetViewShell().GetViewShellBase().GetController(),
-            UNO_QUERY);
-        mxControllerPropertySetWeak = xSet;
-        try
+        Reference<frame::XController> xController (rShell.GetViewShellBase().GetController());
+        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+        if (xSet.is())
         {
-            if (xSet.is())
+            try
             {
-                xSet->addPropertyChangeListener (
-                    String::CreateFromAscii("CurrentPage"),
-                    this);
-                xSet->addPropertyChangeListener (
-                    String::CreateFromAscii("IsMasterPageMode"),
-                    this);
-                mbListeningToController = true;
+                xSet->addPropertyChangeListener(String::CreateFromAscii("CurrentPage"), this);
             }
-        }
-        catch (beans::UnknownPropertyException aEvent)
-        {
-            OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+            catch (beans::UnknownPropertyException aEvent)
+            {
+                OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
+                    ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+            }
+            try
+            {
+                xSet->addPropertyChangeListener(String::CreateFromAscii("IsMasterPageMode"), this);
+            }
+            catch (beans::UnknownPropertyException aEvent)
+            {
+                OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
+                    ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+            }
         }
 
         // Listen for disposing events.
-        Reference<XComponent> xComponent (xSet, UNO_QUERY);
+        Reference<XComponent> xComponent (xController, UNO_QUERY);
         if (xComponent.is())
+        {
             xComponent->addEventListener (
-                Reference<lang::XEventListener>(
-                    static_cast<XWeak*>(this), UNO_QUERY));
+                Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
+
+            mxControllerWeak = xController;
+            mbListeningToController = true;
+        }
+
 
         // Listen for hints at the view shell in the center pane as well.
-        StartListening (
-            *mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
+        StartListening (*rShell.GetViewShellBase().GetMainViewShell());
     }
 }
 
@@ -255,7 +262,8 @@ void Listener::DisconnectFromController (void)
 {
     if (mbListeningToController)
     {
-        Reference<beans::XPropertySet> xSet (mxControllerPropertySetWeak);
+        Reference<frame::XController> xController = mxControllerWeak;
+        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         try
         {
             // Remove the property listener.
@@ -270,7 +278,7 @@ void Listener::DisconnectFromController (void)
             }
 
             // Remove the dispose listener.
-            Reference<XComponent> xComponent (xSet, UNO_QUERY);
+            Reference<XComponent> xComponent (xController, UNO_QUERY);
             if (xComponent.is())
                 xComponent->removeEventListener (
                     Reference<lang::XEventListener>(
@@ -288,6 +296,7 @@ void Listener::DisconnectFromController (void)
             *mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
 
         mbListeningToController = false;
+        mxControllerWeak = Reference<frame::XController>();
     }
 }
 
@@ -362,9 +371,8 @@ void SAL_CALL Listener::disposing (
     }
     else if (mbListeningToController)
     {
-
-        Reference<beans::XPropertySet> xSet (mxControllerPropertySetWeak);
-        if (rEventObject.Source == xSet)
+        Reference<frame::XController> xController (mxControllerWeak);
+        if (rEventObject.Source == xController)
         {
             mbListeningToController = false;
         }
@@ -449,9 +457,34 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
             break;
 
         case frame::FrameAction_COMPONENT_REATTACHED:
+        {
             ConnectToController();
             mrController.GetPageSelector().UpdateAllPages();
-            break;
+
+            // When there is a new controller then the edit mode may have
+            // changed at the same time.
+            Reference<frame::XController> xController (mxControllerWeak);
+            Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+            bool bIsMasterPageMode = false;
+            if (xSet != NULL)
+            {
+                try
+                {
+                    Any aValue (xSet->getPropertyValue(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
+                    aValue >>= bIsMasterPageMode;
+                }
+                catch (beans::UnknownPropertyException e)
+                {
+                    // When the property is not supported then the master
+                    // page mode is not supported, too.
+                    bIsMasterPageMode = false;
+                }
+            }
+            mrController.ChangeEditMode (
+                bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+        }
+        break;
 
         default:
             break;
