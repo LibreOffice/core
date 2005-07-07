@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cc5_solaris_sparc.map,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:21:28 $
+#   last change: $Author: obo $ $Date: 2005-07-07 10:54:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,8 +101,8 @@ UDK_3.3 {
         __1cJjvmaccesscF__RTTI__1nJjvmaccessRUnoVirtualMachineRCreationException__; # RTTI for jvmaccess::UnoVirtualMachine::CreationException
         __1cJjvmaccesscH__RTTI__1CpnJjvmaccessRUnoVirtualMachineRCreationException__; # RTTI for jvmaccess::UnoVirtualMachine::CreationException *
         __1cJjvmaccesscI__RTTI__1CpknJjvmaccessRUnoVirtualMachineRCreationException__; # RTTI for jvmaccess::UnoVirtualMachine::CreationException const *
-        __1cJjvmaccessRUnoVirtualMachine2t6MrknDrtlJReference4n0AOVirtualMachine___pnI_jobject__v_; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, jobject)
-        __1cJjvmaccessRUnoVirtualMachine2t5B6MrknDrtlJReference4n0AOVirtualMachine___pnI_jobject__v_; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, jobject) #Nvariant 1
+        __1cJjvmaccessRUnoVirtualMachine2t6MrknDrtlJReference4n0AOVirtualMachine___pv_v_; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *)
+        __1cJjvmaccessRUnoVirtualMachine2t5B6MrknDrtlJReference4n0AOVirtualMachine___pv_v_; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *) #Nvariant 1
         __1cJjvmaccessRUnoVirtualMachineRgetVirtualMachine6kM_nDrtlJReference4n0AOVirtualMachine____; # jvmaccess::UnoVirtualMachine::getVirtualMachine() const
-        __1cJjvmaccessRUnoVirtualMachineOgetClassLoader6kM_pnI_jobject__; # jvmaccess::UnoVirtualMachine::getClassLoader() const
+        __1cJjvmaccessRUnoVirtualMachineOgetClassLoader6kM_pv_; # jvmaccess::UnoVirtualMachine::getClassLoader() const
 } UDK_3.2;
