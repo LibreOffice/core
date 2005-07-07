@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFontProvider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:53:07 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,17 +138,20 @@ FontProvider::SharedFontPointer FontProvider::GetFont (const OutputDevice& rDevi
 
     if (maFont.get() == NULL)
     {
-        // Remember the size of the original font of the given device.
-        Size aFontSize(rDevice.GetFont().GetSize());
+        // Initialize the font from the application style settings.
         maFont.reset(new Font (Application::GetSettings().GetStyleSettings().GetAppFont()));
-        // Set the original font size at the new font and transfer it to
-        // model coordinates so that in effect the font is displayed in a
-        // constant size on the screen.
-        Size aFontModelSize (rDevice.PixelToLogic(aFontSize));
-        maFont->SetSize (aFontModelSize);
         maFont->SetTransparent(TRUE);
         maFont->SetWeight(WEIGHT_NORMAL);
 
+        // Transform the point size to pixel size.
+        MapMode aFontMapMode (MAP_POINT);
+        Size aFontSize (rDevice.LogicToPixel(maFont->GetSize(), aFontMapMode));
+
+        // Transform the font size to the logical coordinates of the device.
+        maFont->SetSize (rDevice.PixelToLogic(aFontSize));
+
+        // Remember the map mode of the given device to detect different
+        // devices or modified zoom scales on future calls.
         maMapMode = rDevice.GetMapMode();
     }
 
