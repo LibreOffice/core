@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Wrapper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-14 10:37:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@ import com.sun.star.uno.UnoRuntime;
     Because its not worth the efford to create a runtime generated wrapper
     for this purpose, as it might be for OOo 2.0, you still have to use
     UnoRuntime.queryInterface() for interfaces which are optional or come
-    from a subclass.  But for non optional interfaces you can alread
-    directly callötheir methods.
+    from a subclass.  But for non optional interfaces you can already
+    directly call their methods.
 
     This wrapper will only work for UNO objects via a bridge, not for
     direct Java objects.
