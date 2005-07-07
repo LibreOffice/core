@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:23:04 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ import com.sun.star.connection.ConnectionSetupException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.JavaLoader;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.beans.XPropertySet;
@@ -125,7 +124,7 @@ public class LocalOfficeConnection
 
     private List                mComponents     = new Vector();
 
-
+    private static long m_nBridgeCounter = 0;
     //-------------------------------------------------------------------------
     static
     {
@@ -269,7 +268,7 @@ public class LocalOfficeConnection
      *
      * @return The office UNO component context.
      */
-    public XComponentContext getComponentContext()
+    synchronized public XComponentContext getComponentContext()
     {
         if ( mContext == null )
             mContext = connect();
@@ -357,14 +356,6 @@ public class LocalOfficeConnection
 
             // initial serviceManager
             XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-
-            // create a urlresolver
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-
-            // query for the XUnoUrlResolver interface
-            XUnoUrlResolver xUrlResolver =
-                (XUnoUrlResolver) UnoRuntime.queryInterface( XUnoUrlResolver.class, urlResolver );
 
             // try to connect to soffice
             Object aInitialObject = null;
@@ -493,29 +484,32 @@ public class LocalOfficeConnection
         } catch (com.sun.star.uno.Exception e) {
             throw new com.sun.star.uno.RuntimeException(e.getMessage());
         }
-        mBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
-
-        if(mBridge == null) {
-            Object connector= null;
-            try {
-                connector = xLocalServiceManager.createInstanceWithContext(
-                        "com.sun.star.connection.Connector", xLocalContext);
-            } catch (com.sun.star.uno.Exception e) {
+        synchronized(this) {
+            if(mBridge == null) {
+                Object connector= null;
+                try {
+                    connector = xLocalServiceManager.createInstanceWithContext(
+                            "com.sun.star.connection.Connector", xLocalContext);
+                } catch (com.sun.star.uno.Exception e) {
                     throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                }
+                XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
+                // connect to the server
+                XConnection xConnection = connector_xConnector.connect(conDcp);
+                // create the bridge name. This should not be necessary if we pass an
+                //empty string as bridge name into createBridge. Then we should always get
+                //a new bridge. This does not work because of (i51323). Therefore we
+                //create unique bridge names for the current process.
+                String sBridgeName = "OOoBean_private_bridge_" + String.valueOf(m_nBridgeCounter++);
+                try {
+                    mBridge = xBridgeFactory.createBridge(sBridgeName, protDcp, xConnection, null);
+                } catch (com.sun.star.bridge.BridgeExistsException e) {
+                    throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                }
             }
-
-            XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
-
-            // connect to the server
-            XConnection xConnection = connector_xConnector.connect(conDcp);
-            try {
-                mBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, null);
-            } catch (com.sun.star.bridge.BridgeExistsException e) {
-                throw new com.sun.star.uno.RuntimeException(e.getMessage());
-            }
+            rootObject = mBridge.getInstance(rootOid);
+            return rootObject;
         }
-        rootObject = mBridge.getInstance(rootOid);
-        return rootObject;
     }
 
 
@@ -825,6 +819,8 @@ public class LocalOfficeConnection
             mProcess = Runtime.getRuntime().exec(cmdArray);
             if ( mProcess == null )
                 throw new RuntimeException( "cannot start soffice: " + cmdArray );
+            new StreamProcessor(mProcess.getInputStream(), System.out);
+            new StreamProcessor(mProcess.getErrorStream(), System.err);
         }
 
         /**
@@ -837,4 +833,36 @@ public class LocalOfficeConnection
             return 60;
         }
     }
+
+
+
+    class StreamProcessor extends Thread
+    {
+        java.io.InputStream m_in;
+        java.io.PrintStream m_print;
+
+        public StreamProcessor(final java.io.InputStream in, final java.io.PrintStream out)
+        {
+            m_in = in;
+            m_print = out;
+            start();
+        }
+
+        public void run() {
+            java.io.BufferedReader r = new java.io.BufferedReader(
+                new java.io.InputStreamReader(m_in) );
+            try {
+                for ( ; ; ) {
+                    String s = r.readLine();
+                    if ( s == null ) {
+                        break;
+                    }
+                    m_print.println(s);
+                }
+            } catch ( java.io.IOException e ) {
+                e.printStackTrace( System.err );
+            }
+        }
+    }
+
 }
