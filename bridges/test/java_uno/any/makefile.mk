@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:50:26 $
+#   last change: $Author: obo $ $Date: 2005-07-07 10:52:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ PRJNAME = bridges
 TARGET = test_javauno_any
 
 PACKAGE = test$/java_uno$/anytest
+
+ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
