@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 09:16:54 $
+#   last change: $Author: obo $ $Date: 2005-07-07 13:38:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ SLOFILES =      								\
     $(SLO)$/SlideSorterView.obj					\
     $(SLO)$/SlsViewOverlay.obj
 
-EXCEPTIONSFILES= 
+EXCEPTIONSFILES=								\
+    $(SLO)$/SlsPageObjectViewObjectContact.obj
 
 # --- Tagets -------------------------------------------------------
 
