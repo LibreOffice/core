@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:22:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     SetHlplFront( FALSE );
     SetOConSnap( FALSE );
     SetFrameDragSingles( TRUE );
-    SetSlidesPerRow(0); // Indicates to automatically detect the optimal column count.
+    SetSlidesPerRow(4);
 
     if( NULL == pFrameView )
     {
