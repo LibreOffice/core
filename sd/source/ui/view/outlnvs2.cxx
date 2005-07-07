@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:22:53 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                 // return to us (re-create us).
                 GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
                     ViewShell::ST_IMPRESS);
+                GetViewFrame()->GetDispatcher()->Execute(nSId,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
 
             rReq.Done();
