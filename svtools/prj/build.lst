@@ -1,4 +1,4 @@
-st	svtools	:	offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper sal NULL
+st	svtools	:	offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper sal jvmfwk NULL
 st	svtools						usr1	-	all	st_mkout NULL
 st	svtools\inc					get	-	all	st_inc NULL
 st	svtools\inc\sane				get	-	all	st_incsa NULL
@@ -52,3 +52,4 @@ st	svtools\source\hatchwindow			nmake	-	all	st_hatchwin NULL
 st	svtools\source\passwordcontainer	nmake	-	all	st_passcont NULL
 st	svtools\source\productregistration	nmake	-	all	st_prodreg st_util NULL
 st	svtools\uno							nmake	-	all	st_svtuno st_util NULL
+st	svtools\source\java				nmake	-	all	st_svtjava  NULL
