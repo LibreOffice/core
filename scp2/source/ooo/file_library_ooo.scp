@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.117 $
+*  $Revision: 1.118 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-07 11:09:35 $
+*  last change: $Author: obo $ $Date: 2005-07-07 13:18:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1306,7 +1306,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Offacc, offacc)
 
 File gid_File_Lib_Officebean
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT2(libofficebean,UNXSUFFIX));
