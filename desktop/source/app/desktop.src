@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:49:31 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,47 +60,6 @@
  ************************************************************************/
 
 #include "desktop.hrc"
-
-WarningBox WARNINGBOX_JAVANOTFOUND
-{
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ de ] ="%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Bitte installieren Sie eine JRE und starten Sie dann %PRODUCTNAME neu.";
-    Message[ en-US ] ="%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.";
-};
-
-WarningBox WARNINGBOX_INVALIDJAVASETTINGS
-{
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ de ] ="Die %PRODUCTNAME-Konfiguration wurde geändert. Unter Extras - Optionen - %PRODUCTNAME - Java  wählen Sie eine Java-Laufzeitumgebung aus, die von %PRODUCTNAME benutzt werden soll.";
-    Message[ en-US ] ="The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Java, select the Java runtime environment you want to have used by %PRODUCTNAME.";
-};
-
-QueryBox QBX_JAVADISABLED
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ de ] = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Jedoch ist die Benutzung einer  JRE deaktiviert. Möchten Sie die Benutzung von einer JRE jetzt aktivieren?";
-    Message[ en-US ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. However, use of a JRE has been disabled. Do you want to enable the use of a JRE now?";
-};
-
-ErrorBox ERRORBOX_JVMCREATIONFAILED
-{
-    Buttons = WB_OK;
-    DefButton = WB_DEF_OK ;
-    Message [ de ] = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Die ausgewählte JRE ist defekt. Bitte wählen Sie eine andere Version oder installieren Sie eine neue JRE und aktivieren Sie sie unter Extras - Optionen - %PRODUCTNAME - Java.";
-    Message[ en-US ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. The selected JRE is defective. Please select another version or install a new JRE and select  it under Tools - Options - %PRODUCTNAME - Java.";
-};
-
-ErrorBox ERRORBOX_RESTARTREQUIRED
-{
-    Buttons = WB_OK;
-    DefButton = WB_DEF_OK ;
-    Message [ de ] = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu.";
-    Message[ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.";
-};
-
 
 String STR_RECOVER_QUERY
 {
@@ -236,38 +195,6 @@ String STR_CONFIG_ERR_NO_WRITE_ACCESS
     Text [ de ] = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
     Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
-
-String STR_WARNING_JAVANOTFOUND
-{
-    Text [ de ] = "JRE ist erforderlich" ;
-    Text[ en-US ] = "JRE Required" ;
-};
-
-String STR_WARNING_INVALIDJAVASETTINGS
-{
-    Text [ de ] = "JRE auswählen" ;
-    Text[ en-US ] = "Select JRE";
-};
-
-String STR_ERROR_RESTARTREQUIRED
-{
-    Text [ de ] = "Neustart ist erforderlich";
-    Text[ en-US ] = "Restart Required";
-};
-
-String STR_QUESTION_JAVADISABLED
-{
-    Text [ de ] = "JRE aktivieren" ;
-    Text[ en-US ] = "Enable JRE" ;
-};
-
-
-String STR_ERROR_JVMCREATIONFAILED
-{
-    Text [ de ] = "JRE ist defekt" ;
-    Text[ en-US ] = "JRE is Defective" ;
-};
-
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
 {
