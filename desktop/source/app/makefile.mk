@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-03 20:01:35 $
+#   last change: $Author: obo $ $Date: 2005-07-07 13:20:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ OBJFILES = \
         $(OBJ)$/desktopresid.obj			\
         $(OBJ)$/dispatchwatcher.obj			\
         $(OBJ)$/configinit.obj				\
-        $(OBJ)$/javainteractionhandler.obj	\
         $(OBJ)$/checkinstall.obj			\
         $(OBJ)$/langselect.obj			    \
         $(OBJ)$/cmdlinehelp.obj             \
