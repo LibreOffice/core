@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:56:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,15 @@ ScrollBarManager::ScrollBarManager (
       mnVerticalScrollFactor (0.1),
       mpContentWindow (pContentWindow)
 {
+    // Hide the scroll bars by default to prevent display errors while
+    // switching between view shells:  In the short time between initiating
+    // such a switch and the final rearrangement of UI controls the scroll
+    // bars and the filler where displayed in the upper left corner of the
+    // ViewTabBar.
+    mpHorizontalScrollBar->Hide();
+    mpVerticalScrollBar->Hide();
+    mpScrollBarFiller->Hide();
+
     maAutoScrollTimer.SetTimeout(50);
     maAutoScrollTimer.SetTimeoutHdl (
         LINK(this, ScrollBarManager, AutoScrollTimeoutHandler));
