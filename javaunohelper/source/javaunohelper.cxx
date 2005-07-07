@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:36:35 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 
 #include "jni.h"
 #include "jvmaccess/virtualmachine.hxx"
+#include "jvmaccess/unovirtualmachine.hxx"
+
+#include "vm.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -85,19 +88,6 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OString;
 using ::rtl::OUString;
 
-namespace javaunohelper
-{
-
-//==================================================================================================
-Reference< XComponentContext > install_vm_singleton(
-    Reference< XComponentContext > const & xContext,
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access );
-//==================================================================================================
-::rtl::Reference< ::jvmaccess::VirtualMachine > create_vm_access( JNIEnv * jni_env );
-
-}
-
-
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader
  * Method:    component_writeInfo
@@ -105,7 +95,8 @@ Reference< XComponentContext > install_vm_singleton(
  */
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
-    JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr, jobject jRegKey )
+    JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr,
+    jobject jRegKey, jobject loader )
 {
     sal_Bool bRet = sal_False;
 
@@ -134,8 +125,8 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             }
 
             // create vm access
-            ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
-                ::javaunohelper::create_vm_access( pJEnv ) );
+            ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
+                ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = OUSTR(UNO_LB_JAVA);
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
@@ -184,7 +175,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName,
-    jobject jSMgr, jobject jRegKey )
+    jobject jSMgr, jobject jRegKey, jobject loader )
 {
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
     OUString aLibName( pJLibName );
@@ -216,8 +207,8 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             }
 
             // create vm access
-            ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
-                ::javaunohelper::create_vm_access( pJEnv ) );
+            ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
+                ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = OUSTR(UNO_LB_JAVA);
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
@@ -279,7 +270,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile,
-    jstring jReadRegFile, jboolean jbReadOnly )
+    jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
 {
     jobject joRegServiceFac = 0;
 
@@ -315,10 +306,11 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
             xProps->getPropertyValue( OUSTR("DefaultContext") ), UNO_QUERY_THROW );
 
         // create vm access
-        ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
-            ::javaunohelper::create_vm_access( pJEnv ) );
+        ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
+            ::javaunohelper::create_vm_access( pJEnv, loader ) );
         // wrap vm singleton entry
-        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
+        xContext = ::javaunohelper::install_vm_singleton(
+            xContext, vm_access->getVirtualMachine() );
         rMSFac.set( xContext->getServiceManager(), UNO_QUERY_THROW );
 
         // get uno envs

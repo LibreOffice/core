@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:36:26 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include "osl/diagnose.h"
-#include "osl/mutex.hxx"
 
 #include "rtl/alloc.h"
 #include "rtl/bootstrap.hxx"
@@ -70,13 +69,15 @@
 #include "uno/environment.hxx"
 
 #include "cppuhelper/bootstrap.hxx"
-#include "cppuhelper/compbase1.hxx"
-#include "cppuhelper/component_context.hxx"
 
+#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 
 #include "jni.h"
 #include "jvmaccess/virtualmachine.hxx"
+#include "jvmaccess/unovirtualmachine.hxx"
+
+#include "vm.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -88,77 +89,7 @@ using ::rtl::OUString;
 
 namespace javaunohelper
 {
-struct MutexHolder
-{
-    ::osl::Mutex m_mutex;
-};
-typedef ::cppu::WeakComponentImplHelper1< lang::XSingleComponentFactory > t_impl;
 
-//==================================================================================================
-class SingletonFactory : public MutexHolder, public t_impl
-{
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > m_vm_access;
-
-protected:
-    virtual void SAL_CALL disposing();
-
-public:
-    inline SingletonFactory( ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access )
-        : t_impl( m_mutex ),
-          m_vm_access( vm_access )
-        {}
-
-    // XSingleComponentFactory impl
-    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
-        Reference< XComponentContext > const & xContext )
-        throw (Exception);
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
-        Sequence< Any > const & args, Reference< XComponentContext > const & xContext )
-        throw (Exception);
-};
-//__________________________________________________________________________________________________
-void SingletonFactory::disposing()
-{
-    m_vm_access.clear();
-}
-//__________________________________________________________________________________________________
-Reference< XInterface > SingletonFactory::createInstanceWithContext(
-    Reference< XComponentContext > const & xContext )
-    throw (Exception)
-{
-    sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
-    Any arg( makeAny( handle ) );
-    return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUSTR("com.sun.star.java.JavaVirtualMachine"), Sequence< Any >( &arg, 1 ), xContext );
-}
-//__________________________________________________________________________________________________
-Reference< XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
-    Sequence< Any > const & args, Reference< XComponentContext > const & xContext )
-    throw (Exception)
-{
-    return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUSTR("com.sun.star.java.JavaVirtualMachine"), args, xContext );
-}
-
-//==================================================================================================
-Reference< XComponentContext > install_vm_singleton(
-    Reference< XComponentContext > const & xContext,
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access )
-{
-    Reference< lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
-    ::cppu::ContextEntry_Init entry(
-        OUSTR("/singletons/com.sun.star.java.theJavaVirtualMachine"), makeAny( xFac ), true );
-    return ::cppu::createComponentContext( &entry, 1, xContext );
-}
-//==================================================================================================
-::rtl::Reference< ::jvmaccess::VirtualMachine > create_vm_access( JNIEnv * jni_env )
-{
-    JavaVM * vm;
-    jni_env->GetJavaVM( &vm );
-    return new ::jvmaccess::VirtualMachine( vm, JNI_VERSION_1_2, false, jni_env );
-}
-
-//==================================================================================================
 inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 {
     OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
@@ -177,7 +108,8 @@ inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 
 //==================================================================================================
 extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
-    JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs )
+    JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs,
+    jobject loader )
 {
     try
     {
@@ -230,10 +162,11 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         }
 
         // create vm access
-        ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
-            ::javaunohelper::create_vm_access( jni_env ) );
+        ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
+            ::javaunohelper::create_vm_access( jni_env, loader ) );
         // wrap vm singleton entry
-        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
+        xContext = ::javaunohelper::install_vm_singleton(
+            xContext, vm_access->getVirtualMachine() );
 
         // get uno envs
         OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
