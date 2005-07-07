@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-24 13:39:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,8 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
-#include "javainteractionhandler.hxx"
+
+#include <svtools/javacontext.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XSESSIONMANAGERLISTENER_HPP_
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -1690,7 +1691,7 @@ void Desktop::Main()
         // The JavaContext contains an interaction handler which is used when
         // the creation of a Java Virtual Machine fails
         com::sun::star::uno::ContextLayer layer(
-            new JavaContext( com::sun::star::uno::getCurrentContext() ) );
+            new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
         Execute();
     }
