@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-17 10:06:46 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,8 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                     css::uno::Reference<XInterface>());
             jclass jcJavaLoader = static_cast< jclass >(
                 pJNIEnv->CallObjectMethodA(
-                    xVirtualMachine->getClassLoader(), jmLoadClass, &arg));
+                    static_cast< jobject >(xVirtualMachine->getClassLoader()),
+                    jmLoadClass, &arg));
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "javaloader error - could not find class com/sun/star/comp/loader/JavaLoader")),
