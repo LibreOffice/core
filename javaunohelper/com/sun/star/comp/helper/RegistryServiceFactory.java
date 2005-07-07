@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceFactory.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:53 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ public class RegistryServiceFactory {
     private static native Object createRegistryServiceFactory(
             String writeRegistryFile,
             String readRegistryFile,
-            boolean readOnly);
+            boolean readOnly,
+            ClassLoader loader);
 
     /**
       * This bootstraps an initial service factory working on a registry. If the first or both
@@ -151,7 +152,9 @@ public class RegistryServiceFactory {
 //                  throw new com.sun.star.uno.Exception(readRegistryFile + " doese not exist!");
 //          }
 
-        Object obj = createRegistryServiceFactory( writeRegistryFile, readRegistryFile, readOnly );
+        Object obj = createRegistryServiceFactory(
+            writeRegistryFile, readRegistryFile, readOnly,
+            RegistryServiceFactory.class.getClassLoader() );
         return (XMultiServiceFactory) UnoRuntime.queryInterface(
             XMultiServiceFactory.class, obj );
     }
