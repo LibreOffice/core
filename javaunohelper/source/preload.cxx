@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:23:48 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,13 @@ using ::rtl::OUString;
 extern "C"
 {
 typedef jboolean (JNICALL * fptr_writeInfo)(
-    JNIEnv *, jclass, jstring, jobject, jobject );
+    JNIEnv *, jclass, jstring, jobject, jobject, jobject );
 typedef jobject (JNICALL * fptr_getFactory)(
-    JNIEnv *, jclass, jstring, jstring, jobject, jobject );
+    JNIEnv *, jclass, jstring, jstring, jobject, jobject, jobject );
 typedef jobject (JNICALL * fptr_createRegistryServiceFactory)(
-    JNIEnv *, jclass, jstring, jstring, jboolean );
+    JNIEnv *, jclass, jstring, jstring, jboolean, jobject );
 typedef jobject (JNICALL * fptr_bootstrap)(
-    JNIEnv *_env, jclass, jstring, jobjectArray );
+    JNIEnv *_env, jclass, jstring, jobjectArray, jobject );
 
 static fptr_writeInfo s_writeInfo;
 static fptr_getFactory s_getFactory;
@@ -139,42 +139,46 @@ static bool inited_juhx( JNIEnv * jni_env )
 //==================================================================================================
 JNIEXPORT jboolean JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
-    JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr, jobject jRegKey )
+    JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr,
+    jobject jRegKey, jobject loader )
 {
     if (inited_juhx( pJEnv ))
-        return (*s_writeInfo)( pJEnv, jClass, jLibName, jSMgr, jRegKey );
+        return (*s_writeInfo)(
+            pJEnv, jClass, jLibName, jSMgr, jRegKey, loader );
     return JNI_FALSE;
 }
 //==================================================================================================
 JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName,
-    jobject jSMgr, jobject jRegKey )
+    jobject jSMgr, jobject jRegKey, jobject loader )
 {
     if (inited_juhx( pJEnv ))
-        return (*s_getFactory)( pJEnv, jClass, jLibName, jImplName, jSMgr, jRegKey );
+        return (*s_getFactory)(
+            pJEnv, jClass, jLibName, jImplName, jSMgr, jRegKey, loader );
     return 0;
 }
 //==================================================================================================
 JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile,
-    jstring jReadRegFile, jboolean jbReadOnly )
+    jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
 {
     if (inited_juhx( pJEnv ))
     {
         return (*s_createRegistryServiceFactory)(
-            pJEnv, jClass, jWriteRegFile, jReadRegFile, jbReadOnly );
+            pJEnv, jClass, jWriteRegFile, jReadRegFile, jbReadOnly, loader );
     }
     return 0;
 }
 //==================================================================================================
 JNIEXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
-    JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs )
+    JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs,
+    jobject loader )
 {
     if (inited_juhx( jni_env ))
-        return (*s_bootstrap)( jni_env, jClass, juno_rc, jpairs );
+        return (*s_bootstrap)( jni_env, jClass, juno_rc, jpairs, loader );
     return 0;
 }
 }
