@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:36:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,18 +134,25 @@ Image PreviewRenderer::RenderPage (
 {
     Image aPreview;
 
-    if (Initialize (pPage, aPixelSize))
+    try
     {
-        PaintPage (pPage);
-        PaintSubstitutionText (rSubstitutionText);
-        PaintFrame();
+        if (Initialize (pPage, aPixelSize))
+        {
+            PaintPage (pPage);
+            PaintSubstitutionText (rSubstitutionText);
+            PaintFrame();
 
-        Size aSize (mpPreviewDevice->GetOutputSizePixel());
-        aPreview = mpPreviewDevice->GetBitmap (
-            mpPreviewDevice->PixelToLogic(Point(0,0)),
-            mpPreviewDevice->PixelToLogic(aSize));
+            Size aSize (mpPreviewDevice->GetOutputSizePixel());
+            aPreview = mpPreviewDevice->GetBitmap (
+                mpPreviewDevice->PixelToLogic(Point(0,0)),
+                mpPreviewDevice->PixelToLogic(aSize));
 
-        Cleanup();
+            Cleanup();
+        }
+    }
+    catch (const com::sun::star::uno::Exception&)
+    {
+        OSL_TRACE("%s: caught exception", __FUNCTION__);
     }
 
     return aPreview;
@@ -229,7 +236,15 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
     // Paint the page.
     Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
     Region aRegion (aPaintRectangle);
-    mpView->CompleteRedraw (mpPreviewDevice.get(), aRegion);
+
+    try
+    {
+        mpView->CompleteRedraw (mpPreviewDevice.get(), aRegion);
+    }
+    catch (const ::com::sun::star::uno::Exception&)
+    {
+        OSL_TRACE("%s: caught exception", __FUNCTION__);
+    }
 }
 
 
