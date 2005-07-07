@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 11:29:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,15 @@ SimpleResMgr* ImpSvtData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLoc
         rResMgr = new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svs), rLocale );
     }
     return rResMgr;
+}
+
+ResMgr * ImpSvtData::GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale)
+{
+    if (!pPatchResMgr)
+    {
+        pPatchResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(svp), aLocale);
+    }
+    return pPatchResMgr;
 }
 
 //============================================================================
