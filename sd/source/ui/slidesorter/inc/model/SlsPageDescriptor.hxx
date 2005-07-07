@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageDescriptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:38:08 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,13 @@ public:
     void SetModelBorder (const SvBorder& rBorder);
     SvBorder GetModelBorder (void) const;
 
+    /** The size of the area in which the page number is displayed is
+        calculated by the SlideSorterView and then stored in the page
+        descriptors so that the contact objects can access them.  The
+        contact objects can not calculate them on demand because the total
+        number of slides is needed to do that and this number is not known
+        to the contact objects.
+    */
     void SetPageNumberAreaModelSize (const Size& rSize);
     Size GetPageNumberAreaModelSize (void) const;
 
