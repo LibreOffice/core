@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:43:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,7 +840,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     PresentationViewShell::CreateFullScreenShow( this, rReq );
                 else
                 {
-                    pFrameView->SetPreviousViewShellType(GetShellType());
+                    // Save the current view shell type so that it can be
+                    // restored after the show has ended.  If there already
+                    // is a saved shell type then that is not overwritten.
+                    if (pFrameView->GetPreviousViewShellType() == ViewShell::ST_NONE)
+                        pFrameView->SetPreviousViewShellType(GetShellType());
 
                     mpSlideShow = new Slideshow( this, pDrView, GetDoc() );
                     mpSlideShow->setRehearseTimings(
@@ -1856,6 +1860,7 @@ void DrawViewShell::StopSlideShow (bool bCloseFrame)
         else if( pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0 )
         {
             ViewShell::ShellType ePreviousType (pFrameView->GetPreviousViewShellType());
+            pFrameView->SetPreviousViewShellType(ViewShell::ST_NONE);
 
             pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
             pFrameView->SetSlotId(SID_OBJECT_SELECT);
