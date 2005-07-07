@@ -315,9 +315,9 @@ File gid_File_Bin_Soffice_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
   #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME);
+    Styles = (PACKED, PATCH_SO_NAME, PATCH);
   #else
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
   #endif
     Name = "soffice.bin";
 End
