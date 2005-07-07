@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:57:52 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,20 +348,20 @@ public:
     void        SetSoundFile(const String& rStr)    { aSoundFile = rStr; }
     String      GetSoundFile() const                { return aSoundFile; }
 
-    sal_Int16   getTransitionType() const { return mnTransitionType; }
-    void        setTransitionType( sal_Int16 nTransitionType ) { mnTransitionType = nTransitionType; }
+    sal_Int16   getTransitionType() const;
+    void        setTransitionType( sal_Int16 nTransitionType );
 
-    sal_Int16   getTransitionSubtype() const { return mnTransitionSubtype; }
-    void        setTransitionSubtype( sal_Int16 nTransitionSubtype ) { mnTransitionSubtype = nTransitionSubtype; }
+    sal_Int16   getTransitionSubtype() const;
+    void        setTransitionSubtype( sal_Int16 nTransitionSubtype );
 
-    sal_Bool    getTransitionDirection() const { return mbTransitionDirection; }
-    void        setTransitionDirection( sal_Bool bTransitionbDirection ) { mbTransitionDirection = bTransitionbDirection; }
+    sal_Bool    getTransitionDirection() const;
+    void        setTransitionDirection( sal_Bool bTransitionbDirection );
 
-    sal_Int32   getTransitionFadeColor() const { return mnTransitionFadeColor; }
-    void        setTransitionFadeColor( sal_Int32 nTransitionFadeColor ) { mnTransitionFadeColor = nTransitionFadeColor; }
+    sal_Int32   getTransitionFadeColor() const;
+    void        setTransitionFadeColor( sal_Int32 nTransitionFadeColor );
 
-    double      getTransitionDuration() const { return mfTransitionDuration; }
-    void        setTransitionDuration( double fTranstionDuration ) { mfTransitionDuration = fTranstionDuration; }
+    double      getTransitionDuration() const;
+    void        setTransitionDuration( double fTranstionDuration );
 
     // Virtuelle Methoden von SdrObjUserCall
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
