@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:14:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,10 +184,8 @@ private:
     /// Remember whether we are listening to the frame.
     bool mbListeningToFrame;
 
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::beans::XPropertySet> mxControllerPropertySetWeak;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XFrame> mxFrameWeak;
+    ::com::sun::star::uno::WeakReference<::com::sun::star::frame::XController> mxControllerWeak;
+    ::com::sun::star::uno::WeakReference<::com::sun::star::frame::XFrame> mxFrameWeak;
 
 
     void ReleaseListeners (void);
