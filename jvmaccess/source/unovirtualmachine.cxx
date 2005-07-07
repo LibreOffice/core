@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovirtualmachine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-17 09:21:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ UnoVirtualMachine::CreationException::operator =(CreationException const &) {
 
 UnoVirtualMachine::UnoVirtualMachine(
     rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
-    jobject classLoader):
+    void * classLoader):
     m_virtualMachine(virtualMachine),
     m_classLoader(0)
 {
@@ -96,7 +96,7 @@ UnoVirtualMachine::UnoVirtualMachine(
     try {
         m_classLoader =
             jvmaccess::VirtualMachine::AttachGuard(m_virtualMachine).
-            getEnvironment()->NewGlobalRef(classLoader);
+            getEnvironment()->NewGlobalRef(static_cast< jobject >(classLoader));
     } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {}
 #endif
     if (m_classLoader == 0) {
@@ -109,7 +109,7 @@ UnoVirtualMachine::getVirtualMachine() const {
     return m_virtualMachine;
 }
 
-jobject UnoVirtualMachine::getClassLoader() const {
+void * UnoVirtualMachine::getClassLoader() const {
     return m_classLoader;
 }
 
@@ -117,7 +117,8 @@ UnoVirtualMachine::~UnoVirtualMachine() {
 #if defined SOLAR_JAVA
     try {
         jvmaccess::VirtualMachine::AttachGuard(m_virtualMachine).
-            getEnvironment()->DeleteGlobalRef(m_classLoader);
+            getEnvironment()->DeleteGlobalRef(
+                static_cast< jobject >(m_classLoader));
     } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
         OSL_TRACE(
             "jvmaccess::UnoVirtualMachine::~UnoVirtualMachine:"
