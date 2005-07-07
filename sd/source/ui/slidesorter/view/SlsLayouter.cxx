@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsLayouter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:59:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,8 +250,8 @@ bool Layouter::Rearrange (
             nTargetWidth = mnMaximalWidth;
 
         // Initialize the device with some arbitrary zoom factor just in
-        // case that the current zoom factor is numerical instable when used
-        // in a multiplication.
+        // case that the current zoom factor is numerically instable when
+        // used in a multiplication.
         MapMode aMapMode (pDevice->GetMapMode());
         aMapMode.SetScaleX (Fraction(1,1));
         aMapMode.SetScaleY (Fraction(1,1));
