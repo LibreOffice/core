@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.52 $
+#*  $Revision: 1.53 $
 #*
-#*  last change: $Author: obo $ $Date: 2005-04-13 11:55:13 $
+#*  last change: $Author: obo $ $Date: 2005-07-07 13:11:33 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..
 PRJNAME=svtools
 TARGET=svtool
 RESTARGET=svt
+RESTARGETPATCH=svp
 RESTARGETSIMPLE=svs
 VERSION=$(UPD)
 GEN_HID=TRUE
@@ -114,7 +115,8 @@ LIB7FILES=	\
         $(SLB)$/svdde.lib \
         $(SLB)$/svhtml.lib     \
         $(SLB)$/svrtf.lib	\
-        $(SLB)$/heavyconfig.lib
+                $(SLB)$/heavyconfig.lib 	\
+        $(SLB)$/java.lib	
 
 .IF "$(GUI)" == "UNX"
 LIB7FILES+= 	$(SLB)$/eaimp.lib
@@ -144,12 +146,18 @@ RESLIB1SRSFILES= \
         $(SRS)$/svcontnr.srs    \
         $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
-        $(SRS)$/accessibility.srs
+        $(SRS)$/accessibility.srs 	\
+        $(SRS)$/javaerror.srs
 
 RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
         $(SRS)$/items1.srs \
         $(SRS)$/misc1.srs
+
+
+RESLIB3NAME= $(RESTARGETPATCH)
+RESLIB3SRSFILES= \
+        $(SRS)$/patchjavaerror.srs
 
 # build the shared library  --------------------------------------------------
 
@@ -176,7 +184,8 @@ SHL1STDLIBS+= \
         $(CPPULIB)			\
         $(VOSLIB)			\
         $(SALLIB)			\
-        $(ICUUCLIB)
+        $(ICUUCLIB)		\
+        $(JVMFWKLIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libraries go at end
