@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vcldata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:43:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,4 +80,16 @@ ResMgr * ImpSvtData::GetResMgr()
 {
     return GetResMgr(Application::GetSettings().GetUILocale());
 }
+
+ResMgr * ImpSvtData::GetPatchResMgr()
+{
+    return GetPatchResMgr(Application::GetSettings().GetUILocale());
+}
+
+SvpResId::SvpResId( USHORT nId ) :
+    ResId( nId, ImpSvtData::GetSvtData().GetPatchResMgr() )
+{
+}
+
+
 
