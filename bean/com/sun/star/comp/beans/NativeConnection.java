@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeConnection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ import com.sun.star.connection.XConnection;
 
 /* Connection to a locally running OOo instance.
  *
- * @since OOo 2.0.0
+ * @deprecated.
  */
 /* package */ class NativeConnection
     implements XConnection

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidArgumentException.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-14 10:37:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@ package com.sun.star.comp.beans;
 
 /** indicates an invalid argument in a function call.
  *
- * @since OOo 2.0.0
+ * @deprecated
  */
 public class InvalidArgumentException extends Exception
 {
