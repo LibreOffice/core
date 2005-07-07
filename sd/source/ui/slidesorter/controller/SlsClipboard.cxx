@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:56:40 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,16 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             // Prevent redraws while inserting pages from the clipboard
             // because the intermediate inconsistent state might lead to
             // a crash.
-            mrController.GetView().LockRedraw (TRUE);
-            if (pCurrentFunction != NULL)
-                pCurrentFunction->DoPaste();
-            else
-                DoPaste();
-            mrController.MakeSelectionVisible();
-            mrController.GetView().LockRedraw (FALSE);
+            if (mrController.GetModel().GetEditMode() != EM_MASTERPAGE)
+            {
+                mrController.GetView().LockRedraw (TRUE);
+                if (pCurrentFunction != NULL)
+                    pCurrentFunction->DoPaste();
+                else
+                    DoPaste();
+                mrController.MakeSelectionVisible();
+                mrController.GetView().LockRedraw (FALSE);
+            }
             rRequest.Done();
             break;
 
@@ -210,27 +213,15 @@ void Clipboard::DoPaste (::Window* pWindow)
 
     if (pClipTransferable!=NULL && pClipTransferable->IsPageTransferable())
     {
-        OSL_TRACE("DoPaste 0 : %d %d",
-            mrController.GetFocusManager().HasFocus(),
-            mrController.GetFocusManager().IsFocusShowing());
         sal_Int32 nInsertPosition = GetInsertionPosition(pWindow);
 
         if (nInsertPosition >= 0)
         {
-            OSL_TRACE("DoPaste: %d %d",
-                mrController.GetFocusManager().HasFocus(),
-                mrController.GetFocusManager().IsFocusShowing());
             // Paste the pages from the clipboard.
             sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
-            OSL_TRACE("DoPaste: %d %d",
-                mrController.GetFocusManager().HasFocus(),
-                mrController.GetFocusManager().IsFocusShowing());
             // Select the pasted pages and make the first of them the
             // current page.
             mrController.GetView().GetWindow()->GrabFocus();
-            OSL_TRACE("DoPaste: %d %d",
-                mrController.GetFocusManager().HasFocus(),
-                mrController.GetFocusManager().IsFocusShowing());
             SelectPageRange(nInsertPosition, nInsertPageCount);
         }
     }
@@ -512,11 +503,10 @@ sal_Int8 Clipboard::AcceptDrop (
     USHORT nLayer)
 {
     sal_Int8 nResult = DND_ACTION_NONE;
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
-    if (pDragTransferable!=NULL
-        && pDragTransferable->IsPageTransferable())
+    if (IsDropAccepted())
     {
+        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
         // Accept a drop.
         nResult = rEvent.mnAction;
 
@@ -544,11 +534,11 @@ sal_Int8 Clipboard::ExecuteDrop (
     USHORT nPage,
     USHORT nLayer)
 {
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
     sal_Int8 nResult = DND_ACTION_NONE;
 
-    if (pDragTransferable != NULL && pDragTransferable->IsPageTransferable())
+    if (IsDropAccepted())
     {
+        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
         const Point aEventModelPosition (
             pTargetWindow->PixelToLogic (rEvent.maPosPixel));
         long int nXOffset = labs (pDragTransferable->GetStartPos().X()
@@ -652,6 +642,33 @@ USHORT Clipboard::InsertSlides (
 
     return nInsertedPageCount;
 }
+
+
+
+
+bool Clipboard::IsDropAccepted (void) const
+{
+    const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+
+    bool bIsDropAccepted (false);
+    do
+    {
+        if (pDragTransferable == NULL)
+            break;
+
+        if ( ! pDragTransferable->IsPageTransferable())
+            break;
+
+        if (mrController.GetModel().GetEditMode() == EM_MASTERPAGE)
+            break;
+
+        bIsDropAccepted = true;
+    }
+    while (false);
+
+    return bIsDropAccepted;
+}
+
 
 
 } } } // end of namespace ::sd::slidesorter::controller
