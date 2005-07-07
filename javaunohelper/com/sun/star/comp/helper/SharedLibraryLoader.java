@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibraryLoader.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:07:18 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,12 @@ public class SharedLibraryLoader {
     }
 
     private static native boolean component_writeInfo(
-            String libName, XMultiServiceFactory smgr, XRegistryKey regKey );
+            String libName, XMultiServiceFactory smgr, XRegistryKey regKey,
+            ClassLoader loader );
 
     private static native Object component_getFactory(
-            String libName, String implName, XMultiServiceFactory smgr,  XRegistryKey regKey );
+            String libName, String implName, XMultiServiceFactory smgr,
+            XRegistryKey regKey, ClassLoader loader );
 
     /**
      * Supplies the ServiceFactory of the default SharedLibraryLoader.
@@ -116,7 +118,9 @@ public class SharedLibraryLoader {
     {
         return (XSingleServiceFactory) UnoRuntime.queryInterface(
                     XSingleServiceFactory.class,
-                    component_getFactory( DEFAULT_LIBRARY, DEFAULT_IMPLEMENTATION, smgr, regKey ) );
+                    component_getFactory(
+                        DEFAULT_LIBRARY, DEFAULT_IMPLEMENTATION, smgr, regKey,
+                        SharedLibraryLoader.class.getClassLoader() ) );
     }
 
     /**
@@ -139,7 +143,9 @@ public class SharedLibraryLoader {
     {
         return (XSingleServiceFactory) UnoRuntime.queryInterface(
                     XSingleServiceFactory.class,
-                    component_getFactory( libName, impName, smgr, regKey ) );
+                    component_getFactory(
+                        libName, impName, smgr, regKey,
+                        SharedLibraryLoader.class.getClassLoader() ) );
     }
 
     /**
@@ -156,7 +162,9 @@ public class SharedLibraryLoader {
                 com.sun.star.lang.XMultiServiceFactory smgr,
                 com.sun.star.registry.XRegistryKey regKey )
     {
-        return component_writeInfo( DEFAULT_LIBRARY, smgr, regKey );
+        return component_writeInfo(
+            DEFAULT_LIBRARY, smgr, regKey,
+            SharedLibraryLoader.class.getClassLoader() );
     }
 
     /**
@@ -178,7 +186,8 @@ public class SharedLibraryLoader {
             throws  com.sun.star.registry.InvalidRegistryException,
                     com.sun.star.uno.RuntimeException
     {
-        return component_writeInfo( libName, smgr, regKey );
+        return component_writeInfo(
+            libName, smgr, regKey, SharedLibraryLoader.class.getClassLoader() );
     }
 }
 
