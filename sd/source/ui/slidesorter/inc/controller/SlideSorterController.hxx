@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:16:16 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,11 @@ private:
         is moved into the visible area.
     */
     bool mbIsMakeSelectionVisiblePending;
+
+    /** This counter is used to avoid processing of reentrant calls to
+        Paint().
+    */
+    sal_Int32 mnPaintEntranceCount;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
