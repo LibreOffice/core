@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:23:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,32 +118,31 @@ public class OOoBean
     private boolean bToolBarVisible = true;
     private boolean bStatusBarVisible = true;
 
-    //-------------------------------------------------------------------------
+
     // debugging method
     private void dbgPrint( String aMessage )
     {
         // System.err.println( "OOoBean: " + aMessage );
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.PER/0.2
     /** @internal
+     *  @deprecated
      */
     public void writeExternal( java.io.ObjectOutput aObjOut )
     {
         // TBD
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.PER/0.2
     /** @internal
+     *  @deprecated
      */
     public void readExternal( java.io.ObjectInput aObjIn )
     {
         // TBD
     }
 
-    //-------------------------------------------------------------------------
     /** Generic constructor of the OOoBean.
 
         Neither a connection is established nor any document loaded.
@@ -151,14 +150,18 @@ public class OOoBean
     public OOoBean()
     {}
 
-    //-------------------------------------------------------------------------
-        // @requirement FUNC.CON.MULT/0.3
+       // @requirement FUNC.CON.MULT/0.3
     /** Constructor for an OOoBean which uses a specific office connection.
 
         The connection must be established but no document is loaded.
 
         @throws NoConnectionException
             if the connection is not established.
+
+        @deprecated Clients could use the getOOoConnection to obtain an OfficeConnection
+        and use it as argument in a constructor for another OOoBean instance. Calling
+        the dispose method of the OfficeConnection or the OOoBean's stopOOoConnection
+        method would make all instances of OOoBean stop working.
      */
     public OOoBean( OfficeConnection iConnection )
         throws NoConnectionException
@@ -168,7 +171,6 @@ public class OOoBean
         { /* impossible here */ }
     }
 
-    //-------------------------------------------------------------------------
     /** Sets the timeout for methods which launch OOo in milli seconds.
 
         This method does not need a connection to an OOo instance.
@@ -178,7 +180,6 @@ public class OOoBean
         nOOoStartTimeOut = nMilliSecs;
     }
 
-    //-------------------------------------------------------------------------
     /** Sets the timeout for normal OOO methods calls in milli seconds.
 
         This method does not need a connection to an OOo instance.
@@ -188,7 +189,6 @@ public class OOoBean
         nOOoCallTimeOut = nMilliSecs;
     }
 
-    //-------------------------------------------------------------------------
     /** Sets the period length in milli seconds to check the OOo connection.
 
         This method does not need a connection to an OOo instance.
@@ -198,7 +198,6 @@ public class OOoBean
         nOOoCheckCycle = nMilliSecs;
     }
 
-    //-------------------------------------------------------------------------
     /** Sets the a connection to an OOo instance.
 
         @internal
@@ -227,7 +226,6 @@ public class OOoBean
         xConnectionListener = this.new EventListener("setOOoConnection");
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.CON.STRT/0.4
     /** Starts a connection to an OOo instance which is lauched if not running.
 
@@ -248,17 +246,20 @@ public class OOoBean
         setOOoConnection( aConnection );
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.CON.CHK/0.7
     /** Returns true if this OOoBean is connected to an OOo instance,
         false otherwise.
+
+        @deprecated This method is not useful in a multithreaded environment. Then
+        all threads accessing the instance would have to be synchronized in order to
+        make is method work. It is better
+        to call OOoBean's methods and be prepared to catch a NoConnectionException.
      */
     public boolean isOOoConnected()
     {
         return iConnection != null;
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.CON.STOP/0.4
     /** Disconnects from the connected OOo instance.
 
@@ -287,15 +288,23 @@ public class OOoBean
 
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.CON.STOP/0.4 (via XComponent.dispose())
-        // @requirement FUNC.CON.NTFY/0.4 (via XComponent.addEventListener())
+       // @requirement FUNC.CON.NTFY/0.4 (via XComponent.addEventListener())
     /** Returns the a connection to an OOo instance.
 
-        If no connection exists, a default connection will be created.
+        If no connection exists, a default connection will be created. An OfficeConnection
+        can be used to register listeners of type com.sun.star.lang.EventListener,
+        which are notified when the connection to the
+        office dies. One should not call the dispose method, because this may result
+        in receiving com.sun.star.lang.DisposedExceptions when calling
+        {@link #stopOOoConnection stopOOoConnection} or other API methods. If other instances share the
+        same connection then they will stop function properly, because they loose their
+        connection as well. The recommended way to end the connection is
+        calling {@link #stopOOoConnection stopOOoConnection}.
 
         @throws NoConnectionException
             if no connection can be established
+
      */
     public synchronized OfficeConnection getOOoConnection()
         throws NoConnectionException
@@ -310,8 +319,6 @@ public class OOoBean
             throw new NoConnectionException();
         return iConnection;
     }
-
-    //-------------------------------------------------------------------------
 
     /** Returns the service factory used by this OOoBean instance.
 
@@ -347,7 +354,6 @@ public class OOoBean
         return xServiceFactory;
     }
 
-    //-------------------------------------------------------------------------
     /** Returns the XDesktop interface of the OOo instance used by this OOoBean.
 
         @throws NoConnectionException
@@ -371,9 +377,6 @@ public class OOoBean
         return xDesktop;
     }
 
-    //-------------------------------------------------------------------------
-    // @requirement TBD
-    // @estimation 4h
     /** Resets this bean to an empty document.
 
        If a document is loaded and the content modified,
@@ -384,6 +387,14 @@ public class OOoBean
        @param bClearStateToo
            Not only the document content but also the state of the bean,
         like visibility of child components is cleared.
+
+        @deprecated There is currently no way to dismiss changes, except for loading
+        of the unchanged initial document. Furthermore it is unclear how derived classes
+        handle this and what exactly their state is (e.g. what members make up their state).
+        Calling this method on a derived class requires knowledge about their implementation.
+        Therefore a deriving class should declare their own clearDocument if needed. Clients
+        should call the clearDocument of the deriving class or {@link #clear} which discards
+        the currently displayed document.
      */
     public synchronized void clearDocument( boolean bClearStateToo )
         throws
@@ -399,7 +410,6 @@ public class OOoBean
             throw new RuntimeException( "frame without XCloseable" );
     }
 
-    //-------------------------------------------------------------------------
     /** Resets the OOoBean to an empty status.
 
         Any loaded document is unloaded, no matter whether it is modified or not.
@@ -472,16 +482,22 @@ public class OOoBean
         { /* can be ignored */ }
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.PAR.LWP/0.4
-    // @estimation 2h
-    /** This method must be called when the OOoBean can aquire a
-        sytem window from it's parent AWT/Swing component.
+    /** This method causes the office window to be displayed.
 
-        This is the case when java.awt.Component.isDisplayable() returns
-        true.  This again is usually true when the parent is visible and
-        the parent container chain is created up to a top level system
-        window.
+        If no document is loaded and the instance is added to a Java container that
+        is showing, then this method needs not to be called. If later one of the methods
+        {@link #loadFromURL loadFromURL}, {@link #loadFromStream loadFromStream1},
+        or {@link #loadFromByteArray loadFromByteArray}
+        is called, then the document is automatically displayed.
+
+        Should one of the load methods have been called before the Java container
+        was showing, then this method needs to be called after the container window
+        was made visible (java.lang.Component.setVisible(true)).
+        <p>
+        Another scenario is that a OOoBean contains a document and is removed
+        from a Java container and later added again. Then aquireSystemWindow needs
+        to be called after the container window is displayed.
 
         @throws SystemWindowException
             if no system window can be aquired.
@@ -506,7 +522,6 @@ public class OOoBean
         doLayout();
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.PAR.RWL/0.4
     // @estimation 16h
     /** This method must be called when the OOoBean before the
@@ -521,6 +536,10 @@ public class OOoBean
 
         @throws NoConnectionException
             if the connection is not established.
+
+        @deprecated When Component.removeNotify of the parent window of the actual
+        office window is called, then the actions are performed for which this method
+        needed to be called previously.
      */
     public synchronized void releaseSystemWindow()
         throws
@@ -537,10 +556,8 @@ public class OOoBean
         { throw new NoConnectionException(); }
     }
 
-    //-------------------------------------------------------------------------
-        // @requirement FUNC.BEAN.LOAD/0.4
-        // @requirement FUNC.CON.AUTO/0.3
-    // @estimation 2h
+       // @requirement FUNC.BEAN.LOAD/0.4
+       // @requirement FUNC.CON.AUTO/0.3
     /** Loads the bean from the given URL.
 
         If a document is already loaded and the content modified,
@@ -730,7 +747,6 @@ public class OOoBean
         }
     }
 
-    //---------------------------------------------------------------------------
     /** Loads a document from a Java stream.
 
            See loadFromURL() for further information.
@@ -782,7 +798,6 @@ public class OOoBean
         loadFromURL( "private:stream", aExtendedArguments );
     }
 
-    //---------------------------------------------------------------------------
     /** Loads a document from a byte array.
 
            See loadFromURL() for further information.
@@ -811,8 +826,22 @@ public class OOoBean
         loadFromURL( "private:stream", aExtendedArguments );
     }
 
-    //---------------------------------------------------------------------------
     /** Stores a document to the given URL.
+        <p>
+        Due due a bug (50651) calling this method may cause the office to crash,
+        when at the same time the office writes a backup of the document. This bug
+        also affects {@link #storeToByteArray storeToByteArray} and
+        {@link #storeToStream storeToStream}. The workaround
+        is to start the office with the option -norestore, which disables the automatic
+        backup and recovery mechanism. OOoBean offers currently no supported way of providing
+        startup options for OOo. But it is possible to set a Java property when starting
+        Java, which is examined by OOoBean:
+        <pre>
+            java -Dcom.sun.star.officebean.Options=-norestore  ...
+        </pre>
+        It is planned to offer a way of specifying startup options in a future version.
+        The property can be used until then. When using this property only one option
+        can be provided.
 
         @throws IllegalArgumentException
             if either of the arguments is out of the specified range.
@@ -858,10 +887,10 @@ public class OOoBean
         { throw new NoConnectionException(); }
     }
 
-    //---------------------------------------------------------------------------
     /** Stores a document to a stream.
 
-           See storeToURL() for further information.
+           See {@link #storeToURL storeToURL} for further information.
+        @see #storeToURL storeToURL
      */
     public java.io.OutputStream storeToStream(
             java.io.OutputStream aOutStream,
@@ -898,10 +927,10 @@ public class OOoBean
         return aOutStream;
     }
 
-    //---------------------------------------------------------------------------
     /** Stores a document to a byte array.
 
-           See storeToURL() for further information.
+           See {@link #storeToURL storeToURL} for further information.
+        @see #storeToURL storeToURL
      */
     public byte[] storeToByteArray(
             byte aOutBuffer[],
@@ -937,8 +966,6 @@ public class OOoBean
         return aStream.getBuffer();
     }
 
-    //-------------------------------------------------------------------------
-
     // @requirement FUNC.BEAN.PROG/0.5
     // @requirement API.SIM.SEAP/0.2
     /** returns the <type scope="com::sun::star::frame">Frame</a>
@@ -966,10 +993,8 @@ public class OOoBean
         return aFrame;
     }
 
-    //-------------------------------------------------------------------------
-        // @requirement FUNC.BEAN.PROG/0.5
-        // @requirement API.SIM.SEAP/0.2
-        // @estimation 1h
+       // @requirement FUNC.BEAN.PROG/0.5
+       // @requirement API.SIM.SEAP/0.2
     /** returns the <type scope="com::sun::star::frame::Controller"> of the bean.
 
         @returns
@@ -993,13 +1018,11 @@ public class OOoBean
         return aController;
     }
 
-    //-------------------------------------------------------------------------
     // @requirement FUNC.BEAN.PROG/0.5
     // @requirement FUNC.BEAN.STOR/0.4
     // @requirement FUNC.BEAN.PRNT/0.4
     // @requirement API.SIM.SEAP/0.2
-    // @estimation 1h
-        /** returns the <type scope="com::sun::star::document::OfficeDocument">
+       /** returns the <type scope="com::sun::star::document::OfficeDocument">
         of the bean.
 
         @returns
@@ -1022,20 +1045,32 @@ public class OOoBean
         return aDocument;
     }
 
-    //--------------------------------------------------------------------------
-    /*  Sets visibility of all tool bars known by this OOoBean version.
+    /** Sets visibility of all tool bars known by this OOoBean version.
 
          Initially all tool bars are visible.  By hiding all tool bars
         utilizing this method, it is possible to turn just a subset of
         tool bars on afterwards, no matter whether all available tool
         bars are known or not.
-
+        <p>
         If an older OOoBean instance is used with a newer OOo instance,
         some tool bars might not be affected by this method.
-
+        <p>
         If no connection is established or no document is loaded,
         the setting is memorized until a document is loaded.  Same
         is valid when the connection dies within this function call.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. For example:
+        <pre>
+com.sun.star.beans.XPropertySet xPropSet =
+  (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
+    com.sun.star.beans.XPropertySet.class, aFrame );
+com.sun.star.frame.XLayoutManager xLayoutManager =
+  (com.sun.star.frame.XLayoutManager) UnoRuntime.queryInterface(
+    com.sun.star.frame.XLayoutManager.class,
+    xPropSet.getPropertyValue( "LayoutManager" ) );
+xLayoutManager.showElement("private:resource/menubar/menubar");
+        </pre>
      */
     public void setAllBarsVisible( boolean bVisible )
     {
@@ -1048,7 +1083,11 @@ public class OOoBean
     }
 
     //--------------------------------------------------------------------------
-    /*  Applies all tool visiblities to the real thing.
+    /** Applies all tool visiblities to the real thing.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible setAllBarsVisible}.
      */
     protected void applyToolVisibilities()
         throws
@@ -1062,15 +1101,16 @@ public class OOoBean
         bIgnoreVisibility = false;
     }
 
-    //--------------------------------------------------------------------------
-    /*  Helper method to set tool bar visibilty.
+    /** Helper method to set tool bar visibilty.
 
          @param bnewValue
             If false, the tool bar is disabled,
             If true, the tool bar is visible.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
-//    protected boolean setToolVisible( String aProperty, String aResourceURL,
-//              short nSlotID, String aSlotArgName, boolean bOldValue, boolean bNewValue )
     protected boolean setToolVisible( String aProperty, String aResourceURL,
         boolean bOldValue, boolean bNewValue )
 
@@ -1121,11 +1161,10 @@ public class OOoBean
         return bNewValue;
     }
 
-    //--------------------------------------------------------------------------
-    /*  Sets the visibility of the menu bar.
+    /** Sets the visibility of the menu bar.
 
         Initially the menu bar is visible.
-
+        <p>
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
         Same is valid when the connection dies within this function call.
@@ -1133,6 +1172,10 @@ public class OOoBean
          @param bVisible
             If false, the menu bar is disabled,
             If true, the menu bar is visible.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public void setMenuBarVisible(boolean bVisible)
     {
@@ -1147,8 +1190,7 @@ public class OOoBean
         }
     }
 
-    //--------------------------------------------------------------------------
-      /* Returns the visibility of the menu bar.
+      /** Returns the visibility of the menu bar.
 
            This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
@@ -1157,14 +1199,17 @@ public class OOoBean
         @return
             True if the menu bar is visible,
             false if the menu bar is hidden.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public boolean isMenuBarVisible()
     {
         return bMenuBarVisible;
     }
 
-    //--------------------------------------------------------------------------
-    /*  Sets the main function bar visibilty.
+    /** Sets the main function bar visibilty.
 
         Initially the standard bar is visible.
 
@@ -1175,6 +1220,10 @@ public class OOoBean
          @param bVisible
             If false, the main function bar is disabled,
             If true, the main function bar is visible.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public void setStandardBarVisible(boolean bVisible)
     {
@@ -1189,8 +1238,7 @@ public class OOoBean
         }
     }
 
-    //--------------------------------------------------------------------------
-      /* Returns the visibility of the main function bar.
+      /** Returns the visibility of the main function bar.
 
            This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
@@ -1199,14 +1247,17 @@ public class OOoBean
         @return
             True if the main function bar is visible,
             false if the main function bar is hidden.
-     */
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
+    */
     public boolean isStandardBarVisible()
     {
         return bStandardBarVisible;
     }
 
-    //--------------------------------------------------------------------------
-    /*  Sets the tool function bar visibilty.
+    /** Sets the tool function bar visibilty.
 
         Initially the tool bar is visible.
 
@@ -1217,6 +1268,10 @@ public class OOoBean
          @param bVisible
             If false, the tool function bar is disabled,
             If true, the tool function bar is visible.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public void setToolBarVisible(boolean bVisible)
     {
@@ -1231,8 +1286,7 @@ public class OOoBean
         }
     }
 
-    //--------------------------------------------------------------------------
-      /* Returns the visibility of the tool function bar.
+      /** Returns the visibility of the tool function bar.
 
            This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
@@ -1241,14 +1295,17 @@ public class OOoBean
         @return
             True if the tool function bar is visible,
             false if the tool function bar is hidden.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public boolean isToolBarVisible()
     {
         return bToolBarVisible;
     }
 
-    //--------------------------------------------------------------------------
-    /*  Sets the status function bar visibilty.
+    /** Sets the status function bar visibilty.
 
         Initially the status bar is visible.
 
@@ -1259,6 +1316,10 @@ public class OOoBean
          @param bVisible
             If false, the status function bar is disabled,
             If true, the status function bar is visible.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public void setStatusBarVisible(boolean bVisible)
     {
@@ -1273,8 +1334,7 @@ public class OOoBean
         }
     }
 
-    //--------------------------------------------------------------------------
-      /*    Returns the visibility of the status function bar.
+      /**   Returns the visibility of the status function bar.
 
            This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
@@ -1283,6 +1343,10 @@ public class OOoBean
         @return
             True if the status function bar is visible,
             false if the status function bar is hidden.
+
+        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
+        which can be obtained from a frame, to control toolbars. See also
+        {@link #setAllBarsVisible}.
      */
     public boolean isStatusBarVisible()
     {
@@ -1298,20 +1362,20 @@ public class OOoBean
         setLayout(new java.awt.BorderLayout());
     }
 
-    //---------------------------------------------------------------------------
-    /// TBD
+    /**
+        @deprecated
+     */
     public void paint( java.awt.Graphics aGraphics )
     {
         // TBD
         aGraphics.drawString( "empty", 10, 10 );
     }
 
-    //---------------------------------------------------------------------------
     /** Adds a single argument to an array of arguments.
 
         If the argument by its name is already in aArguments
         it is exchanged and aArguments is returned.
-
+        <p>
         If the argument by its name is not yet in aArguments,
         a new array is created, aArgument added and the new
         array returned.
@@ -1357,7 +1421,6 @@ public class OOoBean
     // Helper Classes
     //---------------------------------------------------------------------------
 
-    //---------------------------------------------------------------------------
     /** Helper class to listen on the connection to learn when it dies.
 
         @internal
