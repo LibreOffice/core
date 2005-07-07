@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestJni.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:15 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,12 @@ package test.java_uno.anytest;
 public class TestJni
 {
     static { System.loadLibrary( "test_javauno_any" ); }
-    private static native XTransport create_jni_transport();
+    private static native XTransport create_jni_transport(ClassLoader loader);
 
     public static void main( String args [] )
     {
-        if (TestAny.test( create_jni_transport(), false ))
+        if (TestAny.test(
+                create_jni_transport(TestJni.class.getClassLoader()), false ))
         {
             System.out.println( "jni any test succeeded." );
         }
