@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:01:51 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,12 +639,16 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         rView.SetGrafDraft (pFrameView->IsGrafDraft());
 
         USHORT nSlidesPerRow (pFrameView->GetSlidesPerRow());
-        if (nSlidesPerRow > 0)
-            rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
-        else
-            // A value of 0 is interpreted as 'auto'.  The number of columns
-            // is adapted to the available size.
+        if (nSlidesPerRow == 0 || ! IsMainViewShell())
+        {
+            // When a value of 0 (automatic) is given or the the slide
+            // sorter is displayed in a side pane then we ignore the value
+            // of the frame view and adapt the number of columns
+            // automatically to the window width.
             rView.GetLayouter().SetColumnCount(1,5);
+        }
+        else
+            rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
 
     // DrawMode for 'main' window
         if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
@@ -665,10 +669,7 @@ void SlideSorterViewShell::WriteFrameViewData()
         pFrameView->SetTextDraft( rView.IsTextDraft() );
         pFrameView->SetGrafDraft( rView.IsGrafDraft() );
 
-        if (rView.GetLayouter().IsColumnCountFixed())
-            pFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
-        else
-            pFrameView->SetSlidesPerRow(0);
+        pFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
 
         // DrawMode for 'main' window
         if( pFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
@@ -677,8 +678,17 @@ void SlideSorterViewShell::WriteFrameViewData()
         SdPage* pActualPage = GetActualPage();
 
         if (pActualPage != NULL)
+        {
             pFrameView->SetSelectedPage (
                 ( pActualPage->GetPageNum() - 1 ) / 2 );
+        }
+        else
+        {
+            // We have no current page to set but at least we can make sure
+            // tht the index of the frame view has a legal value.
+            if (pFrameView->GetSelectedPage() >= mpSlideSorterModel->GetPageCount())
+                pFrameView->SetSelectedPage(mpSlideSorterModel->GetPageCount()-1);
+        }
     }
 }
 
