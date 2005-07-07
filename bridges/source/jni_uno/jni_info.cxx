@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-17 09:53:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,8 @@ JNI_info const * JNI_info::get_jni_info(
     ::jvmaccess::VirtualMachine::AttachGuard guard(
         uno_vm->getVirtualMachine() );
     JNIEnv * jni_env = guard.getEnvironment();
-    JNI_context jni( 0, jni_env, uno_vm->getClassLoader() );
+    JNI_context jni(
+        0, jni_env, static_cast< jobject >(uno_vm->getClassLoader()) );
 
     jmethodID jo_loadClass = jni.get_loadClass_method();
     JLocalAutoRef name(
@@ -964,7 +965,8 @@ JNI_info const * JNI_info::get_jni_info(
     JLocalAutoRef jo_JNI_info_holder(
         jni,
         jni->CallObjectMethodA(
-            uno_vm->getClassLoader(), jo_loadClass, &arg ) );
+            static_cast< jobject >(uno_vm->getClassLoader()), jo_loadClass,
+            &arg ) );
     jni.ensure_no_exception();
     // field JNI_info_holder.m_jni_info_handle
     jfieldID field_s_jni_info_handle =
@@ -980,7 +982,8 @@ JNI_info const * JNI_info::get_jni_info(
     if (0 == jni_info) // un-initialized?
     {
         JNI_info * new_info = new JNI_info(
-            jni_env, uno_vm->getClassLoader(), jo_loadClass );
+            jni_env, static_cast< jobject >(uno_vm->getClassLoader()),
+            jo_loadClass );
 
         ClearableMutexGuard guard( Mutex::getGlobalMutex() );
         jni_info =
