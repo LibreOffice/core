@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: javaerror.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:10:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights andlp
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svtools.hrc"
+
+WarningBox WARNINGBOX_JAVANOTFOUND
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] ="%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Bitte installieren Sie eine JRE und starten Sie dann %PRODUCTNAME neu.";
+    Message[ en-US ] ="%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.";
+};
+
+WarningBox WARNINGBOX_INVALIDJAVASETTINGS
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] ="Die %PRODUCTNAME-Konfiguration wurde geändert. Unter Extras - Optionen - %PRODUCTNAME - Java  wählen Sie eine Java-Laufzeitumgebung aus, die von %PRODUCTNAME benutzt werden soll.";
+    Message[ en-US ] ="The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Java, select the Java runtime environment you want to have used by %PRODUCTNAME.";
+};
+
+QueryBox QBX_JAVADISABLED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ de ] = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Jedoch ist die Benutzung einer  JRE deaktiviert. Möchten Sie die Benutzung von einer JRE jetzt aktivieren?";
+    Message[ en-US ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. However, use of a JRE has been disabled. Do you want to enable the use of a JRE now?";
+};
+
+ErrorBox ERRORBOX_JVMCREATIONFAILED
+{
+    Buttons = WB_OK;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Die ausgewählte JRE ist defekt. Bitte wählen Sie eine andere Version oder installieren Sie eine neue JRE und aktivieren Sie sie unter Extras - Optionen - %PRODUCTNAME - Java.";
+    Message[ en-US ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. The selected JRE is defective. Please select another version or install a new JRE and select  it under Tools - Options - %PRODUCTNAME - Java.";
+};
+
+ErrorBox ERRORBOX_RESTARTREQUIRED
+{
+    Buttons = WB_OK;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu.";
+    Message[ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.";
+};
+
+
+
+String STR_WARNING_JAVANOTFOUND
+{
+    Text [ de ] = "JRE ist erforderlich" ;
+    Text[ en-US ] = "JRE Required" ;
+};
+
+String STR_WARNING_INVALIDJAVASETTINGS
+{
+    Text [ de ] = "JRE auswählen" ;
+    Text[ en-US ] = "Select JRE";
+};
+
+String STR_ERROR_RESTARTREQUIRED
+{
+    Text [ de ] = "Neustart ist erforderlich";
+    Text[ en-US ] = "Restart Required";
+};
+
+String STR_QUESTION_JAVADISABLED
+{
+    Text [ de ] = "JRE aktivieren" ;
+    Text[ en-US ] = "Enable JRE" ;
+};
+
+
+String STR_ERROR_JVMCREATIONFAILED
+{
+    Text [ de ] = "JRE ist defekt" ;
+    Text[ en-US ] = "JRE is Defective" ;
+};
+
+
