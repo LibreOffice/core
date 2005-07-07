@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:30:49 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,12 +240,14 @@ public class Bootstrap {
             m_loaded_juh = true;
         }
         return (XComponentContext)UnoRuntime.queryInterface(
-            XComponentContext.class, cppuhelper_bootstrap( ini_file, pairs ) );
+            XComponentContext.class,
+            cppuhelper_bootstrap(
+                ini_file, pairs, Bootstrap.class.getClassLoader() ) );
     }
 
     static private boolean m_loaded_juh = false;
-    static private native final Object cppuhelper_bootstrap(
-        String ini_file, String bootstrap_parameters [] )
+    static private native Object cppuhelper_bootstrap(
+        String ini_file, String bootstrap_parameters [], ClassLoader loader )
         throws Exception;
 
     /**
