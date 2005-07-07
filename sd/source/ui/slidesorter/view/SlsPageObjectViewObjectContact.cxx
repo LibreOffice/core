@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:16:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "cache/SlsPageCache.hxx"
 #include "res_bmp.hrc"
 #include "tools/IconCache.hxx"
+#include "PreviewRenderer.hxx"
 
 #include "sdpage.hxx"
 #include "sdresid.hxx"
@@ -90,6 +91,7 @@
 #include <vcl/lineinfo.hxx>
 #include <tools/color.hxx>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 
 using namespace ::sdr::contact;
 using namespace ::sd::slidesorter::model;
@@ -156,99 +158,17 @@ Rectangle PageObjectViewObjectContact::GetPreviewPixelBox (
 
 BitmapEx PageObjectViewObjectContact::CreatePreview (DisplayInfo& rDisplayInfo)
 {
-    BitmapEx aBitmap;
+    const SdPage* pPage = static_cast<const SdPage*>(GetPage());
+    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
+    Rectangle aPreviewPixelBox (GetPreviewPixelBox (*pDevice));
 
-    do
-    {
-        if ( ! mbIsValid)
-            break;
+    PreviewRenderer aRenderer (pDevice);
+    Image aPreview (aRenderer.RenderPage(
+        pPage,
+        aPreviewPixelBox.GetSize(),
+        String()));
 
-        OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-        if (pDevice == NULL)
-            break;
-
-        Rectangle aNewSizePixel = GetPreviewPixelBox (*pDevice);
-        if (aNewSizePixel.IsEmpty())
-            break;
-
-        // calculate const vars
-        const Point aEmptyPoint(0, 0);
-        const Rectangle& aPaintRectangle (
-            static_cast<PageObjectViewContact&>(GetViewContact()
-                ).GetPageObject().GetCurrentBoundRect());
-        XOutputDevice* pOriginalExtOutDev
-            = rDisplayInfo.GetExtendedOutputDevice();
-        const Rectangle aPaintRectanglePixel(
-            pDevice->LogicToPixel(aPaintRectangle));
-        MapMode aMapMode(pDevice->GetMapMode());
-        Point aMapModeOrigin(aPaintRectangle.TopLeft());
-
-        // calculate new OffsetTopLeft in pixels
-        Point aOffsetTopLeft(
-            aNewSizePixel.TopLeft() - aPaintRectanglePixel.TopLeft());
-
-        if(aOffsetTopLeft.X() || aOffsetTopLeft.Y())
-
-        {
-            // if there is a pixel offset, calculate the logical offset
-            // for later painting
-            const Point aLogicalNewSizePixelTopLeft(
-                pDevice->PixelToLogic(aNewSizePixel.TopLeft()));
-            aOffsetTopLeft = aLogicalNewSizePixelTopLeft
-                - aPaintRectangle.TopLeft();
-
-            // also prepare the MapMode origin
-            aMapModeOrigin += aOffsetTopLeft;
-        }
-
-        // Prepare MapMode for BufferDevice
-        aMapMode.SetOrigin (Point (-aMapModeOrigin.X(), -aMapModeOrigin.Y()));
-
-        // prepare VirtualDevice for mask
-        VirtualDevice aBufferDevice(*pDevice, 0L, 0L);
-
-        // Set OutputSize and MapMode
-        aBufferDevice.SetOutputSizePixel(aNewSizePixel.GetSize());
-        aBufferDevice.SetMapMode(aMapMode);
-
-        // set new values at rDisplayInfo
-        pOriginalExtOutDev->SetOutDev(&aBufferDevice);
-        rDisplayInfo.SetOutputDevice(&aBufferDevice);
-
-        // Set background color at outliner to have correct auto colors.
-        SdrPageView* pPageView = rDisplayInfo.GetPageView();
-        if (pPageView != NULL)
-        {
-            const SdPage* pPage = static_cast<const SdPage*>(GetPage());
-            if (pPage != NULL)
-            {
-                SdDrawDocument* pDocument = static_cast<SdDrawDocument*>(
-                    pPage->GetModel());
-                if (pDocument != NULL)
-                {
-                    SdrOutliner& rOutliner (pDocument->GetDrawOutliner(NULL));
-                    rOutliner.SetBackgroundColor (
-                        pPage->GetBackgroundColor(pPageView));
-                }
-            }
-        }
-
-        // paint in new OutDev using call to parent
-        ViewObjectContact::PaintObject(rDisplayInfo);
-
-        // set back to old OutDev, restore rDisplayInfo
-        pOriginalExtOutDev->SetOutDev(pDevice);
-        rDisplayInfo.SetOutputDevice(pDevice);
-
-        // get BitmapEx
-        aBufferDevice.EnableMapMode(sal_False);
-        aBitmap = aBufferDevice.GetBitmapEx(
-            aEmptyPoint,
-            aBufferDevice.GetOutputSizePixel());
-    }
-    while (false);
-
-    return aBitmap;
+    return aPreview.GetBitmapEx();
 }
 
 
@@ -260,16 +180,23 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
 {
     BitmapEx aBitmap;
 
-    if (mbIsValid)
+    try
     {
-        if (mpCache != NULL)
+        if (mbIsValid)
         {
-            aBitmap = mpCache->GetPreviewBitmap(
-                *this,
-                rNewSizePixel.GetSize());
+            if (mpCache != NULL)
+            {
+                aBitmap = mpCache->GetPreviewBitmap(
+                    *this,
+                    rNewSizePixel.GetSize());
+            }
+            else
+                aBitmap = CreatePreview (rDisplayInfo);
         }
-        else
-            aBitmap = CreatePreview (rDisplayInfo);
+    }
+    catch (const ::com::sun::star::uno::Exception&)
+    {
+        OSL_TRACE("%s: caught exception", __FUNCTION__);
     }
 
     return aBitmap;
@@ -280,60 +207,71 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
 
 void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
 {
-    bool bIsPainted = false;
-
-    // Make sure that our notification object contact exists...
-    if (mpNotifier.get() == NULL)
+    try
     {
-        SdrPage* pPage = const_cast<SdrPage*>(GetPage());
-        mpNotifier.reset(new PageNotificationObjectContact(*pPage, *this));
+        // Make sure that our notification object contact exists...
+        if (mpNotifier.get() == NULL)
+        {
+            SdrPage* pPage = const_cast<SdrPage*>(GetPage());
+            mpNotifier.reset(new PageNotificationObjectContact(*pPage, *this));
+        }
+        // ...and that it has a valid contact object hierarchy.
+        mpNotifier->EnsureValidDrawHierarchy(rDisplayInfo);
+
+        OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
+        // Check if buffering can and shall be done.
+        if (pDevice != NULL
+            && !rDisplayInfo.OutputToPrinter()
+            && !rDisplayInfo.OutputToRecordingMetaFile()
+            && rDisplayInfo.IsBufferingAllowed()
+            && mbIsValid)
+        {
+            // Transform the page borders from pixel coordinates to model
+            // coordinates and tell the view contact object about them.  It
+            // would be nice if we had to do this only once (better yet not at
+            // all).
+            GetViewContact().InvalidatePaintRectangle();
+
+            // Set state flags. This overrides results from a contained
+            // call to PaintObject(..).
+            mbIsPainted = sal_True;
+            mbIsInvalidated = sal_False;
+
+            // Save (a part of) the state of the output device.
+            ULONG nPreviousDrawMode = pDevice->GetDrawMode();
+            const Color aOriginalFillColor (pDevice->GetFillColor());
+            const Color aOriginalLineColor (pDevice->GetLineColor());
+            Font aOriginalFont (pDevice->GetFont());
+
+            // Set default font.
+            pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
+
+            PaintContent (rDisplayInfo);
+
+            // Restore old device state.
+            pDevice->SetFont (aOriginalFont);
+            pDevice->SetLineColor (aOriginalLineColor);
+            pDevice->SetFillColor (aOriginalFillColor);
+            pDevice->SetDrawMode (nPreviousDrawMode);
+
+            // set painted rectangle
+            maPaintedRectangle = GetViewContact().GetPaintRectangle();
+        }
+        else
+        {
+            // paint normal, bitmap not available. Call parent.
+            ViewObjectContact::PaintObject(rDisplayInfo);
+        }
     }
-    // ...and that it has a valid contact object hierarchy.
-    mpNotifier->EnsureValidDrawHierarchy(rDisplayInfo);
-
-    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    // Check if buffering can and shall be done.
-    if (pDevice != NULL
-        && !rDisplayInfo.OutputToPrinter()
-        && !rDisplayInfo.OutputToRecordingMetaFile()
-        && rDisplayInfo.IsBufferingAllowed()
-        && mbIsValid)
+    catch (const com::sun::star::uno::Exception&)
     {
-        // Transform the page borders from pixel coordinates to model
-        // coordinates and tell the view contact object about them.  It
-        // would be nice if we had to do this only once (better yet not at
-        // all).
-        GetViewContact().InvalidatePaintRectangle();
-
-        // Set state flags. This overrides results from a contained
-        // call to PaintObject(..).
+        OSL_TRACE("%s: caught exception", __FUNCTION__);
+        // Event though the object was not painted completely we set the
+        // state flags as if that has happened.  We do this in order to
+        // avoid frequent repaints because when painting failed this time it
+        // may fail the next time, too.
         mbIsPainted = sal_True;
         mbIsInvalidated = sal_False;
-
-        // Save (a part of) the state of the output device.
-        ULONG nPreviousDrawMode = pDevice->GetDrawMode();
-        const Color aOriginalFillColor (pDevice->GetFillColor());
-        const Color aOriginalLineColor (pDevice->GetLineColor());
-        Font aOriginalFont (pDevice->GetFont());
-
-        // Set default font.
-        pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
-
-        PaintContent (rDisplayInfo);
-
-        // Restore old device state.
-        pDevice->SetFont (aOriginalFont);
-        pDevice->SetLineColor (aOriginalLineColor);
-        pDevice->SetFillColor (aOriginalFillColor);
-        pDevice->SetDrawMode (nPreviousDrawMode);
-
-        // set painted rectangle
-        maPaintedRectangle = GetViewContact().GetPaintRectangle();
-    }
-    else
-    {
-        // paint normal, bitmap not available. Call parent.
-        ViewObjectContact::PaintObject(rDisplayInfo);
     }
 }
 
@@ -417,6 +355,8 @@ void PageObjectViewObjectContact::PaintFrame (
     OutputDevice& rDevice,
     bool bShowMouseOverEffect) const
 {
+
+
     PaintBorder (rDevice);
     PaintSelectionIndicator (rDevice);
     if ( ! GetPageDescriptor().IsSelected())
@@ -635,20 +575,20 @@ void PageObjectViewObjectContact::PaintFadeEffectIndicator (
     DisplayInfo& rDisplayInfo,
     bool bHighlight) const
 {
-    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-
-    Rectangle aIndicatorBox (GetFadeEffectIndicatorArea (pDevice));
-
-    bool bHighContrastMode (
-       Application::GetSettings().GetStyleSettings().GetHighContrastMode()!=0);
     if (GetPage() != NULL
-        && static_cast<const SdPage*>(GetPage())->getTransitionType() != 0)
+        && static_cast<const SdPage*>(GetPage())->getTransitionType() > 0)
     {
-        pDevice->DrawImage (aIndicatorBox.TopLeft(),
-            IconCache::Instance().GetIcon (
-                bHighContrastMode
-                ? BMP_FADE_EFFECT_INDICATOR_H
-                : BMP_FADE_EFFECT_INDICATOR));
+        OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
+
+        Rectangle aIndicatorBox (GetFadeEffectIndicatorArea (pDevice));
+
+        USHORT nIconId (BMP_FADE_EFFECT_INDICATOR);
+        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
+            nIconId = BMP_FADE_EFFECT_INDICATOR_H;
+
+        pDevice->DrawImage (
+            aIndicatorBox.TopLeft(),
+            IconCache::Instance().GetIcon(nIconId));
     }
 }
 
@@ -805,7 +745,7 @@ SvBorder PageObjectViewObjectContact::CalculatePageModelBorder (
         // 1. Initialize the border with the values that do not depend on
         // the device.
         Size aTopLeftBorders (pDevice->PixelToLogic (Size (
-            mnPageNumberOffset,
+            mnPageNumberOffset+1,
             mnSelectionIndicatorOffset + mnSelectionIndicatorThickness)));
         Size aBottomRightBorders (pDevice->PixelToLogic (Size (
             mnSelectionIndicatorOffset + mnSelectionIndicatorThickness,
