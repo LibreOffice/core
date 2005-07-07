@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-02 13:22:10 $
+#   last change: $Author: obo $ $Date: 2005-07-07 13:21:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ TARGETOBJS=	\
             $(OBJ)$/desktopresid.obj		\
             $(OBJ)$/dispatchwatcher.obj		\
             $(OBJ)$/configinit.obj				\
-            $(OBJ)$/javainteractionhandler.obj	\
             $(OBJ)$/checkinstall.obj		\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
@@ -142,8 +141,9 @@ APP1STDLIBS=			\
     $(CPPULIB)			\
     $(TKLIB)            \
     $(SALLIB) \
-    $(JVMFWKLIB) \
-    $(SVXLIB)
+    $(SVXLIB) 
+
+
 
 
 #	$(APP1_STDPRE)		\
@@ -196,8 +196,9 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(TKLIB)     \
-    $(JVMFWKLIB)       
+    $(TKLIB)     
+
+
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
