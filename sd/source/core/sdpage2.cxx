@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:45:38 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,4 +568,89 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
     {
         ((SvXMLAttrContainerItem*)pItem)->QueryValue( rAttributes, 0 );
     }
+}
+
+
+
+
+sal_Int16 SdPage::getTransitionType (void) const
+{
+    return mnTransitionType;
+}
+
+
+
+
+void SdPage::setTransitionType( sal_Int16 nTransitionType )
+{
+    mnTransitionType = nTransitionType;
+    ActionChanged();
+}
+
+
+
+
+sal_Int16 SdPage::getTransitionSubtype (void) const
+{
+    return mnTransitionSubtype;
+}
+
+
+
+
+void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
+{
+    mnTransitionSubtype = nTransitionSubtype;
+    ActionChanged();
+}
+
+
+
+
+sal_Bool SdPage::getTransitionDirection (void) const
+{
+    return mbTransitionDirection;
+}
+
+
+
+
+void SdPage::setTransitionDirection ( sal_Bool bTransitionbDirection )
+{
+    mbTransitionDirection = bTransitionbDirection;
+    ActionChanged();
+}
+
+
+
+
+sal_Int32 SdPage::getTransitionFadeColor (void) const
+{
+    return mnTransitionFadeColor;
+}
+
+
+
+
+void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
+{
+    mnTransitionFadeColor = nTransitionFadeColor;
+    ActionChanged();
+}
+
+
+
+
+double SdPage::getTransitionDuration (void) const
+{
+    return mfTransitionDuration;
+}
+
+
+
+
+void SdPage::setTransitionDuration ( double fTranstionDuration )
+{
+    mfTransitionDuration = fTranstionDuration;
+    ActionChanged();
 }
