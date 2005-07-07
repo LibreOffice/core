@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:46:24 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,6 @@
 #define RID_FIRSTSTSTART_START              3000
 #define RID_DESKTOP_STRING_START            10000
 
-//todo
-#define QBX_JAVADISABLED                    (RID_DESKTOP_DIALOG_START+1)
-#define ERRORBOX_JVMCREATIONFAILED          (RID_DESKTOP_DIALOG_START+3)
-#define WARNINGBOX_JAVANOTFOUND             (RID_DESKTOP_DIALOG_START+6)
-#define WARNINGBOX_INVALIDJAVASETTINGS      (RID_DESKTOP_DIALOG_START+7)
-#define ERRORBOX_RESTARTREQUIRED            (RID_DESKTOP_DIALOG_START+8)
 
 #define INFOBOX_CMDLINEHELP                 (RID_DESKTOP_DIALOG_START+51)
 #define INFOBOX_EXPIRED                     (RID_DESKTOP_DIALOG_START+52)
@@ -121,13 +115,7 @@
 #define STR_CONFIG_ERR_ACCESS_GENERAL       (RID_DESKTOP_STRING_START+187)
 #define STR_CONFIG_ERR_NO_WRITE_ACCESS      (RID_DESKTOP_STRING_START+188)
 
-//todo
-#define STR_QUESTION_JAVADISABLED           (RID_DESKTOP_STRING_START+201)
-#define STR_ERROR_JVMCREATIONFAILED     (RID_DESKTOP_STRING_START+203)
 #define STR_TITLE_USERDATALOCKED            (RID_DESKTOP_STRING_START+206)
 #define STR_TITLE_EXPIRED                   (RID_DESKTOP_STRING_START+207)
-#define STR_WARNING_JAVANOTFOUND            (RID_DESKTOP_STRING_START+208)
-#define STR_WARNING_INVALIDJAVASETTINGS     (RID_DESKTOP_STRING_START+209)
-#define STR_ERROR_RESTARTREQUIRED           (RID_DESKTOP_STRING_START+210)
 
 #endif // _DESKTOP_HRC_
