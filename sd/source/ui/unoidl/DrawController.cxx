@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:03:25 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ DrawController::DrawController (
       meViewShellType(rViewShell.GetShellType()),
       maLastVisArea(),
       mrBase(rBase),
-      mbDisposing(false)
+      mbDisposing(false),
+      mpPropertyArrayHelper(NULL)
 {
 }
 
@@ -752,27 +753,6 @@ void DrawController::FirePropertyChange (
 
 //===== Properties ============================================================
 
-Sequence<beans::Property>&  DrawController::GetPropertyTable (void)
-{
-    if (mpProperties.get() == NULL)
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if (mpProperties.get() == NULL)
-        {
-            ::std::vector<beans::Property> aProperties;
-            FillPropertyTable (aProperties);
-            mpProperties = ::std::auto_ptr<Sequence<beans::Property> > (
-                new Sequence<beans::Property> (aProperties.size()));
-            for (unsigned int i=0; i<aProperties.size(); i++)
-                (*mpProperties)[i] = aProperties[i];
-        }
-    }
-    return *mpProperties.get();
-}
-
-
-
-
 void DrawController::FillPropertyTable (
     ::std::vector<beans::Property>& rProperties)
 {
@@ -792,8 +772,17 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    static OPropertyArrayHelper aInfo(GetPropertyTable(), sal_False);
-    return aInfo;
+    if (mpPropertyArrayHelper.get() == NULL)
+    {
+        ::std::vector<beans::Property> aProperties;
+        FillPropertyTable (aProperties);
+        Sequence<beans::Property> aPropertySequence (aProperties.size());
+        for (unsigned int i=0; i<aProperties.size(); i++)
+            aPropertySequence[i] = aProperties[i];
+        mpPropertyArrayHelper.reset(new OPropertyArrayHelper(aPropertySequence, sal_False));
+    }
+
+    return *mpPropertyArrayHelper.get();
 }
 
 
