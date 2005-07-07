@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovirtualmachine.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-17 09:20:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,6 @@
 #include "rtl/ref.hxx"
 #endif
 
-#if defined SOLAR_JAVA
-#include "jni.h"
-#else
-typedef void * jobject;
-#endif
-
 namespace jvmaccess {
 
 class VirtualMachine;
@@ -110,14 +104,18 @@ public:
 
         @param classLoader
         A local or global JNI reference, relative to the given virtualMachine,
-        to an appropriate UNO class loader instance.  Must not be null.
+        to an appropriate UNO class loader instance.  Must not be null.  This
+        parameter should be of type jobject, not void *, but the exact
+        definition of jobject is different for different JDK versions, so that
+        the mangled C++ name of the constructor would depend on the JDK version
+        used at compile time.
 
         @exception CreationException
         Thrown in case creation fails (due to a JNI problem).
      */
     UnoVirtualMachine(
         rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
-        jobject classLoader);
+        void * classLoader);
 
     /** Get the Java virtual machine wrapper.
 
@@ -130,9 +128,12 @@ public:
 
         @return
         A global JNI reference to the UNO class loader.  (The JNI reference must
-        not be deleted by client code.)  Will never be null.
+        not be deleted by client code.)  Will never be null.  This should be of
+        type jobject, not void *, but the exact definition of jobject is
+        different for different JDK versions, so that the mangled C++ name of
+        the function would depend on the JDK version used at compile time.
      */
-    jobject getClassLoader() const;
+    void * getClassLoader() const;
 
 private:
     UnoVirtualMachine(UnoVirtualMachine &); // not defined
@@ -141,7 +142,7 @@ private:
     virtual ~UnoVirtualMachine();
 
     rtl::Reference< jvmaccess::VirtualMachine > m_virtualMachine;
-    jobject m_classLoader;
+    void * m_classLoader;
 };
 
 }
