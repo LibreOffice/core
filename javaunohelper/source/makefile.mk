@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:42:32 $
+#   last change: $Author: obo $ $Date: 2005-07-07 10:58:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,14 +112,16 @@ UNOTYPES= \
 SLOFILES= \
         $(SLO)$/javaunohelper.obj				\
         $(SLO)$/bootstrap.obj					\
-        $(SLO)$/preload.obj
+        $(SLO)$/preload.obj \
+        $(SLO)$/vm.obj
 
 # ------------------------------------------------------------------
 
 LIB1TARGET=$(SLB)$/$(SHL1TARGET).lib
 LIB1OBJFILES=\
         $(SLO)$/javaunohelper.obj				\
-        $(SLO)$/bootstrap.obj
+        $(SLO)$/bootstrap.obj \
+        $(SLO)$/vm.obj
 
 SHL1TARGET=juhx
 
