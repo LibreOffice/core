@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeWindow.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 08:58:58 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,20 @@ public class LocalOfficeWindow
         }
 
         return mWindow;
+    }
+    /** We make sure that the office window is notified that the parent
+     *  will be removed.
+     */
+    public void removeNotify()
+    {
+        try {
+            releaseSystemWindow();
+        } catch (java.lang.Exception e) {
+            System.err.println("LocaleOfficeWindow.removeNotify: Exception in releaseSystemWindow.");
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
+        }
+        super.removeNotify();
     }
 
     /**
