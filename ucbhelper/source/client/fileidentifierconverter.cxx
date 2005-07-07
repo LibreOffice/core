@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-06 07:32:36 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,33 +101,14 @@ namespace ucb {
 
 rtl::OUString
 getLocalFileURL(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager)
+    uno::Reference< star::ucb::XContentProviderManager > const &)
     SAL_THROW((com::sun::star::uno::RuntimeException))
 {
-    OSL_ASSERT(rManager.is());
-
-    static sal_Char const * const aBaseURLs[]
-        = { "file:///", "vnd.sun.star.wfs:///" };
-    sal_Int32 nMaxLocality = -1;
-    rtl::OUString aMaxBaseURL;
-    for (int i = 0; i < sizeof aBaseURLs / sizeof (sal_Char const *); ++i)
-    {
-        rtl::OUString aBaseURL(rtl::OUString::createFromAscii(aBaseURLs[i]));
-        uno::Reference< star::ucb::XFileIdentifierConverter >
-            xConverter(rManager->queryContentProvider(aBaseURL),
-                       uno::UNO_QUERY);
-        if (xConverter.is())
-        {
-            sal_Int32 nLocality
-                = xConverter->getFileProviderLocality(aBaseURL);
-            if (nLocality > nMaxLocality)
-            {
-                nMaxLocality = nLocality;
-                aMaxBaseURL = aBaseURL;
-            }
-        }
-    }
-    return aMaxBaseURL;
+    // If there were more file systems than just "file:///" (e.g., the obsolete
+    // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
+    // their com.sun.star.ucb.XFileIdentifierConverter.getFileProviderLocality
+    // and return the most local one:
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
 }
 
 //============================================================================
