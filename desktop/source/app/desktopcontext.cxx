@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktopcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:00:40 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #endif
 
 #include <vcl/svapp.hxx>
-#include <javainteractionhandler.hxx>
+#include <svtools/javainteractionhandler.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -88,7 +88,7 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
     }
     else if ( 0 == Name.compareToAscii( JAVA_INTERACTION_HANDLER_NAME ))
     {
-        retVal = makeAny( Reference< XInteractionHandler >( new JavaInteractionHandler()) );
+        retVal = makeAny( Reference< XInteractionHandler >( new svt::JavaInteractionHandler()) );
     }
     else if( m_xNextContext.is() )
     {
