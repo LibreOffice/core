@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.116 $
+*  $Revision: 1.117 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-06 09:23:37 $
+*  last change: $Author: obo $ $Date: 2005-07-07 11:09:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -946,7 +946,7 @@ End
 
 File gid_File_Lib_Java_Uno
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT2(libjava_uno,UNXSUFFIX));
@@ -961,7 +961,7 @@ End
 
 File gid_File_Lib_Javaloader
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1009,7 +1009,7 @@ End
 
 File gid_File_Lib_Jen
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1074,7 +1074,7 @@ File gid_File_Lib_Jvmaccess
   #else
     Name = STRING(CONCAT5(jvmaccess,UDK_MAJOR,COMID,.,dll));
   #endif
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #ifdef WNT
@@ -2141,7 +2141,7 @@ File gid_File_Lib_Jvmfwk
   #else
     Name = STRING(CONCAT3(jvmfwk,UDK_MAJOR,.dll));
   #endif
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #ifdef SOLAR_JAVA
