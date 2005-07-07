@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:16:04 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ SlideSorterController::SlideSorterController (
       mnCurrentPageBeforeSwitch(0),
       mpEditModeChangeMasterPage(NULL),
       maTotalWindowArea(),
-      mbIsMakeSelectionVisiblePending(false)
+      mbIsMakeSelectionVisiblePending(false),
+      mnPaintEntranceCount(0)
 {
     OSL_ASSERT(pFrame!=NULL);
     OSL_ASSERT(pParentWindow!=NULL);
@@ -315,22 +316,29 @@ void SlideSorterController::Paint (
     const Rectangle& rBBox,
     ::sd::Window* pWindow)
 {
-    static bool sbReentranceGuardActive = false;
-    if ( ! sbReentranceGuardActive)
+    if (mnPaintEntranceCount == 0)
     {
-        sbReentranceGuardActive = true;
+        ++mnPaintEntranceCount;
 
-        Rectangle aBBox(rBBox);
-        if (mbIsMakeSelectionVisiblePending)
+        try
         {
-            sal_Int32 nVerticalOffset = MakeSelectionVisible();
-            aBBox.Move(0,-nVerticalOffset);
-            mbIsMakeSelectionVisiblePending = false;
-            GetView().GetWindow()->Invalidate();
-        }
-        GetView().CompleteRedraw(pWindow, Region(aBBox));
+            Rectangle aBBox(rBBox);
+            if (mbIsMakeSelectionVisiblePending)
+            {
+                sal_Int32 nVerticalOffset = MakeSelectionVisible();
+                aBBox.Move(0,-nVerticalOffset);
+                mbIsMakeSelectionVisiblePending = false;
+                GetView().GetWindow()->Invalidate();
+            }
 
-        sbReentranceGuardActive = false;
+            GetView().CompleteRedraw(pWindow, Region(aBBox));
+        }
+        catch (const Exception&)
+        {
+            // Ignore all exceptions.
+        }
+
+        --mnPaintEntranceCount;
     }
 }
 
