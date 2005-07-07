@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:04:21 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,11 +435,11 @@ void View::DoPaste (::Window* pWindow)
             if( pWindow )
                 aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
 
-            if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
-            {
-                DrawViewShell* pDrViewSh = (DrawViewShell*) pDocSh->GetViewShell();
+            DrawViewShell* pDrViewSh = (DrawViewShell*) pDocSh->GetViewShell();
 
-                if( pDrViewSh )
+            if( pDrViewSh && pDrViewSh->GetEditMode() != EM_MASTERPAGE)
+            {
+                if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
                 {
                     String          aEmptyStr;
                     INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
