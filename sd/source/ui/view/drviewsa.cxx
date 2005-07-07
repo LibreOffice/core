@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:26:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,26 +537,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     String aName( RTL_CONSTASCII_USTRINGPARAM("DrawViewShell"));
     SetName (aName);
-
-    if (pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0)
-    {
-        // Save the type of the previous view shell and restore it after
-        // starting the presentation function: This is done in the name of
-        // that view shell, so setting this view shell as the previous one,
-        // as it is done in FuSpport would lead to switching back to the
-        // wrong view shell, after the presentation has ended.
-        ViewShell::ShellType ePreviousType (
-            pFrameView->GetPreviousViewShellType());
-
-        // Die Praesentation ist aus einer anderen ViewShell angewaehlt worden,
-        // daraufhin wird zum Zeichentisch (SID_VIEWSHELL0) verzweigt und
-        // die Praesentation wird gestartet.
-        SfxAllItemSet aSet(GetDoc()->GetItemPool());
-        SfxRequest aReq(pFrameView->GetSlotId(), 0, aSet);
-        FuSupport(aReq);
-
-        pFrameView->SetPreviousViewShellType (ePreviousType);
-    }
 
     nLockCount = 0UL;
 
