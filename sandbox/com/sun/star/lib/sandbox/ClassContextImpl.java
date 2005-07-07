@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:41:46 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,10 +301,10 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
                         m_class_path_jars = class_path_jars;
                     }
 
-                    java.util.Enumeration enum = m_class_path_jars.elements();
-                    while (enum.hasMoreElements())
+                    java.util.Enumeration enum_elements = m_class_path_jars.elements();
+                    while (enum_elements.hasMoreElements())
                     {
-                        ClassContext context = (ClassContext)enum.nextElement();
+                        ClassContext context = (ClassContext)enum_elements.nextElement();
                         try
                         {
                             xClass = context.loadClass( className );
