@@ -2,9 +2,9 @@
  *
  *  $RCSfile: com_sun_star_comp_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:07:33 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,6 @@
 #include "jawt.h"
 #include "jawt_md.h"
 
-//#include "../inc/com_sun_star_comp_beans_LocalOfficeWindow.h"
-
-#if defined assert
-#undef assert
-#endif
-
-#define assert(X) if (!X) { (*env)->ThrowNew(env, (*env)->FindClass(env, "java/lang/RuntimeException"), "assertion failed"); return;}
-
 
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
@@ -86,6 +78,24 @@
 #define SYSTEM_OS2     4
 #define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
+
+
+/* type must be something like java/lang/RuntimeException
+ */
+static void ThrowException(JNIEnv * env, char const * type, char const * msg) {
+    jclass c;
+    (*env)->ExceptionClear(env);
+    c = (*env)->FindClass(env, type);
+    if (c == NULL) {
+        (*env)->ExceptionClear(env);
+        (*env)->FatalError(
+            env, "JNI FindClass failed");
+    }
+    if ((*env)->ThrowNew(env, c, msg) != 0) {
+        (*env)->ExceptionClear(env);
+        (*env)->FatalError(env, "JNI ThrowNew failed");
+    }
+}
 
 /*****************************************************************************/
 /*
@@ -123,7 +133,8 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
     /* Get the AWT */
     awt.version = JAWT_VERSION_1_3;
     result = JAWT_GetAWT(env, &awt);
-    assert(result != JNI_FALSE);
+    if (result == JNI_FALSE)
+        ThrowException(env, "java/lang/RuntimeException", "JAWT_GetAWT failed");
 
                                 /* Get the drawing surface */
     if ((ds = awt.GetDrawingSurface(env, obj_this)) == NULL)
@@ -131,7 +142,9 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
 
     /* Lock the drawing surface */
     lock = ds->Lock(ds);
-    assert((lock & JAWT_LOCK_ERROR) == 0);
+    if ( (lock & JAWT_LOCK_ERROR) != 0)
+        ThrowException(env, "java/lang/RuntimeException",
+                       "Could not get AWT drawing surface.");
 
     /* Get the drawing surface info */
     dsi = ds->GetDrawingSurfaceInfo(ds);
