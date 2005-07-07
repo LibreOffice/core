@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 08:55:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,22 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         }
     }
 
+    // Copy and paste of master pages is not yet implemented properly
+    if (rSet.GetItemState(SID_COPY) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE)
+    {
+        if (mrController.GetModel().GetEditMode() == EM_MASTERPAGE)
+        {
+            if (rSet.GetItemState(SID_COPY) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_COPY);
+            if (rSet.GetItemState(SID_PASTE) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_PASTE);
+            if (rSet.GetItemState(SID_PASTE2) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_PASTE2);
+        }
+    }
+
     // Cut, copy, and delete page are disabled when there is no selection.
     if (rSet.GetItemState(SID_CUT) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_COPY)  == SFX_ITEM_AVAILABLE
@@ -782,9 +798,17 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         }
     }
 
-    //rSet.DisableItem( SID_PRINTDOC );
-    //rSet.DisableItem( SID_PRINTDOCDIRECT );
-    //rSet.DisableItem( SID_SETUPPRINTER );
+    // Disable the rename slots when there are no or more than one slides/master
+    // pages selected.
+    if (rSet.GetItemState(SID_RENAMEPAGE) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_RENAME_MASTER_PAGE)  == SFX_ITEM_AVAILABLE)
+    {
+        if (mrController.GetPageSelector().GetSelectedPageCount() != 1)
+        {
+            rSet.DisableItem(SID_RENAMEPAGE);
+            rSet.DisableItem(SID_RENAME_MASTER_PAGE);
+        }
+    }
 }
 
 
@@ -1044,38 +1068,38 @@ void SlotManager::HandleSizeSlots (SfxRequest& rRequest)
 void SlotManager::ShowSlideShow( SfxRequest& rRequest)
 {
     SlideSorterViewShell& rShell (mrController.GetViewShell());
-    SFX_REQUEST_ARG(rRequest,
-        pFullScreen,
-        SfxBoolItem,
-        ATTR_PRESENT_FULLSCREEN,
-        FALSE);
-    bool bFullScreen;
-    if (rRequest.GetSlot()==SID_REHEARSE_TIMINGS && pFullScreen!=NULL)
-        bFullScreen = pFullScreen->GetValue();
-    else
-        bFullScreen
-            = mrController.GetModel().GetDocument()->getPresentationSettings().mbFullScreen;
 
-    if (bFullScreen)
+    if ( ! rShell.IsMainViewShell())
     {
-        PresentationViewShell::CreateFullScreenShow(&rShell, rRequest);
-        rShell.Cancel();
-        rRequest.Done();
+        // We are not the main sub shell, so delegate this call to the main
+        // sub shell.  Because there is no SFX functionality to forward a
+        // slot call further down the stack we have to do that here
+        // manually.
+        ViewShell* pMainViewShell
+            = rShell.GetViewShellBase().GetPaneManager().GetViewShell(
+                PaneManager::PT_CENTER);
+        if (pMainViewShell->ISA(DrawViewShell))
+            PTR_CAST(DrawViewShell, pMainViewShell)->FuSupport (
+                rRequest);
     }
     else
     {
-        if ( ! rShell.IsMainViewShell())
+        SFX_REQUEST_ARG(rRequest,
+            pFullScreen,
+            SfxBoolItem,
+            ATTR_PRESENT_FULLSCREEN,
+            FALSE);
+        bool bFullScreen;
+        if (rRequest.GetSlot()==SID_REHEARSE_TIMINGS && pFullScreen!=NULL)
+            bFullScreen = pFullScreen->GetValue();
+        else
+            bFullScreen
+                = mrController.GetModel().GetDocument()->getPresentationSettings().mbFullScreen;
+        if (bFullScreen)
         {
-            // We are not the main sub shell, so delegate this call
-            // to the main sub shell.  Because there is no SFX functionality
-            // to forward a slot call further down the stack we have to do
-            // that here manually.
-            ViewShell* pMainViewShell
-                = rShell.GetViewShellBase().GetPaneManager().GetViewShell(
-                    PaneManager::PT_CENTER);
-            if (pMainViewShell->ISA(DrawViewShell))
-                PTR_CAST(DrawViewShell, pMainViewShell)->FuSupport (
-                    rRequest);
+            PresentationViewShell::CreateFullScreenShow(&rShell, rRequest);
+            rShell.Cancel();
+            rRequest.Done();
         }
         else
         {
@@ -1083,10 +1107,13 @@ void SlotManager::ShowSlideShow( SfxRequest& rRequest)
             // display the slide show.
             FrameView* pFrameView = rShell.GetFrameView();
             pFrameView->SetPresentationViewShellId(SID_VIEWSHELL1);
+            pFrameView->SetPreviousViewShellType (rShell.GetShellType());
             pFrameView->SetSlotId (rRequest.GetSlot());
             pFrameView->SetPageKind (PK_STANDARD);
-            rShell.GetViewFrame()->GetDispatcher()->Execute(
-                SID_VIEWSHELL0,
+            rShell.GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
+                ViewShell::ST_IMPRESS,
+                PaneManager::CM_ASYNCHRONOUS);
+            rShell.GetViewFrame()->GetDispatcher()->Execute(rRequest.GetSlot(),
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             rRequest.Done();
         }
@@ -1102,45 +1129,47 @@ void SlotManager::RenameSlide (void)
     PageKind ePageKind = mrController.GetModel().GetPageType();
     View* pDrView = &mrController.GetView();
 
-    if (ePageKind==PK_STANDARD || ePageKind==PK_NOTES )
+    if (ePageKind==PK_STANDARD || ePageKind==PK_NOTES)
     {
         if ( pDrView->IsTextEdit() )
         {
             pDrView->EndTextEdit();
         }
 
-        SdPage* pCurrentPage = mrController.GetActualPage();
-
-        String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
-        String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
-        String aPageName = pCurrentPage->GetName();
-
-        //CHINA001 SvxNameDialog aNameDlg( GetActiveWindow(), aPageName, aDescr );
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
-            mrController.GetViewShell().GetActiveWindow(),
-            aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
-        DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
-        //CHINA001 aNameDlg.SetText( aTitle );
-        //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ), true );
-        //CHINA001 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
-        aNameDlg->SetText( aTitle );
-        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
-        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
-
-        if( aNameDlg->Execute() == RET_OK ) //CHINA001 if( aNameDlg.Execute() == RET_OK )
+        SdPage* pSelectedPage = NULL;
+        model::PageEnumeration aSelectedPages (
+            mrController.GetModel().GetSelectedPagesEnumeration());
+        if (aSelectedPages.HasMoreElements())
+            pSelectedPage = aSelectedPages.GetNextElement().GetPage();
+        if (pSelectedPage != NULL)
         {
-            String aNewName;
-            aNameDlg->GetName( aNewName ); //CHINA001 aNameDlg.GetName( aNewName );
-            if( ! aNewName.Equals( aPageName ) )
+            String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
+            String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
+            String aPageName = pSelectedPage->GetName();
+
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
+                mrController.GetViewShell().GetActiveWindow(),
+                aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
+            DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
+            aNameDlg->SetText( aTitle );
+            aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
+            aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+
+            if( aNameDlg->Execute() == RET_OK )
             {
-                bool bResult = RenameSlideFromDrawViewShell(
-                    pCurrentPage->GetPageNum()/2, aNewName );
-                DBG_ASSERT( bResult, "Couldn't rename slide" );
+                String aNewName;
+                aNameDlg->GetName( aNewName );
+                if( ! aNewName.Equals( aPageName ) )
+                {
+                    bool bResult = RenameSlideFromDrawViewShell(
+                        pSelectedPage->GetPageNum()/2, aNewName );
+                    DBG_ASSERT( bResult, "Couldn't rename slide" );
+                }
             }
+            delete aNameDlg;
         }
-        delete aNameDlg; //add by CHINA001
     }
 }
 
