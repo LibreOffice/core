@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-23 11:57:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2002-09-23 11:57:12 $
+ * @version     $Revision: 1.14 $ $ $Date: 2005-07-07 10:56:24 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -164,7 +164,7 @@ public class Job {
         }
 
         if (_iMessage.isException()) {
-            throw (Throwable) msgResult;
+            throw remoteUnoRequestRaisedException(msgResult);
         }
 
         String operation = _iMessage.getOperation();
@@ -206,7 +206,7 @@ public class Job {
                         StringWriter writer = new StringWriter();
                         exception.printStackTrace(new PrintWriter(writer));
                         exception = new com.sun.star.uno.RuntimeException(
-                            "Java exception: " + writer, null);
+                            "Java exception: <" + writer + ">", null);
                     }
 
                     _iReceiver.sendReply(true, _iMessage.getThreadId(),
@@ -292,5 +292,13 @@ public class Job {
 //          _exception  = null;
 //          _zInterface = null;
 //          _disposeId  = null;
+    }
+
+    // The name of this method is chosen to generate a somewhat self-explanatory
+    // stack trace:
+    private Exception remoteUnoRequestRaisedException(Object exception) {
+        Exception e = (Exception) exception;
+        e.fillInStackTrace();
+        return e;
     }
 }
