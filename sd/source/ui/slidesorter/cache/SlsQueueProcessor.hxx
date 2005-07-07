@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:43:58 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ template <class Queue,
         sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
         if (nIdleState != tools::IdleDetection::IDET_IDLE)
         {
-            if (nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE != 0)
+            if ((nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE) != 0)
                 bIsShowingFullScreenShow = true;
             break;
         }
