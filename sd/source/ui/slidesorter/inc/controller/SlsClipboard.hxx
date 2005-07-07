@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:58:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,18 @@ private:
             The number of pages to select.
     */
     void SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount);
+
+    /** Return <TRUE/> when the current transferable in the current state of
+        the slidesorter is acceptable to be pasted.  For this the
+        transferable has to
+        a) exist,
+        b) contain one or more regular draw pages, no master pages.
+        When master pages are involved, either in the transferable or in the
+        slide sorter (by it displaying master pages) the drop of the
+        transferable is not accepted.  The reason is the missing
+        implementation of proper handling master pages copy-and-paste.
+    */
+    bool IsDropAccepted (void) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
