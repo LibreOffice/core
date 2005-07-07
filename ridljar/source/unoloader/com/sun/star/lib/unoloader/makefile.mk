@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:45:10 $
+#   last change: $Author: obo $ $Date: 2005-07-07 10:51:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,8 @@ CUSTOMMANIFESTFILE = manifest
 
 .INCLUDE: target.mk
 
+.IF "$(SOLAR_JAVA)" != ""
+
 .IF "$(depend)" == ""
 $(JAVACLASSFILES): $(MISC)$/$(TARGET).mkdir.done
 .ENDIF
@@ -88,3 +90,5 @@ $(JAVACLASSFILES): $(MISC)$/$(TARGET).mkdir.done
 $(MISC)$/$(TARGET).mkdir.done .ERRREMOVE:
     $(MKDIR) $(CLASSDIR)
     $(TOUCH) $@
+
+.ENDIF
