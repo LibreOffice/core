@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-20 11:41:45 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 11:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,11 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
 {
     std::_tstring   sTempFileName = sFileName1 + TEXT(".tmp");
 
-    bool    fSuccess = MoveFileEx( sFileName1.c_str(), sTempFileName.c_str(), MOVEFILE_REPLACE_EXISTING  );
+    bool fSuccess = true;
+
+    //Try to move the original file to a temp file
+    fSuccess = MoveFileEx( sFileName1.c_str(), sTempFileName.c_str(),
+                           MOVEFILE_REPLACE_EXISTING  );
 
     if ( fSuccess )
     {
@@ -110,13 +114,29 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
 
         if ( fSuccess )
         {
-            fSuccess = MoveFileEx( sTempFileName.c_str(), sFileName2.c_str(), MOVEFILE_REPLACE_EXISTING );
+            fSuccess = MoveFileEx( sTempFileName.c_str(), sFileName2.c_str(),
+                                       MOVEFILE_REPLACE_EXISTING );
             if ( !fSuccess )
                 MoveFileEx( sFileName1.c_str(), sFileName2.c_str(), MOVEFILE_REPLACE_EXISTING );
         }
         else
+        {
             MoveFileEx( sTempFileName.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING  );
+        }
     }
+    else
+    {
+        //It could be that there is no original file and therefore copying the original to a temp
+        // file failed. Examine if there is no original and if so then move file2 to file1
+        WIN32_FIND_DATA data;
+        HANDLE hdl = FindFirstFile(sFileName1.c_str(), &data);
+        if (hdl == INVALID_HANDLE_VALUE)
+            fSuccess = MoveFileEx( sFileName2.c_str(), sFileName1.c_str(),
+                                   MOVEFILE_REPLACE_EXISTING );
+        else
+            FindClose(hdl);
+    }
+
 
     return fSuccess;
 }
@@ -241,7 +261,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
                 // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
                 // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-                SwapFiles( sFileName1, sFileName2 );
+                SwapFiles( sFileName2, sFileName1 );
             }
 
             pKeyName += _tcslen(pKeyName) + 1;
