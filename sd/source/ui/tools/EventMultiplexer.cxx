@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-02 13:18:54 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ private:
     bool mbPaneManagerAvailable;
 
     ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::beans::XPropertySet> mxControllerPropertySetWeak;
+        ::com::sun::star::frame::XController> mxControllerWeak;
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::frame::XFrame> mxFrameWeak;
     ::com::sun::star::uno::WeakReference<
@@ -253,6 +253,7 @@ void EventMultiplexer::RemoveEventListener (
 
 
 
+
 void EventMultiplexer::MultiplexEvent( EventMultiplexerEvent::EventId eEventId, void* pUserData )
 {
     EventType eEventType = ETS_FULL_SET;
@@ -277,6 +278,9 @@ void EventMultiplexer::MultiplexEvent( EventMultiplexerEvent::EventId eEventId, 
     mpImpl->CallListeners( eEventType, aEvent );
 }
 
+
+
+
 //===== EventMultiplexer::Implementation ======================================
 
 EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
@@ -287,7 +291,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mbListeningToController (false),
       mbListeningToFrame (false),
       mbPaneManagerAvailable(true),
-      mxControllerPropertySetWeak(NULL),
+      mxControllerWeak(NULL),
       mxFrameWeak(NULL),
       mxSlideSorterSelectionWeak(NULL)
 {
@@ -327,6 +331,7 @@ EventMultiplexer::Implementation::~Implementation (void)
 
 
 
+
 void EventMultiplexer::Implementation::ReleaseListeners (void)
 {
     if (mbListeningToFrame)
@@ -352,6 +357,7 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
         mrBase.GetPaneManager().RemoveEventListener (
             LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
 }
+
 
 
 
@@ -408,45 +414,57 @@ void EventMultiplexer::Implementation::ConnectToController (void)
 
     // Register at the controller of the main view shell.
 
-    mxControllerPropertySetWeak = Reference<beans::XPropertySet> (
-        mrBase.GetController(),
-        UNO_QUERY);
+    // We have to store a (weak) reference to the controller so that we can
+    // unregister without having to ask the mrBase member (which at that
+    // time may be destroyed.)
+    Reference<frame::XController> xController = mrBase.GetController();
+    mxControllerWeak = mrBase.GetController();
+    OSL_TRACE("EventMultiplexer %x connecting to controller %x", this,mxControllerWeak.get());
 
-    // Listen to changes of certain properties.
-    Reference<beans::XPropertySet> xSet (mxControllerPropertySetWeak);
     try
     {
-        if (xSet.is())
+        // Listen for disposing events.
+        Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
+        if (xComponent.is())
         {
-            xSet->addPropertyChangeListener (
-                String::CreateFromAscii("CurrentPage"),
-                this);
-            xSet->addPropertyChangeListener (
-                String::CreateFromAscii("IsMasterPageMode"),
-                this);
+            xComponent->addEventListener (
+                Reference<lang::XEventListener>(
+                    static_cast<XWeak*>(this), UNO_QUERY));
             mbListeningToController = true;
         }
-    }
-    catch (beans::UnknownPropertyException aEvent)
-    {
-        OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-            ::rtl::OUStringToOString(aEvent.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
-    }
 
-    // Listen for selection change events.
-    Reference<view::XSelectionSupplier> xSelection (xSet, UNO_QUERY);
-    if (xSelection.is())
-    {
-        xSelection->addSelectionChangeListener(this);
-    }
+        // Listen to changes of certain properties.
+        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+        try
+        {
+            if (xSet.is())
+            {
+                xSet->addPropertyChangeListener (
+                    String::CreateFromAscii("CurrentPage"),
+                    this);
+                xSet->addPropertyChangeListener (
+                    String::CreateFromAscii("IsMasterPageMode"),
+                    this);
+            }
+        }
+        catch (beans::UnknownPropertyException aEvent)
+        {
+            OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
+                ::rtl::OUStringToOString(aEvent.Message,
+                    RTL_TEXTENCODING_UTF8).getStr());
+        }
 
-    // Listen for disposing events.
-    Reference<lang::XComponent> xComponent (xSet, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener (
-            Reference<lang::XEventListener>(
-                static_cast<XWeak*>(this), UNO_QUERY));
+        // Listen for selection change events.
+        Reference<view::XSelectionSupplier> xSelection (xController, UNO_QUERY);
+        if (xSelection.is())
+        {
+            xSelection->addSelectionChangeListener(this);
+        }
+    }
+    catch (const lang::DisposedException aException)
+    {
+        mbListeningToController = false;
+    }
 }
 
 
@@ -458,7 +476,10 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
     {
         mbListeningToController = false;
 
-        Reference<beans::XPropertySet> xSet (mxControllerPropertySetWeak);
+        OSL_TRACE("EventMultiplexer %x disconnecting from controller %x", this,mxControllerWeak.get());
+        Reference<frame::XController> xController = mxControllerWeak;
+
+        Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         try
         {
             // Remove the property listener.
@@ -473,7 +494,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
             }
 
             // Remove the dispose listener.
-            Reference<XComponent> xComponent (xSet, UNO_QUERY);
+            Reference<XComponent> xComponent (xController, UNO_QUERY);
             if (xComponent.is())
                 xComponent->removeEventListener (
                     Reference<lang::XEventListener>(
@@ -487,14 +508,14 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
         }
 
         // Remove selection change listener.
-        Reference<view::XSelectionSupplier> xSelection (xSet, UNO_QUERY);
+        Reference<view::XSelectionSupplier> xSelection (xController, UNO_QUERY);
         if (xSelection.is())
         {
             xSelection->removeSelectionChangeListener(this);
         }
 
         // Remove listener for disposing events.
-        Reference<lang::XComponent> xComponent (xSet, UNO_QUERY);
+        Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
         if (xComponent.is())
             xComponent->removeEventListener (
                 Reference<lang::XEventListener>(
@@ -513,10 +534,8 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
 {
     if (mbListeningToController)
     {
-        Reference<view::XSelectionSupplier> xSelectionSupplier (
-            mrBase.GetController(),
-            uno::UNO_QUERY);
-        if (rEventObject.Source == xSelectionSupplier)
+        Reference<frame::XController> xController (mxControllerWeak);
+        if (rEventObject.Source == xController)
         {
             mbListeningToController = false;
         }
@@ -566,20 +585,22 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
     const frame::FrameActionEvent& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    switch (rEvent.Action)
-    {
-        case frame::FrameAction_COMPONENT_DETACHING:
-            DisconnectFromController();
-            break;
+    Reference<frame::XFrame> xFrame (mxFrameWeak);
+    if (rEvent.Frame == xFrame)
+        switch (rEvent.Action)
+        {
+            case frame::FrameAction_COMPONENT_DETACHING:
+                DisconnectFromController();
+                break;
 
-        case frame::FrameAction_COMPONENT_REATTACHED:
-        case frame::FrameAction_COMPONENT_ATTACHED:
-            ConnectToController();
-            break;
+            case frame::FrameAction_COMPONENT_REATTACHED:
+            case frame::FrameAction_COMPONENT_ATTACHED:
+                ConnectToController();
+                break;
 
-        default:
-            break;
-    }
+            default:
+                break;
+        }
 }
 
 
