@@ -189,6 +189,14 @@
         Styles  = (PACKED,PATCH); \
     End
 
+#define STD_RES_FILE_ONLY_PATCH(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        RESFILE_ALL_LANG(name); \
+        Dir     = gid_Dir_Resource; \
+        Styles  = (PACKED,PATCH,PATCH_ONLY); \
+    End
+
 #define STD_SETUPZIP_RES_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
