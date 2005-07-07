@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "uno/mapping.hxx"
 #include "uno/environment.hxx"
 #include "jvmaccess/virtualmachine.hxx"
+#include "jvmaccess/unovirtualmachine.hxx"
 #include "cppuhelper/implbase1.hxx"
 
 #include "test/java_uno/anytest/XTransport.hpp"
@@ -93,7 +94,7 @@ Any Transport::mapAny( Any const & any )
 
 //##################################################################################################
 extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_1jni_1transport(
-    JNIEnv * jni_env, jclass )
+    JNIEnv * jni_env, jclass, jobject loader )
     SAL_THROW_EXTERN_C()
 {
     // publish some idl types
@@ -106,8 +107,16 @@ extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_
     JavaVM * java_vm;
     OSL_VERIFY( 0 == jni_env->GetJavaVM( &java_vm ) );
     // create jvmaccess vm
-    ::rtl::Reference< ::jvmaccess::VirtualMachine > vm(
-        new ::jvmaccess::VirtualMachine( java_vm, JNI_VERSION_1_2, false, jni_env ) );
+    ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm;
+    try {
+        vm = new ::jvmaccess::UnoVirtualMachine(
+            new ::jvmaccess::VirtualMachine(
+                java_vm, JNI_VERSION_1_2, false, jni_env ),
+            loader );
+    } catch ( ::jvmaccess::UnoVirtualMachine::CreationException & ) {
+        OSL_ASSERT( false );
+        throw;
+    }
     // create uno envs
     OUString java_name( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_JAVA) );
     OUString cpp_name( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
