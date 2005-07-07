@@ -349,6 +349,8 @@ hedabu: ..\inc\acceleratorexecute.hxx %_DEST%\inc%_EXT%\svtools\acceleratorexecu
 
 hedabu: ..\inc\QueryFolderName.hxx %_DEST%\inc%_EXT%\svtools\QueryFolderName.hxx
 hedabu: ..\inc\DocumentInfoPreview.hxx %_DEST%\inc%_EXT%\svtools\DocumentInfoPreview.hxx
+hedabu: ..\inc\javacontext.hxx %_DEST%\inc%_EXT%\svtools\javacontext.hxx
+hedabu: ..\inc\javainteractionhandler.hxx %_DEST%\inc%_EXT%\svtools\javainteractionhandler.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
