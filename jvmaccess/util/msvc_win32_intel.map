@@ -24,7 +24,7 @@ UDK_3.3 {
         ??0CreationException@UnoVirtualMachine@jvmaccess@@QAE@XZ; # jvmaccess::UnoVirtualMachine::CreationException::CreationException()
         ??1CreationException@UnoVirtualMachine@jvmaccess@@UAE@XZ; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
         ??4CreationException@UnoVirtualMachine@jvmaccess@@QAEAAV012@ABV012@@Z; # jvmaccess::UnoVirtualMachine::CreationException::operator =(CreationException const &)
-        ??0UnoVirtualMachine@jvmaccess@@QAE@ABV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@PAV_jobject@@@Z; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, jobject)
+        ??0UnoVirtualMachine@jvmaccess@@QAE@ABV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@PAX@Z; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *)
         ?getVirtualMachine@UnoVirtualMachine@jvmaccess@@QBE?AV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@XZ; # jvmaccess::UnoVirtualMachine::getVirtualMachine() const
-        ?getClassLoader@UnoVirtualMachine@jvmaccess@@QBEPAV_jobject@@XZ; # jvmaccess::UnoVirtualMachine::getClassLoader() const
+        ?getClassLoader@UnoVirtualMachine@jvmaccess@@QBEPAXXZ; # jvmaccess::UnoVirtualMachine::getClassLoader() const
 } UDK_3.2;
