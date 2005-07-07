@@ -139,7 +139,7 @@ End
 File gid_File_Bin_Javaldx
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = EXENAME(javaldx);
 End
 
@@ -204,7 +204,7 @@ End
 File gid_File_Bin_Uno
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
   #ifdef UNX
     Name = "uno.bin";
   #else
@@ -635,7 +635,7 @@ File gid_File_Jar_Java_Uno
     TXT_FILE_BODY;
     Name = JARFILENAME(java_uno);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -650,7 +650,7 @@ File gid_File_Jar_Juh
     TXT_FILE_BODY;
     Name = JARFILENAME(juh);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -661,7 +661,7 @@ File gid_File_Jar_Jurt
     TXT_FILE_BODY;
     Name = JARFILENAME(jurt);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -672,7 +672,7 @@ File gid_File_Jar_Jut
     TXT_FILE_BODY;
     Name = JARFILENAME(jut);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -683,7 +683,7 @@ File gid_File_Jar_Unoloader
     TXT_FILE_BODY;
     Name = JARFILENAME(unoloader);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -735,7 +735,7 @@ File gid_File_Jar_Ridl
     TXT_FILE_BODY;
     Name = JARFILENAME(ridl);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -746,7 +746,7 @@ File gid_File_Jar_Sandbox
     TXT_FILE_BODY;
     Name = JARFILENAME(sandbox);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
