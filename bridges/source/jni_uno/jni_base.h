@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-17 09:52:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ public:
         : AttachGuard( vm_access->getVirtualMachine() ),
           JNI_context(
               jni_info, AttachGuard::getEnvironment(),
-              vm_access->getClassLoader() )
+              static_cast< jobject >(vm_access->getClassLoader()) )
         {}
 };
 
