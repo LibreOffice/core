@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:35:15 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 14:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ const char *PositiveList[] = {
     "svx/source/intro/intro_tmpl.hrc",
     "dbaccess/source/ui/dlg/AutoControls_tmpl.hrc",
     "svx/source/unodialogs/textconversiondlgs/chinese_direction_tmpl.hrc",
-    "chart2/source/controller/dialogs/res_DataLabel_tmplhrc",
+    "chart2/source/controller/dialogs/res_DataLabel_tmpl.hrc",
     "chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
     "chart2/source/controller/dialogs/res_Statistic_tmpl.hrc",
     "chart2/source/controller/menu/MenuItems_tmpl.hrc",
