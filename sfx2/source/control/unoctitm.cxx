@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-01 13:16:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/visitem.hxx>
+#include <svtools/javacontext.hxx>
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -112,6 +113,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <vos/mutex.hxx>
+#include <uno/current_context.hxx>
 
 #include "unoctitm.hxx"
 #include "viewfrm.hxx"
@@ -458,7 +460,19 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const ::com::sun::star::util::URL& aU
 {
     // ControllerItem is the Impl class
     if ( pControllerItem )
+    {
+        // The JavaContext contains an interaction handler which is used when
+        // the creation of a Java Virtual Machine fails. The second parameter
+        // indicates, that there shall only be one user notification (message box)
+        // even if the same error (interaction) reoccurs. The effect is, that if a
+        // user selects a menu entry than they may get only one notification that
+        // a JRE is not selected.
+        com::sun::star::uno::ContextLayer layer(
+            new svt::JavaContext( com::sun::star::uno::getCurrentContext(),
+                                  true) );
+
         pControllerItem->dispatch( aURL, aArgs, ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >() );
+    }
 }
 
 void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
@@ -467,7 +481,14 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const ::com::sun::sta
 {
     // ControllerItem is the Impl class
     if ( pControllerItem )
+    {
+        // see comment for SfxOfficeDispatch::dispatch
+        com::sun::star::uno::ContextLayer layer(
+            new svt::JavaContext( com::sun::star::uno::getCurrentContext(),
+                                  true) );
+
         pControllerItem->dispatch( aURL, aArgs, rListener );
+    }
 }
 
 void SAL_CALL SfxOfficeDispatch::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw ( ::com::sun::star::uno::RuntimeException )
