@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:05:49 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9031,7 +9031,7 @@ uno::Any SAL_CALL ScCellsEnumeration::nextElement() throw(container::NoSuchEleme
 
         ScAddress aTempPos(aPos);
         Advance_Impl();
-        return uno::makeAny(uno::Reference<table::XCell>(new ScCellObj( pDocShell, aPos )));
+        return uno::makeAny(uno::Reference<table::XCell>(new ScCellObj( pDocShell, aTempPos )));
     }
 
     throw container::NoSuchElementException();      // no more elements
