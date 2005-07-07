@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:12:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ public:
     */
     const SdrPage* GetPage (void) const;
 
-    /** Create a preview for the page (as returned by GetPage()) according
-        to the given display info.
+    /** This fallback method is called when no preview cache is available.
+        It creates a preview for the page.
     */
     BitmapEx CreatePreview (::sdr::contact::DisplayInfo& rDisplayInfo);
 
