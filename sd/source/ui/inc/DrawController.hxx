@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:10:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 13:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,8 +274,6 @@ protected:
 
     SdXImpressDocument* GetModel (void) const throw();
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::Property>& GetPropertyTable (void);
     virtual void FillPropertyTable (
         ::std::vector< ::com::sun::star::beans::Property>& rProperties);
 
@@ -329,8 +327,7 @@ private:
     */
     bool mbDisposing;
 
-    ::std::auto_ptr< ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::Property> > mpProperties;
+    ::std::auto_ptr< ::cppu::IPropertyArrayHelper> mpPropertyArrayHelper;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
         GetWindow (void);
