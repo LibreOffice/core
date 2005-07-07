@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:52:18 $
+#   last change: $Author: obo $ $Date: 2005-07-07 10:53:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,16 +125,19 @@ $(BIN)$/$(TARGET).rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
     regcomp -register -r $@ -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) -c uuresolver.uno$(DLLPOST) \
-        -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
+        -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
+        -c uriproc.uno$(DLLPOST)
     cp $(SOLARBINDIR)$/types.rdb $(MISC)$/$(TARGET)$/bootstrap.rdb
     regcomp -register -r $(MISC)$/$(TARGET)$/bootstrap.rdb \
-        -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
+        -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
+        -c uriproc.uno$(DLLPOST)
 .IF "$(GUI)" == "WNT"
     ERROR -- missing platform
 .ELSE # GUI, WNT
     + setenv OO_JAVA_PROPERTIES RuntimeLib=$(JVM_LIB_URL) ; \
         regcomp -register -r $@ -c file://$(PWD)/$(BIN)$/$(TARGET).uno.jar \
-        -br $(MISC)$/$(TARGET)$/bootstrap.rdb -classpath $(EXEC_CLASSPATH)
+        -br $(MISC)$/$(TARGET)$/bootstrap.rdb -classpath $(EXEC_CLASSPATH) \
+        -env:URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 .ENDIF # GUI, WNT
 
 test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).uno.jar $(BIN)$/$(TARGET).rdb
@@ -148,5 +151,6 @@ test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).uno.jar $(BIN)$/$(TARGET).rdb
         setenv CLASSPATH \
         $(EXEC_CLASSPATH)$(PATH_SEPERATOR)$(BIN)$/$(TARGET).uno.jar ; \
         uno -c test.javauno.nativethreadpool.client -l $(SHL1TARGETN) \
-        -ro $(BIN)$/$(TARGET).rdb
+        -ro $(BIN)$/$(TARGET).rdb \
+        -env:URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 .ENDIF # GUI, WNT
