@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-18 10:55:21 $
+ *  last change: $Author: obo $ $Date: 2005-07-07 10:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.40 $ $ $Date: 2005-05-18 10:55:21 $
+ * @version     $Revision: 1.41 $ $ $Date: 2005-07-07 10:56:10 $
  * @author      Kay Ramme
  * @since       UDK1.0
  */
@@ -294,11 +294,8 @@ public class java_remote_bridge
 
     protected IThreadPool       _iThreadPool;
 
-    // Variable state must only be used while synchronized on this object:
-    private int state = STATE_ALIVE;
-    private static final int STATE_ALIVE = 0;
-    private static final int STATE_DISPOSING = 1;
-    private static final int STATE_DISPOSED = 2;
+    // Variable disposed must only be used while synchronized on this object:
+    private boolean disposed = false;
 
     /**
      * This method is for testing only.
@@ -683,10 +680,10 @@ public class java_remote_bridge
 
     private void dispose(Throwable throwable) {
         synchronized (this) {
-            if (state != STATE_ALIVE) {
+            if (disposed) {
                 return;
             }
-            state = STATE_DISPOSING;
+            disposed = true;
         }
 
         notifyListeners();
@@ -749,12 +746,6 @@ public class java_remote_bridge
             _xConnection        = null;
             _java_environment   = null;
             _messageDispatcher  = null;
-
-            // TODO!  Is it intended that state is left as STATE_DISPOSING when
-            // an exception is thrown?
-            synchronized (this) {
-                state = STATE_DISPOSED;
-            }
         } catch (InterruptedException e) {
             System.err.println(getClass().getName()
                                + ".dispose - InterruptedException:" + e);
@@ -919,7 +910,7 @@ public class java_remote_bridge
     // @see NotifyDispose.addDisposeListener
     public void addDisposeListener(DisposeListener listener) {
         synchronized (this) {
-            if (state == STATE_ALIVE) {
+            if (!disposed) {
                 disposeListeners.add(listener);
                 return;
             }
@@ -929,7 +920,7 @@ public class java_remote_bridge
 
     // This function must only be called while synchronized on this object:
     private synchronized void checkDisposed() {
-        if (state == STATE_DISPOSED) {
+        if (disposed) {
             throw new DisposedException("java_remote_bridge " + this
                                         + " is disposed");
         }
