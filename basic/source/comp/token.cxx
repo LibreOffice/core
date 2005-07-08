@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:50:10 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,6 +565,7 @@ special:
     if( tp->t == LINE )
     {
         short nC1 = nCol1;
+        String aOldSym = aSym;
         eCurTok = Peek();
         if( eCurTok == INPUT )
         {
@@ -573,7 +574,10 @@ special:
             return eCurTok = LINEINPUT;
         }
         else
+        {
+            aSym = aOldSym;
             return eCurTok = LINE;
+        }
     }
     // END IF, CASE, SUB, DEF, FUNCTION, TYPE, CLASS, WITH
     if( tp->t == END )
