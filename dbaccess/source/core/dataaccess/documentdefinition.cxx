@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 08:46:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
         ::rtl::OUString sPersistentName;
         aIni[1] >>= sPersistentName;
-        loadEmbeddedObject();
+        loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_False );
         Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
         if ( xPersist.is() )
         {
@@ -1164,20 +1164,17 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
         ::comphelper::MediaDescriptor aHelper(aArgs);
-        static const ::rtl::OUString s_sReadOnly(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-        if ( ! aHelper.createItemIfMissing(s_sReadOnly,_bReadOnly) )
-            aHelper[s_sReadOnly] <<= _bReadOnly;
+        aHelper.createItemIfMissing(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) ), _bReadOnly );
 
         if ( m_pImpl->m_aProps.aTitle.getLength() )
         {
-            static const ::rtl::OUString s_sDocumentTitle(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
-            if ( ! aHelper.createItemIfMissing(s_sDocumentTitle,m_pImpl->m_aProps.aTitle) )
-                aHelper[s_sDocumentTitle] <<= m_pImpl->m_aProps.aTitle;
+            aHelper.createItemIfMissing(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) ), m_pImpl->m_aProps.aTitle );
         }
 
-        static const ::rtl::OUString s_sMacroExecutionMode(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-        if ( ! aHelper.createItemIfMissing(s_sMacroExecutionMode,MacroExecMode::USE_CONFIG) )
-            aHelper[s_sMacroExecutionMode] <<= MacroExecMode::USE_CONFIG;
+        aHelper.createItemIfMissing(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ) ), MacroExecMode::USE_CONFIG );
 
         aHelper >> aArgs;
 
@@ -1192,7 +1189,7 @@ void SAL_CALL ODocumentDefinition::onShowWindow( sal_Bool bVisible ) throw (Runt
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::generateNewImage(Any& _rImage)
 {
-    loadEmbeddedObject();
+    loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
     if ( m_xEmbeddedObject.is() )
     {
         try
@@ -1221,7 +1218,7 @@ Any ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::fillDocumentInfo(Any& _rInfo)
 {
-    loadEmbeddedObject();
+    loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
     if ( m_xEmbeddedObject.is() )
     {
         try
@@ -1314,8 +1311,9 @@ Reference< XStorage> ODocumentDefinition::getStorage() const
 {
     static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
     static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    Reference<css::embed::XTransactionListener> xEvt(m_pImpl->m_pDataSource->m_xModel,UNO_QUERY);
-    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bForm ? s_sForms : s_sReports,xEvt) : Reference< XStorage>();
+    return  m_pImpl->m_pDataSource
+        ?   m_pImpl->m_pDataSource->getStorage( m_bForm ? s_sForms : s_sReports )
+        :   Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::isModified()
