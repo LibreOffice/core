@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-06-27 08:26:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
 #endif
+#include <memory>
 
 //........................................................................
 namespace dbaccess
@@ -200,11 +201,16 @@ class OSharedConnectionManager;
 DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
 
 
+class ODatabaseContext;
+class DocumentStorageAccess;
+class OSharedConnectionManager;
 class ODatabaseModelImpl : public ::rtl::IReference
 {
-    friend class ODatabaseContext;
-    friend class OConnection;
-    friend class OSharedConnectionManager;
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>                      m_xTempModel;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource>              m_xDataSource;
+
+    DocumentStorageAccess*                                                                  m_pStorageAccess;
 
 public:
 
@@ -271,10 +277,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>                 m_xCurrentController;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                   m_xStorage;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>                      m_xModel;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource>              m_xDataSource;
-
-
     ODatabaseContext*                                   m_pDBContext;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
     oslInterlockedCount                                 m_refCount;
@@ -289,9 +291,15 @@ public:
     inline bool isEmbeddedDatabase() const { return ( m_sConnectURL.compareToAscii( "sdbc:embedded:", 14 ) == 0 ); }
 
     /** stores the embedded storage ("database")
+
+        @param _bPreventRootCommits
+            Normally, committing the embedded storage results in also commiting the root storage
+            - this is an automatism for data safety reasons.
+            If you pass <TRUE/> here, committing the root storage is prevented for this particular
+            call.
         @return <TRUE/> if the storage could be commited, otherwise <FALSE/>
     */
-    sal_Bool commitEmbeddedStorage();
+    sal_Bool    commitEmbeddedStorage( sal_Bool _bPreventRootCommits = sal_False );
 
     /** commits all storages
     */
@@ -351,7 +359,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    void dispose(  );
+    void dispose();
 
     ::rtl::OUString getURL();
 
@@ -365,7 +373,7 @@ public:
 // XCloseable
     void SAL_CALL close( sal_Bool DeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName,const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener>& _xEventListener, sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName,sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
 // helper
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
@@ -406,12 +414,35 @@ public:
 
     /** returns the data source. If it doesn't exist it will be created
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource();
-    /** returns the model or creates a new one.
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>  getModel();
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource( bool _bCreateIfNecessary = true );
 
-    void clear();
+    /** returns the model, if there already exists one
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel_noCreate();
+
+    /** returns a new ->ODatabaseDocument
+
+        @precond
+            No ->ODatabaseDocument exists so far
+        @seealso
+            getModel_noCreate
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > createNewModel_deliverOwnership();
+
+    struct ResetModelAccess { friend class ODatabaseDocument; private: ResetModelAccess() { } };
+    /** resets the model to NULL
+
+        Only to be called when the model is being disposed
+    */
+    void    modelIsDisposing( ResetModelAccess ) { m_xTempModel = NULL; }
+
+    DocumentStorageAccess*
+            getDocumentStorageAccess();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentSubStorageSupplier >
+            getDocumentSubStorageSupplier();
+
+//  void clear();
 
     /** @see osl_incrementInterlockedCount.
      */
