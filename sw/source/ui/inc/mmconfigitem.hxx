@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmconfigitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 17:00:52 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #ifndef _MMCONFIGITEM_HXX
 #define _MMCONFIGITEM_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
-#include <com/sun/star/uno/Sequence.h>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 #ifndef _TOOLS_RESARY_HXX
 #include <tools/resary.hxx>
@@ -75,6 +75,9 @@
 #endif
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
+#endif
+#ifndef SW_SHARED_UNO_COMPONENT_HXX
+#include "sharedunocomponent.hxx"
 #endif
 
 namespace com{namespace sun{namespace star{
@@ -89,6 +92,7 @@ namespace com{namespace sun{namespace star{
 }}}
 class SwMailMergeConfigItem_Impl;
 class SwView;
+
 /*-- 06.04.2004 10:43:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -134,15 +138,14 @@ public:
 
     void                SetCurrentConnection(
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>          xSource,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          xConnection,
+                            SharedConnection                                                                xConnection,
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    xColumnsSupplier,
                             const SwDBData& rDBData);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>
                         GetSource();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
-                        GetConnection();
+    SharedConnection    GetConnection();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
                         GetColumnsSupplier();
