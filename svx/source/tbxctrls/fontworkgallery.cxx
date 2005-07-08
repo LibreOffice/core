@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:48:13 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,35 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow(
     mbPopupMode( true ),
     mxFrame( rFrame )
 {
+    implInit();
+}
+
+FontWorkAlignmentWindow::FontWorkAlignmentWindow(
+    USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow ) :
+
+    SfxPopupWindow( nId,
+                    rFrame,
+                    SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT )),
+    maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16 ) ),
+    maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16 ) ),
+    maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16 ) ),
+    maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16 ) ),
+    maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) ),
+    maImgAlgin1h( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16_H ) ),
+    maImgAlgin2h( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16_H ) ),
+    maImgAlgin3h( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16_H ) ),
+    maImgAlgin4h( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16_H ) ),
+    maImgAlgin5h( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16_H ) ),
+    mbPopupMode( true ),
+    mxFrame( rFrame )
+{
+    implInit();
+}
+
+void FontWorkAlignmentWindow::implInit()
+{
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
 
     bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
@@ -595,7 +624,7 @@ SfxPopupWindowType FontWorkAlignmentControl::GetPopupWindowType() const
 
 SfxPopupWindow* FontWorkAlignmentControl::CreatePopupWindow()
 {
-    FontWorkAlignmentWindow* pWin = new FontWorkAlignmentWindow( GetId(), m_xFrame );
+    FontWorkAlignmentWindow* pWin = new FontWorkAlignmentWindow( GetId(), m_xFrame, &GetToolBox() );
     pWin->StartPopupMode( &GetToolBox(), TRUE );
     pWin->StartSelection();
     SetPopupWindow( pWin );
@@ -626,6 +655,26 @@ FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
                     SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING )),
     mbPopupMode( true ),
     mxFrame( rFrame )
+{
+    implInit();
+}
+
+FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
+    USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow ) :
+
+    SfxPopupWindow( nId,
+                    rFrame,
+                    pParentWindow,
+                    SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING )),
+    mbPopupMode( true ),
+    mxFrame( rFrame )
+{
+    implInit();
+}
+
+void FontWorkCharacterSpacingWindow::implInit()
 {
     SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
 
@@ -895,7 +944,7 @@ SfxPopupWindowType FontWorkCharacterSpacingControl::GetPopupWindowType() const
 
 SfxPopupWindow* FontWorkCharacterSpacingControl::CreatePopupWindow()
 {
-    FontWorkCharacterSpacingWindow* pWin = new FontWorkCharacterSpacingWindow( GetId(), m_xFrame );
+    FontWorkCharacterSpacingWindow* pWin = new FontWorkCharacterSpacingWindow( GetId(), m_xFrame, &GetToolBox() );
     pWin->StartPopupMode( &GetToolBox(), TRUE );
     pWin->StartSelection();
     SetPopupWindow( pWin );
