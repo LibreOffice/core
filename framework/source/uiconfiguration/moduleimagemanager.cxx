@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:39:42 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,6 +727,18 @@ sal_Bool ModuleImageManager::implts_storeUserImages(
             catch ( ::com::sun::star::container::NoSuchElementException& )
             {
             }
+
+            uno::Reference< XTransactedObject > xTransaction;
+
+            // Commit user image storage
+            xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );
+            if ( xTransaction.is() )
+                xTransaction->commit();
+
+            // Commit user bitmaps storage
+            xTransaction = uno::Reference< XTransactedObject >( xUserBitmapsStorage, UNO_QUERY );
+            if ( xTransaction.is() )
+                xTransaction->commit();
 
             return sal_True;
         }
