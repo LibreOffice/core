@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:39:39 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ public:
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
                             BOOL bOvrTblLns=TRUE ) const;
 
-    SwRect GetLineRect( const BOOL bPrtArea = FALSE ) const;
+    SwTwips GetLineHeight() const;
 };
 
 class SwTableBox: public SwClient       //Client vom FrmFmt
