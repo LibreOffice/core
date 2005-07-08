@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:46:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,20 +114,18 @@ namespace dbaccess
 {
 //........................................................................
 
-    class OChildCommitListen_Impl;
-    class ODatabaseContext;
+class ODatabaseContext;
 //============================================================
 //= ODatabaseDocument
 //============================================================
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseDocument_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper11<  ::com::sun::star::frame::XModel
+typedef ::cppu::WeakComponentImplHelper10<  ::com::sun::star::frame::XModel
                             ,   ::com::sun::star::util::XModifiable
                             ,   ::com::sun::star::frame::XStorable
                             ,   ::com::sun::star::document::XEventBroadcaster
                             ,   ::com::sun::star::document::XEventListener
-                            ,   ::com::sun::star::embed::XTransactionListener
                             ,   ::com::sun::star::view::XPrintable
                             ,   ::com::sun::star::util::XCloseable
                             ,   ::com::sun::star::lang::XServiceInfo
@@ -139,15 +137,9 @@ typedef ::cppu::WeakComponentImplHelper11<  ::com::sun::star::frame::XModel
 class ODatabaseDocument : public ::comphelper::OBaseMutex
                          ,public ODatabaseDocument_OfficeDocument
 {
-    friend class ODatabaseContext;
-    friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        ODatabaseDocument_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-
-
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >      m_xDocEventBroadcaster;
 
-    OChildCommitListen_Impl*                            m_pChildCommitListen;
     ::cppu::OInterfaceContainerHelper                   m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                   m_aDocEventListeners;
@@ -221,12 +213,24 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);
 
 
+private:
+    ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
+    // Do NOT create those documents directly, always use ODatabaseModelImpl::getModel. Reason is that
+    // ODatabaseDocument require clear ownership, and in turn lifetime synchronisation with the ModelImpl.
+    // If you create a ODatabaseDocument directly, you might easily create a leak.
+    // #i50905# / 2005-06-20 / frank.schonheit@sun.com
+
 protected:
     virtual void SAL_CALL disposing();
 
     virtual ~ODatabaseDocument();
+
 public:
-    ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
+    struct FactoryAccess { friend class ODatabaseModelImpl; private: FactoryAccess() { } };
+    static ODatabaseDocument* createDatabaseDocument( const ::rtl::Reference<ODatabaseModelImpl>& _pImpl, FactoryAccess accessControl )
+    {
+        return new ODatabaseDocument( _pImpl );
+    }
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -308,12 +312,6 @@ public:
 
     // XOfficeDatabaseDocument
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException);
-
-     // XTransactionListener
-    virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
 // XStorageBasedDocument
 /*
