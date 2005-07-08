@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:54:54 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,13 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     USHORT &rIdx3,              //      ""
     USHORT &rRemovedIdx )       // falls doppelte geloescht werden, Pos zurueck
 {
+    // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
+    // actions
+    // Note: The undo action stack is cleared at the end of this method.
+    bool bDoesUndo( GetDoc()->DoesUndo() );
+    GetDoc()->DoUndo( sal_False );
+    // <--
+
     BOOL bRet = FALSE;
 
     if (INDEX_IGNORE == rIdx1 && CONTENT_STYLE == nSourceIdx1)
@@ -700,6 +707,15 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                     rIdx2,
                     rIdx3,
                     rRemovedIdx);
+
+    // --> OD 2005-05-10 #i48949# - actions aren't undoable and could have change
+    // the document node array. Thus, clear the undo action stack.
+    if ( bDoesUndo )
+    {
+        GetDoc()->DelAllUndoObj();
+    }
+    GetDoc()->DoUndo( bDoesUndo );
+    // <--
 
     return bRet;
 }
