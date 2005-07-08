@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:59:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1616,7 +1616,11 @@ void CalcCntnt( SwLayoutFrm *pLay,
                     // format anchored object
                     if ( pAnchoredObj->IsFormatPossible() )
                     {
-                        pAnchoredObj->InvalidateObjPos();
+                        // --> OD 2005-05-17 #i43737# - no invalidation of
+                        // anchored object needed - causes loops for as-character
+                        // anchored objects.
+                        //pAnchoredObj->InvalidateObjPos();
+                        // <--
                         SwRect aRect( pAnchoredObj->GetObjRect() );
                         if ( !SwObjectFormatter::FormatObj( *pAnchoredObj, pFrm, pPageFrm ) )
                         {
