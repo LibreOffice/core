@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:00:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,14 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     pFrm->Calc();
                     // --> OD 2005-03-03 #i43771# - format also object anchored
                     // at the frame
-                    if ( pFrm->IsTxtFrm() )
+                    // --> OD 2005-05-03 #i46941# - frame has to be valid.
+                    // Note: frame could be invalid after calling its format,
+                    //       if it's locked
+                    ASSERT( StackHack::IsLocked() || !pFrm->IsTxtFrm() ||
+                            pFrm->IsValid() ||
+                            static_cast<SwTxtFrm*>(pFrm)->IsJoinLocked(),
+                            "<SwHeadFootFrm::FormatSize(..)> - text frame invalid and not locked." );
+                    if ( pFrm->IsTxtFrm() && pFrm->IsValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pFrm,
                                                                   *(pFrm->FindPageFrm()) ) )
