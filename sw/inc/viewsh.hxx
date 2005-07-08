@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:51:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,8 +394,6 @@ public:
     //
     // DOCUMENT COMPATIBILITY FLAGS END
     //
-
-    sal_Bool IsOldNumbering() const;
 
     //Ruft den Idle-Formatierer des Layouts
     void LayoutIdle();
