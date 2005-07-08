@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:10:40 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1228,6 +1228,7 @@ BOOL SbModule::LoadBinaryData( SvStream& rStrm )
 {
     OUString aKeepSource = aOUSource;
     bool bRet = LoadData( rStrm, 2 );
+    LoadCompleted();
     aOUSource = aKeepSource;
     return bRet;
 }
