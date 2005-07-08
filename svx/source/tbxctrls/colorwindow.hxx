@@ -42,7 +42,8 @@ public:
     SvxColorWindow_Impl( const rtl::OUString& rCommand,
                          USHORT nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                         const String& rWndTitle );
+                         const String& rWndTitle,
+                         Window* pParentWindow );
     ~SvxColorWindow_Impl();
     void                StartSelection();
 
