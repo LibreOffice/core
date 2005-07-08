@@ -2,9 +2,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-07-01 12:19:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,31 +118,105 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 {
     string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
-    string sBootstrapPath = sInstallPath + TEXT("program\\setup.ini");
+    // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
 
-    // MessageBox(NULL, sBootstrapPath.c_str(), "DEBUG", MB_OK);
+    UnsetMsiProperty( handle, TEXT("INVALIDDIRECTORY") );
+    UnsetMsiProperty( handle, TEXT("ISWRONGPRODUCT") );
+    UnsetMsiProperty( handle, TEXT("PATCHISOLDER") );
+    UnsetMsiProperty( handle, TEXT("ALLUSERS") );
+
+    string sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
 
     TCHAR szValue[32767];
 
     GetPrivateProfileString(
         TEXT("Bootstrap"),
-        TEXT("ALLUSERS"),
+        TEXT("ProductCode"),
         TEXT("INVALIDDIRECTORY"),
         szValue,
         elementsof(szValue),
-        sBootstrapPath.c_str()
+        sSetupiniPath.c_str()
         );
-
-    UnsetMsiProperty( handle, TEXT("INVALIDDIRECTORY") );
-    UnsetMsiProperty( handle, TEXT("ALLUSERS") );
 
     if ( !_tcsicmp( szValue, TEXT("INVALIDDIRECTORY") ) )
     {
         SetMsiProperty( handle, TEXT("INVALIDDIRECTORY"), TEXT("YES") );
         // MessageBox(NULL, "INVALIDDIRECTORY set", "DEBUG", MB_OK);
-
+        return ERROR_SUCCESS;
     }
-    else if ( szValue[0] )
+
+    string sBootstrapPath = sInstallPath + TEXT("program\\bootstrap.ini");
+
+    szValue[0] = '\0';
+
+    GetPrivateProfileString(
+        TEXT("Bootstrap"),
+        TEXT("buildid"),
+        TEXT("ISWRONGPRODUCT"),
+        szValue,
+        elementsof(szValue),
+        sBootstrapPath.c_str()
+        );
+
+    if ( !_tcsicmp( szValue, TEXT("ISWRONGPRODUCT") ) )
+    {
+        SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
+        // MessageBox(NULL, "ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
+        return ERROR_SUCCESS;
+    }
+
+    string ProductMajor = GetMsiProperty(handle, TEXT("PRODUCTMAJOR"));
+
+    // Comparing the first three characters, for example "680"
+    // If not equal, this version is not suited for patch or language pack
+
+    if (_tcsnicmp(ProductMajor.c_str(), szValue, 3))
+    {
+        SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
+        // MessageBox(NULL, "ISWRONGPRODUCT 2 set", "DEBUG", MB_OK);
+        return ERROR_SUCCESS;
+    }
+
+    string isPatch = GetMsiProperty(handle, TEXT("ISPATCH"));
+
+    if (isPatch=="1")
+    {
+        string ProductMinor = GetMsiProperty(handle, TEXT("PRODUCTMINOR"));
+        int PatchProductMinor = atoi(ProductMinor.c_str());
+
+        szValue[0] = '\0';
+
+        GetPrivateProfileString(
+            TEXT("Bootstrap"),
+            TEXT("ProductMinor"),
+            TEXT("106"),
+            szValue,
+            elementsof(szValue),
+            sBootstrapPath.c_str()
+            );
+
+        int InstalledProductMinor = atoi(szValue);
+
+        if ( InstalledProductMinor >= PatchProductMinor )
+        {
+            SetMsiProperty( handle, TEXT("PATCHISOLDER"), TEXT("YES") );
+            // MessageBox(NULL, "PATCHISOLDER set", "DEBUG", MB_OK);
+            return ERROR_SUCCESS;
+        }
+    }
+
+    szValue[0] = '\0';
+
+    GetPrivateProfileString(
+        TEXT("Bootstrap"),
+        TEXT("ALLUSERS"),
+        TEXT(""),
+        szValue,
+        elementsof(szValue),
+        sSetupiniPath.c_str()
+        );
+
+    if ( szValue[0] )
     {
         SetMsiProperty( handle, TEXT("ALLUSERS"), szValue );
         // MessageBox(NULL, "ALLUSERS set", "DEBUG", MB_OK);
