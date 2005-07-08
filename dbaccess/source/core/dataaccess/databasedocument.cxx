@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 15:43:10 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
-#ifndef DBA_COREDATAACCESS_COMMITLISTENER_HXX
-#include "commitlistener.hxx"
-#endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #endif
@@ -187,7 +184,8 @@ Reference< XInterface > ODatabaseDocument_CreateInstance(const Reference< XMulti
 
     ::rtl::Reference<ODatabaseModelImpl> pImpl(new ODatabaseModelImpl(_rxFactory));
     pImpl->m_pDBContext = pContext;
-    return *(new ODatabaseDocument(pImpl));
+    Reference< XModel > xModel( pImpl->createNewModel_deliverOwnership() );
+    return xModel.get();
 }
 //--------------------------------------------------------------------------
 ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl )
@@ -196,20 +194,10 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_aModifyListeners(m_aMutex)
             ,m_aCloseListener(m_aMutex)
             ,m_aDocEventListeners(m_aMutex)
-            ,m_bCommitMasterStorage(sal_True)
 {
     DBG_CTOR(ODatabaseDocument,NULL);
+
     // adjust our readonly flag
-    m_pChildCommitListen = NULL;
-    m_pImpl->m_xModel = this;
-    TStorages::iterator aIter = m_pImpl->m_aStorages.begin();
-    TStorages::iterator aEnd = m_pImpl->m_aStorages.end();
-    for (; aIter != aEnd ; ++aIter)
-    {
-        Reference<XComponent> xComp(aIter->second,UNO_QUERY);
-        if ( xComp.is() )
-            xComp->addEventListener( static_cast< XTransactionListener* >( this ) );
-    }
     try
     {
         m_xDocEventBroadcaster.set(m_pImpl->m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
@@ -302,12 +290,6 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         xContainer = m_pImpl->m_xCommandDefinitions;
         ::comphelper::disposeComponent(xContainer);
 
-        if ( m_pChildCommitListen )
-        {
-            m_pChildCommitListen->dispose();
-            m_pChildCommitListen->release();
-            m_pChildCommitListen = NULL;
-        }
         m_pImpl->m_aContainer.clear();
         m_pImpl->lateInit();
     }
@@ -412,6 +394,35 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     if ( m_pImpl->m_xCurrentController == _xController )
         m_pImpl->m_xCurrentController = NULL;
 
+    // TODO: The below fragment is conceptually wrong.
+    //
+    // There are more clients of a database document (aka XModel) than its controllers.
+    // In particular, people might programmatically obtain a DataSource from the
+    // DatabaseContext, script it, and at some point obtain the document from
+    // the data source (XDocumentDataSource::getDatabaseDocument). All this might happen
+    // without any controller being involved, which means the document gets never disposed,
+    // which imlpies a resource leak.
+    //
+    // You might argue that the scripter who obtained the model is responsible for disposing
+    // it. However, she cannot know whether the model she just got from getDatabaseDocument
+    // is really hers (since it was newly created), or already owned by somebody else. So,
+    // she cannot know whether she is really allowed to dispose it.
+    //
+    // There is a pattern which could prevent this dilemma: closing with ownership delivery
+    // (XCloseable::close). With this pattern, every client of a component (here: the model)
+    // adds itself as XCloseListener to the component. When the client dies, it tries to
+    // close the component, with the DeliverOwnership parameter set to <TRUE/>. If there is
+    // another client of the component, it will veto the closing, and take the ownership
+    // (and in turn do an own close attempt later on). If there is no other client, closing
+    // will succeed.
+    //
+    // We should implement this for models, too. Then, controllers would be clients of the
+    // model, and do a close attempt when they disconnect. The model would never dispose
+    // itself (as it does now), but it would automatically be closed when the last client
+    // dies (provided that all clients respect this pattern). It turn, it would not be
+    // allowed to dispose a model directly.
+    //
+    // #i50905# / 2005-06-21 / frank.schoenheit@sun.com
     if ( m_pImpl.is() && m_pImpl->m_aControllers.empty() )
     {
         aGuard.clear();
@@ -528,7 +539,9 @@ void ODatabaseDocument::store(const ::rtl::OUString& _rURL
     if ( m_pImpl->m_bDocumentReadOnly )
         throw IOException();
 
+    m_bCommitMasterStorage = sal_False;
     m_pImpl->commitStorages();
+    m_bCommitMasterStorage = sal_True;
 
     writeStorage(_rURL,_rArguments,m_pImpl->getStorage());
 
@@ -643,18 +656,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
         throw IOException( aError );
     }
 
-    // storeTo - i.e. copying a copy of our document to another location - requires
-    // the embedded DB to shut down. To ensure this, we need to dispose all connections
-    // which are currently open.
-    // TODO: wouldn't an explicit XEmbeddedDatabase::shutdown be much better than this implicit,
-    // error-prone handling?
-    // #i45314# / 2005-03-23 / frank.schoenheit@sun.com
-    if ( m_pImpl->isEmbeddedDatabase() )
-        m_pImpl->clearConnections();
-
-    m_bCommitMasterStorage = sal_False;
     m_pImpl->commitEmbeddedStorage();
-    m_bCommitMasterStorage = sal_True;
     xMyStorage->copyToStorage( xStorage );
     writeStorage(_rURL,_rArguments,xStorage);
     try
@@ -1054,32 +1056,15 @@ Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentSubStorage( const :
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
-    OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
-    Reference< XStorage > xResult = m_pImpl->getStorage(aStorageName,this,nMode);
-    if ( xResult.is() )
-    {
-        Reference< XTransactionBroadcaster > xBroadcaster( xResult, UNO_QUERY );
-        if ( xBroadcaster.is() )
-        {
-            if ( m_pChildCommitListen == NULL )
-            {
-                m_pChildCommitListen = new OChildCommitListen_Impl( static_cast<XModifiable*>(this) );
-                m_pChildCommitListen->acquire();
-            }
-            xBroadcaster->addTransactionListener( static_cast< XTransactionListener* >( m_pChildCommitListen ) );
-        }
-    }
-    return xResult;
+    Reference< XDocumentSubStorageSupplier > xStorageAccess( m_pImpl->getDocumentSubStorageSupplier() );
+    return xStorageAccess->getDocumentSubStorage( aStorageName, nMode );
 }
 // -----------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, RuntimeException)
 {
-    Sequence< ::rtl::OUString > aRet(2);
-    sal_Int32 nPos = 0;
-    aRet[nPos++] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
-    aRet[nPos++] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    return aRet;
+    Reference< XDocumentSubStorageSupplier > xStorageAccess( m_pImpl->getDocumentSubStorageSupplier() );
+    return xStorageAccess->getDocumentSubStoragesNames();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::notifyEvent(const ::rtl::OUString& _sEventName)
@@ -1114,28 +1099,17 @@ void ODatabaseDocument::notifyEvent(const ::rtl::OUString& _sEventName)
 //------------------------------------------------------------------------------
 void ODatabaseDocument::disposing()
 {
-    Reference<XInterface> xHold = m_pImpl->m_xModel;
+    Reference< XModel > xHoldAlive( this );
     {
         notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
-        if ( m_pChildCommitListen )
-        {
-            m_pChildCommitListen->dispose();
-            m_pChildCommitListen->release();
-            m_pChildCommitListen = NULL;
-        }
+
         css::lang::EventObject aDisposeEvent(static_cast<XWeak*>(this));
         m_aModifyListeners.disposeAndClear( aDisposeEvent );
         m_aCloseListener.disposeAndClear( aDisposeEvent );
         m_aDocEventListeners.disposeAndClear( aDisposeEvent );
 
-        TStorages::iterator aIter = m_pImpl->m_aStorages.begin();
-        TStorages::iterator aEnd = m_pImpl->m_aStorages.end();
-        for (; aIter != aEnd ; ++aIter)
-        {
-            Reference<XComponent> xComp(aIter->second,UNO_QUERY);
-            if ( xComp.is() )
-                xComp->removeEventListener( static_cast< XTransactionListener* >( this ) );
-        }
+        m_xDocEventBroadcaster = NULL;
+        m_xUIConfigurationManager = NULL;
 
         Reference<XChild> xChild(m_pImpl->m_xForms.get(),UNO_QUERY);
         if ( xChild.is() )
@@ -1151,7 +1125,7 @@ void ODatabaseDocument::disposing()
         if ( xChild.is() )
             xChild->setParent(NULL);
 
-        m_pImpl->m_xModel.clear();
+        m_pImpl->modelIsDisposing( ODatabaseModelImpl::ResetModelAccess() );
     }
     m_pImpl.clear();
 }
@@ -1221,32 +1195,6 @@ void SAL_CALL ODatabaseDocument::disposing( const ::com::sun::star::lang::EventO
 {
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
-}
-//------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
-{
-}
-//------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
-{
-    if ( m_pImpl.is() && m_bCommitMasterStorage )
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        TStorages::iterator aFind = m_pImpl->m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
-        Reference<XStorage> xStorage(aEvent.Source,UNO_QUERY);
-        if ( aFind != m_pImpl->m_aStorages.end() && aFind->second == xStorage )
-        {
-            m_pImpl->commitRootStorage();
-        }
-    }
-}
-//------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
-{
-}
-//------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
-{
 }
 //------------------------------------------------------------------
 //........................................................................
