@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-06-28 15:25:46 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,11 @@
 #ifndef _XMLOFF_ELEMTRANSFORMERACTION_HXX
 #include "ElemTransformerAction.hxx"
 #endif
-#ifndef _XMLOFF_ATTRTRANSFORMERACTION_HXX
-#include "AttrTransformerAction.hxx"
+// --> OD 2005-06-29 #i50322#
+#ifndef _XMLOFF_PROPERTYACTIONSOOO_HXX
+#include "PropertyActionsOOo.hxx"
 #endif
+// <--
 #ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
 #endif
@@ -934,6 +936,33 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         pMutableAttrList->SetValueByIndex( i, aBuffer.makeStringAndClear() );
                     }
                     break;
+                // --> OD 2005-06-10 #i50322# - special handling for the
+                // transparency of writer background graphics.
+                case XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY:
+                    {
+                        // determine, if it's the transparency of a document style
+                        XMLTransformerContext* pFirstContext = (*m_pContexts)[0].get();
+                        OUString aFirstContextLocalName;
+                        sal_uInt16 nFirstContextPrefix =
+                            GetNamespaceMap().GetKeyByAttrName( pFirstContext->GetQName(),
+                                                                &aFirstContextLocalName );
+                        bool bIsDocumentStyle(
+                            ::xmloff::token::IsXMLToken( aFirstContextLocalName,
+                                                         XML_DOCUMENT_STYLES ) );
+                        // no conversion of transparency value for document
+                        // styles, because former OpenOffice.org version writes
+                        // writes always a transparency value of 100% and doesn't
+                        // read the value. Thus, it's intepreted as 0%
+                        if ( !bIsDocumentStyle )
+                        {
+                            OUString aAttrValue( rAttrValue );
+                            NegPercent(aAttrValue);
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        }
+                        bRename = sal_True;
+                    }
+                    break;
+                // <--
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
