@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:22:16 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,9 +911,30 @@ void SdrUndoInsertObj::Undo()
 void SdrUndoInsertObj::Redo()
 {
     DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj ist bereits Inserted");
-    if (!pObj->IsInserted()) {
+    if (!pObj->IsInserted())
+    {
+        // --> OD 2005-05-10 #i45952# - restore anchor position of an object,
+        // which becomes a member of a group, because its cleared in method
+        // <InsertObject(..)>. Needed for correct ReDo in Writer.
+        Point aAnchorPos( 0, 0 );
+        if ( pObjList &&
+             pObjList->GetOwnerObj() &&
+             pObjList->GetOwnerObj()->ISA(SdrObjGroup) )
+        {
+            aAnchorPos = pObj->GetAnchorPos();
+        }
+        // <--
+
         SdrInsertReason aReason(SDRREASON_UNDO);
         pObjList->InsertObject(pObj,nOrdNum,&aReason);
+
+        // --> OD 2005-05-10 #i45952#
+        if ( aAnchorPos.X() || aAnchorPos.Y() )
+        {
+            pObj->NbcSetAnchorPos( aAnchorPos );
+        }
+        // <--
+
         if(pObjList->GetOwnerObj() && pObjList->GetOwnerObj()->ISA(E3dObject) && pObj->ISA(E3dObject))
         {
             E3dScene* pScene = ((E3dObject*)pObjList->GetOwnerObj())->GetScene();
