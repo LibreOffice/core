@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:12:25 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,20 +521,53 @@ class SwDoc
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
-    // OD 2004-05-05 #i28701#
-    // TRUE: object positioning algorithm has consider the wrapping style of
-    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
-    sal_Bool mbConsiderWrapOnObjPos : 1;
 
     //
     // COMPATIBILITY FLAGS START
     //
+    //
+    // HISTORY OF THE COMPATIBILITY FLAGS:
+    //
+    // SO5:
+    // DUMMY_PARASPACEMAX                   def = FALSE, TRUE since SO8
+    // DUMMY_PARASPACEMAX_AT_PAGES          def = FALSE, TRUE since SO8
+    //
+    // SO6:
+    // DUMMY_TAB_COMPAT                     def = FALSE, TRUE since SO8
+    //
+    // SO7:
+    // DUMMY_USE_VIRTUAL_DEVICE             def = TRUE
+    // DUMMY_ADD_FLY_OFFSETS                def = FALSE, hidden
+    //
+    // SO7pp4:
+    // bOldNumbering                        def = FALSE, hidden
+    //
+    // SO8:
+    // DUMMY_ADD_EXTERNAL_LEADING           def = TRUE
+    // DUMMY_USE_HIRES_VIR_DEV              def = TRUE, hidden
+    // bOldLineSpacing                      def = FALSE
+    // bAddParaSpacingToTableCells          def = TRUE
+    // bUseFormerObjectPos                  def = FALSE
+    // bUseFormerTextWrapping               def = FALSE
+    // mbConsiderWrapOnObjPos               def = FALSE
+    //
+    // SO8pp1:
+    // bIgnoreFirstLineIndentInNumbering    def = FALSE, hidden
+    // bDoNotJustifyLinesWithManualBreak    def = FALSE, hidden
+    //
 
-    sal_Bool    bOldNumbering                   : 1;    // #111955# TRUE: use old numbering
-    sal_Bool    bOldLineSpacing                 : 1;    // OD 06.01.2004 #i11859#
-    sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD 2004-02-16 #106629#
-    sal_Bool    bUseFormerObjectPos             : 1;    // OD 2004-03-12 #i11860#
-    sal_Bool    bUseFormerTextWrapping          : 1;    // FME #108724#
+    sal_Bool    bOldLineSpacing                 : 1;    // OD  2004-01-06 #i11859#
+    sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD  2004-02-16 #106629#
+    sal_Bool    bUseFormerObjectPos             : 1;    // OD  2004-03-12 #i11860#
+    sal_Bool    bUseFormerTextWrapping          : 1;    // FME 2005-05-11 #108724#
+    sal_Bool    mbConsiderWrapOnObjPos          : 1;    // OD  2004-05-05 #i28701#
+                                                        // TRUE: object positioning algorithm has consider the wrapping style of
+                                                        //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
+
+    // non-ui-compatibility flags:
+    sal_Bool    bOldNumbering                   : 1;    // HBRINKM #111955#
+    sal_Bool    bIgnoreFirstLineIndentInNumbering: 1;   // FME 2005-05-30# i47448#
+    sal_Bool    bDoNotJustifyLinesWithManualBreak: 1;   // FME 2005-06-08 #i49277#
 
     //
     // COMPATIBILITY FLAGS END
@@ -2213,6 +2246,28 @@ public:
     {
         mbConsiderWrapOnObjPos = _bConsiderWrapOnObjPos;
     }
+
+    // --> FME 2005-05-27 #i47448#
+    inline sal_Bool IgnoreFirstLineIndentInNumbering() const
+    {
+        return bIgnoreFirstLineIndentInNumbering;
+    }
+    inline void SetIgnoreFirstLineIndentInNumbering( const sal_Bool _bIgnoreFirstLineIndentInNumbering )
+    {
+        bIgnoreFirstLineIndentInNumbering = _bIgnoreFirstLineIndentInNumbering;
+    }
+    // <--
+
+    // --> FME 2005-06-08 #i49277#
+    inline sal_Bool DoNotJustifyLinesWithManualBreak() const
+    {
+        return bDoNotJustifyLinesWithManualBreak;
+    }
+    inline void SetDoNotJustifyLinesWithManualBreak( const sal_Bool _bDoNotJustifyLinesWithManualBreak )
+    {
+        bDoNotJustifyLinesWithManualBreak = _bDoNotJustifyLinesWithManualBreak;
+    }
+    // <--
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
