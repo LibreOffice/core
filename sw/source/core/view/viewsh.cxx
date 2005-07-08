@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:47:33 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,13 +990,6 @@ void ViewShell::SetUseFormerTextWrapping( const sal_Bool _bUseFormerTextWrapping
     }
 }
 // <--
-
-
-// #i23728#
-sal_Bool ViewShell::IsOldNumbering() const
-{
-    return GetDoc()->IsOldNumbering();
-}
 
 /******************************************************************************
 |*
