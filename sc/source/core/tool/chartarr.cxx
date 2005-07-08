@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:32:36 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,8 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
             const SchSingleCell& rAddr1 = (*iRange).maUpperLeft.maCells[0];
             const SchSingleCell& rAddr2 = (*iRange).maLowerRight.maCells[0];
             SCTAB nTab = (SCTAB) (*iRange).mnTableNumber;
+            if ( (*iRange).mnTableNumber == -1 && pDocument )
+                pDocument->GetTable( (*iRange).msTableName, nTab );
             ScRange aRange(
                 (SCCOL) rAddr1.mnColumn, (SCROW) rAddr1.mnRow, nTab,
                 (SCCOL) rAddr2.mnColumn, (SCROW) rAddr2.mnRow, nTab );
