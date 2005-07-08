@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 15:20:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef SW_SHARED_UNO_COMPONENT_HXX
+#include "sharedunocomponent.hxx"
+#endif
 
 #include <addresslistdialog.hrc>
 #include <dbui.hrc>
@@ -192,6 +195,8 @@ using namespace rtl;
 #define ITEMID_NAME         1
 #define ITEMID_TABLE        2
 
+typedef SharedUNOComponent< XConnection >   SharedConnection;
+
 static const char* cUTF8 = "UTF-8";
 /*-- 07.05.2004 14:11:34---------------------------------------------------
 
@@ -199,7 +204,7 @@ static const char* cUTF8 = "UTF-8";
 struct AddressUserData_Impl
 {
     uno::Reference<XDataSource>             xSource;
-    uno::Reference<XConnection>             xConnection;
+    SharedConnection                        xConnection;
     uno::Reference< XColumnsSupplier>       xColumnsSupplier;
     uno::Reference< sdbc::XResultSet>       xResultSet;
     ::rtl::OUString                    sFilter;
@@ -422,7 +427,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
                 xRowProperties->setPropertyValue(C2U("Command"), makeAny(
                         OUString()));
                 xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(pUserData->nCommandType));
-                xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(pUserData->xConnection));
+                xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(pUserData->xConnection.getTyped()));
                 xRowSet->execute();
                 aSecond.Value <<= xRowSet;
 
@@ -580,19 +585,10 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
             SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
             rConfigItem.DisposeResultSet();
         }
-        uno::Reference< sdbc::XCloseable > xClose( pUserData->xConnection, uno::UNO_QUERY);
-        try
-        {
-            if(xClose.is())
-                xClose->close();
-            pUserData->xSource = 0;
-            pUserData->xConnection = 0;
-            pUserData->xColumnsSupplier = 0;
-
-        }
-        catch(uno::Exception&)
-        {
-        }
+        pUserData->xSource.clear();
+        pUserData->xColumnsSupplier.clear();
+        pUserData->xConnection.clear();
+            // will automatically close if it was the las reference
         SwCreateAddressListDialog* pDlg =
                 new SwCreateAddressListDialog(
                         pButton,
@@ -793,9 +789,9 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 /*-- 07.05.2004 14:17:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< XConnection>  SwAddressListDialog::GetConnection()
+SharedConnection    SwAddressListDialog::GetConnection()
 {
-    uno::Reference< XConnection> xRet;
+    SharedConnection xRet;
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {
