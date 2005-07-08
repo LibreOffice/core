@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 12:57:47 $
+#   last change: $Author: obo $ $Date: 2005-07-08 10:31:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,12 @@ SRC1FILES =  \
         unotools.src \
         utlui.src
 
-SLOFILES =  \
+EXCEPTIONSFILES= \
+        $(SLO)$/unotools.obj	\
+        $(SLO)$/swrenamexnameddlg.obj \
+        $(SLO)$/sharedunocomponent.obj
+
+SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/bookctrl.obj \
         $(SLO)$/condedit.obj \
         $(SLO)$/content.obj \
@@ -102,14 +107,7 @@ SLOFILES =  \
         $(SLO)$/attrdesc.obj \
         $(SLO)$/swstbctl.obj \
         $(SLO)$/shdwcrsr.obj \
-        $(SLO)$/unotools.obj \
-        $(SLO)$/swrenamexnameddlg.obj	\
         $(SLO)$/zoomctrl.obj
-
-
-EXCEPTIONSFILES= \
-        $(SLO)$/unotools.obj	\
-        $(SLO)$/swrenamexnameddlg.obj	
 
 # --- Tagets -------------------------------------------------------
 
