@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:06:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,7 +1416,13 @@ BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom )
             pCnt->Calc();
             // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrm(..)>
             // to format the floating screen objects
-            if ( pCnt->IsTxtFrm() )
+            // --> OD 2005-05-03 #i46941# - frame has to be valid
+            // Note: frame could be invalid after calling its format, if it's locked.
+            ASSERT( !pCnt->IsTxtFrm() ||
+                    pCnt->IsValid() ||
+                    static_cast<SwTxtFrm*>(pCnt)->IsJoinLocked(),
+                    "<lcl_CalcLowers(..)> - text frame invalid and not locked." );
+            if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
             {
                 // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame to
                 // the object formatter
@@ -2441,8 +2447,14 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                     // table isn't lower of fly
                     !pFly->IsAnLower( this ) &&
                     // fly is lower of fly, the table is in
-                    ( !pMyFly ||
-                      pMyFly->IsAnLower( pFly ) ) &&
+                    // --> OD 2005-05-31 #123274# - correction:
+                    // assure that fly isn't a lower of a fly, the table isn't in.
+                    // E.g., a table in the body doesn't wrap around a graphic,
+                    // which is inside a frame.
+                    ( ( !pMyFly ||
+                        pMyFly->IsAnLower( pFly ) ) &&
+                      pMyFly == pFly->GetAnchorFrmContainingAnchPos()->FindFlyFrm() ) &&
+                    // <--
                     // anchor frame not on following page
                     pPage->GetPhyPageNum() >=
                       pFly->GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() &&
