@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 14:39:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,6 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
     if( pAutoAttr )
         SwCntntNode::SetAttr( *pAutoAttr );
 
-    const SfxPoolItem* pItem;
     if( GetNodes().IsDocNodes())
     {
         //pNdNum = new SwNodeNum( 0 );
@@ -2636,7 +2635,7 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
         {
             rFLOffset = pRule->Get( pNum->GetRealLevel() ).GetFirstLineOffset();
 
-            if (! GetDoc()->IsOldNumbering())
+            if (! GetDoc()->IgnoreFirstLineIndentInNumbering())
             {
                 SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
 
