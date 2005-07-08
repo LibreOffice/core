@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:01:43 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,9 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
     SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, TRUE, FALSE );
-    SwTableNode *pTblNd= pNode->FindTableNode();
+    // --> FME 2005-05-25 #123067# pNode = 0 can really happen:
+    SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
+    // <--
 
     //PageDesc besorgen (entweder vom FrmFmt des ersten Node oder den
     //initialen.)
