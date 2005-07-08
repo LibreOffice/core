@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:49:57 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,16 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     else
         DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
     return sal_False;
+}
+//------------------------------------------------------------------------------
+void SbaTableQueryBrowser::SelectionChanged()
+{
+    if ( !m_bShowMenu )
+    {
+        InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
+        InvalidateFeature(ID_BROWSER_INSERTCONTENT);
+        InvalidateFeature(ID_BROWSER_FORMLETTER);
+    }
 }
 //------------------------------------------------------------------------------
 void SbaTableQueryBrowser::describeSupportedFeatures()
