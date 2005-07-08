@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:12:38 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,8 +807,12 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             }
             else
             {
-                pHdFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo));
-                aHdUL.SetLower(0);
+                // --> OD 2005-05-20 #i48832# - set correct spacing between
+                // header and body.
+                const SwTwips nHdLowerSpace( Abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
+                pHdFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
+                aHdUL.SetLower( nHdLowerSpace );
+                // <--
                 pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
@@ -832,8 +836,12 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             }
             else
             {
-                pFtFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp));
-                aFtUL.SetUpper(0);
+                // --> OD 2005-05-20 #i48832# - set correct spacing between
+                // footer and body.
+                const SwTwips nFtUpperSpace( Abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
+                pFtFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
+                aFtUL.SetUpper( nFtUpperSpace );
+                // <--
                 pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
