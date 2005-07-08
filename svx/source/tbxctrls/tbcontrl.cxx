@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-01 13:04:36 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ protected:
     virtual void    GetFocus();
 
 public:
-    SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame );
+    SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
     ~SvxFrameWindow_Impl();
 
     void            StartSelection();
@@ -417,7 +417,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     void            CreateBitmaps( void );
 public:
-    SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame );
+    SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
     void                    StartSelection();
     virtual SfxPopupWindow* Clone() const;
@@ -1098,9 +1098,10 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           USHORT                     nSlotId,
                                           const Reference< XFrame >& rFrame,
-                                          const String&              rWndTitle ) :
+                                          const String&              rWndTitle,
+                                          Window*                    pParentWindow ) :
 
-    SfxPopupWindow( nSlotId, rFrame, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ) ),
+    SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ) ),
 
     theSlotId( nSlotId ),
     maCommand( rCommand ),
@@ -1194,7 +1195,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 {
-    return new SvxColorWindow_Impl( maCommand, theSlotId, GetFrame(), GetText() );
+    return new SvxColorWindow_Impl( maCommand, theSlotId, GetFrame(), GetText(), GetParent() );
 }
 
 // -----------------------------------------------------------------------
@@ -1320,9 +1321,9 @@ void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const 
 // class SvxFrameWindow_Impl --------------------------------------------------
 //========================================================================
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame ) :
+SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
-    SfxPopupWindow( nId, rFrame, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ) ),
+    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ) ),
     aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     bParagraphMode(sal_False)
 
@@ -1372,7 +1373,7 @@ SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
 {
     //! HACK: wie bekomme ich den Paragraph-Mode ??
-    return new SvxFrameWindow_Impl( GetId(), GetFrame() );
+    return new SvxFrameWindow_Impl( GetId(), GetFrame(), GetParent() );
 }
 
 Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
@@ -1598,9 +1599,9 @@ BOOL SvxFrameWindow_Impl::Close()
 // class SvxLineWindow_Impl --------------------------------------------------
 //========================================================================
 
-SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame ) :
+SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
-    SfxPopupWindow( nId, rFrame, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ) ),
+    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ) ),
 
     aLineSet( this, WinBits( WB_3DLOOK | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_NONEFIELD | WB_NO_DIRECTSELECT ) )
 {
@@ -1620,7 +1621,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& r
 
 SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 {
-    return new SvxLineWindow_Impl( GetId(), GetFrame() );
+    return new SvxLineWindow_Impl( GetId(), GetFrame(), GetParent() );
 }
 
 // -----------------------------------------------------------------------
@@ -2810,7 +2811,8 @@ SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" )),
                 SID_ATTR_CHAR_COLOR,
                 m_xFrame,
-                SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ));
+                SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
+                &GetToolBox() );
 
     pColorWin->StartPopupMode( &GetToolBox(),
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
@@ -2877,10 +2879,11 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     USHORT nResId = GetSlotId() == SID_BACKGROUND_COLOR ?
                         RID_SVXSTR_BACKGROUND : RID_SVXSTR_COLOR;
     SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-                                    OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BackgroundColor" )),
+        OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BackgroundColor" )),
                                     SID_BACKGROUND_COLOR,
                                     m_xFrame,
-                                    SVX_RESSTR(nResId));
+                                    SVX_RESSTR(nResId),
+                                    &GetToolBox() );
 
     pColorWin->StartPopupMode( &GetToolBox(),
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
@@ -2956,7 +2959,8 @@ SfxPopupWindow* SvxFontColorExtToolBoxControl::CreatePopupWindow()
                             m_aCommandURL,
                             GetSlotId(),
                             m_xFrame,
-                            SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ));
+                            SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
+                            &GetToolBox() );
 
     if ( GetSlotId() == SID_ATTR_CHAR_COLOR_BACKGROUND )
         pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND ) );
@@ -3056,7 +3060,7 @@ SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
 {
     SvxFrameWindow_Impl* pFrameWin = new SvxFrameWindow_Impl(
-                                        GetSlotId(), m_xFrame );
+                                        GetSlotId(), m_xFrame, &GetToolBox() );
 
     pFrameWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pFrameWin->StartSelection();
@@ -3107,7 +3111,7 @@ SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
-    SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame );
+    SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame, &GetToolBox() );
 
     pLineWin->StartPopupMode( &GetToolBox(), TRUE );
     pLineWin->StartSelection();
@@ -3170,7 +3174,8 @@ SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
                                         OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" )),
                                         SID_FRAME_LINECOLOR,
                                         m_xFrame,
-                                        SVX_RESSTR(RID_SVXSTR_FRAME_COLOR));
+                                        SVX_RESSTR(RID_SVXSTR_FRAME_COLOR),
+                                        &GetToolBox() );
 
     pColorWin->StartPopupMode( &GetToolBox(),
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
