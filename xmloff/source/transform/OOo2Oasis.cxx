@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:21:35 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,6 +986,18 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
+// --> OD 2005-06-10 #i50322#
+// OOO_BACKGROUND_IMAGE_ACTIONS for OpenOffice.org text documents
+// OpenOffice.org text documents, written by OpenOffice.org, contain
+// wrong value for the transparency of the background graphic
+static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
+{
+    ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY, XML_NAMESPACE_DRAW, XML_OPACITY ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+// <--
+
 // OOO_DDE_CONNECTION_DECL
 static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
 {
@@ -1773,8 +1785,13 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                         new XMLTransformerActions( aFrameAttrActionTable );
                     break;
                 case OOO_BACKGROUND_IMAGE_ACTIONS:
+                    // --> OD 2005-06-10 #i50322#
+                    // use special actions for Writer documents.
                     m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS] =
-                        new XMLTransformerActions( aBackgroundImageActionTable );
+                        isWriter()
+                        ? new XMLTransformerActions( aWriterBackgroundImageActionTable )
+                        : new XMLTransformerActions( aBackgroundImageActionTable );
+                    // <--
                     break;
                 case OOO_DDE_CONNECTION_DECL_ACTIONS:
                     m_aActions[OOO_DDE_CONNECTION_DECL_ACTIONS] =
