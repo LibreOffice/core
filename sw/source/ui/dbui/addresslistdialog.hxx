@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:09:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
+#ifndef SW_SHARED_UNO_COMPONENT_HXX
+#include "sharedunocomponent.hxx"
+#endif
 
 
 namespace com{namespace sun{namespace star{
@@ -152,8 +155,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>
                         GetSource();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
-                        GetConnection();
+    SharedConnection    GetConnection();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
                         GetColumnsSupplier();
