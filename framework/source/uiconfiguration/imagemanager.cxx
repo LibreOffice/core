@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-01 13:09:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,18 @@ sal_Bool ImageManager::implts_storeUserImages(
             catch ( ::com::sun::star::container::NoSuchElementException& )
             {
             }
+
+            uno::Reference< XTransactedObject > xTransaction;
+
+            // Commit user image storage
+            xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );
+            if ( xTransaction.is() )
+                xTransaction->commit();
+
+            // Commit user bitmaps storage
+            xTransaction = uno::Reference< XTransactedObject >( xUserBitmapsStorage, UNO_QUERY );
+            if ( xTransaction.is() )
+                xTransaction->commit();
 
             return sal_True;
         }
