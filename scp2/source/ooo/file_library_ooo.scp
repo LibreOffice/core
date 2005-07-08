@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.119 $
+*  $Revision: 1.120 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-07 13:43:22 $
+*  last change: $Author: obo $ $Date: 2005-07-08 09:35:34 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -629,7 +629,13 @@ End
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Filterconfig1, filterconfig1)
+File gid_File_Lib_Filterconfig1
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Dir = gid_Dir_Program;
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Name = SPECIAL_NAME(filterconfig1);
+End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Flat, flat)
 
