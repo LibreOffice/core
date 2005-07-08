@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:30:01 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     aArgs[3].Name = C2U("CommandType");
     aArgs[3].Value <<= rDBData.nCommandType;
     aArgs[4].Name = C2U("ActiveConnection");
-    aArgs[4].Value <<=  rConfigItem.GetConnection();
+    aArgs[4].Value <<=  rConfigItem.GetConnection().getTyped();
     aArgs[5].Name = C2U("Filter");
     aArgs[5].Value <<= rConfigItem.GetFilter();
     aArgs[6].Name = C2U("Cursor");
