@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:48:07 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException)
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         // is this a request for a context menu?
         if ( _rEvent.PopupTrigger )
         {
@@ -588,7 +589,7 @@ namespace svx
         }
 
         //....................................................................
-        bool lcl_determineReadOnly( const Reference< XControl >& _rxControl, const ::rtl::OUString  )
+        bool lcl_determineReadOnly( const Reference< XControl >& _rxControl )
         {
             bool bIsReadOnlyModel = true;
             try
@@ -635,6 +636,32 @@ namespace svx
 
             return pWindow;
         }
+
+        //....................................................................
+        bool lcl_isRichText( const Reference< XControl >& _rxControl )
+        {
+            if ( !_rxControl.is() )
+                return false;
+
+            bool bIsRichText = false;
+            try
+            {
+                Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY );
+                Reference< XPropertySetInfo > xPSI;
+                if ( xModelProps.is() )
+                    xPSI = xModelProps->getPropertySetInfo();
+                ::rtl::OUString sRichTextPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RichText" ) );
+                if ( xPSI.is() && xPSI->hasPropertyByName( sRichTextPropertyName ) )
+                {
+                    OSL_VERIFY( xModelProps->getPropertyValue( sRichTextPropertyName ) >>= bIsRichText );
+                }
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "lcl_isRichText: caught an exception!" );
+            }
+            return bIsRichText;
+        }
     }
 
     //------------------------------------------------------------------------
@@ -643,6 +670,7 @@ namespace svx
         ,m_rBindings( _pFrame->GetBindings() )
         ,m_bActiveControl( false )
         ,m_bActiveControlIsReadOnly( true )
+        ,m_bActiveControlIsRichText( false )
         ,m_bNeedClipboardInvalidation( true )
     {
         m_aClipboardInvalidation.SetTimeoutHdl( LINK( this, FmTextControlShell, OnInvalidateClipboard ) );
@@ -1119,7 +1147,7 @@ namespace svx
     //------------------------------------------------------------------------
     bool FmTextControlShell::IsActiveControl( bool _bCountRichTextOnly ) const
     {
-        if ( _bCountRichTextOnly && m_aControlFeatures.empty() )
+        if ( _bCountRichTextOnly && !m_bActiveControlIsRichText )
             return false;
 
 #ifdef DONT_REMEMBER_LAST_CONTROL
@@ -1270,6 +1298,7 @@ namespace svx
         m_xActiveControl.clear();
         m_xActiveTextComponent.clear();
         m_bActiveControlIsReadOnly = true;
+        m_bActiveControlIsRichText = false;
 
 #ifndef DONT_REMEMBER_LAST_CONTROL
         m_bActiveControl = false;
@@ -1322,17 +1351,19 @@ namespace svx
         // ask the control for dispatchers for our text-related slots
         fillFeatureDispatchers( _rxControl, pTextControlSlots, m_aControlFeatures );
 
-        // if we found at least one feature which is supported by the control, we also need context menu support
-        if ( !m_aControlFeatures.empty() )
+        // remember this control
+        m_xActiveControl = _rxControl;
+        m_xActiveTextComponent = m_xActiveTextComponent.query( _rxControl );
+        m_bActiveControlIsReadOnly = lcl_determineReadOnly( m_xActiveControl );
+        m_bActiveControlIsRichText = lcl_isRichText( m_xActiveControl );
+
+        // if we found a rich text control, we need context menu support
+        if ( m_bActiveControlIsRichText )
         {
             DBG_ASSERT( NULL == m_aContextMenuObserver.get(), "FmTextControlShell::controlActivated: already have an observer!" );
             m_aContextMenuObserver = MouseListenerAdapter( new FmMouseListenerAdapter( _rxControl, this ) );
         }
 
-        // remember this control
-        m_xActiveControl = _rxControl;
-        m_xActiveTextComponent = m_xActiveTextComponent.query( _rxControl );
-        m_bActiveControlIsReadOnly = lcl_determineReadOnly( m_xActiveControl, FM_PROP_READONLY );
         if ( m_xActiveTextComponent.is() )
         {
             DBG_TRACE( "FmTextControlShell::ClipBoard: starting timer for clipboard invalidation" );
