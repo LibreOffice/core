@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:35:44 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 #include "txtcfg.hxx"
@@ -237,7 +240,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     }
     else
     {
-        if ( !pNewInf->GetVsh()->IsOldNumbering() )
+        if ( !pNewInf->GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() )
         {
             // --> FME 2004-07-29 #i32267# Do not forget paragraph border
             // I'm quite sure this can be optimized. But how?
@@ -323,7 +326,8 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
         else
             nFirstLineOfs = nFLOfst;
 
-        if ( pFrm->IsRightToLeft() || !pNewInf->GetVsh()->IsOldNumbering() )
+        if ( pFrm->IsRightToLeft() ||
+            !pNewInf->GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() )
         {
             nFirst = nLeft + nFirstLineOfs;
         }
