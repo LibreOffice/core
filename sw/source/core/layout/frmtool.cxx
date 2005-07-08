@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-20 12:17:18 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,13 @@ SwFrmNotify::~SwFrmNotify()
         pFrm->SetCompletePaint();
 
         SwFrm* pNxt = pFrm->GetIndNext();
+        // --> OD 2005-05-20 #121888# - skip empty section frames
+        while ( pNxt &&
+                pNxt->IsSctFrm() && !static_cast<SwSectionFrm*>(pNxt)->GetSection() )
+        {
+            pNxt = pNxt->GetIndNext();
+        }
+        // <--
 
         if ( pNxt )
             pNxt->InvalidatePos();
