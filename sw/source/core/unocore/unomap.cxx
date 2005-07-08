@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 12:43:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
-                    { SW_PROP_NMID(UNO_NAME_BACK_COLOR_R_G_B), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},    \
+                    { SW_PROP_NMID(UNO_NAME_BACK_COLOR_R_G_B), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR_TRANSPARENCY), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE ,MID_BACK_COLOR_TRANSPARENCY},    \
                 //  { SW_PROP_NMID(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                CPPU_E2T(CPPUTYPE_OUSTRING),            PROPERTY_NONE ,MID_CHAIN_NEXTNAME},
                 //  { SW_PROP_NMID(UNO_NAME_CHAIN_PREV_NAME), RES_CHAIN,                CPPU_E2T(CPPUTYPE_OUSTRING),            PROPERTY_NONE ,MID_CHAIN_PREVNAME},
@@ -710,6 +710,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         CPPU_E2T(CPPUTYPE_GRAPHICLOC),          PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+                    // --> OD 2005-06-06 #i50322# - add missing map entry for transparency of graphic background
+                    { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_TRANSPARENCY), RES_BACKGROUND, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENCY},
+                    // <--
                     { SW_PROP_NMID(UNO_NAME_LEFT_MARGIN), RES_LR_SPACE,             CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_RIGHT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_HORI_ORIENT), RES_HORI_ORIENT,      CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
