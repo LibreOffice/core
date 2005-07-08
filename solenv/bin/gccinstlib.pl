@@ -3,11 +3,11 @@ eval 'exec perl -wS $0 ${1+"$@"}'
    if 0;
 #*************************************************************************
 #
-#   $RCSfile: gccinstlib.pl,v $
+#   gccinstlib.pl,v
 #
-#   $Revision: 1.5 $
+#   1.5
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:35:20 $
+#   last change: rt 2004/09/20 08:35:20
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,30 +65,22 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 $ENV{'LC_MESSAGES'} = 'C';
 
-%SearchDirs = GetGccSearchDirs ();
-
-$LibPaths = $SearchDirs{'libraries'} || die 'None or invalid output from \"gcc -print-search-dirs\".\n';
-
-@Paths = split(':', $LibPaths);
-
 $Dest = pop(@ARGV) || die "No destination to copy to";
+
+$cc = $ENV{'CC'} || die "No CC environment set";
 
 if ($Dest =~ /--help/ || @ARGV < 1) {
     print "Syntax:\n  gcc-instlib <library-in-libpath ...> <destination-dir>\n";
     exit (0);
 }
 foreach $File (@ARGV) {
-   my $found = 0;
-   foreach $Path (@Paths) {
-        if ( -e $Path.$File) {
-           push (@CopySrc, $Path.$File);
-           $found = 1;
-           last;
-        }
-   }
-   if (!$found) {
-           die "Couldn't find file $File in path\n";
-   }
+    my $string;
+
+    open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-file-name=$File|") || die "Failed to exec $cc -print-file-name=$File $!";
+    $string=<GCCOut>;
+    chomp ($string);
+    push (@CopySrc, $string);
+    close (GCCOut);
 }
 
 foreach $Src (@CopySrc) {
@@ -97,22 +89,3 @@ foreach $Src (@CopySrc) {
 }
 
 exit (0);
-
-sub GetGccSearchDirs {
-    my %Dirs = ();
-    my $cc;
-
-    $cc = $ENV{'CC'} || die "No CC environment set";
-
-    open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-search-dirs|") || die "Failed to exec $cc -print-search-dirs: $!";
-
-    while (<GCCOut>) {
-        if (/^([a-zA-Z]+): [=]{0,1}(.*)/) {
-            $Dirs{$1} = $2;
-        }
-    }
-
-    close (GCCOut);
-
-    return %Dirs;
-}
