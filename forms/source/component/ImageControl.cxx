@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:00:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
@@ -762,8 +765,8 @@ void OImageControlControl::implInsertGraphics()
 //------------------------------------------------------------------------------
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    //////////////////////////////////////////////////////////////////////
-    // Nur linke Maustaste
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     if (e.Buttons != MouseButton::LEFT)
         return;
 
