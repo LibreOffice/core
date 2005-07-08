@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:41:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class SwTxtPainter;
 class SwEditShell;
 class rtl::OUString;
 class MultiSelection;
+class SwTxtNode;
 
 
 /*
@@ -214,7 +215,11 @@ class SwEnhancedPDFExportHelper
     static FrmTagIdMap aFrmTagIdMap;
 
     void EnhancedPDFExport();
-    sal_Int32 CalcOutputPageNum( const SwRect& rRect );
+    sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
+
+    void MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
+                                const SwTxtNode& rTNd, const SwRect& rLinkRect,
+                                sal_Int32 nDestId, const String& rURL, bool bIntern ) const;
 
     public:
 
