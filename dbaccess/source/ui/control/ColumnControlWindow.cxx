@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnControlWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:56:28 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ void OColumnControlWindow::ActivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
-        case tpAutoIncrement:
+//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -130,7 +130,7 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
-        case tpAutoIncrement:
+//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -207,6 +207,8 @@ void OColumnControlWindow::setConnection(const Reference< XConnection>& _xCon)
         Init();
 
         ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aDestTypeInfo,m_aDestTypeInfoIndex);
+        // read autoincrement value set in the datasource
+        ::dbaui::fillAutoIncrementValue(m_xConnection,m_bAutoIncrementEnabled,m_sAutoIncrementValue);
     }
 }
 // -----------------------------------------------------------------------------
