@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-09 12:18:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,12 @@ bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
     }
     else if ( _pUpperOfOrientFrm->IsInTab() && _bGrowInTable )
     {
-        bVertPosFits = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
+        // --> OD 2005-06-08 #i45085# - check, if upper frame would grow the
+        // excepted amount of twips.
+        const SwTwips nTwipsGrown = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
                                         Grow( _nRelPosY - _nAvail, TRUE ) > 0;
+        bVertPosFits = ( nTwipsGrown == ( _nRelPosY - _nAvail ) );
+        // <--
         if ( bVertPosFits )
             _orpLayoutFrmToGrow = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm);
     }
