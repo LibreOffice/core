@@ -881,16 +881,12 @@ End
 
 #ifndef SYSTEM_MOZILLA
 
-#ifndef MACOSX
-
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
     Styles = (ARCHIVE);
     Dir = gid_Dir_Program;
     Name = "mozruntime.zip";
 End
-
-#endif
 
 #endif
 
