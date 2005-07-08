@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:15:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2203,9 +2203,7 @@ void SbaXDataBrowserController::ColumnChanged()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::SelectionChanged()
 {
-    InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
-    InvalidateFeature(ID_BROWSER_INSERTCONTENT);
-    InvalidateFeature(ID_BROWSER_FORMLETTER);
+    // not interested in
 }
 
 //------------------------------------------------------------------------------
