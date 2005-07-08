@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:53:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,8 +452,11 @@ void SwFlyAtCntFrm::MakeAll()
             SwOszControl aOszCntrl( this );
 
             // --> OD 2005-02-22 #i43255#
+            // --> OD 2005-06-07 #i50356# - format the anchor frame, which
+            // contains the anchor position. E.g., for at-character anchored
+            // object this can be the follow frame of the anchor frame.
             const bool bFormatAnchor =
-                    !static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked() &&
+                    !static_cast<const SwTxtFrm*>( GetAnchorFrmContainingAnchPos() )->IsAnyJoinLocked() &&
                     !ConsiderObjWrapInfluenceOnObjPos() &&
                     !ConsiderObjWrapInfluenceOfOtherObjs();
             // <--
@@ -465,10 +468,7 @@ void SwFlyAtCntFrm::MakeAll()
                 // If the anchor is located inside a section, we better calculate
                 // the section first:
                 lcl_CalcUpperSection( *AnchorFrm() );
-                GetAnchorFrm()->Calc();
-                // --> OD 2004-10-11 #i26945# - additionally format anchor frame
-                // containing the anchor position - typically it's the same as
-                // the anchor frame.
+                // --> OD 2005-06-07 #i50356#
                 GetAnchorFrmContainingAnchPos()->Calc();
                 // <--
             }
@@ -513,15 +513,12 @@ void SwFlyAtCntFrm::MakeAll()
                     // If the anchor is located inside a section, we better calculate
                     // the section first:
                     lcl_CalcUpperSection( *AnchorFrm() );
-                    GetAnchorFrm()->Calc();
-                    // --> OD 2004-10-11 #i26945# - additionally format anchor frame
-                    // containing the anchor position - typically it's the same as
-                    // the anchor frame.
+                    // --> OD 2005-06-07 #i50356#
                     GetAnchorFrmContainingAnchPos()->Calc();
                     // <--
                     // --> OD 2004-10-22 #i35911#
                     // --> OD 2005-01-14 #i40444#
-                    if ( GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() >
+                    if ( GetAnchorFrmContainingAnchPos()->FindPageFrm()->GetPhyPageNum() >
                                                 GetPageFrm()->GetPhyPageNum() )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
