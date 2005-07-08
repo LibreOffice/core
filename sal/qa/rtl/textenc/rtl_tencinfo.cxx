@@ -1803,12 +1803,66 @@ namespace rtl_tencinfo
     };
 }
 
+namespace {
+
+class TestEncodingFromUnix: public CppUnit::TestFixture {
+public:
+    void testIso8859() {
+        check(RTL_TEXTENCODING_DONTKNOW, "ISO8859");
+        check(RTL_TEXTENCODING_DONTKNOW, "ISO8859-0");
+        check(RTL_TEXTENCODING_DONTKNOW, "ISO8859-01");
+        check(RTL_TEXTENCODING_DONTKNOW, "ISO8859_1");
+        check(RTL_TEXTENCODING_DONTKNOW, "ISO88591");
+        check(RTL_TEXTENCODING_ISO_8859_1, "ISO8859-1");
+        check(RTL_TEXTENCODING_ISO_8859_2, "ISO8859-2");
+        check(RTL_TEXTENCODING_ISO_8859_3, "ISO8859-3");
+        check(RTL_TEXTENCODING_ISO_8859_4, "ISO8859-4");
+        check(RTL_TEXTENCODING_ISO_8859_5, "ISO8859-5");
+        check(RTL_TEXTENCODING_ISO_8859_6, "ISO8859-6");
+        check(RTL_TEXTENCODING_ISO_8859_7, "ISO8859-7");
+        check(RTL_TEXTENCODING_ISO_8859_8, "ISO8859-8");
+        check(RTL_TEXTENCODING_ISO_8859_9, "ISO8859-9");
+        check(RTL_TEXTENCODING_ISO_8859_10, "ISO8859-10");
+        check(RTL_TEXTENCODING_TIS_620, "ISO8859-11");
+        check(RTL_TEXTENCODING_ISO_8859_13, "ISO8859-13");
+        check(RTL_TEXTENCODING_ISO_8859_14, "ISO8859-14");
+        check(RTL_TEXTENCODING_ISO_8859_15, "ISO8859-15");
+    }
+
+    void testTis620() {
+        check(RTL_TEXTENCODING_DONTKNOW, "TIS620");
+        check(RTL_TEXTENCODING_TIS_620, "TIS620-0");
+        check(RTL_TEXTENCODING_DONTKNOW, "TIS620-1");
+        check(RTL_TEXTENCODING_DONTKNOW, "TIS620.2529-0");
+        check(RTL_TEXTENCODING_TIS_620, "TIS620.2529-1");
+        check(RTL_TEXTENCODING_DONTKNOW, "TIS620.2529-2");
+        check(RTL_TEXTENCODING_TIS_620, "TIS620.2533-0");
+        check(RTL_TEXTENCODING_TIS_620, "TIS620.2533-1");
+        check(RTL_TEXTENCODING_DONTKNOW, "TIS620.2533-2");
+    }
+
+    CPPUNIT_TEST_SUITE(TestEncodingFromUnix);
+    CPPUNIT_TEST(testIso8859);
+    CPPUNIT_TEST(testTis620);
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    void check(rtl_TextEncoding expected, char const * input) {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            input, expected, rtl_getTextEncodingFromUnixCharset(input));
+    }
+};
+
+}
+
 // -----------------------------------------------------------------------------
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_tencinfo::getBestMime,    "rtl_tencinfo" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_tencinfo::getBestUnix,    "rtl_tencinfo" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_tencinfo::getBestWindows, "rtl_tencinfo" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_tencinfo::getTextEncodingInfo, "rtl_tencinfo" );
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
+    TestEncodingFromUnix, "TestEncodingFromUnix");
 
 // -----------------------------------------------------------------------------
 
