@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:54:42 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,13 +505,16 @@ void DbGridColumn::Paint(OutputDevice& rDev,
                          const DbGridRow* pRow,
                          const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
+    bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
+                ||  ( static_cast< Window& >( rDev ).IsEnabled() );
+
     FmXDataCell* pDataCell = PTR_CAST(FmXDataCell, m_pCell);
     if (pDataCell)
     {
         if (!pRow || !pRow->IsValid())
         {
             sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
-            if (!((Window&)rDev).IsEnabled())
+            if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
             rDev.DrawText(rRect, INVALIDTEXT, nStyle);
@@ -520,7 +523,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
         {
             static String aAutoText(SVX_RES(RID_STR_AUTOFIELD));
             sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
-            if (!((Window&)rDev).IsEnabled())
+            if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
             switch (GetAlignment())
@@ -547,7 +550,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
         if (!pRow || !pRow->IsValid())
         {
             sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
-            if (!((Window&)rDev).IsEnabled())
+            if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
             rDev.DrawText(rRect, INVALIDTEXT, nStyle);
@@ -555,7 +558,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
         else if (pRow->HasField(m_nFieldPos) && m_bObject)
         {
             sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
-            if (!((Window&)rDev).IsEnabled())
+            if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
             rDev.DrawText(rRect, OBJECTTEXT, nStyle);
         }
@@ -3203,7 +3206,7 @@ void FmXTextCell::Paint(OutputDevice& rDev,
     }
 
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
-    if (!((Window&)rDev).IsEnabled())
+    if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !static_cast< Window& >( rDev ).IsEnabled() )
         nStyle |= TEXT_DRAW_DISABLE;
 
     switch (m_pColumn->GetAlignment())
