@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:58:48 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ struct DBAddressDataAssignment
         bColumnAssignmentsChanged(false)
         {}
 };
+
 /*-- 16.04.2004 09:43:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -186,7 +187,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 {
     friend class SwMailMergeConfigItem;
     Reference< XDataSource>                 xSource;
-    Reference< XConnection>                 xConnection;
+    SharedConnection                        xConnection;
     Reference< XColumnsSupplier>            xColumnsSupplier;
     Reference< XStatement>                  xStatement;
     Reference< XResultSet>                  xResultSet;
@@ -945,7 +946,7 @@ void SwMailMergeConfigItem::SetCountrySettings(sal_Bool bSet, const rtl::OUStrin
   -----------------------------------------------------------------------*/
 void SwMailMergeConfigItem::SetCurrentConnection(
         Reference< XDataSource>       xSource,
-        Reference< XConnection>       xConnection,
+        SharedConnection              xConnection,
         Reference< XColumnsSupplier>  xColumnsSupplier,
         const SwDBData& rDBData)
 {
@@ -967,7 +968,7 @@ Reference< XDataSource>  SwMailMergeConfigItem::GetSource()
 /*-- 28.04.2004 15:38:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XConnection>  SwMailMergeConfigItem::GetConnection()
+SharedConnection SwMailMergeConfigItem::GetConnection()
 {
     return m_pImpl->xConnection;
 }
@@ -1001,7 +1002,7 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
     if(m_pImpl->aDBData != rDBData)
     {
         m_pImpl->aDBData = rDBData;
-        m_pImpl->xConnection = 0;
+        m_pImpl->xConnection.clear();
         m_pImpl->xSource = 0;
         m_pImpl->xColumnsSupplier = 0;
         m_pImpl->SetModified();
@@ -1014,8 +1015,8 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet()
 {
     if(!m_pImpl->xConnection.is() && m_pImpl->aDBData.sDataSource.getLength())
     {
-        m_pImpl->xConnection = SwNewDBMgr::GetConnection(
-                                    m_pImpl->aDBData.sDataSource, m_pImpl->xSource);
+        m_pImpl->xConnection = SharedConnection( SwNewDBMgr::GetConnection(
+                                    m_pImpl->aDBData.sDataSource, m_pImpl->xSource), true );
     }
     if(!m_pImpl->xResultSet.is() && m_pImpl->xConnection.is())
     {
@@ -1031,7 +1032,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet()
                 xRowProperties->setPropertyValue(C2U("Command"), makeAny(m_pImpl->aDBData.sCommand));
                 xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(m_pImpl->aDBData.nCommandType));
                 xRowProperties->setPropertyValue(C2U("FetchSize"), makeAny((sal_Int32)10));
-                xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(m_pImpl->xConnection));
+                xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(m_pImpl->xConnection.getTyped()));
                 if(m_pImpl->sFilter.getLength())
                 {
                     try
