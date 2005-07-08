@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:07:04 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,10 +807,11 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
 IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    if(pListBox->GetSavedValue() == pListBox->GetSelectEntryPos() || !pActFieldDescr)
+    if ( !pActFieldDescr )
         return 0;
 
-    SetModified(sal_True);
+    if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
+        SetModified(sal_True);
 
     // Sonderbehandlund f"ur Bool Felder
     if(pListBox == pRequired && pBoolDefault )
@@ -836,7 +837,6 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     // nur fuer AutoIncrement eine Sonderbehandlung
     if (pListBox == pAutoIncrement)
     {
-        pListBox->SaveValue();
         if(pListBox->GetSelectEntryPos() == 1)
         { // no
             DeactivateAggregate( tpAutoIncrementValue );
@@ -867,7 +867,6 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 
     if(pListBox == m_pType)
     {
-        pListBox->SaveValue();
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); // SetType(pTypeInfo);
         if ( pTypeInfo.get() )
@@ -896,6 +895,7 @@ void OFieldDescControl::ArrangeAggregates()
         { m_pColumnName, m_pColumnNameText, 1},
         { m_pType, m_pTypeText, 1},
         { pAutoIncrement, pAutoIncrementText, 1 },
+        { m_pAutoIncrementValue, m_pAutoIncrementValueText, 3 },
         { pNumType, pNumTypeText, 1 },
         { pRequired, pRequiredText, 1 },
         { pTextLen, pTextLenText, 1 },
@@ -904,7 +904,6 @@ void OFieldDescControl::ArrangeAggregates()
         { pDefault, pDefaultText, 3 },
         { pFormatSample, pFormatText, 4 },
         { pBoolDefault, pBoolDefaultText, 1 },
-        { m_pAutoIncrementValue, m_pAutoIncrementValueText, 3 },
     };
 
     long nMaxWidth = 0;
@@ -1087,7 +1086,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_pTypeText->SetText( ModuleRes(STR_TAB_FIELD_DATATYPE) );
         m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PRPOERTY_TYPE, WB_DROPDOWN );
         m_pType->SetHelpId(HID_TAB_ENT_TYPE);
-        m_pType->SetDropDownLineCount(5);
+        m_pType->SetDropDownLineCount(20);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
@@ -1705,6 +1704,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if ( pFieldDescr->IsAutoIncrement() )
         {
             pAutoIncrement->SelectEntryPos( 0 ); // yes
+            ActivateAggregate( tpAutoIncrementValue );
             if ( m_pAutoIncrementValue )
                 m_pAutoIncrementValue->SetText(pFieldDescr->GetAutoIncrementValue());
             DeactivateAggregate( tpRequired );
@@ -1839,27 +1839,35 @@ IMPL_LINK(OFieldDescControl, DelayedGrabFocus, Control**, ppControl)
 IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
 {
     String strHelpText;
-    if ((pControl == pLength) || (pControl == pScale) || (pControl == pTextLen))
+    OPropNumericEditCtrl* pNumeric = dynamic_cast< OPropNumericEditCtrl* >( pControl );
+    if ( pNumeric )
     {
-        ((OPropNumericEditCtrl*)pControl)->SaveValue();
-        strHelpText  =((OPropNumericEditCtrl*)pControl)->GetHelp();
+        pNumeric->SaveValue();
+        strHelpText = pNumeric->GetHelp();
     }
-    if(pControl == m_pColumnName)
+
+    OPropColumnEditCtrl* pColumn = dynamic_cast< OPropColumnEditCtrl* >( pControl );
+    if ( pColumn )
     {
-        ((OPropColumnEditCtrl*)pControl)->SaveValue();
-        strHelpText  =((OPropColumnEditCtrl*)pControl)->GetHelp();
+        pColumn->SaveValue();
+        strHelpText = pColumn->GetHelp();
     }
-    else if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pAutoIncrementValue) )
+
+    OPropEditCtrl* pEdit = dynamic_cast< OPropEditCtrl* >( pControl );
+    if ( pEdit )
     {
-        ((OPropEditCtrl*)pControl)->SaveValue();
-        strHelpText  =((OPropEditCtrl*)pControl)->GetHelp();
+        pEdit->SaveValue();
+        strHelpText = pEdit->GetHelp();
     }
-    else if ((pControl == pRequired) || (pControl == pNumType) || (pControl == pAutoIncrement) || (pControl == pBoolDefault) || (pControl == m_pType))
+
+    OPropListBoxCtrl* pListBox = dynamic_cast< OPropListBoxCtrl* >( pControl );
+    if ( pListBox )
     {
-        ((OPropListBoxCtrl*)pControl)->SaveValue();
-        strHelpText  =((OPropListBoxCtrl*)pControl)->GetHelp();
+        pListBox->SaveValue();
+        strHelpText = pListBox->GetHelp();
     }
-    else if (pControl == pFormat)
+
+    if (pControl == pFormat)
         strHelpText  =String(ModuleRes(STR_HELP_FORMAT_BUTTON));
 
     if (strHelpText.Len() && (pHelp != NULL))
