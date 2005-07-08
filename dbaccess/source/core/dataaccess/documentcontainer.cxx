@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:47:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,9 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 aCommand.Argument <<= aIni;
 
                 xCopyFrom->execute(aCommand,-1,Reference< XCommandEnvironment >());
+                Reference<XPropertySet> xProp(xCopyFrom,UNO_QUERY);
+                if ( xProp.is() && xProp->getPropertySetInfo().is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_AS_TEMPLATE) )
+                    xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
             }
         }
 
@@ -663,8 +666,9 @@ Reference< XStorage> ODocumentContainer::getStorage() const
 {
     static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
     static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    Reference<XTransactionListener> xEvt(m_pImpl->m_pDataSource->m_xModel,UNO_QUERY);
-    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bFormsContainer ? s_sForms : s_sReports,xEvt) : Reference< XStorage>();
+    return  m_pImpl->m_pDataSource
+        ?   m_pImpl->m_pDataSource->getStorage( m_bFormsContainer ? s_sForms : s_sReports )
+        :   Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
