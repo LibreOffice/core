@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectdbtabledialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:20:50 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ class SwSelectDBTableDialog : public SfxModalDialog
     String          m_sTable;
     String          m_sQuery;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rxConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> m_xConnection;
 
     DECL_LINK(PreviewHdl, PushButton*);
 public:
 
     SwSelectDBTableDialog(Window* pParent,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rxConnection
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection
             );
     ~SwSelectDBTableDialog();
 
