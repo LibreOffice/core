@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:29:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,34 @@ SvxLineEndWindow::SvxLineEndWindow(
     mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
+    SetText( rWndTitle );
+    implInit();
+}
+
+SvxLineEndWindow::SvxLineEndWindow(
+    USHORT nSlotId,
+    const Reference< XFrame >& rFrame,
+    Window* pParentWindow,
+    const String& rWndTitle ) :
+    SfxPopupWindow( nSlotId,
+                    rFrame,
+                    pParentWindow,
+                    WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
+    pLineEndList    ( NULL ),
+    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    nCols           ( 2 ),
+    nLines          ( 12 ),
+    nLineEndWidth   ( 400 ),
+    bPopupMode      ( TRUE ),
+    mbInResize      ( false ),
+    mxFrame         ( rFrame )
+{
+    SetText( rWndTitle );
+    implInit();
+}
+
+void SvxLineEndWindow::implInit()
+{
     SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
     const SfxPoolItem*  pItem   = NULL;
 
@@ -459,7 +487,6 @@ SvxLineEndWindow::SvxLineEndWindow(
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineEndListState" )));
 
     //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
-    SetText( rWndTitle );
     aLineEndSet.Show();
 }
 
@@ -778,7 +805,7 @@ SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
-        new SvxLineEndWindow( GetId(), m_xFrame, SVX_RESSTR( RID_SVXSTR_LINEEND ) );
+        new SvxLineEndWindow( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
     pLineEndWin->StartPopupMode( &GetToolBox(), TRUE );
     pLineEndWin->StartSelection();
     SetPopupWindow( pLineEndWin );
