@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:34:36 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,9 @@ protected:
         const rtl::OUString& user, const rtl::OUString& password
         );
 
+    /// see the implementation for an explanation for the method's name ...
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        getModelWithPossibleLeak();
 
 // other stuff
     void    flushTables();
