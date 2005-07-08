@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:45:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,6 @@ void* lcl_GetKey( const SwFrm& rFrm )
 
     return pKey;
 }
-
 
 /*
  * SwTaggedPDFHelper::SwTaggedPDFHelper()
@@ -1325,6 +1324,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     if ( !bIntern || -1 != nDestId )
                     {
+                        // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                        const SwPosition aPos( *pTNd );
+                        const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
+                        // <--
+
                         // Create links for all selected rectangles:
                         const USHORT nNumOfRects = aTmp.Count();
                         for ( int i = 0; i < nNumOfRects; ++i )
@@ -1350,6 +1354,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                     pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
                                 else
                                     pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
+
+                                // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                                if ( bHeaderFooter )
+                                    MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bIntern );
+                                // <--
                             }
                         }
                     }
@@ -1411,6 +1420,20 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
                         else
                             pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
+
+                        // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                        const SwFmtAnchor &rAnch = pFrmFmt->GetAnchor();
+                        if ( FLY_PAGE != rAnch.GetAnchorId() )
+                        {
+                            const SwPosition* pPosition = rAnch.GetCntntAnchor();
+                            if ( pPosition && pDoc->IsInHeaderFooter( pPosition->nNode ) )
+                            {
+                                const SwTxtNode* pTNd = pPosition->nNode.GetNode().GetTxtNode();
+                                if ( pTNd )
+                                    MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern );
+                            }
+                        }
+                        // <--
                     }
                 }
             }
@@ -1465,6 +1488,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         // Destination Export
                         const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
+                        // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                        const SwPosition aPos( *pTNd );
+                        const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
+                        // <--
+
                         // Create links for all selected rectangles:
                         const USHORT nNumOfRects = aTmp.Count();
                         for ( int i = 0; i < nNumOfRects; ++i )
@@ -1487,6 +1515,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                                 // Connect Link and Destination:
                                 pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+
+                                // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                                if ( bHeaderFooter )
+                                {
+                                    const String aDummy;
+                                    MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aDummy, true );
+                                }
+                                // <--
                             }
                         }
                     }
@@ -1670,7 +1706,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 /*
  * SwEnhancedPDFExportHelper::CalcOutputPageNum()
  */
-sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect )
+sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) const
 {
     // Document page numbers are 0, 1, 2, ...
     const sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
@@ -1702,3 +1738,52 @@ sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect )
     // pdf export page numbers are 0, 1, 2, ...
     return nOutputPageNum;
 }
+
+void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
+                                                       const SwTxtNode& rTNd,
+                                                       const SwRect& rLinkRect,
+                                                       sal_Int32 nDestId,
+                                                       const String& rURL,
+                                                       bool bIntern ) const
+{
+    // We assume, that the primary link has just been exported. Therefore
+    // the offset of the link rectangle calculates as follows:
+    const Point aOffset = rLinkRect.Pos() + mrOut.GetMapMode().GetOrigin();
+
+    SwClientIter aClientIter( const_cast<SwTxtNode&>(rTNd) );
+    SwClient* pLast = aClientIter.GoStart();
+
+    while( pLast )
+    {
+        if ( pLast->ISA( SwTxtFrm ) )
+        {
+            // Add offset to current page:
+            SwTxtFrm* pTmpFrm = static_cast<SwTxtFrm*>(pLast);
+            const SwPageFrm* pPageFrm = pTmpFrm->FindPageFrm();
+            SwRect aHFLinkRect( rLinkRect );
+            aHFLinkRect.Pos() = pPageFrm->Frm().Pos() + aOffset;
+
+            if ( aHFLinkRect != rLinkRect )
+            {
+                // Link PageNum
+                const sal_Int32 nHFLinkPageNum = CalcOutputPageNum( aHFLinkRect );
+
+                if ( -1 != nHFLinkPageNum )
+                {
+                    // Link Export
+                    const sal_Int32 nHFLinkId =
+                        rPDFExtOutDevData.CreateLink( aHFLinkRect.SVRect(), nHFLinkPageNum );
+
+                    // Connect Link and Destination:
+                    if ( bIntern )
+                        rPDFExtOutDevData.SetLinkDest( nHFLinkId, nDestId );
+                    else
+                        rPDFExtOutDevData.SetLinkURL( nHFLinkId, rURL );
+                }
+            }
+        }
+
+        pLast = ++aClientIter;
+    }
+}
+
