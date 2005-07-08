@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:27:21 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,10 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CHANGES_PASSWORD,
     // --> OD 2004-07-08 #i28701#
     HANDLE_CONSIDER_WRAP_ON_OBJPOS,
+    // --> FME 2005-05-27 #i47448#
+    HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,
+    // --> FME 2005-06-08 #i49277#
+    HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,
     // --> PB 2004-08-20 #i33095#
     HANDLE_LOAD_READONLY
     // <--
@@ -236,6 +240,10 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                CPPUTYPE_SEQINT8,           0,   0},
         // --> OD 2004-07-08 #i28701#
         { RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         CPPUTYPE_BOOLEAN,           0,   0},
+        // --> FME 2005-05 -27 #i47448#
+        { RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         CPPUTYPE_BOOLEAN,           0,   0},
+        // --> FME 2005-06-08 #i49277#
+        { RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> PB 2004-08-20 #i33095#
         { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
         // <--
@@ -649,6 +657,20 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetConsiderWrapOnObjPos( bTmp );
         }
         break;
+        // --> FME 2005-05-27 #i47448#
+        case HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetIgnoreFirstLineIndentInNumbering( bTmp );
+        }
+        break;
+        // --> FME 2005-06-08 #i49277#
+        case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetDoNotJustifyLinesWithManualBreak( bTmp );
+        }
+        break;
         // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
@@ -887,6 +909,20 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
         {
             sal_Bool bTmp = mpDoc->ConsiderWrapOnObjPos();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // --> FME 2005-05-27 #i47448#
+        case HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
+        {
+            sal_Bool bTmp = mpDoc->IgnoreFirstLineIndentInNumbering();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // --> FME 2005-06-08 #i49277#
+        case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
+        {
+            sal_Bool bTmp = mpDoc->DoNotJustifyLinesWithManualBreak();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
