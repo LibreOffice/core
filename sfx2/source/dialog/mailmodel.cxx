@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-21 11:44:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,8 +286,11 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         sal_Bool bHasFilter = pFilter ? sal_True : sal_False;
         if ( !pFilter )
         {
-            SfxFilterMatcher aMatcher( String::CreateFromAscii(xDocShell->GetFactory().GetShortName()) );
-            pFilter = aMatcher.GetAnyFilter( SFX_FILTER_EXPORT );
+            pFilter = SfxFilterContainer::GetDefaultFilter_Impl( String::CreateFromAscii(
+                            xDocShell->GetFactory().GetShortName()) );
+
+            if ( !pFilter )
+                return SAVE_ERROR;
         }
 
         // create temp file name with leading chars and extension
