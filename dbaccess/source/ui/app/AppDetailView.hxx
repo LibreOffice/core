@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:44:54 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,11 +128,14 @@ namespace dbaui
         virtual void GetFocus();
         virtual void LoseFocus();
 
+        inline void resetLastActive() { m_pLastActiveEntry = NULL;}
+
         void    updateHelpText();
 
     protected:
         virtual void        PreparePaint( SvLBoxEntry* _pEntry );
         virtual Rectangle   GetFocusRect( SvLBoxEntry* _pEntry, long _nLine );
+        virtual void        ModelHasCleared();
 
     private:
         void    onSelected( SvLBoxEntry* _pEntry ) const;
