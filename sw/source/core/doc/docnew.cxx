@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:46:21 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,18 +387,25 @@ SwDoc::SwDoc() :
     bInsOnlyTxtGlssry =
     bContains_MSVBasic =
     bKernAsianPunctuation =
-    bOldNumbering =
 #ifndef PRODUCT
     bXMLExport =
 #endif
+
     //
     // COMPATIBILITY FLAGS START
     //
-    bOldNumbering                   =
-    bOldLineSpacing                 =
-    bAddParaSpacingToTableCells     =
-    bUseFormerObjectPos             =
-    bUseFormerTextWrapping          =
+    // Note: Any non-hidden compatibility flag should obtain its default
+    // by asking SvtCompatibilityOptions, see below.
+    //
+    bOldLineSpacing                     =
+    bAddParaSpacingToTableCells         =
+    bUseFormerObjectPos                 =
+    bUseFormerTextWrapping              =
+    mbConsiderWrapOnObjPos              =
+    bOldNumbering                       =
+    bIgnoreFirstLineIndentInNumbering   =
+    bDoNotJustifyLinesWithManualBreak   =
+
     //
     // COMPATIBILITY FLAGS END
     //
@@ -490,14 +497,13 @@ SwDoc::SwDoc() :
     SvtCompatibilityOptions aOptions;
     SetTabCompat( !aOptions.IsUseOurTabStops() );
     SetAddExtLeading( !aOptions.IsNoExtLeading() );
-    short nUseVirtualDev = aOptions.IsUsePrtDevice()
-        ? PrinterIndependentLayout::DISABLED
-        : PrinterIndependentLayout::HIGH_RESOLUTION;
+    const short nUseVirtualDev = aOptions.IsUsePrtDevice() ?
+                                 PrinterIndependentLayout::DISABLED :
+                                 PrinterIndependentLayout::HIGH_RESOLUTION;
     _SetUseVirtualDevice( nUseVirtualDev );
     SetParaSpaceMax( aOptions.IsAddSpacing(), aOptions.IsAddSpacingAtPages() );
     SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
     SetUseFormerLineSpacing( aOptions.IsUseLineSpacing() );
-    SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
     SetUseFormerObjectPositioning( aOptions.IsUseObjectPositioning() );
     SetUseFormerTextWrapping( aOptions.IsUseOurTextWrapping() );
     SetConsiderWrapOnObjPos( aOptions.IsConsiderWrappingStyle() );
