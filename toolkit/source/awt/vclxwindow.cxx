@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-31 13:24:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,12 +155,35 @@
 #ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
 #include <comphelper/asyncnotification.hxx>
 #endif
+#ifndef TOOLKIT_INC_TOOLKIT_HELPER_SOLARRELEASE_HXX
+#include <toolkit/helper/solarrelease.hxx>
+#endif
 
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
+
+//#define SYNCHRON_NOTIFICATION
+    // define this for notifying mouse events synchronously when they happen
+    // disadvantage: potential of deadlocks, since this means that the
+    // SolarMutex is locked when the listener is called
+    // See http://www.openoffice.org/issues/show_bug.cgi?id=40583 for an example
+    // deadlock
+//#define THREADED_NOTIFICATION
+    // define this for notifying mouse events asynchronously, in a dedicated thread
+    // This is what I'd like to use. However, there's some Windows API code
+    // which doesn't like being called in the non-main thread, and we didn't
+    // find out which one :(
+    // See http://www.openoffice.org/issues/show_bug.cgi?id=47502 for an example
+    // of a bug triggered by asynchronous notification in a foreign thread
+
+// If none of the above is defined, then mouse events are notified asynchronously
+// in the main thread, using PostUserEvent.
+// disadvantage: The event we're posting is delayed until the next event
+// reschedule. Normally, this is virtually immediately, but there's no guarantee
+// ....
 
 //====================================================================
 //= VCLXWindowImpl
@@ -175,13 +198,22 @@ class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
 private:
     typedef ::comphelper::EventObjectHolder< ::com::sun::star::awt::MouseEvent >
         MouseEventType;
+    typedef ::std::vector< ::rtl::Reference< ::comphelper::EventDescription > >
+        EventArray;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
         ComponentReference;
 
 private:
     VCLXWindow&                         mrAntiImpl;
     ::vos::IMutex&                      mrMutex;
+#ifdef THREADED_NOTIFICATION
     ::comphelper::AsyncEventNotifier*   mpAsyncNotifier;
+#else
+#if !defined( SYNCHRON_NOTIFICATION )
+    EventArray                          maEvents;
+    sal_Int32                           mnEventId;
+#endif
+#endif
 
 public:
     /** ctor
@@ -203,13 +235,24 @@ protected:
     // IEventProcessor
     virtual void processEvent( const ::comphelper::EventDescription& _rEvent );
     virtual ComponentReference getComponent();
+
+#if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
+private:
+    DECL_LINK( OnProcessEvent, void* );
+#endif
 };
 
 //--------------------------------------------------------------------
 VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
     :mrAntiImpl( _rAntiImpl )
     ,mrMutex( _rMutex )
+#ifdef THREADED_NOTIFICATION
     ,mpAsyncNotifier( NULL )
+#else
+#ifndef SYNCHRON_NOTIFICATION
+    ,mnEventId( 0 )
+#endif
+#endif
 {
 }
 
@@ -217,28 +260,81 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
 void VCLXWindowImpl::disposing()
 {
     ::vos::OGuard aGuard( mrMutex );
+#ifdef THREADED_NOTIFICATION
     if ( mpAsyncNotifier )
     {
         mpAsyncNotifier->release();
         mpAsyncNotifier = NULL;
     }
+#else
+#ifndef SYNCHRON_NOTIFICATION
+    if ( mnEventId )
+        Application::RemoveUserEvent( mnEventId );
+    mnEventId = 0;
+#endif
+#endif
 }
 
 //--------------------------------------------------------------------
 void VCLXWindowImpl::notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rMouseEvent, sal_uInt16 _nType )
 {
-    ::vos::OGuard aGuard( mrMutex );
+    ::vos::OClearableGuard aGuard( mrMutex );
     if ( mrAntiImpl.GetMouseListeners().getLength() )
     {
+        ::rtl::Reference< ::comphelper::EventDescription > aEvent( new MouseEventType( _rMouseEvent, _nType ) );
+#ifdef THREADED_NOTIFICATION
         if ( !mpAsyncNotifier )
         {
             mpAsyncNotifier = new ::comphelper::AsyncEventNotifier( this );
             mpAsyncNotifier->acquire();
             mpAsyncNotifier->create();
         }
-        mpAsyncNotifier->addEvent( new MouseEventType( _rMouseEvent, _nType ) );
+        mpAsyncNotifier->addEvent( aEvent );
+#else
+    #ifdef SYNCHRON_NOTIFICATION
+        aGuard.clear();
+        processEvent( *aEvent );
+    #else
+        maEvents.push_back( aEvent );
+        if ( !mnEventId )
+            mnEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessEvent ) );
+    #endif
+#endif
     }
 }
+
+#if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
+//--------------------------------------------------------------------
+IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, NOINTERESTEDIN )
+{
+    // work on a copy of the events array
+    EventArray aEventsCopy;
+    {
+        ::vos::OGuard aGuard( mrMutex );
+        aEventsCopy = maEvents;
+        maEvents.clear();
+
+        if ( !mnEventId )
+            // we were disposed while waiting for the mutex to lock
+            return 1L;
+
+        mnEventId = 0;
+    }
+
+    {
+        ::toolkit::ReleaseSolarMutex aReleaseSolar;
+        for (   EventArray::const_iterator loop = aEventsCopy.begin();
+                loop != aEventsCopy.end();
+                ++loop
+            )
+        {
+            processEvent( *(*loop) );
+        }
+    }
+
+    return 0L;
+}
+#endif
 
 //--------------------------------------------------------------------
 void VCLXWindowImpl::processEvent( const ::comphelper::EventDescription& _rEvent )
