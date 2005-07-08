@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 14:54:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ private:
     DECL_LINK( SelectHdl, void * );
     void            FillValueSet();
     void            SetSize();
+    void            implInit();
 
 protected:
     virtual void    Resizing( Size& rSize );
@@ -177,6 +178,10 @@ protected:
 public:
     SvxLineEndWindow( USHORT nId,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                      const String& rWndTitle );
+    SvxLineEndWindow( USHORT nId,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                      Window* pParentWindow,
                       const String& rWndTitle );
     ~SvxLineEndWindow();
 
