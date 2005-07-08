@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:38:53 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #ifndef _COMPHELPER_BASIC_IO_HXX_
 #include <comphelper/basicio.hxx>
@@ -82,6 +88,7 @@
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -89,7 +96,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -266,10 +272,10 @@ OImageButtonControl::OImageButtonControl(const Reference<XMultiServiceFactory>& 
     increment(m_refCount);
     {
         // als MouseListener anmelden
-        Reference<XWindow>  xComp;
+        Reference< awt::XWindow >  xComp;
         query_aggregation( m_xAggregate, xComp);
         if (xComp.is())
-            xComp->addMouseListener((XMouseListener*)this);
+            xComp->addMouseListener( static_cast< awt::XMouseListener* >( this ) );
     }
     decrement(m_refCount);
 }
@@ -286,11 +292,11 @@ Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (Ru
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonControl::mousePressed(const MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    //////////////////////////////////////////////////////////////////////
-    // Nur linke Maustaste
-    if (e.Buttons != MouseButton::LEFT)
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    if (e.Buttons != awt::MouseButton::LEFT)
         return;
 
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
