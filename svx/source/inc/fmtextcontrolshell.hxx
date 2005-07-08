@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:50:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ namespace svx
             // is really focused
 #endif
         bool                                                                        m_bActiveControlIsReadOnly;
+        bool                                                                        m_bActiveControlIsRichText;
 
         // listening at all controls of the active controller for focus changes
         typedef ::comphelper::ImplementationReference< FmFocusListenerAdapter, ::com::sun::star::awt::XFocusListener >
