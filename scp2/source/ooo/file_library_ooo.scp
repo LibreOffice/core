@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.120 $
+*  $Revision: 1.121 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-08 09:35:34 $
+*  last change: $Author: obo $ $Date: 2005-07-08 09:50:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -770,7 +770,7 @@ End
 
 File gid_File_Lib_Gcc2_Uno
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = STRING(CONCAT4(lib,COMNAME,_uno,UNXSUFFIX));
     Dir = gid_Dir_Program;
 End
