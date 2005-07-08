@@ -2,9 +2,9 @@
  *
  *  $RCSfile: group.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:19:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,11 @@ void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         pDev->DrawLine( Point( rPos.X(), rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ) );
         pDev->DrawLine( Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, nTop ) );
 
-        if ( !(nDrawFlags & WINDOW_DRAW_MONO) )
+        bool bIsPrinter = OUTDEV_PRINTER == pDev->GetOutDevType();
+        // if we're drawing onto a printer, spare the 3D effect
+        // #i46986# / 2005-04-13 / frank.schoenheit@sun.com
+
+        if ( !bIsPrinter && !(nDrawFlags & WINDOW_DRAW_MONO) )
         {
             pDev->SetLineColor( rStyleSettings.GetLightColor() );
             if ( !aText.Len() )
