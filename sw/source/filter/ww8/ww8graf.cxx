@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:28:21 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2242,7 +2242,10 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
             Fraction aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
             aPoly.Scale(aMapPolyX, aMapPolyY);
 
-            pNd->SetContourAPI(&aPoly);
+            // --> OD 2005-05-19 #i47277# - contour is already in unit of the
+            // graphic prefered unit. Thus, call method <SetContour(..)>
+            pNd->SetContour(&aPoly);
+            // <--
         }
     }
 }
