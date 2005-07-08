@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:44:39 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,13 @@ void OCreationList::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     // since I don't overlook the consequences, and we're close to 2.0 ...)
 }
 // -----------------------------------------------------------------------------
+void OCreationList::ModelHasCleared()
+{
+    SvTreeListBox::ModelHasCleared();
+    m_pLastActiveEntry = NULL;
+    m_pMouseDownEntry = NULL;
+}
+// -----------------------------------------------------------------------------
 void OCreationList::GetFocus()
 {
     SvTreeListBox::GetFocus();
@@ -347,7 +354,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
     {
         if ( rCode.GetCode() == KEY_RETURN )
         {
-            SvLBoxEntry* pEntry = FirstSelected();
+            SvLBoxEntry* pEntry = GetCurEntry() ? GetCurEntry() : FirstSelected();
             if ( pEntry )
                 onSelected( pEntry );
             return;
@@ -487,6 +494,7 @@ void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
 void OTasksWindow::Clear()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
+    m_aCreation.resetLastActive();
     SvLBoxEntry* pEntry = m_aCreation.First();
     while ( pEntry )
     {
