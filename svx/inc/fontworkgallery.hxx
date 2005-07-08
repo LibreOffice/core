@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 14:37:39 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ private:
     DECL_LINK( SelectHdl, void * );
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
+    void    implInit();
 
 protected:
     virtual BOOL    Close();
@@ -140,6 +141,9 @@ protected:
 public:
     FontWorkAlignmentWindow( USHORT nId,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    FontWorkAlignmentWindow( USHORT nId,
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                             Window* pParentWindow );
     ~FontWorkAlignmentWindow();
 
     void            StartSelection();
@@ -178,6 +182,7 @@ private:
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
+    void    implInit();
 
 protected:
     virtual BOOL    Close();
@@ -192,6 +197,9 @@ protected:
 public:
     FontWorkCharacterSpacingWindow( USHORT nId,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    FontWorkCharacterSpacingWindow( USHORT nId,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                            Window* pParentWindow );
     ~FontWorkCharacterSpacingWindow();
 
     void            StartSelection();
