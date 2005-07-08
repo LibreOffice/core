@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:45:35 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,8 +512,13 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
             CommandCollector( nFeat, aFeatureCommands )
         );
 
-        DispatchIterator iterSearch = m_arrStatusListener.begin();
-        DispatchIterator iterEnd = m_arrStatusListener.end();
+        // it is possible that listeners are registered or revoked while
+        // we are notifying them, so we must use a copy of m_arrStatusListener, not
+        // m_arrStatusListener itself
+        // #121276# / 2005-05-19 / frank.schoenheit@sun.com
+        Dispatch aNotifyLoop( m_arrStatusListener );
+        DispatchIterator iterSearch = aNotifyLoop.begin();
+        DispatchIterator iterEnd = aNotifyLoop.end();
 
         while (iterSearch != iterEnd)
         {
@@ -580,7 +585,15 @@ void OGenericUnoController::InvalidateFeature_Impl()
                 ::std::bind2nd( SupportedFeaturesEqualId(), aNextFeature.nId )
             );
 
-            OSL_ENSURE( m_aSupportedFeatures.end() != aFeaturePos, "OGenericUnoController::InvalidateFeature_Impl: out of interest: please tell FS how you got this assertion ..." );
+#if OSL_DEBUG_LEVEL > 0
+            if ( m_aSupportedFeatures.end() == aFeaturePos )
+            {
+                ::rtl::OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
+                sMessage += ::rtl::OString::valueOf( aNextFeature.nId );
+                sMessage += ::rtl::OString( " has been invalidated, but is not supported!" );
+                OSL_ENSURE( false, sMessage.getStr() );
+            }
+#endif
             if ( m_aSupportedFeatures.end() != aFeaturePos )
                 // we really know this feature
                 ImplBroadcastFeatureState( aFeaturePos->first, aNextFeature.xListener, aNextFeature.bForceBroadcast );
@@ -876,7 +889,7 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
 #if DBG_UTIL
         String sMessage("OGenericUnoController::GetState(", RTL_TEXTENCODING_ASCII_US);
         sMessage += String::CreateFromInt32(nId);
-        sMessage.AppendAscii(") : catched an exception ! message : ");
+        sMessage.AppendAscii("): caught an exception ! message : ");
         sMessage += (const sal_Unicode*)e.Message;
         DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
 #else
