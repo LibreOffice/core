@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:40:44 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfo
     while ( pUserIter != rUserElements.end() )
     {
         UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
-        if ( pDataSettings )
+        if ( pDataSettings && !pDataSettings->bDefault )
         {
             // Retrieve user interface name from XPropertySet interface
             rtl::OUString aUIName;
@@ -432,7 +432,9 @@ UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElemen
     if ( pIter != rUserHashMap.end() )
     {
         // Default data settings data means removed!
-        if ( !pIter->second.bDefault )
+        if ( pIter->second.bDefault )
+            return &(pIter->second);
+        else
         {
             if ( !pIter->second.xSettings.is() && bLoad )
                 impl_requestUIElementData( nElementType, pIter->second );
@@ -917,7 +919,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     else
     {
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
-        if ( pDataSettings )
+        if ( pDataSettings && !pDataSettings->bDefault )
             return sal_True;
     }
 
@@ -940,7 +942,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             throw DisposedException();
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings )
+        if ( pDataSettings && !pDataSettings->bDefault )
         {
             // Create a copy of our data if someone wants to change the data.
             if ( bWriteable )
@@ -971,7 +973,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             throw DisposedException();
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings )
+        if ( pDataSettings && !pDataSettings->bDefault )
         {
             // we have a settings entry in our user-defined layer - replace
             Reference< XIndexAccess > xOldSettings = pDataSettings->xSettings;
@@ -1087,30 +1089,43 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
         if ( m_bDisposed )
             throw DisposedException();
 
+        bool           bInsertData( false );
+        UIElementData  aUIElementData;
         UIElementData* pDataSettings = impl_findUIElementData( NewResourceURL, nElementType );
+
+        if ( pDataSettings && !pDataSettings->bDefault )
+            throw ElementExistException();
+
         if ( !pDataSettings )
         {
-            UIElementData aUIElementData;
+            pDataSettings = &aUIElementData;
+            bInsertData   = true;
+        }
 
-            aUIElementData.bDefault     = false;
-            aUIElementData.bModified    = true;
+        {
+            pDataSettings->bDefault     = false;
+            pDataSettings->bModified    = true;
 
             // Create a copy of the data if the container is not const
             Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
             if ( xReplace.is() )
-                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                pDataSettings->xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
             else
-                aUIElementData.xSettings = aNewData;
+                pDataSettings->xSettings = aNewData;
 
-            aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
-            aUIElementData.aResourceURL = NewResourceURL;
             m_bModified = true;
 
             UIElementType& rElementType = m_aUIElements[nElementType];
             rElementType.bModified = true;
 
-            UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
-            rElements.insert( UIElementDataHashMap::value_type( NewResourceURL, aUIElementData ));
+            if ( bInsertData )
+            {
+                pDataSettings->aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
+                pDataSettings->aResourceURL = NewResourceURL;
+
+                UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
+                rElements.insert( UIElementDataHashMap::value_type( NewResourceURL, *pDataSettings ));
+            }
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -1128,8 +1143,6 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
             implts_notifyContainerListener( aEvent, NotifyOp_Insert );
         }
-        else
-            throw ElementExistException();
     }
 }
 
