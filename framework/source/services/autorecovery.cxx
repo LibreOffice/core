@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:34:59 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ static const ::rtl::OUString CMD_DO_ENTRY_BACKUP             = ::rtl::OUString::
 static const ::rtl::OUString CMD_DO_ENTRY_CLEANUP            = ::rtl::OUString::createFromAscii("/doEntryCleanUp"         );    // remove the specified entry from the recovery cache
 static const ::rtl::OUString CMD_DO_SESSION_SAVE             = ::rtl::OUString::createFromAscii("/doSessionSave"          );    // save all open documents if e.g. a window manager closes an user session
 static const ::rtl::OUString CMD_DO_SESSION_RESTORE          = ::rtl::OUString::createFromAscii("/doSessionRestore"       );    // restore a saved user session from disc
+static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY         = ::rtl::OUString::createFromAscii("/disableRecovery"        );    // disable recovery temp. for this office session
 
 static const ::rtl::OUString REFERRER_USER                   = ::rtl::OUString::createFromAscii("private:user");
 
@@ -536,6 +537,14 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
 
     m_eJob |= eNewJob;
 
+    // check if somewhere wish to disable recovery temp. for this office session
+    if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+    {
+       implts_stopTimer();
+       implts_stopListening();
+       return;
+    }
+
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     sal_Bool  bAsynchron        = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, (sal_Bool)sal_False                                 );
               m_nWorkingEntryID = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID          , (sal_Int32)-1                                       );
@@ -755,6 +764,12 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
+
+    // Changes of the configuration must be ignored if AutoSave/Recovery was disabled for this
+    // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+    // was set.
+    if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+       return;
 
     for (i=0; i<c; ++i)
     {
@@ -1188,6 +1203,17 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
 
     // Needed! Otherwise every reschedule request allow a new triggered timer event :-(
     implts_stopTimer();
+
+    // The timer must be ignored if AutoSave/Recovery was disabled for this
+    // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+    // was set. But normaly the timer was disabled if recovery was disabled ...
+    // But so we are more "safe" .-)
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+    if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+       return 0;
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
 
     // check some "states", where its not allowed (better: not a good idea) to
     // start an AutoSave. (e.g. if the user makes drag & drop ...)
@@ -2228,6 +2254,9 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
         else
         if (aURL.Path.equals(CMD_DO_SESSION_RESTORE))
             return AutoRecovery::E_SESSION_RESTORE;
+        else
+        if (aURL.Path.equals(CMD_DO_DISABLE_RECOVERY))
+            return AutoRecovery::E_DISABLE_AUTORECOVERY;
     }
 
     LOG_WARNING("AutoRecovery::implts_classifyJob()", "Invalid URL (protocol).")
