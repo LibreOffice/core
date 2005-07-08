@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:28:28 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,23 +301,44 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 if ( _CheckMovedFwdCondition( nIdx, nToPageNum, bDummy ) )
                 // <--
                 {
-                    // Indicate that anchor text frame has to move forward and
-                    // invalidate its position to force a re-format.
-                    SwLayouter::InsertMovedFwdFrm( *(GetPageFrm().GetFmt()->GetDoc()),
-                                                   mrAnchorTxtFrm,
-                                                   nToPageNum );
-                    mrAnchorTxtFrm.InvalidatePos();
+                    // --> OD 2005-06-01 #i49987# - consider, that anchor frame
+                    // could already been marked to move forward.
+                    bool bInsert( true );
+                    sal_uInt32 nMovedFwdToPageNum( 0L );
+                    const SwDoc& rDoc = *(GetPageFrm().GetFmt()->GetDoc());
+                    if ( SwLayouter::FrmMovedFwdByObjPos(
+                                            rDoc, mrAnchorTxtFrm, nMovedFwdToPageNum ) )
+                    {
+                        if ( nMovedFwdToPageNum < nToPageNum )
+                            SwLayouter::RemoveMovedFwdFrm( rDoc, mrAnchorTxtFrm );
+                        else
+                            bInsert = false;
+                    }
+                    if ( bInsert )
+                    {
+                        // Indicate that anchor text frame has to move forward and
+                        // invalidate its position to force a re-format.
+                        SwLayouter::InsertMovedFwdFrm( rDoc, mrAnchorTxtFrm,
+                                                       nToPageNum );
+                        mrAnchorTxtFrm.InvalidatePos();
 
-                    // Indicate restart of the layout process
-                    bSuccess = false;
+                        // Indicate restart of the layout process
+                        bSuccess = false;
 
-                    // If needed, invalidate previous objects anchored at same anchor
-                    // text frame.
-                    _InvalidatePrevObjs( _rAnchoredObj );
+                        // If needed, invalidate previous objects anchored at same anchor
+                        // text frame.
+                        _InvalidatePrevObjs( _rAnchoredObj );
 
-                    // Invalidate object and following objects for the restart of the
-                    // layout process
-                    _InvalidateFollowObjs( _rAnchoredObj, true );
+                        // Invalidate object and following objects for the restart of the
+                        // layout process
+                        _InvalidateFollowObjs( _rAnchoredObj, true );
+                    }
+                    else
+                    {
+                        ASSERT( false,
+                                "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
+                    }
+                    // <--
                 }
             }
             // <--
@@ -459,23 +480,43 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         {
             // Object found, whose anchor is moved forward
 
-            // Indicate that anchor text frame has to move forward and
-            // invalidate its position to force a re-format.
-            SwLayouter::InsertMovedFwdFrm( *(GetPageFrm().GetFmt()->GetDoc()),
-                                           mrAnchorTxtFrm,
-                                           nToPageNum );
-            mrAnchorTxtFrm.InvalidatePos();
+            // --> OD 2005-06-01 #i49987# - consider, that anchor frame
+            // could already been marked to move forward.
+            bool bInsert( true );
+            sal_uInt32 nMovedFwdToPageNum( 0L );
+            const SwDoc& rDoc = *(GetPageFrm().GetFmt()->GetDoc());
+            if ( SwLayouter::FrmMovedFwdByObjPos(
+                                    rDoc, mrAnchorTxtFrm, nMovedFwdToPageNum ) )
+            {
+                if ( nMovedFwdToPageNum < nToPageNum )
+                    SwLayouter::RemoveMovedFwdFrm( rDoc, mrAnchorTxtFrm );
+                else
+                    bInsert = false;
+            }
+            if ( bInsert )
+            {
+                // Indicate that anchor text frame has to move forward and
+                // invalidate its position to force a re-format.
+                SwLayouter::InsertMovedFwdFrm( rDoc, mrAnchorTxtFrm, nToPageNum );
+                mrAnchorTxtFrm.InvalidatePos();
 
-            // Indicate restart of the layout process
-            bSuccess = false;
+                // Indicate restart of the layout process
+                bSuccess = false;
 
-            // If needed, invalidate previous objects anchored at same anchor
-            // text frame.
-            _InvalidatePrevObjs( *pObj );
+                // If needed, invalidate previous objects anchored at same anchor
+                // text frame.
+                _InvalidatePrevObjs( *pObj );
 
-            // Invalidate object and following objects for the restart of the
-            // layout process
-            _InvalidateFollowObjs( *pObj, true );
+                // Invalidate object and following objects for the restart of the
+                // layout process
+                _InvalidateFollowObjs( *pObj, true );
+            }
+            else
+            {
+                ASSERT( false,
+                        "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
+            }
+            // <--
         }
         // <--
         // --> OD 2005-01-12 #i40155# - mark anchor frame not to wrap around
@@ -720,7 +761,11 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
                 mrAnchorTxtFrm.LockJoin();
                 // <--
                 SwFrm* pFrm = pSectFrm->GetUpper()->GetLower();
-                while ( pFrm != pSectFrm )
+                // --> OD 2005-05-23 #i49605# - section frame could move forward
+                // by the format of its previous frame.
+                // Thus, check for valid <pFrm>.
+                while ( pFrm && pFrm != pSectFrm )
+                // <--
                 {
                     if ( pFrm->IsLayoutFrm() )
                         lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
