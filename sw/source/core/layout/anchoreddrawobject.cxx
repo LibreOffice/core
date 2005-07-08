@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:58:15 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,15 +430,20 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
     // object is positioned again.
     // --> OD 2005-02-22 #i43255# - refine condition: anchor frame format not
     // allowed, if another anchored object, has to be consider its wrap influence
+    // --> OD 2005-06-07 #i50356# - format anchor frame containing the anchor
+    // position. E.g., for at-character anchored object this can be the follow
+    // frame of the anchor frame, which contains the anchor character.
     const bool bFormatAnchor =
-            !static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked() &&
+            !static_cast<const SwTxtFrm*>( GetAnchorFrmContainingAnchPos() )->IsAnyJoinLocked() &&
             !ConsiderObjWrapInfluenceOnObjPos() &&
             !ConsiderObjWrapInfluenceOfOtherObjs();
     // <--
 
     if ( bFormatAnchor )
     {
-        GetAnchorFrm()->Calc();
+        // --> OD 2005-06-07 #i50356#
+        GetAnchorFrmContainingAnchPos()->Calc();
+        // <--
     }
 
     bool bOscillationDetected = false;
@@ -478,7 +483,9 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
         // to be invalid.
         if ( bFormatAnchor )
         {
-            GetAnchorFrm()->Calc();
+            // --> OD 2005-06-07 #i50356#
+            GetAnchorFrmContainingAnchPos()->Calc();
+            // <--
         }
 
         // --> OD 2004-08-25 #i3317#
@@ -824,6 +831,10 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         GetFrmFmt().SetPositionLayoutDir(
             com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+        // <--
+        // --> OD 2005-05-10 #i45952# - indicate that position
+        // attributes are set now.
+        static_cast<SwDrawFrmFmt&>(GetFrmFmt()).PosAttrSet();
         // <--
     }
 }
