@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 10:06:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,32 @@ class SwGrfNode: public SwNoTxtNode
     void InsertLink( const String& rGrfName, const String& rFltName );
     BOOL ImportGraphic( SvStream& rStrm );
     BOOL HasStreamName() const { return aGrfObj.HasUserData(); }
-    BOOL GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
+    // --> OD 2005-05-04 #i48434# - adjust return type and rename method to
+    // indicate that its an private one.
+    bool _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
+    // <--
     void DelStreamName();
     DECL_LINK( SwapGraphic, GraphicObject* );
+
+    /** helper method to determine stream for the embedded graphic.
+
+        OD 2005-05-04 #i48434#
+        Important note: caller of this method has to handle the thrown exceptions
+
+        @author OD
+
+        @param _obGraphic
+        output parameter - boolean indicating, if the stream is an embedded
+        graphic file of a Writer document of version 3.1 - 5.2
+        Value of this output parameter is only valid, if the stream for the
+        the embedded graphic is created.
+        Note: name of parameter taken over from method <GetStreamStorageNames(..)>
+
+        @return SvStream*
+        new created stream of the embedded graphic, which has to be destroyed
+        after its usage. Could be NULL, if the stream isn't found.
+    */
+    SvStream* _GetStreamForEmbedGrf( bool& _obGraphic ) const;
 
 public:
     virtual ~SwGrfNode();
