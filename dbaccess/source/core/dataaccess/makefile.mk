@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 16:35:45 $
+#   last change: $Author: obo $ $Date: 2005-07-08 10:37:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ SLOFILES=	\
         $(SLO)$/intercept.obj			\
         $(SLO)$/myucp_datasupplier.obj	\
         $(SLO)$/myucp_resultset.obj		\
-        $(SLO)$/commitlistener.obj		\
         $(SLO)$/databasedocument.obj	\
         $(SLO)$/ModelImpl.obj
 
