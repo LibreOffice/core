@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:07:28 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,13 @@ private:
         < com::sun::star::ui::XUIConfigurationManager > m_xCfgMgr;
 
     ::com::sun::star::uno::Reference
+        < com::sun::star::ui::XUIConfigurationManager > m_xParentCfgMgr;
+
+    ::com::sun::star::uno::Reference
         < com::sun::star::ui::XImageManager > m_xImgMgr;
+
+    ::com::sun::star::uno::Reference
+        < com::sun::star::ui::XImageManager > m_xParentImgMgr;
 
     static ::com::sun::star::uno::Reference
         < com::sun::star::ui::XImageManager >* xDefaultImgMgr;
@@ -176,6 +182,8 @@ public:
     SaveInData(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >& xCfgMgr,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::ui::XUIConfigurationManager >& xParentCfgMgr,
         const rtl::OUString& aModuleId,
         bool docConfig );
 
@@ -196,8 +204,16 @@ public:
             GetConfigManager() { return m_xCfgMgr; };
 
     ::com::sun::star::uno::Reference
+        < ::com::sun::star::ui::XUIConfigurationManager >
+            GetParentConfigManager() { return m_xParentCfgMgr; };
+
+    ::com::sun::star::uno::Reference
         < ::com::sun::star::ui::XImageManager >
             GetImageManager() { return m_xImgMgr; };
+
+    ::com::sun::star::uno::Reference
+        < ::com::sun::star::ui::XImageManager >
+            GetParentImageManager() { return m_xParentImgMgr; };
 
     ::com::sun::star::uno::Reference
         < com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
@@ -266,6 +282,8 @@ public:
     MenuSaveInData(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
 
@@ -297,6 +315,7 @@ private:
     bool                        bIsMain;
     bool                        bIsDeletable;
     bool                        bIsMovable;
+    bool                        bIsParentData;
 
     // toolbar specific properties
     bool                        bIsVisible;
@@ -317,7 +336,8 @@ public:
 
     SvxConfigEntry( const ::rtl::OUString& rDisplayName,
                     const ::rtl::OUString& rCommandURL,
-                    bool bPopup = FALSE );
+                    bool bPopup = FALSE,
+                    bool bParentData = FALSE );
 
     SvxConfigEntry()
         :
@@ -328,7 +348,8 @@ public:
             bStrEdited( FALSE ),
             bIsVisible( TRUE ),
             nStyle( 0 ),
-            pEntries( 0 )
+            pEntries( 0 ),
+            bIsParentData( FALSE )
     {}
 
     ~SvxConfigEntry();
@@ -361,6 +382,9 @@ public:
 
     void    SetMain( bool bValue = TRUE ) { bIsMain = bValue; }
     bool    IsMain() { return bIsMain; }
+
+    void    SetParentData( bool bValue = TRUE ) { bIsParentData = bValue; }
+    bool    IsParentData() { return bIsParentData; }
 
     bool    IsMovable();
     bool    IsDeletable();
@@ -478,6 +502,8 @@ protected:
     virtual SaveInData* CreateSaveInData(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig ) = 0;
 
@@ -553,6 +579,8 @@ public:
     ~SvxMenuConfigPage();
 
     SaveInData* CreateSaveInData(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
@@ -667,6 +695,8 @@ public:
     SaveInData*     CreateSaveInData(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
 };
@@ -675,8 +705,8 @@ class ToolbarSaveInData : public SaveInData
 {
 private:
 
-    SvxConfigEntry* pRootEntry;
-    rtl::OUString   m_aDescriptorContainer;
+    SvxConfigEntry*                                pRootEntry;
+    rtl::OUString                                  m_aDescriptorContainer;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::container::XNameAccess > m_xPersistentWindowState;
@@ -697,6 +727,8 @@ public:
 
     ToolbarSaveInData(
         const ::com::sun::star::uno::Reference <
+            ::com::sun::star::ui::XUIConfigurationManager >&,
+            const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
@@ -777,6 +809,9 @@ private:
         ::com::sun::star::ui::XImageManager > m_xImageManager;
 
     ::com::sun::star::uno::Reference<
+        ::com::sun::star::ui::XImageManager > m_xParentImageManager;
+
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
 
     bool ImportGraphic( const rtl::OUString& aURL );
@@ -789,7 +824,9 @@ public:
     SvxIconSelectorDialog(
         Window *pWindow,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::ui::XImageManager >& rXImageManager
+            ::com::sun::star::ui::XImageManager >& rXImageManager,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::ui::XImageManager >& rXParentImageManager
         );
 
     ~SvxIconSelectorDialog();
