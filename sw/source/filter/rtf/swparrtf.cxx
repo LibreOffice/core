@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:23:01 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,12 @@ void SwRTFParser::Continue( int nToken )
             pDoc->SetAddFlyOffsets( true );
             pDoc->SetAddExtLeading( true );
             pDoc->SetOldNumbering( false );
+            // --> FME 2005-05-27 #i47448#
+            pDoc->SetIgnoreFirstLineIndentInNumbering( false );
+            // <--
+            // --> FME 2005-06-08 #i49277#
+            pDoc->SetDoNotJustifyLinesWithManualBreak( false );
+            // <--
             pDoc->SetUseFormerLineSpacing( false );
             pDoc->SetAddParaSpacingToTableCells( true );
             pDoc->SetUseFormerObjectPositioning( false );
