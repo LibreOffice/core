@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectdbtabledialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:27:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ using namespace com::sun::star::beans;
 
   -----------------------------------------------------------------------*/
 SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rConnection) :
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rConnection) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
 #pragma warning (disable : 4355)
     m_aSelectFI( this, ResId(       FI_SELECT     )),
@@ -127,7 +127,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_sType( ResId( ST_TYPE )),
     m_sTable( ResId( ST_TABLE )),
     m_sQuery( ResId( ST_QUERY )),
-    rxConnection(rConnection)
+    m_xConnection(rConnection)
 {
     FreeResource();
 
@@ -163,7 +163,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
 
     m_aPreviewPB.SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 
-    Reference<XTablesSupplier> xTSupplier(rxConnection, UNO_QUERY);
+    Reference<XTablesSupplier> xTSupplier(m_xConnection, UNO_QUERY);
     if(xTSupplier.is())
     {
         Reference<XNameAccess> xTbls = xTSupplier->getTables();
@@ -178,7 +178,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
             pEntry->SetUserData((void*)0);
         }
     }
-    Reference<XQueriesSupplier> xQSupplier(rxConnection, UNO_QUERY);
+    Reference<XQueriesSupplier> xQSupplier(m_xConnection, UNO_QUERY);
     if(xQSupplier.is())
     {
         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
@@ -212,7 +212,7 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
         sal_Int32 nCommandType = 0 == pEntry->GetUserData() ? 0 : 1;
 
         ::rtl::OUString sDataSourceName;
-        Reference<XChild> xChild(rxConnection, UNO_QUERY);
+        Reference<XChild> xChild(m_xConnection, UNO_QUERY);
         if(xChild.is())
         {
             Reference<XDataSource> xSource(xChild->getParent(), UNO_QUERY);
