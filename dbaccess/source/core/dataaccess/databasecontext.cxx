@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:33:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,8 @@ Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exc
 {
     ::rtl::Reference<ODatabaseModelImpl> pImpl(new ODatabaseModelImpl(m_xServiceManager));
     pImpl->m_pDBContext = this;
-    Reference< XInterface > xRet = *(new ODatabaseSource(pImpl));
-    pImpl->m_xDataSource = Reference<XDataSource>(xRet,UNO_QUERY);
-    return xRet;
+    Reference< XDataSource > xDataSource( pImpl->getDataSource() );
+    return xDataSource.get();
 }
 
 //--------------------------------------------------------------------------
@@ -324,7 +323,6 @@ void ODatabaseContext::disposing()
         )
     {
         OSL_ENSURE(aIter->second->m_refCount != 0,"Object is already disposed");
-        aIter->second->clear();
         aIter->second->dispose();
     }
     m_aDatabaseObjects.clear();
@@ -421,16 +419,22 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
     if ( !xExistent.is() )
     {
         ::rtl::Reference<ODatabaseModelImpl> pImpl(new ODatabaseModelImpl(_rName,m_xServiceManager,this));
-        xExistent = *(new ODatabaseSource(pImpl));
-        pImpl->m_xDataSource = Reference<XDataSource>(xExistent,UNO_QUERY);
+        xExistent = pImpl->getDataSource().get();
 
         Sequence< PropertyValue > aArgs(1);
         aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
         aArgs[0].Value <<= _sURL;
 
-        Reference<XModel> xModel = new ODatabaseDocument(pImpl);
+        Reference<XModel> xModel = pImpl->createNewModel_deliverOwnership();
+        DBG_ASSERT( xModel.is(), "ODatabaseContext::loadObjectFromURL: no model?" );
         // calls registerPrivate in attachResource
         xModel->attachResource(_sURL,aArgs);
+
+        // since the model has been newly created, we're its owner. However, we do not
+        // really need it, we ust used it for loading the document. So, dispose it to prevent
+        // leaks
+        // #i50905# / 2005-06-20 / frank.schoenheit@sun.com
+        ::comphelper::disposeComponent( xModel );
     }
 
     setTransientProperties(_sURL,xExistent);
@@ -520,7 +524,7 @@ void SAL_CALL ODatabaseContext::disposing( const com::sun::star::lang::EventObje
             ++aLookup
         )
     {
-        Reference< XInterface > xDataSource(aLookup->second->m_xDataSource.get(), UNO_QUERY);
+        Reference< XInterface > xDataSource(aLookup->second->getDataSource(false), UNO_QUERY);
         if ( xDataSource == xSource )
             break;
     }
@@ -599,7 +603,7 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
         ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
         if ( aExistent != m_aDatabaseObjects.end() )
         {
-            xExistent = aExistent->second->m_xDataSource;
+            xExistent = aExistent->second->getDataSource(false);
             if (xExistent.is())
             {
                 Reference< XComponent > xComponent(xExistent, UNO_QUERY);
