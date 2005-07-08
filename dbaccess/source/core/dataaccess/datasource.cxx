@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:46:37 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
-#ifndef DBA_COREDATAACCESS_COMMITLISTENER_HXX
-#include "commitlistener.hxx"
-#endif
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #include "connection.hxx"
 #endif
@@ -142,6 +139,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #endif
 
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -737,8 +737,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
                 aDriverInfo[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
                 aDriverInfo[nCount++].Value <<= m_pImpl->getURL();
                 aDriverInfo[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"));
-                Reference<css::embed::XTransactionListener> xEvt(m_pImpl->m_xModel,UNO_QUERY);
-                aDriverInfo[nCount++].Value <<= m_pImpl->getStorage(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")),xEvt,ElementModes::READWRITE);
+                Reference< css::document::XDocumentSubStorageSupplier> xDocSup( m_pImpl->getDocumentSubStorageSupplier() );
+                aDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")),ElementModes::READWRITE);
             }
             if (nAdditionalArgs)
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
@@ -1195,7 +1195,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
     {
         ResettableMutexGuard _rGuard(m_aMutex);
         ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-        Reference< css::frame::XStorable> xStorable(m_pImpl->getModel(),UNO_QUERY);
+        Reference< css::frame::XStorable> xStorable(getModelWithPossibleLeak(),UNO_QUERY);
         if ( xStorable.is() )
             xStorable->store();
 
@@ -1235,10 +1235,36 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& Event ) th
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
-// XDocumentDataSource
-Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
+Reference< XModel > ODatabaseSource::getModelWithPossibleLeak()
 {
-    return m_pImpl.is() ? Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >(m_pImpl->getModel(),UNO_QUERY) : Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >();
+    Reference< XModel > xModel;
+    if ( m_pImpl.is() )
+    {
+        xModel = m_pImpl->getModel_noCreate();
+        if ( !xModel.is() )
+        {
+            // In the course of #i50905#, the ownership of a XModel instance was more clearly
+            // defined and respected throughout all involved implementations. This place
+            // here is the last one where a fix wasn't easily possible within the restrictions
+            // which applied to the fix (time frame, risk)
+            //
+            // There's a pretty large comment in ODatabaseDocument::disconnectController
+            // explaining how this dilemma could be solved (which in fact suggests to
+            // get completely rid of the "sole ownership" concept, and replace it with
+            // shared ownership, and vetoable closing).
+            //
+            // #i50905# / 2005-06-20 / frank.schoenheit@sun.com
+            DBG_ERROR( "ODatabaseSource::getModelWithPossibleLeak: creating a model instance with undefined ownership! Probably a resource leak!" );
+            xModel = m_pImpl->createNewModel_deliverOwnership();
+        }
+    }
+    return xModel;
+}
+// -----------------------------------------------------------------------------
+// XDocumentDataSource
+Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
+{
+    return Reference< XOfficeDatabaseDocument >( getModelWithPossibleLeak(), UNO_QUERY );
 }
 // -----------------------------------------------------------------------------
 //........................................................................
