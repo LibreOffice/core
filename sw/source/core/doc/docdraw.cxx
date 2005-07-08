@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:56:38 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,13 +235,22 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
         bool bVert;
         bool bR2L;
+        // --> OD 2005-05-10 #i45952# - use anchor position of
+        // anchor frame, if it exist.
+        Point aAnchorPos;
         if ( pAnchorFrm )
         {
+            // --> OD 2005-05-10 #i45952#
+            aAnchorPos = pAnchorFrm->GetFrmAnchorPos( ::HasWrap( &_rSdrObj ) );
+            // <--
             bVert = pAnchorFrm->IsVertical();
             bR2L = pAnchorFrm->IsRightToLeft();
         }
         else
         {
+            // --> OD 2005-05-10 #i45952#
+            aAnchorPos = _rSdrObj.GetAnchorPos();
+            // <--
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem* pDirItem =
@@ -281,7 +290,6 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             }
 
         }
-        const Point aAnchorPos = _rSdrObj.GetAnchorPos();
         // use geometry of drawing object
         const SwRect aObjRect = _rSdrObj.GetSnapRect();
         if ( bVert )
@@ -358,6 +366,14 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                 pUndo->AddObj( i, pFmt, pObj );
             else
                 DelFrmFmt( pFmt );
+
+            // --> OD 2005-05-10 #i45952# - re-introduce position
+            // normalization of group member objects, because its anchor position
+            // is cleared, when they are grouped.
+            Point aAnchorPos( pObj->GetAnchorPos() );
+            pObj->NbcSetAnchorPos( Point( 0, 0 ) );
+            pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
+            // <--
         }
 
         pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
