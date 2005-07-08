@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-29 09:24:07 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,10 +995,12 @@ uno::Reference< css::ui::XImageManager>* SaveInData::xDefaultImgMgr = NULL;
 
 SaveInData::SaveInData(
     const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
     const OUString& aModuleId,
     bool isDocConfig )
         :
             m_xCfgMgr( xCfgMgr ),
+            m_xParentCfgMgr( xParentCfgMgr ),
             bReadOnly( FALSE ),
             bDocConfig( isDocConfig ),
             bModified( FALSE )
@@ -1041,12 +1043,23 @@ SaveInData::SaveInData(
             GetConfigManager()->getImageManager(), uno::UNO_QUERY );
     }
 
-    // If this is not a document configuration then it is the settings
-    // for the module (writer, calc, impress etc.) Use this as the default
-    // XImageManager instance
     if ( !IsDocConfig() )
     {
+        // If this is not a document configuration then it is the settings
+        // for the module (writer, calc, impress etc.) Use this as the default
+        // XImageManager instance
         xDefaultImgMgr = &m_xImgMgr;
+    }
+    else
+    {
+        // If this is a document configuration then use the module image manager
+        // as default.
+        if ( m_xParentCfgMgr.is() )
+        {
+            m_xParentImgMgr = uno::Reference< css::ui::XImageManager >(
+                m_xParentCfgMgr->getImageManager(), uno::UNO_QUERY );
+            xDefaultImgMgr = &m_xParentImgMgr;
+        }
     }
 }
 
@@ -1145,10 +1158,11 @@ MenuSaveInData* MenuSaveInData::pDefaultData = NULL;
 
 MenuSaveInData::MenuSaveInData(
     const uno::Reference< css::ui::XUIConfigurationManager >& cfgmgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
     const OUString& aModuleId,
     bool isDocConfig )
     :
-        SaveInData( cfgmgr, aModuleId, isDocConfig ),
+        SaveInData( cfgmgr, xParentCfgMgr, aModuleId, isDocConfig ),
         pRootEntry( 0 ),
         m_aDescriptorContainer(
             RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) ),
@@ -1719,6 +1733,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
     {
         USHORT nPos = 0;
         uno::Reference < css::ui::XUIConfigurationManager > xCfgMgr;
+        uno::Reference < css::ui::XUIConfigurationManager > xDocCfgMgr;
 
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
@@ -1788,7 +1803,10 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             xCfgMgr =
                 xModuleCfgSupplier->getUIConfigurationManager( aModuleId );
 
-            pModuleData = CreateSaveInData( xCfgMgr, aModuleId, FALSE );
+            pModuleData = CreateSaveInData( xCfgMgr,
+                                            uno::Reference< css::ui::XUIConfigurationManager >(),
+                                            aModuleId,
+                                            FALSE );
         }
         catch ( container::NoSuchElementException& )
         {
@@ -1808,7 +1826,6 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         // try to retrieve the document based ui configuration manager
         OUString aTitle;
-        xCfgMgr.set( NULL );
         uno::Reference< frame::XController > xController =
             m_xFrame->getController();
         if ( CanConfig( aModuleId ) && xController.is() )
@@ -1821,17 +1838,16 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
                 if ( xCfgSupplier.is() )
                 {
-                    xCfgMgr = xCfgSupplier->getUIConfigurationManager();
+                    xDocCfgMgr = xCfgSupplier->getUIConfigurationManager();
                 }
                 SvxScriptSelectorDialog::GetDocTitle( xModel, aTitle );
-
             }
         }
 
         SaveInData* pDocData = NULL;
-        if ( xCfgMgr.is() )
+        if ( xDocCfgMgr.is() )
         {
-            pDocData = CreateSaveInData( xCfgMgr, aModuleId, TRUE );
+            pDocData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, TRUE );
 
             if ( !pDocData->IsReadOnly() )
             {
@@ -1877,70 +1893,69 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         if ( CanConfig( aModuleId ) )
         {
-        // Load configuration for other open documents which have
-        // same module type
-        uno::Reference< frame::XFrames > xFrames =
-            xFramesSupplier->getFrames();
+            // Load configuration for other open documents which have
+            // same module type
+            uno::Reference< frame::XFrames > xFrames =
+                xFramesSupplier->getFrames();
 
-        uno::Sequence< uno::Reference< frame::XFrame > >
-            xFrameList = xFrames->queryFrames(
-                frame::FrameSearchFlag::ALL & ~frame::FrameSearchFlag::SELF );
+            uno::Sequence< uno::Reference< frame::XFrame > >
+                xFrameList = xFrames->queryFrames(
+                    frame::FrameSearchFlag::ALL & ~frame::FrameSearchFlag::SELF );
 
-        for ( sal_Int32 i = 0; i < xFrameList.getLength(); i++ )
-        {
-            SaveInData* pData = NULL;
-            uno::Reference < frame::XFrame > xf = xFrameList[i];
-
-            if ( xf.is() && xf != m_xFrame )
+            for ( sal_Int32 i = 0; i < xFrameList.getLength(); i++ )
             {
-                OUString aCheckId;
-                try{
-                    aCheckId = xModuleManager->identify( xf );
-                } catch(const uno::Exception&)
-                    { aCheckId = ::rtl::OUString(); }
+                SaveInData* pData = NULL;
+                uno::Reference < frame::XFrame > xf = xFrameList[i];
 
-                if ( aModuleId.equals( aCheckId ) )
+                if ( xf.is() && xf != m_xFrame )
                 {
-                    // try to get the document based ui configuration manager
-                    OUString aTitle2;
-                    xCfgMgr.set( NULL );
-                    uno::Reference< frame::XController > xController =
-                        xf->getController();
+                    OUString aCheckId;
+                    try{
+                        aCheckId = xModuleManager->identify( xf );
+                    } catch(const uno::Exception&)
+                        { aCheckId = ::rtl::OUString(); }
 
-                    if ( xController.is() )
+                    if ( aModuleId.equals( aCheckId ) )
                     {
-                        uno::Reference< frame::XModel > xModel(
-                            xController->getModel() );
+                        // try to get the document based ui configuration manager
+                        OUString aTitle2;
+                        uno::Reference< frame::XController > xController =
+                            xf->getController();
 
-                        if ( xModel.is() )
+                        if ( xController.is() )
                         {
-                            uno::Reference<
-                                css::ui::XUIConfigurationManagerSupplier >
-                                    xCfgSupplier( xModel, uno::UNO_QUERY );
+                            uno::Reference< frame::XModel > xModel(
+                                xController->getModel() );
 
-                            if ( xCfgSupplier.is() )
+                            if ( xModel.is() )
                             {
-                                xCfgMgr =
-                                    xCfgSupplier->getUIConfigurationManager();
+                                uno::Reference<
+                                    css::ui::XUIConfigurationManagerSupplier >
+                                        xCfgSupplier( xModel, uno::UNO_QUERY );
+
+                                if ( xCfgSupplier.is() )
+                                {
+                                    xDocCfgMgr =
+                                        xCfgSupplier->getUIConfigurationManager();
+                                }
+                                SvxScriptSelectorDialog::GetDocTitle(
+                                    xModel, aTitle2 );
                             }
-                            SvxScriptSelectorDialog::GetDocTitle(
-                                xModel, aTitle2 );
                         }
-                    }
 
-                    if ( xCfgMgr.is() )
-                    {
-                        pData = CreateSaveInData( xCfgMgr, aModuleId, TRUE );
-
-                        if ( pData && !pData->IsReadOnly() )
+                        if ( xDocCfgMgr.is() )
                         {
-                            nPos = aSaveInListBox.InsertEntry( aTitle2 );
-                            aSaveInListBox.SetEntryData( nPos, pData );
+                            pData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, TRUE );
+
+                            if ( pData && !pData->IsReadOnly() )
+                            {
+                                nPos = aSaveInListBox.InsertEntry( aTitle2 );
+                                aSaveInListBox.SetEntryData( nPos, pData );
+                            }
                         }
                     }
                 }
             }
-        }
         }
 
         aSaveInListBox.SetSelectHdl(
@@ -2787,11 +2802,12 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
     const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
     const OUString& aModuleId,
     bool bDocConfig )
 {
     return static_cast< SaveInData* >(
-        new MenuSaveInData( xCfgMgr, aModuleId, bDocConfig ));
+        new MenuSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ));
 }
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
@@ -3023,7 +3039,8 @@ SvxConfigEntry::SvxConfigEntry(
         bStrEdited( FALSE ),
         bIsVisible( TRUE ),
         nStyle( 0 ),
-        pEntries( 0 )
+        pEntries( 0 ),
+        bIsParentData( FALSE )
 {
     sal_uInt16 nType( css::ui::ItemType::DEFAULT );
     OUString aHelpURL;
@@ -3234,7 +3251,7 @@ SvxMenuConfigEntry::SvxMenuConfigEntry(
 */
 
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
-                                const OUString& rCommandURL, bool bPopup )
+                                const OUString& rCommandURL, bool bPopup, bool bParentData )
     : nId( 1 )
     , bPopUp(bPopup)
     , aCommand(rCommandURL)
@@ -3245,6 +3262,7 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
     , bIsVisible( TRUE )
     , nStyle( 0 )
     , pEntries( 0 )
+    , bIsParentData( bParentData )
 {
     if (bPopUp)
     {
@@ -3750,7 +3768,8 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
             SvxIconSelectorDialog* pIconDialog =
                 new SvxIconSelectorDialog( 0,
-                    GetSaveInData()->GetImageManager() );
+                    GetSaveInData()->GetImageManager(),
+                    GetSaveInData()->GetParentImageManager() );
 
             bool ret = pIconDialog->Execute();
 
@@ -3916,20 +3935,23 @@ void SvxToolbarConfigPage::Init()
 
 SaveInData* SvxToolbarConfigPage::CreateSaveInData(
     const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
     const OUString& aModuleId,
     bool bDocConfig )
 {
     return static_cast< SaveInData* >(
-        new ToolbarSaveInData( xCfgMgr, aModuleId, bDocConfig ));
+        new ToolbarSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ));
 }
 
 ToolbarSaveInData::ToolbarSaveInData(
     const uno::Reference <
         css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference <
+        css::ui::XUIConfigurationManager >& xParentCfgMgr,
     const OUString& aModuleId,
     bool docConfig )
     :
-        SaveInData ( xCfgMgr, aModuleId, docConfig ),
+        SaveInData ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
         m_aDescriptorContainer(
             RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) ),
         pRootEntry( 0 )
@@ -4150,8 +4172,16 @@ bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
 
 SvxEntries* ToolbarSaveInData::GetEntries()
 {
+    typedef ::std::hash_map< ::rtl::OUString,
+                             bool,
+                             ::rtl::OUStringHash,
+                             ::std::equal_to< ::rtl::OUString > > ToolbarInfo;
+
+    ToolbarInfo aToolbarInfo;
+
     if ( pRootEntry == NULL )
     {
+
         pRootEntry = new SvxConfigEntry(
             String::CreateFromAscii("MainToolbars"), String(), TRUE );
 
@@ -4205,6 +4235,10 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 pEntry->SetMain( TRUE );
                 pEntry->SetStyle( GetSystemStyle( url ) );
 
+
+                // insert into hash_map to filter duplicates from the parent
+                aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
+
                 OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
                 if ( systemname.indexOf( custom ) == 0 )
                 {
@@ -4224,6 +4258,96 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 // TODO, handle resourceURL with no settings
             }
         }
+
+        uno::Reference< css::ui::XUIConfigurationManager > xParentCfgMgr = GetParentConfigManager();
+        if ( xParentCfgMgr.is() )
+        {
+            // Retrieve also the parent toolbars to make it possible
+            // to configure module toolbars and save them into the document
+            // config manager.
+            uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
+                xParentCfgMgr->getUIElementsInfo(
+                    css::ui::UIElementType::TOOLBAR );
+
+            for ( sal_Int32 i = 0; i < info.getLength(); i++ )
+            {
+                uno::Sequence< beans::PropertyValue > props = info[ i ];
+
+                OUString url;
+                OUString systemname;
+                OUString uiname;
+
+                for ( sal_Int32 j = 0; j < props.getLength(); j++ )
+                {
+                    if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
+                    {
+                        props[ j ].Value >>= url;
+                        systemname = url.copy( url.lastIndexOf( '/' ) + 1 );
+                    }
+                    else if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
+                    {
+                        props[ j ].Value >>= uiname;
+                    }
+                }
+
+                // custom toolbars of the parent are not visible in the document layer
+                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                if ( systemname.indexOf( custom ) == 0 )
+                    continue;
+
+                // check if toolbar is already in the document layer
+                ToolbarInfo::const_iterator pIter = aToolbarInfo.find( systemname );
+                if ( pIter == aToolbarInfo.end() )
+                {
+                    aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
+
+                    try
+                    {
+                        uno::Reference< container::XIndexAccess > xToolbarSettings =
+                            xParentCfgMgr->getSettings( url, sal_False );
+
+                        uno::Reference< beans::XPropertySet > props(
+                            xToolbarSettings, uno::UNO_QUERY );
+
+                        if ( uiname.getLength() == 0 )
+                        {
+                            // try to get the name from m_xPersistentWindowState
+                            uiname = GetSystemUIName( url );
+
+                            if ( uiname.getLength() == 0 )
+                            {
+                                uiname = systemname;
+                            }
+                        }
+
+                        SvxConfigEntry* pEntry = new SvxConfigEntry(
+                            uiname, url, TRUE, TRUE );
+
+                        pEntry->SetMain( TRUE );
+                        pEntry->SetStyle( GetSystemStyle( url ) );
+
+                        OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                        if ( systemname.indexOf( custom ) == 0 )
+                        {
+                            pEntry->SetUserDefined( TRUE );
+                        }
+                        else
+                        {
+                            pEntry->SetUserDefined( FALSE );
+                        }
+
+                        pRootEntry->GetEntries()->push_back( pEntry );
+
+                        LoadToolbar( xToolbarSettings, pEntry );
+                    }
+                    catch ( container::NoSuchElementException& )
+                    {
+                        // TODO, handle resourceURL with no settings
+                    }
+                }
+            }
+        }
+
         std::sort( GetEntries()->begin(), GetEntries()->end(), EntrySort );
     }
 
@@ -4255,7 +4379,10 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
 
         if ( pEntry->GetCommand().equals( rURL ) )
         {
-            return TRUE;
+            if ( pEntry->IsParentData() )
+                return FALSE;
+            else
+                return TRUE;
         }
 
         iter++;
@@ -4402,6 +4529,8 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
         {
             GetConfigManager()->insertSettings(
                 pToolbar->GetCommand(), xSettings );
+            if ( pToolbar->IsParentData() )
+                pToolbar->SetParentData( false );
         }
     }
     catch ( container::NoSuchElementException& )
@@ -4466,6 +4595,8 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
 {
     try
     {
+        bool bIsModuleToolbar = pToolbar->IsParentData();
+
         OUString url = pToolbar->GetCommand();
         GetConfigManager()->removeSettings( url );
         RemoveEntry( GetEntries(), pToolbar );
@@ -4485,6 +4616,12 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
 
     // Restore of toolbar is done by removing it from
     // it's configuration manager and then getting it again
+    bool bParentToolbar = pToolbar->IsParentData();
+
+    // Cannot restore parent toolbar
+    if ( bParentToolbar )
+        return;
+
     try
     {
         GetConfigManager()->removeSettings( url );
@@ -4500,8 +4637,14 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
     // Now reload the toolbar settings
     try
     {
-        uno::Reference< container::XIndexAccess > xToolbarSettings =
-            GetConfigManager()->getSettings( url, sal_False );
+        uno::Reference< container::XIndexAccess > xToolbarSettings;
+        if ( IsDocConfig() )
+        {
+            xToolbarSettings = GetParentConfigManager()->getSettings( url, sal_False );
+            pToolbar->SetParentData( true );
+        }
+        else
+            xToolbarSettings = GetConfigManager()->getSettings( url, sal_False );
 
         LoadToolbar( xToolbarSettings, pToolbar );
 
@@ -4554,9 +4697,18 @@ void ToolbarSaveInData::ReloadToolbar( const OUString& rResourceURL )
 
         try
         {
-            uno::Reference< container::XIndexAccess > xToolbarSettings =
-                GetConfigManager()->getSettings(
+            uno::Reference< container::XIndexAccess > xToolbarSettings;
+
+            if ( pToolbar->IsParentData() )
+            {
+                xToolbarSettings = GetParentConfigManager()->getSettings(
                     pToolbar->GetCommand(), sal_False);
+            }
+            else
+            {
+                xToolbarSettings = GetConfigManager()->getSettings(
+                    pToolbar->GetCommand(), sal_False);
+            }
 
             LoadToolbar( xToolbarSettings, pToolbar );
         }
@@ -5169,19 +5321,26 @@ IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 *
 *******************************************************************************/
 SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
-    const uno::Reference< css::ui::XImageManager >& rXImageManager )
+    const uno::Reference< css::ui::XImageManager >& rXImageManager,
+    const uno::Reference< css::ui::XImageManager >& rXParentImageManager )
     :
-    ModalDialog     ( pWindow, ResId( MD_ICONSELECTOR, DIALOG_MGR() ) ),
-    aFtDescription  ( this, ResId( FT_SYMBOLS ) ),
-    aTbSymbol       ( this, ResId( TB_SYMBOLS ) ),
-    aFtNote         ( this, ResId( FT_NOTE ) ),
-    aBtnOK          ( this, ResId( BTN_OK ) ),
-    aBtnCancel      ( this, ResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ResId( BTN_HELP ) ),
-    aBtnImport      ( this, ResId( BTN_IMPORT ) ),
-    m_xImageManager ( rXImageManager )
+    ModalDialog          ( pWindow, ResId( MD_ICONSELECTOR, DIALOG_MGR() ) ),
+    aFtDescription       ( this, ResId( FT_SYMBOLS ) ),
+    aTbSymbol            ( this, ResId( TB_SYMBOLS ) ),
+    aFtNote              ( this, ResId( FT_NOTE ) ),
+    aBtnOK               ( this, ResId( BTN_OK ) ),
+    aBtnCancel           ( this, ResId( BTN_CANCEL ) ),
+    aBtnHelp             ( this, ResId( BTN_HELP ) ),
+    aBtnImport           ( this, ResId( BTN_IMPORT ) ),
+    m_xImageManager      ( rXImageManager ),
+    m_xParentImageManager( rXParentImageManager )
 {
     FreeResource();
+
+    typedef ::std::hash_map< ::rtl::OUString,
+                             bool,
+                             ::rtl::OUStringHash,
+                             ::std::equal_to< ::rtl::OUString > > ImageInfo;
 
     aTbSymbol.SetPageScroll( TRUE );
 
@@ -5210,20 +5369,41 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         aBtnImport.Enable( FALSE );
     }
 
-    uno::Sequence< OUString > names =
-        m_xImageManager->getAllImageNames( GetImageType() );
+    uno::Sequence< OUString > names;
+    ImageInfo                 aImageInfo;
+
+    if ( m_xParentImageManager.is() )
+    {
+        names = m_xParentImageManager->getAllImageNames( GetImageType() );
+        for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+            aImageInfo.insert( ImageInfo::value_type( names[n], false ));
+    }
+
+    names = m_xImageManager->getAllImageNames( GetImageType() );
+    for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+    {
+        ImageInfo::iterator pIter = aImageInfo.find( names[n] );
+        if ( pIter != aImageInfo.end() )
+            pIter->second = true;
+        else
+            aImageInfo.insert( ImageInfo::value_type( names[n], true ));
+    }
 
     // large growth factor, expecting many entries
     USHORT nId = 1;
     uno::Sequence< OUString > name( 1 );
-    for ( sal_Int32 i = 0; i < names.getLength(); ++i )
+    ImageInfo::const_iterator pConstIter = aImageInfo.begin();
+    while ( pConstIter != aImageInfo.end() )
     {
-        name[ 0 ] = names[ i ];
+        name[ 0 ] = pConstIter->first;
 
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics;
         try
         {
-            graphics = m_xImageManager->getImages( GetImageType(), name );
+            if ( pConstIter->second )
+                graphics = m_xImageManager->getImages( GetImageType(), name );
+            else
+                graphics = m_xParentImageManager->getImages( GetImageType(), name );
         }
         catch ( uno::Exception& )
         {
@@ -5234,7 +5414,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
-            aTbSymbol.InsertItem( nId, img, names[ i ] );
+            aTbSymbol.InsertItem( nId, img, pConstIter->first );
 
             graphics[ 0 ]->acquire();
 
@@ -5243,6 +5423,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
             ++nId;
         }
+
+        ++pConstIter;
     }
 
     aTbSymbol.SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
