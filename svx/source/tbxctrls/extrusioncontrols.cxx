@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:28:55 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,29 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     maImgParallel( SVX_RES( IMG_PARALLEL ) ),
     maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
     mxFrame( rFrame )
+{
+    implInit();
+}
+
+ExtrusionDirectionWindow::ExtrusionDirectionWindow(
+    USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow ) :
+    SfxPopupWindow( nId,
+                    rFrame,
+                    pParentWindow,
+                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
+    mbPopupMode     ( TRUE ),
+    maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ),
+    maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) ),
+    maImgParallel( SVX_RES( IMG_PARALLEL ) ),
+    maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
+    mxFrame( rFrame )
+{
+    implInit();
+}
+
+void ExtrusionDirectionWindow::implInit()
 {
     SetHelpId( HID_POPUP_EXTRUSION_DIRECTION );
 
@@ -426,7 +449,7 @@ SfxPopupWindowType ExtrusionDirectionControl::GetPopupWindowType() const
 
 SfxPopupWindow* ExtrusionDirectionControl::CreatePopupWindow()
 {
-    ExtrusionDirectionWindow* pWin = new ExtrusionDirectionWindow( GetId(), m_xFrame );
+    ExtrusionDirectionWindow* pWin = new ExtrusionDirectionWindow( GetId(), m_xFrame, &GetToolBox() );
     pWin->StartPopupMode( &GetToolBox(), TRUE );
     pWin->StartSelection();
     SetPopupWindow( pWin );
@@ -498,6 +521,39 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     mbEnabled( false ),
     mbInExecute( false ),
     mxFrame( rFrame )
+{
+    implInit();
+}
+
+ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow ) :
+    SfxPopupWindow( nId,
+                    rFrame,
+                    pParentWindow,
+                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
+    mbPopupMode     ( true ),
+    maImgDepth0( SVX_RES( IMG_DEPTH_0 ) ),
+    maImgDepth1( SVX_RES( IMG_DEPTH_1 ) ),
+    maImgDepth2( SVX_RES( IMG_DEPTH_2 ) ),
+    maImgDepth3( SVX_RES( IMG_DEPTH_3 ) ),
+    maImgDepth4( SVX_RES( IMG_DEPTH_4 ) ),
+    maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) ),
+    maImgDepth0h( SVX_RES( IMG_DEPTH_0_H ) ),
+    maImgDepth1h( SVX_RES( IMG_DEPTH_1_H ) ),
+    maImgDepth2h( SVX_RES( IMG_DEPTH_2_H ) ),
+    maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) ),
+    maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) ),
+    maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
+    mfDepth( -1.0 ),
+    mbEnabled( false ),
+    mbInExecute( false ),
+    mxFrame( rFrame )
+{
+    implInit();
+}
+
+void ExtrusionDepthWindow::implInit()
 {
     SetHelpId( HID_POPUP_EXTRUSION_DEPTH );
 
@@ -776,7 +832,7 @@ SfxPopupWindowType ExtrusionDepthControl::GetPopupWindowType() const
 
 SfxPopupWindow* ExtrusionDepthControl::CreatePopupWindow()
 {
-    ExtrusionDepthWindow* pWin = new ExtrusionDepthWindow( GetId(), m_xFrame );
+    ExtrusionDepthWindow* pWin = new ExtrusionDepthWindow( GetId(), m_xFrame, &GetToolBox() );
     pWin->StartPopupMode( &GetToolBox(), TRUE );
     pWin->StartSelection();
     SetPopupWindow( pWin );
@@ -816,6 +872,39 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(
     mnDirection( FROM_FRONT ),
     mbDirectionEnabled( false ),
     mxFrame( rFrame )
+{
+    implInit();
+}
+
+// -----------------------------------------------------------------------
+
+ExtrusionLightingWindow::ExtrusionLightingWindow(
+    USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow ) :
+    SfxPopupWindow( nId,
+                    rFrame,
+                    pParentWindow,
+                    SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ) ),
+    maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) ),
+    maImgNormal( SVX_RES( IMG_LIGHTING_NORMAL ) ),
+    maImgDim( SVX_RES( IMG_LIGHTING_DIM ) ),
+    maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) ),
+    maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) ),
+    maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) ),
+    mbPopupMode( true ),
+    mnLevel( 0 ),
+    mbLevelEnabled( false ),
+    mnDirection( FROM_FRONT ),
+    mbDirectionEnabled( false ),
+    mxFrame( rFrame )
+{
+    implInit();
+}
+
+// -----------------------------------------------------------------------
+
+void ExtrusionLightingWindow::implInit()
 {
     SetHelpId( HID_POPUP_EXTRUSION_LIGHTING );
 
@@ -879,6 +968,8 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" )));
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" )));
 }
+
+// -----------------------------------------------------------------------
 
 SfxPopupWindow* ExtrusionLightingWindow::Clone() const
 {
@@ -1123,7 +1214,7 @@ SfxPopupWindowType ExtrusionLightingControl::GetPopupWindowType() const
 
 SfxPopupWindow* ExtrusionLightingControl::CreatePopupWindow()
 {
-    ExtrusionLightingWindow* pWin = new ExtrusionLightingWindow( GetId(), m_xFrame );
+    ExtrusionLightingWindow* pWin = new ExtrusionLightingWindow( GetId(), m_xFrame, &GetToolBox() );
     pWin->StartPopupMode( &GetToolBox(), TRUE );
     pWin->StartSelection();
     SetPopupWindow( pWin );
@@ -1163,6 +1254,36 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     mbPopupMode( true ),
     mxFrame( rFrame )
 {
+    implInit();
+}
+
+ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
+    USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow ) :
+
+    SfxPopupWindow( nId,
+                    rFrame,
+                    pParentWindow,
+                    SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE )),
+    maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) ),
+    maImgSurface2( SVX_RES( IMG_MATTE ) ),
+    maImgSurface3( SVX_RES( IMG_PLASTIC ) ),
+    maImgSurface4( SVX_RES( IMG_METAL ) ),
+    maImgSurface1h( SVX_RES( IMG_WIRE_FRAME_H ) ),
+    maImgSurface2h( SVX_RES( IMG_MATTE_H ) ),
+    maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) ),
+    maImgSurface4h( SVX_RES( IMG_METAL_H ) ),
+    mbPopupMode( true ),
+    mxFrame( rFrame )
+{
+    implInit();
+}
+
+// -----------------------------------------------------------------------
+
+void ExtrusionSurfaceWindow::implInit()
+{
     SetHelpId( HID_POPUP_EXTRUSION_SURFACE );
 
     bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
@@ -1188,6 +1309,8 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurface" )));
 //  rBindings.Update( SID_EXTRUSION_SURFACE );
 }
+
+// -----------------------------------------------------------------------
 
 SfxPopupWindow* ExtrusionSurfaceWindow::Clone() const
 {
@@ -1352,7 +1475,7 @@ SfxPopupWindowType ExtrusionSurfaceControl::GetPopupWindowType() const
 
 SfxPopupWindow* ExtrusionSurfaceControl::CreatePopupWindow()
 {
-    ExtrusionSurfaceWindow* pWin = new ExtrusionSurfaceWindow( GetId(), m_xFrame );
+    ExtrusionSurfaceWindow* pWin = new ExtrusionSurfaceWindow( GetId(), m_xFrame, &GetToolBox() );
     pWin->StartPopupMode( &GetToolBox(), TRUE );
     pWin->StartSelection();
     SetPopupWindow( pWin );
@@ -1404,7 +1527,8 @@ SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Extrusion3DColor" )),
         SID_EXTRUSION_3D_COLOR,
         m_xFrame,
-        SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ));
+        SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ),
+        &GetToolBox() );
     pColorWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
