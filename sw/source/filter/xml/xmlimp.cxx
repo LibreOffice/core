@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:30:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,6 +1158,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUseFormerTextWrapping = false;
     // --> OD 2004-07-08 #i28701#
     bool bConsiderWrapOnObjPos = false;
+    // --> FME 2005-05-27 #i47448#
+    bool bIgnoreFirstLineIndentInNumbering = false;
+    // --> FME 2005-06-08 #i49277#
+    bool bDoNotJustifyLinesWithManualBreak = false;
     // --> PB 2004-08-23 #i33095#
     bool bLoadReadonly = false;
 
@@ -1216,6 +1220,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // --> OD 2004-07-08 #i28701#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos")) )
                     bConsiderWrapOnObjPos = true;
+                // <--
+                // --> FME 2005-05-27 #i47448#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering")) )
+                    bIgnoreFirstLineIndentInNumbering = true;
+                // <--
+                // --> FME 2005-06-08 #i49277#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak")) )
+                    bDoNotJustifyLinesWithManualBreak = true;
                 // <--
                 // --> PB 2004-08-23 #i33095#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LoadReadonly")) )
@@ -1294,6 +1306,34 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("ConsiderTextWrapOnObjPos")), makeAny( false ) );
     }
     // <--
+
+    // --> FME 2005-05-27 #i47448#
+    // For SO7pp4, part of the 'new numbering' stuff has been backported from
+    // SO8. Unfortunately, only part of it and by using the same compatibility option
+    // like in SO8. Therefore documents generated with SO7pp4, containing
+    // numbered paragraphs with first line indent differ between SO7pp4 and
+    // SO8. In order to fix this for SO8pp1, I introduce a new compatiblity
+    // flag 'bIgnoreFirstLineIndentInNumbering'. This flag has to be set for all
+    // documents < SO8, but not for SO8. So if the property is not present, the
+    // flag will be set to 'true'. SO8 documents surely have the
+    // 'ConsiderWrapOnObjPos' property set (no matter if 'true' or 'false'),
+    // therefore the correct condition to set this flag is this:
+    if( !bIgnoreFirstLineIndentInNumbering && !bConsiderWrapOnObjPos )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("IgnoreFirstLineIndentInNumbering")), makeAny( true ) );
+    }
+    // <--
+
+    // --> FME 2005-06-08 #i49277#
+    // This flag has to be set for all documents < SO8
+    if ( !bDoNotJustifyLinesWithManualBreak && !bConsiderWrapOnObjPos )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotJustifyLinesWithManualBreak")), makeAny( true ) );
+    }
+    // <--
+
     // --> PB 2004-08-23 #i33095#
     if ( !bLoadReadonly )
     {
