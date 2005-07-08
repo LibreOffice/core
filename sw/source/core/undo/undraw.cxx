@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:53:45 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,15 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
         // move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
         // <--
+        // --> OD 2005-05-10 #i45952# - notify that position attributes
+        // are already set
+        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+                "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
+        if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
+        {
+            static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
+        }
+        // <--
     }
 }
 
@@ -382,6 +391,15 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
     // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
     // move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
+    // <--
+    // --> OD 2005-05-10 #i45952# - notify that position attributes
+    // are already set
+    ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
+            "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
+    if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
+    {
+        static_cast<SwDrawFrmFmt*>(pObjArr->pFmt)->PosAttrSet();
+    }
     // <--
 }
 
@@ -488,6 +506,15 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
     // move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
     // <--
+    // --> OD 2005-05-10 #i45952# - notify that position attributes
+    // are already set
+    ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
+            "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
+    if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
+    {
+        static_cast<SwDrawFrmFmt*>(pObjArr->pFmt)->PosAttrSet();
+    }
+    // <--
 }
 
 void SwUndoDrawUnGroup::Redo( SwUndoIter& )
@@ -527,6 +554,15 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
         // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
         // move object to visible layer
         pContact->MoveObjToVisibleLayer( rSave.pObj );
+        // <--
+        // --> OD 2005-05-10 #i45952# - notify that position attributes
+        // are already set
+        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+                "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
+        if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
+        {
+            static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
+        }
         // <--
     }
 }
@@ -574,6 +610,15 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
         // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
         // move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
+        // <--
+        // --> OD 2005-05-10 #i45952# - notify that position attributes
+        // are already set
+        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+                "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
+        if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
+        {
+            static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
+        }
         // <--
     }
     rIter.pMarkList = pMarkLst;
