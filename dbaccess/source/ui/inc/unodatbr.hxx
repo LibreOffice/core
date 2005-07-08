@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:11:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ namespace dbaui
         // SbaGridListener overridables
         virtual void RowChanged();
         virtual void ColumnChanged();
+        virtual void SelectionChanged();
 
         String getURL() const;
 
