@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:19:39 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,8 +1230,16 @@ USHORT Desktop::Exception(USHORT nError)
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
-    sal_Bool bRestart = sal_False;
-    if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY )
+    sal_Bool bRestart                           = sal_False;
+    sal_Bool bAllowRecoveryAndSessionManagement = (
+                                                    ( !pArgs->IsNoRestore() ) &&
+                                                    ( !pArgs->IsHeadless()  ) &&
+                                                    ( !pArgs->IsServer()    )
+                                                  );
+    if (
+        ( bAllowRecoveryAndSessionManagement       ) &&
+        (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY )
+       )
         bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
@@ -2013,15 +2021,22 @@ void Desktop::OpenClients()
         }
     }
 
-    // Disable AutoSave feature in case "-norestore" is given on the command line.
+    // Disable AutoSave feature in case "-norestore" or a similare command line switch is set on the command line.
     // The reason behind: AutoSave/EmergencySave/AutoRecovery share the same data.
     // But the require that all documents, which are saved as backup should exists inside
     // memory. May be this mechanism will be inconsistent if the configuration exists ...
-    // but no document inside memory corrspodn to this data.
+    // but no document inside memory corrspond to this data.
     // Furter it's not acceptable to recover such documents without any UI. It can
     // need some time, where the user wont see any results and wait for finishing the office startup ...
-    if ( pArgs->IsNoRestore() )
+    sal_Bool bAllowRecoveryAndSessionManagement = (
+                                                    ( !pArgs->IsNoRestore() ) &&
+                                                    ( !pArgs->IsHeadless()  ) &&
+                                                    ( !pArgs->IsServer()    )
+                                                  );
+
+    if ( ! bAllowRecoveryAndSessionManagement )
     {
+     /*
         ::comphelper::ConfigurationHelper::writeDirectKey(
                 ::comphelper::getProcessServiceFactory(),
                 ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
@@ -2029,9 +2044,32 @@ void Desktop::OpenClients()
                 ::rtl::OUString::createFromAscii("Enabled"),
                 ::com::sun::star::uno::makeAny(sal_False),
                 ::comphelper::ConfigurationHelper::E_STANDARD);
-    }
 
-    if ( !pArgs->IsServer() && !pArgs->IsNoRestore())
+        */
+        try
+        {
+            Reference< XDispatch > xRecovery(
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery")) ),
+                    ::com::sun::star::uno::UNO_QUERY_THROW );
+
+            Reference< XURLTransformer > xParser(
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
+                    ::com::sun::star::uno::UNO_QUERY_THROW );
+
+            css::util::URL aCmd;
+            aCmd.Complete = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/disableRecovery");
+            xParser->parseStrict(aCmd);
+
+            xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
+        }
+        catch(const css::uno::Exception& e)
+        {
+            OUString aMessage = OUString::createFromAscii("Could not disable AutoRecovery.\n")
+                + e.Message;
+            OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+        }
+    }
+    else
     {
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
