@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:38:40 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 15:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ Image PreviewRenderer::RenderPage (
     }
     catch (const com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("%s: caught exception", __FUNCTION__);
+        OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
     }
 
     return aPreview;
@@ -243,7 +243,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("%s: caught exception", __FUNCTION__);
+        OSL_TRACE("PreviewRenderer::PaintPage: caught exception");
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:38:05 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 15:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("%s: caught exception", __FUNCTION__);
+        OSL_TRACE("PageObjectViewObjectContact::GetPreview: caught exception");
     }
 
     return aBitmap;
@@ -265,7 +265,7 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
     }
     catch (const com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("%s: caught exception", __FUNCTION__);
+        OSL_TRACE("PageObjectViewObjectContact::PaintObject: caught exception");
         // Event though the object was not painted completely we set the
         // state flags as if that has happened.  We do this in order to
         // avoid frequent repaints because when painting failed this time it
