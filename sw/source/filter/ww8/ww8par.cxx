@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:10:57 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,6 +1630,14 @@ void SwWW8ImplReader::ImportDop()
     rDoc.SetOldNumbering( false );
     // <- #111955#
 
+    // --> FME 2005-05-27 #i47448#
+    rDoc.SetIgnoreFirstLineIndentInNumbering( false );
+    // <--
+
+    // --> FME 2005-06-08 #i49277#
+    rDoc.SetDoNotJustifyLinesWithManualBreak( false );
+    // <--
+
     rDoc.SetUseFormerLineSpacing( false );
 
     // OD, MMAHER 2004-03-01 #i25901#- set new compatibility option
@@ -1649,7 +1657,7 @@ void SwWW8ImplReader::ImportDop()
     // <--
 
     //
-    // COMPATIBILITY FLAGS START
+    // COMPATIBILITY FLAGS END
     //
 
     if (!pWDop->fNoLeading)
