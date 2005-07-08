@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 14:27:00 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ private:
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled = true );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );
+    void implInit();
 
 protected:
     virtual BOOL    Close();
@@ -140,6 +141,9 @@ protected:
 public:
     ExtrusionDirectionWindow( USHORT nId,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    ExtrusionDirectionWindow( USHORT nId,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                              Window* pParentWindow );
     ~ExtrusionDirectionWindow();
 
     void            StartSelection();
@@ -200,6 +204,7 @@ private:
 
     void    implFillStrings( FieldUnit eUnit );
     void    implSetDepth( double fDepth, bool bEnabled );
+    void    implInit();
 
 protected:
     virtual BOOL    Close();
@@ -214,6 +219,9 @@ protected:
 public:
     ExtrusionDepthWindow( USHORT nId,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    ExtrusionDepthWindow( USHORT nId,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                          Window* pParentWindow );
     ~ExtrusionDepthWindow();
 
     void            StartSelection();
@@ -274,6 +282,7 @@ private:
 
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
+    void    implInit();
 
     DECL_LINK( SelectHdl, void * );
 
@@ -290,6 +299,9 @@ protected:
 public:
     ExtrusionLightingWindow( USHORT nId,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    ExtrusionLightingWindow( USHORT nId,
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                             Window* pParentWindow );
     ~ExtrusionLightingWindow();
 
     void            StartSelection();
@@ -339,6 +351,7 @@ private:
     DECL_LINK( SelectHdl, void * );
 
     void    implSetSurface( int nSurface, bool bEnabled );
+    void    implInit();
 
 protected:
     virtual BOOL    Close();
@@ -353,6 +366,9 @@ protected:
 public:
     ExtrusionSurfaceWindow( USHORT nId,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    ExtrusionSurfaceWindow( USHORT nId,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                            Window* pParentWindow );
     ~ExtrusionSurfaceWindow();
 
     void            StartSelection();
