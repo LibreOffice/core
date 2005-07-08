@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:35:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,16 +187,22 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
     // CalcRightMargin() setzt pCurr->Width() auf die Zeilenbreite !
     CalcRightMargin( pCurr, nReal );
 
+    // --> FME 2005-06-08 #i49277#
+    const sal_Bool bDoNotJustifyLinesWithManualBreak =
+                GetTxtFrm()->GetNode()->GetDoc()->DoNotJustifyLinesWithManualBreak();
+    // <--
+
     SwLinePortion *pPos = pCurr->GetPortion();
 
     while( pPos )
     {
-        // disabled for #i13507#
-/*        if ( pPos->IsBreakPortion() && !IsLastBlock() )
+        if ( bDoNotJustifyLinesWithManualBreak &&
+             pPos->IsBreakPortion() && !IsLastBlock() )
         {
            pCurr->FinishSpaceAdd();
            break;
-        } */
+        }
+
         if ( pPos->InTxtGrp() )
             nGluePortion += ((SwTxtPortion*)pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
         else if( pPos->IsMultiPortion() )
