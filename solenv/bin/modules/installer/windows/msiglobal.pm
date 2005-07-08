@@ -454,13 +454,9 @@ sub get_codepage_for_sis
 
 sub get_template_for_sis
 {
-    my ( $language, $languagefile, $searchstring ) = @_;
+    my ( $language ) = @_;
 
     my $windowslanguage = installer::windows::language::get_windows_language($language);
-
-    # my $value = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    # $value =~ s/\"\s*$//;                     # removing ending '"'
 
     my $value = "\"Intel;" . $windowslanguage;  # adding the Windows language
 
@@ -508,10 +504,6 @@ sub get_title_for_sis
 
 sub get_author_for_sis
 {
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    # my $author = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
     my $author = $installer::globals::longmanufacturer;
 
     $author = "\"" . $author . "\"";
@@ -525,9 +517,7 @@ sub get_author_for_sis
 
 sub get_subject_for_sis
 {
-    my ( $language, $languagefile, $searchstring, $allvariableshashref ) = @_;
-
-    # my $subject = get_value_from_sis_lng($language, $languagefile, $searchstring );
+    my ( $allvariableshashref ) = @_;
 
     my $subject = $allvariableshashref->{'PRODUCTNAME'} . " " . $allvariableshashref->{'PRODUCTVERSION'};
 
@@ -602,16 +592,18 @@ sub write_summary_into_msi_database
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
 
+    my $sislanguage = "en-US";  # title, comment, keyword and appname alway in english
+
     my $msiversion = get_msiversion_for_sis();
     my $codepage = get_codepage_for_sis($language);
-    my $template = get_template_for_sis($language,$languagefile, "OOO_SIS_TEMPLATE");
+    my $template = get_template_for_sis($language);
     my $guid = get_packagecode_for_sis();
-    my $title = get_title_for_sis($language,$languagefile, "OOO_SIS_TITLE");
-    my $author = get_author_for_sis($language,$languagefile, "OOO_SIS_AUTHOR");
-    my $subject = get_subject_for_sis($language,$languagefile, "OOO_SIS_SUBJECT", $allvariableshashref);
-    my $comment = get_comment_for_sis($language,$languagefile, "OOO_SIS_COMMENT");
-    my $keywords = get_keywords_for_sis($language,$languagefile, "OOO_SIS_KEYWORDS");
-    my $appname = get_appname_for_sis($language,$languagefile, "OOO_SIS_APPNAME");
+    my $title = get_title_for_sis($sislanguage,$languagefile, "OOO_SIS_TITLE");
+    my $author = get_author_for_sis();
+    my $subject = get_subject_for_sis($allvariableshashref);
+    my $comment = get_comment_for_sis($sislanguage,$languagefile, "OOO_SIS_COMMENT");
+    my $keywords = get_keywords_for_sis($sislanguage,$languagefile, "OOO_SIS_KEYWORDS");
+    my $appname = get_appname_for_sis($sislanguage,$languagefile, "OOO_SIS_APPNAME");
     my $security = get_security_for_sis();
     my $wordcount = get_wordcount_for_sis();
 
