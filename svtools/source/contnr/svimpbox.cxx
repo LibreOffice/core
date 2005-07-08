@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:05:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,6 +823,13 @@ void SvImpLBox::KeyLeftRight( long nDelta )
 // dem letzten Eintrag ist
 SvLBoxEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
 {
+    DBG_ASSERT( pView->GetModel(), "SvImpLBox::GetClickedEntry: how can this ever happen? Please tell me (frank.schoenheit@sun.com) how to reproduce!" );
+    if ( !pView->GetModel() )
+        // this is quite impossible. Nevertheless, stack traces from the crash reporter
+        // suggest it isn't. Okay, make it safe, and wait for somebody to reproduce it
+        // reliably :-\ ....
+        // #122359# / 2005-05-23 / frank.schoenheit@sun.com
+        return NULL;
     if( pView->GetEntryCount() == 0 || !pStartEntry || !pView->GetEntryHeight())
         return 0;
 
