@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 09:16:26 $
+#   last change: $Author: obo $ $Date: 2005-07-08 09:49:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,11 @@ SHL1STDLIBS=\
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
+.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
+SHL1VERSIONMAP = linuxigcc3_export.map
+.ELSE
 SHL1VERSIONMAP = export.map
+.ENDIF
 
 # END --------------------------------------------------------------
 
@@ -96,7 +100,11 @@ SHL2STDLIBS=\
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)
+.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
+SHL2VERSIONMAP = linuxigcc3_export.map
+.ELSE
 SHL2VERSIONMAP = export.map
+.ENDIF
 
 # END --------------------------------------------------------------
 
