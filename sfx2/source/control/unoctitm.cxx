@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:14:44 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,8 +730,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs( aArgs );
-        sal_Int32 nCount = lNewArgs.getLength();
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs;
+        sal_Int32 nCount = aArgs.getLength();
 
         // Support for URL based arguments
         INetURLObject aURLObj( aURL.Complete );
@@ -742,31 +742,38 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         SfxCallMode nCall = SFX_CALLMODE_SLOT;
         sal_Int32   nMarkArg = -1;
 
+        // Filter arguments which shouldn't be part of the sequence property value
         sal_Bool    bTemp;
-        sal_Int32   nModifierIndex( -1 );
         sal_uInt16  nModifier(0);
+        std::vector< ::com::sun::star::beans::PropertyValue > aAddArgs;
         for( sal_Int32 n=0; n<nCount; n++ )
         {
-            const ::com::sun::star::beans::PropertyValue& rProp = lNewArgs[n];
-            if( rProp.Name.compareToAscii("SynchronMode")== 0 )
+            const ::com::sun::star::beans::PropertyValue& rProp = aArgs[n];
+            if( rProp.Name.equalsAsciiL("SynchronMode",12))
             {
                 if( rProp.Value >>=bTemp )
                     nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
             }
-            else if( rProp.Name.compareToAscii("Bookmark")== 0 )
-                nMarkArg = n;
-            else if( rProp.Name.compareToAscii("KeyModifier")== 0 )
+            else if( rProp.Name.equalsAsciiL("Bookmark",8))
             {
-                rProp.Value >>= nModifier;
-                nModifierIndex = n;
+                nMarkArg = n;
+                aAddArgs.push_back( aArgs[n] );
             }
+            else if( rProp.Name.equalsAsciiL("KeyModifier",11))
+                rProp.Value >>= nModifier;
+            else
+                aAddArgs.push_back( aArgs[n] );
         }
 
-        // Remove "KeyModifier" property from sequence to not interfere with TransformParameters
-        if ( nModifierIndex >= 0 )
+        // Add needed arguments to sequence property value
+        sal_uInt32 nAddArgs = aAddArgs.size();
+        if ( nAddArgs > 0 )
         {
-            comphelper::removeElementAt< ::com::sun::star::beans::PropertyValue >( lNewArgs, nModifierIndex );
-            --nCount;
+            sal_uInt32 nIndex( lNewArgs.getLength() );
+
+            lNewArgs.realloc( lNewArgs.getLength()+aAddArgs.size() );
+            for ( sal_uInt32 i = 0; i < nAddArgs; i++ )
+                lNewArgs[nIndex++] = aAddArgs[i];
         }
 
         // Overwrite possible detected sychron argument, if real listener exists (currently no other way)
