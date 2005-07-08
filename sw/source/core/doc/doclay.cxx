@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-23 19:44:48 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,13 +668,17 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     else
     {
         ASSERT( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
-        SwDrawContact *pContact = (SwDrawContact *)rSource.FindContactObj();
+        // --> OD 2005-06-10 #i50086# - move object to visible layer, only if
+        // source object is visible.
+        SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
-        pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
-                                CloneSdrObj( *pContact->GetMaster(),
+        SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
+                                CloneSdrObj( *pSourceContact->GetMaster(),
                                         bCopyIsMove && this == pSrcDoc ) );
-        // --> OD 2004-11-22 #i35635#
-        pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
+        if ( IsVisibleLayerId( pSourceContact->GetMaster()->GetLayer() ) )
+        {
+            pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
+        }
         // <--
         // --> OD 2005-05-23 #i49730# - notify draw frame format
         // that position attributes are already set, if the position attributes
