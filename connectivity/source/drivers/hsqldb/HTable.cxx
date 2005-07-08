@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2005-07-05 07:51:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCol
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
-    OColumn* pColumn = new OColumn(sal_True);
+    OHSQLColumn* pColumn = new OHSQLColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
@@ -408,6 +408,45 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     }
 }
 // -----------------------------------------------------------------------------
+// XRename
+void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(
+#ifdef GCC
+        ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        );
+
+    if(!isNew())
+    {
+        ::rtl::OUString sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER "));
+        if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
+        else
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
+
+        ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+
+        ::rtl::OUString sCatalog,sSchema,sTable;
+        ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+
+        ::rtl::OUString sComposedName;
+        ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInDataManipulation);
+        sSql += sComposedName
+            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" RENAME TO "));
+        ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
+        sSql += sComposedName;
+
+        executeStatement(sSql);
+
+        ::connectivity::OTable_TYPEDEF::rename(newName);
+    }
+    else
+        ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
+}
 
 
 
