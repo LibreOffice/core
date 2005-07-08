@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-06 09:15:48 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,21 +975,26 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
                 }
                 pImpl->mxUIElement = xUIElement;
 
+                Window*  pParentTbxWindow( pImpl->pBox );
                 Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                 ToolBox* pToolBar( 0 );
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     pToolBar = (ToolBox *)pTbxWindow;
 
-                ::Size aSize = getPersistentFloatingSize( xFrame, rSubToolBarResName );
-                if ( aSize.Width() == 0 || aSize.Height() == 0 )
+                if ( pToolBar )
                 {
-                    // calc and set size for popup mode
-                    aSize = pToolBar->CalcPopupWindowSizePixel();
-                }
-                pToolBar->SetSizePixel( aSize );
+                    pToolBar->SetParent( pParentTbxWindow );
+                    ::Size aSize = getPersistentFloatingSize( xFrame, rSubToolBarResName );
+                    if ( aSize.Width() == 0 || aSize.Height() == 0 )
+                    {
+                        // calc and set size for popup mode
+                        aSize = pToolBar->CalcPopupWindowSizePixel();
+                    }
+                    pToolBar->SetSizePixel( aSize );
 
-                // open subtoolbox in popup mode
-                Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
+                    // open subtoolbox in popup mode
+                    Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
+                }
             }
         }
     }
@@ -1313,6 +1318,54 @@ SfxPopupWindow::SfxPopupWindow(
     const Reference< XFrame >& rFrame,
     const ResId &rId ) :
     FloatingWindow( SFX_APP()->GetTopWindow(), rId )
+    , m_nId( nId )
+    , m_bFloating(FALSE)
+    , m_pStatusListener( 0 )
+    , m_bCascading( FALSE )
+    , m_xFrame( rFrame )
+{
+    m_xServiceManager = ::comphelper::getProcessServiceFactory();
+
+    Window* pWindow = SFX_APP()->GetTopWindow();
+    while ( pWindow && !pWindow->IsSystemWindow() )
+        pWindow = pWindow->GetParent();
+
+    if ( pWindow )
+        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+}
+
+//--------------------------------------------------------------------
+
+SfxPopupWindow::SfxPopupWindow(
+    USHORT nId,
+    const Reference< XFrame >& rFrame,
+    Window* pParentWindow,
+    WinBits nBits ) :
+    FloatingWindow( pParentWindow, nBits )
+    , m_nId( nId )
+    , m_bFloating(FALSE)
+    , m_pStatusListener( 0 )
+    , m_bCascading( FALSE )
+    , m_xFrame( rFrame )
+{
+    m_xServiceManager = ::comphelper::getProcessServiceFactory();
+
+    Window* pWindow = SFX_APP()->GetTopWindow();
+    while ( pWindow && !pWindow->IsSystemWindow() )
+        pWindow = pWindow->GetParent();
+
+    if ( pWindow )
+        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+}
+
+//--------------------------------------------------------------------
+
+SfxPopupWindow::SfxPopupWindow(
+    USHORT nId,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParentWindow,
+    const ResId &rId ) :
+    FloatingWindow( pParentWindow, rId )
     , m_nId( nId )
     , m_bFloating(FALSE)
     , m_pStatusListener( 0 )
