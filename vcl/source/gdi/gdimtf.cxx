@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:42:26 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,21 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
         aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
 
+        // #i47260# Convert logical output position to offset within
+        // the metafile's mapmode. Therefore, disable pixel offset on
+        // outdev, it's inverse mnOutOffLogicX/Y is calculated for a
+        // different mapmode (the one currently set on pOut, that is)
+        // - thus, aDrawMap's origin would generally be wrong. And
+        // even _if_ aDrawMap is similar to pOutDev's current mapmode,
+        // it's _still_ undesirable to have pixel offset unequal zero,
+        // because one would still get round-off errors (the
+        // round-trip error for LogicToPixel( PixelToLogic() ) was the
+        // reason for having pixel offset in the first place).
+        const Size& rOldOffset( pOut->GetPixelOffset() );
+        const Size  aEmptySize;
+        pOut->SetPixelOffset( aEmptySize );
         aDrawMap.SetOrigin( pOut->PixelToLogic( pOut->LogicToPixel( rPos ), aDrawMap ) );
+        pOut->SetPixelOffset( rOldOffset );
 
         pOut->Push();
 
