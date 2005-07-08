@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:54:48 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_ENTRY_CLEANUP             =  16,
             E_PREPARE_EMERGENCY_SAVE    =  32,
             E_SESSION_SAVE              =  64,
-            E_SESSION_RESTORE           = 128
+            E_SESSION_RESTORE           = 128,
+            E_DISABLE_AUTORECOVERY      = 256
         };
 
         //---------------------------------------
