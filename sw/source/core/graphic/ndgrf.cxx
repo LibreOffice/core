@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:25:55 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,27 +535,26 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
             nRet = (short)aGrfObj.SwapIn();
         else
         {
-            uno::Reference < embed::XStorage > refRoot = GetDoc()->GetDocStorage();
-            ASSERT( refRoot.is(), "Kein Storage am Doc" );
-            if( refRoot.is() )
+
+            // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
+            try
             {
-                try
+                bool bGraphic(false);
+                SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
+                if ( pStrm )
                 {
-                    String aStrmName, aPicStgName;
-                    BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
-                    uno::Reference < embed::XStorage > refPics = refRoot;
-                    if ( aPicStgName.Len() )
-                        refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
-                    uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
-                    SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
                     if( bGraphic ? aGrfObj.SwapIn( pStrm ) : ImportGraphic( *pStrm ) )
                         nRet = 1;
                     delete pStrm;
                 }
-                catch ( uno::Exception& )
-                {
-                }
             }
+            catch ( uno::Exception& )
+            {
+                // --> OD 2005-04-25 #i48434#
+                ASSERT( false, "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
+                // <--
+            }
+            // <--
         }
 
         if( 1 == nRet )
@@ -1046,7 +1045,7 @@ void SwGrfNode::DelStreamName()
             try
             {
                 String aPicStgName, aStrmName;
-                GetStreamStorageNames( aStrmName, aPicStgName );
+                _GetStreamStorageNames( aStrmName, aPicStgName );
                 uno::Reference < embed::XStorage > refPics = xDocStg;
                 if ( aPicStgName.Len() )
                     refPics = xDocStg->openStorageElement( aPicStgName, embed::ElementModes::READWRITE );
@@ -1057,6 +1056,9 @@ void SwGrfNode::DelStreamName()
             }
             catch ( uno::Exception& )
             {
+                // --> OD 2005-04-25 #i48434#
+                ASSERT( false, "<SwGrfNode::DelStreamName()> - unhandled exception!" );
+                // <--
             }
         }
 
@@ -1064,10 +1066,72 @@ void SwGrfNode::DelStreamName()
     }
 }
 
-BOOL SwGrfNode::GetStreamStorageNames( String& rStrmName,
-                                      String& rStorName ) const
+/** helper method to determine stream for an embedded graphic.
+
+    OD 2005-05-04 #i48434#
+
+    @author OD
+
+    @param _obGraphic
+    output parameter - boolean indicating, if the stream is an embedded
+    graphic file of a Writer document of version 3.1 - 5.2
+    Note: name of parameter taken over from method <GetStreamStorageNames(..)>
+
+    @return SvStream*
+    new created stream of the embedded graphic, which has to be destroyed
+    after its usage. Could be NULL, if the stream isn't found.
+*/
+SvStream* SwGrfNode::_GetStreamForEmbedGrf( bool& _obGraphic ) const
 {
-    BOOL bGraphic = FALSE;
+    SvStream* pStrm( 0L );
+
+    uno::Reference < embed::XStorage > refRoot =
+                        const_cast<SwGrfNode*>(this)->GetDoc()->GetDocStorage();
+    ASSERT( refRoot.is(), "Kein Storage am Doc" );
+    if( refRoot.is() )
+    {
+        String aStrmName, aPicStgName;
+        _obGraphic = _GetStreamStorageNames( aStrmName, aPicStgName );
+
+        uno::Reference < embed::XStorage > refPics = refRoot;
+        if ( aPicStgName.Len() )
+            refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
+
+        // If stream doesn't exist in the storage, try access the graphic file by
+        // re-generating its name.
+        // A save action can have changed the filename of the embedded graphic,
+        // because a changed unique ID of the graphic is calculated.
+        if ( !refPics->hasByName( aStrmName ) ||
+             !refPics->isStreamElement( aStrmName ) )
+        {
+            xub_StrLen nExtPos = aStrmName.Search( '.' );
+            String aExtStr = aStrmName.Copy( nExtPos );
+            aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
+            aStrmName += aExtStr;
+        }
+        // <--
+
+        // assure that graphic file exist in the storage.
+        if ( refPics->hasByName( aStrmName ) &&
+             refPics->isStreamElement( aStrmName ) )
+        {
+            uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
+            pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
+        }
+        else
+        {
+            ASSERT( false, "<SwGrfNode::_GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
+        }
+    }
+
+    return pStrm;
+}
+
+
+bool SwGrfNode::_GetStreamStorageNames( String& rStrmName,
+                                        String& rStorName ) const
+{
+    bool bGraphic = false;
     rStorName.Erase();
     rStrmName.Erase();
 
@@ -1098,7 +1162,7 @@ BOOL SwGrfNode::GetStreamStorageNames( String& rStrmName,
         // 3.1 - 5.2
         rStorName = String( RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" ) );
         rStrmName = aUserData;
-        bGraphic = TRUE;
+        bGraphic = true;
     }
     ASSERT( STRING_NOTFOUND == rStrmName.Search( '/' ),
             "invalid graphic stream name" );
@@ -1111,24 +1175,17 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // kopiere die Formate in das andere Dokument:
     SwGrfFmtColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
 
-    SwGrfNode* pThis = (SwGrfNode*)this;
-
     Graphic aTmpGrf;
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
     if( !pLink && HasStreamName() )
     {
-        uno::Reference < embed::XStorage > refRoot = pThis->GetDoc()->GetDocStorage();
-        if( refRoot.is() )
+        // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
+        try
         {
-            try
+            bool bGraphic(false);
+            SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
+            if ( pStrm )
             {
-                String aPicStgName, aStrmName;
-                BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
-                uno::Reference < embed::XStorage > refPics = refRoot;
-                if ( aPicStgName.Len() )
-                    refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
-                uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
-                SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
                 if( bGraphic )
                     aTmpGrf.SwapIn( pStrm );
                 else
@@ -1136,15 +1193,19 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                                                     *pStrm );
                 delete pStrm;
             }
-            catch ( uno::Exception& )
-            {
-            }
         }
+        catch ( uno::Exception& )
+        {
+            // --> OD 2005-04-25 #i48434#
+            ASSERT( false, "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
+            // <--
+        }
+        // <--
     }
     else
     {
         if( aGrfObj.IsSwappedOut() )
-            pThis->SwapIn();
+            const_cast<SwGrfNode*>(this)->SwapIn();
         aTmpGrf = aGrfObj.GetGraphic();
     }
 
@@ -1201,20 +1262,14 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 
         if( HasStreamName() )
         {
-            uno::Reference < embed::XStorage > refRoot = GetDoc()->GetDocStorage();
-            if( refRoot.is() )
+            // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
+            try
             {
-                try
+                bool bGraphic(false);
+                SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
+                if ( pStrm )
                 {
-                    String aPicStgName, aStrmName;
-                    BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
-                    uno::Reference < embed::XStorage > refPics = refRoot;
-                    if ( aPicStgName.Len() )
-                        refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
-                    uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
-                    SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
-
-                    BOOL bDelStrm = TRUE;
+                    bool bDelStrm = true;
                     if( pGrfObj->IsInSwapOut() )
                         pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
                     else
@@ -1222,7 +1277,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
                         if( bGraphic )
                         {
                             pRet = pStrm;
-                            bDelStrm = FALSE;
+                            bDelStrm = false;
                         }
                         else
                         {
@@ -1234,10 +1289,14 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
                     if( bDelStrm )
                         delete pStrm;
                 }
-                catch ( uno::Exception& )
-                {
-                }
             }
+            catch ( uno::Exception& )
+            {
+                // --> OD 2005-04-25 #i48434#
+                ASSERT( false, "<SwapGraphic> - unhandled exception!" );
+                // <--
+            }
+            // <--
         }
     }
 
