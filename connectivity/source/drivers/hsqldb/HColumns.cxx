@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 10:34:58 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ OHSQLColumn::OHSQLColumn(   sal_Bool    _bCase)
 // -------------------------------------------------------------------------
 void OHSQLColumn::construct()
 {
-    m_sAutoIncrement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto_increment"));
+    m_sAutoIncrement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IDENTITY"));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
