@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TColumnsHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 15:17:02 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef CONNECTIVITY_COLUMNSHELPER_HXX
 #include "connectivity/TColumnsHelper.hxx"
 #endif
@@ -188,7 +187,10 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
 void OColumnsHelper::impl_refresh() throw(RuntimeException)
 {
     if ( m_pTable )
+    {
+        m_pImpl->m_aColumnInfo.clear();
         m_pTable->refreshColumns();
+    }
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumnsHelper::createEmptyObject()
