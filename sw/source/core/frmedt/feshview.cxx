@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:57:11 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,8 +1273,11 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         {
             SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage(0);
 
-            for(sal_uInt32 a(pObj->GetOrdNumDirect() + 1); bRet && a < pPage->GetObjCount(); a++)
+            // --> FME 2005-04-18 #i20965# Use GetOrdNum() instead of GetOrdNumDirect()
+            // because ordnums might be wrong
+            for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
             {
+            // <--
                 SdrObject *pCandidate = pPage->GetObj(a);
 
                 if(pCandidate->ISA(SwVirtFlyDrawObj) && ((SwVirtFlyDrawObj*)pCandidate)->GetCurrentBoundRect().IsInside(rPt))
