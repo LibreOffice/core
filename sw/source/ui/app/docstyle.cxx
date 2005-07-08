@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:17:07 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 11:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,13 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
                 if( rDoc.FindPageDescByName( pDesc->GetName(), &nPgDscPos ))
                 {
                     pNewDsc = new SwPageDesc( *pDesc );
+                    // --> OD 2005-05-09 #i48949# - no undo actions for the
+                    // copy of the page style
+                    const sal_Bool bDoesUndo( rDoc.DoesUndo() );
+                    rDoc.DoUndo( sal_False );
                     rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
+                    rDoc.DoUndo( bDoesUndo );
+                    // <--
 
                     pFmt = &pNewDsc->GetMaster();
                 }
