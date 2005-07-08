@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-06-30 16:33:40 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ namespace dbaui
         OpenDocumentButton  m_aPB_OpenDocument;
         FixedText           m_aTypePreLabel;
         FixedText           m_aDatasourceTypeLabel;
-        ListBox             m_aDatasourceType;
+        ::std::auto_ptr< ListBox >
+                            m_pDatasourceType;
         FixedText           m_aFTDataSourceAppendix;
         FixedText           m_aTypePostLabel;
         FixedText           m_aSpecialMessage;
