@@ -35,8 +35,10 @@ fi
 
 echo "Installing..."
 
+BASEDIR=`dirname $0`
+
 RPMLIST=""
-for i in `ls RPMS/*.rpm`
+for i in `ls $BASEDIR/RPMS/*.rpm`
 do
   rpm -q `rpm -qp --qf "%{NAME}\n" $i` && RPMLIST="$RPMLIST $i"
 done
