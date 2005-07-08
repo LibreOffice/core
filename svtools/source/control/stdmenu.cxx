@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:12:38 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 10:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ FontSizeMenu::FontSizeMenu()
 FontSizeMenu::~FontSizeMenu()
 {
     if ( mpHeightAry )
-        delete mpHeightAry;
+        delete[] mpHeightAry;
 }
 
 // -----------------------------------------------------------------------
@@ -462,7 +462,7 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
 
     // setup font size array
     if ( mpHeightAry )
-        delete mpHeightAry;
+        delete[] mpHeightAry;
 
     const long* pTempAry;
     const long* pAry = pList->GetSizeAry( rInfo );
