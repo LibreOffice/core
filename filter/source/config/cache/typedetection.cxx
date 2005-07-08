@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-20 07:47:54 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
 
             if (lFilters.size() > 0)
             {
-                const ::rtl::OUString& sFilter = *(lFilters.begin());
+                sFilter = *(lFilters.begin());
                 rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
                 rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
                 return;
@@ -322,9 +322,14 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
             {}
     }
 
-    // We use the preferred filter for the specified type.
-    // Note: The configuration must maintain this value, so
-    // it points e.g. to the default filter of the preferred application.
+    // c)
+    // We can use the preferred filter for the specified type.
+    // Such preferred filter points:
+    // - to the default filter of the preferred application
+    // - or to any other filter if no preferred filter was set.
+    // Note: It's an optimization only!
+    // It's not guaranteed, that such preferred filter exists.
+    sFilter = ::rtl::OUString();
     try
     {
         // SAFE ->
@@ -341,6 +346,62 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
         rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
         rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
         return;
+    }
+    catch(const css::uno::Exception&)
+        {}
+
+    // d)
+    // Search for any import(!) filter, which is registered for this type.
+    sFilter = ::rtl::OUString();
+    try
+    {
+        // SAFE ->
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+
+        // Attention: For executing next lines of code, We must be shure that
+        // all filters already loaded :-(
+        // That can disturb our "load on demand feature". But we have no other chance!
+        m_rCache->load(FilterCache::E_CONTAINS_FILTERS);
+
+        CacheItem lIProps;
+        lIProps[PROPNAME_TYPE] <<= sType;
+        OUStringList lFilters = m_rCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
+
+        aLock.clear();
+        // <- SAFE
+
+        OUStringList::const_iterator pIt;
+        for (  pIt  = lFilters.begin();
+               pIt != lFilters.end()  ;
+             ++pIt                    )
+        {
+            sFilter = *pIt;
+
+            // SAFE ->
+            aLock.reset();
+            try
+            {
+                CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, sFilter);
+                sal_Int32 nFlags  = 0;
+                aFilter[PROPNAME_FLAGS] >>= nFlags;
+
+                if ((nFlags & FLAGVAL_IMPORT) == FLAGVAL_IMPORT)
+                    break;
+            }
+            catch(const css::uno::Exception&)
+                { continue; }
+            aLock.clear();
+            // <- SAFE
+
+            sFilter = ::rtl::OUString();
+        }
+
+        if (sFilter.getLength())
+        {
+            rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+            rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+            return;
+        }
     }
     catch(const css::uno::Exception&)
         {}
