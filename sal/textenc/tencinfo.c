@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 14:14:00 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "15", RTL_TEXTENCODING_ISO_8859_15 },
         { "14", RTL_TEXTENCODING_ISO_8859_14 },
         { "13", RTL_TEXTENCODING_ISO_8859_13 },
+        { "11", RTL_TEXTENCODING_TIS_620 },
         { "10", RTL_TEXTENCODING_ISO_8859_10 },
         { "1", RTL_TEXTENCODING_ISO_8859_1 },
         { "2", RTL_TEXTENCODING_ISO_8859_2 },
@@ -566,6 +567,25 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { NULL, RTL_TEXTENCODING_SYMBOL }
     };
 
+    /* See <http://cvs.freedesktop.org/xorg/xc/fonts/encodings/iso8859-11.enc?
+       rev=1.1.1.1>: */
+    static ImplStrCharsetDef const aUnixCharsetTIS620Tab[] =
+    {
+        { "0", RTL_TEXTENCODING_TIS_620 },
+        { NULL, RTL_TEXTENCODING_DONTKNOW }
+    };
+    static ImplStrCharsetDef const aUnixCharsetTIS6202529Tab[] =
+    {
+        { "1", RTL_TEXTENCODING_TIS_620 },
+        { NULL, RTL_TEXTENCODING_DONTKNOW }
+    };
+    static ImplStrCharsetDef const aUnixCharsetTIS6202533Tab[] =
+    {
+        { "0", RTL_TEXTENCODING_TIS_620 },
+        { "1", RTL_TEXTENCODING_TIS_620 },
+        { NULL, RTL_TEXTENCODING_DONTKNOW }
+    };
+
     static ImplStrFirstPartCharsetDef const aUnixCharsetFirstPartTab[] =
     {
         { "iso8859", aUnixCharsetISOTab },
@@ -590,7 +610,9 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "iso10646", aUnixCharsetUNICODETab },
         { "ksc5601.1987", aUnixCharsetKSC56011987Tab },
         { "ksc5601.1992", aUnixCharsetKSC56011992Tab },
-/*        { "tis620.2553",  },          */
+        { "tis620.2529", aUnixCharsetTIS6202529Tab },
+        { "tis620.2533", aUnixCharsetTIS6202533Tab },
+        { "tis620", aUnixCharsetTIS620Tab },
 /*        { "sunudcja.1997",  },        */
 /*        { "sunudcko.1997",  },        */
 /*        { "sunudczh.1997",  },        */
