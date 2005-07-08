@@ -603,7 +603,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #ifdef INCLUDE_JAVA_ACCESSBRIDGE
