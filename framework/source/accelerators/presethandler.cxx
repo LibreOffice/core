@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 17:11:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,8 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_lTargets              = rCopy.m_lTargets;
     m_aLocale               = rCopy.m_aLocale;
     m_lDocumentStorages     = rCopy.m_lDocumentStorages;
+    m_sRelPathShare         = rCopy.m_sRelPathShare;
+    m_sRelPathUser          = rCopy.m_sRelPathUser;
 }
 
 //-----------------------------------------------
@@ -213,8 +215,24 @@ PresetHandler::~PresetHandler()
 {
     m_xWorkingStorageShare.clear();
     m_xWorkingStorageUser.clear();
-    m_aSharedStorages->m_lStoragesUser.forgetCachedStorages();
-    m_aSharedStorages->m_lStoragesShare.forgetCachedStorages();
+
+    /* #i46497#
+        Dont call forgetCachedStorages() here for shared storages.
+        Because we opened different sub storages by using openPath().
+        And every already open path was reused and referenced (means it's
+        ref count was increased!)
+        So now we have to release our ref counts to these shared storages
+        only ... and not to free all used storages.
+        Otherwise we will disconnect all other open configuration access
+        objects which base on these storages.
+     */
+    m_aSharedStorages->m_lStoragesShare.closePath(m_sRelPathShare);
+    m_aSharedStorages->m_lStoragesUser.closePath (m_sRelPathUser );
+
+    /* On the other side closePath() is not needed for our special handled
+       document storage. Because it's not shared with others ... so we can
+       free it.
+     */
     m_lDocumentStorages.forgetCachedStorages();
 }
 
@@ -415,7 +433,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     sal_Int32 eUserMode  = (css::embed::ElementModes::READWRITE                                     );
 
     ::rtl::OUStringBuffer sRelPathBuf(1024);
-    ::rtl::OUString       sRelPath;
+    ::rtl::OUString       sRelPathShare;
+    ::rtl::OUString       sRelPathUser;
     switch(eConfigType)
     {
         case E_GLOBAL :
@@ -423,10 +442,11 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathBuf.append(SUBSTORAGE_GLOBAL);
             sRelPathBuf.append(PATH_SEPERATOR   );
             sRelPathBuf.append(sResource        );
-            sRelPath = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathUser  = sRelPathShare;
 
-            xShare = impl_openPathIgnoringErrors(sRelPath, eShareMode, sal_True );
-            xUser  = impl_openPathIgnoringErrors(sRelPath, eUserMode , sal_False);
+            xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, sal_True );
+            xUser  = impl_openPathIgnoringErrors(sRelPathUser , eUserMode , sal_False);
         }
         break;
 
@@ -437,21 +457,23 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathBuf.append(sModule           );
             sRelPathBuf.append(PATH_SEPERATOR    );
             sRelPathBuf.append(sResource         );
-            sRelPath = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathUser  = sRelPathShare;
 
-            xShare = impl_openPathIgnoringErrors(sRelPath, eShareMode, sal_True );
-            xUser  = impl_openPathIgnoringErrors(sRelPath, eUserMode , sal_False);
+            xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, sal_True );
+            xUser  = impl_openPathIgnoringErrors(sRelPathUser , eUserMode , sal_False);
         }
         break;
 
         case E_DOCUMENT :
         {
             sRelPathBuf.append(sResource);
-            sRelPath = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathUser  = sRelPathShare;
 
             try
             {
-                xUser  = m_lDocumentStorages.openPath(sRelPath, eUserMode);
+                xUser  = m_lDocumentStorages.openPath(sRelPathUser, eUserMode);
                 xShare = xUser; // !!!
             }
             catch(const css::uno::RuntimeException& exRun)
@@ -469,21 +491,21 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         // First try to find the right localized set inside share layer.
         // Fallbacks are allowed there.
-        ::comphelper::Locale aShareLocale       = aLocale ;
-        ::rtl::OUString      sLocalizedSharePath(sRelPath);
-        sal_Bool             bAllowFallbacks    = sal_True;
+        ::comphelper::Locale aShareLocale       = aLocale      ;
+        ::rtl::OUString      sLocalizedSharePath(sRelPathShare);
+        sal_Bool             bAllowFallbacks    = sal_True     ;
         xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
 
         // The try to locate the right sub dir inside user layer ... without using fallbacks!
         // Normaly the corresponding sub dir should be created matching the specified locale.
         // Because we allow creation of storages inside user layer by default.
-        ::comphelper::Locale aUserLocale        = aLocale  ;
-        ::rtl::OUString      sLocalizedUserPath(sRelPath)  ;
-                             bAllowFallbacks    = sal_False;
+        ::comphelper::Locale aUserLocale        = aLocale    ;
+        ::rtl::OUString      sLocalizedUserPath(sRelPathUser);
+                             bAllowFallbacks    = sal_False  ;
         xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode , sal_False, aUserLocale, bAllowFallbacks);
 
-        // TODO ... may be we need one relpath value for every supported config layer .-)
-        sRelPath = sLocalizedUserPath;
+        sRelPathShare = sLocalizedSharePath;
+        sRelPathUser  = sLocalizedUserPath ;
     }
 
     // read content of level 3 (presets, targets)
@@ -538,7 +560,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     m_xWorkingStorageUser  = xUser   ;
     m_lPresets             = lPresets;
     m_lTargets             = lTargets;
-    m_sRelPath             = sRelPath;
+    m_sRelPathShare        = sRelPathShare;
+    m_sRelPathUser         = sRelPathUser;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -746,7 +769,7 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    ::rtl::OUString sRelPath = m_sRelPath;
+    ::rtl::OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
     EConfigType     eCfgType = m_eConfigType;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -776,7 +799,7 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    ::rtl::OUString sRelPath = m_sRelPath;
+    ::rtl::OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
     EConfigType     eCfgType = m_eConfigType;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
