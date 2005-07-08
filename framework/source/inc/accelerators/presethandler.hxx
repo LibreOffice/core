@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 17:11:26 $
+ *  last change: $Author: obo $ $Date: 2005-07-08 09:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,8 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
         //---------------------------------------
         /** @short  knows the relative path from the root. */
-        ::rtl::OUString m_sRelPath;
+        ::rtl::OUString m_sRelPathShare;
+        ::rtl::OUString m_sRelPathUser;
 
     //-------------------------------------------
     // native interface
