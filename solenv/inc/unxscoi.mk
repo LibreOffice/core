@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:31:21 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:33:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,14 +69,17 @@ CDEFS+=-D_PTHREADS -D_REENTRANT
 CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -DX86 -DNEW_SOLAR
 # kann c++ was c braucht??
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=-mpentium
+
 CXX*=/nw386/dev/s/solenv/unxscoi/bin/g++
 CC*=/nw386/dev/s/solenv/unxscoi/bin/gcc
 CFLAGS=-c $(INCLUDE)
-CFLAGSCC=-mpentium
-CFLAGSCXX= -mpentium
+CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
-CFLAGSCXX=-mpentium -fguiding-decls -frtti
+CFLAGSCXX=-fguiding-decls -frtti $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 CFLAGSOBJGUIST=$(PICSWITCH)
