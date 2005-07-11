@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-29 08:49:48 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:27:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,11 +104,11 @@ APP$(TNR)LINKTYPEFLAG=$(APPLINK$(APP$(TNR)LINKTYPE))
 .IF "$(APP$(TNR)CODETYPE)"=="C"
 APP$(TNR)LINKER=$(LINKC)
 APP$(TNR)STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
-APP$(TNR)LINKFLAGS=$(LINKCFLAGS)
+APP$(TNR)LINKFLAGS+=$(LINKCFLAGS)
 .ELSE			# "$(APP$(TNR)CODETYPE)"=="C"
 APP$(TNR)LINKER=$(LINK)
 APP$(TNR)STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
-APP$(TNR)LINKFLAGS=$(LINKFLAGS)
+APP$(TNR)LINKFLAGS+=$(LINKFLAGS)
 .ENDIF			# "$(APP$(TNR)CODETYPE)"=="C"
 
 .IF "$(APP$(TNR)STACK)" != ""
@@ -133,7 +133,7 @@ USE_APP$(TNR)DEF=
 .IF "$(APP$(TNR)TARGETN)"!=""
 
 .IF "$(APP$(TNR)PRODUCTNAME)"!=""
-APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME="$(APP$(TNR)PRODUCTNAME)"
+APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP$(TNR)PRODUCTNAME)\"
 .ENDIF			# "$(APP$(TNR)PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
