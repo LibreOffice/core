@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:30:03 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:32:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 # name of C++ Compiler
 CXX*=g++
 # name of C Compiler
@@ -95,14 +99,14 @@ CC*=gcc
 # if installed elsewhere
 CFLAGS=-nostdinc -c $(INCLUDE) -I$(SOLARENV)/unxlngr/lib/gcc-lib/arm-linux/2.95.2/include -I$(SOLARENV)/unxlngr/usr/include
 # flags for the C++ Compiler
-CFLAGSCC=
+CFLAGSCC=$(ARCH_FLAGS)
 
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX=
+CFLAGSCXX=$(ARCH_FLAGS)
 
 PICSWITCH:=-fpic
 
