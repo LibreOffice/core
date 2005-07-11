@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.171 $
+#   $Revision: 1.172 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-06 09:37:14 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:27:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,11 @@ dmake_test_version:
     force_dmake_to_error
 .ENDIF
 
+.IF "$(UNSUPPORTED_4nt_VERSION)"=="TRUE"
+unsupported_4nt_version:
+    @+echo 4NT version too old!
+    force_dmake_to_error
+.ENDIF
 
 .IF "$(USE_COMMENT)"!=""
 .INCLUDE : comment.mak
@@ -972,16 +977,6 @@ SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
 SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
 .ENDIF			# "$(OFFICEUPD)"!=""
 
-.IF "$(BUILD_SPECIAL)"!=""
-SCPDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
-.ENDIF			# "$(BUILD_SPECIAL)"!=""
-
-# disable for now
-# there will be a usefull replacement later
-#.IF "$(L10N_framework)"!=""
-#SCPDEFS+=-DISO_CODE=$(L10N_framework)
-#.ENDIF			# "$(L10N_framework)"!=""
-
 SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
@@ -1194,7 +1189,9 @@ CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
-CFLAGS+=$(CFLAGSENABLESYMBOLS)
+CFLAGSENABLESYMBOLS_CC_ONLY*=$(CFLAGSENABLESYMBOLS)
+CFLAGSCXX+=$(CFLAGSENABLESYMBOLS)
+CFLAGSCC+=$(CFLAGSENABLESYMBOLS_CC_ONLY)
 .ENDIF          # "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
 
 .IF "$(profile)"!=""
