@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngp.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:29:23 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:31:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,11 +80,15 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 CXX*=g++
 CC*=gcc
 CFLAGS=-nostdinc -c $(INCLUDE) 
-CFLAGSCC= -pipe
-CFLAGSCXX= -pipe -fguiding-decls -fno-rtti -fno-exceptions
+CFLAGSCC= -pipe $(ARCH_FLAGS)
+CFLAGSCXX= -pipe -fguiding-decls -fno-rtti -fno-exceptions $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 # Exceptions increase the size of shared libraries by 50% !!
