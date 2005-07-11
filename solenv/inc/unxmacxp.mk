@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-31 17:01:13 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:33:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,10 @@ SOLAR_JAVA*=TRUE
     JAVA_RUNTIME=-framework JavaVM
 .ENDIF
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 # Specify the compiler to use.  NOTE:  MacOS X should always specify
 # c++ for C++ compilation as it does certain C++ specific things
 # behind the scenes for us.
@@ -108,7 +112,7 @@ CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(INCLUDE)
 #  Compilation flags
 # ---------------------------------
 # Normal C compilation flags
-CFLAGSCC=-pipe -fsigned-char -malign-natural
+CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
 
 # Normal Objective C compilation flags
 OBJCFLAGS=-no-precomp
@@ -120,7 +124,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # Normal C++ compilation flags
-CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double 
+CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 # Other flags
