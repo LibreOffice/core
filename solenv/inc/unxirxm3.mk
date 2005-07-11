@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxirxm3.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:08:18 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,16 @@ JAVA_RUNTIME=-ljava
 JAVA_RUNTIME=-ljava_g
 .ENDIF
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
 
 CC= cc
 CXX= CC
 CFLAGS= -c $(INCLUDE)
 CDEFS+= -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
-CFLAGSCC=
-CFLAGSCXX=      -LANG:ansi-for-init-scope=OFF -LANG:std=ON -LANG:libc_in_namespace_std=ON
+CFLAGSCC=$(ARCH_FLAGS)
+CFLAGSCXX=      -LANG:ansi-for-init-scope=OFF -LANG:std=ON -LANG:libc_in_namespace_std=ON $(ARCH_FLAGS)
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
