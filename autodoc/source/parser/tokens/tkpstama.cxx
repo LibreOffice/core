@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpstama.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:50:30 $
+ *  last change: $Author: kz $ $Date: 2005-07-11 15:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,10 @@ StmArrayStatus &
 StateMachine::CurrentStatus() const
 {
     StmArrayStatus * pCurSt = Status(nCurrentStatus).AsArray();
-    if(pCurSt == 0)
-        csv_assert(false);
+
+    csv_assert(pCurSt != 0);
+//  if(pCurSt == 0)
+//      csv_assert(false);
     return *pCurSt;
 }
 
