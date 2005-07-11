@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: rebase.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 09:45:47 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:38:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,7 +111,7 @@ sub script_id
     ( my $script_name = $0 ) =~ s/^.*[\\\/]([\w\.]+)$/$1/;
 
     my $script_rev;
-    my $id_str = ' $Revision: 1.2 $ ';
+    my $id_str = ' $Revision: 1.3 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
     print "\n$script_name -- version: $script_rev\n";
@@ -162,6 +162,8 @@ sub parse_options
         }
     }
     $rebase_files = join " ", @ARGV;
+    # Cygwin's perl in a W32-4nt configuration wants / instead of \ .
+    $rebase_files =~ s/\\/\//g;
     return;
 }
 
@@ -206,12 +208,12 @@ sub get_files
     my ( $oldfiles_ref, $newfiles_ref ) = @_;
     my @target = split / /,  $rebase_files;
     foreach my $pattern ( @target ) {
-        foreach ( glob( $pattern ) ) {
-            my $lib = File::Basename::basename $_;
+        foreach my $i ( glob( $pattern ) ) {
+            my $lib = File::Basename::basename $i;
             if ( grep /^$lib$/i, (keys %lastrun) ) {
-                push @$oldfiles_ref, $_;
+                push @$oldfiles_ref, $i;
             } else {
-                push @$newfiles_ref, $_;
+                push @$newfiles_ref, $i;
             }
         }
     }
@@ -235,9 +237,13 @@ sub rebase_again
     my $fname = $misc_dir . "rebase_again.txt";
     open ( FILES, "> $fname") or die "Error: cannot open file $fname";
     my $filesstring = join " ", @$oldfiles_ref;
+    # For W32-4nt-cygwin-perl: rebase_again.txt needs \.
+    if ( "$ENV{USE_SHELL}" eq "4nt" ) { $filesstring =~ s/\//\\/g; }
     print FILES "$filesstring\n";
     close FILES;
     $command .= "\@$fname";
+    # Cygwin's perl needs escaped \ in system() and open( COMMAND ... )
+    if ( "$^O" eq "cygwin" ) { $command =~ s/\\/\\\\/g; }
     print "\n$command\n";
     open( COMMAND, "$command 2>&1 |") or die "Error: Can't execute $command\n";
     if ( $? ) {
@@ -289,9 +295,13 @@ sub rebase_initially
     my $fname = $misc_dir . "rebase_new.txt";
     open ( FILES, "> $fname") or die "Error: cannot open file $fname";
     my $filesstring = join " ", @$files_ref;
+    # For W32-4nt-cygwin-perl: rebase_new.txt needs \.
+    if ( "$ENV{USE_SHELL}" eq "4nt" ) { $filesstring =~ s/\//\\/g; }
     print FILES "$filesstring\n";
     close FILES;
     $command .= "\@$fname";
+    # Cygwin's perl needs escaped \ in system() and open( COMMAND ... )
+    if ( "$^O" eq "cygwin" ) { $command =~ s/\\/\\\\/g; }
     print "\n$command\n";
     my $error = system("$command");
     if ($error) {
