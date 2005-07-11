@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsdi2.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:27:27 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:29:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 # name of C++ Compiler
 CXX*=g++
 # name of C Compiler
@@ -99,13 +103,13 @@ CFLAGSENABLESYMBOLS=-g
 .ENDIF
 
 # flags for the C++ Compiler
-CFLAGSCC= -pipe 
+CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX= -pipe -frtti
+CFLAGSCXX= -pipe -frtti $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
 
