@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:21:38 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:28:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,11 +117,11 @@ SHL$(TNR)ARCHIVES=
 .IF "$(SHL$(TNR)CODETYPE)"=="C"
 SHL$(TNR)LINKER=$(LINKC)
 SHL$(TNR)STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
-SHL$(TNR)LINKFLAGS=$(LINKCFLAGS)
+SHL$(TNR)LINKFLAGS+=$(LINKCFLAGS)
 .ELSE			# "$(SHL$(TNR)CODETYPE)"=="C"
 SHL$(TNR)LINKER=$(LINK)
 SHL$(TNR)STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
-SHL$(TNR)LINKFLAGS=$(LINKFLAGS)
+SHL$(TNR)LINKFLAGS+=$(LINKFLAGS)
 .ENDIF			# "$(SHL$(TNR)CODETYPE)"=="C"
 
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
