@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:27:41 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:29:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 # name of C++ Compiler
 CXX=g++ 
 # name of C Compiler
@@ -91,14 +95,14 @@ CC=gcc
 # flags for C and C++ Compiler
 CFLAGS=-c $(INCLUDE) -I$(SOLARENV)/unxbsds/usr/include
 # flags for the C++ Compiler
-CFLAGSCC= -pipe 
+CFLAGSCC= -pipe $(ARCH_FLAGS)
 
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX= -pipe
+CFLAGSCXX= -pipe $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 
