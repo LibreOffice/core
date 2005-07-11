@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxhpxr.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:16 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:29:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,13 +77,17 @@ CDEFS+=-D_PTHREADS -D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -
 # 600 = Type specifier is omitted; "int" is no longer assumed.
 DISWARN=+W67,251,370,600
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 #CXX=/opt/aCC/bin/aCC
 #CC=/opt/ansic/bin/cc
 CXX=aCC
 CC=cc
 CFLAGS= -c $(INCLUDE)
-CFLAGSCC= -Aa +e +Z
-CFLAGSCXX=$(DISWARN) +Z
+CFLAGSCC= -Aa +e +Z $(ARCH_FLAGS)
+CFLAGSCXX=$(DISWARN) +Z $(ARCH_FLAGS)
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
