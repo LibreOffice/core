@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:44:30 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:31:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,9 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF 
 .ENDIF 
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
 
 # name of C++ Compiler
 CXX*=g++ 
@@ -98,14 +101,14 @@ CC*=gcc
 
 # source code is still not signed versus unsigned char clean 
 CFLAGS=-fsigned-char -nostdinc -c $(INCLUDE) -I$(SOLARENV)/unxlngppc/usr/include 
-CFLAGSCC=-fsigned-char
+CFLAGSCC=-fsigned-char $(ARCH_FLAGS)
 
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions 
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions 
 
-CFLAGSCXX= -pipe -frtti
+CFLAGSCXX= -pipe -frtti $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 
