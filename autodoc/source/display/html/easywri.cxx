@@ -2,9 +2,9 @@
  *
  *  $RCSfile: easywri.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:23 $
+ *  last change: $Author: kz $ $Date: 2005-07-11 15:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,9 @@ EasyWriter::Write( const char *        i_sFormatTag,
 csi::xml::Element &
 EasyWriter::Out()
 {
-    if ( aCurDestination.size() <= 0 )
-        csv_assert( false );
+    csv_assert( aCurDestination.size() > 0);
+//    if ( aCurDestination.size() <= 0 )
+//        csv_assert( false );
 
     return *aCurDestination.top();
 }
