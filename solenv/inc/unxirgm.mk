@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:28:29 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:30:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,16 @@ JAVA_RUNTIME=-ljava
 JAVA_RUNTIME=-ljava_g
 .ENDIF
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
 
 CC= gcc
 CXX= g++
 CFLAGS= -w -c $(INCLUDE)
 CDEFS+= -D_PTHREADS -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
-CFLAGSCC= 
-CFLAGSCXX=
+CFLAGSCC=$(ARCH_FLAGS)
+CFLAGSCXX=$(ARCH_FLAGS)
 PICSWITCH:=-fpic
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
