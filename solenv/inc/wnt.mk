@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: hjs $ $Date: 2005-02-14 15:36:01 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:35:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,10 @@ ASM=ml
 AFLAGS=/c /Cp /coff
 OLE2ANSI=TRUE
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 .IF "$(bndchk)" != ""
 CXX*=nmcl
 .ELSE
@@ -213,7 +217,7 @@ CFLAGSCALL=-Gd
 CFLAGSCALL=-Gz
 .ENDIF			# "$(CALL_CDECL)"=="TRUE"
 
-CFLAGSCC=
+CFLAGSCC=$(ARCH_FLAGS)
 .IF "$(DYNAMIC_CRT)"!=""
 CDEFSSLOMT+=-DWIN32 -D_MT -D_DLL
 CDEFSSLOMT+=-DWIN32 -D_MT -D_DLL
@@ -268,7 +272,7 @@ CDEFS+=-D_M_IX86
 CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -D_cdecl=
 CFLAGSOUTOBJ=-o
 CFLAGSCALL=
-CFLAGSCXX=
+CFLAGSCXX=$(ARCH_FLAGS)
 CFLAGSOPT=
 CFLAGSNOOPT=
 CFLAGSPROF=
@@ -428,6 +432,10 @@ CPPLCC=$(WRAPCMD) cpplcc
 ASM=
 AFLAGS=
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=-mpentium
+
 CXX*=gcc
 ### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
 # old:
@@ -438,8 +446,8 @@ CFLAGS=-c -Wall -I$(CYGINC) $(OLE2DEF)
 ###
 PICSWITCH:=-fPIC
 CFLAGS+=-nostdinc $(PICSWITCH)
-CFLAGSCC=-pipe -mpentium
-CFLAGSCXX=-pipe -mpentium -fguiding-decls
+CFLAGSCC=-pipe $(ARCH_FLAGS)
+CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
