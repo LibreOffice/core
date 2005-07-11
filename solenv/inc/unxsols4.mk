@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:58:38 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:35:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,16 +79,21 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 CXX*=CC
 CC*=cc
 
 CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
 # CC defines __sparcv8plus with -xarch=v8plus, cc does not (sigh)
-CFLAGSCC=-xCC -D__sparcv8plus
-CFLAGSCXX=-features=no%altspell -library=no%Cstd
+CFLAGSCC=-xCC -D__sparcv8plus $(ARCH_FLAGS)
+CFLAGSCXX=-features=no%altspell -library=no%Cstd $(ARCH_FLAGS)
 
 # flags to enable build with symbols; required for crashdump feature
 CFLAGSENABLESYMBOLS=-g0 -xs # was temporarily commented out, reenabled before Beta
+CFLAGSENABLESYMBOLS_CC_ONLY=-g -xs # was temporarily commented out, reenabled before Beta
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
