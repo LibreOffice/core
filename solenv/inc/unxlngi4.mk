@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 14:43:21 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:30:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,10 +88,9 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
-# define default arch flags when needed
-.IF "$(ARCH_FLAGS)"==""
-ARCH_FLAGS=-mcpu=pentiumpro
-.ENDIF
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=-mcpu=pentiumpro
 
 # name of C++ Compiler
 CXX*=g++
