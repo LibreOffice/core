@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-06 09:37:55 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:31:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=-mtune=pentiumpro
+
 # name of C++ Compiler
 CXX*=g++
 # name of C Compiler
@@ -109,14 +113,14 @@ CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 .ENDIF
 
 # flags for the C++ Compiler
-CFLAGSCC= -pipe -mtune=pentiumpro
+CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mtune=pentiumpro
+CFLAGSCXX= -pipe $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
