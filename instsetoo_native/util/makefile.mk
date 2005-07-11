@@ -128,24 +128,19 @@ updatepack:
 
 .IF "$(alllangiso)"!=""
 
+openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
+
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 .IF "$(BUILD_SPECIAL)"!=""
 MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
 MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
-.IF "$(OOO_RELEASE_BUILD)"==""
-openoffice: openoffice_en-US
-.ELSE
-openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
-.ENDIF
 .ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.bmp
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
-
 ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
 
-openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 
 openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
