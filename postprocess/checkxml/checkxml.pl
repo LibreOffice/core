@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkxml.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-21 13:26:10 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:37:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,14 +141,18 @@ sub check       #04.02.2005 13:40
   {
     my $path = shift;
     my $error = 0;
+    my $commandargs;
     opendir (DIRECTORY, $path) or
         die "Can't read $path\n";
     my @all_files = grep (!/^\.\.?$/, readdir (DIRECTORY)); #Read all the files except for '.' and '..'
     closedir (DIRECTORY);
     foreach $file (@all_files) {
         if ( $file =~ /registry_.+\.zip$/ ) {
-            print "file=$path$file\n" if ($is_debug);
-            open(UNZIP,"$unzipexe -l $path$file |");
+            $commandargs="$path$file";
+            # Cygwin's perl needs escaped \ in system() and open( COMMAND ... )
+            if ( "$^O" eq "cygwin" ) { $commandargs =~ s/\\/\\\\/g; }
+            print "file=$commandargs\n" if ($is_debug);
+            open(UNZIP,"$unzipexe -l $commandargs |");
             my $ferror = 0;
             while ( $line = <UNZIP> ) {
                 #print $line;
@@ -161,7 +165,7 @@ sub check       #04.02.2005 13:40
                 }
             }
             if ( $ferror ) {
-                print "Error: $path$file contains files with 0 byte size\n";
+                print "Error: $commandargs contains files with 0 byte size\n";
             }
             close(UNZIP);
         }
