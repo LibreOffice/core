@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxhpgr.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:28:08 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:29:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,14 +78,18 @@ CDEFS+=-DNO_AUDIO -DSYSV -D_POSIX_PTHREAD_SEMANTICS  -D_HPUX_SOURCE -DRWSTD_MULT
 # 600 = Type specifier is omitted; "int" is no longer assumed.
 DISWARN=+W67,251,370,600
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 #CXX=/opt/aCC/bin/aCC
 #CC=/opt/ansic/bin/cc
 CXX=g++
 CC=gcc
 CFLAGSWALL=-Wall
 CFLAGS=-nostdinc -c $(INCLUDE) -I/nw386/dev/s/solenv/unxhpgr/lib/gcc-lib/hppa1.1-hp-hpux10.20/egcs-2.91.57/include
-CFLAGSCC=-pipe -fguiding-decls
-CFLAGSCXX=-pipe -fguiding-decls
+CFLAGSCC=-pipe -fguiding-decls $(ARCH_FLAGS)
+CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
