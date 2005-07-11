@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:30:54 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:33:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF                                        
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=-mpentium
+
 CXX*=g++
 CC*=gcc
 .IF "$(GLIBC)"=="2"
@@ -86,8 +90,8 @@ CFLAGS=-c -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
 .ELSE
 CFLAGS=-c -I. -I/usr/solar/inc/pthread_provenzano -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
 .ENDIF
-CFLAGSCC=-pipe -mpentium -fguiding-decls
-CFLAGSCXX=-pipe -mpentium -fguiding-decls
+CFLAGSCC=-pipe -fguiding-decls $(ARCH_FLAGS)
+CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
 #STDOBJVCL=$(L)$/salmain.o
