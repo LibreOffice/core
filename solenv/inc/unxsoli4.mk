@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:58:19 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:34:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,15 +78,20 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 CXX=CC
 CC=cc
 
 CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
-CFLAGSCC=-xCC
-CFLAGSCXX=-features=no%altspell -library=no%Cstd
+CFLAGSCC=-xCC $(ARCH_FLAGS)
+CFLAGSCXX=-features=no%altspell -library=no%Cstd $(ARCH_FLAGS)
 
 # flags to enable build with symbols; required for crashdump feature
 CFLAGSENABLESYMBOLS=-g0 -xs # was temporarily commented out, reenabled before Beta
+CFLAGSENABLESYMBOLS_CC_ONLY=-g -xs # was temporarily commented out, reenabled before Beta
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
