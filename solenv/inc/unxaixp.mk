@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxaixp.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:15 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:28:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,14 +64,16 @@
 ASM=
 AFLAGS=
 
+ARCH_FLAGS*=
+
 CXX=				xlC_r
 CC=				xlc_r
 CFLAGS=			-c -qlanglvl=extended -qchars=signed 
 CFLAGS+=		$(INCLUDE)
 CDEFS+=			-D_PTHREADS
 CDEFS+=			-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-CFLAGSCC=
-CFLAGSCXX=
+CFLAGSCC=$(ARCH_FLAGS)
+CFLAGSCXX=$(ARCH_FLAGS)
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
