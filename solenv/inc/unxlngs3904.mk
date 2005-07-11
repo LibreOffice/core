@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:30:28 $
+#   last change: $Author: kz $ $Date: 2005-07-11 15:32:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+
 # name of C++ Compiler
 CXX*=g++-3.2
 # name of C Compiler
@@ -92,7 +96,7 @@ CC*=gcc-3.2
 CFLAGS+=-fsigned-char -fmessage-length=0 -c $(INCLUDE)
 
 # flags for the C++ Compiler
-CFLAGSCC= -fsigned-char -pipe 
+CFLAGSCC= -fsigned-char -pipe $(ARCH_FLAGS)
 
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
@@ -100,7 +104,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX= -fsigned-char -pipe -fno-rtti 
+CFLAGSCXX= -fsigned-char -pipe -fno-rtti $(ARCH_FLAGS)
 #CFLAGSCXX= -fsigned-char -pipe
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
