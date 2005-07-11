@@ -69,9 +69,11 @@ E *:= .exe	# Executables
 my4ver:=$(shell +echo %_4ver)
 .ENDIF			# "$(GUI)$(USE_SHELL)"=="WNT4nt"
 
-#.IF "$(my4ver:s/.//:s/,//)" >= "400"
-#   RMFLAGS          +=/E
-#.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
+.IF "$(my4ver:s/.//:s/,//)" >= "400"
+   RMFLAGS          +=/E
+.ELSE			# "$(my4ver:s/.//:s/,//)" >= "400"
+UNSUPPORTED_4nt_VERSION=TRUE
+.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "400"
 
 # Does not respect case of filenames.
 .DIRCACHERESPCASE := no
