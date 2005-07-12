@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:45:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SV_PRINTDLG_HXX_
 #include <svtools/printdlg.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -1313,6 +1316,18 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
 /*--------------------------------------------------------------------
     Beschreibung: CursorPos setzen
  --------------------------------------------------------------------*/
+//#i43146# go to the last editing position when opening own files
+bool lcl_IsOwnDocument( SwView& rView )
+{
+    SfxDocumentInfo& rInfo = rView.GetDocShell()->GetDocInfo();
+    const String& rCreated =   rInfo.GetCreated().GetName();
+    const String& rChanged = rInfo.GetChanged().GetName();
+    const String& rFullName = SW_MOD()->GetUserOptions().GetFullName();
+    bool bRet = rFullName.Len() &&
+            (rChanged.Len() && rChanged == rFullName ) ||
+            (!rChanged.Len() && rCreated.Len() && rCreated == rFullName );
+    return bRet;
+}
 
 
 void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
@@ -1322,6 +1337,9 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
         //Forward/Backward
          (!pWrtShell->IsNewLayout() || pWrtShell->IsBrowseMode() || bBrowse) )
     {
+        //#i43146# go to the last editing position when opening own files
+        bool bIsOwnDocument = lcl_IsOwnDocument( *this );
+
         SET_CURR_SHELL(pWrtShell);
 
         sal_uInt16 nPos = 0;
@@ -1365,7 +1383,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             pWrtShell->SetMacroExecAllowed( false );
 //!!! pb (11.08.2004): #i32536#
 // os: changed: The user data has to be read if the view is switched back from page preview
-            if(bOldShellWasPagePreView)
+//#i43146# go to the last editing position when opening own files
+            if(bOldShellWasPagePreView || bIsOwnDocument)
             {
                 pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
                 if( bSelectObj )
@@ -1383,7 +1402,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             // is lost.
 //!!! pb (11.08.2004): #i32536#
 // os: changed: The user data has to be read if the view is switched back from page preview
-            if(bOldShellWasPagePreView)
+//#i43146# go to the last editing position when opening own files
+            if(bOldShellWasPagePreView || bIsOwnDocument )
             {
                 if ( bBrowse )
                     SetVisArea( aVis.TopLeft() );
@@ -1433,6 +1453,8 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
 {
     if(GetDocShell()->IsPreview())
         return;
+    //#i43146# go to the last editing position when opening own files
+    bool bIsOwnDocument = lcl_IsOwnDocument( *this );
     sal_Int32 nLength = rSequence.getLength();
     if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->IsBrowseMode() || bBrowse) )
     {
@@ -1534,7 +1556,8 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                     pWrtShell->SetMacroExecAllowed( false );
 //!!! pb (11.08.2004): #i32536#
 // os: changed: The user data has to be read if the view is switched back from page preview
-                    if(bOldShellWasPagePreView)
+//#i43146# go to the last editing position when opening own files
+                    if(bOldShellWasPagePreView|| bIsOwnDocument)
                     {
                         pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
                         if( bSelectObj )
@@ -1556,7 +1579,8 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                     SetZoom( eZoom, nZoomFactor, sal_True );
 //!!! pb (11.08.2004): #i32536#
 // os: changed: The user data has to be read if the view is switched back from page preview
-                if(bOldShellWasPagePreView)
+//#i43146# go to the last editing position when opening own files
+                if(bOldShellWasPagePreView||bIsOwnDocument)
                 {
                     if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
                     {
