@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:15:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,7 +1309,7 @@ void XMLTableTransformerContext_Impl::StartElement(
                     }
                     pMutableAttrList->RemoveAttributeByIndex( i );
                 }
-                break;
+                // OD 2005-07-05 #i50521# - no break here for savety reason.
             }
             // --> OD 2005-01-10 #i40011#, #i40015#
             // - convert attribute table:style-name for <table:table>
