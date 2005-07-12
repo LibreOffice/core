@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 09:23:52 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,21 @@
         IID_CHANGEROOT ;   \
         IID_ZOOMOUT ;      \
     };                     \
+    IdCount = { 8 ; };
+
+// SC_CONTENT_...
+#define SC_NAVI_CONT_IDLIST \
+    IdList =                \
+    {                       \
+        1 ;                 \
+        2 ;                 \
+        3 ;                 \
+        4 ;                 \
+        5 ;                 \
+        6 ;                 \
+        7 ;                 \
+        8 ;                 \
+    };                      \
     IdCount = { 8 ; };
 
 Window RID_SCDLG_NAVIGATOR
@@ -308,20 +323,6 @@ Window RID_SCDLG_NAVIGATOR
     Text [ x-comment ] = " ";
 };
 
-// SC_CONTENT_...
-#define SC_NAVI_CONT_IDLIST \
-    IdList =                \
-    {                       \
-        1 ;                 \
-        2 ;                 \
-        3 ;                 \
-        4 ;                 \
-        5 ;                 \
-        6 ;                 \
-        7 ;                 \
-        8 ;                 \
-    };                      \
-    IdCount = { 8 ; };
 
 ImageList RID_IMAGELIST_NAVCONT
 {
