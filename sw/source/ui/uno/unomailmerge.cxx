@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:50:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,8 @@ static CloseResult CloseModelAndDocSh(
     {
         try
         {
+            //! 'sal_True' -> transfer ownership to vetoing object if vetoed!
+            //! I.e. now that object is responsible for closing the model and doc shell.
             xClose->close( sal_True );
         }
         catch (util::CloseVetoException &)
@@ -607,7 +609,19 @@ SwXMailMerge::SwXMailMerge() :
 
 SwXMailMerge::~SwXMailMerge()
 {
-    DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
+    if (aTmpFileName.Len())
+        DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
+    else    // there was no temporary file in use
+    {
+        //! we still need to close the model and doc shell manually
+        //! because there is no automatism that will do that later.
+        //! #120086#
+        if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
+            DBG_WARNING( "owner ship transfered to vetoing object!" )
+
+        xModel = 0;
+        xDocSh = 0; // destroy doc shell
+    }
 }
 
 uno::Any SAL_CALL SwXMailMerge::execute(
