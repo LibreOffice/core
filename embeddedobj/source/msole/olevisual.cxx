@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:39:47 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 
 using namespace ::com::sun::star;
 
+uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+
+sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 );
+
 embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFormat_Impl(
                     const uno::Reference< io::XStream > xCachedVisRepr )
         throw ( uno::Exception )
@@ -143,9 +149,15 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    // RECOMPOSE_ON_RESIZE misc flag means that the object has to be switched to running state on resize
-    if ( m_nObjectState == embed::EmbedStates::LOADED
-      && ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
+    // RECOMPOSE_ON_RESIZE misc flag means that the object has to be switched to running state on resize.
+    // SetExtent() is called only for objects that require it,
+    // it should not be called for MSWord documents to workaround problem i49369
+    sal_Bool bAllowToSetExtent =
+      ( ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
+      && !ClassIDsEqual( m_aClassID, GetSequenceClassID( 0x00020906L, 0x0000, 0x0000,
+                                                           0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 ) ) );
+
+    if ( m_nObjectState == embed::EmbedStates::LOADED && bAllowToSetExtent )
     {
         aGuard.clear();
         try {
@@ -158,7 +170,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         aGuard.reset();
     }
 
-    if ( m_pOleComponent && m_nObjectState != embed::EmbedStates::LOADED )
+    if ( m_pOleComponent && m_nObjectState != embed::EmbedStates::LOADED && bAllowToSetExtent )
     {
         aGuard.clear();
         try {
@@ -196,6 +208,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 #ifdef WNT
     if ( m_pOleComponent && !m_bHasSizeToSet )
     {
+        // the order is following: first ask for the size from IViewObject, than ask for the size from cache,
+        // and then ask for the size from IOleObject ( the result from the last one can be different from
+        // the first one, for example in case of MSWord document )
         try
         {
             m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
@@ -210,19 +225,54 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
             if ( !m_bHasCachedSize )
             {
                 // there is no internal cache
-                // try to switch the object to RUNNONG state and request the value again
                 awt::Size aSize;
                 aGuard.clear();
-                try {
-                    changeState( embed::EmbedStates::RUNNING );
-                    aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
-                }
-                catch( uno::Exception& )
+
+                sal_Bool bSuccess = sal_False;
+                if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
+                    // try to switch the object to RUNNING state and request the value again
+                    try {
+                        changeState( embed::EmbedStates::RUNNING );
+                    }
+                    catch( uno::Exception )
+                    {
+                        // if the extent can not be retrieved in the loaded state ( means
+                        // IViewObject is not able to provide it ) and there is no cache
+                        // and the object can not be switched to running state, throw an exception
+                        throw embed::NoVisualAreaSizeException(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    }
+
+                    try
+                    {
+                        aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+                        bSuccess = sal_True;
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
+
+                if ( !bSuccess )
+                {
+                    // no size from IViewObject is available, object is in running state
+                    try
+                    {
+                        aSize = m_pOleComponent->GetReccomendedExtent( nAspect ); // will throw an exception in case of failure
+                        bSuccess = sal_True;
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
+
+                if ( !bSuccess )
                     throw embed::NoVisualAreaSizeException(
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-                }
+
                 aGuard.reset();
 
                 m_aCachedSize = aSize;
