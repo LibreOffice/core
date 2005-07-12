@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:54:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1746,10 +1746,14 @@ void SdrObjCustomShape::RecalcBoundRect()
         Rectangle aAnchorRect;
         TakeTextRect( rOutliner, aTextRect, TRUE, &aAnchorRect ); // EditText ignorieren!
         rOutliner.Clear();
-        if ( aGeo.nDrehWink )
+
+        double fDrehWink = aGeo.nDrehWink;
+        fDrehWink /= 100.0;
+        fDrehWink += GetExtraTextRotation();
+        if ( fDrehWink != 0.0 )
         {
             Polygon aPol( aTextRect );
-            RotatePoly( aPol, aTextRect.TopLeft(), aGeo.nSin, aGeo.nCos );
+            RotatePoly( aPol, aTextRect.TopLeft(), sin( F_PI180 * fDrehWink ), cos( F_PI180 * fDrehWink ) );
             aOutRect.Union( aPol.GetBoundRect() );
         }
         else
@@ -2033,9 +2037,48 @@ sal_Bool SdrObjCustomShape::DoPaintObject(XOutputDevice& rXOut, const SdrPaintIn
     if(HasText() && !IsTextPath())
     {
         // paint text over object
-        SdrTextObj::DoPaintObject(rXOut, rInfoRec);
-    }
+        double fTextRotation = GetExtraTextRotation();
+        if ( fTextRotation != 0.0 )
+        {
+            GeoStat aOldGeoStat( aGeo );
+            Rectangle aOldRect( aRect );
+            Rectangle aTextBound( aRect );
+            GetTextBounds( aTextBound );
 
+            // determining the correct refpoint
+            Point aRef( aTextBound.Center() );
+            Rectangle aUnrotatedSnapRect( aOutRect );
+            RotatePoint( aRef, aUnrotatedSnapRect.Center(), -aGeo.nSin, -aGeo.nCos );
+
+            long dx = aRect.Right()-aRect.Left();
+            long dy = aRect.Bottom()-aRect.Top();
+            Point aP( aRect.TopLeft() );
+            double sn = sin( F_PI180 * fTextRotation );
+            double cs = cos( F_PI180 * fTextRotation );
+            RotatePoint( aP, aRef, sn, cs );
+            ((SdrObjCustomShape*)this)->aRect.Left()=aP.X();
+            ((SdrObjCustomShape*)this)->aRect.Top()=aP.Y();
+            ((SdrObjCustomShape*)this)->aRect.Right()=aRect.Left()+dx;
+            ((SdrObjCustomShape*)this)->aRect.Bottom()=aRect.Top()+dy;
+            if ( aGeo.nDrehWink == 0 )
+            {
+                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( (sal_Int32)( fTextRotation * 100.0 ) );
+                ((SdrObjCustomShape*)this)->aGeo.nSin = sn;
+                ((SdrObjCustomShape*)this)->aGeo.nCos = cs;
+            }
+            else
+            {
+                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( aGeo.nDrehWink + (sal_Int32)( fTextRotation * 100.0 ) );
+                ((SdrObjCustomShape*)this)->aGeo.RecalcSinCos();
+            }
+            SdrTextObj::DoPaintObject( rXOut, rInfoRec );
+            ((SdrObjCustomShape*)this)->aGeo = aOldGeoStat;
+            ((SdrObjCustomShape*)this)->aRect = aOldRect;
+
+        }
+        else
+            SdrTextObj::DoPaintObject(rXOut, rInfoRec);
+    }
     return bOk;
 }
 
@@ -2535,69 +2578,68 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOO
     }
     return FALSE;
 }
+
+Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const FASTBOOL bHgt, const FASTBOOL bWdt )
+{
+    Rectangle aReturnValue;
+
+    Rectangle aOldTextRect( aRect );        // <- initial text rectangle
+
+    Rectangle aNewTextRect( aRect );        // <- new text rectangle returned from the custom shape renderer,
+    GetTextBounds( aNewTextRect );          //    it depends to the current logical shape size
+
+    Rectangle aAdjustedTextRect( aNewTextRect );                            // <- new text rectangle is being tested by AdjustTextFrameWidthAndHeight to ensure
+    if ( AdjustTextFrameWidthAndHeight( aAdjustedTextRect, bHgt, bWdt ) )   //    that the new text rectangle is matching the current text size from the outliner
+    {
+        if ( ( aAdjustedTextRect != aNewTextRect ) && ( aOldTextRect != aAdjustedTextRect ) )
+        {
+            aReturnValue = aRect;
+            double fXScale = (double)aOldTextRect.GetWidth() / (double)aNewTextRect.GetWidth();
+            double fYScale = (double)aOldTextRect.GetHeight() / (double)aNewTextRect.GetHeight();
+            double fRightDiff = (double)( aAdjustedTextRect.Right() - aNewTextRect.Right() ) * fXScale;
+            double fLeftDiff  = (double)( aAdjustedTextRect.Left()  - aNewTextRect.Left()  ) * fXScale;
+            double fTopDiff   = (double)( aAdjustedTextRect.Top()   - aNewTextRect.Top()   ) * fYScale;
+            double fBottomDiff= (double)( aAdjustedTextRect.Bottom()- aNewTextRect.Bottom()) * fYScale;
+            aReturnValue.Left() += (sal_Int32)fLeftDiff;
+            aReturnValue.Right() += (sal_Int32)fRightDiff;
+            aReturnValue.Top() += (sal_Int32)fTopDiff;
+            aReturnValue.Bottom() += (sal_Int32)fBottomDiff;
+        }
+    }
+    return aReturnValue;
+}
+
 FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
-    Rectangle aNewTextRect, aOldTextRect( aRect );
-    GetTextBounds( aOldTextRect );
-    aNewTextRect = aOldTextRect;
-    FASTBOOL bRet = AdjustTextFrameWidthAndHeight( aNewTextRect, bHgt, bWdt );
-    if ( aOldTextRect != aNewTextRect )
+    Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
+    sal_Bool bRet = !aNewTextRect.IsEmpty();
+    if ( bRet )
     {
-        if ( bRet )
-        {
-            // calculating the new text rect
-            double fXScale = (double)aRect.GetWidth() / (double)aOldTextRect.GetWidth();
-            double fYScale = (double)aRect.GetHeight() / (double)aOldTextRect.GetHeight();
-            double fRightDiff = (double)( aNewTextRect.Right() - aOldTextRect.Right() ) * fXScale;
-            double fLeftDiff  = (double)( aNewTextRect.Left()  - aOldTextRect.Left()  ) * fXScale;
-            double fTopDiff   = (double)( aNewTextRect.Top()   - aOldTextRect.Top()   ) * fYScale;
-            double fBottomDiff= (double)( aNewTextRect.Bottom()- aOldTextRect.Bottom()) * fYScale;
-            aRect.Left() += (sal_Int32)fLeftDiff;
-            aRect.Right() += (sal_Int32)fRightDiff;
-            aRect.Top() += (sal_Int32)fTopDiff;
-            aRect.Bottom() += (sal_Int32)fBottomDiff;
-
-            SetRectsDirty();
-            SetChanged();
-            InvalidateRenderGeometry();
-        }
+        aRect = aNewTextRect;
+        SetRectsDirty();
+        SetChanged();
+        InvalidateRenderGeometry();
     }
     return bRet;
 }
 FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
-    Rectangle aNewTextRect, aOldTextRect( aRect );
-    GetTextBounds( aOldTextRect );
-    aNewTextRect = aOldTextRect;
-    FASTBOOL bRet = AdjustTextFrameWidthAndHeight( aNewTextRect, bHgt, bWdt );
-    if ( aOldTextRect != aNewTextRect )
+    Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
+    sal_Bool bRet = !aNewTextRect.IsEmpty();
+    if ( bRet )
     {
-        if ( bRet )
-        {
-            Rectangle aBoundRect0;
-            if ( pUserCall )
-                aBoundRect0 = GetCurrentBoundRect();
-    //      SendRepaintBroadcast();
+        Rectangle aBoundRect0;
+        if ( pUserCall )
+            aBoundRect0 = GetCurrentBoundRect();
+//      SendRepaintBroadcast();
+        aRect = aNewTextRect;
 
-            // calculating the new text rect
-            double fXScale = (double)aRect.GetWidth() / (double)aOldTextRect.GetWidth();
-            double fYScale = (double)aRect.GetHeight() / (double)aOldTextRect.GetHeight();
-            double fRightDiff = (double)( aNewTextRect.Right() - aOldTextRect.Right() ) * fXScale;
-            double fLeftDiff  = (double)( aNewTextRect.Left()  - aOldTextRect.Left()  ) * fXScale;
-            double fTopDiff   = (double)( aNewTextRect.Top()   - aOldTextRect.Top()   ) * fYScale;
-            double fBottomDiff= (double)( aNewTextRect.Bottom()- aOldTextRect.Bottom()) * fYScale;
-            aRect.Left() += (sal_Int32)fLeftDiff;
-            aRect.Right() += (sal_Int32)fRightDiff;
-            aRect.Top() += (sal_Int32)fTopDiff;
-            aRect.Bottom() += (sal_Int32)fBottomDiff;
-
-            SetRectsDirty();
-            InvalidateRenderGeometry();
-            SetChanged();
-    //      SendRepaintBroadcast();
-            BroadcastObjectChange();
-            SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-        }
+        SetRectsDirty();
+        InvalidateRenderGeometry();
+        SetChanged();
+//      SendRepaintBroadcast();
+        BroadcastObjectChange();
+        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
     return bRet;
 }
@@ -2901,20 +2943,55 @@ SdrObject* SdrObjCustomShape::CheckHit(const Point& rPnt, USHORT nTol, const Set
                 if ( pObj->CheckHit( rPnt, nTol, pVisiLayer ) )
                     pHitObj = (SdrObject*)this;
             }
-            if ( !pHitObj && HasText() && SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer ) )
-                pHitObj = (SdrObject*)this;
+        }
+        else if ( pSdrObject->CheckHit( rPnt, nTol, pVisiLayer ) )
+            pHitObj = (SdrObject*)this;
+    }
+
+    if ( !pHitObj && HasText() )
+    {
+        // paint text over object
+        double fTextRotation = GetExtraTextRotation();
+        if ( fTextRotation != 0.0 )
+        {
+            GeoStat aOldGeoStat( aGeo );
+            Rectangle aOldRect( aRect );
+            Rectangle aTextBound( aRect );
+            GetTextBounds( aTextBound );
+
+            // determining the correct refpoint
+            Point aRef( aTextBound.Center() );
+            Rectangle aUnrotatedSnapRect( aOutRect );
+            RotatePoint( aRef, aUnrotatedSnapRect.Center(), -aGeo.nSin, -aGeo.nCos );
+
+            long dx = aRect.Right()-aRect.Left();
+            long dy = aRect.Bottom()-aRect.Top();
+            Point aP( aRect.TopLeft() );
+            double sn = sin( F_PI180 * fTextRotation );
+            double cs = cos( F_PI180 * fTextRotation );
+            RotatePoint( aP, aRef, sn, cs );
+            ((SdrObjCustomShape*)this)->aRect.Left()=aP.X();
+            ((SdrObjCustomShape*)this)->aRect.Top()=aP.Y();
+            ((SdrObjCustomShape*)this)->aRect.Right()=aRect.Left()+dx;
+            ((SdrObjCustomShape*)this)->aRect.Bottom()=aRect.Top()+dy;
+            if ( aGeo.nDrehWink == 0 )
+            {
+                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( (sal_Int32)( fTextRotation * 100.0 ) );
+                ((SdrObjCustomShape*)this)->aGeo.nSin = sn;
+                ((SdrObjCustomShape*)this)->aGeo.nCos = cs;
+            }
+            else
+            {
+                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( aGeo.nDrehWink + (sal_Int32)( fTextRotation * 100.0 ) );
+                ((SdrObjCustomShape*)this)->aGeo.RecalcSinCos();
+            }
+            pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
+            ((SdrObjCustomShape*)this)->aGeo = aOldGeoStat;
+            ((SdrObjCustomShape*)this)->aRect = aOldRect;
+
         }
         else
-        {
-            if ( pSdrObject->CheckHit( rPnt, nTol, pVisiLayer ) )
-                pHitObj = (SdrObject*)this;
-            else if ( SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer ) )
-                pHitObj = (SdrObject*)this;
-        }
-    }
-    else if ( HasText() )
-    {
-        pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
+            pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
     }
 
     return pHitObj;
