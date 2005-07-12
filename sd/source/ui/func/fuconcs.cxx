@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:27:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,44 +348,48 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                     rPool.FreezeIdRanges();
                     if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aFormModel ) )
                     {
-                        const SdrObject* pSourceObj = aFormModel.GetPage( 0 )->GetObj( 0 );
-                        if( pSourceObj )
+                        const SdrPage* pPage = aFormModel.GetPage( 0 );
+                        if ( pPage )
                         {
-                            const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
-                            SDRATTR_START, SDRATTR_SHADOW_LAST,
-                            SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                            SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                            // Graphic Attributes
-                            SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
-                            // 3d Properties
-                            SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                            // CustomShape properties
-                            SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-                            // range from SdrTextObj
-                            EE_ITEMS_START, EE_ITEMS_END,
-                            // end
-                            0, 0);
-                            aDest.Set( rSource );
-                            pObj->SetMergedItemSet( aDest );
-                            sal_Int32 nAngle = pSourceObj->GetRotateAngle();
-                            if ( nAngle )
+                            const SdrObject* pSourceObj = pPage->GetObj( 0 );
+                            if( pSourceObj )
                             {
-                                double a = nAngle * F_PI18000;
-                                pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
-                            }
-                            bAttributesAppliedFromGallery = sal_True;
-
-
-/*
-                            com::sun::star::uno::Any aAny;
-                            if ( ((SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )).QueryValue( aAny ) )
-                            {
-                                aGeometryItem.PutValue( aAny );
-                                pObj->SetMergedItem( aGeometryItem );
+                                const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
+                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                                // Graphic Attributes
+                                SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
+                                // 3d Properties
+                                SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                // CustomShape properties
+                                SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
+                                // range from SdrTextObj
+                                EE_ITEMS_START, EE_ITEMS_END,
+                                // end
+                                0, 0);
+                                aDest.Set( rSource );
+                                pObj->SetMergedItemSet( aDest );
+                                sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+                                if ( nAngle )
+                                {
+                                    double a = nAngle * F_PI18000;
+                                    pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                }
                                 bAttributesAppliedFromGallery = sal_True;
+
+
+    /*
+                                com::sun::star::uno::Any aAny;
+                                if ( ((SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )).QueryValue( aAny ) )
+                                {
+                                    aGeometryItem.PutValue( aAny );
+                                    pObj->SetMergedItem( aGeometryItem );
+                                    bAttributesAppliedFromGallery = sal_True;
+                                }
+    */
                             }
-*/
                         }
                     }
                     break;
