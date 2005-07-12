@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:44:15 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,9 @@ class SwSavePaintStatics
                        *pSFlyOnlyDraw;
     SwLineRects        *pSLines;
     SwSubsRects        *pSSubsLines;
+    // --> OD 2005-07-04 #123196#
+    SwSubsRects*        pSSpecSubsLines;
+    // <--
     SfxProgress        *pSProgress;
     long                nSPixelSzW,
                         nSPixelSzH,
@@ -470,6 +473,9 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pSFlyOnlyDraw       ( pFlyOnlyDraw      ),
     pSLines             ( pLines            ),
     pSSubsLines         ( pSubsLines        ),
+    // --> OD 2005-07-04 #123196#
+    pSSpecSubsLines     ( pSpecSubsLines    ),
+    // <--
     pSProgress          ( pProgress         ),
     nSPixelSzW          ( nPixelSzW         ),
     nSPixelSzH          ( nPixelSzH         ),
@@ -493,6 +499,9 @@ SwSavePaintStatics::SwSavePaintStatics() :
     aEdgeScale = 0.5;
     pLines = 0;
     pSubsLines = 0;
+    // --> OD 2005-07-04 #123196#
+    pSpecSubsLines = 0L;
+    // <--
     pProgress = 0;
 }
 
@@ -506,6 +515,9 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pFlyOnlyDraw       = pSFlyOnlyDraw;
     pLines             = pSLines;
     pSubsLines         = pSSubsLines;
+    // --> OD 2005-07-04 #123196#
+    pSpecSubsLines     = pSSpecSubsLines;
+    // <--
     pProgress          = pSProgress;
     nPixelSzW          = nSPixelSzW;
     nPixelSzH          = nSPixelSzH;
