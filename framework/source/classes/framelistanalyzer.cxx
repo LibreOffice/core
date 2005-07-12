@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framelistanalyzer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:35:00 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,9 @@ void FrameListAnalyzer::impl_analyze()
     css::uno::Reference< css::frame::XModel > xReferenceModel;
     if ((m_eDetectMode & E_MODEL) == E_MODEL )
     {
-        css::uno::Reference< css::frame::XController > xReferenceController = m_xReferenceFrame->getController();
+        css::uno::Reference< css::frame::XController > xReferenceController;
+        if (m_xReferenceFrame.is())
+            xReferenceController = m_xReferenceFrame->getController();
         if (xReferenceController.is())
             xReferenceModel = xReferenceController->getModel();
     }
