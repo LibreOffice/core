@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:37:15 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,6 +789,7 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
 
         if( ( nMagic1 != 0x25091962 ) || ( nMagic2 != 0xACB20201 ) || rIStm.GetError() )
         {
+            rIStm.ResetError();
             rIStm.Seek( nStmPos );
             rBitmapEx = aBmp;
         }
