@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 13:54:10 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,20 +365,23 @@ namespace sfx2
             nStartPos = aBoundary.startPos;
             String sSearchToken( rSearchString.Copy(
                 (USHORT)aBoundary.startPos, (USHORT)aBoundary.endPos - (USHORT)aBoundary.startPos ) );
-            if ( bForSearch && sSearchToken.GetChar( sSearchToken.Len() - 1 ) != '*' )
-                sSearchToken += '*';
-
-            if ( sSearchToken.Len() > 1 ||
-                 ( sSearchToken.Len() > 0 && sSearchToken.GetChar( 0 ) != '*' ) )
+            if ( sSearchToken.Len() > 0 && ( sSearchToken.Len() > 1 || sSearchToken.GetChar(0) != '.' ) )
             {
-                if ( sSearchStr.Len() > 0 )
+                if ( bForSearch && sSearchToken.GetChar( sSearchToken.Len() - 1 ) != '*' )
+                    sSearchToken += '*';
+
+                if ( sSearchToken.Len() > 1 ||
+                     ( sSearchToken.Len() > 0 && sSearchToken.GetChar( 0 ) != '*' ) )
                 {
-                    if ( bForSearch )
-                        sSearchStr += ' ';
-                    else
-                        sSearchStr += '|';
+                    if ( sSearchStr.Len() > 0 )
+                    {
+                        if ( bForSearch )
+                            sSearchStr += ' ';
+                        else
+                            sSearchStr += '|';
+                    }
+                    sSearchStr += sSearchToken;
                 }
-                sSearchStr += sSearchToken;
             }
             aBoundary = xBreak->nextWord( rSearchString, nStartPos,
                                           aLocale, WordType::ANYWORD_IGNOREWHITESPACES );
@@ -2030,7 +2033,9 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
     if ( rFactory.Len() > 0 )
     {
         GetIndexPage()->SetFactory( rFactory );
-        GetSearchPage()->SetFactory( rFactory );
+        // the index page did a check if rFactory is valid,
+        // so the index page always returns a valid factory
+        GetSearchPage()->SetFactory( GetIndexPage()->GetFactory() );
         if ( bActive )
             SetActiveFactory();
     }
