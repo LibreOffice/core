@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-02 15:58:57 $
+#   last change: $Author: kz $ $Date: 2005-07-12 11:10:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ SLO1FILES =  \
         $(SLO)$/symbol.obj \
         $(SLO)$/toolbox.obj \
         $(SLO)$/action.obj \
-            $(SLO)$/accessibility.obj \
+        $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/config.obj \
         $(SLO)$/dialog.obj \
@@ -111,7 +111,8 @@ SLO1FILES =  \
         $(SLO)$/edit.obj \
         $(SLO)$/rect.obj \
         $(SLO)$/unomodel.obj \
-        $(SLO)$/unodoc.obj
+        $(SLO)$/unodoc.obj \
+        $(SLO)$/eqnolefilehdr.obj
 
 SLO2FILES =  \
         $(SLO)$/register.obj  \
