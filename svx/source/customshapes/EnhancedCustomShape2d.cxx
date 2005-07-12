@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:29:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2430,7 +2430,12 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
     if ( !pRet )
         pRet = CreatePathObj( bLineGeometryNeededOnly );
 
-    if ( pRet && seqGluePoints.getLength() )
+    return pRet;
+}
+
+void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
+{
+    if ( pObj && seqGluePoints.getLength() )
     {
         sal_uInt32 i, nCount = seqGluePoints.getLength();
         for ( i = 0; i < nCount; i++ )
@@ -2445,12 +2450,11 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
             aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
-            SdrGluePointList* pList = pRet->ForceGluePointList();
+            SdrGluePointList* pList = pObj->ForceGluePointList();
             if( pList )
                 sal_uInt16 nId = pList->Insert( aGluePoint );
         }
     }
-    return pRet;
 }
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()
