@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.127 $
+*  $Revision: 1.128 $
 *
-*  last change: $Author: kz $ $Date: 2005-07-12 13:52:58 $
+*  last change: $Author: kz $ $Date: 2005-07-12 14:55:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -473,7 +473,7 @@ File gid_File_Lib_Dbjava
         Name = "libdb_java-4.2.jnilib";
     #else
     	Name = STRING(CONCAT2(libdb_java-4.2,UNXSUFFIX));
-    #endif 
+    #endif
  #else
     Name = "libdb_java42.dll";
   #endif
@@ -680,7 +680,7 @@ End
 #endif
 #endif
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 #ifdef UNX
@@ -722,7 +722,7 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Fwe , fwe)
+STD_LIB_FILE_PATCH( gid_File_Lib_Fwe , fwe)
 
 STD_LIB_FILE_PATCH( gid_File_Lib_Fwi , fwi)
 
@@ -734,7 +734,7 @@ File gid_File_Lib_Fwk
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Fwl , fwl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Fwl , fwl)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Fwm , fwm)
 
@@ -1556,7 +1556,7 @@ End
 
 STD_LIB_FILE_PATCH( gid_File_Lib_Sb , sb)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sch , sch)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sch , sch)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Schd , schd)
 
