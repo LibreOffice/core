@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-06 09:13:28 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,7 +1124,7 @@ void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyP
 void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev,
                                   const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx )
 {
-    if ( !rBitmapEx.IsEmpty() )
+    if ( !rBitmapEx.IsEmpty() && rSize.Width() && rSize.Height() )
     {
         BitmapEx        aBitmapEx( rBitmapEx );
         Point           aPoint( rPoint );
@@ -1191,9 +1191,24 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
         const Size aSizePixel( aBitmapEx.GetSizePixel() );
         if ( aSizePixel.Width() && aSizePixel.Height() )
         {
-            if ( !mbUseLosslessCompression )
+            sal_Bool bUseJPGCompression = !mbUseLosslessCompression;
+            if ( ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
+                bUseJPGCompression = sal_False;
+
+            SvMemoryStream  aStrm;
+            Bitmap          aMask;
+
+            if ( bUseJPGCompression )
             {
-                Bitmap aMask;
+                sal_uInt32 nZippedFileSize;     // sj: we will calculate the filesize of a zipped bitmap
+                {                               // to determine if jpeg compression is usefull
+                    SvMemoryStream aTemp;
+                    aTemp.SetCompressMode( aTemp.GetCompressMode() | COMPRESSMODE_ZBITMAP );
+                    aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
+                    aTemp << aBitmapEx;                         // is capable of zlib stream compression
+                    aTemp.Seek( STREAM_SEEK_TO_END );
+                    nZippedFileSize = aTemp.Tell();
+                }
                 if ( aBitmapEx.IsTransparent() )
                 {
                     if ( aBitmapEx.IsAlpha() )
@@ -1201,7 +1216,6 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                     else
                         aMask = aBitmapEx.GetMask();
                 }
-                SvMemoryStream  aStrm;
                 GraphicFilter   aGraphicFilter;
                 Graphic         aGraphic( aBitmapEx.GetBitmap() );
                 sal_uInt16      nFormatName = aGraphicFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( "JPG" ) ) );
@@ -1214,15 +1228,16 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Value <<= nColorMode;
 
                 /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
-                rWriter.DrawJPGBitmap( aStrm, true, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+                aStrm.Seek( STREAM_SEEK_TO_END );
+                if ( aStrm.Tell() > nZippedFileSize )
+                    bUseJPGCompression = sal_False;
             }
+            if ( bUseJPGCompression )
+                rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+            else if ( aBitmapEx.IsTransparent() )
+                rWriter.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else
-            {
-                if ( aBitmapEx.IsTransparent() )
-                    rWriter.DrawBitmapEx( aPoint, aSize, aBitmapEx );
-                else
-                    rWriter.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap() );
-            }
+                rWriter.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap() );
         }
     }
 }
