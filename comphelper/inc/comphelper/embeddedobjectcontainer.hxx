@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:27:24 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ public:
                         ~EmbeddedObjectContainer();
 
     void                SwitchPersistence( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& );
+    sal_Bool            CommitImageSubStorage();
     void                ReleaseImageSubStorage();
 
     ::rtl::OUString     CreateUniqueObjectName();
@@ -149,6 +150,9 @@ public:
 
     // copy an embedded object into the storage
     sal_Bool CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
+
+    // copy an embedded object into the storage, open the new copy and return it
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, /* TODO const ::rtl::OUString& aOrigName,*/ ::rtl::OUString& rName );
 
     // move an embedded object from one container to another one
     sal_Bool MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
