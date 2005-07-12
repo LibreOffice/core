@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-14 16:46:02 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,8 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XINDEXACCESS >                       m_contViewData          ;
     sal_Bool                                        m_bClosed               ;
     sal_Bool                                        m_bClosing              ;
+    sal_Bool                                        m_bSaving               ;
+    sal_Bool                                        m_bSuicide              ;
     REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
     REFERENCE< XSCRIPTPROVIDER >                        m_xScriptProvider;
@@ -403,6 +405,8 @@ struct IMPL_SfxBaseModel_DataContainer
             ,   m_aInterfaceContainer   ( aMutex        )
             ,   m_bClosed               ( sal_False     )
             ,   m_bClosing              ( sal_False     )
+            ,   m_bSaving               ( sal_False     )
+            ,   m_bSuicide              ( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
     {
         // increase global instance counter.
@@ -581,6 +585,81 @@ void SfxOwnFramesLocker::UnlockFrames()
         {
             OSL_ENSURE( sal_False, "Can't unlock the frame window!\n" );
         }
+    }
+}
+
+// SfxSaveGuard ====================================================================================
+class SfxSaveGuard
+{
+    private:
+        REFERENCE< XMODEL > m_xModel;
+        IMPL_SfxBaseModel_DataContainer* m_pData;
+        SfxOwnFramesLocker* m_pFramesLock;
+
+    public:
+        SfxSaveGuard(const REFERENCE< XMODEL >&             xModel                      ,
+                           IMPL_SfxBaseModel_DataContainer* pData                       ,
+                           sal_Bool                         bRejectConcurrentSaveRequest);
+        ~SfxSaveGuard();
+};
+
+SfxSaveGuard::SfxSaveGuard(const REFERENCE< XMODEL >&             xModel                      ,
+                                 IMPL_SfxBaseModel_DataContainer* pData                       ,
+                                 sal_Bool                         bRejectConcurrentSaveRequest)
+    : m_xModel     (xModel)
+    , m_pData      (pData )
+    , m_pFramesLock(0     )
+{
+    static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Object already disposed."                                       );
+    static ::rtl::OUString MSG_2 = ::rtl::OUString::createFromAscii("Concurrent save requests on the same document are not possible.");
+
+    if (
+        m_pData->m_bClosing ||
+        m_pData->m_bClosed
+       )
+        throw ::com::sun::star::lang::DisposedException(
+                MSG_1,
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
+
+    if (
+        bRejectConcurrentSaveRequest &&
+        m_pData->m_bSaving
+       )
+        throw ::com::sun::star::io::IOException(
+                MSG_2,
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
+
+    m_pData->m_bSaving = sal_True;
+    m_pFramesLock = new SfxOwnFramesLocker(m_pData->m_pObjectShell);
+}
+
+SfxSaveGuard::~SfxSaveGuard()
+{
+    SfxOwnFramesLocker* pFramesLock = m_pFramesLock;
+    m_pFramesLock = 0;
+    delete pFramesLock;
+
+    m_pData->m_bSaving = sal_False;
+
+    // m_bSuicide was set e.g. in case somewhere tried to close a document, while it was used for
+    // storing at the same time. Further m_bSuicide was set to TRUE only if close(TRUE) was called.
+    // So the owner ship was delegated to the place where a veto exception was thrown.
+    // Now we have to call close() again and delegate the owner ship to the next one, which
+    // cant accept that. Close(FALSE) cant work in this case. Because then the document will may be never closed ...
+
+    if ( m_pData->m_bSuicide )
+    {
+        // Reset this state. In case the new close() request is not accepted by somehwere else ...
+        // it's not a good idea to have two "owners" for close .-)
+        m_pData->m_bSuicide = sal_False;
+        try
+        {
+            REFERENCE< XCLOSEABLE > xClose(m_xModel, UNOQUERY);
+            if (xClose.is())
+                xClose->close(sal_True);
+        }
+        catch(const CLOSEVETOEXCEPTION&)
+        {}
     }
 }
 
@@ -1495,6 +1574,8 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENE
 
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION)
 {
+    static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
+
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !m_pData || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
@@ -1516,6 +1597,15 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
                 pIterator.remove();
             }
         }
+    }
+
+    if ( m_pData->m_bSaving )
+    {
+        if (bDeliverOwnership)
+            m_pData->m_bSuicide = sal_True;
+        throw CLOSEVETOEXCEPTION(
+                MSG_1,
+                static_cast< ::com::sun::star::util::XCloseable* >(this));
     }
 
     // no own objections against closing!
@@ -2105,7 +2195,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        SfxOwnFramesLocker aLocker( m_pData->m_pObjectShell );
+        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
 
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
         {
@@ -2160,7 +2250,11 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, m_pData->m_pObjectShell ) );
         }
         else
+        {
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, m_pData->m_pObjectShell ) );
+
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
+        }
     }
 
 }
@@ -2191,7 +2285,8 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        SfxOwnFramesLocker aLocker( m_pData->m_pObjectShell );
+        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
+
         impl_store( rURL, rArgs, sal_False );
 
         SEQUENCE< PROPERTYVALUE > aSequence ;
@@ -2215,7 +2310,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        SfxOwnFramesLocker aLocker( m_pData->m_pObjectShell );
+        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
         impl_store( rURL, rArgs, sal_True );
     }
 }
@@ -3015,7 +3110,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
                 }
             }
-            else if ( SFX_EVENT_SAVEDOCDONE == pNamedHint->GetEventId() )
+            else if ( SFX_EVENT_SAVEDOCDONE == pNamedHint->GetEventId()
+                   || SFX_EVENT_SAVEDOCFAILED == pNamedHint->GetEventId()
+                   || SFX_EVENT_SAVEASDOCFAILED == pNamedHint->GetEventId() )
             {
                 // Temporary solution for storage problem
                 if ( m_pData->m_xUIConfigurationManager.is()
@@ -3342,9 +3439,18 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
                 SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, m_pData->m_pObjectShell ) );
             }
+            else
+            {
+                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, m_pData->m_pObjectShell ) );
+            }
         }
         else
+        {
+            SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED,
+                                                    m_pData->m_pObjectShell ) );
+
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
+        }
     }
 }
 
