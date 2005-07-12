@@ -392,7 +392,8 @@ public class TestHelper  {
         {
             if ( pBytes[ind] != pContents[0][ind] )
             {
-                Error( "SubStream '" + sName + "' contains wrong data!" );
+                Error( "SubStream '" + sName + "' contains wrong data! ( byte num. "
+                        + ind + " should be" + pBytes[ind] + " but it is " + pContents[0][ind] + ")" );
                 return false;
             }
         }
@@ -763,6 +764,22 @@ public class TestHelper  {
         try
         {
             xSource.copyElementTo( sName, xDest, sName );
+        }
+        catch( Exception e )
+        {
+            Error( "Element copying failed, exception: " + e );
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean copyElementTo( XStorage xSource, String sName, XStorage xDest, String sTargetName )
+    {
+        // copy element with name sName from xSource to xDest
+        try
+        {
+            xSource.copyElementTo( sName, xDest, sTargetName );
         }
         catch( Exception e )
         {
