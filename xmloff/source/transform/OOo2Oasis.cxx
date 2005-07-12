@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 10:58:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1584,9 +1584,13 @@ XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
 void XMLTableOOoTransformerContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
+    // --> OD 2005-07-05 #i50521# - perform OOO_STYLE_REF_ACTIONS for all applications
+    Reference< XAttributeList > xAttrList( rAttrList );
+    XMLMutableAttributeList* pMutableAttrList =
+        GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
+    // <--
     if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
     {
-        Reference< XAttributeList > xAttrList( rAttrList );
         sal_Bool bPrintRanges(sal_False);
 
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1603,8 +1607,6 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
                 bPrintRanges = sal_True;
             }
         }
-        XMLMutableAttributeList *pMutableAttrList =
-            GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
         if (!bPrintRanges && pMutableAttrList)
         {
             xAttrList = pMutableAttrList;
@@ -1612,10 +1614,9 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
                                 XML_NAMESPACE_TABLE,
                                 GetXMLToken( XML_PRINT ) ), GetXMLToken ( XML_FALSE ));
         }
-        GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
     }
-    else
-        GetTransformer().GetDocHandler()->startElement( m_aElemQName, rAttrList );
+
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 
 void XMLTableOOoTransformerContext_Impl::EndElement()
