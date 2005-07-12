@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:34:02 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,6 +1183,7 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
   -----------------------------------------------------------------------*/
 SwXParagraphEnumeration::~SwXParagraphEnumeration()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
         delete pUnoCrsr;
@@ -1504,6 +1505,7 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
   -----------------------------------------------------------------------*/
 SwXTextRange::~SwXTextRange()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if(GetBookmark())
         pDoc->DelBookmark( GetBookmark()->GetName() );
 }
@@ -2427,6 +2429,7 @@ SwXTextRanges::SwXTextRanges(SwPaM* pCrsr) :
   -----------------------------------------------------------------------*/
 SwXTextRanges::~SwXTextRanges()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pCrsr = GetCrsr();
     delete pCrsr;
     if(pRangeArr)
@@ -2631,6 +2634,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
   -----------------------------------------------------------------------*/
 SwXParaFrameEnumeration::~SwXParaFrameEnumeration()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     aFrameArr.DeleteAndDestroy(0, aFrameArr.Count());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     delete pUnoCrsr;
