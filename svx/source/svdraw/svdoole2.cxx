@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:40:00 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,8 @@ void SdrOle2Obj::CheckFileLink_Impl()
     {
         try
         {
-            uno::Reference< embed::XLinkageSupport > xLinkSupport( xObjRef.GetObject(), uno::UNO_QUERY_THROW );
-            if ( xLinkSupport->isLink() )
+            uno::Reference< embed::XLinkageSupport > xLinkSupport( xObjRef.GetObject(), uno::UNO_QUERY );
+            if ( xLinkSupport.is() && xLinkSupport->isLink() )
             {
                 String aLinkURL = xLinkSupport->getLinkURL();
                 if ( aLinkURL.Len() )
@@ -823,9 +823,17 @@ void SdrOle2Obj::Disconnect_Impl()
                 if ( pPers )
                 {
                     // remove object, but don't close it (that's up to someone else)
-                    comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
-                    xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
-                    rContainer.RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
+                    comphelper::EmbeddedObjectContainer* pContainer = xObjRef.GetContainer();
+                    if ( pContainer )
+                    {
+                        pContainer->RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
+
+                        // TODO/LATER: mpImpl->aPersistName contains outdated information, to have it uptodate
+                        // it should be returned from RemoveEmbeddedObject call. Currently it is no problem,
+                        // since no container is adjusted, actually the empty string could be provided as a name here
+                        xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
+                    }
+
                     DisconnectFileLink_Impl();
                 }
             }
@@ -880,24 +888,9 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
             DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
             if ( xObj.is() )
             {
-                pDestPers->GetEmbeddedObjectContainer().CopyEmbeddedObject( rContainer, xObj, aTmp );
-
-                if ( xObjRef.is() )
-                {
-                    // if the object is already assigned to the helper
-                    uno::Reference < embed::XEmbeddedObject > xOldObj = xObjRef.GetObject();
-
-                    // remove lock to enable closing the file without assigning to a temporary container
-                    xObjRef.Lock(FALSE);
-
-                    // remove all listeners
-                    xObjRef.Clear();
-
-                    // remove object from container (because it is no assigned to another model/container)
-                    rContainer.RemoveEmbeddedObject( xOldObj );
-                }
-
+                pDestPers->GetEmbeddedObjectContainer().MoveEmbeddedObject( rContainer, xObj, aTmp );
                 mpImpl->aPersistName = aTmp;
+                xObjRef.AssignToContainer( &pDestPers->GetEmbeddedObjectContainer(), aTmp );
             }
             DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
         }
@@ -1254,22 +1247,6 @@ void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::ImpCopyObject( SfxObjectShell* pSrcPersist, SfxObjectShell* pDstPersist, String& rPersistName )
-{
-    DBG_ASSERT( !xObjRef.is(), "Object already existing!" );
-    comphelper::EmbeddedObjectContainer& rContainer = pSrcPersist->GetEmbeddedObjectContainer();
-    uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( rPersistName );
-    if ( xObj.is() )
-    {
-        ::rtl::OUString aTmp;
-        pDstPersist->GetEmbeddedObjectContainer().CopyEmbeddedObject( rContainer, xObj, aTmp );
-        rPersistName = aTmp;
-        CheckFileLink_Impl();
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrOle2Obj::operator=(const SdrObject& rObj)
 {
     //TODO/LATER: who takes over control of my old object?!
@@ -1312,27 +1289,41 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             SfxObjectShell* pSrcPers = rObj.GetModel()->GetPersist();
             if( pDestPers && pSrcPers )
             {
-                ImpCopyObject( pSrcPers, pDestPers, mpImpl->aPersistName );
+                DBG_ASSERT( !xObjRef.is(), "Object already existing!" );
+                comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->GetEmbeddedObjectContainer();
+                uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
+                if ( xObj.is() )
+                {
+                    ::rtl::OUString aTmp;
+                    xObjRef.Assign( pDestPers->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject( rContainer, xObj, aTmp ) );
+                    mpImpl->aPersistName = aTmp;
+                    CheckFileLink_Impl();
+                }
+
                 Connect();
-                if( xObjRef.is() && rOle2Obj.xObjRef.is() ) try
+
+                if ( xObjRef.is() && rOle2Obj.xObjRef.is() )
                 {
-                    awt::Size aVisSize = rOle2Obj.xObjRef->getVisualAreaSize( rOle2Obj.GetAspect() );
-                    if( rOle2Obj.xObjRef->getMapUnit( rOle2Obj.GetAspect() ) == xObjRef->getMapUnit( GetAspect() ) )
+                    try
+                    {
+                        awt::Size aVisSize = rOle2Obj.xObjRef->getVisualAreaSize( rOle2Obj.GetAspect() );
+                        if( rOle2Obj.xObjRef->getMapUnit( rOle2Obj.GetAspect() ) == xObjRef->getMapUnit( GetAspect() ) )
                         xObjRef->setVisualAreaSize( GetAspect(), aVisSize );
+                    }
+                    catch ( embed::WrongStateException& )
+                    {
+                        // setting of VisArea not necessary for objects that don't cache it in loaded state
+                    }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {
+                        // objects my not have visual areas
+                    }
+                    catch( uno::Exception& e )
+                    {
+                        (void)e;
+                        DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
+                    }
                 }
-                catch ( embed::WrongStateException& )
-                {
-                    // setting of VisArea not necessary for objects that don't cache it in loaded state
-                }
-        catch( embed::NoVisualAreaSizeException& )
-        {
-            // objects my not have visual areas
-        }
-        catch( uno::Exception& e )
-        {
-            (void)e;
-            DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
-        }
             }
         }
     }
