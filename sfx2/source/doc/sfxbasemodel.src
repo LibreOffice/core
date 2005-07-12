@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:25:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "sfx.hrc"
 #include "sfxlocal.hrc"
 
+/*
+// the following events names are now hardcoded in the code
 StringArray EVENT_NAMES_ARY
 {
     ItemList =
@@ -88,8 +90,12 @@ StringArray EVENT_NAMES_ARY
         < "OnVisAreaChanged"    ; SFX_EVENT_VISAREACHANGED ; > ;
         < "OnCreate"            ; SFX_EVENT_DOCCREATED ; > ;
         < "OnLoadFinished"      ; SFX_EVENT_LOADFINISHED ; > ;
+        < "OnSaveAsFailed"      ; SFX_EVENT_SAVEASDOCFAILED ; > ;
+        < "OnSaveFailed"        ; SFX_EVENT_SAVEDOCFAILED ; > ;
+        < "OnCopyToFailed"      ; SFX_EVENT_SAVETODOCFAILED ; > ;
     };
 };
+*/
 
 /*
     these events are defined by the applications or aren't used
