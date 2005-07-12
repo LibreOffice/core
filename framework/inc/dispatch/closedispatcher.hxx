@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:49:12 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
         //---------------------------------------
         /** @short  reference to the target frame, which should be
                     closed by this dispatch. */
-        css::uno::Reference< css::frame::XFrame > m_xCloseFrame;
+        css::uno::WeakReference< css::frame::XFrame > m_xCloseFrame;
 
         //---------------------------------------
         /** @short  used for asynchronous callbacks within the main thread.
