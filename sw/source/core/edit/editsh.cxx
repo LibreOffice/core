@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:17:57 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,8 +828,11 @@ Graphic SwEditShell::GetIMapGraphic( BOOL bWait ) const
             aRet = *((SwOLENode*)pNd)->GetGraphic();
         }
         else
-            aRet = pNd->GetCntntNode()->GetFrm()->FindFlyFrm()->
-                                GetFmt()->MakeGraphic();
+        {
+            SwFlyFrm* pFlyFrm = pNd->GetCntntNode()->GetFrm()->FindFlyFrm();
+            if(pFlyFrm)
+                aRet = pFlyFrm->GetFmt()->MakeGraphic();
+        }
     }
     return aRet;
 }
