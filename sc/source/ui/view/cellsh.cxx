@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:23:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
+#include <svtools/insdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
@@ -337,7 +338,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     }
 }
 
-void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
+sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
                         SotFormatStringId nFormatId )
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
@@ -353,12 +354,22 @@ void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper
                                         SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
                 aStrVal = aDesc.maTypeName;
         }
+        else if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE
+          || nFormatId == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
+        {
+            String aSource;
+            SvPasteObjectHelper::GetEmbeddedName( rDataHelper, aStrVal, aSource, nFormatId );
+        }
 
         if ( aStrVal.Len() )
             rFormats.AddClipbrdFormat( nFormatId, aStrVal );
         else
             rFormats.AddClipbrdFormat( nFormatId );
+
+        return sal_True;
     }
+
+    return sal_False;
 }
 
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
@@ -385,6 +396,9 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
         lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_8 );
         lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_5 );
     }
+
+    if ( !lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) )
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
 }
 
 //  Einfuegen, Inhalte einfuegen
@@ -405,6 +419,7 @@ BOOL lcl_IsCellPastePossible( const TransferableDataHelper& rData )
              rData.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
              rData.HasFormat( SOT_FORMAT_STRING ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_LINK ) ||
