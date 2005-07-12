@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:25:24 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,8 @@
 #include <classes/framecontainer.hxx>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
-#include <threadhelp/transactionbase.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
-#include <threadhelp/threadhelpbase.hxx>
+#ifndef __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
+#include <classes/propertysethelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
@@ -234,10 +230,6 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
-#ifndef _CPPUHELPER_PROPSHLP_HXX
-#include <cppuhelper/propshlp.hxx>
-#endif
-
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -313,11 +305,8 @@ class Frame :   // interfaces
                 public  css::frame::XComponentLoader                ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
-                public  ThreadHelpBase                              ,   // helper for own threadsafe code
-                public  TransactionBase                             ,   // helper for rejecting calls for wrong object states
-                public  ::cppu::OBroadcastHelper                    ,   // helper for propertyset => XPropertySet, XFastPropertySet, XMultiPropertySet
-                public  ::cppu::OPropertySetHelper                  ,
-                public  ::cppu::OWeakObject                             // helper for refcount mechanism
+                public PropertySetHelper                            ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
+                public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -466,25 +455,19 @@ class Frame :   // interfaces
         virtual void SAL_CALL addCloseListener   ( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
         virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
         //---------------------------------------------------------------------------------------------------------
-        //  OPropertySetHelper
+        //  PropertySetHelper => XPropertySet, XPropertySetInfo
         //---------------------------------------------------------------------------------------------------------
-        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue           (           css::uno::Any&                                                      aConvertedValue     ,
-                                                                                                                                 css::uno::Any&                                                     aOldValue           ,
-                                                                                                                                 sal_Int32                                                          nHandle             ,
-                                                                                                                    const   css::uno::Any&                                                      aValue              ) throw( css::lang::IllegalArgumentException );
-        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast   (           sal_Int32                                                           nHandle             ,
-                                                                                                                      const css::uno::Any&                                                      aValue              ) throw( css::uno::Exception );
-        virtual void                                                SAL_CALL getFastPropertyValue               (           css::uno::Any&                                                      aValue              ,
-                                                                                                                              sal_Int32                                                         nHandle             ) const;
-        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                      (                                                                                                   );
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo                 (                                                                                                   ) throw (::com::sun::star::uno::RuntimeException);
+    private:
+
+        void impl_initializePropInfo();
+
+        virtual void SAL_CALL impl_setPropertyValue(const ::rtl::OUString& sProperty,
+                                                          sal_Int32        nHandle  ,
+                                                    const css::uno::Any&   aValue   );
+
+        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const ::rtl::OUString& sProperty,
+                                                                   sal_Int32        nHandle  );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
