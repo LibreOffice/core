@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:21:09 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,14 @@ using vos::ORef;
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
-                                     sal_Bool bPackageFormat )
+                                     sal_Bool bPackageFormat,
+                                     sal_Bool bAllowRemoveOnInsert )
 : m_xFactory( xFactory )
 , m_bPackageFormat( bPackageFormat )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to the package folder!" );
+
+    ZipPackageEntry::mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_True );
     aEntry.nVersion     = -1;
