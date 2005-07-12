@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 13:54:45 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
-#include <com/sun/star/frame/XFramesSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -513,17 +513,19 @@ SfxHelp::~SfxHelp()
 ::rtl::OUString getCurrentModuleIdentifier_Impl()
 {
     ::rtl::OUString sIdentifier;
-    Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
+    Reference < XFrame > xCurrentFrame;
     Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+    Reference < XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    if ( xDesktop.is() )
+        xCurrentFrame = xDesktop->getCurrentFrame();
 
-    if ( xActiveTask.is() )
+    if ( xCurrentFrame.is() && xModuleManager.is() )
     {
         try
         {
-            sIdentifier = xModuleManager->identify( xActiveTask );
+            sIdentifier = xModuleManager->identify( xCurrentFrame );
         }
         catch ( ::com::sun::star::frame::UnknownModuleException& )
         {
@@ -863,7 +865,7 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
         Window* pParent = pWindow->GetParent();
         while ( pParent )
         {
-            nHelpId = pParent->GetHelpId();
+            nHelpId = pParent->GetSmartUniqueOrHelpId().GetNum();
             aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
 
             if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
