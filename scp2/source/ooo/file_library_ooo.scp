@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.125 $
+*  $Revision: 1.126 $
 *
-*  last change: $Author: kz $ $Date: 2005-07-12 13:25:43 $
+*  last change: $Author: kz $ $Date: 2005-07-12 13:50:51 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1348,13 +1348,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontaine
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pcr, pcr)
 
-File gid_File_Lib_Pdffilter
-    Name = LIBNAME(pdffilter);
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
-    RegistryID = gid_Starregistry_Services_Rdb;
-End
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pdffilter, pdffilter)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pk , pk)
 
@@ -1607,9 +1601,14 @@ File gid_File_Lib_Scriptframe
     Styles = (PACKED, UNO_COMPONENT);
 End
 
+<<<<<<< file_library_ooo.scp
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sd , sd)
 STD_LIB_FILE_PATCH( gid_File_Lib_Sdui, sdui)
 
+=======
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sd , sd)
+STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
+>>>>>>> 1.106.12.1
 File gid_File_Lib_Slideshow
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -1812,15 +1811,25 @@ End
 
 #endif
 
+<<<<<<< file_library_ooo.scp
 STD_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
+=======
+STD_LIB_FILE( gid_File_Lib_Svl, svl )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
+>>>>>>> 1.106.12.1
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 
+<<<<<<< file_library_ooo.scp
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sw , sw)
 STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
+=======
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sw , sw)
+STD_LIB_FILE( gid_File_Lib_Swui, swui)
+>>>>>>> 1.106.12.1
 
 File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;
