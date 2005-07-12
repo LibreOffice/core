@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 13:48:40 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,12 +117,13 @@ class SalGtkPicker
 class RunDialog
 {
 private:
-    bool bFinished;
+    bool mbFinished;
+    osl::Mutex maLock;
     gint mnStatus;
     GtkWidget *m_pDialog;
 public:
     void run();
-    RunDialog(GtkWidget *pDialog) : bFinished(false), m_pDialog(pDialog) { }
+    RunDialog(GtkWidget *pDialog) : mbFinished(false), m_pDialog(pDialog) { }
     gint runandwaitforresult();
 };
 
