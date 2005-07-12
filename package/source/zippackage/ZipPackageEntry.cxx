@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:09:49 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
 : pParent ( NULL )
 , mbIsFolder ( bNewFolder )
+, mbAllowRemoveOnInsert( sal_True )
 {
 }
 
@@ -147,7 +148,7 @@ void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewPar
 
     if ( pNewParent != pParent )
     {
-        if ( pParent && pParent->hasByName ( aEntry.sName ) )
+        if ( pParent && pParent->hasByName ( aEntry.sName ) && mbAllowRemoveOnInsert )
             pParent->removeByName( aEntry.sName );
         doSetParent ( pNewParent, sal_True );
     }
