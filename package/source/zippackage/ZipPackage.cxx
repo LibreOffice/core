@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 13:56:10 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,10 +312,11 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , bUseManifest ( sal_True )
 , m_bMediaTypeFallbackUsed ( sal_False )
 , m_bPackageFormat( sal_True )
+, m_bAllowRemoveOnInsert( sal_True )
 , bForceRecovery ( sal_False )
 , eMode ( e_IMode_None )
 {
-    xRootFolder = pRootFolder = new ZipPackageFolder( xFactory, m_bPackageFormat );
+    xRootFolder = pRootFolder = new ZipPackageFolder( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -374,7 +375,7 @@ void ZipPackage::getZipFileContents()
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
-                    pPkgFolder = new ZipPackageFolder( xFactory, m_bPackageFormat );
+                    pPkgFolder = new ZipPackageFolder( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
                     pPkgFolder->setName( sTemp );
                     pPkgFolder->doSetParent( pCurrent, sal_True );
                     pCurrent = pPkgFolder;
@@ -390,7 +391,7 @@ void ZipPackage::getZipFileContents()
         {
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex);
-            pPkgStream = new ZipPackageStream( *this, xFactory );
+            pPkgStream = new ZipPackageStream( *this, xFactory, m_bAllowRemoveOnInsert );
             pPkgStream->SetPackageMember( sal_True );
             pPkgStream->setZipEntry( rEntry );
             pPkgStream->setName( sTemp );
@@ -650,6 +651,11 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     aNamedValue.Value >>= m_bPackageFormat;
                     pRootFolder->setPackageFormat_Impl( m_bPackageFormat );
                 }
+                else if ( aNamedValue.Name.equalsAscii( "AllowRemoveOnInsert" ) )
+                {
+                    aNamedValue.Value >>= m_bAllowRemoveOnInsert;
+                    pRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
+                }
 
                 // for now the progress handler is not used, probably it will never be
                 // if ( aNamedValue.Name.equalsAscii( "ProgressHandler" )
@@ -886,7 +892,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
         throw(Exception, RuntimeException)
 {
-    Reference < XInterface > xRef = *(new ZipPackageStream ( *this, xFactory ));
+    Reference < XInterface > xRef = *(new ZipPackageStream ( *this, xFactory, m_bAllowRemoveOnInsert ));
     return xRef;
 }
 Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
@@ -897,9 +903,9 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if (bArg)
-        xRef = *new ZipPackageFolder ( xFactory, m_bPackageFormat );
+        xRef = *new ZipPackageFolder ( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
     else
-        xRef = *new ZipPackageStream ( *this, xFactory );
+        xRef = *new ZipPackageStream ( *this, xFactory, m_bAllowRemoveOnInsert );
 
     return xRef;
 }
