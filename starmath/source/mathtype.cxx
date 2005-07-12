@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 12:14:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,30 +224,6 @@ static sal_Unicode Convert(sal_Unicode nIn)
     }
 
     return nIn;
-}
-
-void EQNOLEFILEHDR::Read(SvStorageStream *pS)
-{
-    *pS >> nCBHdr;
-    *pS >> nVersion;
-    *pS >> nCf;
-    *pS >> nCBObject;
-    *pS >> nReserved1;
-    *pS >> nReserved2;
-    *pS >> nReserved3;
-    *pS >> nReserved4;
-}
-
-void EQNOLEFILEHDR::Write(SvStorageStream *pS)
-{
-    *pS << nCBHdr;
-    *pS << nVersion;
-    *pS << nCf;
-    *pS << nCBObject;
-    *pS << nReserved1;
-    *pS << nReserved2;
-    *pS << nReserved3;
-    *pS << nReserved4;
 }
 
 void MathType::Init()
@@ -770,6 +746,9 @@ int MathType::Parse(SotStorage *pStor)
     *pS >> nProduct;
     *pS >> nProdVersion;
     *pS >> nProdSubVersion;
+
+    if (nVersion > 3)   // allow only supported versions of MathType to be parsed
+        return 0;
 
 #ifdef STANDALONE
     *pOut << "Format Version is " << int(nVersion) << endl;
