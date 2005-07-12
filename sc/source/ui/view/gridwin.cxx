@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:44:57 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3435,6 +3435,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
+                                 IsDropFormatSupported( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
                                  IsDropFormatSupported( SOT_FORMAT_STRING ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_SYLK ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) ||
@@ -3559,6 +3560,8 @@ ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xT
         nFormatId = SOT_FORMATSTR_ID_BIFF_5;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) )
         nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) )
+        nFormatId = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) )
         nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
