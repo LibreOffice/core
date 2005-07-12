@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:04:07 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,33 +64,15 @@
 #ifndef NODE_HXX
 #include "node.hxx"
 #endif
+#ifndef __EQNOLEFILEHDR_HXX__
+#include "eqnolefilehdr.hxx"
+#endif
 
 #include <sot/storage.hxx>
 
 #include <set>
 
 class SfxMedium;
-
-#define EQNOLEFILEHDR_SIZE 28
-class EQNOLEFILEHDR
-{
-public:
-    EQNOLEFILEHDR() {}
-    EQNOLEFILEHDR(sal_uInt32 nLenMTEF) : nCBHdr(0x1c),nVersion(0x20000),
-        nCf(0xc1c6),nCBObject(nLenMTEF),nReserved1(0),nReserved2(0x0014F690),
-        nReserved3(0x0014EBB4), nReserved4(0) {}
-    sal_uInt16   nCBHdr;     // length of header, sizeof(EQNOLEFILEHDR) = 28
-    sal_uInt32   nVersion;   // hiword = 2, loword = 0
-    sal_uInt16   nCf;        // clipboard format ("MathType EF")
-    sal_uInt32   nCBObject;  // length of MTEF data following this header
-    sal_uInt32   nReserved1; // not used
-    sal_uInt32   nReserved2; // not used
-    sal_uInt32   nReserved3; // not used
-    sal_uInt32   nReserved4; // not used
-
-    void Read(SvStorageStream *pS);
-    void Write(SvStorageStream *pS);
-};
 
 class MathTypeFont
 {
@@ -129,6 +111,7 @@ public:
     }
     int Parse( SotStorage* pStor );
     int ConvertFromStarMath( SfxMedium& rMedium );
+
 private:
 /*Ver 2 Header*/
     sal_uInt8 nVersion;
