@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:49:23 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE ||
          nFormatId == SOT_FORMATSTR_ID_LINK_SOURCE ||
          nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ||
-         nFormatId == SOT_FORMATSTR_ID_LINK_SOURCE_OLE )
+         nFormatId == SOT_FORMATSTR_ID_LINK_SOURCE_OLE ||
+         nFormatId == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
     {
         uno::Reference < io::XInputStream > xStm;
         TransferableObjectDescriptor   aObjDesc;
