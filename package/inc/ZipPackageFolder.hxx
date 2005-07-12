@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:54:38 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ protected:
 public:
 
     ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                      sal_Bool bPackageFormat );
+                      sal_Bool bPackageFormat,
+                      sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 
     void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
@@ -120,6 +121,7 @@ public:
     }
 
     void setPackageFormat_Impl( sal_Bool bPackageFormat ) { m_bPackageFormat = bPackageFormat; }
+    void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { ZipPackageEntry::mbAllowRemoveOnInsert = bRemove; }
 
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
