@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:22:40 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,14 +895,14 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             catch( packages::WrongPasswordException& )
             {
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
+                throw;
             }
             catch ( uno::Exception& )
             {
                 OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
+                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
                 throw io::IOException(); // TODO:
             }
-
-            throw;
         }
         catch( uno::Exception& )
         {
@@ -1230,14 +1230,14 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( const ::rt
                 {
                     OSL_ENSURE( sal_False, "Encrypted ZipStream must already have input stream inside!\n" );
                     SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
+                    throw;
                 }
             }
             catch( uno::Exception& )
             {
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
+                throw;
             }
-
-            throw;
         }
         catch( uno::Exception& )
         {
