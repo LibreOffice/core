@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:54:11 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,6 +849,30 @@ void SvtFileDialog::Init_Impl
     aCurPathPos.Y() += nDelta;
     _pImp->_pFtCurrentPath->SetPosPixel( aCurPathPos );
 
+    if ( nStyle & SFXWB_READONLY )
+    {
+        _pCbReadOnly = new CheckBox( this, SvtResId( CB_EXPLORERFILE_READONLY ) );
+        _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
+        _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
+        AddControl( _pCbReadOnly );
+        ReleaseOwnerShip( _pCbReadOnly );
+        _pCbReadOnly->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+    }
+
+    if ( nStyle & SFXWB_PASSWORD )
+    {
+        _pImp->_pCbPassword = new CheckBox( this, SvtResId( CB_EXPLORERFILE_PASSWORD ) );
+        _pImp->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
+        AddControl( _pImp->_pCbPassword );
+        ReleaseOwnerShip( _pImp->_pCbPassword );
+        _pImp->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+    }
+
+    // set the ini file for extracting the size
+    _pImp->_aIniKey = IODLG_CONFIGNAME;
+
+    AddControls_Impl( );
+
     // Zahl der Pixel bestimmen, um die die anderen Elemente in der Position
     // Angepasst werden muessen.
     aPos.Y() += aSize.Height();
@@ -886,30 +910,6 @@ void SvtFileDialog::Init_Impl
     aSize = GetSizePixel();
     aSize.Height() += nYOffset;
     SetSizePixel( aSize );
-
-    if ( nStyle & SFXWB_READONLY )
-    {
-        _pCbReadOnly = new CheckBox( this, SvtResId( CB_EXPLORERFILE_READONLY ) );
-        _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
-        _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
-        AddControl( _pCbReadOnly );
-        ReleaseOwnerShip( _pCbReadOnly );
-        _pCbReadOnly->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
-    }
-
-    if ( nStyle & SFXWB_PASSWORD )
-    {
-        _pImp->_pCbPassword = new CheckBox( this, SvtResId( CB_EXPLORERFILE_PASSWORD ) );
-        _pImp->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
-        AddControl( _pImp->_pCbPassword );
-        ReleaseOwnerShip( _pImp->_pCbPassword );
-        _pImp->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
-    }
-
-    // set the ini file for extracting the size
-       _pImp->_aIniKey = IODLG_CONFIGNAME;
-
-    AddControls_Impl( );
 
     // Beschriftungen dem Modus anpassen.
     USHORT nResId = STR_EXPLORERFILE_OPEN;
