@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:46:21 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ void copyInputToOutput_Impl( Reference< io::XInputStream >& aIn, Reference< io::
 
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
-                                    const Reference< XMultiServiceFactory >& xFactory )
+                                    const Reference< XMultiServiceFactory >& xFactory,
+                                    sal_Bool bAllowRemoveOnInsert )
 : rZipPackage(rNewPackage)
 , m_xFactory( xFactory )
 , bToBeCompressed ( sal_True )
@@ -135,6 +136,8 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_nMagicalHackPos( 0 )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to ZipPackageStream!\n" );
+
+    ZipPackageEntry::mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_False );
     aEntry.nVersion     = -1;
