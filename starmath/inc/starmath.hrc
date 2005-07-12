@@ -2,9 +2,9 @@
  *
  *  $RCSfile: starmath.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:14:17 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,14 +169,12 @@
 #define RID_SMACCEL                 (RID_APP_START + 815)
 #define RID_STATUSBAR               (RID_APP_START + 816)
 #define RID_APPNAMESTR              (RID_APP_START + 817)
-#define STR_MATH_DOCUMENT_FULLTYPE_40   (RID_APP_START + 818)
-#define STR_MATH_DOCUMENT_FULLTYPE_31   (RID_APP_START + 819)
-#define STR_MATH_DOCUMENT_FULLTYPE_50   (RID_APP_START + 820)
-#define STR_MATH_DOCUMENT_FULLTYPE_60   (RID_APP_START + 821)
-#define RID_SMPLUGINMENU                (RID_APP_START + 822)
-#define STR_STATSTR_READING             (RID_APP_START + 823)
-#define STR_STATSTR_WRITING             (RID_APP_START + 824)
-#define STR_CMDBOXWINDOW                (RID_APP_START + 825)
+
+#define STR_MATH_DOCUMENT_FULLTYPE_CURRENT  (RID_APP_START + 821)
+#define RID_SMPLUGINMENU                    (RID_APP_START + 822)
+#define STR_STATSTR_READING                 (RID_APP_START + 823)
+#define STR_STATSTR_WRITING                 (RID_APP_START + 824)
+#define STR_CMDBOXWINDOW                    (RID_APP_START + 825)
 
 #define RID_ERR_IDENT               (RID_APP_START + 920)
 #define RID_ERR_UNKOWN              (RID_APP_START + 921)
