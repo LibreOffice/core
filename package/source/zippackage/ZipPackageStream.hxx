@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:46:38 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,8 @@ public:
     void setSize (const sal_Int32 nNewSize);
 
     ZipPackageStream ( ZipPackage & rNewPackage,
-                        const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                        const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                        sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageStream( void );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
