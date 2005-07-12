@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3991,30 +3991,10 @@ String STR_STATSTR_WRITING
 };
 
 
-String STR_MATH_DOCUMENT_FULLTYPE_60
+String STR_MATH_DOCUMENT_FULLTYPE_CURRENT
 {
     Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Formel" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
-};
-String STR_MATH_DOCUMENT_FULLTYPE_50
-{
-    Text [ de ] = "%PRODUCTNAME 5.0 Formel" ;
-    Text [ en-US ] = "%PRODUCTNAME 5.0 Formula" ;
-    Text [ x-comment ] = " ";
-};
-
-String STR_MATH_DOCUMENT_FULLTYPE_40
-{
-    Text [ de ] = "%PRODUCTNAME 4.0 Formel" ;
-    Text [ en-US ] = "%PRODUCTNAME 4.0 Formula" ;
-    Text [ x-comment ] = " ";
-};
-
-String STR_MATH_DOCUMENT_FULLTYPE_31
-{
-    Text [ de ] = "%PRODUCTNAME 3.0 Formel" ;
-    Text [ en-US ] = "%PRODUCTNAME 3.0 Formula" ;
-    Text [ x-comment ] = " ";
 };
 
 String RID_SYMBOLFILESSTR
