@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:14:44 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,15 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -95,12 +104,15 @@
 class SvStream;
 namespace utl { class TempFile; }
 
-class XTempFile : public com::sun::star::io::XInputStream,
+class XTempFile : public com::sun::star::lang::XTypeProvider,
+                  public com::sun::star::io::XInputStream,
                   public com::sun::star::io::XOutputStream,
                   public com::sun::star::io::XSeekable,
                   public com::sun::star::io::XStream,
                   public com::sun::star::io::XTruncate,
+                  public com::sun::star::beans::XPropertySetInfo,
                   public com::sun::star::beans::XPropertySet,
+                  public ::com::sun::star::lang::XServiceInfo,
                   public cppu::OWeakObject
 {
 protected:
@@ -118,6 +130,8 @@ protected:
     void checkError () const;
     void checkConnected ();
 
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > GetProps();
+
 public:
     XTempFile ();
     virtual ~XTempFile ();
@@ -129,6 +143,13 @@ public:
         throw ();
     virtual void SAL_CALL release(  )
         throw ();
+
+    // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId()
+        throw ( ::com::sun::star::uno::RuntimeException );
+
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -165,6 +186,11 @@ public:
     virtual void SAL_CALL truncate()
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
+    // XPropertySetInfo
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) throw (::com::sun::star::uno::RuntimeException);
+
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
         throw (::com::sun::star::uno::RuntimeException);
@@ -180,10 +206,18 @@ public:
         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    static ::rtl::OUString getImplementationName ();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();
-    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & rServiceName)
-        throw (com::sun::star::uno::RuntimeException);
+
+    static ::rtl::OUString getImplementationName_Static ();
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames_Static();
+    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory_Static( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException);
+
 };
 #endif
