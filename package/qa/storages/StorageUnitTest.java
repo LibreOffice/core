@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageUnitTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:49:42 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ import java.io.*;
 /* This unit test for storage objects is designed to
  * test most important statements from storage service
  * specification.
+ *
+ * Regression tests are added to extend the tested
+ * functionalities.
  */
 public class StorageUnitTest  extends ComplexTestCase
 {
@@ -106,7 +109,12 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteTest09",
                                 "ExecuteTest10",
                                 "ExecuteTest11",
-                                "ExecuteTest12" };
+                                "ExecuteTest12",
+                                "ExecuteRegressionTest_114358",
+                                "ExecuteRegressionTest_i29169",
+                                "ExecuteRegressionTest_i30400",
+                                "ExecuteRegressionTest_i29321",
+                                "ExecuteRegressionTest_i30677"};
     }
 
     public String getTestObjectName()
@@ -213,5 +221,34 @@ public class StorageUnitTest  extends ComplexTestCase
         assure( "Test12 failed!", aTest.test() );
     }
 
+    public void ExecuteRegressionTest_114358()
+    {
+        StorageTest aTest = new RegressionTest_114358( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_114358 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i29169()
+    {
+        StorageTest aTest = new RegressionTest_i29169( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i29169 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i30400()
+    {
+        StorageTest aTest = new RegressionTest_i30400( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i30400 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i29321()
+    {
+        StorageTest aTest = new RegressionTest_i29321( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i29321 failed!", aTest.test() );
+    }
+
+    public void ExecuteRegressionTest_i30677()
+    {
+        StorageTest aTest = new RegressionTest_i30677( m_xMSF, m_xStorageFactory, log );
+        assure( "RegressionTest_i30677 failed!", aTest.test() );
+    }
 }
 
