@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:16:13 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,10 @@ void OleComponent::Dispose()
 
     if ( m_bOleInitialized )
     {
-        OleUninitialize();
+        // since the disposing can happen not only from main thread but also from a clipboard
+        // the deinitialization might lead to a disaster, SO7 does not deinitialize OLE at all
+        // so currently the same approach is selected as workaround
+        // OleUninitialize();
         m_bOleInitialized = sal_False;
     }
 
@@ -1095,10 +1098,28 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
         //else
         //  throw io::IOException(); // TODO
 
-        hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
-        if ( FAILED( hr ) )
-            throw io::IOException(); // TODO
+        // actually the following method returns periodically a different value than the method from IViewObject
+        // for this reason it is separated in GetReccomendedExtent call
+        // hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
+        // if ( FAILED( hr ) )
+            throw lang::IllegalArgumentException();
+        //  throw io::IOException(); // TODO
     }
+
+    return awt::Size( aSize.cx, aSize.cy );
+}
+
+//----------------------------------------------
+awt::Size OleComponent::GetReccomendedExtent( sal_Int64 nAspect )
+{
+    if ( !m_pNativeImpl->m_pOleObject )
+        throw embed::WrongStateException(); // TODO: the object is in wrong state
+
+    DWORD nMSAspect = ( DWORD )nAspect; // first 32 bits are for MS aspects
+    SIZEL aSize;
+    HRESULT hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
+    if ( FAILED( hr ) )
+        throw lang::IllegalArgumentException();
 
     return awt::Size( aSize.cx, aSize.cy );
 }
