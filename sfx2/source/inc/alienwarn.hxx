@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alienwarn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 16:48:31 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ private:
     HelpButton              m_aMoreInfoBtn;
     FixedLine               m_aOptionLine;
     CheckBox                m_aWarningOffBox;
+
+    void                    InitSize();
 
 public:
              SfxAlienWarningDialog( Window* pParent, const String& _rFormatName );
