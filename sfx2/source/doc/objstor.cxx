@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 07:59:34 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2972,6 +2972,9 @@ sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
             }
         }
 
+        if ( bResult && bOasis )
+            bResult = GetEmbeddedObjectContainer().CommitImageSubStorage();
+
         if ( bResult && !bObjectsOnly )
         {
             try
@@ -3075,6 +3078,9 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
                         xObj->changeState( embed::EmbedStates::LOADED );
                 }
             }
+
+            bResult = aCnt.CommitImageSubStorage();
+
         }
         catch ( uno::Exception& )
         {
