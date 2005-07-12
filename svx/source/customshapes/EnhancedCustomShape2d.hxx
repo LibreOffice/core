@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:07:23 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         SdrObject*                  CreateLineGeometry();
         SdrObject*                  CreateObject( sal_Bool bLineGeometryNeededOnly );
+        void                        ApplyGluePoints( SdrObject* pObj );
         Rectangle                   GetTextRect() const;
 
         sal_uInt32                  GetHdlCount() const;
