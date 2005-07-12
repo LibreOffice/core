@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:08:01 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 
 #include "node.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -485,12 +486,12 @@ void SmParser::NextToken()
     xub_StrLen  nRealStart;
     BOOL        bCont;
     BOOL        bNumStart = FALSE;
-    const CharClass& rCC = SM_MOD1()->GetSysLocale().GetCharClass();
+    CharClass   aCC(SM_MOD1()->GetSysLocale().GetCharClass().getLocale());
     do
     {
         // skip white spaces
         while (UnicodeType::SPACE_SEPARATOR ==
-                        rCC.getType( BufferString, BufferIndex ))
+                        aCC.getType( BufferString, BufferIndex ))
            ++BufferIndex;
 
         sal_Int32 nStartFlags = coStartFlags;
@@ -505,9 +506,30 @@ void SmParser::NextToken()
             nContFlags  = coNumContFlags;
         }
 */
-        aRes = rCC.parseAnyToken( BufferString, BufferIndex,
+        aRes = aCC.parseAnyToken( BufferString, BufferIndex,
                                             nStartFlags, aEmptyStr,
                                             nContFlags, aEmptyStr );
+
+        // #i45779# parse numbers correctly
+        // i.e. independent from the locale setting.
+        // (note that #i11752# remains fixed)
+        if ((aRes.TokenType & KParseType::IDENTNAME) && IsDigit( cFirstChar ))
+        {
+            //! locale where '.' is decimal seperator!
+            static lang::Locale aDotLoc( SvxCreateLocale( LANGUAGE_ENGLISH_US ) );
+
+            ParseResult aTmpRes;
+            lang::Locale aOldLoc( aCC.getLocale() );
+            aCC.setLocale( aDotLoc );
+            aTmpRes = aCC.parsePredefinedToken(
+                            KParseType::ASC_NUMBER,
+                            BufferString, BufferIndex,
+                            KParseTokens::ASC_DIGIT, aEmptyStr,
+                            KParseTokens::ASC_DIGIT | KParseTokens::ASC_DOT, aEmptyStr );
+            aCC.setLocale( aOldLoc );
+            if (aTmpRes.TokenType & KParseType::ASC_NUMBER)
+                aRes.TokenType = aTmpRes.TokenType;
+        }
 
         nRealStart = BufferIndex + (xub_StrLen) aRes.LeadingWhiteSpace;
         BufferIndex = nRealStart;
@@ -741,7 +763,7 @@ void SmParser::NextToken()
                                 "unexpected comment start" );
 
                         // get identifier of user-defined character
-                        ParseResult aTmpRes = rCC.parseAnyToken(
+                        ParseResult aTmpRes = aCC.parseAnyToken(
                                 BufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
                                 aEmptyStr,
@@ -984,7 +1006,7 @@ void SmParser::NextToken()
                         {
                             cChar = BufferString.GetChar( ++BufferIndex );
                         }
-                        while ( cChar == '.' || ('0' <= cChar && cChar <= '9') );
+                        while ( cChar == '.' || IsDigit( cChar ) );
 
                         CurToken.aText = BufferString.Copy( nTxtStart, BufferIndex - nTxtStart );
                         aRes.EndPos = BufferIndex;
@@ -1904,7 +1926,7 @@ BOOL lcl_IsNumber(const UniString& rText)
             else
                 bPoint = TRUE;
         }
-        else if ( (cChar < 48) || (cChar > 57) )
+        else if ( !IsDigit( cChar ) )
             return FALSE;
     }
     return TRUE;
