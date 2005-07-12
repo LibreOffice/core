@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:55:38 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
   -----------------------------------------------------------------------*/
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     for(sal_uInt16 nFrame = aFrameArr.Count(); nFrame; )
         delete aFrameArr.GetObject( --nFrame );
     aFrameArr.Remove(0, aFrameArr.Count());
