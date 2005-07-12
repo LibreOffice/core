@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:11:49 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,8 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
                             pOleObjDescr->dwFullUserTypeName );
 
                 _rName.Append( pUserTypeName );
-                _nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+                // the following statement was here for historical reasons, it is commented out since it causes bug i49460
+                // _nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
             }
 
             // determine the source of the embedded object
