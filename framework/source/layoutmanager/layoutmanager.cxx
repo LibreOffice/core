@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-01 13:09:15 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6630,6 +6630,9 @@ throw( RuntimeException )
 
         delete m_pAddonOptions;
         m_pAddonOptions = 0;
+
+        // destroy all elements, it's possible that dettaching is NOT called!
+        implts_destroyElements();
 
         m_aUIElements.clear();
         impl_clearUpMenuBar();
