@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:18:45 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ void EMFWriter::ImplCheckTextAttr()
 
         // Text color
         ImplBeginRecord( WIN_EMR_SETTEXTCOLOR );
-        ImplWriteColor( rFont.GetColor() );
+        ImplWriteColor( maVDev.GetTextColor() );
         ImplEndRecord();
 
         ImplBeginRecord( WIN_EMR_SELECTOBJECT );
