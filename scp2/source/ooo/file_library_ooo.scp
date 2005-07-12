@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.123 $
+*  $Revision: 1.124 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-08 10:40:54 $
+*  last change: $Author: obo $ $Date: 2005-07-12 11:34:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -669,7 +669,7 @@ End
 #ifndef MACOSX
 File gid_File_Lib_Fps_Gnome
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_gnome.uno);
