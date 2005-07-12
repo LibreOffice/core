@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 11:07:51 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3193,7 +3193,11 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
                 URIHelper::SmartRel2Abs(
                     INetURLObject(sBaseURL), pGrf->GetFileName(),
                     URIHelper::GetMaybeFileHdl()));
-            if (GRAPHIC_NONE == eType && CanUseRemoteLink(aGrfName))
+            // --> OD 2005-07-04 #124117# - correction of fix for issue #i10939#:
+            // One of the two conditions have to be true to insert the graphic
+            // as a linked graphic -
+            if (GRAPHIC_NONE == eType || CanUseRemoteLink(aGrfName))
+            // <--
             {
                 pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
                     &rFlySet, &aGrSet);
