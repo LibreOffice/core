@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:40:59 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1458,6 +1458,14 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         return;
     }
 
+    // the document is not modified currently, so it can not become modified after signing
+    sal_Bool bAllowModifiedBack = sal_False;
+    if ( IsEnableSetModified() )
+    {
+        EnableSetModified( sal_False );
+        bAllowModifiedBack = sal_True;
+    }
+
     if ( GetMedium()->SignContents_Impl( bScriptingContent ) )
     {
         if ( bScriptingContent )
@@ -1467,13 +1475,13 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
 
         pImp->bSignatureErrorIsShown = sal_False;
 
-        // Doc was not modified befor, and signature is already in the storage...
-        SetModified( FALSE );
-
         Invalidate( SID_SIGNATURE );
         Invalidate( SID_MACRO_SIGNATURE );
         Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
     }
+
+    if ( bAllowModifiedBack )
+        EnableSetModified( sal_True );
 }
 
 sal_uInt16 SfxObjectShell::GetDocumentSignatureState()
