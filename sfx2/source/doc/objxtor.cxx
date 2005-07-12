@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-06-30 16:37:58 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,21 +852,94 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 
 SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
 
-    ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
-    USHORT nCount = aEventNames.Count();
-
-    SEQUENCE < OUSTRING > aSequence( nCount );
-
-    OUSTRING* pNames = aSequence.getArray();
-
-    for ( USHORT i=0; i<nCount; i++ )
+    if ( !pEventNameContainer )
     {
-        pNames[i] = aEventNames.GetString( i );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        if ( !pEventNameContainer )
+        {
+            static uno::Sequence< ::rtl::OUString > aEventNameContainer( 25 );
+            // SFX_EVENT_STARTAPP
+            aEventNameContainer[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnStartApp" ) );
+
+            // SFX_EVENT_CLOSEAPP
+            aEventNameContainer[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCloseApp" ) );
+
+            // SFX_EVENT_CREATEDOC
+            aEventNameContainer[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnNew" ) );
+
+            // SFX_EVENT_OPENDOC
+            aEventNameContainer[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnLoad" ) );
+
+            // SFX_EVENT_SAVEASDOC
+            aEventNameContainer[4] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveAs" ) );
+
+            // SFX_EVENT_SAVEASDOCDONE
+            aEventNameContainer[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsDone" ) );
+
+            // SFX_EVENT_SAVEDOC
+            aEventNameContainer[6] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSave" ) );
+
+            // SFX_EVENT_SAVEDOCDONE
+            aEventNameContainer[7] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveDone" ) );
+
+            // SFX_EVENT_PREPARECLOSEDOC
+            aEventNameContainer[8] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrepareUnload" ) );
+
+            // SFX_EVENT_CLOSEDOC
+            aEventNameContainer[9] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnUnload" ) );
+
+            // SFX_EVENT_ACTIVATEDOC
+            aEventNameContainer[10] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnFocus" ) );
+
+            // SFX_EVENT_DEACTIVATEDOC
+            aEventNameContainer[11] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnUnfocus" ) );
+
+            // SFX_EVENT_PRINTDOC
+            aEventNameContainer[12] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrint" ) );
+
+            // SFX_EVENT_MODIFYCHANGED
+            aEventNameContainer[13] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnModifyChanged" ) );
+
+            // SFX_EVENT_SAVETODOC
+            aEventNameContainer[14] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyTo" ) );
+
+            // SFX_EVENT_SAVETODOCDONE
+            aEventNameContainer[15] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyToDone" ) );
+
+            // SFX_EVENT_VIEWCREATED
+            aEventNameContainer[16] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnViewCreated" ) );
+
+            // SFX_EVENT_PREPARECLOSEVIEW
+            aEventNameContainer[17] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrepareViewClosing" ) );
+
+            // SFX_EVENT_CLOSEVIEW
+            aEventNameContainer[18] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnViewClosed" ) );
+
+            // SFX_EVENT_VISAREACHANGED
+            aEventNameContainer[19] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) );
+
+            // SFX_EVENT_DOCCREATED
+            aEventNameContainer[20] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCreate" ) );
+
+            // SFX_EVENT_LOADFINISHED
+            aEventNameContainer[21] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnLoadFinished" ) );
+
+            // SFX_EVENT_SAVEASDOCFAILED
+            aEventNameContainer[22] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsFailed" ) );
+
+            // SFX_EVENT_SAVEDOCFAILED
+            aEventNameContainer[23] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveFailed" ) );
+
+            // SFX_EVENT_SAVETODOCFAILED
+            aEventNameContainer[24] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyToFailed" ) );
+
+            pEventNameContainer = &aEventNameContainer;
+        }
     }
 
-    return aSequence;
+    return *pEventNameContainer;
 }
 
 //--------------------------------------------------------------------
