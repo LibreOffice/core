@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 07:58:17 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7593,7 +7593,9 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             // SJ: 19.11.2001 bug 94908, also chart objects
             // needs the correct visarea
 
-            if( sStarName.EqualsAscii( "swriter" ) || sStarName.EqualsAscii( "scalc" ) )
+            // If pName is set this is an own embedded object, it should have the correct size internally
+            // TODO/LATER: it might make sence in future to set the size stored in internal object
+            if( !pName && ( sStarName.EqualsAscii( "swriter" ) || sStarName.EqualsAscii( "scalc" ) ) )
             {
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) );
                 Size aSz(lcl_GetPrefSize(rGrf, MapMode( aMapUnit ) ) );
