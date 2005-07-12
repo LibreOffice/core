@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:22:01 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,14 +339,18 @@ void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
 {
     StartAllAction();
 
-    SwNumRule aRule(*GetCurNumRule());
+    const SwNumRule *pCurNumRule = GetCurNumRule();
+    //#120911# check if numbering rule really exists
+    if (pCurNumRule)
+    {
+        SwNumRule aRule(*pCurNumRule);
+        // --> OD 2005-02-18 #i42921# - correction:
+        // consider change of synopsis: 3rd parameter has to be -1
+        aRule.Indent(nIndent, nLevel, -1, bRelative);
+        // <--
 
-    // --> OD 2005-02-18 #i42921# - correction:
-    // consider change of synopsis: 3rd parameter has to be -1
-    aRule.Indent(nIndent, nLevel, -1, bRelative);
-    // <--
-
-    SetCurNumRule(aRule);
+        SetCurNumRule(aRule);
+    }
 
     EndAllAction();
 }
