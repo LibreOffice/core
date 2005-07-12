@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:15:58 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
     ::rtl::OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xNewObjectStream;
+    sal_Bool m_bStoreLoaded;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xCachedVisualRepresentation;
     sal_Bool m_bVisReplInStream;
