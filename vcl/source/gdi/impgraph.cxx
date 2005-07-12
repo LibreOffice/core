@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:39:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,6 +1592,8 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     // (which skips loading its BmpEx if already done)
                     rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
                 }
+                else
+                    rIStm.ResetError();
             }
             else
             {
