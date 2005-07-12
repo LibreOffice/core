@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 09:30:10 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,8 @@ namespace
         : public rtl::Static< String, Version > {};
     struct Extension
         : public rtl::Static< String, Extension > {};
+    struct XMLFileFormatName
+        : public rtl::Static< String, XMLFileFormatName > {};
     struct XMLFileFormatVersion
         : public rtl::Static< String, XMLFileFormatVersion > {};
     struct WriterCompatibilityVersionOOo11
@@ -559,6 +561,7 @@ void ReplaceStringHookProc( UniString& rStr )
         String &rBrandName = BrandName::get();
         String &rVersion = Version::get();
         String &rExtension = Extension::get();
+        String &rXMLFileFormatName = XMLFileFormatName::get();
         String &rXMLFileFormatVersion = XMLFileFormatVersion::get();
 
         if ( !rBrandName.Len() )
@@ -567,6 +570,10 @@ void ReplaceStringHookProc( UniString& rStr )
             Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
             aRet >>= aTmp;
             rBrandName = aTmp;
+
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATNAME );
+            aRet >>= aTmp;
+            rXMLFileFormatName = aTmp;
 
             aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATVERSION );
             aRet >>= aTmp;
@@ -588,6 +595,7 @@ void ReplaceStringHookProc( UniString& rStr )
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATNAME", rXMLFileFormatName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
     }
 
