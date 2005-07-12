@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 13:48:23 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
     {
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
         rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName), osl_getThreadTextEncoding());
-    INetURLObject aCurrentURL(OUString::createFromAscii("file:///") + sEncoded);
+    INetURLObject aCurrentURL(OUString::createFromAscii("file://") + sEncoded);
     aCurrentURL.SetHost(aURL.GetHost());
     sURL = aCurrentURL.getExternalURL();
     }
@@ -142,16 +142,25 @@ void RunDialog::run()
 {
     mnStatus = gtk_dialog_run( GTK_DIALOG( m_pDialog ) );
     gtk_widget_hide( m_pDialog );
-    bFinished = true;
+
+    maLock.acquire();
+    mbFinished = true;
+    maLock.release();
+
+    Application::EndYield();
 }
 
 gint RunDialog::runandwaitforresult()
 {
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)rundialog, this, NULL);
-    do {
+    while (1)
+    {
+    maLock.acquire();
+        if (mbFinished)
+            break;
+    maLock.release();
         Application::Yield();
     }
-    while (!bFinished);
     return mnStatus;
 }
 
