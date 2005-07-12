@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:45:02 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,50 +369,50 @@ String STR_FORMAT_ID_GRAPHOBJ
 };
 String STR_FORMAT_ID_STARWRITER_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Writer Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Writer object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERWEB_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Writer/Web Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Writer/Web object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Web Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Web object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERGLOB_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Writer/Global Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Writer/Master object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Global Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Master object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARDRAW_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Draw Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Draw object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Draw Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Draw object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARIMPRESS_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Impress Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Impress object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Impress Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Impress object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCALC_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Calc Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Calc object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Calc Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Calc object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCHART_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Chart Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Chart object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Chart Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Chart object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARMATH_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Math Objekt";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 Math object";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Math Objekt";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Math object";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_WMF
@@ -441,8 +441,8 @@ String STR_FORMAT_ID_DBACCESS_COMMAND
 };
 String STR_FORMAT_ID_DIALOG_60
 {
-    Text [ de ] = "%PRODUCTNAME 6.0 Dialog";
-    Text [ en-US ] = "%PRODUCTNAME 6.0 dialog";
+    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Dialog";
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION dialog";
     Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_FILEGRPDESCRIPTOR
