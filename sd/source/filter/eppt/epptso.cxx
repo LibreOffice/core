@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:23:34 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3195,6 +3195,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                  << (sal_uInt32)( pFieldEntry->nFieldStartPos )
                                  << (sal_uInt32)( pFieldEntry->nFieldEndPos );
                         }
+                        break;
                         case 5 :
                         {
                             rOut << (sal_uInt32)( EPP_GenericDateMCAtom << 16 ) << (sal_uInt32)4
