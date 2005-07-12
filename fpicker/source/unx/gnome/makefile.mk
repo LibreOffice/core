@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-13 08:57:09 $
+#   last change: $Author: kz $ $Date: 2005-07-12 12:00:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,8 +104,6 @@ SLOFILES =\
         $(SLO)$/SalGtkFilePicker.obj			\
         $(SLO)$/SalGtkFolderPicker.obj			\
         $(SLO)$/resourceprovider.obj			\
-        $(SLO)$/asynceventnotifier.obj          \
-        $(SLO)$/filepickereventnotification.obj \
         $(SLO)$/FPentry.obj
 
 SHL1NOCHECK=TRUE
