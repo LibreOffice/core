@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:13:56 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1998,6 +1998,10 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
             break;
         }
     }
+    sal_Int32 nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
+    if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )
+        bVerticalText = !bVerticalText;
+
     if ( bVerticalText )
     {
         eTVA = SDRTEXTVERTADJUST_BLOCK;
@@ -2181,17 +2185,29 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     {
         sal_Int32 nTextRotateAngle = 0;
         MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+        sal_Int32    nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
+
         switch( eTextFlow )
         {
             case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
                 nTextRotateAngle += 90;
             break;
         }
-        switch( GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) )
-        {
-            case mso_cdir90 : nTextRotateAngle -=  90; break;
+        switch( GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) )  // SJ: mso_cdir90 and mso_cdir270 will be simulated by
+        {                                                           // activating vertical writing for the text objects
+            case mso_cdir90 :
+            {
+                if ( eTextFlow == mso_txflTtoBA )
+                    nTextRotateAngle -= 180;
+            }
+            break;
             case mso_cdir180: nTextRotateAngle -= 180; break;
-            case mso_cdir270: nTextRotateAngle -= 270; break;
+            case mso_cdir270:
+            {
+                if ( eTextFlow != mso_txflTtoBA )
+                    nTextRotateAngle -= 180;
+            }
+            break;
         }
         if ( nTextRotateAngle )
         {
