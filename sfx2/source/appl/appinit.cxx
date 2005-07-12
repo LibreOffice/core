@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:23:52 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,32 +351,34 @@ FASTBOOL SfxApplication::Initialize_Impl()
     Registrations_Impl();
 
 //    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
 
     // TODO/LATER: exchange confusing defines; CREATEDOC -> NEWDOC, DOCCREATED -> CREATEDOC
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_STARTAPP,        String(SfxResId(STR_EVENT_STARTAPP)),   aEventNames.GetString( 0 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEAPP,        String(SfxResId(STR_EVENT_CLOSEAPP)),   aEventNames.GetString( 1 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CREATEDOC,       String(SfxResId(STR_EVENT_CREATEDOC)),  aEventNames.GetString( 2 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_OPENDOC,         String(SfxResId(STR_EVENT_OPENDOC)),    aEventNames.GetString( 3 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOC,       String(SfxResId(STR_EVENT_SAVEASDOC)),  aEventNames.GetString( 4 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOCDONE,   String(SfxResId(STR_EVENT_SAVEASDOCDONE)),  aEventNames.GetString( 5 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOC,         String(SfxResId(STR_EVENT_SAVEDOC)),        aEventNames.GetString( 6 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOCDONE,     String(SfxResId(STR_EVENT_SAVEDOCDONE)),    aEventNames.GetString( 7 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEDOC, String(SfxResId(STR_EVENT_PREPARECLOSEDOC)),aEventNames.GetString( 8 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEDOC,        String(SfxResId(STR_EVENT_CLOSEDOC)),       aEventNames.GetString( 9 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_ACTIVATEDOC,     String(SfxResId(STR_EVENT_ACTIVATEDOC)),    aEventNames.GetString( 10 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_DEACTIVATEDOC,   String(SfxResId(STR_EVENT_DEACTIVATEDOC)),  aEventNames.GetString( 11 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       aEventNames.GetString( 12 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED,   String(SfxResId(STR_EVENT_MODIFYCHANGED)),  aEventNames.GetString( 13 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_STARTAPP,        String(SfxResId(STR_EVENT_STARTAPP)),   SfxObjectShell::GetEventNames_Impl()[0] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEAPP,        String(SfxResId(STR_EVENT_CLOSEAPP)),   SfxObjectShell::GetEventNames_Impl()[1] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CREATEDOC,       String(SfxResId(STR_EVENT_CREATEDOC)),  SfxObjectShell::GetEventNames_Impl()[2] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_OPENDOC,         String(SfxResId(STR_EVENT_OPENDOC)),    SfxObjectShell::GetEventNames_Impl()[3] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOC,       String(SfxResId(STR_EVENT_SAVEASDOC)),  SfxObjectShell::GetEventNames_Impl()[4] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOCDONE,   String(SfxResId(STR_EVENT_SAVEASDOCDONE)),  SfxObjectShell::GetEventNames_Impl()[5] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOC,         String(SfxResId(STR_EVENT_SAVEDOC)),        SfxObjectShell::GetEventNames_Impl()[6] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOCDONE,     String(SfxResId(STR_EVENT_SAVEDOCDONE)),    SfxObjectShell::GetEventNames_Impl()[7] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEDOC, String(SfxResId(STR_EVENT_PREPARECLOSEDOC)),SfxObjectShell::GetEventNames_Impl()[8] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEDOC,        String(SfxResId(STR_EVENT_CLOSEDOC)),       SfxObjectShell::GetEventNames_Impl()[9] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_ACTIVATEDOC,     String(SfxResId(STR_EVENT_ACTIVATEDOC)),    SfxObjectShell::GetEventNames_Impl()[10] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_DEACTIVATEDOC,   String(SfxResId(STR_EVENT_DEACTIVATEDOC)),  SfxObjectShell::GetEventNames_Impl()[11] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       SfxObjectShell::GetEventNames_Impl()[12] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED,   String(SfxResId(STR_EVENT_MODIFYCHANGED)),  SfxObjectShell::GetEventNames_Impl()[13] );
 
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOC,           String(), aEventNames.GetString( 14 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOCDONE,       String(), aEventNames.GetString( 15 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_VIEWCREATED,         String(), aEventNames.GetString( 16 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEVIEW,    String(), aEventNames.GetString( 17 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEVIEW,           String(), aEventNames.GetString( 18 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_VISAREACHANGED,      String(), aEventNames.GetString( 19 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_DOCCREATED,          String(), aEventNames.GetString( 20 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_LOADFINISHED,        String(), aEventNames.GetString( 21 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOC,           String(), SfxObjectShell::GetEventNames_Impl()[14] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOCDONE,       String(), SfxObjectShell::GetEventNames_Impl()[15] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_VIEWCREATED,         String(), SfxObjectShell::GetEventNames_Impl()[16] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEVIEW,    String(), SfxObjectShell::GetEventNames_Impl()[17] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEVIEW,           String(), SfxObjectShell::GetEventNames_Impl()[18] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_VISAREACHANGED,      String(), SfxObjectShell::GetEventNames_Impl()[19] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_DOCCREATED,          String(), SfxObjectShell::GetEventNames_Impl()[20] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_LOADFINISHED,        String(), SfxObjectShell::GetEventNames_Impl()[21] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOCFAILED,     String(), SfxObjectShell::GetEventNames_Impl()[22] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOCFAILED,       String(), SfxObjectShell::GetEventNames_Impl()[23] );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOCFAILED,     String(), SfxObjectShell::GetEventNames_Impl()[24] );
 
     // Subklasse initialisieren
     bDowning = sal_False;
