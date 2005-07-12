@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:35:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     OUString aSeparator( RTL_CONSTASCII_USTRINGPARAM( XMLNS_FILTER_SEPARATOR ));
 
     // create hash map
-    for ( int i = 0; i <= (int)TB_XML_ENTRY_COUNT; i++ )
+    for ( int i = 0; i < (int)TB_XML_ENTRY_COUNT; i++ )
     {
         if ( ToolBoxEntries[i].nNamespace == TB_NS_TOOLBAR )
         {
