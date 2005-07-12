@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:41:28 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -195,8 +198,28 @@ void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::X
     pImpl->bOwnsStorage = sal_False;
 }
 
+sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()
+{
+    if ( pImpl->mxImageStorage.is() )
+    {
+        try
+        {
+            uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY_THROW );
+            xTransact->commit();
+        }
+        catch( uno::Exception& )
+        {
+            return sal_False;
+        }
+    }
+
+    return sal_True;
+}
+
 void EmbeddedObjectContainer::ReleaseImageSubStorage()
 {
+    CommitImageSubStorage();
+
     if ( pImpl->mxImageStorage.is() )
     {
         try
@@ -672,6 +695,139 @@ sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& r
     return sal_False;
 }
 
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
+{
+    uno::Reference< embed::XEmbeddedObject > xResult;
+
+    // TODO/LATER: For now only objects that implement XEmbedPersist have a replacement image, it might change in future
+    // do an incompatible change so that object name is provided in all the move and copy methods
+    ::rtl::OUString aOrigName;
+    try
+    {
+        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY_THROW );
+        aOrigName = xPersist->getEntryName();
+    }
+    catch( uno::Exception& )
+    {}
+
+    if ( !rName.getLength() )
+        rName = CreateUniqueObjectName();
+
+    // objects without persistance are not really stored by the method
+       if ( xObj.is() && StoreEmbeddedObject( xObj, rName, sal_True ) )
+    {
+        xResult = GetEmbeddedObject( rName );
+
+        if ( !xResult.is() )
+        {
+            // this is a case when object has no real persistence
+            // in such cases a new object should be explicitly created and initialized with the data of the old one
+            try
+            {
+                uno::Reference< embed::XLinkageSupport > xOrigLinkage( xObj, uno::UNO_QUERY );
+                if ( xOrigLinkage.is() && xOrigLinkage->isLink() )
+                {
+                    // this is a OOo link, it has no persistence
+                    ::rtl::OUString aURL = xOrigLinkage->getLinkURL();
+                    if ( !aURL.getLength() )
+                        throw uno::RuntimeException();
+
+                    // create new linked object from the URL the link is based on
+                    uno::Reference < embed::XLinkCreator > xCreator(
+                        ::comphelper::getProcessServiceFactory()->createInstance(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator") ) ),
+                        uno::UNO_QUERY_THROW );
+
+                    uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
+                    aMediaDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                    aMediaDescr[0].Value <<= aURL;
+                    xResult = uno::Reference < embed::XEmbeddedObject >(
+                                xCreator->createInstanceLink(
+                                    pImpl->mxStorage,
+                                    rName,
+                                    aMediaDescr,
+                                    uno::Sequence < beans::PropertyValue >() ),
+                                uno::UNO_QUERY_THROW );
+                }
+                else
+                {
+                    // the component is required for copying of this object
+                    if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
+                        xObj->changeState( embed::EmbedStates::RUNNING );
+
+                    // this must be an object based on properties, otherwise we can not copy it currently
+                    uno::Reference< beans::XPropertySet > xOrigProps( xObj->getComponent(), uno::UNO_QUERY_THROW );
+
+                    // use object class ID to create a new one and tranfer all the properties
+                    uno::Reference < embed::XEmbedObjectCreator > xCreator(
+                        ::comphelper::getProcessServiceFactory()->createInstance(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator") ) ),
+                        uno::UNO_QUERY_THROW );
+
+                    xResult = uno::Reference < embed::XEmbeddedObject >(
+                                xCreator->createInstanceInitNew(
+                                    xObj->getClassID(),
+                                    xObj->getClassName(),
+                                    pImpl->mxStorage,
+                                    rName,
+                                    uno::Sequence < beans::PropertyValue >() ),
+                                uno::UNO_QUERY_THROW );
+                    if ( xResult->getCurrentState() == embed::EmbedStates::LOADED )
+                        xResult->changeState( embed::EmbedStates::RUNNING );
+
+                    uno::Reference< beans::XPropertySet > xTargetProps( xResult->getComponent(), uno::UNO_QUERY_THROW );
+
+                    // copy all the properties from xOrigProps to xTargetProps
+                    uno::Reference< beans::XPropertySetInfo > xOrigInfo = xOrigProps->getPropertySetInfo();
+                    if ( !xOrigInfo.is() )
+                        throw uno::RuntimeException();
+
+                    uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
+                    for ( sal_Int32 nInd = 0; nInd < aPropertiesList.getLength(); nInd++ )
+                    {
+                        try
+                        {
+                            xTargetProps->setPropertyValue(
+                                aPropertiesList[nInd].Name,
+                                xOrigProps->getPropertyValue( aPropertiesList[nInd].Name ) );
+                        }
+                        catch( beans::PropertyVetoException& )
+                        {
+                            // impossibility to copy readonly property is not treated as an error for now
+                            // but the assertion is helpful to detect such scenarios and review them
+                            OSL_ENSURE( sal_False, "Could not copy readonly property!\n" );
+                        }
+                    }
+                }
+
+                   if ( xResult.is() )
+                    AddEmbeddedObject( xResult, rName );
+            }
+            catch( uno::Exception& )
+            {
+                if ( xResult.is() )
+                {
+                    try
+                    {
+                        xResult->close( sal_True );
+                    }
+                    catch( uno::Exception& )
+                    {}
+                    xResult = uno::Reference< embed::XEmbeddedObject >();
+                }
+            }
+        }
+    }
+
+    OSL_ENSURE( xResult.is(), "Can not copy embedded object that has no persistance!\n" );
+
+    // the object is successfully copied, try to copy graphical replacement
+    if ( xResult.is() && aOrigName.getLength() )
+        TryToCopyGraphReplacement( rSrc, aOrigName, rName );
+
+    return xResult;
+}
+
 sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
     // get the object name before(!) it is assigned to a new storage
@@ -1006,9 +1162,6 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
         uno::Any aAny;
         aAny <<= rMediaType;
         xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
-
-        uno::Reference< embed::XTransactedObject > xTransact( xReplacements, uno::UNO_QUERY_THROW );
-        xTransact->commit();
     }
     catch( uno::Exception& )
     {
@@ -1024,8 +1177,6 @@ sal_Bool EmbeddedObjectContainer::RemoveGraphicStream( const ::rtl::OUString& rO
     {
         uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
         xReplacements->removeElement( rObjectName );
-        uno::Reference< embed::XTransactedObject > xTransact( xReplacements, uno::UNO_QUERY_THROW );
-        xTransact->commit();
     }
     catch( uno::Exception& )
     {
