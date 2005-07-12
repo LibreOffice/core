@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 11:08:35 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
@@ -728,6 +731,11 @@ void SwXMLImport::startDocument( void )
     // We need a draw model to be able to set the z order
     pDoc->MakeDrawModel();
 
+    // SJ: #i49801# locking the modell to disable repaints
+    SdrModel* pDrawModel = pDoc->GetDrawModel();
+    if ( pDrawModel )
+        pDrawModel->setLock( sal_True );
+
     if( !GetGraphicResolver().is() )
     {
         pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
@@ -926,6 +934,14 @@ void SwXMLImport::endDocument( void )
             pDoc->PrtOLENotify( FALSE );
         else if ( pDoc->IsOLEPrtNotifyPending() )
             pDoc->PrtOLENotify( TRUE );
+    }
+
+    // SJ: #i49801# -> now permitting repaints
+    if ( pDoc )
+    {
+        SdrModel* pDrawModel = pDoc->GetDrawModel();
+        if ( pDrawModel )
+            pDrawModel->setLock( sal_False );
     }
 
     // delegate to parent: takes care of error handling
