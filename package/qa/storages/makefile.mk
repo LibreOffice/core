@@ -3,9 +3,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2004-07-23 15:15:11 $
+#   last change: $Date: 2005-07-12 12:30:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,12 @@ JAVAFILES       =\
                 Test09.java\
                 Test10.java\
                 Test11.java\
-                Test12.java
+                Test12.java\
+                RegressionTest_114358.java\
+                RegressionTest_i29169.java\
+                RegressionTest_i30400.java\
+                RegressionTest_i29321.java\
+                RegressionTest_i30677.java
 
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
