@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdetect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:05:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@
 #include <sfx2/brokenpackageint.hxx>
 
 #include "document.hxx"
+#ifndef __EQNOLEFILEHDR_HXX__
+#include "eqnolefilehdr.hxx"
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -390,7 +394,11 @@ SmFilterDetect::~SmFilterDetect()
                     if ( !aStorage->GetError() )
                     {
                         if ( aStorage->IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Equation Native" ) ) ) )
-                            aTypeName.AssignAscii( "math_MathType_3x" );
+                        {
+                            sal_uInt8 nVersion;
+                            if (GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3)
+                                aTypeName.AssignAscii( "math_MathType_3x" );
+                        }
                     }
                     else
                     {
