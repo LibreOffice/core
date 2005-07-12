@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-06 09:36:51 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,10 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
 ToolBarManager::~ToolBarManager()
 {
+}
+
+void ToolBarManager::Destroy()
+{
     ResetableGuard aGuard( m_aLock );
     if ( m_bAddedToTaskPaneList )
     {
@@ -386,6 +390,7 @@ ToolBarManager::~ToolBarManager()
         m_bAddedToTaskPaneList = sal_False;
     }
     delete m_pToolBar;
+    m_pToolBar = 0;
 }
 
 ToolBox* ToolBarManager::GetToolBar() const
@@ -647,20 +652,10 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
         }
         m_xModuleImageManager.clear();
 
-        if ( m_bAddedToTaskPaneList )
-        {
-            Window* pWindow = m_pToolBar;
-            while ( pWindow && !pWindow->IsSystemWindow() )
-                pWindow = pWindow->GetParent();
-
-            if ( pWindow )
-                ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
-            m_bAddedToTaskPaneList = sal_False;
-        }
-
         ImplClearPopupMenu( m_pToolBar );
-        delete m_pToolBar;
-        m_pToolBar = 0;
+
+        // We have to destroy our toolbar instance now.
+        Destroy();
 
         if ( m_bFrameActionRegistered && m_xFrame.is() )
         {
