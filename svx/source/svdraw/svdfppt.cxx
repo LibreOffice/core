@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:30:28 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,6 +1047,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             PPTTextObj aTextObj( rSt, (SdrPowerPointImport&)*this, rPersistEntry, &rObjData );
             if ( ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() ) )
             {
+                sal_Bool bVerticalText = sal_False;
                 // and if the text object is not empty, it must be applied to pRet, the object we
                 // initially got from our escher import
                 INT32 nTextRotationAngle = 0;
@@ -1061,7 +1062,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
                         case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
                         case mso_txflVertN :                    // Vertical, non-@, oben -> unten
-                            aTextObj.SetVertical( sal_True );   // nTextRotationAngle += 27000;
+                            bVerticalText = !bVerticalText;     // nTextRotationAngle += 27000;
                         break;
     //                  case mso_txflHorzN :                    // Horizontal non-@, normal
     //                  case mso_txflHorzA :                    // Horizontal @-font, normal
@@ -1071,6 +1072,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 nTextRotationAngle -= nFontDirection * 9000;
                 if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )       // #104546#
                 {
+                    bVerticalText = !bVerticalText;
+/*
                     sal_Int32 nHalfWidth = ( rTextRect.GetWidth() + 1 ) >> 1;
                     sal_Int32 nHalfHeight = ( rTextRect.GetHeight() + 1 ) >> 1;
                     Point aTopLeft( rTextRect.Left() + nHalfWidth - nHalfHeight,
@@ -1078,7 +1081,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     Size aNewSize( rTextRect.GetHeight(), rTextRect.GetWidth() );
                     Rectangle aNewRect( aTopLeft, aNewSize );
                     rTextRect = aNewRect;
+*/
                 }
+                aTextObj.SetVertical( bVerticalText );
                 if ( pRet )
                 {
                     BOOL bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != 0;
@@ -1088,7 +1093,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         delete pRet, pRet = NULL;
                 }
                 sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
-                sal_Bool  bVerticalText = aTextObj.GetVertical();
                 sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
                 sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 25 * 3600 ); // 0.25 cm (emu)
                 sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 13 * 3600 );     // 0.13 cm (emu)
@@ -1405,7 +1409,19 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     if ( pTObj->ISA( SdrObjCustomShape ) )
                     {
-
+/*
+                        if ( nTextRotationAngle )
+                        {
+                            double fTextRotateAngle = (double)nTextRotationAngle / 100.0;
+                            SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pTObj)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                            const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                            PropertyValue aPropValue;
+                            aPropValue.Name = sTextRotateAngle;
+                            aPropValue.Value <<= fTextRotateAngle;
+                            aGeometryItem.SetPropertyValue( aPropValue );
+                            ((SdrObjCustomShape*)pTObj)->SetMergedItem( aGeometryItem );
+                        }
+*/
                     }
                     else
                     {
