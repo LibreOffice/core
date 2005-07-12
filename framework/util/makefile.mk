@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: obo $ $Date: 2005-04-22 11:36:59 $
+#   last change: $Author: kz $ $Date: 2005-07-12 14:16:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,8 @@ LIB1OBJFILES=   \
                 $(SLO)$/itemcontainer.obj                       \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
-                $(SLO)$/moduleidentifier.obj
+                $(SLO)$/moduleidentifier.obj                    \
+                $(SLO)$/propertysethelper.obj
 
 
 
@@ -338,8 +339,8 @@ SHL4OBJS=       \
                 $(SLO)$/sessionlistener.obj         \
                 $(SLO)$/newmenucontroller.obj          \
                 $(SLO)$/logoimagestatusbarcontroller.obj \
-                $(SLO)$/logotextstatusbarcontroller.obj               
-                
+                $(SLO)$/logotextstatusbarcontroller.obj
+
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
                 $(FWELIB)							\
