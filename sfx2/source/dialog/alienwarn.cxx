@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alienwarn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 15:30:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,35 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
     sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
     m_aInfoText.SetText( sInfoText );
 
+    // load value of "warning off" checkbox from save options
+    m_aWarningOffBox.Check( SvtSaveOptions().IsWarnAlienFormat() == sal_False );
+
+    // set focus to "No" button
+    m_aNoBtn.GrabFocus();
+
+    // pb: #i43989# we have no online help for this dialog at the moment
+    // -> hide the "more info" button
+    m_aMoreInfoBtn.Hide();
+
+    // calculate and set the size of the dialog and its controls
+    InitSize();
+}
+
+// -----------------------------------------------------------------------
+
+SfxAlienWarningDialog::~SfxAlienWarningDialog()
+{
+    // save value of "warning off" checkbox, if necessary
+    SvtSaveOptions aSaveOpt;
+    sal_Bool bChecked = !m_aWarningOffBox.IsChecked();
+    if ( aSaveOpt.IsWarnAlienFormat() != bChecked )
+        aSaveOpt.SetWarnAlienFormat( bChecked );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxAlienWarningDialog::InitSize()
+{
     // if the button text is too wide, then broaden the button
     long nTxtW = m_aMoreInfoBtn.GetTextWidth( m_aMoreInfoBtn.GetText() );
     long nCtrlW = m_aMoreInfoBtn.GetSizePixel().Width();
@@ -135,21 +164,31 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
         SetSizePixel( aNewSize );
     }
 
-    // load value of "warning off" checkbox from save options
-    m_aWarningOffBox.Check( SvtSaveOptions().IsWarnAlienFormat() == sal_False );
+    // align the size of the information text control (FixedText) to its content
+    Size aMinSize = m_aInfoText.CalcMinimumSize( m_aInfoText.GetSizePixel().Width() );
+    long nTxtH = aMinSize.Height();
+    long nCtrlH = m_aInfoText.GetSizePixel().Height();
+    long nDelta = ( nCtrlH - nTxtH );
+    Size aNewSize = m_aInfoText.GetSizePixel();
+    aNewSize.Height() -= nDelta;
+    m_aInfoText.SetSizePixel( aNewSize );
 
-    // set focus to "No" button
-    m_aNoBtn.GrabFocus();
-}
+    // new position for the succeeding windows
+    Window* pWins[] =
+    {
+        &m_aYesBtn, &m_aNoBtn, &m_aMoreInfoBtn, &m_aOptionLine, &m_aWarningOffBox
+    };
+    Window** pCurrent = pWins;
+    for ( sal_Int32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+    {
+        Point aNewPos = (*pCurrent)->GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        (*pCurrent)->SetPosPixel( aNewPos );
+    }
 
-// -----------------------------------------------------------------------
-
-SfxAlienWarningDialog::~SfxAlienWarningDialog()
-{
-    // save value of "warning off" checkbox, if necessary
-    SvtSaveOptions aSaveOpt;
-    sal_Bool bChecked = !m_aWarningOffBox.IsChecked();
-    if ( aSaveOpt.IsWarnAlienFormat() != bChecked )
-        aSaveOpt.SetWarnAlienFormat( bChecked );
+    // new size of the dialog
+    aNewSize = GetSizePixel();
+    aNewSize.Height() -= nDelta;
+    SetSizePixel( aNewSize );
 }
 
