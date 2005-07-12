@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:53:39 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
 
         if ( pRenderedShape )
         {
+            aCustomShape2d.ApplyGluePoints( pRenderedShape );
             xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
                 pRenderedShape->GetObjInventor(), pRenderedShape, NULL );
         }
