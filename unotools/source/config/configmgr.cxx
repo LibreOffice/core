@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:47:32 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ namespace
         : public rtl::Static< ::rtl::OUString, ProductVersion > {};
     struct ProductExtension
         : public rtl::Static< ::rtl::OUString, ProductExtension > {};
+    struct XMLFileFormatName
+        : public rtl::Static< ::rtl::OUString, XMLFileFormatName > {};
     struct XMLFileFormatVersion
         : public rtl::Static< ::rtl::OUString, XMLFileFormatVersion > {};
     struct WriterCompatibilityVersionOOo11
@@ -472,6 +474,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    rtl::OUString &rXMLFileFormatName = XMLFileFormatName::get();
+    if ( eProp == PRODUCTXMLFILEFORMATNAME && rXMLFileFormatName.getLength() )
+    {
+        aRet <<= rXMLFileFormatName;
+        return aRet;
+    }
+
     rtl::OUString &rXMLFileFormatVersion = XMLFileFormatVersion::get();
     if ( eProp == PRODUCTXMLFILEFORMATVERSION && rXMLFileFormatVersion.getLength() )
     {
@@ -494,6 +503,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case PRODUCTNAME:
         case PRODUCTVERSION:
         case PRODUCTEXTENSION:
+        case PRODUCTXMLFILEFORMATNAME :
         case PRODUCTXMLFILEFORMATVERSION:   sPath += C2U("Setup/Product"); break;
 
         case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
@@ -525,6 +535,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case PRODUCTNAME:                       sProperty = C2U("ooName"); break;
             case PRODUCTVERSION:                    sProperty = C2U("ooSetupVersion"); break;
             case PRODUCTEXTENSION:                  sProperty = C2U("ooSetupExtension"); break;
+            case PRODUCTXMLFILEFORMATNAME:          sProperty = C2U("ooXMLFileFormatName"); break;
             case PRODUCTXMLFILEFORMATVERSION:       sProperty = C2U("ooXMLFileFormatVersion"); break;
             case DEFAULTCURRENCY:                   sProperty = C2U("ooSetupCurrency"); break;
             case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = C2U("OOo11"); break;
@@ -548,6 +559,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTNAME )
         aRet >>= rBrandName;
+
+    if ( eProp == PRODUCTXMLFILEFORMATNAME )
+        aRet >>= rXMLFileFormatName;
 
     if ( eProp == PRODUCTXMLFILEFORMATVERSION )
         aRet >>= rXMLFileFormatVersion;
