@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:23:16 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,17 @@
 #define PPT_TRANSITION_TYPE_WIPE           10
 #define PPT_TRANSITION_TYPE_ZOOM           11
 #define PPT_TRANSITION_TYPE_SPLIT          13
+
+// effects, new in xp
+#define PPT_TRANSITION_TYPE_DIAMOND         17
+#define PPT_TRANSITION_TYPE_PLUS            18
+#define PPT_TRANSITION_TYPE_WEDGE           19
+#define PPT_TRANSITION_TYPE_PUSH            20
+#define PPT_TRANSITION_TYPE_COMB            21
+#define PPT_TRANSITION_TYPE_NEWSFLASH       22
+#define PPT_TRANSITION_TYPE_SMOOTHFADE      23
+#define PPT_TRANSITION_TYPE_WHEEL           26
+#define PPT_TRANSITION_TYPE_CIRCLE          27
 
 using namespace com::sun::star;
 
@@ -1367,25 +1378,10 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
 
-
     if ( aBuExMasterStream.Tell() )
     {
-        EscherExContainer aProgTags( *mpStrm, EPP_ProgTags );
-        // v10
-
-        // v9
-        if ( aBuExMasterStream.Tell() )
-        {
-            EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
-            {
-                EscherExAtom aCString( *mpStrm, EPP_CString );
-                *mpStrm << (sal_uInt32)0x5f005f << (sal_uInt32)0x50005f
-                        << (sal_uInt32)0x540050 << (sal_uInt16)0x39;
-            }
-            ImplProgBinaryTag( &aBuExMasterStream );
-        }
+        ImplProgTagContainer( mpStrm, &aBuExMasterStream );
     }
-
     mpPptEscherEx->CloseContainer();    // EPP_MainMaster
     return TRUE;
 };
@@ -1556,121 +1552,196 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
             aAny >>= aAs;
             nSpeed = (sal_uInt8)aAs;
         }
-        switch ( eFe )
+        sal_Int16 nTT, nTST;
+        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) )
+            && ( aAny >>= nTT ) )
         {
-            default :
-            case ::com::sun::star::presentation::FadeEffect_RANDOM :
-                nTransitionType = PPT_TRANSITION_TYPE_RANDOM;
-            break;
+            if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) )
+                && ( aAny >>= nTST ) )
+            {
+                switch( nTT )
+                {
+                    case animations::TransitionType::FADE :
+                    {
+                        if ( nTST == animations::TransitionSubType::CROSSFADE )
+                            nTransitionType = PPT_TRANSITION_TYPE_SMOOTHFADE;
+                        else if ( nTST == animations::TransitionSubType::FADEOVERCOLOR )
+                            nTransitionType = PPT_TRANSITION_TYPE_FADE;
+                    }
+                    break;
+                    case PPT_TRANSITION_TYPE_COMB :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_COMB;
+                        if ( nTST == animations::TransitionSubType::COMBVERTICAL )
+                            nDirection++;
+                    }
+                    break;
+                    case animations::TransitionType::PUSHWIPE :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_PUSH;
+                        switch( nTST )
+                        {
+                            case animations::TransitionSubType::FROMRIGHT: nDirection = 0; break;
+                            case animations::TransitionSubType::FROMBOTTOM: nDirection = 1; break;
+                            case animations::TransitionSubType::FROMLEFT: nDirection = 2; break;
+                            case animations::TransitionSubType::FROMTOP: nDirection = 3; break;
+                        }
+                    }
+                    break;
+                    case animations::TransitionType::PINWHEELWIPE :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_WHEEL;
+                        switch( nTST )
+                        {
+                            case animations::TransitionSubType::ONEBLADE: nDirection = 1; break;
+                            case animations::TransitionSubType::TWOBLADEVERTICAL : nDirection = 2; break;
+                            case animations::TransitionSubType::THREEBLADE : nDirection = 3; break;
+                            case animations::TransitionSubType::FOURBLADE: nDirection = 4; break;
+                            case animations::TransitionSubType::EIGHTBLADE: nDirection = 8; break;
+                        }
+                    }
+                    break;
+                    case animations::TransitionType::FANWIPE :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_WEDGE;
+                    }
+                    break;
+                    case animations::TransitionType::ELLIPSEWIPE :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_CIRCLE;
+                    }
+                    break;
+                    case animations::TransitionType::FOURBOXWIPE :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_PLUS;
+                    }
+                    break;
+                    case animations::TransitionType::IRISWIPE :
+                    {
+                        nTransitionType = PPT_TRANSITION_TYPE_DIAMOND;
+                    }
+                    break;
+                }
+            }
+        }
+        if ( !nTransitionType )
+        {
+            switch ( eFe )
+            {
+                default :
+                case ::com::sun::star::presentation::FadeEffect_RANDOM :
+                    nTransitionType = PPT_TRANSITION_TYPE_RANDOM;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES :
-                nTransitionType = PPT_TRANSITION_TYPE_BLINDS;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES :
+                    nTransitionType = PPT_TRANSITION_TYPE_BLINDS;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_VERTICAL_CHECKERBOARD :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
-                nTransitionType = PPT_TRANSITION_TYPE_CHECKER;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_VERTICAL_CHECKERBOARD :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
+                    nTransitionType = PPT_TRANSITION_TYPE_CHECKER;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT :
-                nTransitionType = PPT_TRANSITION_TYPE_COVER;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT :
+                    nTransitionType = PPT_TRANSITION_TYPE_COVER;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_DISSOLVE :
-                nTransitionType = PPT_TRANSITION_TYPE_DISSOLVE;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_DISSOLVE :
+                    nTransitionType = PPT_TRANSITION_TYPE_DISSOLVE;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES :
-                nTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES :
+                    nTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
-                nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
+                    nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
-                nDirection += 4;
-                nTransitionType = PPT_TRANSITION_TYPE_STRIPS;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
+                    nDirection += 4;
+                    nTransitionType = PPT_TRANSITION_TYPE_STRIPS;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT :
-                nTransitionType = PPT_TRANSITION_TYPE_PULL;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT :
+                    nTransitionType = PPT_TRANSITION_TYPE_PULL;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
-                nTransitionType = PPT_TRANSITION_TYPE_WIPE;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
+                    nTransitionType = PPT_TRANSITION_TYPE_WIPE;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
-                nTransitionType = PPT_TRANSITION_TYPE_WIPE;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
+                    nTransitionType = PPT_TRANSITION_TYPE_WIPE;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER :
-                nTransitionType = PPT_TRANSITION_TYPE_ZOOM;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
+                    nDirection++;
+                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER :
+                    nTransitionType = PPT_TRANSITION_TYPE_ZOOM;
+                break;
 
-            case ::com::sun::star::presentation::FadeEffect_NONE :
-                nDirection = 2;
-            break;
+                case ::com::sun::star::presentation::FadeEffect_NONE :
+                    nDirection = 2;
+                break;
+            }
         }
         if ( mnDiaMode == 2 )                                   // automatic ?
             nBuildFlags |= 0x400;
