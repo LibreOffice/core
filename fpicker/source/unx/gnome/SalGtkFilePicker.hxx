@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 13:47:48 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,6 @@
 
 #ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
-#endif
-
-#ifndef _ASYNCEVENTNOTIFIER_HXX_
-#include "asynceventnotifier.hxx"
 #endif
 
 #include <memory>
@@ -302,11 +298,6 @@ class SalGtkFilePicker :
         void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         void SAL_CALL dialogSizeChanged( );
 
-        bool startupEventNotification(bool bStartupSuspended);
-        void shutdownEventNotification();
-        void suspendEventNotification();
-        void resumeEventNotification();
-
     private:
         // prevent copy and assignment
         SalGtkFilePicker( const SalGtkFilePicker& );
@@ -321,9 +312,14 @@ class SalGtkFilePicker :
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
 
     private:
-        SalGtkAsyncEventNotifier m_aAsyncEventNotifier;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
+            m_xListener;
         FilterList *m_pFilterList;
         GtkWidget  *m_pVBox;
+
+        GtkWidget  *m_pFilterExpander;
+        GtkWidget  *m_pFilterView;
+        GtkListStore *m_pFilterStore;
 
         enum {
             AUTOEXTENSION,
@@ -369,30 +365,34 @@ class SalGtkFilePicker :
         void SetCurFilter( const OUString& rFilter );
         void SetFilters();
 
-        void implAddFilter( const OUString& rFilter, const OUString& rType);
-        void implAddFilterGroup( const OUString& rFilter,
+        void implChangeType( GtkTreeSelection *selection );
+        int implAddFilter( const OUString& rFilter, const OUString& rType);
+        int implAddFilterGroup( const OUString& rFilter,
                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
+        void updateCurrentFilterFromName(const gchar* filtername);
+        void unselect_type();
 
         bool bVersionWidthUnset;
         sal_Bool mbPreviewState;
         gulong mHID_Preview;
-        gulong mHID_FolderChange;
-        gulong mHID_SelectionChange;
         GtkWidget* m_pPreview;
         sal_Int32 m_PreviewImageWidth;
         sal_Int32 m_PreviewImageHeight;
+
+        void InitialMapping();
 
         void HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction,
             const ::com::sun::star::uno::Any& rValue);
         ::com::sun::star::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const;
 
+        static void expander_changed_cb( GtkExpander *expander, SalGtkFilePicker *pobjFP );
         static void preview_toggled_cb (GtkObject *cb, SalGtkFilePicker *pobjFP);
         static void filter_changed_cb (GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP);
-        static void filter_changed_atsave_cb (GtkComboBox* widget, SalGtkFilePicker *pobjFP);
+        static void type_changed_cb( GtkTreeSelection *selection, SalGtkFilePicker *pobjFP );
         static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
-
+        static void dialog_mapped_cb(GtkWidget *widget, SalGtkFilePicker *pobjFP);
     public:
          virtual ~SalGtkFilePicker();
 
