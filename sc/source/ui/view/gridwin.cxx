@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:23:04 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2551,7 +2551,7 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return bHandle;
+    return Window::PreNotify( rNEvt );
 }
 
 void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
