@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 12:15:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,14 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -83,6 +89,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+using namespace ::com::sun::star;
 
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::beans::XPropertySet;
@@ -109,6 +117,7 @@ using com::sun::star::io::XSeekable;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XSingleServiceFactory;
+using com::sun::star::lang::XTypeProvider;
 using cppu::OWeakObject;
 using rtl::OUString;
 using osl::FileBase;
@@ -131,10 +140,39 @@ XTempFile::XTempFile ()
     mpTempFile = new TempFile;
     mpTempFile->EnableKillingFile ( sal_True );
 }
+
 XTempFile::~XTempFile ()
 {
     if ( mpTempFile )
         delete mpTempFile;
+}
+
+uno::Sequence< beans::Property > XTempFile::GetProps()
+{
+    static uno::Sequence< beans::Property >* pProps = NULL;
+    if ( pProps == NULL )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
+
+        if ( pProps == NULL )
+        {
+            static uno::Sequence< beans::Property > aProps( 3 );
+
+            aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RemoveFile" ) );
+            aProps[0].Type = getCppuType( static_cast< sal_Bool* >( NULL ) );
+            aProps[0].Attributes = beans::PropertyAttribute::TRANSIENT;
+            aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceName" ) );
+            aProps[1].Type = getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+            aProps[1].Attributes = beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY;
+            aProps[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Uri" ) );
+            aProps[2].Type = getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+            aProps[2].Attributes = beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY;
+
+            pProps = &aProps;
+        }
+    }
+
+    return *pProps;
 }
 
 // XInterface
@@ -146,11 +184,14 @@ Any SAL_CALL XTempFile::queryInterface( const Type& rType )
                                 reinterpret_cast< XInterface*> ( this ),
                                 static_cast< XWeak*         > ( this ),
                                 // my own interfaces
+                                static_cast< XTypeProvider* > ( this ),
                                 static_cast< XInputStream*  > ( this ),
                                 static_cast< XOutputStream* > ( this ),
                                 static_cast< XStream*       > ( this ),
                                 static_cast< XTruncate*     > ( this ),
                                 static_cast< XPropertySet*  > ( this ),
+                                static_cast< XPropertySetInfo*  > ( this ),
+                                static_cast< XServiceInfo*  > ( this ),
                                 static_cast< XSeekable*     > ( this ) );
 }
 void SAL_CALL XTempFile::acquire(  )
@@ -162,6 +203,54 @@ void SAL_CALL XTempFile::release(  )
         throw ()
 {
     OWeakObject::release();
+}
+
+// XTypeProvider
+Sequence< Type > SAL_CALL XTempFile::getTypes()
+        throw( RuntimeException )
+{
+    static ::cppu::OTypeCollection* pTypeCollection = NULL;
+    if ( pTypeCollection == NULL )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
+
+        if ( pTypeCollection == NULL )
+        {
+            static ::cppu::OTypeCollection aTypeCollection
+                                    ( ::getCppuType( ( const Reference< XTypeProvider >* )NULL )
+                                    , ::getCppuType( ( const Reference< XWeak >* )NULL )
+                                    , ::getCppuType( ( const Reference< XInputStream >* )NULL )
+                                    , ::getCppuType( ( const Reference< XOutputStream >* )NULL )
+                                    , ::getCppuType( ( const Reference< XStream >* )NULL )
+                                    , ::getCppuType( ( const Reference< XTruncate >* )NULL )
+                                    , ::getCppuType( ( const Reference< XPropertySet >* )NULL )
+                                    , ::getCppuType( ( const Reference< XPropertySetInfo >* )NULL )
+                                    , ::getCppuType( ( const Reference< XServiceInfo >* )NULL )
+                                    , ::getCppuType( ( const Reference< XSeekable >* )NULL ) );
+            pTypeCollection = &aTypeCollection;
+        }
+    }
+
+    return pTypeCollection->getTypes() ;
+}
+
+Sequence< sal_Int8 > SAL_CALL XTempFile::getImplementationId()
+        throw( RuntimeException )
+{
+    static ::cppu::OImplementationId* pID = NULL ;
+
+    if ( pID == NULL )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
+
+        if ( pID == NULL )
+        {
+            static ::cppu::OImplementationId aID( sal_False ) ;
+            pID = &aID ;
+        }
+    }
+
+    return pID->getImplementationId() ;
 }
 
 // XInputStream
@@ -405,11 +494,6 @@ void XTempFile::checkConnected ()
     if (!mpStream)
         throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
 }
-Reference< XPropertySetInfo > SAL_CALL XTempFile::getPropertySetInfo(  )
-    throw (RuntimeException)
-{
-    return Reference < XPropertySetInfo > ();
-}
 
 // XStream
 
@@ -432,11 +516,57 @@ void SAL_CALL XTempFile::truncate()
 {
     MutexGuard aGuard( maMutex );
     checkConnected();
+    // SetStreamSize() call does not change the position
+    mpStream->Seek( 0 );
     mpStream->SetStreamSize( 0 );
     checkError();
 }
 
+// XPropertySetInfo
+uno::Sequence< beans::Property > SAL_CALL XTempFile::getProperties()
+    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    return GetProps();
+}
+
+beans::Property SAL_CALL XTempFile::getPropertyByName( const ::rtl::OUString& aName )
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    uno::Sequence< beans::Property > aProps = XTempFile::GetProps();
+    for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
+        if ( aName.equals( aProps[nInd].Name ) )
+            return aProps[nInd];
+
+    throw beans::UnknownPropertyException();
+}
+
+::sal_Bool SAL_CALL XTempFile::hasPropertyByName( const ::rtl::OUString& aName )
+    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    uno::Sequence< beans::Property > aProps = XTempFile::GetProps();
+    for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
+        if ( aName.equals( aProps[nInd].Name ) )
+            return sal_True;
+
+    return sal_False;
+}
+
+
 // XPropertySet
+
+Reference< XPropertySetInfo > SAL_CALL XTempFile::getPropertySetInfo(  )
+    throw (RuntimeException)
+{
+    MutexGuard aGuard( maMutex );
+
+    return Reference< XPropertySetInfo > ( static_cast< XPropertySetInfo* >( this ) );
+}
 
 void SAL_CALL XTempFile::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
     throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
@@ -507,13 +637,32 @@ void SAL_CALL XTempFile::removeVetoableChangeListener( const OUString& PropertyN
     DBG_ASSERT ( sal_False, "Listeners not implemented" );
 }
 
+// XServiceInfo
+::rtl::OUString SAL_CALL XTempFile::getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return getImplementationName_Static();
+}
+
+sal_Bool SAL_CALL XTempFile::supportsService(rtl::OUString const & rServiceName)
+        throw (com::sun::star::uno::RuntimeException)
+{
+    return rServiceName == getSupportedServiceNames_Static()[0];
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL XTempFile::getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return getSupportedServiceNames_Static();
+}
 
 
-OUString XTempFile::getImplementationName ()
+
+OUString XTempFile::getImplementationName_Static ()
 {
     return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.comp.TempFile" ) );
 }
-Sequence < OUString > XTempFile::getSupportedServiceNames()
+Sequence < OUString > XTempFile::getSupportedServiceNames_Static()
 {
     Sequence < OUString > aNames ( 1 );
     aNames[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
@@ -525,16 +674,11 @@ Reference < XInterface >SAL_CALL XTempFile_createInstance(
     return Reference< XInterface >( *new XTempFile );
 }
 
-Reference < XSingleServiceFactory > XTempFile::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
+Reference < XSingleServiceFactory > XTempFile::createServiceFactory_Static( Reference < XMultiServiceFactory > const & rServiceFactory )
 {
-    return cppu::createSingleFactory ( rServiceFactory, getImplementationName(),
+    return cppu::createSingleFactory ( rServiceFactory, getImplementationName_Static(),
                                        XTempFile_createInstance,
-                                       getSupportedServiceNames());
-}
-sal_Bool SAL_CALL XTempFile::supportsService(rtl::OUString const & rServiceName)
-        throw (com::sun::star::uno::RuntimeException)
-{
-    return rServiceName == getSupportedServiceNames()[0];
+                                       getSupportedServiceNames_Static());
 }
 
 static sal_Bool writeInfo( void * pRegistryKey,
@@ -592,8 +736,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* pSe
 {
     return pRegistryKey &&
     writeInfo (pRegistryKey,
-               XTempFile::getImplementationName(),
-               XTempFile::getSupportedServiceNames() );
+               XTempFile::getImplementationName_Static(),
+               XTempFile::getSupportedServiceNames_Static() );
 }
 
 
@@ -612,8 +756,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    if (XTempFile::getImplementationName().compareToAscii( pImplName ) == 0)
-        xFactory = XTempFile::createServiceFactory ( xSMgr );
+    if (XTempFile::getImplementationName_Static().compareToAscii( pImplName ) == 0)
+        xFactory = XTempFile::createServiceFactory_Static ( xSMgr );
 
     if ( xFactory.is() )
     {
