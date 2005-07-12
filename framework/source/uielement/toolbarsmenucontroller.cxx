@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:00:44 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,15 +570,18 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 {
     rtl::OUString aFeatureURL( Event.FeatureURL.Complete );
 
-    ResetableGuard aLock( m_aLock );
-
     // All other status events will be processed here
     sal_Bool bSetCheckmark      = sal_False;
     sal_Bool bCheckmark         = sal_False;
 
+    ResetableGuard aLock( m_aLock );
+    Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
+    aLock.unlock();
+
+    if ( xPopupMenu.is() )
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
-        VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
+        VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
         for ( USHORT i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
