@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:37:46 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ protected:
 
     sal_Bool        m_bMediaTypeFallbackUsed;
     sal_Bool        m_bPackageFormat;
+    sal_Bool        m_bAllowRemoveOnInsert;
 
     InitialisationMode eMode;
 
