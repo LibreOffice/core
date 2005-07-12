@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:27:34 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,9 @@ void ScViewFunc::PasteFromSystem()
             }
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
+            // the following format can not affect scenario from #89579#
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ))
+                PasteFromSystem( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
             // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
             else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
                 PasteFromSystem(nBiff8);
