@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:44:07 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4684,7 +4684,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                           pACorr->GetSwFlags().bAutoCompleteWords ) &&
                         rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
                     {
-                        ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+                        ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr, sal_True);
                     }
                 }
         }
@@ -5220,7 +5220,8 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
  *
  * --------------------------------------------------*/
 void SwEditWin::ShowAutoTextCorrectQuickHelp(
-        const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr )
+        const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
+        sal_Bool bFromIME )
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     pQuickHlpData->ClearCntnt();
@@ -5238,7 +5239,8 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     else if( pACorr->GetSwFlags().bAutoCompleteWords )
     {
         pQuickHlpData->bIsAutoText = FALSE;
-        pQuickHlpData->bIsTip = !pACorr ||
+        pQuickHlpData->bIsTip = bFromIME ||
+                    !pACorr ||
                     pACorr->GetSwFlags().bAutoCmpltShowAsTip;
 
         pQuickHlpData->FillStrArr( rSh, rWord );
