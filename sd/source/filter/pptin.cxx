@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:27:00 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1746,10 +1746,15 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     break;
                                     case PPT_TRANSITION_TYPE_NONE :
                                     {
-                                        if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt
-                                        else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt ueber Schwarz
+                                        if ( nBuildFlags )
+                                        {
+                                            if ( nDirection == 0 )
+                                                pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt
+                                            else if ( nDirection == 1 )
+                                                pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt ueber Schwarz
+                                        }
+                                        else
+                                            pPage->setTransitionType( 0 );
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_DISSOLVE :
@@ -1822,10 +1827,12 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     case PPT_TRANSITION_TYPE_RANDOM :
                                         pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_RANDOM );              // Automatisch
                                     break;
-
-                                    // the following effects does not match 100%
                                     case PPT_TRANSITION_TYPE_FADE :
-                                        pPage->SetFadeEffect(::com::sun::star::presentation::FadeEffect_NONE);                  // Ueber Schwarz blenden ??
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::FADE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::FADEOVERCOLOR );
+                                        pPage->setTransitionFadeColor( 0 );
+                                    }
                                     break;
                                     case PPT_TRANSITION_TYPE_ZOOM :
                                     {
@@ -1833,6 +1840,83 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                             pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER );// Von innen einblenden
                                         else if ( nDirection == 1 )
                                             pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER );  // Von aussen einblenden
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_DIAMOND :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::IRISWIPE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::DIAMOND );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_PLUS :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::FOURBOXWIPE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::CORNERSOUT );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_CIRCLE :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::ELLIPSEWIPE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::CIRCLE );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_WEDGE :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::FANWIPE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::CENTERTOP );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_WHEEL :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::PINWHEELWIPE );
+                                        sal_Int16 nSubType;
+                                        switch( nDirection )
+                                        {
+                                            default:
+                                            case 1 : nSubType = animations::TransitionSubType::ONEBLADE; break;
+                                            case 2 : nSubType = animations::TransitionSubType::TWOBLADEVERTICAL; break;
+                                            case 3 : nSubType = animations::TransitionSubType::THREEBLADE; break;
+                                            case 4 : nSubType = animations::TransitionSubType::FOURBLADE; break;
+                                            case 8 : nSubType = animations::TransitionSubType::EIGHTBLADE; break;
+                                        }
+                                        pPage->setTransitionSubtype( nSubType );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_PUSH :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::PUSHWIPE );
+                                        sal_Int16 nSubType;
+                                        switch( nDirection )
+                                        {
+                                            default:
+                                            case 0 : nSubType = animations::TransitionSubType::FROMRIGHT; break;
+                                            case 1 : nSubType = animations::TransitionSubType::FROMBOTTOM; break;
+                                            case 2 : nSubType = animations::TransitionSubType::FROMLEFT; break;
+                                            case 3 : nSubType = animations::TransitionSubType::FROMTOP; break;
+                                        }
+                                        pPage->setTransitionSubtype( nSubType );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_COMB :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::PUSHWIPE );
+                                        pPage->setTransitionSubtype( nDirection ? animations::TransitionSubType::COMBVERTICAL : animations::TransitionSubType::COMBHORIZONTAL );
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_NEWSFLASH :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::FOURBOXWIPE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::CORNERSOUT );
+/*
+                                        pPage->setTransitionType( animations::TransitionType::ZOOM );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::ROTATEIN );
+*/
+                                    }
+                                    break;
+                                    case PPT_TRANSITION_TYPE_SMOOTHFADE :
+                                    {
+                                        pPage->setTransitionType( animations::TransitionType::FADE );
+                                        pPage->setTransitionSubtype( animations::TransitionSubType::CROSSFADE );
                                     }
                                     break;
                                 }
