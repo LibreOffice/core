@@ -21,14 +21,11 @@ fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationPersistence
 fwk.UIConfigurationManager::com::sun::star::ui::XUIConfiguration
 fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationManager
 
-### i50187 ###
-fwk.Frame::com::sun::star::frame::Frame
+### i51717 ###
+fwk.Frame::com::sun::star::frame::XFrame
 
 ### i48550 ###
 fwk.Frame::com::sun::star::task::XStatusIndicatorFactory
-
-### i50552 ###
-fwk.ToolBarsMenuController::com::sun::star::frame::XStatusListener
 
 ### i50578 ###
 fwk.StatusBarControllerFactory::com::sun::star::lang::XMultiComponentFactory
