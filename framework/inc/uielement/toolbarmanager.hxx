@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 14:02:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void RefreshImages();
         void FillToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolBarData );
         void notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand );
+        void Destroy();
         static sal_Int16 GetCurrentSymbolSize();
 
     protected:
