@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:23:21 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,7 +1078,7 @@ SwNavigationPI::~SwNavigationPI()
     pImgMan->ReleaseToolBox(&aContentToolBox);
     pImgMan->ReleaseToolBox(&aGlobalToolBox);
     delete aContentToolBox.GetItemWindow(FN_PAGENUMBER);
-    delete aContentToolBox.GetItemWindow(FN_CONTENT_LB);
+    aContentToolBox.Clear();
     if(pxObjectShell)
     {
         if(pxObjectShell->Is())
@@ -1182,18 +1182,6 @@ NumEditAction& SwNavigationPI::GetPageEdit()
     return *(NumEditAction*)aContentToolBox.GetItemWindow(FN_PAGENUMBER);
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-/*
-
-ListBox& SwNavigationPI::GetTypeSelBox()
-{
-    DBG_ASSERT(aContentToolBox.GetItemWindow(FN_CONTENT_LB),
-                                "ItemWindow nicht vorhanden")
-    return *(ListBox*)aContentToolBox.GetItemWindow(FN_CONTENT_LB);
-
-}*/
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
