@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:12:35 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,6 +578,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     {
         long nTxtWidth2;
         long nTxtHeight2 = GetTextHeight()/2;
+        bool bBreak = true;
         while ( ((nStart-n) >= nMin) || ((nStart+n) <= nMax) )
         {
             // Null-Punkt
@@ -654,7 +655,9 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                         ImplVDrawLine( nT, nT1, nT, nT2 );
                 }
             }
-
+            // #i49017# with some zoom factors the value nTick can overflow
+            if( ((ULONG)nTick + (ULONG)nTickCount) > (ULONG)LONG_MAX)
+                break;
             nTick += nTickCount;
         }
     }
