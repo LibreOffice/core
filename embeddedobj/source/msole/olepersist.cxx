@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:16:50 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,8 +323,24 @@ uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Referenc
         return xStream;
     }
 
+    sal_uInt32 nHeaderOffset = 0;
     if ( ( nRead >= 8 && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1 )
       && ( aData[4] == 2 || aData[4] == 3 ) && aData[5] == 0 && aData[6] == 0 && aData[7] == 0 )
+    {
+        nHeaderOffset = 40;
+    }
+    else if ( nRead > 4 )
+    {
+        // check whether the first bytes represent the size
+        sal_uInt32 nSize = 0;
+        for ( sal_Int32 nInd = 3; nInd >= 0; nInd-- )
+            nSize = ( nSize << 8 ) + (sal_uInt8)aData[nInd];
+
+        if ( nSize == xSeek->getLength() - 4 )
+            nHeaderOffset = 4;
+    }
+
+    if ( nHeaderOffset )
     {
         // this is either a bitmap or a metafile clipboard format, retrieve the pure stream
         uno::Reference < io::XStream > xResult(
@@ -336,7 +352,7 @@ uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Referenc
         if ( !xResultOut.is() || !xResultIn.is() )
             throw uno::RuntimeException();
 
-        xSeek->seek( 40 ); // header size for these formats
+        xSeek->seek( nHeaderOffset ); // header size for these formats
         copyInputToOutput_Impl( xInStream, xResultOut );
         xResultOut->closeOutput();
         xResultSeek->seek( 0 );
@@ -714,10 +730,12 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     uno::Reference< io::XStream > xTargetStream;
 
+    sal_Bool bStoreLoaded = sal_False;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
         bVisReplIsStored = m_bVisReplInStream;
+        bStoreLoaded = sal_True;
     }
 #ifdef WNT
     else if ( m_pOleComponent )
@@ -772,6 +790,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         m_xNewParentStorage = xStorage;
         m_aNewEntryName = sEntName;
         m_bNewVisReplInStream = bStoreVis;
+        m_bStoreLoaded = bStoreLoaded;
 
         if ( xCachedVisualRepresentation.is() )
             m_xNewCachedVisRepl = xCachedVisualRepresentation;
@@ -1080,12 +1099,15 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         }
     }
 
+    sal_Bool bStoreLoaded = m_bStoreLoaded;
+
     m_xNewObjectStream = uno::Reference< io::XStream >();
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
     m_aNewEntryName = ::rtl::OUString();
     m_bWaitSaveCompleted = sal_False;
     m_bNewVisReplInStream = sal_False;
     m_xNewCachedVisRepl = uno::Reference< io::XStream >();
+    m_bStoreLoaded = sal_False;
 
     aGuard.clear();
     if ( bUseNew )
@@ -1093,7 +1115,8 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnSaveAsDone" ) );
 
         // the object can be changed only on windows
-        if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
+        // the notification should be done only if the object is not in loaded state
+        if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
             MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
     }
 }
@@ -1175,9 +1198,13 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     LetCommonStoragePassBeUsed_Impl( m_xObjectStream );
 
+    sal_Bool bStoreLoaded = sal_True;
+
 #ifdef WNT
     if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent )
     {
+        bStoreLoaded = sal_False;
+
         OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
         if ( !m_xObjectStream.is() )
@@ -1238,7 +1265,8 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnSaveDone" ) );
 
     // the object can be changed only on Windows
-    if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
+    // the notification should be done only if the object is not in loaded state
+    if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
         MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
 }
 
