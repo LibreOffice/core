@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:02:42 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,14 +1088,25 @@ bool XclImpEscherOle::Apply( ScfProgressBar& rProgress )
         SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mxSdrObj.get() );
         if( pOleSdrObj && pDocShell )
         {
+            Reference< XEmbeddedObject > xObj = pOleSdrObj->GetObjRef();
             OUString aOldName( pOleSdrObj->GetPersistName() );
-            OUString aNewName( aOldName );
-            if( pDocShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( pOleSdrObj->GetObjRef(), aNewName ) )
+
+            if ( pDocShell->GetEmbeddedObjectContainer().HasEmbeddedObject( aOldName ) )
             {
-                /*  #i40126# persist name already created in CreateSdrOLEFromStorage(),
-                    called from XclImpDffManager::CreateSdrOleObj(). */
-                DBG_ASSERT( aOldName == aNewName, "XclImpEscherOle::Apply - persist name changed" );
-                if( aOldName != aNewName )
+                // the object persistence should be already in the storage,
+                // but the object still might not be inserted into the container
+                if ( !pDocShell->GetEmbeddedObjectContainer().HasEmbeddedObject( xObj ) )
+                {
+                    // a filter code is allowed to call the following method
+                    pDocShell->GetEmbeddedObjectContainer().AddEmbeddedObject( xObj, aOldName );
+                }
+            }
+            else
+            {
+                // if the object is still not in container it must be iserted there, the name must be generated in this case
+                OUString aNewName;
+                pDocShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNewName );
+                if ( aOldName != aNewName )
                     // #95381# SetPersistName, not SetName
                     pOleSdrObj->SetPersistName( aNewName );
             }
