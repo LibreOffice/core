@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:24:12 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ namespace utl
                 PRODUCTVERSION,
                 PRODUCTEXTENSION,
                 DEFAULTCURRENCY,
+                PRODUCTXMLFILEFORMATNAME,
                 PRODUCTXMLFILEFORMATVERSION,
                 WRITERCOMPATIBILITYVERSIONOOO11
             };
