@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesdocumenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:54:31 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_nHashMaskModeColor    = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_COLOR )).hashCode();
 
     // create hash map to speed up lookup
-    for ( int i = 0; i <= (int)IMG_XML_ENTRY_COUNT; i++ )
+    for ( int i = 0; i < (int)IMG_XML_ENTRY_COUNT; i++ )
     {
         OUStringBuffer temp( 20 );
 
