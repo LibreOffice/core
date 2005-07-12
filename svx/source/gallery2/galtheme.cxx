@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:00:56 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,12 @@ GalleryTheme::~GalleryTheme()
 void GalleryTheme::ImplCreateSvDrawStorage()
 {
     if( !pThm->IsImported() )
+    {
         aSvDrawStorageRef = new SvStorage( FALSE, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
+        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
+        if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
+            aSvDrawStorageRef = new SvStorage( FALSE, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+    }
     else
         aSvDrawStorageRef.Clear();
 }
