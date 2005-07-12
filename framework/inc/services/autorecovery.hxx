@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 09:12:15 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                 //-------------------------------
                 TDocumentInfo()
                     : DocumentState(E_UNKNOWN)
+                    , UsedForSaving(sal_False)
+                    , ID           (-1       )
                 {}
 
                 //-------------------------------
@@ -296,6 +298,13 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                             works currently on it. We wait for an idle period then ...
                  */
                 sal_Int32 DocumentState;
+
+                //-------------------------------
+                /** Because our applications not ready for concurrent save requests at the same time,
+                    we have supress our own AutoSave for the moment, a document will be already saved
+                    by others.
+                 */
+                sal_Bool UsedForSaving;
 
                 //-------------------------------
                 /** TODO: document me */
@@ -436,8 +445,14 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     So we have to detect such states and ... show a warning.
                     May be there will be a better solution next time ... (copying the cache temp.
                     bevor using).
+
+                    And further it's not possible to use a simple boolean value here.
+                    Because if more then one operation iterates over the same stl container ...
+                    (only to modify it's elements but dont add new or removing existing ones!)
+                    it should be possible doing so. But we must guarantee that the last operation reset
+                    this lock ... not the first one ! So we use a "ref count" mechanism for that."
          */
-        sal_Bool m_bDocCacheLock;
+        sal_Int32 m_nDocCacheLock;
 
     //___________________________________________
     // interface
@@ -627,11 +642,17 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument);
+        void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument            ,
+                                             sal_Bool                                   bStopDisposeListening);
 
         //---------------------------------------
         // TODO document me
         void implts_toggleModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_updateDocumentUsedForSavingState(const css::uno::Reference< css::frame::XModel >& xDocument      ,
+                                                           sal_Bool                                   bSaveInProgress);
 
         //---------------------------------------
         // TODO document me
@@ -872,10 +893,6 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     see enum EJob
          */
         static sal_Int32 implst_classifyJob(const css::util::URL& aURL);
-
-        /// TODO
-        void implts_lockDocCache();
-        void implts_unlockDocCache();
 
         /// TODO
         void implts_verifyCacheAgainstDesktopDocumentList();
