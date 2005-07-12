@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:37:58 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ void OStorage_Impl::OpenOwnPackage()
     {
         if ( !m_xPackage.is() )
         {
-            uno::Sequence< uno::Any > aArguments( 1 );
+            uno::Sequence< uno::Any > aArguments( 2 );
             if ( m_nStorageMode & embed::ElementModes::WRITE )
                 aArguments[ 0 ] <<= m_xStream;
             else
@@ -466,7 +466,11 @@ void OStorage_Impl::OpenOwnPackage()
                 // on XStream object a wrapper must be used
             }
 
-            sal_Int32 nArgNum = 1;
+            // do not allow elements to remove themself from the old container in case of insertion to another container
+            aArguments[ 1 ] <<= beans::NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowRemoveOnInsert" ) ),
+                                                    uno::makeAny( (sal_Bool)sal_False ) );
+
+            sal_Int32 nArgNum = 2;
             for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
             {
                 if ( m_xProperties[aInd].Name.equalsAscii( "RepairPackage" )
@@ -887,19 +891,19 @@ void OStorage_Impl::Commit()
             else if ( !m_bCommited && !m_bIsRoot )
             {
                 // the element must be just copied to the new temporary package folder
+                // the connection with the original package should not be lost just because
+                // the element is still refered by the folder in the original hierarchy
                 uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
             }
             else if ( (*pElementIter)->m_aName.compareTo( (*pElementIter)->m_aOriginalName ) )
             {
+                // this is the case when xNewPackageFolder refers to m_xPackageFolder
                 // in case the name was changed and it is not a changed storage - rename the element
                 uno::Reference< container::XNamed > xNamed;
-                uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
-
-                aPackageElement >>= xNamed;
-                OSL_ENSURE( xNamed.is(), "PackageFolder/PackageStream MUST support XNamed interface" );
-
-                xNamed->setName( (*pElementIter)->m_aName );
+                uno::Any aPackageElement = xNewPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
+                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
             }
 
             (*pElementIter)->m_aOriginalName = (*pElementIter)->m_aName;
