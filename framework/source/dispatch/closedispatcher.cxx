@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:04:26 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,9 @@ void SAL_CALL CloseDispatcher::disposing(const css::lang::EventObject& aSource)
 */
 IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, pVoid )
 {
+    try
+    {
+
     // Allow calling of XController->suspend() everytimes.
     // Dispatch is an UI functionality. We implement such dispatch object here.
     // And further XController->suspend() was designed to bring an UI ...
@@ -365,11 +368,16 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, pVoid )
     // BTW: Make some copies, which are needed later ...
     EOperation                                                  eOperation  = m_eOperation;
     css::uno::Reference< css::lang::XMultiServiceFactory >      xSMGR       = m_xSMGR;
-    css::uno::Reference< css::frame::XFrame >                   xCloseFrame = m_xCloseFrame;
+    css::uno::Reference< css::frame::XFrame >                   xCloseFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchResultListener >  xListener   = m_xResultListener;
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    // frame already dead ?!
+    // Nothing to do !
+    if (! xCloseFrame.is())
+        return 0;
 
     sal_Bool bCloseFrame           = sal_False;
     sal_Bool bEstablishBackingMode = sal_False;
@@ -471,6 +479,12 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, pVoid )
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
+    }
+    catch(const css::lang::DisposedException&)
+    {
+        LOG_ERROR("CloseDispatcher::impl_asyncCallback", "Congratulation! You found the reason for bug #120310#. Please contact the right developer and show him a scenario, which trigger this bug. THX.")
+    }
+
     return 0;
 }
 
@@ -481,9 +495,13 @@ sal_Bool CloseDispatcher::implts_closeView(sal_Bool bAllowSuspend         ,
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
-    css::uno::Reference< css::frame::XFrame >              xFrame = m_xCloseFrame;
+    css::uno::Reference< css::frame::XFrame >              xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    // Frame already dead ... so this view is closed ... is closed ... is ... .-)
+    if (! xFrame.is())
+        return sal_True;
 
     // Close all views to the same document ... if forced to do so.
     // But dont touch our own frame here!
@@ -528,9 +546,13 @@ sal_Bool CloseDispatcher::implts_closeFrame()
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::frame::XFrame > xFrame = m_xCloseFrame;
+    css::uno::Reference< css::frame::XFrame > xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    // frame already dead ? => so it's closed ... it's closed ...
+    if ( ! xFrame.is() )
+        return sal_True;
 
     // dont deliver owner ship; our "UI user" will try it again if it failed.
     // OK - he will get an empty frame then. But normaly an empty frame
@@ -540,7 +562,7 @@ sal_Bool CloseDispatcher::implts_closeFrame()
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-    m_xCloseFrame.clear();
+    m_xCloseFrame = css::uno::WeakReference< css::frame::XFrame >();
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -553,9 +575,12 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
-    css::uno::Reference< css::frame::XFrame >              xFrame = m_xCloseFrame;
+    css::uno::Reference< css::frame::XFrame >              xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    if (!xFrame.is())
+        return sal_False;
 
     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
     css::uno::Sequence< css::uno::Any > lArgs(1);
