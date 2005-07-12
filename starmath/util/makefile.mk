@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 15:40:03 $
+#   last change: $Author: kz $ $Date: 2005-07-12 11:11:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,8 @@ SHL2STDLIBS= \
 SHL2DEPN=	makefile.mk
 SHL2VERSIONMAP= smd.map
 SHL2OBJS=   $(SLO)$/smdetect.obj \
-        $(SLO)$/detreg.obj
+            $(SLO)$/detreg.obj \
+            $(SLO)$/eqnolefilehdr.obj
 
 SHL1DEPN=	makefile.mk
 SHL1LIBS=   $(SLB)$/starmath.lib
