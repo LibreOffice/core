@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:33:34 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ css::uno::WeakReference< css::frame::XFrame > Frame::m_xCloserFrame = css::uno::
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_20                (   Frame                                                                   ,
+DEFINE_XINTERFACE_19                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
@@ -310,9 +310,8 @@ DEFINE_XINTERFACE_20                (   Frame                                   
                                         DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
                                         DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
-                                        DIRECT_INTERFACE(css::beans::XMultiPropertySet                          ),
-                                        DIRECT_INTERFACE(css::beans::XFastPropertySet                           ),
                                         DIRECT_INTERFACE(css::beans::XPropertySet                               ),
+                                        DIRECT_INTERFACE(css::beans::XPropertySetInfo                           ),
                                         DIRECT_INTERFACE(css::awt::XWindowListener                              ),
                                         DIRECT_INTERFACE(css::awt::XTopWindowListener                           ),
                                         DIRECT_INTERFACE(css::awt::XFocusListener                               ),
@@ -323,16 +322,15 @@ DEFINE_XINTERFACE_20                (   Frame                                   
                                         DIRECT_INTERFACE(css::frame::XComponentLoader                           )
                                     )
 
-DEFINE_XTYPEPROVIDER_19             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_18             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
                                         css::frame::XFrame                                                      ,
                                         css::lang::XComponent                                                   ,
                                         css::task::XStatusIndicatorFactory                                      ,
-                                        css::beans::XMultiPropertySet                                           ,
-                                        css::beans::XFastPropertySet                                            ,
                                         css::beans::XPropertySet                                                ,
+                                        css::beans::XPropertySetInfo                                            ,
                                         css::frame::XDispatchProvider                                           ,
                                         css::frame::XDispatchInformationProvider                                ,
                                         css::frame::XDispatchProviderInterception                               ,
@@ -407,6 +405,10 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             // Create an initial layout manager
                                             // Create layout manager and connect it to the newly created frame
                                             m_xLayoutManager = css::uno::Reference< css::frame::XLayoutManager >(m_xFactory->createInstance(SERVICENAME_LAYOUTMANAGER), css::uno::UNO_QUERY);
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            // set information about all supported properties at the base class helper PropertySetHelper
+                                            impl_initializePropInfo();
                                         }
                                     )
 
@@ -432,12 +434,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  init baseclasses first!
-        //  Attention: Don't change order of initialization!
-        :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
-        ,   TransactionBase             (                                                   )
-        ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )
-        ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+        :   PropertySetHelper           ( xFactory, &Application::GetSolarMutex(), sal_False) // FALSE => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )
@@ -687,6 +684,11 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
+    if ( m_xContainerWindow.is() )
+        throw css::uno::RuntimeException(
+                ::rtl::OUString::createFromAscii("Frame::initialized() is called more then once, which isnt usefull nor allowed."),
+                static_cast< css::frame::XFrame* >(this));
+
     // Look for rejected calls first!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
@@ -745,6 +747,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // Start listening for events after setting it on helper class ...
     // So superflous messages are filtered to NULL :-)
     implts_startWindowListening();
+
+    impl_enablePropertySet();
 }
 
 /*-****************************************************************************************************//**
@@ -1886,6 +1890,9 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
+    // set "end of live" for our property set helper
+    impl_disablePropertySet();
+
     // Disable this instance for further work.
     // This will wait for all current running ones ...
     // and reject all further requests!
@@ -2570,139 +2577,87 @@ sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
     return nCurrentLocks;
 }
 
-/*-****************************************************************************************************//**
-    @short      try to convert a property value
-    @descr      This method is calling from helperclass "OPropertySetHelper".
-                Don't use this directly!
-                You must try to convert the value of given FRAME_PROPHANDLE and
-                return results of this operation. This will be use to ask vetoable
-                listener. If no listener have a veto, we will change value realy!
-                ( in method setFastPropertyValue_NoBroadcast(...) )
-
-    @seealso    OPropertySetHelper
-    @seealso    setFastPropertyValue_NoBroadcast()
-
-    @param      "aConvertedValue"   new converted value of property
-    @param      "aOldValue"         old value of property
-    @param      "nHandle"           handle of property
-    @param      "aValue"            new value of property
-    @return     sal_True if value will be changed, sal_FALSE otherway
-
-    @onerror    IllegalArgumentException, if you call this with an invalid argument
-*//*-*****************************************************************************************************/
-sal_Bool SAL_CALL Frame::convertFastPropertyValue(          css::uno::Any&        aConvertedValue ,
-                                                            css::uno::Any&        aOldValue       ,
-                                                            sal_Int32             nHandle         ,
-                                                    const   css::uno::Any&        aValue          ) throw( css::lang::IllegalArgumentException )
+//*****************************************************************************************************************
+void Frame::impl_initializePropInfo()
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // We don't need any mutex or lock here ... if we work with our properties only!
-    // The propertyset helper synchronize for us.
-    // Bur if we try to work with some other member ... we must make it threadsafe!!!
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER,
+            FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER,
+            ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL),
+            css::beans::PropertyAttribute::TRANSIENT));
 
-    //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
-    //  Return TRUE, if changed - else return FALSE.
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_INDICATORINTERCEPTION,
+            FRAME_PROPHANDLE_INDICATORINTERCEPTION,
+            ::getCppuType((const css::uno::Reference< css::task::XStatusIndicator >*)NULL),
+            css::beans::PropertyAttribute::TRANSIENT));
 
-    //  Initialize state with FALSE !!!
-    //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_ISHIDDEN,
+            FRAME_PROPHANDLE_ISHIDDEN,
+            ::getBooleanCppuType(),
+            css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY));
 
-    switch( nHandle )
-    {
-        case FRAME_PROPHANDLE_TITLE :
-                bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(implts_getTitleFromWindow()), aValue, aOldValue, aConvertedValue );
-                break;
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_LAYOUTMANAGER,
+            FRAME_PROPHANDLE_LAYOUTMANAGER,
+            ::getCppuType((const css::uno::Reference< ::com::sun::star::frame::XLayoutManager >*)NULL),
+            css::beans::PropertyAttribute::TRANSIENT));
 
-        case FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER :
-                bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_xDispatchRecorderSupplier), aValue, aOldValue, aConvertedValue );
-                break;
-
-        case FRAME_PROPHANDLE_ISHIDDEN :
-                bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_bIsHidden), aValue, aOldValue, aConvertedValue );
-                break;
-
-        case FRAME_PROPHANDLE_LAYOUTMANAGER:
-                bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_xLayoutManager), aValue, aOldValue, aConvertedValue );
-                break;
-
-        case FRAME_PROPHANDLE_INDICATORINTERCEPTION:
-                {
-                    css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
-                    bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(xProgress), aValue, aOldValue, aConvertedValue );
-                }
-                break;
-
-        #ifdef ENABLE_WARNINGS
-        default :   LOG_WARNING( "Frame::convertFastPropertyValue()", "Invalid handle detected!" )
-                    break;
-        #endif
-    }
-
-    // Return state of operation.
-    return bReturn ;
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_TITLE,
+            FRAME_PROPHANDLE_TITLE,
+            ::getCppuType((const ::rtl::OUString*)NULL),
+            css::beans::PropertyAttribute::TRANSIENT));
 }
 
-static rtl::OUString _getTabString()
+//*****************************************************************************************************************
+void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& sProperty,
+                                                 sal_Int32        nHandle  ,
+                                           const css::uno::Any&   aValue   )
+
 {
-    rtl::OUString result;
-    css::uno::Reference < css::beans::XMaterialHolder > xHolder(
-    comphelper::getProcessServiceFactory()->createInstance(
-    rtl::OUString::createFromAscii("com.sun.star.tab.tabreg") ), css::uno::UNO_QUERY );
-    if (xHolder.is())
-    {
-        rtl::OUString aTabString;
-        css::uno::Sequence< css::beans::NamedValue > sMaterial;
-        if (xHolder->getMaterial() >>= sMaterial) {
-            for (int i=0; i < sMaterial.getLength(); i++) {
-                if ((sMaterial[i].Name.equalsAscii("title")) &&
-                    (sMaterial[i].Value >>= aTabString))
-                {
-                    result += rtl::OUString::createFromAscii(" ");
-                    result += aTabString;
-                }
-            }
-        }
-    }
-    return result;
-}
+    static ::rtl::OUString MATERIALPROP_TITLE = ::rtl::OUString::createFromAscii("title");
 
-/*-****************************************************************************************************//**
-    @short      set value of a transient property
-    @descr      This method is calling from helperclass "OPropertySetHelper".
-                Don't use this directly!
-                Handle and value are valid everyway! You must set the new value only.
-                After this, baseclass send messages to all listener automaticly.
+    /* There is no need to lock any mutex here. Because we share the
+       solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
+       see ctor of PropertySetHelper for further informations.
+    */
 
-    @seealso    OPropertySetHelper
-
-    @param      "nHandle"   handle of property to change
-    @param      "aValue"    new value of property
-    @return     -
-
-    @onerror    An exception is thrown.
-*//*-*****************************************************************************************************/
-void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       nHandle ,
-                                                        const   css::uno::Any&  aValue  ) throw( css::uno::Exception )
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // We don't need any mutex or lock here ... if we work with our properties only!
-    // The propertyset helper synchronize for us.
-    // Bur if we try to work with some other member ... we must make it threadsafe!!!
-
-    // Search for right handle ... and try to set property value.
-    switch ( nHandle )
+    /* Attention: You can use nHandle only, if you are sure that all supported
+                  properties has an unique handle. That must be guaranteed
+                  inside method impl_initializePropInfo()!
+    */
+    switch (nHandle)
     {
         case FRAME_PROPHANDLE_TITLE :
                 {
-                    ::rtl::OUString sTitle;
-                    aValue >>= sTitle;
-                    sTitle += _getTabString();
-                    implts_setTitleOnWindow( sTitle );
+                    ::rtl::OUStringBuffer sCompleteTitle(256);
+
+                    ::rtl::OUString sDocName;
+                    aValue >>= sDocName;
+
+                    rtl::OUString sTabString;
+                    css::uno::Reference< css::beans::XMaterialHolder > xHolder(m_xSMGR->createInstance(SERVICENAME_TABREG), css::uno::UNO_QUERY);
+                    if (xHolder.is())
+                    {
+                        ::comphelper::SequenceAsHashMap lMaterial(xHolder->getMaterial());
+                        sTabString = lMaterial.getUnpackedValueOrDefault(MATERIALPROP_TITLE, ::rtl::OUString());
+                    }
+
+                    sCompleteTitle.append(sDocName);
+                    if (sTabString.getLength())
+                    {
+                        sCompleteTitle.appendAscii(" "       );
+                        sCompleteTitle.append     (sTabString);
+                    }
+
+                    implts_setTitleOnWindow(sCompleteTitle.makeStringAndClear());
                 }
                 break;
 
@@ -2730,29 +2685,21 @@ void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       
     }
 }
 
-/*-****************************************************************************************************//**
-    @short      get value of a transient property
-    @descr      This method is calling from helperclass "OPropertySetHelper".
-                Don't use this directly!
-
-    @seealso    OPropertySetHelper
-
-    @param      "nHandle"   handle of property to change
-    @param      "aValue"    current value of property
-    @return     -
-
-    @onerror    -
-*//*-*****************************************************************************************************/
-void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
-                                            sal_Int32       nHandle ) const
+//*****************************************************************************************************************
+css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& sProperty,
+                                                          sal_Int32        nHandle  )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // We don't need any mutex or lock here ... if we work with our properties only!
-    // The propertyset helper synchronize for us.
-    // Bur if we try to work with some other member ... we must make it threadsafe!!!
+    /* There is no need to lock any mutex here. Because we share the
+       solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
+       see ctor of PropertySetHelper for further informations.
+    */
 
-    // Search for right handle ... and try to set property value.
-    switch( nHandle )
+    /* Attention: You can use nHandle only, if you are sure that all supported
+                  properties has an unique handle. That must be guaranteed
+                  inside method impl_initializePropInfo()!
+    */
+    css::uno::Any aValue;
+    switch (nHandle)
     {
         case FRAME_PROPHANDLE_TITLE :
                 aValue <<= implts_getTitleFromWindow();
@@ -2783,117 +2730,8 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
                 break;
         #endif
     }
-}
 
-/*-****************************************************************************************************//**
-    @short      return structure and information about transient properties
-    @descr      This method is calling from helperclass "OPropertySetHelper".
-                Don't use this directly!
-
-    @seealso    OPropertySetHelper
-
-    @param      -
-    @return     structure with property-informations
-
-    @onerror    -
-*//*-*****************************************************************************************************/
-::cppu::IPropertyArrayHelper& SAL_CALL Frame::getInfoHelper()
-{
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
-
-    if( pInfoHelper == NULL )
-    {
-        // Ready for multithreading
-        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == NULL )
-        {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
-            pInfoHelper = &aInfoHelper;
-        }
-    }
-
-    return (*pInfoHelper);
-}
-
-/*-****************************************************************************************************//**
-    @short      return propertysetinfo
-    @descr      You can call this method to get information about transient properties
-                of this object.
-
-    @seealso    OPropertySetHelper
-    @seealso    XPropertySet
-    @seealso    XMultiPropertySet
-
-    @param      -
-    @return     reference to object with information [XPropertySetInfo]
-
-    @onerror    -
-*//*-*****************************************************************************************************/
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo () throw (::com::sun::star::uno::RuntimeException)
-{
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = NULL ;
-
-    if( pInfo == NULL )
-    {
-        // Ready for multithreading
-        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfo == NULL )
-        {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
-            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-            pInfo = &xInfo;
-        }
-    }
-
-    return (*pInfo);
-}
-
-/*-****************************************************************************************************//**
-    @short      build information struct of our supported properties
-    @descr      We create it one times only and return it every time.
-
-    @seealso    OPropertySetHelper
-    @seealso    XPropertySet
-    @seealso    XMultiPropertySet
-
-    @param      -
-    @return     const struct with information about supported properties
-
-    @onerror    -
-*//*-*****************************************************************************************************/
-const css::uno::Sequence< css::beans::Property > Frame::impl_getStaticPropertyDescriptor()
-{
-    // Create a new static property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME !!!
-
-    static const css::beans::Property pPropertys[] =
-    {
-        css::beans::Property( FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER, FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL)          , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( FRAME_PROPNAME_INDICATORINTERCEPTION   , FRAME_PROPHANDLE_INDICATORINTERCEPTION   , ::getCppuType((const css::uno::Reference< css::task::XStatusIndicator >*)NULL)                    , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( FRAME_PROPNAME_ISHIDDEN                , FRAME_PROPHANDLE_ISHIDDEN                , ::getBooleanCppuType()                                                                            , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( FRAME_PROPNAME_LAYOUTMANAGER           , FRAME_PROPHANDLE_LAYOUTMANAGER           , ::getCppuType((const css::uno::Reference< ::com::sun::star::frame::XLayoutManager >*)NULL)  , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( FRAME_PROPNAME_TITLE                   , FRAME_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                                       , css::beans::PropertyAttribute::TRANSIENT ),
-    };
-    // Use it to initialize sequence!
-    static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pPropertys, FRAME_PROPCOUNT );
-    // Return static "PropertyDescriptor"
-    return lPropertyDescriptor;
+    return aValue;
 }
 
 /*-****************************************************************************************************//**
