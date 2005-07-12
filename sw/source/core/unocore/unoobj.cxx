@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:03:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,6 +1080,7 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent,
   -----------------------------------------------------------------------*/
 SwXTextCursor::~SwXTextCursor()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     delete pUnoCrsr;
     delete pLastSortOptions;
