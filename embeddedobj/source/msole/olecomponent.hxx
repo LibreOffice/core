@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:16:30 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 12:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@ public:
     void SetExtent( const ::com::sun::star::awt::Size& aVisAreaSize, sal_Int64 nAspect );
 
     ::com::sun::star::awt::Size GetExtent( sal_Int64 nAspect );
+    ::com::sun::star::awt::Size GetReccomendedExtent( sal_Int64 nAspect );
 
     sal_Int64 GetMiscStatus( sal_Int64 nAspect );
 
