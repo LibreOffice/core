@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:30:27 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XT
   -----------------------------------------------------------------------*/
 SwXTextPortion::~SwXTextPortion()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     delete pUnoCrsr;
     delete pRubyText;
