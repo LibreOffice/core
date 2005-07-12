@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:12:30 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1609,6 +1609,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
   -----------------------------------------------------------------------*/
 SwXTextTableCursor::~SwXTextTableCursor()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
         delete pUnoCrsr;
@@ -3857,6 +3858,7 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
   -----------------------------------------------------------------------*/
 SwXCellRange::~SwXCellRange()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     delete pTblCrsr;
 }
 /*-- 11.12.98 14:27:34---------------------------------------------------
