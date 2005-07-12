@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptanimations.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:51:16 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 13:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,19 @@ namespace ppt
 #define PPT_TRANSITION_TYPE_WIPE           10
 #define PPT_TRANSITION_TYPE_ZOOM           11
 #define PPT_TRANSITION_TYPE_SPLIT          13
+
+// effects, new in xp
+#define PPT_TRANSITION_TYPE_DIAMOND         17
+#define PPT_TRANSITION_TYPE_PLUS            18
+#define PPT_TRANSITION_TYPE_WEDGE           19
+#define PPT_TRANSITION_TYPE_PUSH            20
+#define PPT_TRANSITION_TYPE_COMB            21
+#define PPT_TRANSITION_TYPE_NEWSFLASH       22
+#define PPT_TRANSITION_TYPE_SMOOTHFADE      23
+#define PPT_TRANSITION_TYPE_WHEEL           26
+#define PPT_TRANSITION_TYPE_CIRCLE          27
+
+
 
 // atoms
 #define DFF_msofbtAnimEvent                         0xf125
