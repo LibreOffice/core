@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:52:07 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 14:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,13 @@ Reference< XMultiServiceFactory > ToolboxController::getServiceManager() const
 
 Reference< XLayoutManager > ToolboxController::getLayoutManager() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
     Reference< XLayoutManager > xLayoutManager;
-    Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
+    Reference< XPropertySet > xPropSet;
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        xPropSet = Reference< XPropertySet >( m_xFrame, UNO_QUERY );
+    }
+
     if ( xPropSet.is() )
     {
         try
