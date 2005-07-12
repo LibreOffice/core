@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:27:57 $
+ *  last change: $Author: kz $ $Date: 2005-07-12 11:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1431,6 +1431,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
   -----------------------------------------------------------------------*/
 SwXNumberingRules::~SwXNumberingRules()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if(pDoc && sCreatedNumRuleName.Len())
         pDoc->DelNumRule( sCreatedNumRuleName );
     if( pNumRule && bOwnNumRuleCreated )
