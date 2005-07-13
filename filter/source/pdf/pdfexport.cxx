@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 13:47:26 $
+ *  last change: $Author: obo $ $Date: 2005-07-13 07:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,7 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                     bUseJPGCompression = sal_False;
             }
             if ( bUseJPGCompression )
-                rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+                rWriter.DrawJPGBitmap( aStrm, true, aSizePixel, Rectangle( aPoint, aSize ), aMask );
             else if ( aBitmapEx.IsTransparent() )
                 rWriter.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else
