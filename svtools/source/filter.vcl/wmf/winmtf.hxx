@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:19:15 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,18 @@ struct LOGFONTW
 #define MAC_CHARSET             77
 #define BALTIC_CHARSET          186
 
+#define ETO_OPAQUE              0x0002
+#define ETO_CLIPPED             0x0004
+/*WINVER >= 0x0400*/
+#define ETO_GLYPH_INDEX         0x0010
+#define ETO_RTLREADING          0x0080
+#define ETO_NUMERICSLOCAL       0x0400
+#define ETO_NUMERICSLATIN       0x0800
+#define ETO_IGNORELANGUAGE      0x1000
+/*_WIN32_WINNT >= 0x0500*/
+#define ETO_PDY                 0x2000
+
+
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
 #define VARIABLE_PITCH          0x02
@@ -486,7 +498,7 @@ struct XForm
 
 struct SaveStruct
 {
-    sal_uInt32          nBkMode, nMapMode, nGfxMode;
+    sal_uInt32          nBkMode, nMapMode, nGfxMode, nTextLayoutMode;
     sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
     sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
 
@@ -586,6 +598,8 @@ class WinMtfOutput
         Color               maTextColor;
         Color               maLatestBkColor;
         Color               maBkColor;
+        sal_uInt32          mnLatestTextLayoutMode;
+        sal_uInt32          mnTextLayoutMode;
         sal_uInt32          mnLatestBkMode;
         sal_uInt32          mnBkMode;
         RasterOp            meLatestRasterOp;
@@ -670,6 +684,8 @@ class WinMtfOutput
         CharSet             GetCharSet(){ return maFont.GetCharSet(); };
         void                SetFont( const Font& rFont );
         const Font&         GetFont() const;
+        void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );
+        sal_uInt32          GetTextLayoutMode() const;
 
         void                ClearPath(){ aPathObj.Init(); };
         void                ClosePath(){ aPathObj.ClosePath(); };
