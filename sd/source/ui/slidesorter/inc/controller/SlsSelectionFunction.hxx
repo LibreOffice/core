@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:01:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ private:
     void GotoNextPage (int nOffset);
 
     void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
+    void ProcessKeyEvent (const KeyEvent& rEvent);
 
     // What follows are a couple of helper methods that are used by
     // ProcessMouseEvent().
@@ -224,6 +225,13 @@ private:
     sal_uInt32 EncodeMouseEvent (
         const EventDescriptor& rDescriptor,
         const MouseEvent& rEvent) const;
+
+    /** Compute a numerical code that describes a key event and that can
+        be used for fast look up of the appropriate reaction.
+    */
+    sal_uInt32 EncodeKeyEvent (
+        const EventDescriptor& rDescriptor,
+        const KeyEvent& rEvent) const;
 
     void EventPreprocessing (const EventDescriptor& rEvent);
     bool EventProcessing (const EventDescriptor& rEvent);
