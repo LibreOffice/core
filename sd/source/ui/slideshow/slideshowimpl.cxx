@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-10 07:54:14 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,8 @@ SlideshowImpl::SlideshowImpl(
     mnEntryCounter(0),
     mnLastPageNumber(-1),
     mbIsPaused(false),
-    mbInputFreeze(false)
+    mbInputFreeze(false),
+    mnEndShowEvent(0)
 {
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
@@ -395,6 +396,9 @@ SlideshowImpl::SlideshowImpl(
 
 SlideshowImpl::~SlideshowImpl()
 {
+    if( mnEndShowEvent )
+        Application::RemoveUserEvent( mnEndShowEvent );
+
     stopShow();
 
     delete mpSaveOptions;
@@ -1341,11 +1345,14 @@ void SlideshowImpl::gotoLastSlide()
 
 void SlideshowImpl::endPresentation()
 {
-    Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
+    if( !mnEndShowEvent )
+        mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }
 
 IMPL_LINK( SlideshowImpl, endPresentationHdl, void*, EMPTYARG )
 {
+    mnEndShowEvent = 0;
+
     if( mpViewShell )
         mpViewShell->GetViewShellBase().StopPresentation();
     else
