@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:01:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,20 @@ public:
 protected:
     DECL_LINK(MasterPageListListener, void*);
     void Fill (void);
+
+    /** Forward this call to the base class but save and restore the
+        currently selected item.
+        Assign the given master page to the list of pages.
+        @param pMasterPage
+            This master page will usually be a member of the list of all
+            available master pages as provided by the MasterPageContainer.
+        @param rPageList
+            The pages to which to assign the master page.  These pages may
+            be slides or master pages themselves.
+    */
+    virtual void AssignMasterPageToPageList (
+        SdPage* pMasterPage,
+        const ::std::vector<SdPage*>& rPageList);
 };
 
 } } } // end of namespace ::sd::toolpanel::controls
