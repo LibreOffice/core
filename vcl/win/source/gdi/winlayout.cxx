@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:47:46 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 13:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,10 +405,14 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( nGlyphWidth == -1 )
         {
             ABC aABC;
-            if( ::GetCharABCWidthsW( mhDC, nCharCode, nCharCode, &aABC ) )
+            SIZE aExtent;
+            if( ::GetTextExtentPoint32W( mhDC, &pCodes[0], bSurrogate ? 2 : 1, &aExtent) )
+                nGlyphWidth = aExtent.cx;
+            else if( ::GetCharABCWidthsW( mhDC, nCharCode, nCharCode, &aABC ) )
                 nGlyphWidth = aABC.abcA + aABC.abcB + aABC.abcC;
-            else if( !::GetCharWidth32W( mhDC, nCharCode, nCharCode, &nGlyphWidth ) )
-                nGlyphWidth = 0;
+            else if( !::GetCharWidth32W( mhDC, nCharCode, nCharCode, &nGlyphWidth )
+                 &&  !::GetCharWidthW( mhDC, nCharCode, nCharCode, &nGlyphWidth ) )
+                    nGlyphWidth = 0;
             mrWinFontEntry.CacheGlyphWidth( nCharCode, nGlyphWidth );
         }
         mpGlyphAdvances[ i ] = nGlyphWidth;
@@ -443,7 +447,9 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 // get the width of the NotDef glyph
                 SIZE aExtent;
                 WCHAR cNotDef = rArgs.mpStr[ nCharPos ];
-                mnNotdefWidth = ::GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
+                mnNotdefWidth = 0;
+                if( ::GetTextExtentPoint32W( mhDC, &cNotDef, 1, &aExtent) )
+                    mnNotdefWidth = aExtent.cx;
             }
             // use a better NotDef glyph
             if( !mbDisableGlyphs )
