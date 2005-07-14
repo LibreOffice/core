@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2005-06-17 09:28:55 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 12:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,7 +646,19 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     if( !pEntry->mpFontData )
         return false;
 
-    // requesting a font provided by builtin rasterizer
+    // handle the request for a native X11-font
+    if( ImplX11FontData::CheckFontData( *pEntry->mpFontData ) )
+    {
+        ImplX11FontData* pRequestedFont = static_cast<ImplX11FontData*>( pEntry->mpFontData );
+        const ExtendedXlfd& rX11Font = pRequestedFont->GetExtendedXlfd();
+
+        Size aReqSize( pEntry->mnWidth, pEntry->mnHeight );
+        mXFont[ nFallbackLevel ] = GetDisplay()->GetFont( &rX11Font, aReqSize, bFontVertical_ );
+        bFontGC_ = FALSE;
+        return true;
+    }
+
+    // handle the request for a non-native X11-font => use the GlyphCache
     ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
     if( pServerFont != NULL )
     {
@@ -659,17 +671,7 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
         return true;
     }
 
-    // requesting a native X11-font
-    if( !ImplX11FontData::CheckFontData( *pEntry->mpFontData ) )
-        return false;
-
-    ImplX11FontData* pRequestedFont = static_cast<ImplX11FontData*>( pEntry->mpFontData );
-    const ExtendedXlfd& rX11Font = pRequestedFont->GetExtendedXlfd();
-
-    Size aReqSize( pEntry->mnWidth, pEntry->mnHeight );
-    mXFont[ nFallbackLevel ] = GetDisplay()->GetFont( &rX11Font, aReqSize, bFontVertical_ );
-    bFontGC_ = FALSE;
-    return true;
+    return false;
 }
 
 //--------------------------------------------------------------------------
