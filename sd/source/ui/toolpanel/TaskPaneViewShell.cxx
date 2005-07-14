@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:35:04 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include "TaskPaneShellManager.hxx"
 #include "ToolPanelChildWindow.hrc"
 #include "ToolPanelChildWindow.hxx"
-#include "ToolPanel.hxx"
-#include "TitledControl.hxx"
+#include "taskpane/ToolPanel.hxx"
+#include "taskpane/TitledControl.hxx"
 #include "LayoutMenu.hxx"
 #include "TaskPaneFocusManager.hxx"
 #include "taskpane/SubToolPanel.hxx"
@@ -77,11 +77,12 @@
 #include "controls/SlideTransitionPanel.hxx"
 #include "controls/AnimationSchemesPanel.hxx"
 #include "TitleToolBox.hxx"
-#include "ControlContainer.hxx"
+#include "taskpane/ControlContainer.hxx"
 #include "FrameView.hxx"
 #include "ObjectBarManager.hxx"
 #include "Window.hxx"
 #include "PaneDockingWindow.hxx"
+#include "AccessibleTaskPane.hxx"
 #include "sdmod.hxx"
 #include "app.hrc"
 #include "glob.hrc"
@@ -341,9 +342,7 @@ TaskPaneViewShell::TaskPaneViewShell (
 
     // Tell the focus manager that we want to pass the focus to our
     // child.
-    FocusManager::Instance().RegisterDownLink (
-        pParentWindow,
-        mpTaskPane.get());
+    FocusManager::Instance().RegisterDownLink(pParentWindow, mpTaskPane.get());
 
     SetPool (&GetDoc()->GetPool());
 
@@ -362,6 +361,17 @@ TaskPaneViewShell::TaskPaneViewShell (
     mpVerticalRuler.reset();
 
     SetName (String (RTL_CONSTASCII_USTRINGPARAM("TaskPaneViewShell")));
+
+    // For accessibility we have to shortly hide the content window.  This
+    // triggers the construction of a new accessibility object for the new
+    // view shell.  (One is created earlier while the construtor of the base
+    // class is executed.  At that time the correct accessibility object can
+    // not be constructed.)
+    if (mpContentWindow.get() !=NULL)
+    {
+        mpContentWindow->Hide();
+        mpContentWindow->Show();
+    }
 }
 
 
@@ -649,6 +659,30 @@ void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
             ControlContainer::ES_EXPAND);
     }
 }
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible>
+    TaskPaneViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
+{
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> xAccessible;
+
+    if (mpTaskPane.get()!=NULL && pWindow!=NULL)
+    {
+        // We have to call CreateAccessible directly so that we can specify
+        // the correct accessible parent.
+        ::Window* pParentWindow = pWindow->GetAccessibleParentWindow();
+        if (pParentWindow != NULL)
+            xAccessible = mpTaskPane->CreateAccessibleObject(
+                pParentWindow->GetAccessible());
+    }
+
+    return xAccessible;
+}
+
 
 
 
