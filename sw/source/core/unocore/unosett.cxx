@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 11:20:57 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2547,10 +2547,6 @@ void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
     const TextColumn* prCols = rColumns.getConstArray();
     for(long i = 0; i < rColumns.getLength(); i++)
     {
-        //wenn die Breite Null ist, oder die Raender breiter als die Spalte werden -> exception
-        if(!prCols[i].Width ||
-            prCols[i].LeftMargin + prCols[i].RightMargin >= prCols[i].Width)
-            throw uno::RuntimeException();
         nReferenceTemp += prCols[i].Width;
     }
     bIsAutomaticWidth = sal_False;
