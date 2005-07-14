@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 14:03:04 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
 
     ::std::auto_ptr<PaneHider> mpPaneHider;
+
+    ULONG   mnEndShowEvent;
 };
 
 class SlideShowImplGuard
