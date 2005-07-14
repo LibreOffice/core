@@ -1,14 +1,28 @@
 all_fragments+=math
 
+
+.IF "$(WITH_BINFILTER)" != "NO"
+T4_MATH_BINFILTER = \
+    math_StarMath_20 \
+    math_StarMath_30 \
+    math_StarMath_40 \
+    math_StarMath_50
+F4_MATH_BINFILTER = \
+    StarMath_2_0 \
+    StarMath_3_0 \
+    StarMath_4_0 \
+    StarMath_5_0
+.ELSE
+T4_MATH_BINFILTER =
+F4_MATH_BINFILTER =
+.ENDIF
+
 # -----------------------------------------------
 # count = 9
 T4_MATH = \
     math_MathML_XML_Math \
     math_MathType_3x \
-    math_StarMath_20 \
-    math_StarMath_30 \
-    math_StarMath_40 \
-    math_StarMath_50 \
+    $(T4_MATH_BINFILTER) \
     math_StarOffice_XML_Math \
     pdf_Portable_Document_Format \
     math8
@@ -18,10 +32,7 @@ T4_MATH = \
 F4_MATH = \
     MathML_XML__Math_ \
     MathType_3_x \
-    StarMath_2_0 \
-    StarMath_3_0 \
-    StarMath_4_0 \
-    StarMath_5_0 \
+    $(F4_MATH_BINFILTER) \
     StarOffice_XML__Math_ \
     math_pdf_Export \
     math8

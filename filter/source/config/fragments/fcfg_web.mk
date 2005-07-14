@@ -1,14 +1,28 @@
 all_fragments+=web
 
-# -----------------------------------------------
-# count = 12
-T4_WEB = \
-    writer_web_HTML \
+.IF "$(WITH_BINFILTER)" != "NO"
+T4_WEB_BINFILTER = \
     writer_StarWriter_30 \
     writer_StarWriter_40 \
     writer_StarWriter_50 \
     writer_web_StarWriterWeb_40_VorlageTemplate \
-    writer_web_StarWriterWeb_50_VorlageTemplate \
+    writer_web_StarWriterWeb_50_VorlageTemplate
+F4_WEB_BINFILTER = \
+    StarWriter_3_0__StarWriter_Web_ \
+    StarWriter_4_0__StarWriter_Web_ \
+    StarWriter_5_0__StarWriter_Web_ \
+    StarWriter_Web_4_0_Vorlage_Template \
+    StarWriter_Web_5_0_Vorlage_Template
+.ELSE
+T4_WEB_BINFILTER =
+F4_WEB_BINFILTER =
+.ENDIF
+
+# -----------------------------------------------
+# count = 12
+T4_WEB = \
+    writer_web_HTML \
+    $(T4_WEB_BINFILTER) \
     writer_Text \
     writer_web_HTML_help \
     writer_StarOffice_XML_Writer \
@@ -20,11 +34,7 @@ T4_WEB = \
 # count = 14
 F4_WEB = \
     HTML \
-    StarWriter_3_0__StarWriter_Web_ \
-    StarWriter_4_0__StarWriter_Web_ \
-    StarWriter_5_0__StarWriter_Web_ \
-    StarWriter_Web_4_0_Vorlage_Template \
-    StarWriter_Web_5_0_Vorlage_Template \
+    $(F4_WEB_BINFILTER) \
     Text__StarWriter_Web_ \
     Text__encoded___StarWriter_Web_ \
     writer_web_HTML_help \
