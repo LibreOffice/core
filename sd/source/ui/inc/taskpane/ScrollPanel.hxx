@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollPanel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:49:12 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,20 @@
 
 namespace sd { namespace toolpanel {
 
+class TitledControl;
+
+/** The scroll panel shows its controls one above the other.  When their
+    total height is larger than the height of the scroll area then only a
+    part of the controls is visible.  Scroll bars control which part that
+    is.
+
+    The scroll panel registers itself as window event listener at the
+    controls and their title bars (conceptually; it really is the
+    TitledControl) to track changes of the selection and focus rectangles.
+    On such a change it tries to move the selected or focused part into the
+    visible area.  At the moment this moving into view only works with
+    valuesets and TitleBars.
+*/
 class ScrollPanel
     : public ::Control,
       public TreeNode
@@ -89,8 +103,11 @@ public:
             belong to the control.
         @param nHelpId
             The help id is set at the title bar not the actual control.
+        @return
+            The new titled control that contains the given control and a new
+            title bar as children is returned.
     */
-    void AddControl (
+    TitledControl* AddControl (
         ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
         ULONG nHelpId);
@@ -118,8 +135,31 @@ public:
         TreeNode* pControl,
         bool bExpansionState);
 
+    bool IsVerticalScrollBarVisible (void) const;
+    bool IsHorizontalScrollBarVisible (void) const;
+    ScrollBar& GetVerticalScrollBar (void);
+    ScrollBar& GetHorizontalScrollBar (void);
+
     // ::Window
     virtual long Notify( NotifyEvent& rNEvt );
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> CreateAccessibleObject (
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>& rxParent);
+
+    /** Scroll the given rectangle into the visible area.
+        @param aRectangle
+            The box to move into the visible area in pixel coordinates
+            relative to the given window.
+        @param pWindow
+            This window is used to translate the given coordinates into ones
+            that are relative to the scroll panel.
+
+    */
+    void MakeRectangleVisible (
+        Rectangle& aRectangle,
+        ::Window* pWindow);
 
 protected:
     /** Initiate a rearrangement of the controls.
