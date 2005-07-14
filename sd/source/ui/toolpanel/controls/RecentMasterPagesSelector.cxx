@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:00:54 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,28 @@ void RecentMasterPagesSelector::Fill (void)
             aCurrentNames.insert (sPageName);
         }
     }
-    mpPageSet->Rearrange ();
+    mpPageSet->Rearrange();
 }
 
 
 
+
+void RecentMasterPagesSelector::AssignMasterPageToPageList (
+    SdPage* pMasterPage,
+    const ::std::vector<SdPage*>& rPageList)
+{
+    USHORT nSelectedItemId = mpPageSet->GetSelectItemId();
+
+    MasterPagesContainerSelector::AssignMasterPageToPageList(pMasterPage, rPageList);
+
+    // Restore the selection.
+    if (mpPageSet->GetItemCount() > 0)
+    {
+        if (mpPageSet->GetItemCount() >= nSelectedItemId)
+            mpPageSet->SelectItem(nSelectedItemId);
+        else
+            mpPageSet->SelectItem(mpPageSet->GetItemCount());
+    }
+}
 
 } } } // end of namespace ::sd::toolpanel::controls
