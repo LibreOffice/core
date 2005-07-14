@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:34:25 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
+
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 
 #include <sfx2/viewfrm.hxx>
 
@@ -329,7 +332,7 @@ void SdUnoDrawView::FireChangeLayerMode (bool bLayerMode) throw()
 
 void SdUnoDrawView::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
 {
-    if( pCurrentPage != mpCurrentPage )
+    if( pCurrentPage != mpCurrentPage ) try
     {
         Reference< drawing::XDrawPage > xNewPage( pCurrentPage->getUnoPage(), UNO_QUERY );
         Any aNewValue( makeAny( xNewPage ) );
@@ -344,6 +347,16 @@ void SdUnoDrawView::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
         FirePropertyChange (PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
 
         mpCurrentPage = pCurrentPage;
+    }
+    catch( uno::Exception& e )
+    {
+        (void)e;
+        DBG_ERROR(
+            (OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
+                     "exception caught: ") +
+             rtl::OUStringToOString(
+                 comphelper::anyToString( cppu::getCaughtException() ),
+                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
 
