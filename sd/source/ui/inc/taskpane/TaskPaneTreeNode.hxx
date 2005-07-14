@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:22:09 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 
 #include "ILayoutableWindow.hxx"
 #include <memory>
+#include <vector>
+
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#include <tools/link.hxx>
 
 namespace sd {
 class ObjectBarManager;
@@ -73,6 +79,15 @@ namespace sd { namespace toolpanel {
 
 class ControlContainer;
 class TaskPaneShellManager;
+
+enum TreeNodeStateChangeEventId {
+    EID_CHILD_ADDED,
+    EID_ALL_CHILDREN_REMOVED,
+    EID_EXPANSION_STATE_CHANGED,
+    EID_FOCUSED_STATE_CHANGED,
+    EID_SHOWING_STATE_CHANGED
+};
+
 
 /** Base class for all members of the object hierarchy that makes up the
     tool panel.  There are usually at least three levels.  At the top level
@@ -181,12 +196,79 @@ public:
     */
     virtual TaskPaneShellManager* GetShellManager (void);
 
+    /** You will rarely need to overload this method.  To supply your own
+        accessible object you should overload CreateAccessible() instead.
+    */
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> GetAccessibleObject (void);
+
+    /** Overload this method in order to supply a class specific accessible
+        object.
+        The default implementation will return a new instance of
+        AccessibleTreeNode.
+        @param rxParent
+            The accessible parent of the accessible object to create.  It is
+            not necessaryly the accessible object of the parent window of
+            GetWindow().
+
+    */
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> CreateAccessibleObject (
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>&rxParent);
+
+    /** Add a listener that will be informated in the future about state
+        changes of the tree node.  This includes adding and removing
+        children as well as focus, visibility, and expansion state.
+        Multiple calls are ignored.  Each listener is added only once.
+    */
+    void AddStateChangeListener (const Link& rListener);
+
+    /** Remove the listener form the list of state change listeners.
+        @param rListener
+            It is OK to specify a listener that is not currently
+            registered.  Only when the listener is registered it is
+            removed.  Otherwise the call is ignored.
+    */
+    void RemoveStateChangeListener (const Link& rListener);
+
+    /** Call the state change listeners and pass a state change event with
+        the specified event id.  The source field is set to this.
+        @param pChild
+            This optional parameter makes sense only with the
+            EID_CHILD_ADDED event.
+    */
+    void FireStateChangeEvent (
+        TreeNodeStateChangeEventId eEventId,
+        TreeNode* pChild = NULL) const;
+
 protected:
     ::std::auto_ptr<ControlContainer> mpControlContainer;
 
 private:
     TreeNode* mpParent;
+    typedef ::std::vector<Link> StateChangeListenerContainer;
+    StateChangeListenerContainer maStateChangeListeners;
+};
 
+
+
+
+/** Objects of this class are sent to listeners to notify them about state
+    changes of a tree node.
+*/
+class TreeNodeStateChangeEvent
+{
+public:
+
+    TreeNodeStateChangeEvent (
+        const TreeNode& rNode,
+        TreeNodeStateChangeEventId eEventId,
+        TreeNode* pChild = NULL);
+
+    const TreeNode& mrSource;
+    TreeNodeStateChangeEventId meEventId;
+    TreeNode* mpChild;
 };
 
 } } // end of namespace ::sd::toolpanel
