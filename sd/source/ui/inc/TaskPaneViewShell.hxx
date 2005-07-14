@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:42:55 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,10 @@ public:
             The id of the panel that is to be made visible.
     */
     void ShowPanel (PanelId nId);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>
+        CreateAccessibleDocumentView (::sd::Window* pWindow);
 
 private:
     class Implementation;
