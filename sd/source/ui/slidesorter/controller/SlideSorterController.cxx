@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:35:10 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
 #endif
-#include "TextLogger.hxx"
+#include "ViewShellHint.hxx"
 
 #include <vcl/window.hxx>
 #include <svx/svdopage.hxx>
@@ -183,8 +183,6 @@ SlideSorterController::SlideSorterController (
     pWindow->SetCenterAllowed (false);
     pWindow->SetViewSize (mrView.GetModelArea().GetSize());
     mrView.HandleModelChange();
-
-    mpScrollBarManager->LateInitialization();
 }
 
 
@@ -192,7 +190,9 @@ SlideSorterController::SlideSorterController (
 
 void SlideSorterController::Init (void)
 {
-    // Create the selection function.
+    mpScrollBarManager->LateInitialization();
+
+          // Create the selection function.
     SfxRequest aRequest (
         SID_OBJECT_SELECT,
         0,
@@ -462,8 +462,30 @@ bool SlideSorterController::Command (
             }
 
             pWindow->ReleaseMouse();
-            GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup (
-                SdResId(nPopupId));
+            if (rEvent.IsMouseEvent())
+                GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nPopupId));
+            else
+            {
+                // The event is not a mouse event.  Use the center of the
+                // focused page as top left position of the context menu.
+                if (pPage != NULL)
+                {
+                    model::PageDescriptor* pDescriptor
+                        = GetFocusManager().GetFocusedPageDescriptor();
+                    if (pDescriptor != NULL)
+                    {
+                        Rectangle aBBox (GetView().GetPageBoundingBox (
+                            *pDescriptor,
+                            view::SlideSorterView::CS_SCREEN,
+                            view::SlideSorterView::BBT_SHAPE));
+                        Point aPosition (aBBox.Center());
+                        GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup(
+                            SdResId(nPopupId),
+                            pWindow,
+                            &aPosition);
+                    }
+                }
+            }
             if (pPage == NULL)
                 GetView().GetOverlay().GetInsertionIndicatorOverlay().Hide();
             bEventHasBeenHandled = true;
@@ -497,6 +519,7 @@ void SlideSorterController::UnlockModelChange (void)
 
 void SlideSorterController::PreModelChange (void)
 {
+    GetViewShell().Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
     mpPageSelector->PrepareModelChange ();
     ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
     if (pWindow != NULL)
@@ -529,6 +552,7 @@ void SlideSorterController::PostModelChange (void)
     mpPageSelector->HandleModelChange ();
 
     mbPostModelChangePending = false;
+    GetViewShell().Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 }
 
 
@@ -605,6 +629,16 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
         else if (pWindow == rShell.GetActiveWindow())
         {
+            switch (pEvent->GetId())
+            {
+                case VCLEVENT_WINDOW_GETFOCUS:
+                    GetFocusManager().ShowFocus();
+                    break;
+
+                case VCLEVENT_WINDOW_LOSEFOCUS:
+                    GetFocusManager().HideFocus();
+                    break;
+            }
         }
         else if (pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED)
         {
@@ -927,25 +961,6 @@ void SlideSorterController::SelectionHasChanged (
     {
         iListener->Call(NULL);
     }
-    /*
-    // fire accessible event
-    uno::Reference<XAccessible> xAccessible(GetWindow()->GetAccessible(FALSE));
-
-    if (xAccessible.is())
-    {
-        AccessibleSlideView* pAccessibleView
-            = AccessibleSlideView::getImplementation (xAccessible);
-
-        if (pAccessibleView != NULL)
-        {
-            const uno::Any aOldAny, aNewAny;
-            pAccessibleView->FireAccessibleEvent (
-                AccessibleEventId::SELECTION_CHANGED,
-                aOldAny,
-                aNewAny);
-        }
-    }
-        */
 }
 
 
