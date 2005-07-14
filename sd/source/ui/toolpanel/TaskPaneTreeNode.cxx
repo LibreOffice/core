@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:02:54 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,19 @@
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 
-#include "ControlContainer.hxx"
-#include "TitledControl.hxx"
+#include "taskpane/ControlContainer.hxx"
+#include "taskpane/TitledControl.hxx"
+
+#include <vector>
+#include <algorithm>
 
 namespace sd { namespace toolpanel {
 
 TreeNode::TreeNode (
     TreeNode* pParent)
     : mpParent (pParent),
-      mpControlContainer (new ControlContainer(this))
+      mpControlContainer (new ControlContainer(this)),
+      maStateChangeListeners()
 {
 }
 
@@ -197,6 +201,8 @@ bool TreeNode::Expand (bool bExpansionState)
         else
             GetWindow()->Hide();
         bExpansionStateChanged = true;
+
+        FireStateChangeEvent (EID_EXPANSION_STATE_CHANGED);
     }
 
     return bExpansionStateChanged;
@@ -227,7 +233,12 @@ bool TreeNode::IsExpandable (void) const
 void TreeNode::Show (bool bExpansionState)
 {
     if (GetWindow() != NULL)
+    {
+        bool bWasShowing (IsShowing());
         GetWindow()->Show (bExpansionState);
+        if (bWasShowing != bExpansionState)
+            FireStateChangeEvent (EID_SHOWING_STATE_CHANGED);
+    }
 }
 
 
@@ -251,6 +262,101 @@ TaskPaneShellManager* TreeNode::GetShellManager (void)
         return mpParent->GetShellManager();
     else
         return NULL;
+}
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> TreeNode::GetAccessibleObject (void)
+{
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> xAccessible;
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+    {
+        xAccessible = pWindow->GetAccessible(FALSE);
+        if ( ! xAccessible.is())
+        {
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::accessibility::XAccessible> xParent;
+            if (pWindow!=NULL && pWindow->GetAccessibleParentWindow()!=NULL)
+                xParent = pWindow->GetAccessibleParentWindow()->GetAccessible();
+            xAccessible = CreateAccessibleObject(xParent);
+            pWindow->SetAccessible(xAccessible);
+        }
+    }
+    return xAccessible;
+}
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> TreeNode::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    if (GetWindow() != NULL)
+        return GetWindow()->CreateAccessible();
+    else
+        return NULL;
+}
+
+
+
+
+void TreeNode::AddStateChangeListener (const Link& rListener)
+{
+    if (::std::find (
+        maStateChangeListeners.begin(),
+        maStateChangeListeners.end(),
+        rListener) == maStateChangeListeners.end())
+    {
+        maStateChangeListeners.push_back(rListener);
+    }
+}
+
+
+
+
+void TreeNode::RemoveStateChangeListener (const Link& rListener)
+{
+    maStateChangeListeners.erase (
+        ::std::find (
+            maStateChangeListeners.begin(),
+            maStateChangeListeners.end(),
+            rListener));
+}
+
+
+
+
+void TreeNode::FireStateChangeEvent (
+    TreeNodeStateChangeEventId eEventId,
+    TreeNode* pChild) const
+{
+    TreeNodeStateChangeEvent aEvent (*this, eEventId, pChild);
+    StateChangeListenerContainer aContainerCopy(maStateChangeListeners);
+    StateChangeListenerContainer::iterator aLink (aContainerCopy.begin());
+    StateChangeListenerContainer::iterator aEnd (aContainerCopy.end());
+    while (aLink!=aEnd)
+    {
+        aLink->Call (&aEvent);
+        ++aLink;
+    }
+}
+
+
+
+TreeNodeStateChangeEvent::TreeNodeStateChangeEvent (
+    const TreeNode& rNode,
+    TreeNodeStateChangeEventId eEventId,
+    TreeNode* pChild)
+    : mrSource(rNode),
+      meEventId(eEventId),
+      mpChild(pChild)
+{
 }
 
 
