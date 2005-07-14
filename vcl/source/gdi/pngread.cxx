@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:57:49 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 12:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ const sal_Bool InitChunkSeq( SvStream& rStm, std::vector< vcl::PNGReader::ChunkD
     sal_uInt16  nIStmOldMode = rStm.GetNumberFormatInt();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
-    sal_uInt32 nDummy[ 2 ];
+    sal_uInt32 nDummy[ 2 ] = {0, 0};
     rStm >> nDummy[0] >> nDummy[1];
     if( ! ( nDummy[0] == 0x89504e47 ) && ( nDummy[1] == 0x0d0a1a0a ) )
         bRet = sal_False;
