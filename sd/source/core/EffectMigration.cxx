@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EffectMigration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2005-03-29 14:54:54 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 // now create effects for each paragraph
                 pGroup =
                     pMainSequence->
-                        createTextGroup( pShapeEffect, 10, pShapeEffect->getDuration(), sal_True, sal_False );
+                        createTextGroup( pShapeEffect, 10, bManual ? -1 : 0.0, sal_True, sal_False );
             }
         }
 
@@ -861,11 +861,11 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
     double fDuration;
     switch( eSpeed )
     {
-    case AnimationSpeed_SLOW: fDuration = 5.0; break;
+    case AnimationSpeed_SLOW: fDuration = 2.0; break;
     case AnimationSpeed_FAST: fDuration = 0.5; break;
     //case AnimationSpeed_MEDIUM:
     default:
-        fDuration = 2.0; break;
+        fDuration = 1.0; break;
     }
     return fDuration;
 }
@@ -909,7 +909,7 @@ AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
 
     EffectSequence::iterator aIter;
 
-    double fDuration = 2.0;
+    double fDuration = 1.0;
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
@@ -933,9 +933,9 @@ AnimationSpeed EffectMigration::ConvertDuration( double fDuration )
 {
     AnimationSpeed eSpeed;
 
-    if( fDuration < 1.5 )
+    if( fDuration < 1.0 )
         eSpeed = AnimationSpeed_FAST;
-    else if( fDuration > 2.5 )
+    else if( fDuration > 1.5 )
         eSpeed = AnimationSpeed_SLOW;
     else
         eSpeed = AnimationSpeed_MEDIUM;
