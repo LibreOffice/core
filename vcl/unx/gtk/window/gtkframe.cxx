@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-07-01 11:46:07 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2386,63 +2386,72 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
-    GTK_YIELD_GRAB();
-
-    bool bWasPreedit = (pThis->m_aInputEvent.mpTextAttr != 0);
-
-    pThis->m_aInputEvent.mnTime             = 0;
-    pThis->m_aInputEvent.mpTextAttr         = 0;
-    pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
-    pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.Len();
-    pThis->m_aInputEvent.mnCursorFlags      = 0;
-    pThis->m_aInputEvent.mnDeltaStart       = 0;
-    pThis->m_aInputEvent.mbOnlyCursor       = False;
-
-    pThis->m_aInputFlags.clear();
-
     vcl::DeletionListener aDel( pThis->m_pFrame );
-
-    /* necessary HACK: all keyboard input comes in here as soon as a IMContext is set
-     *  which is logical and consequent. But since even simple input like
-     *  <space> comes through the commit signal instead of signalKey
-     *  and all kinds of windows only implement KeyInput (e.g. PushButtons,
-     *  RadioButtons and a lot of other Controls), will send a single
-     *  KeyInput/KeyUp sequence instead of an ExtText event if there
-     *  never was a preedit and the text is only one character.
-     *
-     *  In this case there the last ExtText event must have been
-     *  SALEVENT_ENDEXTTEXTINPUT, either because of a regular commit
-     *  or because there never was a preedit.
-     */
-    bool bSingleCommit = false;
-    if( ! bWasPreedit
-        && pThis->m_aInputEvent.maText.Len() == 1
-        && ! pThis->m_aPrevKeyPresses.empty()
-        )
+    // open a block that will end the GTK_YIELD_GRAB before calling preedit changed again
     {
-        const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
-        sal_Unicode aOrigCode = pThis->m_aInputEvent.maText.GetChar(0);
+        GTK_YIELD_GRAB();
 
-        if( checkSingleKeyCommitHack( rKP.keyval, aOrigCode ) )
+        bool bWasPreedit = (pThis->m_aInputEvent.mpTextAttr != 0);
+
+        pThis->m_aInputEvent.mnTime             = 0;
+        pThis->m_aInputEvent.mpTextAttr         = 0;
+        pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
+        pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.Len();
+        pThis->m_aInputEvent.mnCursorFlags      = 0;
+        pThis->m_aInputEvent.mnDeltaStart       = 0;
+        pThis->m_aInputEvent.mbOnlyCursor       = False;
+
+        pThis->m_aInputFlags.clear();
+
+        /* necessary HACK: all keyboard input comes in here as soon as a IMContext is set
+         *  which is logical and consequent. But since even simple input like
+         *  <space> comes through the commit signal instead of signalKey
+         *  and all kinds of windows only implement KeyInput (e.g. PushButtons,
+         *  RadioButtons and a lot of other Controls), will send a single
+         *  KeyInput/KeyUp sequence instead of an ExtText event if there
+         *  never was a preedit and the text is only one character.
+         *
+         *  In this case there the last ExtText event must have been
+         *  SALEVENT_ENDEXTTEXTINPUT, either because of a regular commit
+         *  or because there never was a preedit.
+         */
+        bool bSingleCommit = false;
+        if( ! bWasPreedit
+            && pThis->m_aInputEvent.maText.Len() == 1
+            && ! pThis->m_aPrevKeyPresses.empty()
+            )
         {
-            pThis->m_pFrame->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aOrigCode, true, true );
-            bSingleCommit = true;
+            const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
+            sal_Unicode aOrigCode = pThis->m_aInputEvent.maText.GetChar(0);
+
+            if( checkSingleKeyCommitHack( rKP.keyval, aOrigCode ) )
+            {
+                pThis->m_pFrame->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aOrigCode, true, true );
+                bSingleCommit = true;
+            }
+        }
+
+        if( ! bSingleCommit )
+        {
+            pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
+            if( ! aDel.isDeleted() )
+                pThis->doCallEndExtTextInput();
+        }
+        if( ! aDel.isDeleted() )
+        {
+            // reset input event
+            pThis->m_aInputEvent.maText = String();
+            pThis->m_aInputEvent.mnCursorPos = 0;
+            pThis->updateIMSpotLocation();
         }
     }
-
-    if( ! bSingleCommit )
-    {
-        pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
-        if( ! aDel.isDeleted() )
-            pThis->doCallEndExtTextInput();
-    }
+    #ifdef SOLARIS
+    // #i51356# workaround a solaris IIIMP bug
+    // in case of partial commits the preedit changed signal
+    // and commit signal come in wrong order
     if( ! aDel.isDeleted() )
-    {
-        // reset input event
-        pThis->m_aInputEvent.maText = String();
-        pThis->m_aInputEvent.mnCursorPos = 0;
-        pThis->updateIMSpotLocation();
-    }
+        signalIMPreeditChanged( pContext, im_handler );
+    #endif
 }
 
 void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpointer im_handler )
