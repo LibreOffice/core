@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:58:58 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,19 @@ ViewOverlay& SlideSorterView::GetOverlay (void)
 ::sdr::contact::ObjectContact& SlideSorterView::GetObjectContact (void) const
 {
     return GetPageViewPvNum(0)->GetWindow(0)->GetObjectContact();
+}
+
+
+
+
+SlideSorterView::PageRange SlideSorterView::GetVisiblePageRange (void)
+{
+    const int nMaxPageIndex (mrModel.GetPageCount() - 1);
+    if ( ! mbPageObjectVisibilitiesValid)
+        DeterminePageObjectVisibilities();
+    return PageRange(
+        ::std::min(mnFirstVisiblePageIndex,nMaxPageIndex),
+        ::std::min(mnLastVisiblePageIndex, nMaxPageIndex));
 }
 
 
