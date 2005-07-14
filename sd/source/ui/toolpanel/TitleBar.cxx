@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleBar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:03:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,11 @@
  *
  ************************************************************************/
 
-#include "TitleBar.hxx"
+#include "taskpane/TitleBar.hxx"
 
 #include "ControlContainerDescriptor.hxx"
 #include "tools/IconCache.hxx"
+#include "AccessibleTreeNode.hxx"
 
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
@@ -705,7 +706,7 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
     switch (rEvent.GetType())
     {
         case DATACHANGED_SETTINGS:
-            if ((rEvent.GetFlags() & SETTINGS_STYLE) == NULL)
+            if ((rEvent.GetFlags() & SETTINGS_STYLE) == 0)
                 break;
             // else fall through.
         case DATACHANGED_FONTS:
@@ -733,6 +734,29 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
         }
         break;
     }
+}
+
+
+
+
+String TitleBar::GetTitle (void) const
+{
+    return msTitle;
+}
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible > TitleBar::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    return new ::accessibility::AccessibleTreeNode(
+        *this,
+        GetTitle(),
+        GetTitle(),
+        ::com::sun::star::accessibility::AccessibleRole::LABEL);
 }
 
 
