@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:14:55 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <svx/outliner.hxx>
 #endif
 
+#ifndef _SD_CUSTOMANIMATIONCLONER_HXX
+#include "CustomAnimationCloner.hxx"
+#endif
+
 #ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
 #endif
@@ -139,6 +143,13 @@ Reference< XAnimationNode > SdPage::getAnimationNode() throw (RuntimeException)
     }
 
     return mxAnimationNode;
+}
+
+void SdPage::setAnimationNode( Reference< XAnimationNode >& xNode ) throw (RuntimeException)
+{
+    mxAnimationNode = xNode;
+    if( mpMainSequence.get() )
+        mpMainSequence->reset( xNode );
 }
 
 /** removes all custom animations for the given shape */
@@ -226,3 +237,14 @@ void SdPage::onEndTextEdit( SdrObject* pObj )
     }
 }
 
+void SdPage::cloneAnimations( SdPage& rTargetPage ) const
+{
+    if( mxAnimationNode.is() )
+    {
+        Reference< XAnimationNode > xClonedNode(
+            ::sd::Clone( mxAnimationNode, this, &rTargetPage ) );
+
+        if( xClonedNode.is() )
+            rTargetPage.setAnimationNode( xClonedNode );
+    }
+}
