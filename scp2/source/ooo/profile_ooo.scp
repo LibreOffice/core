@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profile_ooo.scp,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-07 11:10:08 $
+*  last change: $Author: kz $ $Date: 2005-07-14 14:02:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -124,6 +124,6 @@ Profile gid_Profile_Jvmfwk_Ini
     Name = "jvmfwk3.ini";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (NETWORK);
+    Styles = (NETWORK, PATCH);
 End
 
