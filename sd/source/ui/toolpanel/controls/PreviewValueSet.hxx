@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewValueSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:46:53 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ class TreeNode;
 namespace sd { namespace toolpanel { namespace controls {
 
 
+/** Adapt the svtools valueset to the needs of the master page controlls.
+*/
 class PreviewValueSet
     : public ValueSet
 {
@@ -83,6 +85,14 @@ public:
     virtual void Paint (const Rectangle& rRect);
     virtual void Resize (void);
 
+    /** When a request for the display of a context menu is made to this
+        method then that request is forwarded via the ContextMenuCallback.
+        This way the owning class can handle the context menu without having
+        to be derived from this class.
+        Use SetContextMenuCallback to set or rest the handler.
+    */
+    virtual void Command (const CommandEvent& rEvent);
+
     void SetPreviewWidth (int nWidth);
 
     sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
@@ -93,11 +103,18 @@ public:
     */
     void Rearrange (void);
 
+    /** Set the callback function to which requests for context menus are
+        forewarded.  Call with an empty Link to reset the callback
+        function.
+    */
+    void SetContextMenuCallback (const Link& rLink);
+
 protected:
     virtual void MouseButtonDown (const MouseEvent& rEvent);
 
 private:
     Link maRightMouseClickHandler;
+    Link maContextMenuCallback;
     TreeNode* mpParent;
     int mnPreviewWidth;
     const int mnBorderWidth;
