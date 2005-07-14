@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-11 09:32:45 $
+#   last change: $Author: kz $ $Date: 2005-07-14 14:59:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,10 @@ PATCH_FILE_NAME=db-4.2.52.patch
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=..$/dist$/configure
+CONFIGURE_ACTION= \
+    setenv CFLAGS "$(ARCH_FLAGS)" && \
+    setenv CXXFLAGS "$(ARCH_FLAGS)" && \
+    ..$/dist$/configure
 CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared
 .IF "$(SOLAR_JAVA)"!=""
 CONFIGURE_FLAGS+=--enable-java
