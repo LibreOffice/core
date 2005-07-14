@@ -105,6 +105,10 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
+#ifndef _JVMACCESS_UNOVIRTUALMACHINE_HXX_
+#include "jvmaccess/unovirtualmachine.hxx"
+#endif
+
 #ifndef _JVMACCESS_VIRTUALMACHINE_HXX_
 #include "jvmaccess/virtualmachine.hxx"
 #endif
@@ -123,7 +127,7 @@ long VCLEventListenerLinkFunc(void * pInst, void * pData);
 
 Link g_aEventListenerLink(NULL, VCLEventListenerLinkFunc);
 
-rtl::Reference< jvmaccess::VirtualMachine > g_xVirtualMachine;
+rtl::Reference< jvmaccess::UnoVirtualMachine > g_xUnoVirtualMachine;
 typelib_InterfaceTypeDescription * g_pTypeDescription = NULL;
 Mapping g_unoMapping;
 
@@ -161,12 +165,14 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv
     }
 
     // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
-    // process ID has an extra 17th byte of value zero, the returned any
-    // contains a pointer to a jvmaccess::VirtualMachine, instead of the
-    // underlying JavaVM pointer:
+    // process ID has an extra 17th byte of value one, the returned any
+    // contains a pointer to a jvmaccess::UnoVirtualMachine, instead of
+    // the underlying JavaVM pointer:
     jbyte processID[17];
     rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *> (processID));
-    processID[16] = 0;
+    // #i51265# we need a jvmaccess::UnoVirtualMachine pointer for the
+    // uno_getEnvironment() call later.
+    processID[16] = 1;
 
     // Copy the result into a java byte[] and return.
     jbyteArray jbaProcessID = pJNIEnv->NewByteArray(17);
@@ -186,12 +192,12 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
         // as long as our reference to the XJavaVM service lasts), and
         // convert the non-refcounted pointer into a refcounted one
         // immediately:
-        g_xVirtualMachine = reinterpret_cast< jvmaccess::VirtualMachine * >(pointer);
+        g_xUnoVirtualMachine = reinterpret_cast< jvmaccess::UnoVirtualMachine * >(pointer);
 
-        if ( g_xVirtualMachine.is() )
+        if ( g_xUnoVirtualMachine.is() )
         {
             OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
-            uno_getEnvironment(&pJava_environment, sJava.pData, g_xVirtualMachine.get());
+            uno_getEnvironment(&pJava_environment, sJava.pData, g_xUnoVirtualMachine.get());
 
             OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
@@ -251,7 +257,7 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *reserved)
     }
 
     g_unoMapping.clear();
-    g_xVirtualMachine.clear();
+    g_xUnoVirtualMachine.clear();
 }
 
 HWND GetHWND(Window * pWindow)
@@ -324,7 +330,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
 
             if ( NULL != joXAccessible )
             {
-                jvmaccess::VirtualMachine::AttachGuard aGuard(g_xVirtualMachine);
+                jvmaccess::VirtualMachine::AttachGuard aGuard(g_xUnoVirtualMachine->getVirtualMachine());
                 JNIEnv * pJNIEnv = aGuard.getEnvironment();
 
                 if ( NULL != pJNIEnv )
