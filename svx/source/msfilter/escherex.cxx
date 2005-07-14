@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:30:11 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SVDOASHP_HXX
 #include <svdoashp.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svdoole2.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
 #include <svdmodel.hxx>
@@ -1233,6 +1236,43 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
     }
 }
 
+sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+{
+    sal_Bool    bRetValue = sal_False;
+
+    if ( rXShape.is() )
+    {
+        SdrObject* pSdrOLE2( GetSdrObjectFromXShape( rXShape ) );   // SJ: leaving unoapi, because currently there is
+        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )              // no access to the native graphic object
+        {
+            Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
+            if ( pGraphic )
+            {
+                GraphicObject aGraphicObject( *pGraphic );
+                ByteString aUniqueId( aGraphicObject.GetUniqueID() );
+                if ( aUniqueId.Len() )
+                {
+                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+
+                    if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+                    {
+                        Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+                        sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL );
+                        if ( nBlibId )
+                        {
+                            AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                            uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
+                            ImplCreateGraphicAttributes( aXPropSet, nBlibId, sal_False );
+                            bRetValue = sal_True;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return bRetValue;
+}
 
 
 sal_Bool EscherPropertyContainer::CreateGraphicProperties(
@@ -3732,7 +3772,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
             {
                 sal_uInt32 nErrCode;
                 if ( !aGraphic.IsAnimated() )
-                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
+// !EMF             nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
+                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
                     GraphicFilter*  pFilter = GetGrfFilter();
@@ -3761,7 +3802,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {
-                    p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF;
+// !EMF             p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF;
+                    p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : EMF;
                     aStream.Seek( STREAM_SEEK_TO_END );
                     p_EscherBlibEntry->mnSize = aStream.Tell();
                     pGraphicAry = (sal_uInt8*)aStream.GetData();
@@ -3790,6 +3832,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     rPicOutStrm << (sal_uInt16)0x0606;
                 else if ( eBlibType == WMF )
                     rPicOutStrm << (sal_uInt16)0x0403;
+                else if ( eBlibType == EMF )
+                    rPicOutStrm << (sal_uInt16)0x0402;
                 else if ( eBlibType == PEG )
                     rPicOutStrm << (sal_uInt16)0x0505;
             }
@@ -3815,11 +3859,11 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                 pGraphicAry = (sal_uInt8*)aDestStrm.GetData();
                 if ( p_EscherBlibEntry->mnSize && pGraphicAry )
                 {
-                    nExtra = ( eBlibType == WMF ) ? 0x42 : 0x32;
+                    nExtra = eBlibType == WMF ? 0x42 : 0x32;                                    // !EMF -> no change
                     p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
-                    nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d40;
+                    nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d40;                 // !EMF -> no change
                     rPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra );
-                    if ( eBlibType == WMF )
+                    if ( eBlibType == WMF )                                                     // !EMF -> no change
                         rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                     rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
 
