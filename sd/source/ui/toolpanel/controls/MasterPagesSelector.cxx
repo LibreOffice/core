@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:34:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include "ViewShellBase.hxx"
 #include "PaneManager.hxx"
 #include "../TaskPaneShellManager.hxx"
-#include "../TitledControl.hxx"
-#include "../ControlContainer.hxx"
+#include "taskpane/TitledControl.hxx"
+#include "taskpane/ControlContainer.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 
@@ -169,7 +169,10 @@ MasterPagesSelector::MasterPagesSelector (
     mpPageSet->SetSelectHdl (LINK(this, MasterPagesSelector, ClickHandler));
     mpPageSet->SetRightMouseClickHandler (
         LINK(this, MasterPagesSelector, RightClickHandler));
+    mpPageSet->SetContextMenuCallback (
+        LINK(this, MasterPagesSelector, ContextMenuCallback));
     mpPageSet->SetPreviewWidth (mnPreviewWidth);
+    mpPageSet->SetStyle(mpPageSet->GetStyle() | WB_NO_DIRECTSELECT);
 
     SetPool (&rDocument.GetPool());
 
@@ -247,20 +250,50 @@ IMPL_LINK(MasterPagesSelector, ClickHandler, PreviewValueSet*, pValueSet)
 
 IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
 {
+    // Here we only prepare the display of the context menu: the item under
+    // the mouse is selected.  The actual display of the context menu is
+    // done in ContextMenuCallback which is called indirectly through
+    // PreviewValueSet::Command().
     mpPageSet->GrabFocus ();
     mpPageSet->ReleaseMouse();
-    if (GetShellManager() != NULL)
-        GetShellManager()->MoveToTop (this);
-    if (GetDispatcher() != NULL)
+    if (GetDispatcher() != NULL &&  pEvent != NULL)
     {
         USHORT nIndex = mpPageSet->GetItemId (pEvent->GetPosPixel());
         if (nIndex > 0)
-        {
             mpPageSet->SelectItem (nIndex);
-            GetDispatcher()->ExecutePopup(
-                SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP));
-        }
     }
+    return 0;
+}
+
+
+
+
+IMPL_LINK(MasterPagesSelector, ContextMenuCallback, CommandEvent*, pEvent)
+{
+    // Use the currently selected item and show the popup menu in its
+    // center.
+    if (GetShellManager() != NULL)
+        GetShellManager()->MoveToTop (this);
+    const USHORT nIndex = mpPageSet->GetSelectItemId();
+    if (nIndex > 0 && pEvent!=NULL)
+    {
+        // The position of the upper left corner of the context menu is
+        // taken either from the mouse position (when the command was sent
+        // as reaction to a right click) or in the center of the selected
+        // item (when the command was sent as reaction to Shift+F10.)
+        Point aPosition (pEvent->GetMousePosPixel());
+        if ( ! pEvent->IsMouseEvent())
+        {
+            Rectangle aBBox (mpPageSet->GetItemRect(nIndex));
+            aPosition = aBBox.Center();
+        }
+
+        mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
+            SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP),
+            mpPageSet.get(),
+            &aPosition);
+    }
+
     return 0;
 }
 
