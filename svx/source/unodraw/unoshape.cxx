@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:55:34 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,11 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
     {
         DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
 
+        if( pObj && pObj->GetModel() )
+        {
+            EndListening( *pObj->GetModel() );
+        }
+
         pObj = pNewObj;
 
         Init();
@@ -574,6 +579,24 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 }
 
 //----------------------------------------------------------------------
+
+void SvxShape::ChangeModel( SdrModel* pNewModel )
+{
+    if( pObj && pObj->GetModel() )
+    {
+        if( pObj->GetModel() != pNewModel )
+        {
+            EndListening( *pObj->GetModel() );
+        }
+        if( pNewModel )
+            StartListening( *pNewModel );
+    }
+
+    pModel = pNewModel;
+}
+
+//----------------------------------------------------------------------
+
 void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
 {
     if(pObj && pModel)
