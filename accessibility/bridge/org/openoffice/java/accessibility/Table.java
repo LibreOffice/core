@@ -203,6 +203,30 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         }
 
         /*
+        * AccessibleComponent
+        */
+
+        /** Returns the Accessible child, if one exists, contained at the local coordinate Point */
+        public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
+            javax.accessibility.Accessible child = null;
+            try {
+                XAccessible xAccessible = unoAccessibleComponent.getAccessibleAtPoint(
+                    new com.sun.star.awt.Point(p.x, p.y));
+                if (xAccessible != null) {
+                    // Re-use the active descandant wrapper if possible
+                    javax.accessibility.Accessible activeDescendant = Table.this.activeDescendant;
+                    if ((activeDescendant instanceof TableCell) && xAccessible.equals(((TableCell) activeDescendant).unoAccessible)) {
+                        child = activeDescendant;
+                    } else {
+                        child = new TableCell(xAccessible);
+                    }
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
+            return child;
+        }
+
+        /*
         * AccessibleSelection
         */
 
