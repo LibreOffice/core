@@ -1,12 +1,25 @@
 all_fragments+=draw
 
-# -----------------------------------------------
-# count = 9
-T4_DRAW = \
+.IF "$(WITH_BINFILTER)" != "NO"
+T4_DRAW_BINFILTER = \
     draw_StarDraw_30 \
     draw_StarDraw_30_Vorlage \
     draw_StarDraw_50 \
-    draw_StarDraw_50_Vorlage \
+    draw_StarDraw_50_Vorlage
+F4_DRAW_BINFILTER = \
+    StarDraw_3_0 \
+    StarDraw_3_0_Vorlage \
+    StarDraw_5_0 \
+    StarDraw_5_0_Vorlage
+.ELSE
+T4_DRAW_BINFILTER =
+F4_DRAW_BINFILTER =
+.ENDIF
+
+# -----------------------------------------------
+# count = 9
+T4_DRAW = \
+    $(T4_DRAW_BINFILTER) \
     draw_StarOffice_XML_Draw \
     draw_StarOffice_XML_Draw_Template \
     pdf_Portable_Document_Format\
@@ -16,10 +29,7 @@ T4_DRAW = \
 # -----------------------------------------------
 # count = 9
 F4_DRAW = \
-    StarDraw_3_0 \
-    StarDraw_3_0_Vorlage \
-    StarDraw_5_0 \
-    StarDraw_5_0_Vorlage \
+    $(F4_DRAW_BINFILTER) \
     StarOffice_XML__Draw_ \
     draw_StarOffice_XML_Draw_Template \
     draw_pdf_Export \
