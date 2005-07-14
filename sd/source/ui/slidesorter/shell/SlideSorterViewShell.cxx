@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:37:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsFocusManager.hxx"
 
+#include "AccessibleSlideSorterView.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellImplementation.hxx"
 #include "drawdoc.hxx"
@@ -159,7 +160,7 @@ SlideSorterViewShell::SlideSorterViewShell (
     // We do our own scrolling while dragging a page selection.
     pWindow->SetUseDropScroll (false);
     // Change the winbits so that the active window accepts the focus.
-    pWindow->SetStyle ((pWindow->GetStyle() && ~WB_DIALOGCONTROL) || WB_TABSTOP);
+    pWindow->SetStyle ((pWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
     pWindow->Show();
 
 
@@ -185,6 +186,17 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
 {
     ReleaseListeners();
 
+    ::sd::Window* pWindow = GetActiveWindow();
+    if (pWindow!=NULL)
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XComponent> xComponent (
+                pWindow->GetAccessible(false),
+                ::com::sun::star::uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
     // Reset the auto pointers explicitly to control the order of destruction.
     mpSlideSorterController.reset();
     mpSlideSorterView.reset();
@@ -205,6 +217,17 @@ void SlideSorterViewShell::Init (void)
 
     ViewShell::Init ();
     SetupListeners ();
+
+    // For accessibility we have to shortly hide the content window.  This
+    // triggers the construction of a new accessibility object for the new
+    // view shell.  (One is created earlier while the construtor of the base
+    // class is executed.  At that time the correct accessibility object can
+    // not be constructed.)
+    if (mpContentWindow.get() !=NULL)
+    {
+        mpContentWindow->Hide();
+        mpContentWindow->Show();
+    }
 }
 
 
@@ -253,6 +276,24 @@ DrawController* SlideSorterViewShell::GetController (void)
             ::com::sun::star::uno::XWeak> (pController);
     }
     return mpController.get();
+}
+
+
+
+
+/** If there is a valid controller then create a new instance of
+    <type>AccessibleSlideSorterView</type>.  Otherwise delegate this call
+    to the base class to return a default object (probably an empty
+    reference).
+*/
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible>
+    SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
+{
+    return new ::accessibility::AccessibleSlideSorterView (
+        *mpSlideSorterController.get(),
+        pWindow->GetAccessibleParentWindow()->GetAccessible(),
+        pWindow);
 }
 
 
