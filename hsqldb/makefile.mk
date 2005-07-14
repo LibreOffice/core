@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-27 08:26:45 $
+#   last change: $Author: kz $ $Date: 2005-07-14 11:42:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TARGET=so_hsqldb
 
 .INCLUDE :	settings.mk
 .INCLUDE :  version.mk
+.INCLUDE :	minor.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
@@ -101,9 +102,9 @@ ANT_BUILDFILE=build$/build.xml
 .IF "$(JDK)"=="gcj"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -f $(ANT_BUILDFILE) jar				
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
