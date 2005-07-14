@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:34:33 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -20,7 +20,7 @@
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
+ *  modify it under the terms of the GNU Lesser Generals l Public
  *  License version 2.1, as published by the Free Software Foundation.
  *
  *  This library is distributed in the hope that it will be useful,
@@ -498,6 +498,9 @@ SdPage::SdPage(const SdPage& rSrcPage) :
     nPaperBin           = rSrcPage.nPaperBin;
     eOrientation        = rSrcPage.eOrientation;
 
+    // header footer
+    setHeaderFooterSettings( rSrcPage.getHeaderFooterSettings() );
+
     pPageLink           = NULL;    // Wird beim Einfuegen ueber ConnectLink() gesetzt
 }
 
@@ -511,7 +514,11 @@ SdPage::SdPage(const SdPage& rSrcPage) :
 
 SdrPage* SdPage::Clone() const
 {
-    return new SdPage(*this);
+    SdPage* pPage = new SdPage(*this);
+
+    cloneAnimations( *pPage );
+
+    return pPage;
 }
 
 /*************************************************************************
