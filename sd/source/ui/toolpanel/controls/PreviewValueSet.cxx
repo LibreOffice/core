@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewValueSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:02:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,27 @@ void PreviewValueSet::Resize (void)
 
 
 
+
+void PreviewValueSet::Command (const CommandEvent& rEvent)
+{
+    switch (rEvent.GetCommand())
+    {
+        case COMMAND_CONTEXTMENU:
+        {
+            CommandEvent aNonConstEventCopy (rEvent);
+            maContextMenuCallback.Call(&aNonConstEventCopy);
+        }
+        break;
+
+        default:
+            ValueSet::Command(rEvent);
+            break;
+    }
+}
+
+
+
+
 void PreviewValueSet::Rearrange (void)
 {
     USHORT nOldColumnCount (GetColCount());
@@ -162,6 +183,14 @@ void PreviewValueSet::Rearrange (void)
     if (nOldColumnCount != nNewColumnCount
         || nOldRowCount != nNewRowCount)
         mpParent->RequestResize();
+}
+
+
+
+
+void PreviewValueSet::SetContextMenuCallback (const Link& rLink)
+{
+    maContextMenuCallback = rLink;
 }
 
 
