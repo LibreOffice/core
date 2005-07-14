@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneFocusManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:36:21 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,39 @@
 #ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
 #endif
+#include <hash_map>
+
+namespace {
+
+class WindowHash
+{
+public:
+    size_t operator()(::Window* argument) const
+    { return reinterpret_cast<unsigned long>(argument); }
+};
+
+class EventDescriptor
+{
+public:
+    EventDescriptor (const KeyCode& rKey, ::Window* pWindow)
+        : maKeyCode(rKey), mpTargetWindow(pWindow) {}
+    KeyCode maKeyCode;
+    ::Window* mpTargetWindow;
+};
+
+} // end of anonymous namespace
+
+
 
 
 namespace sd { namespace toolpanel {
+
+
+
+class FocusManager::LinkMap : public ::std::hash_multimap< ::Window*, EventDescriptor, WindowHash>
+{
+};
+
 
 
 FocusManager* FocusManager::spInstance = NULL;
@@ -94,6 +124,7 @@ FocusManager& FocusManager::Instance (void)
 
 
 FocusManager::FocusManager (void)
+    : mpLinks(new LinkMap())
 {
 }
 
@@ -107,19 +138,9 @@ FocusManager::~FocusManager (void)
 
 
 
-void FocusManager::RegisterLink (::Window* pParent, ::Window* pChild)
-{
-    RegisterUpLink (pChild, pParent);
-    RegisterDownLink (pParent, pChild);
-}
-
-
-
-
 void FocusManager::RegisterUpLink (::Window* pSource, ::Window* pTarget)
 {
-    maUpLinks[pSource] = pTarget;
-    pSource->AddEventListener (LINK (this, FocusManager, WindowEventListener));
+    RegisterLink(pSource, pTarget, KEY_ESCAPE);
 }
 
 
@@ -127,45 +148,123 @@ void FocusManager::RegisterUpLink (::Window* pSource, ::Window* pTarget)
 
 void FocusManager::RegisterDownLink (::Window* pSource, ::Window* pTarget)
 {
-    maDownLinks[pSource] = pTarget;
-    pSource->AddEventListener (LINK (this, FocusManager, WindowEventListener));
+    RegisterLink(pSource, pTarget, KEY_RETURN);
 }
 
 
 
 
-bool FocusManager::TransferFocusUp (::Window* pWindow)
+void FocusManager::RegisterLink (
+    ::Window* pSource,
+    ::Window* pTarget,
+    const KeyCode& rKey)
+{
+    // Register this focus manager as event listener at the source window.
+    if (mpLinks->equal_range(pSource).first == mpLinks->end())
+        pSource->AddEventListener (LINK (this, FocusManager, WindowEventListener));
+    mpLinks->insert(LinkMap::value_type(pSource, EventDescriptor(rKey,pTarget)));
+}
+
+
+
+
+void FocusManager::RemoveLinks (
+    ::Window* pSourceWindow,
+    ::Window* pTargetWindow)
+{
+    ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates;
+    LinkMap::iterator iCandidate;
+    bool bLoop (mpLinks->size() > 0);
+    while (bLoop)
+    {
+        aCandidates = mpLinks->equal_range(pSourceWindow);
+        if (aCandidates.first == mpLinks->end())
+        {
+            // No links for the source window found -> nothing more to do.
+            bLoop = false;
+        }
+        else
+        {
+            // Set the loop control to false so that when no candidate for
+            // deletion is found the loop is left.
+            bLoop = false;
+            for (iCandidate=aCandidates.first; iCandidate!=aCandidates.second; ++iCandidate)
+                if (iCandidate->second.mpTargetWindow == pTargetWindow)
+                {
+                    mpLinks->erase(iCandidate);
+                    // One link erased.  The iterators have become invalid so
+                    // start the search for links to delete anew.
+                    bLoop = true;
+                    break;
+                }
+        }
+    }
+
+    RemoveUnusedEventListener(pSourceWindow);
+}
+
+
+
+
+void FocusManager::RemoveLinks (::Window* pWindow)
+{
+    // Remove the links from the given window.
+    ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates(mpLinks->equal_range(pWindow));
+    mpLinks->erase(aCandidates.first, aCandidates.second);
+    pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
+
+    // Remove links to the given window.
+    bool bLinkRemoved (false);
+    do
+    {
+        LinkMap::iterator iLink;
+        for (iLink=mpLinks->begin(); iLink!=mpLinks->end(); ++iLink)
+        {
+            if (iLink->second.mpTargetWindow == pWindow)
+            {
+                mpLinks->erase(iLink);
+                RemoveUnusedEventListener(iLink->first);
+                bLinkRemoved;
+                break;
+            }
+        }
+    }
+    while (bLinkRemoved);
+}
+
+
+
+
+void FocusManager::RemoveUnusedEventListener (::Window* pWindow)
+{
+    // When there are no more links from the window to another window
+    // then remove the event listener from the window.
+    if (mpLinks->find(pWindow) == mpLinks->end())
+        pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
+}
+
+
+
+
+bool FocusManager::TransferFocus (
+    ::Window* pSourceWindow,
+    const KeyCode& rKeyCode)
 {
     bool bSuccess (false);
 
-    HashMap::iterator aTarget = maUpLinks.find (pWindow);
-    if (aTarget != maUpLinks.end())
-    {
-        aTarget->second->GrabFocus();
-        bSuccess = true;
-    }
+    ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates (
+        mpLinks->equal_range(pSourceWindow));
+    LinkMap::const_iterator iCandidate;
+    for (iCandidate=aCandidates.first; iCandidate!=aCandidates.second; ++iCandidate)
+        if (iCandidate->second.maKeyCode == rKeyCode)
+        {
+            iCandidate->second.mpTargetWindow->GrabFocus();
+            bSuccess = true;
+            break;
+        }
 
     return bSuccess;
 }
-
-
-
-
-bool FocusManager::TransferFocusDown (::Window* pWindow)
-{
-    bool bSuccess (false);
-
-    HashMap::iterator aTarget = maDownLinks.find (pWindow);
-    if (aTarget != maDownLinks.end())
-    {
-        aTarget->second->GrabFocus();
-        bSuccess = true;
-    }
-
-    return bSuccess;
-}
-
-
 
 
 
@@ -177,19 +276,20 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
         VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
         switch (pWindowEvent->GetId())
         {
-            //            case VCLEVENT_WINDOW_KEYUP:
             case VCLEVENT_WINDOW_KEYINPUT:
+            {
                 Window* pSource = pWindowEvent->GetWindow();
-                KeyEvent* pKeyEvent =
-                    static_cast<KeyEvent*>(pWindowEvent->GetData());
-                if (pKeyEvent->GetKeyCode() == KEY_RETURN)
-                    TransferFocusDown (pSource);
-                else if (pKeyEvent->GetKeyCode() == KEY_ESCAPE)
-                    TransferFocusUp (pSource);
+                KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+                TransferFocus(pSource, pKeyEvent->GetKeyCode());
+            }
+            break;
+
+            case VCLEVENT_OBJECT_DYING:
+                RemoveLinks(pWindowEvent->GetWindow());
                 break;
         }
     }
-    return 0;
+    return 1;
 }
 
 
