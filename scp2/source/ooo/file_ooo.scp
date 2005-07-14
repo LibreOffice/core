@@ -2442,7 +2442,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
+    Styles = (PACKED, STARREGISTRY, PATCH);
 End
 
 #ifdef UNX
