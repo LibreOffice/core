@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlContainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:02:26 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,11 @@
  *
  *
  ************************************************************************/
-#include "ControlContainer.hxx"
 
-#include "TitledControl.hxx"
-#ifdef DEBUG
-#include "../inc/TextLogger.hxx"
-#endif
+#include "taskpane/ControlContainer.hxx"
+
+#include "taskpane/TaskPaneTreeNode.hxx"
+
 #include <vcl/window.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -84,6 +83,8 @@ ControlContainer::ControlContainer (TreeNode* pNode)
 
 ControlContainer::~ControlContainer (void)
 {
+    // Set mpNode to NULL so that no one calls it from now on.
+    mpNode = NULL;
     DeleteChildren();
 }
 
@@ -97,8 +98,10 @@ void ControlContainer::DeleteChildren (void)
     for (I=maControlList.begin(); I!=Iend; ++I)
         delete *I;
     maControlList.clear();
-}
 
+    if (mpNode != NULL)
+        mpNode->FireStateChangeEvent(EID_ALL_CHILDREN_REMOVED);
+}
 
 
 
@@ -112,6 +115,9 @@ sal_uInt32 ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
     pControl.release();
 
     ListHasChanged ();
+
+    if (mpNode != NULL)
+        mpNode->FireStateChangeEvent(EID_CHILD_ADDED, pControl.get());
 
     return nIndex;
 }
