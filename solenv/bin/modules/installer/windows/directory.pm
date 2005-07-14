@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:49:25 $
+#   last change: $Author: kz $ $Date: 2005-07-14 11:28:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ sub create_unique_directorynames
 
         $onedir->{'uniquename'} = $uniquename;
         $onedir->{'uniqueparentname'} = $uniqueparentname;
+
     }
 }
 
@@ -134,6 +135,18 @@ sub create_defaultdir_directorynames
         }
 
         $onedir->{'defaultdir'} = $defaultdir;
+
+        my $fontdir = "";
+        if ( $onedir->{'Dir'} ) { $fontdir = $onedir->{'Dir'}; }
+
+        my $fontdefaultdir = "";
+        if ( $onedir->{'defaultdir'} ) { $fontdefaultdir = $onedir->{'defaultdir'}; }
+
+        if (( $fontdir eq "PREDEFINED_OSSYSTEMFONTDIR" ) && ( $fontdefaultdir eq $installer::globals::fontsdirhostname ))
+        {
+            $installer::globals::fontsdirname = $onedir->{'defaultdir'};
+            $installer::globals::fontsdirparent = $onedir->{'uniqueparentname'};
+        }
     }
 }
 
@@ -219,7 +232,7 @@ sub add_root_directories
         $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$installer::globals::templatefoldername\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
+        $oneline = "$installer::globals::fontsfolder\t$installer::globals::fontsdirparent\t$installer::globals::fontsfoldername\:$installer::globals::fontsdirname\n";
         push(@{$directorytableref}, $oneline);
     }
 
