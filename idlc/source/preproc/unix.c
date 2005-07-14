@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unix.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:48:50 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 15:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void
 /* memmove is defined here because some vendors don't provide it at
    all and others do a terrible job (like calling malloc) */
 
-#if !defined(__IBMC__) && !defined(WNT)
+#if !defined(__IBMC__) && !defined(WNT) && !defined(__GLIBC__)
 
 void *
     memmove(void *dp, const void *sp, size_t n)
