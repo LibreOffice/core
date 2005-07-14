@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.128 $
+*  $Revision: 1.129 $
 *
-*  last change: $Author: kz $ $Date: 2005-07-12 14:55:02 $
+*  last change: $Author: kz $ $Date: 2005-07-14 10:37:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -74,7 +74,7 @@ End
 #ifdef WNT
 File gid_File_Lib_Accessbridge
     BIN_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
     Name = "java_uno_accessbridge.dll";
 End
