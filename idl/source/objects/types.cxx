@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 15:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,6 @@ void SvMetaAttribute::Load( SvPersistStream & rStm )
 
     BYTE nMask;
     rStm >> nMask;
-    if( nMask >= 0x100 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
-        return;
-    }
     if( nMask & 0x01 )
     {
         SvMetaType * pType;
