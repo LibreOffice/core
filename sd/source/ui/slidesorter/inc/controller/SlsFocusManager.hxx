@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFocusManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:34:40 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #define SD_SLIDESORTER_FOCUS_MANAGER_HXX
 
 #include <sal/types.h>
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+#include <vector>
 
 namespace sd { namespace slidesorter { namespace model {
 class PageDescriptor;
@@ -180,6 +184,22 @@ public:
     */
     bool IsFocusShowing (void) const;
 
+    /** Add a listener that is called when the focus is shown or hidden or
+        set to another page object.
+        @param rListener
+            When this method is called multiple times for the same listener
+            the second and all following calls are ignored.  Each listener
+            is added only once.
+    */
+    void AddFocusChangeListener (const Link& rListener);
+
+    /** Remove a focus change listener.
+        @param rListener
+            It is save to pass a listener that was not added are has been
+            removed previously.  Such calls are ignored.
+    */
+    void RemoveFocusChangeListener (const Link& rListener);
+
     /** Create an instance of this class to temporarily hide the focus
         indicator.  It is restored to its former visibility state when the
         FocusHider is destroyed.
@@ -208,6 +228,8 @@ private:
     */
     bool mbPageIsFocused;
 
+    ::std::vector<Link> maFocusChangeListeners;
+
     /** Reset the focus state of the given descriptor and request a repaint
         so that the focus indicator is hidden.
         @param pDescriptor
@@ -222,6 +244,12 @@ private:
             When NULL is given then the call is ignored.
     */
     void ShowFocusIndicator (model::PageDescriptor* pDescriptor);
+
+    /** Call all currently registered listeners that a focus change has
+        happended.  The focus may be hidden or shown or moved from one page
+        object to another.
+    */
+    void NotifyFocusChangeListeners (void) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
