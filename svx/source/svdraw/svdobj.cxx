@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 16:55:14 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,18 @@ void SdrObject::SetModel(SdrModel* pNewModel)
         }
     }
 
+    // update listeners at possible api wrapper object
+    if( pModel != pNewModel )
+    {
+        uno::Reference< uno::XInterface > xShape( mxUnoShape );
+        if( xShape.is() )
+        {
+            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            if( pShape )
+                pShape->ChangeModel( pNewModel );
+        }
+    }
+
     pModel = pNewModel;
 }
 
@@ -633,8 +645,7 @@ void SdrObject::SetPage(SdrPage* pNewPage)
         SdrModel* pMod=pPage->GetModel();
         if (pMod!=pModel && pMod!=NULL) {
             SetModel(pMod);
-        }
-    }
+        }}
 }
 
 // init global static itempool
