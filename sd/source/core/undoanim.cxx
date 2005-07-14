@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoanim.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:30:37 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODE_HPP_
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #endif
+#ifndef _SD_CUSTOMANIMATIONCLONER_HXX
+#include "CustomAnimationCloner.hxx"
+#endif
 
 #include "undoanim.hxx"
 #include "glob.hrc"
@@ -88,21 +91,19 @@ struct UndoAnimationImpl
     SdPage*         mpPage;
     Reference< XAnimationNode > mxOldNode;
     Reference< XAnimationNode > mxNewNode;
+    bool            mbNewNodeSet;
 };
 
 UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
 : SdrUndoAction( *pDoc ), mpImpl( new UndoAnimationImpl )
 {
     mpImpl->mpPage = pThePage;
+    mpImpl->mbNewNodeSet = false;
 
     try
     {
-        if( pThePage->getAnimationNode().is() )
-        {
-            Reference< XCloneable > xCloneAble( pThePage->getAnimationNode(), UNO_QUERY_THROW );
-            Reference< XAnimationNode > xClone( xCloneAble->createClone(), UNO_QUERY_THROW );
-            mpImpl->mxOldNode = xClone;
-        }
+        if( pThePage->mxAnimationNode.is() )
+            mpImpl->mxOldNode = sd::Clone( pThePage->getAnimationNode() );
     }
     catch( Exception& e )
     {
@@ -120,18 +121,18 @@ void UndoAnimation::Undo()
 {
     try
     {
-        if( !mpImpl->mxNewNode.is() )
+        if( !mpImpl->mbNewNodeSet )
         {
-            Reference< XCloneable > xCloneAble( mpImpl->mpPage->mxAnimationNode, UNO_QUERY_THROW );
-            mpImpl->mxNewNode.set( xCloneAble->createClone(), UNO_QUERY_THROW );
+            if( mpImpl->mpPage->mxAnimationNode.is() )
+                mpImpl->mxNewNode.set( sd::Clone( mpImpl->mpPage->mxAnimationNode ) );
+            mpImpl->mbNewNodeSet = true;
         }
 
-        Reference< XCloneable > xCloneAble( mpImpl->mxOldNode, UNO_QUERY_THROW );
-        Reference< XAnimationNode > xClone( xCloneAble->createClone(), UNO_QUERY_THROW );
+        Reference< XAnimationNode > xOldNode;
+        if( mpImpl->mxOldNode.is() )
+            xOldNode = sd::Clone( mpImpl->mxOldNode );
 
-        mpImpl->mpPage->mxAnimationNode = xClone;
-        if( mpImpl->mpPage->mpMainSequence.get() )
-            mpImpl->mpPage->mpMainSequence->reset( xClone );
+        mpImpl->mpPage->setAnimationNode( xOldNode );
     }
     catch( Exception& e )
     {
@@ -144,10 +145,10 @@ void UndoAnimation::Redo()
 {
     try
     {
-        Reference< XCloneable > xCloneAble( mpImpl->mxNewNode, UNO_QUERY_THROW );
-        mpImpl->mpPage->mxAnimationNode.set( xCloneAble->createClone(), UNO_QUERY_THROW );
-        if( mpImpl->mpPage->mpMainSequence.get() )
-            mpImpl->mpPage->mpMainSequence->reset( mpImpl->mpPage->mxAnimationNode );
+        Reference< XAnimationNode > xNewNode;
+        if( mpImpl->mxNewNode.is() )
+            xNewNode = sd::Clone( mpImpl->mxNewNode );
+        mpImpl->mpPage->setAnimationNode( xNewNode );
     }
     catch( Exception& e )
     {
