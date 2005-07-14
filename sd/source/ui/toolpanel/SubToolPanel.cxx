@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubToolPanel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:56:31 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,11 @@
 #include "taskpane/SubToolPanel.hxx"
 
 #include "TaskPaneFocusManager.hxx"
-#include "TitleBar.hxx"
-#include "TitledControl.hxx"
-#include "ControlContainer.hxx"
+#include "taskpane/TitleBar.hxx"
+#include "taskpane/TitledControl.hxx"
+#include "taskpane/ControlContainer.hxx"
+#include "AccessibleTreeNode.hxx"
 
-#ifdef DEBUG
-#include "../inc/TextLogger.hxx"
-#endif
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
@@ -153,12 +151,8 @@ void SubToolPanel::AddControl (
     // Add a down link only for the first control so that when
     // entering the sub tool panel the focus is set to the first control.
     if (mpControlContainer->GetControlCount() == 0)
-        FocusManager::Instance().RegisterDownLink (
-            GetParent(),
-            pTitledControl->GetWindow());
-    FocusManager::Instance().RegisterUpLink (
-        pTitledControl->GetWindow(),
-        GetParent());
+        FocusManager::Instance().RegisterDownLink(GetParent(), pTitledControl->GetWindow());
+    FocusManager::Instance().RegisterUpLink(pTitledControl->GetWindow(), GetParent());
 
     mpControlContainer->AddControl (pChild);
 
@@ -175,12 +169,8 @@ void SubToolPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
     // Add a down link only for the first control so that when
     // entering the sub tool panel the focus is set to the first control.
     if (mpControlContainer->GetControlCount() == 0)
-        FocusManager::Instance().RegisterDownLink (
-            GetParent(),
-            pControl->GetWindow());
-    FocusManager::Instance().RegisterUpLink (
-        pControl->GetWindow(),
-        GetParent());
+        FocusManager::Instance().RegisterDownLink(GetParent(), pControl->GetWindow());
+    FocusManager::Instance().RegisterUpLink(pControl->GetWindow(), GetParent());
 
     mpControlContainer->AddControl (pControl);
 
@@ -477,5 +467,17 @@ IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 
 
 
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> SubToolPanel::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    return new ::accessibility::AccessibleTreeNode (
+        *this,
+        ::rtl::OUString::createFromAscii("Sub Task Panel"),
+        ::rtl::OUString::createFromAscii("Sub Task Panel"),
+        ::com::sun::star::accessibility::AccessibleRole::PANEL);
+}
 
 } } // end of namespace ::sd::toolpanel
