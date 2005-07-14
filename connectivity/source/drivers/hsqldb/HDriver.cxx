@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-06-27 08:24:37 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,10 +733,10 @@ namespace connectivity
             }
 
             const sal_Char** pLookup = pTranslations;
-            for ( ; *pLookup; ++pLookup )
+            for ( ; *pLookup; pLookup +=2 )
             {
                 sal_Int32 nCompareUntil = 0;
-                while ( (*pLookup)[ nCompareUntil ] != nCompareTermination )
+                while ( (*pLookup)[ nCompareUntil ] != nCompareTermination && (*pLookup)[ nCompareUntil ] != 0 )
                     ++nCompareUntil;
 
                 if ( sLocaleString.equalsAsciiL( *pLookup, nCompareUntil ) )
