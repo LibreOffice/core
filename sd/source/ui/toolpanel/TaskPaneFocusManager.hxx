@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneFocusManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:36:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,18 @@
 #include <tools/link.hxx>
 #endif
 
-#include <hash_map>
+#include <memory>
 
+class KeyCode;
 class VclSimpleEvent;
 class Window;
 
 namespace sd { namespace toolpanel {
 
-class WindowHash
-{
-public:
-    size_t operator()(::Window* argument) const
-    { return reinterpret_cast<unsigned long>(argument); }
-};
-
-/** Manage the focus in a window hierarchy.  The focus manager handles
-    focus changes between different levels in the hierarchy,
-    i.e. transferring the focus to a predecessor or succesor.
-
-    <p>For this every window that wants its focus managed has to
-    register or be registered and tell where to put the focus when
-    going up or down.</p>
+/** On certain key presses the focus is moved from one window to another.
+    For this to work every window that wants its focus managed has to
+    register or be registered and tell where to put the focus on what key
+    press.
 */
 class FocusManager
 {
@@ -95,17 +86,25 @@ public:
     */
     static FocusManager& Instance (void);
 
-    /** Register a bidirectional link between the two windows.
-        @param pParent
-            The window that is higher up in the window hierarchy.
-        @param pChild
-            The window that is lower down in a sub-tree of the window
-            hierarchy that is rooted in pParent.
+    /** Register a link from one window to another so that any time the
+        specified key is pressed while the source window is focused, the
+        focus is transferred to the target window.
+        @param pSource
+            The window from which the focus will be transferred.
+        @param pTarget
+            The window to which the focus will be transferred.
+        @param rKey
+            The key for which the focus is transferred from the source
+            window to the target window.
     */
-    void RegisterLink (::Window* pParent, ::Window* pChild);
+    void RegisterLink (
+        ::Window* pSource,
+        ::Window* pTarget,
+        const KeyCode& rKey);
 
-    /** Register a link that will be taken into account when moving up
-        in the window hierarchy.
+    /** Register a link that will move the focus from the source window to
+        the target window when the source window is focused and KEY_ESCAPE
+        is pressed.
         @param pSource
             The window from which the focus will be transferred.
         @param pTarget
@@ -113,8 +112,9 @@ public:
     */
     void RegisterUpLink (::Window* pSource, ::Window* pTarget);
 
-    /** Register a link that will be taken into account when moving down
-        in the window hierarchy.
+    /** Register a link that will move the focus from the source window to
+        the target window when the source window is focused and KEY_RETURN
+        is pressed.
         @param pSource
             The window from which the focus will be transferred.
         @param pTarget
@@ -122,41 +122,38 @@ public:
     */
     void RegisterDownLink (::Window* pSource, ::Window* pTarget);
 
-    /** Transfer the focus from the given window to one higher up in
-        the hierarchy, i.e. nearer to the root window.
-        @param pWindow
-            Transfer the focus from this window to one of its
-            predecessors.  For this to work the appropriate links has
-            to have been registered previously.
-        @return
-            Returns <TRUE/> when the given window has been found
-            amongst the registered windows and the focus transfer has
-            been made successfully.
+    /** Remove all links from the source window to the target window.  When
+        there are links from the target window to the source window then
+        these are not touced.
     */
-    bool TransferFocusUp (::Window* pWindow);
+    void RemoveLinks (
+        ::Window* pSource,
+        ::Window* pTarget);
 
-    /** Transfer the focus from the given window to one lower down in
-        the hierarchy, i.e. nearer one of the leafs.
-        @param pWindow
-            Transfer the focus from this window to one of its
-            successors.  For this to work the appropriate links has to
-            have been registered previously.
-        @return
-            Returns <TRUE/> when the given window has been found
-            amongst the registered windows and the focus transfer has
-            been made successfully.
+    /** Let the focus manager transfer the focus from the specified source
+        window to a target window that is determined according the the
+        registered links and the given key code.
+        When there is no rule for this combination of source window and key
+        code then the focus stays where it is.
     */
-    bool TransferFocusDown (::Window* pWindow);
+    bool TransferFocus (::Window* pSource, const KeyCode& rCode);
 
 private:
     static FocusManager* spInstance;
-
-    typedef ::std::hash_map< ::Window*, ::Window*, WindowHash> HashMap;
-    HashMap maDownLinks;
-    HashMap maUpLinks;
+    class LinkMap;
+    ::std::auto_ptr<LinkMap> mpLinks;
 
     FocusManager (void);
     ~FocusManager (void);
+
+    /** Remove all links from or to the given window.
+    */
+    void RemoveLinks (::Window* pWindow);
+
+    /** Unregister as event listener from the given window when there are no
+        links from this window anymore.
+    */
+    void RemoveUnusedEventListener (::Window* pWindow);
 
     /** Listen for key events and on KEY_RETURN go down and on
         KEY_ESCAPE go up.
