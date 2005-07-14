@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:15:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,25 @@ public:
                  { aVisArea = rVisArea; }
     const Rectangle GetVisArea() { return aVisArea; }
 
-    void SetPageKind(PageKind eKind)
-                 { ePageKind = eKind; }
+    void SetPageKind(PageKind eKind) { ePageKind = eKind; }
     const PageKind GetPageKind() { return ePageKind; }
+
+    /** is used in FrameView::ReadUserDataSequence() only to store the
+        page kind that was selected while last saving this document */
+    void SetPageKindOnLoad(PageKind eKind) { ePageKindOnLoad = eKind; }
+
+    /** can be used to get the page kind that was selected on last save of this document */
+    const PageKind GetPageKindOnLoad() { return ePageKindOnLoad; }
 
     void SetSelectedPage (USHORT nPage);
     const USHORT GetSelectedPage (void) const;
+
+    /** is used in FrameView::ReadUserDataSequence() only to store the
+        page that was selected while last saving this document */
+    void SetSelectedPageOnLoad (USHORT nPage) { nSelectedPageOnLoad = nPage; }
+
+    /** can be used to get the page that was selected on last save of this document */
+    const USHORT GetSelectedPageOnLoad (void) const { return nSelectedPageOnLoad; }
 
     void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode(PageKind eKind);
@@ -214,6 +227,8 @@ private:
     Rectangle       aVisArea;          // Sichtbarer Bereich
     PageKind        ePageKind;         // Seitentyp (Standard, Notizen, Handzettel)
     USHORT          nSelectedPage;     // Selektierte Seite
+    PageKind        ePageKindOnLoad;
+    USHORT          nSelectedPageOnLoad;
     EditMode        eStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
     EditMode        eNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
     EditMode        eHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
