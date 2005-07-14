@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:30:39 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XREDLINESSUPPLIER_HPP_
+#include <com/sun/star/document/XRedlinesSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
@@ -992,7 +995,10 @@ XMLTextParagraphExport::XMLTextParagraphExport(
 
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
-    pRedlineExport = IsBlockMode() ? NULL : new XMLRedlineExport( rExp );
+
+    if( ! IsBlockMode() &&
+        Reference<XRedlinesSupplier>( GetExport().GetModel(), UNO_QUERY ).is())
+        pRedlineExport = new XMLRedlineExport( rExp );
 
     // The text field helper needs a pre-constructed XMLPropertyState
     // to export the combined characters field. We construct that
