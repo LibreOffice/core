@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:38:14 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2045,7 +2045,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         if (0 == sFieldMaster.compareTo( OUString::createFromAscii(sDB),
                                          sizeof(sDB)-1))
         {
-            break;
+            continue;
         }
 
 
