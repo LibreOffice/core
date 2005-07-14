@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 14:27:05 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2497,7 +2497,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 m_pData->m_pObjectShell->SetNoName();
                 m_pData->m_pObjectShell->InvalidateName();
 
-                if( m_pData->m_pObjectShell->IsOwnStorageFormat_Impl( *pMedium ) )
+                if( m_pData->m_pObjectShell->IsPackageStorageFormat_Impl( *pMedium ) )
                 {
                     // untitled document must be based on temporary storage
                     // the medium should not dispose the storage in this case
