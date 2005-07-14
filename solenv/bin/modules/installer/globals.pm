@@ -112,6 +112,9 @@ BEGIN
     $guidcounter = 1000; # for uniqueness of guids
     $fontsfolder = "FontsFolder";
     $fontsfoldername = "Fonts";
+    $fontsdirparent = "";
+    $fontsdirname = "";
+    $fontsdirhostname = "truetype";
     $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
     $startupfolder = "StartupFolder";
