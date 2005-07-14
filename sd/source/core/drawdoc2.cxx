@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:20:46 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,6 +1700,13 @@ USHORT SdDrawDocument::CreatePage (
     pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
     pStandardPage->SetAutoLayout(eStandardLayout, TRUE);
     pStandardPage->setHeaderFooterSettings( pPreviousStandardPage->getHeaderFooterSettings() );
+
+    // transition settings of current page
+    pStandardPage->setTransitionType( pPreviousStandardPage->getTransitionType() );
+    pStandardPage->setTransitionSubtype( pPreviousStandardPage->getTransitionSubtype() );
+    pStandardPage->setTransitionDirection( pPreviousStandardPage->getTransitionDirection() );
+    pStandardPage->setTransitionFadeColor( pPreviousStandardPage->getTransitionFadeColor() );
+    pStandardPage->setTransitionDuration( pPreviousStandardPage->getTransitionDuration() );
 
     // Create new notes page and set it up.
     pNotesPage = (SdPage*) AllocPage(FALSE);
