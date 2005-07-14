@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-06 09:28:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,10 @@ public:
     // DropTargetHelper
     virtual sal_Int8 AcceptDrop (const AcceptDropEvent& rEvent);
     virtual sal_Int8 ExecuteDrop (const ExecuteDropEvent& rEvent);
+
+    /** The context menu is requested over this Command() method.
+    */
+    virtual void Command (const CommandEvent& rEvent);
 
 private:
     ViewShellBase& mrBase;
