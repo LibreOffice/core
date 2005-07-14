@@ -42,7 +42,7 @@
     <accel:item accel:code="KEY_SUBTRACT" accel:shift="true" accel:mod1="true" xlink:href=".uno:SendToBack"/>
     <accel:item accel:code="KEY_H" accel:mod1="true" xlink:href=".uno:SuperScript"/>
     <accel:item accel:code="KEY_T" accel:mod1="true" xlink:href=".uno:SubScript"/>
-    <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:Navigator"/>
+    <accel:item accel:code="KEY_F5" accel:shift="true" accel:mod1="true" xlink:href=".uno:Navigator"/>
     <accel:item accel:code="KEY_F5" xlink:href=".uno:Presentation"/>
     <accel:item accel:code="KEY_F2" accel:mod1="true" xlink:href=".uno:Presentation"/>
     <accel:item accel:code="KEY_F9" xlink:href=".uno:Presentation"/>
