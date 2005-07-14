@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-23 10:35:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,6 +994,12 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> offDx;
+
+                sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
+                if ( nOptions & ETO_RTLREADING )
+                    nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                pOut->SetTextLayoutMode( nTextLayoutMode );
+                DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                 Point aPos( ptlReferenceX, ptlReferenceY );
                 if ( nLen )
