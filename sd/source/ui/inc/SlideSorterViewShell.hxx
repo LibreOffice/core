@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:42:31 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,17 @@ public:
     void RemoveSelectionChangeListener (const Link& rListener);
 
     virtual DrawController* GetController (void);
+
+    /** Create an accessible object representing the specified window.
+        @param pWindow
+            The returned object makes the document displayed in this window
+            accessible.
+        @return
+            Returns an <type>AccessibleSlideSorterView</type> object.
+   */
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>
+        CreateAccessibleDocumentView (::sd::Window* pWindow);
 
 protected:
     ::std::auto_ptr<controller::SlideSorterController> mpSlideSorterController;
