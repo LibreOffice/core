@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:39:41 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,9 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bNoAttribs = pFrameView->IsNoAttribs() ;
         aVisArea = pFrameView->GetVisArea();
         ePageKind = pFrameView->GetPageKind();
+        ePageKindOnLoad = pFrameView->GetPageKindOnLoad();
         nSelectedPage = pFrameView->GetSelectedPage();
+        nSelectedPageOnLoad = pFrameView->GetSelectedPageOnLoad();
         eStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
         eNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
         eHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
@@ -282,7 +284,9 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bNoAttribs = FALSE;
         aVisArea = Rectangle( Point(), Size(0, 0) );
         ePageKind = PK_STANDARD;
+        ePageKindOnLoad = PK_STANDARD;
         nSelectedPage = 0;
+        nSelectedPageOnLoad = 0;
         eStandardEditMode = EM_PAGE;
         eNotesEditMode = EM_PAGE;
         eHandoutEditMode = EM_MASTERPAGE;
@@ -994,14 +998,22 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SetPageKind( (PageKind)nInt16 );
+                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                        SetPageKind( (PageKind)nInt16 );
+
+                    SetPageKindOnLoad( (PageKind)nInt16 );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SelectedPage ) ) )
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SetSelectedPage( (USHORT)nInt16 );
+                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                        SetSelectedPage( (USHORT)nInt16 );
+
+                    SetSelectedPageOnLoad( (USHORT)nInt16 );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsLayerMode ) ) )
