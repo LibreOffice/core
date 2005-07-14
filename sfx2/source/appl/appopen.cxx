@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:27:04 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,18 @@ ULONG CheckPasswd_Impl
                             if ( pPasswordRequest->isPassword() )
                             {
                                 pSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+
+                                try
+                                {
+                                    ::comphelper::OStorageHelper::SetCommonStoragePassword(
+                                                                    xStorage,
+                                                                    pPasswordRequest->getPassword() );
+                                }
+                                catch( uno::Exception& )
+                                {
+                                    // TODO/LATER: set the error code
+                                }
+
                                 nRet = ERRCODE_NONE;
                             }
                             else
